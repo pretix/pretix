@@ -1,12 +1,16 @@
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 from typing import Any, Dict, Iterable, List, Tuple
 
-from django.db.models import Case, Count, F, Sum, Value, When
+from django.db.models import (
+    Case, Count, DateTimeField, F, Max, OuterRef, Subquery, Sum, Value, When,
+)
+from django.utils.timezone import make_aware
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
 from pretix.base.models.event import SubEvent
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import OrderFee, OrderPayment
 from pretix.base.signals import order_fee_type_name
 
 
@@ -71,8 +75,9 @@ def dictsum(*dicts) -> dict:
     return res
 
 
-def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[ItemCategory, List[Item]]],
-                                                                   Dict[str, Tuple[Decimal, Decimal]]]:
+def order_overview(
+        event: Event, subevent: SubEvent=None, date_filter='', date_from=None, date_until=None
+) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
     ).prefetch_related(
@@ -82,6 +87,38 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
     qs = OrderPosition.all
     if subevent:
         qs = qs.filter(subevent=subevent)
+
+    if date_from and isinstance(date_from, date):
+        date_from = make_aware(datetime.combine(
+            date_from,
+            time(hour=0, minute=0, second=0, microsecond=0)
+        ), event.timezone)
+
+    if date_until and isinstance(date_until, date):
+        date_until = make_aware(datetime.combine(
+            date_until + timedelta(days=1),
+            time(hour=0, minute=0, second=0, microsecond=0)
+        ), event.timezone)
+
+    if date_filter == 'order_date':
+        if date_from:
+            qs = qs.filter(order__datetime__gte=date_from)
+        if date_until:
+            qs = qs.filter(order__datetime__lt=date_until)
+    elif date_filter == 'last_payment_date':
+        p_date = OrderPayment.objects.filter(
+            order=OuterRef('order'),
+            state__in=[OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED],
+            payment_date__isnull=False
+        ).values('order').annotate(
+            m=Max('payment_date')
+        ).values('m').order_by()
+        qs = qs.annotate(payment_date=Subquery(p_date, output_field=DateTimeField()))
+        if date_from:
+            qs = qs.filter(payment_date__gte=date_from)
+        if date_until:
+            qs = qs.filter(payment_date__lt=date_until)
+
     counters = qs.filter(
         order__event=event
     ).annotate(
@@ -153,14 +190,26 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
     payment_items = []
 
     if not subevent:
-        counters = OrderFee.all.filter(
+        qs = OrderFee.all.filter(
             order__event=event
         ).annotate(
             status=Case(
                 When(canceled=True, then=Value('c')),
                 default=F('order__status')
             )
-        ).values(
+        )
+        if date_filter == 'order_date':
+            if date_from:
+                qs = qs.filter(order__datetime__gte=date_from)
+            if date_until:
+                qs = qs.filter(order__datetime__lt=date_until)
+        elif date_filter == 'last_payment_date':
+            qs = qs.annotate(payment_date=Subquery(p_date, output_field=DateTimeField()))
+            if date_from:
+                qs = qs.filter(payment_date__gte=date_from)
+            if date_until:
+                qs = qs.filter(payment_date__lt=date_until)
+        counters = qs.values(
             'fee_type', 'internal_type', 'status'
         ).annotate(cnt=Count('id'), value=Sum('value'), tax_value=Sum('tax_value')).order_by()
 

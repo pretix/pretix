@@ -38,7 +38,6 @@ from pretix.base.models import (
     Item, ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
     generate_position_secret, generate_secret,
 )
-from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
     OrderFee, OrderPayment, OrderPosition, OrderRefund,
 )
@@ -66,7 +65,9 @@ from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
-from pretix.control.forms.filter import EventOrderFilterForm, RefundFilterForm
+from pretix.control.forms.filter import (
+    EventOrderFilterForm, OverviewFilterForm, RefundFilterForm,
+)
 from pretix.control.forms.orders import (
     CancelForm, CommentForm, ConfirmPaymentForm, ExporterForm, ExtendForm,
     MarkPaidForm, OrderContactForm, OrderLocaleForm, OrderMailForm,
@@ -1593,21 +1594,32 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/orders/overview.html'
     permission = 'can_view_orders'
 
+    @cached_property
+    def filter_form(self):
+        return OverviewFilterForm(data=self.request.GET, event=self.request.event)
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
 
-        subevent = None
-        if self.request.GET.get("subevent", "") != "" and self.request.event.has_subevents:
-            i = self.request.GET.get("subevent", "")
-            try:
-                subevent = self.request.event.subevents.get(pk=i)
-            except SubEvent.DoesNotExist:
-                pass
-
-        ctx['items_by_category'], ctx['total'] = order_overview(self.request.event, subevent=subevent)
-        ctx['subevent_warning'] = self.request.event.has_subevents and subevent and (
+        if self.filter_form.is_valid():
+            ctx['items_by_category'], ctx['total'] = order_overview(
+                self.request.event,
+                subevent=self.filter_form.cleaned_data.get('subevent'),
+                date_filter=self.filter_form.cleaned_data['date_axis'],
+                date_from=self.filter_form.cleaned_data['date_from'],
+                date_until=self.filter_form.cleaned_data['date_until'],
+            )
+        else:
+            ctx['items_by_category'], ctx['total'] = order_overview(
+                self.request.event,
+            )
+        ctx['subevent_warning'] = (
+            self.request.event.has_subevents and
+            self.filter_form.is_valid() and
+            self.filter_form.cleaned_data.get('subevent') and
             OrderFee.objects.filter(order__event=self.request.event).exclude(value=0).exists()
         )
+        ctx['filter_form'] = self.filter_form
         return ctx
 
 

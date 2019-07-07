@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% load order_overview %}
 {% block title %}{% trans "Order overview" %}{% endblock %}
 {% block content %}
@@ -12,11 +13,36 @@
         </div>
     </div>
 	<h1>{% trans "Order overview" %}</h1>
-    {% if request.event.has_subevents %}
-        <form class="form-inline helper-display-inline" action="" method="get">
-            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+    <div class="row filter-form">
+        <form class="" action="" method="get">
+            {% if request.event.has_subevents %}
+                <div class="col-lg-2 col-sm-3 col-xs-6">
+                    {% bootstrap_field filter_form.subevent layout='inline' %}
+                </div>
+                <div class="col-lg-2 col-sm-3 col-xs-6">
+                    {% bootstrap_field filter_form.date_axis layout='inline' %}
+                </div>
+            {% else %}
+                <div class="col-lg-4 col-sm-6 col-xs-6">
+                    {% bootstrap_field filter_form.date_axis layout='inline' %}
+                </div>
+            {% endif %}
+            <div class="col-lg-2 col-sm-6 col-xs-6">
+                {% bootstrap_field filter_form.date_from layout='inline' %}
+            </div>
+            <div class="col-lg-2 col-sm-6 col-xs-6">
+                {% bootstrap_field filter_form.date_until layout='inline' %}
+            </div>
+            <div class="col-lg-1 col-lg-offset-3 col-sm-6 col-xs-6">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
+                        {% trans "Filter" %}
+                    </span>
+                </button>
+            </div>
         </form>
-    {% endif %}
+    </div>
     {% if subevent_warning %}
         <div class="alert alert-info">
             {% blocktrans trimmed context "subevent" %}

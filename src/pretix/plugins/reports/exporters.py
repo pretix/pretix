@@ -3,6 +3,7 @@ from collections import OrderedDict, defaultdict
 from decimal import Decimal
 
 import pytz
+from dateutil.parser import parse
 from django import forms
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -11,7 +12,7 @@ from django.db.models import Max, OuterRef, Subquery, Sum
 from django.template.defaultfilters import floatformat
 from django.utils.formats import date_format, localize
 from django.utils.timezone import get_current_timezone, now
-from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
+from django.utils.translation import pgettext, ugettext as _
 from reportlab.lib import colors
 
 from pretix.base.decimal import round_decimal
@@ -20,6 +21,7 @@ from pretix.base.models import Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee, OrderPayment
 from pretix.base.services.stats import order_overview
+from pretix.control.forms.filter import OverviewFilterForm
 
 
 class ReportlabExportMixin:
@@ -160,6 +162,11 @@ class OverviewReport(Report):
         from reportlab.platypus import Paragraph, Spacer, TableStyle, Table
         from reportlab.lib.units import mm
 
+        if form_data.get('date_from'):
+            form_data['date_from'] = parse(form_data['date_from'])
+        if form_data.get('date_until'):
+            form_data['date_until'] = parse(form_data['date_until'])
+
         headlinestyle = self.get_style()
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
@@ -190,7 +197,17 @@ class OverviewReport(Report):
             Paragraph(_('Orders by product'), headlinestyle),
             Spacer(1, 5 * mm)
         ]
-        if self.form_data.get('subevent'):
+        if form_data.get('date_axis'):
+            story += [
+                Paragraph(_('{axis} between {start} and {end}').format(
+                    axis=dict(OverviewFilterForm(event=self.event).fields['date_axis'].choices)[form_data.get('date_axis')],
+                    start=date_format(form_data.get('date_from'), 'SHORT_DATE_FORMAT') if form_data.get('date_from') else '–',
+                    end=date_format(form_data.get('date_until'), 'SHORT_DATE_FORMAT') if form_data.get('date_until') else '–',
+                ), self.get_style()),
+                Spacer(1, 5 * mm)
+            ]
+
+        if form_data.get('subevent'):
             try:
                 subevent = self.event.subevents.get(pk=self.form_data.get('subevent'))
             except SubEvent.DoesNotExist:
@@ -215,7 +232,13 @@ class OverviewReport(Report):
             ],
         ]
 
-        items_by_category, total = order_overview(self.event, subevent=self.form_data.get('subevent'))
+        items_by_category, total = order_overview(
+            self.event,
+            subevent=form_data.get('subevent'),
+            date_filter=form_data.get('date_axis'),
+            date_from=form_data.get('date_from'),
+            date_until=form_data.get('date_until'),
+        )
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         states = (
             ('canceled', Order.STATUS_CANCELED),
@@ -264,15 +287,9 @@ class OverviewReport(Report):
 
     @property
     def export_form_fields(self) -> dict:
-        d = OrderedDict()
-        if self.event.has_subevents:
-            d['subevent'] = forms.ModelChoiceField(
-                self.event.subevents.all(),
-                label=pgettext_lazy('subevent', 'Date'),
-                required=False,
-                empty_label=pgettext_lazy('subevent', 'All dates')
-            )
-        return d
+        f = OverviewFilterForm(event=self.event)
+        del f.fields['ordering']
+        return f.fields
 
 
 class OrderTaxListReport(Report):
