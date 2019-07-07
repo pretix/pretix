@@ -1529,6 +1529,19 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.shirt)
         self.assertEqual(objs[0].variation, self.shirt_red)
 
+    def test_hide_without_voucher_failed_because_of_voucher(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.shirt, event=self.event, show_hidden_items=False)
+        self.shirt.hide_without_voucher = True
+        self.shirt.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+            '_voucher_code': v.code
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
     def test_hide_without_voucher_failed(self):
         self.shirt.hide_without_voucher = True
         self.shirt.save()
