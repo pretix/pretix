@@ -41,12 +41,17 @@ quota                                 integer                    An ID of a quot
 tag                                   string                     A string that is used for grouping vouchers
 comment                               string                     An internal comment on the voucher
 subevent                              integer                    ID of the date inside an event series this voucher belongs to (or ``null``).
+show_hidden_items                     boolean                    Only if set to ``true``, this voucher allows to buy products with the property ``hide_without_voucher``. Defaults to ``true``.
 ===================================== ========================== =======================================================
 
 
 .. versionchanged:: 1.9
 
    The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
+
+.. versionchanged:: 3.0
+
+   The attribute ``show_hidden_items`` has been added.
 
 Endpoints
 ---------

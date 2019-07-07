@@ -505,7 +505,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             err = err or error_messages['voucher_required']
             break
 
-        if cp.item.hide_without_voucher and not cp.voucher.applies_to(cp.item.pk, cp.variation.pk):
+        if cp.item.hide_without_voucher and (cp.voucher is None or not cp.voucher.show_hidden_items or not cp.voucher.applies_to(cp.item.pk, cp.variation.pk)):
             delete(cp)
             cp.delete()
             err = error_messages['voucher_required']

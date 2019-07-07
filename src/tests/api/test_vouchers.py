@@ -43,6 +43,7 @@ TEST_VOUCHER_RES = {
     'quota': None,
     'tag': 'Foo',
     'comment': '',
+    'show_hidden_items': True,
     'subevent': None
 }
 

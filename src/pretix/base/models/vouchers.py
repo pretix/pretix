@@ -176,6 +176,10 @@ class Voucher(LoggedModel):
         help_text=_("The text entered in this field will not be visible to the user and is available for your "
                     "convenience.")
     )
+    show_hidden_items = models.BooleanField(
+        verbose_name=_("Shows hidden products that match this voucher"),
+        default=True
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 

@@ -171,7 +171,7 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
     qs = qs.filter(q)
 
     vouchq = Q(hide_without_voucher=False)
-    if voucher:
+    if voucher and voucher.show_hidden_items:
         if voucher.item_id:
             vouchq = Q(pk=voucher.item_id)
         elif voucher.quota_id:
@@ -342,7 +342,7 @@ class Item(LoggedModel):
         verbose_name=_('This product will only be shown if a voucher matching the product is redeemed.'),
         default=False,
         help_text=_('This product will be hidden from the event page until the user enters a voucher '
-                    'code that is specifically tied to this product (and not via a quota).')
+                    'that unlocks this product.')
     )
     require_bundling = models.BooleanField(
         verbose_name=_('Only sell this product as part of a bundle'),
