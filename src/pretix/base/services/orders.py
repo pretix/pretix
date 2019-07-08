@@ -979,6 +979,35 @@ def send_download_reminders(sender, **kwargs):
                                     logger.exception('Reminder email could not be sent to attendee')
 
 
+def notify_user_changed_order(order, user=None, auth=None):
+    with language(order.locale):
+        try:
+            invoice_name = order.invoice_address.name
+            invoice_company = order.invoice_address.company
+        except InvoiceAddress.DoesNotExist:
+            invoice_name = ""
+            invoice_company = ""
+        email_template = order.event.settings.mail_text_order_changed
+        email_context = {
+            'event': order.event.name,
+            'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
+                'order': order.code,
+                'secret': order.secret,
+                'hash': order.email_confirm_hash()
+            }),
+            'invoice_name': invoice_name,
+            'invoice_company': invoice_company,
+        }
+        email_subject = _('Your order has been changed: %(code)s') % {'code': order.code}
+        try:
+            order.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.order_changed', user, auth=auth
+            )
+        except SendMailException:
+            logger.exception('Order changed email could not be sent')
+
+
 class OrderChangeManager:
     error_messages = {
         'product_without_variation': _('You need to select a variation of the product.'),
@@ -1509,34 +1538,6 @@ class OrderChangeManager:
         except InvoiceAddress.DoesNotExist:
             return None
 
-    def _notify_user(self, order):
-        with language(order.locale):
-            try:
-                invoice_name = order.invoice_address.name
-                invoice_company = order.invoice_address.company
-            except InvoiceAddress.DoesNotExist:
-                invoice_name = ""
-                invoice_company = ""
-            email_template = order.event.settings.mail_text_order_changed
-            email_context = {
-                'event': order.event.name,
-                'url': build_absolute_uri(self.order.event, 'presale:event.order.open', kwargs={
-                    'order': order.code,
-                    'secret': order.secret,
-                    'hash': order.email_confirm_hash()
-                }),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-            }
-            email_subject = _('Your order has been changed: %(code)s') % {'code': order.code}
-            try:
-                order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_changed', self.user, auth=self.auth
-                )
-            except SendMailException:
-                logger.exception('Order changed email could not be sent')
-
     def commit(self, check_quotas=True):
         if self._committed:
             # an order change can only be committed once
@@ -1567,9 +1568,9 @@ class OrderChangeManager:
         self._check_paid_to_free()
 
         if self.notify:
-            self._notify_user(self.order)
+            notify_user_changed_order(self.order, self.user, self.auth)
             if self.split_order:
-                self._notify_user(self.split_order)
+                notify_user_changed_order(self.split_order, self.user, self.auth)
 
         order_changed.send(self.order.event, order=self.order)
 
