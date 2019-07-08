@@ -143,6 +143,11 @@ You can see an example here:
         </div>
     </noscript>
 
+You can filter events by meta data attributes. You can create those attributes in your order profile and set their values in both event and series date
+settings. For example, if you set up a meta data property called "Promoted" that you set to "Yes" on some events, you can pass a filter like this::
+
+   <pretix-widget event="https://pretix.eu/demo/series/" style="list" filter="attr[Promoted]=Yes"></pretix-widget>
+
 pretix Button
 -------------
 

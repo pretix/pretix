@@ -365,13 +365,17 @@ class WidgetAPIProductList(EventListMixin, View):
 
             if hasattr(self.request, 'event'):
                 add_subevents_for_days(
-                    self.request.event.subevents_annotated('web'),
+                    filter_qs_by_attr(self.request.event.subevents_annotated('web'), self.request),
                     before, after, ebd, set(), self.request.event,
                     kwargs.get('cart_namespace')
                 )
             else:
                 timezones = set()
-                add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web'), before, after, ebd, timezones)
+                add_events_for_days(
+                    self.request,
+                    filter_qs_by_attr(Event.annotated(self.request.organizer.events, 'web'), self.request),
+                    before, after, ebd, timezones
+                )
                 add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
                     event__organizer=self.request.organizer,
                     event__is_public=True,
@@ -389,7 +393,7 @@ class WidgetAPIProductList(EventListMixin, View):
         else:
             if hasattr(self.request, 'event'):
                 evs = self.request.event.subevents_sorted(
-                    self.request.event.subevents_annotated(self.request.sales_channel)
+                    filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel), self.request)
                 )
                 tz = pytz.timezone(request.event.settings.timezone)
                 data['events'] = [

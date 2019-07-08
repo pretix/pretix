@@ -1040,6 +1040,9 @@ var shared_root_methods = {
         } else {
             url = this.$root.target_url + 'widget/product_list?lang=' + lang;
         }
+        if (this.$root.filter) {
+            url += '&' + this.$root.filter;
+        }
         var cart_id = getCookie(this.cookieName);
         if (this.$root.voucher_code) {
             url += '&voucher=' + escape(this.$root.voucher_code);
@@ -1212,6 +1215,7 @@ var create_widget = function (element) {
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
+    var filter = element.attributes.filter ? element.attributes.filter.value : null;
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
@@ -1234,6 +1238,7 @@ var create_widget = function (element) {
                 categories: null,
                 currency: null,
                 name: null,
+                filter: filter,
                 voucher_code: voucher,
                 display_net_prices: false,
                 voucher_explanation_text: null,
@@ -1309,6 +1314,7 @@ var create_button = function (element) {
                 voucher_code: voucher,
                 items: items,
                 error: null,
+                filter: null,
                 widget_data: widget_data,
                 widget_id: 'pretix-widget-' + widget_id,
                 button_text: button_text
