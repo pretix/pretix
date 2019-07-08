@@ -13,3 +13,9 @@ def register_report_pdf(sender, **kwargs):
 def register_report_ordertaxlist(sender, **kwargs):
     from .exporters import OrderTaxListReport
     return OrderTaxListReport
+
+
+@receiver(register_data_exporters, dispatch_uid="export_overview_report_ordertaxlistpdf")
+def register_report_ordertaxlistpdf(sender, **kwargs):
+    from .exporters import OrderTaxListReportPDF
+    return OrderTaxListReportPDF
