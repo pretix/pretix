@@ -55,6 +55,7 @@ from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
+    notify_user_changed_order,
 )
 from pretix.base.services.stats import order_overview
 from pretix.base.services.tickets import generate
@@ -1319,12 +1320,27 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
     only_user_visible = False
     all_optional = True
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['other_form'] = self.other_form
+        return ctx
+
+    @cached_property
+    def other_form(self):
+        return OtherOperationsForm(prefix='other', order=self.order,
+                                   data=self.request.POST if self.request.method == "POST" else None)
+
     def post(self, request, *args, **kwargs):
-        failed = not self.save() or not self.invoice_form.is_valid()
+        failed = not self.save() or not self.invoice_form.is_valid() or not self.other_form.is_valid()
+        notify = self.other_form.cleaned_data['notify'] if self.other_form.is_valid() else True
         if failed:
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
+
+        if notify:
+            notify_user_changed_order(self.order)
+
         if hasattr(self.invoice_form, 'save'):
             self.invoice_form.save()
         self.order.log_action('pretix.event.order.modified', {
