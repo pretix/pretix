@@ -1,3 +1,4 @@
+import inspect
 from decimal import Decimal
 
 from django.conf import settings
@@ -513,9 +514,9 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             if not provider.is_enabled or not self._is_allowed(provider, self.request):
                 continue
             fee = provider.calculate_fee(self._total_order_value)
-            try:
+            if 'total' in inspect.signature(provider.payment_form_render).parameters:
                 form = provider.payment_form_render(self.request, self._total_order_value + fee)
-            except TypeError:
+            else:
                 form = provider.payment_form_render(self.request)
             providers.append({
                 'provider': provider,

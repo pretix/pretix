@@ -1,3 +1,4 @@
+import inspect
 import logging
 import smtplib
 import warnings
@@ -177,9 +178,9 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             body_plain += "\r\n"
 
         try:
-            try:
+            if 'position' in inspect.signature(renderer.render).parameters:
                 body_html = renderer.render(content_plain, signature, str(subject), order, position)
-            except TypeError:
+            else:
                 # Backwards compatibility
                 warnings.warn('E-mail renderer called without position argument because position argument is not '
                               'supported.',

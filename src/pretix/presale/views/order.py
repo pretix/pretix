@@ -1,3 +1,4 @@
+import inspect
 import mimetypes
 import os
 from decimal import Decimal
@@ -306,9 +307,9 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
 
     @cached_property
     def form(self):
-        try:
+        if 'total' in inspect.signature(self.payment.payment_provider.payment_form_render).parameters:
             return self.payment.payment_provider.payment_form_render(self.request, self.payment.amount)
-        except TypeError:
+        else:
             return self.payment.payment_provider.payment_form_render(self.request)
 
     @cached_property
@@ -521,9 +522,9 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 continue
             current_fee = sum(f.value for f in self.open_fees) or Decimal('0.00')
             fee = provider.calculate_fee(pending_sum - current_fee)
-            try:
+            if 'total' in inspect.signature(provider.payment_form_render).parameters:
                 form = provider.payment_form_render(self.request, abs(pending_sum + fee - current_fee))
-            except TypeError:
+            else:
                 form = provider.payment_form_render(self.request)
             providers.append({
                 'provider': provider,
