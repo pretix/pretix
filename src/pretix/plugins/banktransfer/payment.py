@@ -172,7 +172,7 @@ class BankTransfer(BasePaymentProvider):
     def checkout_confirm_render(self, request):
         return self.payment_form_render(request)
 
-    def order_pending_mail_render(self, order) -> str:
+    def order_pending_mail_render(self, order, payment) -> str:
         template = get_template('pretixplugins/banktransfer/email/order_pending.txt')
         bankdetails = []
         if self.settings.get('bank_details_type') == 'sepa':
@@ -189,6 +189,7 @@ class BankTransfer(BasePaymentProvider):
             'event': self.event,
             'order': order,
             'code': self._code(order),
+            'amount': payment.amount,
             'details': textwrap.indent(''.join(str(i) for i in bankdetails), '    '),
         }
         return template.render(ctx)

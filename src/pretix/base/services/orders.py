@@ -1,3 +1,4 @@
+import inspect
 import json
 import logging
 from collections import Counter, namedtuple
@@ -670,7 +671,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
 
 def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, email_template, log_entry: str,
-                        invoice):
+                        invoice, payment: OrderPayment):
     try:
         invoice_name = order.invoice_address.name
         invoice_company = order.invoice_address.company
@@ -679,7 +680,10 @@ def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, 
         invoice_company = ""
 
     if pprov:
-        payment_info = str(pprov.order_pending_mail_render(order))
+        if 'payment' in inspect.signature(pprov.order_pending_mail_render).parameters:
+            payment_info = str(pprov.order_pending_mail_render(order, payment))
+        else:
+            payment_info = str(pprov.order_pending_mail_render(order))
     else:
         payment_info = None
 
@@ -825,7 +829,7 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
             email_attendees = event.settings.mail_send_order_placed_attendee
             email_attendees_template = event.settings.mail_text_order_placed_attendee
 
-        _order_placed_email(event, order, pprov, email_template, log_entry, invoice)
+        _order_placed_email(event, order, pprov, email_template, log_entry, invoice, payment)
         if email_attendees:
             for p in order.positions.all():
                 if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:

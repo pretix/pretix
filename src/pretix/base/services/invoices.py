@@ -1,3 +1,4 @@
+import inspect
 import json
 import logging
 import urllib.error
@@ -53,7 +54,10 @@ def build_invoice(invoice: Invoice) -> Invoice:
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
         if open_payment and open_payment.payment_provider:
-            payment = open_payment.payment_provider.render_invoice_text(invoice.order)
+            if 'payment' in inspect.signature(open_payment.payment_provider.render_invoice_text).parameters:
+                payment = open_payment.payment_provider.render_invoice_text(invoice.order, open_payment)
+            else:
+                payment = open_payment.payment_provider.render_invoice_text(invoice.order)
         elif invoice.order.status == Order.STATUS_PAID:
             payment = pgettext('invoice', 'The payment for this invoice has already been received.')
         else:

@@ -31,7 +31,7 @@
     {% if settings.bank_details_type == "sepa" %}
         <div class="col-md-3 col-sm-6 hidden-xs text-center">
             BezahlCode<br>
-            <a href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ order.total|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
+            <a href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
                 <script type="text/plain" data-size="150" data-replace-with-qr>bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
             </a>
             <p>&nbsp;</p>
@@ -54,7 +54,7 @@ SCT
         </div>
         <div class="visible-xs-block text-center">
             <p>
-                <a href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ order.total|commadecimal }}&reason={{ code }}&currency={{ event.currency }}" class="btn btn-default">
+                <a href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}" class="btn btn-default">
                     {% trans "Open banking app" %}
                 </a><br>
                 <small>{% trans "Requires that the app supports BezahlCode" %}</small>

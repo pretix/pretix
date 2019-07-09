@@ -296,11 +296,12 @@ class BasePaymentProvider:
         """
         return ""
 
-    def render_invoice_text(self, order: Order) -> str:
+    def render_invoice_text(self, order: Order, payment: OrderPayment) -> str:
         """
         This is called when an invoice for an order with this payment provider is generated.
         The default implementation returns the content of the _invoice_text configuration
-        variable (an I18nString), or an empty string if unconfigured.
+        variable (an I18nString), or an empty string if unconfigured. For paid orders, the
+        default implementation always renders a string stating that the invoice is already paid.
         """
         if order.status == Order.STATUS_PAID:
             return pgettext_lazy('invoice', 'The payment for this invoice has already been received.')
@@ -545,13 +546,14 @@ class BasePaymentProvider:
         """
         return None
 
-    def order_pending_mail_render(self, order: Order) -> str:
+    def order_pending_mail_render(self, order: Order, payment: OrderPayment) -> str:
         """
         After the user has submitted their order, they will receive a confirmation
         email. You can return a string from this method if you want to add additional
         information to this email.
 
         :param order: The order object
+        :param payment: The payment object
         """
         return ""
 
