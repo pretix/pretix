@@ -458,7 +458,7 @@ var shared_methods = {
             return;
         }
         if (this.$root.is_button && this.$root.items.length === 0) {
-            this.resume();
+            this.resume(this.$root.voucher_code);
         } else {
             var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
             this.$root.overlay.frame_loading = true;
@@ -542,10 +542,15 @@ var shared_methods = {
         this.$root.overlay.frame_loading = true;
         iframe.src = redirect_url;
     },
-    resume: function () {
-        var redirect_url = this.$root.target_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang;
-        if (this.$root.cart_id) {
-            redirect_url += '&take_cart_id=' + this.$root.cart_id;
+    resume: function (voucher) {
+        var redirect_url;
+        if (voucher) {
+            redirect_url = this.$root.voucherFormTarget + '&voucher=' + voucher;
+        } else {
+            redirect_url = this.$root.target_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang;
+            if (this.$root.cart_id) {
+                redirect_url += '&take_cart_id=' + this.$root.cart_id;
+            }
         }
         if (this.$root.widget_data) {
             redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
