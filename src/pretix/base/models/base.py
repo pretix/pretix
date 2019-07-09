@@ -86,7 +86,7 @@ class LoggingMixin:
                     if (sensitivekey in k) and v:
                         data[k] = "********"
 
-            logentry.data = json.dumps(data, cls=CustomJSONEncoder)
+            logentry.data = json.dumps(data, cls=CustomJSONEncoder, sort_keys=True)
         elif data:
             raise TypeError("You should only supply dictionaries as log data.")
         if save:

@@ -1185,7 +1185,7 @@ class OrderPayment(models.Model):
 
     @info_data.setter
     def info_data(self, d):
-        self.info = json.dumps(d)
+        self.info = json.dumps(d, sort_keys=True)
 
     @cached_property
     def payment_provider(self):
@@ -1543,7 +1543,7 @@ class OrderRefund(models.Model):
 
     @info_data.setter
     def info_data(self, d):
-        self.info = json.dumps(d)
+        self.info = json.dumps(d, sort_keys=True)
 
     @cached_property
     def payment_provider(self):
