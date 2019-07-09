@@ -168,15 +168,16 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
     )
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
-    qs = qs.filter(q)
 
-    vouchq = Q(hide_without_voucher=False)
-    if voucher and voucher.show_hidden_items:
+    if voucher:
         if voucher.item_id:
-            vouchq = Q(pk=voucher.item_id)
+            q &= Q(pk=voucher.item_id)
         elif voucher.quota_id:
-            vouchq = Q(quotas__in=[voucher.quota_id])
-    return qs.filter(vouchq)
+            q &= Q(quotas__in=[voucher.quota_id])
+    if not voucher or not voucher.show_hidden_items:
+        q &= Q(hide_without_voucher=False)
+
+    return qs.filter(q)
 
 
 class ItemQuerySet(models.QuerySet):
