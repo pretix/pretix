@@ -130,6 +130,8 @@ if SITE_URL.endswith('/'):
 
 CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
 
+TRUST_X_FORWARDED_FOR = config.get('pretix', 'trust_x_forwarded_for', fallback=False)
+
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
                                     fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists')
 PRETIX_PLUGINS_EXCLUDE = config.get('pretix', 'plugins_exclude', fallback='').split(',')

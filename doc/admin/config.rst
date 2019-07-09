@@ -82,6 +82,11 @@ Example::
     Enables or disables obligatory usage of Two-Factor Authentication for users of the pretix backend.
     Defaults to ``False``
 
+``trust_x_forwarded_for``
+    Specifies whether the ``X-Forwarded-For`` header can be trusted. Only set to ``on`` if you have a reverse
+    proxy that actively removes and re-adds the header to make sure the correct client IP is the first value.
+    Defaults to ``off``.
+
 
 Locale settings
 ---------------
