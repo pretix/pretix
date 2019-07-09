@@ -726,7 +726,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         return self.get_step_url(self.request)
 
     def get_order_url(self, order):
-        payment = order.payments.filter(state__in=[OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING]).first()
+        payment = order.payments.filter(state=OrderPayment.PAYMENT_STATE_CREATED).first()
         if not payment:
             return eventreverse(self.request.event, 'presale:event.order', kwargs={
                 'order': order.code,
