@@ -1,5 +1,19 @@
 /*global $,gettext*/
 
+function gettext(msgid) {
+    if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
+        return django.gettext(msgid);
+    }
+    return msgid;
+}
+
+function ngettext(singular, plural, count) {
+    if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
+        return django.ngettext(singular, plural, count);
+    }
+    return plural;
+}
+
 var waitingDialog = {
     show: function (message) {
         "use strict";
