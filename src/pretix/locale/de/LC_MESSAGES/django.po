@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-25 09:08+0000\n"
-"PO-Revision-Date: 2019-06-25 09:32+0000\n"
+"PO-Revision-Date: 2019-07-10 16:02+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14754,7 +14754,7 @@ msgstr "Badge-Layout"
 
 #: pretix/plugins/badges/forms.py:54 pretix/plugins/ticketoutputpdf/forms.py:31
 msgid "(Event default)"
-msgstr "(Veranstaltungs-Standardlayout)"
+msgstr "(Veranstaltungs-Standard)"
 
 #: pretix/plugins/badges/signals.py:153
 msgid "Badge layout created."
