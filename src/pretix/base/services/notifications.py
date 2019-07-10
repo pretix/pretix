@@ -32,7 +32,7 @@ def notify(logentry_id: int):
     # All users that have the permission to get the notification
     users = logentry.event.get_users_with_permission(
         notification_type.required_permission
-    ).filter(notifications_send=True)
+    ).filter(notifications_send=True, is_active=True)
     if logentry.user:
         users = users.exclude(pk=logentry.user.pk)
 
