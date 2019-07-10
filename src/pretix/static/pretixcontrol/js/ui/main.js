@@ -632,9 +632,9 @@ $(function () {
         }
         $.getJSON(url + '?pk=' + id, function (data) {
             if ($a.parent().tagName === "p") {
-                $("<pre>").html(JSON.stringify(data.data, null, 2)).insertAfter($a.parent());
+                $("<pre>").text(JSON.stringify(data.data, null, 2)).insertAfter($a.parent());
             } else {
-                $("<pre>").html(JSON.stringify(data.data, null, 2)).appendTo($a.parent());
+                $("<pre>").text(JSON.stringify(data.data, null, 2)).appendTo($a.parent());
             }
             $a.remove();
         });
