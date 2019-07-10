@@ -356,6 +356,16 @@ class ItemCreateForm(I18nModelForm):
         ]
 
 
+class ShowQuotaNullBooleanSelect(forms.NullBooleanSelect):
+    def __init__(self, attrs=None):
+        choices = (
+            ('1', _('(Event default)')),
+            ('2', _('Yes')),
+            ('3', _('No')),
+        )
+        super(forms.NullBooleanSelect, self).__init__(attrs, choices)
+
+
 class TicketNullBooleanSelect(forms.NullBooleanSelect):
     def __init__(self, attrs=None):
         choices = (
@@ -415,6 +425,7 @@ class ItemUpdateForm(I18nModelForm):
             'generate_tickets',
             'original_price',
             'require_bundling',
+            'show_quota_left'
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
@@ -423,7 +434,8 @@ class ItemUpdateForm(I18nModelForm):
         widgets = {
             'available_from': SplitDateTimePickerWidget(),
             'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
-            'generate_tickets': TicketNullBooleanSelect()
+            'generate_tickets': TicketNullBooleanSelect(),
+            'show_quota_left': ShowQuotaNullBooleanSelect()
         }
 
 

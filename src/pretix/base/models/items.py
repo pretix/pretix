@@ -308,6 +308,11 @@ class Item(LoggedModel):
         verbose_name=_("Generate tickets"),
         blank=True, null=True,
     )
+    show_quota_left = models.NullBooleanField(
+        verbose_name=_("Show number of tickets left"),
+        help_text=_("Publicly show how many tickets are still available."),
+        blank=True, null=True,
+    )
     position = models.IntegerField(
         default=0
     )
@@ -409,6 +414,12 @@ class Item(LoggedModel):
         super().delete(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
+
+    @property
+    def do_show_quota_left(self):
+        if self.show_quota_left is None:
+            return self.event.settings.show_quota_left
+        return self.show_quota_left
 
     def tax(self, price=None, base_price_is='auto', currency=None, include_bundled=False):
         price = price if price is not None else self.default_price

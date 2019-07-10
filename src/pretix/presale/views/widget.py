@@ -198,7 +198,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'free_price': item.free_price,
                         'avail': [
                             item.cached_availability[0],
-                            item.cached_availability[1] if self.request.event.settings.show_quota_left else None
+                            item.cached_availability[1] if item.do_show_quota_left else None
                         ] if not item.has_variations else None,
                         'original_price': (
                             (item.original_price.net
@@ -228,7 +228,7 @@ class WidgetAPIProductList(EventListMixin, View):
                                 ),
                                 'avail': [
                                     var.cached_availability[0],
-                                    var.cached_availability[1] if self.request.event.settings.show_quota_left else None
+                                    var.cached_availability[1] if item.do_show_quota_left else None
                                 ],
                             } for var in item.available_variations
                         ]

@@ -240,6 +240,7 @@ TEST_ITEM_RES = {
     "variations": [],
     "addons": [],
     "bundles": [],
+    "show_quota_left": None,
     "original_price": None
 }
 

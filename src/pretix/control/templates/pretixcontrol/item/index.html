@@ -45,6 +45,7 @@
                     {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.require_approval layout="control" %}
                     {% bootstrap_field form.generate_tickets layout="control" %}
+                    {% bootstrap_field form.show_quota_left layout="control" %}
                     {% for f in plugin_forms %}
                         {% bootstrap_form f layout="control" %}
                     {% endfor %}

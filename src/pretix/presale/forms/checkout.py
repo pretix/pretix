@@ -174,7 +174,7 @@ class AddOnsForm(forms.Form):
         elif avail[0] < 100:
             n += ' – {}'.format(_('Currently unavailable'))
         else:
-            if avail[1] is not None and event.settings.show_quota_left:
+            if avail[1] is not None and item.do_show_quota_left:
                 n += ' – {}'.format(_('%(num)s currently available') % {'num': avail[1]})
 
         if not isinstance(item_or_variation, ItemVariation) and item.picture:
@@ -236,6 +236,7 @@ class AddOnsForm(forms.Form):
                                       to_attr='_subevent_quotas',
                                       queryset=event.quotas.filter(subevent=subevent))
                          ).distinct()),
+                'event'
             ).annotate(
                 quotac=Count('quotas'),
                 has_variations=Count('variations')
