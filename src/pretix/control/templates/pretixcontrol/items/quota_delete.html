@@ -3,23 +3,42 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Delete quota" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Delete quota" %}</h1>
-	<form action="" method="post" class="form-horizontal">
-		{% csrf_token %}
-		<p>{% blocktrans %}Are you sure you want to delete the quota <strong>{{ quota }}</strong>?{% endblocktrans %}</p>
-		{% if dependent|length > 0 %}
-			<p>{% blocktrans %}The following products might be no longer available for sale:{% endblocktrans %}</p>
-			{% for item in dependent %}
-				<li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item.name }}</a></li>
-			{% endfor %}
-		{% endif %}
-		<div class="form-group submit-group">
+    <h1>{% trans "Delete quota" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <p>{% blocktrans %}Are you sure you want to delete the quota <strong>{{ quota }}</strong>?{% endblocktrans %}</p>
+        {% if dependent|length > 0 %}
+            <div class="alert alert-info">
+                <p>{% blocktrans %}The following products might be no longer available for sale:{% endblocktrans %}</p>
+                <ul>
+                    {% for item in dependent %}
+                        <li>
+                            <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if vouchers %}
+            <div class="alert alert-warning">
+                {% blocktrans trimmed count count=vouchers %}
+                    That will cause {{ count }} voucher to be unusable.
+                    {% plural %}
+                    That will cause {{ count }} voucher to be unusable.
+                {% endblocktrans %}
+                <a href="{% url "control:event.vouchers" organizer=request.organizer.slug event=request.event.slug %}?itemvar=q-{{ quota.pk }}"
+                   class="btn btn-default">
+                    {% trans "Show affected vouchers" %}
+                </a>
+            </div>
+        {% endif %}
+        <div class="form-group submit-group">
             <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save">
                 {% trans "Delete" %}
             </button>
-		</div>
-	</form>
+        </div>
+    </form>
 {% endblock %}

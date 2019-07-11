@@ -771,7 +771,8 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        context['dependent'] = list(self.get_object().items.all())
+        context['dependent'] = list(self.object.items.all())
+        context['vouchers'] = self.object.vouchers.count()
         return context
 
     @transaction.atomic
@@ -1183,6 +1184,7 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['possible'] = self.is_allowed()
+        context['vouchers'] = self.object.vouchers.count()
         return context
 
     def is_allowed(self) -> bool:

@@ -142,22 +142,26 @@ class Voucher(LoggedModel):
     item = models.ForeignKey(
         Item, related_name='vouchers',
         verbose_name=_("Product"),
-        null=True, blank=True, on_delete=models.CASCADE,
+        null=True, blank=True,
+        on_delete=models.PROTECT,  # We use a fake version of SET_NULL in Item.delete()
         help_text=_(
             "This product is added to the user's cart if the voucher is redeemed."
         )
     )
     variation = models.ForeignKey(
         ItemVariation, related_name='vouchers',
-        null=True, blank=True, on_delete=models.CASCADE,
+        null=True, blank=True,
+        on_delete=models.PROTECT,  # We use a fake version of SET_NULL in ItemVariation.delete() to avoid the semantic change
+                                   # that would happen if we just set variation to None
         verbose_name=_("Product variation"),
         help_text=_(
             "This variation of the product select above is being used."
         )
     )
     quota = models.ForeignKey(
-        Quota, related_name='quota',
-        null=True, blank=True, on_delete=models.CASCADE,
+        Quota, related_name='vouchers',
+        null=True, blank=True,
+        on_delete=models.PROTECT,  # We use a fake version of SET_NULL in Quota.delete()
         verbose_name=_("Quota"),
         help_text=_(
             "If enabled, the voucher is valid for any product affected by this quota."
@@ -408,4 +412,7 @@ class Voucher(LoggedModel):
             kwargs['subevent'] = self.subevent
         if self.quota_id:
             return SeatCategoryMapping.objects.filter(product__quotas__pk=self.quota_id, **kwargs).exists()
-        return self.item.seat_category_mappings.filter(**kwargs).exists()
+        elif self.item_id:
+            return self.item.seat_category_mappings.filter(**kwargs).exists()
+        else:
+            return False

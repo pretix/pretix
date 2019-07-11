@@ -128,7 +128,7 @@
                                     {% if v.variation %}
                                         – {{ v.variation }}
                                     {% endif %}
-                                {% else %}
+                                {% elif v.quota %}
                                     {% blocktrans trimmed with quota=v.quota.name %}
                                         Any product in quota "{{ quota }}"
                                     {% endblocktrans %}

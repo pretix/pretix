@@ -17,6 +17,19 @@
 			{% csrf_token %}
             {% if possible %}
     			<p>{% blocktrans %}Are you sure you want to delete the product <strong>{{ item }}</strong>?{% endblocktrans %}</p>
+                {% if vouchers %}
+                    <div class="alert alert-warning">
+                        {% blocktrans trimmed count count=vouchers %}
+                            That will cause {{ count }} voucher to be unusable.
+                            {% plural %}
+                            That will cause {{ count }} voucher to be unusable.
+                        {% endblocktrans %}
+                        <a href="{% url "control:event.vouchers" organizer=request.organizer.slug event=request.event.slug %}?itemvar={{ item.pk }}"
+                           class="btn btn-default">
+                            {% trans "Show affected vouchers" %}
+                        </a>
+                    </div>
+                {% endif %}
             {% else %}
                 <p>{% blocktrans %}You cannot delete the product <strong>{{ item }}</strong> because it already has been ordered, but you can deactivate it.{% endblocktrans %}</p>
             {% endif %}

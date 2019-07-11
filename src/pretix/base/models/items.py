@@ -174,6 +174,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
             q &= Q(pk=voucher.item_id)
         elif voucher.quota_id:
             q &= Q(quotas__in=[voucher.quota_id])
+        else:
+            return qs.none()
     if not voucher or not voucher.show_hidden_items:
         q &= Q(hide_without_voucher=False)
 
@@ -411,6 +413,7 @@ class Item(LoggedModel):
             self.event.cache.clear()
 
     def delete(self, *args, **kwargs):
+        self.vouchers.update(item=None, variation=None, quota=None)
         super().delete(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
@@ -655,6 +658,7 @@ class ItemVariation(models.Model):
         return t
 
     def delete(self, *args, **kwargs):
+        self.vouchers.update(item=None, variation=None, quota=None)
         super().delete(*args, **kwargs)
         if self.item:
             self.item.event.cache.clear()
@@ -1275,6 +1279,7 @@ class Quota(LoggedModel):
         return self.name
 
     def delete(self, *args, **kwargs):
+        self.vouchers.update(item=None, variation=None, quota=None)
         super().delete(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
