@@ -2123,32 +2123,33 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
         )
         self.q1.options.create(answer='Tech', identifier='TECH')
         self.q1.options.create(answer='Health', identifier='HEALTH')
+        self.q1.options.create(answer='IT', identifier='IT')
 
         self.q2a = self.event.questions.create(
             event=self.event, question='What is your occupation?', type=Question.TYPE_CHOICE_MULTIPLE,
-            required=False, dependency_question=self.q1, dependency_value='TECH'
+            required=False, dependency_question=self.q1, dependency_values=['TECH', 'IT']
         )
         self.q2a.options.create(answer='Software developer', identifier='DEV')
         self.q2a.options.create(answer='System administrator', identifier='ADMIN')
 
         self.q2b = self.event.questions.create(
             event=self.event, question='What is your occupation?', type=Question.TYPE_CHOICE_MULTIPLE,
-            required=True, dependency_question=self.q1, dependency_value='HEALTH'
+            required=True, dependency_question=self.q1, dependency_values=['HEALTH']
         )
         self.q2b.options.create(answer='Doctor', identifier='DOC')
         self.q2b.options.create(answer='Nurse', identifier='NURSE')
 
         self.q3 = self.event.questions.create(
             event=self.event, question='Do you like Python?', type=Question.TYPE_BOOLEAN,
-            required=False, dependency_question=self.q2a, dependency_value='DEV'
+            required=False, dependency_question=self.q2a, dependency_values=['DEV']
         )
         self.q4a = self.event.questions.create(
             event=self.event, question='Why?', type=Question.TYPE_TEXT,
-            required=True, dependency_question=self.q3, dependency_value='True'
+            required=True, dependency_question=self.q3, dependency_values=['True']
         )
         self.q4b = self.event.questions.create(
             event=self.event, question='Why not?', type=Question.TYPE_TEXT,
-            required=True, dependency_question=self.q3, dependency_value='False'
+            required=True, dependency_question=self.q3, dependency_values=['False']
         )
         self.ticket.questions.add(self.q1)
         self.ticket.questions.add(self.q2a)
@@ -2188,6 +2189,15 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             self.q4a: 'No curly braces!'
         }, should_fail=False)
 
+    def test_question_dependencies_second_path_alterative(self):
+        self._setup_dependency_questions()
+        self._test_question_input({
+            self.q1: 'IT',
+            self.q2a: 'DEV',
+            self.q3: 'True',
+            self.q4a: 'No curly braces!'
+        }, should_fail=False)
+
     def test_question_dependencies_subitem_required(self):
         self._setup_dependency_questions()
         self._test_question_input({
@@ -2198,6 +2208,14 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
         self._setup_dependency_questions()
         self._test_question_input({
             self.q1: 'TECH',
+            self.q2a: 'DEV',
+            self.q3: 'True',
+        }, should_fail=True)
+
+    def test_question_dependencies_subsubitem_required_alternative(self):
+        self._setup_dependency_questions()
+        self._test_question_input({
+            self.q1: 'IT',
             self.q2a: 'DEV',
             self.q3: 'True',
         }, should_fail=True)

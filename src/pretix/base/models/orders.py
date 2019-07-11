@@ -1038,18 +1038,17 @@ class AbstractPosition(models.Model):
             q.pk: q for q in questions
         }
 
-        def question_is_visible(parentid, qval):
+        def question_is_visible(parentid, qvals):
             parentq = question_cache[parentid]
-            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_value):
+            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
                 return False
             if parentid not in self.answ:
                 return False
-            if qval == 'True':
-                return self.answ[parentid].answer == 'True'
-            elif qval == 'False':
-                return self.answ[parentid].answer == 'False'
-            else:
-                return qval in [o.identifier for o in self.answ[parentid].options.all()]
+            return (
+                ('True' in qvals and self.answ[parentid].answer == 'True')
+                or ('False' in qvals and self.answ[parentid].answer == 'False')
+                or (any(qval in [o.identifier for o in self.answ[parentid].options.all()] for qval in qvals))
+            )
 
         self.questions = []
         for q in questions:
@@ -1058,7 +1057,7 @@ class AbstractPosition(models.Model):
                 q.answer.question = q  # cache object
             else:
                 q.answer = ""
-            if not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_value):
+            if not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values):
                 self.questions.append(q)
 
     @property

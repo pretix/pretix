@@ -1,4 +1,5 @@
 import copy
+import json
 import logging
 from decimal import Decimal
 from urllib.error import HTTPError
@@ -10,6 +11,7 @@ import vat_moss.id
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.db.models import QuerySet
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language, ugettext_lazy as _
@@ -25,6 +27,7 @@ from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import SplitDateTimeField
+from pretix.helpers.escapejson import escapejson_attr
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.presale.signals import question_form_fields
 
@@ -278,7 +281,7 @@ class BaseQuestionsForm(forms.Form):
 
             if q.dependency_question_id:
                 field.widget.attrs['data-question-dependency'] = q.dependency_question_id
-                field.widget.attrs['data-question-dependency-value'] = q.dependency_value
+                field.widget.attrs['data-question-dependency-values'] = escapejson_attr(json.dumps(q.dependency_values))
                 if q.type != 'M':
                     field.widget.attrs['required'] = q.required and not self.all_optional
                     field._required = q.required and not self.all_optional
@@ -299,26 +302,24 @@ class BaseQuestionsForm(forms.Form):
 
         question_cache = {f.question.pk: f.question for f in self.fields.values() if getattr(f, 'question', None)}
 
-        def question_is_visible(parentid, qval):
+        def question_is_visible(parentid, qvals):
             parentq = question_cache[parentid]
-            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_value):
+            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
                 return False
             if 'question_%d' % parentid not in d:
                 return False
             dval = d.get('question_%d' % parentid)
-            if qval == 'True':
-                return dval
-            elif qval == 'False':
-                return not dval
-            elif isinstance(dval, QuestionOption):
-                return dval.identifier == qval
-            else:
-                return qval in [o.identifier for o in dval]
+            return (
+                ('True' in qvals and dval)
+                or ('False' in qvals and not dval)
+                or (isinstance(dval, QuestionOption) and dval.identifier in qvals)
+                or (isinstance(dval, (list, QuerySet)) and any(qval in [o.identifier for o in dval] for qval in qvals))
+            )
 
         def question_is_required(q):
             return (
                 q.required and
-                (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_value))
+                (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values))
             )
 
         if not self.all_optional:

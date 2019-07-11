@@ -7,30 +7,34 @@ function questions_toggle_dependent(ev) {
         }
 
         var dependency_name = $el.attr("name").split("_")[0] + "_" + $el.attr("data-question-dependency");
-        var dependency_value = $el.attr("data-question-dependency-value");
+        var dependency_values = JSON.parse($el.attr("data-question-dependency-values"));
         var $dependency_el;
 
         if ($("select[name=" + dependency_name + "]").length) {
             // dependency is type C
             $dependency_el = $("select[name=" + dependency_name + "]");
             if (!$dependency_el.closest(".form-group").hasClass("dependency-hidden")) {  // do not show things that depend on hidden things
-                return q_should_be_shown($dependency_el) && $dependency_el.val() === dependency_value;
+                return q_should_be_shown($dependency_el) && $.inArray($dependency_el.val(), dependency_values) > -1;
             }
         } else if ($("input[type=checkbox][name=" + dependency_name + "]").length) {
             // dependency type is B or M
-            if (dependency_value === "True" || dependency_value === "False") {
+            if ($.inArray("True", dependency_values) > -1 || $.inArray("False", dependency_values) > -1) {
                 $dependency_el = $("input[name=" + dependency_name + "]");
                 if (!$dependency_el.closest(".form-group").hasClass("dependency-hidden")) {  // do not show things that depend on hidden things
-                    if (dependency_value === "True") {
-                        return q_should_be_shown($dependency_el) && $dependency_el.prop('checked');
-                    } else {
-                        return q_should_be_shown($dependency_el) && !$dependency_el.prop('checked');
-                    }
+                    return q_should_be_shown($dependency_el) && (
+                        ($.inArray("True", dependency_values) > -1 && $dependency_el.prop('checked'))
+                        || ($.inArray("False", dependency_values) > -1 && !$dependency_el.prop('checked'))
+                    );
                 }
             } else {
-                $dependency_el = $("input[value=" + dependency_value + "][name=" + dependency_name + "]");
+                var filter = "";
+                for (var i = 0; i < dependency_values.length; i++) {
+                    if (filter) filter += ", ";
+                    filter += "input[value=" + dependency_values[i] + "][name=" + dependency_name + "]:checked";
+                }
+                $dependency_el = $("input[value=" + dependency_values[0] + "][name=" + dependency_name + "]");
                 if (!$dependency_el.closest(".form-group").hasClass("dependency-hidden")) {  // do not show things that depend on hidden things
-                    return q_should_be_shown($dependency_el) && $dependency_el.prop('checked');
+                    return q_should_be_shown($dependency_el) && $(filter).length;
                 }
             }
         }

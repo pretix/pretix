@@ -55,7 +55,12 @@ class QuestionForm(I18nModelForm):
                 pk=self.instance.pk
             )
         self.fields['identifier'].required = False
+        self.fields['dependency_values'].required = False
         self.fields['help_text'].widget.attrs['rows'] = 3
+
+    def clean_dependency_values(self):
+        val = self.data.getlist('dependency_values')
+        return val
 
     def clean_dependency_question(self):
         dep = val = self.cleaned_data.get('dependency_question')
@@ -70,8 +75,8 @@ class QuestionForm(I18nModelForm):
 
     def clean(self):
         d = super().clean()
-        if d.get('dependency_question') and not d.get('dependency_value'):
-            raise ValidationError({'dependency_value': [_('This field is required')]})
+        if d.get('dependency_question') and not d.get('dependency_values'):
+            raise ValidationError({'dependency_values': [_('This field is required')]})
         if d.get('dependency_question') and d.get('ask_during_checkin'):
             raise ValidationError(_('Dependencies between questions are not supported during check-in.'))
         return d
@@ -89,13 +94,13 @@ class QuestionForm(I18nModelForm):
             'identifier',
             'items',
             'dependency_question',
-            'dependency_value'
+            'dependency_values'
         ]
         widgets = {
             'items': forms.CheckboxSelectMultiple(
                 attrs={'class': 'scrolling-multiple-choice'}
             ),
-            'dependency_value': forms.Select,
+            'dependency_values': forms.SelectMultiple,
         }
         field_classes = {
             'items': SafeModelMultipleChoiceField,

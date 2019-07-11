@@ -54,11 +54,12 @@ dependency_question                   integer                    Internal ID of 
                                                                  this attribute is set to the value given in
                                                                  ``dependency_value``. This cannot be combined with
                                                                  ``ask_during_checkin``.
-dependency_value                      string                     The value ``dependency_question`` needs to be set to.
-                                                                 If ``dependency_question`` is set to a boolean
-                                                                 question, this should be ``"true"`` or ``"false"``.
-                                                                 Otherwise, it should be the ``identifier`` of a
-                                                                 question option.
+dependency_values                     list of strings            If ``dependency_question`` is set to a boolean
+                                                                 question, this should be ``["True"]`` or ``["False"]``.
+                                                                 Otherwise, it should be a list of ``identifier`` values
+                                                                 of question options.
+dependency_value                      string                     An old version of ``dependency_values`` that only allows
+                                                                 for one value. **Deprecated.**
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.12
@@ -74,6 +75,10 @@ dependency_value                      string                     The value ``dep
 .. versionchanged:: 2.7
 
   The attribute ``hidden`` and the question type ``CC`` have been added.
+
+.. versionchanged:: 3.0
+
+  The attribute ``dependency_values`` has been added.
 
 Endpoints
 ---------
@@ -120,6 +125,7 @@ Endpoints
             "hidden": false,
             "dependency_question": null,
             "dependency_value": null,
+            "dependency_values": [],
             "options": [
               {
                 "id": 1,
@@ -188,6 +194,7 @@ Endpoints
         "hidden": false,
         "dependency_question": null,
         "dependency_value": null,
+        "dependency_values": [],
         "options": [
           {
             "id": 1,
@@ -239,7 +246,7 @@ Endpoints
         "ask_during_checkin": false,
         "hidden": false,
         "dependency_question": null,
-        "dependency_value": null,
+        "dependency_values": [],
         "options": [
           {
             "answer": {"en": "S"}
@@ -274,6 +281,7 @@ Endpoints
         "hidden": false,
         "dependency_question": null,
         "dependency_value": null,
+        "dependency_values": [],
         "options": [
           {
             "id": 1,
@@ -346,6 +354,7 @@ Endpoints
         "hidden": false,
         "dependency_question": null,
         "dependency_value": null,
+        "dependency_values": [],
         "options": [
           {
             "id": 1,

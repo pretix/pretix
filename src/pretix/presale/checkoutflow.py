@@ -439,23 +439,22 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 q.pk: q for q in cp.item.questions_to_ask
             }
 
-            def question_is_visible(parentid, qval):
+            def question_is_visible(parentid, qvals):
                 parentq = question_cache[parentid]
-                if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_value):
+                if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
                     return False
                 if parentid not in answ:
                     return False
-                if qval == 'True':
-                    return answ[parentid].answer == 'True'
-                elif qval == 'False':
-                    return answ[parentid].answer == 'False'
-                else:
-                    return qval in [o.identifier for o in answ[parentid].options.all()]
+                return (
+                    ('True' in qvals and answ[parentid].answer == 'True')
+                    or ('False' in qvals and answ[parentid].answer == 'False')
+                    or (any(qval in [o.identifier for o in answ[parentid].options.all()] for qval in qvals))
+                )
 
             def question_is_required(q):
                 return (
                     q.required and
-                    (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_value))
+                    (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values))
                 )
 
             for q in cp.item.questions_to_ask:
