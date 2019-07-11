@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-25 09:08+0000\n"
-"PO-Revision-Date: 2019-03-19 09:00+0000\n"
-"Last-Translator: Lorhan Sohaky <lorhansohaky@gmail.com>\n"
+"PO-Revision-Date: 2019-07-10 16:02+0000\n"
+"Last-Translator: Vitor Piedras <contato@bilheteriago.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:127
@@ -100,10 +100,9 @@ msgstr "Não existe quantidade suficiente em \"{}\" para executar esta ação."
 
 #: pretix/api/serializers/cart.py:88 pretix/api/serializers/order.py:682
 #: pretix/base/services/orders.py:991
-#, fuzzy, python-brace-format
-#| msgid "The selected ticket shop is currently not available."
+#, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "Atualmente, a loja online selecionada não está disponível."
+msgstr "Atualmente, o assento {seat} selecionado não está disponível."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:1004
 #: pretix/base/models/items.py:1118 pretix/base/models/items.py:1455
@@ -113,13 +112,13 @@ msgstr "Um ou mais itens não pertencem a este evento."
 #: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1464
 #: pretix/base/models/waitinglist.py:155
 msgid "Subevent cannot be null for event series."
-msgstr "Esta atração não pertence ao evento."
+msgstr "Subevento não pode ser vazio para séries de eventos."
 
 #: pretix/api/serializers/checkin.py:33 pretix/api/serializers/checkin.py:36
 #: pretix/base/models/items.py:1466 pretix/base/models/items.py:1469
 #: pretix/base/models/waitinglist.py:157 pretix/base/models/waitinglist.py:160
 msgid "The subevent does not belong to this event."
-msgstr "Esta atração não pertence ao evento."
+msgstr "Este subevento não pertence a este evento."
 
 #: pretix/api/serializers/event.py:101
 msgid ""
@@ -140,14 +139,12 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Plugin desconhecido: '{name}'."
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:630
-#, fuzzy
-#| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "A categoria do add-on pertence ao mesmo evento que o item."
+msgstr "O item do pacote não pode ser o próprio item."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:632
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "O item agrupado não deve ter pacotes por conta própria."
 
 #: pretix/api/serializers/item.py:130
 #, fuzzy
@@ -185,17 +182,17 @@ msgstr ""
 #: pretix/api/views/order.py:330 pretix/control/views/orders.py:946
 #: pretix/presale/views/order.py:614
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Você não pode gerar uma fatura para este pedido."
 
 #: pretix/api/views/order.py:335 pretix/control/views/orders.py:948
 #: pretix/presale/views/order.py:616
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Uma fatura para este pedido já existe."
 
 #: pretix/api/views/order.py:361 pretix/control/views/orders.py:1070
 #: pretix/control/views/users.py:92
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "Ocorreu um erro enviando o email. Por favor, tente novamente em breve."
 
 #: pretix/api/webhooks.py:114 pretix/base/notifications.py:194
 msgid "New order placed"
@@ -280,8 +277,6 @@ msgid "CSV (with semicolons)"
 msgstr "CSV (com ponto e vírgula)"
 
 #: pretix/base/exporter.py:157
-#, fuzzy
-#| msgid "Excel (.xlsx)"
 msgid "Combined Excel (.xlsx)"
 msgstr "Excel (.xlsx)"
 
@@ -299,7 +294,7 @@ msgstr "Perguntas"
 #: pretix/base/exporters/dekodi.py:82
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "Ingresso do evento {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:199 pretix/base/exporters/invoices.py:80
 #: pretix/control/forms/subevents.py:228
@@ -367,7 +362,7 @@ msgstr ""
 
 #: pretix/base/exporters/mail.py:16
 msgid "Email addresses (text file)"
-msgstr "E-mail (text file)"
+msgstr "E-mail (arquivo de texto)"
 
 #: pretix/base/exporters/mail.py:34 pretix/plugins/reports/exporters.py:289
 msgid "Filter by status"
@@ -393,10 +388,8 @@ msgid "Order positions"
 msgstr "Posição dos pedidos"
 
 #: pretix/base/exporters/orderlist.py:30
-#, fuzzy
-#| msgid "Other fees"
 msgid "Order fees"
-msgstr "Outras taxas"
+msgstr "Taxas do pedido"
 
 #: pretix/base/exporters/orderlist.py:39
 msgid "Only paid orders"
@@ -574,22 +567,22 @@ msgstr "Impostos"
 #: pretix/base/exporters/orderlist.py:100
 #: pretix/control/templates/pretixcontrol/order/index.html:126
 msgid "Order locale"
-msgstr "Local da encomenda"
+msgstr "Local do pedido"
 
 #: pretix/base/exporters/orderlist.py:105
 #, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr "Bruto em {rate} % tax"
+msgstr "Bruto em {rate} % de taxa"
 
 #: pretix/base/exporters/orderlist.py:106
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr "Líquido em {rate} % tax"
+msgstr "Líquido em {rate} % de taxa"
 
 #: pretix/base/exporters/orderlist.py:107
 #, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr "Valor do imposto em {rate} 1% de imposto"
+msgstr "Valor do imposto em {rate} 1% de taxa"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Invoice numbers"
@@ -598,16 +591,12 @@ msgstr "Número da fatura"
 #: pretix/base/exporters/orderlist.py:111
 #: pretix/base/exporters/orderlist.py:306
 #: pretix/control/templates/pretixcontrol/order/index.html:123
-#, fuzzy
-#| msgid "Sales tax"
 msgid "Sales channel"
-msgstr "Imposto sobre vendas"
+msgstr "Canal de vendas"
 
 #: pretix/base/exporters/orderlist.py:197
-#, fuzzy
-#| msgid "Device type"
 msgid "Fee type"
-msgstr "Tipo de dispositivo"
+msgstr "Tipo de taxa"
 
 #: pretix/base/exporters/orderlist.py:198
 #: pretix/base/exporters/orderlist.py:568 pretix/base/models/items.py:274
@@ -649,17 +638,12 @@ msgstr "Valor do imposto"
 #: pretix/base/exporters/orderlist.py:209
 #: pretix/base/exporters/orderlist.py:298
 #: pretix/base/exporters/orderlist.py:302 pretix/base/pdf.py:186
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice address name"
-msgstr "Data da fatura"
+msgstr "Endereço da fatura"
 
 #: pretix/base/exporters/orderlist.py:268
-#, fuzzy
-#| msgid "Position"
 msgid "Position ID"
-msgstr "Posição"
+msgstr "ID Posição"
 
 #: pretix/base/exporters/orderlist.py:274 pretix/base/models/checkin.py:17
 #: pretix/base/models/items.py:1228 pretix/base/models/orders.py:956
@@ -734,13 +718,11 @@ msgstr "Cupom"
 
 #: pretix/base/exporters/orderlist.py:291
 msgid "Pseudonymization ID"
-msgstr ""
+msgstr "ID Proteção de Dados"
 
 #: pretix/base/exporters/orderlist.py:374
-#, fuzzy
-#| msgid "List of payments and refunds"
 msgid "Order payments and refunds"
-msgstr "Listar pagamentos e reembolsos"
+msgstr "Pagamentos e reembolsos do pedido"
 
 #: pretix/base/exporters/orderlist.py:382
 msgid "Only successful payments"
@@ -752,7 +734,7 @@ msgstr "Apenas pagamentos concluídos"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:211
 msgid "Order"
-msgstr "Compra"
+msgstr "Pedido de compra"
 
 #: pretix/base/exporters/orderlist.py:415
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
