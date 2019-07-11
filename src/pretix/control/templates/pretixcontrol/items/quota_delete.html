@@ -32,7 +32,7 @@
                 </a>
             </div>
         {% endif %}
-        <div class="form-group submit-group">
+		<div class="form-group submit-group">
             <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>

@@ -201,15 +201,25 @@ class InlineQuestionOptionSerializer(I18nAwareModelSerializer):
         fields = ('id', 'identifier', 'answer', 'position')
 
 
+class LegacyDependencyValueField(serializers.CharField):
+
+    def to_representation(self, obj):
+        return obj[0] if obj else None
+
+    def to_internal_value(self, data):
+        return [data] if data else []
+
+
 class QuestionSerializer(I18nAwareModelSerializer):
     options = InlineQuestionOptionSerializer(many=True, required=False)
     identifier = serializers.CharField(allow_null=True)
+    dependency_value = LegacyDependencyValueField(source='dependency_values', required=False, allow_null=True)
 
     class Meta:
         model = Question
         fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
-                  'ask_during_checkin', 'identifier', 'dependency_question', 'dependency_value',
-                  'hidden')
+                  'ask_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
+                  'hidden', 'dependency_value')
 
     def validate_identifier(self, value):
         Question._clean_identifier(self.context['event'], value, self.instance)
@@ -263,6 +273,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
     def create(self, validated_data):
         options_data = validated_data.pop('options') if 'options' in validated_data else []
         items = validated_data.pop('items')
+
         question = Question.objects.create(**validated_data)
         question.items.set(items)
         for opt_data in options_data:

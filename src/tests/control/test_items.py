@@ -245,24 +245,24 @@ class QuestionsTest(ItemFormTest):
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['items'] = self.item1.id
         form_data['dependency_question'] = q1.pk
-        form_data['dependency_value'] = o1.identifier
+        form_data['dependency_values'] = o1.identifier
         doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id),
                             form_data)
         assert doc.select(".alert-success")
         q2.refresh_from_db()
         assert q2.dependency_question == q1
-        assert q2.dependency_value == o1.identifier
+        assert q2.dependency_values == [o1.identifier]
 
     def test_set_dependency_circular(self):
         with scopes_disabled():
             q1 = Question.objects.create(event=self.event1, question="What country are you from?", type="C", required=True)
             o1 = q1.options.create(answer='Germany')
             q2 = Question.objects.create(event=self.event1, question="What city are you from?", type="C", required=True,
-                                         dependency_question=q1, dependency_value=o1.identifier)
+                                         dependency_question=q1, dependency_values=[o1.identifier])
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q1.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['dependency_question'] = q2.pk
-        form_data['dependency_value'] = '1'
+        form_data['dependency_values'] = '1'
         doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q1.id),
                             form_data)
         assert not doc.select(".alert-success")
@@ -274,7 +274,7 @@ class QuestionsTest(ItemFormTest):
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['dependency_question'] = q1.pk
-        form_data['dependency_value'] = '1'
+        form_data['dependency_values'] = '1'
         doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id),
                             form_data)
         assert not doc.select(".alert-success")

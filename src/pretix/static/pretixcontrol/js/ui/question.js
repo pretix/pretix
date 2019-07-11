@@ -95,22 +95,22 @@ $(function () {
         $(".alert-required-boolean").toggle(show);
     }
 
-    var $val = $("#id_dependency_value");
+    var $val = $("#id_dependency_values");
     var $dq = $("#id_dependency_question");
-    var oldval = $("#dependency_value_val").text();
+    var oldval = JSON.parse($("#dependency_value_val").text());
     function update_dependency_options() {
         $val.parent().find(".loading-indicator").remove();
-        $("#id_dependency_value option").remove();
-        $("#id_dependency_value").prop("required", false);
+        $("#id_dependency_values option").remove();
+        $("#id_dependency_values").prop("required", false);
 
         var val = $dq.children("option:selected").val();
         if (!val) {
-            $("#id_dependency_value").show();
+            $("#id_dependency_values").show();
             $val.show();
             return;
         }
 
-        $("#id_dependency_value").prop("required", true);
+        $("#id_dependency_values").prop("required", true);
         $val.hide();
         $val.parent().append("<div class=\"help-block loading-indicator\"><span class=\"fa" +
             " fa-cog fa-spin\"></span></div>");

@@ -22,6 +22,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
+from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.signals import quota_availability
 
@@ -934,8 +935,8 @@ class Question(LoggedModel):
     :type identifier: str
     :param dependency_question: This question will only show up if the referenced question is set to `dependency_value`.
     :type dependency_question: Question
-    :param dependency_value: The value that `dependency_question` needs to be set to for this question to be applicable.
-    :type dependency_value: str
+    :param dependency_values: The values that `dependency_question` needs to be set to for this question to be applicable.
+    :type dependency_values: list[str]
     """
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
@@ -1015,7 +1016,7 @@ class Question(LoggedModel):
     dependency_question = models.ForeignKey(
         'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
-    dependency_value = models.TextField(null=True, blank=True)
+    dependency_values = MultiStringField(default=[])
 
     objects = ScopedManager(organizer='event__organizer')
 

@@ -1651,6 +1651,7 @@ TEST_QUESTION_RES = {
     "position": 0,
     "dependency_question": None,
     "dependency_value": None,
+    "dependency_values": [],
     "options": [
         {
             "id": 0,
@@ -1881,6 +1882,49 @@ def test_question_delete(token_client, organizer, event, question):
     assert resp.status_code == 204
     with scopes_disabled():
         assert not event.questions.filter(pk=question.id).exists()
+
+
+@pytest.mark.django_db
+def test_question_update_dependency_values(token_client, organizer, event, question):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "dependency_values": ["a", "b"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    question.refresh_from_db()
+    assert question.dependency_values == ["a", "b"]
+
+
+@pytest.mark.django_db
+def test_question_update_dependency_value_legacy(token_client, organizer, event, question):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "dependency_value": "a"
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    question.refresh_from_db()
+    assert question.dependency_values == ["a"]
+
+
+@pytest.mark.django_db
+def test_question_update_dependency_value_legacy_conflict(token_client, organizer, event, question):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "dependency_values": ["a", "b"],
+            "dependency_value": "a"
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    question.refresh_from_db()
+    assert question.dependency_values == ["a"]
 
 
 TEST_OPTIONS_RES = {
