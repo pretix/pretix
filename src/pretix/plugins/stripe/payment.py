@@ -347,7 +347,7 @@ class StripeMethod(BasePaymentProvider):
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
         except stripe.error.StripeError as e:
-            if e.json_body:
+            if e.json_body and 'error' in e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
             else:
@@ -453,7 +453,7 @@ class StripeMethod(BasePaymentProvider):
             ch.refresh()
         except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError) \
                 as e:
-            if e.json_body:
+            if e.json_body and 'error' in e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
             else:
@@ -478,7 +478,7 @@ class StripeMethod(BasePaymentProvider):
         try:
             source = self._create_source(request, payment)
         except stripe.error.StripeError as e:
-            if e.json_body:
+            if e.json_body and 'err' in e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
             else:
@@ -670,7 +670,7 @@ class StripeCC(StripeMethod):
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
         except stripe.error.StripeError as e:
-            if e.json_body:
+            if e.json_body and 'error' in e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
             else:
