@@ -17,7 +17,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.forms import SafeSessionWizardView
 from pretix.base.i18n import language
-from pretix.base.models import Event, Organizer, Quota, Team
+from pretix.base.models import Event, EventMetaValue, Organizer, Quota, Team
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
@@ -32,8 +32,13 @@ class EventList(PaginationMixin, ListView):
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
-        qs = self.request.user.get_events_with_any_permission(self.request).select_related('organizer').prefetch_related(
-            '_settings_objects', 'organizer___settings_objects'
+        qs = self.request.user.get_events_with_any_permission(self.request).prefetch_related(
+            'organizer', '_settings_objects', 'organizer___settings_objects', 'organizer__meta_properties',
+            Prefetch(
+                'meta_values',
+                EventMetaValue.objects.select_related('property'),
+                to_attr='meta_values_cached'
+            )
         ).order_by('-date_from')
 
         qs = qs.annotate(

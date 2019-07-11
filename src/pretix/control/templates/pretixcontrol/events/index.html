@@ -87,6 +87,11 @@
                     <td class="event-name-col">
                         <strong><a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
                         <br><small>{{ e.slug }}</small>
+                        {% for k, v in e.meta_data.items %}
+                            {% if v %}
+                                <span class="text-muted">&middot; {{ k }}: {{ v }}</span>
+                            {% endif %}
+                        {% endfor %}
                     </td>
                     {% if not hide_orga %}<td>{{ e.organizer }}</td>{% endif %}
                     <td class="event-date-col">

@@ -710,8 +710,12 @@ class Event(EventMixin, LoggedModel):
     @property
     def meta_data(self):
         data = {p.name: p.default for p in self.organizer.meta_properties.all()}
-        data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
-        return data
+        if hasattr(self, 'meta_values_cached'):
+            data.update({v.property.name: v.value for v in self.meta_values_cached})
+        else:
+            data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
+
+        return OrderedDict((k, v) for k, v in sorted(data.items(), key=lambda k: k[0]))
 
     @property
     def has_payment_provider(self):
