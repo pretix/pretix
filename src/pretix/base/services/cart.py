@@ -26,6 +26,7 @@ from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.celery_app import app
 from pretix.presale.signals import (
@@ -643,6 +644,15 @@ class CartManager:
                             'cat': str(iao.addon_category.name),
                         }
                     )
+                validate_cart_addons.send(
+                    sender=self.event,
+                    addons={
+                        (self._items_cache[s[0]], self._variations_cache[s[1]] if s[1] else None)
+                        for s in selected
+                    },
+                    base_position=cp,
+                    iao=iao
+                )
 
         # Detect removed add-ons and create RemoveOperations
         for cp, al in current_addons.items():

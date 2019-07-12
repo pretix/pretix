@@ -14,7 +14,8 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import ItemVariation
 from pretix.base.models.tax import TAXED_ZERO
-from pretix.base.services.cart import error_messages
+from pretix.base.services.cart import CartError, error_messages
+from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.validators import EmailBlacklistValidator
@@ -205,13 +206,14 @@ class AddOnsForm(forms.Form):
         """
         self.iao = kwargs.pop('iao')
         category = self.iao.addon_category
-        event = kwargs.pop('event')
+        self.event = kwargs.pop('event')
         subevent = kwargs.pop('subevent')
         current_addons = kwargs.pop('initial')
         quota_cache = kwargs.pop('quota_cache')
         item_cache = kwargs.pop('item_cache')
         self.price_included = kwargs.pop('price_included')
         self.sales_channel = kwargs.pop('sales_channel')
+        self.base_position = kwargs.pop('base_position')
 
         super().__init__(*args, **kwargs)
 
@@ -231,12 +233,12 @@ class AddOnsForm(forms.Form):
             ).select_related('tax_rule').prefetch_related(
                 Prefetch('quotas',
                          to_attr='_subevent_quotas',
-                         queryset=event.quotas.filter(subevent=subevent)),
+                         queryset=self.event.quotas.filter(subevent=subevent)),
                 Prefetch('variations', to_attr='available_variations',
                          queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).prefetch_related(
                              Prefetch('quotas',
                                       to_attr='_subevent_quotas',
-                                      queryset=event.quotas.filter(subevent=subevent))
+                                      queryset=self.event.quotas.filter(subevent=subevent))
                          ).distinct()),
                 'event'
             ).annotate(
@@ -260,7 +262,7 @@ class AddOnsForm(forms.Form):
                         self.vars_cache[v.pk] = v
                         choices.append(
                             (v.pk,
-                             self._label(event, v, cached_availability,
+                             self._label(self.event, v, cached_availability,
                                          override_price=var_price_override.get(v.pk)),
                              v.description)
                         )
@@ -294,7 +296,7 @@ class AddOnsForm(forms.Form):
                     continue
                 cached_availability = i.check_quotas(subevent=subevent, _cache=quota_cache)
                 field = forms.BooleanField(
-                    label=self._label(event, i, cached_availability,
+                    label=self._label(self.event, i, cached_availability,
                                       override_price=item_price_override.get(i.pk)),
                     required=False,
                     initial=i.pk in current_addons,
@@ -333,3 +335,8 @@ class AddOnsForm(forms.Form):
                     'cat': str(self.iao.addon_category.name),
                 }
             )
+        try:
+            validate_cart_addons.send(sender=self.event, addons=selected, base_position=self.base_position,
+                                      iao=self.iao)
+        except CartError as e:
+            raise ValidationError(str(e))

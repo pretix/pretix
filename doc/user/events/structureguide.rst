@@ -85,7 +85,13 @@ Use case: Conference with workshops
 
 When running a conference, you might also organize a number of workshops with smaller capacity. To be able to plan, it would be great to know which workshops an attendee plans to attend.
 
+Option A: Questions
+"""""""""""""""""""
+
 Your first and simplest option is to just create a multiple-choice question. This has the upside of making it easy for users to change their mind later on, but will not allow you to restrict the number of attendees signing up for a given workshop – or even charge extra for a given workshop.
+
+Option B: Add-on products with fixed time slots
+"""""""""""""""""""""""""""""""""""""""""""""""
 
 The usually better option is to go with add-on products. Let's take for example the following conference schedule, in which the lecture can be attended by anyone, but the workshops only have space for 20 persons each:
 
@@ -116,6 +122,28 @@ Assuming you already created one or more products for your general conference ad
 * Four quotas for each of the workshops
 
 * One add-on configuration on your base product that allows users to choose between 0 and 2 products from the category "Workshops"
+
+Option C: Add-on products with variable time slots
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+The above option only works if your conference uses fixed timeslots and every workshop uses exactly one timeslot. If
+your schedule looks like this, it's not going to work great:
+
++------------+------------+-----------+
+| Time       | Room A     | Room B    |
++============+============+===========+
+| body row 1 | column 2   | column 3  |
++------------+------------+-----------+
+| body row 2 | Cells may span columns.|
++------------+------------+-----------+
+| body row 3 | Cells may  | - Cells   |
++------------+ span rows. | - contain |
+| body row 4 |            | - blocks. |
++------------+------------+-----------+
+
+**This option is currently only available on pretix Hosted. If you are interested in using it with pretix Enterprise,
+ please contact sales@pretix.eu.**
+
 
 Use case: Discounted packages
 -----------------------------

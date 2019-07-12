@@ -265,6 +265,21 @@ appropriate exception message.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+validate_cart_addons = EventPluginSignal(
+    providing_args=["addons", "base_position", "iao"]
+)
+"""
+This signal is sent when a user tries to select a combination of addons. In contrast to
+ ``validate_cart``, this is executed before the cart is actually modified. You are passed
+an argument ``addons`` containing a set of ``(item, variation or None)`` tuples as well
+as the ``ItemAddOn`` object as the argument ``iao`` and the base cart position as
+``base_position``.
+The response of receivers will be ignored, but you can raise a CartError with an
+appropriate exception message.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 order_placed = EventPluginSignal(
     providing_args=["order"]
 )

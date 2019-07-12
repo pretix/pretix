@@ -239,6 +239,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     'form': AddOnsForm(
                         event=self.request.event,
                         prefix='{}_{}'.format(cartpos.pk, iao.addon_category.pk),
+                        base_position=cartpos,
                         iao=iao,
                         price_included=iao.price_included,
                         initial=current_addon_products,
