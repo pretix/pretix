@@ -51,8 +51,18 @@ function async_task_check_callback(data, jqXHR, status) {
 
 function async_task_check_error(jqXHR, textStatus, errorThrown) {
     "use strict";
-    var c = $(jqXHR.responseText).filter('.container');
-    if (c.length > 0) {
+    var respdom = $(jqXHR.responseText);
+    var c = respdom.filter('.container');
+    if (respdom.filter('form') && (respdom.filter('.has-error') || respdom.filter('.alert-danger'))) {
+        // This is a failed form validation, let's just use it
+        $("body").data('ajaxing', false);
+        waitingDialog.hide();
+        $("body").html(jqXHR.responseText.substring(
+            jqXHR.responseText.indexOf("<body"),
+            jqXHR.responseText.indexOf("</body")
+        ));
+    } else if (c.length > 0) {
+        // This is some kind of 500/404/403 page, show it in an overlay
         $("body").data('ajaxing', false);
         waitingDialog.hide();
         if (location.href.indexOf("async_id") !== -1) {
@@ -114,10 +124,23 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
     if (textStatus === "timeout") {
         alert(gettext("The request took to long. Please try again."));
         waitingDialog.hide();
-    } else if (jqXHR.responseText.indexOf('container') > 0) {
-        var c = $(jqXHR.responseText).filter('.container');
-        waitingDialog.hide();
-        ajaxErrDialog.show(c.first().html());
+    } else if (jqXHR.responseText.indexOf('<html') > 0) {
+        var respdom = $(jqXHR.responseText);
+        var c = respdom.filter('.container');
+        if (respdom.filter('form') && (respdom.filter('.has-error') || respdom.filter('.alert-danger'))) {
+            // This is a failed form validation, let's just use it
+            waitingDialog.hide();
+            $("body").html(jqXHR.responseText.substring(
+                jqXHR.responseText.indexOf("<body"),
+                jqXHR.responseText.indexOf("</body")
+            ));
+        } else if (c.length > 0) {
+            waitingDialog.hide();
+            ajaxErrDialog.show(c.first().html());
+        } else {
+            waitingDialog.hide();
+            alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
+        }
     } else {
         if (jqXHR.status >= 400 && jqXHR.status < 500) {
             waitingDialog.hide();
