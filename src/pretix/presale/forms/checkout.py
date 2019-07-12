@@ -14,6 +14,7 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import ItemVariation
 from pretix.base.models.tax import TAXED_ZERO
+from pretix.base.services.cart import error_messages
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.validators import EmailBlacklistValidator
@@ -195,14 +196,15 @@ class AddOnsForm(forms.Form):
         """
         Takes additional keyword arguments:
 
-        :param category: The category to choose from
+        :param iao: The ItemAddOn object
         :param event: The event this belongs to
         :param subevent: The event the parent cart position belongs to
         :param initial: The current set of add-ons
         :param quota_cache: A shared dictionary for quota caching
         :param item_cache: A shared dictionary for item/category caching
         """
-        category = kwargs.pop('category')
+        self.iao = kwargs.pop('iao')
+        category = self.iao.addon_category
         event = kwargs.pop('event')
         subevent = kwargs.pop('subevent')
         current_addons = kwargs.pop('initial')
@@ -247,12 +249,15 @@ class AddOnsForm(forms.Form):
         else:
             items = item_cache[ckey]
 
+        self.vars_cache = {}
+
         for i in items:
             if i.has_variations:
                 choices = [('', _('no selection'), '')]
                 for v in i.available_variations:
                     cached_availability = v.check_quotas(subevent=subevent, _cache=quota_cache)
                     if v._subevent_quotas:
+                        self.vars_cache[v.pk] = v
                         choices.append(
                             (v.pk,
                              self._label(event, v, cached_availability,
@@ -281,6 +286,7 @@ class AddOnsForm(forms.Form):
                     help_text=rich_text(str(i.description)),
                     initial=current_addons.get(i.pk),
                 )
+                field.item = i
                 if len(choices) > 1:
                     self.fields['item_%s' % i.pk] = field
             else:
@@ -294,4 +300,36 @@ class AddOnsForm(forms.Form):
                     initial=i.pk in current_addons,
                     help_text=rich_text(str(i.description)),
                 )
+                field.item = i
                 self.fields['item_%s' % i.pk] = field
+
+    def clean(self):
+        data = super().clean()
+        selected = set()
+        for k, v in data.items():
+            if v is True:
+                selected.add((self.fields[k].item, None))
+            elif v:
+                selected.add((self.fields[k].item, self.vars_cache.get(int(v))))
+        if len(selected) > self.iao.max_count:
+            # TODO: Proper pluralization
+            raise ValidationError(
+                _(error_messages['addon_max_count']),
+                'addon_max_count',
+                {
+                    'base': str(self.iao.base_item.name),
+                    'max': self.iao.max_count,
+                    'cat': str(self.iao.addon_category.name),
+                }
+            )
+        elif len(selected) < self.iao.min_count:
+            # TODO: Proper pluralization
+            raise ValidationError(
+                _(error_messages['addon_min_count']),
+                'addon_min_count',
+                {
+                    'base': str(self.iao.base_item.name),
+                    'min': self.iao.min_count,
+                    'cat': str(self.iao.addon_category.name),
+                }
+            )

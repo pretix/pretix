@@ -239,7 +239,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     'form': AddOnsForm(
                         event=self.request.event,
                         prefix='{}_{}'.format(cartpos.pk, iao.addon_category.pk),
-                        category=iao.addon_category,
+                        iao=iao,
                         price_included=iao.price_included,
                         initial=current_addon_products,
                         data=(self.request.POST if self.request.method == 'POST' else None),
