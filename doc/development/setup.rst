@@ -65,9 +65,7 @@ Then, create the local database::
     python manage.py migrate
 
 A first user with username ``admin@localhost`` and password ``admin`` will be automatically
-created. If you want to generate more test data, run::
-
-    python make_testdata.py
+created. 
 
 If you want to see pretix in a different language than English, you have to compile our language
 files::
