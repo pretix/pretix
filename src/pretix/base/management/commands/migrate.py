@@ -2,7 +2,7 @@
 Django tries to be helpful by suggesting to run "makemigrations" in red font on every "migrate"
 run when there are things we have no migrations for. Usually, this is intended, and running
 "makemigrations" can really screw up the environment of a user, so we want to prevent novice
-users from doing that by going really dirty and fitlering it from the output.
+users from doing that by going really dirty and filtering it from the output.
 """
 import sys
 
