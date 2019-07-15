@@ -140,8 +140,8 @@ $(function () {
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 
     // AddOns
-    $('.addon-variation-description').hide();
-    $('.toggle-variation-description').click(function () {
+    $('.collapse-vardesc .addon-variation-description').hide();
+    $('.collapse-vardesc .toggle-variation-description').click(function () {
         $(this).parent().find('.addon-variation-description').slideToggle();
     });
 

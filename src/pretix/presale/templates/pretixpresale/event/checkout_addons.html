@@ -6,7 +6,8 @@
     <p>
         {% trans "For some of the products in your cart, you can choose additional options before you continue." %}
     </p>
-    <form class="form-horizontal" method="post" data-asynctask
+    <form class="form-horizontal {% if request.event.settings.addon_variation_description_collapsed %}collapse-vardesc{% endif %}"
+            method="post" data-asynctask
             data-asynctask-headline="{% trans "We're now trying to book these add-ons for you!" %}">
         {% csrf_token %}
         <div class="panel-group" id="questions_group">

@@ -88,7 +88,11 @@
     margin-top: 10px;
 }
 .toggle-variation-description {
+    display: none;
+}
+.collapse-vardesc .toggle-variation-description {
     cursor: pointer;
+    display: block;
 }
 #voucher-toggle {
     display: none;
