@@ -50,7 +50,7 @@ class CartMixin:
         return self.request._checkout_flow_invoice_address
 
     def get_cart(self, answers=False, queryset=None, order=None, downloads=False):
-        if queryset:
+        if queryset is not None:
             prefetch = []
             if answers:
                 prefetch.append('item__questions')
