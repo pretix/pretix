@@ -556,3 +556,11 @@ into account.
 system really bad.** Also, keep in mind that your response is subject to caching and out-of-date
 quotas might be used for display (not for actual order processing).
 """
+
+order_split = EventPluginSignal(
+    providing_args=["original", "split_order"]
+)
+"""
+This signal is sent out when an order is split into two orders and allows you to copy related models
+to the new order. You will be passed the old order as ``original`` and the new order as ``split_order``.
+"""

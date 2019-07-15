@@ -49,7 +49,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
     order_denied, order_expired, order_fee_calculation, order_placed,
-    periodic_task, validate_order,
+    order_split, periodic_task, validate_order,
 )
 from pretix.celery_app import app
 from pretix.helpers.models import modelcopy
@@ -1457,6 +1457,8 @@ class OrderChangeManager:
 
         if split_order.total != Decimal('0.00') and self.order.invoices.filter(is_cancellation=False).last():
             generate_invoice(split_order)
+
+        order_split.send(sender=self.order.event, original=self.order, split_order=split_order)
         return split_order
 
     @cached_property
