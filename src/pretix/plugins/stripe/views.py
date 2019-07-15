@@ -469,7 +469,7 @@ class ReturnView(StripeOrderView, View):
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
         if src.client_secret != request.GET.get('client_secret'):
-            messages.error(self.request, _('Sorry, there was an error in the payment process.'
+            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
