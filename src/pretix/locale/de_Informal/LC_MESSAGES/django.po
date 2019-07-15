@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-15 08:31+0000\n"
-"PO-Revision-Date: 2019-07-10 16:02+0000\n"
+"PO-Revision-Date: 2019-07-15 09:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1864,13 +1864,8 @@ msgid "Show number of tickets left"
 msgstr "Zeige Anzahl verbleibender Tickets"
 
 #: pretix/base/models/items.py:316
-#, fuzzy
-#| msgid ""
-#| "Publicly show how many tickets of a certain type are still available."
 msgid "Publicly show how many tickets are still available."
-msgstr ""
-"Zeige öffentlich an, wie viele Tickets des jeweiligen Typs noch verfügbar "
-"sind."
+msgstr "Zeige öffentlich an, wie viele Tickets noch verfügbar sind."
 
 #: pretix/base/models/items.py:323
 msgid "Product picture"
@@ -1929,19 +1924,12 @@ msgstr ""
 "wird."
 
 #: pretix/base/models/items.py:353
-#, fuzzy
-#| msgid ""
-#| "This product will be hidden from the event page until the user enters a "
-#| "voucher code that is specifically tied to this product (and not via a "
-#| "quota)."
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
 msgstr ""
 "Dieses Produkt wird auf der Veranstaltungsseite nicht angezeigt, es sei denn "
-"der Benutzer gibt einen zu diesem Produkt gehörenden Gutscheincode ein. Im "
-"Gutschein muss das Produkt direkt hinterlegt sein und nicht über sein "
-"Kontingent."
+"der Benutzer gibt einen zu diesem Produkt gehörenden Gutscheincode ein."
 
 #: pretix/base/models/items.py:357
 msgid "Only sell this product as part of a bundle"
@@ -2960,7 +2948,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:184
 msgid "Shows hidden products that match this voucher"
-msgstr ""
+msgstr "Zeigt versteckte Produkte an, die zu diesem Gutschein passen"
 
 #: pretix/base/models/vouchers.py:192 pretix/control/navigation.py:234
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:5
@@ -3277,7 +3265,7 @@ msgstr "Fester Betrag"
 
 #: pretix/base/payment.py:252
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Prozentsatz der Bestellsumme"
 
 #: pretix/base/payment.py:258
 msgid "Calculate the fee from the total value including the fee."
@@ -6891,35 +6879,24 @@ msgid "All refunds"
 msgstr "Alle Erstattungen"
 
 #: pretix/control/forms/filter.py:953
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Date history"
 msgid "Date filter"
-msgstr "Termin-Verlauf"
+msgstr "Datums-Filter"
 
 #: pretix/control/forms/filter.py:955
-#, fuzzy
-#| msgid "Filter by tag"
 msgid "Filter by…"
-msgstr "Nach Tag filtern"
+msgstr "Filtern nach…"
 
 #: pretix/control/forms/filter.py:957
-#, fuzzy
-#| msgid "Date of last payment"
 msgid "Date of last successful payment"
 msgstr "Datum der letzten Zahlung"
 
 #: pretix/control/forms/filter.py:962
-#, fuzzy
-#| msgid "Date"
 msgid "Date from"
-msgstr "Datum"
+msgstr "Datum von"
 
 #: pretix/control/forms/filter.py:967
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date until"
-msgstr "Datum und Uhrzeit"
+msgstr "Datum bis"
 
 #: pretix/control/forms/global_settings.py:21
 msgid "Additional footer text"
@@ -7505,6 +7482,8 @@ msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr ""
+"Dieser Gutschein gilt nur für versteckte Produkte, aber du hast nicht "
+"ausgewählt, dass er auch versteckte Produkte anzeigen soll."
 
 #: pretix/control/forms/vouchers.py:190
 msgid "Codes"
@@ -10463,15 +10442,13 @@ msgstr "Möchtest du das Produkt <strong>%(item)s</strong> wirklich löschen?"
 #, python-format
 msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dies wird %(count)s Gutschein unbrauchbar machen."
+msgstr[1] "Dies wird %(count)s Gutscheine unbrauchbar machen."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:29
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:31
-#, fuzzy
-#| msgid "Show affected orders"
 msgid "Show affected vouchers"
-msgstr "Betroffene Bestellungen anzeigen"
+msgstr "Betroffene Gutscheine anzeigen"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:34
 #, python-format
@@ -15863,7 +15840,7 @@ msgstr "Bestellungen nach Produkt"
 #: pretix/plugins/reports/exporters.py:202
 #, python-brace-format
 msgid "{axis} between {start} and {end}"
-msgstr ""
+msgstr "{axis} zwischen {start} und {end}"
 
 #: pretix/plugins/reports/exporters.py:227
 #: pretix/plugins/reports/exporters.py:228
@@ -15893,10 +15870,8 @@ msgid "Tax"
 msgstr "Steuer"
 
 #: pretix/plugins/reports/exporters.py:463
-#, fuzzy
-#| msgid "List of orders with taxes (PDF)"
 msgid "List of orders with taxes"
-msgstr "Liste der Bestellungen mit Steuern (PDF)"
+msgstr "Liste der Bestellungen mit Steuern"
 
 #: pretix/plugins/sendmail/__init__.py:9 pretix/plugins/sendmail/__init__.py:12
 #: pretix/plugins/sendmail/signals.py:16
@@ -16281,10 +16256,8 @@ msgid "You may need to enable JavaScript for Stripe payments."
 msgstr "Du musst JavaScript aktivieren, um mit Stripe zu bezahlen."
 
 #: pretix/plugins/stripe/payment.py:732
-#, fuzzy
-#| msgid "Your input was invalid, please try again."
 msgid "Your payment failed. Please try again."
-msgstr "Deine Eingabe war ungültig, bitte erneut versuchen."
+msgstr "Ihre Zahlung ist fehlgeschlagen, bitte erneut versuchen."
 
 #: pretix/plugins/stripe/payment.py:813
 msgid "giropay via Stripe"
@@ -16520,12 +16493,12 @@ msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
+"Du musst deine Zahlung bestätigen. Bitte klicke den Link weiter unten um "
+"dies zu erledigen oder eine neue Zahlung zu starten."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:15
-#, fuzzy
-#| msgid "Cancel payment"
 msgid "Confirm payment"
-msgstr "Zahlung abbrechen"
+msgstr "Zahlung bestätigen"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:22
 msgid ""
@@ -16544,14 +16517,13 @@ msgid "Pay order"
 msgstr "Bestellung bezahlen"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
-#, fuzzy, python-format
-#| msgid "Change payment method: %(code)s"
+#, python-format
 msgid "Confirm payment: %(code)s"
-msgstr "Zahlungsmethode wechseln: %(code)s"
+msgstr "Zahlung bestätigen: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:18
 msgid "Confirming your payment…"
-msgstr ""
+msgstr "Zahlung bestätigen…"
 
 #: pretix/plugins/stripe/views.py:55 pretix/plugins/stripe/views.py:61
 #: pretix/plugins/stripe/views.py:88 pretix/plugins/stripe/views.py:100
@@ -16585,10 +16557,6 @@ msgstr ""
 "Mail, die wir dir geschickt haben, um fortzufahren."
 
 #: pretix/plugins/stripe/views.py:472
-#, fuzzy
-#| msgid ""
-#| "Sorry, there was an error in the payment process. Please check the link "
-#| "in your emails to continue."
 msgid ""
 "Sorry, there was an error in the payment process.in your emails to continue."
 msgstr ""
@@ -16604,14 +16572,8 @@ msgstr ""
 "kontaktiere uns, falls das Problem fortbesteht."
 
 #: pretix/plugins/stripe/views.py:538 pretix/plugins/stripe/views.py:541
-#, fuzzy
-#| msgid ""
-#| "Sorry, there was an error in the payment process. Please check the link "
-#| "in your emails to continue."
 msgid "Sorry, there was an error in the payment process."
-msgstr ""
-"Sorry, es gab einen Fehler im Bezahlvorgang. Bitte klicke den Link in der E-"
-"Mail, die wir dir geschickt haben, um fortzufahren."
+msgstr "Im Zahlungsvorgang ist ein Fehler aufgetreten."
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:10
 #: pretix/plugins/ticketoutputpdf/__init__.py:13
@@ -17609,10 +17571,9 @@ msgid "Change payment method"
 msgstr "Zahlungsmethode wechseln"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:8
-#, fuzzy, python-format
-#| msgid "Change payment method: %(code)s"
+#, python-format
 msgid "Choose payment method: %(code)s"
-msgstr "Zahlungsmethode wechseln: %(code)s"
+msgstr "Zahlungsmethode auswählen: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:13
 msgid ""
