@@ -698,11 +698,28 @@ class QuotaView(ChartContainingView, DetailView):
             raise Http404(_("The requested quota does not exist."))
 
     def post(self, request, *args, **kwargs):
+        quota = self.get_object()
         if 'reopen' in request.POST:
-            quota = self.get_object()
             quota.closed = False
             quota.save(update_fields=['closed'])
             quota.log_action('pretix.event.quota.opened', user=request.user)
+            messages.success(request, _('The quota has been re-opened.'))
+        if 'disable' in request.POST:
+            quota.closed = False
+            quota.close_when_sold_out = False
+            quota.save(update_fields=['closed', 'close_when_sold_out'])
+            quota.log_action('pretix.event.quota.opened', user=request.user)
+            quota.log_action(
+                'pretix.event.quota.changed', user=self.request.user, data={
+                    'close_when_sold_out': False
+                }
+            )
+            messages.success(request, _('The quota has been re-opened and will not close again.'))
+        return redirect(reverse('control:event.items.quotas.show', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'quota': quota.pk
+        }))
 
 
 class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):

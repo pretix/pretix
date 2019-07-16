@@ -26,17 +26,15 @@
         {% if quota.closed %}
             {% if closed_and_sold_out %}
                 <div class="alert alert-info">
-                    {% if not quota.close_when_sold_out %}
-                        <button type="submit" class="btn btn-default pull-right" name="reopen" value="true">{% trans "Open quota" %}</button>
-                    {% endif %}
+                    <button type="submit" class="btn btn-default pull-right" name="disable" value="true">
+                        {% trans "Open quota and disable closing" %}
+                    </button>
                     {% trans "This quota is sold out and closed. Even if tickets become available e.g. through cancellations, they will not become available again unless you manually re-open the quota on this page." %}
                     <div class="clearfix"></div>
                 </div>
             {% else %}
                 <div class="alert alert-warning">
-                    {% if quota.close_when_sold_out %}
-                        <button type="submit" class="btn btn-primary pull-right" name="reopen" value="true">{% trans "Open quota" %}</button>
-                    {% endif %}
+                    <button type="submit" class="btn btn-primary pull-right" name="reopen" value="true">{% trans "Open quota" %}</button>
                     {% trans "This quota is closed since it has been sold out before. Tickets are theoretically available, but will not be sold unless you manually re-open the quota." %}
                     <div class="clearfix"></div>
                 </div>

@@ -1386,7 +1386,9 @@ TEST_QUOTA_RES = {
     "size": 200,
     "items": [],
     "variations": [],
-    "subevent": None
+    "subevent": None,
+    "close_when_sold_out": False,
+    "closed": False
 }
 
 
@@ -1591,6 +1593,30 @@ def test_quota_update(token_client, organizer, event, quota, item):
     assert quota.name == "Ticket Quota Update"
     assert quota.size == 111
     assert quota.all_logentries().count() == 1
+
+
+@pytest.mark.django_db
+def test_quota_update_closed(token_client, organizer, event, quota, item):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk),
+        {
+            "closed": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        quota = Quota.objects.get(pk=resp.data['id'])
+    assert quota.all_logentries().filter(action_type="pretix.event.quota.closed").count() == 1
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk),
+        {
+            "closed": False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert quota.all_logentries().filter(action_type="pretix.event.quota.opened").count() == 1
 
 
 @pytest.mark.django_db

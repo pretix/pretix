@@ -20,11 +20,21 @@ size                                  integer                    The size of the
 items                                 list of integers           List of item IDs this quota acts on.
 variations                            list of integers           List of item variation IDs this quota acts on.
 subevent                              integer                    ID of the date inside an event series this quota belongs to (or ``null``).
+close_when_sold_out                   boolean                    If ``true``, the quota will "close" as soon as it is
+                                                                 sold out once. Even if tickets become available again,
+                                                                 they will not be sold unless the quota is set to open
+                                                                 again.
+closed                                boolean                    Whether the quota is currently closed (see above
+                                                                 field).
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.10
 
    The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
+
+.. versionchanged:: 3.0
+
+   The attributes ``close_when_sold_out`` and ``closed`` have been added.
 
 
 Endpoints
@@ -61,7 +71,9 @@ Endpoints
             "size": 200,
             "items": [1, 2],
             "variations": [1, 4, 5, 7],
-            "subevent": null
+            "subevent": null,
+            "close_when_sold_out": false,
+            "closed": false
           }
         ]
       }
@@ -102,7 +114,9 @@ Endpoints
         "size": 200,
         "items": [1, 2],
         "variations": [1, 4, 5, 7],
-        "subevent": null
+        "subevent": null,
+        "close_when_sold_out": false,
+        "closed": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -130,7 +144,9 @@ Endpoints
         "size": 200,
         "items": [1, 2],
         "variations": [1, 4, 5, 7],
-        "subevent": null
+        "subevent": null,
+        "close_when_sold_out": false,
+        "closed": false
       }
 
    **Example response**:
@@ -147,7 +163,9 @@ Endpoints
         "size": 200,
         "items": [1, 2],
         "variations": [1, 4, 5, 7],
-        "subevent": null
+        "subevent": null,
+        "close_when_sold_out": false,
+        "closed": false
       }
 
    :param organizer: The ``slug`` field of the organizer of the event/item to create a quota for
@@ -200,7 +218,9 @@ Endpoints
           1,
           2
         ],
-        "subevent": null
+        "subevent": null,
+        "close_when_sold_out": false,
+        "closed": false
       }
 
    :param organizer: The ``slug`` field of the organizer to modify

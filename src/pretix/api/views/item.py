@@ -473,6 +473,19 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
             # This costs us a few cycles on save, but avoids thousands of lines in our log.
             return
 
+        if original_data['closed'] is True and serializer.instance.closed is False:
+            serializer.instance.log_action(
+                'pretix.event.quota.opened',
+                user=self.request.user,
+                auth=self.request.auth,
+            )
+        elif original_data['closed'] is False and serializer.instance.closed is True:
+            serializer.instance.log_action(
+                'pretix.event.quota.closed',
+                user=self.request.user,
+                auth=self.request.auth,
+            )
+
         serializer.instance.log_action(
             'pretix.event.quota.changed',
             user=self.request.user,
