@@ -338,6 +338,28 @@ class QuotaTest(ItemFormTest):
         with scopes_disabled():
             assert not Quota.objects.filter(id=c.id).exists()
 
+    def test_reopen(self):
+        with scopes_disabled():
+            c = Quota.objects.create(event=self.event1, name="Full house", size=500,
+                                     close_when_sold_out=True, closed=True)
+        self.post_doc('/control/event/%s/%s/quotas/%s/' % (self.orga1.slug, self.event1.slug, c.id),
+                      {'reopen': 'true'})
+        with scopes_disabled():
+            c.refresh_from_db()
+            assert not c.closed
+            assert c.close_when_sold_out
+
+    def test_reopen_and_disable(self):
+        with scopes_disabled():
+            c = Quota.objects.create(event=self.event1, name="Full house", size=500,
+                                     close_when_sold_out=True, closed=True)
+        self.post_doc('/control/event/%s/%s/quotas/%s/' % (self.orga1.slug, self.event1.slug, c.id),
+                      {'disable': 'true'})
+        with scopes_disabled():
+            c.refresh_from_db()
+            assert not c.closed
+            assert not c.close_when_sold_out
+
 
 class ItemsTest(ItemFormTest):
 

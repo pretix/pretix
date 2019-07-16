@@ -483,6 +483,24 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.event.has_subevents = False
         self.event.save()
 
+    @classscope(attr='o')
+    def test_close_when_full_on_calculation(self):
+        self.quota.close_when_sold_out = True
+        self.quota.size = 0
+        self.quota.save()
+        assert not self.quota.closed
+        self.quota.availability()
+        self.quota.refresh_from_db()
+        assert self.quota.closed
+        assert self.quota.all_logentries().filter(action_type="pretix.event.quota.closed").exists()
+
+    @classscope(attr='o')
+    def test_closed_reports_as_sold_out(self):
+        self.quota.closed = True
+        self.quota.size = 100
+        self.quota.save()
+        assert self.quota.availability() == (Quota.AVAILABILITY_ORDERED, 0)
+
 
 class BundleQuotaTestCase(BaseQuotaTestCase):
     def setUp(self):
