@@ -332,6 +332,13 @@
                                                                 title="{% trans "This file has been uploaded by a user and could contain viruses or other malicious content." %}">
                                                             {% trans "UNSAFE" %}
                                                         </span>
+                                                        {% if q.answer.is_image %}
+                                                            <br>
+                                                            <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}" data-lightbox="order"
+                                                                class="answer-thumb">
+                                                                <img src="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">
+                                                            </a>
+                                                        {% endif %}
                                                     {% else %}
                                                         {{ q.answer|linebreaksbr }}
                                                     {% endif %}

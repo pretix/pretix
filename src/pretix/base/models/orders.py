@@ -871,6 +871,10 @@ class QuestionAnswer(models.Model):
         return ""
 
     @property
+    def is_image(self):
+        return any(self.file.name.endswith(e) for e in ('.jpg', '.png', '.gif', '.tiff', '.bmp', '.jpeg'))
+
+    @property
     def file_name(self):
         return self.file.name.split('.', 1)[-1]
 
