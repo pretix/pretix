@@ -12,6 +12,7 @@ from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
+from django.forms import Select
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language, ugettext_lazy as _
@@ -24,7 +25,7 @@ from pretix.base.forms.widgets import (
 )
 from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import EU_COUNTRIES
-from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import SplitDateTimeField
 from pretix.helpers.escapejson import escapejson_attr
@@ -37,14 +38,18 @@ logger = logging.getLogger(__name__)
 class NamePartsWidget(forms.MultiWidget):
     widget = forms.TextInput
 
-    def __init__(self, scheme: dict, field: forms.Field, attrs=None):
+    def __init__(self, scheme: dict, field: forms.Field, attrs=None, titles: list=None):
         widgets = []
         self.scheme = scheme
         self.field = field
+        self.titles = titles
         for fname, label, size in self.scheme['fields']:
             a = copy.copy(attrs) or {}
             a['data-fname'] = fname
-            widgets.append(self.widget(attrs=a))
+            if fname == 'title' and self.titles:
+                widgets.append(Select(attrs=a, choices=[('', '')] + [(d, d) for d in self.titles[1]]))
+            else:
+                widgets.append(self.widget(attrs=a))
         super().__init__(widgets, attrs)
 
     def decompress(self, value):
@@ -103,19 +108,34 @@ class NamePartsFormField(forms.MultiValueField):
             'max_length': kwargs.pop('max_length', None),
         }
         self.scheme_name = kwargs.pop('scheme')
+        self.titles = kwargs.pop('titles')
         self.scheme = PERSON_NAME_SCHEMES.get(self.scheme_name)
+        if self.titles:
+            self.scheme_titles = PERSON_NAME_TITLE_GROUPS.get(self.titles)
+        else:
+            self.scheme_titles = None
         self.one_required = kwargs.get('required', True)
         require_all_fields = kwargs.pop('require_all_fields', False)
         kwargs['required'] = False
         kwargs['widget'] = (kwargs.get('widget') or self.widget)(
-            scheme=self.scheme, field=self, **kwargs.pop('widget_kwargs', {})
+            scheme=self.scheme, titles=self.scheme_titles, field=self, **kwargs.pop('widget_kwargs', {})
         )
         defaults.update(**kwargs)
         for fname, label, size in self.scheme['fields']:
             defaults['label'] = label
-            field = forms.CharField(**defaults)
-            field.part_name = fname
-            fields.append(field)
+            if fname == 'title' and self.scheme_titles:
+                d = dict(defaults)
+                d.pop('max_length', None)
+                field = forms.ChoiceField(
+                    **d,
+                    choices=[('', '')] + [(d, d) for d in self.scheme_titles[1]]
+                )
+                field.part_name = fname
+                fields.append(field)
+            else:
+                field = forms.CharField(**defaults)
+                field.part_name = fname
+                fields.append(field)
         super().__init__(
             fields=fields, require_all_fields=False, *args, **kwargs
         )
@@ -160,6 +180,7 @@ class BaseQuestionsForm(forms.Form):
                 max_length=255,
                 required=event.settings.attendee_names_required,
                 scheme=event.settings.name_scheme,
+                titles=event.settings.name_scheme_titles,
                 label=_('Attendee name'),
                 initial=(cartpos.attendee_name_parts if cartpos else orderpos.attendee_name_parts),
             )
@@ -400,6 +421,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             max_length=255,
             required=event.settings.invoice_name_required and not self.all_optional,
             scheme=event.settings.name_scheme,
+            titles=event.settings.name_scheme_titles,
             label=_('Name'),
             initial=(self.instance.name_parts if self.instance else self.instance.name_parts),
         )

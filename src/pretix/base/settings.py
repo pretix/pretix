@@ -705,6 +705,23 @@ Your {event} team"""))
         'type': str
     }
 }
+PERSON_NAME_TITLE_GROUPS = OrderedDict([
+    ('english_common', (_('Most common English titles'), (
+        'Mr',
+        'Ms',
+        'Mrs',
+        'Miss',
+        'Mx',
+        'Dr',
+        'Professor',
+        'Sir'
+    ))),
+    ('german_common', (_('Most common German titles'), (
+        'Dr.',
+        'Prof.',
+        'Prof. Dr.',
+    )))
+])
 PERSON_NAME_SCHEMES = OrderedDict([
     ('given_family', {
         'fields': (
@@ -716,6 +733,22 @@ PERSON_NAME_SCHEMES = OrderedDict([
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
             '_scheme': 'given_family',
+        },
+    }),
+    ('title_given_family', {
+        'fields': (
+            ('title', pgettext_lazy('person_name', 'Title'), 1),
+            ('given_name', _('Given name'), 2),
+            ('family_name', _('Family name'), 2),
+        ),
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('title', ''), d.get('given_name', ''), d.get('family_name', '')] if p
+        ),
+        'sample': {
+            'title': pgettext_lazy('person_name_sample', 'Dr'),
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'title_given_family',
         },
     }),
     ('title_given_family', {

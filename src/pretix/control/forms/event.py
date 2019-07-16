@@ -24,7 +24,7 @@ from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
-from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
 from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
     SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
@@ -383,6 +383,12 @@ class EventSettingsForm(SettingsForm):
                     "orders might lead to unexpected behaviour when sorting or changing names."),
         required=True,
     )
+    name_scheme_titles = forms.ChoiceField(
+        label=_("Allowed titles"),
+        help_text=_("If the naming scheme you defined above allows users to input a title, you can use this to "
+                    "restrict the set of selectable titles."),
+        required=False,
+    )
     attendee_emails_asked = forms.BooleanField(
         label=_("Ask for email addresses per ticket"),
         help_text=_("Normally, pretix asks for one email address per order and the order confirmation will be sent "
@@ -466,6 +472,13 @@ class EventSettingsForm(SettingsForm):
             ))
             for k, v in PERSON_NAME_SCHEMES.items()
         )
+        self.fields['name_scheme_titles'].choices = [('', _('Free text input'))] + [
+            (k, '{scheme}: {samples}'.format(
+                scheme=v[0],
+                samples=', '.join(v[1])
+            ))
+            for k, v in PERSON_NAME_TITLE_GROUPS.items()
+        ]
 
 
 class CancelSettingsForm(SettingsForm):

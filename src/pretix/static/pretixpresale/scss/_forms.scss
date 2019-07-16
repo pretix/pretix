@@ -96,11 +96,11 @@
 @media(max-width: $screen-xs-max) {
   .nameparts-form-group {
     display: block;
-    input:not(:first-child) {
+    input:not(:first-child), select:not(:first-child) {
       border-top-right-radius: 0;
       border-top-left-radius: 0;
     }
-    input:not(:last-child) {
+    input:not(:last-child), select:not(:last-child) {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
     }
@@ -110,32 +110,32 @@
   .nameparts-form-group {
     display: flex;
     flex-direction: row;
-    input {
+    input, select {
       width: auto;
       flex-basis: 0;
       flex-grow: 1;
     }
-    input:not(:first-child) {
+    input:not(:first-child), select:not(:first-child) {
       border-bottom-left-radius: 0;
       border-top-left-radius: 0;
     }
-    input:not(:last-child) {
+    input:not(:last-child), select:not(:last-child)  {
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
     }
-    input[data-size="1"] {
+    [data-size="1"] {
       flex-grow: 1;
       flex-shrink: 4;
     }
-    input[data-size="2"] {
+    [data-size="2"] {
       flex-grow: 2;
       flex-shrink: 3;
     }
-    input[data-size="3"] {
+    [data-size="3"] {
       flex-grow: 3;
       flex-shrink: 2;
     }
-    input[data-size="4"] {
+    [data-size="4"] {
       flex-grow: 4;
       flex-shrink: 1;
     }
