@@ -114,7 +114,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("event_date_range", {
         "label": _("Event date range"),
         "editor_sample": _("May 31st – June 4th, 2017"),
-        "evaluate": lambda op, order, ev: ev.get_date_range_display()
+        "evaluate": lambda op, order, ev: ev.get_date_range_display(force_show_end=True)
     }),
     ("event_begin", {
         "label": _("Event begin date and time"),

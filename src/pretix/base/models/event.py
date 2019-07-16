@@ -100,14 +100,14 @@ class EventMixin:
             "DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT"
         )
 
-    def get_date_range_display(self, tz=None) -> str:
+    def get_date_range_display(self, tz=None, force_show_end=False) -> str:
         """
         Returns a formatted string containing the start date and the end date
         of the event with respect to the current locale and to the ``show_times`` and
         ``show_date_to`` settings.
         """
         tz = tz or self.timezone
-        if not self.settings.show_date_to or not self.date_to:
+        if (not self.settings.show_date_to and not force_show_end) or not self.date_to:
             return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
         return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz))
 
