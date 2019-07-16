@@ -518,6 +518,11 @@ class Event(EventMixin, LoggedModel):
             vars = list(q.variations.all())
             q.pk = None
             q.event = self
+            q.cached_availability_state = None
+            q.cached_availability_number = None
+            q.cached_availability_paid_orders = None
+            q.cached_availability_time = None
+            q.closed = False
             q.save()
             for i in items:
                 if i.pk in item_map:

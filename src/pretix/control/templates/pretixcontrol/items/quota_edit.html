@@ -24,6 +24,8 @@
             {% if form.subevent %}
                 {% bootstrap_field form.subevent layout="control" %}
             {% endif %}
+        </fieldset>
+        <fieldset>
             <legend>{% trans "Items" %}</legend>
             <p>
                 {% blocktrans trimmed %}
@@ -34,6 +36,10 @@
                 {% endblocktrans %}
             </p>
             {% bootstrap_field form.itemvars layout="control" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Advanced options" %}</legend>
+            {% bootstrap_field form.close_when_sold_out layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

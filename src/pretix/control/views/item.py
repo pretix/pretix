@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
@@ -684,6 +685,8 @@ class QuotaView(ChartContainingView, DetailView):
             Q(Q(self.object._position_lookup) | Q(quota=self.object)) &
             Q(redeemed__lt=F('max_usages'))
         ).exists()
+        if self.object.closed:
+            ctx['closed_and_sold_out'] = self.object._availability(ignore_closed=True)[0] <= Quota.AVAILABILITY_ORDERED
 
         return ctx
 
@@ -694,6 +697,32 @@ class QuotaView(ChartContainingView, DetailView):
             )
         except Quota.DoesNotExist:
             raise Http404(_("The requested quota does not exist."))
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.has_event_permission(request.organizer, request.event, 'can_change_items', request):
+            raise PermissionDenied()
+        quota = self.get_object()
+        if 'reopen' in request.POST:
+            quota.closed = False
+            quota.save(update_fields=['closed'])
+            quota.log_action('pretix.event.quota.opened', user=request.user)
+            messages.success(request, _('The quota has been re-opened.'))
+        if 'disable' in request.POST:
+            quota.closed = False
+            quota.close_when_sold_out = False
+            quota.save(update_fields=['closed', 'close_when_sold_out'])
+            quota.log_action('pretix.event.quota.opened', user=request.user)
+            quota.log_action(
+                'pretix.event.quota.changed', user=self.request.user, data={
+                    'close_when_sold_out': False
+                }
+            )
+            messages.success(request, _('The quota has been re-opened and will not close again.'))
+        return redirect(reverse('control:event.items.quotas.show', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'quota': quota.pk
+        }))
 
 
 class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):

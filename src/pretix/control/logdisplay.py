@@ -263,6 +263,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.quota.added': _('The quota has been added.'),
         'pretix.event.quota.deleted': _('The quota has been deleted.'),
         'pretix.event.quota.changed': _('The quota has been changed.'),
+        'pretix.event.quota.closed': _('The quota has closed.'),
+        'pretix.event.quota.opened': _('The quota has been re-opened.'),
         'pretix.event.category.added': _('The category has been added.'),
         'pretix.event.category.deleted': _('The category has been deleted.'),
         'pretix.event.category.changed': _('The category has been changed.'),

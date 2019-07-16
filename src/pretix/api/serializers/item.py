@@ -285,7 +285,7 @@ class QuotaSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Quota
-        fields = ('id', 'name', 'size', 'items', 'variations', 'subevent')
+        fields = ('id', 'name', 'size', 'items', 'variations', 'subevent', 'closed', 'close_when_sold_out')
 
     def validate(self, data):
         data = super().validate(data)
