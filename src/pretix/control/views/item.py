@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
@@ -698,6 +699,8 @@ class QuotaView(ChartContainingView, DetailView):
             raise Http404(_("The requested quota does not exist."))
 
     def post(self, request, *args, **kwargs):
+        if not request.user.has_event_permission(request.organizer, request.event, 'can_change_items', request):
+            raise PermissionDenied()
         quota = self.get_object()
         if 'reopen' in request.POST:
             quota.closed = False
