@@ -1207,10 +1207,6 @@ class DisplaySettingsForm(SettingsForm):
         label=_("Show variations of a product expanded by default"),
         required=False
     )
-    addon_variation_description_collapsed = forms.BooleanField(
-        label=_("Collapse descriptions of variations of add-on products"),
-        required=False
-    )
     frontpage_subevent_ordering = forms.ChoiceField(
         label=pgettext('subevent', 'Date ordering'),
         choices=[

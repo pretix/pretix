@@ -205,10 +205,6 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
-    'addon_variation_description_collapsed': {
-        'default': 'True',
-        'type': bool
-    },
     'waiting_list_enabled': {
         'default': 'False',
         'type': bool
