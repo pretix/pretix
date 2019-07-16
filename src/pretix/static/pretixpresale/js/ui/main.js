@@ -144,6 +144,11 @@ $(function () {
     $('.toggle-variation-description').click(function () {
         $(this).parent().find('.addon-variation-description').slideToggle();
     });
+    $('input[type=radio][description]').change(function () {
+        if ($(this).prop("checked")) {
+            $(this).parent().parent().find('.addon-variation-description').stop().slideDown();
+        }
+    });
 
     // Copy answers
     $(".js-copy-answers").click(function (e) {
