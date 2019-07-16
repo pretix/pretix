@@ -1118,7 +1118,8 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
             invoice_pdf_task.apply(args=(self.invoice.pk,))
             return self.get(request, *args, **kwargs)
 
-        resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(self.invoice.number)
+        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(self.invoice.number)
+        resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
         return resp
 
 
