@@ -105,6 +105,9 @@ var pretixstripe = {
                         });
                         pretixstripe.card.mount("#stripe-card");
                     }
+                    pretixstripe.card.on('ready', function () {
+                       $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", false);
+                    });
                     if ($("#stripe-payment-request-button").length && pretixstripe.paymentRequest != null) {
                       pretixstripe.paymentRequestButton = pretixstripe.elements.create('paymentRequestButton', {
                         paymentRequest: pretixstripe.paymentRequest,
@@ -121,7 +124,6 @@ var pretixstripe = {
                         }
                       });
                     }
-                    $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", false);
                 }
             }
         );
