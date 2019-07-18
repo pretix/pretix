@@ -586,6 +586,23 @@ def test_forced_multiple(token_client, organizer, clist, event, order):
 def test_require_paid(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
+
+    order.status = Order.STATUS_CANCELED
+    order.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'unpaid'
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'canceled_supported': True}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'canceled'
+
     order.status = Order.STATUS_PENDING
     order.save()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(

@@ -548,6 +548,8 @@ Order position endpoints
                                        you do not implement question handling in your user interface, you **must**
                                        set this to ``false``. In that case, questions will just be ignored. Defaults
                                        to ``true``.
+   :<json boolean canceled_supported: When this parameter is set to ``true``, the response code ``canceled`` may be
+                                      returned. Otherwise, canceled orders will return ``unpaid``.
    :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
    :<json boolean force: Specifies that the check-in should succeed regardless of previous check-ins or required
                          questions that have not been filled. Defaults to ``false``.
@@ -576,6 +578,7 @@ Order position endpoints
         "nonce": "Pvrk50vUzQd0DhdpNRL4I4OcXsvg70uA",
         "datetime": null,
         "questions_supported": true,
+        "canceled_supported": true,
         "answers": {
           "4": "XS"
         }
@@ -659,7 +662,9 @@ Order position endpoints
 
    Possible error reasons:
 
-   * ``unpaid`` - Ticket is not paid for or has been refunded
+   * ``unpaid`` - Ticket is not paid for
+   * ``canceled`` – Ticket is canceled or expired. This reason is only sent when your request sets
+     ``canceled_supported`` to ``true``, otherwise these orders return ``unpaid``.
    * ``already_redeemed`` - Ticket already has been redeemed
    * ``product`` - Tickets with this product may not be scanned at this device
 

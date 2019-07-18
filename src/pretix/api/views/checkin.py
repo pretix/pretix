@@ -281,6 +281,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 nonce=nonce,
                 datetime=dt,
                 questions_supported=self.request.data.get('questions_supported', True),
+                canceled_supported=self.request.data.get('canceled_supported', False),
                 user=self.request.user,
                 auth=self.request.auth,
             )

@@ -60,7 +60,7 @@ def _save_answers(op, answers, given_answers):
 @transaction.atomic
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
-                    user=None, auth=None):
+                    user=None, auth=None, canceled_supported=False):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -90,10 +90,10 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         'answers'
     ).get(pk=op.pk)
 
-    if op.canceled:
+    if op.canceled or op.order.status not in (Order.STATUS_PAID, Order.STATUS_PENDING):
         raise CheckInError(
             _('This order position has been canceled.'),
-            'unpaid'
+            'canceled' if canceled_supported else 'unpaid'
         )
 
     answers = {a.question: a for a in op.answers.all()}
