@@ -358,7 +358,6 @@ class ItemCreateForm(I18nModelForm):
             'admission',
             'default_price',
             'tax_rule',
-            'allow_cancel'
         ]
 
 
