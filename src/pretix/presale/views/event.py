@@ -120,7 +120,10 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         max_per_order = item.max_per_order or int(event.settings.max_items_per_order)
 
         if not item.has_variations:
-            item._remove = not bool(item._subevent_quotas)
+            item._remove = False
+            if not bool(item._subevent_quotas):
+                item._remove = True
+                continue
 
             if voucher and (voucher.allow_ignore_quota or voucher.block_quota):
                 item.cached_availability = (
@@ -130,6 +133,10 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 item.cached_availability = list(
                     item.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)
                 )
+
+            if event.settings.hide_sold_out and item.cached_availability[0] < Quota.AVAILABILITY_RESERVED:
+                item._remove = True
+                continue
 
             item.order_max = min(
                 item.cached_availability[1]
@@ -202,6 +209,10 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                     not voucher or not voucher.quota_id or v in restrict_vars
                 )
             ]
+
+            if event.settings.hide_sold_out:
+                item.available_variations = [v for v in item.available_variations
+                                             if v.cached_availability[0] >= Quota.AVAILABILITY_RESERVED]
 
             if voucher and voucher.variation_id:
                 item.available_variations = [v for v in item.available_variations

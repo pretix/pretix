@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseQuestionsForm,
 )
-from pretix.base.models import ItemVariation
+from pretix.base.models import ItemVariation, Quota
 from pretix.base.models.tax import TAXED_ZERO
 from pretix.base.services.cart import CartError, error_messages
 from pretix.base.signals import validate_cart_addons
@@ -171,9 +171,9 @@ class AddOnsForm(forms.Form):
                 taxes=number_format(price.rate), taxname=price.name
             )
 
-        if avail[0] < 20:
+        if avail[0] < Quota.AVAILABILITY_RESERVED:
             n += ' – {}'.format(_('SOLD OUT'))
-        elif avail[0] < 100:
+        elif avail[0] < Quota.AVAILABILITY_OK:
             n += ' – {}'.format(_('Currently unavailable'))
         else:
             if avail[1] is not None and item.do_show_quota_left:
@@ -258,6 +258,9 @@ class AddOnsForm(forms.Form):
                 choices = [('', _('no selection'), '')]
                 for v in i.available_variations:
                     cached_availability = v.check_quotas(subevent=subevent, _cache=quota_cache)
+                    if self.event.settings.hide_sold_out and cached_availability[0] < Quota.AVAILABILITY_RESERVED:
+                        continue
+
                     if v._subevent_quotas:
                         self.vars_cache[v.pk] = v
                         choices.append(
@@ -295,6 +298,8 @@ class AddOnsForm(forms.Form):
                 if not i._subevent_quotas:
                     continue
                 cached_availability = i.check_quotas(subevent=subevent, _cache=quota_cache)
+                if self.event.settings.hide_sold_out and cached_availability[0] < Quota.AVAILABILITY_RESERVED:
+                    continue
                 field = forms.BooleanField(
                     label=self._label(self.event, i, cached_availability,
                                       override_price=item_price_override.get(i.pk)),

@@ -348,6 +348,22 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertEqual(1, len(doc.select(".availability-box")))
 
+    def test_hide_sold_out(self):
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=0)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12)
+            q.items.add(item)
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
+        self.assertIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
+
+        self.event.settings.hide_sold_out = True
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
+        self.assertNotIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
+
     def test_bundle_sold_out(self):
         with scopes_disabled():
             q = Quota.objects.create(event=self.event, name='Quota', size=2)

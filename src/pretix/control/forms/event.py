@@ -1207,6 +1207,10 @@ class DisplaySettingsForm(SettingsForm):
         label=_("Show variations of a product expanded by default"),
         required=False
     )
+    hide_sold_out = forms.BooleanField(
+        label=_("Hide all products that are sold out"),
+        required=False
+    )
     frontpage_subevent_ordering = forms.ChoiceField(
         label=pgettext('subevent', 'Date ordering'),
         choices=[
