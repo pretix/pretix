@@ -5,10 +5,38 @@
 {% block title %}{% trans "Check-in device configuration" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Check-in device configuration" %}</h1>
-    <p>{% blocktrans trimmed %}
-        pretixdroid is an Android app that you can use to control tickets at the entrance of your event.
-        pretixdesk is the corresponding app for desktop computers.
-    {% endblocktrans %}</p>
+
+    {% if not configs or "create" in request.GET %}
+        <div class="alert alert-info pretixscan-migration">
+            <h2 class="mar">{% trans "We've got a new app!" %}</h2>
+            <p>
+                {% blocktrans trimmed %}
+                    We've retired pretixdesk and pretixdroid in favor of our new app pretixSCAN that works on all major
+                    platforms, allows convenient switching between events, has better performance when dealing with large
+                    events and supports printing badges. We suggest that you switch to pretixSCAN for your events, but you
+                    can continue using pretixdesk for at least all of 2019, if you like.
+                {% endblocktrans %}
+            </p>
+            <div class="row">
+                <div class="col-md-6 col-sm-12 text-center">
+                    <h3>{% trans "Our new app: pretixSCAN" %}</h3>
+                    <img src="{% static "pretixbase/img/pretixscan.svg" %}">
+                    <p>{% trans "Available on Android, iOS, Windows, and Linux." %}</p>
+                    <p>{% trans "Configuration is available in your organizer account's device list." %}</p>
+                    <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
+                            class="btn btn-primary btn-lg">
+                        {% trans "Switch to my device list" %}
+                    </a>
+                </div>
+                <div class="col-md-6 col-sm-12 text-center">
+                    <h3>{% trans "Our old apps: pretixdesk and pretixdroid" %}</h3>
+                    <img src="{% static "pretixbase/img/pretixdroid.png" %}">
+                    <p>{% trans "Available on Android, Windows, and Linux." %}</p>
+                    <p><strong>{% trans "Scroll down to create a configuration" %}</strong></p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     {% if not configs or "create" in request.GET %}
         <h2>{% trans "Create app configuration" %}</h2>

@@ -7,7 +7,16 @@
 
     <div>
         <ol>
-            <li>{% trans "Open the app that you want to connect and optionally reset it to the original state." %}</li>
+            <li>
+                {% trans "Download an app that is compatible with pretix. For example, our check-in app <strong>pretixSCAN</strong> is available on all major platforms." %}<br>
+                <a href="https://pretix.eu/about/{% if "de" in request.LANGUAGE_CODE %}de{% else %}en{% endif %}/scan"
+                        class="btn btn-default" target="_blank">
+                    {% trans "Download pretixSCAN" %}
+                </a>
+            </li>
+            <li>
+                {% trans "Open the app that you want to connect and optionally reset it to the original state." %}
+            </li>
             <li>{% trans "Scan the following configuration code:" %}<br><br>
                 <script type="text/json" data-replace-with-qr>{{ qrdata|safe }}</script><br>
                 {% trans "If your app/device does not support scanning a QR code, you can also enter the following information:" %}
@@ -16,19 +25,6 @@
                 <strong>{% trans "Token:" %}</strong> {{ device.initialization_token }}
             </li>
         </ol>
-    </div>
-    <div class="alert alert-warning">
-        <strong>
-            {% blocktrans trimmed %}
-                Please note that this is a new feature that currently only works for beta-stage software, such as
-                pretixPOS. pretixdroid 1.x and pretixdesk 0.x are not supported by this feature. Future versions of
-                pretixdroid and pretixdesk will be supported through this menu.
-            {% endblocktrans %}
-        </strong>
-        <br><br>
-        {% blocktrans trimmed %}
-            To set up pretixdroid or pretixdesk, please go to the <strong>Check-in devices</strong> section of an event.
-        {% endblocktrans %}
     </div>
     <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
             class="btn btn-default"><i class="fa fa-arrow-left"></i>
