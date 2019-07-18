@@ -4,7 +4,7 @@
 {% load money %}
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 {% for line in cart.positions %}
-    <div class="row cart-row {% if download and line.item.admission|default:event.settings.ticket_download_nonadm %}has-downloads{% endif %}">
+    <div class="row cart-row {% if download %}has-downloads{% endif %}">
         <div class="product">
             {% if line.addon_to %}
                 <span class="addon-signifier">+</span>
