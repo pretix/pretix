@@ -173,6 +173,13 @@ class DeviceForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['limit_events'].queryset = organizer.events.all()
 
+    def clean(self):
+        d = super().clean()
+        if not d['all_events'] and not d['limit_events']:
+            raise ValidationError(_('Your device will not have access to anything, please select some events.'))
+
+        return d
+
     class Meta:
         model = Device
         fields = ['name', 'all_events', 'limit_events']
