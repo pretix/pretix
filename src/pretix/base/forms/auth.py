@@ -14,7 +14,7 @@ class LoginForm(forms.Form):
     Base class for authenticating users. Extend this to get a form that accepts
     username/password logins.
     """
-    email = forms.EmailField(label=_("E-mail"), max_length=254)
+    email = forms.EmailField(label=_("E-mail"), max_length=254, widget=forms.EmailInput(attrs={'autofocus': 'autofocus'}))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
     keep_logged_in = forms.BooleanField(label=_("Keep me logged in"), required=False)
 
