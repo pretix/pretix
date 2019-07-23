@@ -643,6 +643,16 @@ h1 .label {
     margin-top: 5px;
 }
 
+.pretixscan-migration {
+    h2 {
+        margin-top: 0;
+    }
+    img {
+        width: 64px;
+        margin-bottom: 5px;
+    }
+}
+
 @media(max-width: $screen-sm-max) {
     .timeline {
         .col-date {
