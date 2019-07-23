@@ -289,7 +289,12 @@ class StripeMethod(BasePaymentProvider):
 
     def _init_api(self):
         stripe.api_version = '2019-05-16'
-        stripe.set_app_info("pretix", version=__version__, url="https://pretix.eu")
+        stripe.set_app_info(
+            "pretix",
+            partner_id="pp_partner_FSaz4PpKIur7Ox",
+            version=__version__,
+            url="https://pretix.eu"
+        )
 
     def checkout_confirm_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_confirm.html')
