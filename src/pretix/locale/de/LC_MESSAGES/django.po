@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-24 13:16+0000\n"
-"PO-Revision-Date: 2019-07-15 09:00+0000\n"
+"PO-Revision-Date: 2019-07-24 13:56+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2343,7 +2343,7 @@ msgstr "Varianten"
 
 #: pretix/base/models/items.py:1273
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "Dieses Kontingent schließen, sobald es einmal ausverkauft war"
 
 #: pretix/base/models/items.py:1274
 msgid ""
@@ -2351,6 +2351,11 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
+"Mit dieser Option wird das Kontingent geschlossen, sobald es einmal "
+"ausverkauft ist. Das bedeutet, dass auch dann keine weiteren Tickets "
+"verkauft werden, wenn durch Stornos oder ablaufende Bestellungen wieder "
+"Tickets frei werden. Natürlich können Sie das Kontingent jederzeit wieder "
+"öffnen."
 
 #: pretix/base/models/items.py:1284 pretix/base/models/vouchers.py:165
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
@@ -4844,11 +4849,11 @@ msgstr ""
 
 #: pretix/base/settings.py:705
 msgid "Most common English titles"
-msgstr ""
+msgstr "Übliche englische Titel"
 
 #: pretix/base/settings.py:715
 msgid "Most common German titles"
-msgstr ""
+msgstr "Übliche deutsche Titel"
 
 #: pretix/base/settings.py:724 pretix/base/settings.py:737
 #: pretix/base/settings.py:753 pretix/base/settings.py:803
@@ -5560,13 +5565,15 @@ msgstr ""
 
 #: pretix/control/forms/event.py:387
 msgid "Allowed titles"
-msgstr ""
+msgstr "Zur Auswahl stehende Titel"
 
 #: pretix/control/forms/event.py:388
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
 msgstr ""
+"Wenn das ausgewählte Namensformat eine Titel-Eingabe erlaubt, kann die "
+"Auswahl der Titel mit dieser Option eingeschränkt werden."
 
 #: pretix/control/forms/event.py:393
 msgid "Ask for email addresses per ticket"
@@ -5700,10 +5707,8 @@ msgid "Ask for {fields}, display like {example}"
 msgstr "Frage nach {fields}, Anzeige wie {example}"
 
 #: pretix/control/forms/event.py:475
-#, fuzzy
-#| msgid "Free price input"
 msgid "Free text input"
-msgstr "Freie Preiseingabe"
+msgstr "Freie Texteingabe"
 
 #: pretix/control/forms/event.py:486
 msgid "Customers can cancel their unpaid orders"
@@ -6444,10 +6449,8 @@ msgid "Show variations of a product expanded by default"
 msgstr "Zeige Produkt-Varianten standardmäßig ausgeklappt an"
 
 #: pretix/control/forms/event.py:1211
-#, fuzzy
-#| msgid "Shows hidden products that match this voucher"
 msgid "Hide all products that are sold out"
-msgstr "Zeigt versteckte Produkte an, die zu diesem Gutschein passen"
+msgstr "Verstecke alle ausverkauften Produkte"
 
 #: pretix/control/forms/event.py:1215
 msgctxt "subevent"
@@ -7369,11 +7372,9 @@ msgstr ""
 "mit der Berechtigung gäbe, Teams zu verwalten."
 
 #: pretix/control/forms/organizer.py:179
-#, fuzzy
-#| msgid "You currently do not have access to any events."
 msgid ""
 "Your device will not have access to anything, please select some events."
-msgstr "Sie haben zur Zeit auf keine Veranstaltungen Zugriff."
+msgstr "Dieses Gerät muss auf mindestens eine Veranstaltung Zugriff erhalten."
 
 #: pretix/control/forms/organizer.py:199
 msgid "Info text"
@@ -8079,16 +8080,12 @@ msgid "The quota has been changed."
 msgstr "Das Kontingent wurde verändert."
 
 #: pretix/control/logdisplay.py:266
-#, fuzzy
-#| msgid "The quota has been deleted."
 msgid "The quota has closed."
-msgstr "Das Kontingent wurde gelöscht."
+msgstr "Das Kontingent wurde geschlossen."
 
 #: pretix/control/logdisplay.py:267 pretix/control/views/item.py:709
-#, fuzzy
-#| msgid "The quota has been deleted."
 msgid "The quota has been re-opened."
-msgstr "Das Kontingent wurde gelöscht."
+msgstr "Das Kontingent wurde erneut geöffnet."
 
 #: pretix/control/logdisplay.py:268
 msgid "The category has been added."
@@ -10608,7 +10605,7 @@ msgstr "Möchten Sie die Kategorie <strong>%(name)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Closed"
-msgstr ""
+msgstr "geschlossen"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:5
 msgid "Sold out (pending orders)"
@@ -10811,7 +10808,7 @@ msgstr "Kontingent bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:30
 msgid "Open quota and disable closing"
-msgstr ""
+msgstr "Kontingent öffnen und Schließen deaktivieren"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:32
 msgid ""
@@ -10819,12 +10816,13 @@ msgid ""
 "through cancellations, they will not become available again unless you "
 "manually re-open the quota on this page."
 msgstr ""
+"Dieses Kontingent ist ausverkauft und geschlossen. Selbst, wenn z.B. durch "
+"Stornos wieder Tickets verfügbar werden, stehen diese nicht zum Verkauf bis "
+"das Kontingent manuell wieder geöffnet wird."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:37
-#, fuzzy
-#| msgid "Overbook quota"
 msgid "Open quota"
-msgstr "Kontingent überbuchen"
+msgstr "Kontingent öffnen"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:38
 msgid ""
@@ -10832,6 +10830,9 @@ msgid ""
 "theoretically available, but will not be sold unless you manually re-open "
 "the quota."
 msgstr ""
+"Dieses Kontingent ist geschlossen, da es zuvor bereits ausverkauft war. "
+"Tickets sind theoretisch verfügbar, aber werden nicht verkauft, bis das "
+"Kontingent manuell wieder geöffnet wird."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:46
 msgid "Usage overview"
@@ -10899,10 +10900,8 @@ msgstr ""
 "noch übrige Kapazität haben."
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:41
-#, fuzzy
-#| msgid "Advanced settings"
 msgid "Advanced options"
-msgstr "Erweiterte Einstellungen"
+msgstr "Erweiterte Optionen"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:7
 msgid ""
@@ -11997,12 +11996,12 @@ msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
+"Laden Sie eine App herunter, die mit pretix kompatibel ist, wie z.B. unsere "
+"Check-in-App <strong>pretixSCAN</strong>."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
-#, fuzzy
-#| msgid "1. Download pretixdesk"
 msgid "Download pretixSCAN"
-msgstr "1. Programm herunterladen"
+msgstr "pretixSCAN herunterladen"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:18
 msgid ""
@@ -14096,10 +14095,9 @@ msgid "The requested quota does not exist."
 msgstr "Das ausgewählte Kontingent existiert nicht."
 
 #: pretix/control/views/item.py:720
-#, fuzzy
-#| msgid "The order has been marked as not paid."
 msgid "The quota has been re-opened and will not close again."
-msgstr "Die Bestellung wurde als nicht bezahlt markiert."
+msgstr ""
+"Das Kontingent wurde geöffnet und wird nicht automatisch wieder geschlossen."
 
 #: pretix/control/views/item.py:813
 msgid "The selected quota has been deleted."
@@ -15800,7 +15798,7 @@ msgstr "Check-in-Gerätekonfiguration"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:11
 msgid "We've got a new app!"
-msgstr ""
+msgstr "Wir haben eine neue App!"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:13
 msgid ""
@@ -15810,36 +15808,41 @@ msgid ""
 "printing badges. We suggest that you switch to pretixSCAN for your events, "
 "but you can continue using pretixdesk for at least all of 2019, if you like."
 msgstr ""
+"Wir haben pretixdesk und pretixdroid in den Ruhestand geschickt und durch "
+"unsere neue App pretixSCAN ersetzt, die auf allen wichtigen Plattformen "
+"läuft, bequemen Wechsel zwischen Events erlaubt, eine bessere Performance "
+"bei größeren Veranstaltungen bietet und Live-Druck von Namensschildern "
+"unterstützt. Wir empfehlen, dass Sie auf pretixSCAN wechseln, aber Sie "
+"können mindestens noch bis Jahresende 2019 unsere alten Apps nutzen, wenn "
+"Sie möchten."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:22
 msgid "Our new app: pretixSCAN"
-msgstr ""
+msgstr "Unsere neue App: pretixSCAN"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:24
 msgid "Available on Android, iOS, Windows, and Linux."
-msgstr ""
+msgstr "Verfügbar auf Android, iOS, Windows und Linux."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:25
 msgid "Configuration is available in your organizer account's device list."
-msgstr ""
+msgstr "Konfiguration über die Geräte-Liste Ihres Veranstalterkontos"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:28
 msgid "Switch to my device list"
-msgstr ""
+msgstr "Zur Geräteliste wechseln"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:32
 msgid "Our old apps: pretixdesk and pretixdroid"
-msgstr ""
+msgstr "Unsere alten Apps: pretixdesk und pretixdroid"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:34
 msgid "Available on Android, Windows, and Linux."
-msgstr ""
+msgstr "Verfügbar auf Android, Windows und Linux."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:35
-#, fuzzy
-#| msgid "Create app configuration"
 msgid "Scroll down to create a configuration"
-msgstr "App-Konfiguration erstellen"
+msgstr "Konfiguration unten auf dieser Seite"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:42
 msgid "Create app configuration"
@@ -17322,10 +17325,9 @@ msgid "minimum amount to order: %(num)s"
 msgstr "minimale Bestellmenge: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:54
-#, fuzzy, python-format
-#| msgid "from %(minprice)s"
+#, python-format
 msgid "from %(price)s"
-msgstr "ab %(minprice)s"
+msgstr "ab %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:60
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:115
