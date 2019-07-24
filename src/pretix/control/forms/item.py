@@ -414,7 +414,7 @@ class ItemUpdateForm(I18nModelForm):
             }
         )
         self.fields['hidden_if_available'].widget.choices = self.fields['hidden_if_available'].choices
-        self.fields['hidden_if_available'].required = True
+        self.fields['hidden_if_available'].required = False
 
     class Meta:
         model = Item
