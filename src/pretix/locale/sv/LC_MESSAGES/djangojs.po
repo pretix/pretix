@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-15 08:31+0000\n"
+"POT-Creation-Date: 2019-07-24 13:16+0000\n"
 "PO-Revision-Date: 2019-06-17 09:07+0000\n"
 "Last-Translator: Mattias Axell <mattias@libertador.es>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -51,12 +51,12 @@ msgstr "Kontakta Stripe …"
 msgid "Total"
 msgstr "Totalt"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:144
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:175
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
 msgid "Confirming your payment …"
 msgstr ""
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:151
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
 #, fuzzy
 #| msgid "Contacting Stripe …"
 msgid "Contacting your bank …"
@@ -267,7 +267,7 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Artiklarna i din varukorg är reserverade i en minut."
 msgstr[1] "Artiklarna i din varukorg är reserverade i {num} minuter."
 
-#: pretix/static/pretixpresale/js/ui/main.js:207
+#: pretix/static/pretixpresale/js/ui/main.js:212
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Vänligen ange en kvantitet för en av biljettyperna."
 

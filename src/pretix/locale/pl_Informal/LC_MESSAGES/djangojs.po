@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-15 08:31+0000\n"
+"POT-Creation-Date: 2019-07-24 13:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -50,12 +50,12 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:144
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:175
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
 msgid "Confirming your payment …"
 msgstr ""
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:151
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
 msgid "Contacting your bank …"
 msgstr ""
 
@@ -254,7 +254,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:207
+#: pretix/static/pretixpresale/js/ui/main.js:212
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
