@@ -421,11 +421,14 @@ Vue.component('item', {
             return this.item.has_variations && !this.$root.show_variations_expanded;
         },
         pricerange: function () {
-            if (this.item.min_price !== this.item.max_price || this.item.free_price) {
+            if (this.item.free_price) {
                 return django.interpolate(strings.price_from, {
                     'currency': this.$root.currency,
                     'price': floatformat(this.item.min_price, 2)
                 }, true);
+            } else if (this.item.min_price !== this.item.max_price) {
+                return this.$root.currency + " " + floatformat(this.item.min_price, 2) + " – "
+                    + floatformat(this.item.max_price, 2);
             } else if (this.item.min_price === "0.00" && this.item.max_price === "0.00") {
                 return strings.free;
             } else {
