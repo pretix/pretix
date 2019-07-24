@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-24 13:16+0000\n"
-"PO-Revision-Date: 2019-05-01 12:12+0000\n"
+"PO-Revision-Date: 2019-07-24 13:45+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
@@ -54,13 +54,11 @@ msgstr "Gesamt"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "Zahlung wird bestätigt …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Contacting your bank …"
-msgstr "Kontaktiere Stripe …"
+msgstr "Kontaktiere deine Bank …"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:105
@@ -441,7 +439,7 @@ msgstr "Vorheriger Monat"
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Saalplan öffnen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgid "Mo"
