@@ -1781,6 +1781,53 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert 'Workshop 1' in response.rendered_content
         assert '€12.00' not in response.rendered_content
 
+    def test_set_addons_hide_sold_out(self):
+        with scopes_disabled():
+            self.workshopquota.size = 0
+            self.workshopquota.save()
+
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10)
+            )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'Workshop 1' in response.rendered_content
+        self.event.settings.hide_sold_out = True
+
+        response = self.client.get('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), follow=True)
+        assert 'Workshop 1' not in response.rendered_content
+
+    def test_set_addons_hidden_if_available(self):
+        with scopes_disabled():
+            self.workshopquota2 = Quota.objects.create(event=self.event, name='Workshop 1', size=5)
+            self.workshopquota2.items.add(self.workshop2)
+            self.workshopquota2.variations.add(self.workshop2a)
+            self.workshop2.hidden_if_available = self.workshopquota
+            self.workshop2.save()
+
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10)
+            )
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'Workshop 1' in response.rendered_content
+        assert 'Workshop 2' not in response.rendered_content
+
+        self.workshopquota.size = 0
+        self.workshopquota.save()
+
+        response = self.client.get('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), follow=True)
+        assert 'Workshop 1' in response.rendered_content
+        assert 'Workshop 2' in response.rendered_content
+
     def test_set_addons_subevent(self):
         with scopes_disabled():
             self.event.has_subevents = True

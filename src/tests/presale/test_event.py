@@ -364,6 +364,30 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
         self.assertNotIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
 
+    def test_hidden_if_available(self):
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Early-bird', size=10)
+            q2 = Quota.objects.create(event=self.event, name='Late-bird', size=10)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12)
+            item2 = Item.objects.create(event=self.event, name='Late-bird ticket', default_price=12,
+                                        hidden_if_available=q)
+            q.items.add(item)
+            q2.items.add(item2)
+        self.event.settings.hide_sold_out = True
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertNotIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertNotIn("Late-bird", doc.select("section:nth-of-type(1)")[0].text)
+
+        q.size = 0
+        q.save()
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertNotIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertIn("Late-bird", doc.select("section:nth-of-type(1)")[0].text)
+
     def test_bundle_sold_out(self):
         with scopes_disabled():
             q = Quota.objects.create(event=self.event, name='Quota', size=2)

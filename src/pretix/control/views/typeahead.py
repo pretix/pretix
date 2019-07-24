@@ -310,6 +310,53 @@ def subevent_select2(request, **kwargs):
 
 
 @event_permission_required(None)
+def quotas_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qf = Q(name__icontains=query) | Q(subevent__name__icontains=i18ncomp(query))
+    tz = request.event.timezone
+
+    dt = None
+    for f in get_format('DATE_INPUT_FORMATS'):
+        try:
+            dt = datetime.strptime(query, f)
+            break
+        except (ValueError, TypeError):
+            continue
+
+    if dt and request.event.has_subevents:
+        dt_start = make_aware(datetime.combine(dt.date(), time(hour=0, minute=0, second=0)), tz)
+        dt_end = make_aware(datetime.combine(dt.date(), time(hour=23, minute=59, second=59)), tz)
+        qf |= Q(subevent__date_from__gte=dt_start) & Q(subevent__date_from__lte=dt_end)
+
+    qs = request.event.quotas.filter(
+        qf
+    ).order_by('-subevent__date_from', 'name')
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': q.pk,
+                'name': str(q.name),
+                'text': q.name
+            }
+            for q in qs[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@event_permission_required(None)
 def checkinlist_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:

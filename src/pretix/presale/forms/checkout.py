@@ -254,6 +254,11 @@ class AddOnsForm(forms.Form):
         self.vars_cache = {}
 
         for i in items:
+            if i.hidden_if_available:
+                q = i.hidden_if_available.availability(_cache=quota_cache)
+                if q[0] == Quota.AVAILABILITY_OK:
+                    continue
+
             if i.has_variations:
                 choices = [('', _('no selection'), '')]
                 for v in i.available_variations:

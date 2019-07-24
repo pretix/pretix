@@ -402,6 +402,19 @@ class ItemUpdateForm(I18nModelForm):
             widget=forms.CheckboxSelectMultiple
         )
         change_decimal_field(self.fields['default_price'], self.event.currency)
+        self.fields['hidden_if_available'].queryset = self.event.quotas.all()
+        self.fields['hidden_if_available'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.items.quotas.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('Quota')
+            }
+        )
+        self.fields['hidden_if_available'].widget.choices = self.fields['hidden_if_available'].choices
+        self.fields['hidden_if_available'].required = True
 
     class Meta:
         model = Item
@@ -430,11 +443,13 @@ class ItemUpdateForm(I18nModelForm):
             'generate_tickets',
             'original_price',
             'require_bundling',
-            'show_quota_left'
+            'show_quota_left',
+            'hidden_if_available',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
             'available_until': SplitDateTimeField,
+            'hidden_if_available': SafeModelChoiceField,
         }
         widgets = {
             'available_from': SplitDateTimePickerWidget(),
