@@ -451,7 +451,12 @@ class StripeMethod(BasePaymentProvider):
             raise PaymentException(_('No payment information found.'))
 
         try:
-            ch = stripe.Charge.retrieve(payment_info['id'], **self.api_kwargs)
+            if payment_info['id'].startswith('pi_'):
+                chargeid = payment_info['charges']['data'][0]['id']
+            else:
+                chargeid = payment_info['id']
+
+            ch = stripe.Charge.retrieve(chargeid, **self.api_kwargs)
             r = ch.refunds.create(
                 amount=self._get_amount(refund),
             )
