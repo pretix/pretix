@@ -1,4 +1,5 @@
 import json
+from collections import OrderedDict
 
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -37,7 +38,7 @@ from pretix.control.forms.item import (
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
-from pretix.control.signals import item_forms, nav_item
+from pretix.control.signals import item_forms, item_formsets, nav_item
 
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
@@ -918,11 +919,38 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             'item': self.get_object().id,
         })
 
+    def is_valid(self, form):
+        v = (
+            form.is_valid()
+            and all(f.is_valid() for f in self.plugin_forms)
+            and all(f.is_valid() for f in self.formsets.values())
+        )
+        if v and form.cleaned_data['category'] and form.cleaned_data['category'].is_addon:
+            addons = self.formsets['addons'].ordered_forms + [
+                ef for ef in self.formsets['addons'].extra_forms
+                if ef not in self.formsets['addons'].ordered_forms and ef not in self.formsets['addons'].deleted_forms
+            ]
+            if addons:
+                messages.error(self.request,
+                               _('You cannot add add-ons to a product that is only available as an add-on '
+                                 'itself.'))
+                v = False
+
+            bundles = [
+                ef for ef in self.formsets['bundles'].forms
+                if ef not in self.formsets['bundles'].deleted_forms
+            ]
+            if bundles:
+                messages.error(self.request,
+                               _('You cannot add bundles to a product that is only available as an add-on '
+                                 'itself.'))
+                v = False
+        return v
+
     def post(self, request, *args, **kwargs):
         self.get_object()
         form = self.get_form()
-        if form.is_valid() and all(f.is_valid() for f in self.plugin_forms) and all(f.is_valid() for f in
-                                                                                    self.formsets.values()):
+        if self.is_valid(form):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -992,20 +1020,25 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
         for f in self.plugin_forms:
             f.save()
 
-        if 'variations' in self.formsets:
-            self.save_formset(
-                'variations', 'variation',
-                serializer=ItemVariationSerializer,
-                rm_verb='deleted'
-            )
-        self.save_formset(
-            'addons', 'addons', 'base_item',
-            serializer=ItemAddOnSerializer
-        )
-        self.save_formset(
-            'bundles', 'bundles', 'base_item', order=False,
-            serializer=ItemBundleSerializer
-        )
+        for k, v in self.formsets.items():
+            if k == 'variations':
+                self.save_formset(
+                    'variations', 'variation',
+                    serializer=ItemVariationSerializer,
+                    rm_verb='deleted'
+                )
+            elif k == 'addons':
+                self.save_formset(
+                    'addons', 'addons', 'base_item',
+                    serializer=ItemAddOnSerializer
+                )
+            elif k == 'bundles':
+                self.save_formset(
+                    'bundles', 'bundles', 'base_item', order=False,
+                    serializer=ItemBundleSerializer
+                )
+            else:
+                v.save()
 
         return super().form_valid(form)
 
@@ -1027,8 +1060,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
 
     @cached_property
     def formsets(self):
-        f = {
-            'variations': inlineformset_factory(
+        f = OrderedDict([
+            ('variations', inlineformset_factory(
                 Item, ItemVariation,
                 form=ItemVariationForm, formset=ItemVariationsFormSet,
                 can_order=True, can_delete=True, extra=0
@@ -1036,8 +1069,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
                 self.request.POST if self.request.method == "POST" else None,
                 queryset=ItemVariation.objects.filter(item=self.get_object()),
                 event=self.request.event, prefix="variations"
-            ),
-            'addons': inlineformset_factory(
+            )),
+            ('addons', inlineformset_factory(
                 Item, ItemAddOn,
                 form=ItemAddOnForm, formset=ItemAddOnsFormSet,
                 can_order=True, can_delete=True, extra=0
@@ -1045,8 +1078,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
                 self.request.POST if self.request.method == "POST" else None,
                 queryset=ItemAddOn.objects.filter(base_item=self.get_object()),
                 event=self.request.event, prefix="addons"
-            ),
-            'bundles': inlineformset_factory(
+            )),
+            ('bundles', inlineformset_factory(
                 Item, ItemBundle,
                 form=ItemBundleForm, formset=ItemBundleFormSet,
                 fk_name='base_item',
@@ -1055,10 +1088,20 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
                 self.request.POST if self.request.method == "POST" else None,
                 queryset=ItemBundle.objects.filter(base_item=self.get_object()),
                 event=self.request.event, item=self.item, prefix="bundles"
-            ),
-        }
+            )),
+        ])
         if not self.object.has_variations:
             del f['variations']
+
+        i = 0
+        for rec, resp in item_formsets.send(sender=self.request.event, item=self.item, request=self.request):
+            if isinstance(resp, (list, tuple)):
+                for k in resp:
+                    f['p-{}'.format(i)] = k
+                    i += 1
+            else:
+                f['p-{}'.format(i)] = resp
+                i += 1
         return f
 
 

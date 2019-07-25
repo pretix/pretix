@@ -279,6 +279,24 @@ styles. It is advisable to set a prefix for your form to avoid clashes with othe
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+item_formsets = EventPluginSignal(
+    providing_args=['request', 'item']
+)
+"""
+This signal allows you to return additional formsets that should be rendered on the product
+modification page. You are passed ``request`` and ``item`` arguments and are expected to return
+an instance of a formset class that you bind yourself when appropriate. Your formset will be
+executed as part of the standard validation and rendering cycle and rendered using default
+bootstrap styles. It is advisable to set a prefix for your formset to avoid clashes with other
+plugins.
+
+Your formset needs to have two special properties: ``template`` with a template that will be
+included to render the formset and ``title`` that will be used as a headline. Your template
+will be passed a ``formset`` variable with your formset.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 subevent_forms = EventPluginSignal(
     providing_args=['request', 'subevent']
 )

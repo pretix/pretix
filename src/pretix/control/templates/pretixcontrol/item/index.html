@@ -41,21 +41,12 @@
                         {% bootstrap_field form.require_bundling layout="control" %}
                         {% bootstrap_field form.allow_cancel layout="control" %}
                     </fieldset>
-                    {% if 'variations' in formsets %}
+                    {% for v in formsets.values %}
                         <fieldset>
-                            <legend>{% trans "Variations" %}</legend>
-                            {% include "pretixcontrol/item/include_variations.html" with formset=formsets.variations %}
+                            <legend>{{ v.title }}</legend>
+                            {% include v.template with formset=v %}
                         </fieldset>
-                    {% endif %}
-                    <fieldset>
-                        <legend>{% trans "Add-Ons" %}</legend>
-                        {% include "pretixcontrol/item/include_addons.html" with formset=formsets.addons %}
-                    </fieldset>
-                    <fieldset>
-                        <legend>{% trans "Bundled products" %}</legend>
-                        {% include "pretixcontrol/item/include_bundles.html" with formset=formsets.bundles %}
-                    </fieldset>
-
+                    {% endfor %}
                     <fieldset>
                         <legend>{% trans "Tickets & check-in" %}</legend>
                         {% bootstrap_field form.generate_tickets layout="control" %}
@@ -69,6 +60,11 @@
                         {% endfor %}
                     </fieldset>
                 </div>
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
             </div>
             <div class="col-xs-12 col-lg-2">
                 <div class="panel panel-default">
@@ -80,11 +76,6 @@
                     {% include "pretixcontrol/includes/logs.html" with obj=item %}
                 </div>
             </div>
-        </div>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
         </div>
     </form>
 {% endblock %}
