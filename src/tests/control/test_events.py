@@ -421,10 +421,10 @@ class EventsTest(SoupTest):
         with mocker_context() as mocker:
             mocked = mocker.patch('pretix.presale.style.regenerate_css.apply_async')
 
-            doc = self.get_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug))
+            doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
             data = extract_form_fields(doc.select("form")[0])
-            data['primary_color'] = '#000000'
-            doc = self.post_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug),
+            data['settings-primary_color'] = '#000000'
+            doc = self.post_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug),
                                 data, follow=True)
             assert doc.select('.alert-success')
             self.event1.settings.flush()
@@ -433,34 +433,27 @@ class EventsTest(SoupTest):
 
     def test_display_settings_do_not_override_parent(self):
         self.orga1.settings.primary_color = '#000000'
-        with mocker_context() as mocker:
-            mocked = mocker.patch('pretix.presale.style.regenerate_css.apply_async')
-
-            doc = self.get_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug))
-            data = extract_form_fields(doc.select("form")[0])
-            doc = self.post_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug),
-                                data, follow=True)
-            assert doc.select('.alert-success')
-            self.event1.settings.flush()
-            assert 'primary_color' not in self.event1.settings._cache()
-            assert self.event1.settings.primary_color == self.orga1.settings.primary_color
-            mocked.assert_any_call(args=(self.event1.pk,))
+        doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
+        data = extract_form_fields(doc.select("form")[0])
+        doc = self.post_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug),
+                            data, follow=True)
+        assert doc.select('.alert-success')
+        self.event1.settings.flush()
+        assert 'primary_color' not in self.event1.settings._cache()
+        assert self.event1.settings.primary_color == self.orga1.settings.primary_color
 
     def test_display_settings_explicitly_override_parent(self):
         self.orga1.settings.primary_color = '#000000'
-        with mocker_context() as mocker:
-            mocked = mocker.patch('pretix.presale.style.regenerate_css.apply_async')
 
-            doc = self.get_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug))
-            data = extract_form_fields(doc.select("form")[0])
-            data['decouple'] = 'primary_color'
-            doc = self.post_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug),
-                                data, follow=True)
-            assert doc.select('.alert-success')
-            self.event1.settings.flush()
-            assert 'primary_color' in self.event1.settings._cache()
-            assert self.event1.settings.primary_color == self.orga1.settings.primary_color
-            mocked.assert_any_call(args=(self.event1.pk,))
+        doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
+        data = extract_form_fields(doc.select("form")[0])
+        data['decouple'] = 'primary_color'
+        doc = self.post_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug),
+                            data, follow=True)
+        assert doc.select('.alert-success')
+        self.event1.settings.flush()
+        assert 'primary_color' in self.event1.settings._cache()
+        assert self.event1.settings.primary_color == self.orga1.settings.primary_color
 
     def test_email_settings(self):
         with mocker_context() as mocker:

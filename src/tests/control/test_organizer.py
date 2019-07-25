@@ -50,13 +50,13 @@ class OrganizerTest(SoupTest):
 
     def test_organizer_display_settings(self):
         assert not self.orga1.settings.presale_css_checksum
-        doc = self.get_doc('/control/organizer/%s/settings/display' % (self.orga1.slug,))
-        doc.select("[name=primary_color]")[0]['value'] = "#33c33c"
+        doc = self.get_doc('/control/organizer/%s/edit' % (self.orga1.slug,))
+        doc.select("[name=settings-primary_color]")[0]['value'] = "#33c33c"
 
-        doc = self.post_doc('/control/organizer/%s/settings/display' % (self.orga1.slug,),
+        doc = self.post_doc('/control/organizer/%s/edit' % (self.orga1.slug,),
                             extract_form_fields(doc.select('.container-fluid form')[0]))
         assert len(doc.select(".alert-success")) > 0
-        assert doc.select("[name=primary_color]")[0]['value'] == "#33c33c"
+        assert doc.select("[name=settings-primary_color]")[0]['value'] == "#33c33c"
         self.orga1.settings.flush()
         assert self.orga1.settings.primary_color == "#33c33c"
         assert self.orga1.settings.presale_css_checksum

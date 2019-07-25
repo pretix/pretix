@@ -255,11 +255,6 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
             if any(p in self.sform.changed_data for p in display_properties):
                 change_css = True
         if form.has_changed():
-            self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
-                k: getattr(self.request.event, k) for k in form.changed_data
-            })
-
-        if form.has_changed():
             self.request.organizer.log_action(
                 'pretix.organizer.changed',
                 user=self.request.user,
