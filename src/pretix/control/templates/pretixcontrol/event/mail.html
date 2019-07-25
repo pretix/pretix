@@ -5,85 +5,87 @@
 {% block inside %}
     <h1>{% trans "E-mail settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data"
-          mail-preview-url="{% url "control:event.settings.mail.preview" event=request.event.slug organizer=request.event.organizer.slug %}">
+            mail-preview-url="{% url "control:event.settings.mail.preview" event=request.event.slug organizer=request.event.organizer.slug %}">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        <fieldset>
-            <legend>{% trans "General settings" %}</legend>
-            {% bootstrap_field form.mail_prefix layout="control" %}
-            {% bootstrap_field form.mail_from layout="control" %}
-            {% bootstrap_field form.mail_from_name layout="control" %}
-            {% bootstrap_field form.mail_text_signature layout="control" %}
-            {% bootstrap_field form.mail_bcc layout="control" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "E-mail design" %}</legend>
-            <div class="row">
-                {% for r in renderers.values %}
-                    <div class="col-md-3">
-                        <div class="well maildesignpreview text-center">
-                            <label class="radio">
-                                <input type="radio" name="mail_html_renderer" value="{{ r.identifier }}"
-                                    {% if request.event.settings.mail_html_renderer == r.identifier %}checked{% endif %}>
-                                {{ r.verbose_name }}
-                            </label>
-                            <img src="{% static r.thumbnail_filename %}">
-                            <a class="btn btn-default btn-sm" target="_blank"
-                                href="{% url "control:event.settings.mail.preview.layout" event=request.event.slug organizer=request.event.organizer.slug %}?renderer={{ r.identifier }}">
-                                {% trans "Preview" %}
-                            </a>
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "General" %}</legend>
+                {% bootstrap_field form.mail_prefix layout="control" %}
+                {% bootstrap_field form.mail_from layout="control" %}
+                {% bootstrap_field form.mail_from_name layout="control" %}
+                {% bootstrap_field form.mail_text_signature layout="control" %}
+                {% bootstrap_field form.mail_bcc layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "E-mail design" %}</legend>
+                <div class="row">
+                    {% for r in renderers.values %}
+                        <div class="col-md-3">
+                            <div class="well maildesignpreview text-center">
+                                <label class="radio">
+                                    <input type="radio" name="mail_html_renderer" value="{{ r.identifier }}"
+                                            {% if request.event.settings.mail_html_renderer == r.identifier %}checked{% endif %}>
+                                    {{ r.verbose_name }}
+                                </label>
+                                <img src="{% static r.thumbnail_filename %}">
+                                <a class="btn btn-default btn-sm" target="_blank"
+                                        href="{% url "control:event.settings.mail.preview.layout" event=request.event.slug organizer=request.event.organizer.slug %}?renderer={{ r.identifier }}">
+                                    {% trans "Preview" %}
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "E-mail content" %}</legend>
-            <div class="panel-group" id="questions_group">
-                {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_placed" title=title_placed_order items="mail_text_order_placed,mail_send_order_placed_attendee,mail_text_order_placed_attendee" exclude="mail_send_order_placed_attendee" %}
+                    {% endfor %}
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "E-mail content" %}</legend>
+                <div class="panel-group" id="questions_group">
+                    {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_placed" title=title_placed_order items="mail_text_order_placed,mail_send_order_placed_attendee,mail_text_order_placed_attendee" exclude="mail_send_order_placed_attendee" %}
 
-                {% blocktrans asvar title_paid_order %}Paid order{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_paid" title=title_paid_order items="mail_text_order_paid,mail_send_order_paid_attendee,mail_text_order_paid_attendee" exclude="mail_send_order_paid_attendee" %}
+                    {% blocktrans asvar title_paid_order %}Paid order{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_paid" title=title_paid_order items="mail_text_order_paid,mail_send_order_paid_attendee,mail_text_order_paid_attendee" exclude="mail_send_order_paid_attendee" %}
 
-                {% blocktrans asvar title_free_order %}Free order{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_free" title=title_free_order items="mail_text_order_free,mail_send_order_free_attendee,mail_text_order_free_attendee" exclude="mail_send_order_free_attendee" %}
+                    {% blocktrans asvar title_free_order %}Free order{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_free" title=title_free_order items="mail_text_order_free,mail_send_order_free_attendee,mail_text_order_free_attendee" exclude="mail_send_order_free_attendee" %}
 
-                {% blocktrans asvar title_resend_link %}Resend link{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="resend_link" title=title_resend_link items="mail_text_resend_link,mail_text_resend_all_links" %}
+                    {% blocktrans asvar title_resend_link %}Resend link{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="resend_link" title=title_resend_link items="mail_text_resend_link,mail_text_resend_all_links" %}
 
-                {% blocktrans asvar title_order_changed %}Order changed{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_changed" title=title_order_changed items="mail_text_order_changed" %}
+                    {% blocktrans asvar title_order_changed %}Order changed{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_changed" title=title_order_changed items="mail_text_order_changed" %}
 
-                {% blocktrans asvar title_payment_reminder %}Payment reminder{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_expirew" title=title_payment_reminder items="mail_days_order_expire_warning,mail_text_order_expire_warning" exclude="mail_days_order_expire_warning" %}
+                    {% blocktrans asvar title_payment_reminder %}Payment reminder{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_expirew" title=title_payment_reminder items="mail_days_order_expire_warning,mail_text_order_expire_warning" exclude="mail_days_order_expire_warning" %}
 
-                {% blocktrans asvar title_waiting_list_notification %}Waiting list notification{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="waiting_list" title=title_waiting_list_notification items="mail_text_waiting_list" %}
+                    {% blocktrans asvar title_waiting_list_notification %}Waiting list notification{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="waiting_list" title=title_waiting_list_notification items="mail_text_waiting_list" %}
 
-                {% blocktrans asvar title_order_canceled %}Order canceled{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_canceled" title=title_order_canceled items="mail_text_order_canceled" %}
+                    {% blocktrans asvar title_order_canceled %}Order canceled{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_canceled" title=title_order_canceled items="mail_text_order_canceled" %}
 
-                {% blocktrans asvar title_order_custom_mail %}Order custom mail{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="custom_mail" title=title_order_custom_mail items="mail_text_order_custom_mail" %}
+                    {% blocktrans asvar title_order_custom_mail %}Order custom mail{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="custom_mail" title=title_order_custom_mail items="mail_text_order_custom_mail" %}
 
-                {% blocktrans asvar title_download_tickets_reminder %}Reminder to download tickets{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_download_tickets_reminder items="mail_days_download_reminder,mail_text_download_reminder,mail_send_download_reminder_attendee,mail_text_download_reminder_attendee" exclude="mail_days_download_reminder,mail_send_download_reminder_attendee" %}
+                    {% blocktrans asvar title_download_tickets_reminder %}Reminder to download tickets{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_download_tickets_reminder items="mail_days_download_reminder,mail_text_download_reminder,mail_send_download_reminder_attendee,mail_text_download_reminder_attendee" exclude="mail_days_download_reminder,mail_send_download_reminder_attendee" %}
 
-                {% blocktrans asvar title_require_approval %}Order approval process{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_require_approval  items="mail_text_order_placed_require_approval,mail_text_order_approved,mail_text_order_denied" %}
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "SMTP settings" %}</legend>
-            {% bootstrap_field form.smtp_use_custom layout="control" %}
-            {% bootstrap_field form.smtp_host layout="control" %}
-            {% bootstrap_field form.smtp_port layout="control" %}
-            {% bootstrap_field form.smtp_username layout="control" %}
-            {% bootstrap_field form.smtp_password layout="control" %}
-            {% bootstrap_field form.smtp_use_tls layout="control" %}
-            {% bootstrap_field form.smtp_use_ssl layout="control" %}
-        </fieldset>
+                    {% blocktrans asvar title_require_approval %}Order approval process{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_require_approval  items="mail_text_order_placed_require_approval,mail_text_order_approved,mail_text_order_denied" %}
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "SMTP settings" %}</legend>
+                {% bootstrap_field form.smtp_use_custom layout="control" %}
+                {% bootstrap_field form.smtp_host layout="control" %}
+                {% bootstrap_field form.smtp_port layout="control" %}
+                {% bootstrap_field form.smtp_username layout="control" %}
+                {% bootstrap_field form.smtp_password layout="control" %}
+                {% bootstrap_field form.smtp_use_tls layout="control" %}
+                {% bootstrap_field form.smtp_use_ssl layout="control" %}
+            </fieldset>
+        </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

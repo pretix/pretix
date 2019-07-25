@@ -5,48 +5,55 @@
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         <h1>{% trans "Ticket download" %}</h1>
-        <fieldset>
-            {% if request.event.settings.ticket_download and not any_enabled %}
-                <div class="alert alert-warning">
-                    {% blocktrans trimmed %}
-                        You activated ticket downloads but no output provider is enabled. Be sure to enable a plugin and
-                        activate an output provider.
-                    {% endblocktrans %}
-                </div>
-            {% endif %}
-            {% bootstrap_form_errors form %}
-            {% bootstrap_field form.ticket_download layout="control" %}
-            {% bootstrap_field form.ticket_download_date layout="control" %}
-            {% bootstrap_field form.ticket_download_addons layout="control" %}
-            {% bootstrap_field form.ticket_download_nonadm layout="control" %}
-            {% bootstrap_field form.ticket_download_pending layout="control" %}
-            {% for provider in providers %}
-                <div class="panel panel-default ticketoutput-panel">
-                    <div class="panel-heading">
-                        <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
-                                class="btn btn-default btn-sm pull-right {% if not provider.preview_allowed %}disabled{% endif %}"
-                                target="_blank">
-                            {% trans "Preview" %}
-                        </a>
-                        <h3 class="panel-title">{{ provider.verbose_name }}</h3>
-                        <div class="clear"></div>
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "Download settings" %}</legend>
+                {% if request.event.settings.ticket_download and not any_enabled %}
+                    <div class="alert alert-warning">
+                        {% blocktrans trimmed %}
+                            You activated ticket downloads but no output provider is enabled. Be sure to enable a plugin and
+                            activate an output provider.
+                        {% endblocktrans %}
                     </div>
-                    <div class="panel-body">
-                        {% bootstrap_form provider.form layout='horizontal' %}
-                        {% with c=provider.settings_content %}
-                            {% if c %}{{ c|safe }}{% endif %}
-                        {% endwith %}
+                {% endif %}
+                {% bootstrap_form_errors form %}
+                {% bootstrap_field form.ticket_download layout="control" %}
+                {% bootstrap_field form.ticket_download_date layout="control" %}
+                {% bootstrap_field form.ticket_download_addons layout="control" %}
+                {% bootstrap_field form.ticket_download_nonadm layout="control" %}
+                {% bootstrap_field form.ticket_download_pending layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Download formats" %}</legend>
+                {% for provider in providers %}
+                    <div class="panel panel-default ticketoutput-panel">
+                        <div class="panel-heading">
+                            <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
+                                    class="btn btn-default btn-sm pull-right {% if not provider.preview_allowed %}disabled{% endif %}"
+                                    target="_blank">
+                                {% trans "Preview" %}
+                            </a>
+                            <h3 class="panel-title">{{ provider.verbose_name }}</h3>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="panel-body">
+                            {% bootstrap_form provider.form layout='horizontal' %}
+                            {% with c=provider.settings_content %}
+                                {% if c %}{{ c|safe }}{% endif %}
+                            {% endwith %}
+                        </div>
                     </div>
-                </div>
-            {% empty %}
-                <div class="alert alert-warning">
-                    {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
-                    {% blocktrans trimmed with plugin_settings_href='href="'|add:plugin_settings_url|add:'"'|safe %}
-                        There are no ticket outputs available. Please go to the <a {{ plugin_settings_href }}>plugin settings</a> and activate one or more ticket output plugins.
-                    {% endblocktrans %}
-                </div>
-            {% endfor %}
-        </fieldset>
+                {% empty %}
+                    <div class="alert alert-warning">
+                        {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
+                        {% blocktrans trimmed with plugin_settings_href='href="'|add:plugin_settings_url|add:'"'|safe %}
+                            There are no ticket outputs available. Please go to the
+                            <a {{ plugin_settings_href }}>plugin settings</a> and activate one or more ticket output plugins.
+                        {% endblocktrans %}
+                    </div>
+                {% endfor %}
+            </fieldset>
+        </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

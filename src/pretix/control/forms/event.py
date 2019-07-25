@@ -325,7 +325,7 @@ class EventSettingsForm(SettingsForm):
     )
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
-        label=_("Default timezone"),
+        label=_("Event timezone"),
     )
     locales = forms.MultipleChoiceField(
         choices=settings.LANGUAGES,
@@ -441,6 +441,96 @@ class EventSettingsForm(SettingsForm):
         required=False,
         help_text=_("We'll show this publicly to allow attendees to contact you.")
     )
+    show_variations_expanded = forms.BooleanField(
+        label=_("Show variations of a product expanded by default"),
+        required=False
+    )
+    hide_sold_out = forms.BooleanField(
+        label=_("Hide all products that are sold out"),
+        required=False
+    )
+    meta_noindex = forms.BooleanField(
+        label=_('Ask search engines not to index the ticket shop'),
+        required=False
+    )
+    redirect_to_checkout_directly = forms.BooleanField(
+        label=_('Directly redirect to check-out after a product has been added to the cart.'),
+        required=False
+    )
+    frontpage_subevent_ordering = forms.ChoiceField(
+        label=pgettext('subevent', 'Date ordering'),
+        choices=[
+            ('date_ascending', _('Event start time')),
+            ('date_descending', _('Event start time (descending)')),
+            ('name_ascending', _('Name')),
+            ('name_descending', _('Name (descending)')),
+        ],  # When adding a new ordering, remember to also define it in the event model
+    )
+    logo_image = ExtFileField(
+        label=_('Logo image'),
+        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+        required=False,
+        help_text=_('If you provide a logo image, we will by default not show your events name and date '
+                    'in the page header. We will show your logo with a maximal height of 120 pixels.')
+    )
+    frontpage_text = I18nFormField(
+        label=_("Frontpage text"),
+        required=False,
+        widget=I18nTextarea
+    )
+    presale_has_ended_text = I18nFormField(
+        label=_("End of presale text"),
+        required=False,
+        widget=I18nTextarea,
+        widget_kwargs={'attrs': {'rows': '2'}},
+        help_text=_("This text will be shown above the ticket shop once the designated sales timeframe for this event "
+                    "is over. You can use it to describe other options to get a ticket, such as a box office.")
+    )
+    voucher_explanation_text = I18nFormField(
+        label=_("Voucher explanation"),
+        required=False,
+        widget=I18nTextarea,
+        widget_kwargs={'attrs': {'rows': '2'}},
+        help_text=_("This text will be shown next to the input for a voucher code. You can use it e.g. to explain "
+                    "how to obtain a voucher code.")
+    )
+    primary_color = forms.CharField(
+        label=_("Primary color"),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+    )
+    theme_color_success = forms.CharField(
+        label=_("Accent color for success"),
+        help_text=_("We strongly suggest to use a shade of green."),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+    )
+    theme_color_danger = forms.CharField(
+        label=_("Accent color for errors"),
+        help_text=_("We strongly suggest to use a dark shade of red."),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+    )
+    primary_font = forms.ChoiceField(
+        label=_('Font'),
+        choices=[
+            ('Open Sans', 'Open Sans')
+        ],
+        widget=FontSelect,
+        help_text=_('Only respected by modern browsers.')
+    )
 
     def clean(self):
         data = super().clean()
@@ -459,6 +549,7 @@ class EventSettingsForm(SettingsForm):
         return data
 
     def __init__(self, *args, **kwargs):
+        event = kwargs['obj']
         super().__init__(*args, **kwargs)
         self.fields['confirm_text'].widget.attrs['rows'] = '3'
         self.fields['confirm_text'].widget.attrs['placeholder'] = _(
@@ -478,6 +569,11 @@ class EventSettingsForm(SettingsForm):
                 samples=', '.join(v[1])
             ))
             for k, v in PERSON_NAME_TITLE_GROUPS.items()
+        ]
+        if not event.has_subevents:
+            del self.fields['frontpage_subevent_ordering']
+        self.fields['primary_font'].choices += [
+            (a, a) for a in get_fonts()
         ]
 
 
@@ -1135,108 +1231,6 @@ class MailSettingsForm(SettingsForm):
 
         if data.get('smtp_use_tls') and data.get('smtp_use_ssl'):
             raise ValidationError(_('You can activate either SSL or STARTTLS security, but not both at the same time.'))
-
-
-class DisplaySettingsForm(SettingsForm):
-    primary_color = forms.CharField(
-        label=_("Primary color"),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    theme_color_success = forms.CharField(
-        label=_("Accent color for success"),
-        help_text=_("We strongly suggest to use a shade of green."),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    theme_color_danger = forms.CharField(
-        label=_("Accent color for errors"),
-        help_text=_("We strongly suggest to use a dark shade of red."),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    logo_image = ExtFileField(
-        label=_('Logo image'),
-        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
-        required=False,
-        help_text=_('If you provide a logo image, we will by default not show your events name and date '
-                    'in the page header. We will show your logo with a maximal height of 120 pixels.')
-    )
-    primary_font = forms.ChoiceField(
-        label=_('Font'),
-        choices=[
-            ('Open Sans', 'Open Sans')
-        ],
-        widget=FontSelect,
-        help_text=_('Only respected by modern browsers.')
-    )
-    frontpage_text = I18nFormField(
-        label=_("Frontpage text"),
-        required=False,
-        widget=I18nTextarea
-    )
-    presale_has_ended_text = I18nFormField(
-        label=_("End of presale text"),
-        required=False,
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        help_text=_("This text will be shown above the ticket shop once the designated sales timeframe for this event "
-                    "is over. You can use it to describe other options to get a ticket, such as a box office.")
-    )
-    voucher_explanation_text = I18nFormField(
-        label=_("Voucher explanation"),
-        required=False,
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        help_text=_("This text will be shown next to the input for a voucher code. You can use it e.g. to explain "
-                    "how to obtain a voucher code.")
-    )
-    show_variations_expanded = forms.BooleanField(
-        label=_("Show variations of a product expanded by default"),
-        required=False
-    )
-    hide_sold_out = forms.BooleanField(
-        label=_("Hide all products that are sold out"),
-        required=False
-    )
-    frontpage_subevent_ordering = forms.ChoiceField(
-        label=pgettext('subevent', 'Date ordering'),
-        choices=[
-            ('date_ascending', _('Event start time')),
-            ('date_descending', _('Event start time (descending)')),
-            ('name_ascending', _('Name')),
-            ('name_descending', _('Name (descending)')),
-        ],  # When adding a new ordering, remember to also define it in the event model
-    )
-    meta_noindex = forms.BooleanField(
-        label=_('Ask search engines not to index the ticket shop'),
-        required=False
-    )
-    redirect_to_checkout_directly = forms.BooleanField(
-        label=_('Directly redirect to check-out after a product has been added to the cart.'),
-        required=False
-    )
-
-    def __init__(self, *args, **kwargs):
-        event = kwargs['obj']
-        super().__init__(*args, **kwargs)
-        self.fields['primary_font'].choices += [
-            (a, a) for a in get_fonts()
-        ]
-        if not event.has_subevents:
-            del self.fields['frontpage_subevent_ordering']
 
 
 class TicketSettingsForm(SettingsForm):
