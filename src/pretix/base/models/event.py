@@ -516,6 +516,7 @@ class Event(EventMixin, LoggedModel):
         for q in Quota.objects.filter(event=other, subevent__isnull=True).prefetch_related('items', 'variations'):
             items = list(q.items.all())
             vars = list(q.variations.all())
+            oldid = q.pk
             q.pk = None
             q.event = self
             q.cached_availability_state = None
@@ -529,6 +530,7 @@ class Event(EventMixin, LoggedModel):
                     q.items.add(item_map[i.pk])
             for v in vars:
                 q.variations.add(variation_map[v.pk])
+            self.items.filter(hidden_if_available_id=oldid).update(hidden_if_available=q)
 
         question_map = {}
         for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):

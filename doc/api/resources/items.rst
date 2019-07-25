@@ -44,6 +44,9 @@ available_from                        datetime                   The first date 
                                                                  (or ``null``).
 available_until                       datetime                   The last date time at which this item can be bought
                                                                  (or ``null``).
+hidden_if_available                   integer                    The internal ID of a quota object, or ``null``. If
+                                                                 set, this item won't be shown publicly as long as this
+                                                                 quota is available.
 require_voucher                       boolean                    If ``true``, this item can only be bought using a
                                                                  voucher that is specifically assigned to this item.
 hide_without_voucher                  boolean                    If ``true``, this item is only shown during the voucher
@@ -146,7 +149,7 @@ bundles                               list of objects            Definition of b
 
 .. versionchanged:: 3.0
 
-   The ``show_quota_left`` attribute has been added.
+   The ``show_quota_left`` and ``hidden_if_available`` attributes have been added.
 
 Notes
 -----
@@ -205,6 +208,7 @@ Endpoints
             "picture": null,
             "available_from": null,
             "available_until": null,
+            "hidden_if_available": null,
             "require_voucher": false,
             "hide_without_voucher": false,
             "allow_cancel": true,
@@ -297,6 +301,7 @@ Endpoints
         "picture": null,
         "available_from": null,
         "available_until": null,
+        "hidden_if_available": null,
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -370,6 +375,7 @@ Endpoints
         "picture": null,
         "available_from": null,
         "available_until": null,
+        "hidden_if_available": null,
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -430,6 +436,7 @@ Endpoints
         "picture": null,
         "available_from": null,
         "available_until": null,
+        "hidden_if_available": null,
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -522,6 +529,7 @@ Endpoints
         "picture": null,
         "available_from": null,
         "available_until": null,
+        "hidden_if_available": null,
         "require_voucher": false,
         "hide_without_voucher": false,
         "generate_tickets": null,

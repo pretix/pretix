@@ -660,10 +660,14 @@ class EventsTest(SoupTest):
             tr = self.event1.tax_rules.create(
                 rate=19, name="VAT"
             )
+            q1 = self.event1.quotas.create(
+                name='Foo',
+                size=0,
+            )
             self.event1.items.create(
                 name='Early-bird ticket',
                 category=None, default_price=23, tax_rule=tr,
-                admission=True
+                admission=True, hidden_if_available=q1
             )
             self.event1.settings.tax_rate_default = tr
         doc = self.get_doc('/control/events/add')
@@ -724,6 +728,10 @@ class EventsTest(SoupTest):
             assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
 
             assert ev.tax_rules.filter(rate=Decimal('19.00')).count() == 1
+            i = ev.items.get()
+            assert i.hidden_if_available.name == "Foo"
+            assert i.hidden_if_available.event == ev
+            assert i.hidden_if_available.pk != q1.pk
 
     def test_create_event_clone_success(self):
         with scopes_disabled():
