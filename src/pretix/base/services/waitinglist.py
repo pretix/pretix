@@ -34,7 +34,7 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
     with event.lock():
         for wle in qs:
-            if (wle.item, wle.variation) in gone:
+            if (wle.item, wle.variation, wle.subevent) in gone:
                 continue
 
             ev = (wle.subevent or event)
@@ -65,7 +65,7 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
                         quota_cache[q.pk][1] - 1 if quota_cache[q.pk][1] is not None else sys.maxsize
                     )
             else:
-                gone.add((wle.item, wle.variation))
+                gone.add((wle.item, wle.variation, wle.subevent))
 
     return sent
 
