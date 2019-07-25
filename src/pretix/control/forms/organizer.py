@@ -201,9 +201,6 @@ class OrganizerSettingsForm(SettingsForm):
         widget=I18nTextarea,
         help_text=_('Not displayed anywhere by default, but if you want to, you can use this e.g. in ticket templates.')
     )
-
-
-class OrganizerDisplaySettingsForm(SettingsForm):
     primary_color = forms.CharField(
         label=_("Primary color"),
         required=False,

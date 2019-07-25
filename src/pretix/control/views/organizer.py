@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from django.views import View
 from django.views.generic import (
     CreateView, DeleteView, DetailView, FormView, ListView, UpdateView,
 )
@@ -25,9 +26,8 @@ from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.organizer import (
-    DeviceForm, EventMetaPropertyForm, OrganizerDeleteForm,
-    OrganizerDisplaySettingsForm, OrganizerForm, OrganizerSettingsForm,
-    OrganizerUpdateForm, TeamForm, WebHookForm,
+    DeviceForm, EventMetaPropertyForm, OrganizerDeleteForm, OrganizerForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm,
 )
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
@@ -154,39 +154,13 @@ class OrganizerSettingsFormView(OrganizerDetailViewMixin, OrganizerPermissionReq
             return self.get(request)
 
 
-class OrganizerDisplaySettings(OrganizerSettingsFormView):
-    model = Organizer
-    form_class = OrganizerDisplaySettingsForm
-    template_name = 'pretixcontrol/organizers/display.html'
-    permission = 'can_change_organizer_settings'
+class OrganizerDisplaySettings(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, View):
+    permission = None
 
-    def get_success_url(self) -> str:
-        return reverse('control:organizer.display', kwargs={
+    def get(self, request, *wargs, **kwargs):
+        return redirect(reverse('control:organizer.edit', kwargs={
             'organizer': self.request.organizer.slug,
-        })
-
-    @transaction.atomic
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            form.save()
-            if form.has_changed():
-                self.request.organizer.log_action(
-                    'pretix.organizer.settings', user=self.request.user, data={
-                        k: (form.cleaned_data.get(k).name
-                            if isinstance(form.cleaned_data.get(k), File)
-                            else form.cleaned_data.get(k))
-                        for k in form.changed_data
-                    }
-                )
-            regenerate_organizer_css.apply_async(args=(self.request.organizer.pk,))
-            messages.success(self.request, _('Your changes have been saved. Please note that it can '
-                                             'take a short period of time until your changes become '
-                                             'active.'))
-            return redirect(self.get_success_url())
-        else:
-            messages.error(self.request, _('We could not save your changes. See below for details.'))
-            return self.get(request)
+        }) + '#tab-0-3-open')
 
 
 class OrganizerDelete(AdministratorPermissionRequiredMixin, FormView):
@@ -263,6 +237,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     def form_valid(self, form):
         self.save_formset(self.object)
         self.sform.save()
+        change_css = False
         if self.sform.has_changed():
             self.request.organizer.log_action(
                 'pretix.organizer.settings',
@@ -274,13 +249,30 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
                     for k in self.sform.changed_data
                 }
             )
+            display_properties = (
+                'primary_color', 'theme_color_success', 'theme_color_danger', 'primary_font',
+            )
+            if any(p in self.sform.changed_data for p in display_properties):
+                change_css = True
+        if form.has_changed():
+            self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
+                k: getattr(self.request.event, k) for k in form.changed_data
+            })
+
         if form.has_changed():
             self.request.organizer.log_action(
                 'pretix.organizer.changed',
                 user=self.request.user,
                 data={k: form.cleaned_data.get(k) for k in form.changed_data}
             )
-        messages.success(self.request, _('Your changes have been saved.'))
+
+        if change_css:
+            regenerate_organizer_css.apply_async(args=(self.request.organizer.pk,))
+            messages.success(self.request, _('Your changes have been saved. Please note that it can '
+                                             'take a short period of time until your changes become '
+                                             'active.'))
+        else:
+            messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
     def get_form_kwargs(self):

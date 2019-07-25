@@ -473,7 +473,7 @@ class DisplaySettings(View):
         return redirect(reverse('control:event.settings', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
-        }) + '#tab-0-3')
+        }) + '#tab-0-3-open')
 
 
 class MailSettings(EventSettingsViewMixin, EventSettingsFormView):

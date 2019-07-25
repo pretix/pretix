@@ -26,7 +26,7 @@
                                 {% endblocktrans %}</p>
                             {% endif %}
                             <p>{{ plugin.description }}</p>
-                            {% if plugin.restricted and not request.user.is_staffasd %}
+                            {% if plugin.restricted and not request.user.is_staff %}
                                 <span class="text-muted">
                                     {% trans "This plugin needs to be enabled by a system administrator for your event." %}
                                 </span>

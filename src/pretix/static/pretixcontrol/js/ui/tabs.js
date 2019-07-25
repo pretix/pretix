@@ -27,14 +27,14 @@ $(function () {
             }
             $fieldset.find("legend").remove();
             $fieldset.addClass("tab-pane").attr("id", tid);
-            if (location.hash && ($fieldset.find(location.hash).length || location.hash === "#" + tid) && preselect === null) {
+            if (location.hash && ($fieldset.find(location.hash).length || location.hash === "#" + tid + "-open") && preselect === null) {
                 preselect = i;
             }
             i++;
         });
         $tabs.find("a").get(preselect != null ? preselect : 0).click();
         $tabs.find("a").on('shown.bs.tab', function (e) {
-            history.replaceState(null, null, e.target.getAttribute("href"));
+            history.replaceState(null, null, e.target.getAttribute("href") + "-open");
         });
         j++;
     });

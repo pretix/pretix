@@ -70,7 +70,7 @@ def get_event_navigation(request: HttpRequest):
                     'event': request.event.slug,
                     'organizer': request.event.organizer.slug,
                 }),
-                'active': url.url_name == 'event.settings.tax',
+                'active': url.url_name.startswith('event.settings.tax'),
             },
             {
                 'label': _('Invoicing'),
@@ -416,13 +416,6 @@ def get_organizer_navigation(request):
                         'organizer': request.organizer.slug
                     }),
                     'active': url.url_name == 'organizer.edit',
-                },
-                {
-                    'label': _('Display'),
-                    'url': reverse('control:organizer.display', kwargs={
-                        'organizer': request.organizer.slug
-                    }),
-                    'active': url.url_name == 'organizer.display',
                 },
             ]
         })
