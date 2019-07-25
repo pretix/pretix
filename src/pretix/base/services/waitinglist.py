@@ -22,7 +22,7 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
     qs = WaitingListEntry.objects.filter(
         event=event, voucher__isnull=True
-    ).select_related('item', 'variation').prefetch_related(
+    ).select_related('item', 'variation', 'subevent').prefetch_related(
         'item__quotas', 'variation__quotas'
     ).order_by('-priority', 'created')
 
@@ -39,6 +39,8 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
             ev = (wle.subevent or event)
             if not ev.presale_is_running or (wle.subevent and not wle.subevent.active):
+                continue
+            if wle.subevent and not wle.subevent.presale_is_running:
                 continue
 
             quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
@@ -75,5 +77,5 @@ def process_waitinglist(sender, **kwargs):
         live=True
     ).prefetch_related('_settings_objects', 'organizer___settings_objects').select_related('organizer')
     for e in qs:
-        if e.settings.waiting_list_auto and e.presale_is_running:
+        if e.settings.waiting_list_auto and (e.presale_is_running or e.has_subevents):
             assign_automatically.apply_async(args=(e.pk,))
