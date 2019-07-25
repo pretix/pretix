@@ -581,6 +581,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
         ctx['providers'] = self.provider_forms
+        ctx['show_fees'] = any(p['fee_diff'] for p in self.provider_forms)
         return ctx
 
     def get_confirm_url(self, payment):
