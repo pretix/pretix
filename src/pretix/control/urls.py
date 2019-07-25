@@ -181,6 +181,7 @@ urlpatterns = [
         url(r'^questions/add$', item.QuestionCreate.as_view(), name='event.items.questions.add'),
         url(r'^quotas/$', item.QuotaList.as_view(), name='event.items.quotas'),
         url(r'^quotas/(?P<quota>\d+)/$', item.QuotaView.as_view(), name='event.items.quotas.show'),
+        url(r'^quotas/select$', typeahead.quotas_select2, name='event.items.quotas.select2'),
         url(r'^quotas/(?P<quota>\d+)/change$', item.QuotaUpdate.as_view(), name='event.items.quotas.edit'),
         url(r'^quotas/(?P<quota>\d+)/delete$', item.QuotaDelete.as_view(),
             name='event.items.quotas.delete'),

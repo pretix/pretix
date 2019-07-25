@@ -334,6 +334,17 @@ class Item(LoggedModel):
         null=True, blank=True,
         help_text=_('This product will not be sold after the given date.')
     )
+    hidden_if_available = models.ForeignKey(
+        'Quota',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        verbose_name=_("Only show after sellout of"),
+        help_text=_("If you select a quota here, this product will only be shown when that quota is "
+                    "unavailable. If combined with the option to hide sold-out products, this allows you to "
+                    "swap out products for more expensive ones once they are sold out. There might be a short period "
+                    "in which both products are visible while all tickets in the referenced quota are reserved, "
+                    "but not yet sold.")
+    )
     require_voucher = models.BooleanField(
         verbose_name=_('This product can only be bought using a voucher.'),
         default=False,

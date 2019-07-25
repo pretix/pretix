@@ -234,6 +234,7 @@ TEST_ITEM_RES = {
     "allow_cancel": True,
     "min_per_order": None,
     "max_per_order": None,
+    "hidden_if_available": None,
     "checkin_attention": False,
     "has_variations": False,
     "require_approval": False,

@@ -52,6 +52,7 @@ def item_group_by_category(items):
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0):
     items = event.items.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).select_related(
         'category', 'tax_rule',  # for re-grouping
+        'hidden_if_available',
     ).prefetch_related(
         Prefetch('quotas',
                  to_attr='_subevent_quotas',
@@ -118,6 +119,12 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                                          if v.pk == voucher.variation_id]
 
         max_per_order = item.max_per_order or int(event.settings.max_items_per_order)
+
+        if item.hidden_if_available:
+            q = item.hidden_if_available.availability(_cache=quota_cache)
+            if q[0] == Quota.AVAILABILITY_OK:
+                item._remove = True
+                continue
 
         if not item.has_variations:
             item._remove = False
