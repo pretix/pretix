@@ -38,7 +38,7 @@ from pretix.control.forms.item import (
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
-from pretix.control.signals import item_forms, item_formsets, nav_item
+from pretix.control.signals import item_forms, item_formsets
 
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
@@ -826,18 +826,6 @@ class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
 class ItemDetailMixin(SingleObjectMixin):
     model = Item
     context_object_name = 'item'
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        nav = sorted(
-            sum(
-                (list(a[1]) for a in nav_item.send(self.request.event, request=self.request, item=self.get_object())),
-                []
-            ),
-            key=lambda r: str(r['label'])
-        )
-        ctx['extra_nav'] = nav
-        return ctx
 
     def get_object(self, queryset=None) -> Item:
         try:

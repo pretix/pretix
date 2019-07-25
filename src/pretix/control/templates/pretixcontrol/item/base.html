@@ -4,22 +4,6 @@
 {% block content %}
     {% if object.id %}
         <h1>{% trans "Modify product:" %} {{ object.name }}</h1>
-        {% if extra_nav %}
-            <ul class="nav nav-pills">
-                <li {% if "event.item" == url_name %}class="active"{% endif %}>
-                    <a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
-                        {% trans "Item settings" %}
-                    </a>
-                </li>
-                {% for n in extra_nav %}
-                    <li {% if n.active %}class="active"{% endif %}>
-                        <a href="{{ n.url }}">
-                            {{ n.label }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
     {% else %}
         <h1>{% trans "Create product" %}</h1>
         <p>{% blocktrans trimmed %}

@@ -237,24 +237,6 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 A second keyword argument ``request`` will contain the request object.
 """
 
-nav_item = EventPluginSignal(
-    providing_args=['request', 'item']
-)
-"""
-This signal is sent out to include tab links on the settings page of an item.
-Receivers are expected to return a list of dictionaries. The dictionaries
-should contain at least the keys ``label`` and ``url``. You should also return
-an ``active`` key with a boolean set to ``True``, when this item should be marked
-as active.
-
-If your linked view should stay in the tab-like context of this page, we recommend
-that you use ``pretix.control.views.item.ItemDetailMixin`` for your view
-and your template inherits from ``pretixcontrol/item/base.html``.
-
-As with all plugin signals, the ``sender`` keyword argument will contain the event.
-A second keyword argument ``request`` will contain the request object.
-"""
-
 event_settings_widget = EventPluginSignal(
     providing_args=['request']
 )
