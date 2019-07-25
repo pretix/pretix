@@ -601,12 +601,14 @@ LOGGING = {
     },
 }
 
+SENTRY_ENABLED = False
 if config.has_option('sentry', 'dsn'):
     import sentry_sdk
     from sentry_sdk.integrations.celery import CeleryIntegration
     from sentry_sdk.integrations.logging import LoggingIntegration, ignore_logger
     from .sentry import PretixSentryIntegration, setup_custom_filters
 
+    SENTRY_ENABLED = True
     sentry_sdk.init(
         dsn=config.get('sentry', 'dsn'),
         integrations=[
