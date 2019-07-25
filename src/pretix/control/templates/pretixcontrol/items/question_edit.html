@@ -19,113 +19,115 @@
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        <fieldset>
-            <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.question layout="control" %}
-            {% bootstrap_field form.type layout="control" %}
-            {% bootstrap_field form.items layout="control" %}
-            {% bootstrap_field form.required layout="control" %}
-        </fieldset>
-        <div class="alert alert-info alert-required-boolean">
-            {% blocktrans trimmed %}
-                If you mark a Yes/No question as required, it means that the user has to select Yes and No is not
-                accepted. If you want to allow both options, do not make this field required.
-            {% endblocktrans %}
-        </div>
-        <fieldset id="answer-options">
-            <legend>{% trans "Answer options" %}</legend>
-            <noscript>
-                <p>{% trans "Only applicable if you choose 'Choose one/multiple from a list' above." %}</p>
-            </noscript>
-            <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
-                {{ formset.management_form }}
-                {% bootstrap_formset_errors formset %}
-                <div data-formset-body>
-                    {% for form in formset %}
-                        <div data-formset-form>
-                            <div class="sr-only">
-                                {{ form.id }}
-                                {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                                {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
-                            </div>
-                            <div class="row question-option-row">
-                                <div class="col-xs-10">
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "General " %}</legend>
+                {% bootstrap_field form.question layout="control" %}
+                {% bootstrap_field form.type layout="control" %}
+                {% bootstrap_field form.items layout="control" %}
+                {% bootstrap_field form.required layout="control" %}
+                <div class="alert alert-info alert-required-boolean">
+                    {% blocktrans trimmed %}
+                        If you mark a Yes/No question as required, it means that the user has to select Yes and No is not
+                        accepted. If you want to allow both options, do not make this field required.
+                    {% endblocktrans %}
+                </div>
+                <div id="answer-options">
+                    <h3>{% trans "Answer options" %}</h3>
+                    <noscript>
+                        <p>{% trans "Only applicable if you choose 'Choose one/multiple from a list' above." %}</p>
+                    </noscript>
+                    <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                        {{ formset.management_form }}
+                        {% bootstrap_formset_errors formset %}
+                        <div data-formset-body>
+                            {% for form in formset %}
+                                <div data-formset-form>
+                                    <div class="sr-only">
+                                        {{ form.id }}
+                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                        {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="row question-option-row">
+                                        <div class="col-xs-10">
                                     <span class="text-muted">
                                         {% blocktrans trimmed with id=form.instance.identifier %}
                                             Answer option {{ id }}
                                         {% endblocktrans %}
                                     </span>
-                                    {% bootstrap_form_errors form %}
-                                    {% bootstrap_field form.answer layout='inline' form_group_class="" %}
+                                            {% bootstrap_form_errors form %}
+                                            {% bootstrap_field form.answer layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <span>&nbsp;</span><br>
+                                            <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                                <i class="fa fa-arrow-up"></i></button>
+                                            <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                                <i class="fa fa-arrow-down"></i></button>
+                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xs-2 text-right">
-                                    <span>&nbsp;</span><br>
-                                    <button type="button" class="btn btn-default" data-formset-move-up-button>
-                                        <i class="fa fa-arrow-up"></i></button>
-                                    <button type="button" class="btn btn-default" data-formset-move-down-button>
-                                        <i class="fa fa-arrow-down"></i></button>
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                        <i class="fa fa-trash"></i></button>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
-                </div>
-                <script type="form-template" data-formset-empty-form>
-                    {% escapescript %}
-                        <div data-formset-form>
-                            <div class="sr-only">
-                                {{ formset.empty_form.id }}
-                                {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
-                                {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
-                            </div>
-                            <div class="row question-option-row">
-                                <div class="col-xs-10">
+                        <script type="form-template" data-formset-empty-form>
+                            {% escapescript %}
+                                <div data-formset-form>
+                                    <div class="sr-only">
+                                        {{ formset.empty_form.id }}
+                                        {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                        {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="row question-option-row">
+                                        <div class="col-xs-10">
                                     <span class="text-muted">
                                         {% trans "New answer option" %}
                                     </span>
-                                    {% bootstrap_field formset.empty_form.answer layout='inline' form_group_class="" %}
+                                            {% bootstrap_field formset.empty_form.answer layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-xs-2 text-right">
+                                            <span>&nbsp;</span><br>
+                                            <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                                <i class="fa fa-arrow-up"></i></button>
+                                            <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                                <i class="fa fa-arrow-down"></i></button>
+                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xs-2 text-right">
-                                    <span>&nbsp;</span><br>
-                                    <button type="button" class="btn btn-default" data-formset-move-up-button>
-                                        <i class="fa fa-arrow-up"></i></button>
-                                    <button type="button" class="btn btn-default" data-formset-move-down-button>
-                                        <i class="fa fa-arrow-down"></i></button>
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                        <i class="fa fa-trash"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    {% endescapescript %}
-                </script>
-                <p>
-                    <button type="button" class="btn btn-default" data-formset-add>
-                        <i class="fa fa-plus"></i> {% trans "Add a new option" %}</button>
-                </p>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Advanced settings" %}</legend>
-            {% bootstrap_field form.help_text layout="control" %}
-            {% bootstrap_field form.identifier layout="control" %}
-            {% bootstrap_field form.ask_during_checkin layout="control" %}
-            {% bootstrap_field form.hidden layout="control" %}
+                            {% endescapescript %}
+                        </script>
+                        <p>
+                            <button type="button" class="btn btn-default" data-formset-add>
+                                <i class="fa fa-plus"></i> {% trans "Add a new option" %}</button>
+                        </p>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Advanced" %}</legend>
+                {% bootstrap_field form.help_text layout="control" %}
+                {% bootstrap_field form.identifier layout="control" %}
+                {% bootstrap_field form.ask_during_checkin layout="control" %}
+                {% bootstrap_field form.hidden layout="control" %}
 
-            <div class="form-group">
-                <label class="col-md-3 control-label" for="id_dependency_question">
-                    {% trans "Question dependency" %}
-                    <br><span class="optional">{% trans "Optional" context "form" %}</span>
-                </label>
-                <div class="col-md-4">
-                    {% bootstrap_field form.dependency_question layout="inline" form_group_class="inner" %}
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="id_dependency_question">
+                        {% trans "Question dependency" %}
+                        <br><span class="optional">{% trans "Optional" context "form" %}</span>
+                    </label>
+                    <div class="col-md-4">
+                        {% bootstrap_field form.dependency_question layout="inline" form_group_class="inner" %}
+                    </div>
+                    <div class="col-md-5">
+                        <script type="text/plain" id="dependency_value_val">{{ form.instance.dependency_values|escapejson_dumps }}</script>
+                        {% bootstrap_field form.dependency_values layout="inline" form_group_class="inner" %}
+                    </div>
                 </div>
-                <div class="col-md-5">
-                    <script type="text/plain" id="dependency_value_val">{{ form.instance.dependency_values|escapejson_dumps }}</script>
-                    {% bootstrap_field form.dependency_values layout="inline" form_group_class="inner" %}
-                </div>
-            </div>
-        </fieldset>
+            </fieldset>
+        </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
