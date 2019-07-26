@@ -178,6 +178,7 @@ class Paypal(BasePaymentProvider):
             payee = {}
 
         payment = paypalrestsdk.Payment({
+            'header': {'PayPal-Partner-Attribution-Id': 'ramiioSoftwareentwicklung_SP'},
             'intent': 'sale',
             'payer': {
                 "payment_method": "paypal",
@@ -435,6 +436,7 @@ class Paypal(BasePaymentProvider):
             payee = {}
 
         payment = paypalrestsdk.Payment({
+            'header': {'PayPal-Partner-Attribution-Id': 'ramiioSoftwareentwicklung_SP'},
             'intent': 'sale',
             'payer': {
                 "payment_method": "paypal",
