@@ -34,15 +34,11 @@
   "definitions": {
     "zone": {
       "type": "object",
-      "description": "Zone represents the parent entity that groups all other entities. The zone itself can be hidden or displayed. Examples of different zones would be 'main area', 'balcony', etc.",
+      "description": "Zone represents the parent entity that groups all other entities. Examples of different zones would be 'main area', 'balcony', etc.",
       "properties": {
         "name": {
           "type": "string",
           "description": "Name of the zone"
-        },
-        "displayed": {
-          "type": "boolean",
-          "description": "Should the zone outlines be displayed or not?"
         },
         "position": { "$ref": "#/definitions/position" },
         "rows": {
@@ -58,7 +54,8 @@
         "row_number_position": {
           "type": ["string", "null"],
           "enum": ["left", "right", null],
-          "description": "Should the row numbers be hidden?"
+          "description": "Should the row numbers be hidden?",
+          "$comment": "Currently not implemented."
         }
       },
       "required": ["position", "rows"],
@@ -67,7 +64,6 @@
     "row": {
       "type": "object",
       "description": "Row is simply a collection of seats with some additional information that simplifies working with seats.",
-      "$comment": "Might need more (editor) infromation like direction, angle, curvature",
       "properties": {
         "row_number": {
           "type": "string",
@@ -78,13 +74,9 @@
           "description": "List of seats in this row",
           "items": { "$ref": "#/definitions/seat" }
         },
-        "number_of_seats": {
-          "type": "integer",
-          "$comment": "This property might be redundant. Since the seats are nested within the row, it's easy to just count them."
-        },
         "seats_spacing": {
           "type": "integer",
-          "description": "How far apart should the seats be positioned?"
+          "description": "How far apart should the seats be positioned? This value is ignored for rendering, it is just useful to keep to modify the row later."
         },
         "row_number_position": {
           "type": ["string", "null"],
@@ -110,6 +102,10 @@
           "type": "string",
           "description": "Human-readable seat number."
         },
+        "radius": {
+          "type": "integer",
+          "description": "Defaults to 10"
+        },
         "position": { "$ref": "#/definitions/position" },
         "category": {
           "type": "string",
@@ -122,11 +118,13 @@
     "area": {
       "type": "object",
       "description": "Area can represent anything from general admission area, to stage, bar or even tables.",
-      "$comment": "TODO needs a definition: should it be defined with parameters or with a free-form svg?",
       "properties": {
         "color": { "type": "string" },
         "border_color": { "type": "string" },
-        "rotation": { "type": "number" },
+        "rotation": {
+          "type": "number",
+          "description": "Rotation of the shape in degrees clockwise around the point specified in position."
+        },
         "position": {
           "$ref": "#/definitions/position"
         },
@@ -181,6 +179,10 @@
           "properties": {
             "text": { "type": "string" },
             "color": { "type": "string" },
+            "size": {
+              "type": "integer",
+              "description": "Defaults to 16"
+            },
             "position": {
               "$ref": "#/definitions/position"
             }
@@ -196,10 +198,10 @@
       "description": "Position of the element",
       "properties": {
         "x": {
-          "type": "integer"
+          "type": "number"
         },
         "y": {
-          "type": "integer"
+          "type": "number"
         }
       },
       "required": ["x", "y"],
