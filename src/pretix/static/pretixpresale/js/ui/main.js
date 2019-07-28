@@ -208,7 +208,7 @@ $(function () {
                 }
             });
         }
-        if (!is_enabled) {
+        if (!is_enabled && !$(".has-seating").length) {
             $("#btn-add-to-cart").prop("disabled", !is_enabled).popover({'content': gettext("Please enter a quantity for one of the ticket types."), 'placement': 'top', 'trigger': 'hover focus'});
         } else {
             $("#btn-add-to-cart").prop("disabled", false).popover("destroy")
