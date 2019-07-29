@@ -29,14 +29,27 @@ def generate_seats(event, subevent, plan, mapping):
         s.seat_guid: s for s in
         event.seats.select_related('product').annotate(has_op=Count('orderposition')).filter(subevent=subevent)
     }
+
+    def update(o, a, v):
+        if getattr(o, a) != v:
+            setattr(o, a, v)
+            return True
+        return False
+
     create_seats = []
     if plan:
         for ss in plan.iter_all_seats():
             p = mapping.get(ss.category)
             if ss.guid in current_seats:
                 seat = current_seats.pop(ss.guid)
-                if seat.product != p:
-                    seat.product = p
+                updated = any([
+                    update(seat, 'product', p),
+                    update(seat, 'name', ss.name),
+                    update(seat, 'row_name', ss.row),
+                    update(seat, 'seat_number', ss.number),
+                    update(seat, 'zone_name', ss.zone),
+                ])
+                if updated:
                     seat.save()
             else:
                 create_seats.append(Seat(
@@ -44,6 +57,9 @@ def generate_seats(event, subevent, plan, mapping):
                     subevent=subevent,
                     seat_guid=ss.guid,
                     name=ss.name,
+                    row_name=ss.row,
+                    seat_number=ss.number,
+                    zone_name=ss.zone,
                     product=p,
                 ))
 

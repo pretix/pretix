@@ -239,9 +239,24 @@ DEFAULT_VARIABLES = OrderedDict((
         ) if ev.date_admission else ""
     }),
     ("seat", {
-        "label": _("Seat name"),
-        "editor_sample": _("3, 4-5"),
+        "label": _("Seat: Full name"),
+        "editor_sample": _("Ground floor, Row 3, Seat 4"),
         "evaluate": lambda op, order, ev: str(op.seat if op.seat else _('General admission'))
+    }),
+    ("seat_zone", {
+        "label": _("Seat: zone"),
+        "editor_sample": _("Ground floor"),
+        "evaluate": lambda op, order, ev: str(op.seat.zone_name if op.seat else _('General admission'))
+    }),
+    ("seat_row", {
+        "label": _("Seat: row"),
+        "editor_sample": "3",
+        "evaluate": lambda op, order, ev: str(op.seat.row_name if op.seat else "")
+    }),
+    ("seat_number", {
+        "label": _("Seat: seat number"),
+        "editor_sample": 4,
+        "evaluate": lambda op, order, ev: str(op.seat.number if op.seat else "")
     }),
 ))
 

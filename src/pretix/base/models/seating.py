@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext, ugettext_lazy as _
 
 from pretix.base.models import Event, Item, LoggedModel, Organizer, SubEvent
 
@@ -39,7 +39,7 @@ class SeatingPlan(LoggedModel):
     layout = models.TextField(validators=[SeatingPlanLayoutValidator()])
 
     Category = namedtuple('Categrory', 'name')
-    RawSeat = namedtuple('Seat', 'name guid number row category')
+    RawSeat = namedtuple('Seat', 'name guid number row category zone')
 
     def __str__(self):
         return self.name
@@ -67,6 +67,7 @@ class SeatingPlan(LoggedModel):
                         guid=s['seat_guid'],
                         name='{} {}'.format(r['row_number'], s['seat_number']),  # TODO: Zone? Variable scheme?
                         row=r['row_number'],
+                        zone=z['name'],
                         category=s['category']
                     )
 
@@ -90,12 +91,24 @@ class Seat(models.Model):
     event = models.ForeignKey(Event, related_name='seats', on_delete=models.CASCADE)
     subevent = models.ForeignKey(SubEvent, null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
     name = models.CharField(max_length=190)
+    zone_name = models.CharField(max_length=190, blank=True, default="")
+    row_name = models.CharField(max_length=190, blank=True, default="")
+    seat_number = models.CharField(max_length=190, blank=True, default="")
     seat_guid = models.CharField(max_length=190, db_index=True)
     product = models.ForeignKey('Item', null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
     blocked = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        parts = []
+        if self.zone_name:
+            parts.append(self.zone_name)
+        if self.row_name:
+            parts.append(gettext('Row {number}').format(number=self.row_name))
+        if self.seat_number:
+            parts.append(gettext('Seat {number}').format(number=self.seat_number))
+        if not parts:
+            return self.name
+        return ', '.join(parts)
 
     def is_available(self, ignore_cart=None, ignore_orderpos=None):
         from .orders import Order
