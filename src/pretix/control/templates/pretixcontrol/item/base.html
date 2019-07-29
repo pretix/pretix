@@ -4,37 +4,6 @@
 {% block content %}
     {% if object.id %}
         <h1>{% trans "Modify product:" %} {{ object.name }}</h1>
-        <ul class="nav nav-pills">
-            <li {% if "event.item" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.item' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
-                    {% trans "General information" %}
-                </a>
-            </li>
-            {% if object.has_variations %}
-                <li {% if "event.item.variations" == url_name %}class="active"{% endif %}>
-                    <a href="{% url 'control:event.item.variations' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
-                        {% trans "Variations" %}
-                    </a>
-                </li>
-            {% endif %}
-            <li {% if "event.item.addons" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.item.addons' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
-                    {% trans "Add-Ons" %}
-                </a>
-            </li>
-            <li {% if "event.item.bundles" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.item.bundles' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
-                    {% trans "Bundled products" %}
-                </a>
-            </li>
-            {% for n in extra_nav %}
-                <li {% if n.active %}class="active"{% endif %}>
-                    <a href="{{ n.url }}">
-                        {{ n.label }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
     {% else %}
         <h1>{% trans "Create product" %}</h1>
         <p>{% blocktrans trimmed %}

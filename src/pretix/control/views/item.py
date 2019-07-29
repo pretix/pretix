@@ -1,4 +1,5 @@
 import json
+from collections import OrderedDict
 
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -13,11 +14,13 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import ListView
-from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import DeleteView
 from django_countries.fields import Country
 
+from pretix.api.serializers.item import (
+    ItemAddOnSerializer, ItemBundleSerializer, ItemVariationSerializer,
+)
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemVariation, Order, Question,
@@ -35,7 +38,7 @@ from pretix.control.forms.item import (
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
-from pretix.control.signals import item_forms, nav_item
+from pretix.control.signals import item_forms, item_formsets
 
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
@@ -824,18 +827,6 @@ class ItemDetailMixin(SingleObjectMixin):
     model = Item
     context_object_name = 'item'
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        nav = sorted(
-            sum(
-                (list(a[1]) for a in nav_item.send(self.request.event, request=self.request, item=self.get_object())),
-                []
-            ),
-            key=lambda r: str(r['label'])
-        )
-        ctx['extra_nav'] = nav
-        return ctx
-
     def get_object(self, queryset=None) -> Item:
         try:
             if not hasattr(self, 'object') or not self.object:
@@ -916,13 +907,84 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             'item': self.get_object().id,
         })
 
+    def is_valid(self, form):
+        v = (
+            form.is_valid()
+            and all(f.is_valid() for f in self.plugin_forms)
+            and all(f.is_valid() for f in self.formsets.values())
+        )
+        if v and form.cleaned_data['category'] and form.cleaned_data['category'].is_addon:
+            addons = self.formsets['addons'].ordered_forms + [
+                ef for ef in self.formsets['addons'].extra_forms
+                if ef not in self.formsets['addons'].ordered_forms and ef not in self.formsets['addons'].deleted_forms
+            ]
+            if addons:
+                messages.error(self.request,
+                               _('You cannot add add-ons to a product that is only available as an add-on '
+                                 'itself.'))
+                v = False
+
+            bundles = [
+                ef for ef in self.formsets['bundles'].forms
+                if ef not in self.formsets['bundles'].deleted_forms
+            ]
+            if bundles:
+                messages.error(self.request,
+                               _('You cannot add bundles to a product that is only available as an add-on '
+                                 'itself.'))
+                v = False
+        return v
+
     def post(self, request, *args, **kwargs):
         self.get_object()
         form = self.get_form()
-        if form.is_valid() and all(f.is_valid() for f in self.plugin_forms):
+        if self.is_valid(form):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    def save_formset(self, key, log_base, attr='item', order=True, serializer=None,
+                     rm_verb='removed'):
+        for form in self.formsets[key].deleted_forms:
+            if not form.instance.pk:
+                continue
+            d = {
+                'id': form.instance.pk
+            }
+            if serializer:
+                d.update(serializer(form.instance).data)
+            self.get_object().log_action(
+                'pretix.event.item.{}.{}'.format(log_base, rm_verb), user=self.request.user, data=d
+            )
+            form.instance.delete()
+            form.instance.pk = None
+
+        if order:
+            forms = self.formsets[key].ordered_forms + [
+                ef for ef in self.formsets[key].extra_forms
+                if ef not in self.formsets[key].ordered_forms and ef not in self.formsets[key].deleted_forms
+            ]
+        else:
+            forms = [
+                ef for ef in self.formsets[key].forms
+                if ef not in self.formsets[key].deleted_forms
+            ]
+        for i, form in enumerate(forms):
+            if order:
+                form.instance.position = i
+            setattr(form.instance, attr, self.get_object())
+            created = not form.instance.pk
+            form.save()
+            if form.has_changed() and any(a for a in form.changed_data if a != 'ORDER'):
+                change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                if key == 'variations':
+                    change_data['value'] = form.instance.value
+                change_data['id'] = form.instance.pk
+                self.get_object().log_action(
+                    'pretix.event.item.{}.changed'.format(log_base) if not created else
+                    'pretix.event.item.{}.added'.format(log_base),
+                    user=self.request.user, data=change_data
+                )
 
     @transaction.atomic
     def form_valid(self, form):
@@ -945,6 +1007,27 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
         for f in self.plugin_forms:
             f.save()
+
+        for k, v in self.formsets.items():
+            if k == 'variations':
+                self.save_formset(
+                    'variations', 'variation',
+                    serializer=ItemVariationSerializer,
+                    rm_verb='deleted'
+                )
+            elif k == 'addons':
+                self.save_formset(
+                    'addons', 'addons', 'base_item',
+                    serializer=ItemAddOnSerializer
+                )
+            elif k == 'bundles':
+                self.save_formset(
+                    'bundles', 'bundles', 'base_item', order=False,
+                    serializer=ItemBundleSerializer
+                )
+            else:
+                v.save()
+
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -954,6 +1037,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['plugin_forms'] = self.plugin_forms
+        ctx['formsets'] = self.formsets
 
         if not ctx['item'].active and ctx['item'].bundled_with.count() > 0:
             messages.info(self.request, _("You disabled this item, but it is still part of a product bundle. "
@@ -962,246 +1046,51 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
 
         return ctx
 
-
-class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_change_items'
-    template_name = 'pretixcontrol/item/variations.html'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.item = None
-
     @cached_property
-    def formset(self):
-        formsetclass = inlineformset_factory(
-            Item, ItemVariation,
-            form=ItemVariationForm, formset=ItemVariationsFormSet,
-            can_order=True, can_delete=True, extra=0
-        )
-        return formsetclass(self.request.POST if self.request.method == "POST" else None,
-                            queryset=ItemVariation.objects.filter(item=self.get_object()),
-                            event=self.request.event)
+    def formsets(self):
+        f = OrderedDict([
+            ('variations', inlineformset_factory(
+                Item, ItemVariation,
+                form=ItemVariationForm, formset=ItemVariationsFormSet,
+                can_order=True, can_delete=True, extra=0
+            )(
+                self.request.POST if self.request.method == "POST" else None,
+                queryset=ItemVariation.objects.filter(item=self.get_object()),
+                event=self.request.event, prefix="variations"
+            )),
+            ('addons', inlineformset_factory(
+                Item, ItemAddOn,
+                form=ItemAddOnForm, formset=ItemAddOnsFormSet,
+                can_order=True, can_delete=True, extra=0
+            )(
+                self.request.POST if self.request.method == "POST" else None,
+                queryset=ItemAddOn.objects.filter(base_item=self.get_object()),
+                event=self.request.event, prefix="addons"
+            )),
+            ('bundles', inlineformset_factory(
+                Item, ItemBundle,
+                form=ItemBundleForm, formset=ItemBundleFormSet,
+                fk_name='base_item',
+                can_order=False, can_delete=True, extra=0
+            )(
+                self.request.POST if self.request.method == "POST" else None,
+                queryset=ItemBundle.objects.filter(base_item=self.get_object()),
+                event=self.request.event, item=self.item, prefix="bundles"
+            )),
+        ])
+        if not self.object.has_variations:
+            del f['variations']
 
-    def post(self, request, *args, **kwargs):
-        with transaction.atomic():
-            if self.formset.is_valid():
-                for form in self.formset.deleted_forms:
-                    if not form.instance.pk:
-                        continue
-                    self.get_object().log_action(
-                        'pretix.event.item.variation.deleted', user=self.request.user, data={
-                            'value': form.instance.value,
-                            'id': form.instance.pk
-                        }
-                    )
-                    form.instance.delete()
-                    form.instance.pk = None
-
-                forms = self.formset.ordered_forms + [
-                    ef for ef in self.formset.extra_forms
-                    if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
-                ]
-                for i, form in enumerate(forms):
-                    form.instance.position = i
-                    form.instance.item = self.get_object()
-                    created = not form.instance.pk
-                    form.save()
-                    if form.has_changed():
-                        change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
-                        change_data['value'] = form.instance.value
-                        change_data['id'] = form.instance.pk
-                        self.get_object().log_action(
-                            'pretix.event.item.variation.changed' if not created else
-                            'pretix.event.item.variation.added',
-                            user=self.request.user, data=change_data
-                        )
-
-                messages.success(self.request, _('Your changes have been saved.'))
-                return redirect(self.get_success_url())
-        messages.error(self.request, _('We could not save your changes. See below for details.'))
-        return self.get(request, *args, **kwargs)
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.item.variations', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-            'item': self.get_object().id,
-        })
-
-    def get_context_data(self, **kwargs) -> dict:
-        self.object = self.get_object()
-        context = super().get_context_data(**kwargs)
-        context['formset'] = self.formset
-        return context
-
-
-class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_change_items'
-    template_name = 'pretixcontrol/item/addons.html'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.item = None
-
-    @cached_property
-    def formset(self):
-        formsetclass = inlineformset_factory(
-            Item, ItemAddOn,
-            form=ItemAddOnForm, formset=ItemAddOnsFormSet,
-            can_order=True, can_delete=True, extra=0
-        )
-        return formsetclass(self.request.POST if self.request.method == "POST" else None,
-                            queryset=ItemAddOn.objects.filter(base_item=self.get_object()),
-                            event=self.request.event)
-
-    def post(self, request, *args, **kwargs):
-        with transaction.atomic():
-            if self.formset.is_valid():
-                for form in self.formset.deleted_forms:
-                    if not form.instance.pk:
-                        continue
-                    self.get_object().log_action(
-                        'pretix.event.item.addons.removed', user=self.request.user, data={
-                            'category': form.instance.addon_category.pk
-                        }
-                    )
-                    form.instance.delete()
-                    form.instance.pk = None
-
-                forms = self.formset.ordered_forms + [
-                    ef for ef in self.formset.extra_forms
-                    if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
-                ]
-                for i, form in enumerate(forms):
-                    form.instance.base_item = self.get_object()
-                    form.instance.position = i
-                    created = not form.instance.pk
-                    form.save()
-                    if form.has_changed():
-                        change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
-                        change_data['id'] = form.instance.pk
-                        self.get_object().log_action(
-                            'pretix.event.item.addons.changed' if not created else
-                            'pretix.event.item.addons.added',
-                            user=self.request.user, data=change_data
-                        )
-
-                messages.success(self.request, _('Your changes have been saved.'))
-                return redirect(self.get_success_url())
-        return self.get(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        if self.get_object().category and self.get_object().category.is_addon:
-            messages.error(self.request, _('You cannot add add-ons to a product that is only available as an add-on '
-                                           'itself.'))
-            return redirect(self.get_previous_url())
-
-        return super().get(request, *args, **kwargs)
-
-    def get_previous_url(self) -> str:
-        return reverse('control:event.item', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-            'item': self.get_object().id,
-        })
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.item.addons', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-            'item': self.get_object().id,
-        })
-
-    def get_context_data(self, **kwargs) -> dict:
-        context = super().get_context_data(**kwargs)
-        context['formset'] = self.formset
-        return context
-
-
-class ItemBundles(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_change_items'
-    template_name = 'pretixcontrol/item/bundles.html'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.item = None
-
-    @cached_property
-    def formset(self):
-        formsetclass = inlineformset_factory(
-            Item, ItemBundle,
-            form=ItemBundleForm, formset=ItemBundleFormSet,
-            fk_name='base_item',
-            can_order=False, can_delete=True, extra=0
-        )
-        return formsetclass(self.request.POST if self.request.method == "POST" else None,
-                            queryset=ItemBundle.objects.filter(base_item=self.get_object()),
-                            event=self.request.event, item=self.item)
-
-    def post(self, request, *args, **kwargs):
-        with transaction.atomic():
-            if self.formset.is_valid():
-                for form in self.formset.deleted_forms:
-                    if not form.instance.pk:
-                        continue
-                    self.get_object().log_action(
-                        'pretix.event.item.bundles.removed', user=self.request.user, data={
-                            'bundled_item': form.instance.bundled_item.pk,
-                            'bundled_variation': (form.instance.bundled_variation.pk if form.instance.bundled_variation else None),
-                            'count': form.instance.count,
-                            'designated_price': str(form.instance.designated_price),
-                        }
-                    )
-                    form.instance.delete()
-                    form.instance.pk = None
-
-                forms = [
-                    ef for ef in self.formset.forms
-                    if ef not in self.formset.deleted_forms
-                ]
-                for i, form in enumerate(forms):
-                    form.instance.base_item = self.get_object()
-                    created = not form.instance.pk
-                    form.save()
-                    if form.has_changed():
-                        change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
-                        change_data['id'] = form.instance.pk
-                        self.get_object().log_action(
-                            'pretix.event.item.bundles.changed' if not created else
-                            'pretix.event.item.bundles.added',
-                            user=self.request.user, data=change_data
-                        )
-
-                messages.success(self.request, _('Your changes have been saved.'))
-                return redirect(self.get_success_url())
-        return self.get(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        if self.get_object().category and self.get_object().category.is_addon:
-            messages.error(self.request, _('You cannot add bundles to a product that is only available as an add-on '
-                                           'itself.'))
-            return redirect(self.get_previous_url())
-
-        return super().get(request, *args, **kwargs)
-
-    def get_previous_url(self) -> str:
-        return reverse('control:event.item', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-            'item': self.get_object().id,
-        })
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.item.bundles', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-            'item': self.get_object().id,
-        })
-
-    def get_context_data(self, **kwargs) -> dict:
-        context = super().get_context_data(**kwargs)
-        context['formset'] = self.formset
-        return context
+        i = 0
+        for rec, resp in item_formsets.send(sender=self.request.event, item=self.item, request=self.request):
+            if isinstance(resp, (list, tuple)):
+                for k in resp:
+                    f['p-{}'.format(i)] = k
+                    i += 1
+            else:
+                f['p-{}'.format(i)] = resp
+                i += 1
+        return f
 
 
 class ItemDelete(EventPermissionRequiredMixin, DeleteView):

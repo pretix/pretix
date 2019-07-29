@@ -40,10 +40,10 @@ from pretix.base.signals import register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.forms.event import (
-    CancelSettingsForm, CommentForm, DisplaySettingsForm, EventDeleteForm,
-    EventMetaValueForm, EventSettingsForm, EventUpdateForm,
-    InvoiceSettingsForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
-    QuickSetupForm, QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
+    CancelSettingsForm, CommentForm, EventDeleteForm, EventMetaValueForm,
+    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
+    PaymentSettingsForm, ProviderForm, QuickSetupForm,
+    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -62,6 +62,17 @@ class EventSettingsViewMixin:
         ctx = super().get_context_data(**kwargs)
         ctx['is_event_settings'] = True
         return ctx
+
+    def _save_decoupled(self, form):
+        # Save fields that are currently only set via the organizer but should be decoupled
+        fields = set()
+        for f in self.request.POST.getlist("decouple"):
+            fields |= set(f.split(","))
+        for f in fields:
+            if f not in form.fields:
+                continue
+            if f not in self.request.event.settings._cache():
+                self.request.event.settings.set(f, self.request.event.settings.get(f))
 
 
 class MetaDataEditorMixin:
@@ -117,7 +128,8 @@ class EventUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, MetaData
         return EventSettingsForm(
             obj=self.object,
             prefix='settings',
-            data=self.request.POST if self.request.method == 'POST' else None
+            data=self.request.POST if self.request.method == 'POST' else None,
+            files=self.request.FILES if self.request.method == 'POST' else None,
         )
 
     def get_context_data(self, *args, **kwargs) -> dict:
@@ -128,18 +140,32 @@ class EventUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, MetaData
 
     @transaction.atomic
     def form_valid(self, form):
+        self._save_decoupled(self.sform)
         self.sform.save()
         self.save_meta()
+        change_css = False
 
         if self.sform.has_changed():
             self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
                 k: self.request.event.settings.get(k) for k in self.sform.changed_data
             })
+            display_properties = (
+                'primary_color', 'theme_color_success', 'theme_color_danger', 'primary_font',
+            )
+            if any(p in self.sform.changed_data for p in display_properties):
+                change_css = True
         if form.has_changed():
             self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
                 k: getattr(self.request.event, k) for k in form.changed_data
             })
-        messages.success(self.request, _('Your changes have been saved.'))
+
+        if change_css:
+            regenerate_css.apply_async(args=(self.request.event.pk,))
+            messages.success(self.request, _('Your changes have been saved. Please note that it can '
+                                             'take a short period of time until your changes become '
+                                             'active.'))
+        else:
+            messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
@@ -325,17 +351,6 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
         kwargs['obj'] = self.request.event
         return kwargs
 
-    def _save_decoupled(self, form):
-        # Save fields that are currently only set via the organizer but should be decoupled
-        fields = set()
-        for f in self.request.POST.getlist("decouple"):
-            fields |= set(f.split(","))
-        for f in fields:
-            if f not in form.fields:
-                continue
-            if f not in self.request.event.settings._cache():
-                self.request.event.settings.set(f, self.request.event.settings.get(f))
-
     def form_success(self):
         pass
 
@@ -453,41 +468,12 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
         return resp
 
 
-class DisplaySettings(EventSettingsViewMixin, EventSettingsFormView):
-    model = Event
-    form_class = DisplaySettingsForm
-    template_name = 'pretixcontrol/event/display.html'
-    permission = 'can_change_event_settings'
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.settings.display', kwargs={
+class DisplaySettings(View):
+    def get(self, request, *wargs, **kwargs):
+        return redirect(reverse('control:event.settings', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
-        })
-
-    @transaction.atomic
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            form.save()
-            self._save_decoupled(form)
-            if form.has_changed():
-                self.request.event.log_action(
-                    'pretix.event.settings', user=self.request.user, data={
-                        k: (form.cleaned_data.get(k).name
-                            if isinstance(form.cleaned_data.get(k), File)
-                            else form.cleaned_data.get(k))
-                        for k in form.changed_data
-                    }
-                )
-            regenerate_css.apply_async(args=(self.request.event.pk,))
-            messages.success(self.request, _('Your changes have been saved. Please note that it can '
-                                             'take a short period of time until your changes become '
-                                             'active.'))
-            return redirect(self.get_success_url())
-        else:
-            messages.error(self.request, _('We could not save your changes. See below for details.'))
-            return self.get(request)
+        }) + '#tab-0-3-open')
 
 
 class MailSettings(EventSettingsViewMixin, EventSettingsFormView):

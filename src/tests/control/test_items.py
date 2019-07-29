@@ -394,7 +394,9 @@ class ItemsTest(ItemFormTest):
         assert 'T-Shirt' in resp.content.decode()
 
     def test_update(self):
-        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), {
+        doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id))
+        d = extract_form_fields(doc.select('.container-fluid form')[0])
+        d.update({
             'name_0': 'Standard',
             'default_price': '23.00',
             'tax_rate': '19.00',
@@ -402,154 +404,164 @@ class ItemsTest(ItemFormTest):
             'allow_cancel': 'yes',
             'sales_channels': 'web'
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), d)
         self.item1.refresh_from_db()
         assert self.item1.default_price == Decimal('23.00')
 
     def test_manipulate_addons(self):
-        self.client.post('/control/event/%s/%s/items/%d/addons' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': '',
-            'form-0-addon_category': str(self.addoncat.pk),
-            'form-0-min_count': '1',
-            'form-0-max_count': '2',
+        doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id))
+        d = extract_form_fields(doc.select('.container-fluid form')[0])
+
+        d.update({
+            'addons-TOTAL_FORMS': '1',
+            'addons-INITIAL_FORMS': '0',
+            'addons-MIN_NUM_FORMS': '0',
+            'addons-MAX_NUM_FORMS': '1000',
+            'addons-0-id': '',
+            'addons-0-addon_category': str(self.addoncat.pk),
+            'addons-0-min_count': '1',
+            'addons-0-max_count': '2',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
             assert self.item2.addons.exists()
             assert self.item2.addons.first().addon_category == self.addoncat
             a = self.item2.addons.first()
-        self.client.post('/control/event/%s/%s/items/%d/addons' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': str(a.pk),
-            'form-0-addon_category': str(self.addoncat.pk),
-            'form-0-min_count': '1',
-            'form-0-max_count': '2',
-            'form-0-DELETE': 'on',
+        d.update({
+            'addons-TOTAL_FORMS': '1',
+            'addons-INITIAL_FORMS': '1',
+            'addons-MIN_NUM_FORMS': '0',
+            'addons-MAX_NUM_FORMS': '1000',
+            'addons-0-id': str(a.pk),
+            'addons-0-addon_category': str(self.addoncat.pk),
+            'addons-0-min_count': '1',
+            'addons-0-max_count': '2',
+            'addons-0-DELETE': 'on',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
             assert not self.item2.addons.exists()
 
         # Do not allow duplicates
-        self.client.post('/control/event/%s/%s/items/%d/addons' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': '',
-            'form-0-addon_category': str(self.addoncat.pk),
-            'form-0-min_count': '1',
-            'form-0-max_count': '2',
-            'form-1-id': '',
-            'form-1-addon_category': str(self.addoncat.pk),
-            'form-1-min_count': '1',
-            'form-1-max_count': '2',
+        d.update({
+            'addons-TOTAL_FORMS': '2',
+            'addons-INITIAL_FORMS': '0',
+            'addons-MIN_NUM_FORMS': '0',
+            'addons-MAX_NUM_FORMS': '1000',
+            'addons-0-id': '',
+            'addons-0-addon_category': str(self.addoncat.pk),
+            'addons-0-min_count': '1',
+            'addons-0-max_count': '2',
+            'addons-1-id': '',
+            'addons-1-addon_category': str(self.addoncat.pk),
+            'addons-1-min_count': '1',
+            'addons-1-max_count': '2',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
-            assert not self.item2.addons.exists()
+            assert self.item2.addons.count() == 1
 
     def test_manipulate_bundles(self):
-        self.client.post('/control/event/%s/%s/items/%d/bundles' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': '',
-            'form-0-itemvar': str(self.item1.pk),
-            'form-0-count': '2',
-            'form-0-designated_price': '2.00',
+        doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id))
+        d = extract_form_fields(doc.select('.container-fluid form')[0])
+
+        d.update({
+            'bundles-TOTAL_FORMS': '1',
+            'bundles-INITIAL_FORMS': '0',
+            'bundles-MIN_NUM_FORMS': '0',
+            'bundles-MAX_NUM_FORMS': '1000',
+            'bundles-0-id': '',
+            'bundles-0-itemvar': str(self.item1.pk),
+            'bundles-0-count': '2',
+            'bundles-0-designated_price': '2.00',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
             assert self.item2.bundles.exists()
             assert self.item2.bundles.first().bundled_item == self.item1
-        self.client.post('/control/event/%s/%s/items/%d/bundles' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '1',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': str(self.item2.bundles.first().pk),
-            'form-0-itemvar': str(self.item1.pk),
-            'form-0-count': '2',
-            'form-0-designated_price': '2.00',
-            'form-0-DELETE': 'on',
+        d.update({
+            'bundles-TOTAL_FORMS': '1',
+            'bundles-INITIAL_FORMS': '1',
+            'bundles-MIN_NUM_FORMS': '0',
+            'bundles-MAX_NUM_FORMS': '1000',
+            'bundles-0-id': str(self.item2.bundles.first().pk),
+            'bundles-0-itemvar': str(self.item1.pk),
+            'bundles-0-count': '2',
+            'bundles-0-designated_price': '2.00',
+            'bundles-0-DELETE': 'on',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
             assert not self.item2.bundles.exists()
 
         # Do not allow self-reference
-        self.client.post('/control/event/%s/%s/items/%d/addons' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': '',
-            'form-0-itemvar': str(self.item2.pk),
-            'form-0-count': '2',
-            'form-0-designated_price': '2.00',
+        d.update({
+            'bundles-TOTAL_FORMS': '1',
+            'bundles-INITIAL_FORMS': '0',
+            'bundles-MIN_NUM_FORMS': '0',
+            'bundles-MAX_NUM_FORMS': '1000',
+            'bundles-0-id': '',
+            'bundles-0-itemvar': str(self.item2.pk),
+            'bundles-0-count': '2',
+            'bundles-0-designated_price': '2.00',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
             assert not self.item2.bundles.exists()
 
         # Do not allow multi-level bundles
         with scopes_disabled():
             self.item1.bundles.create(bundled_item=self.item1, count=1, designated_price=0)
-        self.client.post('/control/event/%s/%s/items/%d/bundles' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '1',
-            'form-INITIAL_FORMS': '0',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': '',
-            'form-0-itemvar': str(self.item1.pk),
-            'form-0-count': '2',
-            'form-0-designated_price': '2.00',
+        d.update({
+            'bundles-TOTAL_FORMS': '1',
+            'bundles-INITIAL_FORMS': '0',
+            'bundles-MIN_NUM_FORMS': '0',
+            'bundles-MAX_NUM_FORMS': '1000',
+            'bundles-0-id': '',
+            'bundles-0-itemvar': str(self.item1.pk),
+            'bundles-0-count': '2',
+            'bundles-0-designated_price': '2.00',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
             assert not self.item2.bundles.exists()
 
     def test_update_variations(self):
-        self.client.post('/control/event/%s/%s/items/%d/variations' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '2',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': str(self.var1.pk),
-            'form-0-value_0': 'Bronze',
-            'form-0-active': 'yes',
-            'form-1-id': str(self.var2.pk),
-            'form-1-value_0': 'Gold',
-            'form-1-active': 'yes',
-            'name_0': 'form-TOTAL_FORMS',
-            'default_price': '23.00',
-            'tax_rate': '19.00',
-            'active': 'yes',
-            'allow_cancel': 'yes'
+        doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id))
+        d = extract_form_fields(doc.select('.container-fluid form')[0])
+        d.update({
+            'variations-TOTAL_FORMS': '2',
+            'variations-INITIAL_FORMS': '2',
+            'variations-MIN_NUM_FORMS': '0',
+            'variations-MAX_NUM_FORMS': '1000',
+            'variations-0-id': str(self.var1.pk),
+            'variations-0-value_0': 'Bronze',
+            'variations-0-active': 'yes',
+            'variations-1-id': str(self.var2.pk),
+            'variations-1-value_0': 'Gold',
+            'variations-1-active': 'yes',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         self.var1.refresh_from_db()
         assert str(self.var1.value) == 'Bronze'
 
     def test_delete_variation(self):
-        self.client.post('/control/event/%s/%s/items/%d/variations' % (self.orga1.slug, self.event1.slug, self.item2.id), {
-            'form-TOTAL_FORMS': '2',
-            'form-INITIAL_FORMS': '2',
-            'form-MIN_NUM_FORMS': '0',
-            'form-MAX_NUM_FORMS': '1000',
-            'form-0-id': str(self.var1.pk),
-            'form-0-value_0': 'Bronze',
-            'form-0-active': 'yes',
-            'form-1-id': str(self.var2.pk),
-            'form-1-value_0': 'Gold',
-            'form-1-active': 'yes',
-            'form-1-DELETE': 'yes',
-            'name_0': 'form-TOTAL_FORMS',
-            'default_price': '23.00',
-            'tax_rate': '19.00',
-            'active': 'yes',
-            'allow_cancel': 'yes'
+        doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id))
+        d = extract_form_fields(doc.select('.container-fluid form')[0])
+        d.update({
+            'variations-TOTAL_FORMS': '2',
+            'variations-INITIAL_FORMS': '2',
+            'variations-MIN_NUM_FORMS': '0',
+            'variations-MAX_NUM_FORMS': '1000',
+            'variations-0-id': str(self.var1.pk),
+            'variations-0-value_0': 'Bronze',
+            'variations-0-active': 'yes',
+            'variations-1-id': str(self.var2.pk),
+            'variations-1-value_0': 'Gold',
+            'variations-1-active': 'yes',
+            'variations-1-DELETE': 'yes',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
             assert not self.item2.variations.filter(pk=self.var2.pk).exists()
 

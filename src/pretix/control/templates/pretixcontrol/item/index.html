@@ -1,56 +1,70 @@
 {% extends "pretixcontrol/item/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load formset_tags %}
 {% block inside %}
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row">
             <div class="col-xs-12 col-lg-10">
-                <fieldset>
-                    <legend>{% trans "General information" %}</legend>
-                    {% bootstrap_field form.name layout="control" %}
-                    <div class="internal-name-wrapper">
-                        {% bootstrap_field form.internal_name layout="control" %}
-                    </div>
-                    {% bootstrap_field form.active layout="control" %}
-                    {% bootstrap_field form.category layout="control" %}
-                    {% bootstrap_field form.admission layout="control" %}
-                    {% bootstrap_field form.description layout="control" %}
-                    {% bootstrap_field form.picture layout="control" %}
-                </fieldset>
-                <fieldset>
-                    <legend>{% trans "Price settings" %}</legend>
-                    {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
-                    {% bootstrap_field form.tax_rule layout="control" %}
-                    {% bootstrap_field form.free_price layout="control" %}
-                </fieldset>
-                <fieldset>
-                    <legend>{% trans "Availability" %}</legend>
-                    {% bootstrap_field form.sales_channels layout="control" %}
-                    {% bootstrap_field form.available_from layout="control" %}
-                    {% bootstrap_field form.available_until layout="control" %}
-                    {% bootstrap_field form.max_per_order layout="control" %}
-                    {% bootstrap_field form.min_per_order layout="control" %}
-                    {% bootstrap_field form.hidden_if_available layout="control" %}
-                    {% bootstrap_field form.require_voucher layout="control" %}
-                    {% bootstrap_field form.hide_without_voucher layout="control" %}
-                    {% bootstrap_field form.require_bundling layout="control" %}
-                    {% bootstrap_field form.allow_cancel layout="control" %}
-                </fieldset>
-                <fieldset>
-                    <legend>{% trans "Check-in" %}</legend>
-                    {% bootstrap_field form.checkin_attention layout="control" %}
-                </fieldset>
-                <fieldset>
-                    <legend>{% trans "Additional settings" %}</legend>
-                    {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
-                    {% bootstrap_field form.require_approval layout="control" %}
-                    {% bootstrap_field form.generate_tickets layout="control" %}
-                    {% bootstrap_field form.show_quota_left layout="control" %}
-                    {% for f in plugin_forms %}
-                        {% bootstrap_form f layout="control" %}
+                <div class="tabbed-form">
+                    <fieldset>
+                        <legend>{% trans "General" %}</legend>
+                        {% bootstrap_field form.name layout="control" %}
+                        <div class="internal-name-wrapper">
+                            {% bootstrap_field form.internal_name layout="control" %}
+                        </div>
+                        {% bootstrap_field form.category layout="control" %}
+                        {% bootstrap_field form.active layout="control" %}
+                        {% bootstrap_field form.admission layout="control" %}
+                        {% bootstrap_field form.description layout="control" %}
+                        {% bootstrap_field form.picture layout="control" %}
+                        {% bootstrap_field form.require_approval layout="control" %}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{% trans "Price" %}</legend>
+                        {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
+                        {% bootstrap_field form.tax_rule layout="control" %}
+                        {% bootstrap_field form.free_price layout="control" %}
+                        {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{% trans "Availability" %}</legend>
+                        {% bootstrap_field form.sales_channels layout="control" %}
+                        {% bootstrap_field form.available_from layout="control" %}
+                        {% bootstrap_field form.available_until layout="control" %}
+                        {% bootstrap_field form.max_per_order layout="control" %}
+                        {% bootstrap_field form.min_per_order layout="control" %}
+                        {% bootstrap_field form.hidden_if_available layout="control" %}
+                        {% bootstrap_field form.require_voucher layout="control" %}
+                        {% bootstrap_field form.hide_without_voucher layout="control" %}
+                        {% bootstrap_field form.require_bundling layout="control" %}
+                        {% bootstrap_field form.allow_cancel layout="control" %}
+                    </fieldset>
+                    {% for v in formsets.values %}
+                        <fieldset>
+                            <legend>{{ v.title }}</legend>
+                            {% include v.template with formset=v %}
+                        </fieldset>
                     {% endfor %}
-                </fieldset>
+                    <fieldset>
+                        <legend>{% trans "Tickets & check-in" %}</legend>
+                        {% bootstrap_field form.generate_tickets layout="control" %}
+                        {% bootstrap_field form.checkin_attention layout="control" %}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{% trans "Additional settings" %}</legend>
+                        {% bootstrap_field form.show_quota_left layout="control" %}
+                        {% for f in plugin_forms %}
+                            {% bootstrap_form f layout="control" %}
+                        {% endfor %}
+                    </fieldset>
+                </div>
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
             </div>
             <div class="col-xs-12 col-lg-2">
                 <div class="panel panel-default">
@@ -62,11 +76,6 @@
                     {% include "pretixcontrol/includes/logs.html" with obj=item %}
                 </div>
             </div>
-        </div>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
         </div>
     </form>
 {% endblock %}

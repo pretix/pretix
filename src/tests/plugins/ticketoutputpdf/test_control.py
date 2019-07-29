@@ -67,7 +67,9 @@ class TicketLayoutFormTest(SoupTest):
         with scopes_disabled():
             self.event1.ticket_layouts.create(name="Layout 1", default=True)
             bl2 = self.event1.ticket_layouts.create(name="Layout 2")
-        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), {
+        doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id))
+        d = extract_form_fields(doc.select('.container-fluid form')[0])
+        d.update({
             'name_0': 'Standard',
             'default_price': '23.00',
             'tax_rate': '19.00',
@@ -76,16 +78,21 @@ class TicketLayoutFormTest(SoupTest):
             'ticketlayoutitem_web-layout': bl2.pk,
             'sales_channels': 'web',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), d)
         with scopes_disabled():
             assert TicketLayoutItem.objects.get(item=self.item1, layout=bl2)
-        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), {
+        doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id))
+        d = extract_form_fields(doc.select('.container-fluid form')[0])
+        d.update({
             'name_0': 'Standard',
             'default_price': '23.00',
             'tax_rate': '19.00',
             'active': 'yes',
             'allow_cancel': 'yes',
             'sales_channels': 'web',
+            'ticketlayoutitem_web-layout': '',
         })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), d)
         with scopes_disabled():
             assert not TicketLayoutItem.objects.filter(item=self.item1, layout=bl2).exists()
 

@@ -36,6 +36,8 @@ eu
 filename
 filesystem
 fontawesome
+formset
+formsets
 frontend
 frontpage
 gettext

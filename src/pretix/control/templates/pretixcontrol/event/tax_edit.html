@@ -18,102 +18,93 @@
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        {% bootstrap_field form.name layout="control" %}
-        {% bootstrap_field form.rate addon_after="%" layout="control" %}
-
-        <details class="panel panel-default"
-                {% if rule.eu_reverse_charge or rule.has_custom_rules or form.errors %}open{% endif %}>
-            <summary class="panel-heading">
-                <h4 class="panel-title">
-                    <strong>{% trans "Advanced settings" %}</strong>
-                    <i class="fa fa-angle-down collapse-indicator"></i>
-                </h4>
-            </summary>
-            <div id="advanced">
-                <div class="panel-body">
-                    <legend>{% trans "Advanced settings" %}</legend>
-                    <div class="alert alert-legal">
-                        {% blocktrans trimmed with docs="https://docs.pretix.eu/en/latest/user/events/taxes.html" %}
-                            These settings are intended for advanced users. See the
-                            <a href="{{ docs }}">documentation</a>
-                            for more information. Note that we are not responsible for the correct handling
-                            of taxes in your ticket shop. If in doubt, please contact a lawyer or tax consultant.
-                        {% endblocktrans %}
-                    </div>
-                    {% bootstrap_field form.price_includes_tax layout="control" %}
-                    {% bootstrap_field form.eu_reverse_charge layout="control" %}
-                    {% bootstrap_field form.home_country layout="control" %}
-                    <legend>{% trans "Custom taxation rules" %}</legend>
-                    <div class="alert alert-warning">
-                        {% blocktrans trimmed %}
-                            These settings are intended for professional users with very specific taxation situations.
-                            If you create any rule here, the reverse charge settings above will be ignored. The rules will be
-                            checked in order and once the first rule matches the order, it will be used and all further rules will
-                            be ignored. If no rule matches, tax will be charged.
-                        {% endblocktrans %}
-                        {% trans "All of these rules will only apply if an invoice address is set." %}
-                    </div>
-
-                    <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
-                        {{ formset.management_form }}
-                        {% bootstrap_formset_errors formset %}
-                        <div data-formset-body>
-                            {% for form in formset %}
-                                {% bootstrap_form_errors form %}
-                                <div class="row" data-formset-form>
-                                    <div class="sr-only">
-                                        {{ form.id }}
-                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                                    </div>
-                                    <div class="col-sm-4">
-                                        {% bootstrap_field form.country layout='inline' form_group_class="" %}
-                                    </div>
-                                    <div class="col-sm-3">
-                                        {% bootstrap_field form.address_type layout='inline' form_group_class="" %}
-                                    </div>
-                                    <div class="col-sm-3">
-                                        {% bootstrap_field form.action layout='inline' form_group_class="" %}
-                                    </div>
-                                    <div class="col-sm-2 text-right">
-                                        <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                            <i class="fa fa-trash"></i></button>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <script type="form-template" data-formset-empty-form>
-                            {% escapescript %}
-                                <div class="row" data-formset-form>
-                                    <div class="sr-only">
-                                        {{ form.id }}
-                                        {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
-                                    </div>
-                                    <div class="col-sm-4">
-                                        {% bootstrap_field formset.empty_form.country layout='inline' form_group_class="" %}
-                                    </div>
-                                    <div class="col-sm-3">
-                                        {% bootstrap_field formset.empty_form.address_type layout='inline' form_group_class="" %}
-                                    </div>
-                                    <div class="col-sm-3">
-                                        {% bootstrap_field formset.empty_form.action layout='inline' form_group_class="" %}
-                                    </div>
-                                    <div class="col-sm-2 text-right">
-                                        <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                            <i class="fa fa-trash"></i></button>
-                                    </div>
-                                </div>
-                            {% endescapescript %}
-                        </script>
-                        <p>
-                            <button type="button" class="btn btn-default" data-formset-add>
-                                <i class="fa fa-plus"></i> {% trans "Add a new rule" %}</button>
-                        </p>
-                    </div>
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "General" %}</legend>
+                {% bootstrap_field form.name layout="control" %}
+                {% bootstrap_field form.rate addon_after="%" layout="control" %}
+                {% bootstrap_field form.price_includes_tax layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Advanced" %}</legend>
+                <div class="alert alert-legal">
+                    {% blocktrans trimmed with docs="https://docs.pretix.eu/en/latest/user/events/taxes.html" %}
+                        These settings are intended for advanced users. See the
+                        <a href="{{ docs }}">documentation</a>
+                        for more information. Note that we are not responsible for the correct handling
+                        of taxes in your ticket shop. If in doubt, please contact a lawyer or tax consultant.
+                    {% endblocktrans %}
                 </div>
-            </div>
-        </details>
+                {% bootstrap_field form.eu_reverse_charge layout="control" %}
+                {% bootstrap_field form.home_country layout="control" %}
+                <h3>{% trans "Custom taxation rules" %}</h3>
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        These settings are intended for professional users with very specific taxation situations.
+                        If you create any rule here, the reverse charge settings above will be ignored. The rules will be
+                        checked in order and once the first rule matches the order, it will be used and all further rules will
+                        be ignored. If no rule matches, tax will be charged.
+                    {% endblocktrans %}
+                    {% trans "All of these rules will only apply if an invoice address is set." %}
+                </div>
 
-
+                <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                    {{ formset.management_form }}
+                    {% bootstrap_formset_errors formset %}
+                    <div data-formset-body>
+                        {% for form in formset %}
+                            {% bootstrap_form_errors form %}
+                            <div class="row" data-formset-form>
+                                <div class="sr-only">
+                                    {{ form.id }}
+                                    {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                </div>
+                                <div class="col-sm-4">
+                                    {% bootstrap_field form.country layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-sm-3">
+                                    {% bootstrap_field form.address_type layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-sm-3">
+                                    {% bootstrap_field form.action layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-sm-2 text-right">
+                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <script type="form-template" data-formset-empty-form>
+                        {% escapescript %}
+                            <div class="row" data-formset-form>
+                                <div class="sr-only">
+                                    {{ form.id }}
+                                    {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                </div>
+                                <div class="col-sm-4">
+                                    {% bootstrap_field formset.empty_form.country layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-sm-3">
+                                    {% bootstrap_field formset.empty_form.address_type layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-sm-3">
+                                    {% bootstrap_field formset.empty_form.action layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-sm-2 text-right">
+                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        {% endescapescript %}
+                    </script>
+                    <p>
+                        <button type="button" class="btn btn-default" data-formset-add>
+                            <i class="fa fa-plus"></i> {% trans "Add a new rule" %}</button>
+                    </p>
+                </div>
+            </fieldset>
+        </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

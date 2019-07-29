@@ -5,60 +5,67 @@
     <h1>{% trans "Payment settings" %}</h1>
     <form action="" method="post" class="form-horizontal form-plugins">
         {% csrf_token %}
-        <fieldset>
-            <legend>{% trans "Payment providers" %}</legend>
-            <table class="table table-payment-providers">
-                <tbody>
-                {% for provider in providers %}
-                    <tr>
-                        <td>
-                            <strong>{{ provider.verbose_name }}</strong>
-                        </td>
-                        <td>
-                            {% if provider.show_enabled %}
-                                <span class="text-success">
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "Payment providers" %}</legend>
+                <table class="table table-payment-providers">
+                    <tbody>
+                    {% for provider in providers %}
+                        <tr>
+                            <td>
+                                <strong>{{ provider.verbose_name }}</strong>
+                            </td>
+                            <td>
+                                {% if provider.show_enabled %}
+                                    <span class="text-success">
                                     <span class="fa fa-check"></span>
                                     {% trans "Enabled" %}
                                 </span>
-                            {% else %}
-                                <span class="text-danger">
+                                {% else %}
+                                    <span class="text-danger">
                                     <span class="fa fa-times"></span>
                                     {% trans "Disabled" %}
                                 </span>
-                            {% endif %}
-                        </td>
-                        <td class="text-right">
-                            <a href="{% url 'control:event.settings.payment.provider' event=request.event.slug organizer=request.organizer.slug provider=provider.identifier %}"
-                                    class="btn btn-default">
-                                <span class="fa fa-cog"></span>
-                                {% trans "Settings" %}
-                            </a>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="3">
-                            {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
-                            {% blocktrans trimmed with plugin_settings_href='href="'|add:plugin_settings_url|add:'"'|safe %}
-                                There are no payment providers available. Please go to the <a {{ plugin_settings_href }}>plugin settings</a> and activate one or more payment plugins.
-                            {% endblocktrans %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "General payment settings" %}</legend>
-            {% bootstrap_form_errors form layout="control" %}
-            {% bootstrap_field form.payment_term_days layout="control" %}
-            {% bootstrap_field form.payment_term_last layout="control" %}
-            {% bootstrap_field form.payment_term_weekdays layout="control" %}
-            {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
-            {% bootstrap_field form.payment_term_accept_late layout="control" %}
-            {% bootstrap_field form.tax_rate_default layout="control" %}
-            {% bootstrap_field form.payment_explanation layout="control" %}
-        </fieldset>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                <a href="{% url 'control:event.settings.payment.provider' event=request.event.slug organizer=request.organizer.slug provider=provider.identifier %}"
+                                        class="btn btn-default">
+                                    <span class="fa fa-cog"></span>
+                                    {% trans "Settings" %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3">
+                                {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
+                                {% blocktrans trimmed with plugin_settings_href='href="'|add:plugin_settings_url|add:'"'|safe %}
+                                    There are no payment providers available. Please go to the
+                                    <a {{ plugin_settings_href }}>plugin settings</a> and activate one or more payment plugins.
+                                {% endblocktrans %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Deadlines" %}</legend>
+                {% bootstrap_form_errors form layout="control" %}
+                {% bootstrap_field form.payment_term_days layout="control" %}
+                {% bootstrap_field form.payment_term_last layout="control" %}
+                {% bootstrap_field form.payment_term_weekdays layout="control" %}
+                {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
+                {% bootstrap_field form.payment_term_accept_late layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Advanced" %}</legend>
+                {% bootstrap_form_errors form layout="control" %}
+                {% bootstrap_field form.tax_rate_default layout="control" %}
+                {% bootstrap_field form.payment_explanation layout="control" %}
+            </fieldset>
+        </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

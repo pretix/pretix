@@ -460,6 +460,9 @@ class ItemUpdateForm(I18nModelForm):
 
 
 class ItemVariationsFormSet(I18nFormSet):
+    template = "pretixcontrol/item/include_variations.html"
+    title = _('Variations')
+
     def clean(self):
         super().clean()
         for f in self.forms:
@@ -516,6 +519,9 @@ class ItemVariationForm(I18nModelForm):
 
 
 class ItemAddOnsFormSet(I18nFormSet):
+    title = _('Add-ons')
+    template = "pretixcontrol/item/include_addons.html"
+
     def __init__(self, *args, **kwargs):
         self.event = kwargs.get('event')
         super().__init__(*args, **kwargs)
@@ -581,6 +587,9 @@ class ItemAddOnForm(I18nModelForm):
 
 
 class ItemBundleFormSet(I18nFormSet):
+    template = "pretixcontrol/item/include_bundles.html"
+    title = _('Bundled products')
+
     def __init__(self, *args, **kwargs):
         self.event = kwargs.get('event')
         self.item = kwargs.pop('item')

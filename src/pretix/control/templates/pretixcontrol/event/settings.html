@@ -1,81 +1,119 @@
 {% extends "pretixcontrol/event/settings_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load hierarkey_form %}
+{% block custom_header %}
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" %}">
+{% endblock %}
 {% block inside %}
     <h1>{% trans "General settings" %}</h1>
-    <form action="" method="post" class="form-horizontal">
+
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        <fieldset>
-            <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="control" %}
-            {% bootstrap_field form.slug layout="control" %}
-            {% bootstrap_field form.date_from layout="control" %}
-            {% bootstrap_field form.date_to layout="control" %}
-            {% bootstrap_field form.location layout="control" %}
-            {% bootstrap_field form.date_admission layout="control" %}
-            {% bootstrap_field form.currency layout="control" %}
-            {% bootstrap_field form.is_public layout="control" %}
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "Basics" %}</legend>
+                {% bootstrap_field form.name layout="control" %}
+                {% bootstrap_field form.slug layout="control" %}
+                {% bootstrap_field form.date_from layout="control" %}
+                {% bootstrap_field form.date_to layout="control" %}
+                {% bootstrap_field form.location layout="control" %}
+                {% bootstrap_field form.date_admission layout="control" %}
+                {% bootstrap_field form.currency layout="control" %}
+                {% bootstrap_field sform.contact_mail layout="control" %}
+                {% bootstrap_field sform.imprint_url layout="control" %}
+                {% bootstrap_field form.is_public layout="control" %}
 
-            {% if meta_forms %}
-                <div class="form-group metadata-group">
-                    <label class="col-md-3 control-label">{% trans "Meta data" %}</label>
-                    <div class="col-md-9">
-                        {% for form in meta_forms %}
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="{{ form.value.id_for_label }}">
-                                        {{ form.property.name }}
-                                    </label>
+                {% if meta_forms %}
+                    <div class="form-group metadata-group">
+                        <label class="col-md-3 control-label">{% trans "Meta data" %}</label>
+                        <div class="col-md-9">
+                            {% for form in meta_forms %}
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="{{ form.value.id_for_label }}">
+                                            {{ form.property.name }}
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {% bootstrap_form form layout="inline" %}
+                                    </div>
                                 </div>
-                                <div class="col-md-8">
-                                    {% bootstrap_form form layout="inline" %}
-                                </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-            {% endif %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Display settings" %}</legend>
-            {% bootstrap_field sform.locales layout="control" %}
-            {% bootstrap_field sform.locale layout="control" %}
-            {% bootstrap_field sform.timezone layout="control" %}
-            {% bootstrap_field sform.show_date_to layout="control" %}
-            {% bootstrap_field sform.show_times layout="control" %}
-            {% bootstrap_field sform.contact_mail layout="control" %}
-            {% bootstrap_field sform.imprint_url layout="control" %}
-            {% bootstrap_field sform.confirm_text layout="control" %}
-            {% bootstrap_field sform.show_quota_left layout="control" %}
-            {% bootstrap_field sform.display_net_prices layout="control" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Timeline" %}</legend>
-            {% bootstrap_field form.presale_start layout="control" %}
-            {% bootstrap_field sform.presale_start_show_date layout="control" %}
-            {% bootstrap_field form.presale_end layout="control" %}
-            {% bootstrap_field sform.show_items_outside_presale_period layout="control" %}
-            {% bootstrap_field sform.last_order_modification_date layout="control" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Orders" %}</legend>
-            {% bootstrap_field sform.reservation_time layout="control" %}
-            {% bootstrap_field sform.max_items_per_order layout="control" %}
-            {% bootstrap_field sform.attendee_names_asked layout="control" %}
-            {% bootstrap_field sform.attendee_names_required layout="control" %}
-            {% bootstrap_field sform.name_scheme layout="control" %}
-            {% bootstrap_field sform.name_scheme_titles layout="control" %}
-            {% bootstrap_field sform.order_email_asked_twice layout="control" %}
-            {% bootstrap_field sform.attendee_emails_asked layout="control" %}
-            {% bootstrap_field sform.attendee_emails_required layout="control" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Waiting list" %}</legend>
-            {% bootstrap_field sform.waiting_list_enabled layout="control" %}
-            {% bootstrap_field sform.waiting_list_auto layout="control" %}
-            {% bootstrap_field sform.waiting_list_hours layout="control" %}
-        </fieldset>
+                {% endif %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Localization" %}</legend>
+                {% bootstrap_field sform.locales layout="control" %}
+                {% bootstrap_field sform.locale layout="control" %}
+                {% bootstrap_field sform.timezone layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Attendee data" %}</legend>
+                {% bootstrap_field sform.attendee_names_asked layout="control" %}
+                {% bootstrap_field sform.attendee_names_required layout="control" %}
+                {% bootstrap_field sform.name_scheme layout="control" %}
+                {% bootstrap_field sform.name_scheme_titles layout="control" %}
+                {% bootstrap_field sform.order_email_asked_twice layout="control" %}
+                {% bootstrap_field sform.attendee_emails_asked layout="control" %}
+                {% bootstrap_field sform.attendee_emails_required layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Texts" %}</legend>
+                {% bootstrap_field sform.frontpage_text layout="control" %}
+                {% bootstrap_field sform.presale_has_ended_text layout="control" %}
+                {% bootstrap_field sform.voucher_explanation_text layout="control" %}
+                {% bootstrap_field sform.confirm_text layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Shop design" %}</legend>
+                {% bootstrap_field sform.logo_image layout="control" %}
+                {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
+                {% propagated request.event org_url "primary_color" "primary_font" "theme_color_success" "theme_color_danger" %}
+                    {% bootstrap_field sform.primary_color layout="control" %}
+                    {% bootstrap_field sform.theme_color_success layout="control" %}
+                    {% bootstrap_field sform.theme_color_danger layout="control" %}
+                    {% bootstrap_field sform.primary_font layout="control" %}
+                {% endpropagated %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Timeline" %}</legend>
+                {% bootstrap_field form.presale_start layout="control" %}
+                {% bootstrap_field sform.presale_start_show_date layout="control" %}
+                {% bootstrap_field form.presale_end layout="control" %}
+                {% bootstrap_field sform.show_items_outside_presale_period layout="control" %}
+                {% bootstrap_field sform.last_order_modification_date layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Display" %}</legend>
+                {% bootstrap_field sform.show_date_to layout="control" %}
+                {% bootstrap_field sform.show_times layout="control" %}
+                {% bootstrap_field sform.show_quota_left layout="control" %}
+                {% bootstrap_field sform.display_net_prices layout="control" %}
+                {% bootstrap_field sform.show_variations_expanded layout="control" %}
+                {% bootstrap_field sform.hide_sold_out layout="control" %}
+                {% bootstrap_field sform.meta_noindex layout="control" %}
+                {% if sform.frontpage_subevent_ordering %}
+                    {% bootstrap_field sform.frontpage_subevent_ordering layout="control" %}
+                {% endif %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Cart" %}</legend>
+                {% bootstrap_field sform.reservation_time layout="control" %}
+                {% bootstrap_field sform.max_items_per_order layout="control" %}
+                {% bootstrap_field sform.redirect_to_checkout_directly layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Waiting list" %}</legend>
+                {% bootstrap_field sform.waiting_list_enabled layout="control" %}
+                {% bootstrap_field sform.waiting_list_auto layout="control" %}
+                {% bootstrap_field sform.waiting_list_hours layout="control" %}
+            </fieldset>
+        </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

@@ -74,7 +74,11 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   margin-bottom: 0;
 }
 
-.preview-panel .nav-tabs {
+.tabbed-form > .tab-pane {
+  padding: 10px;
+}
+
+.nav-tabs {
   border-bottom: 0px solid #ddd;
 }
 

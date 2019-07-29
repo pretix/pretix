@@ -1,0 +1,87 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+<p>
+    {% blocktrans trimmed %}
+        With add-ons, you can specify products that can be bought as an addition to this product. For example, if
+        you host a conference with a base conference ticket and a number of workshops, you could define the
+        workshops as add-ons to the conference ticket. With this configuration, the workshops cannot be bought
+        on their own but only in combination with a conference ticket. You can here specify categories of products
+        that can be used as add-ons to this product. You can also specify the minimum and maximum number of
+        add-ons of the given category that can or need to be chosen. The user can buy every add-on from the
+        category at most once. If an add-on product has multiple variations, only one of them can be bought.
+    {% endblocktrans %}
+</p>
+<div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+    {{ formset.management_form }}
+    {% bootstrap_formset_errors formset %}
+    <div data-formset-body>
+        {% for form in formset %}
+            <div class="panel panel-default" data-formset-form>
+                <div class="sr-only">
+                    {{ form.id }}
+                    {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
+                    {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                </div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h3 class="panel-title">{% trans "Add-On" %}</h3>
+                        </div>
+                        <div class="col-sm-4 text-right">
+                            <button type="button" class="btn btn-xs btn-default" data-formset-move-up-button>
+                                <i class="fa fa-arrow-up"></i></button>
+                            <button type="button" class="btn btn-xs btn-default" data-formset-move-down-button>
+                                <i class="fa fa-arrow-down"></i></button>
+                            <button type="button" class="btn btn-xs btn-danger" data-formset-delete-button>
+                                <i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body form-horizontal">
+                    {% bootstrap_form_errors form %}
+                    {% bootstrap_field form.addon_category layout="control" %}
+                    {% bootstrap_field form.min_count layout="control" %}
+                    {% bootstrap_field form.max_count layout="control" %}
+                    {% bootstrap_field form.price_included layout="control" %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script type="form-template" data-formset-empty-form>
+        {% escapescript %}
+            <div class="panel panel-default" data-formset-form>
+                <div class="sr-only">
+                    {{ formset.empty_form.id }}
+                    {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
+                    {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                </div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h3 class="panel-title">{% trans "Add-On" %}</h3>
+                        </div>
+                        <div class="col-sm-4 text-right">
+                            <button type="button" class="btn btn-xs btn-default" data-formset-move-up-button>
+                                <i class="fa fa-arrow-up"></i></button>
+                            <button type="button" class="btn btn-xs btn-default" data-formset-move-down-button>
+                                <i class="fa fa-arrow-down"></i></button>
+                            <button type="button" class="btn btn-xs btn-danger" data-formset-delete-button>
+                                <i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body form-horizontal">
+                    {% bootstrap_field formset.empty_form.addon_category layout="control" %}
+                    {% bootstrap_field formset.empty_form.min_count layout="control" %}
+                    {% bootstrap_field formset.empty_form.max_count layout="control" %}
+                    {% bootstrap_field formset.empty_form.price_included layout="control" %}
+                </div>
+            </div>
+        {% endescapescript %}
+    </script>
+    <p>
+        <button type="button" class="btn btn-default" data-formset-add>
+            <i class="fa fa-plus"></i> {% trans "Add a new add-on" %}</button>
+    </p>
+</div>
