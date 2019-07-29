@@ -437,6 +437,7 @@ class ItemUpdateForm(I18nModelForm):
             'require_approval',
             'hide_without_voucher',
             'allow_cancel',
+            'allow_waitinglist',
             'max_per_order',
             'min_per_order',
             'checkin_attention',

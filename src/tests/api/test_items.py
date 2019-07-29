@@ -225,6 +225,7 @@ TEST_ITEM_RES = {
     "admission": False,
     "position": 0,
     "generate_tickets": None,
+    "allow_waitinglist": True,
     "picture": None,
     "available_from": None,
     "available_until": None,

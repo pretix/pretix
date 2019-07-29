@@ -3,7 +3,7 @@
 {% if avail <= 10 %}
     <div class="col-md-2 col-xs-6 availability-box gone">
         <strong>{% trans "SOLD OUT" %}</strong>
-        {% if event.settings.waiting_list_enabled %}
+        {% if event.settings.waiting_list_enabled and item.allow_waitinglist %}
             <br/>
             <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
                 <span class="fa fa-plus-circle"></span>
@@ -17,7 +17,7 @@
             <span class="fa fa-info-circle" data-toggle="tooltip"
                   title="{% trans "All remaining products are reserved but might become available again." %}"></span>
         </strong>
-        {% if event.settings.waiting_list_enabled %}
+        {% if event.settings.waiting_list_enabled and item.allow_waitinglist %}
             <br/>
             <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
                 <span class="fa fa-plus-circle"></span>

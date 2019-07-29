@@ -311,6 +311,11 @@ class Item(LoggedModel):
         verbose_name=_("Generate tickets"),
         blank=True, null=True,
     )
+    allow_waitinglist = models.BooleanField(
+        verbose_name=_("Show a waiting list for this ticket"),
+        help_text=_("This will only work of waiting lists are enabled for this event."),
+        default=True
+    )
     show_quota_left = models.NullBooleanField(
         verbose_name=_("Show number of tickets left"),
         help_text=_("Publicly show how many tickets are still available."),

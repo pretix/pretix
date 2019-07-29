@@ -75,6 +75,8 @@ generate_tickets                      boolean                    If ``false``, t
                                                                  non-admission or add-on product, regardless of event
                                                                  settings. If this is ``null``, regular ticketing
                                                                  rules apply.
+allow_waitinglist                     boolean                    If ``false``, no waiting list will be shown for this
+                                                                 product when it is sold out.
 show_quota_left                       boolean                    Publicly show how many tickets are still available.
                                                                  If this is ``null``, the event default is used.
 has_variations                        boolean                    Shows whether or not this item has variations.
@@ -149,7 +151,7 @@ bundles                               list of objects            Definition of b
 
 .. versionchanged:: 3.0
 
-   The ``show_quota_left`` and ``hidden_if_available`` attributes have been added.
+   The ``show_quota_left``, ``allow_waitinglist``, and ``hidden_if_available`` attributes have been added.
 
 Notes
 -----
@@ -217,6 +219,7 @@ Endpoints
             "checkin_attention": false,
             "has_variations": false,
             "generate_tickets": null,
+            "allow_waitinglist": true,
             "show_quota_left": null,
             "require_approval": false,
             "require_bundling": false,
@@ -306,6 +309,7 @@ Endpoints
         "hide_without_voucher": false,
         "allow_cancel": true,
         "generate_tickets": null,
+        "allow_waitinglist": true,
         "show_quota_left": null,
         "min_per_order": null,
         "max_per_order": null,
@@ -380,6 +384,7 @@ Endpoints
         "hide_without_voucher": false,
         "allow_cancel": true,
         "generate_tickets": null,
+        "allow_waitinglist": true,
         "show_quota_left": null,
         "min_per_order": null,
         "max_per_order": null,
@@ -443,6 +448,7 @@ Endpoints
         "min_per_order": null,
         "max_per_order": null,
         "generate_tickets": null,
+        "allow_waitinglist": true,
         "show_quota_left": null,
         "checkin_attention": false,
         "has_variations": true,
@@ -533,6 +539,7 @@ Endpoints
         "require_voucher": false,
         "hide_without_voucher": false,
         "generate_tickets": null,
+        "allow_waitinglist": true,
         "show_quota_left": null,
         "allow_cancel": true,
         "min_per_order": null,

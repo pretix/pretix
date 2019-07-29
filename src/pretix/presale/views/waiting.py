@@ -81,6 +81,10 @@ class WaitingView(EventViewMixin, FormView):
             messages.error(request, _("We could not identify the product you selected."))
             return redirect(self.get_index_url())
 
+        if not self.item_and_variation[0].allow_waitinglist:
+            messages.error(request, _("The waiting list is disabled for this product."))
+            return redirect(self.get_index_url())
+
         self.subevent = None
         if request.event.has_subevents:
             if 'subevent' in request.GET:

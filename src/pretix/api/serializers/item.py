@@ -119,7 +119,7 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
-                  'show_quota_left', 'hidden_if_available')
+                  'show_quota_left', 'hidden_if_available', 'allow_waitinglist')
         read_only_fields = ('has_variations', 'picture')
 
     def get_serializer_context(self):
