@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-29 08:17+0000\n"
-"PO-Revision-Date: 2019-07-24 13:56+0000\n"
+"PO-Revision-Date: 2019-07-29 08:36+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1890,7 +1890,7 @@ msgstr "Dieses Produkt wird nach diesem Termin nicht mehr verkauft."
 
 #: pretix/base/models/items.py:341
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "Nicht anzeigen, wenn anderes Kontingent verfügbar"
 
 #: pretix/base/models/items.py:342
 msgid ""
@@ -1900,6 +1900,13 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"Wenn du hier ein Kontingent auswählst, wird dieses Produkt nur angezeigt "
+"wenn dieses andere Kontingent nicht verfügbar ist. In Kombination mit der "
+"Möglichkeit, ausverkaufte Produkte anzuzeigen, erlaubt dir dies, ein Produkt "
+"durch ein teureres auszutauschen, sobald es ausverkauft wurde. Es kann einen "
+"kurzen Zeitraum geben, in dem beide Produkte sichtbar sind, wenn alle "
+"Produkte des hier eingestellten Kontingentes reserviert sind, aber noch "
+"nicht verkauft wurden."
 
 #: pretix/base/models/items.py:349
 msgid "This product can only be bought using a voucher."
@@ -7122,10 +7129,8 @@ msgstr ""
 "stattdessen auf \"inaktiv\"."
 
 #: pretix/control/forms/item.py:522
-#, fuzzy
-#| msgid "Add-Ons"
 msgid "Add-ons"
-msgstr "Zusatz-Produkte"
+msgstr "Zusatzprodukte"
 
 #: pretix/control/forms/item.py:550
 msgid "You added the same add-on category twice"
@@ -9302,10 +9307,8 @@ msgid "Cancellation settings"
 msgstr "Storno-Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:11
-#, fuzzy
-#| msgid "Cancellation of unpaid or free orders"
 msgid "Unpaid or free orders"
-msgstr "Stornierung von ausstehenden oder kostenlosen Bestellungen"
+msgstr "Ausstehende oder kostenlose Bestellungen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:24
 msgid ""
@@ -9511,22 +9514,16 @@ msgid "Invoice settings"
 msgstr "Rechnungseinstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:11
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Invoice generation"
-msgstr "Rechnungsinformationen"
+msgstr "Rechnungserstellung"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:22
-#, fuzzy
-#| msgid "Address"
 msgid "Address form"
-msgstr "Adresse"
+msgstr "Adresseingabe"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:32
-#, fuzzy
-#| msgid "Voucher details"
 msgid "Issuer details"
-msgstr "Gutscheindetails"
+msgstr "Rechnungsaussteller"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:42
 msgid "Invoice customization"
@@ -9762,15 +9759,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:54
 msgid "Deadlines"
-msgstr ""
+msgstr "Fristen"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:63
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:29
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:110
-#, fuzzy
-#| msgid "Advanced options"
 msgid "Advanced"
-msgstr "Erweiterte Optionen"
+msgstr "Erweitert"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:13
 #: pretix/control/templates/pretixcontrol/events/create_base.html:24
@@ -9990,7 +9985,7 @@ msgstr "Allgemeine Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:17
 msgid "Basics"
-msgstr ""
+msgstr "Eckdaten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:31
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
@@ -10000,22 +9995,16 @@ msgstr "Metadaten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:50
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:40
-#, fuzzy
-#| msgid "Location"
 msgid "Localization"
-msgstr "Veranstaltungsort"
+msgstr "Lokalisierung"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:56
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee data"
-msgstr "Name des/der Teilnehmer*in"
+msgstr "Teilnehmerdaten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:66
-#, fuzzy
-#| msgid "Text"
 msgid "Texts"
-msgstr "Text"
+msgstr "Texte"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:73
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:44
@@ -10035,7 +10024,7 @@ msgstr "Anzeige"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:105
 msgid "Cart"
-msgstr ""
+msgstr "Warenkorb"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:135
 #: pretix/control/templates/pretixcontrol/events/index.html:148
@@ -10144,10 +10133,8 @@ msgid "Ticket download"
 msgstr "Ticket-Download"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:10
-#, fuzzy
-#| msgid "Global settings"
 msgid "Download settings"
-msgstr "Globale Einstellungen"
+msgstr "Download-Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:13
 msgid ""
@@ -10159,10 +10146,8 @@ msgstr ""
 "Output auf dieser Seite."
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:27
-#, fuzzy
-#| msgid "Download date"
 msgid "Download formats"
-msgstr "Download-Datum"
+msgstr "Download-Formate"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:49
 #, python-format
@@ -10585,10 +10570,8 @@ msgid "Availability"
 msgstr "Verfügbarkeit"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:51
-#, fuzzy
-#| msgid "Ticket checked in"
 msgid "Tickets & check-in"
-msgstr "Ticket eingecheckt"
+msgstr "Tickets & Check-In"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:56
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:438
@@ -10768,10 +10751,8 @@ msgstr ""
 "strong>."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:24
-#, fuzzy
-#| msgid "General"
 msgid "General "
-msgstr "Allgemeines"
+msgstr "Allgemeines "
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:30
 msgid ""
@@ -12180,10 +12161,8 @@ msgstr ""
 "die keine eigenen Design-Einstellungen gesetzt sind."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:58
-#, fuzzy
-#| msgid "Event date"
 msgid "Event metadata"
-msgstr "Veranstaltungsdatum"
+msgstr "Veranstaltungs-Metadaten"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:60
 msgid ""
