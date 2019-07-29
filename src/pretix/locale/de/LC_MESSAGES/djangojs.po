@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-29 08:18+0000\n"
-"PO-Revision-Date: 2019-07-24 13:45+0000\n"
+"PO-Revision-Date: 2019-07-29 08:36+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -290,7 +290,7 @@ msgstr "In den Warenkorb"
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Anmelden"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
