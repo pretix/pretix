@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-29 07:35+0000\n"
+"POT-Creation-Date: 2019-07-29 08:18+0000\n"
 "PO-Revision-Date: 2019-06-04 16:00+0000\n"
 "Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -292,78 +292,83 @@ msgstr "Αγορά"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
+msgid "Register"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:18
+msgctxt "widget"
 msgid "Reserved"
 msgstr "Κατοχυρωμένα"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:18
+#: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "FREE"
 msgstr "ΔΩΡΕΑΝ"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:19
+#: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "απο %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:20
+#: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "συμπεριλαμβανομένου %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:21
+#: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "συν %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:22
+#: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. taxes"
 msgstr "συμπεριλαμβανομένων των φόρων"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:23
+#: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus taxes"
 msgstr "συν τους φόρους"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:24
+#: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "διαθέσιμη προς το παρόν:%s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:25
+#: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "Διατίθεται μόνο με ένα κουπόνι"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:26
+#: pretix/static/pretixpresale/js/widget/widget.js:27
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "ελάχιστο ποσό για παραγγελία: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Κλείστε το κατάστημα εισιτηρίων"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "Δεν ήταν δυνατή η φόρτωση του εισιτηρίου."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr ""
 "Δεν ήταν δυνατή η δημιουργία του καλαθιού. Παρακαλώ προσπαθήστε ξανά αργότερα"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Λίστα αναμονής"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -372,12 +377,12 @@ msgstr ""
 "Αυτήν τη στιγμή έχετε προϊόντα στο καλάθι για αυτήν την εκδήλωση. Αν "
 "επιλέξετε περισσότερα προϊόντα, θα προστεθούν στο υπάρχον καλάθι σας."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:33
+#: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Συνεχίστε την ολοκλήρωση της αγοράς"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:34
+#: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
@@ -386,138 +391,138 @@ msgstr ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">εισιτήρια "
 "εκδηλώσεων powered by pretix</a>"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:36
+#: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Εξαργυρώστε ένα κουπόνι"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:37
+#: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Εξαργυρώστε"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Κωδικός κουπονιού"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:39
+#: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:40
+#: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Continue"
 msgstr "Συνέχεια"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "See variations"
 msgstr "Δείτε παραλλαγές"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "Επιλέξτε διαφορετική εκδήλωση"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "Επιλέξτε διαφορετική ημερομηνία"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Back"
 msgstr "Πίσω"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:45
+#: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Next month"
 msgstr "Επόμενος μήνας"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Previous month"
 msgstr "Προηγούμενος μήνας"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:49
+#: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "Mo"
 msgstr "Δευ"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Tu"
 msgstr "Τρι"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "We"
 msgstr "Τετ"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Th"
 msgstr "Πεμ"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:53
+#: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "Fr"
 msgstr "Παρ"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Sa"
 msgstr "Σαβ"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Su"
 msgstr "Κυρ"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "January"
 msgstr "Ιανουάριος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "February"
 msgstr "Φεβρουάριος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "March"
 msgstr "Μάρτιος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "April"
 msgstr "Απρίλιος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "May"
 msgstr "Μάιος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "June"
 msgstr "Ιούνιος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "July"
 msgstr "Ιούλιος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "August"
 msgstr "Αύγουστος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "September"
 msgstr "Σεπτέμβριος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "October"
 msgstr "Οκτώβριος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "November"
 msgstr "Νοέμβριος"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "December"
 msgstr "Δεκέμβριος"
