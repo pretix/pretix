@@ -1329,7 +1329,7 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
 
     @cached_property
     def other_form(self):
-        return OtherOperationsForm(prefix='other', order=self.order,
+        return OtherOperationsForm(prefix='other', order=self.order, initial={'notify': False},
                                    data=self.request.POST if self.request.method == "POST" else None)
 
     def post(self, request, *args, **kwargs):
