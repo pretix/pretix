@@ -65,7 +65,7 @@
                                     {% endif %}
                                 {% endfor %}
                                 {% for v in q.variations.all %}
-                                    <li><a href="{% url "control:event.item.variations" organizer=request.event.organizer.slug event=request.event.slug item=v.item.id %}">
+                                    <li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=v.item.id %}#tab-0-3-open">
                                         {{ v.item }} – {{ v }}</a></li>
                                 {% endfor %}
                             </ul>
