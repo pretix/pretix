@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-29 14:28+0000\n"
-"PO-Revision-Date: 2019-07-29 08:36+0000\n"
+"PO-Revision-Date: 2019-07-29 14:33+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1860,16 +1860,13 @@ msgid "Generate tickets"
 msgstr "Tickets generieren"
 
 #: pretix/base/models/items.py:315
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Show a waiting list for this ticket"
-msgstr "Auf der Liste seit"
+msgstr "Warteliste für Ticket anzeigen"
 
 #: pretix/base/models/items.py:316
-#, fuzzy
-#| msgid "Waiting lists are disabled for this event."
 msgid "This will only work of waiting lists are enabled for this event."
-msgstr "Wartelisten sind für diese Veranstaltung nicht aktiviert."
+msgstr ""
+"Setzt voraus, dass die Wartelisten für diese Veranstaltung aktiviert sind."
 
 #: pretix/base/models/items.py:320 pretix/control/forms/event.py:341
 #: pretix/control/forms/event.py:1429
@@ -2827,16 +2824,14 @@ msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgstr "Die Datei ist kein gültiger Sitzplan. Fehlermeldung: {}"
 
 #: pretix/base/models/seating.py:106
-#, fuzzy, python-brace-format
-#| msgid "Show number"
+#, python-brace-format
 msgid "Row {number}"
-msgstr "Zeige Anzahl"
+msgstr "Reihe {number}"
 
 #: pretix/base/models/seating.py:108
-#, fuzzy, python-brace-format
-#| msgid "Seat name"
+#, python-brace-format
 msgid "Seat {number}"
-msgstr "Name des Sitzplatzes"
+msgstr "Platz {number}"
 
 #: pretix/base/models/tax.py:92
 msgid "Should be short, e.g. \"VAT\""
@@ -3656,14 +3651,12 @@ msgid "Printing time"
 msgstr "Druckzeit"
 
 #: pretix/base/pdf.py:242
-#, fuzzy
-#| msgid "Full name"
 msgid "Seat: Full name"
-msgstr "Voller Name"
+msgstr "Sitz: Voller Name"
 
 #: pretix/base/pdf.py:243
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "Parkett, Reihe 3, Sitz 4"
 
 #: pretix/base/pdf.py:244 pretix/base/pdf.py:249
 #: pretix/control/forms/orders.py:205 pretix/control/forms/orders.py:260
@@ -3671,26 +3664,20 @@ msgid "General admission"
 msgstr "Freie Platzwahl"
 
 #: pretix/base/pdf.py:247
-#, fuzzy
-#| msgid "Seat name"
 msgid "Seat: zone"
-msgstr "Name des Sitzplatzes"
+msgstr "Sitz: Bereich"
 
 #: pretix/base/pdf.py:248
 msgid "Ground floor"
-msgstr ""
+msgstr "Parkett"
 
 #: pretix/base/pdf.py:252
-#, fuzzy
-#| msgid "Seat"
 msgid "Seat: row"
-msgstr "Sitzplatz"
+msgstr "Sitz: Reihe"
 
 #: pretix/base/pdf.py:257
-#, fuzzy
-#| msgid "Street and Number"
 msgid "Seat: seat number"
-msgstr "Straße und Hausnummer"
+msgstr "Sitz: Platznummer"
 
 #: pretix/base/pdf.py:281
 #, python-brace-format
@@ -18113,10 +18100,8 @@ msgid "We could not identify the product you selected."
 msgstr "Wir konnten das ausgewählte Produkt nicht finden."
 
 #: pretix/presale/views/waiting.py:85
-#, fuzzy
-#| msgid "Waiting lists are disabled for this event."
 msgid "The waiting list is disabled for this product."
-msgstr "Wartelisten sind für diese Veranstaltung nicht aktiviert."
+msgstr "Die Warteliste ist für dieses Produkt deaktiviert."
 
 #: pretix/presale/views/waiting.py:94
 msgctxt "subevent"
