@@ -14,6 +14,7 @@ Vue.component('resize-observer', VueResize.ResizeObserver)
 var strings = {
     'sold_out': django.pgettext('widget', 'Sold out'),
     'buy': django.pgettext('widget', 'Buy'),
+    'register': django.pgettext('widget', 'Register'),
     'reserved': django.pgettext('widget', 'Reserved'),
     'free': django.pgettext('widget', 'FREE'),
     'price_from': django.pgettext('widget', 'from %(currency)s %(price)s'),
@@ -714,7 +715,7 @@ Vue.component('pretix-widget-event-form', {
         + '</div>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button @click="$parent.buy" type="submit">' + strings.buy + '</button>'
+        + '<button @click="$parent.buy" type="submit">{{ this.buy_label }}</button>'
         + '</div>'
         + '</form>'
         + '<form method="get" :action="$root.voucherFormTarget" target="_blank" '
@@ -734,6 +735,36 @@ Vue.component('pretix-widget-event-form', {
         + '</form>'
         + '</div>'
     ),
+    computed: {
+        buy_label: function () {
+            var i, j, k, all_free = true;
+            for (i = 0; i < this.$root.categories.length; i++) {
+                var cat = this.$root.categories[i];
+                for (j = 0; j < cat.items.length; j++) {
+                    var item = cat.items[j];
+                    for (k = 0; k < item.variations.length; k++) {
+                        var v = item.variations[k];
+                        if (v.price.gross !== "0.00") {
+                            all_free = false;
+                            break;
+                        }
+                    }
+                    if (item.variations.length === 0 && item.price.gross !== "0.00") {
+                        all_free = false;
+                        break;
+                    }
+                }
+                if (!all_free) {
+                    break;
+                }
+            }
+            if (all_free) {
+                return strings.register;
+            } else {
+                return strings.buy;
+            }
+        }
+    },
     methods: {
         back_to_list: function() {
             this.$root.target_url = this.$root.parent_stack.pop();
