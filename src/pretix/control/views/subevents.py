@@ -420,7 +420,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
         return reverse('control:event.subevents', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        })
+        }) + ('?' + self.request.GET.get('returnto') if 'returnto' in self.request.GET else '')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

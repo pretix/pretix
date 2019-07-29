@@ -92,7 +92,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}">
+                                <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}?returnto={{ request.GET.urlencode|urlencode }}">
                                     {{ s.name }}</a></strong>
                             </td>
                             <td>{{ s.get_date_from_display }}</td>
@@ -120,7 +120,7 @@
                                 {% endif %}
                             </td>
                             <td class="text-right">
-                                <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}?returnto={{ request.GET.urlencode|urlencode }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <div class="btn-group {% if forloop.revcounter0 < 2 %}dropup{% endif %}">
                                     <button type="button" class="btn btn-default btn-sm dropdown-toggle"
                                             data-toggle="dropdown">
@@ -139,7 +139,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <a href="{% url "control:event.subevent.delete" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{% url "control:event.subevent.delete" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}?returnto={{ request.GET.urlencode|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     {% endfor %}
