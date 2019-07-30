@@ -256,7 +256,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("seat_number", {
         "label": _("Seat: seat number"),
         "editor_sample": 4,
-        "evaluate": lambda op, order, ev: str(op.seat.number if op.seat else "")
+        "evaluate": lambda op, order, ev: str(op.seat.seat_number if op.seat else "")
     }),
 ))
 
