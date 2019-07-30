@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-29 14:28+0000\n"
-"PO-Revision-Date: 2019-04-22 19:00+0000\n"
-"Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
+"PO-Revision-Date: 2019-07-30 22:00+0000\n"
+"Last-Translator: Christophe Piret <webmaster.be@greenpeace.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -142,7 +142,7 @@ msgstr "Plugin inconnu : '{name}1'."
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:672
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr ""
-"Un produit qui est un forfait ne doit pas comprendre le le produit forfait."
+"Un produit qui est un forfait ne doit pas comprendre le produit forfait."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:674
 msgid "The bundled item must not have bundles on its own."
@@ -1323,7 +1323,7 @@ msgstr "Tout client"
 #: pretix/base/invoice.py:488
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Bénéficiaire"
 
 #: pretix/base/invoice.py:510 pretix/base/invoice.py:518
 msgctxt "invoice"
@@ -5149,19 +5149,15 @@ msgstr ""
 #: pretix/base/settings.py:724 pretix/base/settings.py:737
 #: pretix/base/settings.py:753 pretix/base/settings.py:803
 #: pretix/base/settings.py:816 pretix/base/settings.py:830
-#, fuzzy
-#| msgid "Event name"
 msgid "Given name"
-msgstr "Nom de l'événement"
+msgstr "Prénom"
 
 #: pretix/base/settings.py:725 pretix/base/settings.py:738
 #: pretix/base/settings.py:754 pretix/base/settings.py:770
 #: pretix/base/settings.py:787 pretix/base/settings.py:802
 #: pretix/base/settings.py:817 pretix/base/settings.py:831
-#, fuzzy
-#| msgid "Full name"
 msgid "Family name"
-msgstr "Nom complet"
+msgstr "Nom de famille"
 
 #: pretix/base/settings.py:729 pretix/base/settings.py:745
 #: pretix/base/settings.py:761 pretix/base/settings.py:776
@@ -17089,10 +17085,8 @@ msgid "This plugin allows you to send out emails to all your customers."
 msgstr "Ce plugin vous permet d'envoyer des emails à tous vos clients."
 
 #: pretix/plugins/sendmail/forms.py:13
-#, fuzzy
-#| msgid "Send email"
 msgid "Send email to"
-msgstr "Envoyer un email"
+msgstr "Envoyer un email à"
 
 #: pretix/plugins/sendmail/forms.py:25
 msgid "Only send to people who bought"
@@ -18552,11 +18546,9 @@ msgid "Choose date to buy a ticket"
 msgstr "Choisissez la date d'achat du billet"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:113
-#, fuzzy
-#| msgid "Other features"
 msgctxt "subevent"
 msgid "Other dates"
-msgstr "Autres caractéristiques"
+msgstr "Autres dates"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:146
 #: pretix/presale/views/widget.py:475
@@ -18602,7 +18594,7 @@ msgstr "Ajouter à l'Agenda"
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:25
 msgid "We're now trying to reserve this for you!"
-msgstr ""
+msgstr "Nous procédons à votre réservation !"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:236
 #: pretix/presale/templates/pretixpresale/event/voucher.html:299
