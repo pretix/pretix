@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-29 14:28+0000\n"
-"PO-Revision-Date: 2018-10-28 10:23+0000\n"
-"Last-Translator: Arnaud Vergnet <keplyx@gmail.com>\n"
+"PO-Revision-Date: 2019-08-01 18:41+0000\n"
+"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -296,7 +296,7 @@ msgstr "Acheter"
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "S'enregistrer"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
@@ -382,7 +382,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr "Reprendre le paiement"
+msgstr "Finaliser ma commande"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
@@ -431,11 +431,9 @@ msgid "Choose a different event"
 msgstr "Utiliser un nom différent en interne"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
-#, fuzzy
-#| msgid "Use a different name internally"
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr "Utiliser un nom différent en interne"
+msgstr "Choisir une autre date"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
