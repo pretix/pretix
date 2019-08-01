@@ -101,9 +101,12 @@ The template is passed the following context variables:
    The ``Event`` object
 
 ``signature`` (optional, only if configured)
-   The body as markdown (render with ``{{ signature|safe }}``)
+   The signature with event organizer contact details as markdown (render with ``{{ signature|safe }}``)
 
 ``order`` (optional, only if applicable)
    The ``Order`` object
+
+``position`` (optional, only if applicable)
+   The ``OrderPosition`` object
 
 .. _inlinestyler: https://pypi.org/project/inlinestyler/
