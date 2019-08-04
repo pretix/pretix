@@ -344,7 +344,7 @@ def render_mail(template, context):
 
 def replace_images_with_cid_paths(body_html):
     if body_html:
-        email = BeautifulSoup(body_html, "html5lib")
+        email = BeautifulSoup(body_html, "lxml")
         image_counter = 1
         cid_images = []
         for image in email.findAll('img'):
