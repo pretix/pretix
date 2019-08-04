@@ -1,11 +1,16 @@
 import inspect
 import logging
+import os
 import smtplib
 import warnings
+from email.encoders import encode_noop
+from email.mime.image import MIMEImage
 from email.utils import formataddr
 from typing import Any, Dict, List, Union
 
 import cssutils
+import requests
+from bs4 import BeautifulSoup
 from celery import chain
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
@@ -13,6 +18,7 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext as _
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
+from raven.utils import urlparse
 
 from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
@@ -220,7 +226,9 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                    invoices: List[int]=None, order: int=None, attach_tickets=False) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
-        email.attach_alternative(html, "text/html")
+        html_with_cid, cid_images = replace_images_with_cid_paths(html)
+        email = attach_cid_images(email, cid_images, verify_ssl=True)
+        email.attach_alternative(html_with_cid, "text/html")
 
     if event:
         with scopes_disabled():
@@ -332,3 +340,75 @@ def render_mail(template, context):
         tpl = get_template(template)
         body = tpl.render(context)
     return body
+
+
+def replace_images_with_cid_paths(body_html):
+    if body_html:
+        email = BeautifulSoup(body_html, "html5lib")
+        image_counter = 1
+        cid_images = []
+        for image in email.findAll('img'):
+            cid_id = "image_%s" % (image_counter)
+            image_counter = image_counter + 1
+            original_image_src = image['src']
+
+            image['src'] = "cid:%s" % (cid_id)
+
+            cid_images.append({
+                'src': original_image_src,
+                'cid_id': cid_id
+            })
+
+        return email.prettify(), cid_images
+    else:
+        return body_html, []
+
+
+def attach_cid_images(msg, cid_images, verify_ssl=True):
+    if cid_images and len(cid_images) > 0:
+
+        msg.mixed_subtype = 'related'
+        for image in cid_images:
+            try:
+                mime_image = convert_image_to_cid(
+                    image['src'], image['cid_id'], verify_ssl)
+                if mime_image:
+                    msg.attach(mime_image)
+            except Exception as e:
+                print("ERROR attaching CID image %s[%s] %s" % (image['cid_id'], image['src'], str(e)))
+
+    return msg
+
+
+def convert_image_to_cid(image_src, cid_id, verify_ssl=True):
+    try:
+        image_src_split = image_src.split('data:image/png;base64,')
+        if len(image_src_split) == 2:
+            mime_image = MIMEImage(image_src_split[1], _subtype="png", _encoder=encode_noop)
+            mime_image.add_header('Content-Transfer-Encoding', 'base64')
+        else:
+            image_src = normalize_image_url(image_src)
+
+            path = urlparse.urlparse(image_src).path
+            guess_subtype = os.path.splitext(path)[1][1:]
+
+            response = requests.get(image_src, verify=verify_ssl)
+            mime_image = MIMEImage(
+                response.content, _subtype=guess_subtype)
+
+        mime_image.add_header('Content-ID', '<%s>' % cid_id)
+
+        return mime_image
+    except Exception as e:
+        print("ERROR creating mime_image %s[%s] %s" % (cid_id, image_src, str(e)))
+        return None
+
+
+def normalize_image_url(url):
+    if '//' not in url.lower():
+        if settings.STATIC_URL.startswith('http'):
+            url = "%s%s" % (settings.MEDIA_ROOT, url)
+        else:
+            url = "%s%s%s" % (settings.SITE_URL, settings.STATIC_URL, url)
+
+    return url
