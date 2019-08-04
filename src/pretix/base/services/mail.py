@@ -7,6 +7,7 @@ from email.encoders import encode_noop
 from email.mime.image import MIMEImage
 from email.utils import formataddr
 from typing import Any, Dict, List, Union
+from urllib.parse import urlparse
 
 import cssutils
 import requests
@@ -18,7 +19,6 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext as _
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
-from raven.utils import urlparse
 
 from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
@@ -389,7 +389,7 @@ def convert_image_to_cid(image_src, cid_id, verify_ssl=True):
         else:
             image_src = normalize_image_url(image_src)
 
-            path = urlparse.urlparse(image_src).path
+            path = urlparse(image_src).path
             guess_subtype = os.path.splitext(path)[1][1:]
 
             response = requests.get(image_src, verify=verify_ssl)
