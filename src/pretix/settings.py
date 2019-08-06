@@ -434,6 +434,12 @@ EXTRA_LANG_INFO = {
         'name': 'Dutch (informal)',
         'name_local': 'Nederlands'
     },
+    'fr': {
+        'bidi': False,
+        'code': 'fr',
+        'name': 'French',
+        'name_local': 'Français'
+    },
 }
 
 django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
