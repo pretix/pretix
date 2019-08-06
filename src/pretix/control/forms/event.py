@@ -1066,7 +1066,7 @@ class MailSettingsForm(SettingsForm):
     )
     mail_days_order_expire_warning = forms.IntegerField(
         label=_("Number of days"),
-        required=False,
+        required=True,
         min_value=0,
         help_text=_("This email will be sent out this many days before the order expires. If the "
                     "value is 0, the mail will never be sent.")
