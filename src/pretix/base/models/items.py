@@ -493,7 +493,7 @@ class Item(LoggedModel):
         return check_quotas
 
     def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None,
-                     include_bundled=False, trust_parameters=False):
+                     include_bundled=False, trust_parameters=False, fail_on_no_quotas=False):
         """
         This method is used to determine whether this Item is currently available
         for sale.
@@ -541,6 +541,8 @@ class Item(LoggedModel):
                 res = (code_avail, num_avail)
 
         if len(quotacounter) == 0:
+            if fail_on_no_quotas:
+                return Quota.AVAILABILITY_GONE, 0
             return Quota.AVAILABILITY_OK, sys.maxsize  # backwards compatibility
         return res
 
@@ -696,7 +698,7 @@ class ItemVariation(models.Model):
         return check_quotas
 
     def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None,
-                     include_bundled=False, trust_parameters=False) -> Tuple[int, int]:
+                     include_bundled=False, trust_parameters=False, fail_on_no_quotas=False) -> Tuple[int, int]:
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas.
@@ -738,6 +740,8 @@ class ItemVariation(models.Model):
             if code_avail < res[0] or res[1] is None or num_avail < res[1]:
                 res = (code_avail, num_avail)
         if len(quotacounter) == 0:
+            if fail_on_no_quotas:
+                return Quota.AVAILABILITY_GONE, 0
             return Quota.AVAILABILITY_OK, sys.maxsize  # backwards compatibility
         return res
 
