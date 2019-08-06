@@ -390,6 +390,13 @@ def test_invoice_number_prefixes(env):
     assert generate_invoice(order).number == 'shared_{}-6'.format(order.code)
     assert generate_invoice(order2).number == 'shared_{}-6'.format(order2.code)
 
+    event2.settings.set('invoice_numbers_prefix', 'inv_')
+    event2.settings.set('invoice_numbers_prefix_cancellations', 'crd_')
+    event2.settings.set('invoice_numbers_consecutive', True)
+    i = generate_invoice(order2)
+    assert i.number == 'inv_00001'
+    assert generate_cancellation(i).number == 'crd_00001'
+
     # Test database uniqueness check
     with pytest.raises(DatabaseError):
         with transaction.atomic():

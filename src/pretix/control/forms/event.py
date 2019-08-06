@@ -787,6 +787,12 @@ class InvoiceSettingsForm(SettingsForm):
                     "used at most once over all of your events. This setting only affects future invoices."),
         required=False,
     )
+    invoice_numbers_prefix_cancellations = forms.CharField(
+        label=_("Invoice number prefix for cancellations"),
+        help_text=_("This will be prepended to invoice numbers of cancellations. If you leave this field empty, "
+                    "the same numbering scheme will be used that you configured for regular invoices."),
+        required=False,
+    )
     invoice_generate = forms.ChoiceField(
         label=_("Generate invoices"),
         required=False,
@@ -920,6 +926,10 @@ class InvoiceSettingsForm(SettingsForm):
             (r.identifier, r.verbose_name) for r in event.get_invoice_renderers().values()
         ]
         self.fields['invoice_numbers_prefix'].widget.attrs['placeholder'] = event.slug.upper() + '-'
+        if event.settings.invoice_numbers_prefix:
+            self.fields['invoice_numbers_prefix_cancellations'].widget.attrs['placeholder'] = event.settings.invoice_numbers_prefix
+        else:
+            self.fields['invoice_numbers_prefix_cancellations'].widget.attrs['placeholder'] = event.slug.upper() + '-'
         locale_names = dict(settings.LANGUAGES)
         self.fields['invoice_language'].choices = [('__user__', _('The user\'s language'))] + [(a, locale_names[a]) for a in event.settings.locales]
         self.fields['invoice_generate_sales_channels'].choices = (

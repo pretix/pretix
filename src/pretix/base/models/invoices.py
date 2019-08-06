@@ -175,6 +175,8 @@ class Invoice(models.Model):
             self.organizer = self.order.event.organizer
         if not self.prefix:
             self.prefix = self.event.settings.invoice_numbers_prefix or (self.event.slug.upper() + '-')
+            if self.is_cancellation:
+                self.prefix = self.event.settings.invoice_numbers_prefix_cancellations or self.prefix
         if not self.invoice_no:
             if self.order.testmode:
                 self.prefix += 'TEST-'

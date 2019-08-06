@@ -12,11 +12,11 @@
                 {% bootstrap_field form.invoice_generate layout="control" %}
                 {% bootstrap_field form.invoice_generate_sales_channels layout="control" %}
                 {% bootstrap_field form.invoice_email_attachment layout="control" %}
-                {% bootstrap_field form.invoice_numbers_prefix layout="control" %}
-                {% bootstrap_field form.invoice_numbers_consecutive layout="control" %}
                 {% bootstrap_field form.invoice_language layout="control" %}
                 {% bootstrap_field form.invoice_include_free layout="control" %}
-                {% bootstrap_field form.invoice_attendee_name layout="control" %}
+                {% bootstrap_field form.invoice_numbers_consecutive layout="control" %}
+                {% bootstrap_field form.invoice_numbers_prefix layout="control" %}
+                {% bootstrap_field form.invoice_numbers_prefix_cancellations layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Address form" %}</legend>
@@ -41,6 +41,7 @@
             <fieldset>
                 <legend>{% trans "Invoice customization" %}</legend>
                 {% bootstrap_field form.invoice_renderer layout="control" %}
+                {% bootstrap_field form.invoice_attendee_name layout="control" %}
                 {% bootstrap_field form.invoice_introductory_text layout="control" %}
                 {% bootstrap_field form.invoice_additional_text layout="control" %}
                 {% bootstrap_field form.invoice_footer_text layout="control" %}

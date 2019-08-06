@@ -93,6 +93,10 @@ DEFAULTS = {
         'default': '',
         'type': str,
     },
+    'invoice_numbers_prefix_cancellations': {
+        'default': '',
+        'type': str,
+    },
     'invoice_renderer': {
         'default': 'classic',
         'type': str,
