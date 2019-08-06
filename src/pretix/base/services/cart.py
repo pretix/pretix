@@ -789,14 +789,19 @@ class CartManager:
 
                 if isinstance(op, self.AddOperation):
                     for b in op.bundled:
-                        b_quota_available_count = min(available_count * b.count, min(quotas_ok[q] for q in b.quotas))
+                        b_quotas = list(b.quotas)
+                        if not b_quotas:
+                            err = err or error_messages['unavailable']
+                            available_count = 0
+                            continue
+                        b_quota_available_count = min(available_count * b.count, min(quotas_ok[q] for q in b_quotas))
                         if b_quota_available_count < b.count:
                             err = err or error_messages['unavailable']
                             available_count = 0
                         elif b_quota_available_count < available_count * b.count:
                             err = err or error_messages['in_part']
                             available_count = b_quota_available_count // b.count
-                        for q in b.quotas:
+                        for q in b_quotas:
                             quotas_ok[q] -= available_count * b.count
                             # TODO: is this correct?
 
