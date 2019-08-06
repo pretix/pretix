@@ -63,17 +63,6 @@ class EventSettingsViewMixin:
         ctx['is_event_settings'] = True
         return ctx
 
-    def _save_decoupled(self, form):
-        # Save fields that are currently only set via the organizer but should be decoupled
-        fields = set()
-        for f in self.request.POST.getlist("decouple"):
-            fields |= set(f.split(","))
-        for f in fields:
-            if f not in form.fields:
-                continue
-            if f not in self.request.event.settings._cache():
-                self.request.event.settings.set(f, self.request.event.settings.get(f))
-
 
 class MetaDataEditorMixin:
     meta_form = EventMetaValueForm
@@ -353,6 +342,17 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
 
     def form_success(self):
         pass
+
+    def _save_decoupled(self, form):
+        # Save fields that are currently only set via the organizer but should be decoupled
+        fields = set()
+        for f in self.request.POST.getlist("decouple"):
+            fields |= set(f.split(","))
+        for f in fields:
+            if f not in form.fields:
+                continue
+            if f not in self.request.event.settings._cache():
+                self.request.event.settings.set(f, self.request.event.settings.get(f))
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
