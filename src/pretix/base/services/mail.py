@@ -1,13 +1,14 @@
 import inspect
 import logging
 import os
+import re
 import smtplib
 import warnings
 from email.encoders import encode_noop
 from email.mime.image import MIMEImage
 from email.utils import formataddr
 from typing import Any, Dict, List, Union
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import cssutils
 import requests
@@ -345,19 +346,17 @@ def render_mail(template, context):
 def replace_images_with_cid_paths(body_html):
     if body_html:
         email = BeautifulSoup(body_html, "lxml")
-        image_counter = 1
         cid_images = []
         for image in email.findAll('img'):
-            cid_id = "image_%s" % (image_counter)
-            image_counter = image_counter + 1
             original_image_src = image['src']
 
-            image['src'] = "cid:%s" % (cid_id)
+            try:
+                cid_id = "image_%s" % cid_images.index(original_image_src)
+            except ValueError:
+                cid_images.append(original_image_src)
+                cid_id = "image_%s" % (len(cid_images) - 1)
 
-            cid_images.append({
-                'src': original_image_src,
-                'cid_id': cid_id
-            })
+            image['src'] = "cid:%s" % cid_id
 
         return email.prettify(), cid_images
     else:
@@ -368,24 +367,29 @@ def attach_cid_images(msg, cid_images, verify_ssl=True):
     if cid_images and len(cid_images) > 0:
 
         msg.mixed_subtype = 'related'
-        for image in cid_images:
+        for key, image in enumerate(cid_images):
+            cid = 'image_%s' % key
             try:
                 mime_image = convert_image_to_cid(
-                    image['src'], image['cid_id'], verify_ssl)
+                    image, cid, verify_ssl)
                 if mime_image:
                     msg.attach(mime_image)
-            except Exception as e:
-                print("ERROR attaching CID image %s[%s] %s" % (image['cid_id'], image['src'], str(e)))
+            except:
+                logger.exception("ERROR attaching CID image %s[%s]" % (cid, image))
 
     return msg
 
 
 def convert_image_to_cid(image_src, cid_id, verify_ssl=True):
     try:
-        image_src_split = image_src.split('data:image/png;base64,')
-        if len(image_src_split) == 2:
-            mime_image = MIMEImage(image_src_split[1], _subtype="png", _encoder=encode_noop)
+        if image_src.startswith('data:image/'):
+            image_type, image_content = image_src.split(',', 1)
+            image_type = re.findall(r'data:image/(\w+);base64', image_type)[0]
+            mime_image = MIMEImage(image_content, _subtype=image_type, _encoder=encode_noop)
             mime_image.add_header('Content-Transfer-Encoding', 'base64')
+        elif image_src.startswith('data:'):
+            logger.exception("ERROR creating MIME element %s[%s]" % (cid_id, image_src))
+            return None
         else:
             image_src = normalize_image_url(image_src)
 
@@ -399,16 +403,30 @@ def convert_image_to_cid(image_src, cid_id, verify_ssl=True):
         mime_image.add_header('Content-ID', '<%s>' % cid_id)
 
         return mime_image
-    except Exception as e:
-        print("ERROR creating mime_image %s[%s] %s" % (cid_id, image_src, str(e)))
+    except:
+        logger.exception("ERROR creating mime_image %s[%s]" % (cid_id, image_src))
         return None
 
 
 def normalize_image_url(url):
-    if '//' not in url.lower():
-        if settings.STATIC_URL.startswith('http'):
-            url = "%s%s" % (settings.MEDIA_ROOT, url)
-        else:
-            url = "%s%s%s" % (settings.SITE_URL, settings.STATIC_URL, url)
+    if '://' not in url:
+        """
+        If we see a relative URL in an email, we can't know if it is meant to be a media file
+        or a static file, so we need to guess. If it is a static file included with the
+        ``{% static %}`` template tag (as it should be), then ``STATIC_URL`` is already prepended.
+        If ``STATIC_URL`` is absolute, then ``url`` should already be absolute and this
+        function should not be triggered. Thus, if we see a relative URL and ``STATIC_URL``
+        is absolute *or* ``url`` does not start with ``STATIC_URL``, we can be sure this
+        is a media file (or a programmer error …).
 
+        Constructing the URL of either a static file or a media file from settings is still
+        not clean, since custom storage backends might very well use more complex approaches
+        to build those URLs. However, this is good enough as a best-effort approach. Complex
+        storage backends (such as cloud storages) will return absolute URLs anyways so this
+        function is not needed in that case.
+        """
+        if '://' not in settings.STATIC_URL and url.startswith(settings.STATIC_URL):
+            url = urljoin(settings.SITE_URL, url)
+        else:
+            url = urljoin(settings.MEDIA_URL, url)
     return url
