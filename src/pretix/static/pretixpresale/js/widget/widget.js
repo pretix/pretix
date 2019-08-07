@@ -462,7 +462,11 @@ var shared_methods = {
             return;
         }
         if (this.$root.is_button && this.$root.items.length === 0) {
-            this.voucher_open(this.$root.voucher_code);
+            if (this.$root.voucher_code) {
+                this.voucher_open(this.$root.voucher_code);
+            } else {
+                this.resume();
+            }
         } else {
             var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
             this.$root.overlay.frame_loading = true;
@@ -560,7 +564,7 @@ var shared_methods = {
             window.open(redirect_url);
         }
     },
-    resume: function (voucher) {
+    resume: function () {
         var redirect_url;
         redirect_url = this.$root.target_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang;
         if (this.$root.cart_id) {
