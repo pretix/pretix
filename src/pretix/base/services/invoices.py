@@ -75,11 +75,13 @@ def build_invoice(invoice: Invoice) -> Invoice:
 {i.street}
 {i.zipcode} {i.city} {state}
 {country}""")
-            invoice.invoice_to = addr_template.format(
-                i=ia,
-                country=ia.country.name if ia.country else ia.country_old,
-                state=ia.state_for_address
-            ).strip()
+            invoice.invoice_to = "\n".join(
+                a.strip() for a in addr_template.format(
+                    i=ia,
+                    country=ia.country.name if ia.country else ia.country_old,
+                    state=ia.state_for_address
+                ).split("\n") if a.strip()
+            )
             invoice.internal_reference = ia.internal_reference
             invoice.invoice_to_company = ia.company
             invoice.invoice_to_name = ia.name

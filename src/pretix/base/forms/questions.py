@@ -408,7 +408,6 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         c = [('', pgettext_lazy('address', 'Select state'))]
         cc = None
-        r = True
         if 'country' in self.data:
             cc = str(self.data['country'])
         elif 'country' in self.initial:
@@ -418,17 +417,17 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if cc and cc in COUNTRIES_WITH_STATE_IN_ADDRESS:
             types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
             statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
-            c += [(s.code[3:], s.name) for s in statelist]
+            c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
         elif 'state' in self.data:
             self.data = self.data.copy()
             del self.data['state']
-            r = False
 
         self.fields['state'] = forms.ChoiceField(
             label=pgettext_lazy('address', 'State'),
-            required=r,
+            required=False,
             choices=c
         )
+        self.fields['state'].widget.is_required = True
 
         if not event.settings.invoice_address_required or self.all_optional:
             for k, f in self.fields.items():

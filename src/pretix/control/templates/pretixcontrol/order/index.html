@@ -664,7 +664,7 @@
                                     <dt>{% trans "Country" %}</dt>
                                     <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
                                     {% if order.invoice_address.state %}
-                                        <dt>{% trans "State" %}</dt>
+                                        <dt>{% trans "State" context "address" %}</dt>
                                         <dd>{{ order.invoice_address.state_name }}</dd>
                                     {% endif %}
                                     {% if request.event.settings.invoice_address_vatid %}

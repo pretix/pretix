@@ -218,6 +218,7 @@ TEST_ORDER_RES = {
         "zipcode": "",
         "city": "",
         "country": "NZ",
+        "state": "",
         "internal_reference": "",
         "vat_id": "DE123",
         "vat_id_validated": True
@@ -792,7 +793,7 @@ TEST_INVOICE_RES = {
     "number": "DUMMY-00001",
     "is_cancellation": False,
     "invoice_from": "",
-    "invoice_to": "Sample company\n\n\n \nNew Zealand\nVAT-ID: DE123",
+    "invoice_to": "Sample company\nNew Zealand\nVAT-ID: DE123",
     "date": "2017-12-10",
     "refers": None,
     "locale": "en",
@@ -1348,6 +1349,7 @@ ORDER_CREATE_PAYLOAD = {
         "company": "Sample company",
         "name_parts": {"full_name": "Fo"},
         "street": "Bar",
+        "state": "",
         "zipcode": "",
         "city": "Sample City",
         "country": "NZ",
@@ -2971,6 +2973,74 @@ def test_order_update_only_partial(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_order_update_state_validation(token_client, organizer, event, order):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": False,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "",
+                "state": "",
+                "zipcode": "",
+                "city": "Paris",
+                "country": "NONEXISTANT",
+                "internal_reference": "",
+                "vat_id": "",
+            }
+        }
+    )
+    assert resp.status_code == 400
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": False,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "",
+                "state": "NONEXISTANT",
+                "zipcode": "",
+                "city": "Test",
+                "country": "AU",
+                "internal_reference": "",
+                "vat_id": "",
+            }
+        }
+    )
+    assert resp.status_code == 400
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": False,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "",
+                "state": "QLD",
+                "zipcode": "",
+                "city": "Test",
+                "country": "AU",
+                "internal_reference": "",
+                "vat_id": "",
+            }
+        }
+    )
+    assert resp.status_code == 200
+    order.invoice_address.refresh_from_db()
+    assert order.invoice_address.state == "QLD"
+    assert order.invoice_address.country == "AU"
+
+
+@pytest.mark.django_db
 def test_order_update_allowed_fields(token_client, organizer, event, order):
     event.settings.locales = ['de', 'en']
     resp = token_client.patch(
@@ -2987,9 +3057,10 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
                 "name": "John Doe",
                 "name_parts": {},
                 "street": "",
+                "state": "",
                 "zipcode": "",
                 "city": "Paris",
-                "country": "Fr",
+                "country": "FR",
                 "internal_reference": "",
                 "vat_id": "",
             }
@@ -3040,6 +3111,7 @@ def test_order_update_invoiceaddress_delete_create(token_client, organizer, even
                 "name": "",
                 "name_parts": {},
                 "street": "",
+                "state": "",
                 "zipcode": "",
                 "city": "Paris",
                 "country": "Fr",
@@ -3107,7 +3179,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         'number': 'DUMMY-00001',
         'is_cancellation': False,
         'invoice_from': '',
-        'invoice_to': 'Sample company\n\n\n \nNew Zealand\nVAT-ID: DE123',
+        'invoice_to': 'Sample company\nNew Zealand\nVAT-ID: DE123',
         'date': now().date().isoformat(),
         'refers': None,
         'locale': 'en',

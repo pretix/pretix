@@ -319,7 +319,7 @@ var form_handlers = function (el) {
                 counter++;
                 var curCounter = counter;
                 dependent.prop("disabled", true);
-                dependency.closest(".form-group").find("label").append("<span class='fa fa-cog fa-spin'></span>");
+                dependency.closest(".form-group").find("label").prepend("<span class='fa fa-cog fa-spin'></span> ");
                 $.getJSON('/js_helpers/states/?country=' + dependency.val(), function (data) {
                     if (counter > curCounter) {
                         return;  // Lost race
@@ -330,7 +330,7 @@ var form_handlers = function (el) {
                             dependent.append($("<option>").attr("value", s.code).text(s.name));
                         });
                         dependent.closest(".form-group").show();
-                        dependent.closest('.form-group').toggleClass('required', dependency.prop("required"));
+                        dependent.prop('required', dependency.prop("required"));
                     } else {
                         dependent.closest(".form-group").hide();
                         dependent.prop("required", false);
@@ -341,6 +341,8 @@ var form_handlers = function (el) {
             };
         if (dependent.find("option").length === 1) {
             dependent.closest(".form-group").hide();
+        } else {
+            dependent.prop('required', dependency.prop("required"));
         }
         dependency.on("change", update);
     });
