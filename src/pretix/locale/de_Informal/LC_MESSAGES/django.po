@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-08 07:54+0000\n"
-"PO-Revision-Date: 2019-07-29 14:33+0000\n"
+"PO-Revision-Date: 2019-08-08 08:47+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6094,10 +6094,8 @@ msgstr ""
 "Einstellung betrifft nur zukünftige Rechnungen."
 
 #: pretix/control/forms/event.py:791
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Invoice number prefix for cancellations"
-msgstr "Rechnungsnummern-Präfix"
+msgstr "Rechnungsnummern-Präfix für Rechnungskorrekturen"
 
 #: pretix/control/forms/event.py:792
 msgid ""
@@ -6105,6 +6103,9 @@ msgid ""
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
 msgstr ""
+"Dies wird Rechnungsnummern von Rechnungskorrekturen vorangestellt. Wenn "
+"dieses Feld leer gelassen wird, wird die gleiche Nummerierung wie für "
+"normale Rechnungen verwendet."
 
 #: pretix/control/forms/event.py:797
 msgid "Generate invoices"
