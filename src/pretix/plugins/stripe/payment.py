@@ -198,18 +198,6 @@ class StripeSettingsHolder(BasePaymentProvider):
                      ),
                      required=False,
                  )),
-                ('cc_3ds_mode',
-                 forms.ChoiceField(
-                     label=_('3D Secure mode'),
-                     help_text=_('This determines when we will use the 3D Secure methods for credit card payments. '
-                                 'Using 3D Secure (also known as Verified by VISA or MasterCard SecureCode) reduces '
-                                 'the risk of fraud but makes the payment process a bit longer.'),
-                     choices=(
-                         ('required', pgettext('stripe 3dsecure', 'Only when required by the card')),
-                         ('recommended', pgettext('stripe 3dsecure', 'Always when recommended by Stripe')),
-                         ('optional', pgettext('stripe 3dsecure', 'Always when supported by the card')),
-                     ),
-                 )),
             ] + list(super().settings_form_fields.items())
         )
         d.move_to_end('_enabled', last=False)
