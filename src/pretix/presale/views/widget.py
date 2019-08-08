@@ -115,7 +115,7 @@ def generate_widget_js(lang):
         ]
         for fname in files:
             f = finders.find(fname)
-            with open(f, 'r') as fp:
+            with open(f, 'r', encoding='utf-8') as fp:
                 code.append(fp.read())
 
         if settings.DEBUG:
