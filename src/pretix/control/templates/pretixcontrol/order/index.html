@@ -663,6 +663,10 @@
                                     <dd>{{ order.invoice_address.zipcode }} {{ order.invoice_address.city }}</dd>
                                     <dt>{% trans "Country" %}</dt>
                                     <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
+                                    {% if order.invoice_address.state %}
+                                        <dt>{% trans "State" %}</dt>
+                                        <dd>{{ order.invoice_address.state_name }}</dd>
+                                    {% endif %}
                                     {% if request.event.settings.invoice_address_vatid %}
                                         <dt>{% trans "VAT ID" %}</dt>
                                         <dd>

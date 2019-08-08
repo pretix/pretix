@@ -9,6 +9,7 @@ from decimal import Decimal
 from typing import Any, Dict, List, Union
 
 import dateutil
+import pycountry
 import pytz
 from django.conf import settings
 from django.db import models, transaction
@@ -2019,6 +2020,7 @@ class InvoiceAddress(models.Model):
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
     country_old = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
     country = CountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'))
+    state = models.CharField(max_length=255, verbose_name=pgettext_lazy('address', 'State'), blank=True)
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'),
                               help_text=_('Only for business customers within the EU.'))
     vat_id_validated = models.BooleanField(default=False)
@@ -2044,6 +2046,22 @@ class InvoiceAddress(models.Model):
             self.name_cached = ""
             self.name_parts = {}
         super().save(**kwargs)
+
+    @property
+    def state_name(self):
+        sd = pycountry.subdivisions.get(code='{}-{}'.format(self.country, self.state))
+        if sd:
+            return sd.name
+        return self.state
+
+    @property
+    def state_for_address(self):
+        from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+        if not self.state or str(self.country) not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            return ""
+        if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.country)][1] == 'long':
+            return self.state_name
+        return self.state
 
     @property
     def name(self):

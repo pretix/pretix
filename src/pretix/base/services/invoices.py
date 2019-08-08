@@ -73,11 +73,12 @@ def build_invoice(invoice: Invoice) -> Invoice:
             addr_template = pgettext("invoice", """{i.company}
 {i.name}
 {i.street}
-{i.zipcode} {i.city}
+{i.zipcode} {i.city} {state}
 {country}""")
             invoice.invoice_to = addr_template.format(
                 i=ia,
-                country=ia.country.name if ia.country else ia.country_old
+                country=ia.country.name if ia.country else ia.country_old,
+                state=ia.state_for_address
             ).strip()
             invoice.internal_reference = ia.internal_reference
             invoice.invoice_to_company = ia.company
@@ -86,6 +87,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             invoice.invoice_to_zipcode = ia.zipcode
             invoice.invoice_to_city = ia.city
             invoice.invoice_to_country = ia.country
+            invoice.invoice_to_state = ia.state
             invoice.invoice_to_beneficiary = ia.beneficiary
 
             if ia.vat_id:

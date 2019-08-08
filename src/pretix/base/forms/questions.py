@@ -5,6 +5,7 @@ from decimal import Decimal
 from urllib.error import HTTPError
 
 import dateutil.parser
+import pycountry
 import pytz
 import vat_moss.errors
 import vat_moss.id
@@ -15,7 +16,9 @@ from django.db.models import QuerySet
 from django.forms import Select
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.translation import get_language, ugettext_lazy as _
+from django.utils.translation import (
+    get_language, pgettext_lazy, ugettext_lazy as _,
+)
 from django_countries import countries
 from django_countries.fields import Country, CountryField
 
@@ -25,7 +28,10 @@ from pretix.base.forms.widgets import (
 )
 from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import EU_COUNTRIES
-from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
+from pretix.base.settings import (
+    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SCHEMES,
+    PERSON_NAME_TITLE_GROUPS,
+)
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import SplitDateTimeField
 from pretix.helpers.escapejson import escapejson_attr
@@ -356,8 +362,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
     class Meta:
         model = InvoiceAddress
-        fields = ('is_business', 'company', 'name_parts', 'street', 'zipcode', 'city', 'country', 'vat_id',
-                  'internal_reference', 'beneficiary')
+        fields = ('is_business', 'company', 'name_parts', 'street', 'zipcode', 'city', 'country', 'state',
+                  'vat_id', 'internal_reference', 'beneficiary')
         widgets = {
             'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
@@ -399,6 +405,30 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
+
+        c = [('', pgettext_lazy('address', 'Select state'))]
+        cc = None
+        r = True
+        if 'country' in self.data:
+            cc = str(self.data['country'])
+        elif 'country' in self.initial:
+            cc = str(self.initial['country'])
+        elif self.instance and self.instance.country:
+            cc = str(self.instance.country)
+        if cc and cc in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
+            statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
+            c += [(s.code[3:], s.name) for s in statelist]
+        elif 'state' in self.data:
+            self.data = self.data.copy()
+            del self.data['state']
+            r = False
+
+        self.fields['state'] = forms.ChoiceField(
+            label=pgettext_lazy('address', 'State'),
+            required=r,
+            choices=c
+        )
 
         if not event.settings.invoice_address_required or self.all_optional:
             for k, f in self.fields.items():
