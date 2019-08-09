@@ -128,6 +128,17 @@ def test_address_with_state(env):
 
 
 @pytest.mark.django_db
+def test_address_with_state_long(env):
+    event, order = env
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
+                                  zipcode='46530', city='Granger', country=Country('MY'), state='10',
+                                  order=order)
+    inv = generate_invoice(order)
+    assert inv.invoice_to == "Acme Company\n221B Baker Street\n46530 Granger Selangor\nMalaysia"
+
+
+@pytest.mark.django_db
 def test_address(env):
     event, order = env
     event.settings.set('invoice_language', 'en')
