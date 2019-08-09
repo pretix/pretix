@@ -202,6 +202,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'zipcode': '12345',
                 'city': 'Here',
                 'country': 'AU',
+                'state': 'QLD',
                 'vat_id': 'AU123456',
                 'email': 'admin@localhost'
             }, follow=True)
