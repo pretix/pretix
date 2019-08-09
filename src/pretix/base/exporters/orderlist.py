@@ -9,7 +9,7 @@ from django.utils.formats import date_format, localize
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
 
 from pretix.base.models import (
-    InvoiceAddress, InvoiceLine, Order, OrderPosition,
+    InvoiceAddress, InvoiceLine, Order, OrderPosition, Question,
 )
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -341,7 +341,12 @@ class OrderListExporter(MultiSheetListExporter):
             ]
             acache = {}
             for a in op.answers.all():
-                acache[a.question_id] = str(a)
+                # We do not want to localize Date, Time and Datetime question answers, as those can lead
+                # to difficulties parsing the data (for example 2019-02-01 may become Février, 2019 01 in French).
+                if a.question.type in Question.UNLOCALIZED_TYPES:
+                    acache[a.question_id] = a.answer
+                else:
+                    acache[a.question_id] = str(a)
             for q in questions:
                 row.append(acache.get(q.pk, ''))
             try:

@@ -250,9 +250,19 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
             acache = {}
             if op.addon_to:
                 for a in op.addon_to.answers.all():
-                    acache[a.question_id] = str(a)
+                    # We do not want to localize Date, Time and Datetime question answers, as those can lead
+                    # to difficulties parsing the data (for example 2019-02-01 may become Février, 2019 01 in French).
+                    if a.question.type in Question.UNLOCALIZED_TYPES:
+                        acache[a.question_id] = a.answer
+                    else:
+                        acache[a.question_id] = str(a)
             for a in op.answers.all():
-                acache[a.question_id] = str(a)
+                # We do not want to localize Date, Time and Datetime question answers, as those can lead
+                # to difficulties parsing the data (for example 2019-02-01 may become Février, 2019 01 in French).
+                if a.question.type in Question.UNLOCALIZED_TYPES:
+                    acache[a.question_id] = a.answer
+                else:
+                    acache[a.question_id] = str(a)
             for q in questions:
                 txt = acache.get(q.pk, '')
                 p = Paragraph(txt, self.get_style())
@@ -365,9 +375,19 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             acache = {}
             if op.addon_to:
                 for a in op.addon_to.answers.all():
-                    acache[a.question_id] = str(a)
+                    # We do not want to localize Date, Time and Datetime question answers, as those can lead
+                    # to difficulties parsing the data (for example 2019-02-01 may become Février, 2019 01 in French).
+                    if a.question.type in Question.UNLOCALIZED_TYPES:
+                        acache[a.question_id] = a.answer
+                    else:
+                        acache[a.question_id] = str(a)
             for a in op.answers.all():
-                acache[a.question_id] = str(a)
+                # We do not want to localize Date, Time and Datetime question answers, as those can lead
+                # to difficulties parsing the data (for example 2019-02-01 may become Février, 2019 01 in French).
+                if a.question.type in Question.UNLOCALIZED_TYPES:
+                    acache[a.question_id] = a.answer
+                else:
+                    acache[a.question_id] = str(a)
             for q in questions:
                 row.append(acache.get(q.pk, ''))
 

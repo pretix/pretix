@@ -982,6 +982,7 @@ class Question(LoggedModel):
         (TYPE_DATETIME, _("Date and time")),
         (TYPE_COUNTRYCODE, _("Country code (ISO 3166-1 alpha-2)")),
     )
+    UNLOCALIZED_TYPES = [TYPE_DATE, TYPE_TIME, TYPE_DATETIME]
 
     event = models.ForeignKey(
         Event,
