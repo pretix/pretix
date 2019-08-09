@@ -274,6 +274,9 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
         };
     </script>
 
+  In some combinations with Google Tag Manager, the widget does not load this way. In this case, try replacing
+  ``tracker.get('clientId')`` with ``ga.getAll()[0].get('clientId')``.
+
 
 .. versionchanged:: 2.3
 
