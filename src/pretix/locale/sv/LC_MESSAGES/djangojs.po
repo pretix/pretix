@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-08 07:55+0000\n"
+"POT-Creation-Date: 2019-08-09 07:58+0000\n"
 "PO-Revision-Date: 2019-06-17 09:07+0000\n"
 "Last-Translator: Mattias Axell <mattias@libertador.es>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -211,19 +211,19 @@ msgstr ""
 "Din färg har dålig kontrast för text på vit bakgrund, var god välj en "
 "mörkare nyans."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:319
+#: pretix/static/pretixcontrol/js/ui/main.js:355
 msgid "All"
 msgstr "Alla"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:320
+#: pretix/static/pretixcontrol/js/ui/main.js:356
 msgid "None"
 msgstr "Ingen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:609
+#: pretix/static/pretixcontrol/js/ui/main.js:645
 msgid "Use a different name internally"
 msgstr "Använd ett annat namn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:666
+#: pretix/static/pretixcontrol/js/ui/main.js:702
 msgid "Click to close"
 msgstr "Klicka för att stänga"
 
