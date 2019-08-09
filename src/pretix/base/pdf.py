@@ -32,7 +32,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from pretix.base.invoice import ThumbnailingImageReader
-from pretix.base.models import Order, OrderPosition, QuestionAnswer
+from pretix.base.models import Order, OrderPosition
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_text_variables
 from pretix.base.templatetags.money import money_filter
@@ -268,10 +268,10 @@ def variables_from_questions(sender, *args, **kwargs):
             if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
                 a = [a for a in op.answers.all() if a.question_id == question_id][0]
             else:
-                a = op.answers.get(question_id=question_id)
+                a = op.answers.filter(question_id=question_id).first()
+                if not a:
+                    return ""
             return str(a).replace("\n", "<br/>\n")
-        except QuestionAnswer.DoesNotExist:
-            return ""
         except IndexError:
             return ""
 
