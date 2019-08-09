@@ -407,9 +407,10 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             del self.fields['vat_id']
 
         c = [('', pgettext_lazy('address', 'Select state'))]
+        fprefix = self.prefix + '-' if self.prefix else ''
         cc = None
-        if 'country' in self.data:
-            cc = str(self.data['country'])
+        if fprefix + 'country' in self.data:
+            cc = str(self.data[fprefix + 'country'])
         elif 'country' in self.initial:
             cc = str(self.initial['country'])
         elif self.instance and self.instance.country:
@@ -418,9 +419,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
             statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
             c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
-        elif 'state' in self.data:
+        elif fprefix + 'state' in self.data:
             self.data = self.data.copy()
-            del self.data['state']
+            del self.data[fprefix + 'state']
 
         self.fields['state'] = forms.ChoiceField(
             label=pgettext_lazy('address', 'State'),
@@ -474,6 +475,10 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         if 'vat_id' in self.changed_data or not data.get('vat_id'):
             self.instance.vat_id_validated = False
+
+        if data.get('city') and data.get('country') and str(data['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            if not data.get('state'):
+                self.add_error('state', _('This field is required.'))
 
         self.instance.name_parts = data.get('name_parts')
 
