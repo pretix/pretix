@@ -100,6 +100,10 @@
                                 <dd>{{ addr.zipcode }} {{ addr.city }}</dd>
                                 <dt>{% trans "Country" %}</dt>
                                 <dd>{{ addr.country.name }}</dd>
+                                {% if addr.state %}
+                                    <dt>{% trans "State" context "address" %}</dt>
+                                    <dd>{{ addr.state_name }}</dd>
+                                {% endif %}
                                 {% if request.event.settings.invoice_address_vatid %}
                                     <dt>{% trans "VAT ID" %}</dt>
                                     <dd>{{ addr.vat_id }}</dd>

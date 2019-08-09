@@ -1,6 +1,7 @@
 import string
 from decimal import Decimal
 
+import pycountry
 from django.db import DatabaseError, models, transaction
 from django.db.models import Max
 from django.db.models.functions import Cast
@@ -10,6 +11,8 @@ from django.utils.functional import cached_property
 from django.utils.translation import pgettext
 from django_countries.fields import CountryField
 from django_scopes import ScopedManager
+
+from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 
 
 def invoice_filename(instance, filename: str) -> str:
@@ -90,6 +93,7 @@ class Invoice(models.Model):
     invoice_to_street = models.TextField(null=True)
     invoice_to_zipcode = models.CharField(max_length=190, null=True)
     invoice_to_city = models.TextField(null=True)
+    invoice_to_state = models.CharField(max_length=190, null=True)
     invoice_to_country = CountryField(null=True)
     invoice_to_vat_id = models.TextField(null=True)
     invoice_to_beneficiary = models.TextField(null=True)
@@ -140,11 +144,21 @@ class Invoice(models.Model):
     def address_invoice_to(self):
         if self.invoice_to and not self.invoice_to_company and not self.invoice_to_name:
             return self.invoice_to
+
+        state_name = ""
+        if self.invoice_to_state:
+            state_name = self.invoice_to_state
+            if str(self.invoice_to_country) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.invoice_to_country)][1] == 'long':
+                    state_name = pycountry.subdivisions.get(
+                        code='{}-{}'.format(self.invoice_to_country, self.invoice_to_state)
+                    )
+
         parts = [
             self.invoice_to_company,
             self.invoice_to_name,
             self.invoice_to_street,
-            (self.invoice_to_zipcode or "") + " " + (self.invoice_to_city or ""),
+            ((self.invoice_to_zipcode or "") + " " + (self.invoice_to_city or "") + " " + (state_name or "")).strip(),
             self.invoice_to_country.name if self.invoice_to_country else "",
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])

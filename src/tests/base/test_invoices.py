@@ -113,7 +113,29 @@ def test_address_old_country(env):
                                   zipcode='12345', city='London', country_old='England', country='',
                                   order=order)
     inv = generate_invoice(order)
-    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London\nEngland"
+    assert inv.invoice_to == "Acme Company\n221B Baker Street\n12345 London\nEngland"
+
+
+@pytest.mark.django_db
+def test_address_with_state(env):
+    event, order = env
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
+                                  zipcode='46530', city='Granger', country=Country('US'), state='IN',
+                                  order=order)
+    inv = generate_invoice(order)
+    assert inv.invoice_to == "Acme Company\n221B Baker Street\n46530 Granger IN\nUnited States of America"
+
+
+@pytest.mark.django_db
+def test_address_with_state_long(env):
+    event, order = env
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
+                                  zipcode='46530', city='Granger', country=Country('MY'), state='10',
+                                  order=order)
+    inv = generate_invoice(order)
+    assert inv.invoice_to == "Acme Company\n221B Baker Street\n46530 Granger Selangor\nMalaysia"
 
 
 @pytest.mark.django_db
@@ -124,7 +146,7 @@ def test_address(env):
                                   zipcode='12345', city='London', country=Country('GB'),
                                   order=order)
     inv = generate_invoice(order)
-    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London\nUnited Kingdom"
+    assert inv.invoice_to == "Acme Company\n221B Baker Street\n12345 London\nUnited Kingdom"
 
 
 @pytest.mark.django_db

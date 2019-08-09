@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 
+import pycountry
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy
 from django_countries.fields import Country
@@ -20,6 +21,7 @@ from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund,
 )
 from pretix.base.pdf import get_variables
+from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
 
 
@@ -41,7 +43,7 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
     class Meta:
         model = InvoiceAddress
         fields = ('last_modified', 'is_business', 'company', 'name', 'name_parts', 'street', 'zipcode', 'city', 'country',
-                  'vat_id', 'vat_id_validated', 'internal_reference')
+                  'state', 'vat_id', 'vat_id_validated', 'internal_reference')
         read_only_fields = ('last_modified', 'vat_id_validated')
 
     def __init__(self, *args, **kwargs):
@@ -57,6 +59,24 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
             )
         if data.get('name_parts') and '_scheme' not in data.get('name_parts'):
             data['name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
+
+        if data.get('country'):
+            if not pycountry.countries.get(alpha_2=data.get('country')):
+                raise ValidationError(
+                    {'country': ['Invalid country code.']}
+                )
+
+        if data.get('state'):
+            cc = str(data.get('country') or self.instance.country or '')
+            if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                raise ValidationError(
+                    {'state': ['States are not supported in country "{}".'.format(cc)]}
+                )
+            if not pycountry.subdivisions.get(code=cc + '-' + data.get('state')):
+                raise ValidationError(
+                    {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
+                )
+
         return data
 
 

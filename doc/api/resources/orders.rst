@@ -53,7 +53,9 @@ invoice_address                       object                     Invoice address
 ├ street                              string                     Customer street
 ├ zipcode                             string                     Customer ZIP code
 ├ city                                string                     Customer city
-├ country                             string                     Customer country
+├ country                             string                     Customer country code
+├ state                               string                     Customer state (ISO 3166-2 code). Only supported in
+                                                                 AU, BR, CA, CN, MY, MX, and US.
 ├ internal_reference                  string                     Customer's internal reference to be printed on the invoice
 ├ vat_id                              string                     Customer VAT ID
 └ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
@@ -136,6 +138,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 2.5:
 
    The ``testmode`` attribute has been added and ``DELETE`` has been implemented for orders.
+
+.. versionchanged:: 3.1:
+
+   The ``invoice_address.state`` attribute has been added.
 
 .. _order-position-resource:
 
@@ -310,7 +316,8 @@ List of all orders
                 "street": "Test street 12",
                 "zipcode": "12345",
                 "city": "Testington",
-                "country": "Testikistan",
+                "country": "DE",
+                "state": "",
                 "internal_reference": "",
                 "vat_id": "EU123456789",
                 "vat_id_validated": false
@@ -453,7 +460,8 @@ Fetching individual orders
             "street": "Test street 12",
             "zipcode": "12345",
             "city": "Testington",
-            "country": "Testikistan",
+            "country": "DE",
+            "state": "",
             "internal_reference": "",
             "vat_id": "EU123456789",
             "vat_id_validated": false
@@ -770,6 +778,7 @@ Creating orders
       * ``zipcode``
       * ``city``
       * ``country``
+      * ``state``
       * ``internal_reference``
       * ``vat_id``
 
@@ -837,6 +846,7 @@ Creating orders
           "zipcode": "12345",
           "city": "Sample City",
           "country": "UK",
+          "state": "",
           "internal_reference": "",
           "vat_id": ""
         },
