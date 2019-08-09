@@ -76,7 +76,7 @@ def dictsum(*dicts) -> dict:
 
 
 def order_overview(
-        event: Event, subevent: SubEvent=None, date_filter='', date_from=None, date_until=None
+        event: Event, subevent: SubEvent=None, date_filter='', date_from=None, date_until=None, fees=False
 ) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
@@ -189,7 +189,7 @@ def order_overview(
     payment_cat_obj.name = _('Fees')
     payment_items = []
 
-    if not subevent:
+    if not subevent and fees:
         qs = OrderFee.all.filter(
             order__event=event
         ).annotate(
