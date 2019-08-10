@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2019-04-27 21:00+0000\n"
+"PO-Revision-Date: 2019-08-11 00:00+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -91,50 +91,54 @@ msgstr "Begränsa till eventen"
 
 #: pretix/api/serializers/cart.py:58 pretix/api/serializers/order.py:675
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Produkten \"{}\" är inte kopplad till ett antal."
 
 #: pretix/api/serializers/cart.py:66 pretix/api/serializers/order.py:687
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
+"Det finns inte tillräckligt antal tillgängligt av antal \"{}\" för att "
+"genomföra operationen."
 
 #: pretix/api/serializers/cart.py:88 pretix/api/serializers/order.py:704
 #: pretix/base/services/orders.py:1028
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "Den valda platsen {seat} är inte tillgänglig."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:1015
 #: pretix/base/models/items.py:1154 pretix/base/models/items.py:1509
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "En eller flera artiklar tillhör inte detta event."
 
 #: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1518
 #: pretix/base/models/waitinglist.py:155
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "Delevent kan inte vara null för en serie av event."
 
 #: pretix/api/serializers/checkin.py:33 pretix/api/serializers/checkin.py:36
 #: pretix/base/models/items.py:1520 pretix/base/models/items.py:1523
 #: pretix/base/models/waitinglist.py:157 pretix/base/models/waitinglist.py:160
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "Deleventet tillhör inte detta event."
 
 #: pretix/api/serializers/event.py:101
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Event kan inte skapas som 'live'. Antal och betalningsätt måste läggas till "
+"eventet innan det kan sättas till live."
 
 #: pretix/api/serializers/event.py:116 pretix/api/serializers/event.py:331
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Meta data egenskap '{name}' finns inte."
 
 #: pretix/api/serializers/event.py:150
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Okänt plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:672
 msgid "The bundled item must not be the same item as the bundling one."
