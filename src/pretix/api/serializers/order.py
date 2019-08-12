@@ -27,6 +27,7 @@ from pretix.base.services.cart import error_messages
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 class CompatibleCountryField(serializers.Field):
@@ -285,10 +286,23 @@ class OrderFeeSerializer(I18nAwareModelSerializer):
         fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule')
 
 
+class PaymentURLField(serializers.URLField):
+    def to_representation(self, instance: OrderPayment):
+        if instance.state != OrderPayment.PAYMENT_STATE_CREATED:
+            return None
+        return build_absolute_uri(self.context['event'], 'presale:event.order.pay', kwargs={
+            'order': instance.order.code,
+            'secret': instance.order.secret,
+            'payment': instance.pk,
+        })
+
+
 class OrderPaymentSerializer(I18nAwareModelSerializer):
+    payment_url = PaymentURLField(source='*', allow_null=True, read_only=True)
+
     class Meta:
         model = OrderPayment
-        fields = ('local_id', 'state', 'amount', 'created', 'payment_date', 'provider')
+        fields = ('local_id', 'state', 'amount', 'created', 'payment_date', 'provider', 'payment_url')
 
 
 class OrderRefundSerializer(I18nAwareModelSerializer):
