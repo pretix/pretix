@@ -657,7 +657,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             delete_cps = []
             quota_avail_cache = {}
             if consume_carts:
-                for cp in CartPosition.objects.filter(event=self.context['event'], cart_id__in=consume_carts):
+                for cp in CartPosition.objects.filter(
+                    event=self.context['event'], cart_id__in=consume_carts, expires__gt=now()
+                ):
                     quotas = (cp.variation.quotas.filter(subevent=cp.subevent)
                               if cp.variation else cp.item.quotas.filter(subevent=cp.subevent))
                     for quota in quotas:
