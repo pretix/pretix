@@ -39,7 +39,9 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
-from pretix.presale.views import CartMixin, EventViewMixin
+from pretix.presale.views import (
+    CartMixin, EventViewMixin, iframe_entry_view_wrapper,
+)
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
@@ -263,6 +265,7 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
     """
     This is used if a payment is retried or the payment method is changed. It shows the payment
@@ -325,6 +328,7 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
     """
     This is used if a payment is retried or the payment method is changed. It is shown after the
