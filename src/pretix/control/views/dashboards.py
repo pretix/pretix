@@ -8,6 +8,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.dispatch import receiver
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse
@@ -36,44 +37,46 @@ NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="
 
 
 @receiver(signal=event_dashboard_widgets)
-def base_widgets(sender, subevent=None, **kwargs):
-    prodc = Item.objects.filter(
-        event=sender, active=True,
-    ).filter(
-        (Q(available_until__isnull=True) | Q(available_until__gte=now())) &
-        (Q(available_from__isnull=True) | Q(available_from__lte=now()))
-    ).count()
+def base_widgets(sender, subevent=None, lazy=False, **kwargs):
+    if not lazy:
+        prodc = Item.objects.filter(
+            event=sender, active=True,
+        ).filter(
+            (Q(available_until__isnull=True) | Q(available_until__gte=now())) &
+            (Q(available_from__isnull=True) | Q(available_from__lte=now()))
+        ).count()
 
-    if subevent:
-        opqs = OrderPosition.objects.filter(subevent=subevent)
-    else:
-        opqs = OrderPosition.objects
+        if subevent:
+            opqs = OrderPosition.objects.filter(subevent=subevent)
+        else:
+            opqs = OrderPosition.objects
 
-    tickc = opqs.filter(
-        order__event=sender, item__admission=True,
-        order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
-    ).count()
+        tickc = opqs.filter(
+            order__event=sender, item__admission=True,
+            order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
+        ).count()
 
-    paidc = opqs.filter(
-        order__event=sender, item__admission=True,
-        order__status=Order.STATUS_PAID,
-    ).count()
+        paidc = opqs.filter(
+            order__event=sender, item__admission=True,
+            order__status=Order.STATUS_PAID,
+        ).count()
 
-    if subevent:
-        rev = opqs.filter(
-            order__event=sender, order__status=Order.STATUS_PAID
-        ).aggregate(
-            sum=Sum('price')
-        )['sum'] or Decimal('0.00')
-    else:
-        rev = Order.objects.filter(
-            event=sender,
-            status=Order.STATUS_PAID
-        ).aggregate(sum=Sum('total'))['sum'] or Decimal('0.00')
+        if subevent:
+            rev = opqs.filter(
+                order__event=sender, order__status=Order.STATUS_PAID
+            ).aggregate(
+                sum=Sum('price')
+            )['sum'] or Decimal('0.00')
+        else:
+            rev = Order.objects.filter(
+                event=sender,
+                status=Order.STATUS_PAID
+            ).aggregate(sum=Sum('total'))['sum'] or Decimal('0.00')
 
     return [
         {
-            'content': NUM_WIDGET.format(num=tickc, text=_('Attendees (ordered)')),
+            'content': None if lazy else NUM_WIDGET.format(num=tickc, text=_('Attendees (ordered)')),
+            'lazy': 'attendees-ordered',
             'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.orders', kwargs={
@@ -82,7 +85,8 @@ def base_widgets(sender, subevent=None, **kwargs):
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
-            'content': NUM_WIDGET.format(num=paidc, text=_('Attendees (paid)')),
+            'content': None if lazy else NUM_WIDGET.format(num=paidc, text=_('Attendees (paid)')),
+            'lazy': 'attendees-paid',
             'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
@@ -91,8 +95,9 @@ def base_widgets(sender, subevent=None, **kwargs):
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
-            'content': NUM_WIDGET.format(
+            'content': None if lazy else NUM_WIDGET.format(
                 num=formats.localize(round_decimal(rev, sender.currency)), text=_('Total revenue ({currency})').format(currency=sender.currency)),
+            'lazy': 'total-revenue',
             'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
@@ -101,7 +106,8 @@ def base_widgets(sender, subevent=None, **kwargs):
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
-            'content': NUM_WIDGET.format(num=prodc, text=_('Active products')),
+            'content': None if lazy else NUM_WIDGET.format(num=prodc, text=_('Active products')),
+            'lazy': 'active-products',
             'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.items', kwargs={
@@ -113,32 +119,36 @@ def base_widgets(sender, subevent=None, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def waitinglist_widgets(sender, subevent=None, **kwargs):
+def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
 
     wles = WaitingListEntry.objects.filter(event=sender, subevent=subevent, voucher__isnull=True)
     if wles.count():
-        quota_cache = {}
-        itemvar_cache = {}
-        happy = 0
+        if not lazy:
+            quota_cache = {}
+            itemvar_cache = {}
+            happy = 0
 
-        for wle in wles:
-            if (wle.item, wle.variation) not in itemvar_cache:
-                itemvar_cache[(wle.item, wle.variation)] = (
-                    wle.variation.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
-                    if wle.variation
-                    else wle.item.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
-                )
-            row = itemvar_cache.get((wle.item, wle.variation))
-            if row[1] is None:
-                itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1])
-                happy += 1
-            elif row[1] > 0:
-                itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1] - 1)
-                happy += 1
+            for wle in wles:
+                if (wle.item, wle.variation) not in itemvar_cache:
+                    itemvar_cache[(wle.item, wle.variation)] = (
+                        wle.variation.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
+                        if wle.variation
+                        else wle.item.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
+                    )
+                row = itemvar_cache.get((wle.item, wle.variation))
+                if row[1] is None:
+                    itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1])
+                    happy += 1
+                elif row[1] > 0:
+                    itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1] - 1)
+                    happy += 1
 
         widgets.append({
-            'content': NUM_WIDGET.format(num=str(happy), text=_('available to give to people on waiting list')),
+            'content': None if lazy else NUM_WIDGET.format(
+                num=str(happy), text=_('available to give to people on waiting list')
+            ),
+            'lazy': 'waitinglist',
             'priority': 50,
             'url': reverse('control:event.orders.waitinglist', kwargs={
                 'event': sender.slug,
@@ -146,7 +156,8 @@ def waitinglist_widgets(sender, subevent=None, **kwargs):
             })
         })
         widgets.append({
-            'content': NUM_WIDGET.format(num=str(wles.count()), text=_('total waiting list length')),
+            'content': None if lazy else NUM_WIDGET.format(num=str(wles.count()), text=_('total waiting list length')),
+            'lazy': lazy,
             'display_size': 'small',
             'priority': 50,
             'url': reverse('control:event.orders.waitinglist', kwargs={
@@ -159,14 +170,18 @@ def waitinglist_widgets(sender, subevent=None, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def quota_widgets(sender, subevent=None, **kwargs):
+def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
 
     for q in sender.quotas.filter(subevent=subevent):
-        status, left = q.availability(allow_cache=True)
+        if not lazy:
+            status, left = q.availability(allow_cache=True)
         widgets.append({
-            'content': NUM_WIDGET.format(num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
-                                         text=_('{quota} left').format(quota=escape(q.name))),
+            'content': None if lazy else NUM_WIDGET.format(
+                num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
+                text=_('{quota} left').format(quota=escape(q.name))
+            ),
+            'lazy': 'quota-{}'.format(q.pk),
             'display_size': 'small',
             'priority': 50,
             'url': reverse('control:event.items.quotas.show', kwargs={
@@ -209,14 +224,18 @@ def shop_state_widget(sender, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def checkin_widget(sender, subevent=None, **kwargs):
+def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
     qs = sender.checkin_lists.filter(subevent=subevent)
-    qs = CheckinList.annotate_with_numbers(qs, sender)
+    if not lazy:
+        qs = CheckinList.annotate_with_numbers(qs, sender)
     for cl in qs:
         widgets.append({
-            'content': NUM_WIDGET.format(num='{}/{}'.format(cl.checkin_count, cl.position_count),
-                                         text=_('Checked in – {list}').format(list=escape(cl.name))),
+            'content': None if lazy else NUM_WIDGET.format(
+                num='{}/{}'.format(cl.checkin_count, cl.position_count),
+                text=_('Checked in – {list}').format(list=escape(cl.name))
+            ),
+            'lazy': 'checkin-{}'.format(cl.pk),
             'display_size': 'small',
             'priority': 50,
             'url': reverse('control:event.orders.checkinlists.show', kwargs={
@@ -263,7 +282,7 @@ def event_index(request, organizer, event):
             pass
 
     widgets = []
-    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent):
+    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=True):
         widgets.extend(result)
 
     can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
@@ -318,6 +337,22 @@ def event_index(request, organizer, event):
     resp = render(request, 'pretixcontrol/event/index.html', ctx)
     # resp['Content-Security-Policy'] = "style-src 'unsafe-inline'"
     return resp
+
+
+def event_index_widgets_lazy(request, organizer, event):
+    subevent = None
+    if request.GET.get("subevent", "") != "" and request.event.has_subevents:
+        i = request.GET.get("subevent", "")
+        try:
+            subevent = request.event.subevents.get(pk=i)
+        except SubEvent.DoesNotExist:
+            pass
+
+    widgets = []
+    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
+        widgets.extend(result)
+
+    return JsonResponse({'widgets': widgets})
 
 
 def annotated_event_query(request):

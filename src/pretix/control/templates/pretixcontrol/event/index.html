@@ -95,18 +95,30 @@
     {% endif %}
     <div class="dashboard">
         {% for w in widgets %}
-            <div class="widget-container widget-{{ w.display_size|default:"small" }}">
+            <div class="widget-container widget-{{ w.display_size|default:"small" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
                 {% if w.url %}{# backwards compatibility #}
                     <a href="{{ w.url }}" class="widget">
-                        {{ w.content|safe }}
+                        {% if w.lazy %}
+                            <span class="fa fa-cog fa-4x"></span>
+                        {% else %}
+                            {{ w.content|safe }}
+                        {% endif %}
                     </a>
                 {% elif w.link %}
                     <a href="{{ w.link }}" class="widget">
-                        {{ w.content|safe }}
+                        {% if w.lazy %}
+                            <span class="fa fa-cog fa-4x´"></span>
+                        {% else %}
+                            {{ w.content|safe }}
+                        {% endif %}
                     </a>
                 {% else %}
                     <div class="widget">
-                        {{ w.content|safe }}
+                        {% if w.lazy %}
+                            <span class="fa fa-cog fa-4x"></span>
+                        {% else %}
+                            {{ w.content|safe }}
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>

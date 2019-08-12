@@ -27,6 +27,16 @@
   width: 25%;
 }
 
+.dashboard .widget-container.widget-lazy-loading {
+  text-align: center;
+  .fa-cog {
+    color: #ccc;
+    margin-top: 30px;
+    -webkit-animation: fa-spin 4s infinite linear;
+    animation: fa-spin 4s infinite linear;
+  }
+}
+
 .dashboard-panels .panel-heading .fa {
   opacity: 0.5;
 }

@@ -106,6 +106,7 @@ urlpatterns = [
     url(r'^search/orders/$', search.OrderSearch.as_view(), name='search.orders'),
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         url(r'^$', dashboards.event_index, name='event.index'),
+        url(r'^widgets.json$', dashboards.event_index_widgets_lazy, name='event.index.widgets'),
         url(r'^live/$', event.EventLive.as_view(), name='event.live'),
         url(r'^logs/$', event.EventLog.as_view(), name='event.log'),
         url(r'^delete/$', event.EventDelete.as_view(), name='event.delete'),
