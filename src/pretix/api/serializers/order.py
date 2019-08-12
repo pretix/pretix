@@ -555,7 +555,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         min_length=5
     )
     comment = serializers.CharField(required=False, allow_blank=True)
-    payment_provider = serializers.CharField(required=True)
+    payment_provider = serializers.CharField(required=False, allow_null=True)
     payment_info = CompatibleJSONField(required=False)
     consume_carts = serializers.ListField(child=serializers.CharField(), required=False)
     force = serializers.BooleanField(default=False, required=False)
@@ -573,6 +573,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                   'force', 'send_mail')
 
     def validate_payment_provider(self, pp):
+        if pp is None:
+            return None
         if pp not in self.context['event'].get_payment_providers():
             raise ValidationError('The given payment provider is not known.')
         return pp
@@ -642,7 +644,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     def create(self, validated_data):
         fees_data = validated_data.pop('fees') if 'fees' in validated_data else []
         positions_data = validated_data.pop('positions') if 'positions' in validated_data else []
-        payment_provider = validated_data.pop('payment_provider')
+        payment_provider = validated_data.pop('payment_provider', None)
         payment_info = validated_data.pop('payment_info', '{}')
         payment_date = validated_data.pop('payment_date', now())
         force = validated_data.pop('force', False)
@@ -832,6 +834,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         elif payment_provider == "free" and order.total != Decimal('0.00'):
             raise ValidationError('You cannot use the "free" payment provider for non-free orders.')
         elif validated_data.get('status') == Order.STATUS_PAID:
+            if not payment_provider:
+                raise ValidationError('You cannot create a paid order without a payment provider.')
             order.payments.create(
                 amount=order.total,
                 provider=payment_provider,
