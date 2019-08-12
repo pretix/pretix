@@ -2800,7 +2800,6 @@ def test_order_create_send_emails_free(token_client, organizer, event, item, quo
             organizer.slug, event.slug
         ), format='json', data=res
     )
-    print(resp.data)
     assert resp.status_code == 201
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == "Your order: {}".format(resp.data['code'])
@@ -2823,6 +2822,25 @@ def test_order_create_send_emails_paid(token_client, organizer, event, item, quo
     assert len(djmail.outbox) == 2
     assert djmail.outbox[0].subject == "Your order: {}".format(resp.data['code'])
     assert djmail.outbox[1].subject == "Payment received for your order: {}".format(resp.data['code'])
+
+
+@pytest.mark.django_db
+def test_order_create_auto_pricing(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    del res['positions'][0]['price']
+    djmail.outbox = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.price == item.default_price
+    assert o.total == item.default_price + Decimal('0.25')
 
 
 REFUND_CREATE_PAYLOAD = {

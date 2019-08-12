@@ -21,6 +21,7 @@ from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund,
 )
 from pretix.base.pdf import get_variables
+from pretix.base.services.pricing import get_price
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
 
@@ -457,6 +458,8 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     secret = serializers.CharField(required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)
     seat = serializers.CharField(required=False, allow_null=True)
+    price = serializers.DecimalField(required=False, allow_null=True, decimal_places=2,
+                                     max_digits=10)
 
     class Meta:
         model = OrderPosition
@@ -716,38 +719,14 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 validated_data['locale'] = self.context['event'].settings.locale
             order = Order(event=self.context['event'], **validated_data)
             order.set_expires(subevents=[p.get('subevent') for p in positions_data])
-            order.total = sum([p['price'] for p in positions_data]) + sum([f['value'] for f in fees_data], Decimal('0.00'))
             order.meta_info = "{}"
+            order.total = Decimal('0.00')
             order.save()
-
-            if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
-                order.status = Order.STATUS_PAID
-                order.save()
-                order.payments.create(
-                    amount=order.total, provider='free', state=OrderPayment.PAYMENT_STATE_CONFIRMED,
-                    payment_date=now()
-                )
-            elif payment_provider == "free" and order.total != Decimal('0.00'):
-                raise ValidationError('You cannot use the "free" payment provider for non-free orders.')
-            elif validated_data.get('status') == Order.STATUS_PAID:
-                order.payments.create(
-                    amount=order.total,
-                    provider=payment_provider,
-                    info=payment_info,
-                    payment_date=payment_date,
-                    state=OrderPayment.PAYMENT_STATE_CONFIRMED
-                )
-            elif payment_provider:
-                order.payments.create(
-                    amount=order.total,
-                    provider=payment_provider,
-                    info=payment_info,
-                    state=OrderPayment.PAYMENT_STATE_CREATED
-                )
 
             if ia:
                 ia.order = order
                 ia.save()
+
             pos_map = {}
             for pos_data in positions_data:
                 answers_data = pos_data.pop('answers', [])
@@ -759,9 +738,25 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     }
                 pos = OrderPosition(**pos_data)
                 pos.order = order
-                pos._calculate_tax()
                 if addon_to:
                     pos.addon_to = pos_map[addon_to]
+
+                if pos.price is None:
+                    price = get_price(
+                        item=pos.item,
+                        variation=pos.variation,
+                        voucher=pos.voucher,
+                        custom_price=None,
+                        subevent=pos.subevent,
+                        addon_to=pos.addon_to,
+                        invoice_address=ia,
+                    )
+                    pos.price = price.gross
+                    pos.tax_rate = price.rate
+                    pos.tax_value = price.tax
+                    pos.tax_rule = pos.item.tax_rule
+                else:
+                    pos._calculate_tax()
                 pos.save()
                 pos_map[pos.positionid] = pos
                 for answ_data in answers_data:
@@ -771,11 +766,40 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
             for cp in delete_cps:
                 cp.delete()
+
         for fee_data in fees_data:
             f = OrderFee(**fee_data)
             f.order = order
             f._calculate_tax()
             f.save()
+
+        order.total = sum([p.price for p in order.positions.all()]) + sum([f.value for f in order.fees.all()])
+        order.save(update_fields=['total'])
+
+        if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
+            order.status = Order.STATUS_PAID
+            order.save()
+            order.payments.create(
+                amount=order.total, provider='free', state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                payment_date=now()
+            )
+        elif payment_provider == "free" and order.total != Decimal('0.00'):
+            raise ValidationError('You cannot use the "free" payment provider for non-free orders.')
+        elif validated_data.get('status') == Order.STATUS_PAID:
+            order.payments.create(
+                amount=order.total,
+                provider=payment_provider,
+                info=payment_info,
+                payment_date=payment_date,
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED
+            )
+        elif payment_provider:
+            order.payments.create(
+                amount=order.total,
+                provider=payment_provider,
+                info=payment_info,
+                state=OrderPayment.PAYMENT_STATE_CREATED
+            )
 
         return order
 

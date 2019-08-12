@@ -726,7 +726,7 @@ Creating orders
 
        * does not validate any requirements related to add-on products
 
-       * does not check or calculate prices but believes any prices you send
+       * does not check prices but believes any prices you send
 
        * does not support the redemption of vouchers
 
@@ -785,7 +785,7 @@ Creating orders
       * ``positionid`` (optional, see below)
       * ``item``
       * ``variation``
-      * ``price``
+      * ``price`` (optional, if set to ``null`` or missing the price will be computed from the given product)
       * ``seat`` (The ``seat_guid`` attribute of a seat. Required when the specified ``item`` requires a seat, otherwise must be ``null``.)
       * ``attendee_name`` **or** ``attendee_name_parts``
       * ``attendee_email``
