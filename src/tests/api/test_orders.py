@@ -159,6 +159,7 @@ TEST_PAYMENTS_RES = [
         "created": "2017-12-01T10:00:00Z",
         "payment_date": "2017-12-01T10:00:00Z",
         "provider": "stripe",
+        "payment_url": None,
         "state": "refunded",
         "amount": "23.00"
     },
@@ -167,6 +168,7 @@ TEST_PAYMENTS_RES = [
         "created": "2017-12-01T10:00:00Z",
         "payment_date": None,
         "provider": "banktransfer",
+        "payment_url": None,
         "state": "pending",
         "amount": "23.00"
     }
