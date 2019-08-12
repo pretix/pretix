@@ -1,7 +1,9 @@
 import json
+from collections import Counter
 from decimal import Decimal
 
 import pycountry
+from django.db.models import F, Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy
 from django_countries.fields import Country
@@ -15,12 +17,13 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Item, ItemVariation, Order,
-    OrderPosition, Question, QuestionAnswer, Seat, SubEvent,
+    OrderPosition, Question, QuestionAnswer, Seat, SubEvent, Voucher,
 )
 from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund,
 )
 from pretix.base.pdf import get_variables
+from pretix.base.services.cart import error_messages
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
@@ -460,11 +463,13 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     seat = serializers.CharField(required=False, allow_null=True)
     price = serializers.DecimalField(required=False, allow_null=True, decimal_places=2,
                                      max_digits=10)
+    voucher = serializers.SlugRelatedField(slug_field='code', queryset=Voucher.objects.none(),
+                                           required=False, allow_null=True)
 
     class Meta:
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
-                  'secret', 'addon_to', 'subevent', 'answers', 'seat')
+                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher')
 
     def validate_secret(self, secret):
         if secret and OrderPosition.all.filter(order__event=self.context['event'], secret=secret).exists():
@@ -556,6 +561,10 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     force = serializers.BooleanField(default=False, required=False)
     payment_date = serializers.DateTimeField(required=False, allow_null=True)
     send_mail = serializers.BooleanField(default=False, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['positions'].child.fields['voucher'].queryset = self.context['event'].vouchers.all()
 
     class Meta:
         model = Order
@@ -656,6 +665,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             consume_carts = validated_data.pop('consume_carts', [])
             delete_cps = []
             quota_avail_cache = {}
+            voucher_usage = Counter()
             if consume_carts:
                 for cp in CartPosition.objects.filter(
                     event=self.context['event'], cart_id__in=consume_carts, expires__gt=now()
@@ -667,6 +677,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                             quota_avail_cache[quota] = list(quota.availability())
                         if quota_avail_cache[quota][1] is not None:
                             quota_avail_cache[quota][1] += 1
+                    if cp.voucher:
+                        voucher_usage[cp.voucher] -= 1
                     if cp.expires > now_dt:
                         if cp.seat:
                             free_seats.add(cp.seat)
@@ -674,8 +686,55 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
             errs = [{} for p in positions_data]
 
+            for i, pos_data in enumerate(positions_data):
+                if pos_data.get('voucher'):
+                    v = pos_data['voucher']
+
+                    if not v.applies_to(pos_data['item'], pos_data.get('variation')):
+                        errs[i]['voucher'] = [error_messages['voucher_invalid_item']]
+                        continue
+
+                    if v.subevent_id and pos_data.get('subevent').pk != v.subevent_id:
+                        errs[i]['voucher'] = [error_messages['voucher_invalid_subevent']]
+                        continue
+
+                    if v.valid_until is not None and v.valid_until < now_dt:
+                        errs[i]['voucher'] = [error_messages['voucher_expired']]
+                        continue
+
+                    voucher_usage[v] += 1
+                    if voucher_usage[v] > 0:
+                        redeemed_in_carts = CartPosition.objects.filter(
+                            Q(voucher=pos_data['voucher']) & Q(event=self.context['event']) & Q(expires__gte=now_dt)
+                        ).exclude(pk__in=[cp.pk for cp in delete_cps])
+                        v_avail = v.max_usages - v.redeemed - redeemed_in_carts.count()
+                        if v_avail < voucher_usage[v]:
+                            errs[i]['voucher'] = [
+                                'The voucher has already been used the maximum number of times.'
+                            ]
+
+                seated = pos_data.get('item').seat_category_mappings.filter(subevent=pos_data.get('subevent')).exists()
+                if pos_data.get('seat'):
+                    if not seated:
+                        errs[i]['seat'] = ['The specified product does not allow to choose a seat.']
+                    try:
+                        seat = self.context['event'].seats.get(seat_guid=pos_data['seat'], subevent=pos_data.get('subevent'))
+                    except Seat.DoesNotExist:
+                        errs[i]['seat'] = ['The specified seat does not exist.']
+                    else:
+                        pos_data['seat'] = seat
+                        if (seat not in free_seats and not seat.is_available()) or seat in seats_seen:
+                            errs[i]['seat'] = [ugettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
+                        seats_seen.add(seat)
+                elif seated:
+                    errs[i]['seat'] = ['The specified product requires to choose a seat.']
+
             if not force:
                 for i, pos_data in enumerate(positions_data):
+                    if pos_data.get('voucher'):
+                        if pos_data['voucher'].allow_ignore_quota or pos_data['voucher'].block_quota:
+                            continue
+
                     new_quotas = (pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
                                   if pos_data.get('variation')
                                   else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))
@@ -696,23 +755,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                                             quota.name
                                         )
                                     ]
-
-            for i, pos_data in enumerate(positions_data):
-                seated = pos_data.get('item').seat_category_mappings.filter(subevent=pos_data.get('subevent')).exists()
-                if pos_data.get('seat'):
-                    if not seated:
-                        errs[i]['seat'] = ['The specified product does not allow to choose a seat.']
-                    try:
-                        seat = self.context['event'].seats.get(seat_guid=pos_data['seat'], subevent=pos_data.get('subevent'))
-                    except Seat.DoesNotExist:
-                        errs[i]['seat'] = ['The specified seat does not exist.']
-                    else:
-                        pos_data['seat'] = seat
-                        if (seat not in free_seats and not seat.is_available()) or seat in seats_seen:
-                            errs[i]['seat'] = [ugettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
-                        seats_seen.add(seat)
-                elif seated:
-                    errs[i]['seat'] = ['The specified product requires to choose a seat.']
 
             if any(errs):
                 raise ValidationError({'positions': errs})
@@ -759,6 +801,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     pos.tax_rule = pos.item.tax_rule
                 else:
                     pos._calculate_tax()
+                if pos.voucher:
+                    Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
                 pos.save()
                 pos_map[pos.positionid] = pos
                 for answ_data in answers_data:
