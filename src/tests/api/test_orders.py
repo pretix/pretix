@@ -2496,21 +2496,6 @@ def test_order_create_free(token_client, organizer, event, item, quota, question
 
 
 @pytest.mark.django_db
-def test_order_create_require_payment_provider(token_client, organizer, event, item, quota, question):
-    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
-    del res['payment_provider']
-    res['positions'][0]['item'] = item.pk
-    res['positions'][0]['answers'][0]['question'] = question.pk
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orders/'.format(
-            organizer.slug, event.slug
-        ), format='json', data=res
-    )
-    assert resp.status_code == 400
-    assert resp.data == {'payment_provider': ['This field is required.']}
-
-
-@pytest.mark.django_db
 def test_order_create_invalid_payment_provider(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['payment_provider'] = 'foo'
@@ -2851,6 +2836,35 @@ def test_order_create_send_emails_paid(token_client, organizer, event, item, quo
     assert len(djmail.outbox) == 2
     assert djmail.outbox[0].subject == "Your order: {}".format(resp.data['code'])
     assert djmail.outbox[1].subject == "Payment received for your order: {}".format(resp.data['code'])
+
+
+@pytest.mark.django_db
+def test_order_paid_require_payment_method(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['payment_provider']
+    res['status'] = 'p'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == [
+        'You cannot create a paid order without a payment provider.'
+    ]
+
+    res['status'] = "n"
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert not o.payments.exists()
 
 
 @pytest.mark.django_db

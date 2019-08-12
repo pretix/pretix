@@ -141,7 +141,9 @@ last_modified                         datetime                   Last modificati
 
 .. versionchanged:: 3.1:
 
-   The ``invoice_address.state`` attribute has been added.
+   The ``invoice_address.state`` attribute has been added. When creating orders through the API,
+   vouchers are now supported and many fields are now optional.
+
 
 .. _order-position-resource:
 
@@ -754,9 +756,9 @@ Creating orders
    * ``email``
    * ``locale``
    * ``sales_channel``
-   * ``payment_provider`` – The identifier of the payment provider set for this order. This needs to be an existing
-     payment provider. You should use ``"free"`` for free orders, and we strongly advise to use ``"manual"`` for all
-     orders you create as paid.
+   * ``payment_provider`` (optional) – The identifier of the payment provider set for this order. This needs to be an
+    existing payment provider. You should use ``"free"`` for free orders, and we strongly advise to use ``"manual"``
+    for all orders you create as paid.
    * ``payment_info`` (optional) – You can pass a nested JSON object that will be set as the internal ``info``
      value of the payment object that will be created. How this value is handled is up to the payment provider and you
      should only use this if you know the specific payment provider in detail. Please keep in mind that the payment
