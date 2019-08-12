@@ -557,7 +557,7 @@ class CompatibleJSONField(serializers.JSONField):
 
 class OrderCreateSerializer(I18nAwareModelSerializer):
     invoice_address = InvoiceAddressSerializer(required=False)
-    positions = OrderPositionCreateSerializer(many=True, required=False)
+    positions = OrderPositionCreateSerializer(many=True, required=True)
     fees = OrderFeeCreateSerializer(many=True, required=False)
     status = serializers.ChoiceField(choices=(
         ('n', Order.STATUS_PENDING),
