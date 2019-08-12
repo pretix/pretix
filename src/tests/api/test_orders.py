@@ -2857,8 +2857,8 @@ def test_order_create_send_emails_paid(token_client, organizer, event, item, quo
 def test_order_create_auto_pricing(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
     del res['positions'][0]['price']
-    djmail.outbox = []
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
@@ -2870,6 +2870,175 @@ def test_order_create_auto_pricing(token_client, organizer, event, item, quota, 
         p = o.positions.first()
     assert p.price == item.default_price
     assert o.total == item.default_price + Decimal('0.25')
+
+
+@pytest.mark.django_db
+def test_order_create_voucher_price(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['price']
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=15, item=item)
+    res['positions'][0]['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.voucher == voucher
+    voucher.refresh_from_db()
+    assert voucher.redeemed == 1
+    assert p.price == Decimal('15.00')
+    assert o.total == Decimal('15.25')
+
+
+@pytest.mark.django_db
+def test_order_create_voucher_unknown_code(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['price']
+    with scopes_disabled():
+        event.vouchers.create(price_mode="set", value=15, item=item)
+    res['positions'][0]['voucher'] = "FOOBAR"
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'voucher': ['Object with code=FOOBAR does not exist.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_voucher_redeemed(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    del res['positions'][0]['price']
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=15, item=item, redeemed=1)
+    res['positions'][0]['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'voucher': ['The voucher has already been used the maximum number of times.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_voucher_redeemed_partially(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['item'] = item.pk
+    del res['positions'][0]['price']
+    del res['positions'][0]['positionid']
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=15, item=item, redeemed=1, max_usages=2)
+    res['positions'][0]['voucher'] = voucher.code
+    res['positions'].append(copy.copy(res['positions'][0]))
+    res['positions'].append(copy.copy(res['positions'][0]))
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {},
+            {'voucher': ['The voucher has already been used the maximum number of times.']},
+            {'voucher': ['The voucher has already been used the maximum number of times.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_voucher_item_mismatch(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['price']
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        voucher = event.vouchers.create(price_mode="set", value=15, item=item2, redeemed=0)
+    res['positions'][0]['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'voucher': ['This voucher is not valid for this product.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_voucher_expired(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['price']
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=15, item=item, redeemed=0,
+                                        valid_until=now() - datetime.timedelta(days=1))
+    res['positions'][0]['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'voucher': ['This voucher is expired.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_voucher_block_quota(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['price']
+    quota.size = 0
+    quota.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=15, item=item, redeemed=0,
+                                        block_quota=True)
+    res['positions'][0]['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
 
 
 REFUND_CREATE_PAYLOAD = {

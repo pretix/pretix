@@ -724,15 +724,13 @@ Creating orders
 
        * does not validate the number of items per order or the number of times an item can be included in an order
 
-       * does not validate any requirements related to add-on products
+       * does not validate any requirements related to add-on products and does not add bundled products automatically
 
        * does not check prices but believes any prices you send
 
-       * does not support the redemption of vouchers
-
        * does not prevent you from buying items that can only be bought with a voucher
 
-       * does not calculate fees
+       * does not calculate fees automatically
 
        * does not allow to pass data to plugins and will therefore cause issues with some plugins like the shipping
          module
@@ -788,6 +786,7 @@ Creating orders
       * ``price`` (optional, if set to ``null`` or missing the price will be computed from the given product)
       * ``seat`` (The ``seat_guid`` attribute of a seat. Required when the specified ``item`` requires a seat, otherwise must be ``null``.)
       * ``attendee_name`` **or** ``attendee_name_parts``
+      * ``voucher`` (optional, the ``code`` attribute of a valid voucher)
       * ``attendee_email``
       * ``secret`` (optional)
       * ``addon_to`` (optional, see below)
