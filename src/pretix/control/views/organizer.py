@@ -343,7 +343,9 @@ class OrganizerCreate(CreateView):
         return ret
 
     def get_success_url(self) -> str:
-        return reverse('control:organizers')
+        return reverse('control:organizer', kwargs={
+            'organizer': self.object.slug,
+        })
 
 
 class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
