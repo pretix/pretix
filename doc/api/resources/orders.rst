@@ -737,8 +737,6 @@ Creating orders
        * does not allow to pass data to plugins and will therefore cause issues with some plugins like the shipping
          module
 
-       * does not send order confirmations via email
-
        * does not support reverse charge taxation
 
        * does not support file upload questions
@@ -809,6 +807,8 @@ Creating orders
       * ``tax_rule``
 
    * ``force`` (optional). If set to ``true``, quotas will be ignored.
+   * ``send_mail`` (optional). If set to ``true``, the same emails will be sent as for a regular order. Defaults to
+     ``false``.
 
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
    to incrementing integers starting with ``1``. Then, you can reference one of these
