@@ -657,7 +657,9 @@ class DeviceListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     context_object_name = 'devices'
 
     def get_queryset(self):
-        return self.request.organizer.devices.prefetch_related('limit_events')
+        return self.request.organizer.devices.prefetch_related(
+            'limit_events'
+        ).order_by('-device_id')
 
 
 class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):

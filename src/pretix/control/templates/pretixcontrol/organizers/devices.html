@@ -42,7 +42,7 @@
                 </thead>
                 <tbody>
                 {% for d in devices %}
-                    <tr>
+                    <tr {% if d.revoked %}class="text-muted"{% endif %}>
                         <td>
                             {{ d.device_id }}
                         </td>
