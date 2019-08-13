@@ -206,6 +206,7 @@ TEST_ORDER_RES = {
             "tax_value": "0.05"
         }
     ],
+    "url": "http://example.com/dummy/dummy/order/FOO/k24fiuwvu8kxz3y1/",
     "payment_provider": "banktransfer",
     "total": "23.00",
     "comment": "",

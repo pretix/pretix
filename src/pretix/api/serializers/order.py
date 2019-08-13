@@ -313,6 +313,14 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
         fields = ('local_id', 'state', 'source', 'amount', 'payment', 'created', 'execution_date', 'provider')
 
 
+class OrderURLField(serializers.URLField):
+    def to_representation(self, instance: Order):
+        return build_absolute_uri(self.context['event'], 'presale:event.order', kwargs={
+            'order': instance.code,
+            'secret': instance.secret,
+        })
+
+
 class OrderSerializer(I18nAwareModelSerializer):
     invoice_address = InvoiceAddressSerializer(allow_null=True)
     positions = OrderPositionSerializer(many=True, read_only=True)
@@ -322,13 +330,15 @@ class OrderSerializer(I18nAwareModelSerializer):
     refunds = OrderRefundSerializer(many=True, read_only=True)
     payment_date = OrderPaymentDateField(source='*', read_only=True)
     payment_provider = OrderPaymentTypeField(source='*', read_only=True)
+    url = OrderURLField(source='*', read_only=True)
 
     class Meta:
         model = Order
         fields = (
             'code', 'status', 'testmode', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-            'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel'
+            'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
+            'url'
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',

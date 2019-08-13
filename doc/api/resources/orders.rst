@@ -84,6 +84,7 @@ require_approval                      boolean                    If ``true`` and
                                                                  needs approval by an organizer before it can
                                                                  continue. If ``true`` and the order is canceled,
                                                                  this order has been denied by the event organizer.
+url                                   string                     The full URL to the order confirmation page
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
 last_modified                         datetime                   Last modification of this object
@@ -141,7 +142,7 @@ last_modified                         datetime                   Last modificati
 
 .. versionchanged:: 3.1:
 
-   The ``invoice_address.state`` attribute has been added. When creating orders through the API,
+   The ``invoice_address.state`` and ``url`` attributes have been added. When creating orders through the API,
    vouchers are now supported and many fields are now optional.
 
 
@@ -229,13 +230,18 @@ amount                                money (string)             Payment amount
 created                               datetime                   Date and time of creation of this payment
 payment_date                          datetime                   Date and time of completion of this payment (or ``null``)
 provider                              string                     Identification string of the payment provider
+payment_url                           string                     The URL where an user can continue with the payment (or ``null``)
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 2.0
 
   This resource has been added.
 
-.. _order-payment-resource:
+.. versionchanged:: 3.1
+
+  The attribute ``payment_url`` has been added.
+
+.. _order-refund-resource:
 
 Order refund resource
 ---------------------
@@ -296,6 +302,7 @@ List of all orders
             "status": "p",
             "testmode": false,
             "secret": "k24fiuwvu8kxz3y1",
+            "url": "https://test.pretix.eu/dummy/dummy/order/ABC12/k24fiuwvu8kxz3y1/",
             "email": "tester@example.org",
             "locale": "en",
             "sales_channel": "web",
@@ -382,6 +389,7 @@ List of all orders
                 "amount": "23.00",
                 "created": "2017-12-01T10:00:00Z",
                 "payment_date": "2017-12-04T12:13:12Z",
+                "payment_url": null,
                 "provider": "banktransfer"
               }
             ],
@@ -440,6 +448,7 @@ Fetching individual orders
         "status": "p",
         "testmode": false,
         "secret": "k24fiuwvu8kxz3y1",
+        "url": "https://test.pretix.eu/dummy/dummy/order/ABC12/k24fiuwvu8kxz3y1/",
         "email": "tester@example.org",
         "locale": "en",
         "sales_channel": "web",
@@ -526,6 +535,7 @@ Fetching individual orders
             "amount": "23.00",
             "created": "2017-12-01T10:00:00Z",
             "payment_date": "2017-12-04T12:13:12Z",
+            "payment_url": null,
             "provider": "banktransfer"
           }
         ],
@@ -1557,6 +1567,7 @@ Order payment endpoints
             "amount": "23.00",
             "created": "2017-12-01T10:00:00Z",
             "payment_date": "2017-12-04T12:13:12Z",
+            "payment_url": null,
             "provider": "banktransfer"
           }
         ]
@@ -1597,6 +1608,7 @@ Order payment endpoints
         "amount": "23.00",
         "created": "2017-12-01T10:00:00Z",
         "payment_date": "2017-12-04T12:13:12Z",
+        "payment_url": null,
         "provider": "banktransfer"
       }
 
