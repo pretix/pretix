@@ -18,3 +18,4 @@ in functionality over time.
    resources/index
    ratelimit
    webhooks
+   guides/index

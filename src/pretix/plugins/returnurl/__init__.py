@@ -12,7 +12,8 @@ class ReturnURLApp(AppConfig):
         name = _("Redirection from order page")
         author = _("the pretix team")
         version = version
-        description = _("This plugin allows to link to payments and redirect back afterwards.")
+        description = _("This plugin allows to link to payments and redirect back afterwards. This is useful in "
+                        "combination with our API.")
 
     def ready(self):
         from . import signals  # NOQA

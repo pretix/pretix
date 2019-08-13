@@ -46,6 +46,7 @@ guid
 hardcoded
 hostname
 idempotency
+iframe
 incrementing
 inofficial
 invalidations
