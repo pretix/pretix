@@ -32,29 +32,190 @@ class TicketLayout(LoggedModel):
         verbose_name=_('Name')
     )
     layout = models.TextField(
-        default='[{"italic": false, "bottom": "274.60", "align": "left", "fontfamily": "Open Sans", '
-                '"width": "175.00", "left": "17.50", "text": "Sample event name", "content": "event_name", '
-                '"fontsize": "16.0", "bold": false, "color": [0, 0, 0, 1], "type": "textarea"}, {"italic": false, '
-                '"bottom": "262.90", "align": "left", "fontfamily": "Open Sans", "width": "110.00", "left": "17.50", '
-                '"text": "Sample product \\u2013 sample variation", "content": "itemvar", "fontsize": "13.0", '
-                '"bold": false, "color": [0, 0, 0, 1], "type": "textarea"}, {"italic": false, "bottom": "252.50", '
-                '"align": "left", "fontfamily": "Open Sans", "width": "110.00", "left": "17.50", "text": "John Doe", '
-                '"content": "attendee_name", "fontsize": "13.0", "bold": false, "color": [0, 0, 0, 1], '
-                '"type": "textarea"}, {"italic": false, "bottom": "242.10", "align": "left", "fontfamily": "Open '
-                'Sans", "width": "110.00", "left": "17.50", "text": "May 31st, 2017", "content": "event_date_range", '
-                '"fontsize": "13.0", "bold": false, "color": [0, 0, 0, 1], "type": "textarea"}, {"italic": false, '
-                '"bottom": "204.80", "align": "left", "fontfamily": "Open Sans", "width": "110.00", "left": "17.50", '
-                '"text": "Random City", "content": "event_location", "fontsize": "13.0", "bold": false, "color": [0, '
-                '0, 0, 1], "type": "textarea"}, {"italic": false, "bottom": "194.50", "align": "left", "fontfamily": '
-                '"Open Sans", "width": "30.00", "left": "17.50", "text": "A1B2C", "content": "order", "fontsize": '
-                '"13.0", "bold": false, "color": [0, 0, 0, 1], "type": "textarea"}, {"italic": false, '
-                '"bottom": "194.50", "align": "right", "fontfamily": "Open Sans", "width": "45.00", "left": "52.50", '
-                '"text": "123.45 EUR", "content": "price", "fontsize": "13.0", "bold": false, "color": [0, 0, 0, 1], '
-                '"type": "textarea"}, {"italic": false, "bottom": "194.50", "align": "left", "fontfamily": "Open '
-                'Sans", "width": "90.00", "left": "102.50", "text": "tdmruoekvkpbv1o2mv8xccvqcikvr58u", "content": '
-                '"secret", "fontsize": "13.0", "bold": false, "color": [0, 0, 0, 1], "type": "textarea"}, '
-                '{"left": "130.40", "bottom": "204.50", "type": "barcodearea", "size": "64.00"},{"type":"poweredby",'
-                '"left":"88.72","bottom":"10.00","size":"20.00","content":"dark"}]'
+        default='''[{
+        "type":"textarea",
+        "left":"17.50",
+        "bottom":"274.60",
+        "fontsize":"16.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"175.00",
+        "content":"event_name",
+        "text":"Sample event name",
+        "align":"left"
+    },
+    {
+        "type":"textarea",
+        "left":"17.50",
+        "bottom":"262.90",
+        "fontsize":"13.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"110.00",
+        "content":"itemvar",
+        "text":"Sample product – sample variation",
+        "align":"left"
+    },
+    {
+        "type":"textarea",
+        "left":"17.50",
+        "bottom":"252.50",
+        "fontsize":"13.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"110.00",
+        "content":"attendee_name",
+        "text":"John Doe",
+        "align":"left"
+    },
+    {
+        "type":"textarea",
+        "left":"17.50",
+        "bottom":"242.10",
+        "fontsize":"13.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"110.00",
+        "content":"event_date_range",
+        "text":"May 31st – June 4th, 2017",
+        "align":"left"
+    },
+    {
+        "type":"textarea",
+        "left":"17.50",
+        "bottom":"231.70",
+        "fontsize":"13.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"110.00",
+        "content":"seat",
+        "text":"Ground floor, Row 3, Seat 4",
+        "align":"left"
+    },
+    {
+        "type":"textarea",
+        "left":"17.50",
+        "bottom":"204.80",
+        "fontsize":"13.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"110.00",
+        "content":"event_location",
+        "text":"Random City",
+        "align":"left"
+    },
+    {
+        "type":"textarea",
+        "left":"17.50",
+        "bottom":"194.50",
+        "fontsize":"13.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"30.00",
+        "content":"order",
+        "text":"A1B2C",
+        "align":"left"
+    },
+    {
+        "type":"textarea",
+        "left":"52.50",
+        "bottom":"194.50",
+        "fontsize":"13.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"45.00",
+        "content":"price",
+        "text":"123.45 EUR",
+        "align":"right"
+    },
+    {
+        "type":"textarea",
+        "left":"102.50",
+        "bottom":"194.50",
+        "fontsize":"13.0",
+        "color":[
+            0,
+            0,
+            0,
+            1
+        ],
+        "fontfamily":"Open Sans",
+        "bold":false,
+        "italic":false,
+        "width":"90.00",
+        "content":"secret",
+        "text":"tdmruoekvkpbv1o2mv8xccvqcikvr58u",
+        "align":"left"
+    },
+    {
+        "type":"barcodearea",
+        "left":"130.40",
+        "bottom":"204.50",
+        "size":"64.00"
+    },
+    {
+        "type":"poweredby",
+        "left":"88.72",
+        "bottom":"10.00",
+        "size":"20.00",
+        "content":"dark"
+    }]'''
     )
     background = models.FileField(null=True, blank=True, upload_to=bg_name, max_length=255)
 
