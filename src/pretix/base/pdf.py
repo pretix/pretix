@@ -241,12 +241,14 @@ DEFAULT_VARIABLES = OrderedDict((
     ("seat", {
         "label": _("Seat: Full name"),
         "editor_sample": _("Ground floor, Row 3, Seat 4"),
-        "evaluate": lambda op, order, ev: str(op.seat if op.seat else _('General admission'))
+        "evaluate": lambda op, order, ev: str(op.seat if op.seat else
+                                              _('General admission') if ev.seating_plan_id is not None else "")
     }),
     ("seat_zone", {
         "label": _("Seat: zone"),
         "editor_sample": _("Ground floor"),
-        "evaluate": lambda op, order, ev: str(op.seat.zone_name if op.seat else _('General admission'))
+        "evaluate": lambda op, order, ev: str(op.seat.zone_name if op.seat else
+                                              _('General admission') if ev.seating_plan_id is not None else "")
     }),
     ("seat_row", {
         "label": _("Seat: row"),
