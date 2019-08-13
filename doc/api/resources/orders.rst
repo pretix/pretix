@@ -747,8 +747,6 @@ Creating orders
        * does not allow to pass data to plugins and will therefore cause issues with some plugins like the shipping
          module
 
-       * does not support reverse charge taxation
-
        * does not support file upload questions
 
    You can supply the following fields of the resource:
@@ -789,6 +787,9 @@ Creating orders
       * ``state``
       * ``internal_reference``
       * ``vat_id``
+      * ``vat_id_validated`` (optional) – If you need support for reverse charge (rarely the case), you need to check
+       yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
+       trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
 
    * ``positions``
 
@@ -881,7 +882,7 @@ Creating orders
             ],
             "subevent": null
           }
-        ],
+        ]
       }
 
    **Example response**:
