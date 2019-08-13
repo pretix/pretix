@@ -3,6 +3,18 @@
 {% load bootstrap3 %}
 {% block inside %}
     <h1>{% trans "Redirection from order page" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            This feature is useful if you use only the payment component of pretix but build your own checkout interface
+            for other steps.
+        {% endblocktrans %}
+    </p>
+    <p>
+        <a href="https://docs.pretix.eu/en/latest/api/guides/custom_checkout.html" target="_blank" rel="noopener">
+            <span class="fa fa-question-circle"></span>
+            {% trans "Read our documentation for more information" %}
+        </a>
+    </p>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form_errors form %}

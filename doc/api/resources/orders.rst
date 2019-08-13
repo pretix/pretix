@@ -711,6 +711,8 @@ Deleting orders
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource **or** the order may not be deleted.
    :statuscode 404: The requested order does not exist.
 
+.. _rest-orders-create:
+
 Creating orders
 ---------------
 
