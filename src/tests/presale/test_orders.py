@@ -17,7 +17,8 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 
 
-class OrdersTest(TestCase):
+class BaseOrdersTest(TestCase):
+
     @scopes_disabled()
     def setUp(self):
         super().setUp()
@@ -82,6 +83,8 @@ class OrdersTest(TestCase):
             total=Decimal("23")
         )
 
+
+class OrdersTest(BaseOrdersTest):
     def test_unknown_order(self):
         response = self.client.get(
             '/%s/%s/order/ABCDE/123/' % (self.orga.slug, self.event.slug)
