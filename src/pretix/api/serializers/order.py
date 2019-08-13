@@ -49,7 +49,7 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
         model = InvoiceAddress
         fields = ('last_modified', 'is_business', 'company', 'name', 'name_parts', 'street', 'zipcode', 'city', 'country',
                   'state', 'vat_id', 'vat_id_validated', 'internal_reference')
-        read_only_fields = ('last_modified', 'vat_id_validated')
+        read_only_fields = ('last_modified',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -377,7 +377,7 @@ class OrderSerializer(I18nAwareModelSerializer):
                     }
                 try:
                     ia = instance.invoice_address
-                    if iadata.get('vat_id') != ia.vat_id:
+                    if iadata.get('vat_id') != ia.vat_id and 'vat_id_validated' not in iadata:
                         ia.vat_id_validated = False
                     self.fields['invoice_address'].update(ia, iadata)
                 except InvoiceAddress.DoesNotExist:

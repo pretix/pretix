@@ -2890,6 +2890,64 @@ def test_order_create_auto_pricing(token_client, organizer, event, item, quota, 
 
 
 @pytest.mark.django_db
+def test_order_create_auto_pricing_reverse_charge(token_client, organizer, event, item, quota, question, taxrule):
+    taxrule.eu_reverse_charge = True
+    taxrule.home_country = Country('DE')
+    taxrule.save()
+    item.tax_rule = taxrule
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['invoice_address']['country'] = 'FR'
+    res['invoice_address']['is_business'] = True
+    res['invoice_address']['vat_id'] = 'FR12345'
+    res['invoice_address']['vat_id_validated'] = True
+    del res['positions'][0]['price']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.price == Decimal('19.33')
+    assert p.tax_rate == Decimal('0.00')
+    assert p.tax_value == Decimal('0.00')
+    assert o.total == Decimal('19.58')
+
+
+@pytest.mark.django_db
+def test_order_create_auto_pricing_reverse_charge_require_valid_vatid(token_client, organizer, event, item, quota,
+                                                                      question, taxrule):
+    taxrule.eu_reverse_charge = True
+    taxrule.home_country = Country('DE')
+    taxrule.save()
+    item.tax_rule = taxrule
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['invoice_address']['country'] = 'FR'
+    res['invoice_address']['is_business'] = True
+    res['invoice_address']['vat_id'] = 'FR12345'
+    del res['positions'][0]['price']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.price == Decimal('23.00')
+    assert p.tax_rate == Decimal('19.00')
+
+
+@pytest.mark.django_db
 def test_order_create_voucher_price(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
@@ -3389,6 +3447,34 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
         assert order.all_logentries().get(action_type='pretix.event.order.contact.changed')
         assert order.all_logentries().get(action_type='pretix.event.order.locale.changed')
         assert order.all_logentries().get(action_type='pretix.event.order.modified')
+
+
+@pytest.mark.django_db
+def test_order_update_validated_vat_id(token_client, organizer, event, order):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": False,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "",
+                "state": "",
+                "zipcode": "",
+                "city": "Paris",
+                "country": "FR",
+                "internal_reference": "",
+                "vat_id": "FR123",
+                "vat_id_validated": True
+            }
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.invoice_address.vat_id == "FR123"
+    assert order.invoice_address.vat_id_validated
 
 
 @pytest.mark.django_db
