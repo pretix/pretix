@@ -98,6 +98,11 @@ class BadgeExporter(BaseExporter):
                      label=_('Include pending orders'),
                      required=False
                  )),
+                ('include_addons',
+                 forms.BooleanField(
+                     label=_('Include add-on or bundled positions'),
+                     required=False
+                 )),
                 ('order_by',
                  forms.ChoiceField(
                      label=_('Sort by'),
@@ -119,6 +124,9 @@ class BadgeExporter(BaseExporter):
         ).prefetch_related(
             'answers', 'answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to')
+
+        if not form_data.get('include_addons'):
+            qs = qs.filter(addon_to__isnull=True)
 
         if form_data.get('include_pending'):
             qs = qs.filter(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
