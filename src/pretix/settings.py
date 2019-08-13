@@ -279,6 +279,7 @@ INSTALLED_APPS = [
     'pretix.plugins.pretixdroid',
     'pretix.plugins.badges',
     'pretix.plugins.manualpayment',
+    'pretix.plugins.returnurl',
     'django_markup',
     'django_otp',
     'django_otp.plugins.otp_totp',

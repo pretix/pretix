@@ -46,6 +46,7 @@ from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
 class OrderDetailMixin(NoSearchIndexViewMixin):
+
     @cached_property
     def order(self):
         order = self.request.event.orders.filter(code=self.kwargs['order']).select_related('event').first()

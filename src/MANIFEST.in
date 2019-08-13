@@ -22,3 +22,5 @@ recursive-include pretix/plugins/ticketoutputpdf/templates *
 recursive-include pretix/plugins/ticketoutputpdf/static *
 recursive-include pretix/plugins/badges/templates *
 recursive-include pretix/plugins/badges/static *
+recursive-include pretix/plugins/returnurl/templates *
+recursive-include pretix/plugins/returnurl/static *
