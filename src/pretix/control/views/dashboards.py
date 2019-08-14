@@ -148,7 +148,7 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
             'content': None if lazy else NUM_WIDGET.format(
                 num=str(happy), text=_('available to give to people on waiting list')
             ),
-            'lazy': 'waitinglist',
+            'lazy': 'waitinglist-avail',
             'priority': 50,
             'url': reverse('control:event.orders.waitinglist', kwargs={
                 'event': sender.slug,
@@ -157,7 +157,7 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
         })
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(num=str(wles.count()), text=_('total waiting list length')),
-            'lazy': lazy,
+            'lazy': 'waitinglist-length',
             'display_size': 'small',
             'priority': 50,
             'url': reverse('control:event.orders.waitinglist', kwargs={
