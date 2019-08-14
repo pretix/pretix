@@ -51,7 +51,7 @@ class SendMailException(Exception):
 def mail(email: str, subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
          order: Order=None, position: OrderPosition=None, headers: dict=None, sender: str=None,
-         invoices: list=None, attach_tickets=False):
+         invoices: list=None, attach_tickets=False, auto_email=True):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -86,6 +86,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
     :param attach_tickets: Whether to attach tickets to this email, if they are available to download.
 
+    :param auto_email: Whether this email is auto-generated
+
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
     """
@@ -93,6 +95,9 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         return
 
     headers = headers or {}
+    if auto_email:
+        headers['X-Auto-Response-Suppress'] = 'OOF, NRN, AutoReply, RN'
+        headers['Auto-Submitted'] = 'auto-generated'
 
     with language(locale):
         if isinstance(context, dict) and event:
