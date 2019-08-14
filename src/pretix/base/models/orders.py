@@ -697,7 +697,7 @@ class Order(LockModel, LoggedModel):
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
-                  auth=None, attach_tickets=False, position: 'OrderPosition'=None):
+                  auth=None, attach_tickets=False, position: 'OrderPosition'=None, auto_email=True):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
 
@@ -737,7 +737,7 @@ class Order(LockModel, LoggedModel):
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers=headers, sender=sender,
                     invoices=invoices, attach_tickets=attach_tickets,
-                    position=position
+                    position=position, auto_email=auto_email
                 )
             except SendMailException:
                 raise

@@ -1525,7 +1525,7 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                 order.send_mail(
                     form.cleaned_data['subject'], email_template,
                     email_context, 'pretix.event.order.email.custom_sent',
-                    self.request.user
+                    self.request.user, auto_email=False
                 )
                 messages.success(self.request,
                                  _('Your message has been queued and will be sent to {}.'.format(order.email)))
