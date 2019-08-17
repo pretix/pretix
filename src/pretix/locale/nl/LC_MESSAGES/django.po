@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2019-08-11 00:00+0000\n"
+"PO-Revision-Date: 2019-08-18 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -1913,7 +1913,7 @@ msgstr "Dit product zal niet na de opgegeven datum verkocht worden."
 
 #: pretix/base/models/items.py:346
 msgid "Only show after sellout of"
-msgstr "Toon alleen na uitverkoop van"
+msgstr "Toon alleen nadat quotum is uitverkocht"
 
 #: pretix/base/models/items.py:347
 msgid ""
@@ -3667,7 +3667,7 @@ msgstr "Vrije plaatskeuze"
 
 #: pretix/base/pdf.py:247
 msgid "Seat: zone"
-msgstr "Stoel: zone"
+msgstr "Stoel: gebied"
 
 #: pretix/base/pdf.py:248
 msgid "Ground floor"
@@ -15843,7 +15843,7 @@ msgid ""
 "printing badges. We suggest that you switch to pretixSCAN for your events, "
 "but you can continue using pretixdesk for at least all of 2019, if you like."
 msgstr ""
-"We hebben pretixdesk en pretixdroid met vervangen door onze nieuwe app "
+"We hebben pretixdesk en pretixdroid vervangen door onze nieuwe app "
 "pretixSCAN, die op alle veelvoorkomende platforms werkt, gemakkelijk "
 "wisselen tussen evenementen toestaat, sneller werkt wanneer u een groot "
 "evenement heeft, en het printen van badges ondersteunt. We raden u aan om "
