@@ -609,7 +609,7 @@ LOGGING = {
 }
 
 SENTRY_ENABLED = False
-if config.has_option('sentry', 'dsn'):
+if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell', 'shell_scoped', 'shell_plus')):
     import sentry_sdk
     from sentry_sdk.integrations.celery import CeleryIntegration
     from sentry_sdk.integrations.logging import LoggingIntegration, ignore_logger
@@ -629,7 +629,6 @@ if config.has_option('sentry', 'dsn'):
         environment=SITE_URL,
         release=__version__,
         send_default_pii=False,
-
     )
     ignore_logger('pretix.base.tasks')
     ignore_logger('django.security.DisallowedHost')
