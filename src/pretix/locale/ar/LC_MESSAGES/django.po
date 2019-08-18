@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2018-07-23 23:00+0000\n"
-"Last-Translator: Muhammad Hewedy <mhewedy@gmail.com>\n"
+"PO-Revision-Date: 2019-08-18 16:00+0000\n"
+"Last-Translator: saad91 <saad.almoosa@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:132
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 #: pretix/control/views/dashboards.py:397
 msgid "Shop disabled"
-msgstr ""
+msgstr "المتجر معطل"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:387 pretix/control/forms/filter.py:522
@@ -33,7 +33,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:66
 #: pretix/control/templates/pretixcontrol/subevents/index.html:115
 msgid "Presale over"
-msgstr ""
+msgstr "البيع المبكر إنتهى"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:386 pretix/control/forms/filter.py:521
@@ -41,7 +41,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:68
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 msgid "Presale not started"
-msgstr ""
+msgstr "البيع المبكر لم يبدأ"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:138
