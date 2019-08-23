@@ -226,6 +226,7 @@ The following snippet is an example on how to configure a nginx proxy for pretix
 
         location / {
             proxy_pass http://localhost:8345/;
+            proxy_redirect off;            
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto https;
             proxy_set_header Host $http_host;
