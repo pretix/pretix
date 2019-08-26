@@ -25,10 +25,12 @@ def validate_plan_change(event, subevent, plan):
 
 
 def generate_seats(event, subevent, plan, mapping):
-    current_seats = {
-        s.seat_guid: s for s in
-        event.seats.select_related('product').annotate(has_op=Count('orderposition')).filter(subevent=subevent)
-    }
+    current_seats = {}
+    for s in event.seats.select_related('product').annotate(has_op=Count('orderposition')).filter(subevent=subevent):
+        if s.seat_guid in current_seats:
+            s.delete()  # Duplicates should not exist
+        else:
+            current_seats[s.seat_guid] = s
 
     def update(o, a, v):
         if getattr(o, a) != v:
