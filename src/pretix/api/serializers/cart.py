@@ -82,6 +82,8 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                     seat = self.context['event'].seats.get(seat_guid=validated_data['seat'], subevent=validated_data.get('subevent'))
                 except Seat.DoesNotExist:
                     raise ValidationError('The specified seat does not exist.')
+                except Seat.MultipleObjectsReturned:
+                    raise ValidationError('The specified seat ID is not unique.')
                 else:
                     validated_data['seat'] = seat
                     if not seat.is_available():

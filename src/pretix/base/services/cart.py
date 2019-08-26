@@ -432,6 +432,8 @@ class CartManager:
                     seat = (subevent or self.event).seats.get(seat_guid=i.get('seat'))
                 except Seat.DoesNotExist:
                     raise CartError(error_messages['seat_invalid'])
+                except Seat.MultipleObjectsReturned:
+                    raise CartError(error_messages['seat_invalid'])
                 i['item'] = seat.product_id
                 if i['item'] not in self._items_cache:
                     self._update_items_cache([i['item']], [i['variation']])
