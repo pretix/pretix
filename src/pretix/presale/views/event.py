@@ -409,6 +409,7 @@ class SeatingPlanView(EventViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['subevent'] = self.subevent
         context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
                                                 kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
         if context['cart_redirect'].startswith('https:'):
