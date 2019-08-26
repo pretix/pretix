@@ -534,7 +534,7 @@ class EventSettingsForm(SettingsForm):
 
     def clean(self):
         data = super().clean()
-        if data['locale'] not in data['locales']:
+        if 'locales' in data and data['locale'] not in data['locales']:
             raise ValidationError({
                 'locale': _('Your default locale must also be enabled for your event (see box above).')
             })
