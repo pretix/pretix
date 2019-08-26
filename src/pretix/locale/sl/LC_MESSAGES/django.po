@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2019-05-10 20:00+0000\n"
+"PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
@@ -72,249 +72,226 @@ msgid "Client secret"
 msgstr "Skrivno geslo klienta"
 
 #: pretix/api/models.py:75
-#, fuzzy
 msgid "Enable webhook"
-msgstr "Enable webhook"
+msgstr "Vklopi webhook"
 
 #: pretix/api/models.py:76
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
-#, fuzzy
 msgid "Target URL"
-msgstr "Target URL"
+msgstr "Ciljni URL"
 
 #: pretix/api/models.py:77 pretix/base/models/devices.py:46
 #: pretix/base/models/organizer.py:142
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Vsi dogodki (vključno z novimi)"
 
 #: pretix/api/models.py:78 pretix/base/models/devices.py:47
 #: pretix/base/models/organizer.py:143
-#, fuzzy
 msgid "Limit to events"
-msgstr "Limit to events"
+msgstr "Omejitev na dogodke"
 
 #: pretix/api/serializers/cart.py:58 pretix/api/serializers/order.py:675
-#, fuzzy
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "The product \"{}\" is not assigned to a quota."
+msgstr "Izdelek \"{}\" ni dodeljen kvoti."
 
 #: pretix/api/serializers/cart.py:66 pretix/api/serializers/order.py:687
-#, fuzzy
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
-"There is not enough quota available on quota \"{}\" to perform the operation."
+msgstr "Na kvoti \"{}\" ni dovolj kvote za izvedbo operacije."
 
 #: pretix/api/serializers/cart.py:88 pretix/api/serializers/order.py:704
 #: pretix/base/services/orders.py:1028
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "Dodeljeni sedež \"{seat}\" ni na voljo."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:1015
 #: pretix/base/models/items.py:1154 pretix/base/models/items.py:1509
-#, fuzzy
 msgid "One or more items do not belong to this event."
-msgstr "One or more items do not belong to this event."
+msgstr "Eden ali več predmetov ne pripada temu dogodku."
 
 #: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1518
 #: pretix/base/models/waitinglist.py:155
-#, fuzzy
 msgid "Subevent cannot be null for event series."
-msgstr "Subevent cannot be null for event series."
+msgstr "Poddogodek ne more biti null za serijo dogodkov."
 
 #: pretix/api/serializers/checkin.py:33 pretix/api/serializers/checkin.py:36
 #: pretix/base/models/items.py:1520 pretix/base/models/items.py:1523
 #: pretix/base/models/waitinglist.py:157 pretix/base/models/waitinglist.py:160
-#, fuzzy
 msgid "The subevent does not belong to this event."
-msgstr "The subevent does not belong to this event."
+msgstr "Poddogodek ne pripada temu dogodku."
 
 #: pretix/api/serializers/event.py:101
-#, fuzzy
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"Events cannot be created as 'live'. Quotas and payment must be added to the "
-"event before sales can go live."
+"Dogodki ne morejo biti dodani kot 'živi'. Pred tem morate dodati kvote in "
+"plačila."
 
 #: pretix/api/serializers/event.py:116 pretix/api/serializers/event.py:331
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "Meta data property '{name}' does not exist."
+msgstr "Meta podatek '{name}' ne obstaja."
 
 #: pretix/api/serializers/event.py:150
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr "Unknown plugin: '{name}'."
+msgstr "Neznan plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:672
-#, fuzzy
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "The bundled item must not be the same item as the bundling one."
+msgstr "Povezana postavka ne sme biti enaka povezovani."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:674
-#, fuzzy
 msgid "The bundled item must not have bundles on its own."
-msgstr "The bundled item must not have bundles on its own."
+msgstr "Povezana postavka ne sme imeti svojih povezani postavk."
 
 #: pretix/api/serializers/item.py:131
-#, fuzzy
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-"Please use the dedicated nested endpoint."
+"Urejanje dodatkov, paketov ali variant preko PATCH/PUT ni podprto. Uporabite "
+"ustrezno povezano končno točko."
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"Updating options via PATCH/PUT is not supported. Please use the dedicated "
-"nested endpoint."
+"Spreminjanje opcij preko PATCH/PUT ni podprto. Uporabite ustrezno gnezdeno "
+"končno točko."
 
 #: pretix/api/serializers/item.py:255 pretix/control/forms/item.py:71
-#, fuzzy
 msgid "Circular dependency between questions detected."
-msgstr "Circular dependency between questions detected."
+msgstr "Zaznana krožna soodvisnost med vprašanji."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:241
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
-"The application \"{application_name}\" has been authorized to access your "
-"account."
+"Aplikacija \"{application_name}\" je bila avtorizirana za dostop do vašega "
+"računa."
 
 #: pretix/api/views/order.py:330 pretix/control/views/orders.py:948
 #: pretix/presale/views/order.py:616
-#, fuzzy
 msgid "You cannot generate an invoice for this order."
-msgstr "You cannot generate an invoice for this order."
+msgstr "Ne morete ustvariti računa za to naročilo."
 
 #: pretix/api/views/order.py:335 pretix/control/views/orders.py:950
 #: pretix/presale/views/order.py:618
-#, fuzzy
 msgid "An invoice for this order already exists."
-msgstr "An invoice for this order already exists."
+msgstr "Račun za to naročilo že obstaja."
 
 #: pretix/api/views/order.py:361 pretix/control/views/orders.py:1072
 #: pretix/control/views/users.py:92
-#, fuzzy
 msgid "There was an error sending the mail. Please try again later."
-msgstr "There was an error sending the mail. Please try again later."
+msgstr "Napaka pri pošiljanju emaila. Poskusite ponovno kasneje."
 
 #: pretix/api/webhooks.py:114 pretix/base/notifications.py:194
-#, fuzzy
 msgid "New order placed"
-msgstr "New order placed"
+msgstr "Oddano novo naročilo"
 
 #: pretix/api/webhooks.py:118 pretix/base/notifications.py:200
-#, fuzzy
 msgid "New order requires approval"
-msgstr "New order requires approval"
+msgstr "Novo naročilo je potrebno potrditi"
 
 #: pretix/api/webhooks.py:122 pretix/base/notifications.py:206
-#, fuzzy
 msgid "Order marked as paid"
-msgstr "Order marked as paid"
+msgstr "Naročilo označeno za plačano"
 
 #: pretix/api/webhooks.py:126 pretix/base/notifications.py:212
 #: pretix/control/templates/pretixcontrol/event/mail.html:65
-#, fuzzy
 msgid "Order canceled"
-msgstr "Order canceled"
+msgstr "Naročilo preklicano"
 
 #: pretix/api/webhooks.py:130 pretix/base/notifications.py:218
-#, fuzzy
 msgid "Order expired"
-msgstr "Order expired"
+msgstr "Naročilo je poteklo"
 
 #: pretix/api/webhooks.py:134 pretix/base/notifications.py:224
 msgid "Order information changed"
-msgstr ""
+msgstr "Podatki naročila so spremenjeni"
 
 #: pretix/api/webhooks.py:138 pretix/base/notifications.py:230
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Kontakni naslov na naročilu je spremenjen"
 
 #: pretix/api/webhooks.py:142 pretix/base/notifications.py:236
 #: pretix/control/templates/pretixcontrol/event/mail.html:56
 msgid "Order changed"
-msgstr ""
+msgstr "Naročilo spremenjeno"
 
 #: pretix/api/webhooks.py:146 pretix/base/notifications.py:248
 msgid "External refund of payment"
-msgstr ""
+msgstr "Zunanje vračilo plačila"
 
 #: pretix/api/webhooks.py:150
 msgid "Order approved"
-msgstr ""
+msgstr "Naročilo potrjeno"
 
 #: pretix/api/webhooks.py:154
 msgid "Order denied"
-msgstr ""
+msgstr "Naročilo zavrnjeno"
 
 #: pretix/api/webhooks.py:158
 msgid "Ticket checked in"
-msgstr ""
+msgstr "Vstopnica 'checkirana'"
 
 #: pretix/api/webhooks.py:162
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "Vstopnica je odcheckirana"
 
 #: pretix/base/channels.py:58
 msgid "Online shop"
-msgstr ""
+msgstr "Spletna trgovina"
 
 #: pretix/base/email.py:130
 msgid "pretix default"
-msgstr ""
+msgstr "pretix privzeta vrednost"
 
 #: pretix/base/exporter.py:93 pretix/base/exporter.py:181
 msgid "Export format"
-msgstr ""
+msgstr "Izvozni format"
 
 #: pretix/base/exporter.py:95
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:96 pretix/base/exporter.py:173
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (z vejicami)"
 
 #: pretix/base/exporter.py:97 pretix/base/exporter.py:174
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (Excel oblika)"
 
 #: pretix/base/exporter.py:98 pretix/base/exporter.py:175
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (s podpičji)"
 
 #: pretix/base/exporter.py:169
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "Kombiniran Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
-msgstr ""
+msgstr "Odgovori na vprašanja o nalaganju datotek"
 
 #: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:1045
 #: pretix/control/navigation.py:161
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "Vprašanja"
 
 #: pretix/base/exporters/dekodi.py:82
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "Vstopnica za dogodek {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:199 pretix/base/exporters/invoices.py:83
 #: pretix/control/forms/subevents.py:228
@@ -326,13 +303,15 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:19
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:18
 msgid "Start date"
-msgstr ""
+msgstr "Začetni datum"
 
 #: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:86
 msgid ""
 "Only include invoices issued on or after this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Vključi samo račune izdane na ali po izbranem datumu. Upoštevajte, da datum "
+"računa ni vedno enak datumu naročila ali plačila."
 
 #: pretix/base/exporters/dekodi.py:207 pretix/base/exporters/invoices.py:91
 #: pretix/control/templates/pretixcontrol/events/index.html:66
@@ -340,17 +319,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:21
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:20
 msgid "End date"
-msgstr ""
+msgstr "Končni datum"
 
 #: pretix/base/exporters/dekodi.py:210 pretix/base/exporters/invoices.py:94
 msgid ""
 "Only include invoices issued on or before this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Vključi samo račune izdane na ali pred izbranem datumu. Upoštevajte, da "
+"datum računa ni vedno enak datumu naročila ali plačila."
 
 #: pretix/base/exporters/invoices.py:21
 msgid "All invoices"
-msgstr ""
+msgstr "Vsi računi"
 
 #: pretix/base/exporters/invoices.py:99 pretix/base/models/orders.py:1162
 #: pretix/base/models/orders.py:1525 pretix/control/forms/filter.py:93
@@ -358,12 +339,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:9
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:42
 msgid "Payment provider"
-msgstr ""
+msgstr "Ponudnik plačil"
 
 #: pretix/base/exporters/invoices.py:101 pretix/control/forms/filter.py:95
 #: pretix/control/forms/filter.py:909
 msgid "All payment providers"
-msgstr ""
+msgstr "Vsi ponudniki plačil"
 
 #: pretix/base/exporters/invoices.py:106
 msgid ""
@@ -371,39 +352,42 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
+"Vključi samo račune za naročila, ki imajo vsaj en poskus plačila s tem "
+"plačilnim sredstvom. Upoštevajte, da to lahko vključuje račune za naročila, "
+"ki so bila na koncu v celoti ali delno plačana z drugim plačilnim sredstvom."
 
 #: pretix/base/exporters/mail.py:16
 msgid "Email addresses (text file)"
-msgstr ""
+msgstr "Email naslovi (tekstovna datoteka)"
 
 #: pretix/base/exporters/mail.py:34 pretix/plugins/reports/exporters.py:306
 #: pretix/plugins/reports/exporters.py:472
 msgid "Filter by status"
-msgstr ""
+msgstr "Filtriraj po statusu"
 
 #: pretix/base/exporters/orderlist.py:23
 msgid "Order data"
-msgstr ""
+msgstr "Podatki o naročilu"
 
 #: pretix/base/exporters/orderlist.py:28 pretix/base/models/orders.py:195
 #: pretix/control/navigation.py:173
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 msgid "Orders"
-msgstr ""
+msgstr "Naročila"
 
 #: pretix/base/exporters/orderlist.py:29 pretix/base/models/orders.py:1782
 #: pretix/base/notifications.py:183
 msgid "Order positions"
-msgstr ""
+msgstr "Pozicije naročil"
 
 #: pretix/base/exporters/orderlist.py:30
 msgid "Order fees"
-msgstr ""
+msgstr "Stroški naročila"
 
 #: pretix/base/exporters/orderlist.py:39
 msgid "Only paid orders"
-msgstr ""
+msgstr "Samo plačana naročila"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:194
 #: pretix/base/exporters/orderlist.py:269
@@ -423,7 +407,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:511
 #: pretix/plugins/ticketoutputpdf/exporters.py:40
 msgid "Order code"
-msgstr ""
+msgstr "Koda naročila"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/notifications.py:179
 #: pretix/control/templates/pretixcontrol/orders/index.html:101
@@ -431,7 +415,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:380
 #: pretix/plugins/reports/exporters.py:511
 msgid "Order total"
-msgstr ""
+msgstr "Skupni znesek naročila"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:195
 #: pretix/base/exporters/orderlist.py:271
@@ -455,13 +439,13 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:48
 #: pretix/presale/templates/pretixpresale/organizers/index.html:58
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:196
 #: pretix/base/exporters/orderlist.py:272
 #: pretix/control/templates/pretixcontrol/checkin/index.html:69
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:197
 #: pretix/base/exporters/orderlist.py:273 pretix/base/notifications.py:181
@@ -475,7 +459,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:483
 #: pretix/plugins/reports/exporters.py:511
 msgid "Order date"
-msgstr ""
+msgstr "Datum naročila"
 
 #: pretix/base/exporters/orderlist.py:92 pretix/base/exporters/orderlist.py:204
 #: pretix/base/exporters/orderlist.py:299
@@ -486,7 +470,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:92
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 msgid "Company"
-msgstr ""
+msgstr "Podjetje"
 
 #: pretix/base/exporters/orderlist.py:92 pretix/base/exporters/orderlist.py:496
 #: pretix/base/exporters/orderlist.py:504
@@ -515,7 +499,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:202
 #: pretix/presale/templates/pretixpresale/organizers/index.html:56
 msgid "Name"
-msgstr ""
+msgstr "Ime"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:212
 #: pretix/base/exporters/orderlist.py:306
@@ -525,7 +509,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:97
 #: pretix/presale/templates/pretixpresale/event/order.html:205
 msgid "Address"
-msgstr ""
+msgstr "Naslov"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:212
 #: pretix/base/exporters/orderlist.py:306
@@ -535,7 +519,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:596 pretix/base/models/orders.py:2019
 #: pretix/control/forms/event.py:852
 msgid "ZIP code"
-msgstr ""
+msgstr "Poštna številka"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:212
 #: pretix/base/exporters/orderlist.py:306
@@ -545,7 +529,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:597 pretix/base/models/orders.py:2020
 #: pretix/control/forms/event.py:859
 msgid "City"
-msgstr ""
+msgstr "Mesto"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:212
 #: pretix/base/exporters/orderlist.py:306
@@ -558,7 +542,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:101
 #: pretix/presale/templates/pretixpresale/event/order.html:209
 msgid "Country"
-msgstr ""
+msgstr "Država"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:212
 #: pretix/base/exporters/orderlist.py:306
@@ -570,7 +554,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:212
 msgctxt "address"
 msgid "State"
-msgstr ""
+msgstr "Dežela"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:212
 #: pretix/base/exporters/orderlist.py:306
@@ -582,55 +566,55 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:108
 #: pretix/presale/templates/pretixpresale/event/order.html:216
 msgid "VAT ID"
-msgstr ""
+msgstr "ID za DDV"
 
 #: pretix/base/exporters/orderlist.py:100
 msgid "Date of last payment"
-msgstr ""
+msgstr "Datum zadnjega plačila"
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/services/stats.py:189
 msgid "Fees"
-msgstr ""
+msgstr "Stroški"
 
 #: pretix/base/exporters/orderlist.py:100
 #: pretix/control/templates/pretixcontrol/order/index.html:126
 msgid "Order locale"
-msgstr ""
+msgstr "Lokacija naročila"
 
 #: pretix/base/exporters/orderlist.py:105
 #, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr ""
+msgstr "Bruto {rate} % davek"
 
 #: pretix/base/exporters/orderlist.py:106
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr ""
+msgstr "Neto {rate} % davka"
 
 #: pretix/base/exporters/orderlist.py:107
 #, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr ""
+msgstr "Vrednost {rate}% davka"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Invoice numbers"
-msgstr ""
+msgstr "Številke računov"
 
 #: pretix/base/exporters/orderlist.py:111
 #: pretix/base/exporters/orderlist.py:308
 #: pretix/control/templates/pretixcontrol/order/index.html:123
 msgid "Sales channel"
-msgstr ""
+msgstr "Prodajni kanal"
 
 #: pretix/base/exporters/orderlist.py:198
 msgid "Fee type"
-msgstr ""
+msgstr "Tipi stroškov"
 
 #: pretix/base/exporters/orderlist.py:199
 #: pretix/base/exporters/orderlist.py:573 pretix/base/models/items.py:277
 #: pretix/base/models/items.py:614 pretix/base/models/items.py:621
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: pretix/base/exporters/orderlist.py:200
 #: pretix/base/exporters/orderlist.py:280 pretix/base/models/orders.py:976
@@ -640,39 +624,39 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:213
 #: pretix/plugins/checkinlists/exporters.py:302
 msgid "Price"
-msgstr ""
+msgstr "Cena"
 
 #: pretix/base/exporters/orderlist.py:201
 #: pretix/base/exporters/orderlist.py:281
 #: pretix/base/exporters/orderlist.py:577 pretix/base/models/orders.py:1659
 #: pretix/base/models/orders.py:1757 pretix/base/models/tax.py:98
 msgid "Tax rate"
-msgstr ""
+msgstr "Stopnja davka"
 
 #: pretix/base/exporters/orderlist.py:202
 #: pretix/base/exporters/orderlist.py:282
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:9
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:16
 msgid "Tax rule"
-msgstr ""
+msgstr "Davčno pravilo"
 
 #: pretix/base/exporters/orderlist.py:203
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:576 pretix/base/models/orders.py:1668
 #: pretix/base/models/orders.py:1766
 msgid "Tax value"
-msgstr ""
+msgstr "Vrednost davka"
 
 #: pretix/base/exporters/orderlist.py:205
 #: pretix/base/exporters/orderlist.py:210
 #: pretix/base/exporters/orderlist.py:300
 #: pretix/base/exporters/orderlist.py:304 pretix/base/pdf.py:186
 msgid "Invoice address name"
-msgstr ""
+msgstr "Naslov plačnika"
 
 #: pretix/base/exporters/orderlist.py:270
 msgid "Position ID"
-msgstr ""
+msgstr "ID pozicije"
 
 #: pretix/base/exporters/orderlist.py:276 pretix/base/models/checkin.py:17
 #: pretix/base/models/items.py:1264 pretix/base/models/orders.py:961
@@ -696,7 +680,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:92
 msgctxt "subevent"
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: pretix/base/exporters/orderlist.py:278 pretix/base/models/items.py:420
 #: pretix/base/models/vouchers.py:144 pretix/base/models/waitinglist.py:52
@@ -713,11 +697,11 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:219
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:10
 msgid "Product"
-msgstr ""
+msgstr "Izdelek"
 
 #: pretix/base/exporters/orderlist.py:279 pretix/base/models/orders.py:971
 msgid "Variation"
-msgstr ""
+msgstr "Varianta"
 
 #: pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:289 pretix/base/forms/questions.py:190
@@ -729,14 +713,14 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/exporters.py:39
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:40
 msgid "Attendee name"
-msgstr ""
+msgstr "Ime udeleženca"
 
 #: pretix/base/exporters/orderlist.py:291 pretix/base/forms/questions.py:196
 #: pretix/base/models/orders.py:988
 #: pretix/control/templates/pretixcontrol/order/index.html:310
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:44
 msgid "Attendee email"
-msgstr ""
+msgstr "Email udeleženca"
 
 #: pretix/base/exporters/orderlist.py:292 pretix/base/models/vouchers.py:191
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -744,19 +728,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:137
 msgid "Voucher"
-msgstr ""
+msgstr "Vavčer"
 
 #: pretix/base/exporters/orderlist.py:293
 msgid "Pseudonymization ID"
-msgstr ""
+msgstr "ID psevdonimizacije"
 
 #: pretix/base/exporters/orderlist.py:377
 msgid "Order payments and refunds"
-msgstr ""
+msgstr "Plačila in vračila"
 
 #: pretix/base/exporters/orderlist.py:385
 msgid "Only successful payments"
-msgstr ""
+msgstr "Samo uspešna plačila"
 
 #: pretix/base/exporters/orderlist.py:418 pretix/base/models/orders.py:194
 #: pretix/base/models/orders.py:1149 pretix/base/models/orders.py:1506
@@ -764,25 +748,25 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:211
 msgid "Order"
-msgstr ""
+msgstr "Naročilo"
 
 #: pretix/base/exporters/orderlist.py:418
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 msgid "Payment ID"
-msgstr ""
+msgstr "ID plačila"
 
 #: pretix/base/exporters/orderlist.py:418
 msgid "Creation date"
-msgstr ""
+msgstr "Datum ustvarjenja"
 
 #: pretix/base/exporters/orderlist.py:418
 #: pretix/control/templates/pretixcontrol/order/index.html:559
 msgid "Completion date"
-msgstr ""
+msgstr "Datum zaključka"
 
 #: pretix/base/exporters/orderlist.py:419
 msgid "Status code"
-msgstr ""
+msgstr "Statusna koda"
 
 #: pretix/base/exporters/orderlist.py:419 pretix/base/models/orders.py:1145
 #: pretix/base/models/orders.py:1502
@@ -792,7 +776,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr ""
+msgstr "Znesek"
 
 #: pretix/base/exporters/orderlist.py:419
 #: pretix/control/templates/pretixcontrol/order/index.html:466
@@ -800,39 +784,39 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:19
 msgid "Payment method"
-msgstr ""
+msgstr "Način plačila"
 
 #: pretix/base/exporters/orderlist.py:448
 msgid "Quota availabilities"
-msgstr ""
+msgstr "Dostopnost kvot"
 
 #: pretix/base/exporters/orderlist.py:452
 #: pretix/control/templates/pretixcontrol/items/quotas.html:44
 msgid "Quota name"
-msgstr ""
+msgstr "Ime kvote"
 
 #: pretix/base/exporters/orderlist.py:452
 #: pretix/control/templates/pretixcontrol/items/quota.html:55
 msgid "Total quota"
-msgstr ""
+msgstr "Skupna kvota"
 
 #: pretix/base/exporters/orderlist.py:452
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:626
 msgid "Paid orders"
-msgstr ""
+msgstr "Plačana naročila"
 
 #: pretix/base/exporters/orderlist.py:452 pretix/control/views/item.py:631
 msgid "Pending orders"
-msgstr ""
+msgstr "Čakajoča naročila"
 
 #: pretix/base/exporters/orderlist.py:452
 msgid "Blocking vouchers"
-msgstr ""
+msgstr "Blokirani vavčerji"
 
 #: pretix/base/exporters/orderlist.py:453 pretix/control/views/item.py:641
 msgid "Current user's carts"
-msgstr ""
+msgstr "Košarica trenutnega uporabnika"
 
 #: pretix/base/exporters/orderlist.py:453 pretix/base/shredder.py:170
 #: pretix/control/forms/event.py:1444 pretix/control/navigation.py:214
@@ -847,22 +831,22 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:78
 #: pretix/presale/views/widget.py:287
 msgid "Waiting list"
-msgstr ""
+msgstr "Čakalna lista"
 
 #: pretix/base/exporters/orderlist.py:453
 msgid "Current availability"
-msgstr ""
+msgstr "Trenutna dostopnost"
 
 #: pretix/base/exporters/orderlist.py:461
 #: pretix/base/exporters/orderlist.py:467
 #: pretix/control/templates/pretixcontrol/items/quota.html:57
 #: pretix/control/views/item.py:648
 msgid "Infinite"
-msgstr ""
+msgstr "Neomejeno"
 
 #: pretix/base/exporters/orderlist.py:477
 msgid "Invoice data"
-msgstr ""
+msgstr "Datum računa"
 
 #: pretix/base/exporters/orderlist.py:482 pretix/base/shredder.py:290
 #: pretix/control/templates/pretixcontrol/order/index.html:162
@@ -870,16 +854,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:140
 #: pretix/presale/templates/pretixpresale/event/order.html:161
 msgid "Invoices"
-msgstr ""
+msgstr "Računi"
 
 #: pretix/base/exporters/orderlist.py:483
 msgid "Invoice lines"
-msgstr ""
+msgstr "Postavke računa"
 
 #: pretix/base/exporters/orderlist.py:489
 #: pretix/base/exporters/orderlist.py:571
 msgid "Invoice number"
-msgstr ""
+msgstr "Številka računa"
 
 #: pretix/base/exporters/orderlist.py:490
 #: pretix/base/exporters/orderlist.py:581 pretix/base/models/items.py:980
@@ -889,29 +873,29 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:11
 #: pretix/presale/templates/pretixpresale/organizers/index.html:57
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: pretix/base/exporters/orderlist.py:492
 #: pretix/base/exporters/orderlist.py:583 pretix/base/models/waitinglist.py:41
 #: pretix/control/templates/pretixcontrol/users/index.html:37
 #: pretix/control/views/waitinglist.py:199
 msgid "E-mail address"
-msgstr ""
+msgstr "Email naslov"
 
 #: pretix/base/exporters/orderlist.py:493
 #: pretix/base/exporters/orderlist.py:584
 msgid "Invoice type"
-msgstr ""
+msgstr "Tip računa"
 
 #: pretix/base/exporters/orderlist.py:494
 #: pretix/base/exporters/orderlist.py:585
 msgid "Cancellation of"
-msgstr ""
+msgstr "Preklic"
 
 #: pretix/base/exporters/orderlist.py:495 pretix/base/models/auth.py:91
 #: pretix/control/forms/event.py:1357 pretix/control/views/waitinglist.py:200
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 #: pretix/base/exporters/orderlist.py:496
 #: pretix/base/exporters/orderlist.py:497
@@ -928,12 +912,12 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:591
 #: pretix/base/exporters/orderlist.py:592
 msgid "Invoice sender:"
-msgstr ""
+msgstr "Pošiljatelj računa:"
 
 #: pretix/base/exporters/orderlist.py:501
 #: pretix/base/exporters/orderlist.py:591
 msgid "Tax ID"
-msgstr ""
+msgstr "ID za DDV"
 
 #: pretix/base/exporters/orderlist.py:503
 #: pretix/base/exporters/orderlist.py:504
@@ -956,56 +940,56 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:601
 #: pretix/base/exporters/orderlist.py:602
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "Prejemnik računa:"
 
 #: pretix/base/exporters/orderlist.py:505
 #: pretix/base/exporters/orderlist.py:595
 msgid "Street address"
-msgstr ""
+msgstr "Ulica"
 
 #: pretix/base/exporters/orderlist.py:511
 #: pretix/base/exporters/orderlist.py:601 pretix/base/models/orders.py:2033
 msgid "Beneficiary"
-msgstr ""
+msgstr "Upravičenec"
 
 #: pretix/base/exporters/orderlist.py:512
 #: pretix/base/exporters/orderlist.py:602 pretix/base/models/orders.py:2028
 #: pretix/control/templates/pretixcontrol/order/index.html:687
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:111
 msgid "Internal reference"
-msgstr ""
+msgstr "Interni prenos"
 
 #: pretix/base/exporters/orderlist.py:513 pretix/control/forms/event.py:1332
 msgid "Reverse charge"
-msgstr ""
+msgstr "Vračilo plačila"
 
 #: pretix/base/exporters/orderlist.py:514
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "Prikaži tujo valuto"
 
 #: pretix/base/exporters/orderlist.py:515
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "Tečaj"
 
 #: pretix/base/exporters/orderlist.py:516
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "Skupaj (z davki)"
 
 #: pretix/base/exporters/orderlist.py:517
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Skupaj (brez davka)"
 
 #: pretix/base/exporters/orderlist.py:543
 #: pretix/base/exporters/orderlist.py:624
 msgid "Cancellation"
-msgstr ""
+msgstr "Preklic"
 
 #: pretix/base/exporters/orderlist.py:543
 #: pretix/base/exporters/orderlist.py:624
 #: pretix/control/templates/pretixcontrol/order/index.html:166
 #: pretix/presale/templates/pretixpresale/event/order.html:148
 msgid "Invoice"
-msgstr ""
+msgstr "Račun"
 
 #: pretix/base/exporters/orderlist.py:563 pretix/base/models/orders.py:884
 #: pretix/control/forms/item.py:368 pretix/control/views/item.py:451
@@ -1015,7 +999,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:111
 #: pretix/presale/checkoutflow.py:646
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #: pretix/base/exporters/orderlist.py:563 pretix/base/models/orders.py:886
 #: pretix/control/forms/item.py:369 pretix/control/views/item.py:451
@@ -1025,27 +1009,27 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:111
 #: pretix/presale/checkoutflow.py:648
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: pretix/base/exporters/orderlist.py:572
 msgid "Line number"
-msgstr ""
+msgstr "Št. vrstice"
 
 #: pretix/base/exporters/orderlist.py:574 pretix/control/forms/orders.py:211
 msgid "Gross price"
-msgstr ""
+msgstr "Bruto cena"
 
 #: pretix/base/exporters/orderlist.py:575
 msgid "Net price"
-msgstr ""
+msgstr "Neto cena"
 
 #: pretix/base/exporters/orderlist.py:578
 msgid "Tax name"
-msgstr ""
+msgstr "Ime davka"
 
 #: pretix/base/exporters/orderlist.py:579
 msgid "Event start date"
-msgstr ""
+msgstr "Začetni datum dogodka"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:79 pretix/base/models/notifications.py:25
@@ -1054,74 +1038,72 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:636 pretix/presale/forms/checkout.py:28
 #: pretix/presale/forms/user.py:6
 msgid "E-mail"
-msgstr ""
+msgstr "Email"
 
 #: pretix/base/forms/auth.py:18 pretix/base/forms/auth.py:84
 #: pretix/base/forms/auth.py:136 pretix/control/forms/event.py:1190
 #: pretix/control/templates/pretixcontrol/user/reauth.html:18
 msgid "Password"
-msgstr ""
+msgstr "Geslo"
 
 #: pretix/base/forms/auth.py:19 pretix/base/forms/auth.py:97
 msgid "Keep me logged in"
-msgstr ""
+msgstr "Ostani prijavljen"
 
 #: pretix/base/forms/auth.py:22
 msgid "Please enter a correct email address and password."
-msgstr ""
+msgstr "Prosimo vnesite pravilen email naslov in geslo."
 
 #: pretix/base/forms/auth.py:23
 msgid "This account is inactive."
-msgstr ""
+msgstr "Ta račun je neaktiven."
 
 #: pretix/base/forms/auth.py:76
 msgid ""
 "You already registered with that email address, please use the login form."
-msgstr ""
+msgstr "S tem email naslovom ste že registrirani. Prijavite se."
 
 #: pretix/base/forms/auth.py:77 pretix/base/forms/auth.py:133
 #: pretix/base/forms/user.py:21 pretix/control/forms/users.py:24
 msgid "Please enter the same password twice"
-msgstr ""
+msgstr "Geslo vnesite dvakrat"
 
 #: pretix/base/forms/auth.py:80
 msgid "Email address"
-msgstr ""
+msgstr "Email naslov"
 
 #: pretix/base/forms/auth.py:91 pretix/base/forms/auth.py:141
 msgid "Repeat password"
-msgstr ""
+msgstr "Ponovite geslo"
 
 #: pretix/base/forms/questions.py:355 pretix/control/forms/item.py:79
 msgid "This field is required"
-msgstr ""
+msgstr "Vnos tega polja je obvezen"
 
 #: pretix/base/forms/questions.py:369
 msgid "Street and Number"
-msgstr ""
+msgstr "Ulica in hišna številka"
 
 #: pretix/base/forms/questions.py:409
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "address"
 msgid "Select state"
-msgstr "Prednaročilo se še ni začelo"
+msgstr "Izberite deželo"
 
 #: pretix/base/forms/questions.py:471
 msgid "You need to provide a company name."
-msgstr ""
+msgstr "Vpišite ime podjetja."
 
 #: pretix/base/forms/questions.py:473
 msgid "You need to provide your name."
-msgstr ""
+msgstr "Vpišite vaše ime."
 
 #: pretix/base/forms/questions.py:490 pretix/control/views/orders.py:987
 msgid "Your VAT ID does not match the selected country."
-msgstr ""
+msgstr "Vaš ID za DDV ne ustreza izbrani državi."
 
 #: pretix/base/forms/questions.py:498
 msgid "This VAT ID is not valid. Please re-check your input."
-msgstr ""
+msgstr "Ta ID za DDV je napačen. Preverite vnos."
 
 #: pretix/base/forms/questions.py:503
 msgid ""
@@ -1130,6 +1112,9 @@ msgid ""
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
+"Vašega ID za DDV ni bilo mogoče preveritit, saj servis za preverbe trenutno "
+"ni dostopen. Zato bomo na računu morali obračunati DDV, povrnete pa si ga "
+"lahko skozi proces povračila DDV."
 
 #: pretix/base/forms/questions.py:511
 msgid ""
@@ -1137,141 +1122,148 @@ msgid ""
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
+"Vašega ID za DDV ni bilo mogoče preveritit, saj servis za preverbe trenutno "
+"ni dostopen. Zato bomo na računu morali obračunati DDV. Obrnite se na "
+"podporo, da to uredimo ročno."
 
 #: pretix/base/forms/user.py:16 pretix/control/forms/users.py:22
 msgid ""
 "There already is an account associated with this e-mail address. Please "
 "choose a different one."
-msgstr ""
+msgstr "S tem email naslovom je že povezan obstoječ profil. Izberite drugega."
 
 #: pretix/base/forms/user.py:18
 msgid ""
 "Please enter your current password if you want to change your e-mail address "
 "or password."
-msgstr ""
+msgstr "Za spremembo gesla ali email naslova, vnesite vaše trenutno geslo."
 
 #: pretix/base/forms/user.py:20 pretix/control/views/shredder.py:107
 msgid "The current password you entered was not correct."
-msgstr ""
+msgstr "Vnešeno trenutno geslo ni pravilno."
 
 #: pretix/base/forms/user.py:26
 msgid "Your current password"
-msgstr ""
+msgstr "Vaše trenutno geslo"
 
 #: pretix/base/forms/user.py:30 pretix/control/forms/users.py:29
 msgid "New password"
-msgstr ""
+msgstr "Novo geslo"
 
 #: pretix/base/forms/user.py:34 pretix/control/forms/users.py:33
 msgid "Repeat new password"
-msgstr ""
+msgstr "Ponovite vaše geslo"
 
 #: pretix/base/forms/user.py:38 pretix/control/forms/users.py:37
 msgid "Default timezone"
-msgstr ""
+msgstr "Privzeta časovna cona"
 
 #: pretix/base/forms/user.py:39 pretix/control/forms/users.py:38
 msgid ""
 "Only used for views that are not bound to an event. For all event views, the "
 "event timezone is used instead."
 msgstr ""
+"Uporabljeno samo za prikaze, ki niso vezani na dogodek. Za vse prikaze "
+"dogodka bo uporabljena časovna cona."
 
 #: pretix/base/forms/user.py:115
 msgid "Device name"
-msgstr ""
+msgstr "Ime naprave"
 
 #: pretix/base/forms/user.py:116
 msgid "Device type"
-msgstr ""
+msgstr "Tip naprave"
 
 #: pretix/base/forms/user.py:117
 msgid "Smartphone with the Authenticator application"
-msgstr ""
+msgstr "Pametni telefon z aplikacijo Authenticator"
 
 #: pretix/base/forms/user.py:118
 msgid "U2F-compatible hardware token (e.g. Yubikey)"
-msgstr ""
+msgstr "U2F kompatibilni strojni ključ (e.g. Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
 msgstr ""
+"Napačna sintaksa spremenljivke: Uporabili ste različno število \"{\" in \"}\""
+"."
 
 #: pretix/base/forms/validators.py:39
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr ""
+msgstr "Napačne spremenljivke: %(value)s"
 
 #: pretix/base/forms/widgets.py:126 pretix/base/forms/widgets.py:131
 #: pretix/base/models/orders.py:2014
 msgid "Business customer"
-msgstr ""
+msgstr "Poslovna stranka"
 
 #: pretix/base/forms/widgets.py:130
 msgid "Individual customer"
-msgstr ""
+msgstr "Končni kupec"
 
 #: pretix/base/invoice.py:59
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr ""
+msgstr "stran %d od %d"
 
 #: pretix/base/invoice.py:246
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr ""
+msgstr "Classic renderer (pretix 1.0)"
 
 #: pretix/base/invoice.py:287
 msgctxt "invoice"
 msgid "Invoice from"
-msgstr ""
+msgstr "Račun od"
 
 #: pretix/base/invoice.py:293
 msgctxt "invoice"
 msgid "Invoice to"
-msgstr ""
+msgstr "Račun za"
 
 #: pretix/base/invoice.py:321 pretix/base/invoice.py:723
 msgctxt "invoice"
 msgid "Order code"
-msgstr ""
+msgstr "Koda naročila"
 
 #: pretix/base/invoice.py:330 pretix/base/invoice.py:732
 msgctxt "invoice"
 msgid "Cancellation number"
-msgstr ""
+msgstr "Številka preklica"
 
 #: pretix/base/invoice.py:336 pretix/base/invoice.py:740
 msgctxt "invoice"
 msgid "Original invoice"
-msgstr ""
+msgstr "Originalni račun"
 
 #: pretix/base/invoice.py:341 pretix/base/invoice.py:747
 msgctxt "invoice"
 msgid "Invoice number"
-msgstr ""
+msgstr "Številka računa"
 
 #: pretix/base/invoice.py:349 pretix/base/invoice.py:762
 msgctxt "invoice"
 msgid "Cancellation date"
-msgstr ""
+msgstr "Datum preklica"
 
 #: pretix/base/invoice.py:355
 msgctxt "invoice"
 msgid "Original invoice date"
-msgstr ""
+msgstr "Datum originalnega računa"
 
 #: pretix/base/invoice.py:362 pretix/base/invoice.py:764
 msgctxt "invoice"
 msgid "Invoice date"
-msgstr ""
+msgstr "Datum računa"
 
 #: pretix/base/invoice.py:378
 msgctxt "invoice"
 msgid "Event"
-msgstr ""
+msgstr "Dogodek"
 
 #: pretix/base/invoice.py:397
 #, python-brace-format
@@ -1280,6 +1272,8 @@ msgid ""
 "{from_date}\n"
 "until {to_date}"
 msgstr ""
+"{from_date}\n"
+"do {to_date}"
 
 #: pretix/base/invoice.py:425
 #: pretix/control/templates/pretixcontrol/base.html:268
@@ -1291,96 +1285,96 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 msgid "TEST MODE"
-msgstr ""
+msgstr "TESTNI NAČIN"
 
 #: pretix/base/invoice.py:430
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
-msgstr ""
+msgstr "Račun {num}"
 
 #: pretix/base/invoice.py:465
 msgctxt "invoice"
 msgid "Invoice"
-msgstr ""
+msgstr "Račun"
 
 #: pretix/base/invoice.py:467
 #: pretix/control/templates/pretixcontrol/order/index.html:166
 #: pretix/presale/templates/pretixpresale/event/order.html:148
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr ""
+msgstr "Preklic"
 
 #: pretix/base/invoice.py:475
 #, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr ""
+msgstr "Oznaka kupca: {reference}"
 
 #: pretix/base/invoice.py:481
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr ""
+msgstr "ID za DDV kupca"
 
 #: pretix/base/invoice.py:488
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Upravičenec"
 
 #: pretix/base/invoice.py:510 pretix/base/invoice.py:518
 msgctxt "invoice"
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: pretix/base/invoice.py:511 pretix/base/invoice.py:519
 msgctxt "invoice"
 msgid "Qty"
-msgstr ""
+msgstr "Količina"
 
 #: pretix/base/invoice.py:512 pretix/base/invoice.py:575
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr ""
+msgstr "Davčna stopnja"
 
 #: pretix/base/invoice.py:513
 msgctxt "invoice"
 msgid "Net"
-msgstr ""
+msgstr "Neto"
 
 #: pretix/base/invoice.py:514
 msgctxt "invoice"
 msgid "Gross"
-msgstr ""
+msgstr "Bruto"
 
 #: pretix/base/invoice.py:520
 msgctxt "invoice"
 msgid "Amount"
-msgstr ""
+msgstr "Znesek"
 
 #: pretix/base/invoice.py:545 pretix/base/invoice.py:550
 msgctxt "invoice"
 msgid "Invoice total"
-msgstr ""
+msgstr "Skupaj"
 
 #: pretix/base/invoice.py:576
 msgctxt "invoice"
 msgid "Net value"
-msgstr ""
+msgstr "Neto znesek"
 
 #: pretix/base/invoice.py:577
 msgctxt "invoice"
 msgid "Gross value"
-msgstr ""
+msgstr "Bruto znesek"
 
 #: pretix/base/invoice.py:578
 msgctxt "invoice"
 msgid "Tax"
-msgstr ""
+msgstr "Davek"
 
 #: pretix/base/invoice.py:608
 msgctxt "invoice"
 msgid "Included taxes"
-msgstr ""
+msgstr "Vključeni davki"
 
 #: pretix/base/invoice.py:636
 #, python-brace-format
@@ -1389,6 +1383,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, this corresponds to:"
 msgstr ""
+"Uporabljen menjalni tečaj 1:{rate} kot ga je objavila Evropska centralna "
+"banka na dan {date}, ki ustreza:"
 
 #: pretix/base/invoice.py:649
 #, python-brace-format
@@ -1397,49 +1393,53 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, the invoice total corresponds to {total}."
 msgstr ""
+"Using the conversion rate of 1:{rate} as published by the European Central "
+"Bank on {date}, the invoice total corresponds to {total}.\n"
+"Uporabljen menjalni tečaj 1:{rate} kot ga je objavila Evropska centralna "
+"banka na dan {date}, ki ustreza {total}."
 
 #: pretix/base/invoice.py:662
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr ""
+msgstr "Modern Invoice Renderer (pretix 2.7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
 msgid "Default list"
-msgstr ""
+msgstr "Privzet seznam"
 
 #: pretix/base/models/auth.py:81 pretix/base/models/orders.py:2016
 #: pretix/base/settings.py:861 pretix/base/settings.py:872
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 msgid "Full name"
-msgstr ""
+msgstr "Ime in priimek"
 
 #: pretix/base/models/auth.py:83
 msgid "Is active"
-msgstr ""
+msgstr "Je aktiven"
 
 #: pretix/base/models/auth.py:85
 msgid "Is site admin"
-msgstr ""
+msgstr "Je administrator"
 
 #: pretix/base/models/auth.py:87
 msgid "Date joined"
-msgstr ""
+msgstr "Datum pridružitve"
 
 #: pretix/base/models/auth.py:94
 msgid "Timezone"
-msgstr ""
+msgstr "Časovna cona"
 
 #: pretix/base/models/auth.py:97
 msgid "Two-factor authentication is required to log in"
-msgstr ""
+msgstr "Dvostopenjska avtentikacija je sedaj obvezna"
 
 #: pretix/base/models/auth.py:101
 msgid "Receive notifications according to my settings below"
-msgstr ""
+msgstr "Prejemajte obvestila v skladu s spodnjimi nastavitvami"
 
 #: pretix/base/models/auth.py:102
 msgid "If turned off, you will not get any notifications."
-msgstr ""
+msgstr "Če to izključite, ne boste prejemali nobenih obvestil."
 
 #: pretix/base/models/auth.py:113
 #: pretix/control/templates/pretixcontrol/order/index.html:137
@@ -1452,35 +1452,35 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:130
 #: pretix/control/views/organizer.py:67 tests/base/test_mail.py:88
 msgid "User"
-msgstr ""
+msgstr "Uporabnik"
 
 #: pretix/base/models/auth.py:114 pretix/control/navigation.py:348
 #: pretix/control/templates/pretixcontrol/users/index.html:5
 #: pretix/control/templates/pretixcontrol/users/index.html:7
 msgid "Users"
-msgstr ""
+msgstr "Uporabniki"
 
 #: pretix/base/models/auth.py:171
 msgid "Account information changed"
-msgstr ""
+msgstr "Podatki o profilu so spremenjeni"
 
 #: pretix/base/models/auth.py:188
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
 msgid "Password recovery"
-msgstr ""
+msgstr "Pozabljeno geslo"
 
 #: pretix/base/models/checkin.py:14
 msgid "All products (including newly created ones)"
-msgstr ""
+msgstr "Vsi izdelki (vključno z na novo dodanimi)"
 
 #: pretix/base/models/checkin.py:15 pretix/plugins/badges/exporters.py:90
 msgid "Limit to products"
-msgstr ""
+msgstr "Omeji na izdelke"
 
 #: pretix/base/models/checkin.py:18
 msgctxt "checkin"
 msgid "Include pending orders"
-msgstr ""
+msgstr "Vključi čakajoča naročila"
 
 #: pretix/base/models/checkin.py:20
 msgid ""
@@ -1488,23 +1488,26 @@ msgid ""
 "been paid. This only works with pretixdesk 0.3.0 or newer or pretixdroid 1.9 "
 "or newer."
 msgstr ""
+"S to opcijo se bodo ljudje lahko prijavili tudi, če naročilo ni plačano. To "
+"deluje samo v pretixdesk 0.3.0 ali novejšem ter v pretixdroid 1.9 ali "
+"novejšem."
 
 #: pretix/base/models/devices.py:55
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
 msgid "Setup date"
-msgstr ""
+msgstr "Datum vzpostavitve"
 
 #: pretix/base/models/devices.py:58
 msgid "Initialization date"
-msgstr ""
+msgstr "Datum inicializacije"
 
 #: pretix/base/models/event.py:38
 msgid "The end of the presale period has to be later than its start."
-msgstr ""
+msgstr "Konec obdobja predprodaje mora biti po njegovem začetku."
 
 #: pretix/base/models/event.py:40
 msgid "The end of the event has to be later than its start."
-msgstr ""
+msgstr "Konec dogodka mora biti za začetkom."
 
 #: pretix/base/models/event.py:280 pretix/base/pdf.py:105
 #: pretix/control/forms/filter.py:411 pretix/control/forms/filter.py:413
@@ -1512,7 +1515,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:52
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:24
 msgid "Event name"
-msgstr ""
+msgstr "Ime dogodka"
 
 #: pretix/base/models/event.py:285
 msgid ""
@@ -1522,53 +1525,59 @@ msgid ""
 "you can also choose to use a random value. This will be used in URLs, order "
 "codes, invoice numbers, and bank transfer references."
 msgstr ""
+"Mora biti kratko, vsebuje lahko samo male črke, pike in vezaje in mora biti "
+"unikatno za vsak dogodek. Priporočamo neke vrste okrajšavo ali datum z manj "
+"kot desetimi znaki, ki si jo lahko zapomnite. Lahko pa uporabite tudi "
+"naključno vrednost. Ta bo uporabljena v URLjih, kodah naročila, številkah "
+"računov in referencah plačil."
 
 #: pretix/base/models/event.py:292 pretix/base/models/organizer.py:40
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr ""
+msgstr "Slug lahko vsebuje samo črke, številke, pike in črtice."
 
 #: pretix/base/models/event.py:296 pretix/base/models/organizer.py:44
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
 msgid "Short form"
-msgstr ""
+msgstr "Kratka oblika"
 
 #: pretix/base/models/event.py:298
 msgid "Shop is live"
-msgstr ""
+msgstr "Trgovina je aktivna"
 
 #: pretix/base/models/event.py:300
 msgid "Event currency"
-msgstr ""
+msgstr "Valuta dogodka"
 
 #: pretix/base/models/event.py:303 pretix/base/models/event.py:903
 #: pretix/control/forms/event.py:463 pretix/control/forms/subevents.py:59
 msgid "Event start time"
-msgstr ""
+msgstr "Začetek dogodka"
 
 #: pretix/base/models/event.py:305 pretix/base/models/event.py:905
 #: pretix/base/pdf.py:157 pretix/control/forms/subevents.py:63
 msgid "Event end time"
-msgstr ""
+msgstr "Konec dogodka"
 
 #: pretix/base/models/event.py:307 pretix/base/models/event.py:907
 #: pretix/control/forms/subevents.py:68
 msgid "Admission time"
-msgstr ""
+msgstr "Čas vstopa"
 
 #: pretix/base/models/event.py:309 pretix/base/models/event.py:896
 msgid "Show in lists"
-msgstr ""
+msgstr "Prikaži v seznamih"
 
 #: pretix/base/models/event.py:310
 msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr ""
+"Če izberete, bo ta dogodek prikazan na javnem seznamu v vaši organizaciji."
 
 #: pretix/base/models/event.py:313 pretix/base/models/event.py:910
 #: pretix/control/forms/subevents.py:79
 msgid "End of presale"
-msgstr ""
+msgstr "Konec predprodaje"
 
 #: pretix/base/models/event.py:314 pretix/base/models/event.py:911
 #: pretix/control/forms/subevents.py:80
@@ -1576,30 +1585,32 @@ msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
 msgstr ""
+"Neobvezno. Po tem datumu ne bo prodanih nobenih izdelkov. Če te vrednosti ne "
+"nastavite, se predprodaja konča po končnem datumu vašega dogodka."
 
 #: pretix/base/models/event.py:319 pretix/base/models/event.py:916
 #: pretix/control/forms/subevents.py:73
 msgid "Start of presale"
-msgstr ""
+msgstr "Začetek predprodaje"
 
 #: pretix/base/models/event.py:320 pretix/base/models/event.py:917
 #: pretix/control/forms/subevents.py:74
 msgid "Optional. No products will be sold before this date."
-msgstr ""
+msgstr "Neobvezno. Po tem datumu prodaje izdelkov ne bo več."
 
 #: pretix/base/models/event.py:325 pretix/base/models/event.py:922
 msgid "Location"
-msgstr ""
+msgstr "Lokacija"
 
 #: pretix/base/models/event.py:329 pretix/control/navigation.py:44
 msgid "Plugins"
-msgstr ""
+msgstr "Plugini"
 
 #: pretix/base/models/event.py:332
 #: pretix/control/templates/pretixcontrol/event/index.html:120
 #: pretix/control/templates/pretixcontrol/order/index.html:698
 msgid "Internal comment"
-msgstr ""
+msgstr "Privatni zaznamek"
 
 #: pretix/base/models/event.py:336 pretix/control/forms/event.py:184
 #: pretix/control/forms/filter.py:525
@@ -1608,7 +1619,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:73
 #: pretix/presale/views/widget.py:420
 msgid "Event series"
-msgstr ""
+msgstr "Serija dogodkov"
 
 #: pretix/base/models/event.py:345 pretix/base/models/items.py:253
 #: pretix/base/models/items.py:1257 pretix/base/models/orders.py:133
@@ -1617,7 +1628,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/search/orders.html:39
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:18
 msgid "Event"
-msgstr ""
+msgstr "Dogodek"
 
 #: pretix/base/models/event.py:346 pretix/control/navigation.py:295
 #: pretix/control/navigation.py:397
@@ -1627,118 +1638,122 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:18
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:37
 msgid "Events"
-msgstr ""
+msgstr "Dogodki"
 
 #: pretix/base/models/event.py:749
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
+"Nastavili ste vsaj en plačan izdelek, vendar niste omogočili nobenega načina "
+"plačila."
 
 #: pretix/base/models/event.py:752
 msgid "You need to configure at least one quota to sell anything."
-msgstr ""
+msgstr "Nastaviti je potrebno vsaj eno kvoto, da lahko začnete s prodajo."
 
 #: pretix/base/models/event.py:843
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
+"Dogodka ne morete več spremeniti med serijo in enkratnim dogodkom, ko je "
+"enkrat ustvarjen."
 
 #: pretix/base/models/event.py:849
 msgid "The event slug cannot be changed."
-msgstr ""
+msgstr "Sluga dogodka ne morete več spremeniti."
 
 #: pretix/base/models/event.py:852
 msgid "This slug has already been used for a different event."
-msgstr ""
+msgstr "Ta opisni link je že bil uporabljen za drug dogodek."
 
 #: pretix/base/models/event.py:858
 msgid "The event cannot end before it starts."
-msgstr ""
+msgstr "Dogodek se ne more zaključiti pred začetkom."
 
 #: pretix/base/models/event.py:864
 msgid "The event's presale cannot end before it starts."
-msgstr ""
+msgstr "Predprodaja se ne more zaključiti pred začetkom."
 
 #: pretix/base/models/event.py:892 pretix/base/models/items.py:274
 #: pretix/base/models/items.py:618 pretix/control/forms/filter.py:383
 #: pretix/control/forms/filter.py:714
 #: pretix/control/templates/pretixcontrol/users/index.html:46
 msgid "Active"
-msgstr ""
+msgstr "Aktiven"
 
 #: pretix/base/models/event.py:893
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
-msgstr ""
+msgstr "Ta datum bo prikazan uporabnikom samo, če obkljukate."
 
 #: pretix/base/models/event.py:897
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
-msgstr ""
+msgstr "Če izberete, bo dogodek prikazan v javnem seznamu."
 
 #: pretix/base/models/event.py:926 pretix/control/forms/event.py:477
 msgid "Frontpage text"
-msgstr ""
+msgstr "Besedilo na vstopni strani"
 
 #: pretix/base/models/event.py:937
 msgid "Date in event series"
-msgstr ""
+msgstr "Datum v seriji dogodkov"
 
 #: pretix/base/models/event.py:938
 msgid "Dates in event series"
-msgstr ""
+msgstr "Datumi v seriji dogodkov"
 
 #: pretix/base/models/event.py:1021
 msgid "One or more variations do not belong to this event."
-msgstr ""
+msgstr "Ena ali več variacij ne pripada temu dogodku."
 
 #: pretix/base/models/event.py:1105
 msgid "Can not contain spaces or special characters except underscores"
-msgstr ""
+msgstr "Ne sme vsebovati presledkov ali posebnih znakov razen podčrtaja"
 
 #: pretix/base/models/event.py:1110
 msgid "The property name may only contain letters, numbers and underscores."
-msgstr ""
+msgstr "Ime sme vsebovati samo črke, številke in podčrtaje."
 
 #: pretix/base/models/fields.py:12
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Nobena vrednost ne sme vsebovati ločil."
 
 #: pretix/base/models/invoices.py:128 pretix/base/services/invoices.py:96
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr ""
+msgstr "ID za DDV: %s"
 
 #: pretix/base/models/invoices.py:129
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr ""
+msgstr "ID za DDV: %s"
 
 #: pretix/base/models/items.py:50
 msgid "Category name"
-msgstr ""
+msgstr "Ime rubrike"
 
 #: pretix/base/models/items.py:53 pretix/base/models/items.py:268
 msgid "Internal name"
-msgstr ""
+msgstr "Interno ime"
 
 #: pretix/base/models/items.py:54 pretix/base/models/items.py:269
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
-msgstr ""
+msgstr "Če to nastavite, bo uporabljeno namesto javnega imena v ozadju."
 
 #: pretix/base/models/items.py:58
 msgid "Category description"
-msgstr ""
+msgstr "Opis rubrike"
 
 #: pretix/base/models/items.py:65
 msgid "Products in this category are add-on products"
-msgstr ""
+msgstr "Izdelki v tej rubriki so dodatni"
 
 #: pretix/base/models/items.py:66
 msgid ""
@@ -1746,47 +1761,50 @@ msgid ""
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
 msgstr ""
+"Če je izbran, izdelkov iz te kategorije niso naprodaj samostojno. Kupiti jih "
+"je mogoče le v kombinaciji z izdelkom, ki ima to kategorijo nastavljeno kot "
+"možen vir za dodatke."
 
 #: pretix/base/models/items.py:72 pretix/base/pdf.py:79
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr ""
+msgstr "Rubrika izdelkov"
 
 #: pretix/base/models/items.py:73
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
 #: pretix/control/templates/pretixcontrol/items/categories.html:5
 #: pretix/control/templates/pretixcontrol/items/categories.html:31
 msgid "Product categories"
-msgstr ""
+msgstr "Rubrike izdelkov"
 
 #: pretix/base/models/items.py:79
 #, python-brace-format
 msgid "{category} (Add-On products)"
-msgstr ""
+msgstr "{category} (dodatni izdelki)"
 
 #: pretix/base/models/items.py:260 pretix/base/models/items.py:790
 #: pretix/control/templates/pretixcontrol/items/index.html:38
 msgid "Category"
-msgstr ""
+msgstr "Rubrika"
 
 #: pretix/base/models/items.py:261
 msgid ""
 "If you have many products, you can optionally sort them into categories to "
 "keep things organized."
-msgstr ""
+msgstr "Če imate veliko izdekov, jih lahko uredite v rubrike."
 
 #: pretix/base/models/items.py:265
 msgid "Item name"
-msgstr ""
+msgstr "Ime postavke"
 
 #: pretix/base/models/items.py:278
 msgid "This is shown below the product name in lists."
-msgstr ""
+msgstr "To bo prikazano pod imenom izdelka v seznamih."
 
 #: pretix/base/models/items.py:282 pretix/base/models/items.py:632
 msgid "Default price"
-msgstr ""
+msgstr "Privzeta cena"
 
 #: pretix/base/models/items.py:283
 msgid ""
@@ -1794,10 +1812,13 @@ msgid ""
 "each of the variations. If a variation does not have a special price or if "
 "you do not have variations, this price will be used."
 msgstr ""
+"Če ima ta izdelek več različic, lahko za vsako različico nastavite različne "
+"cene. Če različica nima posebne cene ali če ni sprememb, bo ta cena "
+"uporabljena."
 
 #: pretix/base/models/items.py:290
 msgid "Free price input"
-msgstr ""
+msgstr "Prost vnos cene"
 
 #: pretix/base/models/items.py:291
 msgid ""
@@ -1807,63 +1828,67 @@ msgid ""
 "event. This is currently not supported for products that are bought as an "
 "add-on to other products."
 msgstr ""
+"Če je ta možnost aktivna, lahko uporabniki sami izberejo ceno. Zgoraj "
+"konfigurirana cena se nato razlaga kot minimalna cena, ki jo mora uporabnik "
+"vnesti. To lahko uporabite npr. za zbiranje dodatnih donacij za vaš dogodek. "
+"Trenutno ni podprto za izdelke, ki se kupujejo kot dodatek drugim izdelkom."
 
 #: pretix/base/models/items.py:298
 msgid "Sales tax"
-msgstr ""
+msgstr "Davek"
 
 #: pretix/base/models/items.py:303
 msgid "Is an admission ticket"
-msgstr ""
+msgstr "Je vstopnica"
 
 #: pretix/base/models/items.py:305
 msgid "Whether or not buying this product allows a person to enter your event"
-msgstr ""
+msgstr "Ali nakup vstopnice omogoča vstop na vaš dogodek"
 
 #: pretix/base/models/items.py:311
 msgid "Generate tickets"
-msgstr ""
+msgstr "Ustvari vstopnice"
 
 #: pretix/base/models/items.py:315
 msgid "Show a waiting list for this ticket"
-msgstr ""
+msgstr "Prikaži čakalno listo za to vstopnico"
 
 #: pretix/base/models/items.py:316
 msgid "This will only work of waiting lists are enabled for this event."
-msgstr ""
+msgstr "Deluje samo, če so čakalne liste vklopljene za ta dogodek."
 
 #: pretix/base/models/items.py:320 pretix/control/forms/event.py:341
 #: pretix/control/forms/event.py:1439
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "Prikaži preostalo število vstopnic"
 
 #: pretix/base/models/items.py:321
 msgid "Publicly show how many tickets are still available."
-msgstr ""
+msgstr "Javno prikaži število vstopnic, ki so še na voljo."
 
 #: pretix/base/models/items.py:328
 msgid "Product picture"
-msgstr ""
+msgstr "Slika izdelka"
 
 #: pretix/base/models/items.py:333
 msgid "Available from"
-msgstr ""
+msgstr "Na voljo od"
 
 #: pretix/base/models/items.py:335
 msgid "This product will not be sold before the given date."
-msgstr ""
+msgstr "Ta izdelek ne bo naprodaj pred podanim datumom."
 
 #: pretix/base/models/items.py:338 pretix/base/payment.py:204
 msgid "Available until"
-msgstr ""
+msgstr "Na voljo do"
 
 #: pretix/base/models/items.py:340
 msgid "This product will not be sold after the given date."
-msgstr ""
+msgstr "Ta izdelek ne bo naprodaj po datem datumu."
 
 #: pretix/base/models/items.py:346
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "Pokaži šele po razprodaji"
 
 #: pretix/base/models/items.py:347
 msgid ""
@@ -1873,20 +1898,27 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"Če tukaj izberete kvoto, bo ta izdelek prikazan samo, če ta kvota ni na "
+"voljo. V kombinaciji z možnostjo skrivanja razprodanih izdelkov to omogoča, "
+"da izdelke zamenjate za dražje, ko so že razprodani. Morda bo kratek čas, ko "
+"sta oba izdelka vidna, medtem ko so vse vstopnice v omenjeni kvoti "
+"rezervirane, vendar še niso prodane."
 
 #: pretix/base/models/items.py:354
 msgid "This product can only be bought using a voucher."
-msgstr ""
+msgstr "Ta izdelek lahko kupite samo z vavčerjem."
 
 #: pretix/base/models/items.py:356
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
+"Za nakup tega izdelka uporabnik potrebuje vavčer, ki velja za ta izdelek "
+"neposredno ali prek kvote."
 
 #: pretix/base/models/items.py:360
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "Nakup tega izdelka zahteva potrditev"
 
 #: pretix/base/models/items.py:362
 msgid ""
@@ -1895,22 +1927,28 @@ msgid ""
 "completed. You can use this e.g. for discounted tickets that are only "
 "available to specific groups."
 msgstr ""
+"Če je ta izdelek del naročila, bo naročilo dano v stanje \"odobritve\" in ga "
+"boste morali potrditi, preden ga boste lahko plačali in dokončali. To lahko "
+"uporabite npr. za vozovnice s popustom, ki so na voljo samo določenim "
+"skupinam."
 
 #: pretix/base/models/items.py:367
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
-msgstr ""
+msgstr "Ta izdelek bo prikazan le, če je unovčen vavčer, ki ustreza izdelku."
 
 #: pretix/base/models/items.py:369
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
 msgstr ""
+"Ta izdelek bo skrit s strani dogodka, dokler uporabnik ne vnese bona, ki "
+"odklene ta izdelek."
 
 #: pretix/base/models/items.py:373
 msgid "Only sell this product as part of a bundle"
-msgstr ""
+msgstr "Prodajaj samo kot del paketa"
 
 #: pretix/base/models/items.py:375
 msgid ""
@@ -1918,10 +1956,13 @@ msgid ""
 "products. Do <strong>not</strong> check this option if you want to use this "
 "product as an add-on product, but only for fixed bundles!"
 msgstr ""
+"Če je ta možnost nastavljena, se bo izdelek prodajal le kot del paketnih "
+"izdelkov. <strong> Ne </strong> potrdite to možnost, če želite ta izdelek "
+"uporabljati kot dodatek, vendar samo za fiksne svežnje!"
 
 #: pretix/base/models/items.py:380
 msgid "Allow product to be canceled"
-msgstr ""
+msgstr "Dovoli preklic izdeka"
 
 #: pretix/base/models/items.py:382
 msgid ""
@@ -1929,10 +1970,13 @@ msgid ""
 "this is unchecked, orders containing this product can not be canceled by "
 "users but only by you."
 msgstr ""
+"Če je to potrjeno, veljajo običajne nastavitve preklica tega dogodka. Če to "
+"ni označeno, naročil, ki vsebujejo ta izdelek, ne morejo preklicati "
+"uporabniki, ampak samo vi."
 
 #: pretix/base/models/items.py:386
 msgid "Minimum amount per order"
-msgstr ""
+msgstr "Najmanjša vrednost naročila"
 
 #: pretix/base/models/items.py:388
 msgid ""
@@ -1940,10 +1984,13 @@ msgid ""
 "many times. If you keep the field empty or set it to 0, there is no special "
 "limit for this product."
 msgstr ""
+"Ta izdelek je mogoče kupiti le, če ga vsaj tolikokrat dodate v košarico. Če "
+"polje pustite prazno ali ga nastavite na 0, za ta izdelek ni posebnih "
+"omejitev."
 
 #: pretix/base/models/items.py:392
 msgid "Maximum amount per order"
-msgstr ""
+msgstr "Največji znesek naročila"
 
 #: pretix/base/models/items.py:394
 msgid ""
@@ -1952,6 +1999,10 @@ msgid ""
 "product. The limit for the maximum number of items in the whole order "
 "applies regardless."
 msgstr ""
+"Ta izdelek lahko kupite samo največ tolikokrat v enem naročilu. Če polje "
+"pustite prazno ali ga nastavite na 0, za ta izdelek ni posebnih omejitev. "
+"Omejitev največjega števila artiklov v celotnem naročilu velja ne glede na "
+"to."
 
 #: pretix/base/models/items.py:399 pretix/base/models/orders.py:162
 msgid "Requires special attention"
@@ -3701,9 +3752,8 @@ msgid "Please select a valid seat."
 msgstr ""
 
 #: pretix/base/services/cart.py:97
-#, fuzzy
 msgid "You can not select a seat for this position."
-msgstr "You cannot generate an invoice for this order."
+msgstr "Za to pozicijo ne morete izbrati sedeža."
 
 #: pretix/base/services/cart.py:98
 msgid ""
@@ -3935,10 +3985,9 @@ msgid "Order canceled: %(code)s"
 msgstr ""
 
 #: pretix/base/services/orders.py:731
-#, fuzzy, python-format
-#| msgid "Presale not started"
+#, python-format
 msgid "Your event registration: %(code)s"
-msgstr "Prednaročilo se še ni začelo"
+msgstr "Registracija vašega dogodka: %(code)s"
 
 #: pretix/base/services/orders.py:901
 #, python-format
@@ -4022,9 +4071,8 @@ msgid "The selected product requires you to select a seat."
 msgstr ""
 
 #: pretix/base/services/orders.py:1031
-#, fuzzy
 msgid "The selected product does not allow to select a seat."
-msgstr "The subevent does not belong to this event."
+msgstr "Za izbrani dogodek ni možna izbira sedeža."
 
 #: pretix/base/services/orders.py:1668
 msgid ""
@@ -4678,11 +4726,9 @@ msgid "Download ticket"
 msgstr ""
 
 #: pretix/base/timeline.py:37
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "timeline"
 msgid "Your event starts"
-msgstr "Prednaročilo se še ni začelo"
+msgstr "Vaš dogodek se začne"
 
 #: pretix/base/timeline.py:45
 msgctxt "timeline"
@@ -6072,7 +6118,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:102
 msgid "All"
-msgstr ""
+msgstr "Vse"
 
 #: pretix/control/forms/filter.py:384 pretix/control/forms/filter.py:519
 msgid "Shop live and presale running"
@@ -7248,18 +7294,16 @@ msgid "An add-on has been changed on this product."
 msgstr ""
 
 #: pretix/control/logdisplay.py:260
-#, fuzzy
 msgid "A bundled item has been added to this product."
-msgstr "The bundled item must not have bundles on its own."
+msgstr "Povezani zapis je bil dodan k temu izdelku."
 
 #: pretix/control/logdisplay.py:261
 msgid "A bundled item has been removed from this product."
 msgstr ""
 
 #: pretix/control/logdisplay.py:262
-#, fuzzy
 msgid "A bundled item has been changed on this product."
-msgstr "The bundled item must not have bundles on its own."
+msgstr "Povezani zapis za ta dogodek je bil spremenjen."
 
 #: pretix/control/logdisplay.py:263
 msgid "The quota has been added."
@@ -8019,7 +8063,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:417
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Obdelujemo vašo zahtevo …"
 
 #: pretix/control/templates/pretixcontrol/base.html:419
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:12
@@ -9631,7 +9675,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Count"
-msgstr ""
+msgstr "Seštevek"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Question history"
@@ -10335,7 +10379,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:571
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:241
 msgid "Total"
-msgstr ""
+msgstr "Skupaj"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:455
 msgid "Payments"
@@ -13840,7 +13884,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr ""
+msgstr "Komentar:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
@@ -15109,7 +15153,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr ""
+msgstr "Oblikovanje vstopnice"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
@@ -15382,7 +15426,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 #: pretix/presale/templates/pretixpresale/event/index.html:45
 msgid "Cart expired"
-msgstr ""
+msgstr "Vsebina košarice je potekla"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:30
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:41
@@ -15395,7 +15439,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:61
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Predmeti v vaši košarici niso več rezervirani za vas."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
