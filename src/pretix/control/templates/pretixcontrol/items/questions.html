@@ -49,6 +49,16 @@
                                 data-toggle="tooltip" title="{% trans "Required question" %}">
                                 </span>
                             {% endif %}
+                            {% if q.ask_during_checkin %}
+                                <span class="fa fa-check-square text-muted"
+                                data-toggle="tooltip" title="{% trans "Ask during check-in" %}">
+                                </span>
+                            {% endif %}
+                            {% if q.hidden %}
+                                <span class="fa fa-eye-slash text-muted"
+                                data-toggle="tooltip" title="{% trans "Hidden question" %}">
+                                </span>
+                            {% endif %}
                         </td>
                         <td>
                             <ul>
