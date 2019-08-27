@@ -160,7 +160,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
     def positions(self):
         qqs = self.request.event.questions.all()
         if self.only_user_visible:
-            qqs = qqs.filter(ask_during_checkin=False)
+            qqs = qqs.filter(ask_during_checkin=False, hidden=False)
         return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(
