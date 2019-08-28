@@ -105,7 +105,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if e.addon_to %}
+                                {% if e.addon_to and not e.attendee_name %}
                                     {{ e.addon_to.attendee_name }}
                                 {% elif e.attendee_name %}
                                     {{ e.attendee_name }}
