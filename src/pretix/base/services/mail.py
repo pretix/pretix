@@ -24,7 +24,7 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, Invoice, InvoiceAddress, Order, OrderPosition,
+    Event, Invoice, InvoiceAddress, Order, OrderPosition, User,
 )
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.services.tasks import TransactionAwareTask
@@ -51,7 +51,7 @@ class SendMailException(Exception):
 def mail(email: str, subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
          order: Order=None, position: OrderPosition=None, headers: dict=None, sender: str=None,
-         invoices: list=None, attach_tickets=False, auto_email=True):
+         invoices: list=None, attach_tickets=False, auto_email=True, user=None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -87,6 +87,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
     :param attach_tickets: Whether to attach tickets to this email, if they are available to download.
 
     :param auto_email: Whether this email is auto-generated
+
+    :param user: The user this email is sent to
 
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
@@ -214,7 +216,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             invoices=[i.pk for i in invoices] if invoices and not position else [],
             order=order.pk if order else None,
             position=position.pk if position else None,
-            attach_tickets=attach_tickets
+            attach_tickets=attach_tickets,
+            user=user.pk if user else None
         )
 
         if invoices:
@@ -229,12 +232,15 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 @app.task(base=TransactionAwareTask, bind=True)
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int=None, position: int=None, headers: dict=None, bcc: List[str]=None,
-                   invoices: List[int]=None, order: int=None, attach_tickets=False) -> bool:
+                   invoices: List[int]=None, order: int=None, attach_tickets=False, user=None) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         html_with_cid, cid_images = replace_images_with_cid_paths(html)
         email = attach_cid_images(email, cid_images, verify_ssl=True)
         email.attach_alternative(html_with_cid, "text/html")
+
+    if user:
+        user = User.objects.get(pk=user)
 
     if event:
         with scopes_disabled():
@@ -297,7 +303,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                 }
                             )
 
-            email = email_filter.send_chained(event, 'message', message=email, order=order)
+            email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
 
         try:
             backend.send_messages([email])

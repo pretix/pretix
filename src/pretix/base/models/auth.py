@@ -176,6 +176,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                     'url': build_absolute_uri('control:user.settings')
                 },
                 event=None,
+                user=self,
                 locale=self.locale
             )
         except SendMailException:
@@ -191,7 +192,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                 'url': (build_absolute_uri('control:auth.forgot.recover')
                         + '?id=%d&token=%s' % (self.id, default_token_generator.make_token(self)))
             },
-            None, locale=self.locale
+            None, locale=self.locale, user=self
         )
 
     @property

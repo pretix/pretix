@@ -500,7 +500,7 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 """
 
 email_filter = EventPluginSignal(
-    providing_args=['message', 'order']
+    providing_args=['message', 'order', 'user']
 )
 """
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
@@ -510,6 +510,8 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
 If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
 it will be ``None``.
+If the email is associated with a specific user, e.g. a notification email, the ``user`` argument will be passed as
+well, otherwise it will be ``None``.
 """
 
 

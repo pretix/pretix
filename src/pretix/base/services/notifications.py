@@ -120,4 +120,5 @@ def send_notification_mail(notification: Notification, user: User):
         'html': body_html,
         'sender': settings.MAIL_FROM,
         'headers': {},
+        'user': user.pk
     })
