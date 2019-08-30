@@ -10,6 +10,7 @@
                 {% trans "Account history" %}
             </h3>
         </div>
-        {% include "pretixcontrol/includes/logs.html" with obj=user %}
+        {% include "pretixcontrol/includes/logs.html" with obj=fakeobj %}
     </div>
+    {% include "pretixcontrol/pagination.html" %}
 {% endblock %}

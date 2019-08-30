@@ -196,6 +196,10 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         )
 
     @property
+    def top_logentries(self):
+        return self.all_logentries
+
+    @property
     def all_logentries(self):
         from pretix.base.models import LogEntry
 

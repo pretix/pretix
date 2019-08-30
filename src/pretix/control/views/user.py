@@ -7,6 +7,7 @@ from urllib.parse import quote
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -23,7 +24,9 @@ from u2flib_server.jsapi import DeviceRegistration
 from u2flib_server.utils import rand_bytes
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
-from pretix.base.models import Event, NotificationSetting, U2FDevice, User
+from pretix.base.models import (
+    Event, LogEntry, NotificationSetting, U2FDevice, User,
+)
 from pretix.base.models.auth import StaffSession
 from pretix.base.notifications import get_all_notification_types
 from pretix.control.forms.users import StaffSessionForm
@@ -149,12 +152,29 @@ class UserSettings(UpdateView):
         return reverse('control:user.settings')
 
 
-class UserHistoryView(TemplateView):
+class UserHistoryView(ListView):
     template_name = 'pretixcontrol/user/history.html'
+    model = LogEntry
+    context_object_name = 'logs'
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = LogEntry.objects.filter(
+            content_type=ContentType.objects.get_for_model(User),
+            object_id=self.request.user.pk
+        ).select_related(
+            'user', 'content_type', 'api_token', 'oauth_application', 'device'
+        ).order_by('-datetime')
+        return qs
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['user'] = self.request.user
+        ctx = super().get_context_data()
+
+        class FakeClass:
+            def top_logentries(self):
+                return ctx['logs']
+
+        ctx['fakeobj'] = FakeClass()
         return ctx
 
 
