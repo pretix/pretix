@@ -105,6 +105,7 @@ screenshot
 scss
 searchable
 selectable
+serializable
 serializers
 serializers
 sexualized
