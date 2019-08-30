@@ -108,6 +108,8 @@ The provider class
 
    .. automethod:: execute_refund
 
+   .. automethod:: api_payment_details
+
    .. automethod:: shred_payment_info
 
    .. autoattribute:: is_implicit

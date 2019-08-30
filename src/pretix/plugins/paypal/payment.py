@@ -395,6 +395,20 @@ class Paypal(BasePaymentProvider):
                'retry': retry, 'order': payment.order}
         return template.render(ctx)
 
+    def api_payment_details(self, payment: OrderPayment):
+        sale_id = None
+        for trans in payment.info_data.get('transactions', []):
+            for res in trans.get('related_resources', []):
+                if 'sale' in res and 'id' in res['sale']:
+                    sale_id = res['sale']['id']
+        return {
+            "payer_email": payment.info_data.get('payer', {}).get('payer_info', {}).get('email'),
+            "payer_id": payment.info_data.get('payer', {}).get('payer_info', {}).get('payer_id'),
+            "cart_id": payment.info_data.get('cart', None),
+            "payment_id": payment.info_data.get('id', None),
+            "sale_id": sale_id,
+        }
+
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
         template = get_template('pretixplugins/paypal/control.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,

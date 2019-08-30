@@ -297,12 +297,22 @@ class PaymentURLField(serializers.URLField):
         })
 
 
+class PaymentDetailsField(serializers.Field):
+    def to_representation(self, value: OrderPayment):
+        pp = value.payment_provider
+        if not pp:
+            return {}
+        return pp.api_payment_details(value)
+
+
 class OrderPaymentSerializer(I18nAwareModelSerializer):
     payment_url = PaymentURLField(source='*', allow_null=True, read_only=True)
+    details = PaymentDetailsField(source='*', allow_null=True, read_only=True)
 
     class Meta:
         model = OrderPayment
-        fields = ('local_id', 'state', 'amount', 'created', 'payment_date', 'provider', 'payment_url')
+        fields = ('local_id', 'state', 'amount', 'created', 'payment_date', 'provider', 'payment_url',
+                  'details')
 
 
 class OrderRefundSerializer(I18nAwareModelSerializer):

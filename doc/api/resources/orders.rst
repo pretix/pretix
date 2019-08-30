@@ -231,6 +231,15 @@ created                               datetime                   Date and time o
 payment_date                          datetime                   Date and time of completion of this payment (or ``null``)
 provider                              string                     Identification string of the payment provider
 payment_url                           string                     The URL where an user can continue with the payment (or ``null``)
+details                               object                     Payment-specific information. This is a dictionary
+                                                                 with various fields that can be different between
+                                                                 payment providers, versions, payment states, etc. If
+                                                                 you read this field, you always need to be able to
+                                                                 deal with situations where values that you expect are
+                                                                 missing. Mostly, the field contains various IDs that
+                                                                 can be used for matching with other systems. If a
+                                                                 payment provider does not implement this feature,
+                                                                 the object is empty.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 2.0
@@ -239,7 +248,7 @@ payment_url                           string                     The URL where a
 
 .. versionchanged:: 3.1
 
-  The attribute ``payment_url`` has been added.
+  The attributes ``payment_url`` and ``details`` have been added.
 
 .. _order-refund-resource:
 

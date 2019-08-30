@@ -1196,7 +1196,7 @@ class OrderPayment(models.Model):
         """
         Cached access to an instance of the payment provider in use.
         """
-        return self.order.event.get_payment_providers().get(self.provider)
+        return self.order.event.get_payment_providers(cached=True).get(self.provider)
 
     def _mark_paid(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
         from pretix.base.signals import order_paid

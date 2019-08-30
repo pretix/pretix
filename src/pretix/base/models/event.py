@@ -608,22 +608,24 @@ class Event(EventMixin, LoggedModel):
             question_map=question_map
         )
 
-    def get_payment_providers(self) -> dict:
+    def get_payment_providers(self, cached=False) -> dict:
         """
         Returns a dictionary of initialized payment providers mapped by their identifiers.
         """
         from ..signals import register_payment_providers
 
-        responses = register_payment_providers.send(self)
-        providers = {}
-        for receiver, response in responses:
-            if not isinstance(response, list):
-                response = [response]
-            for p in response:
-                pp = p(self)
-                providers[pp.identifier] = pp
+        if not cached or not hasattr(self, '_cached_payment_providers'):
+            responses = register_payment_providers.send(self)
+            providers = {}
+            for receiver, response in responses:
+                if not isinstance(response, list):
+                    response = [response]
+                for p in response:
+                    pp = p(self)
+                    providers[pp.identifier] = pp
 
-        return OrderedDict(sorted(providers.items(), key=lambda v: str(v[1].verbose_name)))
+            self._cached_payment_providers = OrderedDict(sorted(providers.items(), key=lambda v: str(v[1].verbose_name)))
+        return self._cached_payment_providers
 
     def get_html_mail_renderer(self):
         """

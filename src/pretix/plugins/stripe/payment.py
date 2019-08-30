@@ -411,6 +411,12 @@ class StripeMethod(BasePaymentProvider):
         }
         return template.render(ctx)
 
+    def api_payment_details(self, payment: OrderPayment):
+        return {
+            "id": payment.info_data.get("id", None),
+            "payment_method": payment.info_data.get("payment_method", None)
+        }
+
     def payment_control_render(self, request, payment) -> str:
         if payment.info:
             payment_info = json.loads(payment.info)

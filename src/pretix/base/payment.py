@@ -657,6 +657,15 @@ class BasePaymentProvider:
         obj.info = '{}'
         obj.save(update_fields=['info'])
 
+    def api_payment_details(self, payment: OrderPayment):
+        """
+        Will be called to populate the ``details`` parameter of the payment in the REST API.
+
+        :param payment: The payment in question.
+        :return: A serializable dictionary
+        """
+        return {}
+
 
 class PaymentException(Exception):
     pass
@@ -719,6 +728,12 @@ class BoxOfficeProvider(BasePaymentProvider):
 
     def order_change_allowed(self, order: Order) -> bool:
         return False
+
+    def api_payment_details(self, payment: OrderPayment):
+        return {
+            "pos_id": payment.info_data.get('pos_id', None),
+            "receipt_id": payment.info_data.get('receipt_id', None),
+        }
 
     def payment_control_render(self, request, payment) -> str:
         if not payment.info:
@@ -863,6 +878,11 @@ class OffsettingProvider(BasePaymentProvider):
 
     def order_change_allowed(self, order: Order) -> bool:
         return False
+
+    def api_payment_details(self, payment: OrderPayment):
+        return {
+            "orders": payment.info_data.get('orders', []),
+        }
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
         return _('Balanced against orders: %s' % ', '.join(payment.info_data['orders']))
