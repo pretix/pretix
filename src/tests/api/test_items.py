@@ -1675,6 +1675,7 @@ TEST_QUESTION_RES = {
     "items": [],
     "ask_during_checkin": False,
     "hidden": False,
+    "print_on_invoice": False,
     "identifier": "ABC",
     "position": 0,
     "dependency_question": None,

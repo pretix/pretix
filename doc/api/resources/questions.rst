@@ -41,6 +41,8 @@ ask_during_checkin                    boolean                    If ``true``, th
                                                                  the ticket instead.
 hidden                                boolean                    If ``true``, the question will only be shown in the
                                                                  backend.
+print_on_invoice                      boolean                    If ``true``, the question will only be shown on
+                                                                 invoices.
 options                               list of objects            In case of question type ``C`` or ``M``, this lists the
                                                                  available objects. Only writable during creation,
                                                                  use separate endpoint to modify this later.
@@ -79,6 +81,10 @@ dependency_value                      string                     An old version 
 .. versionchanged:: 3.0
 
   The attribute ``dependency_values`` has been added.
+
+.. versionchanged:: 3.1
+
+  The attribute ``print_on_invoice`` has been added.
 
 Endpoints
 ---------
@@ -123,6 +129,7 @@ Endpoints
             "identifier": "WY3TP9SL",
             "ask_during_checkin": false,
             "hidden": false,
+            "print_on_invoice": false,
             "dependency_question": null,
             "dependency_value": null,
             "dependency_values": [],
@@ -192,6 +199,7 @@ Endpoints
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
         "hidden": false,
+        "print_on_invoice": false,
         "dependency_question": null,
         "dependency_value": null,
         "dependency_values": [],
@@ -245,6 +253,7 @@ Endpoints
         "position": 1,
         "ask_during_checkin": false,
         "hidden": false,
+        "print_on_invoice": false,
         "dependency_question": null,
         "dependency_values": [],
         "options": [
@@ -279,6 +288,7 @@ Endpoints
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
         "hidden": false,
+        "print_on_invoice": false,
         "dependency_question": null,
         "dependency_value": null,
         "dependency_values": [],
@@ -352,6 +362,7 @@ Endpoints
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
         "hidden": false,
+        "print_on_invoice": false,
         "dependency_question": null,
         "dependency_value": null,
         "dependency_values": [],

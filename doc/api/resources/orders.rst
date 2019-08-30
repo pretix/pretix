@@ -399,6 +399,7 @@ List of all orders
                 "created": "2017-12-01T10:00:00Z",
                 "payment_date": "2017-12-04T12:13:12Z",
                 "payment_url": null,
+                "details": {},
                 "provider": "banktransfer"
               }
             ],
@@ -545,6 +546,7 @@ Fetching individual orders
             "created": "2017-12-01T10:00:00Z",
             "payment_date": "2017-12-04T12:13:12Z",
             "payment_url": null,
+            "details": {},
             "provider": "banktransfer"
           }
         ],
@@ -1580,6 +1582,7 @@ Order payment endpoints
             "created": "2017-12-01T10:00:00Z",
             "payment_date": "2017-12-04T12:13:12Z",
             "payment_url": null,
+            "details": {},
             "provider": "banktransfer"
           }
         ]
@@ -1621,6 +1624,7 @@ Order payment endpoints
         "created": "2017-12-01T10:00:00Z",
         "payment_date": "2017-12-04T12:13:12Z",
         "payment_url": null,
+        "details": {},
         "provider": "banktransfer"
       }
 

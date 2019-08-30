@@ -129,7 +129,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         positions = list(
             invoice.order.positions.select_related('addon_to', 'item', 'tax_rule', 'subevent', 'variation').annotate(
                 addon_c=Count('addons')
-            ).order_by('positionid', 'id')
+            ).prefetch_related('answers', 'answers__question').order_by('positionid', 'id')
         )
 
         reverse_charge = False
@@ -146,6 +146,16 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 desc = "  + " + desc
             if invoice.event.settings.invoice_attendee_name and p.attendee_name:
                 desc += "<br />" + pgettext("invoice", "Attendee: {name}").format(name=p.attendee_name)
+
+            for answ in p.answers.all():
+                if not answ.question.print_on_invoice:
+                    continue
+                desc += "<br />{}{} {}".format(
+                    answ.question.question,
+                    "" if str(answ.question.question).endswith("?") else ":",
+                    str(answ)
+                )
+
             if invoice.event.has_subevents:
                 desc += "<br />" + pgettext("subevent", "Date: {}").format(p.subevent)
             InvoiceLine.objects.create(

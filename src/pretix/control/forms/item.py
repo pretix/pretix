@@ -94,7 +94,8 @@ class QuestionForm(I18nModelForm):
             'identifier',
             'items',
             'dependency_question',
-            'dependency_values'
+            'dependency_values',
+            'print_on_invoice',
         ]
         widgets = {
             'items': forms.CheckboxSelectMultiple(
