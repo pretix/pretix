@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2019-05-01 23:00+0000\n"
-"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
+"PO-Revision-Date: 2019-08-27 08:00+0000\n"
+"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -102,11 +102,9 @@ msgstr ""
 
 #: pretix/api/serializers/cart.py:88 pretix/api/serializers/order.py:704
 #: pretix/base/services/orders.py:1028
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "The selected event date is not active."
+#, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "La fecha del evento seleccionada no está activa."
+msgstr "El asiento seleccionado {seat} no está disponible."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:1015
 #: pretix/base/models/items.py:1154 pretix/base/models/items.py:1509
@@ -557,8 +555,6 @@ msgstr "País"
 #: pretix/control/templates/pretixcontrol/order/index.html:667
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:104
 #: pretix/presale/templates/pretixpresale/event/order.html:212
-#, fuzzy
-#| msgid "Status"
 msgctxt "address"
 msgid "State"
 msgstr "Estado"
@@ -1094,11 +1090,9 @@ msgid "Street and Number"
 msgstr "Calle y número"
 
 #: pretix/base/forms/questions.py:409
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "address"
 msgid "Select state"
-msgstr "Pre venta no iniciada"
+msgstr "Seleccione el estado"
 
 #: pretix/base/forms/questions.py:471
 msgid "You need to provide a company name."
@@ -1330,12 +1324,9 @@ msgid "Customer reference: {reference}"
 msgstr "Referencia del cliente: {reference}"
 
 #: pretix/base/invoice.py:481
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Cliente"
+msgstr "Cliente VAT ID"
 
 #: pretix/base/invoice.py:488
 msgctxt "invoice"
@@ -1418,11 +1409,8 @@ msgstr ""
 "Europeo el {date}, el total de la factura corresponde a {total}."
 
 #: pretix/base/invoice.py:662
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Classic renderer (pretix 1.0)"
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "Versión clásica (pretix 1.0)"
+msgstr "Creador Moderno de Recibos (pretix 2.7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -1895,10 +1883,8 @@ msgid "Generate tickets"
 msgstr "Generar tickets"
 
 #: pretix/base/models/items.py:315
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Show a waiting list for this ticket"
-msgstr "En lista de espera desde"
+msgstr "Mostrar una lista de espera para este ticket"
 
 #: pretix/base/models/items.py:316
 #, fuzzy
@@ -2237,10 +2223,8 @@ msgid "A variation needs to be set for this item."
 msgstr "Esta variación no pertenece a este producto."
 
 #: pretix/base/models/items.py:916
-#, fuzzy
-#| msgid "This variation does not belong to this product."
 msgid "The chosen variation does not belong to this item."
-msgstr "Esta variación no pertenece a este producto."
+msgstr "La variación escogida no pertenece a este item."
 
 #: pretix/base/models/items.py:921
 msgid "The count needs to be equal to or greater than zero."
@@ -2280,7 +2264,7 @@ msgstr "Fecha y hora"
 
 #: pretix/base/models/items.py:983
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "Código de país (ISO 3166-1 alfa-2)"
 
 #: pretix/base/models/items.py:992 pretix/base/models/items.py:1044
 #: pretix/control/forms/item.py:41
@@ -2338,10 +2322,8 @@ msgstr ""
 "o con pretixdesk 0.2 o posterior."
 
 #: pretix/base/models/items.py:1032
-#, fuzzy
-#| msgid "Edit question"
 msgid "Hidden question"
-msgstr "Editar pregunta"
+msgstr "Pregunta oculta"
 
 #: pretix/base/models/items.py:1033
 #, fuzzy
@@ -2378,10 +2360,8 @@ msgid "Invalid datetime input."
 msgstr "Fecha-Hora ingresada invalida."
 
 #: pretix/base/models/items.py:1146
-#, fuzzy
-#| msgid "Unknown order code"
 msgid "Unknown country code."
-msgstr "Código de pedido desconocido"
+msgstr "Código de país desconocido."
 
 #: pretix/base/models/items.py:1160
 #: pretix/control/templates/pretixcontrol/items/question.html:68
@@ -2557,10 +2537,8 @@ msgid "Meta information"
 msgstr "Información meta"
 
 #: pretix/base/models/orders.py:188
-#, fuzzy
-#| msgid "E-mail address"
 msgid "E-mail address verified"
-msgstr "Correo electrónico"
+msgstr "Correo electrónico verificado"
 
 #: pretix/base/models/orders.py:636
 msgid ""
@@ -2588,10 +2566,9 @@ msgid "The ordered product \"{item}\" is no longer available."
 msgstr "El producto pedido \"{item}\" ya no está disponible."
 
 #: pretix/base/models/orders.py:660
-#, fuzzy, python-brace-format
-#| msgid "The ordered product \"{item}\" is no longer available."
+#, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr "El producto pedido \"{item}\" ya no está disponible."
+msgstr "El asiento \"{seat}\" ya no está disponible."
 
 #: pretix/base/models/orders.py:780 pretix/base/services/orders.py:705
 #: pretix/control/views/event.py:686
@@ -2869,16 +2846,14 @@ msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgstr ""
 
 #: pretix/base/models/seating.py:106
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "Row {number}"
-msgstr "Número de factura"
+msgstr "Fila {number}"
 
 #: pretix/base/models/seating.py:108
-#, fuzzy, python-brace-format
-#| msgid "Team name"
+#, python-brace-format
 msgid "Seat {number}"
-msgstr "Nombre del equipo"
+msgstr "Asiento {number}"
 
 #: pretix/base/models/tax.py:92
 msgid "Should be short, e.g. \"VAT\""
@@ -3051,7 +3026,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:184
 msgid "Shows hidden products that match this voucher"
-msgstr ""
+msgstr "Mostrar los productos ocultos que se encuentran en el recibo"
 
 #: pretix/base/models/vouchers.py:192 pretix/control/navigation.py:226
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:5
@@ -3362,7 +3337,7 @@ msgstr "Impuesto total"
 
 #: pretix/base/payment.py:252
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Porcentaje total de la orden."
 
 #: pretix/base/payment.py:258
 msgid "Calculate the fee from the total value including the fee."
@@ -3720,7 +3695,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:252
 msgid "Seat: row"
-msgstr ""
+msgstr "Asiento: fila"
 
 #: pretix/base/pdf.py:257
 #, fuzzy
@@ -5891,7 +5866,7 @@ msgstr "Mostrar variaciones de un producto expandido por defecto"
 
 #: pretix/control/forms/event.py:449
 msgid "Hide all products that are sold out"
-msgstr ""
+msgstr "Ocultar todos los productos agotados"
 
 #: pretix/control/forms/event.py:453
 msgid "Ask search engines not to index the ticket shop"
@@ -7527,7 +7502,7 @@ msgstr "Agregado a"
 #: pretix/control/forms/orders.py:204
 #: pretix/control/templates/pretixcontrol/order/change.html:108
 msgid "Seat"
-msgstr ""
+msgstr "Asiento"
 
 #: pretix/control/forms/orders.py:212
 msgid "Including taxes, if any. Keep empty for the product's default price"
@@ -8740,7 +8715,7 @@ msgstr "Pago"
 #: pretix/control/views/event.py:1329 pretix/control/views/event.py:1360
 #: pretix/control/views/event.py:1365
 msgid "Tickets"
-msgstr "Entradas"
+msgstr "Tickets"
 
 #: pretix/control/navigation.py:68
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
@@ -10066,7 +10041,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:54
 msgid "Deadlines"
-msgstr ""
+msgstr "Fecha límite"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:63
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:29
@@ -10297,7 +10272,7 @@ msgstr "Parametrizaciones generales"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:17
 msgid "Basics"
-msgstr ""
+msgstr "Básicos"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:31
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
@@ -10342,7 +10317,7 @@ msgstr "Pantalla"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:105
 msgid "Cart"
-msgstr ""
+msgstr "Carrito"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:135
 #: pretix/control/templates/pretixcontrol/events/index.html:148
@@ -10749,7 +10724,7 @@ msgstr "Actualizar la configuración de las comprobaciones"
 
 #: pretix/control/templates/pretixcontrol/includes/logs.html:51
 msgid "View full log"
-msgstr ""
+msgstr "Ver log completo"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:6
 msgid "Modify product:"
@@ -10953,7 +10928,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Closed"
-msgstr ""
+msgstr "Cerrado"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:5
 msgid "Sold out (pending orders)"
@@ -14863,7 +14838,7 @@ msgstr "El equipo ha sido creado. Ahora puede agregar miembros al equipo."
 #: pretix/control/views/organizer.py:722 pretix/control/views/organizer.py:826
 #: pretix/control/views/organizer.py:868
 msgid "Your changes could not be saved."
-msgstr "Sus cambios no se han podido guardar."
+msgstr "Tus cambios no pudieron ser guardados."
 
 #: pretix/control/views/organizer.py:465
 msgid "The selected team has been deleted."
@@ -16173,7 +16148,7 @@ msgstr "Configuración del dispositivo de registro"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:11
 msgid "We've got a new app!"
-msgstr ""
+msgstr "Tenemos una nueva aplicación!"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:13
 msgid ""
@@ -16186,7 +16161,7 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:22
 msgid "Our new app: pretixSCAN"
-msgstr ""
+msgstr "Nuestra nueva aplicación: pretixSCAN"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:24
 msgid "Available on Android, iOS, Windows, and Linux."
@@ -17035,7 +17010,7 @@ msgstr "Cambiar método de pago: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:18
 msgid "Confirming your payment…"
-msgstr ""
+msgstr "Confirmando tu pago…"
 
 #: pretix/plugins/stripe/views.py:55 pretix/plugins/stripe/views.py:61
 #: pretix/plugins/stripe/views.py:88 pretix/plugins/stripe/views.py:100
@@ -17865,7 +17840,7 @@ msgstr "¡Estamos tratando de reservar esto para ti!"
 #: pretix/presale/templates/pretixpresale/event/index.html:236
 #: pretix/presale/templates/pretixpresale/event/voucher.html:299
 msgid "Add to cart"
-msgstr "Añadir al carrito"
+msgstr "Agregar al carrito"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:248
 msgid "Redeem a voucher"
@@ -18535,7 +18510,7 @@ msgstr "Chino (simplificado)"
 
 #: pretix/settings.py:409
 msgid "Greek"
-msgstr ""
+msgstr "Griego"
 
 #: pretix/settings.py:690
 msgid "Read access"

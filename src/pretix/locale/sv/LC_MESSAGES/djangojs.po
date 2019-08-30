@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2019-06-17 09:07+0000\n"
-"Last-Translator: Mattias Axell <mattias@libertador.es>\n"
-"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/sv/>\n"
+"PO-Revision-Date: 2019-08-11 00:00+0000\n"
+"Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
+"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,13 +54,11 @@ msgstr "Totalt"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "Bekräftar din betalning …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Contacting your bank …"
-msgstr "Kontakta Stripe …"
+msgstr "Kontaktar din bank …"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:105
@@ -284,7 +282,7 @@ msgstr "Köp"
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Registrera"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
@@ -439,7 +437,7 @@ msgstr "Föregående månad"
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Ingen platsbokning"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "Mo"

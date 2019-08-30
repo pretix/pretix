@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2019-08-06 16:00+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2019-08-18 05:00+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
 "Language: nl_Informal\n"
@@ -555,11 +555,9 @@ msgstr "Land"
 #: pretix/control/templates/pretixcontrol/order/index.html:667
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:104
 #: pretix/presale/templates/pretixpresale/event/order.html:212
-#, fuzzy
-#| msgid "Status"
 msgctxt "address"
 msgid "State"
-msgstr "Status"
+msgstr "Staat"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:212
 #: pretix/base/exporters/orderlist.py:306
@@ -1090,11 +1088,9 @@ msgid "Street and Number"
 msgstr "Straat en huisnummer"
 
 #: pretix/base/forms/questions.py:409
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "address"
 msgid "Select state"
-msgstr "Verkoop nog niet begonnen"
+msgstr "Kies een staat"
 
 #: pretix/base/forms/questions.py:471
 msgid "You need to provide a company name."
@@ -1880,16 +1876,12 @@ msgid "Generate tickets"
 msgstr "Genereer kaartjes"
 
 #: pretix/base/models/items.py:315
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Show a waiting list for this ticket"
-msgstr "Op wachtlijst sinds"
+msgstr "Toon een wachtlijst voor dit kaartje"
 
 #: pretix/base/models/items.py:316
-#, fuzzy
-#| msgid "Waiting lists are disabled for this event."
 msgid "This will only work of waiting lists are enabled for this event."
-msgstr "Wachtlijsten zijn uitgeschakeld voor dit evenement."
+msgstr "Dit werkt alleen als wachtlijsten zijn ingeschakeld voor je evenement."
 
 #: pretix/base/models/items.py:320 pretix/control/forms/event.py:341
 #: pretix/control/forms/event.py:1439
@@ -1897,13 +1889,8 @@ msgid "Show number of tickets left"
 msgstr "Toon resterend aantal kaartjes"
 
 #: pretix/base/models/items.py:321
-#, fuzzy
-#| msgid ""
-#| "Publicly show how many tickets of a certain type are still available."
 msgid "Publicly show how many tickets are still available."
-msgstr ""
-"Laat aan klanten zien hoeveel kaartjes van een bepaald type nog beschikbaar "
-"zijn."
+msgstr "Laat aan klanten zien hoeveel kaartjes nog beschikbaar zijn."
 
 #: pretix/base/models/items.py:328
 msgid "Product picture"
@@ -1927,7 +1914,7 @@ msgstr "Dit product zal niet na de opgegeven datum verkocht worden."
 
 #: pretix/base/models/items.py:346
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "Toon alleen nadat quotum is uitverkocht"
 
 #: pretix/base/models/items.py:347
 msgid ""
@@ -1937,6 +1924,13 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"Als je hier een quotum selecteert zal dit product alleen getoond worden "
+"wanneer dat quotum niet meer beschikbaar is. Als dit wordt gecombineerd met "
+"de optie om uitverkochte producten te verbergen kan deze functie "
+"bijvoorbeeld worden gebruikt om producten automatisch te vervangen door "
+"duurdere producten wanneer het product is uitverkocht. Er kan een korte "
+"periode zijn waarin beide kaartjes zichtbaar zijn wanneer alle kaartjes in "
+"het opgegeven quotum zijn gereserveerd, maar nog niet zijn verkocht."
 
 #: pretix/base/models/items.py:354
 msgid "This product can only be bought using a voucher."
@@ -1976,18 +1970,12 @@ msgstr ""
 "product wordt ingewisseld."
 
 #: pretix/base/models/items.py:369
-#, fuzzy
-#| msgid ""
-#| "This product will be hidden from the event page until the user enters a "
-#| "voucher code that is specifically tied to this product (and not via a "
-#| "quota)."
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
 msgstr ""
 "Dit product wordt verborgen van de evenementpagina totdat de gebruiker een "
-"vouchercode invoert die specifiek aan dit product gekoppeld is (en niet via "
-"een quotum)."
+"vouchercode invoert die dit product vrijgeeft."
 
 #: pretix/base/models/items.py:373
 msgid "Only sell this product as part of a bundle"
@@ -2393,7 +2381,7 @@ msgstr "Varianten"
 
 #: pretix/base/models/items.py:1293
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "Sluit dit quotum permanent wanneer het is uitverkocht"
 
 #: pretix/base/models/items.py:1294
 msgid ""
@@ -2401,6 +2389,10 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
+"Als je dit inschakelt zullen er geen kaartjes meer worden verkocht als het "
+"quotum is uitverkocht, zelfs als er door annuleringen of verlopen "
+"bestellingen nieuwe kaartjes beschikbaar worden. Je kan natuurlijk altijd "
+"handmatig het quotum weer inschakelen."
 
 #: pretix/base/models/items.py:1304 pretix/base/models/vouchers.py:165
 #: pretix/control/forms/item.py:413
@@ -2837,16 +2829,14 @@ msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgstr "Je lay-outbestand is geen geldige stoelplattegrond. Foutmelding: {}"
 
 #: pretix/base/models/seating.py:106
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "Row {number}"
-msgstr "Factuurnummer"
+msgstr "Rij {number}"
 
 #: pretix/base/models/seating.py:108
-#, fuzzy, python-brace-format
-#| msgid "Seat name"
+#, python-brace-format
 msgid "Seat {number}"
-msgstr "Stoelnaam"
+msgstr "Stoel {number}"
 
 #: pretix/base/models/tax.py:92
 msgid "Should be short, e.g. \"VAT\""
@@ -3018,7 +3008,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:184
 msgid "Shows hidden products that match this voucher"
-msgstr ""
+msgstr "Toon verborgen producten die overeenkomen met deze voucher"
 
 #: pretix/base/models/vouchers.py:192 pretix/control/navigation.py:226
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:5
@@ -3333,7 +3323,7 @@ msgstr "Absolute waarde"
 
 #: pretix/base/payment.py:252
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Percentage van het totaalbedrag."
 
 #: pretix/base/payment.py:258
 msgid "Calculate the fee from the total value including the fee."
@@ -3663,14 +3653,12 @@ msgid "Printing time"
 msgstr "Printtijd"
 
 #: pretix/base/pdf.py:242
-#, fuzzy
-#| msgid "Full name"
 msgid "Seat: Full name"
-msgstr "Volledige naam"
+msgstr "Stoel: Volledige naam"
 
 #: pretix/base/pdf.py:243
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "Begane grond, Rij 3, Stoel 4"
 
 #: pretix/base/pdf.py:244 pretix/base/pdf.py:249
 #: pretix/control/forms/orders.py:205 pretix/control/forms/orders.py:260
@@ -3678,26 +3666,20 @@ msgid "General admission"
 msgstr "Vrije plaatskeuze"
 
 #: pretix/base/pdf.py:247
-#, fuzzy
-#| msgid "Seat name"
 msgid "Seat: zone"
-msgstr "Stoelnaam"
+msgstr "Stoel: gebied"
 
 #: pretix/base/pdf.py:248
 msgid "Ground floor"
-msgstr ""
+msgstr "Begane grond"
 
 #: pretix/base/pdf.py:252
-#, fuzzy
-#| msgid "Seat"
 msgid "Seat: row"
-msgstr "Stoel"
+msgstr "Stoel: rij"
 
 #: pretix/base/pdf.py:257
-#, fuzzy
-#| msgid "Street and Number"
 msgid "Seat: seat number"
-msgstr "Straat en huisnummer"
+msgstr "Stoel: stoelnummer"
 
 #: pretix/base/pdf.py:281
 #, python-brace-format
@@ -3999,14 +3981,7 @@ msgid "Your export did not contain any data."
 msgstr "Je export bevatte geen gegevens."
 
 #: pretix/base/services/invoices.py:73
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "{i.company}\n"
-#| "{i.name}\n"
-#| "{i.street}\n"
-#| "{i.zipcode} {i.city}\n"
-#| "{country}"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{i.company}\n"
@@ -4018,7 +3993,7 @@ msgstr ""
 "{i.company}\n"
 "{i.name}\n"
 "{i.street}\n"
-"{i.zipcode} {i.city}\n"
+"{i.zipcode} {i.city} {state}\n"
 "{country}"
 
 #: pretix/base/services/invoices.py:148
@@ -4905,11 +4880,11 @@ msgstr ""
 
 #: pretix/base/settings.py:709
 msgid "Most common English titles"
-msgstr ""
+msgstr "Meest voorkomende Engelse titels"
 
 #: pretix/base/settings.py:719
 msgid "Most common German titles"
-msgstr ""
+msgstr "Meest voorkomende Duitse titels"
 
 #: pretix/base/settings.py:728 pretix/base/settings.py:741
 #: pretix/base/settings.py:757 pretix/base/settings.py:807
@@ -5615,13 +5590,15 @@ msgstr ""
 
 #: pretix/control/forms/event.py:387
 msgid "Allowed titles"
-msgstr ""
+msgstr "Te kiezen titels"
 
 #: pretix/control/forms/event.py:388
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
 msgstr ""
+"Wanneer het hierboven gekozen naamformaat gebruikers toestaat om een titel "
+"in te voeren kan je hier de titels die gekozen kunnen worden beperken."
 
 #: pretix/control/forms/event.py:393
 msgid "Ask for email addresses per ticket"
@@ -5734,7 +5711,7 @@ msgstr "Toon variaties van een product standaard uitgeklapt"
 
 #: pretix/control/forms/event.py:449
 msgid "Hide all products that are sold out"
-msgstr ""
+msgstr "Verberg alle uitverkochte producten"
 
 #: pretix/control/forms/event.py:453
 msgid "Ask search engines not to index the ticket shop"
@@ -5865,10 +5842,8 @@ msgid "Ask for {fields}, display like {example}"
 msgstr "Vraag naar {fields}, toon als {example}"
 
 #: pretix/control/forms/event.py:566
-#, fuzzy
-#| msgid "Free price input"
 msgid "Free text input"
-msgstr "Vrije prijsinvoer"
+msgstr "Vrije tekstinvoer"
 
 #: pretix/control/forms/event.py:582
 msgid "Customers can cancel their unpaid orders"
@@ -6104,10 +6079,8 @@ msgstr ""
 "is alleen van toepassing op nieuw aangemaakte facturen."
 
 #: pretix/control/forms/event.py:791
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Invoice number prefix for cancellations"
-msgstr "Factuurnummer-prefix"
+msgstr "Factuurnummer-prefix voor annuleringen"
 
 #: pretix/control/forms/event.py:792
 msgid ""
@@ -6115,6 +6088,9 @@ msgid ""
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
 msgstr ""
+"Dit zal voor factuurnummers van annuleringen worden gezet. Als je dit veld "
+"leeg laat zal dezelfde nummering als ingesteld voor normale facturen worden "
+"gebruikt."
 
 #: pretix/control/forms/event.py:797
 msgid "Generate invoices"
@@ -7011,35 +6987,24 @@ msgid "All refunds"
 msgstr "Alle terugbetalingen"
 
 #: pretix/control/forms/filter.py:953
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Date history"
 msgid "Date filter"
-msgstr "Datumgeschiedenis"
+msgstr "Datumfilter"
 
 #: pretix/control/forms/filter.py:955
-#, fuzzy
-#| msgid "Filter by tag"
 msgid "Filter by…"
-msgstr "Filteren op tag"
+msgstr "Filteren op…"
 
 #: pretix/control/forms/filter.py:957
-#, fuzzy
-#| msgid "Date of last payment"
 msgid "Date of last successful payment"
-msgstr "Datum van laatste betaling"
+msgstr "Datum van laatste geslaagde betaling"
 
 #: pretix/control/forms/filter.py:962
-#, fuzzy
-#| msgid "Date"
 msgid "Date from"
-msgstr "Datum"
+msgstr "Datum vanaf"
 
 #: pretix/control/forms/filter.py:967
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date until"
-msgstr "Datum en tijd"
+msgstr "Datum tot"
 
 #: pretix/control/forms/global_settings.py:21
 msgid "Additional footer text"
@@ -7205,8 +7170,6 @@ msgstr ""
 "Je kan de variant in plaats daarvan instellen als \"uitgeschakeld\"."
 
 #: pretix/control/forms/item.py:523
-#, fuzzy
-#| msgid "Add-Ons"
 msgid "Add-ons"
 msgstr "Add-ons"
 
@@ -7464,11 +7427,9 @@ msgstr ""
 "team zou zijn met de toestemming om teams en toestemmingen aan te passen."
 
 #: pretix/control/forms/organizer.py:179
-#, fuzzy
-#| msgid "You currently do not have access to any events."
 msgid ""
 "Your device will not have access to anything, please select some events."
-msgstr "Je hebt momenteel geen toegang tot evenementen."
+msgstr "Je apparaat moet tot ten minste één evenement toegang krijgen."
 
 #: pretix/control/forms/organizer.py:199
 msgid "Info text"
@@ -7641,6 +7602,8 @@ msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr ""
+"De voucher komt alleen overeen met verborgen producten, maar je hebt niet "
+"geselecteerd dat deze voucher verborgen producten moet tonen."
 
 #: pretix/control/forms/vouchers.py:190
 msgid "Codes"
@@ -8176,16 +8139,12 @@ msgid "The quota has been changed."
 msgstr "Het quotum is aangepast."
 
 #: pretix/control/logdisplay.py:266
-#, fuzzy
-#| msgid "The quota has been deleted."
 msgid "The quota has closed."
-msgstr "Het quotum is verwijderd."
+msgstr "Het quotum is gesloten."
 
 #: pretix/control/logdisplay.py:267 pretix/control/views/item.py:712
-#, fuzzy
-#| msgid "The quota has been deleted."
 msgid "The quota has been re-opened."
-msgstr "Het quotum is verwijderd."
+msgstr "Het quotum is opnieuw geopend."
 
 #: pretix/control/logdisplay.py:268
 msgid "The category has been added."
@@ -9389,10 +9348,8 @@ msgid "Cancellation settings"
 msgstr "Annuleringsinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:11
-#, fuzzy
-#| msgid "Cancellation of unpaid or free orders"
 msgid "Unpaid or free orders"
-msgstr "Annulering van onbetaalde of gratis bestellingen"
+msgstr "Onbetaalde of gratis bestellingen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:24
 msgid ""
@@ -9595,22 +9552,16 @@ msgid "Invoice settings"
 msgstr "Factuurinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:11
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Invoice generation"
-msgstr "Factuurgegevens"
+msgstr "Factuurgeneratie"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:22
-#, fuzzy
-#| msgid "Address"
 msgid "Address form"
-msgstr "Adres"
+msgstr "Adresinvoer"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:32
-#, fuzzy
-#| msgid "Voucher details"
 msgid "Issuer details"
-msgstr "Vouchergegevens"
+msgstr "Gegevens factuuruitgever"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:42
 msgid "Invoice customization"
@@ -9845,15 +9796,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:54
 msgid "Deadlines"
-msgstr ""
+msgstr "Deadlines"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:63
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:29
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:110
-#, fuzzy
-#| msgid "Advanced settings"
 msgid "Advanced"
-msgstr "Geavanceerde instellingen"
+msgstr "Geavanceerd"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:13
 #: pretix/control/templates/pretixcontrol/events/create_base.html:24
@@ -10076,7 +10025,7 @@ msgstr "Algemene instellingen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:17
 msgid "Basics"
-msgstr ""
+msgstr "Basisinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:31
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
@@ -10086,22 +10035,16 @@ msgstr "Metadata"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:50
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:40
-#, fuzzy
-#| msgid "Location"
 msgid "Localization"
-msgstr "Locatie"
+msgstr "Lokalisatie"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:56
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee data"
-msgstr "Naam van gast"
+msgstr "Gegevens van gasten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:66
-#, fuzzy
-#| msgid "Text"
 msgid "Texts"
-msgstr "Tekst"
+msgstr "Teksten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:73
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:44
@@ -10121,7 +10064,7 @@ msgstr "Weergave"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:105
 msgid "Cart"
-msgstr ""
+msgstr "Winkelwagen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:135
 #: pretix/control/templates/pretixcontrol/events/index.html:148
@@ -10231,10 +10174,8 @@ msgid "Ticket download"
 msgstr "Downloaden van kaartjes"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:10
-#, fuzzy
-#| msgid "Global settings"
 msgid "Download settings"
-msgstr "Globale instellingen"
+msgstr "Downloadinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:13
 msgid ""
@@ -10246,10 +10187,8 @@ msgstr ""
 "activeert."
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:27
-#, fuzzy
-#| msgid "Download date"
 msgid "Download formats"
-msgstr "Downloaddatum"
+msgstr "Downloadformaten"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:49
 #, python-format
@@ -10584,15 +10523,13 @@ msgstr ""
 #, python-format
 msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dit zal %(count)s voucher onbruikbaar maken."
+msgstr[1] "Dit zal %(count)s vouchers onbruikbaar maken."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:29
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:31
-#, fuzzy
-#| msgid "Show affected orders"
 msgid "Show affected vouchers"
-msgstr "Toon getroffen bestellingen"
+msgstr "Toon getroffen vouchers"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:34
 #, python-format
@@ -10670,10 +10607,8 @@ msgid "Availability"
 msgstr "Beschikbaarheid"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:52
-#, fuzzy
-#| msgid "Ticket checked in"
 msgid "Tickets & check-in"
-msgstr "Kaartje ingecheckt"
+msgstr "Tickets & inchecken"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:57
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:438
@@ -10717,7 +10652,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Closed"
-msgstr ""
+msgstr "Gesloten"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:5
 msgid "Sold out (pending orders)"
@@ -10855,10 +10790,8 @@ msgstr ""
 "zullen worden <strong>verwijderd</strong>."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:24
-#, fuzzy
-#| msgid "General"
 msgid "General "
-msgstr "Algemeen"
+msgstr "Algemeen "
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:30
 msgid ""
@@ -10928,7 +10861,7 @@ msgstr "Quotum bewerken"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:30
 msgid "Open quota and disable closing"
-msgstr ""
+msgstr "Quotum openen en sluiten uitschakelen"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:32
 msgid ""
@@ -10936,12 +10869,14 @@ msgid ""
 "through cancellations, they will not become available again unless you "
 "manually re-open the quota on this page."
 msgstr ""
+"Dit quotum is uitverkocht en gesloten. Zelfs als kaartjes weer beschikbaar "
+"worden (bijvoorbeeld door annuleringen) zullen de kaartjes niet beschikbaar "
+"zijn voor klanten om te kopen, tenzij je handmatig het quotum heropent op "
+"deze pagina."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:37
-#, fuzzy
-#| msgid "Overbook quota"
 msgid "Open quota"
-msgstr "Overboek quotum"
+msgstr "Quotum openen"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:38
 msgid ""
@@ -10949,6 +10884,9 @@ msgid ""
 "theoretically available, but will not be sold unless you manually re-open "
 "the quota."
 msgstr ""
+"Dit quotum is gesloten, omdat het eerder uitverkocht was. Er zijn in "
+"principe kaartjes beschikbaar, maar deze kaartjes zullen niet worden "
+"verkocht, tenzij je handmatig het quotum heropent."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:46
 msgid "Usage overview"
@@ -11015,10 +10953,8 @@ msgstr ""
 "beschikbaar zijn wanneer <strong>beide</strong> quota nog capaciteit hebben."
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:41
-#, fuzzy
-#| msgid "Advanced settings"
 msgid "Advanced options"
-msgstr "Geavanceerde instellingen"
+msgstr "Geavanceerde opties"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:7
 msgid ""
@@ -12107,12 +12043,12 @@ msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
+"Download een app die compatibel is met pretix. Onze incheckapp "
+"<strong>pretixSCAN</strong> is beschikbaar op alle veelvoorkomende platforms."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
-#, fuzzy
-#| msgid "1. Download pretixdesk"
 msgid "Download pretixSCAN"
-msgstr "1. Download pretixdesk"
+msgstr "Download pretixSCAN"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:18
 msgid ""
@@ -12261,10 +12197,8 @@ msgstr ""
 "eigen ontwerpinstellingen hebben."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:58
-#, fuzzy
-#| msgid "Event date"
 msgid "Event metadata"
-msgstr "Evenementdatum"
+msgstr "Evenementsmetadata"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:60
 msgid ""
@@ -14200,10 +14134,8 @@ msgid "The requested quota does not exist."
 msgstr "Het gevraagde quotum bestaat niet."
 
 #: pretix/control/views/item.py:723
-#, fuzzy
-#| msgid "The order has been denied and is therefore now canceled."
 msgid "The quota has been re-opened and will not close again."
-msgstr "De bestelling is geweigerd, en is hierom nu geannuleerd."
+msgstr "Het quotum is heropend, en zal niet automatisch opnieuw sluiten."
 
 #: pretix/control/views/item.py:816
 msgid "The selected quota has been deleted."
@@ -15897,7 +15829,7 @@ msgstr "Instellen van incheckapparaat"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:11
 msgid "We've got a new app!"
-msgstr ""
+msgstr "We hebben een nieuwe app!"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:13
 msgid ""
@@ -15907,36 +15839,41 @@ msgid ""
 "printing badges. We suggest that you switch to pretixSCAN for your events, "
 "but you can continue using pretixdesk for at least all of 2019, if you like."
 msgstr ""
+"We hebben pretixdesk en pretixdroid vervangen door onze nieuwe app "
+"pretixSCAN, die op alle veelvoorkomende platforms werkt, gemakkelijk "
+"wisselen tussen evenementen toestaat, sneller werkt wanneer je een groot "
+"evenement hebt, en het printen van badges ondersteunt. We raden je aan om "
+"pretixSCAN te gebruiken voor je evenementen, maar je kan als je dat wilt "
+"pretixdesk tot ten minste het eind van 2019 blijven gebruiken."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:22
 msgid "Our new app: pretixSCAN"
-msgstr ""
+msgstr "Onze nieuwe app: pretixSCAN"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:24
 msgid "Available on Android, iOS, Windows, and Linux."
-msgstr ""
+msgstr "Beschikbaar op Android, iOS, Windows en Linux."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:25
 msgid "Configuration is available in your organizer account's device list."
 msgstr ""
+"Instellingen zijn te vinden in de apparatenlijst van je organisatoraccount."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:28
 msgid "Switch to my device list"
-msgstr ""
+msgstr "Ga naar mijn apparatenlijst"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:32
 msgid "Our old apps: pretixdesk and pretixdroid"
-msgstr ""
+msgstr "Onze oude apps: pretixdesk en pretixdroid"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:34
 msgid "Available on Android, Windows, and Linux."
-msgstr ""
+msgstr "Beschikbaar op Android, Windows en Linux."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:35
-#, fuzzy
-#| msgid "Create app configuration"
 msgid "Scroll down to create a configuration"
-msgstr "Maak app-configuratie"
+msgstr "Scroll naar beneden om een configuratie te maken"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:42
 msgid "Create app configuration"
@@ -16094,7 +16031,7 @@ msgstr "Bestellingen per product"
 #: pretix/plugins/reports/exporters.py:202
 #, python-brace-format
 msgid "{axis} between {start} and {end}"
-msgstr ""
+msgstr "{axis} tussen {start} en {end}"
 
 #: pretix/plugins/reports/exporters.py:227
 #: pretix/plugins/reports/exporters.py:228
@@ -16124,10 +16061,8 @@ msgid "Tax"
 msgstr "Belasting"
 
 #: pretix/plugins/reports/exporters.py:463
-#, fuzzy
-#| msgid "List of orders with taxes (PDF)"
 msgid "List of orders with taxes"
-msgstr "Lijst van bestellingen met belasting (PDF)"
+msgstr "Lijst van bestellingen met belasting"
 
 #: pretix/plugins/sendmail/__init__.py:9 pretix/plugins/sendmail/__init__.py:12
 #: pretix/plugins/sendmail/signals.py:16
@@ -16480,10 +16415,8 @@ msgid "You may need to enable JavaScript for Stripe payments."
 msgstr "Je moet mogelijk JavaScript inschakelen voor Stripe-betalingen."
 
 #: pretix/plugins/stripe/payment.py:730
-#, fuzzy
-#| msgid "The password you entered was invalid, please try again."
 msgid "Your payment failed. Please try again."
-msgstr "Het wachtwoord dat je invoerde was ongeldig, probeer het opnieuw."
+msgstr "Je betaling is mislukt. Probeer het alsjeblieft opnieuw."
 
 #: pretix/plugins/stripe/payment.py:811
 msgid "giropay via Stripe"
@@ -16717,12 +16650,12 @@ msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
+"Je moet je betaling bevestigen. Klik op de link hieronder om dit te doen of "
+"om een nieuwe betaling te starten."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:15
-#, fuzzy
-#| msgid "Cancel payment"
 msgid "Confirm payment"
-msgstr "Annuleer betaling"
+msgstr "Bevestig betaling"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:22
 msgid ""
@@ -16741,14 +16674,13 @@ msgid "Pay order"
 msgstr "Betaal bestelling"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
-#, fuzzy, python-format
-#| msgid "Change payment method: %(code)s"
+#, python-format
 msgid "Confirm payment: %(code)s"
-msgstr "Verander betaalmethode: %(code)s"
+msgstr "Betaling bevestigen: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:18
 msgid "Confirming your payment…"
-msgstr ""
+msgstr "Betaling bevestigen…"
 
 #: pretix/plugins/stripe/views.py:55 pretix/plugins/stripe/views.py:61
 #: pretix/plugins/stripe/views.py:88 pretix/plugins/stripe/views.py:100
@@ -16790,14 +16722,8 @@ msgstr ""
 "neem contact met ons op als het probleem aanhoudt."
 
 #: pretix/plugins/stripe/views.py:538 pretix/plugins/stripe/views.py:541
-#, fuzzy
-#| msgid ""
-#| "Sorry, there was an error in the payment process. Please check the link "
-#| "in your emails to continue."
 msgid "Sorry, there was an error in the payment process."
-msgstr ""
-"Sorry, er is iets misgegaan in het betalingsproces. Klik op de link in je "
-"email om door te gaan."
+msgstr "Sorry, er is iets misgegaan in het betalingsproces."
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:10
 #: pretix/plugins/ticketoutputpdf/__init__.py:13
@@ -17387,10 +17313,9 @@ msgid "minimum amount to order: %(num)s"
 msgstr "minimumhoeveelheid om te bestellen: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:54
-#, fuzzy, python-format
-#| msgid "from %(minprice)s"
+#, python-format
 msgid "from %(price)s"
-msgstr "vanaf %(minprice)s"
+msgstr "vanaf %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:60
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:115
@@ -17796,10 +17721,9 @@ msgid "Change payment method"
 msgstr "Verander betaalmethode"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:8
-#, fuzzy, python-format
-#| msgid "Change payment method: %(code)s"
+#, python-format
 msgid "Choose payment method: %(code)s"
-msgstr "Verander betaalmethode: %(code)s"
+msgstr "Kies betaalmethode: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:13
 msgid ""
@@ -18127,10 +18051,8 @@ msgid "We could not identify the product you selected."
 msgstr "We konden het product dat je koos niet vinden."
 
 #: pretix/presale/views/waiting.py:85
-#, fuzzy
-#| msgid "Waiting lists are disabled for this event."
 msgid "The waiting list is disabled for this product."
-msgstr "Wachtlijsten zijn uitgeschakeld voor dit evenement."
+msgstr "De wachtlijst is uitgeschakeld voor dit product."
 
 #: pretix/presale/views/waiting.py:94
 msgctxt "subevent"
