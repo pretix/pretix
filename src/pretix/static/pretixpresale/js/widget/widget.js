@@ -926,7 +926,7 @@ Vue.component('pretix-widget-event-calendar-cell', {
                     var ev = this.day.events[i];
                     if (ev.availability.color === 'green') {
                         best = 'green';
-                    } else if (ev.availability.color === 'orange' || best !== 'green') {
+                    } else if (ev.availability.color === 'orange' && best !== 'green') {
                         best = 'orange'
                     }
                 }
