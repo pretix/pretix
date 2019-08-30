@@ -514,6 +514,18 @@ If the email is associated with a specific user, e.g. a notification email, the 
 well, otherwise it will be ``None``.
 """
 
+global_email_filter = django.dispatch.Signal(
+    providing_args=['message', 'user']
+)
+"""
+This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
+return a (possibly modified) copy of the message object passed to you.
+
+This signal is called on all events and even if there is no known event. ``sender`` is None.
+The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
+If the email is associated with a specific user, e.g. a notification email, the ``user`` argument will be passed as
+well, otherwise it will be ``None``.
+"""
 
 layout_text_variables = EventPluginSignal()
 """

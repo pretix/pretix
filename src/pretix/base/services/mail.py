@@ -29,7 +29,7 @@ from pretix.base.models import (
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
-from pretix.base.signals import email_filter
+from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -304,6 +304,8 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                             )
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
+
+        email = global_email_filter.send_chained(None, 'message', message=email, user=user)
 
         try:
             backend.send_messages([email])
