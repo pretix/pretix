@@ -139,6 +139,24 @@ class EventPluginSignal(django.dispatch.Signal):
         return sorted_list
 
 
+class GlobalSignal(django.dispatch.Signal):
+    def send_chained(self, sender: Event, chain_kwarg_name, **named) -> List[Tuple[Callable, Any]]:
+        """
+        Send signal from sender to all connected receivers. The return value of the first receiver
+        will be used as the keyword argument specified by ``chain_kwarg_name`` in the input to the
+        second receiver and so on. The return value of the last receiver is returned by this method.
+
+        """
+        response = named.get(chain_kwarg_name)
+        if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
+            return response
+
+        for receiver in self._live_receivers(sender):
+            named[chain_kwarg_name] = response
+            response = receiver(signal=self, sender=sender, **named)
+        return response
+
+
 class DeprecatedSignal(django.dispatch.Signal):
 
     def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
@@ -514,15 +532,17 @@ If the email is associated with a specific user, e.g. a notification email, the 
 well, otherwise it will be ``None``.
 """
 
-global_email_filter = django.dispatch.Signal(
-    providing_args=['message', 'user']
+global_email_filter = GlobalSignal(
+    providing_args=['message', 'order', 'user']
 )
 """
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
 return a (possibly modified) copy of the message object passed to you.
 
-This signal is called on all events and even if there is no known event. ``sender`` is None.
+This signal is called on all events and even if there is no known event. ``sender`` is an event or None.
 The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
+If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
+it will be ``None``.
 If the email is associated with a specific user, e.g. a notification email, the ``user`` argument will be passed as
 well, otherwise it will be ``None``.
 """

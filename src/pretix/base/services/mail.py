@@ -305,7 +305,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
 
-        email = global_email_filter.send_chained(None, 'message', message=email, user=user)
+        email = global_email_filter.send_chained(event, 'message', message=email, user=user, order=order)
 
         try:
             backend.send_messages([email])
