@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2019-08-29 07:00+0000\n"
+"PO-Revision-Date: 2019-09-02 07:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -2803,11 +2803,11 @@ msgstr "Naj bo kratko, npr. \"DDV\""
 
 #: pretix/base/models/tax.py:101
 msgid "The configured product prices include the tax amount"
-msgstr ""
+msgstr "Nastavljene cene izdelkov vključujejo davek"
 
 #: pretix/base/models/tax.py:105
 msgid "Use EU reverse charge taxation rules"
-msgstr ""
+msgstr "Uporabljajte pravila EU za obratno obdavčitev"
 
 #: pretix/base/models/tax.py:107
 msgid ""
@@ -2818,50 +2818,59 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"Ni priporočljivo. Večina dogodkov NE BO kvalificirana za povratno breme, saj "
+"je kraj obdavčitve kraj dogodka. Ta možnost onemogoča obračunavanje DDV za "
+"vse stranke zunaj EU in za poslovne stranke v različnih državah EU, ki so "
+"vnesle veljavno EU številko DDV. To možnost omogočite samo po posvetovanju z "
+"davčnim zastopnikom. Za pravilen izračun davka ni dano garancije. UPORABITE "
+"NA LASTNEM TVEGANJU."
 
 #: pretix/base/models/tax.py:114 pretix/plugins/stripe/payment.py:147
 msgid "Merchant country"
-msgstr ""
+msgstr "Država trgovca"
 
 #: pretix/base/models/tax.py:116
 msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
+"Država, v kateri prebivate. To je država, v kateri pravilo EU o povračilu "
+"pristojbin ne bo veljalo, če je konfigurirano zgoraj."
 
 #: pretix/base/models/tax.py:146
 msgid "You need to set your home country to use the reverse charge feature."
 msgstr ""
+"Za uporabo funkcije za povratno polnjenje morate nastaviti svojo državo."
 
 #: pretix/base/models/tax.py:150
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr ""
+msgstr "vklj. {rate}% {name}"
 
 #: pretix/base/models/tax.py:152
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr ""
+msgstr "plus {rate}% {name}"
 
 #: pretix/base/models/tax.py:154
 msgid "reverse charge enabled"
-msgstr ""
+msgstr "vključi obratno obdavčevanje"
 
 #: pretix/base/models/vouchers.py:80
 msgid "No effect"
-msgstr ""
+msgstr "Ni učinka"
 
 #: pretix/base/models/vouchers.py:81
 msgid "Set product price to"
-msgstr ""
+msgstr "Nastavi ceno izdelka na"
 
 #: pretix/base/models/vouchers.py:82
 msgid "Subtract from product price"
-msgstr ""
+msgstr "Odštej od cene izdelka"
 
 #: pretix/base/models/vouchers.py:83
 msgid "Reduce product price by (%)"
-msgstr ""
+msgstr "Zmanjšaj ceno izdelka za (%)"
 
 #: pretix/base/models/vouchers.py:99
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
@@ -2870,27 +2879,27 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:322
 #: pretix/presale/templates/pretixpresale/event/index.html:260
 msgid "Voucher code"
-msgstr ""
+msgstr "Koda bona"
 
 #: pretix/base/models/vouchers.py:105 pretix/control/views/vouchers.py:62
 msgid "Maximum usages"
-msgstr ""
+msgstr "Največje število uporab"
 
 #: pretix/base/models/vouchers.py:106
 msgid "Number of times this voucher can be redeemed."
-msgstr ""
+msgstr "Število uporab tega bona."
 
 #: pretix/base/models/vouchers.py:110 pretix/control/views/vouchers.py:62
 msgid "Redeemed"
-msgstr ""
+msgstr "Uporabljen"
 
 #: pretix/base/models/vouchers.py:115 pretix/control/views/vouchers.py:61
 msgid "Valid until"
-msgstr ""
+msgstr "Velja do"
 
 #: pretix/base/models/vouchers.py:119 pretix/control/forms/filter.py:782
 msgid "Reserve ticket from quota"
-msgstr ""
+msgstr "Rezerviraj vstopnico iz kvote"
 
 #: pretix/base/models/vouchers.py:121
 msgid ""
@@ -2898,44 +2907,49 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
+"Če je aktiviran, se bo ta kupon odšteval od kvot prizadetega izdelka, tako "
+"da je zagotovljeno, da bo kdo s to kodo bona prejel vozovnico."
 
 #: pretix/base/models/vouchers.py:127
 msgid "Allow to bypass quota"
-msgstr ""
+msgstr "Dovoli zaobiti kvoto"
 
 #: pretix/base/models/vouchers.py:129
 msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
+"Če je aktiviran, lahko imetnik te kode kupona kupi vstopnice, tudi če jih še "
+"ni."
 
 #: pretix/base/models/vouchers.py:133
 msgid "Price mode"
-msgstr ""
+msgstr "Cenovni način"
 
 #: pretix/base/models/vouchers.py:139
 msgid "Voucher value"
-msgstr ""
+msgstr "Vrednost kupona"
 
 #: pretix/base/models/vouchers.py:148 pretix/control/forms/vouchers.py:25
 msgid "This product is added to the user's cart if the voucher is redeemed."
-msgstr ""
+msgstr "Ta izdelek je dodan v uporabnikovo košarico, če je kupon unovčen."
 
 #: pretix/base/models/vouchers.py:158
 msgid "This variation of the product select above is being used."
-msgstr ""
+msgstr "Uporablja se zgoraj navedena varianta izdelka."
 
 #: pretix/base/models/vouchers.py:167
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
+"Če je omogočen, je kupon veljaven za izdelke, na katere vpliva ta kvota."
 
 #: pretix/base/models/vouchers.py:172
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:101
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:24
 #: pretix/control/views/vouchers.py:62
 msgid "Tag"
-msgstr ""
+msgstr "Tag"
 
 #: pretix/base/models/vouchers.py:175
 msgid ""
@@ -2943,52 +2957,57 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
+"To polje lahko uporabite za združevanje več bonov. Če vnesete isto vrednost "
+"za več bonov, lahko dobite statistiko, koliko jih je bilo unovčenih itd."
 
 #: pretix/base/models/vouchers.py:184
 msgid "Shows hidden products that match this voucher"
-msgstr ""
+msgstr "Prikaže skrite izdelke, ki ustrezajo temu bonu"
 
 #: pretix/base/models/vouchers.py:192 pretix/control/navigation.py:226
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:5
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:7
 msgid "Vouchers"
-msgstr ""
+msgstr "Boni"
 
 #: pretix/base/models/vouchers.py:217
 msgid "You cannot select a quota that belongs to a different event."
-msgstr ""
+msgstr "Ne morete izbrati kvote, ki pripada drugemu dogodku."
 
 #: pretix/base/models/vouchers.py:219
 msgid "You cannot select a quota and a specific product at the same time."
-msgstr ""
+msgstr "Ne morete hkrati izbrati kvote in določenega izdelka."
 
 #: pretix/base/models/vouchers.py:222
 msgid "You cannot select an item that belongs to a different event."
-msgstr ""
+msgstr "Ne morete izbrati predmeta, ki pripada drugemu dogodku."
 
 #: pretix/base/models/vouchers.py:224
 msgid ""
 "You cannot select a variation without having selected a product that "
 "provides variations."
 msgstr ""
+"Ne morete izbrati različice, če ne izberete izdelka, ki ponuja različice."
 
 #: pretix/base/models/vouchers.py:227
 msgid "This variation does not belong to this product."
-msgstr ""
+msgstr "Ta različica ne spada v ta izdelek."
 
 #: pretix/base/models/vouchers.py:229 pretix/base/models/vouchers.py:316
 msgid ""
 "You can only block quota if you specify a specific product variation. "
 "Otherwise it might be unclear which quotas to block."
 msgstr ""
+"Kvoto lahko blokirate samo, če določite določeno različico izdelka. V "
+"nasprotnem primeru morda ni jasno, katere kvote blokirati."
 
 #: pretix/base/models/vouchers.py:232
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr ""
+msgstr "Trenutno ni mogoče izdelati bonov za dodatne izdelke."
 
 #: pretix/base/models/vouchers.py:234 pretix/base/models/vouchers.py:323
 msgid "You need to specify either a quota or a product."
-msgstr ""
+msgstr "Določiti morate kvoto ali izdelek."
 
 #: pretix/base/models/vouchers.py:240
 #, python-format
@@ -2996,89 +3015,95 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
+"Ta bon je bil že unovčen %(redeemed)s. Ne morete zmanjšati največjega "
+"števila uporab pod to številko."
 
 #: pretix/base/models/vouchers.py:250 pretix/base/models/vouchers.py:308
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
-msgstr ""
+msgstr "Če želite, da ta kupon blokira kvoto, morate izbrati določen datum."
 
 #: pretix/base/models/vouchers.py:252
 msgid "You can not select a subevent if your event is not an event series."
-msgstr ""
+msgstr "Ne morete izbrati dogodka, če vaš dogodek ni niz dogodkov."
 
 #: pretix/base/models/vouchers.py:326
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
+"Ne morete ustvariti bona, ki blokira kvote, saj je izbrani izdelek ali kvota "
+"trenutno razprodan ali popolnoma rezerviran."
 
 #: pretix/base/models/vouchers.py:332
 msgid "A voucher with this code already exists."
-msgstr ""
+msgstr "Vaučer s to kodo že obstaja."
 
 #: pretix/base/models/waitinglist.py:37
 msgid "On waiting list since"
-msgstr ""
+msgstr "Na čakalnem seznamu od takrat"
 
 #: pretix/base/models/waitinglist.py:45
 msgid "Assigned voucher"
-msgstr ""
+msgstr "Dodeljen bon"
 
 #: pretix/base/models/waitinglist.py:54
 msgid "The product the user waits for."
-msgstr ""
+msgstr "Izdelek, ki ga uporabnik čaka."
 
 #: pretix/base/models/waitinglist.py:62
 msgid "The variation of the product selected above."
-msgstr ""
+msgstr "Različica izdelka, izbranega zgoraj."
 
 #: pretix/base/models/waitinglist.py:74
 msgid "Waiting list entry"
-msgstr ""
+msgstr "Vpis v čakalni seznam"
 
 #: pretix/base/models/waitinglist.py:75
 msgid "Waiting list entries"
-msgstr ""
+msgstr "Vnosi v čakalni seznam"
 
 #: pretix/base/models/waitinglist.py:93
 msgid "This product is currently not available."
-msgstr ""
+msgstr "Ta izdelek trenutno ni na voljo."
 
 #: pretix/base/models/waitinglist.py:95
 msgid "A voucher has already been sent to this person."
-msgstr ""
+msgstr "Ta oseba je že poslala bon."
 
 #: pretix/base/models/waitinglist.py:97
 msgid "This entry is anonymized and can no longer be used."
-msgstr ""
+msgstr "Ta vnos je anonimiziran in ga ni več mogoče uporabljati."
 
 #: pretix/base/models/waitinglist.py:107
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
-msgstr ""
+msgstr "Samodejno ustvarjeno iz vnosa v čakalni seznam za {email}"
 
 #: pretix/base/models/waitinglist.py:131
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr ""
+msgstr "Na čakalnem seznamu ste bili izbrani za {event}"
 
 #: pretix/base/models/waitinglist.py:147
 msgid "The selected item does not belong to this event."
-msgstr ""
+msgstr "Izbrani element ne pripada temu dogodku."
 
 #: pretix/base/models/waitinglist.py:149
 msgid "Please select a specific variation of this product."
-msgstr ""
+msgstr "Izberite določeno različico tega izdelka."
 
 #: pretix/base/models/waitinglist.py:167
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
 msgstr ""
+"Ste že na tej čakalni listi! Obvestili vas bomo takoj, ko bomo imeli na "
+"voljo vstopnico."
 
 #: pretix/base/notifications.py:121 pretix/base/notifications.py:134
 msgid "Administrative action required"
-msgstr ""
+msgstr "Potrebni so upravni ukrepi"
 
 #: pretix/base/notifications.py:135
 msgid ""
@@ -3086,105 +3111,109 @@ msgid ""
 "automatically, e.g. an external refund. You need to resolve it manually or "
 "choose to ignore it, depending on the issue at hand."
 msgstr ""
+"V vašem primeru se je zgodilo nekaj, česar naš sistem ne more samodejno "
+"obdelati, npr. zunanje povračilo. Morate ga rešiti ročno ali se odločiti, da "
+"ga prezrete, odvisno od težave."
 
 #: pretix/base/notifications.py:139
 msgid "View all unresolved problems"
-msgstr ""
+msgstr "Oglejte si vse nerešene težave"
 
 #: pretix/base/notifications.py:180
 msgid "Pending amount"
-msgstr ""
+msgstr "Čakajoči znesek"
 
 #: pretix/base/notifications.py:182 pretix/control/forms/filter.py:100
 #: pretix/control/forms/filter.py:198
 msgid "Order status"
-msgstr ""
+msgstr "Status naročila"
 
 #: pretix/base/notifications.py:184
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:40
 msgid "View order details"
-msgstr ""
+msgstr "Oglejte si podrobnosti naročila"
 
 #: pretix/base/notifications.py:195
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr ""
+msgstr "Oddano je novo naročilo: {order.code}"
 
 #: pretix/base/notifications.py:201
 #, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr ""
+msgstr "Oddano je novo naročilo, ki zahteva odobritev: {order.code}"
 
 #: pretix/base/notifications.py:207
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr ""
+msgstr "Naročilo {order.code} je označeno kot plačano."
 
 #: pretix/base/notifications.py:213
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr ""
+msgstr "Naročilo {order.code} je preklicano."
 
 #: pretix/base/notifications.py:219
 #, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr ""
+msgstr "Naročilo {order.code} je označeno kot potečeno."
 
 #: pretix/base/notifications.py:225
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr ""
+msgstr "Podatki o vozovnicah naročila {order.code} so spremenjeni."
 
 #: pretix/base/notifications.py:231
 #, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr ""
+msgstr "Spremenjen je bil kontaktni naslov naročila {order.code}."
 
 #: pretix/base/notifications.py:237
 #, python-brace-format
 msgid "Order {order.code} has been changed."
-msgstr ""
+msgstr "Naročilo {order.code} je bilo spremenjeno."
 
 #: pretix/base/notifications.py:242
 msgid "Order has been overpaid"
-msgstr ""
+msgstr "Naročilo je preplačano"
 
 #: pretix/base/notifications.py:243
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr ""
+msgstr "Naročilo {order.code} je preveč plačano."
 
 #: pretix/base/notifications.py:249
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr ""
+msgstr "Zunanje vračilo za {order.code} je prišlo."
 
 #: pretix/base/notifications.py:254
 msgid "Refund requested"
-msgstr ""
+msgstr "Zahtevano je vračilo"
 
 #: pretix/base/notifications.py:255
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr ""
+msgstr "Od vas smo zahtevali vračilo za {order.code}."
 
 #: pretix/base/payment.py:44 pretix/control/forms/event.py:717
 #: pretix/control/forms/event.py:1292
 msgid "This field is required."
-msgstr ""
+msgstr "To polje je obvezno."
 
 #: pretix/base/payment.py:199
 msgid "Enable payment method"
-msgstr ""
+msgstr "Omogoči način plačila"
 
 #: pretix/base/payment.py:205
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
+"Uporabniki po določenem datumu ne bodo mogli izbrati tega ponudnika plačil."
 
 #: pretix/base/payment.py:210
 msgid "Text on invoices"
-msgstr ""
+msgstr "Besedilo na računih"
 
 #: pretix/base/payment.py:211
 msgid ""
@@ -3193,10 +3222,14 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Natisnjeno bo tik pod številkami plačil in nad zaključnim besedilom na "
+"računih. To bo uporabljeno le, če bo račun pripravljen pred plačilom "
+"naročila. Če se račun ustvari pozneje, bo izšlo besedilo, ki navaja, da je "
+"že plačan."
 
 #: pretix/base/payment.py:220
 msgid "Minimum order total"
-msgstr ""
+msgstr "Najmanjše skupno naročilo"
 
 #: pretix/base/payment.py:221
 msgid ""
@@ -3204,10 +3237,13 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"To plačilo bo na voljo le, če je skupno naročilo enako ali presega dano "
+"vrednost. V ta namen je mogoče izračunati skupno naročilo brez upoštevanja "
+"pristojbin, naloženih s tem načinom plačila."
 
 #: pretix/base/payment.py:231
 msgid "Maximum order total"
-msgstr ""
+msgstr "Največje skupno naročilo"
 
 #: pretix/base/payment.py:232
 msgid ""
@@ -3215,22 +3251,25 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"To plačilo bo na voljo samo, če je skupna vrednost naročila enaka ali pod "
+"dano vrednostjo. V ta namen je mogoče izračunati skupno naročilo brez "
+"upoštevanja pristojbin, naloženih s tem načinom plačila."
 
 #: pretix/base/payment.py:242 pretix/base/payment.py:251
 msgid "Additional fee"
-msgstr ""
+msgstr "Dodatna pristojbina"
 
 #: pretix/base/payment.py:243
 msgid "Absolute value"
-msgstr ""
+msgstr "Absolutna vrednost"
 
 #: pretix/base/payment.py:252
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Odstotek celotnega naročila."
 
 #: pretix/base/payment.py:258
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Izračunajte pristojbino od skupne vrednosti, vključno s pristojbino."
 
 #: pretix/base/payment.py:259
 #, python-brace-format
@@ -3240,10 +3279,14 @@ msgid ""
 "\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"Priporočamo, da to omogočite, če želite, da vaši uporabniki plačujejo "
+"pristojbine za plačilo vašega ponudnika plačil. <a href=\"{docs_url}\" "
+"target=\"_blank\" rel=\"noopener\"> Za podrobne informacije o tem, kaj to "
+"počne, kliknite tukaj. </a> Ne pozabite nastaviti zgornjih pravil!"
 
 #: pretix/base/payment.py:267
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Omeji na države"
 
 #: pretix/base/payment.py:269
 msgid ""
@@ -3251,40 +3294,47 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
+"Dovoli izbiro tega ponudnika plačil samo za naslove računov v izbranih "
+"državah. Če ne izberete nobene države, so dovoljene vse države. To je "
+"omogočeno le, če je potreben naslov računa."
 
 #: pretix/base/payment.py:307 pretix/base/services/invoices.py:62
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Plačilo za ta račun je že prejeto."
 
 #: pretix/base/payment.py:645
 msgid "Automatic refunds are not supported by this payment provider."
-msgstr ""
+msgstr "Ta ponudnik plačil ne podpira samodejnih povračil."
 
 #: pretix/base/payment.py:671
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
 msgstr ""
+"Plačilo ni potrebno, saj to naročilo vključuje samo izdelke, ki so "
+"brezplačni."
 
 #: pretix/base/payment.py:678
 msgid "Free of charge"
-msgstr ""
+msgstr "Zastonj"
 
 #: pretix/base/payment.py:705
 msgid "Box office"
-msgstr ""
+msgstr "Blagajna"
 
 #: pretix/base/payment.py:742 pretix/plugins/manualpayment/__init__.py:9
 #: pretix/plugins/manualpayment/__init__.py:12
 msgid "Manual payment"
-msgstr ""
+msgstr "Ročno plačilo"
 
 #: pretix/base/payment.py:746 pretix/plugins/banktransfer/payment.py:114
 msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
+"V preizkusnem načinu lahko to naročilo preprosto ročno označite kot plačano "
+"v zaledju, ko je bilo ustvarjeno."
 
 #: pretix/base/payment.py:768 pretix/plugins/banktransfer/payment.py:102
 msgid "Payment method name"
