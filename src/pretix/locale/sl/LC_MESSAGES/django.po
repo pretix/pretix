@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-09 07:58+0000\n"
-"PO-Revision-Date: 2019-09-02 07:00+0000\n"
+"PO-Revision-Date: 2019-09-03 06:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -2519,7 +2519,6 @@ msgid "Your order: %(code)s"
 msgstr "Vaše naročilo: %(code)s"
 
 #: pretix/base/models/orders.py:888
-#, fuzzy
 msgid "<file>"
 msgstr "<file>"
 
@@ -3338,21 +3337,23 @@ msgstr ""
 
 #: pretix/base/payment.py:768 pretix/plugins/banktransfer/payment.py:102
 msgid "Payment method name"
-msgstr ""
+msgstr "Ime načina plačila"
 
 #: pretix/base/payment.py:772
 msgid "Payment process description during checkout"
-msgstr ""
+msgstr "Opis postopka plačila med plačevanjem na blagajni"
 
 #: pretix/base/payment.py:773
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
+"To besedilo bo prikazano med izplačilom, ko uporabnik izbere to plačilno "
+"sredstvo. Podajte kratek opis načina plačila."
 
 #: pretix/base/payment.py:778
 msgid "Payment process description in order confirmation emails"
-msgstr ""
+msgstr "Opis postopka plačila za potrditev v e-poštnih sporočilih"
 
 #: pretix/base/payment.py:779
 #, python-brace-format
@@ -3362,10 +3363,14 @@ msgid ""
 "payment. You can usethe placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
+"To besedilo bo vključeno za {payment_info} placeholder v emailih za "
+"potrditev naročila. Uporabnika mora poučiti, kako naj nadaljuje s plačilom. "
+"Uporabite lahko naslednje placeholderje: {order}, {total}, {currency} in "
+"{total_with_currency}"
 
 #: pretix/base/payment.py:786
 msgid "Payment process description for pending orders"
-msgstr ""
+msgstr "Opis postopka plačila za čakajoča naročila"
 
 #: pretix/base/payment.py:787
 #, python-brace-format
@@ -3374,248 +3379,253 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can "
 "usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
+"To besedilo bo prikazano na strani za potrditev naročila za čakajoča "
+"naročila. Uporabnika mora poučiti, kako naj nadaljuje s plačilom. Uporabite "
+"lahko placeholderje: {order}, {total}, {currency} in {total_with_currency}"
 
 #: pretix/base/payment.py:833
 msgid "Offsetting"
-msgstr ""
+msgstr "Pobotanje (offsetting)"
 
 #: pretix/base/payment.py:847 pretix/control/views/orders.py:706
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Vpisali ste naročilo, ki ga ni bilo mogoče najti."
 
 #: pretix/base/payment.py:868
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr ""
+msgstr "Uravnoteženo z naročili:%s"
 
 #: pretix/base/pdf.py:46
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Koda vstopnice (vsebina črtne kode)"
 
 #: pretix/base/pdf.py:56 pretix/control/forms/event.py:1526
 #: pretix/control/templates/pretixcontrol/items/index.html:33
 msgid "Product name"
-msgstr ""
+msgstr "Ime izdelka"
 
 #: pretix/base/pdf.py:57 pretix/base/services/tickets.py:76
 #: pretix/control/views/event.py:679 pretix/control/views/pdf.py:59
 msgid "Sample product"
-msgstr ""
+msgstr "Vzorčni izdelek"
 
 #: pretix/base/pdf.py:61
 msgid "Variation name"
-msgstr ""
+msgstr "Ime variante"
 
 #: pretix/base/pdf.py:62
 msgid "Sample variation"
-msgstr ""
+msgstr "Vzorčna varianta"
 
 #: pretix/base/pdf.py:66
 msgid "Product description"
-msgstr ""
+msgstr "Opis izdelka"
 
 #: pretix/base/pdf.py:67 pretix/base/services/tickets.py:77
 #: pretix/control/views/event.py:680 pretix/control/views/pdf.py:60
 msgid "Sample product description"
-msgstr ""
+msgstr "Opis vzorčnega izdelka"
 
 #: pretix/base/pdf.py:71
 msgid "Product name and variation"
-msgstr ""
+msgstr "Ime izdelka in varianta"
 
 #: pretix/base/pdf.py:72
 msgid "Sample product – sample variation"
-msgstr ""
+msgstr "Vzorčni izdelek - vzorčna varianta"
 
 #: pretix/base/pdf.py:80
 msgid "Ticket category"
-msgstr ""
+msgstr "Kategorija vstopnic"
 
 #: pretix/base/pdf.py:87 pretix/base/pdf.py:92
 msgid "123.45 EUR"
-msgstr ""
+msgstr "123,45 EUR"
 
 #: pretix/base/pdf.py:91
 msgid "Price including add-ons"
-msgstr ""
+msgstr "Cena z vključenimi dodatki"
 
 #: pretix/base/pdf.py:101 pretix/base/pdf.py:187
 #: pretix/base/services/invoices.py:318 pretix/control/views/event.py:616
 #: pretix/control/views/event.py:681 pretix/plugins/sendmail/views.py:104
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/pdf.py:106
 msgid "Sample event name"
-msgstr ""
+msgstr "Primer imena dogodka"
 
 #: pretix/base/pdf.py:110
 msgid "Event date"
-msgstr ""
+msgstr "Datum dogodka"
 
 #: pretix/base/pdf.py:111
 msgid "May 31st, 2017"
-msgstr ""
+msgstr "31. maj 2017"
 
 #: pretix/base/pdf.py:115
 msgid "Event date range"
-msgstr ""
+msgstr "Časovno obdobje dogodka"
 
 #: pretix/base/pdf.py:116
 msgid "May 31st – June 4th, 2017"
-msgstr ""
+msgstr "31. maj - 4. junij 2017"
 
 #: pretix/base/pdf.py:120
 msgid "Event begin date and time"
-msgstr ""
+msgstr "Datum in ura začetka dogodka"
 
 #: pretix/base/pdf.py:121
 msgid "2017-05-31 20:00"
-msgstr ""
+msgstr "2017-05-31 20:00"
 
 #: pretix/base/pdf.py:128
 msgid "Event begin date"
-msgstr ""
+msgstr "Datum začetka dogodka"
 
 #: pretix/base/pdf.py:129 pretix/base/pdf.py:150 pretix/base/pdf.py:219
 msgid "2017-05-31"
-msgstr ""
+msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:136
 msgid "Event begin time"
-msgstr ""
+msgstr "Čas začetka dogodka"
 
 #: pretix/base/pdf.py:137
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:141
 msgid "Event end date and time"
-msgstr ""
+msgstr "Datum in čas zaključka dogodka"
 
 #: pretix/base/pdf.py:142
 msgid "2017-05-31 22:00"
-msgstr ""
+msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:149
 msgid "Event end date"
-msgstr ""
+msgstr "Končni datum dogodka"
 
 #: pretix/base/pdf.py:158
 msgid "22:00"
-msgstr ""
+msgstr "22:00"
 
 #: pretix/base/pdf.py:165
 msgid "Event admission date and time"
-msgstr ""
+msgstr "Datum in ura vstopa na dogodek"
 
 #: pretix/base/pdf.py:166 pretix/base/pdf.py:227
 msgid "2017-05-31 19:00"
-msgstr ""
+msgstr "2017-05-31 19:00"
 
 #: pretix/base/pdf.py:173
 msgid "Event admission time"
-msgstr ""
+msgstr "Čas vstopa na dogodek"
 
 #: pretix/base/pdf.py:174 pretix/base/pdf.py:235
 msgid "19:00"
-msgstr ""
+msgstr "19:00"
 
 #: pretix/base/pdf.py:181
 msgid "Event location"
-msgstr ""
+msgstr "Lokacija dogodka"
 
 #: pretix/base/pdf.py:182 pretix/control/forms/event.py:856
 msgid "Random City"
-msgstr ""
+msgstr "Naključno mesto"
 
 #: pretix/base/pdf.py:191
 msgid "Invoice address company"
-msgstr ""
+msgstr "Družba za naslov računa"
 
 #: pretix/base/pdf.py:192 pretix/base/services/tickets.py:92
 #: pretix/control/views/pdf.py:75
 msgid "Sample company"
-msgstr ""
+msgstr "Vzorčna družba"
 
 #: pretix/base/pdf.py:196
 msgid "List of Add-Ons"
-msgstr ""
+msgstr "Seznam dodatkov"
 
 #: pretix/base/pdf.py:197
 msgid ""
 "Addon 1\n"
 "Addon 2"
 msgstr ""
+"Dodatek 1\n"
+"Dodatek 2"
 
 #: pretix/base/pdf.py:208 pretix/control/forms/filter.py:478
 #: pretix/control/forms/filter.py:480
 #: pretix/control/templates/pretixcontrol/organizers/index.html:35
 msgid "Organizer name"
-msgstr ""
+msgstr "Ime organizatorja"
 
 #: pretix/base/pdf.py:209
 msgid "Event organizer company"
-msgstr ""
+msgstr "Podjetje organizatorja"
 
 #: pretix/base/pdf.py:213
 msgid "Organizer info text"
-msgstr ""
+msgstr "Info opis organizatorja"
 
 #: pretix/base/pdf.py:214
 msgid "Event organizer info text"
-msgstr ""
+msgstr "Info opis organizatorja"
 
 #: pretix/base/pdf.py:218
 msgid "Printing date"
-msgstr ""
+msgstr "Datum tiskanja"
 
 #: pretix/base/pdf.py:226
 msgid "Printing date and time"
-msgstr ""
+msgstr "Datum in čas tiskanja"
 
 #: pretix/base/pdf.py:234
 msgid "Printing time"
-msgstr ""
+msgstr "Čas tiskanja"
 
 #: pretix/base/pdf.py:242
 msgid "Seat: Full name"
-msgstr ""
+msgstr "Sedež:polno ime"
 
 #: pretix/base/pdf.py:243
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "Parter, vrsta 3, sedež 4"
 
 #: pretix/base/pdf.py:244 pretix/base/pdf.py:249
 #: pretix/control/forms/orders.py:205 pretix/control/forms/orders.py:260
 msgid "General admission"
-msgstr ""
+msgstr "Splošna vstopnica"
 
 #: pretix/base/pdf.py:247
 msgid "Seat: zone"
-msgstr ""
+msgstr "Sedež: cona"
 
 #: pretix/base/pdf.py:248
 msgid "Ground floor"
-msgstr ""
+msgstr "Parter"
 
 #: pretix/base/pdf.py:252
 msgid "Seat: row"
-msgstr ""
+msgstr "Sedež:vrsta"
 
 #: pretix/base/pdf.py:257
 msgid "Seat: seat number"
-msgstr ""
+msgstr "Sedež: številka"
 
 #: pretix/base/pdf.py:281
 #, python-brace-format
 msgid "Question: {question}"
-msgstr ""
+msgstr "Vprašanje: {question}"
 
 #: pretix/base/pdf.py:282
 #, python-brace-format
 msgid "<Answer: {question}>"
-msgstr ""
+msgstr "<Odgovor: {question}>"
 
 #: pretix/base/pdf.py:302 pretix/plugins/badges/exporters.py:108
 #: pretix/plugins/checkinlists/exporters.py:55
@@ -3623,98 +3633,104 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/exporters.py:42
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr ""
+msgstr "Ime udeleženca: {part}"
 
 #: pretix/base/pdf.py:312
 #, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr ""
+msgstr "Naslov računa: {part}"
 
 #: pretix/base/pdf.py:450 pretix/plugins/ticketoutputpdf/ticketoutput.py:75
 msgid "Ticket"
-msgstr ""
+msgstr "Vstopnica"
 
 #: pretix/base/reldate.py:13
 msgid "Event start"
-msgstr ""
+msgstr "Začetek dogodka"
 
 #: pretix/base/reldate.py:14
 msgid "Event end"
-msgstr ""
+msgstr "Zaključek dogodka"
 
 #: pretix/base/reldate.py:15
 msgid "Event admission"
-msgstr ""
+msgstr "Vstop na dogodek"
 
 #: pretix/base/reldate.py:16
 msgid "Presale start"
-msgstr ""
+msgstr "Začetek predprodaje"
 
 #: pretix/base/reldate.py:17
 msgid "Presale end"
-msgstr ""
+msgstr "Zaključek predprodaje"
 
 #: pretix/base/reldate.py:153 pretix/base/reldate.py:247
 msgid "Fixed date:"
-msgstr ""
+msgstr "Fiksni datum:"
 
 #: pretix/base/reldate.py:154 pretix/base/reldate.py:248
 msgid "Relative date:"
-msgstr ""
+msgstr "Relativni datum:"
 
 #: pretix/base/reldate.py:162 pretix/base/reldate.py:251
 msgid "Not set"
-msgstr ""
+msgstr "Ni nastavljeno"
 
 #: pretix/base/services/cart.py:50 pretix/base/services/orders.py:69
 msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
+"Vaše zahteve nismo mogli v celoti obdelati, saj je bil strežnik preveč "
+"zaseden. Prosim poskusite ponovno."
 
 #: pretix/base/services/cart.py:52 pretix/presale/views/cart.py:172
 msgid "You did not select any products."
-msgstr ""
+msgstr "Niste izbrali nobenega izdelka."
 
 #: pretix/base/services/cart.py:53
 msgid "Unknown cart position."
-msgstr ""
+msgstr "Neznan položaj košarice."
 
 #: pretix/base/services/cart.py:54
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr ""
+msgstr "Datum ni bil določen."
 
 #: pretix/base/services/cart.py:55
 msgid "You selected a product which is not available for sale."
-msgstr ""
+msgstr "Izbrali ste izdelek, ki ni na voljo za prodajo."
 
 #: pretix/base/services/cart.py:56
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
 msgstr ""
+"Nekateri izdelki, ki ste jih izbrali, niso več na voljo. Za podrobnosti "
+"glejte spodaj."
 
 #: pretix/base/services/cart.py:58
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Nekateri izdelki, ki ste jih izbrali, niso več na voljo v izbrani količini. "
+"Za podrobnosti glejte spodaj."
 
 #: pretix/base/services/cart.py:60
 #, python-format
 msgid "You cannot select more than %s items per order."
-msgstr ""
+msgstr "Za naročilo ne morete izbrati več kot %s izdelkov."
 
 #: pretix/base/services/cart.py:61
 #, python-format
 msgid "You cannot select more than %(max)s items of the product %(product)s."
-msgstr ""
+msgstr "Ne morete izbrati več kot %(max)s elementov izdelkov %(product)s."
 
 #: pretix/base/services/cart.py:62
 #, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
-msgstr ""
+msgstr "Izbrati morate najmanj %(min)s elementov izdelka %(izdelek)s."
 
 #: pretix/base/services/cart.py:63
 #, python-format
@@ -3722,39 +3738,45 @@ msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr ""
+"Iz vozička smo odstranili %(product)s, saj ne morete kupiti manj kot %(min)s "
+"izdelkov."
 
 #: pretix/base/services/cart.py:65 pretix/base/services/orders.py:71
 msgid "The presale period for this event has not yet started."
-msgstr ""
+msgstr "Predhodno obdobje za ta dogodek se še ni začelo."
 
 #: pretix/base/services/cart.py:66
 msgid "The presale period for this event has ended."
-msgstr ""
+msgstr "Predprodja za ta dogodek se je končalo."
 
 #: pretix/base/services/cart.py:67
 msgid ""
 "The presale period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"Predprodaja za ta dogodek se še ni začelo. Prizadeti položaji so bili "
+"odstranjeni iz vaše košarice."
 
 #: pretix/base/services/cart.py:69 pretix/base/services/orders.py:84
 msgid ""
 "The presale period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
+"Predprodaja enega od dogodkov v vozičku se je končalo. Prizadeti položaji so "
+"bili odstranjeni iz vaše košarice."
 
 #: pretix/base/services/cart.py:71
 msgid "The entered price is to high."
-msgstr ""
+msgstr "Vnešena cena je previsoka."
 
 #: pretix/base/services/cart.py:72
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "Ta koda bona ni znana v naši podatkovni bazi."
 
 #: pretix/base/services/cart.py:73
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
+msgstr "Ta koda bona je že bila uporabljena največje dovoljeno številokrat."
 
 #: pretix/base/services/cart.py:74
 #, python-format
@@ -3764,29 +3786,35 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Ta koda bona je trenutno zaklenjena, saj je že vsebovana v vozičku. To lahko "
+"pomeni, da nekdo drug unovči ta bon trenutno ali pa ste ga že poskusili "
+"unovčiti, vendar postopka dokončanja nakupa niste zaključili. Lahko ga "
+"poskusite ponovno uporabiti v %d minutah."
 
 #: pretix/base/services/cart.py:78
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "To kodo bona lahko unovčite le %d krat."
 
 #: pretix/base/services/cart.py:79
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
+"To kodo bona ste že uporabili. Odstranite povezano vrstico iz košarice, če "
+"jo želite uporabiti za drug izdelek."
 
 #: pretix/base/services/cart.py:81
 msgid "This voucher is expired."
-msgstr ""
+msgstr "Ta bon je potekel."
 
 #: pretix/base/services/cart.py:82
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "Ta bon ni veljaven za ta izdelek."
 
 #: pretix/base/services/cart.py:84
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr ""
+msgstr "Vaš kupon velja za izdelek, ki trenutno ni v prodaji."
 
 #: pretix/base/services/cart.py:85
 msgctxt "subevent"
