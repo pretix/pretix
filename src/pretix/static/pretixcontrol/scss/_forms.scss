@@ -466,3 +466,6 @@ table td > .checkbox input[type="checkbox"] {
   }
 }
 
+.help-inline {
+  color: lighten($text-color, 25%); // lighten the text some for contrast
+}

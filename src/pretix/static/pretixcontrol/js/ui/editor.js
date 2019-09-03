@@ -717,6 +717,30 @@ var editor = {
         $("#source-container").hide();
     },
 
+    _create_empty_background: function () {
+        $("#loading-container, #loading-upload").show();
+        $("#loading-upload .progress").show();
+        $('#loading-upload .progress-bar').css('width', 0);
+        $("#fileupload").prop('disabled', true);
+        $(".background-button").addClass("disabled");
+        $.post(window.location.href, {
+            'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val(),
+            'emptybackground': 'true',
+            'width': $("#pdf-info-width").val(),
+            'height': $("#pdf-info-height").val(),
+        }, function (data) {
+            if (data.status === "ok") {
+                editor.uploaded_file_id = data.id;
+                editor._replace_pdf_file(data.url);
+            } else {
+                alert(data.result.error || gettext("Error while uploading your PDF file, please try again."));
+                $("#loading-container, #loading-upload").hide();
+            }
+            $("#fileupload").prop('disabled', false);
+            $(".background-button").removeClass("disabled");
+        }, 'json');
+    },
+
     init: function () {
         editor.$pdfcv = $("#pdf-canvas");
         editor.pdf_url = editor.$pdfcv.attr("data-pdf-url");
@@ -738,6 +762,7 @@ var editor = {
         $("#source-container").hide();
 
 
+        $("#pdf-empty").on("click", editor._create_empty_background);
         $('#fileupload').fileupload({
             url: location.href,
             dataType: 'json',
@@ -750,7 +775,7 @@ var editor = {
                     $("#loading-container, #loading-upload").hide();
                 }
                 $("#fileupload").prop('disabled', false);
-                $(".fileinput-button").removeClass("disabled");
+                $(".background-button").removeClass("disabled");
             },
             add: function (e, data) {
                 data.formData = {
@@ -760,7 +785,7 @@ var editor = {
                 $("#loading-upload .progress").show();
                 $('#loading-upload .progress-bar').css('width', 0);
                 $("#fileupload").prop('disabled', true);
-                $(".fileinput-button").addClass("disabled");
+                $(".background-button").addClass("disabled");
                 data.process().done(function () {
                     data.submit();
                 });

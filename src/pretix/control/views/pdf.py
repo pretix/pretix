@@ -2,8 +2,10 @@ import json
 import logging
 import mimetypes
 from datetime import timedelta
+from io import BytesIO
 
 from django.core.files import File
+from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import (
     FileResponse, HttpResponse, HttpResponseBadRequest, JsonResponse,
@@ -14,6 +16,8 @@ from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
+from PyPDF2 import PdfFileWriter
+from reportlab.lib.units import mm
 
 from pretix.base.i18n import language
 from pretix.base.models import CachedFile, InvoiceAddress, OrderPosition
@@ -117,6 +121,33 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         self.request.event.settings.set(self.get_background_settings_key(), 'file://' + newname)
 
     def post(self, request, *args, **kwargs):
+        if "emptybackground" in request.POST:
+            p = PdfFileWriter()
+            p.addBlankPage(
+                width=float(request.POST.get('width')) * mm,
+                height=float(request.POST.get('height')) * mm,
+            )
+            buffer = BytesIO()
+            p.write(buffer)
+            buffer.seek(0)
+            c = CachedFile()
+            c.expires = now() + timedelta(days=7)
+            c.date = now()
+            c.filename = 'background_preview.pdf'
+            c.type = 'application/pdf'
+            c.save()
+            c.file.save('empty.pdf', ContentFile(buffer.read()))
+            c.refresh_from_db()
+            return JsonResponse({
+                "status": "ok",
+                "id": c.id,
+                "url": reverse('control:pdf.background', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.organizer.slug,
+                    'filename': str(c.id)
+                })
+            })
+
         if "background" in request.FILES:
             error, fileobj = self.process_upload()
             if error:
