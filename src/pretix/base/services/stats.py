@@ -76,7 +76,8 @@ def dictsum(*dicts) -> dict:
 
 
 def order_overview(
-        event: Event, subevent: SubEvent=None, date_filter='', date_from=None, date_until=None, fees=False
+        event: Event, subevent: SubEvent=None, date_filter='', date_from=None, date_until=None, fees=False,
+        admission_only=False
 ) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
@@ -87,6 +88,9 @@ def order_overview(
     qs = OrderPosition.all
     if subevent:
         qs = qs.filter(subevent=subevent)
+    if admission_only:
+        qs = qs.filter(item__admission=True)
+        items = items.filter(admission=True)
 
     if date_from and isinstance(date_from, date):
         date_from = make_aware(datetime.combine(
