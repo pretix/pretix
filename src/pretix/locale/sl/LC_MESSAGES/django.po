@@ -3738,7 +3738,7 @@ msgstr "Ne morete izbrati več kot %(max)s elementov izdelkov %(product)s."
 #: pretix/base/services/cart.py:62
 #, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
-msgstr "Izbrati morate najmanj %(min)s elementov izdelka %(izdelek)s."
+msgstr "Izbrati morate najmanj %(min)s elementov izdelka %(product)s."
 
 #: pretix/base/services/cart.py:63
 #, python-format
