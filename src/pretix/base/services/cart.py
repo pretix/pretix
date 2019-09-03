@@ -226,7 +226,10 @@ class CartManager:
 
     def _check_item_constraints(self, op):
         if isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
-            if op.addon_to != 'FAKE':
+            if not (
+                (isinstance(op, self.AddOperation) and op.addon_to == 'FAKE') or
+                (isinstance(op, self.ExtendOperation) and op.position.is_bundled)
+            ):
                 if op.item.require_voucher and op.voucher is None:
                     raise CartError(error_messages['voucher_required'])
 
