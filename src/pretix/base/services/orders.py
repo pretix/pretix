@@ -509,12 +509,14 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if cp.seat:
             seats_seen.add(cp.seat)
 
-        if cp.item.require_voucher and cp.voucher is None:
+        if cp.item.require_voucher and cp.voucher is None and not cp.is_bundled:
             delete(cp)
             err = err or error_messages['voucher_required']
             break
 
-        if cp.item.hide_without_voucher and (cp.voucher is None or not cp.voucher.show_hidden_items or not cp.voucher.applies_to(cp.item, cp.variation)):
+        if cp.item.hide_without_voucher and (
+                cp.voucher is None or not cp.voucher.show_hidden_items or not cp.voucher.applies_to(cp.item, cp.variation)
+        ) and not cp.is_bundled:
             delete(cp)
             cp.delete()
             err = error_messages['voucher_required']
