@@ -91,8 +91,8 @@ def render_pdf(event, positions, opt):
         buffer.seek(0)
         canvas_pdf_reader = PdfFileReader(buffer)
         empty_pdf_page = output_pdf_writer.addBlankPage(
-            width=opt['pagesize'][0],
-            height=opt['pagesize'][1],
+            width=opt['pagesize'][0] if opt['pagesize'] else positions[0][1].bg_pdf.getPage(0).mediaBox[2],
+            height=opt['pagesize'][1] if opt['pagesize'] else positions[0][1].bg_pdf.getPage(0).mediaBox[3],
         )
         for i, (op, r) in enumerate(positions):
             bg_page = copy.copy(r.bg_pdf.getPage(0))

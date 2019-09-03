@@ -49,17 +49,20 @@ def test_generate_pdf(env):
     with pytest.raises(OrderError):
         e.render({
             'items': [shirt.pk],
+            'rendering': 'one',
             'include_pending': False
         })
 
     with pytest.raises(OrderError):
         e.render({
             'items': [],
+            'rendering': 'one',
             'include_pending': True
         })
 
     fname, ftype, buf = e.render({
         'items': [shirt.pk],
+        'rendering': 'one',
         'include_pending': True
     })
     assert ftype == 'application/pdf'
