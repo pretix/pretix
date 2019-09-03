@@ -794,8 +794,9 @@ class CartManager:
                     for b in op.bundled:
                         b_quotas = list(b.quotas)
                         if not b_quotas:
-                            err = err or error_messages['unavailable']
-                            available_count = 0
+                            if not op.voucher or not op.voucher.allow_ignore_quota:
+                                err = err or error_messages['unavailable']
+                                available_count = 0
                             continue
                         b_quota_available_count = min(available_count * b.count, min(quotas_ok[q] for q in b_quotas))
                         if b_quota_available_count < b.count:
