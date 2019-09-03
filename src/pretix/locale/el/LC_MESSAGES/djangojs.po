@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-09 07:58+0000\n"
+"POT-Creation-Date: 2019-09-03 09:36+0000\n"
 "PO-Revision-Date: 2019-06-04 16:00+0000\n"
 "Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -179,15 +179,16 @@ msgstr "Σχεδιασμός εισιτηρίων"
 msgid "Saving failed."
 msgstr "Η αποθήκευση απέτυχε."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:735
+#: pretix/static/pretixcontrol/js/ui/editor.js:736
+#: pretix/static/pretixcontrol/js/ui/editor.js:774
+msgid "Error while uploading your PDF file, please try again."
+msgstr "Σφάλμα κατά τη μεταφόρτωση του αρχείου PDF, δοκιμάστε ξανά."
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:759
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Θέλετε πραγματικά να αφήσετε τον επεξεργαστή χωρίς να αποθηκεύσετε τις "
 "αλλαγές σας;"
-
-#: pretix/static/pretixcontrol/js/ui/editor.js:749
-msgid "Error while uploading your PDF file, please try again."
-msgstr "Σφάλμα κατά τη μεταφόρτωση του αρχείου PDF, δοκιμάστε ξανά."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."

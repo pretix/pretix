@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-09 07:58+0000\n"
+"POT-Creation-Date: 2019-09-03 09:36+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
-"Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/sl/>\n"
+"Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
-"n%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3;\n"
 "X-Generator: Weblate 3.5.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
@@ -174,13 +174,14 @@ msgstr "Oblikovanje vstopnice"
 msgid "Saving failed."
 msgstr "Shranjevanje ni bilo uspešno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:735
-msgid "Do you really want to leave the editor without saving your changes?"
-msgstr "Ali zares želite zapustiti urejevalnik ne da bi shranili spremembe?"
-
-#: pretix/static/pretixcontrol/js/ui/editor.js:749
+#: pretix/static/pretixcontrol/js/ui/editor.js:736
+#: pretix/static/pretixcontrol/js/ui/editor.js:774
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Napaka pri nalaganju datoteke PDF. Poskusite ponovno."
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:759
+msgid "Do you really want to leave the editor without saving your changes?"
+msgstr "Ali zares želite zapustiti urejevalnik ne da bi shranili spremembe?"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-09 07:58+0000\n"
+"POT-Creation-Date: 2019-09-03 09:36+0000\n"
 "PO-Revision-Date: 2019-03-15 11:19+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -178,13 +178,14 @@ msgstr "Projekt biletu"
 msgid "Saving failed."
 msgstr "Błąd zapisu."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:735
-msgid "Do you really want to leave the editor without saving your changes?"
-msgstr "Czy na pewno opuścić edytor bez zapisania zmian?"
-
-#: pretix/static/pretixcontrol/js/ui/editor.js:749
+#: pretix/static/pretixcontrol/js/ui/editor.js:736
+#: pretix/static/pretixcontrol/js/ui/editor.js:774
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Błąd uploadu pliku PDF, prosimy spróbować ponownie."
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:759
+msgid "Do you really want to leave the editor without saving your changes?"
+msgstr "Czy na pewno opuścić edytor bez zapisania zmian?"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."
