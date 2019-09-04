@@ -20,7 +20,7 @@ from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.signals import sass_postamble, sass_preamble
 
 logger = logging.getLogger('pretix.presale.style')
-affected_keys = ['primary_font', 'primary_color']
+affected_keys = ['primary_font', 'primary_color', 'theme_color_success', 'theme_color_danger']
 
 
 def compile_scss(object, file="main.scss", fonts=True):

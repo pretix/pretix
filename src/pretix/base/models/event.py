@@ -826,17 +826,23 @@ class Event(EventMixin, LoggedModel):
 
     def enable_plugin(self, module, allow_restricted=False):
         plugins_active = self.get_plugins()
+        from pretix.presale.style import regenerate_css
 
         if module not in plugins_active:
             plugins_active.append(module)
             self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
 
+        regenerate_css.apply_async(args=(self.pk,))
+
     def disable_plugin(self, module):
         plugins_active = self.get_plugins()
+        from pretix.presale.style import regenerate_css
 
         if module in plugins_active:
             plugins_active.remove(module)
             self.set_active_plugins(plugins_active)
+
+        regenerate_css.apply_async(args=(self.pk,))
 
     @staticmethod
     def clean_has_subevents(event, has_subevents):
