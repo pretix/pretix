@@ -7,10 +7,12 @@ from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
 
+from . import forms
+
 
 @app.task(base=ProfiledEventTask)
 def send_mails(event: Event, user: int, subject: dict, message: dict, orders: list, items: list,
-               recipients: str, filter_checkins: bool, checkin_lists: list) -> None:
+               recipients: str, checkin_lists: list) -> None:
     failures = []
     user = User.objects.get(pk=user) if user else None
     orders = Order.objects.filter(pk__in=orders, event=event)
@@ -33,7 +35,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                 if p.item_id not in items and not any(a.item_id in items for a in p.addons.all()):
                     continue
 
-                if filter_checkins and not any(c.list_id in checkin_lists for c in p.checkins.all()):
+                if forms.MailForm.NOT_CHECKED_IN not in checkin_lists and not any(str(c.list_id) in checkin_lists for c in p.checkins.all()):
                     continue
 
                 if not p.attendee_email:

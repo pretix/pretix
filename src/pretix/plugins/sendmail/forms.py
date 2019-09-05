@@ -5,11 +5,12 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
-from pretix.base.models import CheckinList, Item, Order, SubEvent
+from pretix.base.models import Item, Order, SubEvent
 from pretix.control.forms.widgets import Select2
 
 
 class MailForm(forms.Form):
+    NOT_CHECKED_IN = "NotCheckedIn"
     recipients = forms.ChoiceField(
         label=_('Send email to'),
         widget=forms.RadioSelect,
@@ -27,16 +28,13 @@ class MailForm(forms.Form):
         required=True,
         queryset=Item.objects.none()
     )
-    filter_checkins = forms.BooleanField(
-        label=_('Only send to people checked in'),
-        required=False)
-    checkin_lists = forms.ModelMultipleChoiceField(
+    checkin_lists = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(
             attrs={'class': 'scrolling-multiple-choice'}
         ),
         label=_('Only send to people checked in'),
         required=False,
-        queryset=CheckinList.objects.none()
+        choices=[]
     )
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
@@ -107,12 +105,10 @@ class MailForm(forms.Form):
         if not self.initial.get('items'):
             self.initial['items'] = event.items.all()
 
-        self.fields['checkin_lists'].queryset = event.checkin_lists.all()
+        self.fields['checkin_lists'].choices = [(self.NOT_CHECKED_IN, _("Not checked in"))] + \
+            [(c.pk, c.name) for c in event.checkin_lists.all()]
         if not self.initial.get('checkin_lists'):
-            self.initial['checkin_lists'] = event.checkin_lists.all()
-
-        if not self.initial.get('filter_checkins'):
-            self.initial['filter_checkins'] = False
+            self.initial['checkin_lists'] = [c[0] for c in self.fields['checkin_lists'].choices]
 
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()

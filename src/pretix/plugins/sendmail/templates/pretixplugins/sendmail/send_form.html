@@ -13,20 +13,7 @@
                 {% bootstrap_field form.subevent layout='horizontal' %}
             {% endif %}
             {% bootstrap_field form.items layout='horizontal' %}
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <label data-toggle="collapse" data-target="#checkin_filter">
-                            {{ form.filter_checkins }} {{ form.filter_checkins.label }}
-                        </label>
-                    </div>
-                    <div id="checkin_filter" class="panel-body panel-collapse collapse {% if form.filter_checkins.value %} in {% else %} out {% endif %}">
-                        {% bootstrap_field form.checkin_lists layout='horizontal' %}
-                    </div>
-                </div>
-            </div>
-
-
+            {% bootstrap_field form.checkin_lists layout='horizontal' %}
             {% bootstrap_field form.subject layout='horizontal' %}
             {% bootstrap_field form.message layout='horizontal' %}
             {% if request.method == "POST" %}

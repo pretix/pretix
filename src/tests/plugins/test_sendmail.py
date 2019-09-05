@@ -392,15 +392,14 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
         p.attendee_email = 'attendee1@dummy.test'
         p.save()
         pos2 = order.positions.create(item=item, price=0, attendee_email='attendee2@dummy.test')
-        _ = Checkin.objects.create(position=pos2, list=chkl2)
+        Checkin.objects.create(position=pos2, list=chkl2)
 
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'attendees',
                                       'items': pos2.item_id,
-                                      'filter_checkins': True,
-                                      'checkin_lists': chkl2.id,
+                                      'checkin_lists': [str(chkl2.id)],
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },

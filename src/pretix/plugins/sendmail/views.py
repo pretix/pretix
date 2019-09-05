@@ -54,14 +54,9 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                         id=logentry.parsed_data['item']['id']
                     )
                 if 'checkin_lists' in logentry.parsed_data:
-                    kwargs['initial']['checkin_lists'] = self.request.event.checkin_lists.filter(
-                        id__in=[a['id'] for a in logentry.parsed_data['items']]
-                    )
+                    kwargs['initial']['checkin_lists'] = logentry.parsed_data['checkin_lists']
                 elif logentry.parsed_data.get('checkin_list'):
-                    kwargs['initial']['checkin_lists'] = self.request.event.checkin_lists.filter(
-                        id=logentry.parsed_data['item']['id']
-                    )
-                kwargs['initial']['filter_checkins'] = logentry.parsed_data.get('filter_checkins', False)
+                    kwargs['initial']['checkin_lists'] = [logentry.parsed_data['checkin_list']['id']]
                 if logentry.parsed_data.get('subevent'):
                     try:
                         kwargs['initial']['subevent'] = self.request.event.subevents.get(
@@ -85,8 +80,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         orders = qs.filter(statusq)
         orders = orders.filter(all_positions__item_id__in=[i.pk for i in form.cleaned_data.get('items')],
                                all_positions__canceled=False)
-        if form.cleaned_data.get('filter_checkins', False):
-            orders = orders.filter(all_positions__checkins__list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists')])
+        checkinq = Q(all_positions__checkins__list_id__in=[i for i in form.cleaned_data.get('checkin_lists', []) if i != forms.MailForm.NOT_CHECKED_IN])
+        if forms.MailForm.NOT_CHECKED_IN in form.cleaned_data.get('checkin_lists', []):
+            checkinq |= Q(all_positions__checkins__list_id=None)
+        orders = orders.filter(checkinq)
         if form.cleaned_data.get('subevent'):
             orders = orders.filter(all_positions__subevent__in=(form.cleaned_data.get('subevent'),),
                                    all_positions__canceled=False)
@@ -130,8 +127,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 'message': form.cleaned_data['message'].data,
                 'orders': [o.pk for o in orders],
                 'items': [i.pk for i in form.cleaned_data.get('items')],
-                'filter_checkins': form.cleaned_data.get('filter_checkins', False),
-                'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')]
+                'checkin_lists': form.cleaned_data.get('checkin_lists')
             }
         )
         self.request.event.log_action('pretix.plugins.sendmail.sent',
@@ -173,8 +169,9 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
             i.pk: str(i) for i in self.request.event.items.all()
         }
         checkin_list_cache = {
-            i.pk: str(i) for i in self.request.event.checkin_lists.all()
+            str(i.pk): str(i) for i in self.request.event.checkin_lists.all()
         }
+        checkin_list_cache[forms.MailForm.NOT_CHECKED_IN] = _("Not checked in")
         status = dict(Order.STATUS_CHOICE)
         status['overdue'] = _('pending with payment overdue')
         status['r'] = status['c']
@@ -193,7 +190,7 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
                 itemcache[i['id']] for i in log.pdata.get('items', [])
             ]
             log.pdata['checkin_lists'] = [
-                checkin_list_cache[i['id']] for i in log.pdata.get('checkin_lists', [])
+                checkin_list_cache[i] for i in log.pdata.get('checkin_lists', []) if i in checkin_list_cache
             ]
             if log.pdata.get('subevent'):
                 try:
