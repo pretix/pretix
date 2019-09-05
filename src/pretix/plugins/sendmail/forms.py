@@ -5,7 +5,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
-from pretix.base.models import Item, Order, SubEvent
+from pretix.base.models import CheckinList, Item, Order, SubEvent
 from pretix.control.forms.widgets import Select2
 
 
@@ -26,6 +26,17 @@ class MailForm(forms.Form):
         label=_('Only send to people who bought'),
         required=True,
         queryset=Item.objects.none()
+    )
+    filter_checkins = forms.BooleanField(
+        label=_('Only send to people checked in'),
+        required=False)
+    checkin_lists = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(
+            attrs={'class': 'scrolling-multiple-choice'}
+        ),
+        label=_('Only send to people checked in'),
+        required=False,
+        queryset=CheckinList.objects.none()
     )
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
@@ -95,6 +106,13 @@ class MailForm(forms.Form):
         self.fields['items'].queryset = event.items.all()
         if not self.initial.get('items'):
             self.initial['items'] = event.items.all()
+
+        self.fields['checkin_lists'].queryset = event.checkin_lists.all()
+        if not self.initial.get('checkin_lists'):
+            self.initial['checkin_lists'] = event.checkin_lists.all()
+
+        if not self.initial.get('filter_checkins'):
+            self.initial['filter_checkins'] = False
 
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()

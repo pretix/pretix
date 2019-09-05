@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, Organizer, Team, User,
+    Checkin, Event, Item, Order, OrderPosition, Organizer, Team, User,
 )
 
 
@@ -26,6 +26,12 @@ def event():
 def item(event):
     """Returns an item instance"""
     return Item.objects.create(name='Test item', event=event, default_price=13)
+
+
+@pytest.fixture
+def checkin_list(event):
+    """Returns an checkin list instance"""
+    return event.checkin_lists.create(name="Test Checkinlist", all_products=True)
 
 
 @pytest.fixture
@@ -360,11 +366,41 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
             item=i2, price=0, attendee_email='attendee2@dummy.test'
         )
 
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url,
+                                         {'sendto': 'n',
+                                          'recipients': 'attendees',
+                                          'items': i2.pk,
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.'
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee2@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event, order, checkin_list, item, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        chkl2 = event.checkin_lists.create(name="Test Checkinlist 2", all_products=True)
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        pos2 = order.positions.create(item=item, price=0, attendee_email='attendee2@dummy.test')
+        _ = Checkin.objects.create(position=pos2, list=chkl2)
+
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'attendees',
-                                      'items': i2.pk,
+                                      'items': pos2.item_id,
+                                      'filter_checkins': True,
+                                      'checkin_lists': chkl2.id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
