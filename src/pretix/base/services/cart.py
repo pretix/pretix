@@ -618,7 +618,7 @@ class CartManager:
 
                 op = self.AddOperation(
                     count=1, item=item, variation=variation, price=price, voucher=None, quotas=quotas,
-                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[], seat=cp.seat
+                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[], seat=None
                 )
                 self._check_item_constraints(op)
                 operations.append(op)
