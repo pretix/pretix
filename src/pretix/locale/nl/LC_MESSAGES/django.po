@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-03 09:36+0000\n"
-"PO-Revision-Date: 2019-08-18 05:00+0000\n"
+"PO-Revision-Date: 2019-09-09 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2318,10 +2318,8 @@ msgid "This question will only show up in the backend."
 msgstr "Deze vraag zal alleen in de backend zichtbaar zijn."
 
 #: pretix/base/models/items.py:1038
-#, fuzzy
-#| msgid "Text on invoices"
 msgid "Print answer on invoices"
-msgstr "Tekst op facturen"
+msgstr "Print antwoord op facturen"
 
 #: pretix/base/models/items.py:1070
 msgid "This identifier is already used for a different question."
@@ -5623,15 +5621,6 @@ msgid "Ask for email addresses per ticket"
 msgstr "Vraag om e-mailadressen per ticket"
 
 #: pretix/control/forms/event.py:394
-#, fuzzy
-#| msgid ""
-#| "Normally, pretix asks for one email address per order and the order "
-#| "confirmation will be sent only to that email address. If you enable this "
-#| "option, the system will additionally ask for individual email addresses "
-#| "for every admission ticket. This might be useful if you want to obtain "
-#| "individual addresses for every attendee even in case of group orders. "
-#| "However, pretix will send the order confirmation only to the one primary "
-#| "email address, not to the per-attendee addresses."
 msgid ""
 "Normally, pretix asks for one email address per order and the order "
 "confirmation will be sent only to that email address. If you enable this "
@@ -5647,8 +5636,9 @@ msgstr ""
 "inschakelt zal het systeem ook om e-mailadressen voor ieder toegangsbewijs "
 "vragen. Dit zou nuttig kunnen zijn als u losse adressen wilt verzamelen voor "
 "iedere aanwezige bij groepsbestellingen. De orderbevestiging zal nog steeds "
-"alleen naar het primaire e-mailadres verstuurd worden, en niet aan de "
-"adressen op ieder ticket."
+"standaard alleen naar het primaire e-mailadres verstuurd worden, en niet aan "
+"de adressen op ieder ticket. Het verzenden aan de adressen op elk ticket is "
+"in te schakelen in de e-mailinstellingen."
 
 #: pretix/control/forms/event.py:403
 msgid "Require email addresses per ticket"
@@ -10875,7 +10865,7 @@ msgstr "Nieuwe vraag aanmaken"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:58
 msgid "Ask during check-in"
-msgstr ""
+msgstr "Vraag tijdens check-in"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:6
 #: pretix/control/templates/pretixcontrol/items/quota.html:9
@@ -11999,18 +11989,13 @@ msgid "Revenue (net)"
 msgstr "Winst (netto)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:48
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid ""
-#| "If you select a single date, payment method fees will not be listed here "
-#| "as it might not be clear which date they belong to."
 msgctxt "subevent"
 msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
-"Als u een enkele datum selecteert zullen betalingstoeslagen hier niet "
-"getoond worden, omdat het onduidelijk kan zijn bij welke datum ze horen."
+"Als u een enkele datum selecteert zullen toeslagen hier niet getoond worden, "
+"omdat het onduidelijk kan zijn bij welke datum ze horen."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:61
 #: pretix/plugins/reports/exporters.py:219
@@ -12566,16 +12551,12 @@ msgid "Background PDF"
 msgstr "Achtergrond-PDF"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:190
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create empty background"
-msgstr "Maak een nieuw account"
+msgstr "Maak een lege achtergrond"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:195
-#, fuzzy
-#| msgid "Upload new background"
 msgid "Upload custom background"
-msgstr "Upload nieuwe achtergrond"
+msgstr "Upload aangepaste achtergrond"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:208
 msgid "x (mm)"
@@ -13977,8 +13958,6 @@ msgid "Sample Corporation"
 msgstr "Voorbeeldbedrijf"
 
 #: pretix/control/views/event.py:622
-#, fuzzy
-#| msgid "An individial text with a reason can be inserted here."
 msgid "An individual text with a reason can be inserted here."
 msgstr "Een individuele tekst met een reden kan hier worden ingevoerd."
 
@@ -14956,10 +14935,8 @@ msgid "Include pending orders"
 msgstr "Inclusief openstaande bestellingen"
 
 #: pretix/plugins/badges/exporters.py:103
-#, fuzzy
-#| msgid "Include questions"
 msgid "Include add-on or bundled positions"
-msgstr "Inclusief vragen"
+msgstr "Inclusief add-on of gebundelde plaatsen"
 
 #: pretix/plugins/badges/exporters.py:108
 #: pretix/plugins/checkinlists/exporters.py:49
@@ -16117,22 +16094,20 @@ msgstr "Lijst van bestellingen met belasting"
 #: pretix/plugins/returnurl/__init__.py:9
 #: pretix/plugins/returnurl/__init__.py:12
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:5
-#, fuzzy
-#| msgid "Remove from order"
 msgid "Redirection from order page"
-msgstr "Verwijderen van bestelling"
+msgstr "Doorverwijzing van bestelpagina"
 
 #: pretix/plugins/returnurl/__init__.py:15
 msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
+"Deze plug-in staat toe om naar betalingen te linken, en hierna de gebruiker "
+"opnieuw door te verwijzen. Dit kan nuttig zijn in combinatie met onze API."
 
 #: pretix/plugins/returnurl/signals.py:44
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Redirection"
-msgstr "Doorverwijzings-URI's"
+msgstr "Doorverwijzing"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:7
 msgid ""
