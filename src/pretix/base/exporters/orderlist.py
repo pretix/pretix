@@ -109,6 +109,8 @@ class OrderListExporter(MultiSheetListExporter):
 
         headers.append(_('Invoice numbers'))
         headers.append(_('Sales channel'))
+        headers.append(_('Requires special attention'))
+        headers.append(_('Comment'))
 
         yield headers
 
@@ -179,6 +181,8 @@ class OrderListExporter(MultiSheetListExporter):
 
             row.append(', '.join([i.number for i in order.invoices.all()]))
             row.append(order.sales_channel)
+            row.append(_('Yes') if order.checkin_attention else _('No'))
+            row.append(order.comment or "")
             yield row
 
     def iterate_fees(self, form_data: dict):

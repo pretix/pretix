@@ -331,6 +331,8 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers.append(_('Company'))
         headers.append(_('Voucher code'))
         headers.append(_('Order date'))
+        headers.append(_('Requires special attention'))
+        headers.append(_('Comment'))
         yield headers
 
         for op in qs:
@@ -394,6 +396,8 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             row.append(ia.company)
             row.append(op.voucher.code if op.voucher else "")
             row.append(op.order.datetime.astimezone(self.event.timezone).strftime('%Y-%m-%d'))
+            row.append(_('Yes') if op.order.checkin_attention else _('No'))
+            row.append(op.order.comment or "")
             yield row
 
     def get_filename(self):
