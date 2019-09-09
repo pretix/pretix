@@ -239,7 +239,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 name += "<br/>" + iac
 
             row = [
-                '!!' if op.item.checkin_attention else '',
+                '!!' if op.item.checkin_attention or op.order.checkin_attention else '',
                 CBFlowable(bool(op.last_checked_in)),
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
@@ -396,7 +396,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             row.append(ia.company)
             row.append(op.voucher.code if op.voucher else "")
             row.append(op.order.datetime.astimezone(self.event.timezone).strftime('%Y-%m-%d'))
-            row.append(_('Yes') if op.order.checkin_attention else _('No'))
+            row.append(_('Yes') if op.order.checkin_attention or op.item.checkin_attention else _('No'))
             row.append(op.order.comment or "")
             yield row
 
