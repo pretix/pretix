@@ -344,8 +344,16 @@ class Login2FAView(TemplateView):
 
             for d in devices:
                 try:
+                    wu = d.webauthnuser
+
+                    if isinstance(d, U2FDevice):
+                        # RP_ID needs to be appId for U2F devices, but we can't
+                        # set it that way in U2FDevice.webauthnuser, since that
+                        # breaks the frontend part.
+                        wu.rp_id = settings.SITE_URL
+
                     webauthn_assertion_response = webauthn.WebAuthnAssertionResponse(
-                        d.webauthnuser,
+                        wu,
                         resp,
                         challenge,
                         settings.SITE_URL,

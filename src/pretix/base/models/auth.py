@@ -392,8 +392,11 @@ class U2FDevice(Device):
     def webauthnuser(self):
         d = json.loads(self.json_data)
         pub_key = pub_key_from_der(websafe_decode(d['publicKey'].replace('+', '-').replace('/', '_')))
-        pub_key = b'\x04' + binascii.unhexlify('{:064x}{:064x}'.format(
-            pub_key.public_numbers().x, pub_key.public_numbers().y))
+        pub_key = binascii.unhexlify(
+            'A5010203262001215820{:064x}225820{:064x}'.format(
+                pub_key.public_numbers().x, pub_key.public_numbers().y
+            )
+        )
         return webauthn.WebAuthnUser(
             d['keyHandle'],
             self.user.email,

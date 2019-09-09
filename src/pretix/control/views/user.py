@@ -64,23 +64,38 @@ class ReauthView(TemplateView):
         if 'webauthn_challenge' in self.request.session and password.startswith('{'):
             challenge = self.request.session['webauthn_challenge']
 
+            resp = json.loads(password)
             try:
-                resp = json.loads(password)
-                device = WebAuthnDevice.objects.get(user=self.request.user, credential_id=resp.get("id"))
+                devices = [WebAuthnDevice.objects.get(user=self.request.user, credential_id=resp.get("id"))]
+            except WebAuthnDevice.DoesNotExist:
+                devices = U2FDevice.objects.filter(user=self.request.user)
 
-                webauthn_assertion_response = webauthn.WebAuthnAssertionResponse(
-                    device.webauthnuser,
-                    resp,
-                    challenge,
-                    settings.SITE_URL,
-                    uv_required=False  # User Verification
-                )
-                sign_count = webauthn_assertion_response.verify()
-                device.sign_count = sign_count
-                device.save()
-                valid = True
-            except Exception:
-                logger.exception('U2F login failed')
+            for d in devices:
+                try:
+                    wu = d.webauthnuser
+
+                    if isinstance(d, U2FDevice):
+                        # RP_ID needs to be appId for U2F devices, but we can't
+                        # set it that way in U2FDevice.webauthnuser, since that
+                        # breaks the frontend part.
+                        wu.rp_id = settings.SITE_URL
+
+                    webauthn_assertion_response = webauthn.WebAuthnAssertionResponse(
+                        wu,
+                        resp,
+                        challenge,
+                        settings.SITE_URL,
+                        uv_required=False  # User Verification
+                    )
+                    sign_count = webauthn_assertion_response.verify()
+                except Exception:
+                    logger.exception('U2F login failed')
+                else:
+                    if isinstance(d, WebAuthnDevice):
+                        d.sign_count = sign_count
+                        d.save()
+                    valid = True
+                    break
 
         valid = valid or request.user.check_password(password)
 
@@ -101,14 +116,21 @@ class ReauthView(TemplateView):
             del self.request.session['webauthn_challenge']
         challenge = generate_challenge(32)
         self.request.session['webauthn_challenge'] = challenge
-        devices = [device.webauthnuser
-                   for device in WebAuthnDevice.objects.filter(confirmed=True, user=self.request.user)]
+        devices = [
+            device.webauthnuser for device in WebAuthnDevice.objects.filter(confirmed=True, user=self.request.user)
+        ] + [
+            device.webauthnuser for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)
+        ]
         if devices:
             webauthn_assertion_options = webauthn.WebAuthnAssertionOptions(
                 devices,
                 challenge
             )
-            ctx['jsondata'] = webauthn_assertion_options.json
+            ad = webauthn_assertion_options.assertion_dict
+            ad['extensions'] = {
+                'appid': get_u2f_appid(self.request)
+            }
+            ctx['jsondata'] = json.dumps(ad)
         return ctx
 
 
