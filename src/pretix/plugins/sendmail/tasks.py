@@ -35,7 +35,8 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                 if p.item_id not in items and not any(a.item_id in items for a in p.addons.all()):
                     continue
 
-                if forms.MailForm.NOT_CHECKED_IN not in checkin_lists and not any(str(c.list_id) in checkin_lists for c in p.checkins.all()):
+                checkins = p.checkins.all()
+                if not (forms.MailForm.NOT_CHECKED_IN in checkin_lists and not checkins) and not any(str(c.list_id) in checkin_lists for c in checkins):
                     continue
 
                 if not p.attendee_email:
