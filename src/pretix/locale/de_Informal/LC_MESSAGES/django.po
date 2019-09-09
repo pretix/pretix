@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-03 09:36+0000\n"
-"PO-Revision-Date: 2019-08-09 08:26+0000\n"
+"PO-Revision-Date: 2019-09-09 07:48+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -2327,10 +2327,8 @@ msgid "This question will only show up in the backend."
 msgstr "Diese Frage wird nur im Backend angezeigt."
 
 #: pretix/base/models/items.py:1038
-#, fuzzy
-#| msgid "Text on invoices"
 msgid "Print answer on invoices"
-msgstr "Text auf Rechnungen"
+msgstr "Antwort auf Rechnungen abdrucken"
 
 #: pretix/base/models/items.py:1070
 msgid "This identifier is already used for a different question."
@@ -5652,15 +5650,6 @@ msgid "Ask for email addresses per ticket"
 msgstr "E-Mail-Adressen pro Ticket erfassen"
 
 #: pretix/control/forms/event.py:394
-#, fuzzy
-#| msgid ""
-#| "Normally, pretix asks for one email address per order and the order "
-#| "confirmation will be sent only to that email address. If you enable this "
-#| "option, the system will additionally ask for individual email addresses "
-#| "for every admission ticket. This might be useful if you want to obtain "
-#| "individual addresses for every attendee even in case of group orders. "
-#| "However, pretix will send the order confirmation only to the one primary "
-#| "email address, not to the per-attendee addresses."
 msgid ""
 "Normally, pretix asks for one email address per order and the order "
 "confirmation will be sent only to that email address. If you enable this "
@@ -5676,8 +5665,9 @@ msgstr ""
 "aktivierst, fragt das System zusätzlich nach einzelnen E-Mail-Adressen für "
 "jedes Zutritts-Ticket in der Bestellung. Dies könnte z.B. nützlich sein, "
 "wenn du auch im Falle von Gruppenbestellungen individuelle Adressen von "
-"jeder Teilnehmer*in benötigst. pretix sendet die Bestellbestätigung trotzdem "
-"nach wie vor nur an die primäre Adresse."
+"jeder Teilnehmer*in benötigst. pretix sendet die Bestellbestätigung "
+"standardmäßig nach wie vor nur an die primäre Adresse, dies kann jedoch in "
+"den E-Mail-Einstellungen angepasst werden."
 
 #: pretix/control/forms/event.py:403
 msgid "Require email addresses per ticket"
@@ -10898,7 +10888,7 @@ msgstr "Neue Frage erstellen"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:58
 msgid "Ask during check-in"
-msgstr ""
+msgstr "Beim Check-in fragen"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:6
 #: pretix/control/templates/pretixcontrol/items/quota.html:9
@@ -12025,18 +12015,13 @@ msgid "Revenue (net)"
 msgstr "Umsatz (netto)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:48
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid ""
-#| "If you select a single date, payment method fees will not be listed here "
-#| "as it might not be clear which date they belong to."
 msgctxt "subevent"
 msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
-"Wenn du einen einzelnen Termin wählst, werden Zahlungsmittelgebühren hier "
-"nicht angezeigt, da nicht klar ist, welchem Termin sie zuzuordnen wären."
+"Wenn du einen bestimmten Termin auswählst, werden Gebühren nicht aufgelistet "
+"da diese den Terminen nicht eindeutig zugeordnet werden können."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:61
 #: pretix/plugins/reports/exporters.py:219
@@ -12593,16 +12578,12 @@ msgid "Background PDF"
 msgstr "Hintergrund-PDF"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:190
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create empty background"
-msgstr "Neuen Benutzer erstellen"
+msgstr "Leeren Hintergrund erstellen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:195
-#, fuzzy
-#| msgid "Upload new background"
 msgid "Upload custom background"
-msgstr "Neuen Hintergrund hochladen"
+msgstr "Eigenen Hintergrund hochladen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:208
 msgid "x (mm)"
@@ -14009,8 +13990,6 @@ msgid "Sample Corporation"
 msgstr "Musterfirma"
 
 #: pretix/control/views/event.py:622
-#, fuzzy
-#| msgid "An individial text with a reason can be inserted here."
 msgid "An individual text with a reason can be inserted here."
 msgstr "Hier kann ein Grund für den Nutzer angegeben werden."
 
@@ -14992,10 +14971,8 @@ msgid "Include pending orders"
 msgstr "Bestellungen mit ausstehender Zahlung mit einschließen"
 
 #: pretix/plugins/badges/exporters.py:103
-#, fuzzy
-#| msgid "Include questions"
 msgid "Include add-on or bundled positions"
-msgstr "Fragen anzeigen"
+msgstr "Zusatzprodukte und enthaltene Produkte mit einschließen"
 
 #: pretix/plugins/badges/exporters.py:108
 #: pretix/plugins/checkinlists/exporters.py:49
@@ -16153,38 +16130,38 @@ msgstr "Liste der Bestellungen mit Steuern"
 #: pretix/plugins/returnurl/__init__.py:9
 #: pretix/plugins/returnurl/__init__.py:12
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:5
-#, fuzzy
-#| msgid "Remove from order"
 msgid "Redirection from order page"
-msgstr "Von Bestellung entfernen"
+msgstr "Weiterleitung von der Bestellseite"
 
 #: pretix/plugins/returnurl/__init__.py:15
 msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
+"Diese Erweiterung erlaubt die Verlinkung zu Zahlungen und die Umleitung nach "
+"erfolgreicher Zahlung. Dies ist besonders in Kombination mit der API "
+"nützlich."
 
 #: pretix/plugins/returnurl/signals.py:44
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Redirection"
-msgstr "URLs zur Weiterleitung"
+msgstr "Weiterleitung"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:7
 msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
+"Diese Funktion ist nützlich, wenn du pretix nur zur Zahlungsabwicklung "
+"benutzt, aber einen eigenen Checkout für die anderen Schritte verwendest."
 
 #: pretix/plugins/returnurl/views.py:14
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Base redirection URL"
-msgstr "URLs zur Weiterleitung"
+msgstr "Basis-URL zur Weiterleitung"
 
 #: pretix/plugins/returnurl/views.py:15
 msgid "Redirection will only be allowed to URLs that start with this prefix."
 msgstr ""
+"Die Weiterleitung ist nur zu URLs erlaubt, die mit diesem Präfix beginnen."
 
 #: pretix/plugins/sendmail/__init__.py:9 pretix/plugins/sendmail/__init__.py:12
 #: pretix/plugins/sendmail/signals.py:16
