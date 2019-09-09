@@ -391,6 +391,10 @@ class U2FDevice(Device):
     @property
     def webauthnuser(self):
         d = json.loads(self.json_data)
+        # We manually need to convert the pubkey from DER format (used in our
+        # former U2F implementation) to the format required by webauthn. This
+        # is based on the following example:
+        # https://www.w3.org/TR/webauthn/#sctn-encoded-credPubKey-examples
         pub_key = pub_key_from_der(websafe_decode(d['publicKey'].replace('+', '-').replace('/', '_')))
         pub_key = binascii.unhexlify(
             'A5010203262001215820{:064x}225820{:064x}'.format(
