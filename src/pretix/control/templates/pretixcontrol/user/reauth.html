@@ -4,7 +4,7 @@
 {% load compress %}
 {% load static %}
 {% block content %}
-    <form class="form-signin" id="u2f-form" action="" method="post">
+    <form class="form-signin" id="webauthn-form" action="" method="post">
         {% csrf_token %}
         <h3>{% trans "Welcome back!" %}</h3>
         <p>
@@ -19,12 +19,12 @@
                     title="" type="password" required="" autofocus>
         </div>
         {% if jsondata %}
-            <div class="sr-only alert alert-danger" id="u2f-error">
-                {% trans "U2F failed. Check that the correct authentication device is correctly plugged in." %}
+            <div class="sr-only alert alert-danger" id="webauthn-error">
+                {% trans "WebAuthn failed. Check that the correct authentication device is correctly plugged in." %}
             </div>
             <p><small>
                 <span class="fa fa-usb"></span>
-                {% trans "Alternatively, you can use your U2F device." %}
+                {% trans "Alternatively, you can use your WebAuthn device." %}
             </small></p>
         {% endif %}
         <div class="form-group text-right">
@@ -37,14 +37,14 @@
         </div>
 
         {% if jsondata %}
-            <script type="text/json" id="u2f-login">
+            <script type="text/json" id="webauthn-login">
             {{ jsondata|safe }}
             </script>
         {% endif %}
         {% compress js %}
             <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
-            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/u2f-api.js" %}"></script>
-            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/u2f.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/base64js.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/webauthn.js" %}"></script>
         {% endcompress %}
     </form>
 {% endblock %}

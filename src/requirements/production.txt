@@ -17,6 +17,7 @@ django-libsass
 libsass
 django-otp==0.5.*
 python-u2flib-server==4.*
+webauthn==0.4.*
 django-formtools==2.1
 celery==4.3.*
 kombu==4.5.*

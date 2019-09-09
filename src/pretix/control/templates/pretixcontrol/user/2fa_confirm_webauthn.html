@@ -6,13 +6,13 @@
 {% block title %}{% trans "Add a two-factor authentication device" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Add a two-factor authentication device" %}</h1>
-    <p id="u2f-progress">
+    <p id="webauthn-progress">
         <span class="fa fa-cog fa-spin"></span>
-        {% trans "Please connect your U2F device. If it has a button, touch it now. You might have to unplug the device and plug it back in again." %}
+        {% trans "Please connect your WebAuthn device. If it has a button, touch it now. You might have to unplug the device and plug it back in again." %}
     </p>
-    <form class="form form-inline" method="post" action="" id="u2f-form">
+    <form class="form form-inline" method="post" action="" id="webauthn-form">
         {% csrf_token %}
-        <input type="hidden" id="u2f-response" name="token" class="form-control" required="required">
+        <input type="hidden" id="webauthn-response" name="token" class="form-control" required="required">
         <p>
             <label>
                 <input type="checkbox" name="activate" checked="checked" value="on">
@@ -22,16 +22,16 @@
         <button class="btn btn-primary sr-only" type="submit"></button>
     </form>
 
-    <div class="sr-only alert alert-danger" id="u2f-error">
+    <div class="sr-only alert alert-danger" id="webauthn-error">
         {% trans "Device registration failed." %}
     </div>
-    <script type="text/json" id="u2f-enroll">
+    <script type="text/json" id="webauthn-enroll">
         {{ jsondata|safe }}
 
 
     </script>
     {% compress js %}
-        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/u2f-api.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/u2f.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/base64js.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/webauthn.js" %}"></script>
     {% endcompress %}
 {% endblock %}

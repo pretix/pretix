@@ -1,5 +1,9 @@
+import json
 from datetime import timedelta
+from urllib.parse import urlparse
 
+import cbor2
+import webauthn
 from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
@@ -13,6 +17,9 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
 from django_scopes import scopes_disabled
+from u2flib_server.utils import (
+    pub_key_from_der, websafe_decode, websafe_encode,
+)
 
 from pretix.base.i18n import language
 from pretix.helpers.urls import build_absolute_uri
@@ -380,3 +387,45 @@ class StaffSessionAuditLog(models.Model):
 
 class U2FDevice(Device):
     json_data = models.TextField()
+
+    @property
+    def webauthnuser(self):
+        d = json.loads(self.json_data)
+        pub_key = pub_key_from_der(websafe_decode(d['publicKey'].replace('+', '-').replace('/', '_')))
+        pub_key = cbor2.dumps({
+            3: -7,
+            -2: hex(pub_key.public_numbers().x)[2:],
+            -3: hex(pub_key.public_numbers().y)[2:],
+        })
+        return webauthn.WebAuthnUser(
+            d['keyHandle'],
+            self.user.email,
+            str(self.user),
+            settings.SITE_URL,
+            d['keyHandle'],
+            websafe_encode(pub_key),
+            1,
+            urlparse(settings.SITE_URL).netloc
+        )
+
+
+class WebAuthnDevice(Device):
+    credential_id = models.CharField(max_length=255, null=True, blank=True)
+    rp_id = models.CharField(max_length=255, null=True, blank=True)
+    icon_url = models.CharField(max_length=255, null=True, blank=True)
+    ukey = models.TextField(null=True)
+    pub_key = models.TextField(null=True)
+    sign_count = models.IntegerField(default=0)
+
+    @property
+    def webauthnuser(self):
+        return webauthn.WebAuthnUser(
+            self.ukey,
+            self.user.email,
+            str(self.user),
+            settings.SITE_URL,
+            self.credential_id,
+            self.pub_key,
+            self.sign_count,
+            urlparse(settings.SITE_URL).netloc
+        )

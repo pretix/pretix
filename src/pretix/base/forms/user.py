@@ -115,5 +115,5 @@ class User2FADeviceAddForm(forms.Form):
     name = forms.CharField(label=_('Device name'), max_length=64)
     devicetype = forms.ChoiceField(label=_('Device type'), widget=forms.RadioSelect, choices=(
         ('totp', _('Smartphone with the Authenticator application')),
-        ('u2f', _('U2F-compatible hardware token (e.g. Yubikey)')),
+        ('webauthn', _('WebAuthn-compatible hardware token (e.g. Yubikey)')),
     ))
