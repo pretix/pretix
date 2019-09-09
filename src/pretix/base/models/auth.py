@@ -1,8 +1,8 @@
+import binascii
 import json
 from datetime import timedelta
 from urllib.parse import urlparse
 
-import cbor2
 import webauthn
 from django.conf import settings
 from django.contrib.auth.models import (
@@ -392,11 +392,8 @@ class U2FDevice(Device):
     def webauthnuser(self):
         d = json.loads(self.json_data)
         pub_key = pub_key_from_der(websafe_decode(d['publicKey'].replace('+', '-').replace('/', '_')))
-        pub_key = cbor2.dumps({
-            3: -7,
-            -2: hex(pub_key.public_numbers().x)[2:],
-            -3: hex(pub_key.public_numbers().y)[2:],
-        })
+        pub_key = b'\x04' + binascii.unhexlify('{:064x}{:064x}'.format(
+            pub_key.public_numbers().x, pub_key.public_numbers().y))
         return webauthn.WebAuthnUser(
             d['keyHandle'],
             self.user.email,
