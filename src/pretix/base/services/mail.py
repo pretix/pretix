@@ -4,7 +4,6 @@ import os
 import re
 import smtplib
 import warnings
-from email.encoders import encode_noop
 from email.mime.image import MIMEImage
 from email.utils import formataddr
 from typing import Any, Dict, List, Union
@@ -393,12 +392,27 @@ def attach_cid_images(msg, cid_images, verify_ssl=True):
     return msg
 
 
+def encoder_linelength(msg):
+    """
+    RFC1341 mandates that base64 encoded data may not be longer than 76 characters per line
+    https://www.w3.org/Protocols/rfc1341/5_Content-Transfer-Encoding.html section 5.2
+    """
+
+    orig = msg.get_payload(decode=True).replace(b"\n", b"").replace(b"\r", b"")
+    max_length = 76
+    pieces = []
+    for i in range(0, len(orig), max_length):
+        chunk = orig[i:i + max_length]
+        pieces.append(chunk)
+    msg.set_payload(b"\r\n".join(pieces))
+
+
 def convert_image_to_cid(image_src, cid_id, verify_ssl=True):
     try:
         if image_src.startswith('data:image/'):
             image_type, image_content = image_src.split(',', 1)
             image_type = re.findall(r'data:image/(\w+);base64', image_type)[0]
-            mime_image = MIMEImage(image_content, _subtype=image_type, _encoder=encode_noop)
+            mime_image = MIMEImage(image_content, _subtype=image_type, _encoder=encoder_linelength)
             mime_image.add_header('Content-Transfer-Encoding', 'base64')
         elif image_src.startswith('data:'):
             logger.exception("ERROR creating MIME element %s[%s]" % (cid_id, image_src))
