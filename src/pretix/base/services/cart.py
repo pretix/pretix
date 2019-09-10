@@ -14,8 +14,8 @@ from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Item, ItemBundle, ItemVariation, Seat,
-    SeatCategoryMapping, Voucher,
+    CartPosition, Event, GiftCard, InvoiceAddress, Item, ItemBundle,
+    ItemVariation, Seat, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
@@ -958,14 +958,36 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
 
 
 def get_fees(event, request, total, invoice_address, provider):
-    fees = []
+    from pretix.presale.views.cart import cart_session
 
+    fees = []
     for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
                                                     total=total):
         if resp:
             fees += resp
 
     total = total + sum(f.value for f in fees)
+
+    cs = cart_session(request)
+    if cs.get('gift_cards'):
+        gc_qs = GiftCard.objects.filter(pk__in=cs.get('gift_cards'))
+        summed = 0
+        for gc in gc_qs:
+            fval = Decimal(gc.value)  # TODO: don't require an extra query
+            fval = min(fval, total - summed)
+            if fval > 0:
+                total -= fval
+                summed += fval
+                fees.append(OrderFee(
+                    fee_type=OrderFee.FEE_TYPE_GIFTCARD,
+                    internal_type='giftcard',
+                    description=gc.secret,
+                    value=-1 * fval,
+                    tax_rate=Decimal('0.00'),
+                    tax_value=Decimal('0.00'),
+                    tax_rule=TaxRule.zero()
+                ))
+
     if provider and total != 0:
         provider = event.get_payment_providers().get(provider)
         if provider:

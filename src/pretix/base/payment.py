@@ -888,6 +888,21 @@ class OffsettingProvider(BasePaymentProvider):
         return _('Balanced against orders: %s' % ', '.join(payment.info_data['orders']))
 
 
+class GiftCardPayment(BasePaymentProvider):
+    is_enabled = True
+    identifier = "giftcard"
+    verbose_name = _("Gift card")
+    is_implicit = True
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return False
+
+    def order_change_allowed(self, order: Order) -> bool:
+        return False
+
+    # TODO: execute, refund, api, control render
+
+
 @receiver(register_payment_providers, dispatch_uid="payment_free")
 def register_payment_provider(sender, **kwargs):
-    return [FreeOrderProvider, BoxOfficeProvider, OffsettingProvider, ManualPayment]
+    return [FreeOrderProvider, BoxOfficeProvider, OffsettingProvider, ManualPayment, GiftCardPayment]
