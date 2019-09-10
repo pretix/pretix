@@ -54,7 +54,7 @@ vobject==0.9.*
 pycountry
 django-countries
 pyuca  # for better sorting of country names in django-countries
-defusedcsv>=1.0.1
+defusedcsv>=1.1.0
 vat_moss==0.11.0
 django-localflavor>=2.2
 urllib3==1.24.*

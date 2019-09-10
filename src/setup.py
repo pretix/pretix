@@ -136,7 +136,7 @@ setup(
         'pycountry',
         'django-countries',
         'pyuca',
-        'defusedcsv',
+        'defusedcsv>=1.1.0',
         'vat_moss==0.11.0',
         'django-localflavor>=2.2',
         'django-localflavor',
