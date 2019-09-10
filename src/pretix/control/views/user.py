@@ -53,10 +53,6 @@ class RecentAuthenticationRequiredMixin:
 class ReauthView(TemplateView):
     template_name = 'pretixcontrol/user/reauth.html'
 
-    @property
-    def app_id(self):
-        return get_u2f_appid(self.request)
-
     def post(self, request, *args, **kwargs):
         password = request.POST.get("password", "")
         valid = False
@@ -249,6 +245,10 @@ class User2FADeviceAddView(RecentAuthenticationRequiredMixin, FormView):
         if form.cleaned_data['devicetype'] == 'totp':
             dev = TOTPDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
         elif form.cleaned_data['devicetype'] == 'webauthn':
+            if not self.request.is_secure():
+                messages.error(self.request,
+                               _('Security devices are only available if pretix is served via HTTPS.'))
+                return self.get(self.request, self.args, self.kwargs)
             dev = WebAuthnDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
         return redirect(reverse('control:user.settings.2fa.confirm.' + form.cleaned_data['devicetype'], kwargs={
             'device': dev.pk
@@ -339,9 +339,13 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
             resp = json.loads(self.request.POST.get("token"))
             trust_anchor_dir = os.path.normpath(os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
-                '../../static/trusted_attestation_roots'
+                '../../static/webauthn_trusted_attestation_roots'  # currently does not exist
             ))
-            trusted_attestation_cert_required = False  # TODO: Fix?
+            # We currently do not check attestation certificates, since there's no real risk
+            # and we do not have any policies specifying what devices can be used. (Also, we
+            # didn't get it to work.)
+            # Read more: https://fidoalliance.org/fido-technotes-the-truth-about-attestation/
+            trusted_attestation_cert_required = False
             self_attestation_permitted = True
             none_attestation_permitted = True
 

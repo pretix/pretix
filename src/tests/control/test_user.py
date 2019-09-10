@@ -6,9 +6,11 @@ from django_otp.oath import TOTP
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from tests.base import SoupTest, extract_form_fields
-from u2flib_server.jsapi import JSONDict
+from webauthn import WebAuthnCredential
 
-from pretix.base.models import Event, Organizer, U2FDevice, User
+from pretix.base.models import (
+    Event, Organizer, U2FDevice, User, WebAuthnDevice,
+)
 from pretix.testutils.mock import mocker_context
 
 
@@ -181,27 +183,33 @@ class UserSettings2FATest(SoupTest):
         self.client.post('/control/settings/2fa/u2f/{}/delete'.format(d.pk))
         assert not U2FDevice.objects.exists()
 
+    def test_delete_webauthn(self):
+        d = WebAuthnDevice.objects.create(user=self.user, name='Test')
+        self.client.get('/control/settings/2fa/webauthn/{}/delete'.format(d.pk))
+        self.client.post('/control/settings/2fa/webauthn/{}/delete'.format(d.pk))
+        assert not WebAuthnDevice.objects.exists()
+
     def test_delete_totp(self):
         d = TOTPDevice.objects.create(user=self.user, name='Test')
         self.client.get('/control/settings/2fa/totp/{}/delete'.format(d.pk))
         self.client.post('/control/settings/2fa/totp/{}/delete'.format(d.pk))
         assert not TOTPDevice.objects.exists()
 
-    def test_create_u2f_require_https(self):
+    def test_create_webauthn_require_https(self):
         r = self.client.post('/control/settings/2fa/add', {
-            'devicetype': 'u2f',
+            'devicetype': 'webauthn',
             'name': 'Foo'
         })
         assert 'alert-danger' in r.content.decode()
 
-    def test_create_u2f(self):
+    def test_create_webauthn(self):
         with mocker_context() as mocker:
             mocker.patch('django.http.request.HttpRequest.is_secure')
             self.client.post('/control/settings/2fa/add', {
-                'devicetype': 'u2f',
+                'devicetype': 'webauthn',
                 'name': 'Foo'
             })
-            d = U2FDevice.objects.first()
+            d = WebAuthnDevice.objects.first()
             assert d.name == 'Foo'
             assert not d.confirmed
 
@@ -246,35 +254,38 @@ class UserSettings2FATest(SoupTest):
         d.refresh_from_db()
         assert not d.confirmed
 
-    def test_confirm_u2f_failed(self):
+    def test_confirm_webauthn_failed(self):
         with mocker_context() as mocker:
             mocker.patch('django.http.request.HttpRequest.is_secure')
             self.client.post('/control/settings/2fa/add', {
-                'devicetype': 'u2f',
+                'devicetype': 'webauthn',
                 'name': 'Foo'
             }, follow=True)
-        d = U2FDevice.objects.first()
-        r = self.client.post('/control/settings/2fa/u2f/{}/confirm'.format(d.pk), {
+        d = WebAuthnDevice.objects.first()
+        r = self.client.post('/control/settings/2fa/webauthn/{}/confirm'.format(d.pk), {
             'token': 'FOO'
         }, follow=True)
         assert 'alert-danger' in r.content.decode()
         d.refresh_from_db()
         assert not d.confirmed
 
-    def test_confirm_u2f_success(self):
+    def test_confirm_webauthn_success(self):
         with mocker_context() as mocker:
             mocker.patch('django.http.request.HttpRequest.is_secure')
             self.client.post('/control/settings/2fa/add', {
-                'devicetype': 'u2f',
+                'devicetype': 'webauthn',
                 'name': 'Foo'
             }, follow=True)
 
         m = self.monkeypatch
-        m.setattr("u2flib_server.u2f.complete_register", lambda *args, **kwargs: (JSONDict({}), None))
+        m.setattr("webauthn.WebAuthnRegistrationResponse.verify",
+                  lambda *args, **kwargs: WebAuthnCredential(
+                      '', '', b'asd', b'foo', 1
+                  ))
 
-        d = U2FDevice.objects.first()
-        r = self.client.post('/control/settings/2fa/u2f/{}/confirm'.format(d.pk), {
-            'token': 'FOO',
+        d = WebAuthnDevice.objects.first()
+        r = self.client.post('/control/settings/2fa/webauthn/{}/confirm'.format(d.pk), {
+            'token': '{}',
             'activate': 'on'
         }, follow=True)
         d.refresh_from_db()
@@ -282,7 +293,6 @@ class UserSettings2FATest(SoupTest):
         assert 'alert-success' in r.content.decode()
         self.user.refresh_from_db()
         assert self.user.require_2fa
-
         m.undo()
 
 

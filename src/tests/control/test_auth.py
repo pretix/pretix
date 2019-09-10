@@ -11,7 +11,6 @@ from django.test import TestCase, override_settings
 from django.utils.timezone import now
 from django_otp.oath import TOTP
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from u2flib_server.jsapi import JSONDict
 
 from pretix.base.models import U2FDevice, User
 
@@ -268,10 +267,14 @@ class Login2FAFormTest(TestCase):
             raise Exception("Failed")
 
         m = self.monkeypatch
-        m.setattr("u2flib_server.u2f.verify_authenticate", fail)
-        m.setattr("u2flib_server.u2f.start_authenticate",
-                  lambda *args, **kwargs: JSONDict({'authenticateRequests': []}))
-        d = U2FDevice.objects.create(user=self.user, name='test', json_data="{}")
+        m.setattr("webauthn.WebAuthnAssertionResponse.verify", fail)
+        d = U2FDevice.objects.create(
+            user=self.user, name='test',
+            json_data='{"appId": "https://local.pretix.eu", "keyHandle": '
+                      '"j9Rkpon1J5U3eDQMM8YqAvwEapt-m87V8qdCaImiAqmvTJ'
+                      '-sBvnACIKKM6J_RVXF4jPtY0LGyjbHi14sxsoC5g", "publ'
+                      'icKey": "BP5KRLUGvcHbqkCc7eJNXZ9caVXLSk4wjsq'
+                      'L-pLEQcNqVp2E4OeDUIxI0ZLOXry9JSrLn1aAGcGowXiIyB7ynj0"}')
 
         response = self.client.get('/control/login/2fa')
         assert 'token' in response.content.decode()
@@ -285,10 +288,15 @@ class Login2FAFormTest(TestCase):
 
     def test_u2f_valid(self):
         m = self.monkeypatch
-        m.setattr("u2flib_server.u2f.verify_authenticate", lambda *args, **kwargs: True)
-        m.setattr("u2flib_server.u2f.start_authenticate",
-                  lambda *args, **kwargs: JSONDict({'authenticateRequests': []}))
-        d = U2FDevice.objects.create(user=self.user, name='test', json_data="{}")
+        m.setattr("webauthn.WebAuthnAssertionResponse.verify", lambda *args, **kwargs: 1)
+
+        d = U2FDevice.objects.create(
+            user=self.user, name='test',
+            json_data='{"appId": "https://local.pretix.eu", "keyHandle": '
+                      '"j9Rkpon1J5U3eDQMM8YqAvwEapt-m87V8qdCaImiAqmvTJ'
+                      '-sBvnACIKKM6J_RVXF4jPtY0LGyjbHi14sxsoC5g", "publ'
+                      'icKey": "BP5KRLUGvcHbqkCc7eJNXZ9caVXLSk4wjsq'
+                      'L-pLEQcNqVp2E4OeDUIxI0ZLOXry9JSrLn1aAGcGowXiIyB7ynj0"}')
 
         response = self.client.get('/control/login/2fa')
         assert 'token' in response.content.decode()
