@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-08-18 05:00+0000\n"
+"POT-Creation-Date: 2019-09-10 08:00+0000\n"
+"PO-Revision-Date: 2019-09-11 00:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -1211,10 +1211,8 @@ msgid "Smartphone with the Authenticator application"
 msgstr "Smartphone met de Authenticator-applicatie"
 
 #: pretix/base/forms/user.py:118
-#, fuzzy
-#| msgid "U2F-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "U2F ondersteunend hardware-token (bijvoorbeeld Yubikey)"
+msgstr "WebAuthn-compatibel hardware-token (bijvoorbeeld Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
@@ -2334,10 +2332,8 @@ msgid "This question will only show up in the backend."
 msgstr "Deze vraag zal alleen in de backend zichtbaar zijn."
 
 #: pretix/base/models/items.py:1038
-#, fuzzy
-#| msgid "Text on invoices"
 msgid "Print answer on invoices"
-msgstr "Tekst op facturen"
+msgstr "Print antwoord op facturen"
 
 #: pretix/base/models/items.py:1070
 msgid "This identifier is already used for a different question."
@@ -5623,15 +5619,6 @@ msgid "Ask for email addresses per ticket"
 msgstr "Vraag om e-mailadressen per kaartje"
 
 #: pretix/control/forms/event.py:394
-#, fuzzy
-#| msgid ""
-#| "Normally, pretix asks for one email address per order and the order "
-#| "confirmation will be sent only to that email address. If you enable this "
-#| "option, the system will additionally ask for individual email addresses "
-#| "for every admission ticket. This might be useful if you want to obtain "
-#| "individual addresses for every attendee even in case of group orders. "
-#| "However, pretix will send the order confirmation only to the one primary "
-#| "email address, not to the per-attendee addresses."
 msgid ""
 "Normally, pretix asks for one email address per order and the order "
 "confirmation will be sent only to that email address. If you enable this "
@@ -5647,8 +5634,9 @@ msgstr ""
 "inschakelt zal het systeem ook om e-mailadressen voor ieder toegangsbewijs "
 "vragen. Dit zou nuttig kunnen zijn als je losse adressen wilt verzamelen "
 "voor iedere gast bij groepsbestellingen. De orderbevestiging zal nog steeds "
-"alleen naar het primaire e-mailadres verstuurd worden, en niet aan de "
-"adressen op ieder kaartje."
+"standaard alleen naar het primaire e-mailadres verstuurd worden, en niet aan "
+"de adressen op ieder kaartje. De bevestiging sturen naar de adressen op elk "
+"kaartje is in te schakelen in de e-mailinstellingen."
 
 #: pretix/control/forms/event.py:403
 msgid "Require email addresses per ticket"
@@ -6746,7 +6734,7 @@ msgstr "Alle bestellingen"
 
 #: pretix/control/forms/filter.py:103 pretix/control/forms/filter.py:201
 msgid "Paid (or canceled with paid fee)"
-msgstr "Betaald (of geannuleerd met betaalde kosten)"
+msgstr "Betaald (of geannuleerd met betaalde toeslag)"
 
 #: pretix/control/forms/filter.py:104 pretix/control/forms/filter.py:202
 #: pretix/control/templates/pretixcontrol/items/question.html:21
@@ -8718,27 +8706,20 @@ msgstr "Token"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:18
 #: pretix/control/templates/pretixcontrol/user/reauth.html:23
-#, fuzzy
-#| msgid ""
-#| "U2F failed. Check that the correct authentication device is correctly "
-#| "plugged in."
 msgid ""
 "WebAuthn failed. Check that the correct authentication device is correctly "
 "plugged in."
 msgstr ""
-"U2F mislukt. Controleer of het juiste authenticatieapparaat is aangesloten."
+"webAuthn mislukt. Controleer of het juiste authenticatieapparaat is "
+"aangesloten."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:22
-#, fuzzy
-#| msgid ""
-#| "Alternatively, connect your U2F device. If it has a button, touch it now. "
-#| "You might have to unplug the device and plug it back in again."
 msgid ""
 "Alternatively, connect your WebAuthn device. If it has a button, touch it "
 "now. You might have to unplug the device and plug it back in again."
 msgstr ""
-"Of: sluit je U2F-apparaat aan. Als het apparaat een knop heeft, druk die dan "
-"nu in. Je moet mogelijk je apparaat verwijderen en weer aansluiten."
+"Of: sluit je WebAuthn-apparaat aan. Als het apparaat een knop heeft, druk "
+"die dan nu in. Je moet mogelijk je apparaat verwijderen en weer aansluiten."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:27
 #: pretix/control/templates/pretixcontrol/events/create_base.html:19
@@ -10889,7 +10870,7 @@ msgstr "Nieuwe vraag aanmaken"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:58
 msgid "Ask during check-in"
-msgstr ""
+msgstr "Vraag tijdens check-in"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:6
 #: pretix/control/templates/pretixcontrol/items/quota.html:9
@@ -12014,18 +11995,13 @@ msgid "Revenue (net)"
 msgstr "Winst (netto)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:48
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid ""
-#| "If you select a single date, payment method fees will not be listed here "
-#| "as it might not be clear which date they belong to."
 msgctxt "subevent"
 msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
-"Als je een enkele datum selecteert zullen betalingstoeslagen hier niet "
-"getoond worden, omdat het onduidelijk kan zijn bij welke datum ze horen."
+"Als je een enkele datum selecteert zullen toeslagen hier niet getoond "
+"worden, omdat het onduidelijk kan zijn bij welke datum ze horen."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:61
 #: pretix/plugins/reports/exporters.py:219
@@ -12581,16 +12557,12 @@ msgid "Background PDF"
 msgstr "Achtergrond-PDF"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:190
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create empty background"
-msgstr "Maak een nieuw account"
+msgstr "Maak een lege achtergrond"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:195
-#, fuzzy
-#| msgid "Upload new background"
 msgid "Upload custom background"
-msgstr "Upload nieuwe achtergrond"
+msgstr "Upload aangepaste achtergrond"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:208
 msgid "x (mm)"
@@ -13016,16 +12988,12 @@ msgid "Require second factor for future logins"
 msgstr "Vereis tweede factor voor toekomstige aanmeldingen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:11
-#, fuzzy
-#| msgid ""
-#| "Please connect your U2F device. If it has a button, touch it now. You "
-#| "might have to unplug the device and plug it back in again."
 msgid ""
 "Please connect your WebAuthn device. If it has a button, touch it now. You "
 "might have to unplug the device and plug it back in again."
 msgstr ""
-"Sluit je U2F-apparaat aan. Als het een knop heeft, druk die dan nu in. Je "
-"moet mogelijk het apparaat ontkoppelen en weer aansluiten."
+"Sluit je WebAuthn-apparaat aan. Als het een knop heeft, druk die dan nu in. "
+"Je moet mogelijk het apparaat ontkoppelen en weer aansluiten."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:26
 msgid "Device registration failed."
@@ -13259,10 +13227,8 @@ msgstr ""
 "te gaan."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
-#, fuzzy
-#| msgid "Alternatively, you can use your U2F device."
 msgid "Alternatively, you can use your WebAuthn device."
-msgstr "Je kan ook je U2F-apparaat gebruiken."
+msgstr "Je kan ook je WebAuthn-apparaat gebruiken."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
@@ -14001,8 +13967,6 @@ msgid "Sample Corporation"
 msgstr "Voorbeeldbedrijf"
 
 #: pretix/control/views/event.py:622
-#, fuzzy
-#| msgid "An individial text with a reason can be inserted here."
 msgid "An individual text with a reason can be inserted here."
 msgstr "Een individuele tekst met een reden kan hier worden ingevoerd."
 
@@ -14753,11 +14717,10 @@ msgid "The password you entered was invalid, please try again."
 msgstr "Het wachtwoord dat je invoerde was ongeldig, probeer het opnieuw."
 
 #: pretix/control/views/user.py:250
-#, fuzzy
-#| msgid "U2F devices are only available if pretix is served via HTTPS."
 msgid "Security devices are only available if pretix is served via HTTPS."
 msgstr ""
-"U2F-apparaten zijn alleen beschikbaar als pretix via HTTPS wordt geopend."
+"WebAuthn-apparaten zijn alleen beschikbaar als pretix via HTTPS wordt "
+"geopend."
 
 #: pretix/control/views/user.py:287
 msgid "A two-factor authentication device has been removed from your account."
@@ -14768,10 +14731,8 @@ msgid "The device has been removed."
 msgstr "Het apparaat is verwijderd."
 
 #: pretix/control/views/user.py:374
-#, fuzzy
-#| msgid "This ticket has already been redeemed."
 msgid "This security device is already registered."
-msgstr "Dit kaartje is al gebruikt."
+msgstr "Dit beveiligingsapparaat is al geregistreerd."
 
 #: pretix/control/views/user.py:396 pretix/control/views/user.py:455
 msgid "A new two-factor authentication device has been added to your account."
@@ -14987,10 +14948,8 @@ msgid "Include pending orders"
 msgstr "Inclusief openstaande bestellingen"
 
 #: pretix/plugins/badges/exporters.py:103
-#, fuzzy
-#| msgid "Include questions"
 msgid "Include add-on or bundled positions"
-msgstr "Inclusief vragen"
+msgstr "Inclusief add-on of gebundelde plaatsen"
 
 #: pretix/plugins/badges/exporters.py:108
 #: pretix/plugins/checkinlists/exporters.py:49
@@ -16149,38 +16108,38 @@ msgstr "Lijst van bestellingen met belasting"
 #: pretix/plugins/returnurl/__init__.py:9
 #: pretix/plugins/returnurl/__init__.py:12
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:5
-#, fuzzy
-#| msgid "Remove from order"
 msgid "Redirection from order page"
-msgstr "Verwijderen van bestelling"
+msgstr "Doorverwijzing van bestelpagina"
 
 #: pretix/plugins/returnurl/__init__.py:15
 msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
+"Deze plug-in staat toe om naar betalingen te linken, en hierna de gebruiker "
+"opnieuw door te verwijzen. Dit kan nuttig zijn in combinatie met onze API."
 
 #: pretix/plugins/returnurl/signals.py:44
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Redirection"
-msgstr "Doorverwijzings-URI's"
+msgstr "Doorverwijzing"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:7
 msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
+"Deze functie is nuttig als je alleen het betalingsonderdeel van pretix "
+"gebruikt, en een eigen afrekeninterface gebruikt voor andere stappen."
 
 #: pretix/plugins/returnurl/views.py:14
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Base redirection URL"
-msgstr "Doorverwijzings-URI's"
+msgstr "Basis-URL voor doorverwijzing"
 
 #: pretix/plugins/returnurl/views.py:15
 msgid "Redirection will only be allowed to URLs that start with this prefix."
 msgstr ""
+"Doorverwijzingen zullen alleen worden toegestaan naar URLs die met dit "
+"voorvoegsel beginnen."
 
 #: pretix/plugins/sendmail/__init__.py:9 pretix/plugins/sendmail/__init__.py:12
 #: pretix/plugins/sendmail/signals.py:16
