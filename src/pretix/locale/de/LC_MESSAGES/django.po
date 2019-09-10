@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-10 08:00+0000\n"
-"PO-Revision-Date: 2019-09-09 07:48+0000\n"
+"PO-Revision-Date: 2019-09-10 08:16+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1213,10 +1213,8 @@ msgid "Smartphone with the Authenticator application"
 msgstr "Smartphone mit Authenticator-App"
 
 #: pretix/base/forms/user.py:118
-#, fuzzy
-#| msgid "U2F-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "U2F-kompatibler Hardwaretoken (z.B. Yubikey)"
+msgstr "WebAuthn-kompatibler Hardwaretoken (z.B. Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
@@ -8749,29 +8747,21 @@ msgstr "Token"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:18
 #: pretix/control/templates/pretixcontrol/user/reauth.html:23
-#, fuzzy
-#| msgid ""
-#| "U2F failed. Check that the correct authentication device is correctly "
-#| "plugged in."
 msgid ""
 "WebAuthn failed. Check that the correct authentication device is correctly "
 "plugged in."
 msgstr ""
-"U2F fehlgeschlagen. Bitte prüfen Sie, dass der korrekte Hardwaretoken "
+"WebAuthn fehlgeschlagen. Bitte prüfen Sie, dass der korrekte Hardwaretoken "
 "angeschlossen ist."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:22
-#, fuzzy
-#| msgid ""
-#| "Alternatively, connect your U2F device. If it has a button, touch it now. "
-#| "You might have to unplug the device and plug it back in again."
 msgid ""
 "Alternatively, connect your WebAuthn device. If it has a button, touch it "
 "now. You might have to unplug the device and plug it back in again."
 msgstr ""
-"Alternativ können Sie Ihr U2F-Token anschließen. Wenn dieses einen Knopf "
-"hat, drücken Sie diesen jetzt. Möglicherweise müssen Sie es abstecken und "
-"erneut anschließen."
+"Alternativ können Sie Ihr WebAuthn-Token anschließen. Wenn dieses einen "
+"Knopf hat, drücken Sie diesen jetzt. Möglicherweise müssen Sie es abstecken "
+"und erneut anschließen."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:27
 #: pretix/control/templates/pretixcontrol/events/create_base.html:19
@@ -13050,16 +13040,12 @@ msgid "Require second factor for future logins"
 msgstr "Zeiten Faktor für zukünftige Anmeldungen erfordern"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:11
-#, fuzzy
-#| msgid ""
-#| "Please connect your U2F device. If it has a button, touch it now. You "
-#| "might have to unplug the device and plug it back in again."
 msgid ""
 "Please connect your WebAuthn device. If it has a button, touch it now. You "
 "might have to unplug the device and plug it back in again."
 msgstr ""
-"Bitte schließen Sie Ihr U2F-Token an. Wenn dieses einen Knopf hat, drücken "
-"Sie diesen jetzt. Möglicherweise müssen Sie es abstecken und erneut "
+"Bitte schließen Sie Ihr WebAuthn-Token an. Wenn dieses einen Knopf hat, "
+"drücken Sie diesen jetzt. Möglicherweise müssen Sie es abstecken und erneut "
 "anschließen."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:26
@@ -13297,10 +13283,8 @@ msgstr ""
 "Passwort ein, um fortzufahren."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
-#, fuzzy
-#| msgid "Alternatively, you can use your U2F device."
 msgid "Alternatively, you can use your WebAuthn device."
-msgstr "Alternativ können Sie Ihr U2F-Gerät verwenden."
+msgstr "Alternativ können Sie Ihr WebAuthn-Gerät verwenden."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
@@ -14793,12 +14777,10 @@ msgstr ""
 "Das eingegebene aktuelle Passwort war nicht korrekt, bitte erneut versuchen."
 
 #: pretix/control/views/user.py:250
-#, fuzzy
-#| msgid "U2F devices are only available if pretix is served via HTTPS."
 msgid "Security devices are only available if pretix is served via HTTPS."
 msgstr ""
-"U2F-Unterstützung ist nur verfügbar, wenn pretix über HTTPS ausgeliefert "
-"wird."
+"WebAuthn-Unterstützung ist nur verfügbar, wenn pretix über HTTPS "
+"ausgeliefert wird."
 
 #: pretix/control/views/user.py:287
 msgid "A two-factor authentication device has been removed from your account."
@@ -14809,10 +14791,8 @@ msgid "The device has been removed."
 msgstr "Das Gerät wurde entfernt."
 
 #: pretix/control/views/user.py:374
-#, fuzzy
-#| msgid "This ticket has already been redeemed."
 msgid "This security device is already registered."
-msgstr "Das Ticket wurde bereits eingelöst."
+msgstr "Dieser Hardwaretoken wurde bereits registriert."
 
 #: pretix/control/views/user.py:396 pretix/control/views/user.py:455
 msgid "A new two-factor authentication device has been added to your account."
