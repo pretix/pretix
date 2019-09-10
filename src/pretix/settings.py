@@ -241,6 +241,7 @@ ENTROPY = {
     'order_code': config.getint('entropy', 'order_code', fallback=5),
     'ticket_secret': config.getint('entropy', 'ticket_secret', fallback=32),
     'voucher_code': config.getint('entropy', 'voucher_code', fallback=16),
+    'giftcard_secret': config.getint('entropy', 'giftcard_secret', fallback=16),
 }
 
 # Internal settings
