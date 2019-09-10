@@ -12,7 +12,7 @@ from django.db.models import Max, OuterRef, Subquery, Sum
 from django.template.defaultfilters import floatformat
 from django.utils.formats import date_format, localize
 from django.utils.timezone import get_current_timezone, now
-from django.utils.translation import pgettext, ugettext as _
+from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
 from reportlab.lib import colors
 
 from pretix.base.decimal import round_decimal
@@ -150,7 +150,7 @@ class Report(ReportlabExportMixin, BaseExporter):
 class OverviewReport(Report):
     name = "overview"
     identifier = 'pdfreport'
-    verbose_name = _('Order overview (PDF)')
+    verbose_name = ugettext_lazy('Order overview (PDF)')
 
     @property
     def pagesize(self):
@@ -295,7 +295,7 @@ class OverviewReport(Report):
 class OrderTaxListReportPDF(Report):
     name = "ordertaxlist"
     identifier = 'ordertaxes'
-    verbose_name = _('List of orders with taxes (PDF)')
+    verbose_name = ugettext_lazy('List of orders with taxes (PDF)')
 
     @property
     def export_form_fields(self):
@@ -303,7 +303,7 @@ class OrderTaxListReportPDF(Report):
             [
                 ('status',
                  forms.MultipleChoiceField(
-                     label=_('Filter by status'),
+                     label=ugettext_lazy('Filter by status'),
                      initial=[Order.STATUS_PAID],
                      choices=Order.STATUS_CHOICE,
                      widget=forms.CheckboxSelectMultiple,
@@ -311,11 +311,11 @@ class OrderTaxListReportPDF(Report):
                  )),
                 ('sort',
                  forms.ChoiceField(
-                     label=_('Sort by'),
+                     label=ugettext_lazy('Sort by'),
                      initial='datetime',
                      choices=(
-                         ('datetime', _('Order date')),
-                         ('payment_date', _('Payment date')),
+                         ('datetime', ugettext_lazy('Order date')),
+                         ('payment_date', ugettext_lazy('Payment date')),
                      ),
                      widget=forms.RadioSelect,
                      required=False
@@ -460,7 +460,7 @@ class OrderTaxListReportPDF(Report):
 
 class OrderTaxListReport(ListExporter):
     identifier = 'ordertaxeslist'
-    verbose_name = _('List of orders with taxes')
+    verbose_name = ugettext_lazy('List of orders with taxes')
 
     @property
     def export_form_fields(self):
@@ -480,8 +480,8 @@ class OrderTaxListReport(ListExporter):
                      label=_('Sort by'),
                      initial='datetime',
                      choices=(
-                         ('datetime', _('Order date')),
-                         ('payment_date', _('Payment date')),
+                         ('datetime', ugettext_lazy('Order date')),
+                         ('payment_date', ugettext_lazy('Payment date')),
                      ),
                      widget=forms.RadioSelect,
                      required=False
