@@ -78,6 +78,8 @@
                     </a>
                     {% if d.devicetype == "totp" %}
                         <span class="fa fa-mobile"></span>
+                    {% elif d.devicetype == "webauthn" %}
+                        <span class="fa fa-usb"></span>
                     {% elif d.devicetype == "u2f" %}
                         <span class="fa fa-usb"></span>
                     {% endif %}

@@ -104,6 +104,7 @@ setup(
         'django-libsass',
         'libsass',
         'django-otp==0.5.*',
+        'webauthn==0.4.*',
         'python-u2flib-server==4.*',
         'django-formtools==2.1',
         'celery==4.3.*',

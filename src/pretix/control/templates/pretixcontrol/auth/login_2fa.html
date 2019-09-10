@@ -4,7 +4,7 @@
 {% load static %}
 {% load compress %}
 {% block content %}
-    <form class="form-signin" action="" method="post" id="u2f-form">
+    <form class="form-signin" action="" method="post" id="webauthn-form">
         {% csrf_token %}
         <h3>{% trans "Welcome back!" %}</h3>
         <p>
@@ -12,14 +12,14 @@
         </p>
         <div class="form-group">
             <input class="form-control" name="token" placeholder="{% trans "Token" %}"
-                    type="text" required="required" autofocus="autofocus" id="u2f-response">
+                    type="text" required="required" autofocus="autofocus" id="webauthn-response">
         </div>
-        <div class="sr-only alert alert-danger" id="u2f-error">
-            {% trans "U2F failed. Check that the correct authentication device is correctly plugged in." %}
+        <div class="sr-only alert alert-danger" id="webauthn-error">
+            {% trans "WebAuthn failed. Check that the correct authentication device is correctly plugged in." %}
         </div>
         {% if jsondata %}
             <p><small>
-                {% trans "Alternatively, connect your U2F device. If it has a button, touch it now. You might have to unplug the device and plug it back in again." %}
+                {% trans "Alternatively, connect your WebAuthn device. If it has a button, touch it now. You might have to unplug the device and plug it back in again." %}
             </small></p>
         {% endif %}
         <div class="form-group buttons">
@@ -29,14 +29,14 @@
         </div>
     </form>
     {% if jsondata %}
-        <script type="text/json" id="u2f-login">
+        <script type="text/json" id="webauthn-login">
             {{ jsondata|safe }}
 
         </script>
     {% endif %}
     {% compress js %}
         <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/u2f-api.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/u2f.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/base64js.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/webauthn.js" %}"></script>
     {% endcompress %}
 {% endblock %}

@@ -1,9 +1,12 @@
 import base64
+import json
 import logging
+import os
 import time
 from collections import defaultdict
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
+import webauthn
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -19,13 +22,10 @@ from django.views import View
 from django.views.generic import FormView, ListView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from u2flib_server import u2f
-from u2flib_server.jsapi import DeviceRegistration
-from u2flib_server.utils import rand_bytes
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
 from pretix.base.models import (
-    Event, LogEntry, NotificationSetting, U2FDevice, User,
+    Event, LogEntry, NotificationSetting, U2FDevice, User, WebAuthnDevice,
 )
 from pretix.base.models.auth import StaffSession
 from pretix.base.notifications import get_all_notification_types
@@ -34,8 +34,9 @@ from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, StaffMemberRequiredMixin,
 )
 from pretix.control.views.auth import get_u2f_appid
+from pretix.helpers.webauthn import generate_challenge, generate_ukey
 
-REAL_DEVICE_TYPES = (TOTPDevice, U2FDevice)
+REAL_DEVICE_TYPES = (TOTPDevice, WebAuthnDevice, U2FDevice)
 logger = logging.getLogger(__name__)
 
 
@@ -52,23 +53,45 @@ class RecentAuthenticationRequiredMixin:
 class ReauthView(TemplateView):
     template_name = 'pretixcontrol/user/reauth.html'
 
-    @property
-    def app_id(self):
-        return get_u2f_appid(self.request)
-
     def post(self, request, *args, **kwargs):
         password = request.POST.get("password", "")
         valid = False
 
-        if '_u2f_challenge' in self.request.session and password.startswith('{'):
-            devices = [DeviceRegistration.wrap(device.json_data)
-                       for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)]
-            challenge = self.request.session.pop('_u2f_challenge')
+        if 'webauthn_challenge' in self.request.session and password.startswith('{'):
+            challenge = self.request.session['webauthn_challenge']
+
+            resp = json.loads(password)
             try:
-                u2f.verify_authenticate(devices, challenge, password, [self.app_id])
-                valid = True
-            except Exception:
-                logger.exception('U2F login failed')
+                devices = [WebAuthnDevice.objects.get(user=self.request.user, credential_id=resp.get("id"))]
+            except WebAuthnDevice.DoesNotExist:
+                devices = U2FDevice.objects.filter(user=self.request.user)
+
+            for d in devices:
+                try:
+                    wu = d.webauthnuser
+
+                    if isinstance(d, U2FDevice):
+                        # RP_ID needs to be appId for U2F devices, but we can't
+                        # set it that way in U2FDevice.webauthnuser, since that
+                        # breaks the frontend part.
+                        wu.rp_id = settings.SITE_URL
+
+                    webauthn_assertion_response = webauthn.WebAuthnAssertionResponse(
+                        wu,
+                        resp,
+                        challenge,
+                        settings.SITE_URL,
+                        uv_required=False  # User Verification
+                    )
+                    sign_count = webauthn_assertion_response.verify()
+                except Exception:
+                    logger.exception('U2F login failed')
+                else:
+                    if isinstance(d, WebAuthnDevice):
+                        d.sign_count = sign_count
+                        d.save()
+                    valid = True
+                    break
 
         valid = valid or request.user.check_password(password)
 
@@ -85,18 +108,25 @@ class ReauthView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-
-        devices = [DeviceRegistration.wrap(device.json_data)
-                   for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)]
+        if 'webauthn_challenge' in self.request.session:
+            del self.request.session['webauthn_challenge']
+        challenge = generate_challenge(32)
+        self.request.session['webauthn_challenge'] = challenge
+        devices = [
+            device.webauthnuser for device in WebAuthnDevice.objects.filter(confirmed=True, user=self.request.user)
+        ] + [
+            device.webauthnuser for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)
+        ]
         if devices:
-            challenge = u2f.start_authenticate(devices, challenge=rand_bytes(32))
-            self.request.session['_u2f_challenge'] = challenge.json
-            ctx['jsondata'] = challenge.json
-        else:
-            if '_u2f_challenge' in self.request.session:
-                del self.request.session['_u2f_challenge']
-            ctx['jsondata'] = None
-
+            webauthn_assertion_options = webauthn.WebAuthnAssertionOptions(
+                devices,
+                challenge
+            )
+            ad = webauthn_assertion_options.assertion_dict
+            ad['extensions'] = {
+                'appid': get_u2f_appid(self.request)
+            }
+            ctx['jsondata'] = json.dumps(ad)
         return ctx
 
 
@@ -200,6 +230,8 @@ class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
                     obj.devicetype = 'totp'
                 elif dt == U2FDevice:
                     obj.devicetype = 'u2f'
+                elif dt == WebAuthnDevice:
+                    obj.devicetype = 'webauthn'
             ctx['devices'] += objs
 
         return ctx
@@ -212,11 +244,12 @@ class User2FADeviceAddView(RecentAuthenticationRequiredMixin, FormView):
     def form_valid(self, form):
         if form.cleaned_data['devicetype'] == 'totp':
             dev = TOTPDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
-        elif form.cleaned_data['devicetype'] == 'u2f':
+        elif form.cleaned_data['devicetype'] == 'webauthn':
             if not self.request.is_secure():
-                messages.error(self.request, _('U2F devices are only available if pretix is served via HTTPS.'))
+                messages.error(self.request,
+                               _('Security devices are only available if pretix is served via HTTPS.'))
                 return self.get(self.request, self.args, self.kwargs)
-            dev = U2FDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
+            dev = WebAuthnDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
         return redirect(reverse('control:user.settings.2fa.confirm.' + form.cleaned_data['devicetype'], kwargs={
             'device': dev.pk
         }))
@@ -233,6 +266,8 @@ class User2FADeviceDeleteView(RecentAuthenticationRequiredMixin, TemplateView):
     def device(self):
         if self.kwargs['devicetype'] == 'totp':
             return get_object_or_404(TOTPDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
+        elif self.kwargs['devicetype'] == 'webauthn':
+            return get_object_or_404(WebAuthnDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
         elif self.kwargs['devicetype'] == 'u2f':
             return get_object_or_404(U2FDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
 
@@ -262,35 +297,94 @@ class User2FADeviceDeleteView(RecentAuthenticationRequiredMixin, TemplateView):
         return redirect(reverse('control:user.settings.2fa'))
 
 
-class User2FADeviceConfirmU2FView(RecentAuthenticationRequiredMixin, TemplateView):
-    template_name = 'pretixcontrol/user/2fa_confirm_u2f.html'
-
-    @property
-    def app_id(self):
-        return get_u2f_appid(self.request)
+class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, TemplateView):
+    template_name = 'pretixcontrol/user/2fa_confirm_webauthn.html'
 
     @cached_property
     def device(self):
-        return get_object_or_404(U2FDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=False)
+        return get_object_or_404(WebAuthnDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=False)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['device'] = self.device
 
-        devices = [DeviceRegistration.wrap(device.json_data)
-                   for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)]
-        enroll = u2f.start_register(self.app_id, devices)
-        self.request.session['_u2f_enroll'] = enroll.json
-        ctx['jsondata'] = enroll.json
+        if 'webauthn_register_ukey' in self.request.session:
+            del self.request.session['webauthn_register_ukey']
+        if 'webauthn_challenge' in self.request.session:
+            del self.request.session['webauthn_challenge']
+
+        challenge = generate_challenge(32)
+        ukey = generate_ukey()
+
+        self.request.session['webauthn_challenge'] = challenge
+        self.request.session['webauthn_register_ukey'] = ukey
+
+        make_credential_options = webauthn.WebAuthnMakeCredentialOptions(
+            challenge,
+            urlparse(settings.SITE_URL).netloc,
+            urlparse(settings.SITE_URL).netloc,
+            ukey,
+            self.request.user.email,
+            str(self.request.user),
+            settings.SITE_URL
+        )
+        ctx['jsondata'] = json.dumps(make_credential_options.registration_dict)
 
         return ctx
 
     def post(self, request, *args, **kwargs):
         try:
-            binding, cert = u2f.complete_register(self.request.session.pop('_u2f_enroll'),
-                                                  request.POST.get('token'),
-                                                  [self.app_id])
-            self.device.json_data = binding.json
+            challenge = self.request.session['webauthn_challenge']
+            ukey = self.request.session['webauthn_register_ukey']
+            resp = json.loads(self.request.POST.get("token"))
+            trust_anchor_dir = os.path.normpath(os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                '../../static/webauthn_trusted_attestation_roots'  # currently does not exist
+            ))
+            # We currently do not check attestation certificates, since there's no real risk
+            # and we do not have any policies specifying what devices can be used. (Also, we
+            # didn't get it to work.)
+            # Read more: https://fidoalliance.org/fido-technotes-the-truth-about-attestation/
+            trusted_attestation_cert_required = False
+            self_attestation_permitted = True
+            none_attestation_permitted = True
+
+            webauthn_registration_response = webauthn.WebAuthnRegistrationResponse(
+                urlparse(settings.SITE_URL).netloc,
+                settings.SITE_URL,
+                resp,
+                challenge,
+                trust_anchor_dir,
+                trusted_attestation_cert_required,
+                self_attestation_permitted,
+                none_attestation_permitted,
+                uv_required=False
+            )
+            webauthn_credential = webauthn_registration_response.verify()
+
+            # Check that the credentialId is not yet registered to any other user.
+            # If registration is requested for a credential that is already registered
+            # to a different user, the Relying Party SHOULD fail this registration
+            # ceremony, or it MAY decide to accept the registration, e.g. while deleting
+            # the older registration.
+            credential_id_exists = WebAuthnDevice.objects.filter(
+                credential_id=webauthn_credential.credential_id
+            ).first()
+            if credential_id_exists:
+                messages.error(request, _('This security device is already registered.'))
+                return redirect(reverse('control:user.settings.2fa.confirm.webauthn', kwargs={
+                    'device': self.device.pk
+                }))
+
+            webauthn_credential.credential_id = str(webauthn_credential.credential_id, "utf-8")
+            webauthn_credential.public_key = str(webauthn_credential.public_key, "utf-8")
+
+            self.device.credential_id = webauthn_credential.credential_id
+            self.device.ukey = ukey
+            self.device.pub_key = webauthn_credential.public_key
+            self.device.sign_count = webauthn_credential.sign_count
+            self.device.rp_id = urlparse(settings.SITE_URL).netloc
+            self.device.icon_url = settings.SITE_URL
             self.device.confirmed = True
             self.device.save()
             self.request.user.log_action('pretix.user.settings.2fa.device.added', user=self.request.user, data={
@@ -320,8 +414,8 @@ class User2FADeviceConfirmU2FView(RecentAuthenticationRequiredMixin, TemplateVie
             return redirect(reverse('control:user.settings.2fa'))
         except Exception:
             messages.error(request, _('The registration could not be completed. Please try again.'))
-            logger.exception('U2F registration failed')
-            return redirect(reverse('control:user.settings.2fa.confirm.u2f', kwargs={
+            logger.exception('WebAuthn registration failed')
+            return redirect(reverse('control:user.settings.2fa.confirm.webauthn', kwargs={
                 'device': self.device.pk
             }))
 
