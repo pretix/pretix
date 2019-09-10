@@ -41,7 +41,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import (
     OrderFee, OrderPayment, OrderPosition, OrderRefund,
 )
-from pretix.base.models.tax import EU_COUNTRIES
+from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.payment import PaymentException
 from pretix.base.services import tickets
 from pretix.base.services.export import export
@@ -983,7 +983,7 @@ class OrderCheckVATID(OrderView):
                                                'specified.'))
                 return redirect(self.get_order_url())
 
-            if ia.vat_id[:2] != str(ia.country):
+            if ia.vat_id[:2] != cc_to_vat_prefix(str(ia.country)):
                 messages.error(self.request, _('Your VAT ID does not match the selected country.'))
                 return redirect(self.get_order_url())
 

@@ -85,6 +85,12 @@ EU_CURRENCIES = {
 }
 
 
+def cc_to_vat_prefix(country_code):
+    if country_code == 'GR':
+        return 'EL'
+    return country_code
+
+
 class TaxRule(LoggedModel):
     event = models.ForeignKey('Event', related_name='tax_rules', on_delete=models.CASCADE)
     name = I18nCharField(
