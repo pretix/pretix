@@ -315,8 +315,20 @@
                                         {% endif %}
                                         {% if line.item.admission and event.settings.attendee_emails_asked %}
                                             <dt>{% trans "Attendee email" %}</dt>
-                                            <dd>{% if line.attendee_email %}{{ line.attendee_email }}{% else %}
-                                                <em>{% trans "not answered" %}</em>{% endif %}</dd>
+                                            <dd>
+                                                {% if line.attendee_email and not line.addon_to %}
+                                                    {{ line.attendee_email }}
+                                                    <form class="form-inline helper-display-inline" method="post"
+                                                            action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}">
+                                                        {% csrf_token %}
+                                                        <button class="btn btn-default btn-xs">
+                                                            {% trans "Resend link" %}
+                                                        </button>
+                                                    </form>
+                                                {% else %}
+                                                    <em>{% trans "not answered" %}</em>
+                                                {% endif %}
+                                            </dd>
                                         {% endif %}
                                         {% for q in line.questions %}
                                             <dt>

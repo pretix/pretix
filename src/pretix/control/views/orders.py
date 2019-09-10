@@ -1067,7 +1067,11 @@ class OrderResendLink(OrderView):
 
     def post(self, *args, **kwargs):
         try:
-            self.order.resend_link(user=self.request.user)
+            if 'position' in kwargs:
+                p = get_object_or_404(self.order.positions, pk=kwargs['position'])
+                p.resend_link(user=self.request.user)
+            else:
+                self.order.resend_link(user=self.request.user)
         except SendMailException:
             messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
             return redirect(self.get_order_url())

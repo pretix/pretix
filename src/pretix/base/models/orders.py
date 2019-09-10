@@ -1914,25 +1914,26 @@ class OrderPosition(AbstractPosition):
         """
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
-        if not self.email:
+        if not self.attendee_email:
             return
 
         for k, v in self.event.meta_data.items():
             context['meta_' + k] = v
 
-        with language(self.locale):
-            recipient = self.email
+        with language(self.order.locale):
+            recipient = self.attendee_email
             try:
                 email_content = render_mail(template, context)
                 mail(
                     recipient, subject, template, context,
-                    self.event, self.locale, self, headers, sender,
+                    self.event, self.order.locale, order=self.order, headers=headers, sender=sender,
+                    position=self,
                     invoices=invoices, attach_tickets=attach_tickets
                 )
             except SendMailException:
                 raise
             else:
-                self.log_action(
+                self.order.log_action(
                     log_entry_type,
                     user=user,
                     auth=auth,
@@ -1944,6 +1945,40 @@ class OrderPosition(AbstractPosition):
                         'attach_tickets': attach_tickets,
                     }
                 )
+
+    def resend_link(self, user=None, auth=None):
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        with language(self.order.locale):
+            try:
+                invoice_name = self.order.invoice_address.name
+                invoice_company = self.order.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
+            if self.attendee_name:
+                invoice_name = self.attendee_name
+            email_template = self.event.settings.mail_text_resend_link
+            email_context = {
+                'event': self.event.name,
+                'url': build_absolute_uri(self.event, 'presale:event.order.position', kwargs={
+                    'order': self.order.code,
+                    'secret': self.web_secret,
+                    'position': self.positionid
+                }),
+                'invoice_name': invoice_name,
+                'invoice_company': invoice_company,
+                'attendee_name': self.attendee_name,
+            }
+            name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+            for f, l, w in name_scheme['fields']:
+                email_context['attendee_name_%s' % f] = self.attendee_name_parts.get(f, '')
+            email_subject = _('Your event registration: %(code)s') % {'code': self.order.code}
+            self.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.resend', user=user, auth=auth,
+                attach_tickets=True
+            )
 
 
 class CartPosition(AbstractPosition):
