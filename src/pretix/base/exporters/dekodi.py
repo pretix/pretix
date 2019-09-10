@@ -129,8 +129,11 @@ class DekodiNREIExporter(BaseExporter):
             'DIDt': invoice.order.datetime.isoformat().replace('Z', '+00:00'),
             'DT': '30' if invoice.is_cancellation else '10',
             'EM': invoice.order.email,
-            'FamN': invoice.invoice_to_name.rsplit(' ', 1)[-1],
-            'FN': invoice.invoice_to_name.rsplit(' ', 1)[0] if ' ' in invoice.invoice_to_name else '',
+            'FamN': invoice.invoice_to_name.rsplit(' ', 1)[-1] if invoice.invoice_to_name else '',
+            'FN': (
+                invoice.invoice_to_name.rsplit(' ', 1)[0]
+                if invoice.invoice_to_name and ' ' in invoice.invoice_to_name else ''
+            ),
             'IDt': invoice.date.isoformat() + 'T08:00:00+01:00',
             'INo': invoice.full_invoice_no,
             'IsNet': invoice.reverse_charge,
