@@ -173,7 +173,7 @@ class BaseTicketOutput:
     @property
     def is_downloadable(self) -> bool:
         """
-        Returns whether or whether the output of this plugin can be downloaded and/or attached to an eMail.
+        Returns whether or whether the output of this plugin can be downloaded and/or attached to an email.
         By default, this is setting defaults to ``True`` for backwards compatibility.
         """
         return True
@@ -181,8 +181,8 @@ class BaseTicketOutput:
     @property
     def download_action(self) -> str:
         """
-        By default, the download-button will call an async-task to generate the downloadable ticket file.
-        By overriding this property, the default behaviour can be changed - for example a ``href``-target to another
+        By default, the download-button will call an asynchronous task to generate the downloadable ticket file.
+        By overriding this property, the default behavior can be changed - for example a ``href``-target to another
         location or just plainly ``#`` for handling the button click with a JavaScript ``click()``-listener.
 
         In case of using a JavaScript-call, make sure to also include your JavaScript-file on all pages that might
