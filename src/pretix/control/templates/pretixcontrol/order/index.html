@@ -281,15 +281,21 @@
                                     <div class="position-buttons">
                                         {% if line.generate_ticket %}
                                             {% for b in download_buttons %}
-                                                <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
-                                                        method="post" data-asynctask data-asynctask-download
-                                                        class="form-inline helper-display-inline">
-                                                    {% csrf_token %}
-                                                    <button type="submit"
-                                                            class="btn btn-xs btn-default">
+                                                {% if b.download_action %}
+                                                    <a href="{{ b.download_action }}" class="btn btn-default btn-xs btn-{{ b.identifier }}" target="_blank" data-organizer="{{ request.event.organizer.slug }}" data-event="{{ event.slug }}" data-order="{{ order.code }}" data-secret="{{ line.secret }}" data-position="{{ line.pk }}">
                                                         <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                                                    </button>
-                                                </form>
+                                                    </a>
+                                                {% else %}
+                                                    <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
+                                                            method="post" data-asynctask data-asynctask-download
+                                                            class="form-inline helper-display-inline">
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="btn btn-xs btn-default">
+                                                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
                                             {% endfor %}
                                         {% endif %}
                                         <button type="submit" data-toggle="qrcode" data-qrcode="{{ line.secret }}"

@@ -69,3 +69,11 @@ The output class
    .. automethod:: generate_order
 
    .. autoattribute:: download_button_text
+
+   .. autoattribute:: download_button_icon
+
+   .. autoattribute:: preview_allowed
+
+   .. autoattribute:: is_downloadable
+
+   .. autoattribute:: download_action

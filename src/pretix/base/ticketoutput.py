@@ -161,3 +161,47 @@ class BaseTicketOutput:
         The Font Awesome icon on the download button in the frontend.
         """
         return 'fa-download'
+
+    @property
+    def preview_allowed(self) -> bool:
+        """
+        By default, the ``generate()`` method is called for generating a preview in the pretix backend.
+        In case your plugin cannot generate previews for any reason, you can manually disable it here.
+        """
+        return True
+
+    @property
+    def is_downloadable(self) -> bool:
+        """
+        Returns whether or whether the output of this plugin can be downloaded and/or attached to an eMail.
+        By default, this is setting defaults to ``True`` for backwards compatibility.
+        """
+        return True
+
+    @property
+    def download_action(self) -> str:
+        """
+        By default, the download-button will call an async-task to generate the downloadable ticket file.
+        By overriding this property, the default behaviour can be changed - for example a ``href``-target to another
+        location or just plainly ``#`` for handling the button click with a JavaScript ``click()``-listener.
+
+        In case of using a JavaScript-call, make sure to also include your JavaScript-file on all pages that might
+        display the download button (such as the ``control`` and ``presale`` order views and the ticket output settings.
+
+        The link will contain the following ``data-``-attributes, accessible for further usage from your JavaScript:
+
+        - ``data-organizer``: Organizer Slug
+        - ``data-event``: Event Slug
+        - ``data-order``: Order Code
+        - ``data-secret``: Order Secret
+        - ``data-position``: ID of the concerned OrderPosition
+
+        To facilitate access to these ``data-``-attributes, the button will have a ``class``-attribute of
+        ``btn-identifier`` (where ``identifier`` is the identifier of your ticket download provider).
+
+        .. note:: Please be aware, that ``download_action`` cannot contain any direct direct ``javascript:xxxx();``
+                  -calls, as this will violate pretix' Content Security Policy of excluding ``self`` as a
+                  ``script-src``. This is a sane default and should not easily be overridden. Please consider using
+                  event-listeners instead.
+        """
+        return None

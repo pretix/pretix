@@ -822,7 +822,6 @@ class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
             provider.settings_content = provider.settings_content_render(self.request)
             provider.form.prepare_fields()
 
-            provider.preview_allowed = True
             for k, v in provider.settings_form_fields.items():
                 if v.required and not self.request.event.settings.get('ticketoutput_%s_%s' % (provider.identifier, k)):
                     provider.preview_allowed = False
