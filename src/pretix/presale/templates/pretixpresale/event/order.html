@@ -241,14 +241,14 @@
                                 You can cancel this order. In this case, a cancellation fee of <strong>{{ fee }}</strong>
                                 will be kept and you will receive a refund of the remainder to your original payment method.
                             {% endblocktrans %}
-                            {% trans "This will invalidate all of your tickets." %}
+                            {% trans "This will invalidate all tickets in this order." %}
                         </p>
                     {% else %}
                         <p>
                             {% blocktrans trimmed %}
                                 You can cancel this order and receive a full refund to your original payment method.
                             {% endblocktrans %}
-                            {% trans "This will invalidate all of your tickets." %}
+                            {% trans "This will invalidate all tickets in this order." %}
                         </p>
                     {% endif %}
                     <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
@@ -261,7 +261,7 @@
                         {% blocktrans trimmed %}
                             You can cancel this order using the following button.
                         {% endblocktrans %}
-                        {% trans "This will invalidate all of your tickets." %}
+                        {% trans "This will invalidate all tickets in this order." %}
                     </p>
                     <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                         class="btn btn-danger">
