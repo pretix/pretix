@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-09-10 08:16+0000\n"
+"PO-Revision-Date: 2019-09-11 06:58+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -11560,10 +11560,8 @@ msgid "Voucher code used:"
 msgstr "Verwendeter Gutscheincode:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:303
-#, fuzzy
-#| msgid "Ticket name"
 msgid "Ticket page"
-msgstr "Ticket-Bezeichnung"
+msgstr "Ticket-Seite"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:314
 #: pretix/control/templates/pretixcontrol/order/index.html:331
@@ -17816,10 +17814,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:251
 #: pretix/presale/templates/pretixpresale/event/order.html:264
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:16
-#, fuzzy
-#| msgid "This will invalidate all of your tickets."
 msgid "This will invalidate all tickets in this order."
-msgstr "Dies wird alle Ihre Tickets ungültig machen."
+msgstr "Dies wird alle Tickets in dieser Bestellung ungültig machen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:248
 msgid ""

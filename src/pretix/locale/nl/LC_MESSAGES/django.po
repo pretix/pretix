@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-09-09 05:00+0000\n"
+"POT-Creation-Date: 2019-09-10 08:00+0000\n"
+"PO-Revision-Date: 2019-09-11 00:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1211,10 +1211,8 @@ msgid "Smartphone with the Authenticator application"
 msgstr "Smartphone met de Authenticator-applicatie"
 
 #: pretix/base/forms/user.py:118
-#, fuzzy
-#| msgid "U2F-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "U2F ondersteunend hardware-token (bijvoorbeeld Yubikey)"
+msgstr "WebAuthn-compatibel hardware-token (bijvoorbeeld Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
@@ -6745,7 +6743,7 @@ msgstr "Alle bestellingen"
 
 #: pretix/control/forms/filter.py:103 pretix/control/forms/filter.py:201
 msgid "Paid (or canceled with paid fee)"
-msgstr "Betaald (of geannuleerd met betaalde kosten)"
+msgstr "Betaald (of geannuleerd met betaalde toeslag)"
 
 #: pretix/control/forms/filter.py:104 pretix/control/forms/filter.py:202
 #: pretix/control/templates/pretixcontrol/items/question.html:21
@@ -8718,27 +8716,20 @@ msgstr "Token"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:18
 #: pretix/control/templates/pretixcontrol/user/reauth.html:23
-#, fuzzy
-#| msgid ""
-#| "U2F failed. Check that the correct authentication device is correctly "
-#| "plugged in."
 msgid ""
 "WebAuthn failed. Check that the correct authentication device is correctly "
 "plugged in."
 msgstr ""
-"U2F mislukt. Controleer of het juiste authenticatieapparaat is aangesloten."
+"WebAuthn mislukt. Controleer of het juiste authenticatieapparaat is "
+"aangesloten."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:22
-#, fuzzy
-#| msgid ""
-#| "Alternatively, connect your U2F device. If it has a button, touch it now. "
-#| "You might have to unplug the device and plug it back in again."
 msgid ""
 "Alternatively, connect your WebAuthn device. If it has a button, touch it "
 "now. You might have to unplug the device and plug it back in again."
 msgstr ""
-"Of: sluit uw U2F-apparaat aan. Als het apparaat een knop heeft, druk die dan "
-"nu in. U moet mogelijk uw apparaat verwijderen en weer aansluiten."
+"Of: sluit uw WebAuthn-apparaat aan. Als het apparaat een knop heeft, druk "
+"die dan nu in. U moet mogelijk uw apparaat verwijderen en weer aansluiten."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:27
 #: pretix/control/templates/pretixcontrol/events/create_base.html:19
@@ -13004,16 +12995,12 @@ msgid "Require second factor for future logins"
 msgstr "Vereis tweede factor voor toekomstige aanmeldingen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:11
-#, fuzzy
-#| msgid ""
-#| "Please connect your U2F device. If it has a button, touch it now. You "
-#| "might have to unplug the device and plug it back in again."
 msgid ""
 "Please connect your WebAuthn device. If it has a button, touch it now. You "
 "might have to unplug the device and plug it back in again."
 msgstr ""
-"Sluit uw U2F-apparaat aan. Als het een knop heeft, druk die dan nu in. U "
-"moet mogelijk het apparaat ontkoppelen en weer aansluiten."
+"Sluit uw WebAuthn-apparaat aan. Als het een knop heeft, druk die dan nu in. "
+"U moet mogelijk het apparaat ontkoppelen en weer aansluiten."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:26
 msgid "Device registration failed."
@@ -13246,10 +13233,8 @@ msgstr ""
 "te gaan."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
-#, fuzzy
-#| msgid "Alternatively, you can use your U2F device."
 msgid "Alternatively, you can use your WebAuthn device."
-msgstr "U kunt ook uw U2F-apparaat gebruiken."
+msgstr "U kunt ook uw WebAuthn-apparaat gebruiken."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
@@ -14737,11 +14722,10 @@ msgid "The password you entered was invalid, please try again."
 msgstr "Het wachtwoord dat u invoerde was ongeldig, probeer het opnieuw."
 
 #: pretix/control/views/user.py:250
-#, fuzzy
-#| msgid "U2F devices are only available if pretix is served via HTTPS."
 msgid "Security devices are only available if pretix is served via HTTPS."
 msgstr ""
-"U2F-apparaten zijn alleen beschikbaar als pretix via HTTPS wordt geopend."
+"Beveiligingsapparaten zijn alleen beschikbaar als pretix via HTTPS wordt "
+"geopend."
 
 #: pretix/control/views/user.py:287
 msgid "A two-factor authentication device has been removed from your account."
@@ -14752,10 +14736,8 @@ msgid "The device has been removed."
 msgstr "Het apparaat is verwijderd."
 
 #: pretix/control/views/user.py:374
-#, fuzzy
-#| msgid "This ticket has already been redeemed."
 msgid "This security device is already registered."
-msgstr "Dit ticket is al gebruikt."
+msgstr "Dit beveiligingsapparaat is al geregistreerd."
 
 #: pretix/control/views/user.py:396 pretix/control/views/user.py:455
 msgid "A new two-factor authentication device has been added to your account."
@@ -16150,16 +16132,18 @@ msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
+"Deze functie is nuttig als u alleen het betalingsonderdeel van pretix "
+"gebruikt, en uw eigen afrekeninterface gebruikt voor andere stappen."
 
 #: pretix/plugins/returnurl/views.py:14
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Base redirection URL"
-msgstr "Doorverwijzings-URI's"
+msgstr "Basis-URL voor doorverwijzing"
 
 #: pretix/plugins/returnurl/views.py:15
 msgid "Redirection will only be allowed to URLs that start with this prefix."
 msgstr ""
+"Doorverwijzingen zullen alleen worden toegestaan naar URLs die met dit "
+"voorvoegsel beginnen."
 
 #: pretix/plugins/sendmail/__init__.py:9 pretix/plugins/sendmail/__init__.py:12
 #: pretix/plugins/sendmail/signals.py:16
