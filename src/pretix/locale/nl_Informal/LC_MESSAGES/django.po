@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-10 08:00+0000\n"
-"PO-Revision-Date: 2019-09-11 00:00+0000\n"
+"PO-Revision-Date: 2019-09-12 22:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -11508,10 +11508,8 @@ msgid "Voucher code used:"
 msgstr "Vouchercode gebruikt:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:303
-#, fuzzy
-#| msgid "Ticket name"
 msgid "Ticket page"
-msgstr "Naam kaartje"
+msgstr "Kaartjespagina"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:314
 #: pretix/control/templates/pretixcontrol/order/index.html:331
@@ -17730,10 +17728,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:251
 #: pretix/presale/templates/pretixpresale/event/order.html:264
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:16
-#, fuzzy
-#| msgid "This will invalidate all of your tickets."
 msgid "This will invalidate all tickets in this order."
-msgstr "Dit zal al je kaartjes ongeldig maken."
+msgstr "Dit zal alle kaartjes in deze bestelling ongeldig maken."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:248
 msgid ""
