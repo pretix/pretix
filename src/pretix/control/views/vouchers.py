@@ -17,11 +17,9 @@ from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import (
-    CartPosition, LogEntry, OrderPosition, SubEvent, Voucher,
-)
+from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher
 from pretix.base.models.vouchers import _generate_random_code
-from pretix.control.forms.filter import VoucherFilterForm
+from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
@@ -96,10 +94,8 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/vouchers/tags.html'
     permission = 'can_view_vouchers'
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        tags = self.request.event.vouchers.order_by('tag').filter(
+    def get_queryset(self):
+        qs = self.request.event.vouchers.order_by('tag').filter(
             tag__isnull=False,
             waitinglistentries__isnull=True
         ).values('tag').annotate(
@@ -107,13 +103,15 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
             redeemed=Sum('redeemed')
         )
 
-        if self.request.GET.get('subevent'):
-            try:
-                SubEvent.objects.get(pk=self.request.GET.get('subevent'))
-            except SubEvent.DoesNotExist:
-                messages.warning(self.request, _("The requested date does not exist."))
-            else:
-                tags = tags.filter(subevent=self.request.GET.get('subevent'))
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
+        return qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        tags = self.get_queryset()
 
         for t in tags:
             if t['total'] == 0:
@@ -127,7 +125,7 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
 
     @cached_property
     def filter_form(self):
-        return VoucherFilterForm(data=self.request.GET, event=self.request.event)
+        return VoucherTagFilterForm(data=self.request.GET, event=self.request.event)
 
 
 class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
