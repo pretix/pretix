@@ -17,7 +17,9 @@ from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher
+from pretix.base.models import (
+    CartPosition, LogEntry, OrderPosition, SubEvent, Voucher,
+)
 from pretix.base.models.vouchers import _generate_random_code
 from pretix.control.forms.filter import VoucherFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
@@ -104,6 +106,15 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
             total=Sum('max_usages'),
             redeemed=Sum('redeemed')
         )
+
+        if self.request.GET.get('subevent'):
+            try:
+                SubEvent.objects.get(pk=self.request.GET.get('subevent'))
+            except SubEvent.DoesNotExist:
+                messages.warning(self.request, _("The requested date does not exist."))
+            else:
+                tags = tags.filter(subevent=self.request.GET.get('subevent'))
+
         for t in tags:
             if t['total'] == 0:
                 t['percentage'] = 0
@@ -111,7 +122,12 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
                 t['percentage'] = int((t['redeemed'] / t['total']) * 100)
 
         ctx['tags'] = tags
+        ctx['filter_form'] = self.filter_form
         return ctx
+
+    @cached_property
+    def filter_form(self):
+        return VoucherFilterForm(data=self.request.GET, event=self.request.event)
 
 
 class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
