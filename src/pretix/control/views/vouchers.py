@@ -98,13 +98,15 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
         qs = self.request.event.vouchers.order_by('tag').filter(
             tag__isnull=False,
             waitinglistentries__isnull=True
-        ).values('tag').annotate(
-            total=Sum('max_usages'),
-            redeemed=Sum('redeemed')
         )
 
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
+
+        qs = qs.values('tag').annotate(
+            total=Sum('max_usages'),
+            redeemed=Sum('redeemed')
+        )
 
         return qs.distinct()
 
