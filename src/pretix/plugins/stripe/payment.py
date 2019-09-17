@@ -723,7 +723,7 @@ class StripeCC(StripeMethod):
 
                 except SendMailException:
                     raise PaymentException(_('There was an error sending the confirmation mail.'))
-            elif intent.status == 'pending':
+            elif intent.status == 'processing':
                 if request:
                     messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
                                                 'payment completed.'))
