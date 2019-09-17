@@ -170,7 +170,7 @@ def webhook(request, *args, **kwargs):
         rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(reference=objid)
         return func(rso.order.event, event_json, objid, rso)
     except ReferencedStripeObject.DoesNotExist:
-        if event_json['data']['object']['object'] == "charge" and event_json['data']['object']['payment_intent']:
+        if event_json['data']['object']['object'] == "charge" and 'payment_intent' in event_json['data']['object']:
             # If we receive a charge webhook *before* the payment intent webhook, we don't know the charge ID yet
             # and can't match it -- but we know the payment intent ID!
             try:
