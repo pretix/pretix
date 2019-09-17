@@ -170,20 +170,24 @@ def webhook(request, *args, **kwargs):
         rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(reference=objid)
         return func(rso.order.event, event_json, objid, rso)
     except ReferencedStripeObject.DoesNotExist:
-        if hasattr(request, 'event'):
-            return func(request.event, event_json, objid, None)
-        else:
+        if event_json['data']['object']['object'] == "charge" and 'payment_intent' in event_json['data']['object']:
             # If we receive a charge webhook *before* the payment intent webhook, we don't know the charge ID yet
             # and can't match it -- but we know the payment intent ID!
-            if event_json['data']['object']['object'] == "charge" and event_json['data']['object']['payment_intent']:
-                try:
-                    rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
-                        reference=event_json['data']['object']['payment_intent']
-                    )
-                    return func(rso.order.event, event_json, objid, rso)
-                except ReferencedStripeObject.DoesNotExist:
-                    pass
-
+            try:
+                rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
+                    reference=event_json['data']['object']['payment_intent']
+                )
+                return func(rso.order.event, event_json, objid, rso)
+            except ReferencedStripeObject.DoesNotExist:
+                pass
+        elif hasattr(request, 'event') and func != paymentintent_webhook:
+            # This is a legacy integration from back when didn't have ReferencedStripeObject. This can't happen for
+            # payment intents or charges connected with payment intents since they didn't exist back then. Our best
+            # hope is to go for request.event and see if we can find the order ID.
+            return func(request.event, event_json, objid, None)
+        else:
+            # Okay, this is probably not an event that concerns us, maybe other applications talk to the same stripe
+            # account
             return HttpResponse("Unable to detect event", status=200)
 
 
