@@ -31,7 +31,7 @@ def parse(data, hint):
         if len(resrow['amount']) == 0 or 'amount' not in resrow or resrow['date'] == '':
             # This is probably a headline or something other special.
             continue
-        if resrow['reference'] or resrow['payer']:
+        if resrow.get('reference') or resrow.get('payer'):
             good_hint = True
         result.append(resrow)
     return result, good_hint
