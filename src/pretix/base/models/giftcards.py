@@ -48,7 +48,6 @@ class GiftCard(LoggedModel):
     secret = models.CharField(
         max_length=190,
         default=gen_giftcard_secret,
-        unique=True,
         db_index=True,
         verbose_name=_('Gift card code'),
     )
@@ -61,6 +60,9 @@ class GiftCard(LoggedModel):
     @property
     def value(self):
         return self.transactions.aggregate(s=Sum('value'))['s'] or Decimal('0.00')
+
+    class Meta:
+        unique_together = (('secret', 'issuer'),)
 
 
 class GiftCardTransaction(models.Model):
