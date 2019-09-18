@@ -119,6 +119,10 @@
                                     <span class="label label-danger">{% trans "Not checked in" %}</span>
                                 {% else %}
                                     <span class="label label-success">{% trans "Checked in" %}</span>
+                                    {% if e.auto_checked_in %}
+                                        <span class="fa fa-automobile text-muted"
+                                              data-toggle="tooltip" title="{% trans "Checked in automatically" %}"></span>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>

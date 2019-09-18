@@ -34,12 +34,18 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
             m=Max('datetime')
         ).values('m')
 
+        cqs2 = Checkin.objects.filter(
+            position_id=OuterRef('pk'),
+            list_id=self.list.pk
+        ).order_by().values('position_id').values('auto_checked_in')
+
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
             order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.list.include_pending else [Order.STATUS_PAID],
             subevent=self.list.subevent
         ).annotate(
-            last_checked_in=Subquery(cqs)
+            last_checked_in=Subquery(cqs),
+            auto_checked_in=Subquery(cqs2)
         ).select_related('item', 'variation', 'order', 'addon_to')
 
         if not self.list.all_products:

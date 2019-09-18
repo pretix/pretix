@@ -114,7 +114,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 class CheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
-        fields = ('datetime', 'list')
+        fields = ('datetime', 'list', 'auto_checked_in')
 
 
 class OrderDownloadsField(serializers.Field):

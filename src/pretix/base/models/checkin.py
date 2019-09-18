@@ -179,6 +179,7 @@ class Checkin(models.Model):
     list = models.ForeignKey(
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
     )
+    auto_checked_in = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='position__order__event__organizer')
 
