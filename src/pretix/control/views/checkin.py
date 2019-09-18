@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DeleteView, ListView
 from pytz import UTC
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.checkin import CheckinListForm
@@ -146,6 +147,7 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         clists = list(ctx['checkinlists'])
+        sales_channels = get_all_sales_channels()
 
         # Optimization: Fetch expensive columns for this page only
         annotations = {
@@ -160,7 +162,10 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             cl.checkin_count = annotations.get(cl.pk, {}).get('checkin_count', 0)
             cl.position_count = annotations.get(cl.pk, {}).get('position_count', 0)
             cl.percent = annotations.get(cl.pk, {}).get('percent', 0)
+            cl.auto_checkin_sales_channels = [sales_channels[channel] for channel in cl.auto_checkin_sales_channels]
+
         ctx['checkinlists'] = clists
+
         return ctx
 
 
