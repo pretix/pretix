@@ -147,6 +147,7 @@ def test_list_list(token_client, organizer, event, clist, item, subevent):
     res = dict(TEST_LIST_RES)
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
+    res["auto_checkin_sales_channels"] = []
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -171,6 +172,7 @@ def test_list_detail(token_client, organizer, event, clist, item):
 
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
+    res["auto_checkin_sales_channels"] = []
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/'.format(organizer.slug, event.slug,
                                                                                       clist.pk))
     assert resp.status_code == 200
@@ -316,7 +318,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
     p1['checkins'] = [
         {
             'list': clist_all.pk,
-            'datetime': c.datetime.isoformat().replace('+00:00', 'Z')
+            'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
+            'auto_checked_in': False
         }
     ]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?has_checkin=1'.format(
@@ -353,7 +356,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
     p2['checkins'] = [
         {
             'list': clist_all.pk,
-            'datetime': c.datetime.isoformat().replace('+00:00', 'Z')
+            'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
+            'auto_checked_in': False
         }
     ]
     resp = token_client.get(

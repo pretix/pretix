@@ -23,7 +23,8 @@ class CheckinList(LoggedModel):
                                                       '0.3.0 or newer or pretixdroid 1.9 or newer.'))
 
     auto_checkin_sales_channels = MultiStringField(
-        default=[''],
+        default=[],
+        blank=True,
         verbose_name=_('Sales channels to automatically check in'),
         help_text=_('Any items on this check-in list will be automatically marked as checked-in when purchased through '
                     'any of the selected sales channels. This option can be useful, when tickets sold at the box-'

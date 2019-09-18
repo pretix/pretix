@@ -36,7 +36,7 @@ class CheckinListSerializer(I18nAwareModelSerializer):
             if full_data.get('subevent'):
                 raise ValidationError(_('The subevent does not belong to this event.'))
 
-        for channel in full_data.get('auto_checkin_sales_channels'):
+        for channel in full_data.get('auto_checkin_sales_channels') or []:
             if channel not in get_all_sales_channels():
                 raise ValidationError(_('Unknown sales channel.'))
 

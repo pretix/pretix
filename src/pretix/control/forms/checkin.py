@@ -16,14 +16,10 @@ class CheckinListForm(forms.ModelForm):
         kwargs.pop('locales', None)
         super().__init__(**kwargs)
         self.fields['limit_products'].queryset = self.event.items.all()
-        self.fields['auto_checkin_sales_channels'] = forms.MultipleChoiceField(
-            label=self.fields['auto_checkin_sales_channels'].label,
-            help_text=self.fields['auto_checkin_sales_channels'].help_text,
-            choices=(
-                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
-            ),
-            widget=forms.CheckboxSelectMultiple
+        self.fields['auto_checkin_sales_channels'].widget.choices = (
+            (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
         )
+
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
             self.fields['subevent'].widget = Select2(
@@ -56,6 +52,7 @@ class CheckinListForm(forms.ModelForm):
             'limit_products': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '<[name$=all_products]'
             }),
+            'auto_checkin_sales_channels': forms.CheckboxSelectMultiple()
         }
         field_classes = {
             'limit_products': SafeModelMultipleChoiceField,
