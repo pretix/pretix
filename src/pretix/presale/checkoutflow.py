@@ -531,7 +531,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def post(self, request):
         self.request = request
-        if request.POST.get("giftcard"):
+        if request.POST.get("giftcard") and request.POST.get("payment") == "giftcard":
             # TODO: cross-organizer acceptance, …
             try:
                 gc = GiftCard.objects.get(

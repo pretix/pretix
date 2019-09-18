@@ -193,6 +193,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
 
         if self.order.status == Order.STATUS_PENDING:
             ctx['pending_sum'] = self.order.pending_sum
+            ctx['payment_sum_neg'] = ctx['pending_sum'] - self.order.total
 
             lp = self.order.payments.last()
             ctx['can_pay'] = False
