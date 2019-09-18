@@ -24,6 +24,13 @@
                 <dd>{{ card.value|money:card.currency }}</dd>
                 <dt>{% trans "Currency" %}</dt>
                 <dd>{{ card.currency }}</dd>
+                {% if card.issued_in %}
+                    <dt>{% trans "Issued through sale" %}</dt>
+                    <dd>
+                        <a href="{% url "control:event.order" event=card.issued_in.order.event.slug organizer=card.issued_in.order.event.organizer.slug code=card.issued_in.order.code %}">
+                            {{ card.issued_in.order.full_code }}</a>-{{ card.issued_in.positionid }}
+                    </dd>
+                {% endif %}
             </dl>
         </div>
     </div>
@@ -48,7 +55,8 @@
                     <td>
                         {% if t.order %}
                             <a href="{% url "control:event.order" event=t.order.event.slug organizer=t.order.event.organizer.slug code=t.order.code %}">
-                            {{ t.order.full_code }}
+                                {{ t.order.full_code }}
+                            </a>
                         {% else %}
                             <em>{% trans "Manual transaction" %}</em>
                         {% endif %}
@@ -59,22 +67,22 @@
                 </tr>
             {% endfor %}
             </tbody>
-        <tfoot>
-        <tr>
-            <td></td>
-            <td></td>
-            <td class="text-right">
-                <form class="helper-display-inline form-inline" method="post" action="">
-                    {% csrf_token %}
-                    <input type="text" class="form-control input-sm" placeholder="{% trans "Value" %}" name="value">
-                    <button class="btn btn-primary">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </form>
-            </td>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="text-right">
+                    <form class="helper-display-inline form-inline" method="post" action="">
+                        {% csrf_token %}
+                        <input type="text" class="form-control input-sm" placeholder="{% trans "Value" %}" name="value">
+                        <button class="btn btn-primary">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </form>
+                </td>
 
-        </tr>
-        </tfoot>
+            </tr>
+            </tfoot>
         </table>
     </div>
 {% endblock %}
