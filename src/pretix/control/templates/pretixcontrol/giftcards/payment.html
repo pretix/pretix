@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<dl class="dl-horizontal">
+    <dt>{% trans "Gift card code" %}</dt>
+    <dd>
+        <a href="{% url "control:organizer.giftcard" organizer=gc.issuer.slug giftcard=gc.pk %}">
+            {{ gc.secret }}
+        </a>
+    </dd>
+    <dt>{% trans "Issuer" %}</dt>
+    <dd>{{ gc.issuer }}</dd>
+</dl>

@@ -8,6 +8,7 @@ import pytz
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.db import transaction
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
@@ -899,7 +900,53 @@ class GiftCardPayment(BasePaymentProvider):
     def order_change_allowed(self, order: Order) -> bool:
         return False
 
-    # TODO: execute, refund, api, control render
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
+        raise PaymentException("Invalid state, should never occur.")
+
+    def payment_control_render(self, request, payment) -> str:
+        from .models import GiftCard
+
+        gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
+        template = get_template('pretixcontrol/giftcards/payment.html')
+
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'gc': gc,
+        }
+        return template.render(ctx)
+
+    def api_payment_details(self, payment: OrderPayment):
+        from .models import GiftCard
+        gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
+        return {
+            'gift_card': {
+                'id': gc.pk,
+                'secret': gc.secret,
+                'organizer': gc.issuer.slug
+            }
+        }
+
+    def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
+        return True
+
+    def payment_refund_supported(self, payment: OrderPayment) -> bool:
+        return True
+
+    @transaction.atomic()
+    def execute_refund(self, refund: OrderRefund):
+        from .models import GiftCard
+        gc = GiftCard.objects.get(pk=refund.payment.info_data.get('gift_card'))
+        trans = gc.transactions.create(
+            value=refund.amount,
+            order=refund.order,
+            refund=refund
+        )
+        refund.info_data = {
+            'gift_card': gc.pk,
+            'transaction_id': trans.pk,
+        }
+        refund.done()
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_free")
