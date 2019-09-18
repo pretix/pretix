@@ -534,8 +534,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         if request.POST.get("giftcard") and request.POST.get("payment") == "giftcard":
             # TODO: cross-organizer acceptance, …
             try:
-                gc = GiftCard.objects.get(
-                    issuer=request.organizer,
+                gc = request.organizer.accepted_gift_cards.get(
                     secret=request.POST.get("giftcard")
                 )
                 if gc.currency != request.event.currency:

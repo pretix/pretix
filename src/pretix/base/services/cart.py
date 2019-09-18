@@ -14,8 +14,8 @@ from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CartPosition, Event, GiftCard, InvoiceAddress, Item, ItemBundle,
-    ItemVariation, Seat, SeatCategoryMapping, Voucher,
+    CartPosition, Event, InvoiceAddress, Item, ItemBundle, ItemVariation, Seat,
+    SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
@@ -970,7 +970,7 @@ def get_fees(event, request, total, invoice_address, provider):
 
     cs = cart_session(request)
     if cs.get('gift_cards'):
-        gc_qs = GiftCard.objects.filter(pk__in=cs.get('gift_cards'))
+        gc_qs = event.organizer.accepted_gift_cards.filter(pk__in=cs.get('gift_cards'), currency=event.currency)
         summed = 0
         for gc in gc_qs:
             fval = Decimal(gc.value)  # TODO: don't require an extra query
