@@ -730,7 +730,7 @@ class Event(EventMixin, LoggedModel):
     def has_payment_provider(self):
         result = False
         for provider in self.get_payment_providers().values():
-            if provider.is_enabled and provider.identifier not in ('free', 'boxoffice', 'offsetting'):
+            if provider.is_enabled and provider.identifier not in ('free', 'boxoffice', 'offsetting', 'giftcard'):
                 result = True
                 break
         return result

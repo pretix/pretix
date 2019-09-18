@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('issuance', models.DateTimeField(auto_now_add=True)),
                 ('secret', models.CharField(db_index=True, default=pretix.base.models.giftcards.gen_giftcard_secret, max_length=190, unique=True)),
                 ('currency', models.CharField(max_length=10)),
-                ('issued_in', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='issued_gift_cards', to='pretixbase.OrderPosition')),
+                ('issued_in', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='issued_gift_cards', to='pretixbase.OrderPosition', null=True, blank=True)),
                 ('issuer', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='issued_gift_cards', to='pretixbase.Organizer')),
             ],
         ),

@@ -156,6 +156,10 @@ class Team(LoggedModel):
         help_text=_('Someone with this setting can get access to most data of all of your events, i.e. via privacy '
                     'reports, so be careful who you add to this team!')
     )
+    can_manage_gift_cards = models.BooleanField(
+        default=False,
+        verbose_name=_("Can manage gift cards")
+    )
 
     can_change_event_settings = models.BooleanField(
         default=False,

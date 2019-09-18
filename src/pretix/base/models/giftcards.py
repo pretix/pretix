@@ -4,6 +4,9 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Sum
 from django.utils.crypto import get_random_string
+from django.utils.translation import ugettext_lazy as _
+
+from pretix.base.models import LoggedModel
 
 
 def gen_giftcard_secret():
@@ -27,7 +30,7 @@ class GiftCardAcceptance(models.Model):
     )
 
 
-class GiftCard(models.Model):
+class GiftCard(LoggedModel):
     issuer = models.ForeignKey(
         'Organizer',
         related_name='issued_gift_cards',
@@ -37,6 +40,7 @@ class GiftCard(models.Model):
         'OrderPosition',
         related_name='issued_gift_cards',
         on_delete=models.PROTECT,
+        null=True, blank=True
     )
     issuance = models.DateTimeField(
         auto_now_add=True,
@@ -46,8 +50,13 @@ class GiftCard(models.Model):
         default=gen_giftcard_secret,
         unique=True,
         db_index=True,
+        verbose_name=_('Gift card code'),
     )
-    currency = models.CharField(max_length=10)
+    CURRENCY_CHOICES = [(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES]
+    currency = models.CharField(max_length=10, choices=CURRENCY_CHOICES)
+
+    def __str__(self):
+        return self.secret
 
     @property
     def value(self):
@@ -88,3 +97,6 @@ class GiftCardTransaction(models.Model):
         blank=True,
         on_delete=models.PROTECT
     )
+
+    class Meta:
+        ordering = ("datetime",)
