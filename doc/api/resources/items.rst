@@ -77,6 +77,7 @@ generate_tickets                      boolean                    If ``false``, t
                                                                  rules apply.
 allow_waitinglist                     boolean                    If ``false``, no waiting list will be shown for this
                                                                  product when it is sold out.
+issue_giftcard                        boolean                    If ``true``, buying this product will yield a gift card.
 show_quota_left                       boolean                    Publicly show how many tickets are still available.
                                                                  If this is ``null``, the event default is used.
 has_variations                        boolean                    Shows whether or not this item has variations.
@@ -206,6 +207,7 @@ Endpoints
             "tax_rate": "0.00",
             "tax_rule": 1,
             "admission": false,
+            "issue_giftcard": false,
             "position": 0,
             "picture": null,
             "available_from": null,
@@ -300,6 +302,7 @@ Endpoints
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
+        "issue_giftcard": false,
         "position": 0,
         "picture": null,
         "available_from": null,
@@ -375,6 +378,7 @@ Endpoints
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
+        "issue_giftcard": false,
         "position": 0,
         "picture": null,
         "available_from": null,
@@ -437,6 +441,7 @@ Endpoints
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
+        "issue_giftcard": false,
         "position": 0,
         "picture": null,
         "available_from": null,
@@ -531,6 +536,7 @@ Endpoints
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
+        "issue_giftcard": false,
         "position": 0,
         "picture": null,
         "available_from": null,

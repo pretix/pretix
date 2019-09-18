@@ -421,6 +421,16 @@ class ItemUpdateForm(I18nModelForm):
         self.fields['hidden_if_available'].widget.choices = self.fields['hidden_if_available'].choices
         self.fields['hidden_if_available'].required = False
 
+    def clean(self):
+        d = super().clean()
+        if d['issue_giftcard']:
+            if d['tax_rule'] and d['tax_rule'].rate > 0:
+                self.add_error(
+                    'tax_rule',
+                    _("Gift card products should not be associated with non-zero tax rates since sales tax will be applied when the gift card is redeemed.")
+                )
+        return d
+
     class Meta:
         model = Item
         localized_fields = '__all__'
@@ -451,6 +461,7 @@ class ItemUpdateForm(I18nModelForm):
             'require_bundling',
             'show_quota_left',
             'hidden_if_available',
+            'issue_giftcard',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
