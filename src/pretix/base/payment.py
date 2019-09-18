@@ -892,7 +892,6 @@ class GiftCardPayment(BasePaymentProvider):
     is_enabled = True
     identifier = "giftcard"
     verbose_name = _("Gift card")
-    is_implicit = True
 
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         return False

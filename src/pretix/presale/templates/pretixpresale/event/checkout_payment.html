@@ -12,26 +12,25 @@
         {% csrf_token %}
         <div class="panel-group" id="payment_accordion">
             {# TODO: make this proper #}
-            <input type="text" class="form-control" placeholder="Add gift card" name="giftcard">
             {% for p in providers %}
                 <div class="panel panel-default" data-total="{{ p.total|floatformat:2 }}">
                     <label class="accordion-radio">
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 {% if show_fees %}
-                                   <strong class="pull-right flip">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
+                                    <strong class="pull-right flip">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
                                 {% endif %}
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
-                                        title="{{ p.provider.public_name }}"
-                                        data-parent="#payment_accordion"
-                                        {% if selected == p.provider.identifier %}checked="checked"{% endif %}
-                                        data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
+                                       title="{{ p.provider.public_name }}"
+                                       data-parent="#payment_accordion"
+                                       {% if selected == p.provider.identifier %}checked="checked"{% endif %}
+                                       data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
                                 <strong>{{ p.provider.public_name }}</strong>
                             </h4>
                         </div>
                     </label>
                     <div id="payment_{{ p.provider.identifier }}"
-                            class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
+                         class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
                         <div class="panel-body form-horizontal">
                             {% if request.event.testmode %}
                                 {% if p.provider.test_mode_message %}
@@ -52,6 +51,33 @@
                     </div>
                 </div>
             {% endfor %}
+            {% if has_gift_cards %}
+                <div class="panel panel-default">
+                    <label class="accordion-radio">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <input type="radio" name="payment" value="giftcard"
+                                        data-parent="#payment_accordion"
+                                        data-toggle="radiocollapse" data-target="#payment_giftcard"/>
+                                <strong>{% trans "Redeem a gift card" %}</strong>
+                            </h4>
+                        </div>
+                    </label>
+                    <div id="payment_giftcard"
+                            class="panel-collapse collapsed">
+                        <div class="panel-body form-horizontal">
+                            <p>
+                                {% blocktrans %}
+                                    If you have a gift card, please enter the gift card code here. If the gift card does not have
+                                    enough credit to pay for the full order, you will be shown this page again and you can either
+                                    redeem another gift card or select a different payment method for the difference.
+                                {% endblocktrans %}
+                            </p>
+                            <input name="giftcard" class="form-control" placeholder="{% trans "Gift card code" %}">
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
             {% if not providers %}
                 <p><em>{% trans "There are no payment providers enabled." %}</em></p>
                 {% if not event.live %}

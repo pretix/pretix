@@ -82,6 +82,14 @@ class Organizer(LoggedModel):
 
         return ObjectRelatedCache(self)
 
+    @property
+    def has_gift_cards(self):
+        return self.cache.get_or_set(
+            key='has_gift_cards',
+            timeout=15,
+            default=lambda: self.issued_gift_cards.exists() or self.gift_card_issuer_acceptance.exists()
+        )
+
     def allow_delete(self):
         from . import Order, Invoice
         return (
