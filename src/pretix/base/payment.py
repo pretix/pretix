@@ -7,6 +7,7 @@ from typing import Any, Dict, Union
 import pytz
 from django import forms
 from django.conf import settings
+from django.contrib import messages
 from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
 from django.dispatch import receiver
@@ -21,8 +22,8 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Order, OrderPayment, OrderRefund,
-    Quota,
+    CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
+    OrderRefund, Quota,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
@@ -30,6 +31,7 @@ from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.money import DecimalTextInput
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import get_cart_total
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
@@ -890,18 +892,20 @@ class OffsettingProvider(BasePaymentProvider):
 
 
 class GiftCardPayment(BasePaymentProvider):
-    is_enabled = True
     identifier = "giftcard"
     verbose_name = _("Gift card")
 
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
-        return False
+        return super().is_allowed(request, total) and self.event.organizer.has_gift_cards
 
     def order_change_allowed(self, order: Order) -> bool:
         return False
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
         raise PaymentException("Invalid state, should never occur.")
+
+    def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
+        return get_template('pretixcontrol/giftcards/checkout.html').render({})
 
     def payment_control_render(self, request, payment) -> str:
         from .models import GiftCard
@@ -932,6 +936,42 @@ class GiftCardPayment(BasePaymentProvider):
 
     def payment_refund_supported(self, payment: OrderPayment) -> bool:
         return True
+
+    def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
+        cs = cart_session(request)
+        try:
+            gc = self.event.organizer.accepted_gift_cards.get(
+                secret=request.POST.get("giftcard")
+            )
+            if gc.currency != self.event.currency:
+                messages.error(request, _("This gift card does not support this currency."))
+                return
+            if gc.value <= Decimal("0.00"):
+                messages.error(request, _("All credit on this gift card has been used."))
+                return
+            if 'gift_cards' not in cs:
+                cs['gift_cards'] = []
+            elif gc.pk in cs['gift_cards']:
+                messages.error(request, _("This gift card is already used for your payment."))
+                return
+            cs['gift_cards'] = cs['gift_cards'] + [gc.pk]
+
+            remainder = cart['total'] - gc.value
+            if remainder >= Decimal('0.00'):
+                messages.success(request, _("Your gift card has been applied, but {} still need to be paid. Please select a payment method.").format(
+                    money_filter(remainder, self.event.currency)
+                ))
+            else:
+                messages.success(request, _("Your gift card has been applied."))
+
+            kwargs = {'step': 'payment'}
+            if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
+                kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+            return eventreverse(self.event, 'presale:event.checkout', kwargs=kwargs)
+        except GiftCard.DoesNotExist:
+            messages.error(request, _("This gift card is not known."))
+        except GiftCard.MultipleObjectsReturned:
+            messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
     @transaction.atomic()
     def execute_refund(self, refund: OrderRefund):

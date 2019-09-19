@@ -51,33 +51,6 @@
                     </div>
                 </div>
             {% endfor %}
-            {% if has_gift_cards %}
-                <div class="panel panel-default">
-                    <label class="accordion-radio">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <input type="radio" name="payment" value="giftcard"
-                                        data-parent="#payment_accordion"
-                                        data-toggle="radiocollapse" data-target="#payment_giftcard"/>
-                                <strong>{% trans "Redeem a gift card" %}</strong>
-                            </h4>
-                        </div>
-                    </label>
-                    <div id="payment_giftcard"
-                            class="panel-collapse collapsed">
-                        <div class="panel-body form-horizontal">
-                            <p>
-                                {% blocktrans %}
-                                    If you have a gift card, please enter the gift card code here. If the gift card does not have
-                                    enough credit to pay for the full order, you will be shown this page again and you can either
-                                    redeem another gift card or select a different payment method for the difference.
-                                {% endblocktrans %}
-                            </p>
-                            <input name="giftcard" class="form-control" placeholder="{% trans "Gift card code" %}">
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
             {% if not providers %}
                 <p><em>{% trans "There are no payment providers enabled." %}</em></p>
                 {% if not event.live %}

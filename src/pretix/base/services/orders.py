@@ -329,6 +329,15 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 if position.voucher:
                     Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
 
+        for position in order.positions.all():
+            for gc in position.issued_gift_cards.all():
+                if gc.value < position.price:
+                    raise OrderError(_('This order can not be canceled since the gift card {card} purchased in this order has already been redeemed.').format(
+                        card=gc.secret
+                    ))
+                else:
+                    gc.transactions.create(value=-position.price, order=order)
+
         order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device,
                          data={'cancellation_fee': cancellation_fee})
 
@@ -1659,9 +1668,16 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 @receiver(order_paid, dispatch_uid="pretixbase_order_paid_giftcards")
 @transaction.atomic()
 def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
+    any_giftcards = False
     for p in order.positions.all():
         if p.item.issue_giftcard:
             gc = sender.organizer.issued_gift_cards.create(
                 currency=sender.currency, issued_in=p
             )
             gc.transactions.create(value=p.price, order=order)
+            any_giftcards = True
+            p.secret = gc.secret
+            p.save(update_fields=['secret'])
+
+    if any_giftcards:
+        tickets.invalidate_cache.apply_async(kwargs={'event': sender.pk, 'order': order.pk})

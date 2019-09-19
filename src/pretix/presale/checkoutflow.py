@@ -15,13 +15,12 @@ from django.utils.translation import (
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
-from pretix.base.models import GiftCard, Order
+from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
 from pretix.base.services.cart import (
     get_fees, set_cart_addons, update_tax_rates,
 )
 from pretix.base.services.orders import perform_order
-from pretix.base.templatetags.money import money_filter
 from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
@@ -531,40 +530,6 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def post(self, request):
         self.request = request
-        if request.POST.get("giftcard") and request.POST.get("payment") == "giftcard":
-            # TODO: cross-organizer acceptance, …
-            try:
-                gc = request.organizer.accepted_gift_cards.get(
-                    secret=request.POST.get("giftcard")
-                )
-                if gc.currency != request.event.currency:
-                    messages.error(self.request, _("This gift card does not support this currency."))
-                    return self.render()
-                if gc.value <= Decimal("0.00"):
-                    messages.error(self.request, _("All credit on this gift card has been used."))
-                    return self.render()
-                if 'gift_cards' not in self.cart_session:
-                    self.cart_session['gift_cards'] = []
-                elif gc.pk in self.cart_session['gift_cards']:
-                    messages.error(self.request, _("This gift card is already used for your payment."))
-                    return self.render()
-                self.cart_session['gift_cards'] = self.cart_session['gift_cards'] + [gc.pk]
-
-                remainder = self._total_order_value - gc.value
-                if remainder >= Decimal('0.00'):
-                    messages.success(self.request, _("Your gift card has been applied, but {} still need to be paid. Please select a payment method.").format(
-                        money_filter(remainder, self.event.currency)
-                    ))
-                else:
-                    messages.success(self.request, _("Your gift card has been applied."))
-                return redirect(self.get_step_url(request))
-            except GiftCard.DoesNotExist:
-                messages.error(self.request, _("This gift card is not known."))
-                return self.render()
-            except GiftCard.MultipleObjectsReturned:
-                messages.error(self.request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
-                return self.render()
-
         for p in self.provider_forms:
             if p['provider'].identifier == request.POST.get('payment', ''):
                 self.cart_session['payment'] = p['provider'].identifier
@@ -589,7 +554,6 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         if len(self.provider_forms) == 1:
             ctx['selected'] = self.provider_forms[0]['provider'].identifier
         ctx['cart'] = self.get_cart()
-        ctx['has_gift_cards'] = self.request.organizer.has_gift_cards
         return ctx
 
     @cached_property

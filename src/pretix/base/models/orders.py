@@ -458,11 +458,15 @@ class Order(LockModel, LoggedModel):
         positions = list(
             self.positions.all().annotate(
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
-            ).select_related('item')
+            ).select_related('item').prefetch_related('issued_gift_cards')
         )
         cancelable = all([op.item.allow_cancel and not op.has_checkin for op in positions])
         if not cancelable or not positions:
             return False
+        for op in positions:
+            for gc in op.issued_gift_cards.all():
+                if gc.value != op.price:
+                    return False
         if self.user_cancel_deadline and now() > self.user_cancel_deadline:
             return False
         if self.status == Order.STATUS_PENDING:

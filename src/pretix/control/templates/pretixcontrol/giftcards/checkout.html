@@ -1,0 +1,10 @@
+{% load i18n %}
+
+<p>
+    {% blocktrans %}
+        If you have a gift card, please enter the gift card code here. If the gift card does not have
+        enough credit to pay for the full order, you will be shown this page again and you can either
+        redeem another gift card or select a different payment method for the difference.
+    {% endblocktrans %}
+</p>
+<input name="giftcard" class="form-control" placeholder="{% trans "Gift card code" %}">
