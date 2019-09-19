@@ -179,7 +179,7 @@ def webhook(request, *args, **kwargs):
                 )
                 return func(rso.order.event, event_json, objid, rso)
             except ReferencedStripeObject.DoesNotExist:
-                pass
+                return HttpResponse("Unable to detect event", status=200)
         elif hasattr(request, 'event') and func != paymentintent_webhook:
             # This is a legacy integration from back when didn't have ReferencedStripeObject. This can't happen for
             # payment intents or charges connected with payment intents since they didn't exist back then. Our best
