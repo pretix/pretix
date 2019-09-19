@@ -595,9 +595,12 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
     with transaction.atomic():
         checked_gift_cards = []
         if gift_cards:
-            gc_qs = GiftCard.objects.select_for_update().filter(pk__in=gift_cards)  # TODO: Make sure to prevent race conditions
+            gc_qs = GiftCard.objects.select_for_update().filter(pk__in=gift_cards)
             for gc in gc_qs:
-                # TODO: Re-check acceptance
+                if gc.currency != event.currency:
+                    raise OrderError(_("This gift card does not support this currency."))
+                if not gc.accepted_by(event.organizer):
+                    raise OrderError(_("This gift card is not accepted by this event organizer."))
                 checked_gift_cards.append(gc)
 
         fees, pf, gift_card_values = _get_fees(positions, payment_provider, address, meta_info, event, checked_gift_cards)

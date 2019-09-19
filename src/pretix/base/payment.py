@@ -899,26 +899,27 @@ class GiftCardPayment(BasePaymentProvider):
         return super().is_allowed(request, total) and self.event.organizer.has_gift_cards
 
     def order_change_allowed(self, order: Order) -> bool:
-        return False
-
-    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
-        raise PaymentException("Invalid state, should never occur.")
+        return super().order_change_allowed(order) and self.event.organizer.has_gift_cards
 
     def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
         return get_template('pretixcontrol/giftcards/checkout.html').render({})
 
+    def checkout_confirm_render(self, request) -> str:
+        return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({})
+
     def payment_control_render(self, request, payment) -> str:
         from .models import GiftCard
 
-        gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
-        template = get_template('pretixcontrol/giftcards/payment.html')
+        if 'gift_card' in payment.info_data:
+            gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
+            template = get_template('pretixcontrol/giftcards/payment.html')
 
-        ctx = {
-            'request': request,
-            'event': self.event,
-            'gc': gc,
-        }
-        return template.render(ctx)
+            ctx = {
+                'request': request,
+                'event': self.event,
+                'gc': gc,
+            }
+            return template.render(ctx)
 
     def api_payment_details(self, payment: OrderPayment):
         from .models import GiftCard
@@ -976,6 +977,60 @@ class GiftCardPayment(BasePaymentProvider):
                 messages.error(request, _("This gift card is not known."))
         except GiftCard.MultipleObjectsReturned:
             messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
+
+    def payment_prepare(self, request: HttpRequest, payment: OrderPayment) -> Union[bool, str, None]:
+        try:
+            gc = self.event.organizer.accepted_gift_cards.get(
+                secret=request.POST.get("giftcard")
+            )
+            if gc.currency != self.event.currency:
+                messages.error(request, _("This gift card does not support this currency."))
+                return
+            if gc.value <= Decimal("0.00"):
+                messages.error(request, _("All credit on this gift card has been used."))
+                return
+            payment.info_data = {
+                'gift_card': gc.pk,
+                'retry': True
+            }
+            payment.amount = min(payment.amount, gc.value)
+            payment.save()
+
+            return True
+        except GiftCard.DoesNotExist:
+            if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard")).exists():
+                messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
+                                            "the product selection."))
+            else:
+                messages.error(request, _("This gift card is not known."))
+        except GiftCard.MultipleObjectsReturned:
+            messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
+        gcpk = payment.info_data.get('gift_card')
+        if not gcpk or not payment.info_data.get('retry'):
+            raise PaymentException("Invalid state, should never occur.")
+        with transaction.atomic():
+            gc = GiftCard.objects.select_for_update().get(pk=gcpk)
+            if gc.currency != self.event.currency:
+                raise PaymentException(_("This gift card does not support this currency."))
+            if not gc.accepted_by(self.event.organizer):
+                raise PaymentException(_("This gift card is not accepted by this event organizer."))
+            if payment.amount > gc.value:
+                raise PaymentException(_("This gift card was used in the meantime. Please try again"))
+            trans = gc.transactions.create(
+                value=-1 * payment.amount,
+                order=payment.order,
+                payment=payment
+            )
+            payment.info_data = {
+                'gift_card': gc.pk,
+                'transaction_id': trans.pk,
+            }
+            payment.confirm()
+
+    def payment_is_valid_session(self, request: HttpRequest) -> bool:
+        return True
 
     @transaction.atomic()
     def execute_refund(self, refund: OrderRefund):

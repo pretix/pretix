@@ -61,6 +61,9 @@ class GiftCard(LoggedModel):
     def value(self):
         return self.transactions.aggregate(s=Sum('value'))['s'] or Decimal('0.00')
 
+    def accepted_by(self, organizer):
+        return self.issuer == organizer or GiftCardAcceptance.objects.filter(issuer=self.issuer, collector=organizer).exists()
+
     class Meta:
         unique_together = (('secret', 'issuer'),)
 
