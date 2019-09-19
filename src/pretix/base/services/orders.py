@@ -1627,7 +1627,6 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
     order.total = (order.positions.aggregate(sum=Sum('price'))['sum'] or 0) + (order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
     order.save(update_fields=['total'])
-<<<<<<< HEAD
 
     if not new_payment:
         new_payment = order.payments.create(
@@ -1655,8 +1654,6 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
             generate_invoice(order)
 
     return old_fee, new_fee, fee, new_payment
-=======
-    return old_fee, new_fee, fee
 
 
 @receiver(order_paid, dispatch_uid="pretixbase_order_paid_giftcards")
@@ -1668,4 +1665,3 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                 currency=sender.currency, issued_in=p
             )
             gc.transactions.create(value=p.price, order=order)
->>>>>>> 1c09d226e... Actually issue giftcards
