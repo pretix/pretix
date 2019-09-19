@@ -45,6 +45,10 @@
                         </td>
                         <td class="text-right">
                             <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ c.id }}"
+                               class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
+                                <span class="fa fa-copy"></span>
+                            </a>
                             <a href="{% url "control:event.items.categories.delete" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>

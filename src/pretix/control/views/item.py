@@ -39,6 +39,7 @@ from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
 from pretix.control.signals import item_forms, item_formsets
+from pretix.helpers.models import modelcopy
 
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
@@ -188,6 +189,25 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
+
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.categories.get(pk=self.request.GET.get("copy_from"))
+            except ItemCategory.DoesNotExist:
+                pass
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+        else:
+            kwargs['instance'] = ItemCategory(event=self.request.event)
+        return kwargs
 
     @transaction.atomic
     def form_valid(self, form):
@@ -604,6 +624,29 @@ class QuotaCreate(EventPermissionRequiredMixin, CreateView):
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.quota.added', user=self.request.user, data=dict(form.cleaned_data))
         return ret
+
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.quotas.get(pk=self.request.GET.get("copy_from"))
+            except Quota.DoesNotExist:
+                pass
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+            kwargs.setdefault('initial', {})
+            kwargs['initial']['itemvars'] = [str(i.pk) for i in self.copy_from.items.all()] + [
+                '{}-{}'.format(v.item_id, v.pk) for v in self.copy_from.variations.all()
+            ]
+        else:
+            kwargs['instance'] = Quota(event=self.request.event)
+        return kwargs
 
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
