@@ -478,7 +478,10 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
                 if v_avail < 1 and not err:
                     err = error_messages['voucher_redeemed_cart'] % self.request.event.settings.reservation_time
             except Voucher.DoesNotExist:
-                err = error_messages['voucher_invalid']
+                if self.request.event.organizer.accepted_gift_cards.filter(secret__iexact=request.GET.get("voucher")).exists():
+                    err = error_messages['gift_card']
+                else:
+                    err = error_messages['voucher_invalid']
         else:
             return redirect(self.get_index_url())
 

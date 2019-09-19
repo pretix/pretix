@@ -97,6 +97,7 @@ error_messages = {
     'seat_forbidden': _('You can not select a seat for this position.'),
     'seat_unavailable': _('The seat you selected has already been taken. Please select a different seat.'),
     'seat_multiple': _('You can not select the same seat multiple times.'),
+    'gift_card': _("You entered a gift card instead of a voucher. Gift cards can be entered later on when you're asked for your payment details."),
 }
 
 

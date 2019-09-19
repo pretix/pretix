@@ -969,7 +969,11 @@ class GiftCardPayment(BasePaymentProvider):
                 kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
             return eventreverse(self.event, 'presale:event.checkout', kwargs=kwargs)
         except GiftCard.DoesNotExist:
-            messages.error(request, _("This gift card is not known."))
+            if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard")).exists():
+                messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
+                                            "the product selection."))
+            else:
+                messages.error(request, _("This gift card is not known."))
         except GiftCard.MultipleObjectsReturned:
             messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
