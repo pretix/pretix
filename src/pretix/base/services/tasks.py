@@ -63,17 +63,6 @@ class ProfiledTask(app.Task):
         return super().on_success(retval, task_id, args, kwargs)
 
 
-class TransactionAwareTaskMixin:
-    def apply_async(self, *args, **kwargs):
-        """
-        Unlike the default task in celery, this task does not return an async
-        result
-        """
-        transaction.on_commit(
-            lambda: super(TransactionAwareTaskMixin, self).apply_async(*args, **kwargs)
-        )
-
-
 class EventTask(app.Task):
     def __call__(self, *args, **kwargs):
         if 'event_id' in kwargs:
@@ -99,9 +88,21 @@ class EventTask(app.Task):
         return ret
 
 
-class ProfiledEventTask(TransactionAwareTaskMixin, ProfiledTask, EventTask):
+class ProfiledEventTask(ProfiledTask, EventTask):
     pass
 
 
-class TransactionAwareTask(TransactionAwareTaskMixin, ProfiledTask):
-    pass
+class TransactionAwareTask(ProfiledTask):
+    """
+    Task class which is aware of django db transactions and only executes tasks
+    after transaction has been committed
+    """
+
+    def apply_async(self, *args, **kwargs):
+        """
+        Unlike the default task in celery, this task does not return an async
+        result
+        """
+        transaction.on_commit(
+            lambda: super(TransactionAwareTask, self).apply_async(*args, **kwargs)
+        )
