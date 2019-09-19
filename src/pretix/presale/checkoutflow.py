@@ -540,14 +540,14 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 if gc.currency != request.event.currency:
                     messages.error(self.request, _("This gift card does not support this currency."))
                     return self.render()
-                if gc.pk in self.cart_session['gift_cards']:
-                    messages.error(self.request, _("This gift card is already used for your payment."))
-                    return self.render()
                 if gc.value <= Decimal("0.00"):
                     messages.error(self.request, _("All credit on this gift card has been used."))
                     return self.render()
                 if 'gift_cards' not in self.cart_session:
                     self.cart_session['gift_cards'] = []
+                elif gc.pk in self.cart_session['gift_cards']:
+                    messages.error(self.request, _("This gift card is already used for your payment."))
+                    return self.render()
                 self.cart_session['gift_cards'] = self.cart_session['gift_cards'] + [gc.pk]
 
                 remainder = self._total_order_value - gc.value
