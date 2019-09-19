@@ -70,7 +70,7 @@ class TransactionAwareTaskMixin:
         result
         """
         transaction.on_commit(
-            lambda: super().apply_async(*args, **kwargs)
+            lambda: super(TransactionAwareTaskMixin, self).apply_async(*args, **kwargs)
         )
 
 
