@@ -14,7 +14,9 @@ from django.templatetags.static import static as _static
 from django_scopes import scope
 
 from pretix.base.models import Event, Event_SettingsStore, Organizer
-from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
+from pretix.base.services.tasks import (
+    TransactionAwareProfiledEventTask, TransactionAwareTask,
+)
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.signals import sass_postamble, sass_preamble
@@ -79,7 +81,7 @@ def compile_scss(object, file="main.scss", fonts=True):
     return css, checksum
 
 
-@app.task(base=ProfiledEventTask)
+@app.task(base=TransactionAwareProfiledEventTask)
 def regenerate_css(event):
     # main.scss
     css, checksum = compile_scss(event)
@@ -100,7 +102,7 @@ def regenerate_css(event):
         event.settings.set('presale_widget_css_checksum', checksum)
 
 
-@app.task(base=ProfiledTask)
+@app.task(base=TransactionAwareTask)
 def regenerate_organizer_css(organizer_id: int):
     organizer = Organizer.objects.get(pk=organizer_id)
 
