@@ -22,6 +22,7 @@ def contextprocessor(request):
     ctx = {
         'css_file': None,
         'DEBUG': settings.DEBUG,
+        'rtl': request.LANGUAGE_CODE in settings.LANGUAGES_RTL,
     }
     _html_head = []
     _html_page_header = []

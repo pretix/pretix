@@ -1,0 +1,91 @@
+html.rtl {
+  .info-row {
+    & > .fa {
+      float: right;
+    }
+    p {
+      margin-right: 40px;
+      margin-left: 0;
+    }
+  }
+  .cart-row > div {
+    float: right;
+  }
+  #loadingmodal .modal-card .modal-card-icon, #ajaxerr .modal-card .modal-card-icon {
+    float: right;
+  }
+  #loadingmodal .modal-card .modal-card-content, #ajaxerr .modal-card .modal-card-content {
+    margin-right: 160px;
+    margin-left: 0;
+    text-align: right;
+  }
+  .alert-success, .alert-danger, .alert-info, .alert-warning, .alert-legal {
+    padding-right: 65px;
+    padding-left: 15px;
+  }
+  .alert {
+    text-align: right;
+  }
+  .alert-success::before, .alert-danger::before, .alert-info::before, .alert-warning::before, .alert-legal::before {
+    left: inherit;
+    right: 0;
+  }
+  .checkout-flow .checkout-step:last-child .checkout-step-bar-right, .checkout-flow .checkout-step:first-child .checkout-step-bar-left {
+    background: $gray-lighter;
+  }
+  .checkout-flow .checkout-step.step-current .checkout-step-bar-left {
+    background: $gray-lighter;
+  }
+  .checkout-flow .checkout-step.step-current .checkout-step-bar-right,
+  .checkout-flow .checkout-step.step-done .checkout-step-bar-right, .checkout-flow .checkout-step.step-done .checkout-step-bar-left {
+    background: $brand-primary;
+  }
+  .checkout-flow .checkout-step:last-child .checkout-step-bar-left, .checkout-flow .checkout-step:first-child .checkout-step-bar-right {
+    background: transparent;
+  }
+  .cart-modify {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+  .cart-row dl dd {
+    padding-right: 20px;
+    padding-left: 0;
+  }
+  .thank-you .fa {
+    float: right;
+    margin-left: 30px;
+    margin-right: 0;
+  }
+  .thank-you p {
+    margin-right: 158px;
+    margin-left: 0;
+  }
+  .fa-arrow-right::before {
+    content: $fa-var-arrow-left;
+  }
+  .fa-arrow-left::before {
+    content: $fa-var-arrow-right;
+  }
+  .page-header h1 {
+    direction: rtl;
+    * {
+      display: inline-block;
+    }
+  }
+}
+
+@media(min-width: $screen-sm-min) {
+  html.rtl .nameparts-form-group {
+    input, select {
+      border-radius: $border-radius-base;
+    }
+    input:not(:first-child), select:not(:first-child) {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+    input:not(:last-child), select:not(:last-child)  {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+    }
+  }
+}

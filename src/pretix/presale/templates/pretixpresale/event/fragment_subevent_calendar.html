@@ -8,7 +8,7 @@
         {% endif %}
     {% endfor %}
     <div class="row">
-        <div class="col-sm-4 hidden-xs">
+        <div class="col-sm-4 hidden-xs text-left flip">
             <a href="?{% url_replace request "year" before.year "month" before.month %}"
                     class="btn btn-default">
                 <span class="fa fa-arrow-left"></span>
@@ -30,7 +30,7 @@
                 {% trans "Go" %}
             </button>
         </div>
-        <div class="col-sm-4 hidden-xs text-right">
+        <div class="col-sm-4 hidden-xs text-right flip">
             <a href="?{% url_replace request "year" after.year "month" after.month %}" class="btn btn-default">
                 {{ after|date:"F Y" }}
                 <span class="fa fa-arrow-right"></span>

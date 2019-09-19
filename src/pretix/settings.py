@@ -415,6 +415,9 @@ LANGUAGES_OFFICIAL = {
 LANGUAGES_INCUBATING = {
     'pt-br', 'pl', 'it',
 } - set(config.get('languages', 'allow_incubating', fallback='').split(','))
+LANGUAGES_RTL = {
+    'de', 'de-informal'
+}
 
 if DEBUG:
     LANGUAGES = ALL_LANGUAGES

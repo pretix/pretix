@@ -5,7 +5,7 @@
 {% load statici18n %}
 {% load thumb %}
 <!DOCTYPE html>
-<html>
+<html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 <head>
     <title>{% block thetitle %}{% endblock %}</title>
     {% compress css %}

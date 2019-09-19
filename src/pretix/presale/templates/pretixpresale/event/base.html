@@ -38,7 +38,7 @@
                 </a>
             </p>
         {% endif %}
-        <div class="pull-left">
+        <div class="pull-left flip">
             {% if event_logo %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
                         title="{{ event.name }}">
@@ -53,7 +53,7 @@
                 </h1>
             {% endif %}
         </div>
-        <div class="pull-right loginbox">
+        <div class="pull-right flip loginbox">
             {% if request.event.settings.locales|length > 1 %}
                 <div class="locales">
                     {% for l in languages %}

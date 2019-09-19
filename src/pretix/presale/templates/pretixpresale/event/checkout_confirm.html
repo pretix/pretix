@@ -13,14 +13,14 @@
         {% csrf_token %}
         <div class="panel panel-primary cart">
             <div class="panel-heading">
-                <div class="pull-right cart-modify">
+                <div class="pull-right flip cart-modify">
                     <a href="{% eventurl request.event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">
                         <span class="fa fa-edit"></span>
                         {% trans "Modify" %}
                     </a>
                 </div>
                 <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}"
-                    class="pull-right">
+                    class="pull-right flip">
                     {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
                         {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
                     {% else %}
@@ -54,7 +54,7 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     {% if payment_provider.identifier != "free" %}
-                        <div class="pull-right">
+                        <div class="pull-right flip">
                             <a href="{% eventurl request.event "presale:event.checkout" step="payment" cart_namespace=cart_namespace|default_if_none:"" %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Modify" %}
@@ -76,7 +76,7 @@
                 <div class="col-md-6 col-xs-12">
                     <div class="panel panel-primary panel-contact">
                         <div class="panel-heading">
-                            <div class="pull-right">
+                            <div class="pull-right flip">
                                 <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}?invoice=1">
                                     <span class="fa fa-edit"></span>
                                     {% trans "Modify" %}
@@ -118,7 +118,7 @@
             <div class="{% if invoice_address_asked %}col-md-6{% endif %} col-xs-12">
                 <div class="panel panel-primary panel-contact">
                     <div class="panel-heading">
-                        <div class="pull-right">
+                        <div class="pull-right flip">
                             <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Modify" %}
