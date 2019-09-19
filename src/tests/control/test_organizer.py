@@ -1,11 +1,19 @@
 import datetime
 
+import pytest
+from django.db import transaction
 from django_scopes import scopes_disabled
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import Event, Organizer, Team, User
 
 
+@pytest.fixture
+def class_monkeypatch(request, monkeypatch):
+    request.cls.monkeypatch = monkeypatch
+
+
+@pytest.mark.usefixtures("class_monkeypatch")
 class OrganizerTest(SoupTest):
     @scopes_disabled()
     def setUp(self):
@@ -49,14 +57,22 @@ class OrganizerTest(SoupTest):
         assert self.orga1.name == "CCC e.V."
 
     def test_organizer_display_settings(self):
+        called = False
+
+        def set_called(*args, **kwargs):
+            nonlocal called
+            called = True
+
+        self.monkeypatch.setattr("pretix.presale.style.regenerate_organizer_css.apply_async", set_called)
         assert not self.orga1.settings.presale_css_checksum
         doc = self.get_doc('/control/organizer/%s/edit' % (self.orga1.slug,))
         doc.select("[name=settings-primary_color]")[0]['value'] = "#33c33c"
 
-        doc = self.post_doc('/control/organizer/%s/edit' % (self.orga1.slug,),
-                            extract_form_fields(doc.select('.container-fluid form')[0]))
-        assert len(doc.select(".alert-success")) > 0
-        assert doc.select("[name=settings-primary_color]")[0]['value'] == "#33c33c"
+        with transaction.atomic():
+            doc = self.post_doc('/control/organizer/%s/edit' % (self.orga1.slug,),
+                                extract_form_fields(doc.select('.container-fluid form')[0]))
+            assert len(doc.select(".alert-success")) > 0
+            assert doc.select("[name=settings-primary_color]")[0]['value'] == "#33c33c"
         self.orga1.settings.flush()
         assert self.orga1.settings.primary_color == "#33c33c"
-        assert self.orga1.settings.presale_css_checksum
+        assert called
