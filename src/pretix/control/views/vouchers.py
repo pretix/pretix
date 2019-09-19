@@ -24,6 +24,7 @@ from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
 from pretix.control.views import PaginationMixin
+from pretix.helpers.models import modelcopy
 
 
 class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
@@ -279,9 +280,23 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
             'event': self.request.event.slug,
         })
 
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.vouchers.get(pk=self.request.GET.get("copy_from"))
+            except Voucher.DoesNotExist:
+                pass
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['instance'] = Voucher(event=self.request.event)
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+        else:
+            kwargs['instance'] = Voucher(event=self.request.event)
         return kwargs
 
     @transaction.atomic
