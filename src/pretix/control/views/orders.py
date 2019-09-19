@@ -1561,10 +1561,11 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        order = Order.objects.filter(
+        order = get_object_or_404(
+            Order,
             event=self.request.event,
             code=self.kwargs['code'].upper()
-        ).first()
+        )
         qs = order.all_logentries()
         qs = qs.filter(
             action_type__contains="order.email"
