@@ -531,7 +531,7 @@ class BasePaymentProvider:
         containing the URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 
-        If the payment is completed, you should call ``payment.confirm()``. Please note that ``this`` might
+        If the payment is completed, you should call ``payment.confirm()``. Please note that this might
         raise a ``Quota.QuotaExceededException`` if (and only if) the payment term of this order is over and
         some of the items are sold out. You should use the exception message to display a meaningful error
         to the user.
