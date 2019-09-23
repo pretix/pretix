@@ -266,16 +266,28 @@ DEFAULT_VARIABLES = OrderedDict((
 @receiver(layout_text_variables, dispatch_uid="pretix_base_layout_text_variables_questions")
 def variables_from_questions(sender, *args, **kwargs):
     def get_answer(op, order, event, question_id):
-        try:
+        a = None
+        if op.addon_to:
+            if 'answers' in getattr(op.addon_to, '_prefetched_objects_cache', {}):
+                try:
+                    a = [a for a in op.addon_to.answers.all() if a.question_id == question_id][0]
+                except IndexError:
+                    pass
+            else:
+                a = op.addon_to.answers.filter(question_id=question_id).first()
+
             if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
-                a = [a for a in op.answers.all() if a.question_id == question_id][0]
+                try:
+                    a = [a for a in op.answers.all() if a.question_id == question_id][0]
+                except IndexError:
+                    pass
             else:
                 a = op.answers.filter(question_id=question_id).first()
-                if not a:
-                    return ""
-            return str(a).replace("\n", "<br/>\n")
-        except IndexError:
+
+        if not a:
             return ""
+        else:
+            return str(a).replace("\n", "<br/>\n")
 
     d = {}
     for q in sender.questions.all():
