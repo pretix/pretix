@@ -276,13 +276,13 @@ def variables_from_questions(sender, *args, **kwargs):
             else:
                 a = op.addon_to.answers.filter(question_id=question_id).first()
 
-            if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
-                try:
-                    a = [a for a in op.answers.all() if a.question_id == question_id][0]
-                except IndexError:
-                    pass
-            else:
-                a = op.answers.filter(question_id=question_id).first()
+        if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
+            try:
+                a = [a for a in op.answers.all() if a.question_id == question_id][0]
+            except IndexError:
+                pass
+        else:
+            a = op.answers.filter(question_id=question_id).first()
 
         if not a:
             return ""
