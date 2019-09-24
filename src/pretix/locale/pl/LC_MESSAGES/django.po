@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-03-15 11:19+0000\n"
+"PO-Revision-Date: 2019-09-24 19:00+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:132
@@ -760,7 +760,7 @@ msgstr "Wariant"
 #: pretix/plugins/ticketoutputpdf/exporters.py:39
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:40
 msgid "Attendee name"
-msgstr "Imię uczstnika"
+msgstr "Imię uczestnika"
 
 #: pretix/base/exporters/orderlist.py:295 pretix/base/forms/questions.py:196
 #: pretix/base/models/orders.py:988
@@ -3625,7 +3625,7 @@ msgstr ""
 #: pretix/base/pdf.py:245 pretix/base/pdf.py:251
 #: pretix/control/forms/orders.py:205 pretix/control/forms/orders.py:260
 msgid "General admission"
-msgstr ""
+msgstr "Miejsca stojące"
 
 #: pretix/base/pdf.py:248
 #, fuzzy
@@ -6720,7 +6720,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:204
 #: pretix/control/templates/pretixcontrol/order/change.html:108
 msgid "Seat"
-msgstr ""
+msgstr "Miejsce"
 
 #: pretix/control/forms/orders.py:212
 msgid "Including taxes, if any. Keep empty for the product's default price"
