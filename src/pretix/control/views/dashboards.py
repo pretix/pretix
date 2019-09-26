@@ -23,7 +23,6 @@ from pretix.base.models import (
     Item, Order, OrderPosition, OrderRefund, RequiredAction, SubEvent, Voucher,
     WaitingListEntry,
 )
-from pretix.base.models.checkin import CheckinList
 from pretix.base.timeline import timeline_for_event
 from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
@@ -227,8 +226,6 @@ def shop_state_widget(sender, **kwargs):
 def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
     qs = sender.checkin_lists.filter(subevent=subevent)
-    if not lazy:
-        qs = CheckinList.annotate_with_numbers(qs, sender)
     for cl in qs:
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(
