@@ -52,7 +52,8 @@ class CheckinList(LoggedModel):
 
     @property
     def percent(self):
-        return round(self.checkin_count * 100 / self.position_count)
+        pc = self.position_count
+        return round(self.checkin_count * 100 / pc) if pc else 0
 
     @property
     def position_count(self):
