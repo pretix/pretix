@@ -31,6 +31,7 @@ from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
 
+from pretix.base.blacklist import blacklisted
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import User
@@ -537,6 +538,8 @@ class Order(LockModel, LoggedModel):
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
+            if blacklisted(code):
+                continue
             if self.testmode:
                 # Subtle way to recognize test orders while debugging: They all contain a 0 at the second place,
                 # even though zeros are not used outside test mode.
