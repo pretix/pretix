@@ -11,7 +11,8 @@ from django.http import (
 )
 from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
@@ -213,6 +214,9 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
         })
 
 
+_format_html_lazy = lazy(format_html, str)
+
+
 class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/detail.html'
@@ -240,8 +244,13 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
-        messages.success(self.request, _('The new voucher has been created: {code}').format(code=form.instance.code))
         ret = super().form_valid(form)
+        url = reverse('control:event.voucher', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'voucher': self.object.pk
+        })
+        messages.success(self.request, _format_html_lazy(_('The new voucher has been created: <a href="{url}">{code}</a>'), code=form.instance.code, url=url))
         form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret
 
