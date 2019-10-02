@@ -7,7 +7,7 @@ from django.core.files import File
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.forms.models import inlineformset_factory
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
@@ -281,6 +281,22 @@ class QuestionList(PaginationMixin, ListView):
 
     def get_queryset(self):
         return self.request.event.questions.prefetch_related('items')
+
+
+def reorder_questions(request, organizer, event):
+    ids = json.loads(request.body.decode('utf-8'))['ids']
+    questions = request.event.questions
+
+    if questions.count() != questions.filter(id__in=ids).count():
+        raise Http404(_("The provided question ids are invalid."))
+
+    for i, id in enumerate(ids):
+        qt = questions.get(id=id)
+        if qt.position != i:
+            qt.position = i
+            qt.save()
+
+    return HttpResponse()
 
 
 def question_move(request, question, up=True):
