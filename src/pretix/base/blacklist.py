@@ -1,3 +1,5 @@
+import re
+
 # blacklist based on http://www.bannedwordlist.com/lists/swearWords.txt
 blacklist = [
     "anal",
@@ -71,10 +73,8 @@ blacklist = [
     "wtf"
 ]
 
+blacklist_regex = re.compile('(' + '|'.join(blacklist) + ')')
+
 
 def blacklisted(string):
-    lower = string.lower()
-    for word in blacklist:
-        if word in lower:
-            return True
-    return False
+    return bool(blacklist_regex.search(string.lower()))
