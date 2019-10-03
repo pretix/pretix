@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-06-04 16:00+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
-"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
-">\n"
+"PO-Revision-Date: 2019-10-03 19:00+0000\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7001,7 +7001,7 @@ msgstr "Όλοι οι διοργανωτές"
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:102
 msgid "All"
-msgstr "Ολα"
+msgstr "Όλα"
 
 #: pretix/control/forms/filter.py:384 pretix/control/forms/filter.py:519
 msgid "Shop live and presale running"
