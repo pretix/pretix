@@ -111,7 +111,7 @@ class ListExporter(BaseExporter):
         raise NotImplementedError()  # noqa
 
     def get_filename(self):
-        return 'export.csv'
+        return 'export'
 
     def _render_csv(self, form_data, output_file=None, **kwargs):
         if output_file:
