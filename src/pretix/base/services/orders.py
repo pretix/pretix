@@ -1684,7 +1684,9 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
         raise OrderError(error_messages['busy'])
 
 
-def change_payment_provider(order: Order, payment_provider, amount=None, new_payment=None):
+def change_payment_provider(order: Order, payment_provider, amount=None, new_payment=None, create_log=True,
+                            recreate_invoices=True):
+    oldtotal = order.total
     e = OrderPayment.objects.filter(fee=OuterRef('pk'), state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED,
                                                                    OrderPayment.PAYMENT_STATE_REFUNDED))
     open_fees = list(
@@ -1730,4 +1732,30 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
     order.total = (order.positions.aggregate(sum=Sum('price'))['sum'] or 0) + (order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
     order.save(update_fields=['total'])
-    return old_fee, new_fee, fee
+
+    if not new_payment:
+        new_payment = order.payments.create(
+            state=OrderPayment.PAYMENT_STATE_CREATED,
+            provider=payment_provider.identifier,
+            amount=order.pending_sum,
+            fee=fee
+        )
+    if create_log and new_payment:
+        order.log_action(
+            'pretix.event.order.payment.changed' if open_payment else 'pretix.event.order.payment.started',
+            {
+                'fee': new_fee,
+                'old_fee': old_fee,
+                'provider': payment_provider.identifier,
+                'payment': new_payment.pk,
+                'local_id': new_payment.local_id,
+            }
+        )
+
+    if recreate_invoices:
+        i = order.invoices.filter(is_cancellation=False).last()
+        if i and order.total != oldtotal:
+            generate_cancellation(i)
+            generate_invoice(order)
+
+    return old_fee, new_fee, fee, new_payment

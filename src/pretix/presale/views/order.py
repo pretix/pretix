@@ -25,8 +25,7 @@ from pretix.base.models.orders import (
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
-    generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
-    invoice_qualified,
+    generate_invoice, invoice_pdf, invoice_pdf_task, invoice_qualified,
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import cancel_order, change_payment_provider
@@ -543,34 +542,13 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         self.request = request
-        oldtotal = self.order.total
         for p in self.provider_forms:
             if p['provider'].identifier == request.POST.get('payment', ''):
                 request.session['payment'] = p['provider'].identifier
                 request.session['payment_change_{}'.format(self.order.pk)] = '1'
 
                 with transaction.atomic():
-                    old_fee, new_fee, fee = change_payment_provider(self.order, p['provider'], None)
-                    newpayment = self.order.payments.create(
-                        state=OrderPayment.PAYMENT_STATE_CREATED,
-                        provider=p['provider'].identifier,
-                        amount=self.order.pending_sum,
-                        fee=fee
-                    )
-                    self.order.log_action(
-                        'pretix.event.order.payment.changed' if self.open_payment else 'pretix.event.order.payment.started',
-                        {
-                            'fee': new_fee,
-                            'old_fee': old_fee,
-                            'provider': newpayment.provider,
-                            'payment': newpayment.pk,
-                            'local_id': newpayment.local_id,
-                        }
-                    )
-                    i = self.order.invoices.filter(is_cancellation=False).last()
-                    if i and self.order.total != oldtotal:
-                        generate_cancellation(i)
-                        generate_invoice(self.order)
+                    old_fee, new_fee, fee, newpayment = change_payment_provider(self.order, p['provider'], None)
 
                 resp = p['provider'].payment_prepare(request, newpayment)
                 if isinstance(resp, str):
