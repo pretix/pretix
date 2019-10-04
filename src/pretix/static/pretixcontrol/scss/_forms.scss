@@ -314,6 +314,9 @@ div.scrolling-multiple-choice, div.scrolling-choice {
   .radio:first-of-type, .checkbox:first-of-type {
     margin-top: 0;
   }
+  &.scrolling-multiple-choice-large {
+    height: 350px;
+  }
 }
 table td > .checkbox {
   margin: 0;

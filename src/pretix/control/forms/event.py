@@ -177,13 +177,23 @@ class EventWizardBasicsForm(I18nModelForm):
         return slug
 
 
-class EventChoiceField(forms.ModelChoiceField):
+class EventChoiceMixin:
     def label_from_instance(self, obj):
         return mark_safe('{}<br /><span class="text-muted">{} · {}</span>'.format(
             escape(str(obj)),
             obj.get_date_range_display() if not obj.has_subevents else _("Event series"),
             obj.slug
         ))
+
+
+class EventChoiceField(forms.ModelChoiceField):
+    pass
+
+
+class SafeEventMultipleChoiceField(EventChoiceMixin, forms.ModelMultipleChoiceField):
+    def __init__(self, queryset, *args, **kwargs):
+        queryset = queryset.model.objects.none()
+        super().__init__(queryset, *args, **kwargs)
 
 
 class EventWizardCopyForm(forms.Form):
