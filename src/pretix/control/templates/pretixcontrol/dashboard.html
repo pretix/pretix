@@ -20,9 +20,13 @@
             </a>
         </div>
         {% for w in upcoming %}
-            <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }}">
+            <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
                 <div class="widget">
-                    {{ w.content|safe }}
+                    {% if w.lazy %}
+                        <span class="fa fa-cog fa-4x"></span>
+                    {% else %}
+                        {{ w.content|safe }}
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
@@ -38,9 +42,13 @@
         <h2>{% trans "Your most recent events" %}</h2>
         <div class="dashboard">
             {% for w in past %}
-                <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }}">
+                <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
                     <div class="widget">
-                        {{ w.content|safe }}
+                        {% if w.lazy %}
+                            <span class="fa fa-cog fa-4x"></span>
+                        {% else %}
+                            {{ w.content|safe }}
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
@@ -55,9 +63,13 @@
         <h2>{% trans "Your event series" %}</h2>
         <div class="dashboard">
             {% for w in series %}
-                <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }}">
+                <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
                     <div class="widget">
-                        {{ w.content|safe }}
+                        {% if w.lazy %}
+                            <span class="fa fa-cog fa-4x"></span>
+                        {% else %}
+                            {{ w.content|safe }}
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
@@ -72,14 +84,22 @@
         <h2>{% trans "Other features" %}</h2>
         <div class="dashboard">
             {% for w in widgets %}
-                <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }}">
+                <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
                     {% if w.url %}
                         <a href="{{ w.url }}" class="widget">
-                            {{ w.content|safe }}
+                            {% if w.lazy %}
+                                <span class="fa fa-cog fa-4x"></span>
+                            {% else %}
+                                {{ w.content|safe }}
+                            {% endif %}
                         </a>
                     {% else %}
                         <div class="widget">
-                            {{ w.content|safe }}
+                            {% if w.lazy %}
+                                <span class="fa fa-cog fa-4x"></span>
+                            {% else %}
+                                {{ w.content|safe }}
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>

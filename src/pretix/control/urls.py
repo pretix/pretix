@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^forgot$', auth.Forgot.as_view(), name='auth.forgot'),
     url(r'^forgot/recover$', auth.Recover.as_view(), name='auth.forgot.recover'),
     url(r'^$', dashboards.user_index, name='index'),
+    url(r'^widgets.json$', dashboards.user_index_widgets_lazy, name='index.widgets'),
     url(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     url(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
     url(r'^global/message/$', global_settings.MessageView.as_view(), name='global.message'),
