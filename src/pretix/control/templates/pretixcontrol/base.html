@@ -161,13 +161,13 @@
                                 <ul class="dropdown-menu" role="menu">
                                     {% for item in nav.children %}
                                         <li>
-                                            <a href="{{ item.url }}"
+                                            <a {% if item.url %}href="{{ item.url }}"{% endif %}
+                                                    {% if item.external %}target="_blank"{% endif %}
                                                     {% if item.active %}class="active"{% endif %}>
                                                 {% if item.icon %}
-                                                    <span class="fa fa-{{ item.icon }}"></span>
+                                                    <span class="fa fa-fw fa-{{ item.icon }}"></span>
                                                 {% endif %}
-                                                {{ item.label|safe }}
-                                            </a>
+                                                {{ item.label|safe }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
