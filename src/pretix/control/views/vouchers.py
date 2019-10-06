@@ -13,6 +13,7 @@ from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
@@ -247,9 +248,9 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
             'event': self.request.event.slug,
             'voucher': self.object.pk
         })
-        messages.success(self.request, _('The new voucher has been created: {code}').format(
+        messages.success(self.request, mark_safe(_('The new voucher has been created: {code}').format(
             code=format_html('<a href="{url}">{code}</a>', url=url, code=self.object.code)
-        ))
+        )))
         form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret
 
