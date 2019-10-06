@@ -619,7 +619,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'code': '68CYU2H6ZTP3WLK5',
             'invoice_name': _('John Doe'),
             'invoice_company': _('Sample Corporation'),
-            'common': _('An individual text with a reason can be inserted here.'),
+            'comment': _('An individual text with a reason can be inserted here.'),
             'payment_info': _('Please transfer money to this bank account: 9999-9999-9999-9999'),
             'attendee_name': _('John Doe'),
         }

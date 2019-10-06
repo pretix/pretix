@@ -7,8 +7,9 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
+from pretix.base.email import get_email_context
 from pretix.base.services.mail import INVALID_ADDRESS, SendMailException, mail
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.user import ResendLinkForm
 from pretix.presale.views import EventViewMixin
 
@@ -37,25 +38,13 @@ class ResendLinkView(EventViewMixin, TemplateView):
                 rc.setex('pretix_resend_{}'.format(user), 3600 * 24, '1')
 
         orders = self.request.event.orders.filter(email__iexact=user)
-        order_context = []
-
-        for order in orders:
-            url = build_absolute_uri(
-                self.request.event,
-                'presale:event.order',
-                kwargs={'order': order.code, 'secret': order.secret}
-            )
-            order_context.append(' - {} - {}'.format(order, url))
 
         if not orders:
             user = INVALID_ADDRESS
 
         subject = _('Your orders for {}'.format(self.request.event))
         template = self.request.event.settings.mail_text_resend_all_links
-        context = {
-            'orders': '\n'.join(order_context),
-            'event': self.request.event,
-        }
+        context = get_email_context(event=self.request.event, orders=orders)
         try:
             mail(user, subject, template, context, event=self.request.event, locale=self.request.LANGUAGE_CODE)
         except SendMailException:

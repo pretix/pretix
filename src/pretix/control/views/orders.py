@@ -6,7 +6,6 @@ import re
 from datetime import datetime, time, timedelta
 from decimal import Decimal, DecimalException
 
-import pytz
 import vat_moss.id
 from django.conf import settings
 from django.contrib import messages
@@ -21,7 +20,6 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import formats
-from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import make_aware, now
@@ -32,6 +30,7 @@ from django.views.generic import (
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Invoice, InvoiceAddress,
@@ -77,7 +76,6 @@ from pretix.control.forms.orders import (
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 from pretix.helpers.safedownload import check_token
-from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.signals import question_form_fields
 
 logger = logging.getLogger(__name__)
@@ -1490,32 +1488,13 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        tz = pytz.timezone(self.request.event.settings.timezone)
         order = Order.objects.get(
             event=self.request.event,
             code=self.kwargs['code'].upper()
         )
         self.preview_output = {}
-        try:
-            invoice_name = order.invoice_address.name
-            invoice_company = order.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
         with language(order.locale):
-            email_context = {
-                'event': order.event,
-                'code': order.code,
-                'date': date_format(order.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                'expire_date': date_format(order.expires, 'SHORT_DATE_FORMAT'),
-                'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
-                    'order': order.code,
-                    'secret': order.secret,
-                    'hash': order.email_confirm_hash()
-                }),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-            }
+            email_context = get_email_context(event=order.event, order=order)
         email_template = LazyI18nString(form.cleaned_data['message'])
         email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
