@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-06-04 16:00+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"PO-Revision-Date: 2019-10-03 19:00+0000\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
 "Language: el\n"
@@ -200,7 +200,7 @@ msgstr "Δημιουργία μηνυμάτων …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:69
 msgid "Unknown error."
-msgstr "Αγνωστο σφάλμα."
+msgstr "Άγνωστο σφάλμα."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:231
 msgid "Your color has great contrast and is very easy to read!"
@@ -223,7 +223,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:355
 msgid "All"
-msgstr "Ολα"
+msgstr "Όλα"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:356
 msgid "None"
