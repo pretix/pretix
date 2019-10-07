@@ -477,6 +477,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'pretix.base.context.contextprocessor',
                 'pretix.control.context.contextprocessor',
                 'pretix.presale.context.contextprocessor',
             ],

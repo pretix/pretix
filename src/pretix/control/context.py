@@ -99,11 +99,6 @@ def contextprocessor(request):
     ctx['js_locale'] = get_moment_locale()
     ctx['select2locale'] = get_language()[:2]
 
-    if settings.DEBUG and 'runserver' not in sys.argv:
-        ctx['debug_warning'] = True
-    elif 'runserver' in sys.argv:
-        ctx['development_warning'] = True
-
     ctx['warning_update_available'] = False
     ctx['warning_update_check_active'] = False
     gs = GlobalSettingsObject()
