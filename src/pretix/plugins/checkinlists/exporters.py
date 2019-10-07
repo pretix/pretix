@@ -3,7 +3,7 @@ from collections import OrderedDict
 import dateutil.parser
 from django import forms
 from django.conf import settings
-from django.db.models import Max, OuterRef, Subquery
+from django.db.models import Exists, Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -94,16 +94,13 @@ class CheckInListMixin(BaseExporter):
             m=Max('datetime')
         ).values('m')
 
-        cqs2 = Checkin.objects.filter(
-            position_id=OuterRef('pk'),
-            list_id=cl.pk
-        ).order_by().values('position_id').values('auto_checked_in')
-
         qs = OrderPosition.objects.filter(
             order__event=self.event,
         ).annotate(
             last_checked_in=Subquery(cqs),
-            auto_checked_in=Subquery(cqs2)
+            auto_checked_in=Exists(
+                Checkin.objects.filter(position_id=OuterRef('pk'), list_id=cl.pk, auto_checked_in=True)
+            )
         ).prefetch_related(
             'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address', 'voucher')
@@ -138,18 +135,13 @@ class CheckInListMixin(BaseExporter):
 
 
 class CBFlowable(Flowable):
-    def __init__(self, checked=False, auto_checked_in=False):
+    def __init__(self, checked=False):
         self.checked = checked
-        self.auto_checked_in = auto_checked_in
         super().__init__()
 
     def draw(self):
         self.canv.rect(1 * mm, -4.5 * mm, 4 * mm, 4 * mm)
-        if self.auto_checked_in:
-            self.canv.line(1.5 * mm, -4.0 * mm, 3.0 * mm, -1.0 * mm)
-            self.canv.line(3.0 * mm, -1.0 * mm, 4.5 * mm, -4.0 * mm)
-            self.canv.line(2.0 * mm, -3.0 * mm, 4.0 * mm, -3.0 * mm)
-        elif self.checked:
+        if self.checked:
             self.canv.line(1.5 * mm, -4.0 * mm, 4.5 * mm, -1.0 * mm)
             self.canv.line(1.5 * mm, -1.0 * mm, 4.5 * mm, -4.0 * mm)
 
@@ -252,7 +244,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
 
             row = [
                 '!!' if op.item.checkin_attention or op.order.checkin_attention else '',
-                CBFlowable(checked=bool(op.last_checked_in), auto_checked_in=bool(op.auto_checked_in)),
+                CBFlowable(bool(op.last_checked_in)),
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
                 Paragraph(name, self.get_style()),

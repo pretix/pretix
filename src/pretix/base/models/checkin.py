@@ -26,10 +26,9 @@ class CheckinList(LoggedModel):
         default=[],
         blank=True,
         verbose_name=_('Sales channels to automatically check in'),
-        help_text=_('Any items on this check-in list will be automatically marked as checked-in when purchased through '
-                    'any of the selected sales channels. This option can be useful, when tickets sold at the box-'
-                    'office are not checked again before entry and should be considered validated directly upon '
-                    'purchase.')
+        help_text=_('All items on this check-in list will be automatically marked as checked-in when purchased through '
+                    'any of the selected sales channels. This option can be useful when tickets sold at the box office '
+                    'are not checked again before entry and should be considered validated directly upon purchase.')
     )
 
     objects = ScopedManager(organizer='event__organizer')
