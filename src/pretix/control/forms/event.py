@@ -1169,6 +1169,26 @@ class MailSettingsForm(SettingsForm):
         help_text=_("Commonly enabled on port 465."),
         required=False
     )
+    base_context = {
+        'mail_text_order_placed': ['event', 'order', 'payment'],
+        'mail_text_order_placed_attendee': ['event', 'position'],
+        'mail_text_order_placed_require_approval': ['event', 'order'],
+        'mail_text_order_approved': ['event', 'order'],
+        'mail_text_order_denied': ['event', 'order', 'comment'],
+        'mail_text_order_paid': ['event', 'order'],
+        'mail_text_order_paid_attendee': ['event', 'position'],
+        'mail_text_order_free': ['event', 'order'],
+        'mail_text_order_free_attendee': ['event', 'position'],
+        'mail_text_order_changed': ['event', 'order'],
+        'mail_text_order_canceled': ['event', 'order'],
+        'mail_text_order_expire_warning': ['event', 'order'],
+        'mail_text_order_custom_mail': ['event', 'order'],
+        'mail_text_download_reminder': ['event', 'order'],
+        'mail_text_download_reminder_attendee': ['event', 'position'],
+        'mail_text_resend_link': ['event', 'order'],
+        'mail_text_waiting_list': ['event', 'waiting_list_entry'],
+        'mail_text_resend_all_links': ['event', 'orders']
+    }
 
     def _set_field_placeholders(self, fn, base_parameters):
         phs = [
@@ -1192,25 +1212,8 @@ class MailSettingsForm(SettingsForm):
         self.fields['mail_html_renderer'].choices = [
             (r.identifier, r.verbose_name) for r in event.get_html_mail_renderers().values()
         ]
-
-        self._set_field_placeholders('mail_text_order_placed', ['event', 'order'])
-        self._set_field_placeholders('mail_text_order_placed_attendee', ['event', 'position'])
-        self._set_field_placeholders('mail_text_order_placed_require_approval', ['event', 'order'])
-        self._set_field_placeholders('mail_text_order_approved', ['event', 'order'])
-        self._set_field_placeholders('mail_text_order_denied', ['event', 'order', 'comment'])
-        self._set_field_placeholders('mail_text_order_paid', ['event', 'order'])
-        self._set_field_placeholders('mail_text_order_paid_attendee', ['event', 'position'])
-        self._set_field_placeholders('mail_text_order_free', ['event', 'order'])
-        self._set_field_placeholders('mail_text_order_free_attendee', ['event', 'position'])
-        self._set_field_placeholders('mail_text_order_changed', ['event', 'order'])
-        self._set_field_placeholders('mail_text_order_canceled', ['event', 'order'])
-        self._set_field_placeholders('mail_text_order_expire_warning', ['event', 'order'])
-        self._set_field_placeholders('mail_text_order_custom_mail', ['event', 'order'])
-        self._set_field_placeholders('mail_text_download_reminder', ['event', 'order'])
-        self._set_field_placeholders('mail_text_download_reminder_attendee', ['event', 'position'])
-        self._set_field_placeholders('mail_text_resend_link', ['event', 'order'])
-        self._set_field_placeholders('mail_text_waiting_list', ['event', 'waiting_list_entry'])
-        self._set_field_placeholders('mail_text_resend_all_links', ['event', 'orders'])
+        for k, v in self.base_context.items():
+            self._set_field_placeholders(k, v)
 
         for k, v in list(self.fields.items()):
             if k.endswith('_attendee') and not event.settings.attendee_emails_asked:

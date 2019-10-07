@@ -6,6 +6,7 @@ function preview_task_callback(data, jqXHR, status) {
             var target = $('div[for=' + data.item + '][lang=' + m +']');
             if (target.length === 1){
                 target.html(data.msgs[m]);
+                target.find('.placeholder').tooltip();
             }
         }
     }

@@ -54,7 +54,7 @@ ALLOWED_ATTRIBUTES = {
     'td': ['width', 'align'],
     'div': ['class'],
     'p': ['class'],
-    'span': ['class'],
+    'span': ['class', 'title'],
     # Update doc/user/markdown.rst if you change this!
 }
 

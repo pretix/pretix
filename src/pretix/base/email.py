@@ -1,11 +1,14 @@
 import inspect
 import logging
+from datetime import timedelta
+from decimal import Decimal
 from smtplib import SMTPResponseException
 
 from django.conf import settings
 from django.core.mail.backends.smtp import EmailBackend
 from django.dispatch import receiver
 from django.template.loader import get_template
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from inlinestyler.utils import inline_css
 
@@ -173,12 +176,20 @@ class BaseMailTextPlaceholder:
         """
         raise NotImplementedError()
 
+    def render_sample(self, event):
+        """
+        This method is called to generate a text to be used in email previews.
+        This may only depend on the event.
+        """
+        raise NotImplementedError()
+
 
 class SimpleFunctionalMailTextPlaceholder(BaseMailTextPlaceholder):
-    def __init__(self, identifier, args, func):
+    def __init__(self, identifier, args, func, sample):
         self._identifier = identifier
         self._args = args
         self._func = func
+        self._sample = sample
 
     @property
     def identifier(self):
@@ -190,6 +201,12 @@ class SimpleFunctionalMailTextPlaceholder(BaseMailTextPlaceholder):
 
     def render(self, context):
         return self._func(**{k: context[k] for k in self._args})
+
+    def render_sample(self, event):
+        if callable(self._sample):
+            return self._sample(event)
+        else:
+            return self._sample
 
 
 def get_available_placeholders(event, base_parameters):
@@ -239,28 +256,41 @@ def base_placeholders(sender, **kwargs):
 
     ph = [
         SimpleFunctionalMailTextPlaceholder(
-            'event', ['event'], lambda event: event.name,
+            'event', ['event'], lambda event: event.name, lambda event: event.name
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'total', ['order'], lambda order: LazyNumber(order.total),
+            'code', ['order'], lambda order: order.code, 'F8VVL'
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'currency', ['event'], lambda event: event.currency,
+            'total', ['order'], lambda order: LazyNumber(order.total), lambda event: LazyNumber(Decimal('42.23'))
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'total_with_currency', ['event', 'order'], lambda event, order: LazyCurrencyNumber(order.total, event.currency),
+            'currency', ['event'], lambda event: event.currency, lambda event: event.currency
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'total_with_currency', ['event', 'order'], lambda event, order: LazyCurrencyNumber(order.total,
+                                                                                               event.currency),
+            lambda event: LazyCurrencyNumber(Decimal('42.23'), event.currency)
         ),
         SimpleFunctionalMailTextPlaceholder(
             'expire_date', ['event', 'order'], lambda event, order: LazyDate(order.expires.astimezone(event.timezone)),
+            lambda event: LazyDate(now() + timedelta(days=15))
             # TODO: This used to be "date" in some placeholders, add a migration!
         ),
         SimpleFunctionalMailTextPlaceholder(
             'url', ['order', 'event'], lambda order, event: build_absolute_uri(
-                order.event,
+                event,
                 'presale:event.order.open', kwargs={
                     'order': order.code,
                     'secret': order.secret,
                     'hash': order.email_confirm_hash()
+                }
+            ), lambda event: build_absolute_uri(
+                event,
+                'presale:event.order.open', kwargs={
+                    'order': 'F8VVL',
+                    'secret': '6zzjnumtsx136ddy',
+                    'hash': '98kusd8ofsj8dnkd'
                 }
             ),
         ),
@@ -273,25 +303,39 @@ def base_placeholders(sender, **kwargs):
                     'secret': position.web_secret,
                     'position': position.positionid
                 }
-            )
+            ),
+            lambda event: build_absolute_uri(
+                event,
+                'presale:event.order.position', kwargs={
+                    'order': 'F8VVL',
+                    'secret': '6zzjnumtsx136ddy',
+                    'position': '123'
+                }
+            ),
         ),
         SimpleFunctionalMailTextPlaceholder(
             'url', ['waiting_list_entry', 'event'],
             lambda waiting_list_entry, event: build_absolute_uri(
                 event, 'presale:event.redeem'
             ) + '?voucher=' + waiting_list_entry.voucher.code,
+            lambda event: build_absolute_uri(
+                event,
+                'presale:event.redeem',
+            ) + '?voucher=68CYU2H6ZTP3WLK5',
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'invoice_name', ['invoice_address'], lambda invoice_address: invoice_address.name or ''
+            'invoice_name', ['invoice_address'], lambda invoice_address: invoice_address.name or '',
+            _('John Doe')
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'invoice_company', ['invoice_address'], lambda invoice_address: invoice_address.company or ''
+            'invoice_company', ['invoice_address'], lambda invoice_address: invoice_address.company or '',
+            _('Sample Corporation')
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'orders', ['event', 'orders'], lambda event, orders: '\n'.join(
-                ' - {} - {}'.format(
+            'orders', ['event', 'orders'], lambda event, orders: '\n' + '\n\n'.join(
+                '* {} - {}'.format(
                     order.full_code,
-                    build_absolute_uri('presale:event.order', kwargs={
+                    build_absolute_uri(event, 'presale:event.order', kwargs={
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'order': order.code,
@@ -299,29 +343,52 @@ def base_placeholders(sender, **kwargs):
                     }),
                 )
                 for order in orders
-            )
+            ), lambda event: '\n' + '\n\n'.join(
+                '* {} - {}'.format(
+                    '{}-{}'.format(event.slug.upper(), order['code']),
+                    build_absolute_uri(event, 'presale:event.order', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                        'order': order['code'],
+                        'secret': order['secret']
+                    }),
+                )
+                for order in [
+                    {'code': 'F8VVL', 'secret': '6zzjnumtsx136ddy'},
+                    {'code': 'HIDHK', 'secret': '98kusd8ofsj8dnkd'},
+                    {'code': 'OPKSB', 'secret': '09pjdksflosk3njd'}
+                ]
+            ),
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'hours', ['event', 'waiting_list_entry'], lambda event, waiting_list_entry: event.settings.waiting_list_hours,
+            'hours', ['event', 'waiting_list_entry'], lambda event, waiting_list_entry:
+            event.settings.waiting_list_hours,
+            lambda event: event.settings.waiting_list_hours
         ),
         SimpleFunctionalMailTextPlaceholder(
             'product', ['waiting_list_entry'], lambda waiting_list_entry: waiting_list_entry.item.name,
+            _('Sample Admission Ticket')
         ),
         SimpleFunctionalMailTextPlaceholder(
             'code', ['waiting_list_entry'], lambda waiting_list_entry: waiting_list_entry.voucher.code,
+            '68CYU2H6ZTP3WLK5'
         ),
         SimpleFunctionalMailTextPlaceholder(
             'comment', ['comment'], lambda comment: comment,
+            _('An individual text with a reason can be inserted here.'),
         ),
         SimpleFunctionalMailTextPlaceholder(
             'payment_info', ['order', 'payment'], _placeholder_payment,
+            _('Please transfer money to this bank account: 9999-9999-9999-9999'),
         ),
         SimpleFunctionalMailTextPlaceholder(
             'payment_info', ['payment_info'], lambda payment_info: payment_info,
+            _('Please transfer money to this bank account: 9999-9999-9999-9999'),
         ),
         SimpleFunctionalMailTextPlaceholder(
             'attendee_name', ['position'], lambda position: position.attendee_name,
-        ),
+            _('John Doe'),
+        )
     ]
 
     name_scheme = PERSON_NAME_SCHEMES[sender.settings.name_scheme]
@@ -329,12 +396,14 @@ def base_placeholders(sender, **kwargs):
         if f == 'full_name':
             continue
         ph.append(SimpleFunctionalMailTextPlaceholder(
-            'attendee_name_%s' % f, ['position'], lambda position, f=f: position.attendee_name_parts.get(f, '')
+            'attendee_name_%s' % f, ['position'], lambda position, f=f: position.attendee_name_parts.get(f, ''),
+            name_scheme['sample'][f]
         ))
 
     for k, v in sender.meta_data.items():
         ph.append(SimpleFunctionalMailTextPlaceholder(
-            'meta_%s' % k, ['event'], lambda event, k=k: event.meta_data[k]
+            'meta_%s' % k, ['event'], lambda event, k=k: event.meta_data[k],
+            v
         ))
 
     return ph
