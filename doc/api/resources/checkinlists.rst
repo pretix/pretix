@@ -1,3 +1,5 @@
+.. spelling:: checkin
+
 Check-in lists
 ==============
 
