@@ -27,6 +27,7 @@ subevent                              integer                    ID of the date 
 position_count                        integer                    Number of tickets that match this list (read-only).
 checkin_count                         integer                    Number of check-ins performed on this list (read-only).
 include_pending                       boolean                    If ``true``, the check-in list also contains tickets from orders in pending state.
+auto_checkin_sales_channels           list of strings            All items on the check-in list will be automatically marked as checked-in when purchased through any of the listed sales channels.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.10
@@ -40,6 +41,10 @@ include_pending                       boolean                    If ``true``, th
 .. versionchanged:: 1.13
 
    The ``include_pending`` field has been added.
+
+.. versionchanged:: 3.2
+
+    The ``auto_checkin_sales_channels`` field has been added.
 
 Endpoints
 ---------
@@ -81,7 +86,10 @@ Endpoints
             "all_products": true,
             "limit_products": [],
             "include_pending": false,
-            "subevent": null
+            "subevent": null,
+            "auto_checkin_sales_channels": [
+              "pretixpos"
+            ]
           }
         ]
       }
@@ -122,7 +130,10 @@ Endpoints
         "all_products": true,
         "limit_products": [],
         "include_pending": false,
-        "subevent": null
+        "subevent": null,
+        "auto_checkin_sales_channels": [
+          "pretixpos"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -215,7 +226,10 @@ Endpoints
         "name": "VIP entry",
         "all_products": false,
         "limit_products": [1, 2],
-        "subevent": null
+        "subevent": null,
+        "auto_checkin_sales_channels": [
+          "pretixpos"
+        ]
       }
 
    **Example response**:
@@ -234,7 +248,10 @@ Endpoints
         "all_products": false,
         "limit_products": [1, 2],
         "include_pending": false,
-        "subevent": null
+        "subevent": null,
+        "auto_checkin_sales_channels": [
+          "pretixpos"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer of the event/item to create a list for
@@ -283,7 +300,10 @@ Endpoints
         "all_products": false,
         "limit_products": [1, 2],
         "include_pending": false,
-        "subevent": null
+        "subevent": null,
+        "auto_checkin_sales_channels": [
+          "pretixpos"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
@@ -341,6 +361,11 @@ Order position endpoints
    The resource now contains the new attributes ``require_attention`` and ``order__status`` and accepts the new
    ``ignore_status`` filter. The ``attendee_name`` field is now "smart" (see below) and the redemption endpoint
    returns ``400`` instead of ``404`` on tickets which are known but not paid.
+
+.. versionchanged:: 3.2
+
+    The ``checkins`` dict now also contains a ``auto_checked_in`` value to indicate if the check-in has been performed
+    automatically by the system.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/
 
@@ -400,7 +425,8 @@ Order position endpoints
             "checkins": [
               {
                 "list": 1,
-                "datetime": "2017-12-25T12:45:23Z"
+                "datetime": "2017-12-25T12:45:23Z",
+                "auto_checked_in": true
               }
             ],
             "answers": [
@@ -510,7 +536,8 @@ Order position endpoints
         "checkins": [
           {
             "list": 1,
-            "datetime": "2017-12-25T12:45:23Z"
+            "datetime": "2017-12-25T12:45:23Z",
+            "auto_checked_in": true
           }
         ],
         "answers": [
