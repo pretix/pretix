@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-07 09:48+0000\n"
-"PO-Revision-Date: 2019-09-11 06:58+0000\n"
+"PO-Revision-Date: 2019-10-07 10:14+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -273,10 +273,8 @@ msgid "An individual text with a reason can be inserted here."
 msgstr "Hier kann ein Grund für den Nutzer angegeben werden."
 
 #: pretix/base/email.py:383
-#, fuzzy
-#| msgid "The products have been successfully added to your cart."
 msgid "The amount has been charged to your card."
-msgstr "Die gewählten Produkte wurden Ihrem Warenkorb hinzugefügt."
+msgstr "Der Betrag wurde von Ihrer Karte abgebucht."
 
 #: pretix/base/email.py:387
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
@@ -4608,20 +4606,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:386
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event} with a total value\n"
-#| "of {total_with_currency}. Please complete your payment before {date}.\n"
-#| "\n"
-#| "{payment_info}\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -4640,8 +4625,8 @@ msgstr ""
 "Hallo,\n"
 "\n"
 "wir haben Ihre Bestellung für {event} mit einem Gesamtbetrag von\n"
-"{total_with_currency} erhalten. Bitte schließen Sie die Bezahlung bis {date} "
-"ab.\n"
+"{total_with_currency} erhalten. Bitte schließen Sie die Bezahlung bis "
+"{expire_date} ab.\n"
 "{payment_info}\n"
 "\n"
 "Sie können Ihre Bestellung unter folgender Adresse einsehen und ändern:\n"
@@ -4848,21 +4833,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:512
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we approved your order for {event} and will be happy to welcome you\n"
-#| "at our event.\n"
-#| "\n"
-#| "Please continue by paying for your order before {date}.\n"
-#| "\n"
-#| "You can select a payment method and perform the payment here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -4882,8 +4853,8 @@ msgstr ""
 "\n"
 "wir haben Ihre Bestellung für {event} freigegeben und freuen uns, Sie auf "
 "unserer\n"
-"Veranstaltung zu begrüßen. Bitte fahren Sie fort, indem Sie bis zum {date} "
-"die\n"
+"Veranstaltung zu begrüßen. Bitte fahren Sie fort, indem Sie bis zum "
+"{expire_date} die\n"
 "Bezahlung abschließen.\n"
 "\n"
 "Dies können Sie unter folgender Adresse tun:\n"
@@ -6474,20 +6445,12 @@ msgid "Approved order"
 msgstr "Bestätigte Bestellung"
 
 #: pretix/control/forms/event.py:1127
-#, fuzzy
-#| msgid ""
-#| "This will only be sent out for non-free orders. Free orders will receive "
-#| "the free order template from above instead. Available placeholders: "
-#| "{event}, {total_with_currency}, {total}, {currency}, {date}, "
-#| "{payment_info}, {url}, {invoice_name}, {invoice_company}"
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from above instead."
 msgstr ""
 "Wird nur für kostenpflichtige Bestellungen verschickt. Für kostenlose "
-"Bestellung wird die E-Mail-Vorlage für den Bestelleingang verwendet. "
-"Verfügbare Platzhalter: {event}, {total_with_currency}, {total}, {currency}, "
-"{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
+"Bestellung wird die E-Mail-Vorlage für den Bestelleingang verwendet."
 
 #: pretix/control/forms/event.py:1131
 msgid "Denied order"
@@ -6535,10 +6498,9 @@ msgstr "Meistens auf Port 465 verfügbar."
 
 #: pretix/control/forms/event.py:1198 pretix/control/forms/orders.py:417
 #: pretix/plugins/sendmail/forms.py:42
-#, fuzzy, python-brace-format
-#| msgid "Available placeholders: {event}, {url}"
+#, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Verfügbare Platzhalter: {event}, {url}"
+msgstr "Verfügbare Platzhalter: {list}"
 
 #: pretix/control/forms/event.py:1233
 msgid ""
@@ -10677,10 +10639,8 @@ msgstr "Kategorie erstellen"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:49
 #: pretix/control/templates/pretixcontrol/items/quotas.html:81
-#, fuzzy
-#| msgid "Clone event"
 msgid "Clone"
-msgstr "Veranstaltung klonen"
+msgstr "Klonen"
 
 #: pretix/control/templates/pretixcontrol/items/category.html:27
 msgid "Category history"
@@ -13525,11 +13485,8 @@ msgid "Any product in quota \"%(quota)s\""
 msgstr "Beliebiges Produkt des Kontingents \"%(quota)s\""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:142
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Use as a template for a new date"
 msgid "Use as a template for new vouchers"
-msgstr "Als Vorlage für neuen Termin verwenden"
+msgstr "Als Vorlage für neue Gutscheine verwenden"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:6
@@ -13998,6 +13955,8 @@ msgstr ""
 #: pretix/control/views/event.py:555 pretix/plugins/sendmail/views.py:97
 msgid "This value will be replaced based on dynamic parameters."
 msgstr ""
+"Dieser Textbaustein wird aufgrund verschiedener Parameter dynamisch "
+"angepasst."
 
 #: pretix/control/views/event.py:563
 msgid "invalid item"
