@@ -370,7 +370,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 op.price,
                 date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
                 if last_checked_in else '',
-                op.auto_checked_in
+                _('Yes') if op.auto_checked_in else _('No'),
             ]
             if cl.include_pending:
                 row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))
