@@ -133,7 +133,7 @@ CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
 TRUST_X_FORWARDED_FOR = config.get('pretix', 'trust_x_forwarded_for', fallback=False)
 
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
-                                    fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists')
+                                    fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin')
 PRETIX_PLUGINS_EXCLUDE = config.get('pretix', 'plugins_exclude', fallback='').split(',')
 
 FETCH_ECB_RATES = config.getboolean('pretix', 'ecb_rates', fallback=True)
@@ -276,6 +276,7 @@ INSTALLED_APPS = [
     'pretix.plugins.statistics',
     'pretix.plugins.reports',
     'pretix.plugins.checkinlists',
+    'pretix.plugins.autocheckin',
     'pretix.plugins.pretixdroid',
     'pretix.plugins.badges',
     'pretix.plugins.manualpayment',
@@ -331,6 +332,7 @@ CORE_MODULES = {
     "pretix.presale",
     "pretix.control",
     "pretix.plugins.checkinlists",
+    "pretix.plugins.autocheckin",
 }
 
 MIDDLEWARE = [
