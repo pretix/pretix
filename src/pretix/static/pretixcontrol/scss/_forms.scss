@@ -141,6 +141,10 @@ div.mail-preview {
   border: 1px solid #ccc;
   border-top-width: 1px;
   border-radius: 3px;
+
+  .placeholder {
+    background: transparentize($brand-warning, 0.6);
+  }
 }
 
 .mail-preview-group div[lang] {

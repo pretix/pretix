@@ -21,7 +21,7 @@
                 <div class="tab-pane mail-preview-group">
                     {% for locale, out in output.items %}
                         <div lang="{{ locale }}" class="mail-preview">
-                            <strong>{{ out.subject }}</strong><br><br>
+                            <strong>{{ out.subject|safe }}</strong><br><br>
                             {{ out.html|safe }}
                         </div>
                     {% endfor %}

@@ -144,7 +144,7 @@ class MailSettingPreviewTest(SoupTest):
         assert self.locale_event.name['en'] in res['msgs']['en']
 
     def test_mail_text_order_placed(self):
-        text = '{event}{total}{currency}{date}{payment_info}{url}{invoice_name}{invoice_company}'
+        text = '{event}{total}{currency}{expire_date}{payment_info}{url}{invoice_name}{invoice_company}'
         response = self.client.post(self.target.format(
             self.orga1.slug, self.event1.slug), {
             'item': 'mail_text_order_placed',
@@ -273,8 +273,8 @@ class MailSettingPreviewTest(SoupTest):
         assert len(res['msgs']) == 1
         assert text in res['msgs']['en']
 
-    def test_localised_date(self):
-        dummy_text = '{date}'
+    def test_localized_date(self):
+        dummy_text = '{expire_date}'
         response = self.client.post(self.target.format(
             self.orga1.slug, self.locale_event.slug), {
             'item': 'mail_text_order_placed',
@@ -287,7 +287,7 @@ class MailSettingPreviewTest(SoupTest):
         assert len(res['msgs']) == 2
         assert res['msgs']['en'] != res['msgs']['de-informal']
 
-    def test_localised_expire_date(self):
+    def test_localized_expire_date(self):
         dummy_text = '{expire_date}'
         response = self.client.post(self.target.format(
             self.orga1.slug, self.locale_event.slug), {
@@ -301,7 +301,7 @@ class MailSettingPreviewTest(SoupTest):
         assert len(res['msgs']) == 2
         assert res['msgs']['en'] != res['msgs']['de-informal']
 
-    def test_localised_payment_info(self):
+    def test_localized_payment_info(self):
         dummy_text = '{payment_info}'
         response = self.client.post(self.target.format(
             self.orga1.slug, self.locale_event.slug), {

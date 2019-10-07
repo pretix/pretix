@@ -1,13 +1,11 @@
-import pytz
-from django.utils.formats import date_format
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import Event, InvoiceAddress, Order, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
-from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 @app.task(base=ProfiledEventTask)
@@ -17,17 +15,15 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
     orders = Order.objects.filter(pk__in=orders, event=event)
     subject = LazyI18nString(subject)
     message = LazyI18nString(message)
-    tz = pytz.timezone(event.settings.timezone)
 
     for o in orders:
-        try:
-            invoice_name = o.invoice_address.name
-            invoice_company = o.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
-
         send_to_order = recipients in ('both', 'orders')
+
+        try:
+            ia = o.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = InvoiceAddress()
+
         if recipients in ('both', 'attendees'):
             for p in o.positions.prefetch_related('addons'):
                 if p.addon_to_id is not None:
@@ -46,19 +42,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
 
                 try:
                     with language(o.locale):
-                        email_context = {
-                            'event': event,
-                            'code': o.code,
-                            'date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                            'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                            'url': build_absolute_uri(event, 'presale:event.order.position', kwargs={
-                                'order': o.code,
-                                'secret': p.web_secret,
-                                'position': p.positionid
-                            }),
-                            'invoice_name': invoice_name,
-                            'invoice_company': invoice_company,
-                        }
+                        email_context = get_email_context(event=event, order=o, position_or_address=p, position=p)
                         mail(
                             p.attendee_email,
                             subject,
@@ -85,19 +69,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
         if send_to_order and o.email:
             try:
                 with language(o.locale):
-                    email_context = {
-                        'event': event,
-                        'code': o.code,
-                        'date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                        'url': build_absolute_uri(event, 'presale:event.order.open', kwargs={
-                            'order': o.code,
-                            'secret': o.secret,
-                            'hash': o.email_confirm_hash()
-                        }),
-                        'invoice_name': invoice_name,
-                        'invoice_company': invoice_company,
-                    }
+                    email_context = get_email_context(event=event, order=o, position_or_address=ia)
                     mail(
                         o.email,
                         subject,
