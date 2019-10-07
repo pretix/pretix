@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
+from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import Item, Order, SubEvent
 from pretix.control.forms.widgets import Select2
@@ -33,8 +34,24 @@ class MailForm(forms.Form):
         empty_label=pgettext_lazy('subevent', 'All dates')
     )
 
+    def _set_field_placeholders(self, fn, base_parameters):
+        phs = [
+            '{%s}' % p
+            for p in sorted(get_available_placeholders(self.event, base_parameters).keys())
+        ]
+        ht = _('Available placeholders: {list}').format(
+            list=', '.join(phs)
+        )
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(phs)
+        )
+
     def __init__(self, *args, **kwargs):
-        event = kwargs.pop('event')
+        event = self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
 
         recp_choices = [
@@ -52,20 +69,14 @@ class MailForm(forms.Form):
             label=_('Subject'),
             widget=I18nTextInput, required=True,
             locales=event.settings.get('locales'),
-            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
-                        "{invoice_name}, {invoice_company}"),
-            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
-                                              '{invoice_name}', '{invoice_company}'])]
         )
         self.fields['message'] = I18nFormField(
             label=_('Message'),
             widget=I18nTextarea, required=True,
             locales=event.settings.get('locales'),
-            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
-                        "{invoice_name}, {invoice_company}"),
-            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
-                                              '{invoice_name}', '{invoice_company}'])]
         )
+        self._set_field_placeholders('subject', ['event', 'order', 'position_or_address'])
+        self._set_field_placeholders('message', ['event', 'order', 'position_or_address'])
         choices = list(Order.STATUS_CHOICE)
         if not event.settings.get('payment_term_expire_automatically', as_type=bool):
             choices.append(

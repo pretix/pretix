@@ -2,7 +2,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import Event, Order, User
+from pretix.base.models import Event, InvoiceAddress, Order, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
@@ -18,6 +18,12 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
 
     for o in orders:
         send_to_order = recipients in ('both', 'orders')
+
+        try:
+            ia = o.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = InvoiceAddress()
+
         if recipients in ('both', 'attendees'):
             for p in o.positions.prefetch_related('addons'):
                 if p.addon_to_id is not None:
@@ -36,7 +42,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
 
                 try:
                     with language(o.locale):
-                        email_context = get_email_context(event=event, order=o, position=p)
+                        email_context = get_email_context(event=event, order=o, position_or_address=p, position=p)
                         mail(
                             p.attendee_email,
                             subject,
@@ -63,7 +69,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
         if send_to_order and o.email:
             try:
                 with language(o.locale):
-                    email_context = get_email_context(event=event, order=o)
+                    email_context = get_email_context(event=event, order=o, position_or_address=ia)
                     mail(
                         o.email,
                         subject,

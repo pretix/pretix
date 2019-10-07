@@ -1175,7 +1175,7 @@ class MailSettingsForm(SettingsForm):
         'mail_text_order_placed_require_approval': ['event', 'order'],
         'mail_text_order_approved': ['event', 'order'],
         'mail_text_order_denied': ['event', 'order', 'comment'],
-        'mail_text_order_paid': ['event', 'order'],
+        'mail_text_order_paid': ['event', 'order', 'payment_info'],
         'mail_text_order_paid_attendee': ['event', 'position'],
         'mail_text_order_free': ['event', 'order'],
         'mail_text_order_free_attendee': ['event', 'position'],

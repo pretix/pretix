@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
+from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
@@ -408,8 +409,24 @@ class OrderMailForm(forms.Form):
         required=True
     )
 
+    def _set_field_placeholders(self, fn, base_parameters):
+        phs = [
+            '{%s}' % p
+            for p in sorted(get_available_placeholders(self.order.event, base_parameters).keys())
+        ]
+        ht = _('Available placeholders: {list}').format(
+            list=', '.join(phs)
+        )
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(phs)
+        )
+
     def __init__(self, *args, **kwargs):
-        order = kwargs.pop('order')
+        order = self.order = kwargs.pop('order')
         super().__init__(*args, **kwargs)
         self.fields['sendto'] = forms.EmailField(
             label=_("Recipient"),
@@ -422,11 +439,8 @@ class OrderMailForm(forms.Form):
             required=True,
             widget=forms.Textarea,
             initial=order.event.settings.mail_text_order_custom_mail.localize(order.locale),
-            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
-                        "{invoice_name}, {invoice_company}"),
-            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
-                                              '{invoice_name}', '{invoice_company}'])]
         )
+        self._set_field_placeholders('message', ['event', 'order'])
 
 
 class OrderRefundForm(forms.Form):

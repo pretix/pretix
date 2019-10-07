@@ -252,6 +252,7 @@ def _placeholder_payment(order, payment):
 
 @receiver(register_mail_placeholders, dispatch_uid="pretixbase_register_mail_placeholders")
 def base_placeholders(sender, **kwargs):
+    from pretix.base.models import InvoiceAddress
     from pretix.multidomain.urlreverse import build_absolute_uri
 
     ph = [
@@ -379,7 +380,7 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleFunctionalMailTextPlaceholder(
             'payment_info', ['order', 'payment'], _placeholder_payment,
-            _('Please transfer money to this bank account: 9999-9999-9999-9999'),
+            _('The amount has been charged to your card.'),
         ),
         SimpleFunctionalMailTextPlaceholder(
             'payment_info', ['payment_info'], lambda payment_info: payment_info,
@@ -388,7 +389,16 @@ def base_placeholders(sender, **kwargs):
         SimpleFunctionalMailTextPlaceholder(
             'attendee_name', ['position'], lambda position: position.attendee_name,
             _('John Doe'),
-        )
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'name', ['position_or_address'],
+            lambda position_or_address: (
+                position_or_address.name
+                if isinstance(position_or_address, InvoiceAddress)
+                else position_or_address.attendee_name
+            ),
+            _('John Doe'),
+        ),
     ]
 
     name_scheme = PERSON_NAME_SCHEMES[sender.settings.name_scheme]
@@ -397,6 +407,15 @@ def base_placeholders(sender, **kwargs):
             continue
         ph.append(SimpleFunctionalMailTextPlaceholder(
             'attendee_name_%s' % f, ['position'], lambda position, f=f: position.attendee_name_parts.get(f, ''),
+            name_scheme['sample'][f]
+        ))
+        ph.append(SimpleFunctionalMailTextPlaceholder(
+            'name_%s' % f, ['position_or_address'],
+            lambda position_or_address, f=f: (
+                position_or_address.name_parts.get(f, '')
+                if isinstance(position_or_address, InvoiceAddress)
+                else position_or_address.attendee_name_parts.get(f, '')
+            ),
             name_scheme['sample'][f]
         ))
 

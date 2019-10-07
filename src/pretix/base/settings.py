@@ -386,7 +386,7 @@ Your {event} team"""))
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
 
 we successfully received your order for {event} with a total value
-of {total_with_currency}. Please complete your payment before {date}.
+of {total_with_currency}. Please complete your payment before {expire_date}.
 
 {payment_info}
 
@@ -514,7 +514,7 @@ Your {event} team"""))
 we approved your order for {event} and will be happy to welcome you
 at our event.
 
-Please continue by paying for your order before {date}.
+Please continue by paying for your order before {expire_date}.
 
 You can select a payment method and perform the payment here:
 
