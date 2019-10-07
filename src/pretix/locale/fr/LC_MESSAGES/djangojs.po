@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 06:55+0000\n"
+"POT-Creation-Date: 2019-10-07 09:49+0000\n"
 "PO-Revision-Date: 2019-10-01 01:00+0000\n"
 "Last-Translator: Fabian Rodriguez <magicfab@legoutdulibre.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -82,7 +82,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:76
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixbase/js/asynctask.js:147
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
+#: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Une erreur de type {code} s'est produite."
 
@@ -95,12 +95,12 @@ msgstr ""
 "d'essayer. Dernier code d'erreur: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixcontrol/js/ui/mail.js:20
+#: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took to long. Please try again."
 msgstr "La requête a prit trop de temps. Veuillez réessayer."
 
 #: pretix/static/pretixbase/js/asynctask.js:150
-#: pretix/static/pretixcontrol/js/ui/mail.js:25
+#: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
@@ -187,11 +187,11 @@ msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:18
+#: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
 msgstr "Une erreur s'est produite."
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:52
+#: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
 msgstr "Création de messages …"
 
