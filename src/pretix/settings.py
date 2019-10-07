@@ -276,7 +276,6 @@ INSTALLED_APPS = [
     'pretix.plugins.statistics',
     'pretix.plugins.reports',
     'pretix.plugins.checkinlists',
-    'pretix.plugins.autocheckin',
     'pretix.plugins.pretixdroid',
     'pretix.plugins.badges',
     'pretix.plugins.manualpayment',
@@ -332,7 +331,6 @@ CORE_MODULES = {
     "pretix.presale",
     "pretix.control",
     "pretix.plugins.checkinlists",
-    "pretix.plugins.autocheckin",
 }
 
 MIDDLEWARE = [
