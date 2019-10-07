@@ -33,7 +33,7 @@ Example::
     url=http://localhost
     currency=EUR
     datadir=/data
-    plugins_default=pretix.plugins.sendmail,pretix.plugins.statistics
+    plugins_default=pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin
     cookie_domain=.pretix.de
 
 ``instance_name``
@@ -51,7 +51,7 @@ Example::
 
 ``plugins_default``
     A comma-separated list of plugins that are enabled by default for all new events.
-    Defaults to ``pretix.plugins.sendmail,pretix.plugins.statistics``.
+    Defaults to ``pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin``.
 
 ``plugins_exclude``
     A comma-separated list of plugins that are not available even though they are installed.
