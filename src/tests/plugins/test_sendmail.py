@@ -244,7 +244,7 @@ def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order, pos)
                                      follow=True)
 
     assert response.status_code == 200
-    assert 'ORDER1234' in response.rendered_content
+    assert 'F8VVL' in response.rendered_content
 
     assert len(djmail.outbox) == 0
 
