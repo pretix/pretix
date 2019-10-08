@@ -106,14 +106,14 @@ class BaseDataShredder:
         raise NotImplementedError()  # NOQA
 
 
-def shred_log_fields(logentry, blacklist=None, whitelist=None):
+def shred_log_fields(logentry, banlist=None, whitelist=None):
     d = logentry.parsed_data
     if whitelist:
         for k, v in d.items():
             if k not in whitelist:
                 d[k] = '█'
-    elif blacklist:
-        for f in blacklist:
+    elif banlist:
+        for f in banlist:
             if f in d:
                 d[f] = '█'
     logentry.data = json.dumps(d)
@@ -150,10 +150,10 @@ class EmailAddressShredder(BaseDataShredder):
             o.save(update_fields=['meta_info', 'email'])
 
         for le in self.event.logentry_set.filter(action_type__contains="order.email"):
-            shred_log_fields(le, blacklist=['recipient', 'message', 'subject'])
+            shred_log_fields(le, banlist=['recipient', 'message', 'subject'])
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.contact.changed"):
-            shred_log_fields(le, blacklist=['old_email', 'new_email'])
+            shred_log_fields(le, banlist=['old_email', 'new_email'])
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
             d = le.parsed_data

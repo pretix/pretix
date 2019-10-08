@@ -6,11 +6,11 @@ from django.utils.translation import ugettext_lazy as _
 
 class BlacklistValidator:
 
-    blacklist = []
+    banlist = []
 
     def __call__(self, value):
         # Validation logic
-        if value in self.blacklist:
+        if value in self.banlist:
             raise ValidationError(
                 _('This field has an invalid value: %(value)s.'),
                 code='invalid',
@@ -21,7 +21,7 @@ class BlacklistValidator:
 @deconstructible
 class EventSlugBlacklistValidator(BlacklistValidator):
 
-    blacklist = [
+    banlist = [
         'download',
         'healthcheck',
         'locale',
@@ -41,7 +41,7 @@ class EventSlugBlacklistValidator(BlacklistValidator):
 @deconstructible
 class OrganizerSlugBlacklistValidator(BlacklistValidator):
 
-    blacklist = [
+    banlist = [
         'download',
         'healthcheck',
         'locale',
@@ -62,6 +62,6 @@ class OrganizerSlugBlacklistValidator(BlacklistValidator):
 @deconstructible
 class EmailBlacklistValidator(BlacklistValidator):
 
-    blacklist = [
+    banlist = [
         settings.PRETIX_EMAIL_NONE_VALUE,
     ]

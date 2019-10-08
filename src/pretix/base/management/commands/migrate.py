@@ -11,13 +11,13 @@ from django.core.management.commands.migrate import Command as Parent
 
 
 class OutputFilter(OutputWrapper):
-    blacklist = (
+    banlist = (
         "Your models have changes that are not yet reflected",
         "Run 'manage.py makemigrations' to make new "
     )
 
     def write(self, msg, style_func=None, ending=None):
-        if any(b in msg for b in self.blacklist):
+        if any(b in msg for b in self.banlist):
             return
         super().write(msg, style_func, ending)
 

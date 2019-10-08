@@ -7,7 +7,7 @@ from django.conf import settings
 
 
 class CProfileMiddleware(object):
-    blacklist = (
+    banlist = (
         '/healthcheck/',
         '/jsi18n/'
     )
@@ -19,7 +19,7 @@ class CProfileMiddleware(object):
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-        for b in self.blacklist:
+        for b in self.banlist:
             if b in request.path:
                 return self.get_response(request)
 

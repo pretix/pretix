@@ -6,7 +6,7 @@ from pretix.base.metrics import pretix_view_duration_seconds
 
 
 class MetricsMiddleware(object):
-    blacklist = (
+    banlist = (
         '/healthcheck/',
         '/jsi18n/',
         '/metrics',
@@ -19,7 +19,7 @@ class MetricsMiddleware(object):
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-        for b in self.blacklist:
+        for b in self.banlist:
             if b in request.path:
                 return self.get_response(request)
 
