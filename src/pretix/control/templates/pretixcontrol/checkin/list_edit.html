@@ -24,7 +24,9 @@
                 {% bootstrap_field form.subevent layout="control" %}
             {% endif %}
             {% bootstrap_field form.include_pending layout="control" %}
-            {% bootstrap_field form.auto_checkin_sales_channels layout="control" %}
+        </fieldset>
+        <fieldset>
+
             <legend>{% trans "Products" %}</legend>
             <p>
                 {% blocktrans trimmed %}
@@ -33,6 +35,10 @@
             </p>
             {% bootstrap_field form.all_products layout="control" %}
             {% bootstrap_field form.limit_products layout="control" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Advanced" %}</legend>
+            {% bootstrap_field form.auto_checkin_sales_channels layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
