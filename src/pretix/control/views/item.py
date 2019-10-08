@@ -283,6 +283,7 @@ class QuestionList(PaginationMixin, ListView):
         return self.request.event.questions.prefetch_related('items')
 
 
+@event_permission_required("can_change_items")
 def reorder_questions(request, organizer, event):
     ids = json.loads(request.body.decode('utf-8'))['ids']
     questions = request.event.questions
