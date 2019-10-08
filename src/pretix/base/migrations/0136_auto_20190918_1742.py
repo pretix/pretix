@@ -8,7 +8,7 @@ import pretix.base.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0134_auto_20190909_1042'),
+        ('pretixbase', '0135_auto_20191007_0803'),
     ]
 
     operations = [
