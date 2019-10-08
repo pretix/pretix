@@ -40,8 +40,8 @@
                             <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.name }}</a></strong>
                         </td>
                         <td>
-                            <a href="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
-                            <a href="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
+                            <a href="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 and is_paginated and not page_obj.has_previous %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
+                            <a href="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 and is_paginated and not page_obj.has_next %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
                         </td>
                         <td class="text-right">
                             <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
