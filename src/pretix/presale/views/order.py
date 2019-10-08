@@ -633,9 +633,10 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
         })
         order_modified.send(sender=self.request.event, order=self.order)
         if self.invoice_form.has_changed():
-            success_message = ('Your invoice address has been updated. Please contact us if you need us '
-                               'to regenerate your invoice.')
-            messages.success(self.request, _(success_message))
+            messages.success(self.request, _('Your invoice address has been updated. Please contact us if you need us '
+                                             'to regenerate your invoice.'))
+        else:
+            messages.success(self.request, _('Your changes have been saved.'))
 
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
         CachedTicket.objects.filter(order_position__order=self.order).delete()
