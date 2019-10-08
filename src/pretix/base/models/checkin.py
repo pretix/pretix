@@ -5,6 +5,7 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_scopes import ScopedManager
 
 from pretix.base.models import LoggedModel
+from pretix.base.models.fields import MultiStringField
 
 
 class CheckinList(LoggedModel):
@@ -19,6 +20,15 @@ class CheckinList(LoggedModel):
                                           help_text=_('With this option, people will be able to check in even if the '
                                                       'order have not been paid. This only works with pretixdesk '
                                                       '0.3.0 or newer or pretixdroid 1.9 or newer.'))
+
+    auto_checkin_sales_channels = MultiStringField(
+        default=[],
+        blank=True,
+        verbose_name=_('Sales channels to automatically check in'),
+        help_text=_('All items on this check-in list will be automatically marked as checked-in when purchased through '
+                    'any of the selected sales channels. This option can be useful when tickets sold at the box office '
+                    'are not checked again before entry and should be considered validated directly upon purchase.')
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 
@@ -87,6 +97,7 @@ class Checkin(models.Model):
     list = models.ForeignKey(
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
     )
+    auto_checked_in = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='position__order__event__organizer')
 

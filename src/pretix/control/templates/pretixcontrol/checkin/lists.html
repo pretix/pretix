@@ -60,6 +60,7 @@
                     {% if request.event.has_subevents %}
                         <th>{% trans "Date" context "subevent" %}</th>
                     {% endif %}
+                    <th class="iconcol">{% trans "Automated check-in" %}</th>
                     <th>{% trans "Products" %}</th>
                     <th class="action-col-2"></th>
                 </tr>
@@ -84,6 +85,12 @@
                         {% if request.event.has_subevents %}
                             <td>{{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }}</td>
                         {% endif %}
+                        <td>
+                            {% for channel in cl.auto_checkin_sales_channels %}
+                                <span class="fa fa-{{ channel.icon }} text-muted"
+                                      data-toggle="tooltip" title="{% trans channel.verbose_name %}"></span>
+                            {% endfor %}
+                        </td>
                         <td>
                             {% if cl.all_products %}
                                 <em>{% trans "All" %}</em>

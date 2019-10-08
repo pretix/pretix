@@ -1,7 +1,7 @@
 import dateutil.parser
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Max, OuterRef, Subquery
+from django.db.models import Exists, Max, OuterRef, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DeleteView, ListView
 from pytz import UTC
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.checkin import CheckinListForm
@@ -38,7 +39,10 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
             order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.list.include_pending else [Order.STATUS_PAID],
             subevent=self.list.subevent
         ).annotate(
-            last_checked_in=Subquery(cqs)
+            last_checked_in=Subquery(cqs),
+            auto_checked_in=Exists(
+                Checkin.objects.filter(position_id=OuterRef('pk'), list_id=self.list.pk, auto_checked_in=True)
+            )
         ).select_related('item', 'variation', 'order', 'addon_to')
 
         if not self.list.all_products:
@@ -146,11 +150,14 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         clists = list(ctx['checkinlists'])
+        sales_channels = get_all_sales_channels()
 
         for cl in clists:
             if cl.subevent:
                 cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
+            cl.auto_checkin_sales_channels = [sales_channels[channel] for channel in cl.auto_checkin_sales_channels]
         ctx['checkinlists'] = clists
+
         return ctx
 
 

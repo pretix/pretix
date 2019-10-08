@@ -3,7 +3,7 @@ from collections import OrderedDict
 import dateutil.parser
 from django import forms
 from django.conf import settings
-from django.db.models import Max, OuterRef, Subquery
+from django.db.models import Exists, Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -93,10 +93,14 @@ class CheckInListMixin(BaseExporter):
         ).order_by().values('position_id').annotate(
             m=Max('datetime')
         ).values('m')
+
         qs = OrderPosition.objects.filter(
             order__event=self.event,
         ).annotate(
-            last_checked_in=Subquery(cqs)
+            last_checked_in=Subquery(cqs),
+            auto_checked_in=Exists(
+                Checkin.objects.filter(position_id=OuterRef('pk'), list_id=cl.pk, auto_checked_in=True)
+            )
         ).prefetch_related(
             'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address', 'voucher')
@@ -309,7 +313,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             for k, label, w in name_scheme['fields']:
                 headers.append(_('Attendee name: {part}').format(part=label))
         headers += [
-            _('Product'), _('Price'), _('Checked in')
+            _('Product'), _('Price'), _('Checked in'), _('Automatically checked in')
         ]
         if not cl.include_pending:
             qs = qs.filter(order__status=Order.STATUS_PAID)
@@ -365,7 +369,8 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,
                 date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
-                if last_checked_in else ''
+                if last_checked_in else '',
+                _('Yes') if op.auto_checked_in else _('No'),
             ]
             if cl.include_pending:
                 row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))

@@ -122,6 +122,12 @@ def order(event, item, taxrule, question):
         return o
 
 
+@pytest.fixture
+def clist_autocheckin(event):
+    c = event.checkin_lists.create(name="Default", all_products=True, auto_checkin_sales_channels=['web'])
+    return c
+
+
 TEST_ORDERPOSITION_RES = {
     "id": 1,
     "order": "FOO",
@@ -699,7 +705,7 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
     with scopes_disabled():
         cl = event.checkin_lists.create(name="Default")
         op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC), list=cl)
-    res['checkins'] = [{'datetime': '2017-12-26T10:00:00Z', 'list': cl.pk}]
+    res['checkins'] = [{'datetime': '2017-12-26T10:00:00Z', 'list': cl.pk, 'auto_checked_in': False}]
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
@@ -1430,6 +1436,37 @@ def test_order_create(token_client, organizer, event, item, quota, question):
         answ = pos.answers.first()
     assert answ.question == question
     assert answ.answer == "S"
+
+
+@pytest.mark.django_db
+def test_order_create_autocheckin(token_client, organizer, event, item, quota, question, clist_autocheckin):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert "web" in clist_autocheckin.auto_checkin_sales_channels
+        assert o.positions.first().checkins.first().auto_checked_in
+
+    clist_autocheckin.auto_checkin_sales_channels = []
+    clist_autocheckin.save()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert clist_autocheckin.auto_checkin_sales_channels == []
+        assert o.positions.first().checkins.count() == 0
 
 
 @pytest.mark.django_db

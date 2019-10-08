@@ -38,6 +38,12 @@ def event():
         yield event
 
 
+@pytest.fixture
+def clist_autocheckin(event):
+    c = event.checkin_lists.create(name="Default", all_products=True, auto_checkin_sales_channels=['web'])
+    return c
+
+
 @pytest.mark.django_db
 def test_expiry_days(event):
     today = now()
@@ -1848,3 +1854,28 @@ class OrderChangeManagerTests(TestCase):
         self.ocm.change_subevent(self.op1, se2)
         with self.assertRaises(OrderError):
             self.ocm.add_position(self.ticket, None, price=Decimal('13.00'), subevent=se2, seat=self.seat_a1)
+
+
+@pytest.mark.django_db
+def test_autocheckin(clist_autocheckin, event):
+    today = now()
+    tr7 = event.tax_rules.create(rate=Decimal('17.00'))
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rule=tr7,
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de')[0]
+    assert "web" in clist_autocheckin.auto_checkin_sales_channels
+    assert order.positions.first().checkins.first().auto_checked_in
+
+    clist_autocheckin.auto_checkin_sales_channels = []
+    clist_autocheckin.save()
+
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de')[0]
+    assert clist_autocheckin.auto_checkin_sales_channels == []
+    assert order.positions.first().checkins.count() == 0

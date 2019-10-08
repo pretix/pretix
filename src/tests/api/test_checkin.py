@@ -147,6 +147,7 @@ def test_list_list(token_client, organizer, event, clist, item, subevent):
     res = dict(TEST_LIST_RES)
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
+    res["auto_checkin_sales_channels"] = []
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -171,6 +172,7 @@ def test_list_detail(token_client, organizer, event, clist, item):
 
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
+    res["auto_checkin_sales_channels"] = []
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/'.format(organizer.slug, event.slug,
                                                                                       clist.pk))
     assert resp.status_code == 200
@@ -200,6 +202,27 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
         {
             "name": "VIP",
+            "limit_products": [item.pk],
+            "all_products": False,
+            "subevent": None,
+            "auto_checkin_sales_channels": [
+                "web"
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        cl = CheckinList.objects.get(pk=resp.data['id'])
+        assert cl.name == "VIP"
+        assert cl.limit_products.count() == 1
+        assert not cl.all_products
+        assert "web" in cl.auto_checkin_sales_channels
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
+        {
+            "name": "VIP",
             "limit_products": [item_on_wrong_event.pk],
             "all_products": True,
             "subevent": None
@@ -223,6 +246,24 @@ def test_list_create_with_subevent(token_client, organizer, event, event3, item,
         format='json'
     )
     assert resp.status_code == 201
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
+        {
+            "name": "VIP",
+            "limit_products": [item.pk],
+            "all_products": True,
+            "subevent": subevent.pk,
+            "auto_checkin_sales_channels": [
+                "web"
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        cl = CheckinList.objects.get(pk=resp.data['id'])
+        assert "web" in cl.auto_checkin_sales_channels
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -278,6 +319,20 @@ def test_list_update(token_client, organizer, event, clist):
         cl = CheckinList.objects.get(pk=resp.data['id'])
     assert cl.name == "VIP"
 
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/checkinlists/{}/'.format(organizer.slug, event.slug, clist.pk),
+        {
+            "auto_checkin_sales_channels": [
+                "web"
+            ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        cl = CheckinList.objects.get(pk=resp.data['id'])
+        assert "web" in cl.auto_checkin_sales_channels
+
 
 @pytest.mark.django_db
 def test_list_all_items_positions(token_client, organizer, event, clist, clist_all, item, other_item, order):
@@ -316,7 +371,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
     p1['checkins'] = [
         {
             'list': clist_all.pk,
-            'datetime': c.datetime.isoformat().replace('+00:00', 'Z')
+            'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
+            'auto_checked_in': False
         }
     ]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?has_checkin=1'.format(
@@ -353,7 +409,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
     p2['checkins'] = [
         {
             'list': clist_all.pk,
-            'datetime': c.datetime.isoformat().replace('+00:00', 'Z')
+            'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
+            'auto_checked_in': False
         }
     ]
     resp = token_client.get(

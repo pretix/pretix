@@ -255,7 +255,11 @@
                                 {% endif %}
                                 {% if line.checkins.all %}
                                     {% for c in line.checkins.all %}
-                                        <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                        {% if c.auto_checked_in %}
+                                            <span class="fa fa-fw fa-magic" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically checked in: {{ date }}{% endblocktrans %}"></span>
+                                        {% else %}
+                                            <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                        {% endif %}
                                     {% endfor %}
                                 {% endif %}
                                 {% if line.seat %}

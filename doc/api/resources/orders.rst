@@ -175,7 +175,8 @@ subevent                              integer                    ID of the date 
 pseudonymization_id                   string                     A random ID, e.g. for use in lead scanning apps
 checkins                              list of objects            List of check-ins with this ticket
 ├ list                                integer                    Internal ID of the check-in list
-└ datetime                            datetime                   Time of check-in
+├ datetime                            datetime                   Time of check-in
+└ auto_checked_in                     boolean                    Indicates if this check-in been performed automatically by the system
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
@@ -213,6 +214,10 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 3.0
 
   The attribute ``seat`` has been added.
+
+.. versionchanged:: 3.2
+
+  The value ``auto_checked_in`` has been added to the ``checkins``-attribute.
 
 .. _order-payment-resource:
 
@@ -365,7 +370,8 @@ List of all orders
                 "checkins": [
                   {
                     "list": 44,
-                    "datetime": "2017-12-25T12:45:23Z"
+                    "datetime": "2017-12-25T12:45:23Z",
+                    "auto_checked_in": false
                   }
                 ],
                 "answers": [
@@ -512,7 +518,8 @@ Fetching individual orders
             "checkins": [
               {
                 "list": 44,
-                "datetime": "2017-12-25T12:45:23Z"
+                "datetime": "2017-12-25T12:45:23Z",
+                "auto_checked_in": false
               }
             ],
             "answers": [
@@ -1286,6 +1293,11 @@ List of all order positions
    The order positions endpoint has been extended by the filter queries ``voucher``, ``voucher__code`` and
    ``pseudonymization_id``.
 
+.. versionchanged:: 3.2
+
+  The value ``auto_checked_in`` has been added to the ``checkins``-attribute.
+
+
 .. note:: Individually canceled order positions are currently not visible via the API at all.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
@@ -1337,7 +1349,8 @@ List of all order positions
             "checkins": [
               {
                 "list": 44,
-                "datetime": "2017-12-25T12:45:23Z"
+                "datetime": "2017-12-25T12:45:23Z",
+                "auto_checked_in": false
               }
             ],
             "answers": [
@@ -1438,7 +1451,8 @@ Fetching individual positions
         "checkins": [
           {
             "list": 44,
-            "datetime": "2017-12-25T12:45:23Z"
+            "datetime": "2017-12-25T12:45:23Z",
+            "auto_checked_in": false
           }
         ],
         "answers": [
