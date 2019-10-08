@@ -166,6 +166,8 @@ def order_placed(sender, **kwargs):
 
     cls = list(event.checkin_lists.filter(auto_checkin_sales_channels__contains=order.sales_channel).prefetch_related(
         'limit_products'))
+    if not cls:
+        return
     for op in order.positions.all():
         for cl in cls:
             if cl.all_products or op.item_id in {i.pk for i in cl.limit_products.all()}:
