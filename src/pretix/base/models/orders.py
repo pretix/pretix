@@ -537,17 +537,29 @@ class Order(LockModel, LoggedModel):
         # handwriting (2/Z, 4/A, 5/S, 6/G). This allows for better detection e.g. in incoming wire transfers that
         # might include OCR'd handwritten text
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
+        iteration = 0
+        length = settings.ENTROPY['order_code']
         while True:
-            code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
+            code = get_random_string(length=length, allowed_chars=charset)
+            iteration += 1
+
             if banned(code):
                 continue
+
             if self.testmode:
                 # Subtle way to recognize test orders while debugging: They all contain a 0 at the second place,
                 # even though zeros are not used outside test mode.
                 code = code[0] + "0" + code[2:]
+
             if not Order.objects.filter(event__organizer=self.event.organizer, code=code).exists():
                 self.code = code
                 return
+
+            if iteration > 20:
+                # Safeguard: If we don't find an unused and non-blacklisted code within 20 iterations, we increase
+                # the length.
+                length += 1
+                iteration = 0
 
     @property
     def can_modify_answers(self) -> bool:
