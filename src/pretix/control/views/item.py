@@ -1,4 +1,5 @@
 import json
+from json.decoder import JSONDecodeError
 from collections import OrderedDict
 
 from django.contrib import messages
@@ -7,7 +8,7 @@ from django.core.files import File
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.forms.models import inlineformset_factory
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
@@ -285,7 +286,11 @@ class QuestionList(PaginationMixin, ListView):
 
 @event_permission_required("can_change_items")
 def reorder_questions(request, organizer, event):
-    ids = json.loads(request.body.decode('utf-8'))['ids']
+    try:
+        ids = json.loads(request.body.decode('utf-8'))['ids']
+    except (JSONDecodeError, KeyError):
+        return HttpResponseBadRequest()
+
     questions = request.event.questions
 
     if questions.count() != questions.filter(id__in=ids).count():
