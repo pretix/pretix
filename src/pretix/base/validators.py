@@ -4,7 +4,7 @@ from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _
 
 
-class BlacklistValidator:
+class BanlistValidator:
 
     banlist = []
 
@@ -19,7 +19,7 @@ class BlacklistValidator:
 
 
 @deconstructible
-class EventSlugBlacklistValidator(BlacklistValidator):
+class EventSlugBanlistValidator(BanlistValidator):
 
     banlist = [
         'download',
@@ -39,7 +39,7 @@ class EventSlugBlacklistValidator(BlacklistValidator):
 
 
 @deconstructible
-class OrganizerSlugBlacklistValidator(BlacklistValidator):
+class OrganizerSlugBanlistValidator(BanlistValidator):
 
     banlist = [
         'download',
@@ -60,7 +60,7 @@ class OrganizerSlugBlacklistValidator(BlacklistValidator):
 
 
 @deconstructible
-class EmailBlacklistValidator(BlacklistValidator):
+class EmailBanlistValidator(BanlistValidator):
 
     banlist = [
         settings.PRETIX_EMAIL_NONE_VALUE,

@@ -18,7 +18,7 @@ from pretix.base.services.cart import CartError, error_messages
 from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
-from pretix.base.validators import EmailBlacklistValidator
+from pretix.base.validators import EmailBanlistValidator
 from pretix.helpers.templatetags.thumb import thumb
 from pretix.presale.signals import contact_form_fields
 
@@ -28,7 +28,7 @@ class ContactForm(forms.Form):
     email = forms.EmailField(label=_('E-mail'),
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
                                          'confirmation including a link that you need to access your order later.'),
-                             validators=[EmailBlacklistValidator()],
+                             validators=[EmailBanlistValidator()],
                              widget=forms.EmailInput(attrs={'autocomplete': 'section-contact email'})
                              )
 

@@ -1205,7 +1205,7 @@ class EventMicrodataTest(EventTestMixin, SoupTest):
         self.assertEqual(self.event.date_from.isoformat(), md['startDate'], msg='Date From not present')
 
 
-class EventSlugBlacklistValidatorTest(EventTestMixin, SoupTest):
+class EventSlugBanlistValidatorTest(EventTestMixin, SoupTest):
     @scopes_disabled()
     def test_slug_validation(self):
         event = Event(
