@@ -10,12 +10,16 @@
     {% endcompress %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">
+    {% if development_warning or debug_warning %}
+        <link rel="shortcut icon" href="{% static "pretixbase/img/favicon-debug.ico" %}">
+    {% else %}
+        <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static "pretixbase/img/icons/favicon-32x32.png" %}">
+        <link rel="icon" type="image/png" sizes="194x194" href="{% static "pretixbase/img/icons/favicon-194x194.png" %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static "pretixbase/img/icons/favicon-16x16.png" %}">
+    {% endif %}
     <link rel="apple-touch-icon" sizes="180x180" href="{% static "pretixbase/img/icons/apple-touch-icon.png" %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static "pretixbase/img/icons/favicon-32x32.png" %}">
-    <link rel="icon" type="image/png" sizes="194x194" href="{% static "pretixbase/img/icons/favicon-194x194.png" %}">
     <link rel="icon" type="image/png" sizes="192x192" href="{% static "pretixbase/img/icons/android-chrome-192x192.png" %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static "pretixbase/img/icons/favicon-16x16.png" %}">
     <link rel="manifest" href="{% url "presale:site.webmanifest" %}">
     <link rel="mask-icon" href="{% static "pretixbase/img/icons/safari-pinned-tab.svg" %}" color="#3b1c4a">
     <meta name="msapplication-TileColor" content="#3b1c4a">

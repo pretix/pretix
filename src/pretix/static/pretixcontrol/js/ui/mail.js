@@ -6,6 +6,7 @@ function preview_task_callback(data, jqXHR, status) {
             var target = $('div[for=' + data.item + '][lang=' + m +']');
             if (target.length === 1){
                 target.html(data.msgs[m]);
+                target.find('.placeholder').tooltip();
             }
         }
     }
@@ -32,6 +33,7 @@ function preview_task_error(item) {
 $(function () {
     "use strict";
 
+    $('.mail-preview .placeholder').tooltip();
     $('a[type=preview]').on('click', function () {
         var itemName = $(this).closest('.preview-panel').attr('for');
         if ($('#' + itemName + '_panel').data('ajaxing') || $(this).parent('.active').length !== 0) {

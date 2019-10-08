@@ -125,7 +125,7 @@ class QuotaForm(I18nModelForm):
         items = kwargs.pop('items', None) or self.event.items.prefetch_related('variations')
         self.original_instance = modelcopy(self.instance) if self.instance else None
         initial = kwargs.get('initial', {})
-        if self.instance and self.instance.pk:
+        if self.instance and self.instance.pk and 'itemvars' not in initial:
             initial['itemvars'] = [str(i.pk) for i in self.instance.items.all()] + [
                 '{}-{}'.format(v.item_id, v.pk) for v in self.instance.variations.all()
             ]

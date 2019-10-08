@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-08-01 18:41+0000\n"
-"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
+"POT-Creation-Date: 2019-10-07 09:49+0000\n"
+"PO-Revision-Date: 2019-10-01 01:00+0000\n"
+"Last-Translator: Fabian Rodriguez <magicfab@legoutdulibre.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -53,13 +53,11 @@ msgstr "Total"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "Confirmation de votre paiment…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Contacting your bank …"
-msgstr "Contacter Stripe …"
+msgstr "Communication avec votre banque …"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:105
@@ -72,11 +70,6 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:45
 #: pretix/static/pretixbase/js/asynctask.js:111
-#, fuzzy
-#| msgid ""
-#| "Your request has been queued on the server and will now be processed. If "
-#| "this takes longer than two minutes, please contact us or go back in your "
-#| "browser and try again."
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -89,7 +82,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:76
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixbase/js/asynctask.js:147
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
+#: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Une erreur de type {code} s'est produite."
 
@@ -102,12 +95,12 @@ msgstr ""
 "d'essayer. Dernier code d'erreur: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixcontrol/js/ui/mail.js:20
+#: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took to long. Please try again."
 msgstr "La requête a prit trop de temps. Veuillez réessayer."
 
 #: pretix/static/pretixbase/js/asynctask.js:150
-#: pretix/static/pretixcontrol/js/ui/mail.js:25
+#: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
@@ -194,11 +187,11 @@ msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:18
+#: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
 msgstr "Une erreur s'est produite."
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:52
+#: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
 msgstr "Création de messages …"
 
@@ -209,16 +202,20 @@ msgstr "Erreur inconnue."
 #: pretix/static/pretixcontrol/js/ui/main.js:231
 msgid "Your color has great contrast and is very easy to read!"
 msgstr ""
+"Votre choix de couleur est très facile à lire, il a un excellent contraste !"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:235
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Votre choix de couleur est assez bon pour la lecture et a un bon contraste !"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:239
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Votre choix de couleur n'a pas un bon contraste avec du texte sur un fond "
+"blanc, SVP choisissez un ton plus sombre."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:355
 msgid "All"
@@ -234,13 +231,11 @@ msgstr "Utiliser un nom différent en interne"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:702
 msgid "Click to close"
-msgstr ""
+msgstr "Cliquez pour fermer"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Calculating default price…"
-msgstr "Contacter Stripe …"
+msgstr "Calcul du prix par défaut …"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -252,13 +247,11 @@ msgstr "Compter"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
-#, fuzzy
-#| msgid "None"
 msgid "No"
-msgstr "Aucun"
+msgstr "Non"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -282,7 +275,7 @@ msgstr[1] "Les articles de votre panier vous sont réservés pour {num} minutes.
 
 #: pretix/static/pretixpresale/js/ui/main.js:212
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "SVP entrez une quantité pour un de vos types de billets."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
@@ -327,12 +320,12 @@ msgstr "plus %(rate)s% %(taxname)s"
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "taxes incluses"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "taxes en sus"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
@@ -425,11 +418,9 @@ msgid "See variations"
 msgstr "Voir les variations"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
-#, fuzzy
-#| msgid "Use a different name internally"
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr "Utiliser un nom différent en interne"
+msgstr "Choisissez un autre événement"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
@@ -439,98 +430,98 @@ msgstr "Choisir une autre date"
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Retour"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Mois suivant"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Moins précédent"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Ouvrir la sélection de sièges"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "Mo"
-msgstr ""
+msgstr "Lu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Tu"
-msgstr ""
+msgstr "Ma"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "We"
-msgstr ""
+msgstr "Me"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Th"
-msgstr ""
+msgstr "Je"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "Fr"
-msgstr ""
+msgstr "Ve"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Sa"
-msgstr ""
+msgstr "Sa"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Su"
-msgstr ""
+msgstr "Di"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "January"
-msgstr ""
+msgstr "Janvier"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "February"
-msgstr ""
+msgstr "Février"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "March"
-msgstr ""
+msgstr "Mars"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "April"
-msgstr ""
+msgstr "Avril"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "May"
-msgstr ""
+msgstr "Mai"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "June"
-msgstr ""
+msgstr "Juin"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "July"
-msgstr ""
+msgstr "Juillet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "August"
-msgstr ""
+msgstr "Août"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "September"
-msgstr ""
+msgstr "Septembre"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "October"
-msgstr ""
+msgstr "Octobre"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "November"
-msgstr ""
+msgstr "Novembre"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "December"
-msgstr ""
+msgstr "Décembre"
 
 #~ msgid ""
 #~ "Your request has been queued on the server and will now be processed. If "

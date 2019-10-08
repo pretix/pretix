@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-03-15 11:19+0000\n"
+"POT-Creation-Date: 2019-10-07 09:49+0000\n"
+"PO-Revision-Date: 2019-09-24 19:00+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -55,13 +55,11 @@ msgstr "Razem"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "Potwierdzanie płatności…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Contacting your bank …"
-msgstr "Kontaktowanie Stripe…"
+msgstr "Łączenie z bankiem…"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:105
@@ -87,7 +85,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:76
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixbase/js/asynctask.js:147
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
+#: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Wystąpił błąd typu {code}."
 
@@ -100,12 +98,12 @@ msgstr ""
 "{code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixcontrol/js/ui/mail.js:20
+#: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took to long. Please try again."
 msgstr "Zapytanie trwało zbyt długo. Prosimy spróbować ponownie."
 
 #: pretix/static/pretixbase/js/asynctask.js:150
-#: pretix/static/pretixcontrol/js/ui/mail.js:25
+#: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
@@ -136,7 +134,7 @@ msgstr "Skopiowano!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr "Prosimy o wciśnięcie Ctrl-C w celu skopiowania."
+msgstr "Wciśnij Ctrl-C żeby skopiować!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
@@ -187,11 +185,11 @@ msgstr "Błąd uploadu pliku PDF, prosimy spróbować ponownie."
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Czy na pewno opuścić edytor bez zapisania zmian?"
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:18
+#: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
 msgstr "Wystąpił błąd."
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:52
+#: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
 msgstr "Generowanie wiadomości…"
 
@@ -233,10 +231,8 @@ msgid "Click to close"
 msgstr "Zamknij"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Calculating default price…"
-msgstr "Kontaktowanie Stripe…"
+msgstr "Liczenie domyślnej ceny…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -248,13 +244,11 @@ msgstr "Ilość"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Yes"
-msgstr ""
+msgstr "Tak"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
-#, fuzzy
-#| msgid "None"
 msgid "No"
-msgstr "Odznacz wszystko"
+msgstr "Nie"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -280,7 +274,7 @@ msgstr[2] "Przedmioty w koszyku są zarezerwowane na {num} minut."
 
 #: pretix/static/pretixpresale/js/ui/main.js:212
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "Proszę wybrać liczbę dla jednego z typów biletów."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
@@ -295,7 +289,7 @@ msgstr "Kup"
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Rejestracja"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
@@ -325,12 +319,12 @@ msgstr "plus %(rate)s% %(taxname)s"
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "Brutto"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "netto"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
@@ -423,114 +417,110 @@ msgid "See variations"
 msgstr "Możliwe warianty"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
-#, fuzzy
-#| msgid "Use a different name internally"
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr "Użyj innej nazwy wewnętrznie"
+msgstr "Wybierz inne wydarzenie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
-#, fuzzy
-#| msgid "Use a different name internally"
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr "Użyj innej nazwy wewnętrznie"
+msgstr "Wybierz inną datę"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Wstecz"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Przyszły miesiąc"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Zeszły miesiąc"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Otwórz wybór miejsca"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "Mo"
-msgstr ""
+msgstr "Pn"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Tu"
-msgstr ""
+msgstr "Wt"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "We"
-msgstr ""
+msgstr "Śr"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Th"
-msgstr ""
+msgstr "Cz"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "Fr"
-msgstr ""
+msgstr "Pt"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Sa"
-msgstr ""
+msgstr "So"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Su"
-msgstr ""
+msgstr "Nd"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "January"
-msgstr ""
+msgstr "Styczeń"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "February"
-msgstr ""
+msgstr "Luty"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "March"
-msgstr ""
+msgstr "Marzec"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "April"
-msgstr ""
+msgstr "Kwiecień"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "May"
-msgstr ""
+msgstr "Maj"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "June"
-msgstr ""
+msgstr "Czerwiec"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "July"
-msgstr ""
+msgstr "Lipiec"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "August"
-msgstr ""
+msgstr "Sierpień"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "September"
-msgstr ""
+msgstr "Wrzesień"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "October"
-msgstr ""
+msgstr "Październik"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "November"
-msgstr ""
+msgstr "Listopad"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "December"
-msgstr ""
+msgstr "Grudzień"
 
 #~ msgid "Ja"
 #~ msgstr "Tak"

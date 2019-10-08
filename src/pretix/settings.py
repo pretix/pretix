@@ -413,7 +413,7 @@ LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_INCUBATING = {
-    'pt-br', 'da', 'pl', 'it',
+    'pt-br', 'pl', 'it',
 } - set(config.get('languages', 'allow_incubating', fallback='').split(','))
 
 if DEBUG:
@@ -477,6 +477,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'pretix.base.context.contextprocessor',
                 'pretix.control.context.contextprocessor',
                 'pretix.presale.context.contextprocessor',
             ],

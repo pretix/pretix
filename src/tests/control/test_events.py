@@ -464,6 +464,7 @@ class EventsTest(SoupTest):
             data['test'] = '1'
             doc = self.post_doc('/control/event/%s/%s/settings/email' % (self.orga1.slug, self.event1.slug),
                                 data, follow=True)
+            print(doc)
             assert doc.select('.alert-success')
             self.event1.settings.flush()
             assert mocked.called

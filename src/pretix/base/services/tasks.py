@@ -106,3 +106,15 @@ class TransactionAwareTask(ProfiledTask):
         transaction.on_commit(
             lambda: super(TransactionAwareTask, self).apply_async(*args, **kwargs)
         )
+
+
+class TransactionAwareProfiledEventTask(ProfiledEventTask):
+
+    def apply_async(self, *args, **kwargs):
+        """
+        Unlike the default task in celery, this task does not return an async
+        result
+        """
+        transaction.on_commit(
+            lambda: super(TransactionAwareProfiledEventTask, self).apply_async(*args, **kwargs)
+        )

@@ -12,6 +12,8 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
@@ -24,6 +26,7 @@ from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
 from pretix.control.views import PaginationMixin
+from pretix.helpers.models import modelcopy
 
 
 class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
@@ -239,8 +242,15 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
-        messages.success(self.request, _('The new voucher has been created: {code}').format(code=form.instance.code))
         ret = super().form_valid(form)
+        url = reverse('control:event.voucher', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'voucher': self.object.pk
+        })
+        messages.success(self.request, mark_safe(_('The new voucher has been created: {code}').format(
+            code=format_html('<a href="{url}">{code}</a>', url=url, code=self.object.code)
+        )))
         form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret
 
@@ -279,9 +289,23 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
             'event': self.request.event.slug,
         })
 
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.vouchers.get(pk=self.request.GET.get("copy_from"))
+            except Voucher.DoesNotExist:
+                pass
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['instance'] = Voucher(event=self.request.event)
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+        else:
+            kwargs['instance'] = Voucher(event=self.request.event)
         return kwargs
 
     @transaction.atomic

@@ -152,21 +152,10 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
         clists = list(ctx['checkinlists'])
         sales_channels = get_all_sales_channels()
 
-        # Optimization: Fetch expensive columns for this page only
-        annotations = {
-            a['pk']: a
-            for a in CheckinList.annotate_with_numbers(CheckinList.objects.filter(pk__in=[l.pk for l in clists]), self.request.event).values(
-                'pk', 'checkin_count', 'position_count', 'percent'
-            )
-        }
         for cl in clists:
             if cl.subevent:
                 cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
-            cl.checkin_count = annotations.get(cl.pk, {}).get('checkin_count', 0)
-            cl.position_count = annotations.get(cl.pk, {}).get('position_count', 0)
-            cl.percent = annotations.get(cl.pk, {}).get('percent', 0)
             cl.auto_checkin_sales_channels = [sales_channels[channel] for channel in cl.auto_checkin_sales_channels]
-
         ctx['checkinlists'] = clists
 
         return ctx

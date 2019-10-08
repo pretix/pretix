@@ -179,7 +179,7 @@ def webhook(request, *args, **kwargs):
                 )
                 return func(rso.order.event, event_json, objid, rso)
             except ReferencedStripeObject.DoesNotExist:
-                pass
+                return HttpResponse("Unable to detect event", status=200)
         elif hasattr(request, 'event') and func != paymentintent_webhook:
             # This is a legacy integration from back when didn't have ReferencedStripeObject. This can't happen for
             # payment intents or charges connected with payment intents since they didn't exist back then. Our best
@@ -370,7 +370,7 @@ def source_webhook(event, event_json, source_id, rso):
                 'info': str(src)
             })
             payment.save()
-        elif src.status == 'canceled' and payment.state in (OrderPayment.STATUS_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
+        elif src.status == 'canceled' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
             payment.info = str(src)
             payment.state = OrderPayment.PAYMENT_STATE_CANCELED
             payment.save()
