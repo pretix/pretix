@@ -10,7 +10,7 @@ from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 
-from pretix.base.blacklist import blacklisted
+from pretix.base.banlist import banned
 from pretix.base.models import SeatCategoryMapping
 
 from ..decimal import round_decimal
@@ -23,7 +23,7 @@ from .orders import Order
 def _generate_random_code(prefix=None):
     charset = list('ABCDEFGHKLMNPQRSTUVWXYZ23456789')
     rnd = None
-    while not rnd or blacklisted(rnd):
+    while not rnd or banned(rnd):
         rnd = get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
     if prefix:
         return prefix + rnd
