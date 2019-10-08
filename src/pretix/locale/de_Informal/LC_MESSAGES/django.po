@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-08 13:56+0000\n"
-"PO-Revision-Date: 2019-10-07 10:14+0000\n"
+"PO-Revision-Date: 2019-10-08 14:09+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -122,10 +122,8 @@ msgid "The subevent does not belong to this event."
 msgstr "Dieser Termin gehört nicht zu dieser Veranstaltungsreihe."
 
 #: pretix/api/serializers/checkin.py:41
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Unknown sales channel."
-msgstr "Verkaufskanal"
+msgstr "Unbekannter Verkaufskanal."
 
 #: pretix/api/serializers/event.py:101
 msgid ""
@@ -1563,7 +1561,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:27
 msgid "Sales channels to automatically check in"
-msgstr ""
+msgstr "Automatischer Check-in auf bestimmten Verkaufskanälen"
 
 #: pretix/base/models/checkin.py:28
 msgid ""
@@ -1572,6 +1570,11 @@ msgid ""
 "be useful when tickets sold at the box office are not checked again before "
 "entry and should be considered validated directly upon purchase."
 msgstr ""
+"Alle Produkte auf dieser Check-in-Liste werden automatisch als eingecheckt "
+"markiert, wenn sie durch einen der hier eingestellten Verkaufskanäle "
+"verkauft werden. Diese Option kann z.B. nützlich sein, wenn an der "
+"Abendkasse verkaufte Tickets nicht beim Einlass nochmal gescannt werden "
+"sondern direkt als eingecheckt markiert werden sollen."
 
 #: pretix/base/models/devices.py:55
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -9021,10 +9024,8 @@ msgid "unpaid"
 msgstr "unbezahlt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:124
-#, fuzzy
-#| msgid "Refund automatically?"
 msgid "Checked in automatically"
-msgstr "Geld zurückbuchen?"
+msgstr "Automatisch eingecheckt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:140
 msgid "Check-In selected attendees"
@@ -9191,10 +9192,8 @@ msgid "Create a new check-in list"
 msgstr "Neue Check-in-Liste erstellen"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:63
-#, fuzzy
-#| msgid "Not checked in"
 msgid "Automated check-in"
-msgstr "Nicht eingecheckt"
+msgstr "Automatischer Check-In"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
@@ -11499,10 +11498,9 @@ msgid "Ordered items"
 msgstr "Bestellte Produkte"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:259
-#, fuzzy, python-format
-#| msgid "Automatically expire unpaid orders"
+#, python-format
 msgid "Automatically checked in: %(date)s"
-msgstr "Unbezahlte Bestellungen automatisch ablaufen lassen"
+msgstr "Automatisch eingecheckt: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:261
 #, python-format
@@ -15543,11 +15541,8 @@ msgid "paid"
 msgstr "bezahlt"
 
 #: pretix/plugins/checkinlists/exporters.py:316
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Automatically refund"
 msgid "Automatically checked in"
-msgstr "Automatisch erstatten"
+msgstr "Automatisch eingecheckt"
 
 #: pretix/plugins/checkinlists/exporters.py:325
 #: pretix/plugins/paypal/payment.py:80
@@ -18112,16 +18107,12 @@ msgid "A payment is currently pending for this order."
 msgstr "Eine Zahlung für diese Bestellung ist noch offen."
 
 #: pretix/presale/views/order.py:636
-#, fuzzy
-#| msgid ""
-#| "Modifying your invoice address will not automatically generate a new "
-#| "invoice. Please contact us if you need a new invoice."
 msgid ""
 "Your invoice address has been updated. Please contact us if you need us to "
 "regenerate your invoice."
 msgstr ""
-"Das Ändern deiner Rechnungsadresse wird nicht automatisch eine neue Rechnung "
-"generieren. Bitte kontaktiere uns, wenn du eine neue Rechnung benötigst."
+"Deine Rechnungsadresse wurde geändert. Bitte kontaktiere uns, wenn du eine "
+"neue Rechnung benötigst."
 
 #: pretix/presale/views/order.py:655
 msgid "You cannot modify this order"
