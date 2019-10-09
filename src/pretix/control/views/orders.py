@@ -227,8 +227,7 @@ class OrderDetail(OrderView):
                 'icon': provider.download_button_icon or 'fa-download',
                 'identifier': provider.identifier,
                 'multi': provider.multi_download_enabled,
-                'is_downloadable': provider.is_downloadable,
-                'download_action': provider.download_action
+                'download_handled_by_frontend': provider.download_handled_by_frontend
             })
         return buttons
 

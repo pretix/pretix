@@ -124,7 +124,7 @@ def get_tickets_for_order(order, base_position=None):
         if not p.is_enabled:
             continue
 
-        if not p.is_downloadable:
+        if p.download_handled_by_frontend:
             continue
 
         if p.multi_download_enabled and not base_position:

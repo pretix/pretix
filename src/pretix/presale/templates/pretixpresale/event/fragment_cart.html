@@ -73,8 +73,8 @@
             <div class="download-desktop">
             {% if line.generate_ticket %}
                 {% for b in download_buttons %}
-                    {% if b.download_action %}
-                        <a href="{{ b.download_action }}" class="btn btn-default btn-sm btn-{{ b.identifier }}" target="_blank" data-organizer="{{ organizer }}" data-event="{{ event.slug }}" data-order="{{ order.code }}"
+                    {% if b.download_handled_by_frontend %}
+                        <a href="#" class="btn btn-default btn-sm btn-ticket-{{ b.identifier }}" target="_blank" data-organizer="{{ organizer }}" data-event="{{ event.slug }}" data-order="{{ order.code }}"
                            {% if position_page and line.addon_to %}data-secret="{{ line.addon_to.web_secret }}" data-pid="{{ line.pk }}" data-position="{{ line.addon_to.positionid }}"{% elif position_page %}data-secret="{{ line.web_secret }}" data-pid="{{ line.pk }}" data-position="{{ line.positionid }}"{% else %}data-secret="{{ order.secret }}" data-position="{{ line.pk }}"{% endif %}>
                             <span class="fa {{ b.icon }}"></span> {{ b.text }}
                         </a>

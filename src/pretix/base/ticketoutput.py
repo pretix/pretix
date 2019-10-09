@@ -171,37 +171,44 @@ class BaseTicketOutput:
         return True
 
     @property
-    def is_downloadable(self) -> bool:
-        """
-        Returns whether or whether the output of this plugin can be downloaded and/or attached to an email.
-        By default, this is setting defaults to ``True`` for backwards compatibility.
-        """
-        return True
-
-    @property
-    def download_action(self) -> str:
+    def download_handled_by_frontend(self) -> bool:
         """
         By default, the download-button will call an asynchronous task to generate the downloadable ticket file.
-        By overriding this property, the default behavior can be changed - for example a ``href``-target to another
-        location or just plainly ``#`` for handling the button click with a JavaScript ``click()``-listener.
+        By overriding this property, the default behavior can be changed for handling the button click with a
+        JavaScript ``click()``-listener.
 
-        In case of using a JavaScript-call, make sure to also include your JavaScript-file on all pages that might
-        display the download button (such as the ``control`` and ``presale`` order views and the ticket output settings.
+        Please make sure to also include your JavaScript-file on all pages that might display the download button,
+        such as the ``control`` and ``presale`` order views.
 
         The link will contain the following ``data-``-attributes, accessible for further usage from your JavaScript:
 
         - ``data-organizer``: Organizer Slug
         - ``data-event``: Event Slug
         - ``data-order``: Order Code
+
+        Depending on if the download-button is placed on a order overview page or a dedicated single ticket download
+        page, the following fields will be made available and might have a different meaning.
+
+        Regular order overview page (/organizer/event/order/...):
         - ``data-secret``: Order Secret
-        - ``data-position``: ID of the concerned OrderPosition
+        - ``data-position``: PK of the concerned OrderPosition
+
+        Single Ticket page (/organizer/event/ticket/...):
+        - ``data-secret``: Web secret of the OrderPosition (or of the parent item, if item is an add-on)
+        - ``data-position``: positionid of the item (or of the parent item, if the item is an add-on)
+        - ``data-pid``: PK of the concerned OrderPosition
 
         To facilitate access to these ``data-``-attributes, the button will have a ``class``-attribute of
-        ``btn-identifier`` (where ``identifier`` is the identifier of your ticket download provider).
+        ``btn-ticket-identifier`` (where ``identifier`` is the identifier of your ticket download provider).
 
-        .. note:: Please be aware, that ``download_action`` cannot contain any direct direct ``javascript:xxxx();``
-                  -calls, as this will violate pretix' Content Security Policy of excluding ``self`` as a
-                  ``script-src``. This is a sane default and should not easily be overridden. Please consider using
-                  event-listeners instead.
+        If you plan on reconstructing a link to retrieve the proper item, please have a look at the
+        ``presale:event.order.download`` and ``presale:event.order.position.download`` url patterns as well as the
+        provided ``OrderDetailMixin`` and ``OrderPositionDetailMixin`` MixIns.
+
+        Should this property return ``False`` or if it is not overridden, the async ``generate()``-function is being
+        called instead.
+
+        In case the property is returning ``True``, previews in the ticketoutput settings will automatically be
+        disabled.
         """
-        return None
+        return False
