@@ -284,6 +284,7 @@ class QuestionList(PaginationMixin, ListView):
         return self.request.event.questions.prefetch_related('items')
 
 
+@transaction.atomic
 @event_permission_required("can_change_items")
 def reorder_questions(request, organizer, event):
     try:
