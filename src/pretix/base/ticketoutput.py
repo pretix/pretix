@@ -190,6 +190,7 @@ class BaseTicketOutput:
         page, the following fields will be made available and might have a different meaning.
 
         Regular order overview page (/organizer/event/order/...):
+        - ``data-generate-url``: The original URL that would get POSTed to to call the ``generate()``-function.
         - ``data-secret``: Order Secret
         - ``data-position``: PK of the concerned OrderPosition
 
@@ -203,7 +204,8 @@ class BaseTicketOutput:
 
         If you plan on reconstructing a link to retrieve the proper item, please have a look at the
         ``presale:event.order.download`` and ``presale:event.order.position.download`` url patterns as well as the
-        provided ``OrderDetailMixin`` and ``OrderPositionDetailMixin`` MixIns.
+        provided ``OrderDetailMixin`` and ``OrderPositionDetailMixin`` MixIns. Alternatively, the ``data-generate-url``
+        could be used, as it already contains the proper link and takes out the guesswork.
 
         Should this property return ``False`` or if it is not overridden, the async ``generate()``-function is being
         called instead.
