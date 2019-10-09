@@ -66,7 +66,7 @@
                     <li class="list-group-item logentry">
                         <p>
                             <a href="{% url "control:event.requiredaction.discard" event=request.event.slug organizer=request.event.organizer.slug id=action.id %}"
-                               class="btn btn-default btn-xs pull-right">
+                               class="btn btn-default btn-xs pull-right flip">
                                 {% trans "Hide message" %}
                             </a>
                             <small><span
@@ -139,7 +139,7 @@
                 <div class="row">
                     {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
                 </div>
-                <p class="text-right">
+                <p class="text-right flip">
                     <br>
                     <button class="btn btn-default">
                         {% trans "Update comment" %}

@@ -12,7 +12,7 @@
                 <p>
                     {% trans "Your shop is currently live. If you take it down, it will only be visible to you and your team." %}
                 </p>
-                <form action="" method="post" class="text-right">
+                <form action="" method="post" class="text-right flip">
                     {% csrf_token %}
                     <input type="hidden" name="live" value="false">
                     <button type="submit" class="btn btn-lg btn-danger btn-save">
@@ -46,7 +46,7 @@
                     <p>
                         {% trans "If you want to, you can publish your ticket shop now." %}
                     </p>
-                    <form action="" method="post" class="text-right">
+                    <form action="" method="post" class="flip text-right">
                         {% csrf_token %}
                         <input type="hidden" name="live" value="true">
                         <button type="submit" class="btn btn-primary btn-lg btn-save">
@@ -100,7 +100,7 @@
                         {% trans "It looks like you already have some real orders in your shop. We do not recommend enabling test mode if your customers already know your shop, as it will confuse them." %}
                     </div>
                 {% endif %}
-                <form action="" method="post" class="text-right">
+                <form action="" method="post" class="flip text-right">
                     {% csrf_token %}
                     <input type="hidden" name="testmode" value="true">
                     <button type="submit" class="btn btn-danger btn-lg btn-save">

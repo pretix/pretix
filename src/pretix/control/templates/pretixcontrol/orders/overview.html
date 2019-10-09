@@ -5,7 +5,7 @@
 {% block title %}{% trans "Order overview" %}{% endblock %}
 {% block content %}
     {% url "control:event.orders" organizer=request.event.organizer.slug event=request.event.slug as listurl %}
-    <div class="pull-right">
+    <div class="pull-right flip">
         <div class="btn-group" role="group" id="sumtoggle">
             <button type="button" data-target=".count" class="btn btn-default active">{% trans "Sales" %}</button>
             <button type="button" data-target=".sum-gross" class="btn btn-default">{% trans "Revenue (gross)" %}</button>

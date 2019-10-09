@@ -665,3 +665,7 @@ h1 .label {
         }
     }
 }
+
+@import "../../pretixbase/scss/_rtl.scss";
+@import "../../bootstrap/scss/_rtl.scss";
+@import "_rtl.scss";

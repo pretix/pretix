@@ -75,7 +75,7 @@
                         {% endif %}
                         <td>{% if q.size == None %}Unlimited{% else %}{{ q.size }}{% endif %}</td>
                         <td>{% include "pretixcontrol/items/fragment_quota_availability.html" with availability=q.availability closed=q.closed %}</td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             <a href="{% url "control:event.items.quotas.edit" organizer=request.event.organizer.slug event=request.event.slug quota=q.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             <a href="{% url "control:event.items.quotas.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ q.id }}"
                                class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">

@@ -57,7 +57,7 @@
                 <td>{{ u.fullname|default_if_none:"" }}</td>
                 <td>{% if u.is_active %}<span class="fa fa-check-circle"></span>{% endif %}</td>
                 <td>{% if u.is_staff %}<span class="fa fa-check-circle"></span>{% endif %}</td>
-                <td class="text-right">
+                <td class="text-right flip">
                     <a href="{% url "control:users.edit" id=u.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                 </td>
             </tr>

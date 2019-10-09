@@ -9,7 +9,7 @@
         <fieldset>
             {% if request.user.notifications_send %}
                 <div class="alert alert-info">
-                    <button name="notifications_send" value="off" type="submit" class="pull-right btn btn-default">
+                    <button name="notifications_send" value="off" type="submit" class="pull-right flip btn btn-default">
                         <span class="fa fa-bell-slash"></span>
                         {% trans "Disable" %}
                     </button>
@@ -18,7 +18,7 @@
                 </div>
             {% else %}
                 <div class="alert alert-warning">
-                    <button name="notifications_send" value="on" type="submit" class="pull-right btn btn-default">
+                    <button name="notifications_send" value="on" type="submit" class="pull-right flip btn btn-default">
                         <span class="fa fa-bell"></span>
                         {% trans "Enable" %}
                     </button>

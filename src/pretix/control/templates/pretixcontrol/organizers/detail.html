@@ -70,7 +70,7 @@
                             <span class="label label-success">{% trans "On sale" %}</span>
                         {% endif %}
                     </td>
-                    <td class="text-right">
+                    <td class="text-right flip">
                         <a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}"
                            class="btn btn-sm btn-default" title="{% trans "Open event dashboard" %}"
                            data-toggle="tooltip">

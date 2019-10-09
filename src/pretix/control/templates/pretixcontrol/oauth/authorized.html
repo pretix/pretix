@@ -44,7 +44,7 @@
                                 {% endfor %}
                             </ul>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             <a href="{% url "control:user.settings.oauth.revoke" pk=token.pk %}"
                                class="btn btn-danger btn-sm">{% trans "Revoke access" %}</a>
                         </td>

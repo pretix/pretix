@@ -37,7 +37,7 @@
                             </span>
                         {% endif %}
                     </td>
-                    <td class="text-right">
+                    <td class="text-right flip">
                         <button type="submit" name="remove-member" value="{{ u.id }}"
                                 class="btn btn-danger btn-sm btn-block">
                             <i class="fa fa-times"></i> {% trans "Remove" %}
@@ -57,7 +57,7 @@
                             <span class="fa fa-repeat"></span>
                         </button>
                     </td>
-                    <td class="text-right">
+                    <td class="text-right flip">
                         <button type="submit" name="remove-invite" value="{{ i.id }}"
                                 class="btn btn-danger btn-sm btn-block">
                             <i class="fa fa-times"></i> {% trans "Remove" %}
@@ -76,7 +76,7 @@
                         be sent an email with an invitation.
                     {% endblocktrans %}
                 </td>
-                <td class="text-right">
+                <td class="text-right flip">
                     <button type="submit" class="btn btn-primary btn-sm btn-block">
                         <i class="fa fa-plus"></i> {% trans "Add" %}
                     </button>
@@ -103,7 +103,7 @@
                     <td>
                         {{ t.name }}
                     </td>
-                    <td class="text-right">
+                    <td class="text-right flip">
                         <button type="submit" name="remove-token" value="{{ t.id }}"
                                 class="btn btn-danger btn-sm btn-block">
                             <i class="fa fa-times"></i> {% trans "Remove" %}
@@ -117,7 +117,7 @@
                 <td>
                     {% bootstrap_field add_token_form.name layout='inline' %}<br>
                 </td>
-                <td class="text-right">
+                <td class="text-right flip">
                     <button type="submit" class="btn btn-primary btn-sm btn-block">
                         <i class="fa fa-plus"></i> {% trans "Add" %}
                     </button>
