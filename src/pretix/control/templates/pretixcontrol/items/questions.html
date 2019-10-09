@@ -39,10 +39,7 @@
                     <th class="action-col-2"></th>
                 </tr>
                 </thead>
-                <tbody data-dnd-url="{% url "control:event.items.questions.reorder" organizer=request.event.organizer.slug event=request.event.slug %}"
-                       {% if is_paginated %}
-                       data-dnd-offset="{{ page_obj.start_index }}"
-                       {% endif %}>
+                <tbody data-dnd-url="{% url "control:event.items.questions.reorder" organizer=request.event.organizer.slug event=request.event.slug %}">
                 {% for q in questions %}
                     <tr data-dnd-id="{{q.id}}">
                         <td><strong><a href="

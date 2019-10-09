@@ -3,7 +3,6 @@ $(function () {
     $("[data-dnd-url]").each(function(){
         var container = $(this),
             url = container.data("dnd-url"),
-            offset = container.data("dnd-offset"),
             up = container.find("a:has(.fa-arrow-up)"),
             handle = $('<span class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></span>');
 
@@ -34,8 +33,7 @@ $(function () {
                         'url': url,
                         'headers': {'X-CSRFToken': $("input[name=csrfmiddlewaretoken]").val()},
                         'data': JSON.stringify({
-                            ids: ids,
-                            offset: offset
+                            ids: ids
                         }),
                         'contentType': "application/json",
                         'timeout': 30000
