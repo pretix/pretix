@@ -43,6 +43,14 @@ logger = logging.getLogger(__name__)
 
 class NamePartsWidget(forms.MultiWidget):
     widget = forms.TextInput
+    autofill_map = {
+        'given_name': 'given-name',
+        'family_name': 'family-name',
+        'middle_name': 'additional-name',
+        'title': 'honorific-prefix',
+        'full_name': 'name',
+        'calling_name': 'nickname',
+    }
 
     def __init__(self, scheme: dict, field: forms.Field, attrs=None, titles: list=None):
         widgets = []
@@ -88,6 +96,7 @@ class NamePartsWidget(forms.MultiWidget):
                     id='%s_%s' % (id_, i),
                     title=self.scheme['fields'][i][1],
                     placeholder=self.scheme['fields'][i][1],
+                    autocomplete=self.autofill_map.get(self.scheme['fields'][i][0], 'off'),
                 )
                 final_attrs['data-size'] = self.scheme['fields'][i][2]
             output.append(widget.render(name + '_%s' % i, widget_value, final_attrs, renderer=renderer))
