@@ -194,7 +194,7 @@ class QuestionsTest(ItemFormTest):
             {
                 "ids": [q2.id, q1.id]
             },
-            format='json'
+            content_type='application/json'
         )
         doc = self.get_doc('/control/event/%s/%s/questions/' % (self.orga1.slug, self.event1.slug))
         self.assertIn("Vegetarian?", doc.select("table > tbody > tr")[1].text)
