@@ -1,6 +1,6 @@
 import json
-from json.decoder import JSONDecodeError
 from collections import OrderedDict
+from json.decoder import JSONDecodeError
 
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -8,7 +8,9 @@ from django.core.files import File
 from django.db import transaction
 from django.db.models import Count, F, Max, Prefetch, Q
 from django.forms.models import inlineformset_factory
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import (
+    Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
+)
 from django.shortcuts import redirect
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
@@ -328,7 +330,6 @@ def reorder_questions(request, organizer, event):
         if pos != q.position:  # Save unneccessary UPDATE queries
             q.position = pos
             q.save(update_fields=['position'])
-
 
     return HttpResponse()
 
