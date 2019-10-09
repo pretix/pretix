@@ -5,7 +5,7 @@ from django.conf import settings
 
 def contextprocessor(request):
     ctx = {
-        'rtl': request.LANGUAGE_CODE in settings.LANGUAGES_RTL,
+        'rtl': getattr(request, 'LANGUAGE_CODE', 'en') in settings.LANGUAGES_RTL,
     }
     if settings.DEBUG and 'runserver' not in sys.argv:
         ctx['debug_warning'] = True
