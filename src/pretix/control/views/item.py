@@ -288,11 +288,14 @@ class QuestionList(PaginationMixin, ListView):
 @event_permission_required("can_change_items")
 def reorder_questions(request, organizer, event):
     try:
-        ids = json.loads(request.body.decode('utf-8'))['ids']
-    except (JSONDecodeError, KeyError):
+        ids = [int(id) for id in json.loads(request.body.decode('utf-8'))['ids']]
+    except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
     questions = request.event.questions.filter(id__in=ids)
+    cache = {}
+    for q in questions:
+        cache[q.id] = q
 
     if questions.count() != len(ids):
         raise Http404(_("Some of the provided question ids are invalid."))
@@ -303,10 +306,10 @@ def reorder_questions(request, organizer, event):
         return HttpResponseBadRequest("ids have to be from a consecutive range")
 
     for pos, id in zip(positions, ids):
-        qt = questions.get(id=id)
-        if qt.position != pos:
-            qt.position = pos
-            qt.save()
+        q = cache[id]
+        if q.position != pos:
+            q.position = pos
+            q.save()
 
     return HttpResponse()
 
