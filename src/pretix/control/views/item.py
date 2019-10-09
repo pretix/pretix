@@ -289,17 +289,22 @@ def reorder_questions(request, organizer, event):
     try:
         ids = json.loads(request.body.decode('utf-8'))['ids']
     except (JSONDecodeError, KeyError):
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
-    questions = request.event.questions
+    questions = request.event.questions.filter(id__in=ids)
 
-    if questions.count() != questions.filter(id__in=ids).count():
-        raise Http404(_("The provided question ids are invalid."))
+    if questions.count() != len(ids):
+        raise Http404(_("Some of the provided question ids are invalid."))
 
-    for i, id in enumerate(ids):
+    positions = questions.values_list('position', flat=True)
+
+    if positions.last() - positions.first() + 1 != questions.count():
+        return HttpResponseBadRequest("ids have to be from a consecutive range")
+
+    for pos, id in zip(positions, ids):
         qt = questions.get(id=id)
-        if qt.position != i:
-            qt.position = i
+        if qt.position != pos:
+            qt.position = pos
             qt.save()
 
     return HttpResponse()
