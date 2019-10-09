@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, F, Prefetch, Q
+from django.db.models import Count, F, Max, Prefetch, Q
 from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import redirect
@@ -292,24 +292,43 @@ def reorder_questions(request, organizer, event):
     except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
-    questions = request.event.questions.filter(id__in=ids)
-    cache = {}
-    for q in questions:
-        cache[q.id] = q
+    input_questions = request.event.questions.filter(id__in=ids)
 
-    if questions.count() != len(ids):
+    if input_questions.count() != len(ids):
         raise Http404(_("Some of the provided question ids are invalid."))
 
-    positions = questions.values_list('position', flat=True)
+    first = input_questions.first()
+    last = input_questions.last()
+    original_lowest_score = (first.position, first.id)
+    original_highest_score = (last.position, last.id)
 
-    if positions.last() - positions.first() + 1 != questions.count():
-        return HttpResponseBadRequest("ids have to be from a consecutive range")
+    if request.event.questions.filter(
+            Q(Q(position__gt=original_lowest_score[0])
+              | Q(Q(position=original_lowest_score[0]) & Q(pk__gt=original_lowest_score[1])))
+            &
+            Q(Q(position__lt=original_highest_score[0])
+              | Q(Q(position=original_highest_score[0]) & Q(pk__lt=original_highest_score[1])))
+    ).exclude(id__in=ids).exists():
+        return HttpResponseBadRequest("ids need to be from a consecutive range of questions")
 
-    for pos, id in zip(positions, ids):
-        q = cache[id]
-        if q.position != pos:
+    highest_position_on_previous_page = request.event.questions.filter(
+        Q(position__lt=original_lowest_score[0])
+        | Q(Q(position=original_lowest_score[0]) & Q(pk__lt=original_lowest_score[1]))
+    ).aggregate(m=Max('position'))['m'] or 0
+
+    questions_on_later_pages = request.event.questions.filter(
+        Q(position__gt=original_highest_score[0])
+        | Q(Q(position=original_highest_score[0]) & Q(pk__gt=original_highest_score[1]))
+    )
+
+    ordered_questions = sorted(input_questions, key=lambda k: ids.index(k.pk))
+
+    for i, q in enumerate(ordered_questions + list(questions_on_later_pages)):
+        pos = highest_position_on_previous_page + 1 + i
+        if pos != q.position:  # Save unneccessary UPDATE queries
             q.position = pos
-            q.save()
+            q.save(update_fields=['position'])
+
 
     return HttpResponse()
 
