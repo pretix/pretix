@@ -18,8 +18,7 @@ class CheckinList(LoggedModel):
     include_pending = models.BooleanField(verbose_name=pgettext_lazy('checkin', 'Include pending orders'),
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '
-                                                      'order have not been paid. This only works with pretixdesk '
-                                                      '0.3.0 or newer or pretixdroid 1.9 or newer.'))
+                                                      'order have not been paid.'))
 
     auto_checkin_sales_channels = MultiStringField(
         default=[],
