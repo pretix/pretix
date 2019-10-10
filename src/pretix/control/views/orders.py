@@ -14,6 +14,7 @@ from django.db import transaction
 from django.db.models import (
     Count, IntegerField, OuterRef, Prefetch, ProtectedError, Q, Subquery, Sum,
 )
+from django.forms import formset_factory
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
 )
@@ -70,8 +71,8 @@ from pretix.control.forms.filter import (
 from pretix.control.forms.orders import (
     CancelForm, CommentForm, ConfirmPaymentForm, ExporterForm, ExtendForm,
     MarkPaidForm, OrderContactForm, OrderLocaleForm, OrderMailForm,
-    OrderPositionAddForm, OrderPositionChangeForm, OrderRefundForm,
-    OtherOperationsForm,
+    OrderPositionAddForm, OrderPositionAddFormset, OrderPositionChangeForm,
+    OrderRefundForm, OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -1188,9 +1189,16 @@ class OrderChange(OrderView):
                                    data=self.request.POST if self.request.method == "POST" else None)
 
     @cached_property
-    def add_form(self):
-        return OrderPositionAddForm(prefix='add', order=self.order,
-                                    data=self.request.POST if self.request.method == "POST" else None)
+    def add_formset(self):
+        ff = formset_factory(
+            OrderPositionAddForm, formset=OrderPositionAddFormset,
+            can_order=False, can_delete=True, extra=0
+        )
+        return ff(
+            prefix='add',
+            order=self.order,
+            data=self.request.POST if self.request.method == "POST" else None
+        )
 
     @cached_property
     def positions(self):
@@ -1208,7 +1216,7 @@ class OrderChange(OrderView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['positions'] = self.positions
-        ctx['add_form'] = self.add_form
+        ctx['add_formset'] = self.add_formset
         ctx['other_form'] = self.other_form
         return ctx
 
@@ -1221,16 +1229,17 @@ class OrderChange(OrderView):
             return True
 
     def _process_add(self, ocm):
-        if 'add-do' not in self.request.POST:
-            return True
-        if not self.add_form.is_valid():
+        if not self.add_formset.is_valid():
             return False
         else:
-            if self.add_form.cleaned_data['do']:
-                if '-' in self.add_form.cleaned_data['itemvar']:
-                    itemid, varid = self.add_form.cleaned_data['itemvar'].split('-')
+            for f in self.add_formset.forms:
+                if f in self.add_formset.deleted_forms or not f.has_changed():
+                    continue
+
+                if '-' in f.cleaned_data['itemvar']:
+                    itemid, varid = f.cleaned_data['itemvar'].split('-')
                 else:
-                    itemid, varid = self.add_form.cleaned_data['itemvar'], None
+                    itemid, varid = f.cleaned_data['itemvar'], None
 
                 item = Item.objects.get(pk=itemid, event=self.request.event)
                 if varid:
@@ -1239,12 +1248,12 @@ class OrderChange(OrderView):
                     variation = None
                 try:
                     ocm.add_position(item, variation,
-                                     self.add_form.cleaned_data['price'],
-                                     self.add_form.cleaned_data.get('addon_to'),
-                                     self.add_form.cleaned_data.get('subevent'),
-                                     self.add_form.cleaned_data.get('seat'))
+                                     f.cleaned_data['price'],
+                                     f.cleaned_data.get('addon_to'),
+                                     f.cleaned_data.get('subevent'),
+                                     f.cleaned_data.get('seat'))
                 except OrderError as e:
-                    self.add_form.custom_error = str(e)
+                    f.custom_error = str(e)
                     return False
         return True
 

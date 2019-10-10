@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load formset_tags %}
 {% load money %}
 {% block title %}
     {% blocktrans trimmed with code=order.code %}
@@ -64,10 +65,10 @@
                         {% endif %}
                         {% if position.addon_to %}
                             – <em>
-                                {% blocktrans trimmed with posid=position.addon_to.positionid %}
-                                    Add-On to position #{{ posid }}
-                                {% endblocktrans %}
-                            </em>
+                            {% blocktrans trimmed with posid=position.addon_to.positionid %}
+                                Add-On to position #{{ posid }}
+                            {% endblocktrans %}
+                        </em>
                         {% endif %}
                     </h3>
                 </div>
@@ -173,33 +174,87 @@
                 </div>
             </div>
         {% endfor %}
-        <div class="panel panel-default items">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Add product" %}
-                </h3>
-            </div>
-            <div class="panel-body">
-                <div class="form-horizontal">
-                    {% bootstrap_form_errors add_form %}
-                    {% if add_form.custom_error %}
-                        <div class="alert alert-danger">
-                            {{ add_form.custom_error }}
+
+
+        <div class="formset" data-formset data-formset-prefix="{{ add_formset.prefix }}">
+            {{ add_formset.management_form }}
+            {% bootstrap_formset_errors add_formset %}
+            <div data-formset-body>
+                {% for add_form in add_formset %}
+                    <div class="panel panel-default items" data-formset-form>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <button type="button" class="btn btn-danger btn-xs pull-right flip"
+                                        data-formset-delete-button>
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                {% trans "Add product" %}
+                                <div class="sr-only">
+                                    {{ add_form.id }}
+                                    {% bootstrap_field add_form.DELETE form_group_class="" layout="inline" %}
+                                </div>
+                            </h3>
                         </div>
-                    {% endif %}
-                    {% bootstrap_field add_form.do layout="control" %}
-                    {% bootstrap_field add_form.itemvar layout="control" %}
-                    {% bootstrap_field add_form.price addon_after=request.event.currency layout="control" %}
-                    {% if add_form.addon_to %}
-                        {% bootstrap_field add_form.addon_to layout="control" %}
-                    {% endif %}
-                    {% if add_form.subevent %}
-                        {% bootstrap_field add_form.subevent layout="control" %}
-                    {% endif %}
-                    {% bootstrap_field add_form.seat layout="control" %}
-                </div>
+                        <div class="panel-body">
+                            <div class="form-horizontal">
+                                {% bootstrap_form_errors add_form %}
+                                {% if add_form.custom_error %}
+                                    <div class="alert alert-danger">
+                                        {{ add_form.custom_error }}
+                                    </div>
+                                {% endif %}
+                                {% bootstrap_field add_form.itemvar layout="control" %}
+                                {% bootstrap_field add_form.price addon_after=request.event.currency layout="control" %}
+                                {% if add_form.addon_to %}
+                                    {% bootstrap_field add_form.addon_to layout="control" %}
+                                {% endif %}
+                                {% if add_form.subevent %}
+                                    {% bootstrap_field add_form.subevent layout="control" %}
+                                {% endif %}
+                                {% bootstrap_field add_form.seat layout="control" %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
+            <script type="form-template" data-formset-empty-form>
+                {% escapescript %}
+                    <div class="panel panel-default items" data-formset-form>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <button type="button" class="btn btn-danger btn-xs pull-right flip"
+                                        data-formset-delete-button>
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                {% trans "Add product" %}
+                                <div class="sr-only">
+                                    {{ add_formset.empty_form.id }}
+                                    {% bootstrap_field add_formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                </div>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-horizontal">
+                                {% bootstrap_field add_formset.empty_form.itemvar layout="control" %}
+                                {% bootstrap_field add_formset.empty_form.price addon_after=request.event.currency layout="control" %}
+                                {% if add_formset.empty_form.addon_to %}
+                                    {% bootstrap_field add_formset.empty_form.addon_to layout="control" %}
+                                {% endif %}
+                                {% if add_formset.empty_form.subevent %}
+                                    {% bootstrap_field add_formset.empty_form.subevent layout="control" %}
+                                {% endif %}
+                                {% bootstrap_field add_formset.empty_form.seat layout="control" %}
+                            </div>
+                        </div>
+                    </div>
+                {% endescapescript %}
+            </script>
+            <p>
+                <button type="button" class="btn btn-default" data-formset-add>
+                    <i class="fa fa-plus"></i> {% trans "Add product" %}</button>
+            </p>
         </div>
+
         <div class="panel panel-default items">
             <div class="panel-heading">
                 <h3 class="panel-title">

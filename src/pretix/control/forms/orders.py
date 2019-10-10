@@ -196,10 +196,6 @@ class OtherOperationsForm(forms.Form):
 
 
 class OrderPositionAddForm(forms.Form):
-    do = forms.BooleanField(
-        label=_('Add a new product to the order'),
-        required=False
-    )
     itemvar = forms.ChoiceField(
         label=_('Product')
     )
@@ -289,6 +285,28 @@ class OrderPositionAddForm(forms.Form):
         else:
             del self.fields['subevent']
         change_decimal_field(self.fields['price'], order.event.currency)
+
+
+class OrderPositionAddFormset(forms.BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        self.order = kwargs.pop('order', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['order'] = self.order
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            order=self.order,
+        )
+        self.add_fields(form, None)
+        return form
 
 
 class OrderPositionChangeForm(forms.Form):

@@ -1154,9 +1154,12 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
+            'add-TOTAL_FORMS': '0',
+            'add-INITIAL_FORMS': '0',
+            'add-MIN_NUM_FORMS': '0',
+            'add-MAX_NUM_FORMS': '100',
             'op-{}-itemvar'.format(self.op1.pk): str(self.shirt.pk),
             'op-{}-price'.format(self.op1.pk): str('12.00'),
-            'add-itemvar': str(self.ticket.pk),
         })
         self.op1.refresh_from_db()
         self.order.refresh_from_db()
@@ -1183,9 +1186,11 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
+            'add-TOTAL_FORMS': '0',
+            'add-INITIAL_FORMS': '0',
+            'add-MIN_NUM_FORMS': '0',
+            'add-MAX_NUM_FORMS': '100',
             'op-{}-subevent'.format(self.op1.pk): str(se2.pk),
-            'add-itemvar': str(self.ticket.pk),
-            'add-subevent': str(se1.pk),
         })
         self.op1.refresh_from_db()
         self.op2.refresh_from_db()
@@ -1197,12 +1202,15 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
+            'add-TOTAL_FORMS': '0',
+            'add-INITIAL_FORMS': '0',
+            'add-MIN_NUM_FORMS': '0',
+            'add-MAX_NUM_FORMS': '100',
             'op-{}-operation'.format(self.op1.pk): 'price',
             'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
             'op-{}-price'.format(self.op1.pk): '24.00',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'add-itemvar': str(self.ticket.pk),
         })
         self.op1.refresh_from_db()
         self.order.refresh_from_db()
@@ -1214,8 +1222,11 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
+            'add-TOTAL_FORMS': '0',
+            'add-INITIAL_FORMS': '0',
+            'add-MIN_NUM_FORMS': '0',
+            'add-MAX_NUM_FORMS': '100',
             'op-{}-operation_cancel'.format(self.op1.pk): 'on',
-            'add-itemvar': str(self.ticket.pk),
         })
         self.order.refresh_from_db()
         with scopes_disabled():
@@ -1226,9 +1237,13 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-itemvar': str(self.shirt.pk),
-            'add-do': 'on',
-            'add-price': '14.00',
+            'add-TOTAL_FORMS': '1',
+            'add-INITIAL_FORMS': '0',
+            'add-MIN_NUM_FORMS': '0',
+            'add-MAX_NUM_FORMS': '100',
+            'add-0-itemvar': str(self.shirt.pk),
+            'add-0-do': 'on',
+            'add-0-price': '14.00',
         })
         with scopes_disabled():
             assert self.order.positions.count() == 3
@@ -1251,8 +1266,11 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
+            'add-TOTAL_FORMS': '0',
+            'add-INITIAL_FORMS': '0',
+            'add-MIN_NUM_FORMS': '0',
+            'add-MAX_NUM_FORMS': '100',
             'other-recalculate_taxes': 'on',
-            'add-itemvar': str(self.ticket.pk),
             'op-{}-operation'.format(self.op1.pk): '',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
