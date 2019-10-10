@@ -281,8 +281,8 @@
                                     <div class="position-buttons">
                                         {% if line.generate_ticket %}
                                             {% for b in download_buttons %}
-                                                {% if b.download_action %}
-                                                    <a href="{{ b.download_action }}" class="btn btn-default btn-xs btn-{{ b.identifier }}" target="_blank" data-organizer="{{ request.event.organizer.slug }}" data-event="{{ event.slug }}" data-order="{{ order.code }}" data-secret="{{ line.secret }}" data-position="{{ line.pk }}">
+                                                {% if b.download_handled_by_frontend %}
+                                                    <a href="#" class="btn btn-default btn-xs btn-ticket-{{ b.identifier }}" target="_blank" data-organizer="{{ request.event.organizer.slug }}" data-event="{{ event.slug }}" data-order="{{ order.code }}" data-secret="{{ line.secret }}" data-position="{{ line.pk }}" data-generate-url="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}">
                                                         <span class="fa {{ b.icon }}"></span> {{ b.text }}
                                                     </a>
                                                 {% else %}
