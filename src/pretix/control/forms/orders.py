@@ -168,6 +168,15 @@ class OtherOperationsForm(forms.Form):
             'Use with care and only if you need to. Note that rounding differences might occur in this procedure.'
         )
     )
+    reissue_invoice = forms.BooleanField(
+        label=_('Issue a new invoice if required'),
+        required=False,
+        initial=True,
+        help_text=_(
+            'If an invoice exists for this order and this operation would change its contents, the old invoice will '
+            'be cancelled and a new invoice will be issued.'
+        )
+    )
     notify = forms.BooleanField(
         label=_('Notify user'),
         required=False,

@@ -904,12 +904,13 @@ class OrderChangeManager:
     SplitOperation = namedtuple('SplitOperation', ('position',))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
-    def __init__(self, order: Order, user=None, auth=None, notify=True):
+    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
         self.order = order
         self.user = user
         self.auth = auth
         self.event = order.event
         self.split_order = None
+        self.reissue_invoice = reissue_invoice
         self._committed = False
         self._totaldiff = 0
         self._quotadiff = Counter()
@@ -1392,7 +1393,7 @@ class OrderChangeManager:
 
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
-        if i and self._invoice_dirty:
+        if self.reissue_invoice and i and self._invoice_dirty:
             generate_cancellation(i)
             generate_invoice(self.order)
 

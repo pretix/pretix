@@ -1220,6 +1220,15 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.invoices.count() == 3
 
     @classscope(attr='o')
+    def test_reissue_invoice_disabled(self):
+        self.ocm.reissue_invoice = False
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+        self.ocm.add_position(self.ticket, None, Decimal('0.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 1
+
+    @classscope(attr='o')
     def test_dont_reissue_invoice_on_free_product_changes(self):
         self.event.settings.invoice_include_free = False
         generate_invoice(self.order)

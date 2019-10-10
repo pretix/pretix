@@ -1297,7 +1297,8 @@ class OrderChange(OrderView):
         ocm = OrderChangeManager(
             self.order,
             user=self.request.user,
-            notify=notify
+            notify=notify,
+            reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True
         )
         form_valid = self._process_add(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
