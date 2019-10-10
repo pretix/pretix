@@ -46,12 +46,19 @@ class BaseTicketOutput:
         filename, a file type and file content. The extension will be taken from the filename
         which is otherwise ignored.
 
+        Alternatively, you can pass a tuple consisting of an arbitrary string, ``text/uri-list``
+        and a single URL. In this case, the user will be redirected to this link instead of
+        being asked to download a generated file.
+
         .. note:: If the event uses the event series feature (internally called subevents)
                   and your generated ticket contains information like the event name or date,
                   you probably want to display the properties of the subevent. A common pattern
                   to do this would be a declaration ``ev = position.subevent or position.order.event``
                   and then access properties that are present on both classes like ``ev.name`` or
                   ``ev.date_from``.
+
+        .. note:: Should you elect to use the URI redirection feature instead of offering downloads,
+                  you should also set the ``multi_download_enabled``-property to ``False``.
         """
         raise NotImplementedError()
 
@@ -171,46 +178,11 @@ class BaseTicketOutput:
         return True
 
     @property
-    def download_handled_by_frontend(self) -> bool:
+    def javascript_required(self) -> bool:
         """
-        By default, the download-button will call an asynchronous task to generate the downloadable ticket file.
-        By overriding this property, the default behavior can be changed for handling the button click with a
-        JavaScript ``click()``-listener.
+        If this property is set to true, the download-button for this ticket-type will not be displayed
+        when the user's browser has JavaScript disabled.
 
-        Please make sure to also include your JavaScript-file on all pages that might display the download button,
-        such as the ``control`` and ``presale`` order views.
-
-        The link will contain the following ``data-``-attributes, accessible for further usage from your JavaScript:
-
-        - ``data-organizer``: Organizer Slug
-        - ``data-event``: Event Slug
-        - ``data-order``: Order Code
-
-        Depending on if the download-button is placed on a order overview page or a dedicated single ticket download
-        page, the following fields will be made available and might have a different meaning.
-
-        Regular order overview page (/organizer/event/order/...):
-        - ``data-generate-url``: The original URL that would get POSTed to to call the ``generate()``-function.
-        - ``data-secret``: Order Secret
-        - ``data-position``: PK of the concerned OrderPosition
-
-        Single Ticket page (/organizer/event/ticket/...):
-        - ``data-secret``: Web secret of the OrderPosition (or of the parent item, if item is an add-on)
-        - ``data-position``: positionid of the item (or of the parent item, if the item is an add-on)
-        - ``data-pid``: PK of the concerned OrderPosition
-
-        To facilitate access to these ``data-``-attributes, the button will have a ``class``-attribute of
-        ``btn-ticket-identifier`` (where ``identifier`` is the identifier of your ticket download provider).
-
-        If you plan on reconstructing a link to retrieve the proper item, please have a look at the
-        ``presale:event.order.download`` and ``presale:event.order.position.download`` url patterns as well as the
-        provided ``OrderDetailMixin`` and ``OrderPositionDetailMixin`` MixIns. Alternatively, the ``data-generate-url``
-        could be used, as it already contains the proper link and takes out the guesswork.
-
-        Should this property return ``False`` or if it is not overridden, the async ``generate()``-function is being
-        called instead.
-
-        In case the property is returning ``True``, previews in the ticketoutput settings will automatically be
-        disabled.
+        Defaults to ``False``
         """
         return False

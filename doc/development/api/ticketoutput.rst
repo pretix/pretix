@@ -74,6 +74,4 @@ The output class
 
    .. autoattribute:: preview_allowed
 
-   .. autoattribute:: is_downloadable
-
-   .. autoattribute:: download_action
+   .. autoattribute:: javascript_required

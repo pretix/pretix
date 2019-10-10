@@ -47,6 +47,9 @@ def generate_order(order: int, provider: str):
             prov = response(order.event)
             if prov.identifier == provider:
                 filename, ttype, data = prov.generate_order(order)
+                if ttype == 'text/uri-list':
+                    continue
+
                 path, ext = os.path.splitext(filename)
                 for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
                     ct.delete()

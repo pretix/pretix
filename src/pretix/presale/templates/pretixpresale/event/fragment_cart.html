@@ -73,21 +73,14 @@
             <div class="download-desktop">
             {% if line.generate_ticket %}
                 {% for b in download_buttons %}
-                    {% if b.download_handled_by_frontend %}
-                        <a href="#" class="btn btn-default btn-sm btn-ticket-{{ b.identifier }}" target="_blank" data-organizer="{{ organizer }}" data-event="{{ event.slug }}" data-order="{{ order.code }}" data-generate-url="{% if position_page and line.addon_to %}{% eventurl event "presale:event.order.position.download" secret=line.addon_to.web_secret order=order.code output=b.identifier pid=line.pk position=line.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=line.web_secret order=order.code output=b.identifier pid=line.pk position=line.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.pk %}{% endif %}"
-                           {% if position_page and line.addon_to %}data-secret="{{ line.addon_to.web_secret }}" data-pid="{{ line.pk }}" data-position="{{ line.addon_to.positionid }}"{% elif position_page %}data-secret="{{ line.web_secret }}" data-pid="{{ line.pk }}" data-position="{{ line.positionid }}"{% else %}data-secret="{{ order.secret }}" data-position="{{ line.pk }}"{% endif %}>
+                    <form action="{% if position_page and line.addon_to %}{% eventurl event "presale:event.order.position.download" secret=line.addon_to.web_secret order=order.code output=b.identifier pid=line.pk position=line.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=line.web_secret order=order.code output=b.identifier pid=line.pk position=line.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.pk %}{% endif %}"
+                            method="post" data-asynctask data-asynctask-download class="download-btn-form{% if b.javascript_required %} requirejs{% endif %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
                             <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                        </a>
-                    {% else %}
-                        <form action="{% if position_page and line.addon_to %}{% eventurl event "presale:event.order.position.download" secret=line.addon_to.web_secret order=order.code output=b.identifier pid=line.pk position=line.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=line.web_secret order=order.code output=b.identifier pid=line.pk position=line.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.pk %}{% endif %}"
-                                method="post" data-asynctask data-asynctask-download class="download-btn-form">
-                            {% csrf_token %}
-                            <button type="submit"
-                                    class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                                <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                            </button>
-                        </form>
-                    {% endif %}
+                        </button>
+                    </form>
                 {% endfor %}
             {% endif %}
             </div>

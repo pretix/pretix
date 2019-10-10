@@ -288,6 +288,10 @@ h2 .label {
     display: inline-block;
 }
 
+.nojs .requirejs {
+    display: none !important;
+}
+
 @import "_iframe.scss";
 @import "_a11y.scss";
 @import "_print.scss";

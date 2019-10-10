@@ -16,7 +16,8 @@ from django.db.models import (
     Count, IntegerField, OuterRef, Prefetch, ProtectedError, Q, Subquery, Sum,
 )
 from django.http import (
-    FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
+    FileResponse, Http404, HttpResponseNotAllowed, HttpResponseRedirect,
+    JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -227,7 +228,7 @@ class OrderDetail(OrderView):
                 'icon': provider.download_button_icon or 'fa-download',
                 'identifier': provider.identifier,
                 'multi': provider.multi_download_enabled,
-                'download_handled_by_frontend': provider.download_handled_by_frontend
+                'javascript_required': provider.javascript_required
             })
         return buttons
 
@@ -342,12 +343,16 @@ class OrderDownload(AsyncAction, OrderView):
                 'message': str(self.get_success_message(value))
             })
         if isinstance(value, CachedTicket):
-            resp = FileResponse(value.file.file, content_type=value.type)
-            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
-                self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
-                self.output.identifier, value.extension
-            )
-            return resp
+            if value.type == 'text/uri-list':
+                resp = HttpResponseRedirect(value.file.file.read())
+                return resp
+            else:
+                resp = FileResponse(value.file.file, content_type=value.type)
+                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
+                    self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
+                    self.output.identifier, value.extension
+                )
+                return resp
         elif isinstance(value, CachedCombinedTicket):
             resp = FileResponse(value.file.file, content_type=value.type)
             resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(

@@ -6,7 +6,7 @@ import pytz
 from django.db import transaction
 from django.db.models import F, Prefetch, Q
 from django.db.models.functions import Coalesce, Concat
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
@@ -148,12 +148,16 @@ class OrderViewSet(viewsets.ModelViewSet):
             generate.apply_async(args=('order', order.pk, provider.identifier))
             raise RetryException()
         else:
-            resp = FileResponse(ct.file.file, content_type=ct.type)
-            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                self.request.event.slug.upper(), order.code,
-                provider.identifier, ct.extension
-            )
-            return resp
+            if ct.type == 'text/uri-list':
+                resp = HttpResponseRedirect(ct.file.file.read())
+                return resp
+            else:
+                resp = FileResponse(ct.file.file, content_type=ct.type)
+                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                    self.request.event.slug.upper(), order.code,
+                    provider.identifier, ct.extension
+                )
+                return resp
 
     @action(detail=True, methods=['POST'])
     def mark_paid(self, request, **kwargs):
@@ -759,12 +763,16 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
             generate.apply_async(args=('orderposition', pos.pk, provider.identifier))
             raise RetryException()
         else:
-            resp = FileResponse(ct.file.file, content_type=ct.type)
-            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
-                self.request.event.slug.upper(), pos.order.code, pos.positionid,
-                provider.identifier, ct.extension
-            )
-            return resp
+            if ct.type == 'text/uri-list':
+                resp = HttpResponseRedirect(ct.file.file.read())
+                return resp
+            else:
+                resp = FileResponse(ct.file.file, content_type=ct.type)
+                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
+                    self.request.event.slug.upper(), pos.order.code, pos.positionid,
+                    provider.identifier, ct.extension
+                )
+                return resp
 
     def perform_destroy(self, instance):
         try:
