@@ -785,8 +785,9 @@ Creating orders
    * ``locale``
    * ``sales_channel``
    * ``payment_provider`` (optional) – The identifier of the payment provider set for this order. This needs to be an
-    existing payment provider. You should use ``"free"`` for free orders, and we strongly advise to use ``"manual"``
-    for all orders you create as paid.
+     existing payment provider. You should use ``"free"`` for free orders, and we strongly advise to use ``"manual"``
+     for all orders you create as paid. This field is optional when the order status is ``"n"`` or the order total is
+     zero, otherwise it is required.
    * ``payment_info`` (optional) – You can pass a nested JSON object that will be set as the internal ``info``
      value of the payment object that will be created. How this value is handled is up to the payment provider and you
      should only use this if you know the specific payment provider in detail. Please keep in mind that the payment

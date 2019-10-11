@@ -858,6 +858,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         order.total = sum([p.price for p in order.positions.all()]) + sum([f.value for f in order.fees.all()])
         order.save(update_fields=['total'])
 
+        if order.total == Decimal('0.00') and validated_data.get('status') == Order.STATUS_PAID and not payment_provider:
+            payment_provider = 'free'
+
         if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
             order.status = Order.STATUS_PAID
             order.save()

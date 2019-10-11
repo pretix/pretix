@@ -1657,6 +1657,25 @@ def test_order_email_optional(token_client, organizer, event, item, quota, quest
 
 
 @pytest.mark.django_db
+def test_order_create_payment_provider_optional_free(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['price'] = '0.00'
+    res['positions'][0]['status'] = 'p'
+    del res['payment_provider']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert not o.payments.exists()
+
+
+@pytest.mark.django_db
 def test_order_create_payment_info_optional(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
