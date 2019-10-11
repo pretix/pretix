@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-08 13:56+0000\n"
-"PO-Revision-Date: 2019-09-12 22:00+0000\n"
+"PO-Revision-Date: 2019-10-11 16:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -122,10 +122,8 @@ msgid "The subevent does not belong to this event."
 msgstr "Het onderevenement hoort niet bij dit evenement."
 
 #: pretix/api/serializers/checkin.py:41
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Unknown sales channel."
-msgstr "Verkoopkanaal"
+msgstr "Onbekend verkoopkanaal."
 
 #: pretix/api/serializers/event.py:101
 msgid ""
@@ -279,10 +277,8 @@ msgid "An individual text with a reason can be inserted here."
 msgstr "Een individuele tekst met een reden kan hier worden ingevoerd."
 
 #: pretix/base/email.py:383
-#, fuzzy
-#| msgid "The products have been successfully added to your cart."
 msgid "The amount has been charged to your card."
-msgstr "De producten zijn succesvol aan uw winkelwagen toegevoegd."
+msgstr "Het bedrag is van uw kaart afgeschreven."
 
 #: pretix/base/email.py:387
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
@@ -1560,7 +1556,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:27
 msgid "Sales channels to automatically check in"
-msgstr ""
+msgstr "Automatisch ingecheckte verkoopkanalen"
 
 #: pretix/base/models/checkin.py:28
 msgid ""
@@ -1569,6 +1565,11 @@ msgid ""
 "be useful when tickets sold at the box office are not checked again before "
 "entry and should be considered validated directly upon purchase."
 msgstr ""
+"Alle items op deze inchecklijst zullen automatisch als ingecheckt worden "
+"gemarkeerd wanneer ze worden gekocht via een van de gekozen verkoopkanalen. "
+"Deze optie kan nuttig zijn wanneer tickets die aan de kassa worden verkocht "
+"niet opnieuw worden gecontroleerd en de tickets direct als gebruikt moeten "
+"worden beschouwd na de aankoop."
 
 #: pretix/base/models/devices.py:55
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -4594,20 +4595,7 @@ msgstr ""
 "Organisatie van {event}"
 
 #: pretix/base/settings.py:386
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event} with a total value\n"
-#| "of {total_with_currency}. Please complete your payment before {date}.\n"
-#| "\n"
-#| "{payment_info}\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -4627,7 +4615,7 @@ msgstr ""
 "\n"
 "We hebben uw bestelling voor {event} met een totale waarde van "
 "{total_with_currency}\n"
-"met succes ontvangen. Voltooi uw betaling vóór {date}.\n"
+"met succes ontvangen. Voltooi uw betaling vóór {expire_date}.\n"
 "\n"
 "{payment_info}\n"
 "\n"
@@ -4834,21 +4822,7 @@ msgstr ""
 "Organisatie van {event}"
 
 #: pretix/base/settings.py:512
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we approved your order for {event} and will be happy to welcome you\n"
-#| "at our event.\n"
-#| "\n"
-#| "Please continue by paying for your order before {date}.\n"
-#| "\n"
-#| "You can select a payment method and perform the payment here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -4868,7 +4842,7 @@ msgstr ""
 "\n"
 "We hebben uw bestelling voor {event} goedgekeurd.\n"
 "\n"
-"Ga verder met uw bestelling door te betalen voor {date}.\n"
+"Ga verder met uw bestelling door te betalen voor {expire_date}.\n"
 "\n"
 "U kunt via de volgende link een betalingsmethode kiezen en de betaling "
 "uitvoeren:\n"
@@ -6457,21 +6431,13 @@ msgid "Approved order"
 msgstr "Bestelling goedgekeurd"
 
 #: pretix/control/forms/event.py:1127
-#, fuzzy
-#| msgid ""
-#| "This will only be sent out for non-free orders. Free orders will receive "
-#| "the free order template from above instead. Available placeholders: "
-#| "{event}, {total_with_currency}, {total}, {currency}, {date}, "
-#| "{payment_info}, {url}, {invoice_name}, {invoice_company}"
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from above instead."
 msgstr ""
 "Dit zal alleen worden verstuurd voor niet-gratis bestellingen. Gratis "
 "bestellingen zullen in plaats hiervan het sjabloon voor gratis bestellingen "
-"hierboven ontvangen. Beschikbare plaatsaanduidingen: {event}, "
-"{total_with_currency}, {total}, {currency}, {date}, {payment_info}, {url}, "
-"{invoice_name}, {invoice_company}"
+"hierboven ontvangen."
 
 #: pretix/control/forms/event.py:1131
 msgid "Denied order"
@@ -6519,10 +6485,9 @@ msgstr "Vaak ingeschakeld op poort 465."
 
 #: pretix/control/forms/event.py:1198 pretix/control/forms/orders.py:417
 #: pretix/plugins/sendmail/forms.py:42
-#, fuzzy, python-brace-format
-#| msgid "Available placeholders: {event}, {url}"
+#, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Beschikbare plaatsaanduidingen: {event}, {url}"
+msgstr "Beschikbare plaatsaanduidingen: {list}"
 
 #: pretix/control/forms/event.py:1233
 msgid ""
@@ -9038,10 +9003,8 @@ msgid "unpaid"
 msgstr "onbetaald"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:124
-#, fuzzy
-#| msgid "Refund automatically?"
 msgid "Checked in automatically"
-msgstr "Automatisch terugbetalen?"
+msgstr "Automatisch ingecheckt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:140
 msgid "Check-In selected attendees"
@@ -9210,10 +9173,8 @@ msgid "Create a new check-in list"
 msgstr "Maak een nieuwe inchecklijst"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:63
-#, fuzzy
-#| msgid "Not checked in"
 msgid "Automated check-in"
-msgstr "Niet ingecheckt"
+msgstr "Automatisch inchecken"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
@@ -10664,10 +10625,8 @@ msgstr "Nieuwe categorie aanmaken"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:49
 #: pretix/control/templates/pretixcontrol/items/quotas.html:81
-#, fuzzy
-#| msgid "Clone event"
 msgid "Clone"
-msgstr "Evenement kopiëren"
+msgstr "Kopiëren"
 
 #: pretix/control/templates/pretixcontrol/items/category.html:27
 msgid "Category history"
@@ -11510,10 +11469,9 @@ msgid "Ordered items"
 msgstr "Bestelde items"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:259
-#, fuzzy, python-format
-#| msgid "Automatically expire unpaid orders"
+#, python-format
 msgid "Automatically checked in: %(date)s"
-msgstr "Laat onbetaalde bestellingen automatisch verlopen"
+msgstr "Automatisch ingecheckt: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:261
 #, python-format
@@ -13508,11 +13466,8 @@ msgid "Any product in quota \"%(quota)s\""
 msgstr "Elk product in quotum \"%(quota)s\""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:142
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Use as a template for a new date"
 msgid "Use as a template for new vouchers"
-msgstr "Gebruik als sjabloon voor een nieuwe datum"
+msgstr "Gebruik als sjabloon voor nieuwe vouchers"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:6
@@ -13977,6 +13932,8 @@ msgstr ""
 #: pretix/control/views/event.py:555 pretix/plugins/sendmail/views.py:97
 msgid "This value will be replaced based on dynamic parameters."
 msgstr ""
+"Deze waarde zal op basis van verschillende parameters automatisch worden "
+"aangepast."
 
 #: pretix/control/views/event.py:563
 msgid "invalid item"
@@ -15549,11 +15506,8 @@ msgid "paid"
 msgstr "betaald"
 
 #: pretix/plugins/checkinlists/exporters.py:316
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Automatically refund"
 msgid "Automatically checked in"
-msgstr "Automatisch terugbetalen"
+msgstr "Automatisch ingecheckt"
 
 #: pretix/plugins/checkinlists/exporters.py:325
 #: pretix/plugins/paypal/payment.py:80
@@ -18100,16 +18054,12 @@ msgid "A payment is currently pending for this order."
 msgstr "Een betaling staat momenteel open voor deze bestelling."
 
 #: pretix/presale/views/order.py:636
-#, fuzzy
-#| msgid ""
-#| "Modifying your invoice address will not automatically generate a new "
-#| "invoice. Please contact us if you need a new invoice."
 msgid ""
 "Your invoice address has been updated. Please contact us if you need us to "
 "regenerate your invoice."
 msgstr ""
-"Uw factuuradres aanpassen zal niet automatisch een nieuwe factuur genereren. "
-"Neem contact met ons op als u een nieuwe factuur nodig heeft."
+"Uw factuuradres is bijgewerkt. Neem contact met ons op als u wilt dat we uw "
+"factuur opnieuw genereren."
 
 #: pretix/presale/views/order.py:655
 msgid "You cannot modify this order"
