@@ -68,7 +68,7 @@ generated key and installs the plugin from the URL we told you::
         mkdir -p /etc/ssh && \
         ssh-keyscan -t rsa -p 10022 code.rami.io >> /root/.ssh/known_hosts && \
         echo StrictHostKeyChecking=no >> /root/.ssh/config && \
-        pip3 install -Ue "git+ssh://git@code.rami.io:10022/pretix/pretix-slack.git@stable#egg=pretix-slack" && \
+        DJANGO_SETTINGS_MODULE=pretix.settings pip3 install -U "git+ssh://git@code.rami.io:10022/pretix/pretix-slack.git@stable#egg=pretix-slack" && \
         cd /pretix/src && \
         sudo -u pretixuser make production
     USER pretixuser
