@@ -158,6 +158,12 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             cl.auto_checkin_sales_channels = [sales_channels[channel] for channel in cl.auto_checkin_sales_channels]
         ctx['checkinlists'] = clists
 
+        ctx['can_change_organizer_settings'] = self.request.user.has_organizer_permission(
+            self.request.organizer,
+            'can_change_organizer_settings',
+            self.request
+        )
+
         return ctx
 
 

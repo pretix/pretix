@@ -19,6 +19,13 @@
             performances.
         {% endblocktrans %}
     </p>
+    <p>
+        {% blocktrans trimmed %}
+            If you have the appropriate organizer-level permissions, you can connect new devices to your account and
+            use them to validate tickets. Since the devices are connected on the organizer level, you do not have to
+            create a new device for every event but can reuse them over and over again.
+        {% endblocktrans %}
+    </p>
     {% if request.event.has_subevents %}
         <form class="form-inline helper-display-inline" action="" method="get">
             <form class="form-inline helper-display-inline" action="" method="get">
@@ -40,17 +47,24 @@
 
             {% if "can_change_event_settings" in request.eventpermset %}
                 <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                        class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
-                    {% trans "Create a new check-in list" %}</a>
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new check-in list" %}</a>
+            {% endif %}
+            {% if can_change_organizer_settings %}
+                <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
+                   class="btn btn-default btn-lg"><i class="fa fa-tablet"></i> {% trans "Connected devices" %}</a>
             {% endif %}
         </div>
     {% else %}
-        {% if "can_change_event_settings" in request.eventpermset %}
-            <p>
-                <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new check-in list" %}
-                </a>
-            </p>
-        {% endif %}
+        <p>
+            {% if "can_change_event_settings" in request.eventpermset %}
+                <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new check-in list" %}</a>
+            {% endif %}
+            {% if can_change_organizer_settings %}
+                <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
+                   class="btn btn-default"><i class="fa fa-tablet"></i> {% trans "Connected devices" %}</a>
+            {% endif %}
+        </p>
         <div class="table-responsive">
             <table class="table table-hover table-quotas">
                 <thead>
