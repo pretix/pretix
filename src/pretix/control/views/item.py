@@ -1,13 +1,16 @@
 import json
 from collections import OrderedDict
+from json.decoder import JSONDecodeError
 
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, F, Prefetch, Q
+from django.db.models import Count, F, Max, Prefetch, Q
 from django.forms.models import inlineformset_factory
-from django.http import Http404, HttpResponseRedirect
+from django.http import (
+    Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
+)
 from django.shortcuts import redirect
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
@@ -281,6 +284,54 @@ class QuestionList(PaginationMixin, ListView):
 
     def get_queryset(self):
         return self.request.event.questions.prefetch_related('items')
+
+
+@transaction.atomic
+@event_permission_required("can_change_items")
+def reorder_questions(request, organizer, event):
+    try:
+        ids = [int(id) for id in json.loads(request.body.decode('utf-8'))['ids']]
+    except (JSONDecodeError, KeyError, ValueError):
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
+
+    input_questions = request.event.questions.filter(id__in=ids)
+
+    if input_questions.count() != len(ids):
+        raise Http404(_("Some of the provided question ids are invalid."))
+
+    first = input_questions.first()
+    last = input_questions.last()
+    original_lowest_score = (first.position, first.id)
+    original_highest_score = (last.position, last.id)
+
+    if request.event.questions.filter(
+            Q(Q(position__gt=original_lowest_score[0])
+              | Q(Q(position=original_lowest_score[0]) & Q(pk__gt=original_lowest_score[1])))
+            &
+            Q(Q(position__lt=original_highest_score[0])
+              | Q(Q(position=original_highest_score[0]) & Q(pk__lt=original_highest_score[1])))
+    ).exclude(id__in=ids).exists():
+        return HttpResponseBadRequest("ids need to be from a consecutive range of questions")
+
+    highest_position_on_previous_page = request.event.questions.filter(
+        Q(position__lt=original_lowest_score[0])
+        | Q(Q(position=original_lowest_score[0]) & Q(pk__lt=original_lowest_score[1]))
+    ).aggregate(m=Max('position'))['m'] or 0
+
+    questions_on_later_pages = request.event.questions.filter(
+        Q(position__gt=original_highest_score[0])
+        | Q(Q(position=original_highest_score[0]) & Q(pk__gt=original_highest_score[1]))
+    )
+
+    ordered_questions = sorted(input_questions, key=lambda k: ids.index(k.pk))
+
+    for i, q in enumerate(ordered_questions + list(questions_on_later_pages)):
+        pos = highest_position_on_previous_page + 1 + i
+        if pos != q.position:  # Save unneccessary UPDATE queries
+            q.position = pos
+            q.save(update_fields=['position'])
+
+    return HttpResponse()
 
 
 def question_move(request, question, up=True):

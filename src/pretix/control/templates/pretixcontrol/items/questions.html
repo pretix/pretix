@@ -39,9 +39,9 @@
                     <th class="action-col-2"></th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody data-dnd-url="{% url "control:event.items.questions.reorder" organizer=request.event.organizer.slug event=request.event.slug %}">
                 {% for q in questions %}
-                    <tr>
+                    <tr data-dnd-id="{{q.id}}">
                         <td><strong><a href="
                     {% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">{{ q.question }}</a></strong>
                         </td>

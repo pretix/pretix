@@ -174,7 +174,7 @@ class QuestionsTest(ItemFormTest):
     def test_sort(self):
         with scopes_disabled():
             q1 = Question.objects.create(event=self.event1, question="Vegetarian?", type="N", required=True, position=0)
-            Question.objects.create(event=self.event1, question="Food allergies?", position=1)
+            q2 = Question.objects.create(event=self.event1, question="Food allergies?", position=1)
         doc = self.get_doc('/control/event/%s/%s/questions/' % (self.orga1.slug, self.event1.slug))
         self.assertIn("Vegetarian?", doc.select("table > tbody > tr")[0].text)
         self.assertIn("Food allergies?", doc.select("table > tbody > tr")[1].text)
@@ -188,6 +188,17 @@ class QuestionsTest(ItemFormTest):
         doc = self.get_doc('/control/event/%s/%s/questions/' % (self.orga1.slug, self.event1.slug))
         self.assertIn("Vegetarian?", doc.select("table > tbody > tr")[0].text)
         self.assertIn("Food allergies?", doc.select("table > tbody > tr")[1].text)
+
+        self.client.post(
+            '/control/event/%s/%s/questions/reorder' % (self.orga1.slug, self.event1.slug),
+            {
+                "ids": [q2.id, q1.id]
+            },
+            content_type='application/json'
+        )
+        doc = self.get_doc('/control/event/%s/%s/questions/' % (self.orga1.slug, self.event1.slug))
+        self.assertIn("Vegetarian?", doc.select("table > tbody > tr")[1].text)
+        self.assertIn("Food allergies?", doc.select("table > tbody > tr")[0].text)
 
     def test_delete(self):
         with scopes_disabled():

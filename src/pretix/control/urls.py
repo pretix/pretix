@@ -165,6 +165,7 @@ urlpatterns = [
             name='event.items.categories.edit'),
         url(r'^categories/add$', item.CategoryCreate.as_view(), name='event.items.categories.add'),
         url(r'^questions/$', item.QuestionList.as_view(), name='event.items.questions'),
+        url(r'^questions/reorder$', item.reorder_questions, name='event.items.questions.reorder'),
         url(r'^questions/(?P<question>\d+)/delete$', item.QuestionDelete.as_view(),
             name='event.items.questions.delete'),
         url(r'^questions/(?P<question>\d+)/up$', item.question_move_up, name='event.items.questions.up'),
