@@ -9,6 +9,7 @@
             example might be to ask your users about dietary requirements.
         {% endblocktrans %}
     </p>
+    {% csrf_token %}
     {% if questions|length == 0 %}
         <div class="empty-collection">
             <p>
