@@ -23,7 +23,7 @@ modelops.AlterModelOptions.ALTER_OPTION_KEYS.remove("default_manager_name")
 modelops.AlterModelOptions.ALTER_OPTION_KEYS.remove("permissions")
 modelops.AlterModelOptions.ALTER_OPTION_KEYS.remove("default_permissions")
 IGNORED_ATTRS = [
-    # (field type, attribute name, blacklist of field sub-types)
+    # (field type, attribute name, banlist of field sub-types)
     (models.Field, 'verbose_name', []),
     (models.Field, 'help_text', []),
     (models.Field, 'validators', []),
@@ -38,8 +38,8 @@ original_deconstruct = models.Field.deconstruct
 
 def new_deconstruct(self):
     name, path, args, kwargs = original_deconstruct(self)
-    for ftype, attr, blacklist in IGNORED_ATTRS:
-        if isinstance(self, ftype) and not any(isinstance(self, ft) for ft in blacklist):
+    for ftype, attr, banlist in IGNORED_ATTRS:
+        if isinstance(self, ftype) and not any(isinstance(self, ft) for ft in banlist):
             kwargs.pop(attr, None)
     return name, path, args, kwargs
 

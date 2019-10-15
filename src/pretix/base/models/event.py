@@ -22,7 +22,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models.base import LoggedModel
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.validators import EventSlugBlacklistValidator
+from pretix.base.validators import EventSlugBanlistValidator
 from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
@@ -291,7 +291,7 @@ class Event(EventMixin, LoggedModel):
                 regex="^[a-zA-Z0-9.-]+$",
                 message=_("The slug may only contain letters, numbers, dots and dashes."),
             ),
-            EventSlugBlacklistValidator()
+            EventSlugBanlistValidator()
         ],
         verbose_name=_("Short form"),
     )

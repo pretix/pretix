@@ -4,13 +4,13 @@ from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _
 
 
-class BlacklistValidator:
+class BanlistValidator:
 
-    blacklist = []
+    banlist = []
 
     def __call__(self, value):
         # Validation logic
-        if value in self.blacklist:
+        if value in self.banlist:
             raise ValidationError(
                 _('This field has an invalid value: %(value)s.'),
                 code='invalid',
@@ -19,9 +19,9 @@ class BlacklistValidator:
 
 
 @deconstructible
-class EventSlugBlacklistValidator(BlacklistValidator):
+class EventSlugBanlistValidator(BanlistValidator):
 
-    blacklist = [
+    banlist = [
         'download',
         'healthcheck',
         'locale',
@@ -39,9 +39,9 @@ class EventSlugBlacklistValidator(BlacklistValidator):
 
 
 @deconstructible
-class OrganizerSlugBlacklistValidator(BlacklistValidator):
+class OrganizerSlugBanlistValidator(BanlistValidator):
 
-    blacklist = [
+    banlist = [
         'download',
         'healthcheck',
         'locale',
@@ -60,8 +60,8 @@ class OrganizerSlugBlacklistValidator(BlacklistValidator):
 
 
 @deconstructible
-class EmailBlacklistValidator(BlacklistValidator):
+class EmailBanlistValidator(BanlistValidator):
 
-    blacklist = [
+    banlist = [
         settings.PRETIX_EMAIL_NONE_VALUE,
     ]

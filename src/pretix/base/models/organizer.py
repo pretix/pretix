@@ -7,7 +7,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models.base import LoggedModel
-from pretix.base.validators import OrganizerSlugBlacklistValidator
+from pretix.base.validators import OrganizerSlugBanlistValidator
 
 from ..settings import settings_hierarkey
 from .auth import User
@@ -39,7 +39,7 @@ class Organizer(LoggedModel):
                 regex="^[a-zA-Z0-9.-]+$",
                 message=_("The slug may only contain letters, numbers, dots and dashes.")
             ),
-            OrganizerSlugBlacklistValidator()
+            OrganizerSlugBanlistValidator()
         ],
         verbose_name=_("Short form"),
         unique=True

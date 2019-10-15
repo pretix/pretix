@@ -30,7 +30,7 @@ from pretix.control.signals import (
 )
 from pretix.helpers.daterange import daterange
 
-from ..logdisplay import OVERVIEW_BLACKLIST
+from ..logdisplay import OVERVIEW_BANLIST
 
 NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="text">{text}</span></div>'
 
@@ -286,7 +286,7 @@ def event_index(request, organizer, event):
                                                           request=request)
     qs = request.event.logentry_set.all().select_related('user', 'content_type', 'api_token', 'oauth_application',
                                                          'device').order_by('-datetime')
-    qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
+    qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
     if not request.user.has_event_permission(request.organizer, request.event, 'can_view_orders', request=request):
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
     if not request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers', request=request):

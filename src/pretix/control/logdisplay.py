@@ -19,7 +19,7 @@ from pretix.base.models import (
 from pretix.base.signals import logentry_display
 from pretix.base.templatetags.money import money_filter
 
-OVERVIEW_BLACKLIST = [
+OVERVIEW_BANLIST = [
     'pretix.plugins.sendmail.order.email.sent'
 ]
 

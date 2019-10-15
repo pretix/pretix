@@ -49,7 +49,7 @@ from pretix.multidomain.urlreverse import get_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
-from ..logdisplay import OVERVIEW_BLACKLIST
+from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
 
 
@@ -868,7 +868,7 @@ class EventLog(EventPermissionRequiredMixin, ListView):
         qs = self.request.event.logentry_set.all().select_related(
             'user', 'content_type', 'api_token', 'oauth_application', 'device'
         ).order_by('-datetime')
-        qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
+        qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
         if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders',
                                                       request=self.request):
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
