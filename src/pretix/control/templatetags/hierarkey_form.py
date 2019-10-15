@@ -2,6 +2,8 @@ from django import template
 from django.template import Node
 from django.utils.translation import ugettext as _
 
+from pretix.base.models import Event
+
 register = template.Library()
 
 
@@ -39,15 +41,19 @@ class PropagatedNode(Node):
             </div>
             """.format(
                 body=body,
-                text_inh=_("Organizer-level settings"),
+                text_inh=_("Organizer-level settings") if isinstance(event, Event) else _('Site-level settings'),
                 fnames=','.join(self.field_names),
                 text_expl=_(
                     'These settings are currently set on organizer level. This way, you can easily change them for '
                     'all of your events at the same time. You can either go to the organizer settings to change them '
                     'or decouple them from the organizer account to change them for this event individually.'
+                ) if isinstance(event, Event) else _(
+                    'These settings are currently set on global level. This way, you can easily change them for '
+                    'all organizers at the same time. You can either go to the global settings to change them '
+                    'or decouple them from the global settings to change them for this event individually.'
                 ),
-                text_unlink=_('Change only for this event'),
-                text_orga=_('Change for all events'),
+                text_unlink=_('Change only for this event') if isinstance(event, Event) else _('Change only for this organizer'),
+                text_orga=_('Change for all events') if isinstance(event, Event) else _('Change for all organizers'),
                 url=url
             )
 

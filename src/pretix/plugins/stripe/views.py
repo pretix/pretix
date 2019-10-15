@@ -17,14 +17,20 @@ from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.generic import FormView
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Event, Order, OrderPayment, Quota
+from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.settings import GlobalSettingsObject
-from pretix.control.permissions import event_permission_required
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, event_permission_required,
+)
+from pretix.control.views.event import DecoupleMixin
+from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC, StripeSettingsHolder
 from pretix.plugins.stripe.tasks import (
@@ -580,3 +586,37 @@ class ScaReturnView(StripeOrderView, View):
         self.order.refresh_from_db()
 
         return render(request, 'pretixplugins/stripe/sca_return.html', {'order': self.order})
+
+
+class OrganizerSettingsFormView(DecoupleMixin, OrganizerDetailViewMixin, AdministratorPermissionRequiredMixin, FormView):
+    model = Organizer
+    permission = 'can_change_organizer_settings'
+    form_class = OrganizerStripeSettingsForm
+    template_name = 'pretixplugins/stripe/organizer_stripe.html'
+
+    def get_success_url(self):
+        return reverse('plugins:stripe:settings.connect', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['obj'] = self.request.organizer
+        return kwargs
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            if form.has_changed():
+                self.request.organizer.log_action(
+                    'pretix.organizer.settings', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                )
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.get(request)
