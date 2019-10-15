@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 <head>
     <title>{{ django_settings.PRETIX_INSTANCE_NAME }}</title>
     {% compress css %}

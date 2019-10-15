@@ -17,7 +17,7 @@
                 {% for application in applications %}
                     <tr>
                         <td><strong><a href="{% url "control:user.settings.oauth.app" pk=application.pk %}">{{ application.name }}</a></strong></td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             <a href="{% url "control:user.settings.oauth.app" pk=application.pk %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             <a href="{% url "control:user.settings.oauth.app.roll" pk=application.pk %}" class="btn btn-default btn-sm"><i class="fa fa-repeat"></i></a>
                             <a href="{% url "control:user.settings.oauth.app.disable" pk=application.pk %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>

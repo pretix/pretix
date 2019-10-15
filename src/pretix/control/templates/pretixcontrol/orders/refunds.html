@@ -43,8 +43,8 @@
                     <th>{% trans "Start date" %}</th>
                     <th>{% trans "Source" %}</th>
                     <th>{% trans "Status" %}</th>
-                    <th class="text-right">{% trans "Amount" %}</th>
-                    <th class="text-right">{% trans "Actions" %}</th>
+                    <th class="text-right flip">{% trans "Amount" %}</th>
+                    <th class="text-right flip">{% trans "Actions" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,10 +69,10 @@
                                 {{ r.get_state_display }}
                             </span>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             {{ r.amount|money:request.event.currency }}
                         </td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             {% if r.state == "transit" or r.state == "created" %}
                                 <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
                                    class="btn btn-danger btn-xs" data-toggle="tooltip">

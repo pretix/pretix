@@ -36,7 +36,7 @@
             </div>
             <div class="panel-body">
                 {% if not settings.PRETIX_OBLIGATORY_2FA %}
-                    <a href="{% url "control:user.settings.2fa.disable" %}" class="btn btn-primary pull-right">
+                    <a href="{% url "control:user.settings.2fa.disable" %}" class="btn btn-primary pull-right flip">
                         {% trans "Disable" %}
                     </a>
                 {% endif %}
@@ -52,7 +52,7 @@
             </div>
             <div class="panel-body">
                 {% if devices|length %}
-                    <a href="{% url "control:user.settings.2fa.enable" %}" class="btn btn-primary pull-right">
+                    <a href="{% url "control:user.settings.2fa.enable" %}" class="btn btn-primary pull-right flip">
                         {% trans "Enable" %}
                     </a>
                 {% endif %}
@@ -72,7 +72,7 @@
         <ul class="list-group">
             {% for d in devices %}
                 <li class="list-group-item">
-                    <a class="btn btn-danger btn-xs pull-right"
+                    <a class="btn btn-danger btn-xs pull-right flip"
                             href="{% url "control:user.settings.2fa.delete" devicetype=d.devicetype device=d.pk %}">
                         Delete
                     </a>

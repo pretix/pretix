@@ -34,7 +34,7 @@
                             <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file" name="file"/>
                         </div>
                         <div class="clearfix"></div>
-                        <button class="btn btn-primary pull-right" type="submit">
+                        <button class="btn btn-primary pull-right flip" type="submit">
                             <span class="icon icon-upload"></span> {% trans "Start upload" %}
                         </button>
                     </form>
@@ -65,7 +65,7 @@
                     <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
                 </form>
                 {% if not request.GET.search %}
-                    <form action="" method="post" class="helper-display-inline pull-right">
+                    <form action="" method="post" class="helper-display-inline pull-right flip">
                         {% csrf_token %}
                         <button class="btn btn-danger" type="submit" name="discard" value="all">
                             <span class="fa fa-trash"></span>

@@ -37,7 +37,7 @@
                             </a></strong>
                         </td>
                         <td>{{ tr.rate }} %</td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             <a href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             <a href="{% url "control:event.settings.tax.delete" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                         </td>

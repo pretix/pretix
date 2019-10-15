@@ -95,7 +95,7 @@
                             <span class="label label-warning">{% trans "Not yet on sale" %}</span>
                         {% endif %}
                     </td>
-                    <td class="text-right">
+                    <td class="text-right flip">
                         <a class="btn btn-primary" href="{{ url }}">
                             {% if e.has_subevents %}{% trans "Buy tickets" %}
                             {% elif e.presale_is_running and e.best_availability_state == 100 %}{% trans "Buy tickets" %}

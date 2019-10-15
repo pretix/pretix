@@ -15,7 +15,7 @@
                     {{ subev.date_from|date:"TIME_FORMAT" }}
                 {% endif %}
             </div>
-            <div class="col-md-2 text-right">
+            <div class="col-md-2 text-right flip">
                 {% if subev.presale_is_running and event.settings.event_list_availability %}
                     {% if subev.best_availability_state == 100 %}
                         <span class="label label-success">{% trans "Tickets on sale" %}</span>

@@ -43,7 +43,7 @@
                             <a href="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 and is_paginated and not page_obj.has_previous %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
                             <a href="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 and is_paginated and not page_obj.has_next %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ c.id }}"
                                class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">

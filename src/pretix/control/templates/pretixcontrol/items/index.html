@@ -93,7 +93,7 @@
                                 <a href="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 and is_paginated and not page_obj.has_previous %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
                                 <a href="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 and is_paginated and not page_obj.has_next %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
                             </td>
-                            <td class="text-right">
+                            <td class="text-right flip">
                                 <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "control:event.items.delete" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             </td>

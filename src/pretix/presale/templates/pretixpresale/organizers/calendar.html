@@ -18,7 +18,7 @@
             {% endif %}
         {% endfor %}
         <div class="row">
-            <div class="col-sm-4 col-xs-12">
+            <div class="col-sm-4 col-xs-12 text-left flip">
                 <div class="btn-group" role="group">
                     <a href="?{% url_replace request "style" "list" %}" type="button" class="btn btn-default">
                         <span class="fa fa-list"></span>
@@ -52,7 +52,7 @@
                     {% trans "Go" %}
                 </button>
             </div>
-            <div class="col-sm-4 hidden-xs text-right">
+            <div class="col-sm-4 hidden-xs text-right flip">
                 <a href="?{% url_replace request "year" before.year "month" before.month %}" class="btn btn-default">
                     <span class="fa fa-arrow-left"></span>
                     {{ before|date:"F Y" }}

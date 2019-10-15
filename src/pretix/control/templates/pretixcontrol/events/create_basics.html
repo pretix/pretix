@@ -8,7 +8,7 @@
         <div class="form-group">
             <label class="col-md-3 control-label" for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
             <div class="col-md-9 form-inline">
-                <button class="btn btn-default pull-right" type="button" id="event-slug-random-generate"
+                <button class="btn btn-default pull-right flip" type="button" id="event-slug-random-generate"
                         data-rng-url="{% url "control:events.add.slugrng" organizer=organizer.slug %}">
                     {% trans "Set to random" %}
                 </button>

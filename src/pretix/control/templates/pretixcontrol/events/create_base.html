@@ -15,12 +15,12 @@
             {% block form %}
             {% endblock %}
             <div class="form-group submit-group">
-                <button type="submit" class="btn btn-primary btn-save pull-right">
+                <button type="submit" class="btn btn-primary btn-save pull-right flip">
                     {% trans "Continue" %}
                 </button>
                 {% if wizard.steps.prev %}
                     <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}"
-                            class="btn btn-default btn-lg pull-left">
+                            class="btn btn-default btn-lg pull-left flip">
                         {% trans "Back" %}
                     </button>
                 {% endif %}

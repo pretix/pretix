@@ -118,7 +118,7 @@
                                 </ul>
                             {% endif %}
                         </td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
                             {% if "can_change_event_settings" in request.eventpermset %}
                                 <a href="{% url "control:event.orders.checkinlists.edit" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>

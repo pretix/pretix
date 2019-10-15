@@ -17,7 +17,7 @@
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 {% if show_fees %}
-                                <strong class="pull-right">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
+                                   <strong class="pull-right flip">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
                                 {% endif %}
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                         title="{{ p.provider.public_name }}"

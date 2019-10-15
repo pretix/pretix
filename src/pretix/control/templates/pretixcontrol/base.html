@@ -6,7 +6,7 @@
 {% load eventsignal %}
 {% load eventurl %}
 <!DOCTYPE html>
-<html>
+<html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 	<head>
 		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}
             {{ settings.PRETIX_INSTANCE_NAME }}</title>
@@ -123,7 +123,7 @@
                         {{ settings.PRETIX_INSTANCE_NAME }}
                     </a>
                 </div>
-                <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
+                <ul class="nav navbar-nav navbar-top-links navbar-left flip hidden-xs">
                     {% if request.event %}
                         <li>
                             {% if has_domain and not request.event.live %}
@@ -147,7 +147,7 @@
                         </li>
                     {% endif %}
                 </ul>
-                <ul class="nav navbar-nav navbar-top-links navbar-right">
+                <ul class="nav navbar-nav navbar-top-links navbar-right flip">
                     {% for nav in nav_topbar %}
                         <li {% if nav.children %}class="dropdown"{% endif %}>
                             <a href="{{ nav.url }}" title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}

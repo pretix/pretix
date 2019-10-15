@@ -137,7 +137,7 @@
                             {% if request.event.has_subevents %}
                                 <td>{{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}</td>
                             {% endif %}
-                            <td class="text-right">
+                            <td class="text-right flip">
                                 <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ v.id }}"
                                    class="btn btn-sm btn-default" title="{% trans "Use as a template for new vouchers" %}" data-toggle="tooltip">
                                     <span class="fa fa-copy"></span>
