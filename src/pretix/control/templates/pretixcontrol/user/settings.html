@@ -33,10 +33,14 @@
     </fieldset>
     <fieldset>
         <legend>{% trans "Login settings" %}</legend>
-        {% bootstrap_field form.old_pw layout='horizontal' %}
+        {% if form.old_pw %}
+            {% bootstrap_field form.old_pw layout='horizontal' %}
+        {% endif %}
         {% bootstrap_field form.email layout='horizontal' %}
-        {% bootstrap_field form.new_pw layout='horizontal' %}
-        {% bootstrap_field form.new_pw_repeat layout='horizontal' %}
+        {% if form.new_pw %}
+            {% bootstrap_field form.new_pw layout='horizontal' %}
+            {% bootstrap_field form.new_pw_repeat layout='horizontal' %}
+        {% endif %}
         <div class="form-group">
             <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Two-factor authentication" %}</label>
             <div class="col-md-9 static-form-row">

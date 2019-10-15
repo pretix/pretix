@@ -133,6 +133,9 @@ def invite(request, token):
     """
     ctx = {}
 
+    if 'native' not in get_auth_backends():
+        raise PermissionDenied('Invites are disabled')
+
     try:
         inv = TeamInvite.objects.get(token=token)
     except TeamInvite.DoesNotExist:
@@ -202,7 +205,7 @@ class Forgot(TemplateView):
     template_name = 'pretixcontrol/auth/forgot.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not settings.PRETIX_PASSWORD_RESET:
+        if not settings.PRETIX_PASSWORD_RESET or 'native' not in get_auth_backends():
             raise PermissionDenied('Password reset is disabled')
         return super().dispatch(request, *args, **kwargs)
 

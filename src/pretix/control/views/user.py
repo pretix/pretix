@@ -23,6 +23,8 @@ from django.views.generic import FormView, ListView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
+from pretix.base.auth import get_auth_backends
+from pretix.base.forms.auth import ReauthForm
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
 from pretix.base.models import (
     Event, LogEntry, NotificationSetting, U2FDevice, User, WebAuthnDevice,
@@ -54,13 +56,13 @@ class ReauthView(TemplateView):
     template_name = 'pretixcontrol/user/reauth.html'
 
     def post(self, request, *args, **kwargs):
-        password = request.POST.get("password", "")
+        r = request.POST.get("webauthn", "")
         valid = False
 
-        if 'webauthn_challenge' in self.request.session and password.startswith('{'):
+        if 'webauthn_challenge' in self.request.session and r.startswith('{'):
             challenge = self.request.session['webauthn_challenge']
 
-            resp = json.loads(password)
+            resp = json.loads(r)
             try:
                 devices = [WebAuthnDevice.objects.get(user=self.request.user, credential_id=resp.get("id"))]
             except WebAuthnDevice.DoesNotExist:
@@ -93,7 +95,7 @@ class ReauthView(TemplateView):
                     valid = True
                     break
 
-        valid = valid or request.user.check_password(password)
+        valid = valid or self.form.is_valid()
 
         if valid:
             t = int(time.time())
@@ -105,6 +107,14 @@ class ReauthView(TemplateView):
         else:
             messages.error(request, _('The password you entered was invalid, please try again.'))
             return self.get(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        u = get_auth_backends()[request.user.auth_backend].request_authenticate(request)
+        if u and u == request.user:
+            if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
+                return redirect(request.GET.get("next"))
+            return redirect(reverse('control:index'))
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
@@ -127,7 +137,20 @@ class ReauthView(TemplateView):
                 'appid': get_u2f_appid(self.request)
             }
             ctx['jsondata'] = json.dumps(ad)
+        ctx['form'] = self.form
         return ctx
+
+    @cached_property
+    def form(self):
+        return ReauthForm(
+            user=self.request.user,
+            backend=get_auth_backends()[self.request.user.auth_backend],
+            request=self.request,
+            data=self.request.POST if self.request.method == "POST" else None,
+            initial={
+                'email': self.request.user.email,
+            }
+        )
 
 
 class UserSettings(UpdateView):

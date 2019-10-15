@@ -11,6 +11,7 @@ from django.views import View
 from django.views.generic import ListView, TemplateView
 from hijack.helpers import login_user, release_hijack
 
+from pretix.base.auth import get_auth_backends
 from pretix.base.models import User
 from pretix.base.services.mail import SendMailException
 from pretix.control.forms.filter import UserFilterForm
@@ -52,6 +53,10 @@ class UserEditView(AdministratorPermissionRequiredMixin, RecentAuthenticationReq
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['teams'] = self.object.teams.select_related('organizer')
+        b = get_auth_backends()
+        ctx['backend'] = (
+            b[self.object.auth_backend].verbose_name if self.object.auth_backend in b else self.object.auth_backend
+        )
         return ctx
 
     def get_success_url(self):

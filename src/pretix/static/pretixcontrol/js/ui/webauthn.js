@@ -163,6 +163,7 @@ const startLogin = async (e) => {
     const transformedAssertionForServer = transformAssertionForServer(assertion);
 
     // post the assertion to the server for verification.
+    $("input, select, textarea").prop("required", false);
     $("#webauthn-response, #id_password").val(JSON.stringify(transformedAssertionForServer));
     $("#webauthn-form").submit();
 };

@@ -16,7 +16,7 @@ class LoginForm(forms.Form):
     keep_logged_in = forms.BooleanField(label=_("Keep me logged in"), required=False)
 
     error_messages = {
-        'invalid_login': _("Please enter a correct email address and password."),
+        'invalid_login': _("This combination of credentials is not known to our system."),
         'inactive': _("This account is inactive.")
     }
 
@@ -38,18 +38,14 @@ class LoginForm(forms.Form):
             self.fields.move_to_end('keep_logged_in')
 
     def clean(self):
-        email = self.cleaned_data.get('email')
-        password = self.cleaned_data.get('password')
-
-        if email and password:
-            self.user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
-            if self.user_cache is None:
-                raise forms.ValidationError(
-                    self.error_messages['invalid_login'],
-                    code='invalid_login'
-                )
-            else:
-                self.confirm_login_allowed(self.user_cache)
+        self.user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
+        if self.user_cache is None:
+            raise forms.ValidationError(
+                self.error_messages['invalid_login'],
+                code='invalid_login'
+            )
+        else:
+            self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data
 
@@ -184,3 +180,45 @@ class PasswordForgotForm(forms.Form):
 
     def clean_email(self):
         return self.cleaned_data['email']
+
+
+class ReauthForm(forms.Form):
+    error_messages = {
+        'invalid_login': _("This combination of credentials is not known to our system."),
+        'inactive': _("This account is inactive.")
+    }
+
+    def __init__(self, backend, user, request=None, *args, **kwargs):
+        """
+        The 'request' parameter is set for custom auth use by subclasses.
+        The form data comes in via the standard 'data' kwarg.
+        """
+        self.request = request
+        self.user = user
+        self.backend = backend
+        super().__init__(*args, **kwargs)
+        for k, f in backend.login_form_fields.items():
+            self.fields[k] = f
+        if 'email' in self.fields:
+            self.fields['email'].disabled = True
+
+    def clean(self):
+        self.cleaned_data['email'] = self.user.email
+        user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
+        print(user_cache, self.user)
+        if user_cache != self.user:
+            raise forms.ValidationError(
+                self.error_messages['invalid_login'],
+                code='invalid_login'
+            )
+        else:
+            self.confirm_login_allowed(user_cache)
+
+        return self.cleaned_data
+
+    def confirm_login_allowed(self, user: User):
+        if not user.is_active:
+            raise forms.ValidationError(
+                self.error_messages['inactive'],
+                code='inactive',
+            )
