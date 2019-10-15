@@ -88,7 +88,7 @@ msgstr "Все мероприятия (включая вновь созданн�
 #: pretix/api/models.py:78 pretix/base/models/devices.py:47
 #: pretix/base/models/organizer.py:143
 msgid "Limit to events"
-msgstr ""
+msgstr "Ограничение на события"
 
 #: pretix/api/serializers/cart.py:58 pretix/api/serializers/order.py:778
 msgid "The product \"{}\" is not assigned to a quota."
@@ -108,7 +108,7 @@ msgstr ""
 #: pretix/api/serializers/checkin.py:28 pretix/base/models/event.py:1023
 #: pretix/base/models/items.py:1159 pretix/base/models/items.py:1514
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Один или несколько предметов не относятся к этому событию."
 
 #: pretix/api/serializers/checkin.py:32 pretix/base/models/items.py:1523
 #: pretix/base/models/waitinglist.py:149
@@ -123,7 +123,7 @@ msgstr ""
 
 #: pretix/api/serializers/checkin.py:41
 msgid "Unknown sales channel."
-msgstr ""
+msgstr "Неизвестный канал продаж."
 
 #: pretix/api/serializers/event.py:101
 msgid ""
@@ -143,7 +143,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:673
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "Связанный товар не должен совпадать с товаром в комплекте."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:675
 msgid "The bundled item must not have bundles on its own."
@@ -175,12 +175,12 @@ msgstr ""
 #: pretix/api/views/order.py:331 pretix/control/views/orders.py:946
 #: pretix/presale/views/order.py:599
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Вы не можете сгенерировать счет для этого заказа."
 
 #: pretix/api/views/order.py:336 pretix/control/views/orders.py:948
 #: pretix/presale/views/order.py:601
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Счет на этот заказ уже существует."
 
 #: pretix/api/views/order.py:362 pretix/control/views/orders.py:1074
 #: pretix/control/views/users.py:92
