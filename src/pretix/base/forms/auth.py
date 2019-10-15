@@ -1,6 +1,5 @@
 from django import forms
 from django.conf import settings
-from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
@@ -14,8 +13,6 @@ class LoginForm(forms.Form):
     Base class for authenticating users. Extend this to get a form that accepts
     username/password logins.
     """
-    email = forms.EmailField(label=_("E-mail"), max_length=254, widget=forms.EmailInput(attrs={'autofocus': 'autofocus'}))
-    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
     keep_logged_in = forms.BooleanField(label=_("Keep me logged in"), required=False)
 
     error_messages = {
@@ -23,23 +20,29 @@ class LoginForm(forms.Form):
         'inactive': _("This account is inactive.")
     }
 
-    def __init__(self, request=None, *args, **kwargs):
+    def __init__(self, backend, request=None, *args, **kwargs):
         """
         The 'request' parameter is set for custom auth use by subclasses.
         The form data comes in via the standard 'data' kwarg.
         """
         self.request = request
         self.user_cache = None
+        self.backend = backend
         super().__init__(*args, **kwargs)
+        for k, f in backend.login_form_fields.items():
+            self.fields[k] = f
+
         if not settings.PRETIX_LONG_SESSIONS:
             del self.fields['keep_logged_in']
+        else:
+            self.fields.move_to_end('keep_logged_in')
 
     def clean(self):
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
 
         if email and password:
-            self.user_cache = authenticate(request=self.request, email=email.lower(), password=password)
+            self.user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
             if self.user_cache is None:
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],
