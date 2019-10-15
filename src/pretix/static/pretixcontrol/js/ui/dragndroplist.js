@@ -21,9 +21,9 @@ $(function () {
 
         Sortable.create(container.get(0), {
             handle: ".dnd-sort-handle",
-            onSort: function(evt){
+            onSort: function (evt){
                 var container = $(evt.to),
-                    ids = container.find("[data-dnd-id]").toArray().map(e => e.dataset.dndId);
+                    ids = container.find("[data-dnd-id]").toArray().map(function (e) { return e.dataset.dndId; });
 
                 hideArrows(container);
 
