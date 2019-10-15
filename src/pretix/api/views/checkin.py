@@ -44,7 +44,6 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         qs = self.request.event.checkin_lists.prefetch_related(
             'limit_products',
         )
-        qs = CheckinList.annotate_with_numbers(qs, self.request.event)
         return qs
 
     def perform_create(self, serializer):

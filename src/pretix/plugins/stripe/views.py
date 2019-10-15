@@ -17,14 +17,20 @@ from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.generic import FormView
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Event, Order, OrderPayment, Quota
+from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.settings import GlobalSettingsObject
-from pretix.control.permissions import event_permission_required
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, event_permission_required,
+)
+from pretix.control.views.event import DecoupleMixin
+from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC, StripeSettingsHolder
 from pretix.plugins.stripe.tasks import (
@@ -170,20 +176,24 @@ def webhook(request, *args, **kwargs):
         rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(reference=objid)
         return func(rso.order.event, event_json, objid, rso)
     except ReferencedStripeObject.DoesNotExist:
-        if hasattr(request, 'event'):
-            return func(request.event, event_json, objid, None)
-        else:
+        if event_json['data']['object']['object'] == "charge" and 'payment_intent' in event_json['data']['object']:
             # If we receive a charge webhook *before* the payment intent webhook, we don't know the charge ID yet
             # and can't match it -- but we know the payment intent ID!
-            if event_json['data']['object']['object'] == "charge" and event_json['data']['object']['payment_intent']:
-                try:
-                    rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
-                        reference=event_json['data']['object']['payment_intent']
-                    )
-                    return func(rso.order.event, event_json, objid, rso)
-                except ReferencedStripeObject.DoesNotExist:
-                    pass
-
+            try:
+                rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
+                    reference=event_json['data']['object']['payment_intent']
+                )
+                return func(rso.order.event, event_json, objid, rso)
+            except ReferencedStripeObject.DoesNotExist:
+                return HttpResponse("Unable to detect event", status=200)
+        elif hasattr(request, 'event') and func != paymentintent_webhook:
+            # This is a legacy integration from back when didn't have ReferencedStripeObject. This can't happen for
+            # payment intents or charges connected with payment intents since they didn't exist back then. Our best
+            # hope is to go for request.event and see if we can find the order ID.
+            return func(request.event, event_json, objid, None)
+        else:
+            # Okay, this is probably not an event that concerns us, maybe other applications talk to the same stripe
+            # account
             return HttpResponse("Unable to detect event", status=200)
 
 
@@ -366,7 +376,7 @@ def source_webhook(event, event_json, source_id, rso):
                 'info': str(src)
             })
             payment.save()
-        elif src.status == 'canceled' and payment.state in (OrderPayment.STATUS_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
+        elif src.status == 'canceled' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
             payment.info = str(src)
             payment.state = OrderPayment.PAYMENT_STATE_CANCELED
             payment.save()
@@ -576,3 +586,37 @@ class ScaReturnView(StripeOrderView, View):
         self.order.refresh_from_db()
 
         return render(request, 'pretixplugins/stripe/sca_return.html', {'order': self.order})
+
+
+class OrganizerSettingsFormView(DecoupleMixin, OrganizerDetailViewMixin, AdministratorPermissionRequiredMixin, FormView):
+    model = Organizer
+    permission = 'can_change_organizer_settings'
+    form_class = OrganizerStripeSettingsForm
+    template_name = 'pretixplugins/stripe/organizer_stripe.html'
+
+    def get_success_url(self):
+        return reverse('plugins:stripe:settings.connect', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['obj'] = self.request.organizer
+        return kwargs
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            if form.has_changed():
+                self.request.organizer.log_action(
+                    'pretix.organizer.settings', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                )
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.get(request)

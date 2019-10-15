@@ -1,11 +1,11 @@
 from django.db import models
-from django.db.models import Case, Count, F, OuterRef, Q, Subquery, When
-from django.db.models.functions import Coalesce
+from django.db.models import Exists, OuterRef
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_scopes import ScopedManager
 
 from pretix.base.models import LoggedModel
+from pretix.base.models.fields import MultiStringField
 
 
 class CheckinList(LoggedModel):
@@ -18,142 +18,69 @@ class CheckinList(LoggedModel):
     include_pending = models.BooleanField(verbose_name=pgettext_lazy('checkin', 'Include pending orders'),
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '
-                                                      'order have not been paid. This only works with pretixdesk '
-                                                      '0.3.0 or newer or pretixdroid 1.9 or newer.'))
+                                                      'order have not been paid.'))
+
+    auto_checkin_sales_channels = MultiStringField(
+        default=[],
+        blank=True,
+        verbose_name=_('Sales channels to automatically check in'),
+        help_text=_('All items on this check-in list will be automatically marked as checked-in when purchased through '
+                    'any of the selected sales channels. This option can be useful when tickets sold at the box office '
+                    'are not checked again before entry and should be considered validated directly upon purchase.')
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
         ordering = ('subevent__date_from', 'name')
 
+    @property
+    def positions(self):
+        from . import OrderPosition, Order
+
+        qs = OrderPosition.objects.filter(
+            order__event=self.event,
+            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [Order.STATUS_PAID],
+            subevent=self.subevent
+        )
+        if not self.all_products:
+            qs = qs.filter(item__in=self.limit_products.values_list('id', flat=True))
+        return qs
+
+    @property
+    def checkin_count(self):
+        return self.event.cache.get_or_set(
+            'checkin_list_{}_checkin_count'.format(self.pk),
+            lambda: self.positions.annotate(
+                checkedin=Exists(Checkin.objects.filter(list_id=self.pk, position=OuterRef('pk')))
+            ).filter(
+                checkedin=True
+            ).count(),
+            60
+        )
+
+    @property
+    def percent(self):
+        pc = self.position_count
+        return round(self.checkin_count * 100 / pc) if pc else 0
+
+    @property
+    def position_count(self):
+        return self.event.cache.get_or_set(
+            'checkin_list_{}_position_count'.format(self.pk),
+            lambda: self.positions.count(),
+            60
+        )
+
+    def touch(self):
+        self.event.cache.delete('checkin_list_{}_position_count'.format(self.pk))
+        self.event.cache.delete('checkin_list_{}_checkin_count'.format(self.pk))
+
     @staticmethod
     def annotate_with_numbers(qs, event):
-        """
-        Modifies a queryset of checkin lists by annotating it with the number of order positions and
-        checkins associated with it.
-        """
-        # Import here to prevent circular import
-        from . import Order, OrderPosition, Item
-
-        # This is the mother of all subqueries. Sorry. I try to explain it, at least?
-        # First, we prepare a subquery that for every check-in that belongs to a paid-order
-        # position and to the list in question. Then, we check that it also belongs to the
-        # correct subevent (just to be sure) and aggregate over lists (so, over everything,
-        # since we filtered by lists).
-        cqs_paid = Checkin.objects.filter(
-            position__order__event=event,
-            position__order__status=Order.STATUS_PAID,
-            list=OuterRef('pk')
-        ).filter(
-            # This assumes that in an event with subevents, *all* positions have subevents
-            # and *all* checkin lists have a subevent assigned
-            Q(position__subevent=OuterRef('subevent'))
-            | (Q(position__subevent__isnull=True))
-        ).order_by().values('list').annotate(
-            c=Count('*')
-        ).values('c')
-        cqs_paid_and_pending = Checkin.objects.filter(
-            position__order__event=event,
-            position__order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING],
-            list=OuterRef('pk')
-        ).filter(
-            # This assumes that in an event with subevents, *all* positions have subevents
-            # and *all* checkin lists have a subevent assigned
-            Q(position__subevent=OuterRef('subevent'))
-            | (Q(position__subevent__isnull=True))
-        ).order_by().values('list').annotate(
-            c=Count('*')
-        ).values('c')
-
-        # Now for the hard part: getting all order positions that contribute to this list. This
-        # requires us to use TWO subqueries. The first one, pqs_all, will only be used for check-in
-        # lists that contain all the products of the event. This is the simpler one, it basically
-        # looks like the check-in counter above.
-        pqs_all_paid = OrderPosition.objects.filter(
-            order__event=event,
-            order__status=Order.STATUS_PAID,
-        ).filter(
-            # This assumes that in an event with subevents, *all* positions have subevents
-            # and *all* checkin lists have a subevent assigned
-            Q(subevent=OuterRef('subevent'))
-            | (Q(subevent__isnull=True))
-        ).order_by().values('order__event').annotate(
-            c=Count('*')
-        ).values('c')
-        pqs_all_paid_and_pending = OrderPosition.objects.filter(
-            order__event=event,
-            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING]
-        ).filter(
-            # This assumes that in an event with subevents, *all* positions have subevents
-            # and *all* checkin lists have a subevent assigned
-            Q(subevent=OuterRef('subevent'))
-            | (Q(subevent__isnull=True))
-        ).order_by().values('order__event').annotate(
-            c=Count('*')
-        ).values('c')
-
-        # Now we need a subquery for the case of checkin lists that are limited to certain
-        # products. We cannot use OuterRef("limit_products") since that would do a cross-product
-        # with the products table and we'd get duplicate rows in the output with different annotations
-        # on them, which isn't useful at all. Therefore, we need to add a second layer of subqueries
-        # to retrieve all of those items and then check if the item_id is IN this subquery result.
-        pqs_limited_paid = OrderPosition.objects.filter(
-            order__event=event,
-            order__status=Order.STATUS_PAID,
-            item_id__in=Subquery(Item.objects.filter(checkinlist__pk=OuterRef(OuterRef('pk'))).values('pk'))
-        ).filter(
-            # This assumes that in an event with subevents, *all* positions have subevents
-            # and *all* checkin lists have a subevent assigned
-            Q(subevent=OuterRef('subevent'))
-            | (Q(subevent__isnull=True))
-        ).order_by().values('order__event').annotate(
-            c=Count('*')
-        ).values('c')
-        pqs_limited_paid_and_pending = OrderPosition.objects.filter(
-            order__event=event,
-            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING],
-            item_id__in=Subquery(Item.objects.filter(checkinlist__pk=OuterRef(OuterRef('pk'))).values('pk'))
-        ).filter(
-            # This assumes that in an event with subevents, *all* positions have subevents
-            # and *all* checkin lists have a subevent assigned
-            Q(subevent=OuterRef('subevent'))
-            | (Q(subevent__isnull=True))
-        ).order_by().values('order__event').annotate(
-            c=Count('*')
-        ).values('c')
-
-        # Finally, we put all of this together. We force empty subquery aggregates to 0 by using Coalesce()
-        # and decide which subquery to use for this row. In the end, we compute an integer percentage in case
-        # we want to display a progress bar.
-        return qs.annotate(
-            checkin_count=Coalesce(
-                Case(
-                    When(include_pending=True, then=Subquery(cqs_paid_and_pending, output_field=models.IntegerField())),
-                    default=Subquery(cqs_paid, output_field=models.IntegerField()),
-                    output_field=models.IntegerField()
-                ),
-                0
-            ),
-            position_count=Coalesce(
-                Case(
-                    When(all_products=True, include_pending=False,
-                         then=Subquery(pqs_all_paid, output_field=models.IntegerField())),
-                    When(all_products=True, include_pending=True,
-                         then=Subquery(pqs_all_paid_and_pending, output_field=models.IntegerField())),
-                    When(all_products=False, include_pending=False,
-                         then=Subquery(pqs_limited_paid, output_field=models.IntegerField())),
-                    default=Subquery(pqs_limited_paid_and_pending, output_field=models.IntegerField()),
-                    output_field=models.IntegerField()
-                ),
-                0
-            )
-        ).annotate(
-            percent=Case(
-                When(position_count__gt=0, then=F('checkin_count') * 100 / F('position_count')),
-                default=0,
-                output_field=models.IntegerField()
-            )
-        )
+        # This is only kept for backwards-compatibility reasons. This method used to precompute .position_count
+        # and .checkin_count through a huge subquery chain, but was dropped for performance reasons.
+        return qs
 
     def __str__(self):
         return self.name
@@ -169,6 +96,7 @@ class Checkin(models.Model):
     list = models.ForeignKey(
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
     )
+    auto_checked_in = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='position__order__event__organizer')
 
@@ -182,8 +110,11 @@ class Checkin(models.Model):
 
     def save(self, **kwargs):
         self.position.order.touch()
+        self.list.event.cache.delete('checkin_count')
+        self.list.touch()
         super().save(**kwargs)
 
     def delete(self, **kwargs):
         self.position.order.touch()
         super().delete(**kwargs)
+        self.list.touch()

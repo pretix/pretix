@@ -31,7 +31,9 @@ from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
 
+from pretix.base.banlist import banned
 from pretix.base.decimal import round_decimal
+from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
@@ -535,15 +537,29 @@ class Order(LockModel, LoggedModel):
         # handwriting (2/Z, 4/A, 5/S, 6/G). This allows for better detection e.g. in incoming wire transfers that
         # might include OCR'd handwritten text
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
+        iteration = 0
+        length = settings.ENTROPY['order_code']
         while True:
-            code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
+            code = get_random_string(length=length, allowed_chars=charset)
+            iteration += 1
+
+            if banned(code):
+                continue
+
             if self.testmode:
                 # Subtle way to recognize test orders while debugging: They all contain a 0 at the second place,
                 # even though zeros are not used outside test mode.
                 code = code[0] + "0" + code[2:]
+
             if not Order.objects.filter(event__organizer=self.event.organizer, code=code).exists():
                 self.code = code
                 return
+
+            if iteration > 20:
+                # Safeguard: If we don't find an unused and non-blacklisted code within 20 iterations, we increase
+                # the length.
+                length += 1
+                iteration = 0
 
     @property
     def can_modify_answers(self) -> bool:
@@ -757,26 +773,9 @@ class Order(LockModel, LoggedModel):
                 )
 
     def resend_link(self, user=None, auth=None):
-        from pretix.multidomain.urlreverse import build_absolute_uri
-
         with language(self.locale):
-            try:
-                invoice_name = self.invoice_address.name
-                invoice_company = self.invoice_address.company
-            except InvoiceAddress.DoesNotExist:
-                invoice_name = ""
-                invoice_company = ""
             email_template = self.event.settings.mail_text_resend_link
-            email_context = {
-                'event': self.event.name,
-                'url': build_absolute_uri(self.event, 'presale:event.order.open', kwargs={
-                    'order': self.code,
-                    'secret': self.secret,
-                    'hash': self.email_confirm_hash()
-                }),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-            }
+            email_context = get_email_context(event=self.event, order=self)
             email_subject = _('Your order: %(code)s') % {'code': self.code}
             self.send_mail(
                 email_subject, email_template, email_context,
@@ -1313,24 +1312,10 @@ class OrderPayment(models.Model):
 
     def _send_paid_mail_attendee(self, position, user):
         from pretix.base.services.mail import SendMailException
-        from pretix.multidomain.urlreverse import build_absolute_uri
 
         with language(self.order.locale):
-            name_scheme = PERSON_NAME_SCHEMES[self.order.event.settings.name_scheme]
             email_template = self.order.event.settings.mail_text_order_paid_attendee
-            email_context = {
-                'event': self.order.event.name,
-                'downloads': self.order.event.settings.get('ticket_download', as_type=bool),
-                'url': build_absolute_uri(self.order.event, 'presale:event.order.position', kwargs={
-                    'order': self.order.code,
-                    'secret': position.web_secret,
-                    'position': position.positionid
-                }),
-                'attendee_name': position.attendee_name,
-            }
-            for f, l, w in name_scheme['fields']:
-                email_context['attendee_name_%s' % f] = position.attendee_name_parts.get(f, '')
-
+            email_context = get_email_context(event=self.order.event, order=self.order, position=position)
             email_subject = _('Event registration confirmed: %(code)s') % {'code': self.order.code}
             try:
                 self.order.send_mail(
@@ -1344,28 +1329,10 @@ class OrderPayment(models.Model):
 
     def _send_paid_mail(self, invoice, user, mail_text):
         from pretix.base.services.mail import SendMailException
-        from pretix.multidomain.urlreverse import build_absolute_uri
 
         with language(self.order.locale):
-            try:
-                invoice_name = self.order.invoice_address.name
-                invoice_company = self.order.invoice_address.company
-            except InvoiceAddress.DoesNotExist:
-                invoice_name = ""
-                invoice_company = ""
             email_template = self.order.event.settings.mail_text_order_paid
-            email_context = {
-                'event': self.order.event.name,
-                'url': build_absolute_uri(self.order.event, 'presale:event.order.open', kwargs={
-                    'order': self.order.code,
-                    'secret': self.order.secret,
-                    'hash': self.order.email_confirm_hash()
-                }),
-                'downloads': self.order.event.settings.get('ticket_download', as_type=bool),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-                'payment_info': mail_text
-            }
+            email_context = get_email_context(event=self.order.event, order=self.order, payment_info=mail_text)
             email_subject = _('Payment received for your order: %(code)s') % {'code': self.order.code}
             try:
                 self.order.send_mail(
@@ -1947,32 +1914,10 @@ class OrderPosition(AbstractPosition):
                 )
 
     def resend_link(self, user=None, auth=None):
-        from pretix.multidomain.urlreverse import build_absolute_uri
 
         with language(self.order.locale):
-            try:
-                invoice_name = self.order.invoice_address.name
-                invoice_company = self.order.invoice_address.company
-            except InvoiceAddress.DoesNotExist:
-                invoice_name = ""
-                invoice_company = ""
-            if self.attendee_name:
-                invoice_name = self.attendee_name
             email_template = self.event.settings.mail_text_resend_link
-            email_context = {
-                'event': self.event.name,
-                'url': build_absolute_uri(self.event, 'presale:event.order.position', kwargs={
-                    'order': self.order.code,
-                    'secret': self.web_secret,
-                    'position': self.positionid
-                }),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-                'attendee_name': self.attendee_name,
-            }
-            name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
-            for f, l, w in name_scheme['fields']:
-                email_context['attendee_name_%s' % f] = self.attendee_name_parts.get(f, '')
+            email_context = get_email_context(event=self.order.event, order=self.order, position=self)
             email_subject = _('Your event registration: %(code)s') % {'code': self.order.code}
             self.send_mail(
                 email_subject, email_template, email_context,

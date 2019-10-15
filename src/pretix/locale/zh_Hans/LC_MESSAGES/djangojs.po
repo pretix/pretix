@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 06:55+0000\n"
+"POT-Creation-Date: 2019-10-08 13:57+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -84,7 +84,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:76
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixbase/js/asynctask.js:147
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
+#: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "发生类型为{code}的错误。"
 
@@ -95,12 +95,12 @@ msgid ""
 msgstr "我们目前无法连接到服务器，但我们一直在尝试。最后的错误代码为:{code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixcontrol/js/ui/mail.js:20
+#: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took to long. Please try again."
 msgstr "服务器请求超时。请再试一次。"
 
 #: pretix/static/pretixbase/js/asynctask.js:150
-#: pretix/static/pretixcontrol/js/ui/mail.js:25
+#: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "我们目前无法连接到服务器。请再试一次。错误代码为:{code}"
@@ -180,11 +180,11 @@ msgstr "上传PDF文件时出错，请重试。"
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "你真的想离开编辑器而不保存你的更改吗?"
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:18
+#: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
 msgstr "发生一个错误。"
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:52
+#: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
 msgstr "生成消息…"
 

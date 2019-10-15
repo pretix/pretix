@@ -378,7 +378,7 @@ def replace_images_with_cid_paths(body_html):
 def attach_cid_images(msg, cid_images, verify_ssl=True):
     if cid_images and len(cid_images) > 0:
 
-        msg.mixed_subtype = 'related'
+        msg.mixed_subtype = 'mixed'
         for key, image in enumerate(cid_images):
             cid = 'image_%s' % key
             try:

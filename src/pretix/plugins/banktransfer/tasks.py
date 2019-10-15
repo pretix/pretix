@@ -2,25 +2,21 @@ import logging
 import re
 from decimal import Decimal
 
-import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
-from django.utils.formats import date_format
 from django.utils.translation import ugettext, ugettext_noop
 from django_scopes import scope, scopes_disabled
 
+from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import (
-    Event, InvoiceAddress, Order, OrderPayment, Organizer, Quota,
-)
+from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import change_payment_provider
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.celery_app import app
-from pretix.multidomain.urlreverse import build_absolute_uri
 
 from .models import BankImportJob, BankTransaction
 
@@ -29,25 +25,8 @@ logger = logging.getLogger(__name__)
 
 def notify_incomplete_payment(o: Order):
     with language(o.locale):
-        tz = pytz.timezone(o.event.settings.get('timezone', settings.TIME_ZONE))
-        try:
-            invoice_name = o.invoice_address.name
-            invoice_company = o.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
         email_template = o.event.settings.mail_text_order_expire_warning
-        email_context = {
-            'event': o.event.name,
-            'url': build_absolute_uri(o.event, 'presale:event.order.open', kwargs={
-                'order': o.code,
-                'secret': o.secret,
-                'hash': o.email_confirm_hash()
-            }),
-            'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
-            'invoice_name': invoice_name,
-            'invoice_company': invoice_company,
-        }
+        email_context = get_email_context(event=o.event, order=o)
         email_subject = ugettext('Your order received an incomplete payment: %(code)s') % {'code': o.code}
 
         try:
@@ -119,8 +98,9 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
         }
 
         if created:
-            # We're perform a payment method switchign on-demand here
-            old_fee, new_fee, fee = change_payment_provider(trans.order, p.payment_provider, p.amount, new_payment=p)  # noqa
+            # We're perform a payment method switching on-demand here
+            old_fee, new_fee, fee, p = change_payment_provider(trans.order, p.payment_provider, p.amount,
+                                                               new_payment=p, create_log=False)  # noqa
             if fee:
                 p.fee = fee
                 p.save(update_fields=['fee'])

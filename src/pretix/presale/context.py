@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.utils.translation import get_language_info
+from django_scopes import get_scope
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.settings import GlobalSettingsObject
@@ -43,7 +44,7 @@ def contextprocessor(request):
         else:
             ctx['footer_text'] = str(text)
 
-    if hasattr(request, 'event'):
+    if hasattr(request, 'event') and get_scope():
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
         for receiver, response in html_page_header.send(request.event, request=request):

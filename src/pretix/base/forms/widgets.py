@@ -46,6 +46,14 @@ class TimePickerWidget(forms.TimeInput):
 
 class UploadedFileWidget(forms.ClearableFileInput):
     def __init__(self, *args, **kwargs):
+        # Browsers can't recognize that the server already has a file uploaded
+        # Don't mark this input as being required if we already have an answer
+        # (this needs to be done via the attrs, otherwise we wouldn't get the "required" star on the field label)
+        attrs = kwargs.get('attrs', {})
+        if kwargs.get('required') and kwargs.get('initial'):
+            attrs.update({'required': None})
+        kwargs.update({'attrs': attrs})
+
         self.position = kwargs.pop('position')
         self.event = kwargs.pop('event')
         self.answer = kwargs.pop('answer')

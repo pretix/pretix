@@ -14,6 +14,8 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
     if isinstance(value, float) or isinstance(value, int):
         value = Decimal(value)
     if not isinstance(value, Decimal):
+        if value == '':
+            return value
         raise TypeError("Invalid data type passed to money filter: %r" % type(value))
     if not arg:
         raise ValueError("No currency passed.")

@@ -12,6 +12,8 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
@@ -19,11 +21,12 @@ from django.views.generic import (
 
 from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher
 from pretix.base.models.vouchers import _generate_random_code
-from pretix.control.forms.filter import VoucherFilterForm
+from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
 from pretix.control.views import PaginationMixin
+from pretix.helpers.models import modelcopy
 
 
 class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
@@ -94,16 +97,27 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/vouchers/tags.html'
     permission = 'can_view_vouchers'
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        tags = self.request.event.vouchers.order_by('tag').filter(
+    def get_queryset(self):
+        qs = self.request.event.vouchers.order_by('tag').filter(
             tag__isnull=False,
             waitinglistentries__isnull=True
-        ).values('tag').annotate(
+        )
+
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
+        qs = qs.values('tag').annotate(
             total=Sum('max_usages'),
             redeemed=Sum('redeemed')
         )
+
+        return qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        tags = self.get_queryset()
+
         for t in tags:
             if t['total'] == 0:
                 t['percentage'] = 0
@@ -111,7 +125,12 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
                 t['percentage'] = int((t['redeemed'] / t['total']) * 100)
 
         ctx['tags'] = tags
+        ctx['filter_form'] = self.filter_form
         return ctx
+
+    @cached_property
+    def filter_form(self):
+        return VoucherTagFilterForm(data=self.request.GET, event=self.request.event)
 
 
 class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
@@ -223,8 +242,15 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
-        messages.success(self.request, _('The new voucher has been created: {code}').format(code=form.instance.code))
         ret = super().form_valid(form)
+        url = reverse('control:event.voucher', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'voucher': self.object.pk
+        })
+        messages.success(self.request, mark_safe(_('The new voucher has been created: {code}').format(
+            code=format_html('<a href="{url}">{code}</a>', url=url, code=self.object.code)
+        )))
         form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
         return ret
 
@@ -263,9 +289,23 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
             'event': self.request.event.slug,
         })
 
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.vouchers.get(pk=self.request.GET.get("copy_from"))
+            except Voucher.DoesNotExist:
+                pass
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['instance'] = Voucher(event=self.request.event)
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+        else:
+            kwargs['instance'] = Voucher(event=self.request.event)
         return kwargs
 
     @transaction.atomic

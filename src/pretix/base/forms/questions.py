@@ -43,6 +43,14 @@ logger = logging.getLogger(__name__)
 
 class NamePartsWidget(forms.MultiWidget):
     widget = forms.TextInput
+    autofill_map = {
+        'given_name': 'given-name',
+        'family_name': 'family-name',
+        'middle_name': 'additional-name',
+        'title': 'honorific-prefix',
+        'full_name': 'name',
+        'calling_name': 'nickname',
+    }
 
     def __init__(self, scheme: dict, field: forms.Field, attrs=None, titles: list=None):
         widgets = []
@@ -89,6 +97,7 @@ class NamePartsWidget(forms.MultiWidget):
                     title=self.scheme['fields'][i][1],
                     placeholder=self.scheme['fields'][i][1],
                 )
+                final_attrs['autocomplete'] = (self.attrs.get('autocomplete', '') + ' ' + self.autofill_map.get(self.scheme['fields'][i][0], 'off')).strip()
                 final_attrs['data-size'] = self.scheme['fields'][i][2]
             output.append(widget.render(name + '_%s' % i, widget_value, final_attrs, renderer=renderer))
         return mark_safe(self.format_output(output))
@@ -194,7 +203,12 @@ class BaseQuestionsForm(forms.Form):
             self.fields['attendee_email'] = forms.EmailField(
                 required=event.settings.attendee_emails_required,
                 label=_('Attendee email'),
-                initial=(cartpos.attendee_email if cartpos else orderpos.attendee_email)
+                initial=(cartpos.attendee_email if cartpos else orderpos.attendee_email),
+                widget=forms.EmailInput(
+                    attrs={
+                        'autocomplete': 'email'
+                    }
+                )
             )
 
         for q in questions:
@@ -324,6 +338,10 @@ class BaseQuestionsForm(forms.Form):
                 self.fields[key] = value
                 value.initial = data.get('question_form_data', {}).get(key)
 
+        for k, v in self.fields.items():
+            if v.widget.attrs.get('autocomplete') or k == 'attendee_name_parts':
+                v.widget.attrs['autocomplete'] = 'section-{} '.format(self.prefix) + v.widget.attrs.get('autocomplete', '')
+
     def clean(self):
         d = super().clean()
 
@@ -366,9 +384,25 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                   'vat_id', 'internal_reference', 'beneficiary')
         widgets = {
             'is_business': BusinessBooleanRadio,
-            'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
+            'street': forms.Textarea(attrs={
+                'rows': 2,
+                'placeholder': _('Street and Number'),
+                'autocomplete': 'street-address'
+            }),
             'beneficiary': forms.Textarea(attrs={'rows': 3}),
-            'company': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
+            'country': forms.Select(attrs={
+                'autocomplete': 'country',
+            }),
+            'zipcode': forms.TextInput(attrs={
+                'autocomplete': 'postal-code',
+            }),
+            'city': forms.TextInput(attrs={
+                'autocomplete': 'address-level2',
+            }),
+            'company': forms.TextInput(attrs={
+                'data-display-dependency': '#id_is_business_1',
+                'autocomplete': 'organization',
+            }),
             'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
             'internal_reference': forms.TextInput,
         }
@@ -426,7 +460,10 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['state'] = forms.ChoiceField(
             label=pgettext_lazy('address', 'State'),
             required=False,
-            choices=c
+            choices=c,
+            widget=forms.Select(attrs={
+                'autocomplete': 'address-level1',
+            }),
         )
         self.fields['state'].widget.is_required = True
 
@@ -456,12 +493,17 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             initial=(self.instance.name_parts if self.instance else self.instance.name_parts),
         )
         if event.settings.invoice_address_required and not event.settings.invoice_address_company_required and not self.all_optional:
-            self.fields['name_parts'].widget.attrs['data-required-if'] = '#id_is_business_0'
+            if not event.settings.invoice_name_required:
+                self.fields['name_parts'].widget.attrs['data-required-if'] = '#id_is_business_0'
             self.fields['name_parts'].widget.attrs['data-no-required-attr'] = '1'
             self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
 
         if not event.settings.invoice_address_beneficiary:
             del self.fields['beneficiary']
+
+        for k, v in self.fields.items():
+            if v.widget.attrs.get('autocomplete') or k == 'name_parts':
+                v.widget.attrs['autocomplete'] = 'section-invoice billing ' + v.widget.attrs.get('autocomplete', '')
 
     def clean(self):
         data = self.cleaned_data
@@ -522,9 +564,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
 
 class BaseInvoiceNameForm(BaseInvoiceAddressForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for f in list(self.fields.keys()):
-            if f != 'name':
+            if f != 'name_parts':
                 del self.fields[f]

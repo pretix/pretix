@@ -114,7 +114,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 class CheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
-        fields = ('datetime', 'list')
+        fields = ('datetime', 'list', 'auto_checked_in')
 
 
 class OrderDownloadsField(serializers.Field):
@@ -857,6 +857,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
         order.total = sum([p.price for p in order.positions.all()]) + sum([f.value for f in order.fees.all()])
         order.save(update_fields=['total'])
+
+        if order.total == Decimal('0.00') and validated_data.get('status') == Order.STATUS_PAID and not payment_provider:
+            payment_provider = 'free'
 
         if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
             order.status = Order.STATUS_PAID

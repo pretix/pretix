@@ -6,7 +6,6 @@ import re
 from datetime import datetime, time, timedelta
 from decimal import Decimal, DecimalException
 
-import pytz
 import vat_moss.id
 from django.conf import settings
 from django.contrib import messages
@@ -15,6 +14,7 @@ from django.db import transaction
 from django.db.models import (
     Count, IntegerField, OuterRef, Prefetch, ProtectedError, Q, Subquery, Sum,
 )
+from django.forms import formset_factory
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, HttpResponseRedirect,
     JsonResponse,
@@ -22,7 +22,6 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import formats
-from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import make_aware, now
@@ -33,6 +32,7 @@ from django.views.generic import (
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Invoice, InvoiceAddress,
@@ -72,13 +72,12 @@ from pretix.control.forms.filter import (
 from pretix.control.forms.orders import (
     CancelForm, CommentForm, ConfirmPaymentForm, ExporterForm, ExtendForm,
     MarkPaidForm, OrderContactForm, OrderLocaleForm, OrderMailForm,
-    OrderPositionAddForm, OrderPositionChangeForm, OrderRefundForm,
-    OtherOperationsForm,
+    OrderPositionAddForm, OrderPositionAddFormset, OrderPositionChangeForm,
+    OrderRefundForm, OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 from pretix.helpers.safedownload import check_token
-from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.signals import question_form_fields
 
 logger = logging.getLogger(__name__)
@@ -1196,9 +1195,16 @@ class OrderChange(OrderView):
                                    data=self.request.POST if self.request.method == "POST" else None)
 
     @cached_property
-    def add_form(self):
-        return OrderPositionAddForm(prefix='add', order=self.order,
-                                    data=self.request.POST if self.request.method == "POST" else None)
+    def add_formset(self):
+        ff = formset_factory(
+            OrderPositionAddForm, formset=OrderPositionAddFormset,
+            can_order=False, can_delete=True, extra=0
+        )
+        return ff(
+            prefix='add',
+            order=self.order,
+            data=self.request.POST if self.request.method == "POST" else None
+        )
 
     @cached_property
     def positions(self):
@@ -1216,7 +1222,7 @@ class OrderChange(OrderView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['positions'] = self.positions
-        ctx['add_form'] = self.add_form
+        ctx['add_formset'] = self.add_formset
         ctx['other_form'] = self.other_form
         return ctx
 
@@ -1229,16 +1235,17 @@ class OrderChange(OrderView):
             return True
 
     def _process_add(self, ocm):
-        if 'add-do' not in self.request.POST:
-            return True
-        if not self.add_form.is_valid():
+        if not self.add_formset.is_valid():
             return False
         else:
-            if self.add_form.cleaned_data['do']:
-                if '-' in self.add_form.cleaned_data['itemvar']:
-                    itemid, varid = self.add_form.cleaned_data['itemvar'].split('-')
+            for f in self.add_formset.forms:
+                if f in self.add_formset.deleted_forms or not f.has_changed():
+                    continue
+
+                if '-' in f.cleaned_data['itemvar']:
+                    itemid, varid = f.cleaned_data['itemvar'].split('-')
                 else:
-                    itemid, varid = self.add_form.cleaned_data['itemvar'], None
+                    itemid, varid = f.cleaned_data['itemvar'], None
 
                 item = Item.objects.get(pk=itemid, event=self.request.event)
                 if varid:
@@ -1247,12 +1254,12 @@ class OrderChange(OrderView):
                     variation = None
                 try:
                     ocm.add_position(item, variation,
-                                     self.add_form.cleaned_data['price'],
-                                     self.add_form.cleaned_data.get('addon_to'),
-                                     self.add_form.cleaned_data.get('subevent'),
-                                     self.add_form.cleaned_data.get('seat'))
+                                     f.cleaned_data['price'],
+                                     f.cleaned_data.get('addon_to'),
+                                     f.cleaned_data.get('subevent'),
+                                     f.cleaned_data.get('seat'))
                 except OrderError as e:
-                    self.add_form.custom_error = str(e)
+                    f.custom_error = str(e)
                     return False
         return True
 
@@ -1305,7 +1312,8 @@ class OrderChange(OrderView):
         ocm = OrderChangeManager(
             self.order,
             user=self.request.user,
-            notify=notify
+            notify=notify,
+            reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True
         )
         form_valid = self._process_add(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
@@ -1496,32 +1504,13 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        tz = pytz.timezone(self.request.event.settings.timezone)
         order = Order.objects.get(
             event=self.request.event,
             code=self.kwargs['code'].upper()
         )
         self.preview_output = {}
-        try:
-            invoice_name = order.invoice_address.name
-            invoice_company = order.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
         with language(order.locale):
-            email_context = {
-                'event': order.event,
-                'code': order.code,
-                'date': date_format(order.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                'expire_date': date_format(order.expires, 'SHORT_DATE_FORMAT'),
-                'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
-                    'order': order.code,
-                    'secret': order.secret,
-                    'hash': order.email_confirm_hash()
-                }),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-            }
+            email_context = get_email_context(event=order.event, order=order)
         email_template = LazyI18nString(form.cleaned_data['message'])
         email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
@@ -1567,10 +1556,11 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        order = Order.objects.filter(
+        order = get_object_or_404(
+            Order,
             event=self.request.event,
             code=self.kwargs['code'].upper()
-        ).first()
+        )
         qs = order.all_logentries()
         qs = qs.filter(
             action_type__contains="order.email"

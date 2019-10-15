@@ -102,7 +102,12 @@ class BankTransfer(BasePaymentProvider):
                 label=_('Payment method name'),
                 widget=I18nTextInput,
                 required=False
-            ))
+            )),
+            ('omit_hyphen', forms.BooleanField(
+                label=_('Do not include a hypen in the payment reference.'),
+                help_text=_('This is required in some countries.'),
+                required=False
+            )),
         ])
 
     @property
@@ -116,16 +121,7 @@ class BankTransfer(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        d = OrderedDict(
-            list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()) + [
-                ('omit_hyphen', forms.BooleanField(
-                    label=_('Do not include a hypen in the payment reference.'),
-                    help_text=_('This is required in some countries.'),
-                    required=False
-                )),
-
-            ]
-        )
+        d = OrderedDict(list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()))
         d.move_to_end('bank_details', last=False)
         d.move_to_end('bank_details_sepa_bank', last=False)
         d.move_to_end('bank_details_sepa_bic', last=False)

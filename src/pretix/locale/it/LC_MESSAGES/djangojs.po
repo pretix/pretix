@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-11 06:55+0000\n"
-"PO-Revision-Date: 2019-01-02 08:20+0000\n"
-"Last-Translator: amefad <fame@libero.it>\n"
+"POT-Creation-Date: 2019-10-08 13:57+0000\n"
+"PO-Revision-Date: 2019-09-13 18:00+0000\n"
+"Last-Translator: Gianmarco Palumbo <pal_gm@hotmail.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -54,13 +54,11 @@ msgstr "Totale"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "Stiamo processando il tuo pagamento ..."
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Contacting your bank …"
-msgstr "Sto contattando Stripe …"
+msgstr "Sto contattando la tua banca …"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:105
@@ -86,7 +84,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:76
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixbase/js/asynctask.js:147
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
+#: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Si è verificato un errore {code}."
 
@@ -99,12 +97,12 @@ msgstr ""
 "dell'ultimo errore: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixcontrol/js/ui/mail.js:20
+#: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took to long. Please try again."
 msgstr "La richiesta ha impiegato troppo tempo. Si prega di riprovare."
 
 #: pretix/static/pretixbase/js/asynctask.js:150
-#: pretix/static/pretixcontrol/js/ui/mail.js:25
+#: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
@@ -168,7 +166,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
-msgstr ""
+msgstr "Oggetto"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:434
 msgid "Ticket design"
@@ -176,80 +174,80 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:687
 msgid "Saving failed."
-msgstr ""
+msgstr "Salvataggio fallito."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:736
 #: pretix/static/pretixcontrol/js/ui/editor.js:774
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Errore durante il caricamento del tuo file PDF, prova di nuovo."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:759
 msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
+msgstr "Vuoi davvero abbandonare l'editor senza salvare le modifiche?"
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:18
+#: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr ""
+msgstr "Abbiamo riscontrato un errore."
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:52
+#: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
-msgstr ""
+msgstr "Stiamo generando i messaggi …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:69
 msgid "Unknown error."
-msgstr ""
+msgstr "Errore sconosciuto."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:231
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "Il colore scelto ha un ottimo contrasto ed è molto leggibile!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:235
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Il colore scelto ha un buon contrasto e probabilmente è abbastanza leggibile!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:239
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Il colore scelto non ha un buon contrasto, per favore scegline uno più scuro."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:355
 msgid "All"
-msgstr ""
+msgstr "Tutto"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:356
 msgid "None"
-msgstr ""
+msgstr "Nessuno"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:645
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Utilizza un nome diverso internamente"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:702
 msgid "Click to close"
-msgstr ""
+msgstr "Clicca per chiudere"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Calculating default price…"
-msgstr "Sto contattando Stripe …"
+msgstr "Calcolando il prezzo di default…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "Altri"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
-msgstr ""
+msgstr "Conteggio"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Yes"
-msgstr ""
+msgstr "Si"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -259,11 +257,11 @@ msgstr[1] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Gli articoli nel tuo carrello non sono più riservati per te."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Carrello scaduto"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."

@@ -1,4 +1,3 @@
-import inspect
 import json
 import logging
 from collections import Counter, namedtuple
@@ -6,23 +5,20 @@ from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import List, Optional
 
-import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Exists, F, Max, OuterRef, Q, Sum
 from django.db.models.functions import Greatest
 from django.dispatch import receiver
-from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
 from django_scopes import scopes_disabled
 
 from pretix.api.models import OAuthApplication
-from pretix.base.i18n import (
-    LazyCurrencyNumber, LazyDate, LazyLocaleException, LazyNumber, language,
-)
+from pretix.base.email import get_email_context
+from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
     CartPosition, Device, Event, Item, ItemVariation, Order, OrderPayment,
     OrderPosition, Quota, Seat, SeatCategoryMapping, User, Voucher,
@@ -45,7 +41,6 @@ from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
-from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
     order_denied, order_expired, order_fee_calculation, order_placed,
@@ -53,7 +48,6 @@ from pretix.base.signals import (
 )
 from pretix.celery_app import app
 from pretix.helpers.models import modelcopy
-from pretix.multidomain.urlreverse import build_absolute_uri
 
 error_messages = {
     'unavailable': _('Some of the products you selected were no longer available. '
@@ -206,13 +200,6 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
             # send_mail will trigger PDF generation later
 
     if send_mail:
-        try:
-            invoice_name = order.invoice_address.name
-            invoice_company = order.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
-
         with language(order.locale):
             if order.total == Decimal('0.00'):
                 email_template = order.event.settings.mail_text_order_free
@@ -221,20 +208,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 email_template = order.event.settings.mail_text_order_approved
                 email_subject = _('Order approved and awaiting payment: %(code)s') % {'code': order.code}
 
-            email_context = {
-                'total': LazyNumber(order.total),
-                'currency': order.event.currency,
-                'total_with_currency': LazyCurrencyNumber(order.total, order.event.currency),
-                'date': LazyDate(order.expires),
-                'event': order.event.name,
-                'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
-                    'order': order.code,
-                    'secret': order.secret,
-                    'hash': order.email_confirm_hash()
-                }),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-            }
+            email_context = get_email_context(event=order.event, order=order)
             try:
                 order.send_mail(
                     email_subject, email_template, email_context,
@@ -275,28 +249,8 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
     order_denied.send(order.event, order=order)
 
     if send_mail:
-        try:
-            invoice_name = order.invoice_address.name
-            invoice_company = order.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
         email_template = order.event.settings.mail_text_order_denied
-        email_context = {
-            'total': LazyNumber(order.total),
-            'currency': order.event.currency,
-            'total_with_currency': LazyCurrencyNumber(order.total, order.event.currency),
-            'date': LazyDate(order.expires),
-            'event': order.event.name,
-            'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
-                'order': order.code,
-                'secret': order.secret,
-                'hash': order.email_confirm_hash()
-            }),
-            'comment': comment,
-            'invoice_name': invoice_name,
-            'invoice_company': invoice_company,
-        }
+        email_context = get_email_context(event=order.event, order=order, comment=comment)
         with language(order.locale):
             email_subject = _('Order denied: %(code)s') % {'code': order.code}
             try:
@@ -379,16 +333,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
         if send_mail:
             email_template = order.event.settings.mail_text_order_canceled
-            email_context = {
-                'event': order.event.name,
-                'code': order.code,
-                'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
-                    'order': order.code,
-                    'secret': order.secret,
-                    'hash': order.email_confirm_hash()
-                })
-            }
             with language(order.locale):
+                email_context = get_email_context(event=order.event, order=order)
                 email_subject = _('Order canceled: %(code)s') % {'code': order.code}
                 try:
                     order.send_mail(
@@ -682,36 +628,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
 def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, email_template, log_entry: str,
                         invoice, payment: OrderPayment):
-    try:
-        invoice_name = order.invoice_address.name
-        invoice_company = order.invoice_address.company
-    except InvoiceAddress.DoesNotExist:
-        invoice_name = ""
-        invoice_company = ""
-
-    if pprov:
-        if 'payment' in inspect.signature(pprov.order_pending_mail_render).parameters:
-            payment_info = str(pprov.order_pending_mail_render(order, payment))
-        else:
-            payment_info = str(pprov.order_pending_mail_render(order))
-    else:
-        payment_info = None
-
-    email_context = {
-        'total': LazyNumber(order.total),
-        'currency': event.currency,
-        'total_with_currency': LazyCurrencyNumber(order.total, event.currency),
-        'date': LazyDate(order.expires),
-        'event': event.name,
-        'url': build_absolute_uri(event, 'presale:event.order.open', kwargs={
-            'order': order.code,
-            'secret': order.secret,
-            'hash': order.email_confirm_hash()
-        }),
-        'payment_info': payment_info,
-        'invoice_name': invoice_name,
-        'invoice_company': invoice_company,
-    }
+    email_context = get_email_context(event=event, order=order, payment=payment if pprov else None)
     email_subject = _('Your order: %(code)s') % {'code': order.code}
     try:
         order.send_mail(
@@ -725,19 +642,7 @@ def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, 
 
 
 def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, log_entry: str):
-    name_scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
-    email_context = {
-        'event': event.name,
-        'url': build_absolute_uri(event, 'presale:event.order.position', kwargs={
-            'order': order.code,
-            'secret': position.web_secret,
-            'position': position.positionid
-        }),
-        'attendee_name': position.attendee_name,
-    }
-    for f, l, w in name_scheme['fields']:
-        email_context['attendee_name_%s' % f] = position.attendee_name_parts.get(f, '')
-
+    email_context = get_email_context(event=event, order=order, position=position)
     email_subject = _('Your event registration: %(code)s') % {'code': order.code}
 
     try:
@@ -884,29 +789,12 @@ def send_expiry_warnings(sender, **kwargs):
                 eventcache[o.event.pk] = eventsettings
 
             days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
-            tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
             if days and (o.expires - today).days <= days:
                 with language(o.locale):
                     o.expiry_reminder_sent = True
                     o.save(update_fields=['expiry_reminder_sent'])
-                    try:
-                        invoice_name = o.invoice_address.name
-                        invoice_company = o.invoice_address.company
-                    except InvoiceAddress.DoesNotExist:
-                        invoice_name = ""
-                        invoice_company = ""
                     email_template = eventsettings.mail_text_order_expire_warning
-                    email_context = {
-                        'event': o.event.name,
-                        'url': build_absolute_uri(o.event, 'presale:event.order.open', kwargs={
-                            'order': o.code,
-                            'secret': o.secret,
-                            'hash': o.email_confirm_hash()
-                        }),
-                        'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
-                        'invoice_name': invoice_name,
-                        'invoice_company': invoice_company,
-                    }
+                    email_context = get_email_context(event=o.event, order=o)
                     if eventsettings.payment_term_expire_automatically:
                         email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
                     else:
@@ -949,14 +837,7 @@ def send_download_reminders(sender, **kwargs):
                     o.download_reminder_sent = True
                     o.save(update_fields=['download_reminder_sent'])
                     email_template = e.settings.mail_text_download_reminder
-                    email_context = {
-                        'event': o.event.name,
-                        'url': build_absolute_uri(o.event, 'presale:event.order.open', kwargs={
-                            'order': o.code,
-                            'secret': o.secret,
-                            'hash': o.email_confirm_hash()
-                        }),
-                    }
+                    email_context = get_email_context(event=e, order=o)
                     email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
                     try:
                         o.send_mail(
@@ -968,21 +849,10 @@ def send_download_reminders(sender, **kwargs):
                         logger.exception('Reminder email could not be sent')
 
                     if e.settings.mail_send_download_reminder_attendee:
-                        name_scheme = PERSON_NAME_SCHEMES[e.settings.name_scheme]
                         for p in o.positions.all():
                             if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
                                 email_template = e.settings.mail_text_download_reminder_attendee
-                                email_context = {
-                                    'event': e.name,
-                                    'url': build_absolute_uri(e, 'presale:event.order.position', kwargs={
-                                        'order': o.code,
-                                        'secret': p.web_secret,
-                                        'position': p.positionid
-                                    }),
-                                    'attendee_name': p.attendee_name,
-                                }
-                                for f, l, w in name_scheme['fields']:
-                                    email_context['attendee_name_%s' % f] = p.attendee_name_parts.get(f, '')
+                                email_context = get_email_context(event=e, order=o, position=p)
                                 try:
                                     o.send_mail(
                                         email_subject, email_template, email_context,
@@ -995,23 +865,8 @@ def send_download_reminders(sender, **kwargs):
 
 def notify_user_changed_order(order, user=None, auth=None):
     with language(order.locale):
-        try:
-            invoice_name = order.invoice_address.name
-            invoice_company = order.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
         email_template = order.event.settings.mail_text_order_changed
-        email_context = {
-            'event': order.event.name,
-            'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
-                'order': order.code,
-                'secret': order.secret,
-                'hash': order.email_confirm_hash()
-            }),
-            'invoice_name': invoice_name,
-            'invoice_company': invoice_company,
-        }
+        email_context = get_email_context(event=order.event, order=order)
         email_subject = _('Your order has been changed: %(code)s') % {'code': order.code}
         try:
             order.send_mail(
@@ -1049,12 +904,13 @@ class OrderChangeManager:
     SplitOperation = namedtuple('SplitOperation', ('position',))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
-    def __init__(self, order: Order, user=None, auth=None, notify=True):
+    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
         self.order = order
         self.user = user
         self.auth = auth
         self.event = order.event
         self.split_order = None
+        self.reissue_invoice = reissue_invoice
         self._committed = False
         self._totaldiff = 0
         self._quotadiff = Counter()
@@ -1537,7 +1393,7 @@ class OrderChangeManager:
 
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
-        if i and self._invoice_dirty:
+        if self.reissue_invoice and i and self._invoice_dirty:
             generate_cancellation(i)
             generate_invoice(self.order)
 
@@ -1684,7 +1540,9 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
         raise OrderError(error_messages['busy'])
 
 
-def change_payment_provider(order: Order, payment_provider, amount=None, new_payment=None):
+def change_payment_provider(order: Order, payment_provider, amount=None, new_payment=None, create_log=True,
+                            recreate_invoices=True):
+    oldtotal = order.total
     e = OrderPayment.objects.filter(fee=OuterRef('pk'), state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED,
                                                                    OrderPayment.PAYMENT_STATE_REFUNDED))
     open_fees = list(
@@ -1730,4 +1588,30 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
     order.total = (order.positions.aggregate(sum=Sum('price'))['sum'] or 0) + (order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
     order.save(update_fields=['total'])
-    return old_fee, new_fee, fee
+
+    if not new_payment:
+        new_payment = order.payments.create(
+            state=OrderPayment.PAYMENT_STATE_CREATED,
+            provider=payment_provider.identifier,
+            amount=order.pending_sum,
+            fee=fee
+        )
+    if create_log and new_payment:
+        order.log_action(
+            'pretix.event.order.payment.changed' if open_payment else 'pretix.event.order.payment.started',
+            {
+                'fee': new_fee,
+                'old_fee': old_fee,
+                'provider': payment_provider.identifier,
+                'payment': new_payment.pk,
+                'local_id': new_payment.local_id,
+            }
+        )
+
+    if recreate_invoices:
+        i = order.invoices.filter(is_cancellation=False).last()
+        if i and order.total != oldtotal:
+            generate_cancellation(i)
+            generate_invoice(order)
+
+    return old_fee, new_fee, fee, new_payment

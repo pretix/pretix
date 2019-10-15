@@ -123,10 +123,16 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         if "emptybackground" in request.POST:
             p = PdfFileWriter()
-            p.addBlankPage(
-                width=float(request.POST.get('width')) * mm,
-                height=float(request.POST.get('height')) * mm,
-            )
+            try:
+                p.addBlankPage(
+                    width=float(request.POST.get('width')) * mm,
+                    height=float(request.POST.get('height')) * mm,
+                )
+            except ValueError:
+                return JsonResponse({
+                    "status": "error",
+                    "error": "Invalid height/width given."
+                })
             buffer = BytesIO()
             p.write(buffer)
             buffer.seek(0)

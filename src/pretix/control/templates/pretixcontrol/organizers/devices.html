@@ -82,7 +82,7 @@
                                 </ul>
                             {% endif %}
                         </td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             {% if not d.initialized %}
                                 <a href="{% url "control:organizer.device.connect" organizer=request.organizer.slug device=d.id %}"
                                         class="btn btn-primary btn-sm"><i class="fa fa-link"></i>

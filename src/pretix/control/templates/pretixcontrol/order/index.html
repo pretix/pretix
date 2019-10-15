@@ -19,7 +19,7 @@
         {% if order.testmode %}
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
-        {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
+        {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right flip" %}
     </h1>
     {% if 'can_change_orders' in request.eventpermset %}
         <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
@@ -78,7 +78,7 @@
                 method="post">
             {% csrf_token %}
             <div class="alert alert-info">
-                <button name="status" value="e" class="btn btn-default pull-right">{% trans "Expire order" %}</button>
+                <button name="status" value="e" class="btn btn-default pull-right flip">{% trans "Expire order" %}</button>
                 {% trans "The payment for this order is overdue, but you have configured not to expire orders automatically. To free quota capacity, you can mark it as expired manually." %}
                 <div class="clearfix"></div>
             </div>
@@ -224,7 +224,7 @@
             </div>
             <div class="panel panel-default items">
                 <div class="panel-heading">
-                    <div class="pull-right">
+                    <div class="pull-right flip">
                         {% if order.changable and 'can_change_orders' in request.eventpermset %}
                             <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 <span class="fa fa-edit"></span>
@@ -255,7 +255,11 @@
                                 {% endif %}
                                 {% if line.checkins.all %}
                                     {% for c in line.checkins.all %}
-                                        <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                        {% if c.auto_checked_in %}
+                                            <span class="fa fa-fw fa-magic" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically checked in: {{ date }}{% endblocktrans %}"></span>
+                                        {% else %}
+                                            <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                        {% endif %}
                                     {% endfor %}
                                 {% endif %}
                                 {% if line.seat %}
@@ -486,7 +490,7 @@
                                         <th>{% trans "Confirmation date" %}</th>
                                         <th>{% trans "Payment method" %}</th>
                                         <th>{% trans "Status" %}</th>
-                                        <th class="text-right">{% trans "Amount" %}</th>
+                                        <th class="text-right flip">{% trans "Amount" %}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -524,7 +528,7 @@
                                                     {{ p.get_state_display }}
                                                 </span>
                                             </td>
-                                            <td class="text-right">{{ p.amount|money:request.event.currency }}</td>
+                                            <td class="text-right flip">{{ p.amount|money:request.event.currency }}</td>
                                         </tr>
                                         {% if p.html_info %}
                                             <tr>
@@ -582,8 +586,8 @@
                                             <th>{% trans "Payment method" %}</th>
                                             <th>{% trans "Payment" %}</th>
                                             <th>{% trans "Status" %}</th>
-                                            <th class="text-right">{% trans "Amount" %}</th>
-                                            <th class="text-right"></th>
+                                            <th class="text-right flip">{% trans "Amount" %}</th>
+                                            <th class="text-right flip"></th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -606,8 +610,8 @@
                                                     {{ r.get_state_display }}
                                                 </span>
                                                 </td>
-                                                <td class="text-right">{{ r.amount|money:request.event.currency }}</td>
-                                                <td class="text-right">
+                                                <td class="text-right flip">{{ r.amount|money:request.event.currency }}</td>
+                                                <td class="text-right flip">
                                                     {% if r.state == "transit" or r.state == "created" %}
                                                         <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=order.code refund=r.pk %}"
                                                                 class="btn btn-danger btn-xs" data-toggle="tooltip"
@@ -660,7 +664,7 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <div class="pull-right">
+                                <div class="pull-right flip">
                                     {% if order.changable and 'can_change_orders' in request.eventpermset %}
                                         <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                             <span class="fa fa-edit"></span>

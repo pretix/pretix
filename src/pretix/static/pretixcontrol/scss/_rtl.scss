@@ -1,0 +1,115 @@
+html.rtl {
+  .timeline .col-date {
+    float: right;
+    text-align: left;
+  }
+
+  .timeline .col-event {
+    margin-right: 120px;
+    margin-left: 0;
+  }
+
+
+  .navbar-top-links li:last-child {
+    margin-left: 15px;
+    margin-right: 0;
+  }
+
+  .sidebar .context-selector a span.caret {
+    right: inherit;
+    left: 15px;
+  }
+
+  .sidebar .context-selector a {
+    padding: 10px 7px 9px 20px;
+  }
+
+  .sidebar ul li a.arrow {
+    right: inherit;
+    left: 0;
+  }
+
+  .sidebar ul li a.has-children {
+    margin-right: 0;
+    margin-left: 40px;
+  }
+
+  .sidebar .fa.arrow::before {
+    content: "\f105";
+  }
+
+  .sidebar .nav-second-level li a {
+    padding-left: 15px;
+    padding-right: 37px;
+  }
+
+  .splitdatetimepart.datepickerfield {
+    border-bottom-right-radius: $border-radius-base;
+    border-top-right-radius: $border-radius-base;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+
+  .splitdatetimepart.timepickerfield {
+    border-bottom-left-radius: $border-radius-base;
+    border-top-left-radius: $border-radius-base;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    border-right: 0;
+    border-left: 1px solid $input-group-addon-border-color;
+  }
+
+  .submit-group {
+    text-align: left;
+
+    .pull-left {
+      float: right !important;
+    }
+    .btn-cancel {
+      float: right !important;
+    }
+  }
+
+  .checkbox .label {
+    display: inline-block;
+  }
+  .scrolling-multiple-choice {
+    padding-right: 15px;
+    padding-left: 0;
+  }
+  .tab-content {
+    border-radius: $border-radius-large 0 $border-radius-large $border-radius-large;
+  }
+  .nav-tabs > li > a {
+    margin-right: 0;
+  }
+  .table-product-overview td:not(:first-child), .table-product-overview th:not(:first-child):not(.text-center) {
+    text-align: left;
+  }
+  .product-row dl {
+    padding-left: 0;
+    padding-right: 20px;
+  }
+}
+@media (min-width: $screen-sm-min) {
+  html.rtl #page-wrapper {
+    margin: 0 250px 0 0;
+  }
+}
+@media(max-width: $screen-sm-max) {
+  html.rtl .timeline {
+    .col-date {
+      width: 100%;
+      float: none;
+      text-align: right;
+      padding-right: 15px;
+    }
+
+    .col-event {
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 15px;
+    }
+  }
+}
+

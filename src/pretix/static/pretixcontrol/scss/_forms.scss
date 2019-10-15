@@ -141,6 +141,10 @@ div.mail-preview {
   border: 1px solid #ccc;
   border-top-width: 1px;
   border-radius: 3px;
+
+  .placeholder {
+    background: transparentize($brand-warning, 0.6);
+  }
 }
 
 .mail-preview-group div[lang] {
@@ -313,6 +317,9 @@ div.scrolling-multiple-choice, div.scrolling-choice {
 
   .radio:first-of-type, .checkbox:first-of-type {
     margin-top: 0;
+  }
+  &.scrolling-multiple-choice-large {
+    height: 350px;
   }
 }
 table td > .checkbox {

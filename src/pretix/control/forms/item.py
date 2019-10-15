@@ -48,7 +48,8 @@ class QuestionForm(I18nModelForm):
         self.fields['items'].queryset = self.instance.event.items.all()
         self.fields['items'].required = True
         self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
-            type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE)
+            type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE),
+            ask_during_checkin=False
         )
         if self.instance.pk:
             self.fields['dependency_question'].queryset = self.fields['dependency_question'].queryset.exclude(
@@ -65,6 +66,9 @@ class QuestionForm(I18nModelForm):
     def clean_dependency_question(self):
         dep = val = self.cleaned_data.get('dependency_question')
         if dep:
+            if dep.ask_during_checkin:
+                raise ValidationError(_('Question cannot depend on a question asked during check-in.'))
+
             seen_ids = {self.instance.pk} if self.instance else set()
             while dep:
                 if dep.pk in seen_ids:
@@ -125,7 +129,7 @@ class QuotaForm(I18nModelForm):
         items = kwargs.pop('items', None) or self.event.items.prefetch_related('variations')
         self.original_instance = modelcopy(self.instance) if self.instance else None
         initial = kwargs.get('initial', {})
-        if self.instance and self.instance.pk:
+        if self.instance and self.instance.pk and 'itemvars' not in initial:
             initial['itemvars'] = [str(i.pk) for i in self.instance.items.all()] + [
                 '{}-{}'.format(v.item_id, v.pk) for v in self.instance.variations.all()
             ]

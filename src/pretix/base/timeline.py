@@ -113,7 +113,7 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=rd.datetime(ev),
             description=pgettext_lazy('timeline', 'Customers can no longer cancel free or unpaid orders'),
-            edit_url=reverse('control:event.settings.tickets', kwargs={
+            edit_url=reverse('control:event.settings.cancel', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
             })
@@ -125,7 +125,7 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=rd.datetime(ev),
             description=pgettext_lazy('timeline', 'Customers can no longer cancel paid orders'),
-            edit_url=reverse('control:event.settings.tickets', kwargs={
+            edit_url=reverse('control:event.settings.cancel', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
             })

@@ -3,6 +3,7 @@ import json
 import logging
 import urllib.parse
 from collections import OrderedDict
+from decimal import Decimal
 
 import stripe
 from django import forms
@@ -256,6 +257,20 @@ class StripeMethod(BasePaymentProvider):
     def _get_amount(self, payment):
         return self._decimal_to_int(payment.amount)
 
+    def _connect_kwargs(self, payment):
+        d = {}
+        if self.settings.connect_client_id and self.settings.connect_user_id:
+            fee = Decimal('0.00')
+            if self.settings.get('connect_app_fee_percent', as_type=Decimal):
+                fee = round_decimal(self.settings.get('connect_app_fee_percent', as_type=Decimal) * payment.amount / Decimal('100.00'), self.event.currency)
+            if self.settings.connect_app_fee_max:
+                fee = min(fee, self.settings.get('connect_app_fee_max', as_type=Decimal))
+            if self.settings.get('connect_app_fee_min', as_type=Decimal):
+                fee = max(fee, self.settings.get('connect_app_fee_min', as_type=Decimal))
+            if fee:
+                d['application_fee_amount'] = self._decimal_to_int(fee)
+        return d
+
     @property
     def api_kwargs(self):
         if self.settings.connect_client_id and self.settings.connect_user_id:
@@ -301,6 +316,7 @@ class StripeMethod(BasePaymentProvider):
                     code=payment.order.code
                 )[:22]
             params.update(self.api_kwargs)
+            params.update(self._connect_kwargs(payment))
             charge = stripe.Charge.create(
                 amount=self._get_amount(payment),
                 currency=self.event.currency.lower(),
@@ -612,6 +628,9 @@ class StripeCC(StripeMethod):
 
         try:
             if self.payment_is_valid_session(request):
+                params = {}
+                params.update(self._connect_kwargs(payment))
+                params.update(self.api_kwargs)
                 intent = stripe.PaymentIntent.create(
                     amount=self._get_amount(payment),
                     currency=self.event.currency.lower(),
@@ -638,7 +657,7 @@ class StripeCC(StripeMethod):
                         'payment': payment.pk,
                         'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
                     }),
-                    **self.api_kwargs
+                    **params
                 )
             else:
                 payment_info = json.loads(payment.info)
@@ -723,7 +742,7 @@ class StripeCC(StripeMethod):
 
                 except SendMailException:
                     raise PaymentException(_('There was an error sending the confirmation mail.'))
-            elif intent.status == 'pending':
+            elif intent.status == 'processing':
                 if request:
                     messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
                                                 'payment completed.'))

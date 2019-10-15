@@ -179,9 +179,7 @@ class VoucherForm(I18nModelForm):
         return data
 
     def save(self, commit=True):
-        super().save(commit)
-
-        return ['item']
+        return super().save(commit)
 
 
 class VoucherBulkForm(VoucherForm):

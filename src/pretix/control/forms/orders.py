@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
+from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
@@ -167,6 +168,15 @@ class OtherOperationsForm(forms.Form):
             'Use with care and only if you need to. Note that rounding differences might occur in this procedure.'
         )
     )
+    reissue_invoice = forms.BooleanField(
+        label=_('Issue a new invoice if required'),
+        required=False,
+        initial=True,
+        help_text=_(
+            'If an invoice exists for this order and this operation would change its contents, the old invoice will '
+            'be cancelled and a new invoice will be issued.'
+        )
+    )
     notify = forms.BooleanField(
         label=_('Notify user'),
         required=False,
@@ -186,10 +196,6 @@ class OtherOperationsForm(forms.Form):
 
 
 class OrderPositionAddForm(forms.Form):
-    do = forms.BooleanField(
-        label=_('Add a new product to the order'),
-        required=False
-    )
     itemvar = forms.ChoiceField(
         label=_('Product')
     )
@@ -279,6 +285,28 @@ class OrderPositionAddForm(forms.Form):
         else:
             del self.fields['subevent']
         change_decimal_field(self.fields['price'], order.event.currency)
+
+
+class OrderPositionAddFormset(forms.BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        self.order = kwargs.pop('order', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['order'] = self.order
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            order=self.order,
+        )
+        self.add_fields(form, None)
+        return form
 
 
 class OrderPositionChangeForm(forms.Form):
@@ -408,8 +436,24 @@ class OrderMailForm(forms.Form):
         required=True
     )
 
+    def _set_field_placeholders(self, fn, base_parameters):
+        phs = [
+            '{%s}' % p
+            for p in sorted(get_available_placeholders(self.order.event, base_parameters).keys())
+        ]
+        ht = _('Available placeholders: {list}').format(
+            list=', '.join(phs)
+        )
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(phs)
+        )
+
     def __init__(self, *args, **kwargs):
-        order = kwargs.pop('order')
+        order = self.order = kwargs.pop('order')
         super().__init__(*args, **kwargs)
         self.fields['sendto'] = forms.EmailField(
             label=_("Recipient"),
@@ -422,11 +466,8 @@ class OrderMailForm(forms.Form):
             required=True,
             widget=forms.Textarea,
             initial=order.event.settings.mail_text_order_custom_mail.localize(order.locale),
-            help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
-                        "{invoice_name}, {invoice_company}"),
-            validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
-                                              '{invoice_name}', '{invoice_company}'])]
         )
+        self._set_field_placeholders('message', ['event', 'order'])
 
 
 class OrderRefundForm(forms.Form):

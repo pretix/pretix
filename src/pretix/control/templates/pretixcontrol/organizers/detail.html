@@ -7,7 +7,7 @@
     </h1>
     {% if "can_create_events" in request.orgapermset %}
         <p>
-            <a href="{% url "control:events.add" %}" class="btn btn-default">
+            <a href="{% url "control:events.add" %}?organizer={{ request.organizer.slug }}" class="btn btn-default">
                 <span class="fa fa-plus"></span>
                 {% trans "Create a new event" %}
             </a>
@@ -70,7 +70,7 @@
                             <span class="label label-success">{% trans "On sale" %}</span>
                         {% endif %}
                     </td>
-                    <td class="text-right">
+                    <td class="text-right flip">
                         <a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}"
                            class="btn btn-sm btn-default" title="{% trans "Open event dashboard" %}"
                            data-toggle="tooltip">

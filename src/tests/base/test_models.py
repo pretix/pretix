@@ -1972,8 +1972,8 @@ class CheckinListTestCase(TestCase):
             op4.checkins.create(list=cls.cl_all_pending)
 
     @classscope(attr='organizer')
-    def test_annotated(self):
-        lists = list(CheckinList.annotate_with_numbers(self.event.checkin_lists.order_by('name'), self.event))
+    def test_attributes(self):
+        lists = list(self.event.checkin_lists.order_by('name'))
         assert lists == [self.cl_all, self.cl_both, self.cl_tickets, self.cl_all_pending]
         assert lists[0].checkin_count == 0
         assert lists[0].position_count == 3

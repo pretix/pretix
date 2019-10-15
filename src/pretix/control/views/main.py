@@ -141,6 +141,17 @@ class EventWizard(SafeSessionWizardView):
                 initial['locale'] = self.clone_from.settings.locale
                 if self.clone_from.settings.tax_rate_default:
                     initial['tax_rate'] = self.clone_from.settings.tax_rate_default.rate
+        if 'organizer' in self.request.GET:
+            if step == 'foundation':
+                try:
+                    qs = Organizer.objects.all()
+                    if not self.request.user.has_active_staff_session(self.request.session.session_key):
+                        qs = qs.filter(
+                            id__in=self.request.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
+                        )
+                    initial['organizer'] = qs.get(slug=self.request.GET.get('organizer'))
+                except Organizer.DoesNotExist:
+                    pass
 
         return initial
 

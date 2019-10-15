@@ -98,11 +98,11 @@
                         <a href="?{% url_replace request 'ordering' '-datetime' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'datetime' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
-                    <th class="text-right">{% trans "Order total" %}
+                    <th class="text-right flip">{% trans "Order total" %}
                         <a href="?{% url_replace request 'ordering' '-total' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a></th>
-                    <th class="text-right">{% trans "Positions" %}</th>
-                    <th class="text-right">{% trans "Status" %}
+                    <th class="text-right flip">{% trans "Positions" %}</th>
+                    <th class="text-right flip">{% trans "Status" %}
                         <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a></th>
                 </tr>
@@ -127,7 +127,7 @@
                             {% endif %}
                         </td>
                         <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
-                        <td class="text-right">
+                        <td class="text-right flip">
                             {% if o.has_external_refund or o.has_pending_refund %}
                                 <span class="label label-danger">{% trans "REFUND PENDING" %}</span>
                             {% elif o.has_pending_refund %}
@@ -142,8 +142,8 @@
                             {% endif %}
                             {{ o.total|money:request.event.currency }}
                         </td>
-                        <td class="text-right">{{ o.pcnt|default_if_none:"0" }}</td>
-                        <td class="text-right">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+                        <td class="text-right flip">{{ o.pcnt|default_if_none:"0" }}</td>
+                        <td class="text-right flip">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -159,12 +159,12 @@
                                 {{ s }} orders
                             {% endblocktrans %}
                         </th>
-                        <th class="text-right">
+                        <th class="text-right flip">
                             {% if sums.s|default_if_none:"none" != "none" %}
                                 {{ sums.s|money:request.event.currency }}
                             {% endif %}
                         </th>
-                        <th class="text-right">
+                        <th class="text-right flip">
                             {% if sums.pc %}
                                 {{ sums.pc }}
                             {% endif %}

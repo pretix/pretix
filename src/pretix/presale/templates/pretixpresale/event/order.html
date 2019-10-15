@@ -52,7 +52,7 @@
                 {% trans "View in backend" %}
             </a>
         {% endif %}
-        {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right" %}
+        {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right flip" %}
         <div class="clearfix"></div>
     </h2>
     {% if order.status == "n" and not order.require_approval %}
@@ -72,7 +72,7 @@
                 {% if last_payment %}
                     {{ last_payment_info }}
                     {% if can_pay %}
-                        <div class="text-right">
+                        <div class="text-right flip">
                             <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}"
                                     class="btn btn-default">
                                 {% trans "Re-try payment or choose another payment method" %}
@@ -81,7 +81,7 @@
                     {% endif %}
                 {% else %}
                     {% if can_pay %}
-                        <div class="text-right">
+                        <div class="text-right flip">
                             <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}"
                                     class="btn btn-primary btn-lg">{% trans "Pay now" %}</a>
                         </div>
@@ -115,7 +115,7 @@
     <div class="panel panel-primary cart">
         <div class="panel-heading">
             {% if order.can_modify_answers %}
-                <div class="pull-right">
+                <div class="pull-right flip">
                     <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
                         <span class="fa fa-edit"></span>
                         {% trans "Change details" %}
@@ -178,7 +178,7 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         {% if order.can_modify_answers %}
-                            <div class="pull-right">
+                            <div class="pull-right flip">
                                 <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
                                     <span class="fa fa-edit"></span>
                                     {% trans "Change details" %}

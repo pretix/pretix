@@ -4,7 +4,7 @@ from collections import OrderedDict
 from django import forms
 from django.dispatch import receiver
 from django.template.loader import get_template
-from django.urls import resolve
+from django.urls import resolve, reverse
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.settings import settings_hierarkey
@@ -12,6 +12,7 @@ from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
     requiredaction_display,
 )
+from pretix.control.signals import nav_organizer
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.presale.signals import html_head
 
@@ -121,6 +122,18 @@ def register_global_settings(sender, **kwargs):
                 StripeKeyValidator('pk_test_'),
             ),
         )),
+        ('payment_stripe_connect_app_fee_percent', forms.DecimalField(
+            label=_('Stripe Connect: App fee (percent)'),
+            required=False,
+        )),
+        ('payment_stripe_connect_app_fee_max', forms.DecimalField(
+            label=_('Stripe Connect: App fee (max)'),
+            required=False,
+        )),
+        ('payment_stripe_connect_app_fee_min', forms.DecimalField(
+            label=_('Stripe Connect: App fee (min)'),
+            required=False,
+        )),
     ])
 
 
@@ -141,3 +154,20 @@ def pretixcontrol_action_display(sender, action, request, **kwargs):
 
     ctx = {'data': data, 'event': sender, 'action': action}
     return template.render(ctx, request)
+
+
+@receiver(nav_organizer, dispatch_uid="stripe_nav_organizer")
+def nav_o(sender, request, organizer, **kwargs):
+    if request.user.has_active_staff_session(request.session.session_key):
+        url = resolve(request.path_info)
+        return [{
+            'label': _('Stripe Connect'),
+            'url': reverse('plugins:stripe:settings.connect', kwargs={
+                'organizer': request.organizer.slug
+            }),
+            'parent': reverse('control:organizer.edit', kwargs={
+                'organizer': request.organizer.slug
+            }),
+            'active': 'settings.connect' in url.url_name,
+        }]
+    return []

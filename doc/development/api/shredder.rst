@@ -35,9 +35,9 @@ The shredder class
 
 .. class:: pretix.base.shredder.BaseDataShredder
 
-   The central object of each invoice renderer is the subclass of ``BaseInvoiceRenderer``.
+   The central object of each data shredder is the subclass of ``BaseDataShredder``.
 
-   .. py:attribute:: BaseInvoiceRenderer.event
+   .. py:attribute:: BaseDataShredder.event
 
       The default constructor sets this property to the event we are currently
       working for.

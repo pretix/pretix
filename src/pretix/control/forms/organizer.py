@@ -16,6 +16,7 @@ from pretix.base.models import Device, Organizer, Team
 from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget,
 )
+from pretix.control.forms.event import SafeEventMultipleChoiceField
 from pretix.multidomain.models import KnownDomain
 from pretix.presale.style import get_fonts
 
@@ -136,7 +137,9 @@ class TeamForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         organizer = kwargs.pop('organizer')
         super().__init__(*args, **kwargs)
-        self.fields['limit_events'].queryset = organizer.events.all()
+        self.fields['limit_events'].queryset = organizer.events.all().order_by(
+            '-has_subevents', '-date_from'
+        )
 
     class Meta:
         model = Team
@@ -147,11 +150,12 @@ class TeamForm(forms.ModelForm):
                   'can_view_vouchers', 'can_change_vouchers']
         widgets = {
             'limit_events': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '#id_all_events'
+                'data-inverse-dependency': '#id_all_events',
+                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
             }),
         }
         field_classes = {
-            'limit_events': SafeModelMultipleChoiceField
+            'limit_events': SafeEventMultipleChoiceField
         }
 
     def clean(self):
@@ -171,7 +175,9 @@ class DeviceForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         organizer = kwargs.pop('organizer')
         super().__init__(*args, **kwargs)
-        self.fields['limit_events'].queryset = organizer.events.all()
+        self.fields['limit_events'].queryset = organizer.events.all().order_by(
+            '-has_subevents', '-date_from'
+        )
 
     def clean(self):
         d = super().clean()
@@ -185,11 +191,12 @@ class DeviceForm(forms.ModelForm):
         fields = ['name', 'all_events', 'limit_events']
         widgets = {
             'limit_events': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '#id_all_events'
+                'data-inverse-dependency': '#id_all_events',
+                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
             }),
         }
         field_classes = {
-            'limit_events': SafeModelMultipleChoiceField
+            'limit_events': SafeEventMultipleChoiceField
         }
 
 

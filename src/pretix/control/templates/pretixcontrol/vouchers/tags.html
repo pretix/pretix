@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% block title %}{% trans "Voucher tags" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Voucher tags" %}</h1>
@@ -8,6 +9,23 @@
             If you add a "tag" to a voucher, you can here see statistics on their usage.
         {% endblocktrans %}
     </p>
+    {% if request.event.has_subevents %}
+        <div class="row filter-form">
+            <form class="" action="" method="get">
+                    <div class="col-lg-2 col-sm-3 col-xs-6">
+                        {% bootstrap_field filter_form.subevent layout='inline' %}
+                    </div>
+                <div class="col-lg-1 col-sm-6 col-xs-6">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <span class="fa fa-filter"></span>
+                        <span class="hidden-md">
+                                {% trans "Filter" %}
+                            </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
     {% if tags|length == 0 %}
         <div class="empty-collection">
             <p>

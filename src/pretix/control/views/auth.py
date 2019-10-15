@@ -74,6 +74,8 @@ def logout(request):
     next = reverse('control:auth.login')
     if 'next' in request.GET and is_safe_url(request.GET.get('next'), allowed_hosts=None):
         next += '?next=' + quote(request.GET.get('next'))
+    if 'back' in request.GET and is_safe_url(request.GET.get('back'), allowed_hosts=None):
+        return redirect(request.GET.get('back'))
     return redirect(next)
 
 

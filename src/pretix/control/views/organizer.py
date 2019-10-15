@@ -92,6 +92,7 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
     template_name = 'pretixcontrol/organizers/detail.html'
     permission = None
     context_object_name = 'events'
+    paginate_by = 50
 
     @property
     def organizer(self):

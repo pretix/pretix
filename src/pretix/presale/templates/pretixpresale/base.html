@@ -5,7 +5,7 @@
 {% load statici18n %}
 {% load thumb %}
 <!DOCTYPE html>
-<html>
+<html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 <head>
     <title>{% block thetitle %}{% endblock %}</title>
     {% compress css %}
@@ -30,6 +30,8 @@
         <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.favicon|thumb:'32x32^' }}">
         <link rel="icon" type="image/png" sizes="194x194" href="{{ settings.favicon|thumb:'194x194^' }}">
         <link rel="icon" type="image/png" sizes="16x16" href="{{ settings.favicon|thumb:'16x16^' }}">
+    {% elif development_warning or debug_warning %}
+        <link rel="shortcut icon" href="{% static "pretixbase/img/favicon-debug.ico" %}">
     {% else %}
         <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
         <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">

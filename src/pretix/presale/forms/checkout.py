@@ -29,6 +29,7 @@ class ContactForm(forms.Form):
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
                                          'confirmation including a link that you need to access your order later.'),
                              validators=[EmailBlacklistValidator()],
+                             widget=forms.EmailInput(attrs={'autocomplete': 'section-contact email'})
                              )
 
     def __init__(self, *args, **kwargs):

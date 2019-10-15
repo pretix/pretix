@@ -6,7 +6,7 @@
 {% load eventsignal %}
 {% load eventurl %}
 <!DOCTYPE html>
-<html>
+<html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 	<head>
 		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}
             {{ settings.PRETIX_INSTANCE_NAME }}</title>
@@ -43,6 +43,7 @@
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/quota.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/subevent.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/question.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/dragndroplist.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/mail.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/orderchange.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/typeahead.js" %}"></script>
@@ -51,6 +52,7 @@
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/tabs.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixbase/js/details.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
+            <script type="text/javascript" src="{% static "sortable/Sortable.js" %}"></script>
             <script type="text/javascript" src="{% static "colorpicker/bootstrap-colorpicker.js" %}"></script>
             <script type="text/javascript" src="{% static "fileupload/jquery.ui.widget.js" %}"></script>
             <script type="text/javascript" src="{% static "fileupload/jquery.fileupload.js" %}"></script>
@@ -59,12 +61,16 @@
         {{ html_head|safe }}
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">
+        {% if development_warning or debug_warning %}
+            <link rel="shortcut icon" href="{% static "pretixbase/img/favicon-debug.ico" %}">
+        {% else %}
+            <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">
+            <link rel="icon" type="image/png" sizes="32x32" href="{% static "pretixbase/img/icons/favicon-32x32.png" %}">
+            <link rel="icon" type="image/png" sizes="194x194" href="{% static "pretixbase/img/icons/favicon-194x194.png" %}">
+            <link rel="icon" type="image/png" sizes="16x16" href="{% static "pretixbase/img/icons/favicon-16x16.png" %}">
+        {% endif %}
         <link rel="apple-touch-icon" sizes="180x180" href="{% static "pretixbase/img/icons/apple-touch-icon.png" %}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static "pretixbase/img/icons/favicon-32x32.png" %}">
-        <link rel="icon" type="image/png" sizes="194x194" href="{% static "pretixbase/img/icons/favicon-194x194.png" %}">
         <link rel="icon" type="image/png" sizes="192x192" href="{% static "pretixbase/img/icons/android-chrome-192x192.png" %}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{% static "pretixbase/img/icons/favicon-16x16.png" %}">
         <link rel="manifest" href="{% url "presale:site.webmanifest" %}">
         <link rel="mask-icon" href="{% static "pretixbase/img/icons/safari-pinned-tab.svg" %}" color="#3b1c4a">
         <meta name="msapplication-TileColor" content="#3b1c4a">
@@ -117,7 +123,7 @@
                         {{ settings.PRETIX_INSTANCE_NAME }}
                     </a>
                 </div>
-                <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
+                <ul class="nav navbar-nav navbar-top-links navbar-left flip hidden-xs">
                     {% if request.event %}
                         <li>
                             {% if has_domain and not request.event.live %}
@@ -141,7 +147,7 @@
                         </li>
                     {% endif %}
                 </ul>
-                <ul class="nav navbar-nav navbar-top-links navbar-right">
+                <ul class="nav navbar-nav navbar-top-links navbar-right flip">
                     {% for nav in nav_topbar %}
                         <li {% if nav.children %}class="dropdown"{% endif %}>
                             <a href="{{ nav.url }}" title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}
@@ -161,13 +167,13 @@
                                 <ul class="dropdown-menu" role="menu">
                                     {% for item in nav.children %}
                                         <li>
-                                            <a href="{{ item.url }}"
+                                            <a {% if item.url %}href="{{ item.url }}"{% endif %}
+                                                    {% if item.external %}target="_blank"{% endif %}
                                                     {% if item.active %}class="active"{% endif %}>
                                                 {% if item.icon %}
-                                                    <span class="fa fa-{{ item.icon }}"></span>
+                                                    <span class="fa fa-fw fa-{{ item.icon }}"></span>
                                                 {% endif %}
-                                                {{ item.label|safe }}
-                                            </a>
+                                                {{ item.label|safe }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -256,7 +262,7 @@
                                     <div class="form-box">
                                         <input type="text" class="form-control" id="event-dropdown-field"
                                                placeholder="{% trans "Search for events" %}"
-                                               data-typeahead-query>
+                                               data-typeahead-query autocomplete="off">
                                     </div>
                                 </li>
                             </ul>

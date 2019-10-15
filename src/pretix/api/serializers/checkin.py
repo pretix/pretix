@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import CheckinList
 
 
@@ -13,7 +14,7 @@ class CheckinListSerializer(I18nAwareModelSerializer):
     class Meta:
         model = CheckinList
         fields = ('id', 'name', 'all_products', 'limit_products', 'subevent', 'checkin_count', 'position_count',
-                  'include_pending')
+                  'include_pending', 'auto_checkin_sales_channels')
 
     def validate(self, data):
         data = super().validate(data)
@@ -34,5 +35,9 @@ class CheckinListSerializer(I18nAwareModelSerializer):
         else:
             if full_data.get('subevent'):
                 raise ValidationError(_('The subevent does not belong to this event.'))
+
+        for channel in full_data.get('auto_checkin_sales_channels') or []:
+            if channel not in get_all_sales_channels():
+                raise ValidationError(_('Unknown sales channel.'))
 
         return data

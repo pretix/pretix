@@ -3,8 +3,9 @@ from django.conf.urls import include, url
 from pretix.multidomain import event_url
 
 from .views import (
-    ReturnView, ScaReturnView, ScaView, applepay_association, oauth_disconnect,
-    oauth_return, redirect_view, webhook,
+    OrganizerSettingsFormView, ReturnView, ScaReturnView, ScaView,
+    applepay_association, oauth_disconnect, oauth_return, redirect_view,
+    webhook,
 )
 
 event_patterns = [
@@ -24,6 +25,8 @@ organizer_patterns = [
 urlpatterns = [
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/stripe/disconnect/',
         oauth_disconnect, name='oauth.disconnect'),
+    url(r'^control/organizer/(?P<organizer>[^/]+)/stripeconnect/',
+        OrganizerSettingsFormView.as_view(), name='settings.connect'),
     url(r'^_stripe/webhook/$', webhook, name='webhook'),
     url(r'^_stripe/oauth_return/$', oauth_return, name='oauth.return'),
     url(r'^.well-known/apple-developer-merchantid-domain-association$', applepay_association, name='applepay.association'),

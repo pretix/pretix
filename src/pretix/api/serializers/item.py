@@ -249,6 +249,9 @@ class QuestionSerializer(I18nAwareModelSerializer):
 
         dep = full_data.get('dependency_question')
         if dep:
+            if dep.ask_during_checkin:
+                raise ValidationError(_('Question cannot depend on a question asked during check-in.'))
+
             seen_ids = {self.instance.pk} if self.instance else set()
             while dep:
                 if dep.pk in seen_ids:

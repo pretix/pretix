@@ -1025,8 +1025,6 @@ class Question(LoggedModel):
     )
     ask_during_checkin = models.BooleanField(
         verbose_name=_('Ask during check-in instead of in the ticket buying process'),
-        help_text=_('This will only work if you handle your check-in with pretixdroid 1.8 or newer or '
-                    'pretixdesk 0.2 or newer.'),
         default=False
     )
     hidden = models.BooleanField(

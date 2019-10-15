@@ -24,7 +24,7 @@
                         <h4 class="panel-title">
                             <label class="radio">
                                 {% if show_fees %}
-                                    <strong class="pull-right">{% if p.fee_diff >= 0 %}+{% else %}-{% endif %} {{ p.fee_diff_abs|money:event.currency }}</strong>
+                                    <strong class="pull-right flip">{% if p.fee_diff >= 0 %}+{% else %}-{% endif %} {{ p.fee_diff_abs|money:event.currency }}</strong>
                                 {% endif %}
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                         data-parent="#payment_accordion"

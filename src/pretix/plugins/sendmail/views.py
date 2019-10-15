@@ -1,21 +1,21 @@
 import logging
-from datetime import timedelta
 
+import bleach
 from django.contrib import messages
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect
-from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
 
+from pretix.base.email import get_available_placeholders
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import LogEntry, Order
 from pretix.base.models.event import SubEvent
+from pretix.base.services.mail import TolerantDict
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.sendmail.tasks import send_mails
 
 from . import forms
@@ -90,22 +90,15 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             for l in self.request.event.settings.locales:
 
                 with language(l):
+                    context_dict = TolerantDict()
+                    for k, v in get_available_placeholders(self.request.event, ['event', 'order',
+                                                                                'position_or_address']).items():
+                        context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
+                            _('This value will be replaced based on dynamic parameters.'),
+                            v.render_sample(self.request.event)
+                        )
 
-                    context_dict = {
-                        'code': 'ORDER1234',
-                        'event': self.request.event.name,
-                        'date': date_format(now(), 'SHORT_DATE_FORMAT'),
-                        'expire_date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
-                        'url': build_absolute_uri(self.request.event, 'presale:event.order.open', kwargs={
-                            'order': 'ORDER1234',
-                            'secret': 'longrandomsecretabcdef123456',
-                            'hash': 'abcdef',
-                        }),
-                        'invoice_name': _('John Doe'),
-                        'invoice_company': _('Sample Company LLC')
-                    }
-
-                    subject = form.cleaned_data['subject'].localize(l)
+                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
                     preview_subject = subject.format_map(context_dict)
                     message = form.cleaned_data['message'].localize(l)
                     preview_text = markdown_compile_email(message.format_map(context_dict))
