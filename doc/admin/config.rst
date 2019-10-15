@@ -57,6 +57,9 @@ Example::
     A comma-separated list of plugins that are not available even though they are installed.
     Defaults to an empty string.
 
+``auth_backends``
+    A comma-separated list of available auth backends. Defaults to ``pretix.base.auth.NativeAuthBackend``.
+
 ``cookie_domain``
     The cookie domain to be set. Defaults to ``None``.
 

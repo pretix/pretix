@@ -38,14 +38,15 @@ class LoginForm(forms.Form):
             self.fields.move_to_end('keep_logged_in')
 
     def clean(self):
-        self.user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
-        if self.user_cache is None:
-            raise forms.ValidationError(
-                self.error_messages['invalid_login'],
-                code='invalid_login'
-            )
-        else:
-            self.confirm_login_allowed(self.user_cache)
+        if all(k in self.cleaned_data for k, f in self.fields.items() if f.required):
+            self.user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
+            if self.user_cache is None:
+                raise forms.ValidationError(
+                    self.error_messages['invalid_login'],
+                    code='invalid_login'
+                )
+            else:
+                self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data
 
@@ -205,7 +206,6 @@ class ReauthForm(forms.Form):
     def clean(self):
         self.cleaned_data['email'] = self.user.email
         user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
-        print(user_cache, self.user)
         if user_cache != self.user:
             raise forms.ValidationError(
                 self.error_messages['invalid_login'],

@@ -33,7 +33,10 @@ logger = logging.getLogger(__name__)
 
 def process_login(request, user, keep_logged_in):
     """
-    TODO
+    This method allows you to return a response to a successful log-in. This will set all session values correctly
+    and redirect to either the URL specified in the ``next`` parameter, or the 2FA login screen, or the dashboard.
+
+    :return: This method returns a ``HttpResponse``.
     """
     request.session['pretix_auth_long_session'] = settings.PRETIX_LONG_SESSIONS and keep_logged_in
     if user.require_2fa:
