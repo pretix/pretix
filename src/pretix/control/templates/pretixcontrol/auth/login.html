@@ -8,11 +8,13 @@
         {% if backends|length > 1 %}
             <ul class="nav nav-pills">
                 {% for b in backends %}
-                    <li class="{% if backend.identifier == b.identifier %}active{% endif %}">
-                        <a href="{% if b.url %}{{ b.url }}{% else %}?{% url_replace request "backend" b.identifier %}{% endif %}">
-                            {{ b.verbose_name }}
-                        </a>
-                    </li>
+                    {% if b.visible %}
+                        <li class="{% if backend.identifier == b.identifier %}active{% endif %}">
+                            <a href="{% if b.url %}{{ b.url }}{% else %}?{% url_replace request "backend" b.identifier %}{% endif %}">
+                                {{ b.verbose_name }}
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
             <br>
