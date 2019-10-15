@@ -105,7 +105,7 @@ class Migration(migrations.Migration):
                           'references.',
                 validators=[django.core.validators.RegexValidator(
                     message='The slug may only contain letters, numbers, dots and dashes.', regex='^[a-zA-Z0-9.-]+$'),
-                    pretix.base.validators.EventSlugBlacklistValidator()], verbose_name='Short form'),
+                    pretix.base.validators.EventSlugBanlistValidator()], verbose_name='Short form'),
         ),
         migrations.AlterField(
             model_name='eventmetaproperty',
@@ -125,7 +125,7 @@ class Migration(migrations.Migration):
                           ' events.',
                 validators=[django.core.validators.RegexValidator(
                     message='The slug may only contain letters, numbers, dots and dashes.', regex='^[a-zA-Z0-9.-]+$'),
-                    pretix.base.validators.OrganizerSlugBlacklistValidator()], verbose_name='Short form'),
+                    pretix.base.validators.OrganizerSlugBanlistValidator()], verbose_name='Short form'),
         ),
         migrations.CreateModel(
             name='CheckinList',
