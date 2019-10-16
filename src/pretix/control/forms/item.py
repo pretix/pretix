@@ -369,9 +369,9 @@ class ItemCreateForm(I18nModelForm):
 class ShowQuotaNullBooleanSelect(forms.NullBooleanSelect):
     def __init__(self, attrs=None):
         choices = (
-            ('1', _('(Event default)')),
-            ('2', _('Yes')),
-            ('3', _('No')),
+            ('unknown', _('(Event default)')),
+            ('true', _('Yes')),
+            ('false', _('No')),
         )
         super(forms.NullBooleanSelect, self).__init__(attrs, choices)
 
@@ -379,9 +379,9 @@ class ShowQuotaNullBooleanSelect(forms.NullBooleanSelect):
 class TicketNullBooleanSelect(forms.NullBooleanSelect):
     def __init__(self, attrs=None):
         choices = (
-            ('1', _('Choose automatically depending on event settings')),
-            ('2', _('Yes, if ticket generation is enabled in general')),
-            ('3', _('Never')),
+            ('unknown', _('Choose automatically depending on event settings')),
+            ('true', _('Yes, if ticket generation is enabled in general')),
+            ('false', _('Never')),
         )
         super(forms.NullBooleanSelect, self).__init__(attrs, choices)
 
