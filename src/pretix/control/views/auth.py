@@ -62,18 +62,20 @@ def login(request):
     ctx = {}
     backenddict = get_auth_backends()
     backends = sorted(backenddict.values(), key=lambda b: (b.identifier != "native", b.verbose_name))
-    backend = backenddict.get(request.GET.get('backend', 'native'), backends[0])
     for b in backends:
         u = b.request_authenticate(request)
-        if u:
+        if u and u.auth_backend == b.identifier:
             return process_login(request, u, False)
         b.url = b.authentication_url(request)
 
+    backend = backenddict.get(request.GET.get('backend', 'native'), backends[0])
+    if not backend.visible:
+        backend = [b for b in backends if b.visible][0]
     if request.user.is_authenticated:
         return redirect(request.GET.get("next", 'control:index'))
     if request.method == 'POST':
         form = LoginForm(backend=backend, data=request.POST)
-        if form.is_valid() and form.user_cache:
+        if form.is_valid() and form.user_cache and form.user_cache.auth_backend == b.identifier:
             return process_login(request, form.user_cache, form.cleaned_data.get('keep_logged_in', False))
     else:
         form = LoginForm(backend=backend)
@@ -288,7 +290,7 @@ class Recover(TemplateView):
         if request.user.is_authenticated:
             return redirect(request.GET.get("next", 'control:index'))
         try:
-            user = User.objects.get(id=self.request.GET.get('id'))
+            user = User.objects.get(id=self.request.GET.get('id'), auth_backend='native')
         except User.DoesNotExist:
             return self.invalid('unknownuser')
         if not default_token_generator.check_token(user, self.request.GET.get('token')):
@@ -302,7 +304,7 @@ class Recover(TemplateView):
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
             try:
-                user = User.objects.get(id=self.request.GET.get('id'))
+                user = User.objects.get(id=self.request.GET.get('id'), auth_backend='native')
             except User.DoesNotExist:
                 return self.invalid('unknownuser')
             if not default_token_generator.check_token(user, self.request.GET.get('token')):

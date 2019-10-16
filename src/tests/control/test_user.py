@@ -72,6 +72,18 @@ class UserSettingsTest(SoupTest):
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
 
+    def test_change_password_wrong_backend(self):
+        self.user.auth_backend = 'test_request'
+        self.user.save()
+        self.save({
+            'new_pw': 'foobarbar',
+            'new_pw_repeat': 'foobarbar',
+            'old_pw': 'dummy',
+        })
+        pw = self.user.password
+        self.user = User.objects.get(pk=self.user.pk)
+        assert self.user.password == pw
+
     def test_change_password_success(self):
         doc = self.save({
             'new_pw': 'foobarbar',

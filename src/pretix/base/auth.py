@@ -105,5 +105,5 @@ class NativeAuthBackend(BaseAuthBackend):
 
     def form_authenticate(self, request, form_data):
         u = authenticate(request=request, email=form_data['email'].lower(), password=form_data['password'])
-        if u.auth_backend == self.identifier:
+        if u and u.auth_backend == self.identifier:
             return u
