@@ -75,7 +75,7 @@ def login(request):
         return redirect(request.GET.get("next", 'control:index'))
     if request.method == 'POST':
         form = LoginForm(backend=backend, data=request.POST)
-        if form.is_valid() and form.user_cache and form.user_cache.auth_backend == b.identifier:
+        if form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier:
             return process_login(request, form.user_cache, form.cleaned_data.get('keep_logged_in', False))
     else:
         form = LoginForm(backend=backend)
