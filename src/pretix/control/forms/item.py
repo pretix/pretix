@@ -429,6 +429,13 @@ class ItemUpdateForm(I18nModelForm):
                     'tax_rule',
                     _("Gift card products should not be associated with non-zero tax rates since sales tax will be applied when the gift card is redeemed.")
                 )
+            if d['admission']:
+                self.add_error(
+                    'admission',
+                    _(
+                        "Gift card products should not be admission products at the same time."
+                    )
+                )
         return d
 
     class Meta:

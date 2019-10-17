@@ -134,6 +134,17 @@ class ItemSerializer(I18nAwareModelSerializer):
         Item.clean_per_order(data.get('min_per_order'), data.get('max_per_order'))
         Item.clean_available(data.get('available_from'), data.get('available_until'))
 
+        if data.get('issue_giftcard'):
+            if data.get('tax_rule') and data.get('tax_rule').rate > 0:
+                raise ValidationError(
+                    _("Gift card products should not be associated with non-zero tax rates since sales tax will be "
+                      "applied when the gift card is redeemed.")
+                )
+            if data.get('admission'):
+                raise ValidationError(_(
+                    "Gift card products should not be admission products at the same time."
+                ))
+
         return data
 
     def validate_category(self, value):
