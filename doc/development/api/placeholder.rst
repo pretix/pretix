@@ -1,8 +1,8 @@
 .. highlight:: python
    :linenothreshold: 5
 
-Writing an HTML e-mail placeholder plugin
-=========================================
+Writing an e-mail placeholder plugin
+====================================
 
 An email placeholder is a dynamic value that pretix users can use in their email templates.
 
