@@ -260,6 +260,9 @@ def base_placeholders(sender, **kwargs):
             'event', ['event'], lambda event: event.name, lambda event: event.name
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'event_slug', ['event'], lambda event: event.slug, lambda event: event.slug
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'code', ['order'], lambda order: order.code, 'F8VVL'
         ),
         SimpleFunctionalMailTextPlaceholder(
