@@ -348,6 +348,8 @@ class BaseQuestionsForm(forms.Form):
         question_cache = {f.question.pk: f.question for f in self.fields.values() if getattr(f, 'question', None)}
 
         def question_is_visible(parentid, qvals):
+            if parentid not in question_cache:
+                return False
             parentq = question_cache[parentid]
             if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
                 return False
