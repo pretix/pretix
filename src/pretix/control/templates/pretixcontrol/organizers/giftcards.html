@@ -85,7 +85,6 @@
                     {% endblocktrans %}
                 </p>
                 <ul>
-
                     {% for gca in request.organizer.gift_card_issuer_acceptance.all %}
                         <li>
                             <strong>{{ gca.issuer }}</strong>
@@ -98,17 +97,17 @@
                             <em>{% trans "You are currently not accepting gift cards from other organizers." %}</em>
                         </li>
                     {% endfor %}
-                    <li>
                     {% if other_organizers %}
                         <li>
                             <select name="add" class="form-control">
-                            <option></option>
-                            {% for o in other_organizers %}
-                                <option value="{{ o.slug }}">{{ o }}</option>
-                            {% endfor %}
-                        </select>
-                        <button class="btn btn-primary btn-sm" type="submit"><span class="fa fa-plus"></span></button>
-                    </li>
+                                <option></option>
+                                {% for o in other_organizers %}
+                                    <option value="{{ o.slug }}">{{ o }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-primary btn-sm" type="submit"><span class="fa fa-plus"></span></button>
+                        </li>
+                    {% endif %}
                 </ul>
             </fieldset>
         </form>

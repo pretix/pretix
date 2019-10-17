@@ -237,7 +237,7 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation', 'addon_to', 'tax_rule'
         ).prefetch_related(
-            'item__questions',
+            'item__questions', 'issued_gift_cards',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
             'checkins', 'checkins__list'
         ).order_by('positionid')
