@@ -1379,6 +1379,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         cr1.voucher = v
         cr1.save()
+        self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)

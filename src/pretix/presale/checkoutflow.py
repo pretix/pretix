@@ -712,7 +712,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
                        [p.id for p in self.positions], self.cart_session.get('email'),
                        translation.get_language(), self.invoice_address.pk, meta_info,
                        request.sales_channel, self.cart_session.get('gift_cards'),
-                       self.cart_session['shown_total'])
+                       self.cart_session.get('shown_total'))
 
     def get_success_message(self, value):
         create_empty_cart_id(self.request)
