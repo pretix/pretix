@@ -201,7 +201,7 @@ class Order(LockModel, LoggedModel):
         return self.full_code
 
     def gracefully_delete(self, user=None, auth=None):
-        from . import Voucher
+        from . import Voucher, GiftCard, GiftCardTransaction
 
         if not self.testmode:
             raise TypeError("Only test mode orders can be deleted.")
@@ -217,6 +217,10 @@ class Order(LockModel, LoggedModel):
                 if position.voucher:
                     Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
 
+        GiftCardTransaction.objects.filter(payment__in=self.payments.all()).update(payment=None)
+        GiftCardTransaction.objects.filter(refund__in=self.refunds.all()).update(refund=None)
+        GiftCardTransaction.objects.filter(order=self).update(order=None)
+        GiftCard.objects.filter(issued_in__in=self.positions.all()).update(issued_in=None)
         OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order=self).delete()
         OrderFee.all.filter(order=self).delete()

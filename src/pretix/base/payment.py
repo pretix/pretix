@@ -906,6 +906,10 @@ class GiftCardPayment(BasePaymentProvider):
         del f['_invoice_text']
         return f
 
+    @property
+    def test_mode_message(self) -> str:
+        return _("In test mode, only test cards will work.")
+
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         return super().is_allowed(request, total) and self.event.organizer.has_gift_cards
 
@@ -958,6 +962,12 @@ class GiftCardPayment(BasePaymentProvider):
             if gc.currency != self.event.currency:
                 messages.error(request, _("This gift card does not support this currency."))
                 return
+            if gc.testmode and not self.event.testmode:
+                messages.error(request, _("This gift card can only be used in test mode."))
+                return
+            if not gc.testmode and self.event.testmode:
+                messages.error(request, _("Only test gifts cards can be used in test mode."))
+                return
             if gc.value <= Decimal("0.00"):
                 messages.error(request, _("All credit on this gift card has been used."))
                 return
@@ -997,6 +1007,12 @@ class GiftCardPayment(BasePaymentProvider):
             if gc.currency != self.event.currency:
                 messages.error(request, _("This gift card does not support this currency."))
                 return
+            if gc.testmode and not self.event.testmode:
+                messages.error(request, _("This gift card can only be used in test mode."))
+                return
+            if not gc.testmode and self.event.testmode:
+                messages.error(request, _("Only test gift cards can be used in test mode."))
+                return
             if gc.value <= Decimal("0.00"):
                 messages.error(request, _("All credit on this gift card has been used."))
                 return
@@ -1027,6 +1043,8 @@ class GiftCardPayment(BasePaymentProvider):
                 raise PaymentException(_("This gift card does not support this currency."))
             if not gc.accepted_by(self.event.organizer):
                 raise PaymentException(_("This gift card is not accepted by this event organizer."))
+            if gc.testmode != payment.order.testmode:
+                raise PaymentException(_("Only the gift card or only the order are created in test mode."))
             if payment.amount > gc.value:
                 raise PaymentException(_("This gift card was used in the meantime. Please try again"))
             trans = gc.transactions.create(

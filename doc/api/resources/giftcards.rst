@@ -17,6 +17,7 @@ id                                    integer                    Internal ID of 
 secret                                string                     Gift card code (can not be modified later)
 value                                 money (string)             Current gift card value
 currency                              string                     Currency of the value (can not be modified later)
+testmode                              boolean                    Whether this is a test gift card
 ===================================== ========================== =======================================================
 
 Endpoints
@@ -51,6 +52,7 @@ Endpoints
             "id": 1,
             "secret": "HLBYVELFRC77NCQY",
             "currency": "EUR",
+            "testmode": false,
             "value": "13.37"
           }
         ]
@@ -86,6 +88,7 @@ Endpoints
         "id": 1,
         "secret": "HLBYVELFRC77NCQY",
         "currency": "EUR",
+        "testmode": false,
         "value": "13.37"
       }
 
@@ -125,6 +128,7 @@ Endpoints
       {
         "id": 1,
         "secret": "HLBYVELFRC77NCQY",
+        "testmode": false,
         "currency": "EUR",
         "value": "13.37"
       }
@@ -141,8 +145,9 @@ Endpoints
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
-   You can change all fields of the resource except the ``id``, ``secret``, and ``currency`` fields. Be careful when
-   modifying the ``value`` field to avoid race conditions. We recommend to use the ``transact`` method described below.
+   You can change all fields of the resource except the ``id``, ``secret``, ``testmode``, and ``currency`` fields. Be
+   careful when modifying the ``value`` field to avoid race conditions. We recommend to use the ``transact`` method
+   described below.
 
    **Example request**:
 
@@ -169,6 +174,7 @@ Endpoints
       {
         "id": 1,
         "secret": "HLBYVELFRC77NCQY",
+        "testmode": false,
         "currency": "EUR",
         "value": "14.00"
       }
@@ -211,6 +217,7 @@ Endpoints
         "id": 1,
         "secret": "HLBYVELFRC77NCQY",
         "currency": "EUR",
+        "testmode": false,
         "value": "15.37"
       }
 

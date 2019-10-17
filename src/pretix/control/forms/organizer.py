@@ -355,4 +355,4 @@ class GiftCardCreateForm(forms.ModelForm):
 
     class Meta:
         model = GiftCard
-        fields = ['secret', 'currency']
+        fields = ['secret', 'currency', 'testmode']

@@ -600,6 +600,10 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             for gc in gc_qs:
                 if gc.currency != event.currency:
                     raise OrderError(_("This gift card does not support this currency."))
+                if gc.testmode and not event.testmode:
+                    raise OrderError(_("This gift card can only be used in test mode."))
+                if not gc.testmode and event.testmode:
+                    raise OrderError(_("Only test gift cards can be used in test mode."))
                 if not gc.accepted_by(event.organizer):
                     raise OrderError(_("This gift card is not accepted by this event organizer."))
                 checked_gift_cards.append(gc)
@@ -1687,7 +1691,7 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
     for p in order.positions.all():
         if p.item.issue_giftcard:
             gc = sender.organizer.issued_gift_cards.create(
-                currency=sender.currency, issued_in=p
+                currency=sender.currency, issued_in=p, testmode=order.testmode
             )
             gc.transactions.create(value=p.price, order=order)
             any_giftcards = True

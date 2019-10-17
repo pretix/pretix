@@ -971,9 +971,13 @@ def get_fees(event, request, total, invoice_address, provider):
 
     cs = cart_session(request)
     if cs.get('gift_cards'):
+        gcs = cs['gift_cards']
         gc_qs = event.organizer.accepted_gift_cards.filter(pk__in=cs.get('gift_cards'), currency=event.currency)
         summed = 0
         for gc in gc_qs:
+            if gc.testmode != event.testmode:
+                gcs.remove(gc.pk)
+                continue
             fval = Decimal(gc.value)  # TODO: don't require an extra query
             fval = min(fval, total - summed)
             if fval > 0:
@@ -988,6 +992,7 @@ def get_fees(event, request, total, invoice_address, provider):
                     tax_value=Decimal('0.00'),
                     tax_rule=TaxRule.zero()
                 ))
+        cs['gift_cards'] = gcs
 
     if provider and total != 0:
         provider = event.get_payment_providers().get(provider)

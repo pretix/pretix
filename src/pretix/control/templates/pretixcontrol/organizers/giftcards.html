@@ -54,6 +54,9 @@
                             <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=g.id %}">
                                 <strong>{{ g.secret }}</strong>
                             </a>
+                            {% if g.testmode %}
+                                <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                            {% endif %}
                         </td>
                         <td>{{ g.issuance|date:"SHORT_DATETIME_FORMAT" }}</td>
                         <td class="text-right">

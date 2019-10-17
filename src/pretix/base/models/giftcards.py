@@ -52,6 +52,10 @@ class GiftCard(LoggedModel):
         db_index=True,
         verbose_name=_('Gift card code'),
     )
+    testmode = models.BooleanField(
+        verbose_name=_('Test mode card'),
+        default=False
+    )
     CURRENCY_CHOICES = [(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES]
     currency = models.CharField(max_length=10, choices=CURRENCY_CHOICES)
 

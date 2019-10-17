@@ -117,7 +117,8 @@ class GiftCardViewSet(viewsets.ModelViewSet):
         GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
         old_value = serializer.instance.value
         value = serializer.validated_data.pop('value')
-        inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency)
+        inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
+                               testmode=serializer.instance.testmode)
         diff = value - old_value
         inst.transactions.create(value=diff)
         inst.log_action(

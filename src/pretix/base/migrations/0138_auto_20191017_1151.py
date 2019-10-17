@@ -32,6 +32,7 @@ class Migration(migrations.Migration):
                 ('issuer',
                  models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='issued_gift_cards',
                                    to='pretixbase.Organizer')),
+                ('testmode', django.db.models.BooleanField(default=False)),
             ],
             options={
                 'unique_together': {('secret', 'issuer')},

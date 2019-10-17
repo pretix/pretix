@@ -7,6 +7,9 @@
         {% blocktrans trimmed with card=card.secret %}
             Gift card: {{ card }}
         {% endblocktrans %}
+        {% if card.testmode %}
+            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+        {% endif %}
     </h1>
     <div class="panel panel-primary items">
         <div class="panel-heading">

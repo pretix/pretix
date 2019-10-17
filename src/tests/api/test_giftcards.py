@@ -18,6 +18,7 @@ TEST_GC_RES = {
     "id": 1,
     "secret": "ABCDEF",
     "value": "23.00",
+    "testmode": False,
     "currency": "EUR"
 }
 
@@ -46,6 +47,7 @@ def test_giftcard_detail(token_client, organizer, event, giftcard):
 TEST_GIFTCARD_CREATE_PAYLOAD = {
     "secret": "DEFABC",
     "value": "12.00",
+    "testmode": False,
     "currency": "EUR",
 }
 
@@ -84,6 +86,7 @@ def test_giftcard_patch(token_client, organizer, event, giftcard):
         {
             'secret': 'foo',
             'value': '10.00',
+            'testmode': True,
             'currency': 'USD'
         },
         format='json'
@@ -93,6 +96,7 @@ def test_giftcard_patch(token_client, organizer, event, giftcard):
     assert giftcard.value == Decimal('10.00')
     assert giftcard.secret == "ABCDEF"
     assert giftcard.currency == "EUR"
+    assert not giftcard.testmode
 
 
 @pytest.mark.django_db
