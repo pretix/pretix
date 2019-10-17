@@ -918,9 +918,45 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
             qs = self.filter_form.filter_qs(qs)
         return qs
 
+    def post(self, request, *args, **kwargs):
+        if "add" in request.POST:
+            o = self.request.user.get_organizers_with_permission(
+                'can_manage_gift_cards', self.request
+            ).exclude(pk=self.request.organizer.pk).filter(
+                slug=request.POST.get("add")
+            ).first()
+            if o:
+                self.request.organizer.gift_card_issuer_acceptance.get_or_create(
+                    issuer=o
+                )
+                self.request.organizer.log_action(
+                    'pretix.giftcards.acceptance.added',
+                    data={'issuer': o.slug},
+                    user=request.user
+                )
+                messages.success(self.request, _('The selected gift card issuer has been added.'))
+        if "del" in request.POST:
+            o = Organizer.objects.filter(
+                slug=request.POST.get("del")
+            ).first()
+            if o:
+                self.request.organizer.gift_card_issuer_acceptance.filter(
+                    issuer=o
+                ).delete()
+                self.request.organizer.log_action(
+                    'pretix.giftcards.acceptance.removed',
+                    data={'issuer': o.slug},
+                    user=request.user
+                )
+                messages.success(self.request, _('The selected gift card issuer has been removed.'))
+        return redirect(reverse('control:organizer.giftcards', kwargs={'organizer': self.request.organizer.slug}))
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
+        ctx['other_organizers'] = self.request.user.get_organizers_with_permission(
+            'can_manage_gift_cards', self.request
+        ).exclude(pk=self.request.organizer.pk)
         return ctx
 
     @cached_property
