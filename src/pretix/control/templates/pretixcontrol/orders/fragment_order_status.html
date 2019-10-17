@@ -4,7 +4,8 @@
     {% if order.require_approval %}
         <span class="label label-warning {{ class }}">{% trans "Approval pending" %}</span>
     {% else %}
-        <span class="label label-warning {{ class }}">{% trans "Pending" %}</span>
+        <span data-toggle="tooltip" title="{{ order.expires|date:"SHORT_DATETIME_FORMAT" }}"
+                class="label label-warning {{ class }}">{% trans "Pending" %}</span>
     {% endif %}
 {% elif order.status == "p" %}
     {% if order.count_positions == 0 %}
