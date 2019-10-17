@@ -607,6 +607,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                 if not gc.accepted_by(event.organizer):
                     raise OrderError(_("This gift card is not accepted by this event organizer."))
                 checked_gift_cards.append(gc)
+        if checked_gift_cards and any(c.item.issue_giftcard for c in positions):
+            raise OrderError(_("You cannot pay with gift cards when buying a gift card."))
 
         fees, pf, gift_card_values = _get_fees(positions, payment_provider, address, meta_info, event, checked_gift_cards)
         total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])

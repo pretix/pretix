@@ -32,7 +32,7 @@ from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.money import DecimalTextInput
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.views import get_cart_total
+from pretix.presale.views import get_cart, get_cart_total
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
@@ -954,6 +954,11 @@ class GiftCardPayment(BasePaymentProvider):
         return True
 
     def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
+        for p in get_cart(request):
+            if p.item.issue_giftcard:
+                messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
+                return
+
         cs = cart_session(request)
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
@@ -1000,6 +1005,11 @@ class GiftCardPayment(BasePaymentProvider):
             messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
     def payment_prepare(self, request: HttpRequest, payment: OrderPayment) -> Union[bool, str, None]:
+        for p in payment.order.positions.all():
+            if p.item.issue_giftcard:
+                messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
+                return
+
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
                 secret=request.POST.get("giftcard")
@@ -1034,6 +1044,10 @@ class GiftCardPayment(BasePaymentProvider):
             messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
+        for p in payment.order.positions.all():
+            if p.item.issue_giftcard:
+                raise PaymentException(_("You cannot pay with gift cards when buying a gift card."))
+
         gcpk = payment.info_data.get('gift_card')
         if not gcpk or not payment.info_data.get('retry'):
             raise PaymentException("Invalid state, should never occur.")
