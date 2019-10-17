@@ -2599,7 +2599,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1921 pretix/base/services/orders.py:646
 #, python-format
 msgid "Your event registration: %(code)s"
-msgstr "Förköp har inte startat"
+msgstr "Förköp har inte startat: %(code)s"
 
 #: pretix/base/models/orders.py:1950
 msgid "Cart ID (e.g. session key)"
