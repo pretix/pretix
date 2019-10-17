@@ -895,6 +895,17 @@ class GiftCardPayment(BasePaymentProvider):
     identifier = "giftcard"
     verbose_name = _("Gift card")
 
+    @property
+    def settings_form_fields(self):
+        f = super().settings_form_fields
+        del f['_fee_abs']
+        del f['_fee_percent']
+        del f['_fee_reverse_calc']
+        del f['_total_min']
+        del f['_total_max']
+        del f['_invoice_text']
+        return f
+
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         return super().is_allowed(request, total) and self.event.organizer.has_gift_cards
 
