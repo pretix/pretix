@@ -142,7 +142,7 @@ Endpoints
    want to change.
 
    You can change all fields of the resource except the ``id``, ``secret``, and ``currency`` fields. Be careful when
-   modifying the ``value`` field to avoid race conditions.
+   modifying the ``value`` field to avoid race conditions. We recommend to use the ``transact`` method described below.
 
    **Example request**:
 
@@ -170,7 +170,48 @@ Endpoints
         "id": 1,
         "secret": "HLBYVELFRC77NCQY",
         "currency": "EUR",
-        "value": "13.37"
+        "value": "14.00"
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param id: The ``id`` field of the gift card to modify
+   :statuscode 200: no error
+   :statuscode 400: The gift card could not be modified due to invalid submitted data
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to change this resource.
+
+.. http:post:: /api/v1/organizers/(organizer)/giftcards/(id)/transact/
+
+   Atomically change the value of a gift card. A positive amount will increase the value of the gift card,
+   a negative amount will decrease it.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/giftcards/1/transact/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 94
+
+      {
+        "value": "2.00"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "secret": "HLBYVELFRC77NCQY",
+        "currency": "EUR",
+        "value": "15.37"
       }
 
    :param organizer: The ``slug`` field of the organizer to modify

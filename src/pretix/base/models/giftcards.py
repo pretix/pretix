@@ -6,6 +6,7 @@ from django.db.models import Sum
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.banlist import banned
 from pretix.base.models import LoggedModel
 
 
@@ -13,7 +14,7 @@ def gen_giftcard_secret():
     charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
     while True:
         code = get_random_string(length=settings.ENTROPY['giftcard_secret'], allowed_chars=charset)
-        if not GiftCard.objects.filter(secret=code).exists():
+        if not banned(code) and not GiftCard.objects.filter(secret=code).exists():
             return code
 
 

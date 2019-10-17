@@ -590,7 +590,8 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
 
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: InvoiceAddress=None,
-                  meta_info: dict=None, sales_channel: str='web', gift_cards: list=None):
+                  meta_info: dict=None, sales_channel: str='web', gift_cards: list=None,
+                  shown_total=None):
     p = None
     with transaction.atomic():
         checked_gift_cards = []
@@ -655,6 +656,17 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             p.save()
             pending_sum -= val
 
+        # Safety check: Is the amount we're now going to charge the same amount the user has been shown when they
+        # pressed "Confirm purchase"? If not, we should better warn the user and show the confirmation page again.
+        # The only *known* case where this happens is if a gift card is used in two concurrent sessions.
+        if shown_total is not None:
+            if Decimal(shown_total) != pending_sum:
+                raise OrderError(
+                    _('While trying to place your order, we noticed that the order total has changed. Either one of '
+                      'the prices changed just now, or a gift card you used has been used in the meantime. Please '
+                      'check the prices below and try again.')
+                )
+
         if payment_provider and not order.require_approval:
             p = order.payments.create(
                 state=OrderPayment.PAYMENT_STATE_CREATED,
@@ -708,7 +720,7 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
 
 def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
-                   gift_cards: list=None):
+                   gift_cards: list=None, shown_total=None):
     if payment_provider:
         pprov = event.get_payment_providers().get(payment_provider)
         if not pprov:
@@ -758,7 +770,7 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         _check_positions(event, now_dt, positions, address=addr)
         order, payment = _create_order(event, email, positions, now_dt, pprov,
                                        locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                       gift_cards=gift_cards)
+                                       gift_cards=gift_cards, shown_total=shown_total)
 
         free_order_flow = payment and payment_provider == 'free' and order.pending_sum == Decimal('0.00') and not order.require_approval
         if free_order_flow:
@@ -1517,12 +1529,12 @@ class OrderChangeManager:
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: Event, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
-                  sales_channel: str='web', gift_cards: list=None):
+                  sales_channel: str='web', gift_cards: list=None, shown_total=None):
     with language(locale):
         try:
             try:
                 return _perform_order(event, payment_provider, positions, email, locale, address, meta_info,
-                                      sales_channel, gift_cards)
+                                      sales_channel, gift_cards, shown_total)
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):

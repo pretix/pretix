@@ -977,7 +977,7 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        self.object = GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
         if 'value' in request.POST:
             try:
                 value = DecimalField().to_python(request.POST.get('value'))

@@ -1,6 +1,8 @@
 from django.db import transaction
-from rest_framework import filters, viewsets
+from rest_framework import filters, serializers, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
+from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
@@ -103,7 +105,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
         value = serializer.validated_data.pop('value')
         inst = serializer.save(issuer=self.request.organizer)
         inst.transactions.create(value=value)
-        self.request.organizer.log_action(
+        inst.log_action(
             'pretix.giftcards.transaction.manual',
             user=self.request.user,
             auth=self.request.auth,
@@ -112,18 +114,35 @@ class GiftCardViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_update(self, serializer):
+        GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
         old_value = serializer.instance.value
         value = serializer.validated_data.pop('value')
         inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency)
         diff = value - old_value
         inst.transactions.create(value=diff)
-        self.request.organizer.log_action(
+        inst.log_action(
             'pretix.giftcards.transaction.manual',
             user=self.request.user,
             auth=self.request.auth,
             data={'value': diff}
         )
         return inst
+
+    @action(detail=True, methods=["POST"])
+    @transaction.atomic()
+    def transact(self, request, **kwargs):
+        gc = GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
+        value = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
+            request.data.get('value')
+        )
+        gc.transactions.create(value=value)
+        gc.log_action(
+            'pretix.giftcards.transaction.manual',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'value': value}
+        )
+        return Response(GiftCardSerializer(gc).data, status=status.HTTP_200_OK)
 
     def perform_destroy(self, instance):
         raise MethodNotAllowed("Gift cards cannot be deleted.")

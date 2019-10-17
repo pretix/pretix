@@ -96,6 +96,20 @@ def test_giftcard_patch(token_client, organizer, event, giftcard):
 
 
 @pytest.mark.django_db
+def test_giftcard_transact(token_client, organizer, event, giftcard):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/giftcards/{}/transact/'.format(organizer.slug, giftcard.pk),
+        {
+            'value': '10.00',
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    giftcard.refresh_from_db()
+    assert giftcard.value == Decimal('33.00')
+
+
+@pytest.mark.django_db
 def test_giftcard_no_deletion(token_client, organizer, event, giftcard):
     resp = token_client.delete(
         '/api/v1/organizers/{}/giftcards/{}/'.format(organizer.slug, giftcard.pk),
