@@ -14,18 +14,18 @@ if [ "$PRETIX_CONFIG_FILE" == "tests/travis_postgres.cfg" ]; then
 fi
 
 if [ "$1" == "style" ]; then
-	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt
+	XDG_CACHE_HOME=/cache pip3 install --no-use-pep517 -Ur src/requirements.txt -r src/requirements/dev.txt
 	cd src
     flake8 .
     isort -c -rc -df .
 fi
 if [ "$1" == "doctests" ]; then
-	XDG_CACHE_HOME=/cache pip3 install -Ur doc/requirements.txt
+	XDG_CACHE_HOME=/cache pip3 install --no-use-pep517 -Ur doc/requirements.txt
 	cd doc
 	make doctest
 fi
 if [ "$1" == "doc-spelling" ]; then
-	XDG_CACHE_HOME=/cache pip3 install -Ur doc/requirements.txt
+	XDG_CACHE_HOME=/cache pip3 install --no-use-pep517 -Ur doc/requirements.txt
 	cd doc
 	make spelling
 	if [ -s _build/spelling/output.txt ]; then
@@ -33,26 +33,26 @@ if [ "$1" == "doc-spelling" ]; then
 	fi
 fi
 if [ "$1" == "translation-spelling" ]; then
-	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements/dev.txt
+	XDG_CACHE_HOME=/cache pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
 	cd src
 	potypo
 fi
 if [ "$1" == "tests" ]; then
-	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt
+	pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
 	cd src
 	python manage.py check
 	make all compress
 	py.test --reruns 5 -n 3 tests
 fi
 if [ "$1" == "tests-cov" ]; then
-	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt
+	pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
 	cd src
 	python manage.py check
 	make all compress
 	coverage run -m py.test --reruns 5 tests && codecov
 fi
 if [ "$1" == "plugins" ]; then
-	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt
+	pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
 	cd src
 	python setup.py develop
 	make all compress
