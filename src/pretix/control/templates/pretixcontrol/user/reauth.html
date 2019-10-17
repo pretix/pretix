@@ -10,14 +10,9 @@
         <p>
             {% trans "We just want to make sure it's really you. Please re-enter your password to continue." %}
         </p>
-        <div class="form-group">
-            <input class="form-control"
-                    value="{{ request.user.get_full_name }}" disabled>
-        </div>
-        <div class="form-group">
-            <input class="form-control" id="id_password" name="password" placeholder="{% trans "Password" %}"
-                    title="" type="password" required="" autofocus>
-        </div>
+        {% bootstrap_form form %}
+        <input class="form-control" id="webauthn-response" name="webauthn"
+                type="hidden">
         {% if jsondata %}
             <div class="sr-only alert alert-danger" id="webauthn-error">
                 {% trans "WebAuthn failed. Check that the correct authentication device is correctly plugged in." %}
@@ -45,6 +40,7 @@
             <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/base64js.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/webauthn.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/focus.js" %}"></script>
         {% endcompress %}
     </form>
 {% endblock %}

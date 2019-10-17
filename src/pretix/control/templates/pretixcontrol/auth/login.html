@@ -2,28 +2,40 @@
 {% load bootstrap3 %}
 {% load i18n %}
 {% load static %}
+{% load urlreplace %}
 {% block content %}
     <form class="form-signin" action="" method="post">
-        {% bootstrap_form_errors form type='all' layout='inline' %}
-        {% csrf_token %}
-        {% bootstrap_field form.email %}
-        {% bootstrap_field form.password %}
-        {% if form.keep_logged_in %}
-            {% bootstrap_field form.keep_logged_in %}
+        {% if backends|length > 1 %}
+            <ul class="nav nav-pills">
+                {% for b in backends %}
+                    {% if b.visible %}
+                        <li class="{% if backend.identifier == b.identifier %}active{% endif %}">
+                            <a href="{% if b.url %}{{ b.url }}{% else %}?{% url_replace request "backend" b.identifier %}{% endif %}">
+                                {{ b.verbose_name }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <br>
         {% endif %}
+        {% csrf_token %}
+        {% bootstrap_form form %}
         <div class="form-group buttons">
             <button type="submit" class="btn btn-primary btn-block">
                 {% trans "Log in" %}
             </button>
-            {% if can_reset %}
-                <a href="{% url "control:auth.forgot" %}" class="btn btn-link btn-block">
-                    {% trans "Lost password?" %}
-                </a>
-            {% endif %}
-            {% if can_register %}
-                <a href="{% url "control:auth.register" %}" class="btn btn-link btn-block">
-                    {% trans "Register" %}
-                </a>
+            {% if backend.identifier == "native" %}
+                {% if can_reset %}
+                    <a href="{% url "control:auth.forgot" %}" class="btn btn-link btn-block">
+                        {% trans "Lost password?" %}
+                    </a>
+                {% endif %}
+                {% if can_register %}
+                    <a href="{% url "control:auth.register" %}" class="btn btn-link btn-block">
+                        {% trans "Register" %}
+                    </a>
+                {% endif %}
             {% endif %}
         </div>
     </form>

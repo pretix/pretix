@@ -5,10 +5,12 @@
 {% block content %}
     <h1>{% trans "User" %} {{ user.email }}</h1>
     <p>
-        <form action="{% url "control:users.reset" id=user.pk %}" method="post" class="form-inline helper-display-inline">
-            {% csrf_token %}
-            <button class="btn btn-default">{% trans "Send password reset email" %}</button>
-        </form>
+        {% if user.auth_backend == "native" %}
+            <form action="{% url "control:users.reset" id=user.pk %}" method="post" class="form-inline helper-display-inline">
+                {% csrf_token %}
+                <button class="btn btn-default">{% trans "Send password reset email" %}</button>
+            </form>
+        {% endif %}
         <form action="{% url "control:users.impersonate" id=user.pk %}" method="post" class="form-inline helper-display-inline">
             {% csrf_token %}
             <button class="btn btn-default">{% trans "Impersonate user" %}</button>
@@ -30,9 +32,17 @@
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Log-in settings" %}</legend>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{% trans "Authentication backend" %}</label>
+                        <div class="col-md-9">
+                            <input name="text" value="{{ backend }}" class="form-control" disabled>
+                        </div>
+                    </div>
                     {% bootstrap_field form.email layout='control' %}
-                    {% bootstrap_field form.new_pw layout='control' %}
-                    {% bootstrap_field form.new_pw_repeat layout='control' %}
+                    {% if form.new_pw %}
+                        {% bootstrap_field form.new_pw layout='control' %}
+                        {% bootstrap_field form.new_pw_repeat layout='control' %}
+                    {% endif %}
                     {% bootstrap_field form.last_login layout='control' %}
                     {% bootstrap_field form.require_2fa layout='control' %}
                 </fieldset>

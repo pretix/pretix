@@ -20,6 +20,7 @@ from django.views.generic import (
 )
 
 from pretix.api.models import WebHook
+from pretix.base.auth import get_auth_backends
 from pretix.base.models import Device, Organizer, Team, TeamInvite, User
 from pretix.base.models.event import Event, EventMetaProperty
 from pretix.base.models.organizer import TeamAPIToken
@@ -601,6 +602,9 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             except User.DoesNotExist:
                 if self.object.invites.filter(email__iexact=self.add_form.cleaned_data['user']).exists():
                     messages.error(self.request, _('This user already has been invited for this team.'))
+                    return self.get(request, *args, **kwargs)
+                if 'native' not in get_auth_backends():
+                    messages.error(self.request, _('Users need to have a pretix account before they can be invited.'))
                     return self.get(request, *args, **kwargs)
 
                 invite = self.object.invites.create(email=self.add_form.cleaned_data['user'])

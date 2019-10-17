@@ -32,6 +32,10 @@ TEMPLATES[0]['OPTIONS']['loaders'] = (
 DEBUG = True
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
+PRETIX_AUTH_BACKENDS = [
+    'pretix.base.auth.NativeAuthBackend',
+]
+
 PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
 
 # Disable celery

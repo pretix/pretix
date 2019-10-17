@@ -20,6 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django_otp import match_token
 
+from pretix.base.auth import get_auth_backends
 from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
@@ -30,38 +31,59 @@ from pretix.helpers.webauthn import generate_challenge
 logger = logging.getLogger(__name__)
 
 
+def process_login(request, user, keep_logged_in):
+    """
+    This method allows you to return a response to a successful log-in. This will set all session values correctly
+    and redirect to either the URL specified in the ``next`` parameter, or the 2FA login screen, or the dashboard.
+
+    :return: This method returns a ``HttpResponse``.
+    """
+    request.session['pretix_auth_long_session'] = settings.PRETIX_LONG_SESSIONS and keep_logged_in
+    if user.require_2fa:
+        request.session['pretix_auth_2fa_user'] = user.pk
+        request.session['pretix_auth_2fa_time'] = str(int(time.time()))
+        twofa_url = reverse('control:auth.login.2fa')
+        if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
+            twofa_url += '?next=' + quote(request.GET.get('next'))
+        return redirect(twofa_url)
+    else:
+        auth_login(request, user)
+        request.session['pretix_auth_login_time'] = int(time.time())
+        if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
+            return redirect(request.GET.get("next"))
+        return redirect(reverse('control:index'))
+
+
 def login(request):
     """
     Render and process a most basic login form. Takes an URL as GET
     parameter "next" for redirection after successful login
     """
     ctx = {}
+    backenddict = get_auth_backends()
+    backends = sorted(backenddict.values(), key=lambda b: (b.identifier != "native", b.verbose_name))
+    for b in backends:
+        u = b.request_authenticate(request)
+        if u and u.auth_backend == b.identifier:
+            return process_login(request, u, False)
+        b.url = b.authentication_url(request)
+
+    backend = backenddict.get(request.GET.get('backend', 'native'), backends[0])
+    if not backend.visible:
+        backend = [b for b in backends if b.visible][0]
     if request.user.is_authenticated:
         return redirect(request.GET.get("next", 'control:index'))
     if request.method == 'POST':
-        form = LoginForm(data=request.POST)
-        if form.is_valid() and form.user_cache:
-            request.session['pretix_auth_long_session'] = (
-                settings.PRETIX_LONG_SESSIONS and form.cleaned_data.get('keep_logged_in', False)
-            )
-            if form.user_cache.require_2fa:
-                request.session['pretix_auth_2fa_user'] = form.user_cache.pk
-                request.session['pretix_auth_2fa_time'] = str(int(time.time()))
-                twofa_url = reverse('control:auth.login.2fa')
-                if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
-                    twofa_url += '?next=' + quote(request.GET.get('next'))
-                return redirect(twofa_url)
-            else:
-                auth_login(request, form.user_cache)
-                request.session['pretix_auth_login_time'] = int(time.time())
-                if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
-                    return redirect(request.GET.get("next"))
-                return redirect(reverse('control:index'))
+        form = LoginForm(backend=backend, data=request.POST)
+        if form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier:
+            return process_login(request, form.user_cache, form.cleaned_data.get('keep_logged_in', False))
     else:
-        form = LoginForm()
+        form = LoginForm(backend=backend)
     ctx['form'] = form
     ctx['can_register'] = settings.PRETIX_REGISTRATION
     ctx['can_reset'] = settings.PRETIX_PASSWORD_RESET
+    ctx['backends'] = backends
+    ctx['backend'] = backend
     return render(request, 'pretixcontrol/auth/login.html', ctx)
 
 
@@ -83,7 +105,7 @@ def register(request):
     """
     Render and process a basic registration form.
     """
-    if not settings.PRETIX_REGISTRATION:
+    if not settings.PRETIX_REGISTRATION or 'native' not in get_auth_backends():
         raise PermissionDenied('Registration is disabled')
     ctx = {}
     if request.user.is_authenticated:
@@ -115,6 +137,9 @@ def invite(request, token):
     Registration form in case of an invite
     """
     ctx = {}
+
+    if 'native' not in get_auth_backends():
+        raise PermissionDenied('Invites are disabled')
 
     try:
         inv = TeamInvite.objects.get(token=token)
@@ -185,7 +210,7 @@ class Forgot(TemplateView):
     template_name = 'pretixcontrol/auth/forgot.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not settings.PRETIX_PASSWORD_RESET:
+        if not settings.PRETIX_PASSWORD_RESET or 'native' not in get_auth_backends():
             raise PermissionDenied('Password reset is disabled')
         return super().dispatch(request, *args, **kwargs)
 
@@ -257,15 +282,15 @@ class Recover(TemplateView):
     }
 
     def dispatch(self, request, *args, **kwargs):
-        if not settings.PRETIX_PASSWORD_RESET:
-            raise PermissionDenied('Password reset is disabled')
+        if not settings.PRETIX_PASSWORD_RESET or 'native' not in get_auth_backends():
+            raise PermissionDenied('Registration is disabled')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect(request.GET.get("next", 'control:index'))
         try:
-            user = User.objects.get(id=self.request.GET.get('id'))
+            user = User.objects.get(id=self.request.GET.get('id'), auth_backend='native')
         except User.DoesNotExist:
             return self.invalid('unknownuser')
         if not default_token_generator.check_token(user, self.request.GET.get('token')):
@@ -279,7 +304,7 @@ class Recover(TemplateView):
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
             try:
-                user = User.objects.get(id=self.request.GET.get('id'))
+                user = User.objects.get(id=self.request.GET.get('id'), auth_backend='native')
             except User.DoesNotExist:
                 return self.invalid('unknownuser')
             if not default_token_generator.check_token(user, self.request.GET.get('token')):

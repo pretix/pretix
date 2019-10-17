@@ -16,5 +16,6 @@ Contents:
    invoice
    shredder
    customview
+   auth
    general
    quality

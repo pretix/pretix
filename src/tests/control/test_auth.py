@@ -103,6 +103,51 @@ class LoginFormTest(TestCase):
         response = self.client.get('/control/login')
         self.assertEqual(response.status_code, 200)
 
+    def test_wrong_backend(self):
+        self.user = User.objects.create_user('hallo@example.com', 'dummy', auth_backend='test_request')
+        response = self.client.post('/control/login', {
+            'email': 'hallo@example.com',
+            'password': 'dummy',
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_backends_shown(self):
+        response = self.client.get('/control/login')
+        self.assertEqual(response.status_code, 200)
+        assert b'Form' in response.content
+        assert b'pretix User' in response.content
+        assert b'Request' not in response.content
+
+    def test_form_backend(self):
+        response = self.client.get('/control/login?backend=test_form')
+        self.assertEqual(response.status_code, 200)
+        assert b'name="username"' in response.content
+
+        response = self.client.post('/control/login?backend=test_form', {
+            'username': 'dummy',
+            'password': 'dummy',
+        })
+        self.assertEqual(response.status_code, 200)
+        assert b'alert-danger' in response.content
+
+        response = self.client.post('/control/login?backend=test_form', {
+            'username': 'foo',
+            'password': 'bar',
+        })
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/control/')
+        assert b'foo' in response.content
+
+    def test_request_backend(self):
+        response = self.client.get('/control/login?backend=test_request')
+        self.assertEqual(response.status_code, 200)
+        assert b'name="email"' in response.content
+
+        response = self.client.get('/control/login', HTTP_X_LOGIN_EMAIL='hallo@example.org')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/control/')
+        assert b'hallo@example.org' in response.content
+
 
 class RegistrationFormTest(TestCase):
 
@@ -200,6 +245,24 @@ class RegistrationFormTest(TestCase):
         self.assertEqual(response.status_code, 302)
         assert time.time() - self.client.session['pretix_auth_login_time'] < 60
         assert not self.client.session['pretix_auth_long_session']
+
+    @override_settings(PRETIX_REGISTRATION=False)
+    def test_disabled(self):
+        response = self.client.post('/control/register', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'foobarbar',
+            'password_repeat': 'foobarbar'
+        })
+        self.assertEqual(response.status_code, 403)
+
+    @override_settings(PRETIX_AUTH_BACKENDS=['tests.testdummy.auth.TestFormAuthBackend'])
+    def test_no_native_auth(self):
+        response = self.client.post('/control/register', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'foobarbar',
+            'password_repeat': 'foobarbar'
+        })
+        self.assertEqual(response.status_code, 403)
 
 
 @pytest.fixture
@@ -559,6 +622,20 @@ class PasswordRecoveryFormTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.user = User.objects.get(id=self.user.id)
         self.assertTrue(self.user.check_password('demo'))
+
+    @override_settings(PRETIX_PASSWORD_RESET=False)
+    def test_disabled(self):
+        response = self.client.post('/control/forgot', {
+            'email': 'dummy@dummy.dummy',
+        })
+        self.assertEqual(response.status_code, 403)
+
+    @override_settings(PRETIX_AUTH_BACKENDS=['tests.testdummy.auth.TestFormAuthBackend'])
+    def test_no_native_auth(self):
+        response = self.client.post('/control/forgot', {
+            'email': 'dummy@dummy.dummy',
+        })
+        self.assertEqual(response.status_code, 403)
 
 
 class SessionTimeOutTest(TestCase):

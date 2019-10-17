@@ -109,6 +109,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         help_text=_('If turned off, you will not get any notifications.')
     )
     notifications_token = models.CharField(max_length=255, default=generate_notifications_token)
+    auth_backend = models.CharField(max_length=255, default='native')
 
     objects = UserManager()
 

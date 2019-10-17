@@ -56,6 +56,11 @@ class UserSettingsForm(forms.ModelForm):
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.fields['email'].required = True
+        if self.user.auth_backend != 'native':
+            del self.fields['old_pw']
+            del self.fields['new_pw']
+            del self.fields['new_pw_repeat']
+            self.fields['email'].disabled = True
 
     def clean_old_pw(self):
         old_pw = self.cleaned_data.get('old_pw')
