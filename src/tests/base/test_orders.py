@@ -2007,8 +2007,8 @@ def test_saleschannel_testmode_restriction(event):
                           now_dt=today, payment_provider=FreeOrderProvider(event),
                           locale='de', sales_channel=FoobarSalesChannel.identifier)[0]
     assert not order.testmode
-    
-    
+
+
 @pytest.mark.django_db
 def test_giftcard_multiple(event):
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
