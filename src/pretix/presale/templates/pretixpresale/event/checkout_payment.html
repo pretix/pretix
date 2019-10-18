@@ -11,7 +11,6 @@
     <form method="post">
         {% csrf_token %}
         <div class="panel-group" id="payment_accordion">
-            {# TODO: make this proper #}
             {% for p in providers %}
                 <div class="panel panel-default" data-total="{{ p.total|floatformat:2 }}">
                     <label class="accordion-radio">

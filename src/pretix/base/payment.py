@@ -1044,7 +1044,9 @@ class GiftCardPayment(BasePaymentProvider):
             messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
-        for p in payment.order.positions.all():
+        # This method will only be called when retrying payments, e.g. after a payment_prepare call. It is not called
+        # during the order creation phase because this payment provider is a special case.
+        for p in payment.order.positions.all():  # noqa - just a safeguard
             if p.item.issue_giftcard:
                 raise PaymentException(_("You cannot pay with gift cards when buying a gift card."))
 
@@ -1053,13 +1055,11 @@ class GiftCardPayment(BasePaymentProvider):
             raise PaymentException("Invalid state, should never occur.")
         with transaction.atomic():
             gc = GiftCard.objects.select_for_update().get(pk=gcpk)
-            if gc.currency != self.event.currency:
+            if gc.currency != self.event.currency:  # noqa - just a safeguard
                 raise PaymentException(_("This gift card does not support this currency."))
-            if not gc.accepted_by(self.event.organizer):
+            if not gc.accepted_by(self.event.organizer):  # noqa - just a safeguard
                 raise PaymentException(_("This gift card is not accepted by this event organizer."))
-            if gc.testmode != payment.order.testmode:
-                raise PaymentException(_("Only the gift card or only the order are created in test mode."))
-            if payment.amount > gc.value:
+            if payment.amount > gc.value:  # noqa - just a safeguard
                 raise PaymentException(_("This gift card was used in the meantime. Please try again"))
             trans = gc.transactions.create(
                 value=-1 * payment.amount,

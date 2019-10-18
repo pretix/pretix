@@ -943,8 +943,35 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             'payment': 'giftcard',
             'giftcard': gc.secret
         }, follow=True)
-        print(response.rendered_content)
         assert 'This gift card is not known.' in response.rendered_content
+
+    def test_giftcard_cross_organizer(self):
+        self.orga.issued_gift_cards.create(currency="EUR")
+        orga2 = Organizer.objects.create(slug="foo2", name="foo2")
+        gc = orga2.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=23)
+        self.orga.gift_card_issuer_acceptance.create(issuer=orga2)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert '-€23.00' in response.rendered_content
+        assert '0.00' in response.rendered_content
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            assert o.payments.get(provider='giftcard').amount == Decimal('23.00')
 
     def test_giftcard_in_test_mode(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")

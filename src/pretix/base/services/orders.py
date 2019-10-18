@@ -569,14 +569,12 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
             fees += resp
     total += sum(f.value for f in fees)
 
-    summed = 0
     gift_card_values = {}
     for gc in gift_cards:
         fval = Decimal(gc.value)  # TODO: don't require an extra query
-        fval = min(fval, total - summed)
+        fval = min(fval, total)
         if fval > 0:
             total -= fval
-            summed += fval
             gift_card_values[gc] = fval
 
     if payment_provider:
@@ -967,6 +965,7 @@ class OrderChangeManager:
         'seat_subevent_mismatch': _('You selected seat "{seat}" for a date that does not match the selected ticket date. Please choose a seat again.'),
         'seat_required': _('The selected product requires you to select a seat.'),
         'seat_forbidden': _('The selected product does not allow to select a seat.'),
+        'gift_card_change': _('You cannot change the price of a position that has been used to issue a gift card.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
@@ -1033,6 +1032,9 @@ class OrderChangeManager:
 
     def change_price(self, position: OrderPosition, price: Decimal):
         price = position.item.tax(price, base_price_is='gross')
+
+        if position.issued_gift_cards.exists():
+            raise OrderError(self.error_messages['gift_card_change'])
 
         self._totaldiff += price.gross - position.price
 
@@ -1710,13 +1712,14 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
             issued = Decimal('0.00')
             for gc in p.issued_gift_cards.all():
                 issued += gc.transactions.first().value
-            gc = sender.organizer.issued_gift_cards.create(
-                currency=sender.currency, issued_in=p, testmode=order.testmode
-            )
-            gc.transactions.create(value=p.price - issued, order=order)
-            any_giftcards = True
-            p.secret = gc.secret
-            p.save(update_fields=['secret'])
+            if p.price - issued > 0:
+                gc = sender.organizer.issued_gift_cards.create(
+                    currency=sender.currency, issued_in=p, testmode=order.testmode
+                )
+                gc.transactions.create(value=p.price - issued, order=order)
+                any_giftcards = True
+                p.secret = gc.secret
+                p.save(update_fields=['secret'])
 
     if any_giftcards:
         tickets.invalidate_cache.apply_async(kwargs={'event': sender.pk, 'order': order.pk})
