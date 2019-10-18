@@ -64,7 +64,6 @@ class WebshopSalesChannel(SalesChannel):
     identifier = "web"
     verbose_name = _('Online shop')
     icon = "globe"
-    testmode_supported = True
 
 
 @receiver(register_sales_channels, dispatch_uid="base_register_default_sales_channels")
