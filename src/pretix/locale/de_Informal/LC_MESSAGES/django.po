@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-08 13:56+0000\n"
-"PO-Revision-Date: 2019-10-18 15:17+0000\n"
+"PO-Revision-Date: 2019-10-18 15:51+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -165,12 +165,12 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Geschenkgutscheine müssen einem 0%-Steuersatz zugeordnet sein, da "
+"Umsatzsteuer berechnet wird, wenn der Gutschein eingelöst wird."
 
 #: pretix/api/serializers/item.py:145 pretix/control/forms/item.py:436
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "Gift card products should not be admission products at the same time."
-msgstr "Du kannst nicht gleichzeitig ein Kontingent und ein Produkt auswählen."
+msgstr "Geschenkgutscheine können nicht gleichzeitig zum Einlass berechtigen."
 
 #: pretix/api/serializers/item.py:250
 msgid ""
@@ -181,10 +181,10 @@ msgstr ""
 "separate Ressource."
 
 #: pretix/api/serializers/item.py:264 pretix/control/forms/item.py:70
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "Diese Frage wird beim Check-In gestellt."
+msgstr ""
+"Die Frage darf nicht von einer Frage abhängen, die erst beim Check-in "
+"gestellt wird."
 
 #: pretix/api/serializers/item.py:269 pretix/control/forms/item.py:75
 msgid "Circular dependency between questions detected."
@@ -195,6 +195,8 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Ein Geschenkgutschein mit dem gleichen Code existiert bereits in diesem oder "
+"einem verbundenen Veranstalterkonto."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:241
 #, python-brace-format
@@ -276,10 +278,8 @@ msgid "Ticket check-in reverted"
 msgstr "Check-in rückgängig gemacht"
 
 #: pretix/base/auth.py:91
-#, fuzzy
-#| msgid "pretix default"
 msgid "pretix User"
-msgstr "pretix-Standard"
+msgstr "pretix-Nutzer"
 
 #: pretix/base/auth.py:100 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:86 pretix/base/models/notifications.py:25
@@ -1137,10 +1137,8 @@ msgid "Keep me logged in"
 msgstr "Angemeldet bleiben"
 
 #: pretix/base/forms/auth.py:19 pretix/base/forms/auth.py:188
-#, fuzzy
-#| msgid "This voucher code is not known in our database."
 msgid "This combination of credentials is not known to our system."
-msgstr "Dieser Gutscheincode ist uns nicht bekannt."
+msgstr "Diese Kombination von Zugangsdaten ist uns nicht bekannt."
 
 #: pretix/base/forms/auth.py:20 pretix/base/forms/auth.py:189
 msgid "This account is inactive."
@@ -1586,18 +1584,12 @@ msgid "Include pending orders"
 msgstr "Bestellungen mit ausstehender Zahlung mit einschließen"
 
 #: pretix/base/models/checkin.py:20
-#, fuzzy
-#| msgid ""
-#| "With this option, people will be able to check in even if the order have "
-#| "not been paid. This only works with pretixdesk 0.3.0 or newer or "
-#| "pretixdroid 1.9 or newer."
 msgid ""
 "With this option, people will be able to check in even if the order have not "
 "been paid."
 msgstr ""
 "Mit dieser Option wird ein Check-In auch dann möglich sein, wenn die "
-"Bestellung noch nicht bezahlt wurde. Dies funktioniert nur mit pretixdesk "
-"0.3.0 oder pretixdroid 1.9 oder neuer."
+"Bestellung noch nicht bezahlt wurde."
 
 #: pretix/base/models/checkin.py:26
 msgid "Sales channels to automatically check in"
@@ -1862,16 +1854,12 @@ msgstr "Kein Wert darf den Trennwert enthalten."
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:22
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:44
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:39
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card code"
-msgstr "Geschenkgutschein"
+msgstr "Gutscheincode"
 
 #: pretix/base/models/giftcards.py:56
-#, fuzzy
-#| msgid "Test mode"
 msgid "Test mode card"
-msgstr "Testmodus"
+msgstr "Testgutschein"
 
 #: pretix/base/models/invoices.py:128 pretix/base/services/invoices.py:96
 #, python-format
@@ -2202,16 +2190,16 @@ msgid "Sales channels"
 msgstr "Verkaufskanäle"
 
 #: pretix/base/models/items.py:419
-#, fuzzy
-#| msgid "The product the user waits for."
 msgid "This product is a gift card"
-msgstr "Das Produkt auf das der Benutzer wartet."
+msgstr "Das Produkt ist ein Geschenkgutschein"
 
 #: pretix/base/models/items.py:420
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
+"Dem Käufer dieses Produktes wird statt eines Tickets ein Geschenkgutschein "
+"in Höhe des Produktpreises ausgestellt."
 
 #: pretix/base/models/items.py:429 pretix/base/models/items.py:1026
 #: pretix/control/forms/filter.py:181 pretix/control/forms/filter.py:673
@@ -2930,10 +2918,8 @@ msgstr ""
 "vertrauenswürdige Kollegen!"
 
 #: pretix/base/models/organizer.py:180
-#, fuzzy
-#| msgid "Can change orders"
 msgid "Can manage gift cards"
-msgstr "Kann Bestellungen verändern"
+msgstr "Kann Geschenkgutscheine verwalten"
 
 #: pretix/base/models/organizer.py:185
 msgid "Can change event settings"
@@ -3618,90 +3604,80 @@ msgstr "Verrechnet mit: %s"
 
 #: pretix/base/payment.py:911
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "Im Testmodus funktionieren nur Testgutscheine."
 
 #: pretix/base/payment.py:959 pretix/base/payment.py:1010
 #: pretix/base/payment.py:1051 pretix/base/services/orders.py:613
 msgid "You cannot pay with gift cards when buying a gift card."
 msgstr ""
+"Geschenkgutscheine können nicht benutzt werden um Geschenkgutscheine zu "
+"erwerben."
 
 #: pretix/base/payment.py:968 pretix/base/payment.py:1018
 #: pretix/base/payment.py:1059 pretix/base/services/orders.py:604
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid "This gift card does not support this currency."
-msgstr "Diese Zahlungsmethode unterstützt keine automatische Erstattung."
+msgstr "Dieser Geschenkgutschein unterstützt diese Währung nicht."
 
 #: pretix/base/payment.py:971 pretix/base/payment.py:1021
 #: pretix/base/services/orders.py:606
-#, fuzzy
-#| msgid "This refund can not be processed at the moment."
 msgid "This gift card can only be used in test mode."
-msgstr "Die Erstattung kann momentan nicht verarbeitet werden."
+msgstr "Dieser Geschenkgutschein kann nur im Testmodus verwendet werden."
 
 #: pretix/base/payment.py:974 pretix/base/payment.py:1024
 #: pretix/base/services/orders.py:608
-#, fuzzy
-#| msgid "Permanently delete all orders created in test mode"
 msgid "Only test gift cards can be used in test mode."
-msgstr "Alle im Testmodus erstellten Bestellungen unwiderruflich löschen"
+msgstr "Im Testmodus können nur Testgutscheine verwendet werden."
 
 #: pretix/base/payment.py:977 pretix/base/payment.py:1027
-#, fuzzy
-#| msgid "A voucher you tried to use already has been used."
 msgid "All credit on this gift card has been used."
-msgstr ""
-"Ein Gutscheincode, den du verwenden wolltest, wurde zwischenzeitlich bereits "
-"eingelöst."
+msgstr "Auf diesem Geschenkgutschein ist kein Guthaben mehr vorhanden."
 
 #: pretix/base/payment.py:982
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This gift card is already used for your payment."
-msgstr "Diese Referenz ist bereits in Verwendung, bitte wähle eine andere."
+msgstr "Dieser Geschenkgutschein ist für diese Zahlung bereits in Verwendung."
 
 #: pretix/base/payment.py:988
 msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
 msgstr ""
+"Der Geschenkgutschein kann eingelöst werden, aber {} müssen noch bezahlt "
+"werden. Bitte wähle eine Zahlungsmethode für den Restbetrag aus."
 
 #: pretix/base/payment.py:992
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your gift card has been applied."
-msgstr "Dein Warenkorb wurde aktualisiert."
+msgstr "Dein Geschenkgutschein wurde angewendet."
 
 #: pretix/base/payment.py:1000 pretix/base/payment.py:1039
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
+"Du hast einen Rabatt- oder Zugangsgutschein statt eines Geschenkgutscheins "
+"eingegeben. Solche Gutscheine können auf der ersten Shop-Seite unterhalb der "
+"Produktauswahl eingegeben werden."
 
 #: pretix/base/payment.py:1003 pretix/base/payment.py:1042
-#, fuzzy
-#| msgid "This feature is not enabled."
 msgid "This gift card is not known."
-msgstr "Diese Funktion ist nicht aktiviert."
+msgstr "Dieser Geschenkgutschein ist nicht bekannt."
 
 #: pretix/base/payment.py:1005 pretix/base/payment.py:1044
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
+"Dieser Geschenkgutschein kann nicht eingelöst werden, da der Code mehrfach "
+"existiert. Bitte kontaktiere den Veranstalter für Unterstützung."
 
 #: pretix/base/payment.py:1061 pretix/base/services/orders.py:610
-#, fuzzy
-#| msgid "This order is not yet approved by the event organizer."
 msgid "This gift card is not accepted by this event organizer."
-msgstr "Diese Bestellung wurde noch nicht vom Veranstalter freigegeben."
+msgstr "Dieser Geschenkgutschein wird von diesem Veranstalter nicht akzeptiert."
 
 #: pretix/base/payment.py:1063
-#, fuzzy
-#| msgid "There was an error sending the mail. Please try again later."
 msgid "This gift card was used in the meantime. Please try again"
 msgstr ""
-"Es gab ein Fehler beim Senden der E-Mail. Bitte probiere es später erneut."
+"Dieser Geschenkgutschein wurde zwischenzeitlich verwendet. Bitte erneut "
+"versuchen."
 
 #: pretix/base/pdf.py:46
 msgid "Ticket code (barcode content)"
@@ -4206,6 +4182,8 @@ msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
+"Du hast einen Geschenkgutschein eingegeben. Dieser kann später im Ablauf "
+"eingegeben werden, wenn du nach deiner Zahlungsmethode gefragt wirst."
 
 #: pretix/base/services/checkin.py:97
 msgid "This order position has been canceled."
@@ -4465,6 +4443,8 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Diese Bestellung kann nicht storniert werden, da der hier erworbene "
+"Geschenkgutschein {card} bereits eingelöst wurde."
 
 #: pretix/base/services/orders.py:329 pretix/control/forms/orders.py:112
 msgid ""
@@ -4484,6 +4464,11 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
+"Während du deine Bestellung abgeschickt hast, hat sich der Gesamtpreis "
+"verändert. Entweder hat sich gerade eben ein Produktpreis geändert oder ein "
+"eingesetzter Gutschein wurde zwischenzeitlich von einem anderen Nutzer "
+"verwendet. Bitte prüfe die unten angezeigten Preise genau und versuche es "
+"erneut."
 
 #: pretix/base/services/orders.py:870
 #, python-format
@@ -4585,6 +4570,8 @@ msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
 msgstr ""
+"Du kannst den Preis einer Position, aus der ein Geschenkgutschein erstellt "
+"wurde, nicht ändern."
 
 #: pretix/base/services/orders.py:1270
 #, python-brace-format
@@ -4592,6 +4579,8 @@ msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Eine Position kann nicht storniert werden, da der Geschenkgutschein {card} "
+"bereits verwendet wurde."
 
 #: pretix/base/services/orders.py:1620
 msgid ""
@@ -7476,13 +7465,16 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:172
 msgid "Issue a new invoice if required"
-msgstr ""
+msgstr "Neue Rechnung erzeugen (falls erforderlich)"
 
 #: pretix/control/forms/orders.py:176
 msgid ""
 "If an invoice exists for this order and this operation would change its "
 "contents, the old invoice will be cancelled and a new invoice will be issued."
 msgstr ""
+"Wenn eine Rechnung für diese Bestellung existiert und durch diese "
+"Operationen geändert würde, wird die alte Rechnung storniert und eine neue "
+"ausgestellt."
 
 #: pretix/control/forms/orders.py:181
 msgid "Notify user"
@@ -7721,10 +7713,8 @@ msgid "Event types"
 msgstr "Benachrichtigungsarten"
 
 #: pretix/control/forms/organizer.py:337
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card value"
-msgstr "Geschenkgutschein"
+msgstr "Wert des Geschenkgutscheins"
 
 #: pretix/control/forms/renderers.py:27
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:120
@@ -8820,10 +8810,8 @@ msgid "Devices"
 msgstr "Geräte"
 
 #: pretix/control/navigation.py:442
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift cards"
-msgstr "Geschenkgutschein"
+msgstr "Geschenkgutscheine"
 
 #: pretix/control/navigation.py:451
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
@@ -9406,6 +9394,10 @@ msgid ""
 "are connected on the organizer level, you do not have to create a new device "
 "for every event but can reuse them over and over again."
 msgstr ""
+"Wenn du die entsprechenden Berechtigungen hast, kannst du neue Geräte zu "
+"deinem Veranstalter-Account hinzufügen und mit diesen Tickets validieren. Da "
+"die Geräte auf Veranstalter-Ebene verwaltet werden, musst du dein Gerät "
+"nicht für jede Veranstaltung neu registrieren."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:40
 msgid "Your search did not match any check-in lists."
@@ -10644,6 +10636,14 @@ msgid ""
 "the difference.\n"
 "    "
 msgstr ""
+"\n"
+"        Wenn du einen Geschenkgutschein hast, kannst du den Code hier "
+"eingeben. Wenn der Geschenkgutschein\n"
+"nicht mehr ausreichend Guthaben aufweist, um die Bestellung voll zu "
+"bezahlen, wird diese Seite erneut angezeigt\n"
+"und du kannst einen weiteren Gutschein eingeben oder eine andere "
+"Zahlungsmethode für den Restbetrag wählen.\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout_confirm.html:4
 msgid ""
@@ -10655,12 +10655,17 @@ msgid ""
 "future.\n"
 "    "
 msgstr ""
+"\n"
+"        Dein Geschenkgutschein wird zur Bezahlung dieser Bestellung benutzt. "
+"Wenn das Guthaben auf dem Geschenkgutschein niedriger ist als die\n"
+"Bestellsumme, kannst du den Restbetrag mit einer anderen Zahlungsmethode "
+"bezahlen. Wenn das Guthaben höher ist als die Bestellsumme,\n"
+"kannst du den Gutschein in Zukunft erneut verwenden.\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
-#, fuzzy
-#| msgid "Issuer details"
 msgid "Issuer"
-msgstr "Rechnungsaussteller"
+msgstr "Aussteller"
 
 #: pretix/control/templates/pretixcontrol/global_message.html:5
 #: pretix/control/templates/pretixcontrol/global_message.html:7
@@ -12504,60 +12509,52 @@ msgid "Add property"
 msgstr "Eigenschaft hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
-#, fuzzy, python-format
-#| msgid "Gift card"
+#, python-format
 msgid "Gift card: %(card)s"
-msgstr "Geschenkgutschein"
+msgstr "Geschenkgutschein: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:17
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:66
-#, fuzzy
-#| msgid "Order details"
 msgid "Details"
-msgstr "Bestellung"
+msgstr "Details"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:31
 msgid "Issued through sale"
-msgstr ""
+msgstr "Ausgestellt durch Verkauf"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:43
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transactions"
-msgstr "Transaktions-Code"
+msgstr "Transaktionen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:64
-#, fuzzy
-#| msgid "Latin transcription"
 msgid "Manual transaction"
-msgstr "Transkription"
+msgstr "Manuelle Transaktion"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_create.html:5
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create a new gift card"
-msgstr "Neues Team erstellen"
+msgstr "Neuen Geschenkgutschein erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:7
-#, fuzzy
-#| msgid "Credit card"
 msgid "Issued gift cards"
-msgstr "Kreditkarte"
+msgstr "Ausgestellte Geschenkgutscheine"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:12
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
+"Du hast noch keine Geschenkgutscheine ausgestellt. Du kannst entweder ein "
+"Produkt in einer Veranstaltung so konfigurieren, dass Geschenkgutscheine "
+"verkauft werden, oder diese manuell ausstellen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:19
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:38
 msgid "Manually issue a gift card"
-msgstr ""
+msgstr "Geschenkgutschein manuell ausstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:81
 msgid "Accepted gift cards of other organizers"
-msgstr ""
+msgstr "Akzeptierte Geschenkgutscheine anderer Veranstalter"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:83
 msgid ""
@@ -12565,10 +12562,13 @@ msgid ""
 "ticket shops in this account will also accept gift codes issued through a "
 "different organizer account, and vice versa."
 msgstr ""
+"Wenn du Zugriff auf mehrere Veranstalterkonten hast, kannst du hier "
+"konfigurieren, dass Shops in diesem Account auch Gutscheine akzeptieren, die "
+"von einem anderen Veranstalter ausgestellt wurden, und umgekehrt."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:99
 msgid "You are currently not accepting gift cards from other organizers."
-msgstr ""
+msgstr "Du akzeptierst derzeit keine Gutscheine anderer Veranstalter."
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
@@ -13663,10 +13663,8 @@ msgid "Anonymize"
 msgstr "Anonymisieren"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:36
-#, fuzzy
-#| msgid "Reset authentication token"
 msgid "Authentication backend"
-msgstr "Authentifizierungstoken zurücksetzen"
+msgstr "Authentifizierungs-Mechanismus"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:50
 msgid "Team memberships"
@@ -14011,10 +14009,8 @@ msgid "Organizer-level settings"
 msgstr "Einstellungen auf Veranstalter-Ebene"
 
 #: pretix/control/templatetags/hierarkey_form.py:44
-#, fuzzy
-#| msgid "Organizer-level settings"
 msgid "Site-level settings"
-msgstr "Einstellungen auf Veranstalter-Ebene"
+msgstr "Globale Einstellungen"
 
 #: pretix/control/templatetags/hierarkey_form.py:47
 msgid ""
@@ -14029,42 +14025,32 @@ msgstr ""
 "und für diese Veranstaltung einzeln ändern."
 
 #: pretix/control/templatetags/hierarkey_form.py:51
-#, fuzzy
-#| msgid ""
-#| "These settings are currently set on organizer level. This way, you can "
-#| "easily change them for all of your events at the same time. You can "
-#| "either go to the organizer settings to change them or decouple them from "
-#| "the organizer account to change them for this event individually."
 msgid ""
 "These settings are currently set on global level. This way, you can easily "
 "change them for all organizers at the same time. You can either go to the "
 "global settings to change them or decouple them from the global settings to "
 "change them for this event individually."
 msgstr ""
-"Diese Einstellungen werden derzeit auf Veranstalter-Ebene verwaltet. Auf "
-"diese Weise kannst du einfach für alle deine Veranstaltungen gleichzeitig "
-"ändern. Du kannst sie entweder auf Veranstalter-Ebene ändern oder entkoppeln "
-"und für diese Veranstaltung einzeln ändern."
+"Diese Einstellungen werden derzeit auf globaler Ebene verwaltet. Auf diese "
+"Weise kannst du sie einfach für alle deine Veranstalter gleichzeitig ändern. "
+"Du kannst sie entweder auf globale Ebene ändern oder entkoppeln und für "
+"diesen Veranstalter einzeln ändern."
 
 #: pretix/control/templatetags/hierarkey_form.py:55
 msgid "Change only for this event"
 msgstr "Nur für diese Veranstaltung ändern"
 
 #: pretix/control/templatetags/hierarkey_form.py:55
-#, fuzzy
-#| msgid "Change only for this event"
 msgid "Change only for this organizer"
-msgstr "Nur für diese Veranstaltung ändern"
+msgstr "Nur für diesen Veranstalter ändern"
 
 #: pretix/control/templatetags/hierarkey_form.py:56
 msgid "Change for all events"
 msgstr "Für alle Veranstaltungen ändern"
 
 #: pretix/control/templatetags/hierarkey_form.py:56
-#, fuzzy
-#| msgid "Change for all events"
 msgid "Change for all organizers"
-msgstr "Für alle Veranstaltungen ändern"
+msgstr "Für alle Veranstalter ändern"
 
 #: pretix/control/views/__init__.py:145
 msgid "That page number is not an integer"
@@ -14480,7 +14466,7 @@ msgstr "Die Reihenfolge der Kategorien wurde gespeichert."
 
 #: pretix/control/views/item.py:300
 msgid "Some of the provided question ids are invalid."
-msgstr ""
+msgstr "Einige der angegebenen Fragen-IDs sind ungültig."
 
 #: pretix/control/views/item.py:348
 msgid "The selected question does not exist."
@@ -14986,6 +14972,7 @@ msgstr "Dieser Benutzer hat bereits eine Einladung für dieses Team."
 #: pretix/control/views/organizer.py:611
 msgid "Users need to have a pretix account before they can be invited."
 msgstr ""
+"Nutzer müssen ein pretix-Konto haben, bevor sie eingeladen werden können."
 
 #: pretix/control/views/organizer.py:621
 msgid "The new member has been invited to the team."
@@ -15022,39 +15009,28 @@ msgid "Access for this device has been revoked."
 msgstr "Der Zugriff für dieses Gerät wurde entfernt."
 
 #: pretix/control/views/organizer.py:937
-#, fuzzy
-#| msgid "The selected tax rule has been deleted."
 msgid "The selected gift card issuer has been added."
-msgstr "Die ausgewählte Steuer-Regel wurde gelöscht."
+msgstr "Der ausgewählte Gutscheinaussteller wurde hinzugefügt."
 
 #: pretix/control/views/organizer.py:951
-#, fuzzy
-#| msgid "The selected tax rule has been deleted."
 msgid "The selected gift card issuer has been removed."
-msgstr "Die ausgewählte Steuer-Regel wurde gelöscht."
+msgstr "Der ausgewählte Gutscheinaussteller wurde gelöscht."
 
 #: pretix/control/views/organizer.py:985
-#, fuzzy
-#| msgid "The password you entered was invalid, please try again."
 msgid "Your input was invalid, please try again."
-msgstr ""
-"Das eingegebene aktuelle Passwort war nicht korrekt, bitte erneut versuchen."
+msgstr "Die Eingabe war nicht korrekt, bitte erneut versuchen."
 
 #: pretix/control/views/organizer.py:988
 msgid "Gift cards are not allowed to have negative values."
-msgstr ""
+msgstr "Geschenkgutscheine dürfen keine negativen Werte haben."
 
 #: pretix/control/views/organizer.py:1000
-#, fuzzy
-#| msgid "The question has been added."
 msgid "The manual transaction has been saved."
-msgstr "Die Frage wurde erstellt."
+msgstr "Die manuelle Transaktion wurde gespeichert."
 
 #: pretix/control/views/organizer.py:1031
-#, fuzzy
-#| msgid "The device has been verified and can now be used."
 msgid "The gift card has been created and can now be used."
-msgstr "Das Gerät wurde bestätigt und kann nun verwendet werden."
+msgstr "Der Geschenkgutschein wurde erstellt und kann nun verwendet werden."
 
 #: pretix/control/views/pdf.py:52
 msgid "The uploaded PDF file is to large."
@@ -16727,22 +16703,16 @@ msgstr ""
 "\"%(prefix)s\" beginnen."
 
 #: pretix/plugins/stripe/forms.py:30 pretix/plugins/stripe/signals.py:126
-#, fuzzy
-#| msgid "Stripe Connect: Secret key (test)"
 msgid "Stripe Connect: App fee (percent)"
-msgstr "Stripe Connect: Geheimer Schlüssel (Testmodus)"
+msgstr "Stripe Connect: App-Gebühr (Prozent)"
 
 #: pretix/plugins/stripe/forms.py:34 pretix/plugins/stripe/signals.py:130
-#, fuzzy
-#| msgid "Stripe Connect: Secret key"
 msgid "Stripe Connect: App fee (max)"
-msgstr "Stripe Connect: Geheimer Schlüssel"
+msgstr "Stripe Connect: App-Gebühr (max)"
 
 #: pretix/plugins/stripe/forms.py:38 pretix/plugins/stripe/signals.py:134
-#, fuzzy
-#| msgid "Stripe Connect: Secret key"
 msgid "Stripe Connect: App fee (min)"
-msgstr "Stripe Connect: Geheimer Schlüssel"
+msgstr "Stripe Connect: App-Gebühr (min)"
 
 #: pretix/plugins/stripe/payment.py:73
 msgid ""
@@ -17053,10 +17023,8 @@ msgstr "Stripe Connect: Öffentlicher Schlüssel (Testmodus)"
 #: pretix/plugins/stripe/signals.py:164
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:6
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:9
-#, fuzzy
-#| msgid "Stripe Checkout"
 msgid "Stripe Connect"
-msgstr "Stripe Checkout"
+msgstr "Stripe Connect"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
@@ -18155,14 +18123,10 @@ msgid "Change details"
 msgstr "Details bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:134
-#, fuzzy
-#| msgid "Only successful payments"
 msgid "Successful payments"
-msgstr "Nur erfolgreiche Zahlungen"
+msgstr "Erfolgreiche Zahlungen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:143
-#, fuzzy
-#| msgid "Pending amount"
 msgid "Pending total"
 msgstr "Offener Betrag"
 
