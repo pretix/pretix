@@ -219,6 +219,8 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
 
         ctx['refunds'] = self.order.refunds.filter(
             state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT, OrderRefund.REFUND_STATE_CREATED)
+        ).exclude(
+            provider__in=('offsetting', 'reseller', 'boxoffice')
         )
 
         return ctx
