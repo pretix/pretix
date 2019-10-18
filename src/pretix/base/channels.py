@@ -35,6 +35,13 @@ class SalesChannel:
         """
         return "circle"
 
+    @property
+    def testmode_supported(self) -> bool:
+        """
+        Indication, if a saleschannels supports test mode orders
+        """
+        return True
+
 
 def get_all_sales_channels():
     global _ALL_CHANNELS
@@ -57,6 +64,7 @@ class WebshopSalesChannel(SalesChannel):
     identifier = "web"
     verbose_name = _('Online shop')
     icon = "globe"
+    testmode_supported = True
 
 
 @receiver(register_sales_channels, dispatch_uid="base_register_default_sales_channels")

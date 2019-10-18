@@ -401,7 +401,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         items = self._items_from_post_data()
         if items:
             return self.do(self.request.event.id, items, cart_id, translation.get_language(),
-                           self.invoice_address.pk, widget_data, self.request.sales_channel)
+                           self.invoice_address.pk, widget_data, self.request.sales_channel.identifier)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -424,7 +424,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
 
         # Fetch all items
         items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
-                                                       voucher=self.voucher, channel=self.request.sales_channel)
+                                                       voucher=self.voucher, channel=self.request.sales_channel.identifier)
 
         # Calculate how many options the user still has. If there is only one option, we can
         # check the box right away ;)

@@ -294,7 +294,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
             items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
-                                                           channel=self.request.sales_channel)
+                                                           channel=self.request.sales_channel.identifier)
             context['itemnum'] = len(items)
 
             # Regroup those by category
@@ -335,7 +335,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel).using(settings.DATABASE_REPLICA), self.request),
+                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
                 kwargs.get('cart_namespace')
             )
@@ -345,7 +345,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['years'] = range(now().year - 2, now().year + 3)
         else:
             context['subevent_list'] = self.request.event.subevents_sorted(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel).using(settings.DATABASE_REPLICA), self.request)
+                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
             )
 
         context['show_cart'] = (
