@@ -39,6 +39,7 @@ from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.locking import NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.signals import order_gracefully_delete
 
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
@@ -220,6 +221,7 @@ class Order(LockModel, LoggedModel):
         OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order=self).delete()
         OrderFee.all.filter(order=self).delete()
+        order_gracefully_delete.send(self.event, order=self)
         self.refunds.all().delete()
         self.payments.all().delete()
         self.event.cache.delete('complain_testmode_orders')

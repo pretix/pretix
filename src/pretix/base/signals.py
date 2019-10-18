@@ -391,6 +391,20 @@ as the first argument.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+order_gracefully_delete = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out every time a test-mode order is being deleted. The order object
+is given as the first argument.
+
+Any plugin receiving this signals is supposed to perform any cleanup necessary at this
+point, so that the underlying oder has no more external constraints that would inhibit
+the deletion of the order.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 logentry_display = EventPluginSignal(
     providing_args=["logentry"]
 )
