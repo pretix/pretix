@@ -1,3 +1,4 @@
+from decimal import Decimal
 from urllib.parse import urlparse
 
 from django import forms
@@ -334,7 +335,8 @@ class WebHookForm(forms.ModelForm):
 
 class GiftCardCreateForm(forms.ModelForm):
     value = forms.DecimalField(
-        label=_('Gift card value')
+        label=_('Gift card value'),
+        min_value=Decimal('0.00')
     )
 
     def __init__(self, *args, **kwargs):
