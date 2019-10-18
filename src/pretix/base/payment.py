@@ -971,7 +971,7 @@ class GiftCardPayment(BasePaymentProvider):
                 messages.error(request, _("This gift card can only be used in test mode."))
                 return
             if not gc.testmode and self.event.testmode:
-                messages.error(request, _("Only test gifts cards can be used in test mode."))
+                messages.error(request, _("Only test gift cards can be used in test mode."))
                 return
             if gc.value <= Decimal("0.00"):
                 messages.error(request, _("All credit on this gift card has been used."))
@@ -1017,10 +1017,10 @@ class GiftCardPayment(BasePaymentProvider):
             if gc.currency != self.event.currency:
                 messages.error(request, _("This gift card does not support this currency."))
                 return
-            if gc.testmode and not self.event.testmode:
+            if gc.testmode and not payment.order.testmode:
                 messages.error(request, _("This gift card can only be used in test mode."))
                 return
-            if not gc.testmode and self.event.testmode:
+            if not gc.testmode and payment.order.testmode:
                 messages.error(request, _("Only test gift cards can be used in test mode."))
                 return
             if gc.value <= Decimal("0.00"):

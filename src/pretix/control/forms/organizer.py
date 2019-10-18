@@ -341,10 +341,10 @@ class GiftCardCreateForm(forms.ModelForm):
         self.organizer = kwargs.pop('organizer')
         super().__init__(*args, **kwargs)
 
-    def validate_secret(self):
+    def clean_secret(self):
         s = self.cleaned_data['secret']
         if GiftCard.objects.filter(
-            secret=s
+            secret__iexact=s
         ).filter(
             Q(issuer=self.organizer) | Q(issuer__gift_card_collector_acceptance__collector=self.organizer)
         ).exists():

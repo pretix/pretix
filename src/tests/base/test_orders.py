@@ -593,6 +593,52 @@ class OrderCancelTests(TestCase):
         assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
 
     @classscope(attr='o')
+    def test_auto_refund_possible_giftcard(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        p1 = self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('44.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_BUYER
+        assert r.payment == p1
+        assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
+        assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
+        assert gc.value == Decimal('44.00')
+
+    @classscope(attr='o')
+    def test_auto_refund_possible_issued_giftcard(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=23)
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy_partialrefund'
+        )
+        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert gc.value == Decimal('0.00')
+
+    @classscope(attr='o')
+    def test_auto_refund_impossible_issued_giftcard_used(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=20)
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy_partialrefund'
+        )
+        with pytest.raises(OrderError):
+            cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        assert gc.value == Decimal('20.00')
+
+    @classscope(attr='o')
     def test_auto_refund_impossible(self):
         self.order.payments.create(
             amount=Decimal('46.00'),
@@ -858,6 +904,22 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.price == Decimal('24.00')
         assert self.order.status == Order.STATUS_PENDING
+
+    @classscope(attr='o')
+    def test_cancel_issued_giftcard(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=23)
+        self.ocm.cancel(self.op1)
+        self.ocm.commit()
+        assert gc.value == Decimal('0.00')
+
+    @classscope(attr='o')
+    def test_cancel_issued_giftcard_used(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=20)
+        self.ocm.cancel(self.op1)
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
 
     @classscope(attr='o')
     def test_cancel_all_in_order(self):

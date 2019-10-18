@@ -158,6 +158,12 @@ def taxrule(event):
 
 @pytest.fixture
 @scopes_disabled()
+def taxrule0(event):
+    return event.tax_rules.create(name="VAT", rate=0)
+
+
+@pytest.fixture
+@scopes_disabled()
 def taxrule2(event2):
     return event2.tax_rules.create(name="VAT", rate=25)
 

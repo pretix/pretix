@@ -292,6 +292,19 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         if i:
             generate_cancellation(i)
 
+        for position in order.positions.all():
+            for gc in position.issued_gift_cards.all():
+                gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
+                if gc.value < position.price:
+                    raise OrderError(
+                        _('This order can not be canceled since the gift card {card} purchased in '
+                          'this order has already been redeemed.').format(
+                            card=gc.secret
+                        )
+                    )
+                else:
+                    gc.transactions.create(value=-position.price, order=order)
+
         if cancellation_fee:
             with order.event.lock():
                 for position in order.positions.all():
@@ -328,15 +341,6 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
             for position in order.positions.all():
                 if position.voucher:
                     Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
-
-        for position in order.positions.all():
-            for gc in position.issued_gift_cards.all():
-                if gc.value < position.price:
-                    raise OrderError(_('This order can not be canceled since the gift card {card} purchased in this order has already been redeemed.').format(
-                        card=gc.secret
-                    ))
-                else:
-                    gc.transactions.create(value=-position.price, order=order)
 
         order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device,
                          data={'cancellation_fee': cancellation_fee})
@@ -1257,6 +1261,17 @@ class OrderChangeManager:
                 op.position._calculate_tax()
                 op.position.save()
             elif isinstance(op, self.CancelOperation):
+                for gc in op.position.issued_gift_cards.all():
+                    gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
+                    if gc.value < op.position.price:
+                        raise OrderError(_(
+                            'A position can not be canceled since the gift card {card} purchased in this order has '
+                            'already been redeemed.').format(
+                            card=gc.secret
+                        ))
+                    else:
+                        gc.transactions.create(value=-op.position.price, order=self.order)
+
                 for opa in op.position.addons.all():
                     self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                         'position': opa.pk,
@@ -1692,10 +1707,13 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
     any_giftcards = False
     for p in order.positions.all():
         if p.item.issue_giftcard:
+            issued = Decimal('0.00')
+            for gc in p.issued_gift_cards.all():
+                issued += gc.transactions.first().value
             gc = sender.organizer.issued_gift_cards.create(
                 currency=sender.currency, issued_in=p, testmode=order.testmode
             )
-            gc.transactions.create(value=p.price, order=order)
+            gc.transactions.create(value=p.price - issued, order=order)
             any_giftcards = True
             p.secret = gc.secret
             p.save(update_fields=['secret'])
