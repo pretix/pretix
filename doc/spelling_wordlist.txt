@@ -41,6 +41,7 @@ formsets
 frontend
 frontpage
 gettext
+giftcard
 gunicorn
 guid
 hardcoded

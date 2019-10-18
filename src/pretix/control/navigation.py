@@ -437,6 +437,16 @@ def get_organizer_navigation(request):
             'active': 'organizer.device' in url.url_name,
             'icon': 'tablet',
         })
+    if 'can_manage_gift_cards' in request.orgapermset:
+        nav.append({
+            'label': _('Gift cards'),
+            'url': reverse('control:organizer.giftcards', kwargs={
+                'organizer': request.organizer.slug
+            }),
+            'active': 'organizer.giftcard' in url.url_name,
+            'icon': 'credit-card',
+        })
+    if 'can_change_organizer_settings' in request.orgapermset:
         nav.append({
             'label': _('Webhooks'),
             'url': reverse('control:organizer.webhooks', kwargs={

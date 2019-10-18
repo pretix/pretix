@@ -4,6 +4,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_scopes.forms import SafeModelMultipleChoiceField
@@ -12,7 +13,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
-from pretix.base.models import Device, Organizer, Team
+from pretix.base.models import Device, GiftCard, Organizer, Team
 from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget,
 )
@@ -145,6 +146,7 @@ class TeamForm(forms.ModelForm):
         model = Team
         fields = ['name', 'all_events', 'limit_events', 'can_create_events',
                   'can_change_teams', 'can_change_organizer_settings',
+                  'can_manage_gift_cards',
                   'can_change_event_settings', 'can_change_items',
                   'can_view_orders', 'can_change_orders',
                   'can_view_vouchers', 'can_change_vouchers']
@@ -328,3 +330,29 @@ class WebHookForm(forms.ModelForm):
         field_classes = {
             'limit_events': SafeModelMultipleChoiceField
         }
+
+
+class GiftCardCreateForm(forms.ModelForm):
+    value = forms.DecimalField(
+        label=_('Gift card value')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+
+    def clean_secret(self):
+        s = self.cleaned_data['secret']
+        if GiftCard.objects.filter(
+            secret__iexact=s
+        ).filter(
+            Q(issuer=self.organizer) | Q(issuer__gift_card_collector_acceptance__collector=self.organizer)
+        ).exists():
+            raise ValidationError(
+                _('A gift card with the same secret already exists in your or an affiliated organizer account.')
+            )
+        return s
+
+    class Meta:
+        model = GiftCard
+        fields = ['secret', 'currency', 'testmode']

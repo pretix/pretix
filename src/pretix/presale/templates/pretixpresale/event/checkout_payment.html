@@ -17,19 +17,19 @@
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 {% if show_fees %}
-                                   <strong class="pull-right flip">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
+                                    <strong class="pull-right flip">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
                                 {% endif %}
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
-                                        title="{{ p.provider.public_name }}"
-                                        data-parent="#payment_accordion"
-                                        {% if selected == p.provider.identifier %}checked="checked"{% endif %}
-                                        data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
+                                       title="{{ p.provider.public_name }}"
+                                       data-parent="#payment_accordion"
+                                       {% if selected == p.provider.identifier %}checked="checked"{% endif %}
+                                       data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
                                 <strong>{{ p.provider.public_name }}</strong>
                             </h4>
                         </div>
                     </label>
                     <div id="payment_{{ p.provider.identifier }}"
-                            class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
+                         class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
                         <div class="panel-body form-horizontal">
                             {% if request.event.testmode %}
                                 {% if p.provider.test_mode_message %}

@@ -335,6 +335,25 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             | Q(id__in=self.teams.filter(**kwargs).values_list('limit_events__id', flat=True))
         )
 
+    @scopes_disabled()
+    def get_organizers_with_permission(self, permission, request=None):
+        """
+        Returns a queryset of organizers the user has a specific permissions to.
+
+        :param request: The current request (optional). Required to detect staff sessions properly.
+        :return: Iterable of Organizers
+        """
+        from .event import Organizer
+
+        if request and self.has_active_staff_session(request.session.session_key):
+            return Organizer.objects.all()
+
+        kwargs = {permission: True}
+
+        return Organizer.objects.filter(
+            id__in=self.teams.filter(**kwargs).values_list('organizer', flat=True)
+        )
+
     def has_active_staff_session(self, session_key=None):
         """
         Returns whether or not a user has an active staff session (formerly known as superuser session)

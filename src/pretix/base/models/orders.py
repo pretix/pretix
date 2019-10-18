@@ -202,7 +202,7 @@ class Order(LockModel, LoggedModel):
         return self.full_code
 
     def gracefully_delete(self, user=None, auth=None):
-        from . import Voucher
+        from . import Voucher, GiftCard, GiftCardTransaction
 
         if not self.testmode:
             raise TypeError("Only test mode orders can be deleted.")
@@ -218,6 +218,10 @@ class Order(LockModel, LoggedModel):
                 if position.voucher:
                     Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
 
+        GiftCardTransaction.objects.filter(payment__in=self.payments.all()).update(payment=None)
+        GiftCardTransaction.objects.filter(refund__in=self.refunds.all()).update(refund=None)
+        GiftCardTransaction.objects.filter(order=self).update(order=None)
+        GiftCard.objects.filter(issued_in__in=self.positions.all()).update(issued_in=None)
         OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order=self).delete()
         OrderFee.all.filter(order=self).delete()
@@ -460,11 +464,15 @@ class Order(LockModel, LoggedModel):
         positions = list(
             self.positions.all().annotate(
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
-            ).select_related('item')
+            ).select_related('item').prefetch_related('issued_gift_cards')
         )
         cancelable = all([op.item.allow_cancel and not op.has_checkin for op in positions])
         if not cancelable or not positions:
             return False
+        for op in positions:
+            for gc in op.issued_gift_cards.all():
+                if gc.value != op.price:
+                    return False
         if self.user_cancel_deadline and now() > self.user_cancel_deadline:
             return False
         if self.status == Order.STATUS_PENDING:

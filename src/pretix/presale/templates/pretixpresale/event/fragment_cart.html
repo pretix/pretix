@@ -33,7 +33,14 @@
                 {% endif %}
             {% endif %}
 
-
+            {% if line.issued_gift_cards %}
+                <dl>
+                    {% for gc in line.issued_gift_cards.all %}
+                        <dt>{% trans "Gift card code" %}</dt>
+                        <dd>{{ gc.secret }}</dd>
+                    {% endfor %}
+                </dl>
+            {% endif %}
             {% if line.has_questions %}
                 <dl>
                     {% if line.item.admission and event.settings.attendee_names_asked %}

@@ -128,6 +128,26 @@
         </div>
         <div class="panel-body">
             {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event download=can_download editable=False %}
+            {% if order.status == "n" and order.total > pending_sum %}
+                <div class="row cart-row">
+                    <div class="col-md-4 col-xs-6">
+                        <strong>{% trans "Successful payments" %}</strong>
+                    </div>
+                    <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                        <strong>{{ payment_sum_neg|money:event.currency }}</strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="row cart-row total">
+                    <div class="col-md-4 col-xs-6">
+                        <strong>{% trans "Pending total" %}</strong>
+                    </div>
+                    <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                        <strong>{{ pending_sum|money:event.currency }}</strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {% endif %}
         </div>
     </div>
     {% eventsignal event "pretix.presale.signals.order_info" order=order %}

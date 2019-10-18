@@ -133,6 +133,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'payment_giftcard__enabled': {
+        'default': 'True',
+        'type': bool
+    },
     'payment_term_accept_late': {
         'default': 'True',
         'type': bool

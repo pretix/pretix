@@ -237,7 +237,7 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation', 'addon_to', 'tax_rule'
         ).prefetch_related(
-            'item__questions',
+            'item__questions', 'issued_gift_cards',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
             'checkins', 'checkins__list'
         ).order_by('positionid')
@@ -897,23 +897,26 @@ class OrderTransition(OrderView):
             else:
                 messages.success(self.request, _('The payment has been created successfully.'))
         elif self.order.cancel_allowed() and to == 'c' and self.mark_canceled_form.is_valid():
-            cancel_order(self.order, user=self.request.user,
-                         send_mail=self.mark_canceled_form.cleaned_data['send_email'],
-                         cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
-            self.order.refresh_from_db()
+            try:
+                cancel_order(self.order, user=self.request.user,
+                             send_mail=self.mark_canceled_form.cleaned_data['send_email'],
+                             cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
+            except OrderError as e:
+                messages.error(self.request, str(e))
+            else:
+                self.order.refresh_from_db()
+                if self.order.pending_sum < 0:
+                    messages.success(self.request, _('The order has been canceled. You can now select how you want to '
+                                                     'transfer the money back to the user.'))
+                    return redirect(reverse('control:event.order.refunds.start', kwargs={
+                        'event': self.request.event.slug,
+                        'organizer': self.request.event.organizer.slug,
+                        'code': self.order.code
+                    }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}'.format(
+                        self.order.pending_sum * -1
+                    ))
 
-            if self.order.pending_sum < 0:
-                messages.success(self.request, _('The order has been canceled. You can now select how you want to '
-                                                 'transfer the money back to the user.'))
-                return redirect(reverse('control:event.order.refunds.start', kwargs={
-                    'event': self.request.event.slug,
-                    'organizer': self.request.event.organizer.slug,
-                    'code': self.order.code
-                }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}'.format(
-                    self.order.pending_sum * -1
-                ))
-
-            messages.success(self.request, _('The order has been canceled.'))
+                messages.success(self.request, _('The order has been canceled.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'e':
             mark_order_expired(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been marked as expired.'))

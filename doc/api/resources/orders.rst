@@ -769,6 +769,8 @@ Creating orders
 
        * does not support file upload questions
 
+       * does not support redeeming gift cards
+
    You can supply the following fields of the resource:
 
    * ``code`` (optional)

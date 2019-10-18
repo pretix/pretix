@@ -137,6 +137,11 @@ org_permission_sub_urls = [
     ('put', 'can_change_organizer_settings', 'webhooks/1/', 404),
     ('patch', 'can_change_organizer_settings', 'webhooks/1/', 404),
     ('delete', 'can_change_organizer_settings', 'webhooks/1/', 404),
+    ('get', 'can_manage_gift_cards', 'giftcards/', 200),
+    ('post', 'can_manage_gift_cards', 'giftcards/', 400),
+    ('get', 'can_manage_gift_cards', 'giftcards/1/', 404),
+    ('put', 'can_manage_gift_cards', 'giftcards/1/', 404),
+    ('patch', 'can_manage_gift_cards', 'giftcards/1/', 404),
 ]
 
 

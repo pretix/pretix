@@ -97,6 +97,7 @@ error_messages = {
     'seat_forbidden': _('You can not select a seat for this position.'),
     'seat_unavailable': _('The seat you selected has already been taken. Please select a different seat.'),
     'seat_multiple': _('You can not select the same seat multiple times.'),
+    'gift_card': _("You entered a gift card instead of a voucher. Gift cards can be entered later on when you're asked for your payment details."),
 }
 
 
@@ -958,14 +959,41 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
 
 
 def get_fees(event, request, total, invoice_address, provider):
-    fees = []
+    from pretix.presale.views.cart import cart_session
 
+    fees = []
     for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
                                                     total=total):
         if resp:
             fees += resp
 
     total = total + sum(f.value for f in fees)
+
+    cs = cart_session(request)
+    if cs.get('gift_cards'):
+        gcs = cs['gift_cards']
+        gc_qs = event.organizer.accepted_gift_cards.filter(pk__in=cs.get('gift_cards'), currency=event.currency)
+        summed = 0
+        for gc in gc_qs:
+            if gc.testmode != event.testmode:
+                gcs.remove(gc.pk)
+                continue
+            fval = Decimal(gc.value)  # TODO: don't require an extra query
+            fval = min(fval, total - summed)
+            if fval > 0:
+                total -= fval
+                summed += fval
+                fees.append(OrderFee(
+                    fee_type=OrderFee.FEE_TYPE_GIFTCARD,
+                    internal_type='giftcard',
+                    description=gc.secret,
+                    value=-1 * fval,
+                    tax_rate=Decimal('0.00'),
+                    tax_value=Decimal('0.00'),
+                    tax_rule=TaxRule.zero()
+                ))
+        cs['gift_cards'] = gcs
+
     if provider and total != 0:
         provider = event.get_payment_providers().get(provider)
         if provider:

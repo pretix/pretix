@@ -1,11 +1,14 @@
-from rest_framework import filters, viewsets
-from rest_framework.exceptions import PermissionDenied
+from django.db import transaction
+from rest_framework import filters, serializers, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
+from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
-    OrganizerSerializer, SeatingPlanSerializer,
+    GiftCardSerializer, OrganizerSerializer, SeatingPlanSerializer,
 )
-from pretix.base.models import Organizer, SeatingPlan
+from pretix.base.models import GiftCard, Organizer, SeatingPlan
 from pretix.helpers.dicts import merge_dicts
 
 
@@ -81,3 +84,66 @@ class SeatingPlanViewSet(viewsets.ModelViewSet):
             data={'id': instance.pk}
         )
         instance.delete()
+
+
+class GiftCardViewSet(viewsets.ModelViewSet):
+    serializer_class = GiftCardSerializer
+    queryset = GiftCard.objects.none()
+    permission = 'can_manage_gift_cards'
+    write_permission = 'can_manage_gift_cards'
+
+    def get_queryset(self):
+        return self.request.organizer.issued_gift_cards.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        value = serializer.validated_data.pop('value')
+        inst = serializer.save(issuer=self.request.organizer)
+        inst.transactions.create(value=value)
+        inst.log_action(
+            'pretix.giftcards.transaction.manual',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=merge_dicts(self.request.data, {'id': inst.pk})
+        )
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
+        old_value = serializer.instance.value
+        value = serializer.validated_data.pop('value')
+        inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
+                               testmode=serializer.instance.testmode)
+        diff = value - old_value
+        inst.transactions.create(value=diff)
+        inst.log_action(
+            'pretix.giftcards.transaction.manual',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'value': diff}
+        )
+        return inst
+
+    @action(detail=True, methods=["POST"])
+    @transaction.atomic()
+    def transact(self, request, **kwargs):
+        gc = GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
+        value = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
+            request.data.get('value')
+        )
+        gc.transactions.create(value=value)
+        gc.log_action(
+            'pretix.giftcards.transaction.manual',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'value': value}
+        )
+        return Response(GiftCardSerializer(gc).data, status=status.HTTP_200_OK)
+
+    def perform_destroy(self, instance):
+        raise MethodNotAllowed("Gift cards cannot be deleted.")

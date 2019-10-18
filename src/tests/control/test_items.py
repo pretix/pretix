@@ -419,6 +419,22 @@ class ItemsTest(ItemFormTest):
         self.item1.refresh_from_db()
         assert self.item1.default_price == Decimal('23.00')
 
+    def test_update_validate_giftcard(self):
+        doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id))
+        d = extract_form_fields(doc.select('.container-fluid form')[0])
+        d.update({
+            'name_0': 'Standard',
+            'default_price': '23.00',
+            'admission': 'on',
+            'issue_giftcard': 'on',
+            'active': 'yes',
+            'allow_cancel': 'yes',
+            'sales_channels': 'web'
+        })
+        self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), d)
+        self.item1.refresh_from_db()
+        assert not self.item1.issue_giftcard
+
     def test_manipulate_addons(self):
         doc = self.get_doc('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id))
         d = extract_form_fields(doc.select('.container-fluid form')[0])
