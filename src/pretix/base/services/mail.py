@@ -31,6 +31,7 @@ from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.presale.ical import get_ical
 
 logger = logging.getLogger('pretix.base.mail')
 INVALID_ADDRESS = 'invalid-pretix-mail-address'
@@ -50,7 +51,7 @@ class SendMailException(Exception):
 def mail(email: str, subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
          order: Order=None, position: OrderPosition=None, headers: dict=None, sender: str=None,
-         invoices: list=None, attach_tickets=False, auto_email=True, user=None):
+         invoices: list=None, attach_tickets=False, auto_email=True, user=None, attach_ical=False):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -84,6 +85,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
     :param invoices: A list of invoices to attach to this email.
 
     :param attach_tickets: Whether to attach tickets to this email, if they are available to download.
+
+    :param attach_ical: Whether to attach relevant ``.ics`` files to this email
 
     :param auto_email: Whether this email is auto-generated
 
@@ -216,6 +219,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             order=order.pk if order else None,
             position=position.pk if position else None,
             attach_tickets=attach_tickets,
+            attach_ical=attach_ical,
             user=user.pk if user else None
         )
 
@@ -231,7 +235,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 @app.task(base=TransactionAwareTask, bind=True)
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int=None, position: int=None, headers: dict=None, bcc: List[str]=None,
-                   invoices: List[int]=None, order: int=None, attach_tickets=False, user=None) -> bool:
+                   invoices: List[int]=None, order: int=None, attach_tickets=False, user=None,
+                   attach_ical=False) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         html_with_cid, cid_images = replace_images_with_cid_paths(html)
@@ -301,6 +306,20 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                     'invoices': [],
                                 }
                             )
+                    if attach_ical:
+                        ical_events = set()
+                        if event.has_subevents:
+                            if position:
+                                ical_events.add(position.subevent)
+                            else:
+                                for p in order.positions.all():
+                                    ical_events.add(p.subevent)
+                        else:
+                            ical_events.add(order.event)
+
+                        for i, e in enumerate(ical_events):
+                            cal = get_ical([e])
+                            email.attach('event-{}.ics'.format(i), cal.serialize(), 'text/calendar')
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
 

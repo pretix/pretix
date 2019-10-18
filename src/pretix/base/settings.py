@@ -297,6 +297,10 @@ DEFAULTS = {
         'default': 'classic',
         'type': str
     },
+    'mail_attach_ical': {
+        'default': 'False',
+        'type': bool
+    },
     'mail_prefix': {
         'default': None,
         'type': str

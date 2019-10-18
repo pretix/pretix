@@ -704,7 +704,8 @@ def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, 
             email_subject, email_template, email_context,
             log_entry,
             invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
-            attach_tickets=True
+            attach_tickets=True,
+            attach_ical=event.settings.mail_attach_ical
         )
     except SendMailException:
         logger.exception('Order received email could not be sent')
@@ -720,7 +721,8 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
             log_entry,
             invoices=[],
             attach_tickets=True,
-            position=position
+            position=position,
+            attach_ical=event.settings.mail_attach_ical
         )
     except SendMailException:
         logger.exception('Order received email could not be sent to attendee')

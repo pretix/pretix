@@ -723,7 +723,8 @@ class Order(LockModel, LoggedModel):
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
-                  auth=None, attach_tickets=False, position: 'OrderPosition'=None, auto_email=True):
+                  auth=None, attach_tickets=False, position: 'OrderPosition'=None, auto_email=True,
+                  attach_ical=False):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
 
@@ -740,6 +741,7 @@ class Order(LockModel, LoggedModel):
         :param headers: Dictionary with additional mail headers
         :param sender: Custom email sender.
         :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
+        :param attach_ical: Attach relevant ICS files
         :param position: An order position this refers to. If given, no invoices will be attached, the tickets will
                          only be attached for this position and child positions, the link will only point to the
                          position and the attendee email will be used if available.
@@ -763,7 +765,7 @@ class Order(LockModel, LoggedModel):
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers=headers, sender=sender,
                     invoices=invoices, attach_tickets=attach_tickets,
-                    position=position, auto_email=auto_email
+                    position=position, auto_email=auto_email, attach_ical=attach_ical
                 )
             except SendMailException:
                 raise
@@ -779,6 +781,7 @@ class Order(LockModel, LoggedModel):
                         'recipient': recipient,
                         'invoices': [i.pk for i in invoices] if invoices else [],
                         'attach_tickets': attach_tickets,
+                        'attach_ical': attach_ical,
                     }
                 )
 
@@ -790,7 +793,7 @@ class Order(LockModel, LoggedModel):
             self.send_mail(
                 email_subject, email_template, email_context,
                 'pretix.event.order.email.resend', user=user, auth=auth,
-                attach_tickets=True
+                attach_tickets=True,
             )
 
     @property
@@ -1334,7 +1337,7 @@ class OrderPayment(models.Model):
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_paid', user,
                     invoices=[], position=position,
-                    attach_tickets=True
+                    attach_tickets=True, attach_ical=True
                 )
             except SendMailException:
                 logger.exception('Order paid email could not be sent')
@@ -1351,7 +1354,7 @@ class OrderPayment(models.Model):
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_paid', user,
                     invoices=[invoice] if invoice and self.order.event.settings.invoice_email_attachment else [],
-                    attach_tickets=True
+                    attach_tickets=True, attach_ical=True
                 )
             except SendMailException:
                 logger.exception('Order paid email could not be sent')
