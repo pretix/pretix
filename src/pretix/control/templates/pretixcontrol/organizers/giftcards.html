@@ -102,7 +102,7 @@
                     {% endfor %}
                     {% if other_organizers %}
                         <li>
-                            <select name="add" class="form-control">
+                            <select name="add" class="form-control input-sm">
                                 <option></option>
                                 {% for o in other_organizers %}
                                     <option value="{{ o.slug }}">{{ o }}</option>
