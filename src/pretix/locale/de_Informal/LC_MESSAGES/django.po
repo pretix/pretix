@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-18 15:17+0000\n"
-"PO-Revision-Date: 2019-10-08 14:09+0000\n"
+"POT-Creation-Date: 2019-10-08 13:56+0000\n"
+"PO-Revision-Date: 2019-10-18 15:17+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -7364,7 +7364,7 @@ msgstr "Zusatzprodukte"
 
 #: pretix/control/forms/item.py:574
 msgid "You added the same add-on category twice"
-msgstr "Du hast die selbe Kategorie zweimal hinzugefügt."
+msgstr "Du hast dieselbe Kategorie zweimal hinzugefügt."
 
 #: pretix/control/forms/item.py:608
 msgid ""
@@ -17466,12 +17466,12 @@ msgid ""
 "Please enter the same email address again to make sure you typed it "
 "correctly."
 msgstr ""
-"Bitte gib die selbe E-Mail-Adresse erneut ein um sicherzustellen, dass du "
+"Bitte gib dieselbe E-Mail-Adresse erneut ein, um sicherzustellen, dass du "
 "dich nicht vertippt hast."
 
 #: pretix/presale/forms/checkout.py:66
 msgid "Please enter the same email address twice."
-msgstr "Bitte gib zweimal die selbe E-Mail-Adresse ein."
+msgstr "Bitte gib zweimal dieselbe E-Mail-Adresse ein."
 
 #: pretix/presale/forms/checkout.py:161
 #, python-brace-format
