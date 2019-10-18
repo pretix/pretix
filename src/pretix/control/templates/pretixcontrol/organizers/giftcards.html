@@ -1,0 +1,117 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% block inner %}
+    <h1>
+        {% trans "Issued gift cards" %}
+    </h1>
+    {% if giftcards|length == 0 and not filter_form.filtered %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't issued any gift cards yet. You can either set up a product in an event shop to sell gift cards,
+                    or you can manually issue gift cards.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:organizer.giftcard.add" organizer=request.organizer.slug %}"
+                    class="btn btn-default btn-lg"><i class="fa fa-plus"></i> {% trans "Manually issue a gift card" %}
+            </a>
+        </div>
+    {% else %}
+        <form class="row filter-form" action="" method="get">
+            <div class="col-md-10 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.query layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
+                    {% trans "Filter" %}
+                </span>
+                </button>
+            </div>
+        </form>
+        <p>
+            <a href="{% url "control:organizer.giftcard.add" organizer=request.organizer.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Manually issue a gift card" %}</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Gift card code" %}</th>
+                    <th>{% trans "Creation date" %}</th>
+                    <th class="text-right">{% trans "Current value" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for g in giftcards %}
+                    <tr>
+                        <td>
+                            <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=g.id %}">
+                                <strong>{{ g.secret }}</strong></a>
+                            {% if g.testmode %}
+                                <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ g.issuance|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td class="text-right">
+                            {{ g.cached_value|money:g.currency }}
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=g.id %}"
+                                    class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Details" %}">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+    {% if not is_paginated or page_obj.number == 1 %}
+        <form action="" method="post" class="form-inline">
+            {% csrf_token %}
+            <fieldset>
+                <legend>{% trans "Accepted gift cards of other organizers" %}</legend>
+                <p>
+                    {% blocktrans trimmed %}
+                        If you have access to multiple organizer accounts, you can configure that ticket shops in
+                        this account will also accept gift codes issued through a different organizer account, and
+                        vice versa.
+                    {% endblocktrans %}
+                </p>
+                <ul>
+                    {% for gca in request.organizer.gift_card_issuer_acceptance.all %}
+                        <li>
+                            <strong>{{ gca.issuer }}</strong>
+                            <button type="submit" name="del" value="{{ gca.issuer.slug }}" class="btn btn-xs btn-danger">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                        </li>
+                    {% empty %}
+                        <li>
+                            <em>{% trans "You are currently not accepting gift cards from other organizers." %}</em>
+                        </li>
+                    {% endfor %}
+                    {% if other_organizers %}
+                        <li>
+                            <select name="add" class="form-control input-sm">
+                                <option></option>
+                                {% for o in other_organizers %}
+                                    <option value="{{ o.slug }}">{{ o }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-primary btn-sm" type="submit"><span class="fa fa-plus"></span></button>
+                        </li>
+                    {% endif %}
+                </ul>
+            </fieldset>
+        </form>
+    {% endif %}
+{% endblock %}

@@ -163,7 +163,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
-            queryset=self.order.positions.select_related('tax_rule'),
+            queryset=self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule'),
             order=self.order
         )
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
@@ -193,6 +193,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
 
         if self.order.status == Order.STATUS_PENDING:
             ctx['pending_sum'] = self.order.pending_sum
+            ctx['payment_sum_neg'] = ctx['pending_sum'] - self.order.total
 
             lp = self.order.payments.last()
             ctx['can_pay'] = False

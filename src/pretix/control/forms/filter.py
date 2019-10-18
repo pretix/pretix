@@ -502,6 +502,29 @@ class OrganizerFilterForm(FilterForm):
         return qs
 
 
+class GiftCardFilterForm(FilterForm):
+    query = forms.CharField(
+        label=_('Search query'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search query'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(secret__icontains=query)
+        return qs
+
+
 class EventFilterForm(FilterForm):
     orders = {
         'slug': 'slug',

@@ -21,6 +21,7 @@ Resources and endpoints
    vouchers
    checkinlists
    waitinglist
+   giftcards
    carts
    webhooks
    seatingplans

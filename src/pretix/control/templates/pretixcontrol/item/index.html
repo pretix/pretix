@@ -55,6 +55,7 @@
                     </fieldset>
                     <fieldset>
                         <legend>{% trans "Additional settings" %}</legend>
+                        {% bootstrap_field form.issue_giftcard layout="control" %}
                         {% bootstrap_field form.show_quota_left layout="control" %}
                         {% for f in plugin_forms %}
                             {% bootstrap_form f layout="control" %}

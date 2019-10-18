@@ -242,6 +242,8 @@ class Item(LoggedModel):
     :type require_approval: bool
     :param sales_channels: Sales channels this item is available on.
     :type sales_channels: bool
+    :param issue_giftcard: If ``True``, buying this product will give you a gift card with the value of the product's price
+    :type issue_giftcard: bool
     """
 
     objects = ItemQuerySetManager()
@@ -412,6 +414,12 @@ class Item(LoggedModel):
     sales_channels = fields.MultiStringField(
         verbose_name=_('Sales channels'),
         default=['web']
+    )
+    issue_giftcard = models.BooleanField(
+        verbose_name=_('This product is a gift card'),
+        help_text=_('When a customer buys this product, they will get a gift card with a value corresponding to the '
+                    'product price.'),
+        default=False
     )
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.

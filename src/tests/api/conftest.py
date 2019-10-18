@@ -70,6 +70,7 @@ def event3(organizer, meta_prop):
 def team(organizer):
     return Team.objects.create(
         organizer=organizer,
+        can_manage_gift_cards=True,
         can_change_items=True,
         can_create_events=True,
         can_change_event_settings=True,
@@ -153,6 +154,12 @@ def subevent2(event2, meta_prop):
 @scopes_disabled()
 def taxrule(event):
     return event.tax_rules.create(name="VAT", rate=19)
+
+
+@pytest.fixture
+@scopes_disabled()
+def taxrule0(event):
+    return event.tax_rules.create(name="VAT", rate=0)
 
 
 @pytest.fixture

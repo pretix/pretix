@@ -632,6 +632,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['cart_session'] = self.cart_session
         ctx['invoice_address_asked'] = self.address_asked
 
+        self.cart_session['shown_total'] = str(ctx['cart']['total'])
+
         email = self.cart_session.get('contact_form_data', {}).get('email')
         if email != settings.PRETIX_EMAIL_NONE_VALUE:
             ctx['contact_info'] = [
@@ -709,7 +711,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         return self.do(self.request.event.id, self.payment_provider.identifier if self.payment_provider else None,
                        [p.id for p in self.positions], self.cart_session.get('email'),
                        translation.get_language(), self.invoice_address.pk, meta_info,
-                       request.sales_channel)
+                       request.sales_channel, self.cart_session.get('gift_cards'),
+                       self.cart_session.get('shown_total'))
 
     def get_success_message(self, value):
         create_empty_cart_id(self.request)

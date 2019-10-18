@@ -1075,6 +1075,17 @@ class OrderTestCase(BaseQuotaTestCase):
         assert not self.order.user_cancel_allowed
 
     @classscope(attr='o')
+    def test_can_cancel_order_with_giftcard(self):
+        item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=True, issue_giftcard=True)
+        p = OrderPosition.objects.create(order=self.order, item=item1,
+                                         variation=None, price=23)
+        self.event.organizer.issued_gift_cards.create(
+            currency="EUR", issued_in=p
+        )
+        assert not self.order.user_cancel_allowed
+
+    @classscope(attr='o')
     def test_can_cancel_order_free(self):
         self.order.status = Order.STATUS_PAID
         self.order.total = Decimal('0.00')

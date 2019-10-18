@@ -7,6 +7,7 @@ from .event import (
     Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
     RequiredAction, SubEvent, SubEventMetaValue, generate_invite_token,
 )
+from .giftcards import GiftCard, GiftCardAcceptance, GiftCardTransaction
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation, Question,

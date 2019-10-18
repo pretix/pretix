@@ -2,6 +2,7 @@ import string
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Exists, OuterRef, Q
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -82,6 +83,24 @@ class Organizer(LoggedModel):
 
         return ObjectRelatedCache(self)
 
+    @property
+    def has_gift_cards(self):
+        return self.cache.get_or_set(
+            key='has_gift_cards',
+            timeout=15,
+            default=lambda: self.issued_gift_cards.exists() or self.gift_card_issuer_acceptance.exists()
+        )
+
+    @property
+    def accepted_gift_cards(self):
+        from .giftcards import GiftCard, GiftCardAcceptance
+
+        return GiftCard.objects.annotate(
+            accepted=Exists(GiftCardAcceptance.objects.filter(issuer=OuterRef('issuer'), collector=self))
+        ).filter(
+            Q(issuer=self) | Q(accepted=True)
+        )
+
     def allow_delete(self):
         from . import Order, Invoice
         return (
@@ -155,6 +174,10 @@ class Team(LoggedModel):
         verbose_name=_("Can change organizer settings"),
         help_text=_('Someone with this setting can get access to most data of all of your events, i.e. via privacy '
                     'reports, so be careful who you add to this team!')
+    )
+    can_manage_gift_cards = models.BooleanField(
+        default=False,
+        verbose_name=_("Can manage gift cards")
     )
 
     can_change_event_settings = models.BooleanField(

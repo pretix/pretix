@@ -874,7 +874,7 @@ class OrdersTest(BaseOrdersTest):
         )
         assert 'Test dummy' in response.rendered_content
         assert '+ €12.00' in response.rendered_content
-        response = self.client.post(
+        self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'testdummy'
@@ -892,6 +892,171 @@ class OrdersTest(BaseOrdersTest):
             assert fee.value == Decimal('12.00')
             assert self.order.total == Decimal('23.00') + fee.value
             assert self.order.invoices.count() == 3
+
+    def test_change_paymentmethod_giftcard_partial(self):
+        with scopes_disabled():
+            self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=Decimal('10.00'),
+            )
+            gc = self.orga.issued_gift_cards.create(currency="EUR")
+            gc.transactions.create(value=10)
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+        )
+        assert 'Gift card' in response.rendered_content
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'giftcard',
+                'giftcard': gc.secret
+            }
+        )
+        with scopes_disabled():
+            p = self.order.payments.last()
+        self.assertRedirects(
+            response,
+            '/%s/%s/order/%s/%s/pay/%s/confirm' % (self.orga.slug, self.event.slug, self.order.code,
+                                                   self.order.secret, p.pk),
+        )
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/%s/confirm' % (self.orga.slug, self.event.slug, self.order.code,
+                                                   self.order.secret, p.pk),
+            {}
+        )
+        self.order.refresh_from_db()
+        p.refresh_from_db()
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+        assert self.order.status == Order.STATUS_PENDING
+        assert gc.value == Decimal('0.00')
+        assert self.order.pending_sum == Decimal('3.00')
+
+    def test_change_paymentmethod_giftcard_swap_card(self):
+        with scopes_disabled():
+            self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=Decimal('10.00'),
+            )
+            gc = self.orga.issued_gift_cards.create(currency="EUR")
+            gc.transactions.create(value=10)
+            self.ticket.issue_giftcard = True
+            self.ticket.save()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'giftcard',
+                'giftcard': gc.secret
+            }
+        )
+        assert "You cannot pay with gift cards when buying a gift card." in response.rendered_content
+
+    def test_change_paymentmethod_giftcard_wrong_currency(self):
+        with scopes_disabled():
+            gc = self.orga.issued_gift_cards.create(currency="USD")
+            gc.transactions.create(value=10)
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'giftcard',
+                'giftcard': gc.secret
+            }
+        )
+        assert "This gift card does not support this currency." in response.rendered_content
+
+    def test_change_paymentmethod_giftcard_in_test_mode(self):
+        with scopes_disabled():
+            self.order.testmode = True
+            self.order.save()
+            gc = self.orga.issued_gift_cards.create(currency="EUR")
+            gc.transactions.create(value=10)
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'giftcard',
+                'giftcard': gc.secret
+            }
+        )
+        assert "Only test gift cards can be used in test mode." in response.rendered_content
+
+    def test_change_paymentmethod_giftcard_not_in_test_mode(self):
+        with scopes_disabled():
+            gc = self.orga.issued_gift_cards.create(currency="EUR", testmode=True)
+            gc.transactions.create(value=10)
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'giftcard',
+                'giftcard': gc.secret
+            }
+        )
+        assert "This gift card can only be used in test mode." in response.rendered_content
+
+    def test_change_paymentmethod_giftcard_empty(self):
+        with scopes_disabled():
+            gc = self.orga.issued_gift_cards.create(currency="EUR")
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'giftcard',
+                'giftcard': gc.secret
+            }
+        )
+        assert "All credit on this gift card has been used." in response.rendered_content
+
+    def test_change_paymentmethod_giftcard_wrong_organizer(self):
+        with scopes_disabled():
+            o = Organizer.objects.create(slug='Foo', name='bar')
+            self.orga.issued_gift_cards.create(currency="EUR")
+            gc = o.issued_gift_cards.create(currency="EUR")
+            gc.transactions.create(value=10)
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'giftcard',
+                'giftcard': gc.secret
+            }
+        )
+        assert "This gift card is not known." in response.rendered_content
+
+    def test_change_paymentmethod_giftcard(self):
+        with scopes_disabled():
+            self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=Decimal('10.00'),
+            )
+            gc = self.orga.issued_gift_cards.create(currency="EUR")
+            gc.transactions.create(value=100)
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+        )
+        assert 'Gift card' in response.rendered_content
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'giftcard',
+                'giftcard': gc.secret
+            }
+        )
+        with scopes_disabled():
+            p = self.order.payments.last()
+        self.assertRedirects(
+            response,
+            '/%s/%s/order/%s/%s/pay/%s/confirm' % (self.orga.slug, self.event.slug, self.order.code,
+                                                   self.order.secret, p.pk),
+        )
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/%s/confirm' % (self.orga.slug, self.event.slug, self.order.code,
+                                                   self.order.secret, p.pk),
+            {}
+        )
+        self.order.refresh_from_db()
+        p.refresh_from_db()
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+        assert self.order.status == Order.STATUS_PAID
+        assert gc.value == Decimal('87.00')
 
     def test_answer_download_token(self):
         with scopes_disabled():

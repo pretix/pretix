@@ -795,6 +795,266 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         assert doc.select(".alert-danger")
 
+    def test_giftcard_partial(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_stripe__enabled', True)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 3)
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert '-€20.00' in response.rendered_content
+        assert '3.00' in response.rendered_content
+        assert 'alert-success' in response.rendered_content
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert '-€20.00' in response.rendered_content
+        assert '3.00' in response.rendered_content
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            assert o.payments.get(provider='giftcard').amount == Decimal('20.00')
+            assert o.payments.get(provider='banktransfer').amount == Decimal('3.00')
+
+        assert '-€20.00' in response.rendered_content
+        assert '3.00' in response.rendered_content
+
+    def test_giftcard_full(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=30)
+        self.event.settings.set('payment_stripe__enabled', True)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 3)
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert '-€23.00' in response.rendered_content
+        assert '0.00' in response.rendered_content
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            assert o.payments.get(provider='giftcard').amount == Decimal('23.00')
+
+    def test_giftcard_racecondition(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_stripe__enabled', True)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 3)
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert '-€20.00' in response.rendered_content
+        assert '3.00' in response.rendered_content
+        assert 'alert-success' in response.rendered_content
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert '-€20.00' in response.rendered_content
+        assert '3.00' in response.rendered_content
+
+        gc.transactions.create(value=-2)
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        assert '-€18.00' in response.rendered_content
+        assert '5.00' in response.rendered_content
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            assert o.payments.get(provider='giftcard').amount == Decimal('18.00')
+            assert o.payments.get(provider='banktransfer').amount == Decimal('5.00')
+
+    def test_giftcard_invalid_currency(self):
+        gc = self.orga.issued_gift_cards.create(currency="USD")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'This gift card does not support this currency.' in response.rendered_content
+
+    def test_giftcard_invalid_organizer(self):
+        self.orga.issued_gift_cards.create(currency="EUR")
+        orga2 = Organizer.objects.create(slug="foo2", name="foo2")
+        gc = orga2.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'This gift card is not known.' in response.rendered_content
+
+    def test_giftcard_cross_organizer(self):
+        self.orga.issued_gift_cards.create(currency="EUR")
+        orga2 = Organizer.objects.create(slug="foo2", name="foo2")
+        gc = orga2.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=23)
+        self.orga.gift_card_issuer_acceptance.create(issuer=orga2)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert '-€23.00' in response.rendered_content
+        assert '0.00' in response.rendered_content
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            assert o.payments.get(provider='giftcard').amount == Decimal('23.00')
+
+    def test_giftcard_in_test_mode(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.testmode = True
+        self.event.save()
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'Only test gift cards can be used in test mode.' in response.rendered_content
+
+    def test_giftcard_not_in_test_mode(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR", testmode=True)
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'This gift card can only be used in test mode.' in response.rendered_content
+
+    def test_giftcard_empty(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'All credit on this gift card has been used.' in response.rendered_content
+
+    def test_giftcard_twice(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'This gift card is already used for your payment.' in response.rendered_content
+
+    def test_giftcard_swap(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.ticket.issue_giftcard = True
+        self.ticket.save()
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'You cannot pay with gift cards when buying a gift card.' in response.rendered_content
+
     def test_premature_confirm(self):
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
@@ -1379,6 +1639,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         cr1.voucher = v
         cr1.save()
+        self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)

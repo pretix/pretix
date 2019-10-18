@@ -23,6 +23,7 @@ from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, approve_order, cancel_order,
     deny_order, expire_orders, send_download_reminders, send_expiry_warnings,
 )
+from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.testutils.scope import classscope
 
 
@@ -593,6 +594,52 @@ class OrderCancelTests(TestCase):
         assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
 
     @classscope(attr='o')
+    def test_auto_refund_possible_giftcard(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        p1 = self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('44.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_BUYER
+        assert r.payment == p1
+        assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
+        assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
+        assert gc.value == Decimal('44.00')
+
+    @classscope(attr='o')
+    def test_auto_refund_possible_issued_giftcard(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=23)
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy_partialrefund'
+        )
+        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert gc.value == Decimal('0.00')
+
+    @classscope(attr='o')
+    def test_auto_refund_impossible_issued_giftcard_used(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=20)
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy_partialrefund'
+        )
+        with pytest.raises(OrderError):
+            cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        assert gc.value == Decimal('20.00')
+
+    @classscope(attr='o')
     def test_auto_refund_impossible(self):
         self.order.payments.create(
             amount=Decimal('46.00'),
@@ -858,6 +905,29 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.price == Decimal('24.00')
         assert self.order.status == Order.STATUS_PENDING
+
+    @classscope(attr='o')
+    def test_cancel_issued_giftcard(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=23)
+        self.ocm.cancel(self.op1)
+        self.ocm.commit()
+        assert gc.value == Decimal('0.00')
+
+    @classscope(attr='o')
+    def test_cancel_issued_giftcard_used(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=20)
+        self.ocm.cancel(self.op1)
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
+
+    @classscope(attr='o')
+    def test_change_price_issued_giftcard_used(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        gc.transactions.create(value=20)
+        with self.assertRaises(OrderError):
+            self.ocm.change_price(self.op1, 25)
 
     @classscope(attr='o')
     def test_cancel_all_in_order(self):
@@ -1888,3 +1958,174 @@ def test_autocheckin(clist_autocheckin, event):
                           locale='de')[0]
     assert clist_autocheckin.auto_checkin_sales_channels == []
     assert order.positions.first().checkins.count() == 0
+
+
+@pytest.mark.django_db
+def test_giftcard_multiple(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
+    gc1.transactions.create(value=12)
+    gc2 = event.organizer.issued_gift_cards.create(currency="EUR")
+    gc2.transactions.create(value=12)
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=now(), payment_provider=BankTransfer(event),
+                          locale='de', gift_cards=[gc1.pk, gc2.pk])[0]
+    assert order.payments.count() == 3
+    assert order.payments.get(info__icontains=gc1.pk).amount == Decimal('12.00')
+    assert order.payments.get(info__icontains=gc2.pk).amount == Decimal('11.00')
+    assert gc1.value == 0
+    assert gc2.value == 1
+
+
+@pytest.mark.django_db
+def test_giftcard_partial(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
+    gc1.transactions.create(value=12)
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=now(), payment_provider=BankTransfer(event),
+                          locale='de', gift_cards=[gc1.pk])[0]
+    assert order.payments.count() == 2
+    assert order.payments.get(info__icontains=gc1.pk).amount == Decimal('12.00')
+    assert order.payments.get(provider='banktransfer').amount == Decimal('11.00')
+    assert gc1.value == 0
+
+
+@pytest.mark.django_db
+def test_giftcard_payment_fee(event):
+    event.settings.set('payment_banktransfer__fee_percent', Decimal('10.00'))
+    event.settings.set('payment_banktransfer__fee_reverse_calc', False)
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
+    gc1.transactions.create(value=12)
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=now(), payment_provider=BankTransfer(event),
+                          locale='de', gift_cards=[gc1.pk])[0]
+    assert order.payments.count() == 2
+    assert order.payments.get(info__icontains=gc1.pk).amount == Decimal('12.00')
+    assert order.payments.get(provider='banktransfer').amount == Decimal('12.10')
+    assert order.fees.get().value == Decimal('1.10')
+    assert gc1.value == 0
+
+
+@pytest.mark.django_db
+def test_giftcard_invalid_currency(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    gc1 = event.organizer.issued_gift_cards.create(currency="USD")
+    gc1.transactions.create(value=12)
+    with pytest.raises(OrderError):
+        _create_order(event, email='dummy@example.org', positions=[cp1],
+                      now_dt=now(), payment_provider=BankTransfer(event),
+                      locale='de', gift_cards=[gc1.pk])[0]
+
+
+@pytest.mark.django_db
+def test_giftcard_invalid_organizer(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    o2 = Organizer.objects.create(slug="foo", name="bar")
+    gc1 = o2.issued_gift_cards.create(currency="EUR")
+    gc1.transactions.create(value=12)
+    with pytest.raises(OrderError):
+        _create_order(event, email='dummy@example.org', positions=[cp1],
+                      now_dt=now(), payment_provider=BankTransfer(event),
+                      locale='de', gift_cards=[gc1.pk])[0]
+
+
+@pytest.mark.django_db
+def test_giftcard_test_mode_invalid(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=True)
+    gc1.transactions.create(value=12)
+    with pytest.raises(OrderError):
+        _create_order(event, email='dummy@example.org', positions=[cp1],
+                      now_dt=now(), payment_provider=BankTransfer(event),
+                      locale='de', gift_cards=[gc1.pk])[0]
+
+
+@pytest.mark.django_db
+def test_giftcard_test_mode_event(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    event.testmode = True
+    event.save()
+    gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=False)
+    gc1.transactions.create(value=12)
+    with pytest.raises(OrderError):
+        _create_order(event, email='dummy@example.org', positions=[cp1],
+                      now_dt=now(), payment_provider=BankTransfer(event),
+                      locale='de', gift_cards=[gc1.pk])[0]
+
+
+@pytest.mark.django_db
+def test_giftcard_swap(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', issue_giftcard=True,
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=False)
+    gc1.transactions.create(value=12)
+    with pytest.raises(OrderError):
+        _create_order(event, email='dummy@example.org', positions=[cp1],
+                      now_dt=now(), payment_provider=BankTransfer(event),
+                      locale='de', gift_cards=[gc1.pk])[0]
+
+
+@pytest.mark.django_db
+def test_issue_when_paid_and_changed(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', issue_giftcard=True,
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    q = event.quotas.create(size=None, name="foo")
+    q.items.add(ticket)
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=now(), payment_provider=BankTransfer(event),
+                          locale='de', gift_cards=[])[0]
+    op = order.positions.first()
+    assert not op.issued_gift_cards.exists()
+    order.payments.first().confirm()
+    gc1 = op.issued_gift_cards.get()
+    assert gc1.value == op.price
+    op.refresh_from_db()
+    assert op.secret == gc1.secret
+
+    ocm = OrderChangeManager(order)
+    ocm.add_position(ticket, None, Decimal('12.00'))
+    ocm.commit()
+    order.payments.create(
+        provider='manual', amount=order.pending_sum
+    ).confirm()
+
+    assert op.issued_gift_cards.count() == 1
+    op2 = order.positions.last()
+    gc2 = op2.issued_gift_cards.get()
+    assert gc2.value == op2.price
