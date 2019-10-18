@@ -2105,12 +2105,14 @@ def test_issue_when_paid_and_changed(event):
     cp1 = CartPosition.objects.create(
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
+    q = event.quotas.create(size=None, name="foo")
+    q.items.add(ticket)
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=now(), payment_provider=BankTransfer(event),
                           locale='de', gift_cards=[])[0]
     op = order.positions.first()
     assert not op.issued_gift_cards.exists()
-    op.payments.first().confirm()
+    order.payments.first().confirm()
     gc1 = op.issued_gift_cards.get()
     assert gc1.value == op.price
     op.refresh_from_db()
