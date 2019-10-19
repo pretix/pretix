@@ -704,6 +704,14 @@ Your {event} team"""))
         'default': None,
         'type': str
     },
+    'leaflet_tiles': {
+        'default': None,
+        'type': str
+    },
+    'leaflet_tiles_attribution': {
+        'default': None,
+        'type': str
+    },
     'frontpage_subevent_ordering': {
         'default': 'date_ascending',
         'type': str
