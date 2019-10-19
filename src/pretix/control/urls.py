@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    auth, checkin, dashboards, event, global_settings, item, main, oauth,
+    auth, checkin, dashboards, event, geo, global_settings, item, main, oauth,
     orders, organizer, pdf, search, shredder, subevents, typeahead, user,
     users, vouchers, waitinglist,
 )
@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^logdetail/$', global_settings.LogDetailView.as_view(), name='global.logdetail'),
     url(r'^logdetail/payment/$', global_settings.PaymentDetailView.as_view(), name='global.paymentdetail'),
     url(r'^logdetail/refund/$', global_settings.RefundDetailView.as_view(), name='global.refunddetail'),
+    url(r'^geocode/$', geo.GeoCodeView.as_view(), name='global.geocode'),
     url(r'^reauth/$', user.ReauthView.as_view(), name='user.reauth'),
     url(r'^sudo/$', user.StartStaffSession.as_view(), name='user.sudo'),
     url(r'^sudo/stop/$', user.StopStaffSession.as_view(), name='user.sudo.stop'),

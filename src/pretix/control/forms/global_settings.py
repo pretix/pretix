@@ -37,6 +37,10 @@ class GlobalSettingsForm(SettingsForm):
                 required=False,
                 label=_("Global message banner detail text"),
             )),
+            ('opencagedata_apikey', forms.CharField(
+                required=False,
+                label=_("OpenCage API key for geocoding"),
+            )),
         ])
         responses = register_global_settings.send(self)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
