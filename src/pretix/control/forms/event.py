@@ -112,6 +112,8 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_start',
             'presale_end',
             'location',
+            'geo_lat',
+            'geo_lon',
         ]
         field_classes = {
             'date_from': SplitDateTimeField,
@@ -282,6 +284,8 @@ class EventUpdateForm(I18nModelForm):
             'presale_start',
             'presale_end',
             'location',
+            'geo_lat',
+            'geo_lon',
         ]
         field_classes = {
             'date_from': SplitDateTimeField,

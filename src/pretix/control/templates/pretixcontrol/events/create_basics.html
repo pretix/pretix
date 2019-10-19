@@ -36,7 +36,21 @@
         </div>
         {% bootstrap_field form.date_from layout="control" %}
         {% bootstrap_field form.date_to layout="control" %}
-        {% bootstrap_field form.location layout="control" %}
+        <div class="geodata-section">
+            {% bootstrap_field form.location layout="control" %}
+            <div class="form-group geodata-group">
+                <label class="col-md-3 control-label">
+                    {% trans "Geo coordinates" %}<br>
+                    <span class="optional">{% trans "Optional" %}</span>
+                </label>
+                <div class="col-md-4">
+                    {% bootstrap_field form.geo_lat layout="inline" %}
+                </div>
+                <div class="col-md-4 col-md-offset-1">
+                    {% bootstrap_field form.geo_lon layout="inline" %}
+                </div>
+            </div>
+        </div>
         {% bootstrap_field form.currency layout="control" %}
         {% bootstrap_field form.tax_rate addon_after="%" layout="control" %}
     </fieldset>
