@@ -12,7 +12,7 @@ from . import forms
 
 @app.task(base=ProfiledEventTask)
 def send_mails(event: Event, user: int, subject: dict, message: dict, orders: list, items: list,
-               recipients: str, checkin_lists: list) -> None:
+               recipients: str, not_checked_in: bool, checkin_lists: list) -> None:
     failures = []
     user = User.objects.get(pk=user) if user else None
     orders = Order.objects.filter(pk__in=orders, event=event)
@@ -36,7 +36,8 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                     continue
 
                 checkins = p.checkins.all()
-                if not (forms.MailForm.NOT_CHECKED_IN in checkin_lists and not checkins) and not any(str(c.list_id) in checkin_lists for c in checkins):
+                if not (not_checked_in and not checkins) and \
+                    not any(c.list_id in checkin_lists for c in checkins):
                     continue
 
                 if not p.attendee_email:

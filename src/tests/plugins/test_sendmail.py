@@ -8,7 +8,6 @@ from django_scopes import scopes_disabled
 from pretix.base.models import (
     Checkin, Event, Item, Order, OrderPosition, Organizer, Team, User,
 )
-from pretix.plugins.sendmail.forms import MailForm
 
 
 @pytest.fixture
@@ -86,7 +85,7 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order, pos)
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -113,7 +112,7 @@ def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_u
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert 'alert-danger' in response.rendered_content
@@ -131,7 +130,7 @@ def test_sendmail_preview(logged_in_client, sendmail_url, event, order, pos):
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'action': 'preview',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -148,7 +147,7 @@ def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order, pos
                                       'recipients': 'orders',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
 
@@ -179,7 +178,7 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
                                       'message_0': 'Test message',
                                       'subject_1': 'Benutzer',
                                       'message_1': 'Test nachricht',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -217,7 +216,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'subevent': se1.pk,
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -232,7 +231,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'subevent': se2.pk,
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert len(djmail.outbox) == 0
@@ -254,7 +253,7 @@ def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order, pos)
                                       'subject_0': '{code} Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'action': 'preview',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
 
@@ -278,7 +277,7 @@ def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order, p
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -303,7 +302,7 @@ def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order, pos):
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -331,7 +330,7 @@ def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, o
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -356,7 +355,7 @@ def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -386,7 +385,7 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
                                           'items': i2.pk,
                                           'subject_0': 'Test subject',
                                           'message_0': 'This is a test file for sending mails.',
-                                          'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                          'not_checked_in': 'on',
                                           },
                                          follow=True)
     assert response.status_code == 200
@@ -413,7 +412,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
                                      {'sendto': 'n',
                                       'recipients': 'attendees',
                                       'items': pos2.item_id,
-                                      'checkin_lists': [str(chkl2.id)],
+                                      'checkin_lists': [chkl2.id],
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -430,7 +429,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
                                      {'sendto': 'n',
                                       'recipients': 'attendees',
                                       'items': pos2.item_id,
-                                      'checkin_lists': [MailForm.NOT_CHECKED_IN],
+                                      'not_checked_in': 'on',
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },

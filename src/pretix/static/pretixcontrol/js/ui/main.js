@@ -256,7 +256,7 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
-    el.find("input[data-inverse-dependency]").each(function () {
+    $("select[data-inverse-dependency], input[data-inverse-dependency]").each(function () {
         var dependency = $(this).attr("data-inverse-dependency");
         if (dependency.substr(0, 1) === '<') {
             dependency = $(this).closest("form, .form-horizontal").find(dependency.substr(1));

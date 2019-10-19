@@ -1,12 +1,13 @@
 from django import forms
 from django.urls import reverse
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
-from pretix.base.models import Item, Order, SubEvent
-from pretix.control.forms.widgets import Select2
+from pretix.base.models import CheckinList, Item, Order, SubEvent
+from pretix.control.forms.widgets import Select2, Select2Multiple
 
 
 class MailForm(forms.Form):
@@ -28,14 +29,8 @@ class MailForm(forms.Form):
         required=True,
         queryset=Item.objects.none()
     )
-    checkin_lists = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple(
-            attrs={'class': 'scrolling-multiple-choice'}
-        ),
-        label=_('Only send to people checked in'),
-        required=False,
-        choices=[]
-    )
+    checkin_lists = SafeModelMultipleChoiceField(queryset=CheckinList.objects.none(), required=False)  # overridden later
+    not_checked_in = forms.BooleanField(label=_("Only send to customers not checked in"), required=False)
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=_('Only send to customers of'),
@@ -105,10 +100,19 @@ class MailForm(forms.Form):
         if not self.initial.get('items'):
             self.initial['items'] = event.items.all()
 
-        self.fields['checkin_lists'].choices = [(self.NOT_CHECKED_IN, _("Not checked in"))] + \
-            [(c.pk, c.name) for c in event.checkin_lists.all()]
-        if not self.initial.get('checkin_lists'):
-            self.initial['checkin_lists'] = [c[0] for c in self.fields['checkin_lists'].choices]
+        self.fields['checkin_lists'].queryset = event.checkin_lists.all()
+        self.fields['checkin_lists'].widget = Select2Multiple(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.orders.checkinlists.select2', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                }),
+                'data-placeholder': _('Only send to customers checked in'),
+                'data-inverse-dependency': '#id_not_checked_in'
+            }
+        )
+        self.fields['checkin_lists'].widget.choices = self.fields['checkin_lists'].choices
 
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()

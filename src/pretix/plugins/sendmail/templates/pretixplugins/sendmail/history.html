@@ -23,7 +23,9 @@
                         {% if log.pdata.items %}
                             <br/><span class="fa fa-shopping-cart fa-fw"></span> {{ log.pdata.items|join:", " }}
                         {% endif %}
-                        {% if log.pdata.checkin_lists %}
+                        {% if log.pdata.not_checked_in %}
+                            <br/><span class="fa fa-check-square-o fa-fw"></span> {% trans "All customers not checked in" %}
+                        {% elif log.pdata.checkin_lists %}
                             <br/><span class="fa fa-check-square-o fa-fw"></span> {{ log.pdata.checkin_lists|join:", " }}
                         {% endif %}
                         {% if log.pdata.subevent_obj %}
