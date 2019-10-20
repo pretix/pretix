@@ -29,6 +29,9 @@ class MailForm(forms.Form):
         required=True,
         queryset=Item.objects.none()
     )
+    filter_checkins = forms.BooleanField(
+        label=_('Filter check-in status'),
+        required=False)
     checkin_lists = SafeModelMultipleChoiceField(queryset=CheckinList.objects.none(), required=False)  # overridden later
     not_checked_in = forms.BooleanField(label=_("Only send to customers not checked in"), required=False)
     subevent = forms.ModelChoiceField(

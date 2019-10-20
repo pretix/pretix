@@ -55,6 +55,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     )
                 if 'checkin_lists' in logentry.parsed_data:
                     kwargs['initial']['checkin_lists'] = logentry.parsed_data['checkin_lists']
+                kwargs['initial']['filter_checkins'] = logentry.parsed_data.get('filter_checkins', False)
                 if logentry.parsed_data.get('subevent'):
                     try:
                         kwargs['initial']['subevent'] = self.request.event.subevents.get(
@@ -78,11 +79,11 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         orders = qs.filter(statusq)
         orders = orders.filter(all_positions__item_id__in=[i.pk for i in form.cleaned_data.get('items')],
                                all_positions__canceled=False)
-
-        if form.cleaned_data.get('not_checked_in'):
-            orders = orders.filter(all_positions__checkins__list_id=None)
-        else:
-            orders = orders.filter(all_positions__checkins__list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])])
+        if form.cleaned_data.get('filter_checkins'):
+            if form.cleaned_data.get('not_checked_in'):
+                orders = orders.filter(all_positions__checkins__list_id=None)
+            else:
+                orders = orders.filter(all_positions__checkins__list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])])
         if form.cleaned_data.get('subevent'):
             orders = orders.filter(all_positions__subevent__in=(form.cleaned_data.get('subevent'),),
                                    all_positions__canceled=False)
@@ -127,7 +128,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 'orders': [o.pk for o in orders],
                 'items': [i.pk for i in form.cleaned_data.get('items')],
                 'not_checked_in': form.cleaned_data.get('not_checked_in'),
-                'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')]
+                'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
+                'filter_checkins': form.cleaned_data.get('filter_checkins'),
             }
         )
         self.request.event.log_action('pretix.plugins.sendmail.sent',
