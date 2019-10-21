@@ -11,7 +11,6 @@ from pretix.control.forms.widgets import Select2, Select2Multiple
 
 
 class MailForm(forms.Form):
-    NOT_CHECKED_IN = "NotCheckedIn"
     recipients = forms.ChoiceField(
         label=_('Send email to'),
         widget=forms.RadioSelect,

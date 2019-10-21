@@ -173,7 +173,6 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
         checkin_list_cache = {
             i.pk: str(i) for i in self.request.event.checkin_lists.all()
         }
-        checkin_list_cache[forms.MailForm.NOT_CHECKED_IN] = _("Not checked in")
         status = dict(Order.STATUS_CHOICE)
         status['overdue'] = _('pending with payment overdue')
         status['r'] = status['c']
