@@ -35,6 +35,13 @@ class SalesChannel:
         """
         return "circle"
 
+    @property
+    def testmode_supported(self) -> bool:
+        """
+        Indication, if a saleschannels supports test mode orders
+        """
+        return True
+
 
 def get_all_sales_channels():
     global _ALL_CHANNELS

@@ -17,6 +17,7 @@ from django.utils.translation import ugettext as _
 from django_scopes import scopes_disabled
 
 from pretix.api.models import OAuthApplication
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_email_context
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
@@ -595,6 +596,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                   meta_info: dict=None, sales_channel: str='web', gift_cards: list=None,
                   shown_total=None):
     p = None
+    sales_channel = get_all_sales_channels()[sales_channel]
+
     with transaction.atomic():
         checked_gift_cards = []
         if gift_cards:
@@ -622,10 +625,10 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             datetime=now_dt,
             locale=locale,
             total=total,
-            testmode=event.testmode,
+            testmode=True if sales_channel.testmode_supported and event.testmode else False,
             meta_info=json.dumps(meta_info or {}),
             require_approval=any(p.item.require_approval for p in positions),
-            sales_channel=sales_channel
+            sales_channel=sales_channel.identifier
         )
         order.set_expires(now_dt, event.subevents.filter(id__in=[p.subevent_id for p in positions]))
         order.save()

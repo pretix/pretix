@@ -393,7 +393,7 @@ class WidgetAPIProductList(EventListMixin, View):
         else:
             if hasattr(self.request, 'event'):
                 evs = self.request.event.subevents_sorted(
-                    filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel), self.request)
+                    filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier), self.request)
                 )
                 tz = pytz.timezone(request.event.settings.timezone)
                 data['events'] = [

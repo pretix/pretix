@@ -11,6 +11,7 @@ from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
 from django_scopes import scope
 
+from pretix.base.channels import WebshopSalesChannel
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Event, Organizer
 from pretix.multidomain.urlreverse import get_domain
@@ -103,7 +104,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
 
             if not hasattr(request, 'sales_channel'):
                 # The environ lookup is only relevant during unit testing
-                request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', 'web')
+                request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', WebshopSalesChannel())
             for receiver, response in process_request.send(request.event, request=request):
                 if response:
                     return response

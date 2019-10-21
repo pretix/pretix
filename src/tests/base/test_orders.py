@@ -4,11 +4,13 @@ from decimal import Decimal
 import pytest
 import pytz
 from django.core import mail as djmail
+from django.dispatch import receiver
 from django.test import TestCase
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
 
+from pretix.base.channels import SalesChannel
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, Order, OrderPosition, Organizer,
@@ -23,8 +25,23 @@ from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, approve_order, cancel_order,
     deny_order, expire_orders, send_download_reminders, send_expiry_warnings,
 )
+from pretix.base.signals import register_sales_channels
 from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.testutils.scope import classscope
+
+
+class FoobarSalesChannel(SalesChannel):
+    identifier = "bar"
+    verbose_name = "Foobar"
+    icon = "home"
+    testmode_supported = False
+
+
+@receiver(register_sales_channels, dispatch_uid="test_orders_register_sales_channels")
+def base_sales_channels(sender, **kwargs):
+    return (
+        FoobarSalesChannel(),
+    )
 
 
 @pytest.fixture(scope='function')
@@ -1958,6 +1975,38 @@ def test_autocheckin(clist_autocheckin, event):
                           locale='de')[0]
     assert clist_autocheckin.auto_checkin_sales_channels == []
     assert order.positions.first().checkins.count() == 0
+
+
+@pytest.mark.django_db
+def test_saleschannel_testmode_restriction(event):
+    today = now()
+    tr7 = event.tax_rules.create(rate=Decimal('17.00'))
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rule=tr7,
+                                 default_price=Decimal('23.00'), admission=True)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de', sales_channel='web')[0]
+    assert not order.testmode
+
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de', sales_channel=FoobarSalesChannel.identifier)[0]
+    assert not order.testmode
+
+    event.testmode = True
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de', sales_channel='web')[0]
+    assert order.testmode
+
+    order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de', sales_channel=FoobarSalesChannel.identifier)[0]
+    assert not order.testmode
 
 
 @pytest.mark.django_db

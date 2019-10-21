@@ -9,6 +9,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 
+from pretix.base.channels import SalesChannel
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemCategory, ItemVariation,
@@ -22,6 +23,13 @@ from pretix.base.services.cart import (
 )
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
+
+
+class FoobarSalesChannel(SalesChannel):
+    identifier = "bar"
+    verbose_name = "Foobar"
+    icon = "home"
+    testmode_supported = True
 
 
 class CartTestMixin:
@@ -759,7 +767,7 @@ class CartTest(CartTestMixin, TestCase):
         self.ticket.save()
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
-        }, follow=True, PRETIX_SALES_CHANNEL='bar')
+        }, follow=True, PRETIX_SALES_CHANNEL=FoobarSalesChannel)
         with scopes_disabled():
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
 
