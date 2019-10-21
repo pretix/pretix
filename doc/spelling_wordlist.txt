@@ -138,6 +138,7 @@ username
 url
 versa
 versioning
+viewable
 viewset
 viewsets
 waitinglist
