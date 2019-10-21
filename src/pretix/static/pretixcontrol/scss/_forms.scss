@@ -228,6 +228,14 @@ input[type=number].short {
   .form-group {
     margin: 0 0 10px 0;
   }
+  .attrib {
+    padding: 0;
+    margin: 0;
+    font-size: $font-size-small;
+    a {
+      color: $text-muted;
+    }
+  }
   .leaflet-container {
     height: 200px;
     margin: 0;

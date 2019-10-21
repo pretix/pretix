@@ -69,6 +69,8 @@ TEST_EVENT_RES = {
     "presale_start": None,
     "presale_end": None,
     "location": None,
+    "geo_lat": None,
+    "geo_lon": None,
     "slug": "dummy",
     "has_subevents": False,
     "seating_plan": None,

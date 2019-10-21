@@ -25,6 +25,8 @@ is_public                             boolean                    If ``true``, th
 presale_start                         datetime                   The date at which the ticket shop opens (or ``null``)
 presale_end                           datetime                   The date at which the ticket shop closes (or ``null``)
 location                              multi-lingual string       The event location (or ``null``)
+geo_lat                               float                      Latitude of the location (or ``null``)
+geo_lon                               float                      Longitude of the location (or ``null``)
 has_subevents                         boolean                    ``true`` if the event series feature is active for this
                                                                  event. Cannot change after event is created.
 meta_data                             object                     Values set for organizer-specific meta data parameters.
@@ -61,6 +63,10 @@ seat_category_mapping                 object                     An object mappi
 .. versionchanged:: 3.0
 
    The attributes ``seating_plan`` and ``seat_category_mapping`` have been added.
+
+.. versionchanged:: 3.3
+
+   The attributes ``geo_lat`` and ``geo_lon`` have been added.
 
 Endpoints
 ---------
@@ -105,6 +111,8 @@ Endpoints
             "presale_start": null,
             "presale_end": null,
             "location": null,
+            "geo_lat": null,
+            "geo_lon": null,
             "has_subevents": false,
             "meta_data": {},
             "seating_plan": null,
@@ -169,6 +177,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "has_subevents": false,
         "seating_plan": null,
         "seat_category_mapping": {},
@@ -220,6 +230,8 @@ Endpoints
         "seating_plan": null,
         "seat_category_mapping": {},
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "has_subevents": false,
         "meta_data": {},
         "plugins": [
@@ -249,6 +261,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "seating_plan": null,
         "seat_category_mapping": {},
         "has_subevents": false,
@@ -300,6 +314,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "seating_plan": null,
         "seat_category_mapping": {},
         "has_subevents": false,
@@ -331,6 +347,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "has_subevents": false,
         "seating_plan": null,
         "seat_category_mapping": {},
@@ -394,6 +412,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "has_subevents": false,
         "seating_plan": null,
         "seat_category_mapping": {},

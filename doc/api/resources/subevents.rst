@@ -28,6 +28,8 @@ date_admission                        datetime                   The sub-event's
 presale_start                         datetime                   The sub-date at which the ticket shop opens (or ``null``)
 presale_end                           datetime                   The sub-date at which the ticket shop closes (or ``null``)
 location                              multi-lingual string       The sub-event location (or ``null``)
+geo_lat                               float                      Latitude of the location (or ``null``)
+geo_lon                               float                      Longitude of the location (or ``null``)
 item_price_overrides                  list of objects            List of items for which this sub-event overrides the
                                                                  default price
 ├ item                                integer                    The internal item ID
@@ -61,6 +63,10 @@ seat_category_mapping                 object                     An object mappi
 .. versionchanged:: 3.0
 
    The attributes ``seating_plan`` and ``seat_category_mapping`` have been added.
+
+.. versionchanged:: 3.3
+
+   The attributes ``geo_lat`` and ``geo_lon`` have been added.
 
 Endpoints
 ---------
@@ -104,6 +110,8 @@ Endpoints
             "seating_plan": null,
             "seat_category_mapping": {},
             "location": null,
+            "geo_lat": null,
+            "geo_lon": null,
             "item_price_overrides": [
               {
                 "item": 2,
@@ -152,6 +160,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "seating_plan": null,
         "seat_category_mapping": {},
         "item_price_overrides": [
@@ -184,6 +194,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "seating_plan": null,
         "seat_category_mapping": {},
         "item_price_overrides": [
@@ -237,6 +249,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "seating_plan": null,
         "seat_category_mapping": {},
         "item_price_overrides": [
@@ -303,6 +317,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
         "seating_plan": null,
         "seat_category_mapping": {},
         "item_price_overrides": [
@@ -389,6 +405,8 @@ Endpoints
             "presale_start": null,
             "presale_end": null,
             "location": null,
+            "geo_lat": null,
+            "geo_lon": null,
             "seating_plan": null,
             "seat_category_mapping": {},
             "item_price_overrides": [
