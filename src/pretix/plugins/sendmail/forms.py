@@ -30,9 +30,10 @@ class MailForm(forms.Form):
     )
     filter_checkins = forms.BooleanField(
         label=_('Filter check-in status'),
-        required=False)
+        required=False
+    )
     checkin_lists = SafeModelMultipleChoiceField(queryset=CheckinList.objects.none(), required=False)  # overridden later
-    not_checked_in = forms.BooleanField(label=_("Only send to customers not checked in"), required=False)
+    not_checked_in = forms.BooleanField(label=_("Send to customers not checked in"), required=False)
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=_('Only send to customers of'),
@@ -110,11 +111,12 @@ class MailForm(forms.Form):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                 }),
-                'data-placeholder': _('Only send to customers checked in'),
+                'data-placeholder': _('Send to customers checked in on list'),
                 'data-inverse-dependency': '#id_not_checked_in'
             }
         )
         self.fields['checkin_lists'].widget.choices = self.fields['checkin_lists'].choices
+        self.fields['checkin_lists'].label = _('Send to customers checked in on list')
 
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()

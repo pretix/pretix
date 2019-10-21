@@ -430,6 +430,24 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     assert '/ticket/' in djmail.outbox[0].body
     assert '/order/' not in djmail.outbox[0].body
 
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'attendees',
+                                      'items': pos2.item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'filter_checkins': 'on',
+                                      'checkin_lists': [chkl2.id],
+                                      'not_checked_in': 'on',
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    assert djmail.outbox[0].to == ['attendee1@dummy.test']
+    assert djmail.outbox[1].to == ['attendee2@dummy.test']
+
     # Test that filtering is ignored if filter_checkins is not set
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,

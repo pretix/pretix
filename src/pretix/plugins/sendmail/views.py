@@ -79,11 +79,21 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         orders = qs.filter(statusq)
         orders = orders.filter(all_positions__item_id__in=[i.pk for i in form.cleaned_data.get('items')],
                                all_positions__canceled=False)
+
         if form.cleaned_data.get('filter_checkins'):
+            ql = []
             if form.cleaned_data.get('not_checked_in'):
-                orders = orders.filter(all_positions__checkins__list_id=None)
+                ql.append(Q(all_positions__checkins__list_id=None, all_positions__canceled=False))
+            if form.cleaned_data.get('checkin_lists'):
+                ql.append(Q(
+                    all_positions__checkins__list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
+                    all_positions__canceled=False
+                ))
+            if len(ql) == 2:
+                orders = orders.filter(ql[0] | ql[1])
             else:
-                orders = orders.filter(all_positions__checkins__list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])])
+                orders = orders.filter(ql[0])
+
         if form.cleaned_data.get('subevent'):
             orders = orders.filter(all_positions__subevent__in=(form.cleaned_data.get('subevent'),),
                                    all_positions__canceled=False)

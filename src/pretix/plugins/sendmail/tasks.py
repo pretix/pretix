@@ -34,11 +34,12 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                     continue
 
                 if filter_checkins:
-                    checkins = p.checkins.all()
-                    if not_checked_in:
-                        if checkins:
-                            continue
-                    elif not any(c.list_id in checkin_lists for c in checkins):
+                    checkins = list(p.checkins.all())
+                    allowed = (
+                        (not_checked_in and not checkins)
+                        or (any(c.list_id in checkin_lists for c in checkins))
+                    )
+                    if not allowed:
                         continue
 
                 if not p.attendee_email:
