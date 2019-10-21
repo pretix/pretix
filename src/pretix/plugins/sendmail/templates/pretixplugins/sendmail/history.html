@@ -23,6 +23,14 @@
                         {% if log.pdata.items %}
                             <br/><span class="fa fa-shopping-cart fa-fw"></span> {{ log.pdata.items|join:", " }}
                         {% endif %}
+                        {% if log.pdata.filter_checkins %}
+                            {% if log.pdata.not_checked_in %}
+                                <br/><span class="fa fa-check-square-o fa-fw"></span> {% trans "All customers not checked in" %}
+                            {% endif %}
+                            {% if log.pdata.checkin_lists %}
+                                <br/><span class="fa fa-check-square-o fa-fw"></span> {{ log.pdata.checkin_lists|join:", " }}
+                            {% endif %}
+                        {% endif %}
                         {% if log.pdata.subevent_obj %}
                             <br/><span class="fa fa-calendar fa-fw"></span> {{ log.pdata.subevent_obj }}
                         {% endif %}

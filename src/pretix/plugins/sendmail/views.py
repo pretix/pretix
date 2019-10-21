@@ -2,7 +2,7 @@ import logging
 
 import bleach
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.timezone import now
@@ -11,7 +11,7 @@ from django.views.generic import FormView, ListView
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.i18n import LazyI18nString, language
-from pretix.base.models import LogEntry, Order
+from pretix.base.models import LogEntry, Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.services.mail import TolerantDict
 from pretix.base.templatetags.rich_text import markdown_compile_email
@@ -53,6 +53,9 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     kwargs['initial']['items'] = self.request.event.items.filter(
                         id=logentry.parsed_data['item']['id']
                     )
+                if 'checkin_lists' in logentry.parsed_data:
+                    kwargs['initial']['checkin_lists'] = logentry.parsed_data['checkin_lists']
+                kwargs['initial']['filter_checkins'] = logentry.parsed_data.get('filter_checkins', False)
                 if logentry.parsed_data.get('subevent'):
                     try:
                         kwargs['initial']['subevent'] = self.request.event.subevents.get(
@@ -74,12 +77,30 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         if 'overdue' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
         orders = qs.filter(statusq)
-        orders = orders.filter(all_positions__item_id__in=[i.pk for i in form.cleaned_data.get('items')],
-                               all_positions__canceled=False)
+
+        opq = OrderPosition.objects.filter(
+            order=OuterRef('pk'),
+            canceled=False,
+            item_id__in=[i.pk for i in form.cleaned_data.get('items')],
+        )
+
+        if form.cleaned_data.get('filter_checkins'):
+            ql = []
+            if form.cleaned_data.get('not_checked_in'):
+                ql.append(Q(checkins__list_id=None))
+            if form.cleaned_data.get('checkin_lists'):
+                ql.append(Q(
+                    checkins__list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
+                ))
+            if len(ql) == 2:
+                opq = opq.filter(ql[0] | ql[1])
+            else:
+                opq = opq.filter(ql[0])
+
         if form.cleaned_data.get('subevent'):
-            orders = orders.filter(all_positions__subevent__in=(form.cleaned_data.get('subevent'),),
-                                   all_positions__canceled=False)
-        orders = orders.distinct()
+            opq = opq.filter(subevent=form.cleaned_data.get('subevent'))
+
+        orders = orders.annotate(match_pos=Exists(opq)).filter(match_pos=True).distinct()
 
         self.output = {}
         if not orders:
@@ -118,7 +139,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 'subject': form.cleaned_data['subject'].data,
                 'message': form.cleaned_data['message'].data,
                 'orders': [o.pk for o in orders],
-                'items': [i.pk for i in form.cleaned_data.get('items')]
+                'items': [i.pk for i in form.cleaned_data.get('items')],
+                'not_checked_in': form.cleaned_data.get('not_checked_in'),
+                'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
+                'filter_checkins': form.cleaned_data.get('filter_checkins'),
             }
         )
         self.request.event.log_action('pretix.plugins.sendmail.sent',
@@ -159,6 +183,9 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
         itemcache = {
             i.pk: str(i) for i in self.request.event.items.all()
         }
+        checkin_list_cache = {
+            i.pk: str(i) for i in self.request.event.checkin_lists.all()
+        }
         status = dict(Order.STATUS_CHOICE)
         status['overdue'] = _('pending with payment overdue')
         status['r'] = status['c']
@@ -175,6 +202,9 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
             ]
             log.pdata['items'] = [
                 itemcache[i['id']] for i in log.pdata.get('items', [])
+            ]
+            log.pdata['checkin_lists'] = [
+                checkin_list_cache[i] for i in log.pdata.get('checkin_lists', []) if i in checkin_list_cache
             ]
             if log.pdata.get('subevent'):
                 try:

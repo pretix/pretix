@@ -9,7 +9,8 @@ from pretix.celery_app import app
 
 
 @app.task(base=ProfiledEventTask)
-def send_mails(event: Event, user: int, subject: dict, message: dict, orders: list, items: list, recipients: str) -> None:
+def send_mails(event: Event, user: int, subject: dict, message: dict, orders: list, items: list,
+               recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list) -> None:
     failures = []
     user = User.objects.get(pk=user) if user else None
     orders = Order.objects.filter(pk__in=orders, event=event)
@@ -31,6 +32,15 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
 
                 if p.item_id not in items and not any(a.item_id in items for a in p.addons.all()):
                     continue
+
+                if filter_checkins:
+                    checkins = list(p.checkins.all())
+                    allowed = (
+                        (not_checked_in and not checkins)
+                        or (any(c.list_id in checkin_lists for c in checkins))
+                    )
+                    if not allowed:
+                        continue
 
                 if not p.attendee_email:
                     if recipients == 'attendees':

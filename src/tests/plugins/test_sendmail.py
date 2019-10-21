@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, Organizer, Team, User,
+    Checkin, Event, Item, Order, OrderPosition, Organizer, Team, User,
 )
 
 
@@ -26,6 +26,12 @@ def event():
 def item(event):
     """Returns an item instance"""
     return Item.objects.create(name='Test item', event=event, default_price=13)
+
+
+@pytest.fixture
+def checkin_list(event):
+    """Returns an checkin list instance"""
+    return event.checkin_lists.create(name="Test Checkinlist", all_products=True)
 
 
 @pytest.fixture
@@ -78,7 +84,7 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order, pos)
                                       'recipients': 'orders',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
-                                      'message_0': 'This is a test file for sending mails.'
+                                      'message_0': 'This is a test file for sending mails.',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -104,7 +110,7 @@ def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_u
                                       'recipients': 'orders',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
-                                      'message_0': 'This is a test file for sending mails.'
+                                      'message_0': 'This is a test file for sending mails.',
                                       },
                                      follow=True)
     assert 'alert-danger' in response.rendered_content
@@ -121,7 +127,7 @@ def test_sendmail_preview(logged_in_client, sendmail_url, event, order, pos):
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'action': 'preview'
+                                      'action': 'preview',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -167,7 +173,7 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
                                       'subject_0': 'Test subject',
                                       'message_0': 'Test message',
                                       'subject_1': 'Benutzer',
-                                      'message_1': 'Test nachricht'
+                                      'message_1': 'Test nachricht',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -204,7 +210,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'subevent': se1.pk
+                                      'subevent': se1.pk,
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -218,7 +224,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'subevent': se2.pk
+                                      'subevent': se2.pk,
                                       },
                                      follow=True)
     assert len(djmail.outbox) == 0
@@ -239,7 +245,7 @@ def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order, pos)
                                       'items': pos.item_id,
                                       'subject_0': '{code} Test subject',
                                       'message_0': 'This is a test file for sending mails.',
-                                      'action': 'preview'
+                                      'action': 'preview',
                                       },
                                      follow=True)
 
@@ -262,7 +268,7 @@ def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order, p
                                       'recipients': 'attendees',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
-                                      'message_0': 'This is a test file for sending mails.'
+                                      'message_0': 'This is a test file for sending mails.',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -286,7 +292,7 @@ def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order, pos):
                                       'recipients': 'both',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
-                                      'message_0': 'This is a test file for sending mails.'
+                                      'message_0': 'This is a test file for sending mails.',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -313,7 +319,7 @@ def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, o
                                       'recipients': 'both',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
-                                      'message_0': 'This is a test file for sending mails.'
+                                      'message_0': 'This is a test file for sending mails.',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -337,7 +343,7 @@ def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order
                                       'recipients': 'attendees',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
-                                      'message_0': 'This is a test file for sending mails.'
+                                      'message_0': 'This is a test file for sending mails.',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -360,11 +366,41 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
             item=i2, price=0, attendee_email='attendee2@dummy.test'
         )
 
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url,
+                                         {'sendto': 'n',
+                                          'recipients': 'attendees',
+                                          'items': i2.pk,
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee2@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event, order, checkin_list, item, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        chkl2 = event.checkin_lists.create(name="Test Checkinlist 2", all_products=True)
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        pos2 = order.positions.create(item=item, price=0, attendee_email='attendee2@dummy.test')
+        Checkin.objects.create(position=pos2, list=chkl2)
+
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'attendees',
-                                      'items': i2.pk,
+                                      'items': pos2.item_id,
+                                      'filter_checkins': 'on',
+                                      'checkin_lists': [chkl2.id],
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -375,3 +411,81 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
     assert djmail.outbox[0].to == ['attendee2@dummy.test']
     assert '/ticket/' in djmail.outbox[0].body
     assert '/order/' not in djmail.outbox[0].body
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'attendees',
+                                      'items': pos2.item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'filter_checkins': 'on',
+                                      'not_checked_in': 'on',
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee1@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'attendees',
+                                      'items': pos2.item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'filter_checkins': 'on',
+                                      'checkin_lists': [chkl2.id],
+                                      'not_checked_in': 'on',
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    assert djmail.outbox[0].to == ['attendee1@dummy.test']
+    assert djmail.outbox[1].to == ['attendee2@dummy.test']
+
+    # Test that filtering is ignored if filter_checkins is not set
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'attendees',
+                                      'items': pos2.item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'not_checked_in': 'on',
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+    assert '/ticket/' in djmail.outbox[1].body
+    assert '/order/' not in djmail.outbox[1].body
+    to_emails = set(*zip(*[mail.to for mail in djmail.outbox]))
+    assert to_emails == {'attendee1@dummy.test', 'attendee2@dummy.test'}
+
+    # Test that filtering is ignored if filter_checkins is not set
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'attendees',
+                                      'items': pos2.item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      'checkin_lists': [chkl2.id],
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+    assert '/ticket/' in djmail.outbox[1].body
+    assert '/order/' not in djmail.outbox[1].body
+    to_emails = set(*zip(*[mail.to for mail in djmail.outbox]))
+    assert to_emails == {'attendee1@dummy.test', 'attendee2@dummy.test'}
