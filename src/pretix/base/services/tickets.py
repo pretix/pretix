@@ -47,6 +47,9 @@ def generate_order(order: int, provider: str):
             prov = response(order.event)
             if prov.identifier == provider:
                 filename, ttype, data = prov.generate_order(order)
+                if ttype == 'text/uri-list':
+                    continue
+
                 path, ext = os.path.splitext(filename)
                 for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
                     ct.delete()
@@ -122,6 +125,9 @@ def get_tickets_for_order(order, base_position=None):
 
     for p in providers:
         if not p.is_enabled:
+            continue
+
+        if p.download_handled_by_frontend:
             continue
 
         if p.multi_download_enabled and not base_position:

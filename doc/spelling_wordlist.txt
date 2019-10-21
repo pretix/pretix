@@ -31,6 +31,7 @@ deprovision
 discoverable
 django
 dockerfile
+downloadable
 durations
 eu
 filename
@@ -140,6 +141,7 @@ username
 url
 versa
 versioning
+viewable
 viewset
 viewsets
 waitinglist

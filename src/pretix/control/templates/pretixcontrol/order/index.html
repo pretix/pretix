@@ -287,7 +287,7 @@
                                             {% for b in download_buttons %}
                                                 <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
                                                         method="post" data-asynctask data-asynctask-download
-                                                        class="form-inline helper-display-inline">
+                                                        class="form-inline helper-display-inline{% if b.javascript_required %} requirejs{% endif %}">
                                                     {% csrf_token %}
                                                     <button type="submit"
                                                             class="btn btn-xs btn-default">

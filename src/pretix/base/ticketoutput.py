@@ -46,12 +46,19 @@ class BaseTicketOutput:
         filename, a file type and file content. The extension will be taken from the filename
         which is otherwise ignored.
 
+        Alternatively, you can pass a tuple consisting of an arbitrary string, ``text/uri-list``
+        and a single URL. In this case, the user will be redirected to this link instead of
+        being asked to download a generated file.
+
         .. note:: If the event uses the event series feature (internally called subevents)
                   and your generated ticket contains information like the event name or date,
                   you probably want to display the properties of the subevent. A common pattern
                   to do this would be a declaration ``ev = position.subevent or position.order.event``
                   and then access properties that are present on both classes like ``ev.name`` or
                   ``ev.date_from``.
+
+        .. note:: Should you elect to use the URI redirection feature instead of offering downloads,
+                  you should also set the ``multi_download_enabled``-property to ``False``.
         """
         raise NotImplementedError()
 
@@ -161,3 +168,21 @@ class BaseTicketOutput:
         The Font Awesome icon on the download button in the frontend.
         """
         return 'fa-download'
+
+    @property
+    def preview_allowed(self) -> bool:
+        """
+        By default, the ``generate()`` method is called for generating a preview in the pretix backend.
+        In case your plugin cannot generate previews for any reason, you can manually disable it here.
+        """
+        return True
+
+    @property
+    def javascript_required(self) -> bool:
+        """
+        If this property is set to true, the download-button for this ticket-type will not be displayed
+        when the user's browser has JavaScript disabled.
+
+        Defaults to ``False``
+        """
+        return False
