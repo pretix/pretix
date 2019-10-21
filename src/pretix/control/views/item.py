@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, F, Max, Prefetch, Q
+from django.db.models import Count, Exists, F, Max, OuterRef, Prefetch, Q
 from django.forms.models import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
@@ -644,7 +644,10 @@ class QuotaList(PaginationMixin, ListView):
         ).prefetch_related(
             Prefetch(
                 "items",
-                queryset=Item.objects.annotate(has_variations=Count('variations'))
+                queryset=Item.objects.annotate(
+                    has_variations=Exists(ItemVariation.objects.filter(item=OuterRef('pk')))
+                ),
+                to_attr="cached_items"
             ),
             "variations",
             "variations__item"
