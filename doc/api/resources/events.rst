@@ -1,3 +1,9 @@
+.. spelling::
+
+   geo
+   lat
+   lon
+
 Events
 ======
 
