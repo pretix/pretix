@@ -324,6 +324,14 @@ class Event(EventMixin, LoggedModel):
         max_length=200,
         verbose_name=_("Location"),
     )
+    geo_lat = models.FloatField(
+        verbose_name=_("Latitude"),
+        null=True, blank=True,
+    )
+    geo_lon = models.FloatField(
+        verbose_name=_("Longitude"),
+        null=True, blank=True,
+    )
     plugins = models.TextField(
         null=False, blank=True,
         verbose_name=_("Plugins"),
@@ -928,6 +936,14 @@ class SubEvent(EventMixin, LoggedModel):
         null=True, blank=True,
         max_length=200,
         verbose_name=_("Location"),
+    )
+    geo_lat = models.FloatField(
+        verbose_name=_("Latitude"),
+        null=True, blank=True,
+    )
+    geo_lon = models.FloatField(
+        verbose_name=_("Longitude"),
+        null=True, blank=True
     )
     frontpage_text = I18nTextField(
         null=True, blank=True,

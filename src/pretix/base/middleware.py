@@ -14,6 +14,7 @@ from django.utils.translation.trans_real import (
     parse_accept_lang_header,
 )
 
+from pretix.base.settings import GlobalSettingsObject
 from pretix.multidomain.urlreverse import get_domain
 
 _supported = None
@@ -187,6 +188,11 @@ class SecurityMiddleware(MiddlewareMixin):
         # https://github.com/pretix/pretix/issues/765
         resp['P3P'] = 'CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"'
 
+        img_src = []
+        gs = GlobalSettingsObject()
+        if gs.settings.leaflet_tiles:
+            img_src.append(gs.settings.leaflet_tiles[:gs.settings.leaflet_tiles.index("/", 10)].replace("{s}", "*"))
+
         h = {
             'default-src': ["{static}"],
             'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
@@ -196,7 +202,7 @@ class SecurityMiddleware(MiddlewareMixin):
             'child-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'style-src': ["{static}", "{media}"],
             'connect-src': ["{dynamic}", "{media}", "https://checkout.stripe.com"],
-            'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"],
+            'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"] + img_src,
             'font-src': ["{static}"],
             'media-src': ["{static}", "data:"],
             # form-action is not only used to match on form actions, but also on URLs

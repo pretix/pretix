@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load formset_tags %}
 {% load eventsignal %}
+{% load static %}
 {% block title %}{% trans "Date" context "subevent" %}{% endblock %}
 {% block content %}
     {% if not subevent.pk %}
@@ -24,7 +25,30 @@
                     {% bootstrap_field form.active layout="control" %}
                     {% bootstrap_field form.date_from layout="control" %}
                     {% bootstrap_field form.date_to layout="control" %}
-                    {% bootstrap_field form.location layout="control" %}
+                    <div class="geodata-section">
+                        {% bootstrap_field form.location layout="control" %}
+                        <div class="form-group geodata-group" data-tiles="{{ global_settings.leaflet_tiles|default_if_none:"" }}" data-attrib="{{ global_settings.leaflet_tiles_attribution }}" data-icon="{% static "leaflet/images/marker-icon.png" %}" data-shadow="{% static "leaflet/images/marker-shadow.png" %}">
+                            <label class="col-md-3 control-label">
+                                {% trans "Geo coordinates" %}<br>
+                                <span class="optional">{% trans "Optional" %}</span>
+                            </label>
+                            <div class="col-md-4">
+                                {% bootstrap_field form.geo_lat layout="inline" %}
+                                {% if global_settings.opencagedata_apikey %}
+                                    <p class="attrib">
+                                        <a href="https://openstreetmap.org/" target="_blank">
+                                            {% trans "Geocoding data © OpenStreetMap" %}
+                                        </a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                {% bootstrap_field form.geo_lon layout="inline" %}
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                        </div>
+                    </div>
                     {% bootstrap_field form.date_admission layout="control" %}
                     {% bootstrap_field form.frontpage_text layout="control" %}
                     {% bootstrap_field form.is_public layout="control" %}

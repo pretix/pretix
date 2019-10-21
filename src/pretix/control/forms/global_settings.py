@@ -37,6 +37,20 @@ class GlobalSettingsForm(SettingsForm):
                 required=False,
                 label=_("Global message banner detail text"),
             )),
+            ('opencagedata_apikey', forms.CharField(
+                required=False,
+                label=_("OpenCage API key for geocoding"),
+            )),
+            ('leaflet_tiles', forms.CharField(
+                required=False,
+                label=_("Leaflet tiles URL pattern"),
+                help_text=_("e.g. {sample}").format(sample="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png")
+            )),
+            ('leaflet_tiles_attribution', forms.CharField(
+                required=False,
+                label=_("Leaflet tiles attribution"),
+                help_text=_("e.g. {sample}").format(sample='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors')
+            )),
         ])
         responses = register_global_settings.send(self)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
