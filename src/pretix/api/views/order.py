@@ -6,7 +6,7 @@ import pytz
 from django.db import transaction
 from django.db.models import F, Prefetch, Q
 from django.db.models.functions import Coalesce, Concat
-from django.http import FileResponse, HttpResponseRedirect
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
@@ -149,7 +149,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             raise RetryException()
         else:
             if ct.type == 'text/uri-list':
-                resp = HttpResponseRedirect(ct.file.file.read())
+                resp = HttpResponse(ct.file.file.read(), content_type='text/uri-list')
                 return resp
             else:
                 resp = FileResponse(ct.file.file, content_type=ct.type)
@@ -764,7 +764,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
             raise RetryException()
         else:
             if ct.type == 'text/uri-list':
-                resp = HttpResponseRedirect(ct.file.file.read())
+                resp = HttpResponse(ct.file.file.read(), content_type='text/uri-list')
                 return resp
             else:
                 resp = FileResponse(ct.file.file, content_type=ct.type)
