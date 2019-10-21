@@ -976,6 +976,11 @@ class MailSettingsForm(SettingsForm):
         required=False,
         max_length=255
     )
+    mail_attach_ical = forms.BooleanField(
+        label=_("Attach calendar files"),
+        help_text=_("If enabled, we will attach an .ics calendar file to order confirmation emails."),
+        required=False
+    )
 
     mail_text_signature = I18nFormField(
         label=_("Signature"),
