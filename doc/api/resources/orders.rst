@@ -219,6 +219,11 @@ pdf_data                              object                     Data object req
 
   The value ``auto_checked_in`` has been added to the ``checkins``-attribute.
 
+.. versionchanged:: 3.3
+
+  The ``url`` of a ticket ``download`` can now also return a ``text/uri-list`` instead of a file. See
+  :ref:`order-position-ticket-download` for details.
+
 .. _order-payment-resource:
 
 Order payment resource
@@ -1481,6 +1486,8 @@ Fetching individual positions
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position does not exist.
 
+.. _`order-position-ticket-download`:
+
 Order position ticket download
 ------------------------------
 
@@ -1489,6 +1496,11 @@ Order position ticket download
    Download tickets for one order position, identified by its internal ID.
    Depending on the chosen output, the response might be a ZIP file, PDF file or something else. The order details
    response contains a list of output options for this particular order position.
+
+   Be aware that the output does not have to be a file, but can also be a regular HTTP response with a ``Content-Type``
+   set to ``text/uri-list``. In this case, the user is expected to navigate to that URL in order to access their ticket.
+   The referenced URL can provide a download or a regular, human-viewable website - so it is advised to open this URL
+   in a webbrowser and leave it up to the user to handle the result.
 
    Tickets can be only downloaded if the order is paid and if ticket downloads are active. Also, depending on event
    configuration downloads might be only unavailable for add-on products or non-admission products.
