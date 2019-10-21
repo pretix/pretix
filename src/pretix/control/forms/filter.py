@@ -10,8 +10,8 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
-    Checkin, Event, Invoice, Item, Order, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, Question, QuestionAnswer, SubEvent,
+    Checkin, Event, EventMetaValue, Invoice, Item, Order, OrderPayment,
+    OrderPosition, OrderRefund, Organizer, Question, QuestionAnswer, SubEvent,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
@@ -573,13 +573,21 @@ class EventFilterForm(FilterForm):
 
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request')
+        self.organizer = kwargs.pop('organizer', None)
         super().__init__(*args, **kwargs)
-        if request.user.has_active_staff_session(request.session.session_key):
-            self.fields['organizer'].queryset = Organizer.objects.all()
+        if self.organizer:
+            del self.fields['organizer']
+            for p in self.organizer.meta_properties.all():
+                self.fields['meta_{}'.format(p.name)] = forms.CharField(
+                    label=p.name, required=False
+                )
         else:
-            self.fields['organizer'].queryset = Organizer.objects.filter(
-                pk__in=request.user.teams.values_list('organizer', flat=True)
-            )
+            if request.user.has_active_staff_session(request.session.session_key):
+                self.fields['organizer'].queryset = Organizer.objects.all()
+            else:
+                self.fields['organizer'].queryset = Organizer.objects.filter(
+                    pk__in=request.user.teams.values_list('organizer', flat=True)
+                )
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
@@ -627,6 +635,26 @@ class EventFilterForm(FilterForm):
             qs = qs.filter(
                 Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
             )
+
+        if self.organizer:
+            for i, p in enumerate(self.organizer.meta_properties.all()):
+                d = fdata.get('meta_{}'.format(p.name))
+                if d:
+                    emv_with_value = EventMetaValue.objects.filter(
+                        event=OuterRef('pk'),
+                        property__name=p.name,
+                        value=d
+                    )
+                    emv_with_any_value = EventMetaValue.objects.filter(
+                        event=OuterRef('pk'),
+                        property__name=p.name,
+                    )
+                    qs = qs.annotate(**{'attr_{}'.format(i): Exists(emv_with_value)})
+                    filters = Q(**{'attr_{}'.format(i): True})
+                    if p.default == d:
+                        qs = qs.annotate(**{'attr_{}_any'.format(i): Exists(emv_with_any_value)})
+                        filters |= Q(**{'attr_{}_any'.format(i): False})
+                    qs = qs.filter(filters)
 
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())

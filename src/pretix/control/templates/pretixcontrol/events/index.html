@@ -89,7 +89,7 @@
                         <br><small>{{ e.slug }}</small>
                         {% for k, v in e.meta_data.items %}
                             {% if v %}
-                                <span class="text-muted">&middot; {{ k }}: {{ v }}</span>
+                                <small class="text-muted">&middot; {{ k }}: {{ v }}</small>
                             {% endif %}
                         {% endfor %}
                     </td>

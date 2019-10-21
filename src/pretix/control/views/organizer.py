@@ -7,7 +7,9 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, DecimalField, Max, Min, ProtectedError, Sum
+from django.db.models import (
+    Count, DecimalField, Max, Min, Prefetch, ProtectedError, Sum,
+)
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
@@ -25,10 +27,12 @@ from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
     Device, GiftCard, Organizer, Team, TeamInvite, User,
 )
-from pretix.base.models.event import Event, EventMetaProperty
+from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
-from pretix.control.forms.filter import GiftCardFilterForm, OrganizerFilterForm
+from pretix.control.forms.filter import (
+    EventFilterForm, GiftCardFilterForm, OrganizerFilterForm,
+)
 from pretix.control.forms.organizer import (
     DeviceForm, EventMetaPropertyForm, GiftCardCreateForm, OrganizerDeleteForm,
     OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
@@ -105,7 +109,13 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
 
     def get_queryset(self):
         qs = self.request.user.get_events_with_any_permission(self.request).select_related('organizer').prefetch_related(
-            '_settings_objects', 'organizer___settings_objects'
+            'organizer', '_settings_objects', 'organizer___settings_objects',
+            'organizer__meta_properties',
+            Prefetch(
+                'meta_values',
+                EventMetaValue.objects.select_related('property'),
+                to_attr='meta_values_cached'
+            )
         ).filter(organizer=self.request.organizer).order_by('-date_from')
         qs = qs.annotate(
             min_from=Min('subevents__date_from'),
@@ -116,10 +126,20 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
             order_from=Coalesce('min_from', 'date_from'),
             order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
         )
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
         return qs
+
+    @cached_property
+    def filter_form(self):
+        return EventFilterForm(data=self.request.GET, request=self.request, organizer=self.organizer)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        ctx['meta_fields'] = [
+            self.filter_form['meta_{}'.format(p.name)] for p in self.organizer.meta_properties.all()
+        ]
         return ctx
 
 
