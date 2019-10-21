@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-21 12:07+0000\n"
-"PO-Revision-Date: 2019-10-18 15:51+0000\n"
+"PO-Revision-Date: 2019-10-21 12:42+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1723,11 +1723,11 @@ msgstr "Veranstaltungsort"
 
 #: pretix/base/models/event.py:328 pretix/base/models/event.py:941
 msgid "Latitude"
-msgstr ""
+msgstr "Breitengrad"
 
 #: pretix/base/models/event.py:332 pretix/base/models/event.py:945
 msgid "Longitude"
-msgstr ""
+msgstr "Längengrad"
 
 #: pretix/base/models/event.py:337 pretix/control/navigation.py:44
 msgid "Plugins"
@@ -6571,16 +6571,16 @@ msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "Alle E-Mails werden in Bcc-Kopie an diese Adresse geschickt"
 
 #: pretix/control/forms/event.py:984
-#, fuzzy
-#| msgid "Cached ticket files"
 msgid "Attach calendar files"
-msgstr "Zwischengespeicherte Tickets"
+msgstr "Kalenderdateien anhängen"
 
 #: pretix/control/forms/event.py:985
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
+"Wenn diese Option aktiviert ist, hängen wir Bestellbestätigungs-E-Mails eine "
+".ics-Kalenderdatei an."
 
 #: pretix/control/forms/event.py:990
 msgid "Signature"
@@ -7243,21 +7243,21 @@ msgstr "Details zur systemweiten Banner-Nachricht"
 
 #: pretix/control/forms/global_settings.py:42
 msgid "OpenCage API key for geocoding"
-msgstr ""
+msgstr "OpenCage-API-Key für Geocoding"
 
 #: pretix/control/forms/global_settings.py:46
 msgid "Leaflet tiles URL pattern"
-msgstr ""
+msgstr "Leaflet-Kacheln URL-Format"
 
 #: pretix/control/forms/global_settings.py:47
 #: pretix/control/forms/global_settings.py:52
 #, python-brace-format
 msgid "e.g. {sample}"
-msgstr ""
+msgstr "z.B. {sample}"
 
 #: pretix/control/forms/global_settings.py:51
 msgid "Leaflet tiles attribution"
-msgstr ""
+msgstr "Leaflet-Kacheln Rechte"
 
 #: pretix/control/forms/global_settings.py:68
 msgid "Perform update checks"
@@ -10321,19 +10321,13 @@ msgstr "Eckdaten"
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:44
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:32
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No dates"
 msgid "Geo coordinates"
-msgstr "Keine Termine"
+msgstr "Geo-Koordinaten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:28
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:45
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:33
-#, fuzzy
-#| msgctxt "form"
-#| msgid "Optional"
 msgid "Optional"
 msgstr "Optional"
 
@@ -10342,7 +10336,7 @@ msgstr "Optional"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:282
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:40
 msgid "Geocoding data © OpenStreetMap"
-msgstr ""
+msgstr "Geocoding-Daten © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:55
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:299
@@ -16647,16 +16641,12 @@ msgid "Only send to people who bought"
 msgstr "Sende nur an Käufer des Produktes"
 
 #: pretix/plugins/sendmail/forms.py:32
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Filter check-in status"
-msgstr "Check-in-Status"
+msgstr "Nach Check-in-Status filtern"
 
 #: pretix/plugins/sendmail/forms.py:36
-#, fuzzy
-#| msgid "Send to customers with order status"
 msgid "Send to customers not checked in"
-msgstr "An Kunden mit Bestellstatus"
+msgstr "An Kunden ohne Check-in schicken"
 
 #: pretix/plugins/sendmail/forms.py:39
 msgid "Only send to customers of"
@@ -16688,10 +16678,8 @@ msgid "Send to customers with order status"
 msgstr "An Kunden mit Bestellstatus"
 
 #: pretix/plugins/sendmail/forms.py:114 pretix/plugins/sendmail/forms.py:119
-#, fuzzy
-#| msgid "Send to customers with order status"
 msgid "Send to customers checked in on list"
-msgstr "An Kunden mit Bestellstatus"
+msgstr "An Kunden mit Check-in auf Liste"
 
 #: pretix/plugins/sendmail/signals.py:48
 msgid "Email was sent"
@@ -16710,10 +16698,8 @@ msgid "Sent to orders:"
 msgstr "An Bestellungen:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:28
-#, fuzzy
-#| msgid "Automatically checked in"
 msgid "All customers not checked in"
-msgstr "Automatisch eingecheckt"
+msgstr "Alle nicht eingecheckten Kunden"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:38
 msgid "Attendee contact addresses"
@@ -17647,6 +17633,8 @@ msgid ""
 "Orders made through this sales channel cannot be deleted - even if the "
 "ticket shop is in test mode!"
 msgstr ""
+"Bestellungen über diesen Verkaufskanal können nicht gelöscht werden – auch "
+"nicht im Testmodus!"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:110
 msgid "Contact event organizer"
@@ -17792,14 +17780,14 @@ msgid "Please select how you want to pay."
 msgstr "Bitte wählen Sie die gewünschte Zahlungsmethode aus."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
-#, fuzzy
-#| msgid "This payment provider does not provide support for testmode."
 msgid "This sales channel does not provide support for testmode."
-msgstr "Diese Zahlungsmethode unterstützt den Testmodus nicht."
+msgstr "Diese Verkaufskanal unterstützt den Testmodus nicht."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
 msgid "If you continue, you might pay an actual order with non-existing money!"
 msgstr ""
+"Wenn Sie weiter machst, wird ggf. eine tatsächliche Bestellung mit nicht-"
+"existierendem Geld bezahlt!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:49
 msgid "This payment provider does not provide support for testmode."
