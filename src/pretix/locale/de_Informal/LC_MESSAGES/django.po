@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-21 12:07+0000\n"
-"PO-Revision-Date: 2019-10-21 12:43+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2019-10-23 04:00+0000\n"
+"Last-Translator: Felix Rindt <felix@rindt.me>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -15106,7 +15106,7 @@ msgstr "Bitte nur PDF-Dateien hochladen."
 
 #: pretix/control/views/shredder.py:92
 msgid "The selected data was deleted successfully."
-msgstr "Der ausgewählten Daten wurden gelöscht."
+msgstr "Die ausgewählten Daten wurden gelöscht."
 
 #: pretix/control/views/subevents.py:103 pretix/control/views/subevents.py:387
 msgctxt "subevent"
