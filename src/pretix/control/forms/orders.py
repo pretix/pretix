@@ -107,7 +107,7 @@ class CancelForm(ConfirmPaymentForm):
             del self.fields['cancellation_fee']
 
     def clean_cancellation_fee(self):
-        val = self.cleaned_data['cancellation_fee']
+        val = self.cleaned_data['cancellation_fee'] or Decimal('0.00')
         if val > self.instance.payment_refund_sum:
             raise ValidationError(_('The cancellation fee cannot be higher than the payment credit of this order.'))
         return val
