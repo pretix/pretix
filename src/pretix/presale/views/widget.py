@@ -139,7 +139,7 @@ def widget_js(request, lang, **kwargs):
         try:
             resp = HttpResponse(default_storage.open(fname).read(), content_type='text/javascript')
         except:
-            logger.critical('Failed to open widget.js')
+            logger.exception('Failed to open widget.js')
 
     if not resp:
         data = generate_widget_js(lang).encode()
