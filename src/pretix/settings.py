@@ -292,6 +292,7 @@ INSTALLED_APPS = [
     'hijack',
     'compat',
     'oauth2_provider',
+    'phonenumber_field'
 ]
 
 try:
