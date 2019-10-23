@@ -1338,7 +1338,8 @@ class OrderPayment(models.Model):
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_paid', user,
                     invoices=[], position=position,
-                    attach_tickets=True, attach_ical=True
+                    attach_tickets=True,
+                    attach_ical=self.order.event.settings.mail_attach_ical
                 )
             except SendMailException:
                 logger.exception('Order paid email could not be sent')
@@ -1355,7 +1356,8 @@ class OrderPayment(models.Model):
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_paid', user,
                     invoices=[invoice] if invoice and self.order.event.settings.invoice_email_attachment else [],
-                    attach_tickets=True, attach_ical=True
+                    attach_tickets=True,
+                    attach_ical=self.order.event.settings.mail_attach_ical
                 )
             except SendMailException:
                 logger.exception('Order paid email could not be sent')
