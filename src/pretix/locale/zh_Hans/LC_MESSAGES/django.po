@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-21 12:07+0000\n"
-"PO-Revision-Date: 2019-10-23 13:17+0000\n"
+"PO-Revision-Date: 2019-10-23 13:28+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -3978,14 +3978,7 @@ msgid "Your export did not contain any data."
 msgstr "您的导出没有任何数据。"
 
 #: pretix/base/services/invoices.py:73
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "{i.company}\n"
-#| "{i.name}\n"
-#| "{i.street}\n"
-#| "{i.zipcode} {i.city}\n"
-#| "{country}"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{i.company}\n"
@@ -3997,7 +3990,7 @@ msgstr ""
 "{i.company}\n"
 "{i.name}\n"
 "{i.street}\n"
-"{i.zipcode} {i.city}\n"
+"{i.zipcode} {i.city}{state}\n"
 "{country}"
 
 #: pretix/base/services/invoices.py:148
@@ -4044,13 +4037,11 @@ msgid "Sample product A"
 msgstr "样本产品 A"
 
 #: pretix/base/services/mail.py:164
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr "您收到此电子邮件是因为您订购了{event}。"
+msgstr "您收到此电子邮件是因为某人为你订购了{event}。"
 
 #: pretix/base/services/mail.py:168 pretix/base/services/mail.py:184
 #, python-brace-format
@@ -4150,28 +4141,16 @@ msgstr ""
 "您购物车中其中某个活动的预售期尚未开始。受影响的位置已从您的购物车中移除。"
 
 #: pretix/base/services/orders.py:82
-#, fuzzy
-#| msgid ""
-#| "The voucher code used for one of the items in your cart is expired. We "
-#| "removed this item from your cart."
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
-msgstr ""
-"用于购物车中某件商品的优惠券号码已过期。我们从您的购物车中删除了该商品。"
+msgstr "您订单中的座位之一无效，我们从您的购物车中删除了该位置。"
 
 #: pretix/base/services/orders.py:83
-#, fuzzy
-#| msgid ""
-#| "The voucher code used for one of the items in your cart has already been "
-#| "used the maximum number of times allowed. We removed this item from your "
-#| "cart."
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
-msgstr ""
-"用于购物车中某件商品的优惠券号码已达到允许的最大次数。我们从您的购物车中删除"
-"了该商品。"
+msgstr "在此期间，您订单中的一个座位已被选走，我们已从您的购物车中删除了该位置。"
 
 #: pretix/base/services/orders.py:100 pretix/control/forms/orders.py:52
 msgid "The new expiry date needs to be in the future."
@@ -4206,7 +4185,7 @@ msgstr "您无法取消此订单。"
 msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
-msgstr ""
+msgstr "由于此订单购买的礼品卡{card}已被兑换 ，因此无法取消该订单。"
 
 #: pretix/base/services/orders.py:330 pretix/control/forms/orders.py:112
 msgid ""
@@ -4223,7 +4202,7 @@ msgid ""
 "While trying to place your order, we noticed that the order total has "
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
-msgstr ""
+msgstr "在尝试下订单时，我们注意到订单总价已更改。可能是某一个价格刚刚改变了，或者您使用的礼品卡在此期间使用了。请检查以下价格，然后重试。"
 
 #: pretix/base/services/orders.py:875
 #, python-format
@@ -4300,25 +4279,21 @@ msgstr "您需要为新位置选择子活动。"
 msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
-msgstr ""
+msgstr "您选择的座位“ {seat} ”与所选票证日期不符。请再次选择一个座位。"
 
 #: pretix/base/services/orders.py:971
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected product requires you to select a seat."
-msgstr "所选产品无效或未设置价格。"
+msgstr "所选产品要求您选择一个座位。"
 
 #: pretix/base/services/orders.py:972
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected product does not allow to select a seat."
-msgstr "所选产品无效或未设置价格。"
+msgstr "所选产品不允许选择座位。"
 
 #: pretix/base/services/orders.py:973
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
-msgstr ""
+msgstr "您不能更改已用于发行礼品卡的位置的价格。"
 
 #: pretix/base/services/orders.py:1275
 #, python-brace-format
