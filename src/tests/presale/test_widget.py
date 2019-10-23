@@ -422,9 +422,9 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'list_type': 'list',
                 'events': [
                     {'name': 'Present', 'date_range': 'Jan. 1, 2019 11:00', 'availability': {'color': 'green', 'text': 'Tickets on sale'},
-                     'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk},
+                     'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk, 'location': ''},
                     {'name': 'Future', 'date_range': 'Jan. 4, 2019 11:00', 'availability': {'color': 'green', 'text': 'Tickets on sale'},
-                     'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}
+                     'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk, 'location': ''}
                 ]
             }
 
@@ -451,12 +451,14 @@ class WidgetCartTest(CartTestMixin, TestCase):
                         None,
                         {'day': 1, 'date': '2019-01-01', 'events': [
                             {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 1, 2019 11:00',
+                             'location': '',
                              'availability': {'color': 'green', 'text': 'Tickets on sale'},
                              'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}]},
                         {'day': 2, 'date': '2019-01-02', 'events': []},
                         {'day': 3, 'date': '2019-01-03', 'events': []},
                         {'day': 4, 'date': '2019-01-04', 'events': [
                             {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 4, 2019 11:00',
+                             'location': '',
                              'availability': {'color': 'green', 'text': 'Tickets on sale'},
                              'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}]},
                         {'day': 5, 'date': '2019-01-05', 'events': []},
@@ -524,13 +526,16 @@ class WidgetCartTest(CartTestMixin, TestCase):
                     {'availability': {'color': 'none', 'text': 'Event series'},
                      'date_range': 'Dec. 29, 2018 – Jan. 4, 2019',
                      'event_url': 'http://example.com/ccc/30c3/',
+                     'location': '',
                      'name': '30C3'},
                     {'availability': {'color': 'green', 'text': 'Tickets on sale'},
                      'date_range': 'Jan. 1, 2019 10:00',
+                     'location': '',
                      'event_url': 'http://example.com/ccc/present/',
                      'name': 'Present'},
                     {'availability': {'color': 'green', 'text': 'Tickets on sale'},
                      'date_range': 'Jan. 4, 2019 10:00',
+                     'location': '',
                      'event_url': 'http://example.com/ccc/future/',
                      'name': 'Future'}
                 ],
@@ -570,6 +575,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                   'date_range': 'Jan. 1, 2019 10:00',
                                   'event_url': 'http://example.com/ccc/present/',
                                   'name': 'Present',
+                                  'location': '',
                                   'subevent': None,
                                   'time': '10:00'},
                                  {'availability': {'color': 'green',
@@ -578,6 +584,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                   'date_range': 'Jan. 1, 2019 11:00',
                                   'event_url': 'http://example.com/ccc/30c3/',
                                   'name': 'Present',
+                                  'location': '',
                                   'subevent': se1.pk,
                                   'time': '11:00'}]},
                      {'date': '2019-01-02', 'day': 2, 'events': []},
@@ -590,6 +597,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                   'date_range': 'Jan. 4, 2019 10:00',
                                   'event_url': 'http://example.com/ccc/future/',
                                   'name': 'Future',
+                                  'location': '',
                                   'subevent': None,
                                   'time': '10:00'},
                                  {'availability': {'color': 'green',
@@ -598,6 +606,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                   'date_range': 'Jan. 4, 2019 11:00',
                                   'event_url': 'http://example.com/ccc/30c3/',
                                   'name': 'Future',
+                                  'location': '',
                                   'subevent': se2.pk,
                                   'time': '11:00'}]},
                      {'date': '2019-01-05', 'day': 5, 'events': []},
