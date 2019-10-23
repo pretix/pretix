@@ -213,6 +213,8 @@ class Order(LockModel, LoggedModel):
             }
         )
 
+        order_gracefully_delete.send(self.event, order=self)
+
         if self.status != Order.STATUS_CANCELED:
             for position in self.positions.all():
                 if position.voucher:
@@ -225,7 +227,6 @@ class Order(LockModel, LoggedModel):
         OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order=self).delete()
         OrderFee.all.filter(order=self).delete()
-        order_gracefully_delete.send(self.event, order=self)
         self.refunds.all().delete()
         self.payments.all().delete()
         self.event.cache.delete('complain_testmode_orders')
