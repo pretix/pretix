@@ -42,7 +42,18 @@
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
-                    {% elif trans.state == 'error' or trans.state == 'already' %}
+                    {% elif trans.state == 'error' %}
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
+                                data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
+                                <span class="fa fa-refresh"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
+                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                        </div>
+                    {% elif trans.state == 'already' %}
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <div class="btn-group" role="group">
                             <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
