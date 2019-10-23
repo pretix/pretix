@@ -136,7 +136,8 @@ class ActionView(View):
             elif v.startswith('comment:'):
                 return self._comment(trans, v[8:])
 
-            elif v.startswith('assign:') and trans.state == BankTransaction.STATE_NOMATCH:
+            elif v.startswith('assign:') and trans.state in (BankTransaction.STATE_NOMATCH,
+                                                             BankTransaction.STATE_DUPLICATE):
                 return self._assign(trans, v[7:])
 
             elif v == 'retry' and trans.state in (BankTransaction.STATE_ERROR, BankTransaction.STATE_DUPLICATE):

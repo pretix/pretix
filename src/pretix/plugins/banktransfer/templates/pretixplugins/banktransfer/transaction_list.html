@@ -43,7 +43,12 @@
                             </button>
                         </div>
                     {% elif trans.state == 'error' or trans.state == 'already' %}
+                        <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <div class="btn-group" role="group">
+                            <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
+                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}" data-placement="right">
+                                <span class="fa fa-check"></span>
+                            </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
                                 data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
                                 <span class="fa fa-refresh"></span>
