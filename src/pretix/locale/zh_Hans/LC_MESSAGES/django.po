@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-21 12:07+0000\n"
-"PO-Revision-Date: 2019-10-23 13:09+0000\n"
+"PO-Revision-Date: 2019-10-23 13:17+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -3460,31 +3460,25 @@ msgstr "您的礼品卡已被应用。"
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
-msgstr ""
+msgstr "您输入了优惠券而不是礼品卡。优惠券只能在产品选择下方的商店首页上输入。"
 
 #: pretix/base/payment.py:1004 pretix/base/payment.py:1043
-#, fuzzy
-#| msgid "This feature is not enabled."
 msgid "This gift card is not known."
-msgstr "此功能未启用。"
+msgstr "该礼品卡未知。"
 
 #: pretix/base/payment.py:1006 pretix/base/payment.py:1045
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
-msgstr ""
+msgstr "由于该礼品卡的代码不唯一，因此无法兑换。请联系此活动的组织者。"
 
 #: pretix/base/payment.py:1062 pretix/base/services/orders.py:613
-#, fuzzy
-#| msgid "This order is not yet approved by the event organizer."
 msgid "This gift card is not accepted by this event organizer."
-msgstr "此订单尚未得到项目组织者的批准。"
+msgstr "该活动组织者不接受此礼品卡。"
 
 #: pretix/base/payment.py:1064
-#, fuzzy
-#| msgid "There was an error sending the mail. Please try again later."
 msgid "This gift card was used in the meantime. Please try again"
-msgstr "发送邮件时出错。请稍后再试。"
+msgstr "在此期间，此礼品卡已被使用。请再试一次"
 
 #: pretix/base/pdf.py:46
 msgid "Ticket code (barcode content)"
@@ -3535,7 +3529,7 @@ msgstr "123.45 欧元"
 
 #: pretix/base/pdf.py:91
 msgid "Price including add-ons"
-msgstr ""
+msgstr "价格包括附加"
 
 #: pretix/base/pdf.py:106
 msgid "Sample event name"
@@ -3673,41 +3667,33 @@ msgid "Printing time"
 msgstr "印刷时间"
 
 #: pretix/base/pdf.py:242
-#, fuzzy
-#| msgid "Full name"
 msgid "Seat: Full name"
-msgstr "全名"
+msgstr "座位:全名"
 
 #: pretix/base/pdf.py:243
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "地面层，3排，4座"
 
 #: pretix/base/pdf.py:245 pretix/base/pdf.py:251
 #: pretix/control/forms/orders.py:211 pretix/control/forms/orders.py:266
-#, fuzzy
-#| msgid "Event admission"
 msgid "General admission"
-msgstr "活动入场"
+msgstr "一般入场"
 
 #: pretix/base/pdf.py:248
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat: zone"
-msgstr "队名"
+msgstr "座位：区域"
 
 #: pretix/base/pdf.py:249
 msgid "Ground floor"
-msgstr ""
+msgstr "一楼"
 
 #: pretix/base/pdf.py:254
 msgid "Seat: row"
-msgstr ""
+msgstr "座位：排"
 
 #: pretix/base/pdf.py:259
-#, fuzzy
-#| msgid "Street and Number"
 msgid "Seat: seat number"
-msgstr "街道和门牌"
+msgstr "座位：座位号"
 
 #: pretix/base/pdf.py:295
 #, python-brace-format
@@ -3941,42 +3927,31 @@ msgid "One of the products you selected can only be bought part of a bundle."
 msgstr "您所选择的产品中，有一种只能从捆绑包中购买。"
 
 #: pretix/base/services/cart.py:95
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to select a specific seat."
-msgstr "您需要选择一个日期。"
+msgstr "您需要选择一个特定的座位。"
 
 #: pretix/base/services/cart.py:96
-#, fuzzy
-#| msgid "Please select a quota."
 msgid "Please select a valid seat."
-msgstr "请选择配额。"
+msgstr "请选择一个有效的座位。"
 
 #: pretix/base/services/cart.py:97
-#, fuzzy
-#| msgid "You can not select an add-on for the selected product."
 msgid "You can not select a seat for this position."
-msgstr "您无法为所选产品选择附加组件。"
+msgstr "您不能选择此位置的座位。"
 
 #: pretix/base/services/cart.py:98
-#, fuzzy
-#| msgid "This slug is already in use. Please choose a different one."
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
-msgstr "这个slug已经在使用了。请选择其他的。"
+msgstr "您选择的座位已经被选。请选择其他座位。"
 
 #: pretix/base/services/cart.py:99
-#, fuzzy
-#| msgid "You cannot select more than %s items per order."
 msgid "You can not select the same seat multiple times."
-msgstr "您不能为每个订单选择超过%s项。"
+msgstr "您不能多次选择同一座位。"
 
 #: pretix/base/services/cart.py:100
 msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
-msgstr ""
+msgstr "您输入了礼品卡而不是优惠券。稍后要求您提供付款详细信息时，可以输入礼品卡。"
 
 #: pretix/base/services/checkin.py:97
 msgid "This order position has been canceled."
@@ -3999,10 +3974,8 @@ msgid "This ticket has already been redeemed."
 msgstr "此票已经兑换。"
 
 #: pretix/base/services/export.py:29
-#, fuzzy
-#| msgid "Your search did not match any quotas."
 msgid "Your export did not contain any data."
-msgstr "您的搜索与任何配额都不匹配。"
+msgstr "您的导出没有任何数据。"
 
 #: pretix/base/services/invoices.py:73
 #, fuzzy, python-brace-format
