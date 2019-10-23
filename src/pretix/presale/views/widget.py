@@ -319,6 +319,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 'time': date_format(ev.date_from.astimezone(tz), 'TIME_FORMAT') if e.get('time') and event.settings.show_times else
                 None,
                 'continued': e['continued'],
+                'location': str(ev.location),
                 'date_range': ev.get_date_range_display() + (
                     " " + date_format(ev.date_from.astimezone(tz), "TIME_FORMAT") if event.settings.show_times else ""
                 ),
@@ -399,6 +400,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 data['events'] = [
                     {
                         'name': str(ev.name),
+                        'location': str(ev.location),
                         'date_range': ev.get_date_range_display(tz) + (
                             (" " + ev.get_time_from_display(tz)) if ev.event.settings.show_times else ""
                         ),
@@ -425,6 +427,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         avail = self._get_availability(event, event)
                     data['events'].append({
                         'name': str(event.name),
+                        'location': str(event.location),
                         'date_range': dr,
                         'availability': avail,
                         'event_url': build_absolute_uri(event, 'presale:event.index'),

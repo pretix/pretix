@@ -798,6 +798,8 @@ Vue.component('pretix-widget-event-list-entry', {
     template: ('<a :class="classObject" @click.prevent="select">'
         + '<div class="pretix-widget-event-list-entry-name">{{ event.name }}</div>'
         + '<div class="pretix-widget-event-list-entry-date">{{ event.date_range }}</div>'
+        + '<div class="pretix-widget-event-list-entry-location">{{ location }}</div>'  // hidden by css for now, but
+                                                                                       // used by a few people
         + '<div class="pretix-widget-event-list-entry-availability"><span>{{ event.availability.text }}</span></div>'
         + '</a>'),
     props: {
@@ -810,6 +812,9 @@ Vue.component('pretix-widget-event-list-entry', {
             };
             o['pretix-widget-event-availability-' + this.event.availability.color] = true;
             return o
+        },
+        location: function () {
+            return this.event.location.replace(/\s*\n\s*/g, ', ');
         }
     },
     methods: {

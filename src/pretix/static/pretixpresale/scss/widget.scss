@@ -390,6 +390,11 @@
       padding: 5px;
       box-sizing: border-box;
     }
+    .pretix-widget-event-list-entry-location {
+      padding: 5px;
+      box-sizing: border-box;
+      display: none;
+    }
     .pretix-widget-event-list-entry-date {
       width: 25%;
       padding: 5px;
@@ -671,6 +676,9 @@
 
   .pretix-widget-event-list-entry {
     .pretix-widget-event-list-entry-name {
+      width: 100%;
+    }
+    .pretix-widget-event-list-entry-location {
       width: 100%;
     }
     .pretix-widget-event-list-entry-date {
