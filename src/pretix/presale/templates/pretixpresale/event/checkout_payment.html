@@ -36,7 +36,7 @@
                                     <div class="alert alert-info">
                                         {{ p.provider.test_mode_message }}
                                     </div>
-                                    {% if not request.event.sales_channel.testmode_supported %}
+                                    {% if not request.sales_channel.testmode_supported %}
                                         <div class="alert alert-danger">
                                             {% trans "This sales channel does not provide support for testmode." %}
                                             <strong>
