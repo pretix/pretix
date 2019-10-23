@@ -206,6 +206,21 @@ If you want, you can suppress us loading the widget and/or modify the user data 
 
 If you then later want to trigger loading the widgets, just call ``window.PretixWidget.buildWidgets()``.
 
+Waiting for the widget to load
+------------------------------
+
+If you want to run custom JavaScript once the widget is fully loaded, you can register a callback function. Note that
+this function might be run multiple times, for example if you have multiple widgets on a page or if the user switches
+e.g. from an event list to an event detail view::
+
+    <script type="text/javascript">
+    window.pretixWidgetCallback = function () {
+        window.PretixWidget.addLoadListener(function () {
+            console.log("Widget has loaded!");
+        });
+    }
+    </script>
+
 
 Passing user data to the widget
 -------------------------------
