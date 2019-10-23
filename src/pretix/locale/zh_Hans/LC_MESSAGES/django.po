@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-21 12:07+0000\n"
-"PO-Revision-Date: 2019-10-23 12:39+0000\n"
+"PO-Revision-Date: 2019-10-23 13:09+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -1561,6 +1561,8 @@ msgid ""
 "be useful when tickets sold at the box office are not checked again before "
 "entry and should be considered validated directly upon purchase."
 msgstr ""
+"当通过任何选定的销售渠道购买时，此登记列表上的所有项目将自动标记为已登记。当在票房出售的门票在进入之前没有再次检查时，该选项会很有用，并且应该被认为是在购"
+"买时直接验证的。"
 
 #: pretix/base/models/devices.py:55
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -1671,11 +1673,11 @@ msgstr "位置"
 
 #: pretix/base/models/event.py:328 pretix/base/models/event.py:941
 msgid "Latitude"
-msgstr ""
+msgstr "纬度"
 
 #: pretix/base/models/event.py:332 pretix/base/models/event.py:945
 msgid "Longitude"
-msgstr ""
+msgstr "经度"
 
 #: pretix/base/models/event.py:337 pretix/control/navigation.py:44
 msgid "Plugins"
@@ -1760,14 +1762,10 @@ msgid ""
 msgstr "只有启用此复选框，日期才能在前端显示给用户。"
 
 #: pretix/base/models/event.py:913
-#, fuzzy
-#| msgid ""
-#| "If selected, this event will show up publicly on the list of events for "
-#| "your organizer account."
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
-msgstr "如果选中，此活动将公开显示在您的管理器帐户的活动列表中。"
+msgstr "如果选中，此活动将公开显示在您的事件的日期列表中。"
 
 #: pretix/base/models/event.py:950 pretix/control/forms/event.py:492
 msgid "Frontpage text"
@@ -1804,16 +1802,12 @@ msgstr "没有值可以包含分隔符字符。"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:22
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:44
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:39
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card code"
-msgstr "礼品卡"
+msgstr "礼品卡代码"
 
 #: pretix/base/models/giftcards.py:56
-#, fuzzy
-#| msgid "Test mode"
 msgid "Test mode card"
-msgstr "测试模式"
+msgstr "测试模式卡"
 
 #: pretix/base/models/invoices.py:128 pretix/base/services/invoices.py:96
 #, python-format
@@ -1940,16 +1934,12 @@ msgid "Generate tickets"
 msgstr "生成门票"
 
 #: pretix/base/models/items.py:317
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Show a waiting list for this ticket"
-msgstr "在等待名单上"
+msgstr "显示此票的等待清单"
 
 #: pretix/base/models/items.py:318
-#, fuzzy
-#| msgid "Waiting lists are disabled for this event."
 msgid "This will only work of waiting lists are enabled for this event."
-msgstr "已禁用此活动的等待列表。"
+msgstr "这将仅为该事件启用等待列表。"
 
 #: pretix/base/models/items.py:322 pretix/control/forms/event.py:356
 #: pretix/control/forms/event.py:1435
@@ -1957,11 +1947,8 @@ msgid "Show number of tickets left"
 msgstr "显示剩余的票数"
 
 #: pretix/base/models/items.py:323
-#, fuzzy
-#| msgid ""
-#| "Publicly show how many tickets of a certain type are still available."
 msgid "Publicly show how many tickets are still available."
-msgstr "公开显示某种类型的票还有多少。"
+msgstr "公开显示票还有多少可供。"
 
 #: pretix/base/models/items.py:330
 msgid "Product picture"
@@ -1985,7 +1972,7 @@ msgstr "该产品不会在指定日期后出售。"
 
 #: pretix/base/models/items.py:348
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "仅在售罄后显示"
 
 #: pretix/base/models/items.py:349
 msgid ""
@@ -1995,6 +1982,8 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"如果您在此选择配额，此产品将仅在该配额不可用时显示。如果结合隐藏已售完产品的选项，这允许您在产品售完后将其换成更贵的产品。这两种产品可能会在短时间内可见，"
+"而引用配额中的所有票证都已保留，但尚未售出。"
 
 #: pretix/base/models/items.py:356
 msgid "This product can only be bought using a voucher."
@@ -2027,21 +2016,14 @@ msgid ""
 msgstr "此产品只会在兑换与产品相匹配的优惠券时才会显示。"
 
 #: pretix/base/models/items.py:371
-#, fuzzy
-#| msgid ""
-#| "This product will be hidden from the event page until the user enters a "
-#| "voucher code that is specifically tied to this product (and not via a "
-#| "quota)."
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
-msgstr ""
-"此产品将在活动页面中隐藏，直到用户输入与此产品特定关联的优惠券号码（而不是通"
-"过配额）。"
+msgstr "此产品将在活动页面中隐藏，直到用户输入解锁此产品的优惠券号码。"
 
 #: pretix/base/models/items.py:375
 msgid "Only sell this product as part of a bundle"
-msgstr ""
+msgstr "仅将此产品作为捆绑销售"
 
 #: pretix/base/models/items.py:377
 msgid ""
@@ -2049,6 +2031,8 @@ msgid ""
 "products. Do <strong>not</strong> check this option if you want to use this "
 "product as an add-on product, but only for fixed bundles!"
 msgstr ""
+"如果设置此选项，则该产品将仅作为捆绑产品的一部分出售。如果您想将此产品用作附加产品，而不是仅用于固定捆绑包，请<strong>不要</strong>选中此"
+"选项！"
 
 #: pretix/base/models/items.py:382
 msgid "Allow product to be canceled"
@@ -2118,16 +2102,14 @@ msgid "Sales channels"
 msgstr "销售渠道"
 
 #: pretix/base/models/items.py:419
-#, fuzzy
-#| msgid "The product the user waits for."
 msgid "This product is a gift card"
-msgstr "用户等待的产品。"
+msgstr "该产品是礼品卡"
 
 #: pretix/base/models/items.py:420
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
-msgstr ""
+msgstr "客户购买该产品时，将获得一张礼品卡，其价值与产品价格相对应。"
 
 #: pretix/base/models/items.py:429 pretix/base/models/items.py:1026
 #: pretix/control/forms/filter.py:181 pretix/control/forms/filter.py:673
@@ -2233,7 +2215,7 @@ msgstr "数量"
 
 #: pretix/base/models/items.py:896
 msgid "Designated price part"
-msgstr ""
+msgstr "指定价格部分"
 
 #: pretix/base/models/items.py:897
 msgid ""
@@ -2241,7 +2223,7 @@ msgid ""
 "value of the total gross price. This might be important in cases of mixed "
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
-msgstr ""
+msgstr "如果设置，将显示此捆绑商品负责总价的给定值。这在混合税收的情况下可能很重要，但在其他情况下可以保留为空白。此值不会添加到基本商品的价格中。"
 
 #: pretix/base/models/items.py:920
 msgid "The bundled item must belong to the same event as the item."
@@ -2293,7 +2275,7 @@ msgstr "日期和时间"
 
 #: pretix/base/models/items.py:991
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "国家/地区代码（ISO 3166-1 alpha-2）"
 
 #: pretix/base/models/items.py:1001 pretix/base/models/items.py:1055
 #: pretix/control/forms/item.py:41
@@ -2342,22 +2324,16 @@ msgstr "在办理手续时询问，而不是在购票过程中询问"
 
 #: pretix/base/models/items.py:1039
 #: pretix/control/templates/pretixcontrol/items/questions.html:65
-#, fuzzy
-#| msgid "Edit question"
 msgid "Hidden question"
-msgstr "编辑问题"
+msgstr "隐藏问题"
 
 #: pretix/base/models/items.py:1040
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "This question will only show up in the backend."
-msgstr "这个问题将在签入时提出。"
+msgstr "这个问题只会出现在后端。"
 
 #: pretix/base/models/items.py:1044
-#, fuzzy
-#| msgid "Text on invoices"
 msgid "Print answer on invoices"
-msgstr "发票上的文本"
+msgstr "在发票上打印答案"
 
 #: pretix/base/models/items.py:1076
 msgid "This identifier is already used for a different question."
@@ -2388,10 +2364,8 @@ msgid "Invalid datetime input."
 msgstr "日期时间输入无效。"
 
 #: pretix/base/models/items.py:1157
-#, fuzzy
-#| msgid "Unknown order code"
 msgid "Unknown country code."
-msgstr "未知的订单代码"
+msgstr "未知的国家/地区代码。"
 
 #: pretix/base/models/items.py:1171
 #: pretix/control/templates/pretixcontrol/items/question.html:68
@@ -2430,14 +2404,14 @@ msgstr "变动"
 
 #: pretix/base/models/items.py:1304
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "配额售完后永久关闭"
 
 #: pretix/base/models/items.py:1305
 msgid ""
 "If you enable this, when the quota is sold out once, no more tickets will be "
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
-msgstr ""
+msgstr "如果启用此功能，则配额一旦售罄，就不会再售出任何门票，即使通过取消或过期订单再次获得门票也是如此。当然，您可以随时手动将其重新打开。"
 
 #: pretix/base/models/items.py:1315 pretix/base/models/vouchers.py:169
 #: pretix/control/forms/item.py:418
@@ -2554,10 +2528,8 @@ msgid "Meta information"
 msgstr "元信息"
 
 #: pretix/base/models/orders.py:191
-#, fuzzy
-#| msgid "E-mail address"
 msgid "E-mail address verified"
-msgstr "E-mail 地址"
+msgstr "E-mail 地址已验证"
 
 #: pretix/base/models/orders.py:662
 msgid ""
@@ -2582,10 +2554,9 @@ msgid "The ordered product \"{item}\" is no longer available."
 msgstr "订购的产品“{item}”不再可用。"
 
 #: pretix/base/models/orders.py:686
-#, fuzzy, python-brace-format
-#| msgid "The ordered product \"{item}\" is no longer available."
+#, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr "订购的产品“{item}”不再可用。"
+msgstr "座位“{seat}”不再可用。"
 
 #: pretix/base/models/orders.py:792 pretix/base/services/orders.py:704
 #: pretix/control/views/event.py:605
@@ -2638,10 +2609,9 @@ msgid "Payment information"
 msgstr "支付信息"
 
 #: pretix/base/models/orders.py:1334
-#, fuzzy, python-format
-#| msgid "Order approved and confirmed: %(code)s"
+#, python-format
 msgid "Event registration confirmed: %(code)s"
-msgstr "订单已批准并确认：%(code)s"
+msgstr "活动注册已确认：%(code)s"
 
 #: pretix/base/models/orders.py:1351
 #, python-format
@@ -2729,10 +2699,9 @@ msgid "Order position"
 msgstr "订单位置"
 
 #: pretix/base/models/orders.py:1936 pretix/base/services/orders.py:719
-#, fuzzy, python-format
-#| msgid "Your order: %(code)s"
+#, python-format
 msgid "Your event registration: %(code)s"
-msgstr "您的订单：%(code)s"
+msgstr "您的活动注册：%(code)s"
 
 #: pretix/base/models/orders.py:1965
 msgid "Cart ID (e.g. session key)"
@@ -2819,10 +2788,8 @@ msgstr ""
 "到此团队中！"
 
 #: pretix/base/models/organizer.py:180
-#, fuzzy
-#| msgid "Can change orders"
 msgid "Can manage gift cards"
-msgstr "可以更改订单"
+msgstr "可以管理礼品卡"
 
 #: pretix/base/models/organizer.py:185
 msgid "Can change event settings"
@@ -2869,23 +2836,21 @@ msgstr "邀请团队'{team}'代表'{email}'"
 
 #: pretix/base/models/seating.py:22
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "您的布局文件不是有效的JSON文件。"
 
 #: pretix/base/models/seating.py:30
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr ""
+msgstr "您的布局文件不是有效的座位图。错误信息： {}"
 
 #: pretix/base/models/seating.py:106
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "Row {number}"
-msgstr "发票号码"
+msgstr "排{number}"
 
 #: pretix/base/models/seating.py:108
-#, fuzzy, python-brace-format
-#| msgid "Team name"
+#, python-brace-format
 msgid "Seat {number}"
-msgstr "队名"
+msgstr "座位{number}"
 
 #: pretix/base/models/tax.py:98
 msgid "Should be short, e.g. \"VAT\""
@@ -3044,7 +3009,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:188
 msgid "Shows hidden products that match this voucher"
-msgstr ""
+msgstr "显示与此优惠券匹配的隐藏产品"
 
 #: pretix/base/models/vouchers.py:196 pretix/control/navigation.py:226
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:5
@@ -3327,7 +3292,7 @@ msgstr "绝对值"
 
 #: pretix/base/payment.py:255
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "订单总数的百分比。"
 
 #: pretix/base/payment.py:261
 msgid "Calculate the fee from the total value including the fee."
@@ -3451,57 +3416,45 @@ msgstr "平衡订单：%s"
 
 #: pretix/base/payment.py:911
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "在测试模式下，只有测试卡可以使用。"
 
 #: pretix/base/payment.py:959 pretix/base/payment.py:1011
 #: pretix/base/payment.py:1052 pretix/base/services/orders.py:616
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr ""
+msgstr "购买礼品卡时，不能使用礼品卡付款。"
 
 #: pretix/base/payment.py:968 pretix/base/payment.py:1019
 #: pretix/base/payment.py:1060 pretix/base/services/orders.py:607
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid "This gift card does not support this currency."
-msgstr "此付款方式不支持自动退款。"
+msgstr "该礼品卡不支持该货币。"
 
 #: pretix/base/payment.py:971 pretix/base/payment.py:1022
 #: pretix/base/services/orders.py:609
-#, fuzzy
-#| msgid "This refund can not be processed at the moment."
 msgid "This gift card can only be used in test mode."
-msgstr "此退款目前无法处理。"
+msgstr "该礼品卡只能在测试模式下使用。"
 
 #: pretix/base/payment.py:974 pretix/base/payment.py:1025
 #: pretix/base/services/orders.py:611
-#, fuzzy
-#| msgid "Permanently delete all orders created in test mode"
 msgid "Only test gift cards can be used in test mode."
-msgstr "永久删除在测试模式下创建的所有订单"
+msgstr "在测试模式下只能使用测试礼品卡。"
 
 #: pretix/base/payment.py:977 pretix/base/payment.py:1028
-#, fuzzy
-#| msgid "Access for this device has been revoked."
 msgid "All credit on this gift card has been used."
-msgstr "此设备的访问权限已被撤销。"
+msgstr "此礼品卡上的所有额度都已使用。"
 
 #: pretix/base/payment.py:982
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This gift card is already used for your payment."
-msgstr "此标识符已用于其他问题。"
+msgstr "此礼品卡已用于付款。"
 
 #: pretix/base/payment.py:989
 msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
-msgstr ""
+msgstr "您的礼品卡已应用，但仍需付款{}。请选择一种付款方式。"
 
 #: pretix/base/payment.py:993
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your gift card has been applied."
-msgstr "您的购物车已更新。"
+msgstr "您的礼品卡已被应用。"
 
 #: pretix/base/payment.py:1001 pretix/base/payment.py:1040
 msgid ""
