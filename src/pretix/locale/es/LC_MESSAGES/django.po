@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-21 12:07+0000\n"
-"PO-Revision-Date: 2019-08-27 08:00+0000\n"
+"PO-Revision-Date: 2019-10-24 08:30+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -1736,11 +1736,11 @@ msgstr "Localización"
 
 #: pretix/base/models/event.py:328 pretix/base/models/event.py:941
 msgid "Latitude"
-msgstr ""
+msgstr "Lalitud"
 
 #: pretix/base/models/event.py:332 pretix/base/models/event.py:945
 msgid "Longitude"
-msgstr ""
+msgstr "Longitud"
 
 #: pretix/base/models/event.py:337 pretix/control/navigation.py:44
 msgid "Plugins"
@@ -2999,7 +2999,7 @@ msgstr "Invitar al equipo de '{team}' para '{email}'"
 
 #: pretix/base/models/seating.py:22
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "Tu archivo de layout no es un archivo valido JSON."
 
 #: pretix/base/models/seating.py:30
 msgid "Your layout file is not a valid seating plan. Error message: {}"
@@ -3631,7 +3631,7 @@ msgstr "Equilibrado con órdenes: %s"
 
 #: pretix/base/payment.py:911
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "En modo de pruebas, solo tarjetas de prueba funcionaran."
 
 #: pretix/base/payment.py:959 pretix/base/payment.py:1011
 #: pretix/base/payment.py:1052 pretix/base/services/orders.py:616
@@ -5706,7 +5706,7 @@ msgstr "Nombre del producto y variación"
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr ""
+msgstr "Producto \"{name}\" esta ocupado"
 
 #: pretix/base/timeline.py:187
 #, python-brace-format
@@ -6034,7 +6034,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:402
 msgid "Allowed titles"
-msgstr ""
+msgstr "Titulos permitidos"
 
 #: pretix/control/forms/event.py:403
 msgid ""
