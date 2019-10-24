@@ -214,6 +214,28 @@ def test_expiring_paid_invoice(event):
 
 
 @pytest.mark.django_db
+def test_expire_twice(event):
+    o2 = Order.objects.create(
+        code='FO2', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING, locale='en',
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=12,
+    )
+    generate_invoice(o2)
+    expire_orders(None)
+    o2 = Order.objects.get(id=o2.id)
+    assert o2.status == Order.STATUS_EXPIRED
+    assert o2.invoices.count() == 2
+    # this would usually happen when the deadline is extended, but lets keep the case simple
+    o2.status = Order.STATUS_PENDING
+    o2.save()
+    expire_orders(None)
+    o2 = Order.objects.get(id=o2.id)
+    assert o2.status == Order.STATUS_EXPIRED
+    assert o2.invoices.count() == 2
+
+
+@pytest.mark.django_db
 def test_expiring_auto_disabled(event):
     event.settings.set('payment_term_expire_automatically', False)
     o1 = Order.objects.create(

@@ -591,6 +591,8 @@ def test_order_extend_not_expired(client, env):
     with scopes_disabled():
         q = Quota.objects.create(event=env[0], size=0)
         q.items.add(env[3])
+        o = Order.objects.get(id=env[2].id)
+        generate_invoice(o)
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
@@ -600,6 +602,7 @@ def test_order_extend_not_expired(client, env):
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
         assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
+        assert o.invoices.count() == 1
 
 
 @pytest.mark.django_db
@@ -631,6 +634,7 @@ def test_order_extend_overdue_quota_blocked_by_waiting_list(client, env):
         q = Quota.objects.create(event=env[0], size=1)
         q.items.add(env[3])
         env[0].waitinglistentries.create(item=env[3], email='foo@bar.com')
+        generate_cancellation(generate_invoice(o))
 
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -642,6 +646,7 @@ def test_order_extend_overdue_quota_blocked_by_waiting_list(client, env):
         o = Order.objects.get(id=env[2].id)
         assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
         assert o.status == Order.STATUS_PENDING
+        assert o.invoices.count() == 3
 
 
 @pytest.mark.django_db

@@ -156,7 +156,7 @@ def mark_order_expired(order, user=None, auth=None):
 
         order.log_action('pretix.event.order.expired', user=user, auth=auth)
         i = order.invoices.filter(is_cancellation=False).last()
-        if i:
+        if i and not i.refered.exists():
             generate_cancellation(i)
 
     order_expired.send(order.event, order=order)
