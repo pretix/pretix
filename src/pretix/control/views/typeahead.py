@@ -132,7 +132,7 @@ def event_list(request):
 
 
 def nav_context_list(request):
-    query = request.GET.get('query', '')
+    query = request.GET.get('query', '').strip()
     organizer = request.GET.get('organizer', None)
 
     try:
