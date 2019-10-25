@@ -445,48 +445,50 @@ class OrderViewSet(viewsets.ModelViewSet):
                 user=request.user if request.user.is_authenticated else None,
                 auth=request.auth,
             )
-        order_placed.send(self.request.event, order=order)
 
-        gen_invoice = invoice_qualified(order) and (
-            (order.event.settings.get('invoice_generate') == 'True') or
-            (order.event.settings.get('invoice_generate') == 'paid' and order.status == Order.STATUS_PAID)
-        ) and not order.invoices.last()
-        invoice = None
-        if gen_invoice:
-            invoice = generate_invoice(order, trigger_pdf=True)
+        with language(order.locale):
+            order_placed.send(self.request.event, order=order)
 
-        if send_mail:
-            payment = order.payments.last()
-            free_flow = (
-                payment and order.total == Decimal('0.00') and order.status == Order.STATUS_PAID and
-                not order.require_approval and payment.provider == "free"
-            )
-            if free_flow:
-                email_template = request.event.settings.mail_text_order_free
-                log_entry = 'pretix.event.order.email.order_free'
-                email_attendees = request.event.settings.mail_send_order_free_attendee
-                email_attendees_template = request.event.settings.mail_text_order_free_attendee
-            else:
-                email_template = request.event.settings.mail_text_order_placed
-                log_entry = 'pretix.event.order.email.order_placed'
-                email_attendees = request.event.settings.mail_send_order_placed_attendee
-                email_attendees_template = request.event.settings.mail_text_order_placed_attendee
+            gen_invoice = invoice_qualified(order) and (
+                (order.event.settings.get('invoice_generate') == 'True') or
+                (order.event.settings.get('invoice_generate') == 'paid' and order.status == Order.STATUS_PAID)
+            ) and not order.invoices.last()
+            invoice = None
+            if gen_invoice:
+                invoice = generate_invoice(order, trigger_pdf=True)
 
-            _order_placed_email(
-                request.event, order, payment.payment_provider if payment else None, email_template,
-                log_entry, invoice, payment
-            )
-            if email_attendees:
-                for p in order.positions.all():
-                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                        _order_placed_email_attendee(request.event, order, p, email_attendees_template, log_entry)
+            if send_mail:
+                payment = order.payments.last()
+                free_flow = (
+                    payment and order.total == Decimal('0.00') and order.status == Order.STATUS_PAID and
+                    not order.require_approval and payment.provider == "free"
+                )
+                if free_flow:
+                    email_template = request.event.settings.mail_text_order_free
+                    log_entry = 'pretix.event.order.email.order_free'
+                    email_attendees = request.event.settings.mail_send_order_free_attendee
+                    email_attendees_template = request.event.settings.mail_text_order_free_attendee
+                else:
+                    email_template = request.event.settings.mail_text_order_placed
+                    log_entry = 'pretix.event.order.email.order_placed'
+                    email_attendees = request.event.settings.mail_send_order_placed_attendee
+                    email_attendees_template = request.event.settings.mail_text_order_placed_attendee
 
-            if not free_flow and order.status == Order.STATUS_PAID and payment:
-                payment._send_paid_mail(invoice, None, '')
-                if self.request.event.settings.mail_send_order_paid_attendee:
+                _order_placed_email(
+                    request.event, order, payment.payment_provider if payment else None, email_template,
+                    log_entry, invoice, payment
+                )
+                if email_attendees:
                     for p in order.positions.all():
                         if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                            payment._send_paid_mail_attendee(p, None)
+                            _order_placed_email_attendee(request.event, order, p, email_attendees_template, log_entry)
+
+                if not free_flow and order.status == Order.STATUS_PAID and payment:
+                    payment._send_paid_mail(invoice, None, '')
+                    if self.request.event.settings.mail_send_order_paid_attendee:
+                        for p in order.positions.all():
+                            if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
+                                payment._send_paid_mail_attendee(p, None)
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
