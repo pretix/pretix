@@ -290,10 +290,6 @@ List of all orders
 
    Filtering for emails or order codes is now case-insensitive.
 
-.. versionchanged:: 3.3
-
-    The orders resource can now be filtered by meta data attributes.
-
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/
 
    Returns a list of all orders within a given event.
@@ -437,10 +433,6 @@ List of all orders
        recommend using this in combination with ``testmode=false``, since test mode orders can vanish at any time and
        you will not notice it using this method.
    :query datetime created_since: Only return orders that have been created since the given date.
-   :query array attr[meta_data_key]: By providing the key and value of a meta data attribute, the list of events will
-        only contain the events matching the set criteria. Providing ``?attr[Format]=Seminar`` would return only those
-        events having set their ``Format`` meta data to ``Seminar``, ``?attr[Format]=`` only those, that have no value
-        set.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :resheader X-Page-Generated: The server time at the beginning of the operation. If you're using this API to fetch
