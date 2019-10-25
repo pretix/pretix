@@ -244,6 +244,9 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
                 event__organizer=self.request.organizer,
                 event__in=self.request.user.get_events_with_any_permission()
             )
+
+        qs = filter_qs_by_attr(qs, self.request)
+
         return qs.prefetch_related(
             'subeventitem_set', 'subeventitemvariation_set', 'seat_category_mappings'
         )
