@@ -134,7 +134,6 @@ def test_subevent_list(token_client, organizer, event, subevent):
 def test_subevent_list_filter(token_client, organizer, event, subevent):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/subevents/?attr[type]=Workshop'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
-    print(resp.data)
     assert resp.data['count'] == 1
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/subevents/?attr[type]=Conference'.format(organizer.slug, event.slug))
