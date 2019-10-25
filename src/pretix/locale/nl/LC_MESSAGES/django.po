@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-29 08:41+0000\n"
-"PO-Revision-Date: 2019-10-17 09:50+0000\n"
+"POT-Creation-Date: 2019-10-21 12:07+0000\n"
+"PO-Revision-Date: 2019-10-26 01:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -164,12 +164,13 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Cadeaukaartproducten moeten niet worden gekoppeld aan een positief "
+"belastingtarief, omdat de belasting al wordt toegepast wanneer de "
+"cadeaukaart wordt verzilverd."
 
 #: pretix/api/serializers/item.py:145 pretix/control/forms/item.py:436
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "Gift card products should not be admission products at the same time."
-msgstr "U kunt niet tegelijk een quotum en een specifiek product selecteren."
+msgstr "Cadeaukaartproducten kunnen niet tegelijkertijd toegangsbewijzen zijn."
 
 #: pretix/api/serializers/item.py:250
 msgid ""
@@ -180,10 +181,10 @@ msgstr ""
 "het speciale geneste endpoint."
 
 #: pretix/api/serializers/item.py:264 pretix/control/forms/item.py:70
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "Deze vraag zal bij het inchecken worden gesteld."
+msgstr ""
+"Deze vraag kan niet van een vraag die tijdens het inchecken gesteld wordt "
+"afhangen."
 
 #: pretix/api/serializers/item.py:269 pretix/control/forms/item.py:75
 msgid "Circular dependency between questions detected."
@@ -194,6 +195,8 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Een cadeaukaart met dezelfde code bestaat al in uw organisatoraccount of een "
+"met uw account verbonden organisatoraccount."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:241
 #, python-brace-format
@@ -275,10 +278,8 @@ msgid "Ticket check-in reverted"
 msgstr "Ticketcheck-in teruggedraaid"
 
 #: pretix/base/auth.py:91
-#, fuzzy
-#| msgid "pretix default"
 msgid "pretix User"
-msgstr "pretix-standaard"
+msgstr "pretix-gebruiker"
 
 #: pretix/base/auth.py:100 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:86 pretix/base/models/notifications.py:25
