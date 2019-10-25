@@ -311,9 +311,10 @@ class StripeMethod(BasePaymentProvider):
         try:
             params = {}
             if not source.startswith('src_'):
-                params['statement_descriptor'] = ugettext('{event}-{code}').format(
+                params['statement_descriptor'] = '{event}-{code} {eventname}'.format(
                     event=self.event.slug.upper(),
-                    code=payment.order.code
+                    code=payment.order.code,
+                    eventname=str(self.event.name)
                 )[:22]
             params.update(self.api_kwargs)
             params.update(self._connect_kwargs(payment))
@@ -641,9 +642,10 @@ class StripeCC(StripeMethod):
                         event=self.event.slug.upper(),
                         code=payment.order.code
                     ),
-                    statement_descriptor=ugettext('{event}-{code}').format(
+                    statement_descriptor='{event}-{code} {eventname}'.format(
                         event=self.event.slug.upper(),
-                        code=payment.order.code
+                        code=payment.order.code,
+                        eventname=str(self.event.name)
                     )[:22],
                     metadata={
                         'order': str(payment.order.id),
@@ -868,10 +870,11 @@ class StripeGiropay(StripeMethod):
                     'name': request.session.get('payment_stripe_giropay_account') or ugettext('unknown name')
                 },
                 giropay={
-                    'statement_descriptor': ugettext('{event}-{code}').format(
+                    'statement_descriptor': '{event}-{code} {eventname}'.format(
                         event=self.event.slug.upper(),
-                        code=payment.order.code
-                    )[:35]
+                        code=payment.order.code,
+                        eventname=str(self.event.name)
+                    )[:35],
                 },
                 redirect={
                     'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
@@ -926,10 +929,11 @@ class StripeIdeal(StripeMethod):
                 'code': payment.order.code
             },
             ideal={
-                'statement_descriptor': ugettext('{event}-{code}').format(
+                'statement_descriptor': '{event}-{code} {eventname}'.format(
                     event=self.event.slug.upper(),
-                    code=payment.order.code
-                )[:22]
+                    code=payment.order.code,
+                    eventname=str(self.event.name)
+                )[:22],
             },
             redirect={
                 'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
@@ -1029,10 +1033,11 @@ class StripeBancontact(StripeMethod):
                     'name': request.session.get('payment_stripe_bancontact_account') or ugettext('unknown name')
                 },
                 bancontact={
-                    'statement_descriptor': ugettext('{event}-{code}').format(
+                    'statement_descriptor': '{event}-{code} {eventname}'.format(
                         event=self.event.slug.upper(),
-                        code=payment.order.code
-                    )[:35]
+                        code=payment.order.code,
+                        eventname=str(self.event.name)
+                    )[:35],
                 },
                 redirect={
                     'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
@@ -1101,10 +1106,11 @@ class StripeSofort(StripeMethod):
             },
             sofort={
                 'country': request.session.get('payment_stripe_sofort_bank_country'),
-                'statement_descriptor': ugettext('{event}-{code}').format(
+                'statement_descriptor': '{event}-{code} {eventname}'.format(
                     event=self.event.slug.upper(),
-                    code=payment.order.code
-                )[:35]
+                    code=payment.order.code,
+                    eventname=str(self.event.name)
+                )[:35],
             },
             redirect={
                 'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
