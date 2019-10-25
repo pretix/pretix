@@ -136,6 +136,17 @@ def test_event_list(token_client, organizer, event):
 
 
 @pytest.mark.django_db
+def test_event_list_filter(token_client, organizer, event):
+    resp = token_client.get('/api/v1/organizers/{}/events/?attr[type]=Conference'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert resp.data['count'] == 1
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?attr[type]='.format(organizer.slug))
+    assert resp.status_code == 200
+    assert resp.data['count'] == 0
+
+
+@pytest.mark.django_db
 def test_event_get(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200

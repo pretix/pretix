@@ -131,16 +131,16 @@ last_modified                         datetime                   Last modificati
 
    The ``sales_channel`` attribute has been added.
 
-.. versionchanged:: 2.4:
+.. versionchanged:: 2.4
 
    ``order.status`` can no longer be ``r``, ``…/mark_canceled/`` now accepts a ``cancellation_fee`` parameter and
    ``…/mark_refunded/`` has been deprecated.
 
-.. versionchanged:: 2.5:
+.. versionchanged:: 2.5
 
    The ``testmode`` attribute has been added and ``DELETE`` has been implemented for orders.
 
-.. versionchanged:: 3.1:
+.. versionchanged:: 3.1
 
    The ``invoice_address.state`` and ``url`` attributes have been added. When creating orders through the API,
    vouchers are now supported and many fields are now optional.

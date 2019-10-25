@@ -77,6 +77,10 @@ seat_category_mapping                 object                     An object mappi
 Endpoints
 ---------
 
+.. versionchanged:: 3.3
+
+    The sub-events resource can now be filtered by meta data attributes.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/subevents/
 
    Returns a list of all sub-events of an event.
@@ -137,6 +141,11 @@ Endpoints
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
    :param organizer: The ``slug`` field of a valid organizer
    :param event: The ``slug`` field of the main event
+   :query array attr[meta_data_key]: By providing the key and value of a meta data attribute, the list of sub-events
+        will only contain the sub-events matching the set criteria. Providing ``?attr[Format]=Seminar`` would return
+        only those sub-events having set their ``Format`` meta data to ``Seminar``, ``?attr[Format]=`` only those, that
+        have no value set. Please note that this filter will respect default values set on 
+        organizer or event level.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
