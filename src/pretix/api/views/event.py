@@ -18,6 +18,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.helpers.dicts import merge_dicts
+from pretix.presale.views.organizer import filter_qs_by_attr
 
 with scopes_disabled():
     class EventFilter(FilterSet):
@@ -84,6 +85,8 @@ class EventViewSet(viewsets.ModelViewSet):
             qs = self.request.user.get_events_with_any_permission(self.request).filter(
                 organizer=self.request.organizer
             )
+
+        qs = filter_qs_by_attr(qs, self.request)
 
         return qs.prefetch_related(
             'meta_values', 'meta_values__property', 'seat_category_mappings'
