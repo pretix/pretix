@@ -150,7 +150,7 @@ Endpoints
    :query array attr[meta_data_key]: By providing the key and value of a meta data attribute, the list of events will
         only contain the events matching the set criteria. Providing ``?attr[Format]=Seminar`` would return only those
         events having set their ``Format`` meta data to ``Seminar``, ``?attr[Format]=`` only those, that have no value
-        set.
+        set. Please note that this filter will respect default values set on organizer level.
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
    :statuscode 401: Authentication failure
