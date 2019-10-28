@@ -501,7 +501,7 @@ def user_index_widgets_lazy(request):
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
                 | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
             )
-        ).order_by('date_from', 'pk'),
+        ).order_by('date_from', 'order_to', 'pk'),
         request.user,
         7
     )
@@ -543,7 +543,7 @@ def user_index(request):
                     Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
                     | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
                 )
-            ).order_by('date_from', 'pk'),
+            ).order_by('date_from', 'order_to', 'pk'),
             request.user,
             7,
             lazy=True
