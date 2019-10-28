@@ -2,6 +2,7 @@ import datetime
 import decimal
 import json
 
+from django.core import mail as djmail
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from tests.base import SoupTest, extract_form_fields
@@ -474,6 +475,121 @@ class VoucherFormTest(SoupTest):
         self._create_bulk_vouchers({
             'codes': 'ABCDE\n%s' % v.code,
             'itemvar': '%d' % self.shirt.pk,
+        }, expected_failure=True)
+
+    def test_create_bulk_send(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'foo@example.com\nfoo@example.net'
+        })
+        assert len(djmail.outbox) == 2
+        assert len([m for m in djmail.outbox if m.to == ['foo@example.com']]) == 1
+        assert len([m for m in djmail.outbox if m.to == ['foo@example.net']]) == 1
+        assert len([m for m in djmail.outbox if 'ABCDE' in m.body]) == 1
+        assert len([m for m in djmail.outbox if 'DEFGH' in m.body]) == 1
+
+    def test_create_bulk_send_csv(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'email,number\nfoo@example.com,2'
+        })
+        assert len(djmail.outbox) == 1
+        assert 'ABCDE' in djmail.outbox[0].body
+        assert 'DEFGH' in djmail.outbox[0].body
+        assert ['foo@example.com'] == djmail.outbox[0].to
+
+    def test_create_bulk_send_csv_tag(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'email,number,tag\nfoo@example.com,2,mytag'
+        })
+        assert len(djmail.outbox) == 1
+        assert 'ABCDE' in djmail.outbox[0].body
+        assert 'DEFGH' in djmail.outbox[0].body
+        assert ['foo@example.com'] == djmail.outbox[0].to
+        with scopes_disabled():
+            assert Voucher.objects.get(code="ABCDE").tag == "mytag"
+
+    def test_create_bulk_send_invalid_placeholder(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {order}',
+            'send_recipients': 'foo@example.com\nfoo@example.net'
+        }, expected_failure=True)
+
+    def test_create_bulk_send_empty_subject(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': '',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'foo@example.com\nfoo@example.net'
+        }, expected_failure=True)
+
+    def test_create_bulk_send_invalid_mail_list(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'foooo\nfoo@example.org'
+        }, expected_failure=True)
+
+    def test_create_bulk_send_invalid_mail_count(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'foooo@example.org'
+        }, expected_failure=True)
+
+    def test_create_bulk_send_missing_csv_header(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'foooo@example.org,bar,baz'
+        }, expected_failure=True)
+
+    def test_create_bulk_send_missing_csv_header_email(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'mail,number,tag\nfoooo@example.org,2,baz'
+        }, expected_failure=True)
+
+    def test_create_bulk_send_missing_csv_unknown_header(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'email,number,flop\nfoooo@example.org,2,baz'
         }, expected_failure=True)
 
     def test_delete_voucher(self):
