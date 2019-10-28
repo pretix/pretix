@@ -21,6 +21,7 @@ from django.views.generic import (
 
 from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher
 from pretix.base.models.vouchers import _generate_random_code
+from pretix.base.services.vouchers import vouchers_send
 from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -314,12 +315,26 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
         form.save(self.request.event)
         # We need to query them again as form.save() uses bulk_create which does not fill in .pk values on databases
         # other than PostgreSQL
+        voucherids = []
         for v in self.request.event.vouchers.filter(code__in=form.cleaned_data['codes']):
             log_entries.append(
                 v.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user, save=False)
             )
+            voucherids.append(v.pk)
         LogEntry.objects.bulk_create(log_entries)
-        messages.success(self.request, _('The new vouchers have been created.'))
+
+        if form.cleaned_data['send']:
+            vouchers_send.apply_async(kwargs={
+                'event': self.request.event.pk,
+                'vouchers': voucherids,
+                'subject': form.cleaned_data['send_subject'],
+                'message': form.cleaned_data['send_message'],
+                'recipients': [r._asdict() for r in form.cleaned_data['send_recipients']],
+                'user': self.request.user.pk,
+            })
+            messages.success(self.request, _('The new vouchers have been created and will be sent out shortly.'))
+        else:
+            messages.success(self.request, _('The new vouchers have been created.'))
         return HttpResponseRedirect(self.get_success_url())
 
     def get_form_class(self):

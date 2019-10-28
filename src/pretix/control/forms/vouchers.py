@@ -213,7 +213,7 @@ class VoucherBulkForm(VoucherForm):
         initial=_('Hello,\n\n'
                   'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
                   'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,\n\n'
-                  'your {event} team')
+                  'Your {event} team')
     )
     send_recipients = forms.CharField(
         label=_('Recipients'),

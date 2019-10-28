@@ -244,6 +244,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
         'pretix.organizer.deleted': _('The organizer "{name}" has been deleted.'),
         'pretix.voucher.added': _('The voucher has been created.'),
+        'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
         'pretix.voucher.added.waitinglist': _('The voucher has been created and sent to a person on the waiting list.'),
         'pretix.voucher.changed': _('The voucher has been changed.'),
         'pretix.voucher.deleted': _('The voucher has been deleted.'),
