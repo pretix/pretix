@@ -501,7 +501,7 @@ def user_index_widgets_lazy(request):
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
                 | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
             )
-        ).order_by('date_from'),
+        ).order_by('date_from', 'pk'),
         request.user,
         7
     )
@@ -513,7 +513,7 @@ def user_index_widgets_lazy(request):
                 Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
                 | Q(Q(date_to__isnull=False) & Q(date_to__lt=now()))
             )
-        ).order_by('-order_to'),
+        ).order_by('-order_to', 'pk'),
         request.user,
         8
     )
@@ -521,7 +521,7 @@ def user_index_widgets_lazy(request):
         request,
         annotated_event_query(request).filter(
             has_subevents=True
-        ).order_by('-order_to'),
+        ).order_by('-order_to', 'pk'),
         request.user,
         8
     )
@@ -543,7 +543,7 @@ def user_index(request):
                     Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
                     | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
                 )
-            ).order_by('date_from'),
+            ).order_by('date_from', 'pk'),
             request.user,
             7,
             lazy=True
@@ -556,7 +556,7 @@ def user_index(request):
                     Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
                     | Q(Q(date_to__isnull=False) & Q(date_to__lt=now()))
                 )
-            ).order_by('-order_to'),
+            ).order_by('-order_to', 'pk'),
             request.user,
             8,
             lazy=True
@@ -565,7 +565,7 @@ def user_index(request):
             request,
             annotated_event_query(request, lazy=True).filter(
                 has_subevents=True
-            ).order_by('-order_to'),
+            ).order_by('-order_to', 'pk'),
             request.user,
             8,
             lazy=True
