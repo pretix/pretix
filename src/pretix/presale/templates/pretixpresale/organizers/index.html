@@ -73,7 +73,7 @@
                             <span class="label label-default">{% trans "Event series" %}</span>
                         {% elif e.presale_is_running and request.organizer.settings.event_list_availability %}
                             {% if e.best_availability_state == 100 %}
-                                <span class="label label-success">{% trans "Tickets on sale" %}</span>
+                                <span class="label label-success">{% trans "Book now" %}</span>
                             {% elif e.settings.waiting_list_enabled and e.best_availability_state >= 0 %}
                                 <span class="label label-warning">{% trans "Waiting list" %}</span>
                             {% elif e.best_availability_state == 20 %}
@@ -82,7 +82,7 @@
                                 <span class="label label-danger">{% trans "Sold out" %}</span>
                             {% endif %}
                         {% elif e.presale_is_running %}
-                            <span class="label label-success">{% trans "Tickets on sale" %}</span>
+                            <span class="label label-success">{% trans "Book now" %}</span>
                         {% elif e.presale_has_ended %}
                             <span class="label label-danger">{% trans "Sale over" %}</span>
                             {% elif e.settings.presale_start_show_date %}

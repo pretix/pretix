@@ -281,7 +281,7 @@ class WidgetAPIProductList(EventListMixin, View):
         if ev.presale_is_running and event.settings.event_list_availability and ev.best_availability_state is not None:
             if ev.best_availability_state == Quota.AVAILABILITY_OK:
                 availability['color'] = 'green'
-                availability['text'] = ugettext('Tickets on sale')
+                availability['text'] = ugettext('Book now')
             elif event.settings.waiting_list_enabled and ev.best_availability_state >= 0:
                 availability['color'] = 'orange'
                 availability['text'] = ugettext('Waiting list')
@@ -293,7 +293,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 availability['text'] = ugettext('Sold out')
         elif ev.presale_is_running:
             availability['color'] = 'green'
-            availability['text'] = ugettext('Tickets on sale')
+            availability['text'] = ugettext('Book now')
         elif ev.presale_has_ended:
             availability['color'] = 'red'
             availability['text'] = ugettext('Sale over')
@@ -302,7 +302,7 @@ class WidgetAPIProductList(EventListMixin, View):
             availability['text'] = ugettext('from %(start_date)s') % {'start_date': date_format(ev.presale_start, "SHORT_DATE_FORMAT")}
         else:
             availability['color'] = 'orange'
-            availability['text'] = ugettext('Sale Soon')
+            availability['text'] = ugettext('Sale soon')
         return availability
 
     def _serialize_events(self, ebd):
