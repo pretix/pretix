@@ -493,3 +493,9 @@ table td > .checkbox input[type="checkbox"] {
 .help-inline {
   color: lighten($text-color, 25%); // lighten the text some for contrast
 }
+
+.panel .filter-form {
+  .form-group {
+    margin-bottom: 10px;
+  }
+}

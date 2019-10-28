@@ -78,6 +78,9 @@ class EventList(PaginationMixin, ListView):
             pk__in=self.request.user.teams.values_list('organizer', flat=True)
         ).count()
         ctx['hide_orga'] = orga_c <= 1
+        ctx['meta_fields'] = [
+            self.filter_form[k] for k in self.filter_form.fields if k.startswith('meta_')
+        ]
 
         for s in ctx['events']:
             s.first_quotas = s.first_quotas[:4]
