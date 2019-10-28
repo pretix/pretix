@@ -3,7 +3,7 @@ from collections import OrderedDict, namedtuple
 
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.models import Event, LogEntry
 from pretix.base.signals import register_notification_types
@@ -175,12 +175,23 @@ class ParametrizedOrderNotificationType(NotificationType):
             url=order_url
         )
         n.add_attribute(_('Event'), order.event.name)
+        if order.event.has_subevents:
+            ses = []
+            for se in self.event.subevents.filter(id__in=order.positions.values_list('subevent', flat=True)):
+                ses.append('{} ({})'.format(se.name, se.get_date_range_display()))
+            n.add_attribute(pgettext_lazy('subevent', 'Dates'), '\n'.join(ses))
+        else:
+            n.add_attribute(_('Event date'), order.event.get_date_range_display())
         n.add_attribute(_('Order code'), order.code)
         n.add_attribute(_('Order total'), money_filter(order.total, logentry.event.currency))
         n.add_attribute(_('Pending amount'), money_filter(order.pending_sum, logentry.event.currency))
         n.add_attribute(_('Order date'), date_format(order.datetime, 'SHORT_DATETIME_FORMAT'))
         n.add_attribute(_('Order status'), order.get_status_display())
         n.add_attribute(_('Order positions'), str(order.positions.count()))
+        items = []
+        for it in self.event.items.filter(id__in=order.positions.values_list('item', flat=True)):
+            items.append(str(it.name))
+        n.add_attribute(_('Purchased products'), '\n'.join(items))
         n.add_action(_('View order details'), order_url)
         return n
 
