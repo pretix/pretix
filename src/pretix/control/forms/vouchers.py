@@ -198,7 +198,8 @@ class VoucherBulkForm(VoucherForm):
         required=True
     )
     send = forms.BooleanField(
-        label=_("Send vouchers via email")
+        label=_("Send vouchers via email"),
+        required=False
     )
     send_subject = forms.CharField(
         label=_("Subject"),
@@ -273,6 +274,8 @@ class VoucherBulkForm(VoucherForm):
 
     def clean_send_recipients(self):
         raw = self.cleaned_data['send_recipients']
+        if not raw:
+            return []
         r = raw.split('\n')
         res = []
         if ',' in raw or ';' in raw:
@@ -287,6 +290,10 @@ class VoucherBulkForm(VoucherForm):
                 raise ValidationError(_('CSV input contains an unknown field with the header "{header}".').format(header=unknown_fields[0]))
             for i, row in enumerate(reader):
                 try:
+                    EmailValidator()(row['email'])
+                except ValidationError as err:
+                    raise ValidationError(_('{value} is not a valid email address.').format(value=row['email'])) from err
+                try:
                     res.append(self.Recipient(
                         name=row.get('name', ''),
                         email=row['email'],
@@ -300,7 +307,7 @@ class VoucherBulkForm(VoucherForm):
                 try:
                     EmailValidator()(e.strip())
                 except ValidationError as err:
-                    raise ValidationError(_('{e} is not a valid email address.').format(e.strip())) from err
+                    raise ValidationError(_('{value} is not a valid email address.').format(value=e.strip())) from err
                 else:
                     res.append(self.Recipient(email=e, number=1, tag=None, name=''))
         return res
