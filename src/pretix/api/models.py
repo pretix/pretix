@@ -43,6 +43,7 @@ class OAuthGrant(AbstractGrant):
         OAuthApplication, on_delete=models.CASCADE
     )
     organizers = models.ManyToManyField('pretixbase.Organizer')
+    redirect_uri = models.CharField(max_length=2500)  # Only 255 in AbstractGrant, which caused problems
 
 
 class OAuthAccessToken(AbstractAccessToken):
