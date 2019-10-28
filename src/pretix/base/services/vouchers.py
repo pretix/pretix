@@ -39,6 +39,8 @@ def vouchers_send(event: Event, vouchers: list, subject: str, message: str, reci
                     user=user,
                     data={
                         'recipient': r['email'],
-                        'name': r.get('name')
+                        'name': r.get('name'),
+                        'subject': subject,
+                        'message': message,
                     }
                 )
