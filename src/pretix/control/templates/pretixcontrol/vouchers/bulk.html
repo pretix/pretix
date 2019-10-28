@@ -74,6 +74,13 @@
             {% bootstrap_field form.comment layout="control" %}
             {% bootstrap_field form.show_hidden_items layout="control" %}
         </fieldset>
+        <fieldset>
+            <legend>{% trans "Send out emails" %}</legend>
+            {% bootstrap_field form.send layout="control" %}
+            {% bootstrap_field form.send_subject layout="horizontal" %}
+            {% bootstrap_field form.send_message layout="horizontal" %}
+            {% bootstrap_field form.send_recipients layout="horizontal" %}
+        </fieldset>
         {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

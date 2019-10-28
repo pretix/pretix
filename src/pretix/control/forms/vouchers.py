@@ -1,11 +1,17 @@
+import csv
+from collections import namedtuple
+from io import StringIO
+
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.validators import EmailValidator
 from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
 
-from pretix.base.forms import I18nModelForm
+from pretix.base.email import get_available_placeholders
+from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.models import Item, Voucher
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
@@ -191,6 +197,53 @@ class VoucherBulkForm(VoucherForm):
         ),
         required=True
     )
+    send = forms.BooleanField(
+        label=_("Send vouchers via email")
+    )
+    send_subject = forms.CharField(
+        label=_("Subject"),
+        widget=forms.TextInput(attrs={'data-display-dependency': '#id_send'}),
+        required=False,
+        initial=_('Your voucher for {event}')
+    )
+    send_message = forms.CharField(
+        label=_("Message"),
+        widget=forms.Textarea(attrs={'data-display-dependency': '#id_send'}),
+        required=False,
+        initial=_('Hello,\n\n'
+                  'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
+                  'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,\n\n'
+                  'your {event} team')
+    )
+    send_recipients = forms.CharField(
+        label=_('Recipients'),
+        widget=forms.Textarea(attrs={
+            'data-display-dependency': '#id_send',
+            'placeholder': 'email,number,name,tag\njohn@example.org,3,John,example\n\n-- {} --\n\njohn@example.org\njane@example.net'.format(
+                _('or')
+            )
+        }),
+        required=False,
+        help_text=_('You can either supply a list of email addresses with one email address per line, or a CSV file with a title column '
+                    'and one or more of the columns "email", "number", "name", or "tag".')
+    )
+    Recipient = namedtuple('Recipient', 'email number name tag')
+
+    def _set_field_placeholders(self, fn, base_parameters):
+        phs = [
+            '{%s}' % p
+            for p in sorted(get_available_placeholders(self.instance.event, base_parameters).keys())
+        ]
+        ht = _('Available placeholders: {list}').format(
+            list=', '.join(phs)
+        )
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(phs)
+        )
 
     class Meta:
         model = Voucher
@@ -213,6 +266,45 @@ class VoucherBulkForm(VoucherForm):
             'max_usages': _('Number of times times EACH of these vouchers can be redeemed.')
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._set_field_placeholders('send_subject', ['event', 'name'])
+        self._set_field_placeholders('send_message', ['event', 'voucher_list', 'name'])
+
+    def clean_send_recipients(self):
+        raw = self.cleaned_data['send_recipients']
+        r = raw.split('\n')
+        res = []
+        if ',' in raw or ';' in raw:
+            if '@' in r[0]:
+                raise ValidationError(_('CSV input needs to contain a header row in the first line.'))
+            dialect = csv.Sniffer().sniff(raw[:1024])
+            reader = csv.DictReader(StringIO(raw), dialect=dialect)
+            if 'email' not in reader.fieldnames:
+                raise ValidationError(_('CSV input needs to contain a field with the header "{header}".').format(header="email"))
+            unknown_fields = [f for f in reader.fieldnames if f not in ('email', 'name', 'tag', 'number')]
+            if unknown_fields:
+                raise ValidationError(_('CSV input contains an unknown field with the header "{header}".').format(header=unknown_fields[0]))
+            for i, row in enumerate(reader):
+                try:
+                    res.append(self.Recipient(
+                        name=row.get('name', ''),
+                        email=row['email'],
+                        number=int(row.get('number', 1)),
+                        tag=row.get('tag', None)
+                    ))
+                except ValueError as err:
+                    raise ValidationError(_('Invalid value in row {number}.').format(number=i + 1)) from err
+        else:
+            for e in r:
+                try:
+                    EmailValidator()(e.strip())
+                except ValidationError as err:
+                    raise ValidationError(_('{e} is not a valid email address.').format(e.strip())) from err
+                else:
+                    res.append(self.Recipient(email=e, number=1, tag=None, name=''))
+        return res
+
     def clean(self):
         data = super().clean()
 
@@ -221,6 +313,16 @@ class VoucherBulkForm(VoucherForm):
         ).filter(code_lower__in=[c.lower() for c in data['codes']])
         if vouchers.exists():
             raise ValidationError(_('A voucher with one of these codes already exists.'))
+
+        if data.get('send') and not all([data.get('send_subject'), data.get('send_message'), data.get('send_recipients')]):
+            raise ValidationError(_('If vouchers should be sent by email, subject, message and recipients need to be specified.'))
+
+        if data.get('codes') and data.get('send'):
+            recp = self.cleaned_data.get('send_recipients', [])
+            code_len = len(data.get('codes'))
+            recp_len = sum(r.number for r in recp)
+            if code_len != recp_len:
+                raise ValidationError(_('You generated {codes} vouchers, but entered recipients for {recp} vouchers.').format(codes=code_len, recp=recp_len))
 
         return data
 
