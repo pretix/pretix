@@ -373,6 +373,38 @@ var form_handlers = function (el) {
         language: $("body").attr("data-select2-locale"),
     });
 
+    el.find('input[data-typeahead-url]').each(function () {
+        var $inp = $(this);
+        $inp.typeahead(null, {
+            minLength: 1,
+            highlight: true,
+            source: new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: $inp.attr("data-typeahead-url"),
+                    prepare: function (query, settings) {
+                        var sep = (settings.url.indexOf('?') > 0) ? '&' : '?';
+                        settings.url = settings.url + sep + 'q=' + encodeURIComponent(query);
+                        return settings;
+                    },
+                    transform: function (object) {
+                        var results = object.results;
+                        var suggs = [];
+                        var reslen = results.length;
+                        for (var i = 0; i < reslen; i++) {
+                            suggs.push(results[i]);
+                        }
+                        return suggs;
+                    }
+                }
+            }),
+            display: function (obj) {
+                return obj.name;
+            },
+        });
+    });
+
     el.find('[data-model-select2=generic]').each(function () {
         var $s = $(this);
         $s.select2({

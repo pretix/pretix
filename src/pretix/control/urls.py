@@ -108,6 +108,7 @@ urlpatterns = [
     url(r'^events/$', main.EventList.as_view(), name='events'),
     url(r'^events/add$', main.EventWizard.as_view(), name='events.add'),
     url(r'^events/typeahead/$', typeahead.event_list, name='events.typeahead'),
+    url(r'^events/typeahead/meta/$', typeahead.meta_values, name='events.meta.typeahead'),
     url(r'^search/orders/$', search.OrderSearch.as_view(), name='search.orders'),
     url(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         url(r'^$', dashboards.event_index, name='event.index'),

@@ -1,4 +1,5 @@
 from datetime import datetime, time
+from urllib.parse import urlencode
 
 from django import forms
 from django.apps import apps
@@ -583,7 +584,16 @@ class EventFilterForm(FilterForm):
                 continue
             seen.add(p.name)
             self.fields['meta_{}'.format(p.name)] = forms.CharField(
-                label=p.name, required=False
+                label=p.name,
+                required=False,
+                widget=forms.TextInput(
+                    attrs={
+                        'data-typeahead-url': reverse('control:events.meta.typeahead') + '?' + urlencode({
+                            'property': p.name,
+                            'organizer': self.organizer.slug if self.organizer else ''
+                        })
+                    }
+                )
             )
         if self.organizer:
             del self.fields['organizer']

@@ -6,12 +6,16 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Max, Min, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.formats import get_format
 from django.utils.timezone import make_aware
 from django.utils.translation import pgettext, ugettext as _
 
-from pretix.base.models import Order, Organizer, SubEvent, User, Voucher
+from pretix.base.models import (
+    EventMetaProperty, EventMetaValue, Order, Organizer, SubEvent, User,
+    Voucher,
+)
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import event_permission_required
 from pretix.helpers.daterange import daterange
@@ -547,3 +551,52 @@ def users_select2(request):
     }
 
     return JsonResponse(doc)
+
+
+def meta_values(request):
+    q = request.GET.get('q')
+    propname = request.GET.get('property')
+    organizer = request.GET.get('organizer')
+
+    matches = EventMetaValue.objects.filter(
+        value__icontains=q,
+        property__name=propname
+    )
+    defaults = EventMetaProperty.objects.filter(
+        name=propname,
+        default__icontains=q
+    )
+
+    if organizer:
+        organizer = get_object_or_404(Organizer, slug=organizer)
+        if not request.user.has_organizer_permission(organizer, request=request):
+            raise PermissionDenied()
+
+        defaults = defaults.filter(organizer_id=organizer.pk)
+        matches = matches.filter(event__organizer_id=organizer.pk)
+        all_access = (
+            (request and request.user.has_active_staff_session(request.session.session_key))
+            or request.user.teams.filter(all_events=True, organizer=organizer).exists()
+        )
+        if not all_access:
+            matches = matches.filter(event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
+
+    else:
+        # We ignore superuser permissions here. This is intentional – we do not want to show super
+        # users a form with all meta properties ever assigned.
+        defaults = defaults.filter(
+            organizer_id__in=request.user.teams.values_list('organizer', flat=True),
+        )
+
+        if not (request and request.user.has_active_staff_session(request.session.session_key)):
+            matches = matches.filter(
+                Q(event__organizer_id__in=request.user.teams.filter(all_events=True).values_list('organizer', flat=True))
+                | Q(event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
+            )
+
+    return JsonResponse({
+        'results': [
+            {'name': v, 'id': v}
+            for v in sorted(set(defaults.values_list('default', flat=True)[:10]) | set(matches.values_list('value', flat=True)[:10]))
+        ]
+    })
