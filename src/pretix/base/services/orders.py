@@ -32,7 +32,7 @@ from pretix.base.models.orders import (
     generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
-from pretix.base.models.tax import TaxedPrice
+from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services import tickets
@@ -979,6 +979,8 @@ class OrderChangeManager:
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
+    FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value'))
+    CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee',))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
@@ -1070,8 +1072,19 @@ class OrderChangeManager:
                     self._totaldiff += price.gross - pos.price
                     self._operations.append(self.PriceOperation(pos, price))
 
+    def cancel_fee(self, fee: OrderFee):
+        self._totaldiff -= fee.value
+        self._operations.append(self.CancelFeeOperation(fee))
+        self._invoice_dirty = True
+
+    def change_fee(self, fee: OrderFee, value: Decimal):
+        value = (self.order.event.settings.tax_rate_default or TaxRule.zero()).tax(value, base_price_is='gross')
+        self._totaldiff += value.gross - fee.value
+        self._invoice_dirty = True
+        self._operations.append(self.FeeValueOperation(fee, value))
+
     def cancel(self, position: OrderPosition):
-        self._totaldiff += -position.price
+        self._totaldiff -= position.price
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
         if position.seat:
@@ -1256,6 +1269,15 @@ class OrderChangeManager:
                 })
                 op.position.subevent = op.subevent
                 op.position.save()
+            elif isinstance(op, self.FeeValueOperation):
+                self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
+                    'fee': op.fee.pk,
+                    'old_price': op.fee.value,
+                    'new_price': op.value.gross
+                })
+                op.fee.value = op.value.gross
+                op.fee._calculate_tax()
+                op.fee.save()
             elif isinstance(op, self.PriceOperation):
                 self.order.log_action('pretix.event.order.changed.price', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -1267,6 +1289,14 @@ class OrderChangeManager:
                 op.position.price = op.price.gross
                 op.position._calculate_tax()
                 op.position.save()
+            elif isinstance(op, self.CancelFeeOperation):
+                self.order.log_action('pretix.event.order.changed.cancelfee', user=self.user, auth=self.auth, data={
+                    'fee': op.fee.pk,
+                    'fee_type': op.fee.fee_type,
+                    'old_price': op.fee.value,
+                })
+                op.fee.canceled = True
+                op.fee.save(update_fields=['canceled'])
             elif isinstance(op, self.CancelOperation):
                 for gc in op.position.issued_gift_cards.all():
                     gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
@@ -1489,9 +1519,10 @@ class OrderChangeManager:
             generate_invoice(self.order)
 
     def _check_complete_cancel(self):
+        current = self.order.positions.count()
         cancels = len([o for o in self._operations if isinstance(o, (self.CancelOperation, self.SplitOperation))])
         adds = len([o for o in self._operations if isinstance(o, self.AddOperation)])
-        if self.order.positions.count() - cancels + adds < 1:
+        if current > 0 and current - cancels + adds < 1:
             raise OrderError(self.error_messages['complete_cancel'])
 
     @property

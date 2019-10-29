@@ -250,11 +250,67 @@
                 {% endescapescript %}
             </script>
             <p>
-                <button type="button" class="btn btn-default" data-formset-add>
+                <button type="button" class="btn btn-primary" data-formset-add>
                     <i class="fa fa-plus"></i> {% trans "Add product" %}</button>
             </p>
         </div>
 
+        {% for fee in fees %}
+            <div class="panel panel-default items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <strong>{{ fee.get_fee_type_display }}</strong>
+                        {% if fee.description %}
+                            – {{ fee.description }}
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-order-change">
+                        {% bootstrap_form_errors fee.form %}
+                        {% if fee.custom_error %}
+                            <div class="alert alert-danger">
+                                {{ fee.custom_error }}
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-sm-5 col-sm-offset-3">
+                                <strong>{% trans "Current value" %}</strong>
+                            </div>
+                            <div class="col-sm-4">
+                                <strong>{% trans "Change to" %}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <strong>{% trans "Price" %}</strong>
+                            </div>
+                            <div class="col-sm-5">
+                                {{ fee.value|money:request.event.currency }}
+                                {% if fee.tax_rate %}
+                                    <br>
+                                    <small>
+                                        ({{ fee.net_value|money:request.event.currency }}
+                                        + {{ fee.tax_rate }}%)
+                                    </small>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-4 field-container">
+                                {% bootstrap_field fee.form.value addon_after=request.event.currency layout='inline' %}
+                                <small><strong>{% trans "including all taxes" %}</strong></small>
+                            </div>
+                        </div>
+
+                        {% bootstrap_field fee.form.operation_cancel layout='inline' %}
+                        {% if fee.fee_type == "payment" %}
+                            <em class="text-danger">
+                                {% trans "Manually modifying payment fees is discouraged since they might automatically be reset on changes of the order total or when choosing a different payment method." %}
+                            </em>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
         <div class="panel panel-default items">
             <div class="panel-heading">
                 <h3 class="panel-title">
