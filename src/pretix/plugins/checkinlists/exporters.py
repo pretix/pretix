@@ -3,8 +3,8 @@ from collections import OrderedDict
 import dateutil.parser
 from django import forms
 from django.conf import settings
-from django.db.models import Exists, Max, OuterRef, Subquery
-from django.db.models.functions import Coalesce
+from django.db.models import Case, Exists, Max, OuterRef, Subquery, Value, When
+from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
@@ -112,14 +112,24 @@ class CheckInListMixin(BaseExporter):
             qs = qs.filter(subevent=cl.subevent)
 
         if form_data['sort'] == 'name':
-            qs = qs.order_by(Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached', 'order__invoice_address__name_cached'),
-                             'order__code')
+            qs = qs.order_by(
+                Coalesce(
+                    NullIf('attendee_name_cached', Value('')),
+                    NullIf('addon_to__attendee_name_cached', Value('')),
+                    NullIf('order__invoice_address__name_cached', Value('')),
+                    'order__code'
+                )
+            )
         elif form_data['sort'] == 'code':
             qs = qs.order_by('order__code')
         elif form_data['sort'].startswith('name:'):
             part = form_data['sort'][5:]
             qs = qs.annotate(
-                resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts', 'order__invoice_address__name_parts')
+                resolved_name=Case(
+                    When(attendee_name_cached__ne='', then='attendee_name_parts'),
+                    When(addon_to__attendee_name_cached__isnull=False, addon_to__attendee_name_cached__ne='', then='addon_to__attendee_name_parts'),
+                    default='order__invoice_address__name_parts',
+                )
             ).annotate(
                 resolved_name_part=JSONExtract('resolved_name', part)
             ).order_by(

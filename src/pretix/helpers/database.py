@@ -1,7 +1,7 @@
 import contextlib
 
 from django.db import transaction
-from django.db.models import Aggregate
+from django.db.models import Aggregate, Field, Lookup
 from django.db.models.expressions import OrderBy
 
 
@@ -94,3 +94,14 @@ class ReplicaRouter:
 
     def allow_migrate(self, db, app_label, model_name=None, **hintrs):
         return True
+
+
+@Field.register_lookup
+class NotEqual(Lookup):
+    lookup_name = 'ne'
+
+    def as_sql(self, compiler, connection):
+        lhs, lhs_params = self.process_lhs(compiler, connection)
+        rhs, rhs_params = self.process_rhs(compiler, connection)
+        params = lhs_params + rhs_params
+        return '%s <> %s' % (lhs, rhs), params
