@@ -304,7 +304,7 @@
                         {% bootstrap_field fee.form.operation_cancel layout='inline' %}
                         {% if fee.fee_type == "payment" %}
                             <em class="text-danger">
-                                {% trans "Manually modifying payment fees is discouraged since they might automatically be reset on changes of the order total or when choosing a different payment method." %}
+                                {% trans "Manually modifying payment fees is discouraged since they might automatically be on subsequent order changes or when choosing a different payment method." %}
                             </em>
                         {% endif %}
                     </div>

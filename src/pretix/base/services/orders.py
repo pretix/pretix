@@ -1479,10 +1479,19 @@ class OrderChangeManager:
             fee = None
             if self.open_payment.fee:
                 fee = self.open_payment.fee
-                current_fee = self.open_payment.fee.value
+                if any(isinstance(op, (self.FeeValueOperation, self.CancelFeeOperation)) for op in self._operations):
+                    fee.refresh_from_db()
+                if not self.open_payment.fee.canceled:
+                    current_fee = self.open_payment.fee.value
             total -= current_fee
 
-            if self.order.pending_sum - current_fee != 0:
+            if fee and any([isinstance(op, self.FeeValueOperation) and op.fee == fee for op in self._operations]):
+                # Do not automatically modify a fee that is being manually modified right now
+                payment_fee = fee.value
+            elif fee and any([isinstance(op, self.CancelFeeOperation) and op.fee == fee for op in self._operations]):
+                # Do not automatically modify a fee that is being manually removed right now
+                payment_fee = Decimal('0.00')
+            elif self.order.pending_sum - current_fee != 0:
                 prov = self.open_payment.payment_provider
                 if prov:
                     payment_fee = prov.calculate_fee(total - self.completed_payment_sum)
@@ -1495,7 +1504,7 @@ class OrderChangeManager:
                 if not self.open_payment.fee:
                     self.open_payment.fee = fee
                     self.open_payment.save(update_fields=['fee'])
-            elif fee:
+            elif fee and not fee.canceled:
                 fee.delete()
 
         self.order.total = total + payment_fee
