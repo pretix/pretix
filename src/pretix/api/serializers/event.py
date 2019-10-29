@@ -239,6 +239,7 @@ class CloneEventSerializer(EventSerializer):
         plugins = validated_data.pop('plugins', None)
         is_public = validated_data.pop('is_public', None)
         testmode = validated_data.pop('testmode', None)
+        has_subevents = validated_data.pop('has_subevents', None)
         new_event = super().create(validated_data)
 
         event = Event.objects.filter(slug=self.context['event'], organizer=self.context['organizer'].pk).first()
@@ -250,6 +251,8 @@ class CloneEventSerializer(EventSerializer):
             new_event.is_public = is_public
         if testmode is not None:
             new_event.testmode = testmode
+        if has_subevents is not None:
+            new_event.has_subevents = has_subevents
         new_event.save()
 
         return new_event
