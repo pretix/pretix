@@ -536,10 +536,12 @@ class Paypal(BasePaymentProvider):
     def render_invoice_text(self, order: Order, payment: OrderPayment) -> str:
         if order.status == Order.STATUS_PAID:
             if payment.info_data.get('id', None):
-                return '{}\r\n{}: {}'.format(
+                return '{}\r\n{}: {}\r\n{}: {}'.format(
                     _('The payment for this invoice has already been received.'),
                     _('PayPal payment ID'),
-                    payment.info_data['id']
+                    payment.info_data['id'],
+                    _('PayPal sale ID'),
+                    payment.info_data['transactions'][0]['related_resources'][0]['sale']['id']
                 )
             else:
                 return super().render_invoice_text(order, payment)
