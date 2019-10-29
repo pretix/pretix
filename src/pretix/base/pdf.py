@@ -288,7 +288,7 @@ def variables_from_questions(sender, *args, **kwargs):
         if not a:
             return ""
         else:
-            return str(a).replace("\n", "<br/>\n")
+            return escape(str(a)).replace("\n", "<br/>\n")
 
     d = {}
     for q in sender.questions.all():
