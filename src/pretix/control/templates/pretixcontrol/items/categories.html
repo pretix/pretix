@@ -37,7 +37,7 @@
                 {% for c in categories %}
                     <tr>
                         <td>
-                            <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.name }}</a></strong>
+                            <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.internal_name|default:c.name }}</a></strong>
                         </td>
                         <td>
                             <a href="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 and is_paginated and not page_obj.has_previous %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
