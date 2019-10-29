@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-29 08:41+0000\n"
-"PO-Revision-Date: 2019-10-21 12:42+0000\n"
+"PO-Revision-Date: 2019-10-29 10:50+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -3355,10 +3355,8 @@ msgid "Order status"
 msgstr "Bestellstatus"
 
 #: pretix/base/notifications.py:194
-#, fuzzy
-#| msgid "Change products"
 msgid "Purchased products"
-msgstr "Produkte bearbeiten"
+msgstr "Bestellte Produkte"
 
 #: pretix/base/notifications.py:195
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:40
@@ -18032,7 +18030,7 @@ msgstr "Los!"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 #: pretix/presale/views/widget.py:284 pretix/presale/views/widget.py:296
 msgid "Book now"
-msgstr ""
+msgstr "Jetzt buchen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:35
 #: pretix/presale/templates/pretixpresale/organizers/index.html:90
@@ -18749,8 +18747,6 @@ msgid "from %(start_date)s"
 msgstr "von %(start_date)s"
 
 #: pretix/presale/views/widget.py:305
-#, fuzzy
-#| msgid "Sale Soon"
 msgid "Sale soon"
 msgstr "Verkauf demnächst"
 
