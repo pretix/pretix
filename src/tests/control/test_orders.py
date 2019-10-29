@@ -1306,7 +1306,7 @@ class OrderChangeTests(SoupTest):
             'op-{}-price'.format(self.op1.pk): '24.00',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'of-{}-value'.format(self.op1.pk): '3.50',
+            'of-{}-value'.format(fee.pk): '3.50',
         })
         self.op1.refresh_from_db()
         self.order.refresh_from_db()
@@ -1335,8 +1335,8 @@ class OrderChangeTests(SoupTest):
             'op-{}-price'.format(self.op1.pk): '24.00',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'of-{}-value'.format(self.op1.pk): '5.00',
-            'of-{}-operation_cancel'.format(self.op1.pk): 'on',
+            'of-{}-value'.format(fee.pk): '5.00',
+            'of-{}-operation_cancel'.format(fee.pk): 'on',
         })
         self.order.refresh_from_db()
         fee.refresh_from_db()
