@@ -378,6 +378,23 @@ def base_placeholders(sender, **kwargs):
             '68CYU2H6ZTP3WLK5'
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'voucher_list', ['voucher_list'], lambda voucher_list: '\n'.join(voucher_list),
+            '    68CYU2H6ZTP3WLK5\n    7MB94KKPVEPSMVF2'
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'url', ['event', 'voucher_list'], lambda event, voucher_list: build_absolute_uri(event, 'presale:event.index', kwargs={
+                'event': event.slug,
+                'organizer': event.organizer.slug,
+            }), lambda event: build_absolute_uri(event, 'presale:event.index', kwargs={
+                'event': event.slug,
+                'organizer': event.organizer.slug,
+            })
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'name', ['name'], lambda name: name,
+            _('John Doe')
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'comment', ['comment'], lambda comment: comment,
             _('An individual text with a reason can be inserted here.'),
         ),

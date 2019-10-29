@@ -273,13 +273,13 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
-    el.find("div[data-display-dependency], input[data-display-dependency]").each(function () {
+    el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
                 var $toggling = dependent;
-                if (dependent.get(0).tagName.toLowerCase() === "input") {
+                if (dependent.get(0).tagName.toLowerCase() !== "div") {
                     $toggling = dependent.closest('.form-group');
                 }
                 if (ev) {
