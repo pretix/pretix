@@ -12,11 +12,12 @@ from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as __, ugettext_lazy as _
+from i18nfield.strings import LazyI18nString
 from paypalrestsdk.exceptions import BadRequest
 from paypalrestsdk.openid_connect import Tokeninfo
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
+from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
@@ -531,3 +532,16 @@ class Paypal(BasePaymentProvider):
             le.data = json.dumps(d)
             le.shredded = True
             le.save(update_fields=['data', 'shredded'])
+
+    def render_invoice_text(self, order: Order, payment: OrderPayment) -> str:
+        if order.status == Order.STATUS_PAID:
+            if payment.info_data.get('id', None):
+                return '{}\r\n{}: {}'.format(
+                    _('The payment for this invoice has already been received.'),
+                    _('PayPal payment ID'),
+                    payment.info_data['id']
+                )
+            else:
+                return super().render_invoice_text(order, payment)
+
+        return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
