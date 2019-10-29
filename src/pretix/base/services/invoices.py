@@ -20,9 +20,7 @@ from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
-from pretix.base.models import (
-    Invoice, InvoiceAddress, InvoiceLine, Order, OrderPayment,
-)
+from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
@@ -37,9 +35,6 @@ logger = logging.getLogger(__name__)
 @transaction.atomic
 def build_invoice(invoice: Invoice) -> Invoice:
     lp = invoice.order.payments.last()
-    open_payment = None
-    if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
-        open_payment = lp
 
     with language(invoice.locale):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
@@ -53,13 +48,11 @@ def build_invoice(invoice: Invoice) -> Invoice:
         introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
-        if open_payment and open_payment.payment_provider:
-            if 'payment' in inspect.signature(open_payment.payment_provider.render_invoice_text).parameters:
-                payment = open_payment.payment_provider.render_invoice_text(invoice.order, open_payment)
+        if lp and lp.payment_provider:
+            if 'payment' in inspect.signature(lp.payment_provider.render_invoice_text).parameters:
+                payment = lp.payment_provider.render_invoice_text(invoice.order, lp)
             else:
-                payment = open_payment.payment_provider.render_invoice_text(invoice.order)
-        elif invoice.order.status == Order.STATUS_PAID:
-            payment = pgettext('invoice', 'The payment for this invoice has already been received.')
+                payment = lp.payment_provider.render_invoice_text(invoice.order)
         else:
             payment = ""
 
