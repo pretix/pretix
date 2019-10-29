@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 12:07+0000\n"
+"POT-Creation-Date: 2019-10-29 08:42+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -214,11 +214,11 @@ msgstr "所有"
 msgid "None"
 msgstr "无"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:645
+#: pretix/static/pretixcontrol/js/ui/main.js:677
 msgid "Use a different name internally"
 msgstr "在内部使用一个不同的名称"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:702
+#: pretix/static/pretixcontrol/js/ui/main.js:734
 msgid "Click to close"
 msgstr "点此关闭"
 

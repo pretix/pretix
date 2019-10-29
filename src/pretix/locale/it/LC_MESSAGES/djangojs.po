@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 12:07+0000\n"
+"POT-Creation-Date: 2019-10-29 08:42+0000\n"
 "PO-Revision-Date: 2019-09-13 18:00+0000\n"
 "Last-Translator: Gianmarco Palumbo <pal_gm@hotmail.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -221,11 +221,11 @@ msgstr "Tutto"
 msgid "None"
 msgstr "Nessuno"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:645
+#: pretix/static/pretixcontrol/js/ui/main.js:677
 msgid "Use a different name internally"
 msgstr "Utilizza un nome diverso internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:702
+#: pretix/static/pretixcontrol/js/ui/main.js:734
 msgid "Click to close"
 msgstr "Clicca per chiudere"
 
