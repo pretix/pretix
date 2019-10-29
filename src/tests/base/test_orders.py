@@ -1973,6 +1973,115 @@ class OrderChangeManagerTests(TestCase):
         with self.assertRaises(OrderError):
             self.ocm.add_position(self.ticket, None, price=Decimal('13.00'), subevent=se2, seat=self.seat_a1)
 
+    @classscope(attr='o')
+    def test_fee_change_value(self):
+        fee = self.order.fees.create(fee_type="shipping", value=Decimal('5.00'))
+        self.order.total += Decimal('5.00')
+        self.order.save()
+        self.ocm.change_fee(fee, Decimal('3.50'))
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('49.50')
+        fee.refresh_from_db()
+        assert fee.value == Decimal('3.50')
+
+    @classscope(attr='o')
+    def test_fee_change_value_tax_rate(self):
+        fee = self.order.fees.create(fee_type="shipping", value=Decimal('5.00'), tax_rule=self.tr19)
+        self.order.total += Decimal('5.00')
+        self.order.save()
+        self.ocm.change_fee(fee, Decimal('3.50'))
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('49.50')
+        fee.refresh_from_db()
+        assert fee.value == Decimal('3.50')
+        assert fee.tax_rate == Decimal('19.00')
+        assert fee.tax_value == Decimal('0.56')
+
+    @classscope(attr='o')
+    def test_fee_cancel(self):
+        fee = self.order.fees.create(fee_type="shipping", value=Decimal('5.00'))
+        self.order.total += Decimal('5.00')
+        self.order.save()
+        self.ocm.cancel_fee(fee)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('46.00')
+        fee.refresh_from_db()
+        assert fee.canceled
+
+    @classscope(attr='o')
+    def test_clear_out_order(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED, provider='manual')
+        cancel_order(self.order, cancellation_fee=Decimal('5.00'))
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('5.00')
+        self.ocm.cancel_fee(self.order.fees.get())
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('0.00')
+        assert self.order.status == Order.STATUS_CANCELED
+
+    @classscope(attr='o')
+    def test_auto_change_payment_fee(self):
+        fee2 = self.order.fees.create(fee_type=OrderFee.FEE_TYPE_SHIPPING, value=Decimal('0.50'))
+        fee = self.order.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.46'))
+        self.order.status = Order.STATUS_PAID
+        self.order.total = Decimal('51.1')
+        self.order.save()
+
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee, provider="banktransfer")
+        prov = self.ocm._get_payment_provider()
+        prov.settings.set('_fee_percent', Decimal('10.00'))
+        prov.settings.set('_fee_reverse_calc', False)
+
+        self.ocm.cancel_fee(fee2)
+        self.ocm.commit()
+        assert self.order.total == Decimal('50.6')
+        fee.refresh_from_db()
+        assert fee.value == Decimal('4.6')
+
+    @classscope(attr='o')
+    def test_change_payment_fee(self):
+        fee = self.order.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.46'))
+        self.order.status = Order.STATUS_PAID
+        self.order.total = Decimal('50.60')
+        self.order.save()
+
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee, provider="banktransfer")
+        prov = self.ocm._get_payment_provider()
+        prov.settings.set('_fee_percent', Decimal('10.00'))
+        prov.settings.set('_fee_reverse_calc', False)
+
+        self.ocm.change_fee(fee, Decimal('0.2'))
+        self.ocm.commit()
+        fee.refresh_from_db()
+        assert fee.value == Decimal('0.20')
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('46.20')
+
+    @classscope(attr='o')
+    def test_cancel_payment_fee(self):
+        fee = self.order.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.46'))
+        self.order.status = Order.STATUS_PAID
+        self.order.total = Decimal('50.60')
+        self.order.save()
+
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee, provider="banktransfer")
+        prov = self.ocm._get_payment_provider()
+        prov.settings.set('_fee_percent', Decimal('10.00'))
+        prov.settings.set('_fee_reverse_calc', False)
+
+        self.ocm.cancel_fee(fee)
+        self.ocm.commit()
+        fee.refresh_from_db()
+        assert fee.canceled
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('46.00')
+
 
 @pytest.mark.django_db
 def test_autocheckin(clist_autocheckin, event):

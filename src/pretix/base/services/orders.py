@@ -32,7 +32,7 @@ from pretix.base.models.orders import (
     generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
-from pretix.base.models.tax import TaxedPrice
+from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services import tickets
@@ -979,6 +979,8 @@ class OrderChangeManager:
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
+    FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value'))
+    CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee',))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
@@ -1070,8 +1072,19 @@ class OrderChangeManager:
                     self._totaldiff += price.gross - pos.price
                     self._operations.append(self.PriceOperation(pos, price))
 
+    def cancel_fee(self, fee: OrderFee):
+        self._totaldiff -= fee.value
+        self._operations.append(self.CancelFeeOperation(fee))
+        self._invoice_dirty = True
+
+    def change_fee(self, fee: OrderFee, value: Decimal):
+        value = (fee.tax_rule or TaxRule.zero()).tax(value, base_price_is='gross')
+        self._totaldiff += value.gross - fee.value
+        self._invoice_dirty = True
+        self._operations.append(self.FeeValueOperation(fee, value))
+
     def cancel(self, position: OrderPosition):
-        self._totaldiff += -position.price
+        self._totaldiff -= position.price
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
         if position.seat:
@@ -1187,19 +1200,25 @@ class OrderChangeManager:
 
     def _check_paid_to_free(self):
         if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)) and not self.order.require_approval:
-            # if the order becomes free, mark it paid using the 'free' provider
-            # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
-            # or positions got split off to a new order (split_order with positive total)
-            p = self.order.payments.create(
-                state=OrderPayment.PAYMENT_STATE_CREATED,
-                provider='free',
-                amount=0,
-                fee=None
-            )
-            try:
-                p.confirm(send_mail=False, count_waitinglist=False, user=self.user, auth=self.auth)
-            except Quota.QuotaExceededException:
-                raise OrderError(self.error_messages['paid_to_free_exceeded'])
+            if not self.order.fees.exists() and not self.order.positions.exists():
+                # The order is completely empty now, so we cancel it.
+                self.order.status = Order.STATUS_CANCELED
+                self.order.save(update_fields=['status'])
+                order_canceled.send(self.order.event, order=self.order)
+            else:
+                # if the order becomes free, mark it paid using the 'free' provider
+                # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
+                # or positions got split off to a new order (split_order with positive total)
+                p = self.order.payments.create(
+                    state=OrderPayment.PAYMENT_STATE_CREATED,
+                    provider='free',
+                    amount=0,
+                    fee=None
+                )
+                try:
+                    p.confirm(send_mail=False, count_waitinglist=False, user=self.user, auth=self.auth)
+                except Quota.QuotaExceededException:
+                    raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
         if self.split_order and self.split_order.total == 0 and not self.split_order.require_approval:
             p = self.split_order.payments.create(
@@ -1256,6 +1275,15 @@ class OrderChangeManager:
                 })
                 op.position.subevent = op.subevent
                 op.position.save()
+            elif isinstance(op, self.FeeValueOperation):
+                self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
+                    'fee': op.fee.pk,
+                    'old_price': op.fee.value,
+                    'new_price': op.value.gross
+                })
+                op.fee.value = op.value.gross
+                op.fee._calculate_tax()
+                op.fee.save()
             elif isinstance(op, self.PriceOperation):
                 self.order.log_action('pretix.event.order.changed.price', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -1267,6 +1295,14 @@ class OrderChangeManager:
                 op.position.price = op.price.gross
                 op.position._calculate_tax()
                 op.position.save()
+            elif isinstance(op, self.CancelFeeOperation):
+                self.order.log_action('pretix.event.order.changed.cancelfee', user=self.user, auth=self.auth, data={
+                    'fee': op.fee.pk,
+                    'fee_type': op.fee.fee_type,
+                    'old_price': op.fee.value,
+                })
+                op.fee.canceled = True
+                op.fee.save(update_fields=['canceled'])
             elif isinstance(op, self.CancelOperation):
                 for gc in op.position.issued_gift_cards.all():
                     gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
@@ -1443,10 +1479,19 @@ class OrderChangeManager:
             fee = None
             if self.open_payment.fee:
                 fee = self.open_payment.fee
-                current_fee = self.open_payment.fee.value
+                if any(isinstance(op, (self.FeeValueOperation, self.CancelFeeOperation)) for op in self._operations):
+                    fee.refresh_from_db()
+                if not self.open_payment.fee.canceled:
+                    current_fee = self.open_payment.fee.value
             total -= current_fee
 
-            if self.order.pending_sum - current_fee != 0:
+            if fee and any([isinstance(op, self.FeeValueOperation) and op.fee == fee for op in self._operations]):
+                # Do not automatically modify a fee that is being manually modified right now
+                payment_fee = fee.value
+            elif fee and any([isinstance(op, self.CancelFeeOperation) and op.fee == fee for op in self._operations]):
+                # Do not automatically modify a fee that is being manually removed right now
+                payment_fee = Decimal('0.00')
+            elif self.order.pending_sum - current_fee != 0:
                 prov = self.open_payment.payment_provider
                 if prov:
                     payment_fee = prov.calculate_fee(total - self.completed_payment_sum)
@@ -1459,7 +1504,7 @@ class OrderChangeManager:
                 if not self.open_payment.fee:
                     self.open_payment.fee = fee
                     self.open_payment.save(update_fields=['fee'])
-            elif fee:
+            elif fee and not fee.canceled:
                 fee.delete()
 
         self.order.total = total + payment_fee
@@ -1489,9 +1534,10 @@ class OrderChangeManager:
             generate_invoice(self.order)
 
     def _check_complete_cancel(self):
+        current = self.order.positions.count()
         cancels = len([o for o in self._operations if isinstance(o, (self.CancelOperation, self.SplitOperation))])
         adds = len([o for o in self._operations if isinstance(o, self.AddOperation)])
-        if self.order.positions.count() - cancels + adds < 1:
+        if current > 0 and current - cancels + adds < 1:
             raise OrderError(self.error_messages['complete_cancel'])
 
     @property

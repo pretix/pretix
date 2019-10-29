@@ -71,9 +71,9 @@ from pretix.control.forms.filter import (
 )
 from pretix.control.forms.orders import (
     CancelForm, CommentForm, ConfirmPaymentForm, ExporterForm, ExtendForm,
-    MarkPaidForm, OrderContactForm, OrderLocaleForm, OrderMailForm,
-    OrderPositionAddForm, OrderPositionAddFormset, OrderPositionChangeForm,
-    OrderRefundForm, OtherOperationsForm,
+    MarkPaidForm, OrderContactForm, OrderFeeChangeForm, OrderLocaleForm,
+    OrderMailForm, OrderPositionAddForm, OrderPositionAddFormset,
+    OrderPositionChangeForm, OrderRefundForm, OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -1210,6 +1210,19 @@ class OrderChange(OrderView):
         )
 
     @cached_property
+    def fees(self):
+        fees = list(self.order.fees.all())
+        for f in fees:
+            f.form = OrderFeeChangeForm(prefix='of-{}'.format(f.pk), instance=f,
+                                        data=self.request.POST if self.request.method == "POST" else None)
+            try:
+                ia = self.order.invoice_address
+            except InvoiceAddress.DoesNotExist:
+                ia = None
+            f.apply_tax = self.request.event.settings.tax_rate_default and self.request.event.settings.tax_rate_default.tax_applicable(invoice_address=ia)
+        return fees
+
+    @cached_property
     def positions(self):
         positions = list(self.order.positions.all())
         for p in positions:
@@ -1225,6 +1238,7 @@ class OrderChange(OrderView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['positions'] = self.positions
+        ctx['fees'] = self.fees
         ctx['add_formset'] = self.add_formset
         ctx['other_form'] = self.other_form
         return ctx
@@ -1264,6 +1278,24 @@ class OrderChange(OrderView):
                 except OrderError as e:
                     f.custom_error = str(e)
                     return False
+        return True
+
+    def _process_fees(self, ocm):
+        for f in self.fees:
+            if not f.form.is_valid():
+                return False
+
+            try:
+                if f.form.cleaned_data['operation_cancel']:
+                    ocm.cancel_fee(f)
+                    continue
+
+                if f.form.cleaned_data['value'] != f.value:
+                    ocm.change_fee(f, f.form.cleaned_data['value'])
+
+            except OrderError as e:
+                f.custom_error = str(e)
+                return False
         return True
 
     def _process_change(self, ocm):
@@ -1318,7 +1350,7 @@ class OrderChange(OrderView):
             notify=notify,
             reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True
         )
-        form_valid = self._process_add(ocm) and self._process_change(ocm) and self._process_other(ocm)
+        form_valid = self._process_add(ocm) and self._process_fees(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
         if not form_valid:
             messages.error(self.request, _('An error occurred. Please see the details below.'))

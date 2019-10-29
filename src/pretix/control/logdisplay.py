@@ -65,6 +65,15 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
+    elif logentry.action_type == 'pretix.event.order.changed.feevalue':
+        return text + ' ' + _('A fee was changed from {old_price} to {new_price}.').format(
+            old_price=money_filter(Decimal(data['old_price']), event.currency),
+            new_price=money_filter(Decimal(data['new_price']), event.currency),
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.cancelfee':
+        return text + ' ' + _('A fee of {old_price} was removed.').format(
+            old_price=money_filter(Decimal(data['old_price']), event.currency),
+        )
     elif logentry.action_type == 'pretix.event.order.changed.cancel':
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:

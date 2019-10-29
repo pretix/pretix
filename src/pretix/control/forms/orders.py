@@ -400,9 +400,27 @@ class OrderPositionChangeForm(forms.Form):
         self.fields['itemvar'].choices = choices
         change_decimal_field(self.fields['price'], instance.order.event.currency)
 
-    def clean(self):
-        if self.cleaned_data.get('operation') == 'price' and not self.cleaned_data.get('price', '') != '':
-            raise ValidationError(_('You need to enter a price if you want to change the product price.'))
+
+class OrderFeeChangeForm(forms.Form):
+    value = forms.DecimalField(
+        required=False,
+        max_digits=10, decimal_places=2,
+        localize=True,
+        label=_('New price (gross)')
+    )
+    operation_cancel = forms.BooleanField(
+        required=False,
+        label=_('Remove this fee')
+    )
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.pop('instance')
+        initial = kwargs.get('initial', {})
+
+        initial['value'] = instance.value
+        kwargs['initial'] = initial
+        super().__init__(*args, **kwargs)
+        change_decimal_field(self.fields['value'], instance.order.event.currency)
 
 
 class OrderContactForm(forms.ModelForm):
