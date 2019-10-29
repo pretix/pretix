@@ -1078,7 +1078,7 @@ class OrderChangeManager:
         self._invoice_dirty = True
 
     def change_fee(self, fee: OrderFee, value: Decimal):
-        value = (self.order.event.settings.tax_rate_default or TaxRule.zero()).tax(value, base_price_is='gross')
+        value = (fee.tax_rule or TaxRule.zero()).tax(value, base_price_is='gross')
         self._totaldiff += value.gross - fee.value
         self._invoice_dirty = True
         self._operations.append(self.FeeValueOperation(fee, value))
@@ -1200,19 +1200,25 @@ class OrderChangeManager:
 
     def _check_paid_to_free(self):
         if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)) and not self.order.require_approval:
-            # if the order becomes free, mark it paid using the 'free' provider
-            # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
-            # or positions got split off to a new order (split_order with positive total)
-            p = self.order.payments.create(
-                state=OrderPayment.PAYMENT_STATE_CREATED,
-                provider='free',
-                amount=0,
-                fee=None
-            )
-            try:
-                p.confirm(send_mail=False, count_waitinglist=False, user=self.user, auth=self.auth)
-            except Quota.QuotaExceededException:
-                raise OrderError(self.error_messages['paid_to_free_exceeded'])
+            if not self.order.fees.exists() and not self.order.positions.exists():
+                # The order is completely empty now, so we cancel it.
+                self.order.status = Order.STATUS_CANCELED
+                self.order.save(update_fields=['status'])
+                order_canceled.send(self.order.event, order=self.order)
+            else:
+                # if the order becomes free, mark it paid using the 'free' provider
+                # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
+                # or positions got split off to a new order (split_order with positive total)
+                p = self.order.payments.create(
+                    state=OrderPayment.PAYMENT_STATE_CREATED,
+                    provider='free',
+                    amount=0,
+                    fee=None
+                )
+                try:
+                    p.confirm(send_mail=False, count_waitinglist=False, user=self.user, auth=self.auth)
+                except Quota.QuotaExceededException:
+                    raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
         if self.split_order and self.split_order.total == 0 and not self.split_order.require_approval:
             p = self.split_order.payments.create(
