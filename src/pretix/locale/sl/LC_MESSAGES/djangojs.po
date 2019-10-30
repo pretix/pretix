@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-29 08:42+0000\n"
+"POT-Creation-Date: 2019-10-30 16:23+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -271,7 +271,7 @@ msgstr[1] "Izdelki v vaši košarici bodo rezervirani še dve minuti."
 msgstr[2] "Izdelki v vaši košarici bodo rezervirani še nekaj minut."
 msgstr[3] "Izdelki v vaši košarici bodo rezervirani še več minut."
 
-#: pretix/static/pretixpresale/js/ui/main.js:212
+#: pretix/static/pretixpresale/js/ui/main.js:213
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Prosimo vnesite količino za eno od vrst vstopnic."
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-29 08:42+0000\n"
+"POT-Creation-Date: 2019-10-30 16:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -252,7 +252,7 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
 msgstr[1] ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:212
+#: pretix/static/pretixpresale/js/ui/main.js:213
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 

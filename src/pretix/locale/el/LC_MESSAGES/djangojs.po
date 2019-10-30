@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-29 08:42+0000\n"
+"POT-Creation-Date: 2019-10-30 16:23+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -277,7 +277,7 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Τα είδη στο καλάθι θα παραμείνουν δεσμευμένα για ένα λεπτό."
 msgstr[1] "Τα είδη στο καλάθι θα παραμείνουν δεσμευμένα για {num} λεπτά."
 
-#: pretix/static/pretixpresale/js/ui/main.js:212
+#: pretix/static/pretixpresale/js/ui/main.js:213
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Εισαγάγετε μια ποσότητα για έναν από τους τύπους εισιτηρίων."
 
