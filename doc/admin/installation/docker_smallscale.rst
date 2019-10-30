@@ -276,7 +276,7 @@ choice)::
 
 Then, go to that directory and build the image::
 
-    $ docker build -t mypretix
+    $ docker build . -t mypretix
 
 You can now use that image ``mypretix`` instead of ``pretix/standalone`` in your service file (see above). Be sure
 to re-build your custom image after you pulled ``pretix/standalone`` if you want to perform an update.
