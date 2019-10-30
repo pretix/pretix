@@ -454,7 +454,7 @@ class StripeOrderView:
         return self.request.event.get_payment_providers()[self.payment.provider]
 
     def _redirect_to_order(self):
-        if self.request.session.get('payment_stripe_order_secret') != self.order.secret:
+        if self.request.session.get('payment_stripe_order_secret') != self.order.secret and self.payment.provider != 'stripe_ideal':
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
