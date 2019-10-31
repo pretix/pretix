@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-10-29 10:50+0000\n"
+"PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -4702,10 +4702,9 @@ msgid "Plugin: %s"
 msgstr "Plugin: %s"
 
 #: pretix/base/services/vouchers.py:35 pretix/control/logdisplay.py:256
-#, fuzzy, python-brace-format
-#| msgid "The voucher has been modified."
+#, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr "Der Gutschein wurde verändert."
+msgstr "Der Gutschein wurde an {recipient} verschickt."
 
 #: pretix/base/settings.py:326
 #, python-brace-format
@@ -7599,10 +7598,8 @@ msgid "Split into new order"
 msgstr "In neue Bestellung abspalten"
 
 #: pretix/control/forms/orders.py:413
-#, fuzzy
-#| msgid "Remove filter"
 msgid "Remove this fee"
-msgstr "Filter entfernen"
+msgstr "Gebühr entfernen"
 
 #: pretix/control/forms/orders.py:427
 msgid "Invalidate secrets"
@@ -7886,32 +7883,16 @@ msgstr ""
 "eine Datei ab."
 
 #: pretix/control/forms/vouchers.py:201
-#, fuzzy
-#| msgid "Send vouchers"
 msgid "Send vouchers via email"
-msgstr "Gutscheine verschicken"
+msgstr "Gutscheine per E-Mail verschicken"
 
 #: pretix/control/forms/vouchers.py:208
-#, fuzzy, python-brace-format
-#| msgid "Your orders for {}"
+#, python-brace-format
 msgid "Your voucher for {event}"
-msgstr "Ihre Bestellungen für {}"
+msgstr "Dein Gutschein für {event}"
 
 #: pretix/control/forms/vouchers.py:214
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "unfortunately, we denied your order request for {event}.\n"
-#| "\n"
-#| "{comment}\n"
-#| "\n"
-#| "You can view the details of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -7929,27 +7910,26 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"Ihre Bestellung für {event} wurde leider abgelehnt.\n"
+"mit dieser E-Mail senden wir Ihnen einen oder mehrere Gutscheine für {event}:"
 "\n"
-"{comment}\n"
 "\n"
-"Sie können Ihre Bestellung unter folgender Adresse einsehen:\n"
+"{voucher_list}\n"
+"\n"
+"Sie können den Gutschein hier in unserem Ticketshop einlösen:\n"
+"\n"
 "{url}\n"
 "\n"
 "Viele Grüße,\n"
+"\n"
 "Das {event} Team"
 
 #: pretix/control/forms/vouchers.py:220
-#, fuzzy
-#| msgid "Recipient"
 msgid "Recipients"
 msgstr "Empfänger"
 
 #: pretix/control/forms/vouchers.py:224
-#, fuzzy
-#| msgid "Port"
 msgid "or"
-msgstr "Port"
+msgstr "oder"
 
 #: pretix/control/forms/vouchers.py:228
 msgid ""
@@ -7957,6 +7937,9 @@ msgid ""
 "line, or a CSV file with a title column and one or more of the columns "
 "\"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
+"Du kannst entweder eine Liste von E-Mail-Adressen mit einer Adresse pro "
+"Zeile angeben, oder eine CSV-Datei mit einer Kopfzeile und einer oder "
+"mehrerer der Spalten \"email\", \"number\", \"name\" und \"tag\"."
 
 #: pretix/control/forms/vouchers.py:264
 msgid "Maximum usages per voucher"
@@ -7968,29 +7951,30 @@ msgstr "Wie oft JEDER der Gutscheine eingelöst werden kann."
 
 #: pretix/control/forms/vouchers.py:283
 msgid "CSV input needs to contain a header row in the first line."
-msgstr ""
+msgstr "CSV-Eingabedaten müssen eine Kopfzeile haben."
 
 #: pretix/control/forms/vouchers.py:287
 #, python-brace-format
 msgid "CSV input needs to contain a field with the header \"{header}\"."
 msgstr ""
+"CSV-Eingabedaten müssen ein Feld mit der Bezeichnung \"{header}\" haben."
 
 #: pretix/control/forms/vouchers.py:290
 #, python-brace-format
 msgid "CSV input contains an unknown field with the header \"{header}\"."
 msgstr ""
+"CSV-Eingabe enthält eine Spalte \"{header}\", die nicht zugeordnet werden "
+"kann."
 
 #: pretix/control/forms/vouchers.py:295 pretix/control/forms/vouchers.py:310
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid email address."
+#, python-brace-format
 msgid "{value} is not a valid email address."
-msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+msgstr "{value} ist keine gültige E-Mail-Adresse."
 
 #: pretix/control/forms/vouchers.py:304
-#, fuzzy, python-brace-format
-#| msgid "Invalid date input."
+#, python-brace-format
 msgid "Invalid value in row {number}."
-msgstr "Ungültige Datumseingabe."
+msgstr "Ungültiger Wert in Zeile {number}."
 
 #: pretix/control/forms/vouchers.py:322
 msgid "A voucher with one of these codes already exists."
@@ -8001,12 +7985,16 @@ msgid ""
 "If vouchers should be sent by email, subject, message and recipients need to "
 "be specified."
 msgstr ""
+"Wenn Gutscheine per E-Mail verschickt werden sollen, müssen Betreff, "
+"Nachricht und Empfänger angegeben werden."
 
 #: pretix/control/forms/vouchers.py:332
 #, python-brace-format
 msgid ""
 "You generated {codes} vouchers, but entered recipients for {recp} vouchers."
 msgstr ""
+"Du hast {codes} Gutscheine generiert, aber nur Empfänger für {recp} "
+"angegeben."
 
 #: pretix/control/logdisplay.py:30
 msgid "The order has been changed:"
@@ -8042,15 +8030,14 @@ msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "Preis von Position #{posid} von  {old_price} auf {new_price} geändert."
 
 #: pretix/control/logdisplay.py:69
-#, fuzzy, python-brace-format
-#| msgid "Price of position #{posid} changed from {old_price} to {new_price}."
+#, python-brace-format
 msgid "A fee was changed from {old_price} to {new_price}."
-msgstr "Preis von Position #{posid} von  {old_price} auf {new_price} geändert."
+msgstr "Eine Gebühr wurde von {old_price} auf {new_price} geändert."
 
 #: pretix/control/logdisplay.py:74
 #, python-brace-format
 msgid "A fee of {old_price} was removed."
-msgstr ""
+msgstr "Eine Gebühr in Höhe von {old_price} wurde gelöscht."
 
 #: pretix/control/logdisplay.py:81
 #, python-brace-format
@@ -11792,6 +11779,9 @@ msgid ""
 "automatically be on subsequent order changes or when choosing a different "
 "payment method."
 msgstr ""
+"Das manuelle Bearbeiten von Zahlungsgebühren wird nicht empfohlen, da diese "
+"automatisch bei weiteren Bestellungsänderungen oder beim Ändern der "
+"Zahlungsmethode neu gesetzt werden können."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:317
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:65
@@ -15469,10 +15459,9 @@ msgid "There is no voucher with the given voucher code."
 msgstr "Es existiert kein Gutschein mit dem eingegebenen Gutscheincode."
 
 #: pretix/control/views/vouchers.py:335
-#, fuzzy
-#| msgid "{num} vouchers have been created and sent out via email."
 msgid "The new vouchers have been created and will be sent out shortly."
-msgstr "{num} Gutscheine wurden erstellt und per E-Mail verschickt."
+msgstr ""
+"Die neuen Gutscheine wurden erstellt und werden nun per E-Mail verschickt."
 
 #: pretix/control/views/vouchers.py:337
 msgid "The new vouchers have been created."
@@ -16292,23 +16281,16 @@ msgid "Refunding the amount via PayPal failed: {}"
 msgstr "Die Rückerstattung über PayPal ist fehlgeschlagen: {}"
 
 #: pretix/plugins/paypal/payment.py:541 pretix/plugins/paypal/payment.py:549
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "The payment for this invoice has already been received."
 msgid "The payment for this invoice has already been received."
 msgstr "Die Zahlung für diese Rechnung ist bereits eingegangen."
 
 #: pretix/plugins/paypal/payment.py:542 pretix/plugins/paypal/payment.py:550
-#, fuzzy
-#| msgid "PayPal payment history"
 msgid "PayPal payment ID"
-msgstr "PayPal-Zahlungsverlauf"
+msgstr "PayPal-Zahlungs-ID"
 
 #: pretix/plugins/paypal/payment.py:544
-#, fuzzy
-#| msgid "PayPal Connect: Client ID"
 msgid "PayPal sale ID"
-msgstr "PayPal Connect: Client-ID"
+msgstr "PayPal-Verkaufs-ID"
 
 #: pretix/plugins/paypal/signals.py:30
 msgid "Payment completed."
