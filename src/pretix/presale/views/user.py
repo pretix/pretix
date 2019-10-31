@@ -42,7 +42,7 @@ class ResendLinkView(EventViewMixin, TemplateView):
         if not orders:
             user = INVALID_ADDRESS
 
-        subject = _('Your orders for {}'.format(self.request.event))
+        subject = _('Your orders for {}').format(self.request.event)
         template = self.request.event.settings.mail_text_resend_all_links
         context = get_email_context(event=self.request.event, orders=orders)
         try:
