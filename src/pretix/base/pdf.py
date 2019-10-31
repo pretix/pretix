@@ -405,9 +405,9 @@ class Renderer:
         if not o['content']:
             return '(error)'
         if o['content'] == 'other':
-            return o['text'].replace("\n", "<br/>\n")
+            return escape(o['text']).replace("\n", "<br/>\n")
         elif o['content'].startswith('meta:'):
-            return ev.meta_data.get(o['content'][5:]) or ''
+            return escape(ev.meta_data.get(o['content'][5:])) or ''
         elif o['content'] in self.variables:
             try:
                 return self.variables[o['content']]['evaluate'](op, order, ev)
