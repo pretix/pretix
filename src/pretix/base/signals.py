@@ -607,7 +607,7 @@ This signal allows you to modify the availability of a quota. You are passed the
 ``availability`` result calculated by pretix code or other plugins. ``availability`` is a tuple
 with the first entry being one of the ``Quota.AVAILABILITY_*`` constants and the second entry being
 the number of available tickets (or ``None`` for unlimited). You are expected to return a value
-of the same time. The parameter ``count_waitinglists`` specifies whether waiting lists should be taken
+of the same type. The parameter ``count_waitinglists`` specifies whether waiting lists should be taken
 into account.
 
 **Warning: Use this signal with great caution, it allows you to screw up the performance of the
