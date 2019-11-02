@@ -56,7 +56,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("positionid", {
         "label": _("Order position number"),
         "editor_sample": "1",
-        "evaluate": lambda orderposition, order, event: orderposition.positionid
+        "evaluate": lambda orderposition, order, event: str(orderposition.positionid)
     }),
     ("item", {
         "label": _("Product name"),
