@@ -1430,19 +1430,25 @@ class OrderChangeManager:
                 fee.delete()
             split_order.total += fee.value
 
+        remaining_total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
+        offset_amount = min(max(0, self.completed_payment_sum - remaining_total), split_order.total)
+        if offset_amount >= split_order.total:
+            split_order.status = Order.STATUS_PAID
+        else:
+            split_order.status = Order.STATUS_PENDING
         split_order.save()
 
-        if split_order.status == Order.STATUS_PAID:
+        if offset_amount > Decimal('0.00'):
             split_order.payments.create(
                 state=OrderPayment.PAYMENT_STATE_CONFIRMED,
-                amount=split_order.total,
+                amount=offset_amount,
                 payment_date=now(),
                 provider='offsetting',
                 info=json.dumps({'orders': [self.order.code]})
             )
             self.order.refunds.create(
                 state=OrderRefund.REFUND_STATE_DONE,
-                amount=split_order.total,
+                amount=offset_amount,
                 execution_date=now(),
                 provider='offsetting',
                 info=json.dumps({'orders': [split_order.code]})

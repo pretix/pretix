@@ -1518,6 +1518,86 @@ class OrderChangeManagerTests(TestCase):
         assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
     @classscope(attr='o')
+    def test_split_and_change_higher(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
+
+        # Split
+        self.ocm.change_price(self.op2, Decimal('42.00'))
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.op2.refresh_from_db()
+
+        # First order
+        assert self.order.total == Decimal('23.00')
+        assert not self.order.fees.exists()
+        assert self.order.status == Order.STATUS_PAID
+        assert self.order.pending_sum == Decimal('0.00')
+        r = self.order.refunds.last()
+        assert r.provider == 'offsetting'
+        assert r.amount == Decimal('23.00')
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+
+        # New order
+        assert self.op2.order != self.order
+        o2 = self.op2.order
+        assert o2.total == Decimal('42.00')
+        assert o2.status == Order.STATUS_PENDING
+        assert o2.positions.count() == 1
+        assert o2.fees.count() == 0
+        assert o2.pending_sum == Decimal('19.00')
+        p = o2.payments.last()
+        assert p.provider == 'offsetting'
+        assert p.amount == Decimal('23.00')
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+    @classscope(attr='o')
+    def test_split_and_change_lower(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
+
+        # Split
+        self.ocm.change_price(self.op2, Decimal('10.00'))
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.op2.refresh_from_db()
+
+        # First order
+        assert self.order.total == Decimal('23.00')
+        assert not self.order.fees.exists()
+        assert self.order.status == Order.STATUS_PAID
+        assert self.order.pending_sum == Decimal('-13.00')
+        r = self.order.refunds.last()
+        assert r.provider == 'offsetting'
+        assert r.amount == Decimal('10.00')
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+
+        # New order
+        assert self.op2.order != self.order
+        o2 = self.op2.order
+        assert o2.total == Decimal('10.00')
+        assert o2.status == Order.STATUS_PAID
+        assert o2.positions.count() == 1
+        assert o2.fees.count() == 0
+        assert o2.pending_sum == Decimal('0.00')
+        p = o2.payments.last()
+        assert p.provider == 'offsetting'
+        assert p.amount == Decimal('10.00')
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+    @classscope(attr='o')
     def test_split_invoice_address(self):
         ia = InvoiceAddress.objects.create(
             order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
