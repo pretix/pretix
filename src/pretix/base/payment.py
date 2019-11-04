@@ -702,8 +702,9 @@ class FreeOrderProvider(BasePaymentProvider):
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         from .services.cart import get_fees
 
+        cart = get_cart(request)
         total = get_cart_total(request)
-        total += sum([f.value for f in get_fees(self.event, request, total, None, None)])
+        total += sum([f.value for f in get_fees(self.event, request, total, None, None, cart)])
         return total == 0
 
     def order_change_allowed(self, order: Order) -> bool:

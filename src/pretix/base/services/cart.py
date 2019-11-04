@@ -958,12 +958,12 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
     return totaldiff
 
 
-def get_fees(event, request, total, invoice_address, provider):
+def get_fees(event, request, total, invoice_address, provider, positions):
     from pretix.presale.views.cart import cart_session
 
     fees = []
     for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
-                                                    total=total):
+                                                    total=total, positions=positions):
         if resp:
             fees += resp
 

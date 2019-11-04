@@ -505,8 +505,10 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def _total_order_value(self):
+        cart = get_cart(self.request)
         total = get_cart_total(self.request)
-        total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address, None)])
+        total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address, None,
+                                                cart)])
         return Decimal(total)
 
     @cached_property

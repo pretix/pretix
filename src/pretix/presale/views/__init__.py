@@ -133,7 +133,10 @@ class CartMixin:
         if order:
             fees = order.fees.all()
         elif positions:
-            fees = get_fees(self.request.event, self.request, total, self.invoice_address, self.cart_session.get('payment'))
+            fees = get_fees(
+                self.request.event, self.request, total, self.invoice_address, self.cart_session.get('payment'),
+                cartpos
+            )
         else:
             fees = []
 
@@ -231,9 +234,10 @@ def get_cart_is_free(request):
 
     if not hasattr(request, '_cart_free_cache'):
         cs = cart_session(request)
+        pos = get_cart(request)
         ia = get_cart_invoice_address(request)
         total = get_cart_total(request)
-        fees = get_fees(request.event, request, total, ia, cs.get('payment'))
+        fees = get_fees(request.event, request, total, ia, cs.get('payment'), pos)
         request._cart_free_cache = total + sum(f.value for f in fees) == Decimal('0.00')
     return request._cart_free_cache
 

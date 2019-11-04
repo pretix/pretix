@@ -119,7 +119,7 @@ argument will contain the request object.
 """
 
 fee_calculation_for_cart = EventPluginSignal(
-    providing_args=['request', 'invoice_address', 'total']
+    providing_args=['request', 'invoice_address', 'total', 'positions']
 )
 """
 This signals allows you to add fees to a cart. You are expected to return a list of ``OrderFee``
@@ -129,6 +129,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the request object and ``invoice_address`` the invoice address (useful for
 tax calculation). The ``total`` keyword argument will contain the total cart sum without any fees.
 You should not rely on this ``total`` value for fee calculations as other fees might interfere.
+The ``positions`` argument will contain a list or queryset of ``CartPosition`` objects.
 """
 
 contact_form_fields = EventPluginSignal(
