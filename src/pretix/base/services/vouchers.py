@@ -5,11 +5,11 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import Event, User, Voucher
 from pretix.base.services.mail import mail
-from pretix.base.services.tasks import ProfiledEventTask
+from pretix.base.services.tasks import TransactionAwareProfiledEventTask
 from pretix.celery_app import app
 
 
-@app.task(base=ProfiledEventTask)
+@app.task(base=TransactionAwareProfiledEventTask)
 def vouchers_send(event: Event, vouchers: list, subject: str, message: str, recipients: list, user: int) -> None:
     vouchers = list(Voucher.objects.filter(id__in=vouchers).order_by('id'))
     user = User.objects.get(pk=user)
