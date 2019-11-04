@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from django.test import TestCase
 
 
-class SoupTest(TestCase):
+class SoupTestMixin:
 
     def get_doc(self, *args, **kwargs):
         response = self.client.get(*args, **kwargs)
@@ -15,6 +15,10 @@ class SoupTest(TestCase):
             return BeautifulSoup(response.render().content, "lxml")
         except AttributeError:
             return BeautifulSoup(response.content, "lxml")
+
+
+class SoupTest(SoupTestMixin, TestCase):
+    pass
 
 
 def extract_form_fields(soup):

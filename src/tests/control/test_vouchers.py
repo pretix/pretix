@@ -3,9 +3,10 @@ import decimal
 import json
 
 from django.core import mail as djmail
+from django.test import TransactionTestCase
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
-from tests.base import SoupTest, extract_form_fields
+from tests.base import SoupTestMixin, extract_form_fields
 
 from pretix.base.models import (
     Event, Item, ItemVariation, Order, OrderPosition, Organizer, Quota, Team,
@@ -13,7 +14,7 @@ from pretix.base.models import (
 )
 
 
-class VoucherFormTest(SoupTest):
+class VoucherFormTest(SoupTestMixin, TransactionTestCase):
     @scopes_disabled()
     def setUp(self):
         super().setUp()
