@@ -296,11 +296,11 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/clone/
 
-   Creates a new event with properties as set in the request body. The properties that are copied are: 'is_public',
-   `testmode`, settings, plugin settings, items, variations, add-ons, quotas, categories, tax rules, questions.
+   Creates a new event with properties as set in the request body. The properties that are copied are: ``is_public``,
+   ``testmode``, ``has_subevents``, settings, plugin settings, items, variations, add-ons, quotas, categories, tax rules, questions.
 
-   If the 'plugins' and/or 'is_public' fields are present in the post body this will determine their value. Otherwise
-   their value will be copied from the existing event.
+   If the ``plugins``, ``has_subevents`` and/or ``is_public`` fields are present in the post body this will determine their
+   value. Otherwise their value will be copied from the existing event.
 
    Please note that you can only copy from events under the same organizer.
 
