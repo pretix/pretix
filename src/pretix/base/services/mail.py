@@ -261,7 +261,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             for inv in invoices:
                 if inv.file:
                     try:
-                        with language(inv.order.language):
+                        with language(inv.order.locale):
                             email.attach(
                                 pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf',
                                 inv.file.file.read(),
