@@ -16,7 +16,7 @@ from celery import chain
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import get_template
-from django.utils.translation import ugettext as _
+from django.utils.translation import pgettext, ugettext as _
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
@@ -261,11 +261,12 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             for inv in invoices:
                 if inv.file:
                     try:
-                        email.attach(
-                            '{}.pdf'.format(inv.number),
-                            inv.file.file.read(),
-                            'application/pdf'
-                        )
+                        with language(inv.order.language):
+                            email.attach(
+                                pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf',
+                                inv.file.file.read(),
+                                'application/pdf'
+                            )
                     except:
                         logger.exception('Could not attach invoice to email')
                         pass
