@@ -122,7 +122,7 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     $("body").data('ajaxing', false);
     if (textStatus === "timeout") {
-        alert(gettext("The request took to long. Please try again."));
+        alert(gettext("The request took too long. Please try again."));
         waitingDialog.hide();
     } else if (jqXHR.responseText.indexOf('<html') > 0) {
         var respdom = $(jqXHR.responseText);

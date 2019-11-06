@@ -18,7 +18,7 @@ function preview_task_error(item) {
         $('#' + item + '_panel').data('ajaxing', false);
         $('#' + item + '_preview div').text(gettext('An error has occurred.'));
         if (textStatus === "timeout") {
-            alert(gettext("The request took to long. Please try again."));
+            alert(gettext("The request took too long. Please try again."));
         } else {
             if (jqXHR.status >= 400 && jqXHR.status < 500) {
                 alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
