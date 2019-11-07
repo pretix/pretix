@@ -89,8 +89,9 @@ def preview(event: int, provider: str):
         scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
         sample = {k: str(v) for k, v in scheme['sample'].items()}
         p = order.positions.create(item=item, attendee_name_parts=sample, price=item.default_price)
-        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p)
-        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p)
+        s = event.subevents.first()
+        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p, subevent=s)
+        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p, subevent=s)
 
         InvoiceAddress.objects.create(order=order, name_parts=sample, company=_("Sample company"))
 
