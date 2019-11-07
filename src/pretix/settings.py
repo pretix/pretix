@@ -409,6 +409,8 @@ ALL_LANGUAGES = [
     ('tr', _('Turkish')),
     ('pl', _('Polish')),
     ('it', _('Italian')),
+    ('ru', _('Russian')),
+    ('lv', _('Latvian')),
     ('zh-hans', _('Chinese (simplified)')),
     ('el', _('Greek'))
 ]
