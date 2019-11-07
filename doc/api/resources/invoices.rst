@@ -28,6 +28,7 @@ payment_provider_text                 string                     Text to be prin
                                                                  payment information
 footer_text                           string                     Text to be printed in the page footer area
 lines                                 list of objects            The actual invoice contents
+├ position                            integer                    Number of the line within an invoice.
 ├ description                         string                     Text representing the invoice line (e.g. product name)
 ├ gross_value                         money (string)             Price including taxes
 ├ tax_value                           money (string)             Tax amount included
@@ -61,6 +62,11 @@ internal_reference                    string                     Customer's refe
 .. versionchanged:: 1.9
 
    The attribute ``internal_reference`` has been added.
+
+
+.. versionchanged:: 3.4
+
+   The attribute ``lines.number`` has been added.
 
 
 Endpoints
@@ -107,6 +113,7 @@ Endpoints
             "footer_text": "Big Events LLC - Registration No. 123456 - VAT ID: EU0987654321",
             "lines": [
               {
+                "position": 1,
                 "description": "Budget Ticket",
                 "gross_value": "23.00",
                 "tax_value": "0.00",
@@ -171,6 +178,7 @@ Endpoints
         "footer_text": "Big Events LLC - Registration No. 123456 - VAT ID: EU0987654321",
         "lines": [
           {
+            "position": 1,
             "description": "Budget Ticket",
             "gross_value": "23.00",
             "tax_value": "0.00",

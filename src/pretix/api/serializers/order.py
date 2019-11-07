@@ -905,10 +905,25 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         return order
 
 
+class LinePositionField(serializers.IntegerField):
+    """
+    Internally, the position field is stored starting at 0, but for the API, starting at 1 makes it
+    more consistent with other models
+    """
+
+    def to_representation(self, value):
+        return super().to_representation(value) + 1
+
+    def to_internal_value(self, data):
+        return super().to_internal_value(data) - 1
+
+
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
+    position = LinePositionField(read_only=True)
+
     class Meta:
         model = InvoiceLine
-        fields = ('description', 'gross_value', 'tax_value', 'tax_rate', 'tax_name')
+        fields = ('position', 'description', 'gross_value', 'tax_value', 'tax_rate', 'tax_name')
 
 
 class InvoiceSerializer(I18nAwareModelSerializer):

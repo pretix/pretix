@@ -838,6 +838,7 @@ TEST_INVOICE_RES = {
     "foreign_currency_rate_date": None,
     "lines": [
         {
+            "position": 1,
             "description": "Budget Ticket<br />Attendee: Peter",
             "gross_value": "23.00",
             "tax_value": "0.00",
@@ -845,6 +846,7 @@ TEST_INVOICE_RES = {
             "tax_rate": "0.00"
         },
         {
+            "position": 2,
             "description": "Payment fee",
             "gross_value": "0.25",
             "tax_value": "0.05",
@@ -3674,6 +3676,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         'footer_text': '',
         'lines': [
             {
+                'position': 1,
                 'description': 'Budget Ticket<br />Attendee: Peter',
                 'gross_value': '23.00',
                 'tax_value': '0.00',
@@ -3681,6 +3684,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
                 'tax_name': ''
             },
             {
+                'position': 2,
                 'description': 'Payment fee',
                 'gross_value': '0.25',
                 'tax_value': '0.05',
