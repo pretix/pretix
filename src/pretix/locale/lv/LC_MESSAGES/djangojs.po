@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-07 09:31+0000\n"
+"PO-Revision-Date: 2019-11-09 01:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/lv/>\n"
@@ -33,12 +33,12 @@ msgstr "Komentāri:"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr "Pieteiktās preces"
+msgstr "Pieteiktie pirkumi"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "Apmaksātās preces"
+msgstr "Apmaksātie pirkumi"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -67,8 +67,8 @@ msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
 msgstr ""
-"Jūsu pasūtījums ir ievietots rindā un drīz tiks apstrādāts. Atkarībā no "
-"pasākuma izmēra, process var aizņemt līdz dažām minūtēm."
+"Jūsu pieprasījums ir ievietots rindā serverī un drīz tiks apstrādāts. "
+"Atkarībā no pieprasījuma izmēra, process var aizņemt līdz dažām minūtēm."
 
 #: pretix/static/pretixbase/js/asynctask.js:45
 #: pretix/static/pretixbase/js/asynctask.js:111
@@ -77,37 +77,41 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
-"Jūsu pasūtījums vēl stāv rindā uz apstrādi. Ja gaidīšanas process aizņem "
-"ilgāk kā divas minūtes, lūdzu sazinieties ar mums vai pārlādējiet savu "
-"interneta pārluku un mēģiniet vēlreiz."
+"Jūsu pieprasījums vēl stāv rindā serverī uz apstrādi. Ja gaidīšanas process "
+"aizņem ilgāk kā divas minūtes, lūdzu sazinieties ar mums vai pārlādējiet "
+"savu interneta pārluku un mēģiniet vēlreiz."
 
 #: pretix/static/pretixbase/js/asynctask.js:76
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixbase/js/asynctask.js:147
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "Ir notikusi kļūda {code}."
 
 #: pretix/static/pretixbase/js/asynctask.js:79
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
+"Mēs patreiz nevaram izveidot savienojumu ar serveri, bet turpinām mēģināt. "
+"Pēdējās kļūdas kods: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:125
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took to long. Please try again."
-msgstr ""
+msgstr "Mēģinājums izpildīt pieprasījumu ir ieildzis. Lūdzu mēģiniet vēlreiz."
 
 #: pretix/static/pretixbase/js/asynctask.js:150
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
+"Šobrīd neizdodas izveidot savienojumu ar serveri. Lūdzu mēģiniet vēlreiz. "
+"Kļūdas kods: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:171
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Mēs apstrādājam jūsu pieprasījumu …"
 
 #: pretix/static/pretixbase/js/asynctask.js:179
 msgid ""
@@ -115,130 +119,139 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"Jūsu pieprasījums šobrīd tiek sūtīts uz serveri apstrādei. Ja šis process "
+"aizņem ilgāk kā vienu minūti, lūdzu pārbaudiet savu interneta savienojumu, "
+"pārlādējiet šo lapu un mēģiniet vēlreiz."
 
 #: pretix/static/pretixbase/js/asynctask.js:216
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
-msgstr ""
+msgstr "Aizvērt ziņu"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr ""
+msgstr "Nokopēts!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "Nospiediet Ctrl-C, lai nokopētu!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
-msgstr ""
+msgstr "Galvenās skenēšanas QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:45
 msgid "Check-in QR"
-msgstr ""
+msgstr "Reģistrācijas QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
+msgstr "Fona PDF fails nevarēja ielādēties sekojoša iemesla dēļ:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:418
 msgid "Group of objects"
-msgstr ""
+msgstr "Objektu grupa"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:424
 msgid "Text object"
-msgstr ""
+msgstr "Teksta objekts"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:426
 msgid "Barcode area"
-msgstr ""
+msgstr "Svītru koda lauks"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Pretix atbalstīts"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
-msgstr ""
+msgstr "Objekts"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:434
 msgid "Ticket design"
-msgstr ""
+msgstr "Biļešu dizains"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:687
 msgid "Saving failed."
-msgstr ""
+msgstr "Saglabāšana neizdevās."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:736
 #: pretix/static/pretixcontrol/js/ui/editor.js:774
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Radusies kļūda augšupielādējot jūsu PDF failu, lūdzu mēģiniet vēlreiz."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:759
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
+"Vai jūs tiešām vēlaties iziet no rediģēšanas lauka bez veikto izmaiņu "
+"saglabāšanas?"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr ""
+msgstr "Ir radusies kļūda."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
-msgstr ""
+msgstr "Ziņas tiek ģenerētas …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:69
 msgid "Unknown error."
-msgstr ""
+msgstr "Nezināma kļūda."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:231
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "Izvēlētā teksta krāsa ļoti labi izceļas un ir viegli lasāma!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:235
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Izvēlētā krāsa tekstam pietiekami izceļas un visdrīzāk būs samērā viegli "
+"lasāma!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:239
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Izvēlētā krāsa tekstam neizceļas uz esošā fona, lūdzu izvēlieties tumšāku "
+"krāsu."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:355
 msgid "All"
-msgstr ""
+msgstr "Visi"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:356
 msgid "None"
-msgstr ""
+msgstr "Neviens"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:677
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Izmantojiet citu nosaukumu iekšēji"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:734
 msgid "Click to close"
-msgstr ""
+msgstr "Noklikšķiniet, lai aizvērtu"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
 msgid "Calculating default price…"
-msgstr ""
+msgstr "Aprēķina pamata cenu…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "Citi"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
-msgstr ""
+msgstr "Skaits"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Yes"
-msgstr ""
+msgstr "Jā"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
 msgid "No"
-msgstr ""
+msgstr "Nē"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -249,11 +262,11 @@ msgstr[2] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Jūsu precēm, kas atradās grozā, rezervācijas laiks ir beidzies."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Pirkumu groza rezervācijas laiks ir beidzies"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
@@ -264,12 +277,12 @@ msgstr[2] ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:213
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "Lūdzu ievadiet pieejamo daudzumu konkrētajam biļešu veidam."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Izpārdots"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
