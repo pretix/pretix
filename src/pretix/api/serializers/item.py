@@ -122,9 +122,6 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard')
         read_only_fields = ('has_variations', 'picture')
 
-    def get_serializer_context(self):
-        return {"has_variations": self.kwargs['has_variations']}
-
     def validate(self, data):
         data = super().validate(data)
         if self.instance and ('addons' in data or 'variations' in data or 'bundles' in data):
