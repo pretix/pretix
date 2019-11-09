@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-10-26 01:00+0000\n"
+"PO-Revision-Date: 2019-11-09 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1138,10 +1138,10 @@ msgid "Keep me logged in"
 msgstr "Houd mij ingelogd"
 
 #: pretix/base/forms/auth.py:19 pretix/base/forms/auth.py:188
-#, fuzzy
-#| msgid "This voucher code is not known in our database."
 msgid "This combination of credentials is not known to our system."
-msgstr "Deze vouchercode is niet bekend in onze database."
+msgstr ""
+"Deze combinatie van gebruikersnaam en wachtwoord is niet bekend in onze "
+"database."
 
 #: pretix/base/forms/auth.py:20 pretix/base/forms/auth.py:189
 msgid "This account is inactive."
@@ -1585,18 +1585,12 @@ msgid "Include pending orders"
 msgstr "Neem ook openstaande bestellingen mee"
 
 #: pretix/base/models/checkin.py:20
-#, fuzzy
-#| msgid ""
-#| "With this option, people will be able to check in even if the order have "
-#| "not been paid. This only works with pretixdesk 0.3.0 or newer or "
-#| "pretixdroid 1.9 or newer."
 msgid ""
 "With this option, people will be able to check in even if the order have not "
 "been paid."
 msgstr ""
 "Als deze optie is ingeschakeld kunnen mensen ingecheckt worden zelfs als de "
-"bestelling niet betaald is. Dit werkt alleen met pretixdesk 0.3.0 of nieuwer "
-"of pretixdroid 1.9 of nieuwer."
+"bestelling niet betaald is."
 
 #: pretix/base/models/checkin.py:26
 msgid "Sales channels to automatically check in"
@@ -1729,11 +1723,11 @@ msgstr "Plaats"
 
 #: pretix/base/models/event.py:328 pretix/base/models/event.py:941
 msgid "Latitude"
-msgstr ""
+msgstr "Breedtegraad"
 
 #: pretix/base/models/event.py:332 pretix/base/models/event.py:945
 msgid "Longitude"
-msgstr ""
+msgstr "Lengtegraad"
 
 #: pretix/base/models/event.py:337 pretix/control/navigation.py:44
 msgid "Plugins"
@@ -1871,16 +1865,12 @@ msgstr "Geen waarde kan het scheidingsteken bevatten."
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:22
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:44
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:39
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card code"
-msgstr "Cadeaubon"
+msgstr "Cadeauboncode"
 
 #: pretix/base/models/giftcards.py:56
-#, fuzzy
-#| msgid "Test mode"
 msgid "Test mode card"
-msgstr "Testmodus"
+msgstr "Testcadeaubon"
 
 #: pretix/base/models/invoices.py:128 pretix/base/services/invoices.py:89
 #, python-format
@@ -2208,16 +2198,16 @@ msgid "Sales channels"
 msgstr "Verkoopkanalen"
 
 #: pretix/base/models/items.py:419
-#, fuzzy
-#| msgid "The product the user waits for."
 msgid "This product is a gift card"
-msgstr "Het product waar de gebruiker op wacht."
+msgstr "Dit product is een cadeaubon"
 
 #: pretix/base/models/items.py:420
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
+"Wanneer een klant dit product koopt ontvangt de klant een cadeaubon met een "
+"waarde die overeenkomt met de productprijs."
 
 #: pretix/base/models/items.py:429 pretix/base/models/items.py:1026
 #: pretix/control/forms/filter.py:184 pretix/control/forms/filter.py:732
@@ -2926,10 +2916,8 @@ msgstr ""
 "team toevoegt!"
 
 #: pretix/base/models/organizer.py:180
-#, fuzzy
-#| msgid "Can change orders"
 msgid "Can manage gift cards"
-msgstr "Kan bestellingen wijzigen"
+msgstr "Kan cadeaubonnen beheren"
 
 #: pretix/base/models/organizer.py:185
 msgid "Can change event settings"
@@ -3350,10 +3338,8 @@ msgid "Order status"
 msgstr "Bestelstatus"
 
 #: pretix/base/notifications.py:194
-#, fuzzy
-#| msgid "Change products"
 msgid "Purchased products"
-msgstr "Verander producten"
+msgstr "Gekochte producten"
 
 #: pretix/base/notifications.py:195
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:40
@@ -3631,91 +3617,77 @@ msgstr "Verrekend met bestellingen: %s"
 
 #: pretix/base/payment.py:911
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "In de testmodus zullen alleen testcadeaubonnen bruikbaar zijn."
 
 #: pretix/base/payment.py:959 pretix/base/payment.py:1011
 #: pretix/base/payment.py:1052 pretix/base/services/orders.py:616
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr ""
+msgstr "U kunt niet met cadeaubonnen betalen wanneer u een cadeaubon koopt."
 
 #: pretix/base/payment.py:968 pretix/base/payment.py:1019
 #: pretix/base/payment.py:1060 pretix/base/services/orders.py:607
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid "This gift card does not support this currency."
-msgstr "Deze betalingsmethode ondersteunt geen automatische terugbetalingen."
+msgstr "Deze cadeaubon ondersteunt deze munteenheid niet."
 
 #: pretix/base/payment.py:971 pretix/base/payment.py:1022
 #: pretix/base/services/orders.py:609
-#, fuzzy
-#| msgid "This refund can not be processed at the moment."
 msgid "This gift card can only be used in test mode."
-msgstr "Deze terugbetaling kan momenteel niet worden verwerkt."
+msgstr "Deze cadeaubon kan alleen in de testmodus worden gebruikt."
 
 #: pretix/base/payment.py:974 pretix/base/payment.py:1025
 #: pretix/base/services/orders.py:611
-#, fuzzy
-#| msgid "Permanently delete all orders created in test mode"
 msgid "Only test gift cards can be used in test mode."
-msgstr "Alle bestellingen die in testmodus zijn gemaakt permanent verwijderen"
+msgstr "Alleen testcadeaubonnen kunnen in de testmodus worden gebruikt."
 
 #: pretix/base/payment.py:977 pretix/base/payment.py:1028
-#, fuzzy
-#| msgid "Access for this device has been revoked."
 msgid "All credit on this gift card has been used."
-msgstr "De toegang voor dit apparaat is ingetrokken."
+msgstr "Het tegoed van deze cadeaubon is verbruikt."
 
 #: pretix/base/payment.py:982
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This gift card is already used for your payment."
-msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
+msgstr "Deze cadeaubon wordt al voor uw betaling gebruikt."
 
 #: pretix/base/payment.py:989
 msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
 msgstr ""
+"Uw cadeaubon is gebruikt, maar er moet nog {} worden betaald. Kies een "
+"betalingmethode voor het resterende bedrag."
 
 #: pretix/base/payment.py:993
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your gift card has been applied."
-msgstr "Uw winkelwagen is bijgewerkt."
+msgstr "Uw cadeaubon is succesvol gebruikt."
 
 #: pretix/base/payment.py:1001 pretix/base/payment.py:1040
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
+"U heeft een vouchercode in plaats van een cadeauboncode ingevoerd. Vouchers "
+"kunnen alleen op de eerste pagina van de winkel worden ingevoerd, onder de "
+"productkeuze."
 
 #: pretix/base/payment.py:1004 pretix/base/payment.py:1043
-#, fuzzy
-#| msgid "This feature is not enabled."
 msgid "This gift card is not known."
-msgstr "Deze functie is niet ingeschakeld."
+msgstr "Deze cadeauboncode is onbekend."
 
 #: pretix/base/payment.py:1006 pretix/base/payment.py:1045
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
+"Deze cadeaubon kan niet worden gebruikt, omdat de code niet uniek is. Neem "
+"contact op met de organisator van dit evenement."
 
 #: pretix/base/payment.py:1062 pretix/base/services/orders.py:613
-#, fuzzy
-#| msgid "This order is not yet approved by the event organizer."
 msgid "This gift card is not accepted by this event organizer."
 msgstr ""
-"Deze bestelling is nog niet goedgekeurd door de organisator van het "
-"evenement."
+"Deze cadeaubon wordt niet geaccepteerd door de organisator van dit evenement."
 
 #: pretix/base/payment.py:1064
-#, fuzzy
-#| msgid "There was an error sending the mail. Please try again later."
 msgid "This gift card was used in the meantime. Please try again"
-msgstr ""
-"Er is een fout opgetreden bij het verzenden van de e-mail. Probeer het later "
-"opnieuw."
+msgstr "Deze cadeaubon is in de tussentijd gebruikt. Probeer het opnieuw."
 
 #: pretix/base/pdf.py:47
 msgid "Ticket code (barcode content)"
@@ -4209,6 +4181,9 @@ msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
+"U heeft een cadeauboncode ingevoerd in plaats van een vouchercode. "
+"Cadeaubonnen kunnen worden gebruikt tijdens het betalingsproces, wanneer u "
+"om uw betalingsgegevens wordt gevraagd."
 
 #: pretix/base/services/checkin.py:97
 msgid "This order position has been canceled."
@@ -4465,6 +4440,8 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Deze bestelling kan niet worden geannuleerd, omdat de in deze bestelling "
+"gekochte cadeaubon {card} al is gebruikt."
 
 #: pretix/base/services/orders.py:330 pretix/control/forms/orders.py:112
 msgid ""
@@ -4484,6 +4461,11 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
+"Bij het plaatsen van uw bestelling is het totaalbedrag van de bestelling "
+"veranderd. Dit kan gebeuren doordat de prijs van een van de gekochte "
+"producten zojuist is veranderd, of doordat een cadeaubon die u heeft "
+"gebruikt in de tussentijd door een andere bestelling is gebruikt. Controleer "
+"de getoonde bedragen hieronder en probeer het opnieuw."
 
 #: pretix/base/services/orders.py:875
 #, python-format
@@ -4589,6 +4571,8 @@ msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
 msgstr ""
+"U kunt de prijs van een plaats die is gebruikt om een cadeaubon uit te geven "
+"niet wijzigen."
 
 #: pretix/base/services/orders.py:1311
 #, python-brace-format
@@ -4596,6 +4580,8 @@ msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Een plaats kan niet worden geannuleerd, omdat de in deze bestelling gekochte "
+"cadeaubon {card} al is gebruikt."
 
 #: pretix/base/services/orders.py:1671
 msgid ""
@@ -4689,10 +4675,9 @@ msgid "Plugin: %s"
 msgstr "Plug-in: %s"
 
 #: pretix/base/services/vouchers.py:35 pretix/control/logdisplay.py:256
-#, fuzzy, python-brace-format
-#| msgid "The voucher has been created."
+#, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr "De voucher is aangemaakt."
+msgstr "De voucher is verstuurd naar {recipient}."
 
 #: pretix/base/settings.py:326
 #, python-brace-format
@@ -6568,16 +6553,16 @@ msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "Alle e-mails zullen als BCC-kopie worden verstuurd naar dit adres"
 
 #: pretix/control/forms/event.py:984
-#, fuzzy
-#| msgid "Cached ticket files"
 msgid "Attach calendar files"
-msgstr "Gecachete ticketbestanden"
+msgstr "Kalenderbestanden bijsluiten"
 
 #: pretix/control/forms/event.py:985
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
+"Als deze optie is ingeschakeld zullen we een .ics-kalenderbestand meesturen "
+"bij bestellingsbevestigingsmails."
 
 #: pretix/control/forms/event.py:990
 msgid "Signature"
@@ -7245,21 +7230,21 @@ msgstr "Detailtekst globale berichtbanner"
 
 #: pretix/control/forms/global_settings.py:42
 msgid "OpenCage API key for geocoding"
-msgstr ""
+msgstr "OpenCage-API-sleutel voor geocoding"
 
 #: pretix/control/forms/global_settings.py:46
 msgid "Leaflet tiles URL pattern"
-msgstr ""
+msgstr "URL-patroon voor Leaflet-tegels"
 
 #: pretix/control/forms/global_settings.py:47
 #: pretix/control/forms/global_settings.py:52
 #, python-brace-format
 msgid "e.g. {sample}"
-msgstr ""
+msgstr "bijv. {sample}"
 
 #: pretix/control/forms/global_settings.py:51
 msgid "Leaflet tiles attribution"
-msgstr ""
+msgstr "Attributie voor Leaflet-tegels"
 
 #: pretix/control/forms/global_settings.py:68
 msgid "Perform update checks"
@@ -7515,13 +7500,16 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:172
 msgid "Issue a new invoice if required"
-msgstr ""
+msgstr "Genereer indien nodig een nieuwe factuur"
 
 #: pretix/control/forms/orders.py:176
 msgid ""
 "If an invoice exists for this order and this operation would change its "
 "contents, the old invoice will be cancelled and a new invoice will be issued."
 msgstr ""
+"Als er een factuur bestaat voor deze bestelling en deze handeling zou de "
+"inhoud van de factuur aanpassen wordt de oude factuur geannuleerd en een "
+"nieuwe factuur gegenereerd."
 
 #: pretix/control/forms/orders.py:181
 msgid "Notify user"
@@ -7576,10 +7564,8 @@ msgid "Split into new order"
 msgstr "Splitsen naar nieuwe bestelling"
 
 #: pretix/control/forms/orders.py:413
-#, fuzzy
-#| msgid "Remove filter"
 msgid "Remove this fee"
-msgstr "Verwijder filter"
+msgstr "Verwijder deze toeslag"
 
 #: pretix/control/forms/orders.py:427
 msgid "Invalidate secrets"
@@ -7763,10 +7749,8 @@ msgid "Event types"
 msgstr "Evenementstypes"
 
 #: pretix/control/forms/organizer.py:338
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card value"
-msgstr "Cadeaubon"
+msgstr "Waarde van cadeaubon"
 
 #: pretix/control/forms/renderers.py:27
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:120
@@ -7863,32 +7847,16 @@ msgstr ""
 "op te slaan in een bestand."
 
 #: pretix/control/forms/vouchers.py:201
-#, fuzzy
-#| msgid "Send vouchers"
 msgid "Send vouchers via email"
-msgstr "Stuur vouchers"
+msgstr "Stuur vouchers via e-mail"
 
 #: pretix/control/forms/vouchers.py:208
-#, fuzzy, python-brace-format
-#| msgid "Your orders for {}"
+#, python-brace-format
 msgid "Your voucher for {event}"
-msgstr "Uw bestellingen voor {}"
+msgstr "Uw voucher voor {event}"
 
 #: pretix/control/forms/vouchers.py:214
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "unfortunately, we denied your order request for {event}.\n"
-#| "\n"
-#| "{comment}\n"
-#| "\n"
-#| "You can view the details of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -7906,27 +7874,24 @@ msgid ""
 msgstr ""
 "Beste heer/mevrouw,\n"
 "\n"
-"We hebben uw bestelverzoek voor {event} afgewezen.\n"
+"Met deze e-mail sturen we u een of meerdere vouchers voor {event}:\n"
 "\n"
-"{comment}\n"
+"{voucher_list}\n"
 "\n"
-"U kunt de gegevens van uw bestelling bekijken op\n"
+"Deze vouchers zijn te gebruiken in onze ticketwinkel op:\n"
+"\n"
 "{url}\n"
 "\n"
 "Met vriendelijke groeten,\n"
 "Organisatie van {event}"
 
 #: pretix/control/forms/vouchers.py:220
-#, fuzzy
-#| msgid "Recipient"
 msgid "Recipients"
-msgstr "Ontvanger"
+msgstr "Ontvangers"
 
 #: pretix/control/forms/vouchers.py:224
-#, fuzzy
-#| msgid "Port"
 msgid "or"
-msgstr "Poort"
+msgstr "of"
 
 #: pretix/control/forms/vouchers.py:228
 msgid ""
@@ -7934,6 +7899,9 @@ msgid ""
 "line, or a CSV file with a title column and one or more of the columns "
 "\"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
+"U kunt een lijst van e-mailadressen opgeven, met een e-mailadres per regel, "
+"of een CSV-bestand met een titelkolom en een of meerdere van de kolommen \""
+"email\", \"number\", \"name\", of \"tag\"."
 
 #: pretix/control/forms/vouchers.py:264
 msgid "Maximum usages per voucher"
@@ -7945,29 +7913,27 @@ msgstr "Het aantal keren dat ELKE van deze vouchers kan worden gebruikt."
 
 #: pretix/control/forms/vouchers.py:283
 msgid "CSV input needs to contain a header row in the first line."
-msgstr ""
+msgstr "CSV-invoer moet op de eerste regel een header bevatten."
 
 #: pretix/control/forms/vouchers.py:287
 #, python-brace-format
 msgid "CSV input needs to contain a field with the header \"{header}\"."
-msgstr ""
+msgstr "CSV-invoer moet een veld met de header \"{header}\" bevatten."
 
 #: pretix/control/forms/vouchers.py:290
 #, python-brace-format
 msgid "CSV input contains an unknown field with the header \"{header}\"."
-msgstr ""
+msgstr "CSV-invoer bevat een onbekend veld met de header \"{header}\"."
 
 #: pretix/control/forms/vouchers.py:295 pretix/control/forms/vouchers.py:310
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid email address."
+#, python-brace-format
 msgid "{value} is not a valid email address."
-msgstr "Vul alstublieft een geldig e-mailadres in."
+msgstr "{value} is geen geldig e-mailadres."
 
 #: pretix/control/forms/vouchers.py:304
-#, fuzzy, python-brace-format
-#| msgid "Invalid date input."
+#, python-brace-format
 msgid "Invalid value in row {number}."
-msgstr "Ongeldige datuminvoer."
+msgstr "Ongeldige waarde in rij {number}."
 
 #: pretix/control/forms/vouchers.py:322
 msgid "A voucher with one of these codes already exists."
@@ -7978,12 +7944,15 @@ msgid ""
 "If vouchers should be sent by email, subject, message and recipients need to "
 "be specified."
 msgstr ""
+"Als vouchers moeten worden verzonden via e-mail moet er ook een onderwerp, "
+"bericht en ontvanger(s) worden opgegeven."
 
 #: pretix/control/forms/vouchers.py:332
 #, python-brace-format
 msgid ""
 "You generated {codes} vouchers, but entered recipients for {recp} vouchers."
 msgstr ""
+"U genereerde {codes} vouchers, maar gaf ontvangers voor {recp} vouchers op."
 
 #: pretix/control/logdisplay.py:30
 msgid "The order has been changed:"
@@ -8018,15 +7987,14 @@ msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "Prijs van plaats #{posid} veranderd van {old_price} naar {new_price}."
 
 #: pretix/control/logdisplay.py:69
-#, fuzzy, python-brace-format
-#| msgid "Price of position #{posid} changed from {old_price} to {new_price}."
+#, python-brace-format
 msgid "A fee was changed from {old_price} to {new_price}."
-msgstr "Prijs van plaats #{posid} veranderd van {old_price} naar {new_price}."
+msgstr "Een toeslag is veranderd van {old_price} naar {new_price}."
 
 #: pretix/control/logdisplay.py:74
 #, python-brace-format
 msgid "A fee of {old_price} was removed."
-msgstr ""
+msgstr "Een toeslag van {old_price} is verwijderd."
 
 #: pretix/control/logdisplay.py:81
 #, python-brace-format
@@ -8982,10 +8950,8 @@ msgid "Devices"
 msgstr "Apparaten"
 
 #: pretix/control/navigation.py:442
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift cards"
-msgstr "Cadeaubon"
+msgstr "Cadeaubonnen"
 
 #: pretix/control/navigation.py:451
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
@@ -9569,6 +9535,11 @@ msgid ""
 "are connected on the organizer level, you do not have to create a new device "
 "for every event but can reuse them over and over again."
 msgstr ""
+"Als u hiervoor voldoende rechten op uw organisatoraccount heeft kunt u "
+"nieuwe apparaten verbinden met uw account, en deze apparaten gebruiken om "
+"tickets te controleren. Omdat de apparaten zijn verbonden met uw "
+"organisatoraccount hoeft u dit maar eenmalig te doen, waarna u het apparaat "
+"kunt gebruiken voor meerdere evenementen."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:40
 msgid "Your search did not match any check-in lists."
@@ -10431,19 +10402,13 @@ msgstr "Basisinstellingen"
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:44
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:32
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No dates"
 msgid "Geo coordinates"
-msgstr "Geen datums"
+msgstr "Geo-coördinaten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:28
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:45
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:33
-#, fuzzy
-#| msgctxt "form"
-#| msgid "Optional"
 msgid "Optional"
 msgstr "Optioneel"
 
@@ -10452,7 +10417,7 @@ msgstr "Optioneel"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:282
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:40
 msgid "Geocoding data © OpenStreetMap"
-msgstr ""
+msgstr "Geocoding-data © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:55
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:299
@@ -10826,6 +10791,14 @@ msgid ""
 "the difference.\n"
 "    "
 msgstr ""
+"\n"
+"        Als u een cadeaubon heeft kunt u de cadeauboncode hier invoeren. Als "
+"de cadeaubon onvoldoende\n"
+"        saldo heeft om voor de hele bestelling te betalen zult u deze pagina "
+"opnieuw zien, en kunt u een\n"
+"        andere cadeaubon gebruiken of een andere betalingsmethode selecteren "
+"voor het restbedrag.\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout_confirm.html:4
 msgid ""
@@ -10837,12 +10810,18 @@ msgid ""
 "future.\n"
 "    "
 msgstr ""
+"\n"
+"        Uw cadeaubon zal worden gebruikt om voor deze bestelling te betalen. "
+"Als het saldo op de cadeaubon lager is dan het totaalbedrag van de "
+"bestelling zult u het restbedrag kunnen betalen met een andere "
+"betalingsmethode. Als het saldo op de cadeaubon hoger is dan het "
+"totaalbedrag van de bestelling zult u de cadeaubon later bij een andere "
+"bestelling opnieuw kunnen gebruiken.\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
-#, fuzzy
-#| msgid "Issuer details"
 msgid "Issuer"
-msgstr "Gegevens factuuruitgever"
+msgstr "Uitgever"
 
 #: pretix/control/templates/pretixcontrol/global_message.html:5
 #: pretix/control/templates/pretixcontrol/global_message.html:7
@@ -11750,6 +11729,9 @@ msgid ""
 "automatically be on subsequent order changes or when choosing a different "
 "payment method."
 msgstr ""
+"Het handmatig bewerken van betalingstoeslagen wordt afgeraden, omdat deze "
+"kosten anders kunnen zijn na later volgende wijzigingen in de bestelling of "
+"wanneer een andere betalingsmethode wordt gekozen."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:317
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:65
@@ -12693,60 +12675,52 @@ msgid "Add property"
 msgstr "Eigenschap toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
-#, fuzzy, python-format
-#| msgid "Gift card"
+#, python-format
 msgid "Gift card: %(card)s"
-msgstr "Cadeaubon"
+msgstr "Cadeaubon: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:17
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:66
-#, fuzzy
-#| msgid "Order details"
 msgid "Details"
-msgstr "Bestellingsdetails"
+msgstr "Details"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:31
 msgid "Issued through sale"
-msgstr ""
+msgstr "Uitgegeven door verkoop"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:43
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transactions"
-msgstr "Transactiecode"
+msgstr "Transacties"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:64
-#, fuzzy
-#| msgid "Latin transcription"
 msgid "Manual transaction"
-msgstr "Transcriptie"
+msgstr "Handmatige transactie"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_create.html:5
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create a new gift card"
-msgstr "Nieuw team aanmaken"
+msgstr "Nieuwe cadeaubon aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:7
-#, fuzzy
-#| msgid "Credit card"
 msgid "Issued gift cards"
-msgstr "Creditcard"
+msgstr "Uitgegeven cadeaubonnen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:12
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
+"U heeft nog geen cadeaubonnen uitgegeven. U kunt een product toevoegen in uw "
+"ticketwinkel om cadeaubonnen uit te geven, of u kunt handmatig cadeaubonnen "
+"aanmaken."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:19
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:38
 msgid "Manually issue a gift card"
-msgstr ""
+msgstr "Handmatig cadeaubon aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:81
 msgid "Accepted gift cards of other organizers"
-msgstr ""
+msgstr "Geaccepteerde cadeaubonnen van andere organisators"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:83
 msgid ""
@@ -12754,10 +12728,13 @@ msgid ""
 "ticket shops in this account will also accept gift codes issued through a "
 "different organizer account, and vice versa."
 msgstr ""
+"Als u toegang heeft tot meerdere organisatoraccounts kunt u hier instellen "
+"dat ticketwinkels in dit account ook cadeaubonnen accepteren die zijn "
+"uitgegeven door een ander organisatoraccount, en omgekeerd."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:99
 msgid "You are currently not accepting gift cards from other organizers."
-msgstr ""
+msgstr "U accepteert momenteel geen cadeaubonnen van andere organisators."
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
@@ -13848,10 +13825,8 @@ msgid "Anonymize"
 msgstr "Anonimiseren"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:36
-#, fuzzy
-#| msgid "Two-factor authentication enabled"
 msgid "Authentication backend"
-msgstr "Twee-factor-authenticatie ingeschakeld"
+msgstr "Authenticatie-backend"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:50
 msgid "Team memberships"
@@ -14205,10 +14180,8 @@ msgid "Organizer-level settings"
 msgstr "Instellingen op organisator-niveau"
 
 #: pretix/control/templatetags/hierarkey_form.py:44
-#, fuzzy
-#| msgid "Organizer-level settings"
 msgid "Site-level settings"
-msgstr "Instellingen op organisator-niveau"
+msgstr "Site-brede instellingen"
 
 #: pretix/control/templatetags/hierarkey_form.py:47
 msgid ""
@@ -14224,43 +14197,33 @@ msgstr ""
 "alleen voor dit evenement aan te passen."
 
 #: pretix/control/templatetags/hierarkey_form.py:51
-#, fuzzy
-#| msgid ""
-#| "These settings are currently set on organizer level. This way, you can "
-#| "easily change them for all of your events at the same time. You can "
-#| "either go to the organizer settings to change them or decouple them from "
-#| "the organizer account to change them for this event individually."
 msgid ""
 "These settings are currently set on global level. This way, you can easily "
 "change them for all organizers at the same time. You can either go to the "
 "global settings to change them or decouple them from the global settings to "
 "change them for this event individually."
 msgstr ""
-"Deze instellingen zijn momenteel op het niveau van de organisator ingesteld. "
-"Hierdoor kunt u de instellingen gemakkelijk wijzigen voor al uw evenementen "
-"tegelijk. U kunt naar de organisatorinstellingen gaan om deze aan te passen, "
-"of u kunt de instellingen ontkoppelen van de organisatorinstellingen om ze "
-"alleen voor dit evenement aan te passen."
+"Deze instellingen zijn momenteel op het globale niveau ingesteld. Hierdoor "
+"kunt u de instellingen gemakkelijk wijzigen voor alle organisators tegelijk. "
+"U kunt naar de globale instellingen gaan om deze aan te passen, of u kunt de "
+"instellingen ontkoppelen van de globale instellingen om ze alleen voor deze "
+"organisator aan te passen."
 
 #: pretix/control/templatetags/hierarkey_form.py:55
 msgid "Change only for this event"
 msgstr "Verander alleen voor dit evenement"
 
 #: pretix/control/templatetags/hierarkey_form.py:55
-#, fuzzy
-#| msgid "Change only for this event"
 msgid "Change only for this organizer"
-msgstr "Verander alleen voor dit evenement"
+msgstr "Verander alleen voor deze organisator"
 
 #: pretix/control/templatetags/hierarkey_form.py:56
 msgid "Change for all events"
 msgstr "Verander voor alle evenementen"
 
 #: pretix/control/templatetags/hierarkey_form.py:56
-#, fuzzy
-#| msgid "Change for all events"
 msgid "Change for all organizers"
-msgstr "Verander voor alle evenementen"
+msgstr "Verander voor alle organisators"
 
 #: pretix/control/views/__init__.py:145
 msgid "That page number is not an integer"
@@ -14673,7 +14636,7 @@ msgstr "De volgorde van categorieën is bijgewerkt."
 
 #: pretix/control/views/item.py:300
 msgid "Some of the provided question ids are invalid."
-msgstr ""
+msgstr "Sommige van de opgegeven vraagnummers zijn ongeldig."
 
 #: pretix/control/views/item.py:348
 msgid "The selected question does not exist."
@@ -15180,6 +15143,8 @@ msgstr "Deze gebruiker is al uitgenodigd voor dit team."
 #: pretix/control/views/organizer.py:631
 msgid "Users need to have a pretix account before they can be invited."
 msgstr ""
+"Gebruikers moeten een pretix-account hebben voordat ze kunnen worden "
+"uitgenodigd."
 
 #: pretix/control/views/organizer.py:641
 msgid "The new member has been invited to the team."
@@ -15216,38 +15181,28 @@ msgid "Access for this device has been revoked."
 msgstr "De toegang voor dit apparaat is ingetrokken."
 
 #: pretix/control/views/organizer.py:957
-#, fuzzy
-#| msgid "The selected tax rule has been deleted."
 msgid "The selected gift card issuer has been added."
-msgstr "De gekozen belastingregel is verwijderd."
+msgstr "De gekozen cadeaukaartuitgever is toegevoegd."
 
 #: pretix/control/views/organizer.py:971
-#, fuzzy
-#| msgid "The selected tax rule has been deleted."
 msgid "The selected gift card issuer has been removed."
-msgstr "De gekozen belastingregel is verwijderd."
+msgstr "De gekozen cadeaukaartuitgever is verwijderd."
 
 #: pretix/control/views/organizer.py:1005
-#, fuzzy
-#| msgid "The password you entered was invalid, please try again."
 msgid "Your input was invalid, please try again."
-msgstr "Het wachtwoord dat u invoerde was ongeldig, probeer het opnieuw."
+msgstr "Uw invoer was ongeldig, probeer het opnieuw."
 
 #: pretix/control/views/organizer.py:1008
 msgid "Gift cards are not allowed to have negative values."
-msgstr ""
+msgstr "Cadeaubonnen kunnen geen negatieve waarde hebben."
 
 #: pretix/control/views/organizer.py:1020
-#, fuzzy
-#| msgid "The question has been added."
 msgid "The manual transaction has been saved."
-msgstr "De vraag is toegevoegd."
+msgstr "De handmatige transactie is opgeslagen."
 
 #: pretix/control/views/organizer.py:1051
-#, fuzzy
-#| msgid "The device has been verified and can now be used."
 msgid "The gift card has been created and can now be used."
-msgstr "Het apparaat is geverifieerd en kan nu worden gebruikt."
+msgstr "De cadeaubon is aangemaakt en kan nu worden gebruikt."
 
 #: pretix/control/views/pdf.py:52
 msgid "The uploaded PDF file is to large."
@@ -15440,10 +15395,9 @@ msgid "There is no voucher with the given voucher code."
 msgstr "Er is geen voucher met de gegeven vouchercode."
 
 #: pretix/control/views/vouchers.py:335
-#, fuzzy
-#| msgid "{num} vouchers have been created and sent out via email."
 msgid "The new vouchers have been created and will be sent out shortly."
-msgstr "{num} vouchers zijn aangemaakt en verstuurd via email."
+msgstr ""
+"De nieuwe vouchers zijn aangemaakt en zullen binnenkort worden verzonden."
 
 #: pretix/control/views/vouchers.py:337
 msgid "The new vouchers have been created."
@@ -16263,23 +16217,16 @@ msgid "Refunding the amount via PayPal failed: {}"
 msgstr "Het bedrag via PayPal terugbetalen is mislukt: {}"
 
 #: pretix/plugins/paypal/payment.py:541 pretix/plugins/paypal/payment.py:549
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "The payment for this invoice has already been received."
 msgid "The payment for this invoice has already been received."
 msgstr "De betaling voor deze factuur is al ontvangen."
 
 #: pretix/plugins/paypal/payment.py:542 pretix/plugins/paypal/payment.py:550
-#, fuzzy
-#| msgid "PayPal payment history"
 msgid "PayPal payment ID"
-msgstr "PayPal-betalingsgeschiedenis"
+msgstr "PayPal-betalingskenmerk"
 
 #: pretix/plugins/paypal/payment.py:544
-#, fuzzy
-#| msgid "PayPal Connect: Client ID"
 msgid "PayPal sale ID"
-msgstr "PayPal Connect: Client-ID"
+msgstr "PayPal verkoopskenmerk"
 
 #: pretix/plugins/paypal/signals.py:30
 msgid "Payment completed."
@@ -16786,16 +16733,12 @@ msgid "Only send to people who bought"
 msgstr "Verstuur alleen aan klanten die kochten"
 
 #: pretix/plugins/sendmail/forms.py:32
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Filter check-in status"
-msgstr "Incheckstatus"
+msgstr "Filteren op incheckstatus"
 
 #: pretix/plugins/sendmail/forms.py:36
-#, fuzzy
-#| msgid "Send to customers with order status"
 msgid "Send to customers not checked in"
-msgstr "Stuur naar klanten met bestelstatus"
+msgstr "Stuur naar niet-ingecheckte klanten"
 
 #: pretix/plugins/sendmail/forms.py:39
 msgid "Only send to customers of"
@@ -16827,10 +16770,8 @@ msgid "Send to customers with order status"
 msgstr "Stuur naar klanten met bestelstatus"
 
 #: pretix/plugins/sendmail/forms.py:114 pretix/plugins/sendmail/forms.py:119
-#, fuzzy
-#| msgid "Send to customers with order status"
 msgid "Send to customers checked in on list"
-msgstr "Stuur naar klanten met bestelstatus"
+msgstr "Stuur naar ingecheckte klanten op lijst"
 
 #: pretix/plugins/sendmail/signals.py:48
 msgid "Email was sent"
@@ -16849,10 +16790,8 @@ msgid "Sent to orders:"
 msgstr "Verstuurd aan bestellingen:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:28
-#, fuzzy
-#| msgid "Automatically checked in"
 msgid "All customers not checked in"
-msgstr "Automatisch ingecheckt"
+msgstr "Alle niet ingecheckte klanten"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:38
 msgid "Attendee contact addresses"
@@ -16961,22 +16900,16 @@ msgstr ""
 "met \"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:30 pretix/plugins/stripe/signals.py:126
-#, fuzzy
-#| msgid "Stripe Connect: Secret key (test)"
 msgid "Stripe Connect: App fee (percent)"
-msgstr "Stripe Connect: Geheime sleutel (test)"
+msgstr "Stripe Connect: App-toeslag (procent)"
 
 #: pretix/plugins/stripe/forms.py:34 pretix/plugins/stripe/signals.py:130
-#, fuzzy
-#| msgid "Stripe Connect: Secret key"
 msgid "Stripe Connect: App fee (max)"
-msgstr "Stripe Connect: Geheime sleutel"
+msgstr "Stripe Connect: App-toeslag (max.)"
 
 #: pretix/plugins/stripe/forms.py:38 pretix/plugins/stripe/signals.py:134
-#, fuzzy
-#| msgid "Stripe Connect: Secret key"
 msgid "Stripe Connect: App fee (min)"
-msgstr "Stripe Connect: Geheime sleutel"
+msgstr "Stripe Connect: App-toeslag (min.)"
 
 #: pretix/plugins/stripe/payment.py:73
 msgid ""
@@ -17278,10 +17211,8 @@ msgstr "Stripe Connect: Publiceerbare sleutel (test)"
 #: pretix/plugins/stripe/signals.py:164
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:6
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:9
-#, fuzzy
-#| msgid "Stripe Checkout"
 msgid "Stripe Connect"
-msgstr "Stripe Checkout"
+msgstr "Stripe Connect"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
@@ -17777,6 +17708,8 @@ msgid ""
 "Orders made through this sales channel cannot be deleted - even if the "
 "ticket shop is in test mode!"
 msgstr ""
+"Bestellingen die via dit verkoopkanaal worden gemaakt kunnen niet worden "
+"verwijderd - zelfs niet als de ticketwinkel in testmodus staat!"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:110
 msgid "Contact event organizer"
@@ -17918,14 +17851,14 @@ msgid "Please select how you want to pay."
 msgstr "Selecteer hoe u wilt betalen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
-#, fuzzy
-#| msgid "This payment provider does not provide support for testmode."
 msgid "This sales channel does not provide support for testmode."
-msgstr "Deze betalingsprovider heeft geen ondersteuning voor de testmodus."
+msgstr "Dit verkoopkanaal heeft geen ondersteuning voor de testmodus."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
 msgid "If you continue, you might pay an actual order with non-existing money!"
 msgstr ""
+"Als u doorgaat betaalt u mogelijk een echte bestelling met niet-bestaand "
+"geld!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:49
 msgid "This payment provider does not provide support for testmode."
@@ -18166,7 +18099,7 @@ msgstr "Ga"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 #: pretix/presale/views/widget.py:284 pretix/presale/views/widget.py:296
 msgid "Book now"
-msgstr ""
+msgstr "Nu boeken"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:35
 #: pretix/presale/templates/pretixpresale/organizers/index.html:90
@@ -18386,14 +18319,10 @@ msgid "Change details"
 msgstr "Wijzig gegevens"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:134
-#, fuzzy
-#| msgid "Only successful payments"
 msgid "Successful payments"
-msgstr "Alleen geslaagde betalingen"
+msgstr "Geslaagde betalingen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:143
-#, fuzzy
-#| msgid "Pending amount"
 msgid "Pending total"
 msgstr "Openstaand bedrag"
 
@@ -18877,8 +18806,6 @@ msgid "from %(start_date)s"
 msgstr "vanaf %(start_date)s"
 
 #: pretix/presale/views/widget.py:305
-#, fuzzy
-#| msgid "Sale Soon"
 msgid "Sale soon"
 msgstr "Verkoop binnenkort"
 
