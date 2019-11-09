@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-09 01:00+0000\n"
+"PO-Revision-Date: 2019-11-09 20:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/lv/>\n"
@@ -206,7 +206,7 @@ msgstr "Izvēlētā teksta krāsa ļoti labi izceļas un ir viegli lasāma!"
 #: pretix/static/pretixcontrol/js/ui/main.js:235
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
-"Izvēlētā krāsa tekstam pietiekami izceļas un visdrīzāk būs samērā viegli "
+"Izvēlētā teksta krāsa pietiekami izceļas un visdrīzāk būs samērā viegli "
 "lasāma!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:239
@@ -262,7 +262,7 @@ msgstr[2] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr "Jūsu precēm, kas atradās grozā, rezervācijas laiks ir beidzies."
+msgstr "Jūsu grozā saglabātajām precēm rezervācijas laiks ir beidzies."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
@@ -277,7 +277,7 @@ msgstr[2] ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:213
 msgid "Please enter a quantity for one of the ticket types."
-msgstr "Lūdzu ievadiet pieejamo daudzumu konkrētajam biļešu veidam."
+msgstr "Lūdzu ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
@@ -287,84 +287,84 @@ msgstr "Izpārdots"
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Pirkt"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Reģistrēties"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Rezervēts"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "Bezmaksas"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "no %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "iekļ. %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "plus %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "iekļ. nodokļus"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "plus nodokļi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "šobrīd pieejams: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Pieejams tikai ar kuponu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "minimālais pirkuma apjoms: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Aizvērt biļešu veikalu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Biļešu veikals nevarēja ielādēties."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Iepirkumu grozu nebija iespējams izveidot. Lūdzu mēģiniet vēlreiz vēlāk"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Gaidīšanas saraksts"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
@@ -372,11 +372,13 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
+"Jums šobrīd jau ir aktīvs pirkumu grozs šim pasākumam. Ja atlasīsiet "
+"papildus produktus, tie tiks pievienoti esošajam grozam."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Turpināt veikt pirkumu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
@@ -384,139 +386,141 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">pretix "
+"atbalstīta pasākuma biļešu pārdošana </a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Izmantot kuponu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Izmantot"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Kupona kods"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "Aizvērt"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Turpināt"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "See variations"
-msgstr ""
+msgstr "Apskatīt iespējas"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr ""
+msgstr "Izvēlēties citu pasākumu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "Izvēlēties citu datumu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Atpakaļ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Nākamais mēnesis"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Iepriekšējais mēnesis"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Atvērt sēdvietu izvēlni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "Mo"
-msgstr ""
+msgstr "Pi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Tu"
-msgstr ""
+msgstr "Ot"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "We"
-msgstr ""
+msgstr "Tr"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Th"
-msgstr ""
+msgstr "Ce"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "Fr"
-msgstr ""
+msgstr "Pi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Sa"
-msgstr ""
+msgstr "Se"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Su"
-msgstr ""
+msgstr "Sv"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "January"
-msgstr ""
+msgstr "Janvāris"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "February"
-msgstr ""
+msgstr "Februāris"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "March"
-msgstr ""
+msgstr "Marts"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "April"
-msgstr ""
+msgstr "Aprīlis"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "May"
-msgstr ""
+msgstr "Maijs"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "June"
-msgstr ""
+msgstr "Jūnijs"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "July"
-msgstr ""
+msgstr "Jūlijs"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "August"
-msgstr ""
+msgstr "Augusts"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "September"
-msgstr ""
+msgstr "Septembris"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "October"
-msgstr ""
+msgstr "Oktobris"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "November"
-msgstr ""
+msgstr "Novembris"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "December"
-msgstr ""
+msgstr "Decembris"
