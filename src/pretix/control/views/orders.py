@@ -767,7 +767,7 @@ class OrderRefundView(OrderView):
                     if r.payment or r.provider == "offsetting":
                         try:
                             r.payment_provider.execute_refund(r)
-                        except (PaymentException, Quota.QuotaExceededException) as e:
+                        except PaymentException as e:
                             r.state = OrderRefund.REFUND_STATE_FAILED
                             r.save()
                             messages.error(self.request, _('One of the refunds failed to be processed. You should '

@@ -1213,6 +1213,7 @@ class OrderPayment(models.Model):
         """
         return self.order.event.get_payment_providers(cached=True).get(self.provider)
 
+    @transaction.atomic()
     def _mark_paid(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
         from pretix.base.signals import order_paid
         can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date, force=force)
@@ -1281,7 +1282,7 @@ class OrderPayment(models.Model):
             'provider': self.provider,
         }, user=user, auth=auth)
 
-        if self.order.status == Order.STATUS_PAID:
+        if self.order.status in (Order.STATUS_PAID, Order.STATUS_CANCELED):
             return
 
         payment_sum = self.order.payments.filter(

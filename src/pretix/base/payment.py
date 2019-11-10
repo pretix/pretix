@@ -871,7 +871,10 @@ class OffsettingProvider(BasePaymentProvider):
             provider='offsetting',
             info=json.dumps({'orders': [refund.order.code]})
         )
-        p.confirm(ignore_date=True)
+        try:
+            p.confirm(ignore_date=True)
+        except Quota.QuotaExceededException:
+            pass
 
     @property
     def settings_form_fields(self) -> dict:
