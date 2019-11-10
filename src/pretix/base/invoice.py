@@ -457,19 +457,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                   id='normal')
         ]
 
-    def _get_story(self, doc):
-        has_taxes = any(il.tax_value for il in self.invoice.lines.all())
-
-        story = [
-            NextPageTemplate('FirstPage'),
-            Paragraph(pgettext('invoice', 'Invoice')
-                      if not self.invoice.is_cancellation
-                      else pgettext('invoice', 'Cancellation'),
-                      self.stylesheet['Heading1']),
-            Spacer(1, 5 * mm),
-            NextPageTemplate('OtherPages'),
-        ]
-
+    def _get_intro(self):
+        story = []
         if self.invoice.internal_reference:
             story.append(Paragraph(
                 pgettext('invoice', 'Customer reference: {reference}').format(reference=self.invoice.internal_reference),
@@ -493,6 +482,22 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         if self.invoice.introductory_text:
             story.append(Paragraph(self.invoice.introductory_text, self.stylesheet['Normal']))
             story.append(Spacer(1, 10 * mm))
+
+        return story
+
+    def _get_story(self, doc):
+        has_taxes = any(il.tax_value for il in self.invoice.lines.all())
+
+        story = [
+            NextPageTemplate('FirstPage'),
+            Paragraph(pgettext('invoice', 'Invoice')
+                      if not self.invoice.is_cancellation
+                      else pgettext('invoice', 'Cancellation'),
+                      self.stylesheet['Heading1']),
+            Spacer(1, 5 * mm),
+            NextPageTemplate('OtherPages'),
+        ]
+        story += self._get_intro()
 
         taxvalue_map = defaultdict(Decimal)
         grossvalue_map = defaultdict(Decimal)
