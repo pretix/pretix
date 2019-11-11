@@ -283,8 +283,9 @@ class BasePaymentProvider:
                  label=_('Restrict to specific sales channels'),
                  choices=(
                      (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
-                     if c.identifier != 'pretixpos'
+                     if c.payment_restrictions_supported
                  ),
+                 initial=['web'],
                  widget=forms.CheckboxSelectMultiple,
                  help_text=_(
                      'Only allow the usage of this payment provider in the following sales channels'),

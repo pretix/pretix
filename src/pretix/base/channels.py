@@ -42,6 +42,17 @@ class SalesChannel:
         """
         return True
 
+    @property
+    def payment_restrictions_supported(self) -> bool:
+        """
+        If this property is ``True``, organizers can restrict the usage of payment providers to this sales channel.
+
+        Example: pretixPOS provides its own sales channel, ignores the configured payment providers completely and
+        handles payments locally. Therefor, this property should be set to ``False`` for the pretixPOS sales channel as
+        the event organizer cannot restrict the usage of any payment provider through the backend.
+        """
+        return True
+
 
 def get_all_sales_channels():
     global _ALL_CHANNELS

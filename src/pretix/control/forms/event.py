@@ -719,7 +719,7 @@ class ProviderForm(SettingsForm):
                 v.set_event(self.obj)
 
             if hasattr(v, '_as_type'):
-                self.initial[k] = self.obj.settings.get(k, as_type=v._as_type)
+                self.initial[k] = self.obj.settings.get(k, as_type=v._as_type, default=v.initial)
 
     def clean(self):
         cleaned_data = super().clean()
