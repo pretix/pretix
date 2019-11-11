@@ -137,6 +137,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'payment_resellers__restrict_to_sales_channels': {
+        'default': ['resellers'],
+        'type': list
+    },
     'payment_term_accept_late': {
         'default': 'True',
         'type': bool

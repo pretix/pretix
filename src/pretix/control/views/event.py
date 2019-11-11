@@ -392,11 +392,15 @@ class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
         context = super().get_context_data(*args, **kwargs)
         context['providers'] = sorted(
             [p for p in self.request.event.get_payment_providers().values()
-             if not p.is_implicit and (p.settings_form_fields or p.settings_content_render(self.request))],
+             if not (p.is_implicit(self.request) if callable(p.is_implicit) else p.is_implicit) and
+             (p.settings_form_fields or p.settings_content_render(self.request))],
             key=lambda s: s.verbose_name
         )
+
+        sales_channels = get_all_sales_channels()
         for p in context['providers']:
             p.show_enabled = p.is_enabled
+            p.sales_channels = [sales_channels[channel] for channel in p.settings.get('_restrict_to_sales_channels', as_type=list, default=['web'])]
             if p.is_meta:
                 p.show_enabled = p.settings._enabled in (True, 'True')
         return context
