@@ -203,7 +203,7 @@ def build_cancellation(invoice: Invoice):
 
 
 def generate_cancellation(invoice: Invoice, trigger_pdf=True):
-    if invoice.refered.exists():
+    if invoice.canceled:
         raise ValueError("Invoice should not be canceled twice.")
     cancellation = modelcopy(invoice)
     cancellation.pk = None

@@ -1753,7 +1753,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
     if recreate_invoices:
         i = order.invoices.filter(is_cancellation=False).last()
-        if i and order.total != oldtotal:
+        if i and order.total != oldtotal and not i.canceled:
             generate_cancellation(i)
             generate_invoice(order)
 
