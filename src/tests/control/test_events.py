@@ -359,6 +359,7 @@ class EventsTest(SoupTest):
             'payment_banktransfer__fee_abs': '12.23',
             'payment_banktransfer_bank_details_type': 'other',
             'payment_banktransfer_bank_details_0': 'Test',
+            'payment_banktransfer__restrict_to_sales_channels': ['web'],
         })
         self.event1.settings.flush()
         assert self.event1.settings.get('payment_banktransfer__enabled', as_type=bool)

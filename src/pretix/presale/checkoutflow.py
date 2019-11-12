@@ -589,7 +589,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 return False
 
         for p in self.request.event.get_payment_providers().values():
-            if p.is_implicit:
+            if p.is_implicit(request) if callable(p.is_implicit) else p.is_implicit:
                 if self._is_allowed(p, request):
                     self.cart_session['payment'] = p.identifier
                     return False

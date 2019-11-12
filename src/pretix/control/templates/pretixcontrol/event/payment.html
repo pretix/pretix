@@ -28,6 +28,12 @@
                                 </span>
                                 {% endif %}
                             </td>
+                            <td class="iconcol">
+                                {% for channel in provider.sales_channels %}
+                                    <span class="fa fa-{{ channel.icon }} text-muted"
+                                          data-toggle="tooltip" title="{% trans channel.verbose_name %}"></span>
+                                {% endfor %}
+                            </td>
                             <td class="text-right flip">
                                 <a href="{% url 'control:event.settings.payment.provider' event=request.event.slug organizer=request.organizer.slug provider=provider.identifier %}"
                                         class="btn btn-default">
