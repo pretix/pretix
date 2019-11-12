@@ -198,8 +198,14 @@ class TaxRule(LoggedModel):
             rate=self.rate, name=self.name
         )
 
+    @property
+    def _custom_rules(self):
+        if not self.custom_rules:
+            return []
+        return json.loads(self.custom_rules)
+
     def get_matching_rule(self, invoice_address):
-        rules = json.loads(self.custom_rules)
+        rules = self._custom_rules
         if invoice_address:
             for r in rules:
                 if r['country'] == 'EU' and str(invoice_address.country) not in EU_COUNTRIES:
@@ -216,7 +222,7 @@ class TaxRule(LoggedModel):
         return {'action': 'vat'}
 
     def is_reverse_charge(self, invoice_address):
-        if self.custom_rules:
+        if self._custom_rules:
             rule = self.get_matching_rule(invoice_address)
             return rule['action'] == 'reverse'
 
@@ -238,7 +244,7 @@ class TaxRule(LoggedModel):
         return False
 
     def tax_applicable(self, invoice_address):
-        if self.custom_rules:
+        if self._custom_rules:
             rule = self.get_matching_rule(invoice_address)
             return rule.get('action', 'vat') == 'vat'
 
