@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-10-31 14:39+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2019-11-12 10:11+0000\n"
+"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -1072,10 +1072,8 @@ msgstr "Fakturadesign"
 
 #: pretix/base/exporters/orderlist.py:503
 #: pretix/base/exporters/orderlist.py:594
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation of"
-msgstr "Annullering"
+msgstr "Afbestilling af"
 
 #: pretix/base/exporters/orderlist.py:504 pretix/base/models/auth.py:98
 #: pretix/control/forms/event.py:1353 pretix/control/views/waitinglist.py:200
@@ -1182,11 +1180,8 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:552
 #: pretix/base/exporters/orderlist.py:633
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation"
 msgid "Cancellation"
-msgstr "Annullering"
+msgstr "Afbestilling"
 
 #: pretix/base/exporters/orderlist.py:552
 #: pretix/base/exporters/orderlist.py:633
@@ -1426,7 +1421,7 @@ msgstr "Bestillingskode"
 #: pretix/base/invoice.py:330 pretix/base/invoice.py:732
 msgctxt "invoice"
 msgid "Cancellation number"
-msgstr "Annulleringsnummer"
+msgstr "Afbestillingsnummer"
 
 #: pretix/base/invoice.py:336 pretix/base/invoice.py:740
 msgctxt "invoice"
@@ -1441,7 +1436,7 @@ msgstr "Fakturanummer"
 #: pretix/base/invoice.py:349 pretix/base/invoice.py:762
 msgctxt "invoice"
 msgid "Cancellation date"
-msgstr "Annulleringsdato"
+msgstr "Afbestillingsdato"
 
 #: pretix/base/invoice.py:355
 msgctxt "invoice"
@@ -1498,7 +1493,7 @@ msgstr "Faktura"
 #: pretix/presale/templates/pretixpresale/event/order.html:168
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr "Annullering"
+msgstr "Afbestilling"
 
 #: pretix/base/invoice.py:475
 #, fuzzy, python-brace-format
@@ -2112,16 +2107,12 @@ msgid "Generate tickets"
 msgstr "Generer fakturaer"
 
 #: pretix/base/models/items.py:317
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Show a waiting list for this ticket"
-msgstr "På venteliste siden"
+msgstr "Vis en venteliste for denne billet"
 
 #: pretix/base/models/items.py:318
-#, fuzzy
-#| msgid "Waiting lists are disabled for this event."
 msgid "This will only work of waiting lists are enabled for this event."
-msgstr "Venteliste er ikke tilgængelig for dette arrangement."
+msgstr "Dette virker kun, hvis venteliste er aktiveret for dette arrangement"
 
 #: pretix/base/models/items.py:322 pretix/control/forms/event.py:356
 #: pretix/control/forms/event.py:1435
@@ -2917,10 +2908,8 @@ msgid "Service fee"
 msgstr ""
 
 #: pretix/base/models/orders.py:1622
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation fee"
-msgstr "Annullering"
+msgstr "Afbestillingsgebyr"
 
 #: pretix/base/models/orders.py:1623
 msgid "Other fees"
@@ -5464,7 +5453,7 @@ msgstr ""
 
 #: pretix/base/shredder.py:172
 msgid "This will remove all email addresses from the waiting list."
-msgstr ""
+msgstr "Dette vil fjerne alle emailadresser fra ventelisten"
 
 #: pretix/base/shredder.py:198
 #, fuzzy
@@ -5995,7 +5984,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:361
 msgid "Enable waiting list"
-msgstr "Aktiver venteliste"
+msgstr "Aktivér venteliste"
 
 #: pretix/control/forms/event.py:362 pretix/control/forms/event.py:1441
 msgid ""
@@ -6169,7 +6158,7 @@ msgstr "Udfold produktvarianter som standard"
 
 #: pretix/control/forms/event.py:464
 msgid "Hide all products that are sold out"
-msgstr ""
+msgstr "Skjul alle udsolgte produkter"
 
 #: pretix/control/forms/event.py:468
 msgid "Ask search engines not to index the ticket shop"
@@ -6310,10 +6299,8 @@ msgid "Customers can cancel their unpaid orders"
 msgstr "Tillad brugere at annullere ubetalte bestillinger"
 
 #: pretix/control/forms/event.py:601 pretix/control/forms/event.py:623
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Do not allow cancellations after"
-msgstr "Annullering"
+msgstr "Tillad ikke afbestilling efter"
 
 #: pretix/control/forms/event.py:605
 #, fuzzy
@@ -6328,20 +6315,16 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/event.py:611
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a fixed cancellation fee"
-msgstr "Annullering"
+msgstr "Hold et fast afbestillingsgebyr"
 
 #: pretix/control/forms/event.py:615
 msgid "Keep payment, shipping and service fees"
 msgstr ""
 
 #: pretix/control/forms/event.py:619
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a percentual cancellation fee"
-msgstr "Annullering"
+msgstr "Hold et procentuelt afbestillingsgebyr"
 
 #: pretix/control/forms/event.py:630
 msgid "Payment term in days"
@@ -6522,10 +6505,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/event.py:803
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Invoice number prefix for cancellations"
-msgstr "Faktureringsnummerpræfiks"
+msgstr "Fakturanummerpræfiks for afbestillinger"
 
 #: pretix/control/forms/event.py:804
 msgid ""
@@ -7617,10 +7598,8 @@ msgid "Notify user by e-mail"
 msgstr "Giv bruger besked via e-mail"
 
 #: pretix/control/forms/orders.py:92
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a cancellation fee of"
-msgstr "Annullering"
+msgstr "Hold et afbestillingsgebyr på"
 
 #: pretix/control/forms/orders.py:93
 msgid ""
@@ -9050,11 +9029,9 @@ msgstr "Fakturering"
 
 #: pretix/control/navigation.py:84
 #: pretix/presale/templates/pretixpresale/event/order.html:253
-#, fuzzy
-#| msgid "Cancellation"
 msgctxt "action"
 msgid "Cancellation"
-msgstr "Annullering"
+msgstr "Afbestilling"
 
 #: pretix/control/navigation.py:92
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
@@ -9900,10 +9877,8 @@ msgid "No issues. Awesome!"
 msgstr "Ingen problemer. Fantastisk!"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:5
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation settings"
-msgstr "Annullering"
+msgstr "Indstillinger for afbestilling"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:11
 #, fuzzy
@@ -11979,7 +11954,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:187
 msgid "Generate cancellation"
-msgstr "Generer annullering"
+msgstr "Generér afbestilling"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:189
 msgid "Cancel and reissue"
@@ -18334,6 +18309,8 @@ msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
+"Gem venligst det følgende link, hvis du vil ændre i din booking senere. Vi "
+"har også sendt linket til den emailadress, du har oplyst."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:52
 #: pretix/presale/templates/pretixpresale/event/position.html:18
