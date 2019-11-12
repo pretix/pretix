@@ -41,6 +41,9 @@ from pretix.presale.signals import question_form_fields
 logger = logging.getLogger(__name__)
 
 
+REQUIRED_NAME_PARTS = ['given_name', 'family_name', 'full_name']
+
+
 class NamePartsWidget(forms.MultiWidget):
     widget = forms.TextInput
     autofill_map = {
@@ -91,15 +94,20 @@ class NamePartsWidget(forms.MultiWidget):
             except (IndexError, TypeError):
                 widget_value = None
             if id_:
-                final_attrs = dict(
+                these_attrs = dict(
                     final_attrs,
                     id='%s_%s' % (id_, i),
                     title=self.scheme['fields'][i][1],
                     placeholder=self.scheme['fields'][i][1],
                 )
-                final_attrs['autocomplete'] = (self.attrs.get('autocomplete', '') + ' ' + self.autofill_map.get(self.scheme['fields'][i][0], 'off')).strip()
-                final_attrs['data-size'] = self.scheme['fields'][i][2]
-            output.append(widget.render(name + '_%s' % i, widget_value, final_attrs, renderer=renderer))
+                if self.scheme['fields'][i][0] in REQUIRED_NAME_PARTS:
+                    these_attrs['required'] = 'required'
+                    these_attrs.pop('data-no-required-attr', None)
+                these_attrs['autocomplete'] = (self.attrs.get('autocomplete', '') + ' ' + self.autofill_map.get(self.scheme['fields'][i][0], 'off')).strip()
+                these_attrs['data-size'] = self.scheme['fields'][i][2]
+            else:
+                these_attrs = final_attrs
+            output.append(widget.render(name + '_%s' % i, widget_value, these_attrs, renderer=renderer))
         return mark_safe(self.format_output(output))
 
     def format_output(self, rendered_widgets) -> str:
@@ -159,8 +167,12 @@ class NamePartsFormField(forms.MultiValueField):
 
     def clean(self, value) -> dict:
         value = super().clean(value)
-        if self.one_required and (not value or not any(v for v in value)):
+        if self.one_required and (not value or not any(v for v in value.values())):
             raise forms.ValidationError(self.error_messages['required'], code='required')
+        if self.one_required:
+            for k, v in value.items():
+                if k in REQUIRED_NAME_PARTS and not v:
+                    raise forms.ValidationError(self.error_messages['required'], code='required')
         if self.require_all_fields and not all(v for v in value):
             raise forms.ValidationError(self.error_messages['incomplete'], code='required')
         return value
