@@ -77,6 +77,14 @@ class QuestionForm(I18nModelForm):
                 dep = dep.dependency_question
         return val
 
+    def clean_ask_during_checkin(self):
+        val = self.cleaned_data.get('ask_during_checkin')
+
+        if val and self.cleaned_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
+            raise ValidationError(_('This type of question cannot be asked during check-in.'))
+
+        return val
+
     def clean(self):
         d = super().clean()
         if d.get('dependency_question') and not d.get('dependency_values'):

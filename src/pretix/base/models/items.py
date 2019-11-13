@@ -993,6 +993,7 @@ class Question(LoggedModel):
         (TYPE_PHONENUMBER, _("Phone number")),
     )
     UNLOCALIZED_TYPES = [TYPE_DATE, TYPE_TIME, TYPE_DATETIME]
+    ASK_DURING_CHECKIN_UNSUPPORTED = [TYPE_FILE, TYPE_PHONENUMBER]
 
     event = models.ForeignKey(
         Event,
