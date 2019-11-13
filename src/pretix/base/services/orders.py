@@ -289,7 +289,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
         if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
-        i = order.invoices.filter(is_cancellation=False).last()
+        i = order.invoices.filter(is_cancellation=False, refered__isnull=True).last()
         if i:
             generate_cancellation(i)
 
