@@ -31,6 +31,7 @@ type                                  string                     The expected ty
                                                                  * ``H`` – time
                                                                  * ``W`` – date and time
                                                                  * ``CC`` – country code (ISO 3666-1 alpha-2)
+                                                                 * ``TEL`` – telephone number
 required                              boolean                    If ``true``, the question needs to be filled out.
 position                              integer                    An integer, used for sorting
 items                                 list of integers           List of item IDs this question is assigned to.
