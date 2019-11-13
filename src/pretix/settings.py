@@ -449,6 +449,12 @@ EXTRA_LANG_INFO = {
         'name': 'French',
         'name_local': 'Français'
     },
+    'lv': {
+        'bidi': False,
+        'code': 'lv',
+        'name': 'Latvian',
+        'name_local': 'Latviešu'
+    },
 }
 
 django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
