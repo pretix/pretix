@@ -101,7 +101,8 @@ class NamePartsWidget(forms.MultiWidget):
                     placeholder=self.scheme['fields'][i][1],
                 )
                 if self.scheme['fields'][i][0] in REQUIRED_NAME_PARTS:
-                    these_attrs['required'] = 'required'
+                    if self.field.required:
+                        these_attrs['required'] = 'required'
                     these_attrs.pop('data-no-required-attr', None)
                 these_attrs['autocomplete'] = (self.attrs.get('autocomplete', '') + ' ' + self.autofill_map.get(self.scheme['fields'][i][0], 'off')).strip()
                 these_attrs['data-size'] = self.scheme['fields'][i][2]
