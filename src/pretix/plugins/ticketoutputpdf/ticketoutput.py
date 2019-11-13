@@ -15,6 +15,7 @@ from PyPDF2 import PdfFileMerger
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
 from pretix.base.pdf import Renderer
+from pretix.base.signals import ticketoutput_override_layout
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.plugins.ticketoutputpdf.models import (
     TicketLayout, TicketLayoutItem,
@@ -78,7 +79,7 @@ class PdfTicketOutput(BaseTicketOutput):
         merger = PdfFileMerger()
         with language(order.locale):
             for op in order.positions_with_tickets:
-                layout = self.layout_map.get(
+                layout = ticketoutput_override_layout.send(order.event, op) or self.layout_map.get(
                     (op.item_id, order.sales_channel),
                     self.layout_map.get(
                         (op.item_id, 'web'),
@@ -96,7 +97,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
     def generate(self, op):
         order = op.order
-        layout = self.layout_map.get(
+        layout = ticketoutput_override_layout.send(order.event, op) or self.layout_map.get(
             (op.item_id, order.sales_channel),
             self.layout_map.get(
                 (op.item_id, 'web'),

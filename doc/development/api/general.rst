@@ -77,4 +77,4 @@ Ticket designs
 """"""""""""""
 
 .. automodule:: pretix.base.signals
-   :members: layout_text_variables
+   :members: layout_text_variables, ticketoutput_override_layout
