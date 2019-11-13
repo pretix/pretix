@@ -79,7 +79,9 @@ class PdfTicketOutput(BaseTicketOutput):
         merger = PdfFileMerger()
         with language(order.locale):
             for op in order.positions_with_tickets:
-                layout = ticketoutput_override_layout.send(order.event, op) or self.layout_map.get(
+                layout = ticketoutput_override_layout.send_chained(
+                    order.event, 'layoutoverride', orderposition=op
+                ) or self.layout_map.get(
                     (op.item_id, order.sales_channel),
                     self.layout_map.get(
                         (op.item_id, 'web'),
@@ -97,7 +99,10 @@ class PdfTicketOutput(BaseTicketOutput):
 
     def generate(self, op):
         order = op.order
-        layout = ticketoutput_override_layout.send(order.event, op) or self.layout_map.get(
+
+        layout = ticketoutput_override_layout.send_chained(
+            order.event, 'layoutoverride', orderposition=op
+        ) or self.layout_map.get(
             (op.item_id, order.sales_channel),
             self.layout_map.get(
                 (op.item_id, 'web'),
