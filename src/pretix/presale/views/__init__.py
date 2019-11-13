@@ -20,6 +20,25 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import question_form_fields
 
 
+def cached_invoice_address(request):
+    from .cart import cart_session
+
+    if not hasattr(request, '_checkout_flow_invoice_address'):
+        cs = cart_session(request)
+        iapk = cs.get('invoice_address')
+        if not iapk:
+            request._checkout_flow_invoice_address = InvoiceAddress()
+        else:
+            try:
+                with scopes_disabled():
+                    request._checkout_flow_invoice_address = InvoiceAddress.objects.get(
+                        pk=iapk, order__isnull=True
+                    )
+            except InvoiceAddress.DoesNotExist:
+                request._checkout_flow_invoice_address = InvoiceAddress()
+    return request._checkout_flow_invoice_address
+
+
 class CartMixin:
     @cached_property
     def positions(self):
@@ -35,19 +54,7 @@ class CartMixin:
 
     @cached_property
     def invoice_address(self):
-        if not hasattr(self.request, '_checkout_flow_invoice_address'):
-            iapk = self.cart_session.get('invoice_address')
-            if not iapk:
-                self.request._checkout_flow_invoice_address = InvoiceAddress()
-            else:
-                try:
-                    with scopes_disabled():
-                        self.request._checkout_flow_invoice_address = InvoiceAddress.objects.get(
-                            pk=iapk, order__isnull=True
-                        )
-                except InvoiceAddress.DoesNotExist:
-                    self.request._checkout_flow_invoice_address = InvoiceAddress()
-        return self.request._checkout_flow_invoice_address
+        return cached_invoice_address(self.request)
 
     def get_cart(self, answers=False, queryset=None, order=None, downloads=False):
         if queryset is not None:
