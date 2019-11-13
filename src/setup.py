@@ -147,7 +147,7 @@ setup(
         'oauthlib==2.1.*',
         'urllib3==1.24.*',  # required by current requests
         'django-phonenumber-field==3.0.*',
-        'phonenumberslite=8.10.*',
+        'phonenumberslite==8.10.*',
     ],
     extras_require={
         'dev': [
