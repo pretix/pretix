@@ -9,6 +9,7 @@ import pycountry
 import pytz
 import vat_moss.errors
 import vat_moss.id
+from babel import localedata
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -29,6 +30,7 @@ from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
     TimePickerWidget, UploadedFileWidget,
 )
+from pretix.base.i18n import language
 from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.settings import (
@@ -341,12 +343,19 @@ class BaseQuestionsForm(forms.Form):
                     widget=SplitDateTimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             elif q.type == Question.TYPE_PHONENUMBER:
-                field = PhoneNumberField(
-                    label=label, required=required,
-                    help_text=help_text,
-                    initial=PhoneNumber().from_string(initial.answer) if initial else None,
-                    widget=WrappedPhoneNumberPrefixWidget(),
-                )
+                babel_locale = 'en'
+                # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal
+                if localedata.exists(get_language()):
+                    babel_locale = get_language()
+                elif localedata.exists(get_language()[:2]):
+                    babel_locale = get_language()[:2]
+                with language(babel_locale):
+                    field = PhoneNumberField(
+                        label=label, required=required,
+                        help_text=help_text,
+                        initial=PhoneNumber().from_string(initial.answer) if initial else None,
+                        widget=WrappedPhoneNumberPrefixWidget(),
+                    )
             field.question = q
             if answers:
                 # Cache the answer object for later use
