@@ -9,6 +9,7 @@ import pycountry
 import pytz
 import vat_moss.errors
 import vat_moss.id
+from babel import localedata
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -21,11 +22,16 @@ from django.utils.translation import (
 )
 from django_countries import countries
 from django_countries.fields import Country, CountryField
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.phonenumber import PhoneNumber
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
     TimePickerWidget, UploadedFileWidget,
 )
+from pretix.base.i18n import language
 from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.settings import (
@@ -179,6 +185,34 @@ class NamePartsFormField(forms.MultiValueField):
         return value
 
 
+class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
+    def render(self, name, value, attrs=None, renderer=None):
+        output = super().render(name, value, attrs, renderer)
+        return mark_safe(self.format_output(output))
+
+    def format_output(self, rendered_widgets) -> str:
+        return '<div class="nameparts-form-group">%s</div>' % ''.join(rendered_widgets)
+
+
+def guess_country(event):
+    # Try to guess the initial country from either the country of the merchant
+    # or the locale. This will hopefully save at least some users some scrolling :)
+    locale = get_language()
+    country = event.settings.invoice_address_from_country
+    if not country:
+        valid_countries = countries.countries
+        if '-' in locale:
+            parts = locale.split('-')
+            if parts[1].upper() in valid_countries:
+                country = Country(parts[1].upper())
+            elif parts[0].upper() in valid_countries:
+                country = Country(parts[0].upper())
+        else:
+            if locale in valid_countries:
+                country = Country(locale.upper())
+    return country
+
+
 class BaseQuestionsForm(forms.Form):
     """
     This form class is responsible for asking order-related questions. This includes
@@ -328,6 +362,28 @@ class BaseQuestionsForm(forms.Form):
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
                     widget=SplitDateTimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
+            elif q.type == Question.TYPE_PHONENUMBER:
+                babel_locale = 'en'
+                # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal
+                if localedata.exists(get_language()):
+                    babel_locale = get_language()
+                elif localedata.exists(get_language()[:2]):
+                    babel_locale = get_language()[:2]
+                with language(babel_locale):
+                    default_country = guess_country(event)
+                    default_prefix = None
+                    for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+                        if str(default_country) in values:
+                            default_prefix = prefix
+                    field = PhoneNumberField(
+                        label=label, required=required,
+                        help_text=help_text,
+                        # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
+                        # a country code but no number as an initial value. It's a bit hacky, but should be stable for
+                        # the future.
+                        initial=PhoneNumber().from_string(initial.answer) if initial else "+{}.".format(default_prefix),
+                        widget=WrappedPhoneNumberPrefixWidget()
+                    )
             field.question = q
             if answers:
                 # Cache the answer object for later use
@@ -433,23 +489,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         kwargs.setdefault('initial', {})
         if not kwargs.get('instance') or not kwargs['instance'].country:
-            # Try to guess the initial country from either the country of the merchant
-            # or the locale. This will hopefully save at least some users some scrolling :)
-            locale = get_language()
-            country = event.settings.invoice_address_from_country
-            if not country:
-                valid_countries = countries.countries
-                if '-' in locale:
-                    parts = locale.split('-')
-                    if parts[1].upper() in valid_countries:
-                        country = Country(parts[1].upper())
-                    elif parts[0].upper() in valid_countries:
-                        country = Country(parts[0].upper())
-                else:
-                    if locale in valid_countries:
-                        country = Country(locale.upper())
-
-            kwargs['initial']['country'] = country
+            kwargs['initial']['country'] = guess_country(self.event)
 
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:

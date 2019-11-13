@@ -977,6 +977,7 @@ class Question(LoggedModel):
     TYPE_TIME = "H"
     TYPE_DATETIME = "W"
     TYPE_COUNTRYCODE = "CC"
+    TYPE_PHONENUMBER = "TEL"
     TYPE_CHOICES = (
         (TYPE_NUMBER, _("Number")),
         (TYPE_STRING, _("Text (one line)")),
@@ -989,8 +990,10 @@ class Question(LoggedModel):
         (TYPE_TIME, _("Time")),
         (TYPE_DATETIME, _("Date and time")),
         (TYPE_COUNTRYCODE, _("Country code (ISO 3166-1 alpha-2)")),
+        (TYPE_PHONENUMBER, _("Phone number")),
     )
     UNLOCALIZED_TYPES = [TYPE_DATE, TYPE_TIME, TYPE_DATETIME]
+    ASK_DURING_CHECKIN_UNSUPPORTED = [TYPE_FILE, TYPE_PHONENUMBER]
 
     event = models.ForeignKey(
         Event,

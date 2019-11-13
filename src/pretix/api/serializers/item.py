@@ -267,6 +267,9 @@ class QuestionSerializer(I18nAwareModelSerializer):
                 seen_ids.add(dep.pk)
                 dep = dep.dependency_question
 
+        if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
+            raise ValidationError(_('This type of question cannot be asked during check-in.'))
+
         Question.clean_items(event, full_data.get('items'))
         return data
 
