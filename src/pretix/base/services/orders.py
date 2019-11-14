@@ -359,6 +359,31 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 except SendMailException:
                     logger.exception('Order canceled email could not be sent')
 
+    for p in order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING)):
+        try:
+            with transaction.atomic():
+                p.payment_provider.cancel_payment(p)
+                order.log_action(
+                    'pretix.event.order.payment.canceled',
+                    {
+                        'local_id': p.local_id,
+                        'provider': p.provider,
+                    },
+                    user=user,
+                    auth=api_token or oauth_application or device
+                )
+        except PaymentException as e:
+            order.log_action(
+                'pretix.event.order.payment.canceled.failed',
+                {
+                    'local_id': p.local_id,
+                    'provider': p.provider,
+                    'error': str(e)
+                },
+                user=user,
+                auth=api_token or oauth_application or device
+            )
+
     order_canceled.send(order.event, order=order)
     return order.pk
 
