@@ -173,9 +173,26 @@ class OrderViewSet(viewsets.ModelViewSet):
                     amount=ps
                 )
             except OrderPayment.DoesNotExist:
-                order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_PENDING,
-                                                 OrderPayment.PAYMENT_STATE_CREATED)) \
-                    .update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+                for p in order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_PENDING,
+                                                          OrderPayment.PAYMENT_STATE_CREATED)):
+                    try:
+                        with transaction.atomic():
+                            p.payment_provider.cancel_payment(p)
+                            order.log_action('pretix.event.order.payment.canceled', {
+                                'local_id': p.local_id,
+                                'provider': p.provider,
+                            }, user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
+                    except PaymentException as e:
+                        order.log_action(
+                            'pretix.event.order.payment.canceled.failed',
+                            {
+                                'local_id': p.local_id,
+                                'provider': p.provider,
+                                'error': str(e)
+                            },
+                            user=self.request.user if self.request.user.is_authenticated else None,
+                            auth=self.request.auth
+                        )
                 p = order.payments.create(
                     state=OrderPayment.PAYMENT_STATE_CREATED,
                     provider='manual',
@@ -896,13 +913,16 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
         if payment.state not in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
             return Response({'detail': 'Invalid state of payment'}, status=status.HTTP_400_BAD_REQUEST)
 
-        with transaction.atomic():
-            payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.canceled', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-            }, user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
+            try:
+                with transaction.atomic():
+                    payment.payment_provider.cancel_payment(payment)
+                    payment.order.log_action('pretix.event.order.payment.canceled', {
+                        'local_id': payment.local_id,
+                        'provider': payment.provider,
+                    }, user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
+            except PaymentException as e:
+                return Response({'detail': 'External error: {}'.format(str(e))},
+                                status=status.HTTP_400_BAD_REQUEST)
         return self.retrieve(request, [], **kwargs)
 
 

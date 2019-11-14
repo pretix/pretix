@@ -480,14 +480,26 @@ class OrderPaymentCancel(OrderView):
 
     def post(self, *args, **kwargs):
         if self.payment.state in (OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING):
-            with transaction.atomic():
-                self.payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-                self.payment.save()
-                self.order.log_action('pretix.event.order.payment.canceled', {
-                    'local_id': self.payment.local_id,
-                    'provider': self.payment.provider,
-                }, user=self.request.user)
-            messages.success(self.request, _('This payment has been canceled.'))
+            try:
+                with transaction.atomic():
+                    self.payment.payment_provider.cancel_payment(self.payment)
+                    self.order.log_action('pretix.event.order.payment.canceled', {
+                        'local_id': self.payment.local_id,
+                        'provider': self.payment.provider,
+                    }, user=self.request.user if self.request.user.is_authenticated else None)
+            except PaymentException as e:
+                self.order.log_action(
+                    'pretix.event.order.payment.canceled.failed',
+                    {
+                        'local_id': self.payment.local_id,
+                        'provider': self.payment.provider,
+                        'error': str(e)
+                    },
+                    user=self.request.user if self.request.user.is_authenticated else None,
+                )
+                messages.error(self.request, str(e))
+            else:
+                messages.success(self.request, _('This payment has been canceled.'))
         else:
             messages.error(self.request, _('This payment can not be canceled at the moment.'))
         return redirect(self.get_order_url())
@@ -859,9 +871,25 @@ class OrderTransition(OrderView):
                     amount=ps
                 )
             except OrderPayment.DoesNotExist:
-                self.order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_PENDING,
-                                                      OrderPayment.PAYMENT_STATE_CREATED)) \
-                    .update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+                for p in self.order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_PENDING,
+                                                               OrderPayment.PAYMENT_STATE_CREATED)):
+                    try:
+                        with transaction.atomic():
+                            p.payment_provider.cancel_payment(p)
+                            self.order.log_action('pretix.event.order.payment.canceled', {
+                                'local_id': p.local_id,
+                                'provider': p.provider,
+                            }, user=self.request.user if self.request.user.is_authenticated else None)
+                    except PaymentException as e:
+                        self.order.log_action(
+                            'pretix.event.order.payment.canceled.failed',
+                            {
+                                'local_id': p.local_id,
+                                'provider': p.provider,
+                                'error': str(e)
+                            },
+                            user=self.request.user if self.request.user.is_authenticated else None,
+                        )
                 p = self.order.payments.create(
                     state=OrderPayment.PAYMENT_STATE_CREATED,
                     provider='manual',

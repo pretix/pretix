@@ -1183,20 +1183,49 @@ class OrderChangeManager:
                 self.order.status = Order.STATUS_PAID
                 self.order.save()
             elif self.open_payment:
-                self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-                self.open_payment.save()
-                self.order.log_action('pretix.event.order.payment.canceled', {
-                    'local_id': self.open_payment.local_id,
-                    'provider': self.open_payment.provider,
-                }, user=self.user, auth=self.auth)
+                try:
+                    with transaction.atomic():
+                        self.open_payment.payment_provider.cancel_payment(self.open_payment)
+                        self.order.log_action(
+                            'pretix.event.order.payment.canceled',
+                            {
+                                'local_id': self.open_payment.local_id,
+                                'provider': self.open_payment.provider,
+                            },
+                            user=self.user,
+                            auth=self.auth
+                        )
+                except PaymentException as e:
+                    self.order.log_action(
+                        'pretix.event.order.payment.canceled.failed',
+                        {
+                            'local_id': self.open_payment.local_id,
+                            'provider': self.open_payment.provider,
+                            'error': str(e)
+                        },
+                        user=self.user,
+                        auth=self.auth
+                    )
         elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff > 0:
             if self.open_payment:
-                self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-                self.open_payment.save()
-                self.order.log_action('pretix.event.order.payment.canceled', {
-                    'local_id': self.open_payment.local_id,
-                    'provider': self.open_payment.provider,
-                }, user=self.user, auth=self.auth)
+                try:
+                    with transaction.atomic():
+                        self.open_payment.payment_provider.cancel_payment(self.open_payment)
+                        self.order.log_action('pretix.event.order.payment.canceled', {
+                            'local_id': self.open_payment.local_id,
+                            'provider': self.open_payment.provider,
+                        }, user=self.user, auth=self.auth)
+                except PaymentException as e:
+                    self.order.log_action(
+                        'pretix.event.order.payment.canceled.failed',
+                        {
+                            'local_id': self.open_payment.local_id,
+                            'provider': self.open_payment.provider,
+                            'error': str(e)
+                        },
+                        user=self.user,
+                        auth=self.auth,
+                    )
 
     def _check_paid_to_free(self):
         if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)) and not self.order.require_approval:
@@ -1726,8 +1755,22 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
     if open_payment and open_payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
                                                OrderPayment.PAYMENT_STATE_CREATED):
-        open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-        open_payment.save(update_fields=['state'])
+        try:
+            with transaction.atomic():
+                open_payment.payment_provider.cancel_payment(open_payment)
+                order.log_action('pretix.event.order.payment.canceled', {
+                    'local_id': open_payment.local_id,
+                    'provider': open_payment.provider,
+                })
+        except PaymentException as e:
+            order.log_action(
+                'pretix.event.order.payment.canceled.failed',
+                {
+                    'local_id': open_payment.local_id,
+                    'provider': open_payment.provider,
+                    'error': str(e)
+                },
+            )
 
     order.total = (order.positions.aggregate(sum=Sum('price'))['sum'] or 0) + (order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
     order.save(update_fields=['total'])

@@ -112,6 +112,8 @@ The provider class
 
    .. automethod:: shred_payment_info
 
+   .. automethod:: cancel_payment
+
    .. autoattribute:: is_implicit
 
    .. autoattribute:: is_meta

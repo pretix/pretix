@@ -654,6 +654,17 @@ class BasePaymentProvider:
         """
         return False
 
+    def cancel_payment(self, payment: OrderPayment):
+        """
+        Will be called to cancel a payment. The default implementation just sets the payment state to canceled,
+        but in some cases you might want to notify an external provider.
+
+        On success, you should set ``payment.state = OrderPayment.PAYMENT_STATE_CANCELED`` (or call the super method).
+        On failure, you should raise a PaymentException.
+        """
+        payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+        payment.save()
+
     def execute_refund(self, refund: OrderRefund):
         """
         Will be called to execute an refund. Note that refunds have an amount property and can be partial.

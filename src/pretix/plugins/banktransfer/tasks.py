@@ -12,6 +12,7 @@ from django_scopes import scope, scopes_disabled
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
+from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import change_payment_provider
@@ -36,6 +37,30 @@ def notify_incomplete_payment(o: Order):
             )
         except SendMailException:
             logger.exception('Reminder email could not be sent')
+
+
+def cancel_old_payments(order):
+    for p in order.payments.filter(
+            state__in=(OrderPayment.PAYMENT_STATE_PENDING,
+                       OrderPayment.PAYMENT_STATE_CREATED),
+            provider='banktransfer',
+    ):
+        try:
+            with transaction.atomic():
+                p.payment_provider.cancel_payment(p)
+                order.log_action('pretix.event.order.payment.canceled', {
+                    'local_id': p.local_id,
+                    'provider': p.provider,
+                })
+        except PaymentException as e:
+            order.log_action(
+                'pretix.event.order.payment.canceled.failed',
+                {
+                    'local_id': p.local_id,
+                    'provider': p.provider,
+                    'error': str(e)
+                },
+            )
 
 
 @transaction.atomic
@@ -109,22 +134,13 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
             p.confirm()
         except Quota.QuotaExceededException:
             trans.state = BankTransaction.STATE_VALID
-            trans.order.payments.filter(
-                provider='banktransfer',
-                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
-            ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+            cancel_old_payments(trans.order)
         except SendMailException:
             trans.state = BankTransaction.STATE_VALID
-            trans.order.payments.filter(
-                provider='banktransfer',
-                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
-            ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+            cancel_old_payments(trans.order)
         else:
             trans.state = BankTransaction.STATE_VALID
-            trans.order.payments.filter(
-                provider='banktransfer',
-                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
-            ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+            cancel_old_payments(trans.order)
 
             o = trans.order
             o.refresh_from_db()
