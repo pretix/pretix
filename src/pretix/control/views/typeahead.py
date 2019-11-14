@@ -235,11 +235,11 @@ def seat_select2(request, **kwargs):
 
     if request.event.has_subevents:
         try:
-            qs = request.event.subevents.get(active=True, pk=request.GET.get('subevent', 0)).free_seats
+            qs = request.event.subevents.get(active=True, pk=request.GET.get('subevent', 0)).free_seats()
         except SubEvent.DoesNotExist:
             qs = request.event.seats.none()
     else:
-        qs = request.event.free_seats
+        qs = request.event.free_seats()
     qs = qs.filter(
         Q(name__icontains=query) | Q(seat_guid__icontains=query)
     ).order_by('name').select_related('product', 'subevent')

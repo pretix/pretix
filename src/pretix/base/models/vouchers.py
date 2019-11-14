@@ -11,7 +11,7 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.banlist import banned
-from pretix.base.models import SeatCategoryMapping
+from pretix.base.models import Seat, SeatCategoryMapping
 
 from ..decimal import round_decimal
 from .base import LoggedModel
@@ -170,6 +170,12 @@ class Voucher(LoggedModel):
         help_text=_(
             "If enabled, the voucher is valid for any product affected by this quota."
         )
+    )
+    seat = models.ForeignKey(
+        Seat, related_name='vouchers',
+        null=True, blank=True,
+        on_delete=models.PROTECT,
+        verbose_name=_("Specific seat"),
     )
     tag = models.CharField(
         max_length=255,
@@ -334,6 +340,36 @@ class Voucher(LoggedModel):
     def clean_voucher_code(data, event, pk):
         if 'code' in data and Voucher.objects.filter(Q(code__iexact=data['code']) & Q(event=event) & ~Q(pk=pk)).exists():
             raise ValidationError(_('A voucher with this code already exists.'))
+
+    @staticmethod
+    def clean_seat_id(data, item, event, pk):
+        try:
+            if event.has_subevents:
+                if not data.get('subevent'):
+                    raise ValidationError(_('You need to choose a date if you select a seat.'))
+                seat = event.seats.get(seat_guid=data.get('seat'), subevent=data.get('subevent'))
+            else:
+                seat = event.seats.get(seat_guid=data.get('seat'))
+        except Seat.DoesNotExist:
+            raise ValidationError(_('The specified seat ID "{id}" does not exist for this event.').format(
+                id=data.get('seat')))
+
+        if Voucher.objects.filter(seat=seat).exclude(pk=pk).exists():
+            raise ValidationError(_('A voucher for the seat "{id}" already exists.').format(id=seat.seat_guid))
+
+        if not item:
+            raise ValidationError(_('You need to choose a specific product if you select a seat.'))
+
+        if data.get('max_usages', 1) > 1:
+            raise ValidationError(_('Seat-specific vouchers can only be used once.'))
+
+        if seat.product != item:
+            raise ValidationError(_('You need to choose the product "{prod}" for this seat.').format(prod=seat.product))
+
+        if not seat.is_available(ignore_voucher_id=pk):
+            raise ValidationError(_('The seat "{id}" is already sold or currently blocked.').format(id=seat.seat_guid))
+
+        return seat
 
     def save(self, *args, **kwargs):
         self.code = self.code.upper()

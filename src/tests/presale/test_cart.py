@@ -2918,6 +2918,30 @@ class CartSeatingTest(CartTestMixin, TestCase):
             objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
             self.assertEqual(len(objs), 0)
 
+    def test_add_specific_voucher(self):
+        with scopes_disabled():
+            v = self.event.vouchers.create(item=self.ticket, seat=self.seat_a1)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'seat_%d' % self.ticket.id: self.seat_a1,
+            '_voucher_code': v.code,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 1)
+            self.assertEqual(objs[0].voucher, v)
+            self.assertEqual(objs[0].seat, self.seat_a1)
+
+    def test_add_specific_voucher_wrong_seat(self):
+        with scopes_disabled():
+            v = self.event.vouchers.create(item=self.ticket, seat=self.seat_a1)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'seat_%d' % self.ticket.id: self.seat_a2,
+            '_voucher_code': v.code,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
+
     def test_add_seat_unknown(self):
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'seat_%d' % self.ticket.id: 'asdasdasd',

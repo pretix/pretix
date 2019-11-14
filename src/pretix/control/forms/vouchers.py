@@ -38,7 +38,7 @@ class VoucherForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag',
-            'comment', 'max_usages', 'price_mode', 'subevent', 'show_hidden_items'
+            'comment', 'max_usages', 'price_mode', 'subevent', 'show_hidden_items',
         ]
         field_classes = {
             'valid_until': SplitDateTimeField,
@@ -115,6 +115,15 @@ class VoucherForm(I18nModelForm):
         self.fields['itemvar'].widget.choices = self.fields['itemvar'].choices
         self.fields['itemvar'].required = True
 
+        if self.instance.event.seating_plan or self.instance.event.subevents.filter(seating_plan__isnull=False).exists():
+            self.fields['seat'] = forms.CharField(
+                label=_("Specific seat ID"),
+                max_length=255,
+                required=False,
+                widget=forms.TextInput(attrs={'data-seat-guid-field': '1'}),
+                initial=self.instance.seat.seat_guid if self.instance.seat else '',
+            )
+
     def clean(self):
         data = super().clean()
 
@@ -179,6 +188,8 @@ class VoucherForm(I18nModelForm):
                 self.instance.quota, self.instance.item, self.instance.variation
             )
         Voucher.clean_voucher_code(data, self.instance.event, self.instance.pk)
+        if 'seat' in self.fields and data.get('seat'):
+            self.instance.seat = Voucher.clean_seat_id(data, self.instance.item, self.instance.event, self.instance.pk)
 
         voucher_form_validation.send(sender=self.instance.event, form=self, data=data)
 
@@ -271,6 +282,13 @@ class VoucherBulkForm(VoucherForm):
         super().__init__(*args, **kwargs)
         self._set_field_placeholders('send_subject', ['event', 'name'])
         self._set_field_placeholders('send_message', ['event', 'voucher_list', 'name'])
+        if 'seat' in self.fields:
+            self.fields['seats'] = forms.CharField(
+                label=_("Specific seat IDs"),
+                required=False,
+                widget=forms.Textarea(attrs={'data-seat-guid-field': '1'}),
+                initial=self.instance.seat.seat_guid if self.instance.seat else '',
+            )
 
     def clean_send_recipients(self):
         raw = self.cleaned_data['send_recipients']
@@ -331,6 +349,18 @@ class VoucherBulkForm(VoucherForm):
             if code_len != recp_len:
                 raise ValidationError(_('You generated {codes} vouchers, but entered recipients for {recp} vouchers.').format(codes=code_len, recp=recp_len))
 
+        if data.get('seats'):
+            seatids = [s.strip() for s in data.get('seats').strip().split() if s]
+            print(seatids)
+            if len(seatids) != len(data.get('codes')):
+                raise ValidationError(_('You need to specify as many seats as voucher codes.'))
+            data['seats'] = []
+            for s in seatids:
+                data['seat'] = s
+                data['seats'].append(Voucher.clean_seat_id(data, self.instance.item, self.instance.event, None))
+        else:
+            data['seats'] = []
+
         return data
 
     def save(self, event, *args, **kwargs):
@@ -339,6 +369,10 @@ class VoucherBulkForm(VoucherForm):
             obj = modelcopy(self.instance)
             obj.event = event
             obj.code = code
+            try:
+                obj.seat = self.cleaned_data['seats'].pop()
+            except IndexError:
+                pass
             data = dict(self.cleaned_data)
             data['code'] = code
             data['bulk'] = True

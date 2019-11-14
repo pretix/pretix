@@ -42,6 +42,9 @@
                     {% bootstrap_field form.max_usages layout="control" %}
                     {% bootstrap_field form.valid_until layout="control" %}
                     {% bootstrap_field form.itemvar layout="control" %}
+                    {% if "seat" in form.fields %}
+                        {% bootstrap_field form.seat layout="control" %}
+                    {% endif %}
                     <div class="form-group">
                         <label class="col-md-3 control-label" for="id_tag">{% trans "Price effect" %}</label>
                         <div class="col-md-5">

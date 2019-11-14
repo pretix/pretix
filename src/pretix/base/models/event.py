@@ -11,7 +11,7 @@ from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery
+from django.db.models import Exists, F, OuterRef, Prefetch, Q, Subquery
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -358,9 +358,18 @@ class Event(EventMixin, LoggedModel):
     def __str__(self):
         return str(self.name)
 
-    @property
-    def free_seats(self):
+    def free_seats(self, ignore_voucher=None):
         from .orders import CartPosition, Order, OrderPosition
+        from .vouchers import Voucher
+        vqs = Voucher.objects.filter(
+            event=self,
+            seat_id=OuterRef('pk'),
+            redeemed__lt=F('max_usages'),
+        ).filter(
+            Q(valid_until__isnull=True) | Q(valid_until__gte=now())
+        )
+        if ignore_voucher:
+            vqs = vqs.exclude(pk=ignore_voucher.pk)
         return self.seats.annotate(
             has_order=Exists(
                 OrderPosition.objects.filter(
@@ -375,8 +384,11 @@ class Event(EventMixin, LoggedModel):
                     seat_id=OuterRef('pk'),
                     expires__gte=now()
                 )
+            ),
+            has_voucher=Exists(
+                vqs
             )
-        ).filter(has_order=False, has_cart=False, blocked=False)
+        ).filter(has_order=False, has_cart=False, has_voucher=False, blocked=False)
 
     @property
     def presale_has_ended(self):
@@ -965,9 +977,19 @@ class SubEvent(EventMixin, LoggedModel):
     def __str__(self):
         return '{} - {}'.format(self.name, self.get_date_range_display())
 
-    @property
-    def free_seats(self):
+    def free_seats(self, ignore_voucher=None):
         from .orders import CartPosition, Order, OrderPosition
+        from .vouchers import Voucher
+        vqs = Voucher.objects.filter(
+            event_id=self.event_id,
+            subevent=self,
+            seat_id=OuterRef('pk'),
+            redeemed__lt=F('max_usages'),
+        ).filter(
+            Q(valid_until__isnull=True) | Q(valid_until__gte=now())
+        )
+        if ignore_voucher:
+            vqs = vqs.exclude(pk=ignore_voucher.pk)
         return self.seats.annotate(
             has_order=Exists(
                 OrderPosition.objects.filter(
@@ -984,8 +1006,11 @@ class SubEvent(EventMixin, LoggedModel):
                     seat_id=OuterRef('pk'),
                     expires__gte=now()
                 )
+            ),
+            has_voucher=Exists(
+                vqs
             )
-        ).filter(has_order=False, has_cart=False, blocked=False)
+        ).filter(has_order=False, has_cart=False, blocked=False, has_voucher=False)
 
     @cached_property
     def settings(self):

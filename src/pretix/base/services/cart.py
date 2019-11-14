@@ -80,6 +80,7 @@ error_messages = {
                         'cart if you want to use it for a different product.'),
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
+    'voucher_invalid_seat': _('This voucher is not valid for this seat.'),
     'voucher_item_not_available': _(
         'Your voucher is valid for a product that is currently not for sale.'),
     'voucher_invalid_subevent': pgettext_lazy('subevent', 'This voucher is not valid for this event date.'),
@@ -251,6 +252,9 @@ class CartManager:
 
             if op.voucher and not op.voucher.applies_to(op.item, op.variation):
                 raise CartError(error_messages['voucher_invalid_item'])
+
+            if op.voucher and op.voucher.seat and op.voucher.seat != op.seat:
+                raise CartError(error_messages['voucher_invalid_seat'])
 
             if op.voucher and op.voucher.subevent_id and op.voucher.subevent_id != op.subevent.pk:
                 raise CartError(error_messages['voucher_invalid_subevent'])
@@ -824,7 +828,7 @@ class CartManager:
                     available_count = 0
 
                 if isinstance(op, self.AddOperation):
-                    if op.seat and not op.seat.is_available():
+                    if op.seat and not op.seat.is_available(ignore_voucher_id=op.voucher.id if op.voucher else None):
                         available_count = 0
                         err = err or error_messages['seat_unavailable']
 
@@ -872,7 +876,8 @@ class CartManager:
 
                         new_cart_positions.append(cp)
                 elif isinstance(op, self.ExtendOperation):
-                    if op.seat and not op.seat.is_available(ignore_cart=op.position):
+                    if op.seat and not op.seat.is_available(ignore_cart=op.position,
+                                                            ignore_voucher_id=op.position.voucher_id):
                         err = err or error_messages['seat_unavailable']
                         op.position.addons.all().delete()
                         op.position.delete()
