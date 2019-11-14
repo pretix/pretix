@@ -228,18 +228,17 @@ class EventWizard(SafeSessionWizardView):
             event.testmode = True
             form_dict['basics'].save()
 
-            has_control_rights = self.request.user.teams.filter(
-                organizer=event.organizer, all_events=True, can_change_event_settings=True, can_change_items=True,
-                can_change_orders=True, can_change_vouchers=True
-            ).exists()
-            if not has_control_rights:
-                t = Team.objects.create(
-                    organizer=event.organizer, name=_('Team {event}').format(event=event.name),
-                    can_change_event_settings=True, can_change_items=True,
-                    can_view_orders=True, can_change_orders=True, can_view_vouchers=True,
-                    can_change_vouchers=True
-                )
-                t.members.add(self.request.user)
+            if not EventWizardBasicsForm.has_control_rights(self.request.user, event.organizer):
+                if basics_data["team"] is not None:
+                    t = basics_data["team"]
+                else:
+                    t = Team.objects.create(
+                        organizer=event.organizer, name=_('Team {event}').format(event=event.name),
+                        can_change_event_settings=True, can_change_items=True,
+                        can_view_orders=True, can_change_orders=True, can_view_vouchers=True,
+                        can_change_vouchers=True
+                    )
+                    t.members.add(self.request.user)
                 t.limit_events.add(event)
 
             if event.has_subevents:

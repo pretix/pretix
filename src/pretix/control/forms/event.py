@@ -22,7 +22,7 @@ from pytz import common_timezones, timezone
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
-from pretix.base.models import Event, Organizer, TaxRule
+from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
@@ -101,6 +101,16 @@ class EventWizardBasicsForm(I18nModelForm):
         required=False
     )
 
+    team = forms.ModelChoiceField(
+        label=_("Team owner"),
+        help_text=_("Your user is allowed to create events under this organizer, however you do not have permission "
+                    "to edit all events under this organizer. Please select one of your existing teams to grant access"
+                    " to."),
+        queryset=Team.objects.none(),
+        required=False,
+        empty_label=_('Provision new team')
+    )
+
     class Meta:
         model = Event
         fields = [
@@ -133,7 +143,7 @@ class EventWizardBasicsForm(I18nModelForm):
         self.organizer = kwargs.pop('organizer')
         self.locales = kwargs.get('locales')
         self.has_subevents = kwargs.pop('has_subevents')
-        kwargs.pop('user')
+        self.user = kwargs.pop('user')
         kwargs.pop('session')
         super().__init__(*args, **kwargs)
         self.initial['timezone'] = get_current_timezone_name()
@@ -146,6 +156,11 @@ class EventWizardBasicsForm(I18nModelForm):
         if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']
+
+        if self.has_control_rights(self.user, self.organizer):
+            del self.fields['team']
+        else:
+            self.fields['team'].queryset = self.user.teams.filter(organizer=self.organizer)
 
     def clean(self):
         data = super().clean()
@@ -178,6 +193,13 @@ class EventWizardBasicsForm(I18nModelForm):
                 code='duplicate_slug'
             )
         return slug
+
+    @staticmethod
+    def has_control_rights(user, organizer):
+        return user.teams.filter(
+            organizer=organizer, all_events=True, can_change_event_settings=True, can_change_items=True,
+            can_change_orders=True, can_change_vouchers=True
+        ).exists()
 
 
 class EventChoiceMixin:

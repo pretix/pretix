@@ -76,4 +76,11 @@
             {% bootstrap_field form.presale_end layout="control" %}
         </fieldset>
     {% endif %}
+
+    {% if form.team %}
+        <fieldset>
+            <legend>{% trans "Team" %}</legend>
+            {%  bootstrap_field form.team layout="control" %}
+        </fieldset>
+    {% endif %}
 {% endblock %}
