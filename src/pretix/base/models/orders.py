@@ -31,6 +31,7 @@ from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
 from phonenumber_field.phonenumber import PhoneNumber
+from phonenumbers import NumberParseException
 
 from pretix.base.banlist import banned
 from pretix.base.decimal import round_decimal
@@ -924,7 +925,10 @@ class QuestionAnswer(models.Model):
         elif self.question.type == Question.TYPE_COUNTRYCODE and self.answer:
             return Country(self.answer).name or self.answer
         elif self.question.type == Question.TYPE_PHONENUMBER and self.answer:
-            return PhoneNumber.from_string(self.answer).as_international
+            try:
+                return PhoneNumber.from_string(self.answer).as_international
+            except NumberParseException:
+                return self.answer
         else:
             return self.answer
 
