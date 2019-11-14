@@ -36,10 +36,14 @@ class EventsTest(SoupTest):
             date_from=datetime.datetime(2014, 9, 5, tzinfo=datetime.timezone.utc),
         )
 
-        t = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
-                                can_change_items=True)
-        t.members.add(self.user)
-        t.limit_events.add(self.event1)
+        self.team1 = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
+                                         can_change_items=True)
+        self.team1.members.add(self.user)
+        self.team1.limit_events.add(self.event1)
+
+        self.team2 = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_change_items=True,
+                                         can_change_orders=True, can_change_vouchers=True)
+        self.team2.members.add(self.user)
 
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
@@ -579,6 +583,7 @@ class EventsTest(SoupTest):
             'basics-presale_start_1': '10:00:00',
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
+            'basics-team': '',
         })
 
         self.post_doc('/control/events/add', {
@@ -639,6 +644,7 @@ class EventsTest(SoupTest):
             'basics-presale_start_1': '10:00:00',
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
+            'basics-team': '',
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
@@ -772,6 +778,7 @@ class EventsTest(SoupTest):
             'basics-presale_start_1': '10:00:00',
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
+            'basics-team': '',
         })
 
         assert not doc.select("#id_copy-copy_from_event_1")
@@ -822,6 +829,7 @@ class EventsTest(SoupTest):
             'basics-presale_start_1': '',
             'basics-presale_end_0': '',
             'basics-presale_end_1': '',
+            'basics-team': '',
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
@@ -839,6 +847,55 @@ class EventsTest(SoupTest):
             assert ev.organizer == self.orga1
             assert ev.location == LazyI18nString({'en': 'Hamburg'})
             assert Team.objects.filter(limit_events=ev, members=self.user).exists()
+            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=pytz.utc)
+            assert ev.date_to is None
+            assert ev.presale_start is None
+            assert ev.presale_end is None
+
+    def test_create_event_existing_team(self):
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': 'en'
+        })
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
+            'basics-name_0': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '',
+            'basics-date_to_1': '',
+            'basics-location_0': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-tax_rate': '',
+            'basics-locale': 'en',
+            'basics-timezone': 'UTC',
+            'basics-presale_start_0': '',
+            'basics-presale_start_1': '',
+            'basics-presale_end_0': '',
+            'basics-presale_end_1': '',
+            'basics-team': str(self.team2.pk),
+        })
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
+            'copy-copy_from_event': ''
+        })
+
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            assert ev.name == LazyI18nString({'en': '33C3'})
+            assert ev.settings.locales == ['en']
+            assert ev.settings.locale == 'en'
+            assert ev.currency == 'EUR'
+            assert ev.settings.timezone == 'UTC'
+            assert ev.organizer == self.orga1
+            assert ev.location == LazyI18nString({'en': 'Hamburg'})
+            team = Team.objects.filter(limit_events=ev, members=self.user).first()
+            assert team == self.team2
             assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=pytz.utc)
             assert ev.date_to is None
             assert ev.presale_start is None

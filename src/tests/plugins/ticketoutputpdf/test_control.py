@@ -21,7 +21,8 @@ class TicketLayoutFormTest(SoupTest):
         )
         self.item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0, position=1)
         t = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_view_orders=True,
-                                can_change_items=True, all_events=True, can_create_events=True)
+                                can_change_items=True, all_events=True, can_create_events=True,
+                                can_change_vouchers=True, can_change_orders=True)
         t.members.add(self.user)
         t.limit_events.add(self.event1)
         self.client.login(email='dummy@dummy.dummy', password='dummy')

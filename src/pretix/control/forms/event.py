@@ -108,7 +108,7 @@ class EventWizardBasicsForm(I18nModelForm):
                     " to."),
         queryset=Team.objects.none(),
         required=False,
-        empty_label=_('Provision new team')
+        empty_label=_('Provision new team specifically for this event.')
     )
 
     class Meta:
@@ -161,6 +161,10 @@ class EventWizardBasicsForm(I18nModelForm):
             del self.fields['team']
         else:
             self.fields['team'].queryset = self.user.teams.filter(organizer=self.organizer)
+            if not self.organizer.settings.get("event_team_provisioning", "True"):
+                self.fields['team'].required = True
+                self.fields['team'].empty_label = None
+                self.fields['team'].initial = 0
 
     def clean(self):
         data = super().clean()
