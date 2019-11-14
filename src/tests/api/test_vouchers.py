@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from pytz import UTC
 
-from pretix.base.models import Event, Voucher
+from pretix.base.models import Event, SeatingPlan, Voucher
 
 
 @pytest.fixture
@@ -44,7 +44,8 @@ TEST_VOUCHER_RES = {
     'tag': 'Foo',
     'comment': '',
     'show_hidden_items': True,
-    'subevent': None
+    'subevent': None,
+    'seat': None,
 }
 
 
@@ -1049,3 +1050,223 @@ def test_create_multiple_vouchers_duplicate_code(token_client, organizer, event,
     assert resp.data == [{}, {'code': ['Duplicate voucher code in request.']}]
     with scopes_disabled():
         assert Voucher.objects.count() == 0
+
+
+@pytest.fixture
+def seatingplan(organizer, event):
+    plan = SeatingPlan.objects.create(
+        name="Plan", organizer=organizer, layout="{}"
+    )
+    event.seating_plan = plan
+    event.save()
+    return plan
+
+
+@pytest.fixture
+def seat1(item, event):
+    return event.seats.create(name="A1", product=item, seat_guid="A1")
+
+
+@pytest.mark.django_db
+def test_create_multiple_vouchers_duplicate_seat(token_client, organizer, event, item, seat1, seatingplan):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/vouchers/batch_create/'.format(organizer.slug, event.slug),
+        data=[
+            {
+                'code': 'ABCDEFGHI',
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': False,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None,
+                'seat': 'A1',
+            },
+            {
+                'code': 'ABCDEFGHI',
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': True,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None,
+                'seat': 'A1',
+            }
+        ], format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == [{}, {'code': ['Duplicate seat ID in request.']}]
+    with scopes_disabled():
+        assert Voucher.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_set_seat_ok(token_client, organizer, event, seatingplan, seat1, item):
+    with scopes_disabled():
+        v = event.vouchers.create(item=item)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1'
+        },
+    )
+    with scopes_disabled():
+        v.refresh_from_db()
+        assert v.seat == seat1
+
+
+@pytest.mark.django_db
+def test_save_set_seat(token_client, organizer, event, seatingplan, seat1, item):
+    with scopes_disabled():
+        v = event.vouchers.create(item=item, seat=seat1)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1'
+        },
+    )
+    with scopes_disabled():
+        v.refresh_from_db()
+        assert v.seat == seat1
+
+
+@pytest.mark.django_db
+def test_set_seat_unknown(token_client, organizer, event, seatingplan, seat1, item):
+    with scopes_disabled():
+        v = event.vouchers.create(item=item)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'unknown'
+        },
+        expected_failure=True
+    )
+
+
+@pytest.mark.django_db
+def test_seat_seat_productmissing(token_client, organizer, event, seatingplan, seat1, item, quota):
+    with scopes_disabled():
+        v = event.vouchers.create(quota=quota)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1'
+        },
+        expected_failure=True
+    )
+
+
+@pytest.mark.django_db
+def test_seat_seat_productwrong(token_client, organizer, event, seatingplan, seat1, item, quota):
+    with scopes_disabled():
+        i2 = event.items.create(name="Budget Ticket", default_price=23)
+        v = event.vouchers.create(item=i2)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1'
+        },
+        expected_failure=True
+    )
+
+
+@pytest.mark.django_db
+def test_seat_seat_usages(token_client, organizer, event, seatingplan, seat1, item, quota):
+    with scopes_disabled():
+        v = event.vouchers.create(item=item, max_usages=2)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1'
+        },
+        expected_failure=True
+    )
+
+
+@pytest.mark.django_db
+def test_seat_seat_duplicate(token_client, organizer, event, seatingplan, seat1, item, quota):
+    with scopes_disabled():
+        event.vouchers.create(item=item, seat=seat1)
+        v = event.vouchers.create(item=item)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1'
+        },
+        expected_failure=True
+    )
+
+
+@pytest.mark.django_db
+def test_set_seat_subevent(token_client, organizer, event, seatingplan, seat1, item, quota):
+    with scopes_disabled():
+        event.has_subevents = True
+        event.save()
+        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        seat1 = event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se1)
+        event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se2)
+        v = event.vouchers.create(item=item)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1',
+            'subevent': se1.pk
+        },
+    )
+    with scopes_disabled():
+        v.refresh_from_db()
+        assert v.seat == seat1
+        assert v.subevent == se1
+
+
+@pytest.mark.django_db
+def test_set_seat_subevent_required(token_client, organizer, event, seatingplan, seat1, item, quota):
+    with scopes_disabled():
+        event.has_subevents = True
+        event.save()
+        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        seat1 = event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se1)
+        event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se2)
+        event.vouchers.create(item=item, seat=seat1)
+        v = event.vouchers.create(item=item)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1',
+        },
+        expected_failure=True
+    )
+
+
+@pytest.mark.django_db
+def test_set_seat_subevent_invalid(token_client, organizer, event, seatingplan, seat1, item, quota):
+    with scopes_disabled():
+        event.has_subevents = True
+        event.save()
+        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        seat1 = event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se1)
+        event.seats.create(name="B1", product=item, seat_guid="B1", subevent=se2)
+        event.vouchers.create(item=item, seat=seat1, subevent=se2)
+        v = event.vouchers.create(item=item)
+    change_voucher(
+        token_client, organizer, event, v,
+        data={
+            'seat': 'A1',
+        },
+        expected_failure=True
+    )

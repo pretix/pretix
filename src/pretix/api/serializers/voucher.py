@@ -2,15 +2,23 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
-from pretix.base.models import Voucher
+from pretix.base.models import Seat, Voucher
 
 
 class VoucherListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
         codes = set()
+        seats = set()
         errs = []
         err = False
         for voucher_data in validated_data:
+            if voucher_data.get('seat') and (voucher_data.get('seat'), voucher_data.get('subevent')) in seats:
+                err = True
+                errs.append({'code': ['Duplicate seat ID in request.']})
+                continue
+            else:
+                seats.add((voucher_data.get('seat'), voucher_data.get('subevent')))
+
             if voucher_data['code'] in codes:
                 err = True
                 errs.append({'code': ['Duplicate voucher code in request.']})
@@ -22,12 +30,19 @@ class VoucherListSerializer(serializers.ListSerializer):
         return super().create(validated_data)
 
 
+class SeatGuidField(serializers.CharField):
+    def to_representation(self, val: Seat):
+        return val.seat_guid
+
+
 class VoucherSerializer(I18nAwareModelSerializer):
+    seat = SeatGuidField(allow_null=True, required=False)
+
     class Meta:
         model = Voucher
         fields = ('id', 'code', 'max_usages', 'redeemed', 'valid_until', 'block_quota',
                   'allow_ignore_quota', 'price_mode', 'value', 'item', 'variation', 'quota',
-                  'tag', 'comment', 'subevent', 'show_hidden_items')
+                  'tag', 'comment', 'subevent', 'show_hidden_items', 'seat')
         read_only_fields = ('id', 'redeemed')
         list_serializer_class = VoucherListSerializer
 
@@ -60,5 +75,11 @@ class VoucherSerializer(I18nAwareModelSerializer):
                 full_data.get('quota'), full_data.get('item'), full_data.get('variation')
             )
         Voucher.clean_voucher_code(full_data, self.context.get('event'), self.instance.pk if self.instance else None)
+
+        if full_data.get('seat'):
+            data['seat'] = Voucher.clean_seat_id(
+                full_data, full_data.get('item'), self.context.get('event'),
+                self.instance.pk if self.instance else None
+            )
 
         return data

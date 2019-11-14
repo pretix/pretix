@@ -38,6 +38,7 @@ quota                                 integer                    An ID of a quot
                                                                  attached either to a specific product or to all
                                                                  products within one quota or it can be available
                                                                  for all items without restriction.
+seat                                  string                     ``seat_guid`` attribute of a specific seat (or ``null``)
 tag                                   string                     A string that is used for grouping vouchers
 comment                               string                     An internal comment on the voucher
 subevent                              integer                    ID of the date inside an event series this voucher belongs to (or ``null``).
@@ -52,6 +53,10 @@ show_hidden_items                     boolean                    Only if set to 
 .. versionchanged:: 3.0
 
    The attribute ``show_hidden_items`` has been added.
+
+.. versionchanged:: 3.4
+
+   The attribute ``seat`` has been added.
 
 Endpoints
 ---------
@@ -96,7 +101,8 @@ Endpoints
             "quota": null,
             "tag": "testvoucher",
             "comment": "",
-            "subevent": null
+            "seat": null,
+            "subevent": null,
           }
         ]
       }
@@ -162,6 +168,7 @@ Endpoints
         "quota": null,
         "tag": "testvoucher",
         "comment": "",
+        "seat": null,
         "subevent": null
       }
 
@@ -225,6 +232,7 @@ Endpoints
         "quota": null,
         "tag": "testvoucher",
         "comment": "",
+        "seat": null,
         "subevent": null
       }
 
@@ -352,6 +360,7 @@ Endpoints
         "quota": null,
         "tag": "testvoucher",
         "comment": "",
+        "seat": null,
         "subevent": null
       }
 
