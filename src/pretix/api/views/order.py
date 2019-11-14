@@ -913,16 +913,16 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
         if payment.state not in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
             return Response({'detail': 'Invalid state of payment'}, status=status.HTTP_400_BAD_REQUEST)
 
-            try:
-                with transaction.atomic():
-                    payment.payment_provider.cancel_payment(payment)
-                    payment.order.log_action('pretix.event.order.payment.canceled', {
-                        'local_id': payment.local_id,
-                        'provider': payment.provider,
-                    }, user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
-            except PaymentException as e:
-                return Response({'detail': 'External error: {}'.format(str(e))},
-                                status=status.HTTP_400_BAD_REQUEST)
+        try:
+            with transaction.atomic():
+                payment.payment_provider.cancel_payment(payment)
+                payment.order.log_action('pretix.event.order.payment.canceled', {
+                    'local_id': payment.local_id,
+                    'provider': payment.provider,
+                }, user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
+        except PaymentException as e:
+            return Response({'detail': 'External error: {}'.format(str(e))},
+                            status=status.HTTP_400_BAD_REQUEST)
         return self.retrieve(request, [], **kwargs)
 
 
