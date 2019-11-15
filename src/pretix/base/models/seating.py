@@ -122,7 +122,7 @@ class Seat(models.Model):
             Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now())) &
             Q(redeemed__lt=F('max_usages'))
         )
-        if ignore_cart:
+        if ignore_cart and ignore_cart is not True:
             cpqs = cpqs.exclude(pk=ignore_cart.pk)
         if ignore_orderpos:
             opqs = opqs.exclude(pk=ignore_orderpos.pk)
