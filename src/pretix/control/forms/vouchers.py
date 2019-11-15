@@ -351,8 +351,7 @@ class VoucherBulkForm(VoucherForm):
                 raise ValidationError(_('You generated {codes} vouchers, but entered recipients for {recp} vouchers.').format(codes=code_len, recp=recp_len))
 
         if data.get('seats'):
-            seatids = [s.strip() for s in data.get('seats').strip().split() if s]
-            print(seatids)
+            seatids = [s.strip() for s in data.get('seats').strip().split("\n") if s]
             if len(seatids) != len(data.get('codes')):
                 raise ValidationError(_('You need to specify as many seats as voucher codes.'))
             data['seats'] = []
