@@ -63,7 +63,7 @@ If you're just *testing* the check-in capabilities and want to clean out everyth
 delete and re-create the check-in list.
 
 Why does pretix not support any 1D (linear) bar codes?
------------------------------------------------------
+------------------------------------------------------
 
 We often get asked, why pretix depends on QR codes instead of more traditional 1D bar codes. More often than not, people
 tend to already own linear (laser) bar code scanners.
@@ -94,7 +94,7 @@ The truth is: we have deliberately chosen not to support 1D bar codes - and that
     A QR-code however, while also not 100% immune to kinking it, has some redundancy built into it, so that even
     slightly damaged bar codes are still readable.
 
-3. Laser bar code scanners dont work on (most) phone screens
+3. Laser bar code scanners don not work on (most) phone screens
     To be fair: There is a variety of bar code scanners out there. But when people ask about linear bar code support
     because their existing scanners are professional grade, they are talking about laser bar code scanners.
 
