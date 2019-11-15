@@ -656,6 +656,10 @@ Your {event} team"""))
         'default': None,
         'type': File
     },
+    'og_image': {
+        'default': None,
+        'type': File
+    },
     'invoice_logo_image': {
         'default': None,
         'type': File

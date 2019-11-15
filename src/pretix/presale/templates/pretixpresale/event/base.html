@@ -11,6 +11,10 @@
     {% if event.settings.meta_noindex %}
         <meta name="robots" content="noindex, nofollow">
     {% endif %}
+    <meta property="og:type" content="website" />
+    {% if social_image %}
+        <meta property="og:image" content="{{ social_image }}" />
+    {% endif %}
     {{ block.super }}
 {% endblock %}
 {% block above %}

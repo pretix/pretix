@@ -3,6 +3,7 @@ import uuid
 from collections import OrderedDict
 from datetime import datetime, time, timedelta
 from operator import attrgetter
+from urllib.parse import urljoin
 
 import pytz
 from django.conf import settings
@@ -26,6 +27,7 @@ from pretix.base.validators import EventSlugBanlistValidator
 from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
+from pretix.helpers.thumb import get_thumbnail
 
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
@@ -145,10 +147,13 @@ class EventMixin:
             "@context": "http://schema.org",
             "@type": "Event", "location": {
                 "@type": "Place",
-                "address": str(self.location)
+                "address": str(self.location),
             },
-            "name": str(self.name)
+            "name": str(self.name),
         }
+        img = getattr(self, 'event', self).social_image
+        if img:
+            eventdict['image'] = img
 
         if self.settings.show_times:
             eventdict["startDate"] = self.date_from.isoformat()
@@ -357,6 +362,20 @@ class Event(EventMixin, LoggedModel):
 
     def __str__(self):
         return str(self.name)
+
+    @property
+    def social_image(self):
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        img = None
+        logo_file = self.settings.get('logo_image', as_type=str, default='')[7:]
+        og_file = self.settings.get('og_image', as_type=str, default='')[7:]
+        if og_file:
+            img = get_thumbnail(og_file, '1200').thumb.url
+        elif logo_file:
+            img = get_thumbnail(logo_file, '5000x120').thumb.url
+        if img:
+            return urljoin(build_absolute_uri(self, 'presale:event.index'), img)
 
     @property
     def free_seats(self):

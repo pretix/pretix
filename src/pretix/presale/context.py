@@ -59,7 +59,14 @@ def contextprocessor(request):
 
         if request.event.settings.presale_css_file:
             ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)
+
         ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
+        ctx['social_image'] = request.event.cache.get_or_set(
+            'social_image_url',
+            request.event.social_image,
+            60
+        )
+
         ctx['event'] = request.event
         ctx['languages'] = [get_language_info(code) for code in request.event.settings.locales]
 
