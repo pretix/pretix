@@ -126,14 +126,14 @@ def pdf_logentry_object_link(sender, logentry, **kwargs):
 
 
 override_layout = EventPluginSignal(
-    providing_args=["layout", "position"]
+    providing_args=["layout", "orderposition"]
 )
 """
 This signal allows you to forcefully override the ticket layout that is being used to create the ticket PDF. Use with
 care, as this will render any specifically by the organizer selected templates useless.
 
 The ``layout`` keyword argument will contain the layout which has been originally selected by the system, the
-``position`` keyword argument will contain the ``OrderPosition`` which is being generated.
+``orderposition`` keyword argument will contain the ``OrderPosition`` which is being generated.
 
 If you implement this signal and do not want to override the layout, make sure to return the ``layout`` keyword argument
 which you have been passed.
