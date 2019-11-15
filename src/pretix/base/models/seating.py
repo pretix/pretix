@@ -128,4 +128,4 @@ class Seat(models.Model):
             opqs = opqs.exclude(pk=ignore_orderpos.pk)
         if ignore_voucher_id:
             vqs = vqs.exclude(pk=ignore_voucher_id)
-        return not opqs.exists() and not cpqs.exists() and not vqs.exists()
+        return not opqs.exists() and (ignore_cart is True or not cpqs.exists()) and not vqs.exists()

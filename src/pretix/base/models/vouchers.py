@@ -354,8 +354,10 @@ class Voucher(LoggedModel):
             raise ValidationError(_('The specified seat ID "{id}" does not exist for this event.').format(
                 id=data.get('seat')))
 
-        if Voucher.objects.filter(seat=seat).exclude(pk=pk).exists():
-            raise ValidationError(_('A voucher for the seat "{id}" already exists.').format(id=seat.seat_guid))
+        if not seat.is_available(ignore_voucher_id=pk, ignore_cart=True):
+            raise ValidationError(_('The seat "{id}" is currently unavailable (blocked, already sold or a '
+                                    'different voucher).').format(
+                id=seat.seat_guid))
 
         if not item:
             raise ValidationError(_('You need to choose a specific product if you select a seat.'))
