@@ -80,7 +80,7 @@ class PdfTicketOutput(BaseTicketOutput):
         with language(order.locale):
             for op in order.positions_with_tickets:
                 layout = override_layout.send_chained(
-                    order.event, 'layoutoverride', orderposition=op, layout=self.layout_map.get(
+                    order.event, 'layout', orderposition=op, layout=self.layout_map.get(
                         (op.item_id, order.sales_channel),
                         self.layout_map.get(
                             (op.item_id, 'web'),
@@ -101,7 +101,7 @@ class PdfTicketOutput(BaseTicketOutput):
         order = op.order
 
         layout = override_layout.send_chained(
-            order.event, 'layoutoverride', orderposition=op, layout=self.layout_map.get(
+            order.event, 'layout', orderposition=op, layout=self.layout_map.get(
                 (op.item_id, order.sales_channel),
                 self.layout_map.get(
                     (op.item_id, 'web'),
