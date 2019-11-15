@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-14 11:37+0000\n"
+"PO-Revision-Date: 2019-11-15 08:42+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -1654,7 +1654,7 @@ msgstr ""
 #: pretix/base/models/event.py:307 pretix/base/models/event.py:923
 #: pretix/control/forms/subevents.py:70
 msgid "Admission time"
-msgstr ""
+msgstr "Ierašanās no"
 
 #: pretix/base/models/event.py:309 pretix/base/models/event.py:912
 msgid "Show in lists"
@@ -3733,7 +3733,7 @@ msgstr "22:00"
 
 #: pretix/base/pdf.py:166
 msgid "Event admission date and time"
-msgstr "Pasākuma ieejas atvēršanas datums un laiks"
+msgstr "Ierašanās no"
 
 #: pretix/base/pdf.py:167 pretix/base/pdf.py:228
 msgid "2017-05-31 19:00"
@@ -3815,7 +3815,7 @@ msgstr "Pirmais stāvs, 3. rinda, 4. sēdvieta"
 #: pretix/base/pdf.py:246 pretix/base/pdf.py:252
 #: pretix/control/forms/orders.py:211 pretix/control/forms/orders.py:266
 msgid "General admission"
-msgstr ""
+msgstr "Brīvi izvēlētu sēdvietu ieeja"
 
 #: pretix/base/pdf.py:249
 msgid "Seat: zone"
@@ -15637,11 +15637,11 @@ msgstr "Stripe uzrādīja kļūdu"
 
 #: pretix/plugins/stripe/payment.py:590
 msgid "Credit card via Stripe"
-msgstr "Kredītkarte, debatkarte caur Stripe"
+msgstr "Kredītkarte, debetkarte caur Stripe"
 
 #: pretix/plugins/stripe/payment.py:591
 msgid "Credit card"
-msgstr "Kredītkarte, debatkarte"
+msgstr "Kredītkarte, debetkarte"
 
 #: pretix/plugins/stripe/payment.py:617
 msgid "You may need to enable JavaScript for Stripe payments."
@@ -15816,7 +15816,7 @@ msgstr "Kopējā summa tiks izņemta no jūsu kredītkartes."
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:11
 msgid "Card type"
-msgstr "Kartes tips"
+msgstr "Kartes veids"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_bancontact.html:4
@@ -15857,8 +15857,8 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
-"Jūsu maksājumu apstrādā Stripe, Inc. Jūsu kredītkartes dati tiks pārsūtīti "
-"tieši uz Stripe un nekad nepieskarsies mūsu serveriem."
+"Jūsu maksājumu apstrādā Stripe, Inc. Jūsu maksājumu kartes dati tiks "
+"pārsūtīti pa tiešo uz Stripe, Inc., garantējot pilnīgu to privātumu."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
 msgid "Charge ID"
@@ -16264,11 +16264,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:110
 msgid "Contact event organizer"
-msgstr "Sazinieties ar pasākuma rīkotāju"
+msgstr "Sazinies ar pasākuma rīkotāju"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:113
 msgid "Imprint"
-msgstr "Nospiedums"
+msgstr "Kontaktinformācija"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:7
 msgid ""
@@ -16347,7 +16347,7 @@ msgstr "Pārskatīt pasūtījumu"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:10
 msgid "Please review the details below and confirm your order."
-msgstr "Lūdzu, pārskatiet zemāk esošo informāciju un apstipriniet pasūtījumu."
+msgstr "Lūdzam pārbaudīt zemāk esošo informāciju un apstiprināt pasūtījumu."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please hang tight, we're finalizing your order!"
@@ -16358,7 +16358,7 @@ msgstr "Lūdzu, uzgaidiet, šobrīd tiek pabeigts jūsu pirkuma process!"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:82
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:124
 msgid "Modify"
-msgstr "Modificēt"
+msgstr "Labot informāciju"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:128
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:18
@@ -16399,7 +16399,7 @@ msgstr "Iesniegt reģistrāciju"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
-msgstr "Lūdzu, atlasiet, kā vēlaties maksāt."
+msgstr "Lūdzu, izvēlieties maksājuma veidu."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
 msgid "This sales channel does not provide support for testmode."
@@ -16539,8 +16539,9 @@ msgid ""
 "You can download your tickets using the buttons below. Please have your "
 "ticket ready when entering the event."
 msgstr ""
-"Jūs varat lejupielādēt biļetes, izmantojot zemāk esošās pogas. Pie pasākuma "
-"ieejas tiks pārbaudītas biļetes, tāpēc lūdzu ņemiet tās līdzi."
+"Jūs varat lejupielādēt iegādātās biļetes, spiežot uz zemāk esošajām pogām. "
+"Informējam, ka pirms pasākuma pie ieejas Jūsu biļete tiks pārbaudīta, "
+"aicinot to uzrādīt drukātā vai elektroniskā formātā."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:11
 msgid "Download all tickets at once:"
@@ -16650,7 +16651,7 @@ msgstr "Aiziet"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 #: pretix/presale/views/widget.py:284 pretix/presale/views/widget.py:296
 msgid "Book now"
-msgstr ""
+msgstr "Pērc tagad"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:35
 #: pretix/presale/templates/pretixpresale/organizers/index.html:90
@@ -16763,16 +16764,16 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
-"Ja vēlaties redzēt vai mainīt pasūtījuma statusu un informāciju, "
-"noklikšķiniet uz saites vienā no e-pasta ziņojumiem, ko jums nosūtījām "
-"pasūtījuma procesa laikā. Ja nevarat atrast saiti, noklikšķiniet uz šīs "
-"pogas, lai pieprasītu saiti uz pasūtījumu, lai jums to atkal nosūtītu."
+"Ja vēlaties redzēt vai mainīt pasūtījuma statusu un / vai informāciju, "
+"noklišķiniet uz saites e-pasta ziņojumā, ko saņēmāt pasūtījuma laikā. Ja "
+"nevarat atrast saiti, noklikšķiniet uz šīs pogas, lai no jauna pieprasītu "
+"saiti uz pasūtījumu."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:290
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:7
 msgid "Resend order links"
-msgstr "Nosūtīt pasūtījumu saites atkārtoti"
+msgstr "Nosūtīt saiti uz pirkumu atkārtoti"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:13
 msgid "Thank you!"
@@ -16802,7 +16803,9 @@ msgstr "Jūsu pasūtījums ir veiksmīgi apstrādāts. Sīkāku informāciju ska
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
-msgstr "Mēs veiksmīgi saņēmām jūsu maksājumu. Sīkāku informāciju skatīt zemāk."
+msgstr ""
+"Jūsu maksājums ir veiksmīgi saņemts. Vairāk informācijas aicinām skatīt "
+"zemāk."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid ""
@@ -16810,9 +16813,9 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
-"Lūdzu, pievienojiet grāmatzīmi vai saglabājiet saiti uz šo precīzo lapu, ja "
-"vēlāk vēlaties piekļūt savam pasūtījumam. Mēs jums nosūtījām arī e-pastu ar "
-"saiti uz jūsu norādīto adresi."
+"Lūdzu pievienojiet grāmatzīmi vai saglabājiet saiti uz šo lapu, ja vēlāk "
+"vēlēsieties piekļūt informācijai par pasūtījumu. Tāpat arī informācija par "
+"pasūtījumu ir tikusi nosūtīta uz jūsu norādīto e-pasta adresi."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
