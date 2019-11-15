@@ -19,6 +19,7 @@ from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.plugins.ticketoutputpdf.models import (
     TicketLayout, TicketLayoutItem,
 )
+from pretix.plugins.ticketoutputpdf.signals import override_layout
 
 logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
@@ -78,11 +79,13 @@ class PdfTicketOutput(BaseTicketOutput):
         merger = PdfFileMerger()
         with language(order.locale):
             for op in order.positions_with_tickets:
-                layout = self.layout_map.get(
-                    (op.item_id, order.sales_channel),
-                    self.layout_map.get(
-                        (op.item_id, 'web'),
-                        self.default_layout
+                layout = override_layout.send_chained(
+                    order.event, 'layoutoverride', orderposition=op, layout=self.layout_map.get(
+                        (op.item_id, order.sales_channel),
+                        self.layout_map.get(
+                            (op.item_id, 'web'),
+                            self.default_layout
+                        )
                     )
                 )
                 outbuffer = self._draw_page(layout, op, order)
@@ -96,11 +99,14 @@ class PdfTicketOutput(BaseTicketOutput):
 
     def generate(self, op):
         order = op.order
-        layout = self.layout_map.get(
-            (op.item_id, order.sales_channel),
-            self.layout_map.get(
-                (op.item_id, 'web'),
-                self.default_layout
+
+        layout = override_layout.send_chained(
+            order.event, 'layoutoverride', orderposition=op, layout=self.layout_map.get(
+                (op.item_id, order.sales_channel),
+                self.layout_map.get(
+                    (op.item_id, 'web'),
+                    self.default_layout
+                )
             )
         )
         with language(order.locale):
