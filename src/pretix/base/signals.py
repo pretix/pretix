@@ -589,18 +589,6 @@ The evaluate member will be called with the order position, order and event as a
 also be a subevent, if applicable.
 """
 
-ticketoutput_override_layout = EventPluginSignal(
-    providing_args=["position"]
-)
-"""
-This signal allows you to forcefully override the ticket layout that is being used to create the ticket PDF. Use with
-care, as this will render any specifically by the organizer selected templates useless.
-
-The ``position`` keyword argument will contain the ``OrderPosition`` which is being generated.
-
-As with all plugin signals, the ``sender`` keyword will contain the event.
-"""
-
 
 timeline_events = EventPluginSignal()
 """
