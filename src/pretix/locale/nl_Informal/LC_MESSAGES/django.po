@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-10-17 09:50+0000\n"
+"PO-Revision-Date: 2019-11-15 22:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -165,12 +165,13 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Cadeaukaartproducten moeten niet worden gekoppeld aan een positief "
+"belastingtarief, omdat de belasting al wordt toegepast wanneer de "
+"cadeaukaart wordt verzilverd."
 
 #: pretix/api/serializers/item.py:145 pretix/control/forms/item.py:436
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "Gift card products should not be admission products at the same time."
-msgstr "Je kan niet tegelijk een quotum en een specifiek product selecteren."
+msgstr "Cadeaukaartproducten kunnen niet tegelijkertijd toegangsbewijzen zijn."
 
 #: pretix/api/serializers/item.py:250
 msgid ""
@@ -181,10 +182,10 @@ msgstr ""
 "het speciale geneste eindpunt."
 
 #: pretix/api/serializers/item.py:264 pretix/control/forms/item.py:70
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "Deze vraag zal bij het inchecken worden gesteld."
+msgstr ""
+"Deze vraag kan niet van een vraag die tijdens het inchecken gesteld wordt "
+"afhangen."
 
 #: pretix/api/serializers/item.py:269 pretix/control/forms/item.py:75
 msgid "Circular dependency between questions detected."
@@ -195,6 +196,8 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Een cadeaukaart met dezelfde code bestaat al in jouw organisatoraccount of "
+"een met je account verbonden organisatoraccount."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:250
 #, python-brace-format
@@ -276,10 +279,8 @@ msgid "Ticket check-in reverted"
 msgstr "Kaartjescheck-in teruggedraaid"
 
 #: pretix/base/auth.py:91
-#, fuzzy
-#| msgid "pretix default"
 msgid "pretix User"
-msgstr "pretix-standaard"
+msgstr "pretix-gebruiker"
 
 #: pretix/base/auth.py:100 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:86 pretix/base/models/notifications.py:25
@@ -1138,10 +1139,10 @@ msgid "Keep me logged in"
 msgstr "Houd mij ingelogd"
 
 #: pretix/base/forms/auth.py:19 pretix/base/forms/auth.py:188
-#, fuzzy
-#| msgid "This voucher code is not known in our database."
 msgid "This combination of credentials is not known to our system."
-msgstr "Deze vouchercode is niet bekend in onze database."
+msgstr ""
+"Deze combinatie van gebruikersnaam en wachtwoord is niet bekend in onze "
+"database."
 
 #: pretix/base/forms/auth.py:20 pretix/base/forms/auth.py:189
 msgid "This account is inactive."
@@ -1584,18 +1585,12 @@ msgid "Include pending orders"
 msgstr "Neem ook openstaande bestellingen mee"
 
 #: pretix/base/models/checkin.py:20
-#, fuzzy
-#| msgid ""
-#| "With this option, people will be able to check in even if the order have "
-#| "not been paid. This only works with pretixdesk 0.3.0 or newer or "
-#| "pretixdroid 1.9 or newer."
 msgid ""
 "With this option, people will be able to check in even if the order have not "
 "been paid."
 msgstr ""
 "Als deze optie is ingeschakeld kunnen mensen ingecheckt worden zelfs als de "
-"bestelling niet betaald is. Dit werkt alleen met pretixdesk 0.3.0 of nieuwer "
-"of pretixdroid 1.9 of nieuwer."
+"bestelling niet betaald is."
 
 #: pretix/base/models/checkin.py:26
 msgid "Sales channels to automatically check in"
@@ -1728,11 +1723,11 @@ msgstr "Locatie"
 
 #: pretix/base/models/event.py:328 pretix/base/models/event.py:941
 msgid "Latitude"
-msgstr ""
+msgstr "Breedtegraad"
 
 #: pretix/base/models/event.py:332 pretix/base/models/event.py:945
 msgid "Longitude"
-msgstr ""
+msgstr "Lengtegraad"
 
 #: pretix/base/models/event.py:337 pretix/control/navigation.py:44
 msgid "Plugins"
@@ -1870,16 +1865,12 @@ msgstr "Geen waarde kan het scheidingsteken bevatten."
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:22
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:44
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:39
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card code"
-msgstr "Cadeaubon"
+msgstr "Cadeauboncode"
 
 #: pretix/base/models/giftcards.py:56
-#, fuzzy
-#| msgid "Test mode"
 msgid "Test mode card"
-msgstr "Testmodus"
+msgstr "Testcadeaubon"
 
 #: pretix/base/models/invoices.py:128 pretix/base/services/invoices.py:89
 #, python-format
@@ -2208,16 +2199,16 @@ msgid "Sales channels"
 msgstr "Verkoopkanalen"
 
 #: pretix/base/models/items.py:419
-#, fuzzy
-#| msgid "The product the user waits for."
 msgid "This product is a gift card"
-msgstr "Het product waar de gebruiker op wacht."
+msgstr "Dit product is een cadeaubon"
 
 #: pretix/base/models/items.py:420
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
+"Wanneer een klant dit product koopt ontvangt de klant een cadeaubon met een "
+"waarde die overeenkomt met de productprijs."
 
 #: pretix/base/models/items.py:429 pretix/base/models/items.py:1026
 #: pretix/control/forms/filter.py:184 pretix/control/forms/filter.py:732
@@ -2926,10 +2917,8 @@ msgstr ""
 "dit team toevoegt!"
 
 #: pretix/base/models/organizer.py:180
-#, fuzzy
-#| msgid "Can change orders"
 msgid "Can manage gift cards"
-msgstr "Kan bestellingen wijzigen"
+msgstr "Kan cadeaubonnen beheren"
 
 #: pretix/base/models/organizer.py:185
 msgid "Can change event settings"
@@ -3349,10 +3338,8 @@ msgid "Order status"
 msgstr "Bestelstatus"
 
 #: pretix/base/notifications.py:194
-#, fuzzy
-#| msgid "Change products"
 msgid "Purchased products"
-msgstr "Verander producten"
+msgstr "Gekochte producten"
 
 #: pretix/base/notifications.py:195
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:40
