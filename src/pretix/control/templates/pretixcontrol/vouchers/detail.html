@@ -67,6 +67,9 @@
                     {% if form.subevent %}
                         {% bootstrap_field form.subevent layout="control" %}
                     {% endif %}
+                    {% if "seat" in form.fields %}
+                        {% bootstrap_field form.seat layout="control" %}
+                    {% endif %}
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Advanced settings" %}</legend>

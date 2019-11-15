@@ -509,9 +509,9 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             break
 
         if cp.seat:
-            # Unlike quotas (which we blindly trust as long as the position is not expired), we check seats every time, since we absolutely
-            # can not overbook a seat.
-            if not cp.seat.is_available(ignore_cart=cp) or cp.seat.blocked:
+            # Unlike quotas (which we blindly trust as long as the position is not expired), we check seats every
+            # time, since we absolutely can not overbook a seat.
+            if not cp.seat.is_available(ignore_cart=cp, ignore_voucher_id=cp.voucher_id) or cp.seat.blocked:
                 err = err or error_messages['seat_unavailable']
                 cp.delete()
                 continue

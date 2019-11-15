@@ -5,6 +5,7 @@ import jsonschema
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import F, Q
 from django.utils.deconstruct import deconstructible
 from django.utils.timezone import now
 from django.utils.translation import gettext, ugettext_lazy as _
@@ -110,15 +111,21 @@ class Seat(models.Model):
             return self.name
         return ', '.join(parts)
 
-    def is_available(self, ignore_cart=None, ignore_orderpos=None):
+    def is_available(self, ignore_cart=None, ignore_orderpos=None, ignore_voucher_id=None):
         from .orders import Order
 
         if self.blocked:
             return False
         opqs = self.orderposition_set.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
         cpqs = self.cartposition_set.filter(expires__gte=now())
-        if ignore_cart:
+        vqs = self.vouchers.filter(
+            Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now())) &
+            Q(redeemed__lt=F('max_usages'))
+        )
+        if ignore_cart and ignore_cart is not True:
             cpqs = cpqs.exclude(pk=ignore_cart.pk)
         if ignore_orderpos:
             opqs = opqs.exclude(pk=ignore_orderpos.pk)
-        return not opqs.exists() and not cpqs.exists()
+        if ignore_voucher_id:
+            vqs = vqs.exclude(pk=ignore_voucher_id)
+        return not opqs.exists() and (ignore_cart is True or not cpqs.exists()) and not vqs.exists()

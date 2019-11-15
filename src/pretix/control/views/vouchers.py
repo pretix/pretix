@@ -37,7 +37,9 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
     permission = 'can_view_vouchers'
 
     def get_queryset(self):
-        qs = self.request.event.vouchers.filter(waitinglistentries__isnull=True).select_related('item', 'variation')
+        qs = self.request.event.vouchers.filter(waitinglistentries__isnull=True).select_related(
+            'item', 'variation', 'seat'
+        )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 

@@ -45,7 +45,7 @@ class VoucherViewSet(viewsets.ModelViewSet):
     write_permission = 'can_change_vouchers'
 
     def get_queryset(self):
-        return self.request.event.vouchers.all()
+        return self.request.event.vouchers.select_related('seat').all()
 
     def _predict_quota_check(self, data, instance):
         # This method predicts if Voucher.clean_quota_needs_checking
