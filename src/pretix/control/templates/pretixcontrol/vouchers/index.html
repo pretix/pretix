@@ -133,6 +133,7 @@
                                         Any product in quota "{{ quota }}"
                                     {% endblocktrans %}
                                 {% endif %}
+                                {% if v.seat %}<br><small class="text-muted">{{ v.seat }}</small>{% endif %}
                             </td>
                             {% if request.event.has_subevents %}
                                 <td>{{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}</td>
