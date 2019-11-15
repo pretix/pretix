@@ -25,6 +25,7 @@ from django_countries.fields import Country, CountryField
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from phonenumbers import NumberParseException
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.widgets import (
@@ -375,13 +376,17 @@ class BaseQuestionsForm(forms.Form):
                     for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
                         if str(default_country) in values:
                             default_prefix = prefix
+                    try:
+                        initial = PhoneNumber().from_string(initial.answer) if initial else "+{}.".format(default_prefix)
+                    except NumberParseException:
+                        initial = None
                     field = PhoneNumberField(
                         label=label, required=required,
                         help_text=help_text,
                         # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
                         # a country code but no number as an initial value. It's a bit hacky, but should be stable for
                         # the future.
-                        initial=PhoneNumber().from_string(initial.answer) if initial else "+{}.".format(default_prefix),
+                        initial=initial,
                         widget=WrappedPhoneNumberPrefixWidget()
                     )
             field.question = q

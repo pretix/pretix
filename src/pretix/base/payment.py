@@ -84,6 +84,14 @@ class BasePaymentProvider:
         return False
 
     @property
+    def priority(self) -> int:
+        """
+        Returns a priority that is used for sorting payment providers. Higher priority means higher up in the list.
+        Default to 100. Providers with same priority are sorted alphabetically.
+        """
+        return 100
+
+    @property
     def is_enabled(self) -> bool:
         """
         Returns whether or whether not this payment provider is enabled.
@@ -925,6 +933,7 @@ class OffsettingProvider(BasePaymentProvider):
 class GiftCardPayment(BasePaymentProvider):
     identifier = "giftcard"
     verbose_name = _("Gift card")
+    priority = 10
 
     @property
     def settings_form_fields(self):

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-09 20:00+0000\n"
+"PO-Revision-Date: 2019-11-13 06:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/lv/>\n"
@@ -33,12 +33,12 @@ msgstr "Komentāri:"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr "Pieteiktie pirkumi"
+msgstr "Pieteiktie pasūtījumi"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "Apmaksātie pirkumi"
+msgstr "Apmaksātie pasūtījumi"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -78,7 +78,7 @@ msgid ""
 "browser and try again."
 msgstr ""
 "Jūsu pieprasījums vēl stāv rindā serverī uz apstrādi. Ja gaidīšanas process "
-"aizņem ilgāk kā divas minūtes, lūdzu sazinieties ar mums vai pārlādējiet "
+"aizņem ilgāk kā divas minūtes, lūdzu, sazinieties ar mums vai pārlādējiet "
 "savu interneta pārluku un mēģiniet vēlreiz."
 
 #: pretix/static/pretixbase/js/asynctask.js:76
@@ -99,7 +99,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:125
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took to long. Please try again."
-msgstr "Mēģinājums izpildīt pieprasījumu ir ieildzis. Lūdzu mēģiniet vēlreiz."
+msgstr "Mēģinājums izpildīt pieprasījumu ir ieildzis. Lūdzu, mēģiniet vēlreiz."
 
 #: pretix/static/pretixbase/js/asynctask.js:150
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
@@ -120,7 +120,7 @@ msgid ""
 "page and try again."
 msgstr ""
 "Jūsu pieprasījums šobrīd tiek sūtīts uz serveri apstrādei. Ja šis process "
-"aizņem ilgāk kā vienu minūti, lūdzu pārbaudiet savu interneta savienojumu, "
+"aizņem ilgāk kā vienu minūti, lūdzu, pārbaudiet savu interneta savienojumu, "
 "pārlādējiet šo lapu un mēģiniet vēlreiz."
 
 #: pretix/static/pretixbase/js/asynctask.js:216
@@ -179,7 +179,7 @@ msgstr "Saglabāšana neizdevās."
 #: pretix/static/pretixcontrol/js/ui/editor.js:736
 #: pretix/static/pretixcontrol/js/ui/editor.js:774
 msgid "Error while uploading your PDF file, please try again."
-msgstr "Radusies kļūda augšupielādējot jūsu PDF failu, lūdzu mēģiniet vēlreiz."
+msgstr "Radusies kļūda augšupielādējot jūsu PDF failu, lūdzu, mēģiniet vēlreiz."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:759
 msgid "Do you really want to leave the editor without saving your changes?"
@@ -214,7 +214,7 @@ msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
-"Izvēlētā krāsa tekstam neizceļas uz esošā fona, lūdzu izvēlieties tumšāku "
+"Izvēlētā krāsa tekstam neizceļas uz esošā fona, lūdzu, izvēlieties tumšāku "
 "krāsu."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:355
@@ -256,9 +256,9 @@ msgstr "Nē"
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "(neviens datums)"
+msgstr[1] "(vēl viens datums)"
+msgstr[2] "(vēl {num} datumi)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
@@ -271,13 +271,13 @@ msgstr "Pirkumu groza rezervācijas laiks ir beidzies"
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Preces jūsu grozā ir rezervētas nulle minūtes."
+msgstr[1] "Preces jūsu grozā ir rezervētas uz vienu minūti."
+msgstr[2] "Preces jūsu grozā ir rezervētas uz {num} minūtēm."
 
 #: pretix/static/pretixpresale/js/ui/main.js:213
 msgid "Please enter a quantity for one of the ticket types."
-msgstr "Lūdzu ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
+msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
