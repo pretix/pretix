@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:21+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -6407,8 +6407,8 @@ msgid ""
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Мы рекомендуем активировать эту опцию, если вы хотите, чтобы ваши "
-"пользователи оплачивали сборы вашего поставщика платёжных услуг. <a "
-"href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\"> Нажмите здесь, чтобы "
+"пользователи оплачивали сборы вашего поставщика платёжных услуг. <a href=\""
+"{docs_url}\" target=\"_blank\" rel=\"noopener\"> Нажмите здесь, чтобы "
 "получить об этом подробную информацию. </a> Не забудьте установить выше "
 "правильные сборы!"
 
@@ -6614,8 +6614,7 @@ msgstr "Этот подарочный сертификат не поддержи
 #: pretix/base/payment.py:1363 pretix/base/payment.py:1413
 #: pretix/base/payment.py:1463
 msgid "This gift card can only be used in test mode."
-msgstr ""
-"Этот подарочный сертификат можно использовать только в тестовом режиме."
+msgstr "Этот подарочный сертификат можно использовать только в тестовом режиме."
 
 #: pretix/base/payment.py:1366 pretix/base/payment.py:1416
 #: pretix/base/payment.py:1465
@@ -25826,8 +25825,7 @@ msgstr "Процесс оплаты начался в новом окне."
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr ""
-"Окно для ввода ваших платёжных данных не было открыто или было закрыто?"
+msgstr "Окно для ввода ваших платёжных данных не было открыто или было закрыто?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
