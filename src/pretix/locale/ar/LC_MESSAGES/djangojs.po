@@ -8,56 +8,58 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-11-17 18:31+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
+"ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr ""
+msgstr "وضع علامة على دفع"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr ""
+msgstr "تعليق:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr ""
+msgstr "الطلبات"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr ""
+msgstr "أوامر دفع"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr ""
+msgstr "إجمالي الإيرادات"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
-msgstr ""
+msgstr "الاتصال الشريط ..."
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:57
 msgid "Total"
-msgstr ""
+msgstr "مجموع"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "تأكيد الدفع الخاص بك ..."
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
 msgid "Contacting your bank …"
-msgstr ""
+msgstr "الاتصال البنك الذي تتعامل معه ..."
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:105
@@ -65,6 +67,8 @@ msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
 msgstr ""
+"وقد اصطف طلبك على الخادم وسيتم الآن معالجتها. اعتمادا على حجم الحدث، وهذا قد "
+"يستغرق ما يصل الى بضع دقائق."
 
 #: pretix/static/pretixbase/js/asynctask.js:45
 #: pretix/static/pretixbase/js/asynctask.js:111
@@ -73,34 +77,41 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
+"وصل طلبك على الخادم ولكن ما زلنا ننتظر أن تتم معالجتها. إذا كان هذا يستغرق "
+"وقتا أطول من دقيقتين، يرجى الاتصال بنا أو العودة في المتصفح الخاص بك وحاول "
+"مرة أخرى."
 
 #: pretix/static/pretixbase/js/asynctask.js:76
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixbase/js/asynctask.js:147
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "حدث خطأ من نوع {كود}."
 
 #: pretix/static/pretixbase/js/asynctask.js:79
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
+"نحن في الوقت الراهن لا يمكن أن تصل إلى الخادم، ولكننا نواصل المحاولة. رمز "
+"الخطأ نشاط: {كود}"
 
 #: pretix/static/pretixbase/js/asynctask.js:125
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took to long. Please try again."
-msgstr ""
+msgstr "استغرق بناء على طلب لفترة طويلة. حاول مرة اخرى."
 
 #: pretix/static/pretixbase/js/asynctask.js:150
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
+"نحن في الوقت الراهن لا يمكن أن تصل إلى الخادم. حاول مرة اخرى. رمز الخطأ: "
+"{كود}"
 
 #: pretix/static/pretixbase/js/asynctask.js:171
 msgid "We are processing your request …"
-msgstr ""
+msgstr "نحن معالجة طلبك ..."
 
 #: pretix/static/pretixbase/js/asynctask.js:179
 msgid ""
@@ -108,130 +119,132 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"نحن نرسل حاليا طلبك إلى الخادم. إذا كان هذا يأخذ دقيقة تعد من واحد، يرجى "
+"التحقق من اتصالك بالإنترنت ثم إعادة تحميل هذه الصفحة وحاول مرة أخرى."
 
 #: pretix/static/pretixbase/js/asynctask.js:216
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
-msgstr ""
+msgstr "رسالة ثيقة"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr ""
+msgstr "نسخ!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "اضغط Ctrl + C لنسخ!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
-msgstr ""
+msgstr "يؤدي مسح QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:45
 msgid "Check-in QR"
-msgstr ""
+msgstr "تحقق في QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
+msgstr "لا يمكن تحميل ملف PDF الخلفية للأسباب التالية:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:418
 msgid "Group of objects"
-msgstr ""
+msgstr "مجموعة من الكائنات"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:424
 msgid "Text object"
-msgstr ""
+msgstr "كائن النص"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:426
 msgid "Barcode area"
-msgstr ""
+msgstr "منطقة الباركود"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr ""
+msgstr "مدعوم من pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
-msgstr ""
+msgstr "موضوع"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:434
 msgid "Ticket design"
-msgstr ""
+msgstr "تصميم تذكرة"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:687
 msgid "Saving failed."
-msgstr ""
+msgstr "فشل الادخار."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:736
 #: pretix/static/pretixcontrol/js/ui/editor.js:774
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "خطأ أثناء تحميل ملف PDF الخاصة بك، يرجى المحاولة مرة أخرى."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:759
 msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
+msgstr "هل تريد حقا أن تترك المحرر دون حفظ التغييرات؟"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr ""
+msgstr "حدث خطأ."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
-msgstr ""
+msgstr "توليد رسائل ..."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:69
 msgid "Unknown error."
-msgstr ""
+msgstr "خطأ غير معروف."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:231
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "اللون لديه التباين الكبير وهو من السهل جدا أن تقرأ!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:235
 msgid "Your color has decent contrast and is probably good-enough to read!"
-msgstr ""
+msgstr "اللون لديه النقيض لائق وهو على الارجح جيدة بما فيه الكفاية لقراءة!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:239
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
-msgstr ""
+msgstr "اللون لديه النقيض سيئة للنص على خلفية بيضاء، يرجى اختيار الظل أغمق."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:355
 msgid "All"
-msgstr ""
+msgstr "الكل"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:356
 msgid "None"
-msgstr ""
+msgstr "لا شيء"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:677
 msgid "Use a different name internally"
-msgstr ""
+msgstr "استخدام اسم مختلف داخليا"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:734
 msgid "Click to close"
-msgstr ""
+msgstr "انقر لقريب"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
 msgid "Calculating default price…"
-msgstr ""
+msgstr "حساب السعر الافتراضي ..."
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "الآخرين"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
-msgstr ""
+msgstr "عد"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Yes"
-msgstr ""
+msgstr "نعم"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
 msgid "No"
-msgstr ""
+msgstr "لا"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -245,11 +258,11 @@ msgstr[5] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "العناصر الموجودة في سلة التسوق الخاصة بك لم تعد حكرا على لك."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "انتهت العربة"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
@@ -263,94 +276,94 @@ msgstr[5] ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:213
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "الرجاء إدخال كمية لأحد أنواع التذاكر."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "بيعت كلها"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "يشترى"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "تسجيل"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "محجوز"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "مجانا"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "من٪ (العملة) ق٪ (سعر) ق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "بما في ذلك ٪ (معدل) ق٪٪ (taxname) ق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "بالإضافة٪ (معدل) ق٪٪ (taxname) ق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "بما في ذلك الضرائب"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "بالإضافة إلى الضرائب"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "المتاحة حاليا:٪ ق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "متوفرة فقط مع قسيمة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "الحد الأدنى للنظام:٪ ق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "انهيار متجر تذكرة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "لا يمكن تحميل المحل التذاكر."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "لا يمكن إنشاء العربة. الرجاء معاودة المحاولة في وقت لاحق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "قائمة الانتظار"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
@@ -358,11 +371,13 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
+"لديك حاليا عربة فعالة لهذا الحدث. إذا قمت بتحديد المزيد من المنتجات، وسوف "
+"تتم إضافته إلى عربة الموجودة لديك."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "استئناف الخروج"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
@@ -370,139 +385,141 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
+"<a target=\"_blank\" href=\"https://pretix.eu\" rel=\"noopener\"> الحدث "
+"التذاكر مدعوم من pretix </A>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "استبدال قسيمة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "خلص"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "كود قسيمة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "قريب"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "استمر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "See variations"
-msgstr ""
+msgstr "نرى الاختلافات"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr ""
+msgstr "اختيار الحدث مختلفة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "اختر تاريخا مختلفا"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "عودة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "الشهر القادم"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "الشهر الماضى"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "مفتوحة اختيار المقعد"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "Mo"
-msgstr ""
+msgstr "مو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Tu"
-msgstr ""
+msgstr "تو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "We"
-msgstr ""
+msgstr "نحن"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Th"
-msgstr ""
+msgstr "العاشر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "Fr"
-msgstr ""
+msgstr "الاب"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Sa"
-msgstr ""
+msgstr "سا"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Su"
-msgstr ""
+msgstr "سو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "January"
-msgstr ""
+msgstr "كانون الثاني"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "February"
-msgstr ""
+msgstr "شهر فبراير"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "March"
-msgstr ""
+msgstr "مارس"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "April"
-msgstr ""
+msgstr "أبريل"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "May"
-msgstr ""
+msgstr "مايو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "June"
-msgstr ""
+msgstr "يونيو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "July"
-msgstr ""
+msgstr "يوليو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "August"
-msgstr ""
+msgstr "أغسطس"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "September"
-msgstr ""
+msgstr "سبتمبر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "October"
-msgstr ""
+msgstr "شهر اكتوبر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "November"
-msgstr ""
+msgstr "شهر نوفمبر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "December"
-msgstr ""
+msgstr "ديسمبر"
