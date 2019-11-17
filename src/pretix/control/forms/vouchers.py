@@ -328,7 +328,7 @@ class VoucherBulkForm(VoucherForm):
                 except ValidationError as err:
                     raise ValidationError(_('{value} is not a valid email address.').format(value=e.strip())) from err
                 else:
-                    res.append(self.Recipient(email=e.stripe(), number=1, tag=None, name=''))
+                    res.append(self.Recipient(email=e.strip(), number=1, tag=None, name=''))
         return res
 
     def clean(self):
