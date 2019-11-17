@@ -262,7 +262,11 @@ class AddOnsForm(forms.Form):
                     continue
 
             if i.has_variations:
-                choices = [('', _('no selection'), '')]
+                if self.iao.min_count == 1 and self.iao.max_count == 1:
+                    choices = []
+                else:
+                    choices = [('', _('no selection'), '')]
+
                 for v in i.available_variations:
                     cached_availability = v.check_quotas(subevent=subevent, _cache=quota_cache)
                     if self.event.settings.hide_sold_out and cached_availability[0] < Quota.AVAILABILITY_RESERVED:
