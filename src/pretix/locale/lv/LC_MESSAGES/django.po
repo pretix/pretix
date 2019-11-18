@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-15 22:00+0000\n"
+"PO-Revision-Date: 2019-11-18 15:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -1418,12 +1418,12 @@ msgstr "PVN"
 #: pretix/base/invoice.py:513
 msgctxt "invoice"
 msgid "Net"
-msgstr "Bez nodokļiem"
+msgstr "Bez PVN"
 
 #: pretix/base/invoice.py:514
 msgctxt "invoice"
 msgid "Gross"
-msgstr "Ar nodokļiem"
+msgstr "Ar PVN"
 
 #: pretix/base/invoice.py:520
 msgctxt "invoice"
@@ -1433,7 +1433,7 @@ msgstr "Summa"
 #: pretix/base/invoice.py:545 pretix/base/invoice.py:550
 msgctxt "invoice"
 msgid "Invoice total"
-msgstr "Rēķina kopsumma apmaksai"
+msgstr "Rēķina kopsumma"
 
 #: pretix/base/invoice.py:576
 msgctxt "invoice"
