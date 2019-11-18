@@ -1,6 +1,7 @@
 import hashlib
 import json
 import logging
+import re
 import urllib.parse
 from collections import OrderedDict
 from decimal import Decimal
@@ -271,6 +272,13 @@ class StripeMethod(BasePaymentProvider):
                 d['application_fee_amount'] = self._decimal_to_int(fee)
         return d
 
+    def statement_descriptor(self, payment, length=22):
+        return '{event}-{code} {eventname}'.format(
+            event=self.event.slug.upper(),
+            code=payment.order.code,
+            eventname=re.sub('[^a-zA-Z0-9 ]', '', str(self.event.name))
+        )[:length]
+
     @property
     def api_kwargs(self):
         if self.settings.connect_client_id and self.settings.connect_user_id:
@@ -311,11 +319,7 @@ class StripeMethod(BasePaymentProvider):
         try:
             params = {}
             if not source.startswith('src_'):
-                params['statement_descriptor'] = '{event}-{code} {eventname}'.format(
-                    event=self.event.slug.upper(),
-                    code=payment.order.code,
-                    eventname=str(self.event.name)
-                )[:22]
+                params['statement_descriptor'] = self.statement_descriptor(payment)
             params.update(self.api_kwargs)
             params.update(self._connect_kwargs(payment))
             charge = stripe.Charge.create(
@@ -642,11 +646,7 @@ class StripeCC(StripeMethod):
                         event=self.event.slug.upper(),
                         code=payment.order.code
                     ),
-                    statement_descriptor='{event}-{code} {eventname}'.format(
-                        event=self.event.slug.upper(),
-                        code=payment.order.code,
-                        eventname=str(self.event.name)
-                    )[:22],
+                    statement_descriptor=self.statement_descriptor(payment),
                     metadata={
                         'order': str(payment.order.id),
                         'event': self.event.id,
@@ -870,11 +870,7 @@ class StripeGiropay(StripeMethod):
                     'name': request.session.get('payment_stripe_giropay_account') or ugettext('unknown name')
                 },
                 giropay={
-                    'statement_descriptor': '{event}-{code} {eventname}'.format(
-                        event=self.event.slug.upper(),
-                        code=payment.order.code,
-                        eventname=str(self.event.name)
-                    )[:35],
+                    'statement_descriptor': self.statement_descriptor(payment, 35),
                 },
                 redirect={
                     'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
@@ -929,11 +925,7 @@ class StripeIdeal(StripeMethod):
                 'code': payment.order.code
             },
             ideal={
-                'statement_descriptor': '{event}-{code} {eventname}'.format(
-                    event=self.event.slug.upper(),
-                    code=payment.order.code,
-                    eventname=str(self.event.name)
-                )[:22],
+                'statement_descriptor': self.statement_descriptor(payment)
             },
             redirect={
                 'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
@@ -1033,11 +1025,7 @@ class StripeBancontact(StripeMethod):
                     'name': request.session.get('payment_stripe_bancontact_account') or ugettext('unknown name')
                 },
                 bancontact={
-                    'statement_descriptor': '{event}-{code} {eventname}'.format(
-                        event=self.event.slug.upper(),
-                        code=payment.order.code,
-                        eventname=str(self.event.name)
-                    )[:35],
+                    'statement_descriptor': self.statement_descriptor(payment, 35)
                 },
                 redirect={
                     'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
@@ -1106,11 +1094,7 @@ class StripeSofort(StripeMethod):
             },
             sofort={
                 'country': request.session.get('payment_stripe_sofort_bank_country'),
-                'statement_descriptor': '{event}-{code} {eventname}'.format(
-                    event=self.event.slug.upper(),
-                    code=payment.order.code,
-                    eventname=str(self.event.name)
-                )[:35],
+                'statement_descriptor': self.statement_descriptor(payment, 35)
             },
             redirect={
                 'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
