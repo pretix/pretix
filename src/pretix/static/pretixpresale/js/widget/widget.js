@@ -579,26 +579,6 @@ var shared_methods = {
             window.open(redirect_url);
         }
     },
-    startseating: function () {
-        var redirect_url = this.$root.target_url + 'w/' + widget_id;
-        if (this.$root.subevent){
-            redirect_url += '/' + this.$root.subevent;
-        }
-        redirect_url += '/seatingframe/?iframe=1&locale=' + lang;
-        if (this.$root.cart_id) {
-            redirect_url += '&take_cart_id=' + this.$root.cart_id;
-        }
-        if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
-        }
-        if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
-            this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
-        } else {
-            window.open(redirect_url);
-        }
-    },
     handleResize: function () {
         this.mobile = this.$refs.wrapper.clientWidth <= 800;
     }
@@ -683,6 +663,7 @@ Vue.component('pretix-overlay', {
         },
         close: function () {
             this.$root.frame_shown = false;
+            this.$root.parent.frame_dismissed = true;
             this.$root.parent.reload();
         },
         iframeLoaded: function () {
@@ -721,7 +702,7 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-clear"></div>'
         + '</div>'
         + '<div class="pretix-widget-seating-link-wrapper" v-if="this.$root.has_seating_plan">'
-        + '<button class="pretix-widget-seating-link" @click.prevent="$parent.startseating">'
+        + '<button class="pretix-widget-seating-link" @click.prevent="$root.startseating">'
         + strings['show_seating']
         + '</button>'
         + '</div>'
@@ -1161,6 +1142,11 @@ var shared_root_methods = {
                 root.loading--;
                 root.trigger_load_callback();
             }
+            if (root.parent_stack.length > 0 && root.has_seating_plan && root.categories.length === 0 && !root.frame_dismissed && root.useIframe) {
+                // If we're on desktop and someone selects a seating-only event in a calendar, let's open it right away,
+                // but only if the person didn't close it before.
+                root.startseating()
+            }
         }, function (error) {
             root.categories = [];
             root.currency = '';
@@ -1170,6 +1156,26 @@ var shared_root_methods = {
                 root.trigger_load_callback();
             }
         });
+    },
+    startseating: function () {
+        var redirect_url = this.$root.target_url + 'w/' + widget_id;
+        if (this.$root.subevent){
+            redirect_url += '/' + this.$root.subevent;
+        }
+        redirect_url += '/seatingframe/?iframe=1&locale=' + lang;
+        if (this.$root.cart_id) {
+            redirect_url += '&take_cart_id=' + this.$root.cart_id;
+        }
+        if (this.$root.widget_data) {
+            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
+        }
+        if (this.$root.useIframe) {
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            this.$root.overlay.frame_loading = true;
+            iframe.src = redirect_url;
+        } else {
+            window.open(redirect_url);
+        }
     },
     choose_event: function (event) {
         root.target_url = event.event_url;
@@ -1314,6 +1320,7 @@ var create_widget = function (element) {
                 error: null,
                 weeks: null,
                 date: null,
+                frame_dismissed: false,
                 events: null,
                 view: null,
                 display_add_to_cart: false,
@@ -1382,6 +1389,7 @@ var create_button = function (element) {
                 items: items,
                 error: null,
                 filter: null,
+                frame_dismissed: false,
                 widget_data: widget_data,
                 widget_id: 'pretix-widget-' + widget_id,
                 button_text: button_text
