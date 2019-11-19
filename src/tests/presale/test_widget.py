@@ -134,6 +134,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "waiting_list_enabled": False,
             "error": None,
             "has_seating_plan": False,
+            'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
             "items_by_category": [
                 {
                     "items": [
@@ -219,6 +220,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "vouchers_exist": True,
             "waiting_list_enabled": False,
             "error": None,
+            'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
             "items_by_category": [
                 {
                     "items": [
@@ -267,6 +269,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "has_seating_plan": False,
             "waiting_list_enabled": False,
             "error": None,
+            'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
             "items_by_category": [
                 {
                     "items": [
@@ -325,6 +328,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert data == {
             "name": "30C3",
             "currency": "EUR",
+            'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
             "show_variations_expanded": False,
             "display_net_prices": False,
             "has_seating_plan": False,
@@ -420,6 +424,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             settings.SITE_URL = 'http://example.com'
             assert data == {
                 'list_type': 'list',
+                'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'events': [
                     {'name': 'Present', 'date_range': 'Jan. 1, 2019 11:00', 'availability': {'color': 'green', 'text': 'Book now'},
                      'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk, 'location': ''},
@@ -446,6 +451,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             assert data == {
                 'list_type': 'calendar',
                 'date': '2019-01-01',
+                'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'weeks': [
                     [
                         None,
@@ -522,6 +528,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
             data = json.loads(response.content.decode())
             assert data == {
+                'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'events': [
                     {'availability': {'color': 'none', 'text': 'Event series'},
                      'date_range': 'Dec. 29, 2018 – Jan. 4, 2019',
@@ -565,6 +572,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             assert data == {
                 'date': '2019-01-01',
                 'list_type': 'calendar',
+                'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'weeks': [
                     [None,
                      {'date': '2019-01-01',
