@@ -4,6 +4,7 @@ import json
 import logging
 from collections import defaultdict
 from datetime import date, datetime, timedelta
+from gettext import pgettext
 from urllib.parse import urljoin
 
 import pytz
@@ -238,7 +239,13 @@ class WidgetAPIProductList(EventListMixin, View):
             })
         return grps, display_add_to_cart, len(items)
 
+    def post_process(self, data):
+        data['poweredby'] = '<a href="https://pretix.eu" target="_blank" rel="noopener">{}</a>'.format(
+            pgettext('widget', 'event ticketing powered by pretix')
+        )
+
     def response(self, data):
+        self.post_process(data)
         resp = JsonResponse(data)
         resp['Access-Control-Allow-Origin'] = '*'
         return resp

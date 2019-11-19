@@ -32,8 +32,6 @@ var strings = {
     'cart_exists': django.pgettext('widget', 'You currently have an active cart for this event. If you select more' +
         ' products, they will be added to your existing cart.'),
     'resume_checkout': django.pgettext('widget', 'Resume checkout'),
-    'poweredby': django.pgettext('widget', '<a href="https://pretix.eu" target="_blank" rel="noopener">event' +
-        ' ticketing powered by pretix</a>'),
     'redeem_voucher': django.pgettext('widget', 'Redeem a voucher'),
     'redeem': django.pgettext('widget', 'Redeem'),
     'voucher_code': django.pgettext('widget', 'Voucher code'),
@@ -1032,8 +1030,7 @@ Vue.component('pretix-widget', {
         + '<pretix-widget-event-list v-if="$root.view === \'events\'"></pretix-widget-event-list>'
         + '<pretix-widget-event-calendar v-if="$root.view === \'weeks\'"></pretix-widget-event-calendar>'
         + '<div class="pretix-widget-clear"></div>'
-        + '<div class="pretix-widget-attribution">'
-        + strings.poweredby
+        + '<div class="pretix-widget-attribution" v-if="$root.poweredby" v-html="$root.poweredby">'
         + '</div>'
         + '</div>'
         + '</div>'
@@ -1159,6 +1156,7 @@ var shared_root_methods = {
                 root.has_seating_plan = data.has_seating_plan;
                 root.itemnum = data.itemnum;
             }
+            root.poweredby = data.poweredby;
             if (root.loading > 0) {
                 root.loading--;
                 root.trigger_load_callback();
@@ -1327,6 +1325,7 @@ var create_widget = function (element) {
                 cart_exists: false,
                 itemcount: 0,
                 overlay: null,
+                poweredby: "",
                 has_seating_plan: false
             }
         },
