@@ -4,7 +4,6 @@ import json
 import logging
 from collections import defaultdict
 from datetime import date, datetime, timedelta
-from gettext import pgettext
 from urllib.parse import urljoin
 
 import pytz
@@ -19,7 +18,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import get_language, ugettext
+from django.utils.translation import get_language, pgettext, ugettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
