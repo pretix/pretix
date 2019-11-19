@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-09 20:00+0000\n"
+"PO-Revision-Date: 2019-11-19 15:55+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -7507,9 +7507,9 @@ msgid ""
 "If an invoice exists for this order and this operation would change its "
 "contents, the old invoice will be cancelled and a new invoice will be issued."
 msgstr ""
-"Als er een factuur bestaat voor deze bestelling en deze handeling zou de "
-"inhoud van de factuur aanpassen wordt de oude factuur geannuleerd en een "
-"nieuwe factuur gegenereerd."
+"Als er een factuur bestaat voor deze bestelling en deze factuur door deze "
+"handeling wordt aangepast annuleren we de oude factuur en genereren we een "
+"nieuwe factuur."
 
 #: pretix/control/forms/orders.py:181
 msgid "Notify user"
@@ -7900,7 +7900,7 @@ msgid ""
 "\"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
 "U kunt een lijst van e-mailadressen opgeven, met een e-mailadres per regel, "
-"of een CSV-bestand met een titelkolom en een of meerdere van de kolommen \""
+"of een CSV-bestand met een headerrij en een of meerdere van de kolommen \""
 "email\", \"number\", \"name\", of \"tag\"."
 
 #: pretix/control/forms/vouchers.py:264
@@ -7933,7 +7933,7 @@ msgstr "{value} is geen geldig e-mailadres."
 #: pretix/control/forms/vouchers.py:304
 #, python-brace-format
 msgid "Invalid value in row {number}."
-msgstr "Ongeldige waarde in rij {number}."
+msgstr "Ongeldige waarde op regel {number}."
 
 #: pretix/control/forms/vouchers.py:322
 msgid "A voucher with one of these codes already exists."
@@ -14181,7 +14181,7 @@ msgstr "Instellingen op organisator-niveau"
 
 #: pretix/control/templatetags/hierarkey_form.py:44
 msgid "Site-level settings"
-msgstr "Site-brede instellingen"
+msgstr "Globale instellingen"
 
 #: pretix/control/templatetags/hierarkey_form.py:47
 msgid ""
@@ -14203,9 +14203,9 @@ msgid ""
 "global settings to change them or decouple them from the global settings to "
 "change them for this event individually."
 msgstr ""
-"Deze instellingen zijn momenteel op het globale niveau ingesteld. Hierdoor "
-"kunt u de instellingen gemakkelijk wijzigen voor alle organisators tegelijk. "
-"U kunt naar de globale instellingen gaan om deze aan te passen, of u kunt de "
+"Deze instellingen zijn momenteel op het site-niveau ingesteld. Hierdoor kunt "
+"u de instellingen gemakkelijk wijzigen voor alle organisators tegelijk. U "
+"kunt naar de globale instellingen gaan om deze aan te passen, of u kunt de "
 "instellingen ontkoppelen van de globale instellingen om ze alleen voor deze "
 "organisator aan te passen."
 
