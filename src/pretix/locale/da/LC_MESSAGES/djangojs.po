@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-20 13:54+0000\n"
+"PO-Revision-Date: 2019-11-20 14:41+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "da/>\n"
@@ -285,7 +285,7 @@ msgstr "Læg i kurv"
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Book nu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
