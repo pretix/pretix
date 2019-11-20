@@ -112,7 +112,6 @@ class MailForm(forms.Form):
                     'organizer': event.organizer.slug,
                 }),
                 'data-placeholder': _('Send to customers checked in on list'),
-                'data-inverse-dependency': '#id_not_checked_in'
             }
         )
         self.fields['checkin_lists'].widget.choices = self.fields['checkin_lists'].choices

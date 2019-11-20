@@ -54,8 +54,11 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                         id=logentry.parsed_data['item']['id']
                     )
                 if 'checkin_lists' in logentry.parsed_data:
-                    kwargs['initial']['checkin_lists'] = logentry.parsed_data['checkin_lists']
+                    kwargs['initial']['checkin_lists'] = self.request.event.checkin_lists.filter(
+                        id__in=[c['id'] for c in logentry.parsed_data['checkin_lists']]
+                    )
                 kwargs['initial']['filter_checkins'] = logentry.parsed_data.get('filter_checkins', False)
+                kwargs['initial']['not_checked_in'] = logentry.parsed_data.get('not_checked_in', False)
                 if logentry.parsed_data.get('subevent'):
                     try:
                         kwargs['initial']['subevent'] = self.request.event.subevents.get(
@@ -204,7 +207,7 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
                 itemcache[i['id']] for i in log.pdata.get('items', [])
             ]
             log.pdata['checkin_lists'] = [
-                checkin_list_cache[i] for i in log.pdata.get('checkin_lists', []) if i in checkin_list_cache
+                checkin_list_cache[i['id']] for i in log.pdata.get('checkin_lists', []) if i['id'] in checkin_list_cache
             ]
             if log.pdata.get('subevent'):
                 try:
