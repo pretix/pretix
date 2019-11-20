@@ -612,6 +612,9 @@ class BasePaymentProvider:
                 if str(ia.country) not in restricted_countries:
                     return False
 
+        if order.sales_channel not in self.settings.get('_restrict_to_sales_channels', as_type=list, default=['web']):
+            return False
+
         return self._is_still_available(order=order)
 
     def payment_prepare(self, request: HttpRequest, payment: OrderPayment) -> Union[bool, str]:
