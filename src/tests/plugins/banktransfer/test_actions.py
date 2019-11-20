@@ -3,9 +3,11 @@ from datetime import timedelta
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, Organizer, Quota, Team, User,
+    Event, Item, Order, OrderPayment, OrderPosition, OrderRefund, Organizer,
+    Quota, Team, User,
 )
 from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
 
@@ -256,3 +258,75 @@ def test_assign_order_organizer_no_permission_for_event(env, client):
         'action_{}'.format(trans.pk): 'assign:{}-{}'.format(env[0].slug.upper(), env[2].code),
     }).content.decode('utf-8'))
     assert r['status'] == 'error'
+
+
+@pytest.mark.django_db
+def test_retry_refund(env, client):
+    job = BankImportJob.objects.create(event=env[0])
+    trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_ERROR,
+                                           amount=-23, date='unknown', order=env[3])
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    env[3].status = Order.STATUS_PAID
+    env[3].save()
+    r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
+        'action_{}'.format(trans.pk): 'retry',
+    }).content.decode('utf-8'))
+    assert r['status'] == 'error'
+    trans.refresh_from_db()
+    assert trans.state == BankTransaction.STATE_ERROR
+
+
+@pytest.mark.django_db
+def test_retry_refund_external(env, client):
+    job = BankImportJob.objects.create(event=env[0])
+    trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_ERROR,
+                                           amount=-23, date='unknown', order=env[3])
+    with scopes_disabled():
+        p = env[3].payments.create(amount=23, provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    env[3].status = Order.STATUS_PAID
+    env[3].save()
+    r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
+        'action_{}'.format(trans.pk): 'retry',
+    }).content.decode('utf-8'))
+    assert r['status'] == 'ok'
+    trans.refresh_from_db()
+    assert trans.state == BankTransaction.STATE_VALID
+    env[3].refresh_from_db()
+    assert env[3].status == Order.STATUS_PAID
+    with scopes_disabled():
+        r = env[3].refunds.first()
+    assert r
+    assert r.provider == "banktransfer"
+    assert r.amount == 23
+    assert r.payment == p
+    assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
+
+
+@pytest.mark.django_db
+def test_retry_refund_complete(env, client):
+    job = BankImportJob.objects.create(event=env[0])
+    trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_ERROR,
+                                           amount=-23, date='unknown', order=env[3])
+    with scopes_disabled():
+        env[3].payments.create(amount=23, provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        ref = env[3].refunds.create(amount=23, provider='manual', state=OrderRefund.REFUND_STATE_CREATED)
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    env[3].status = Order.STATUS_CANCELED
+    env[3].save()
+    r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
+        'action_{}'.format(trans.pk): 'retry',
+    }).content.decode('utf-8'))
+    assert r['status'] == 'ok'
+    trans.refresh_from_db()
+    assert trans.state == BankTransaction.STATE_VALID
+    env[3].refresh_from_db()
+    assert env[3].status == Order.STATUS_CANCELED
+    ref.refresh_from_db()
+    assert ref.provider == "manual"
+    assert ref.amount == 23
+    assert ref.payment is None
+    assert ref.state == OrderRefund.REFUND_STATE_DONE

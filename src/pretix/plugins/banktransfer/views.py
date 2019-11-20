@@ -2,6 +2,7 @@ import csv
 import json
 import logging
 from datetime import timedelta
+from decimal import Decimal
 
 from django.contrib import messages
 from django.db.models import Count, Q
@@ -14,7 +15,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView, View
 
-from pretix.base.models import Order, OrderPayment, Quota
+from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter
@@ -44,6 +45,45 @@ class ActionView(View):
         return self._accept_ignore_amount(trans)
 
     def _accept_ignore_amount(self, trans):
+        if trans.amount < Decimal('0.00'):
+            ref = trans.order.refunds.filter(
+                amount=trans.amount * -1,
+                provider='manual',
+                state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_CREATED)
+            ).first()
+            p = trans.order.payments.filter(
+                amount=trans.amount * -1,
+                provider='banktransfer',
+                state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
+            ).first()
+            if ref:
+                ref.done(user=self.request.user)
+                trans.state = BankTransaction.STATE_VALID
+                trans.save()
+                return JsonResponse({
+                    'status': 'ok',
+                })
+            elif p:
+                p.create_external_refund(
+                    amount=trans.amount * -1,
+                    info=json.dumps({
+                        'reference': trans.reference,
+                        'date': trans.date,
+                        'payer': trans.payer,
+                        'trans_id': trans.pk
+                    })
+                )
+                trans.state = BankTransaction.STATE_VALID
+                trans.save()
+                return JsonResponse({
+                    'status': 'ok',
+                })
+            else:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': _('Negative amount but refund can\'t be logged, please create manual refund first.')
+                })
+
         if trans.order.status == Order.STATUS_PAID:
             return JsonResponse({
                 'status': 'error',
