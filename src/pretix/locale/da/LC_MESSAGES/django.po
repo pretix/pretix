@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-12 10:11+0000\n"
+"PO-Revision-Date: 2019-11-20 13:59+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -1073,7 +1073,7 @@ msgstr "Fakturadesign"
 #: pretix/base/exporters/orderlist.py:503
 #: pretix/base/exporters/orderlist.py:594
 msgid "Cancellation of"
-msgstr "Afbestilling af"
+msgstr "Annullering"
 
 #: pretix/base/exporters/orderlist.py:504 pretix/base/models/auth.py:98
 #: pretix/control/forms/event.py:1353 pretix/control/views/waitinglist.py:200
@@ -11142,7 +11142,7 @@ msgstr "Er du sikker på at du vil slette kategorien <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Closed"
-msgstr ""
+msgstr "Lukket"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:5
 msgid "Sold out (pending orders)"
@@ -18141,7 +18141,7 @@ msgstr "Skift"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 #: pretix/presale/views/widget.py:284 pretix/presale/views/widget.py:296
 msgid "Book now"
-msgstr ""
+msgstr "Book nu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:35
 #: pretix/presale/templates/pretixpresale/organizers/index.html:90
@@ -18202,7 +18202,7 @@ msgstr "Forsalget for dette arrangement starter %(date)s, kl.%(time)s."
 #: pretix/presale/templates/pretixpresale/event/index.html:155
 #: pretix/presale/views/widget.py:485
 msgid "The presale for this event has not yet started."
-msgstr ""
+msgstr "Forsalget til dette arrangement er ikke startet endnu."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:177
 #, python-format
