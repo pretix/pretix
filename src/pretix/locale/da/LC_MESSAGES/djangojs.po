@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-09-05 18:00+0000\n"
-"Last-Translator: Ture Gjørup <ture@ignatz.dk>\n"
+"PO-Revision-Date: 2019-11-20 13:54+0000\n"
+"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "da/>\n"
 "Language: da\n"
@@ -315,12 +315,12 @@ msgstr "plus %(rate)s% %(taxname)s"
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "inkl. moms"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "plus moms"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
@@ -360,25 +360,18 @@ msgid "Waiting list"
 msgstr "Venteliste"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
-#, fuzzy
-#| msgctxt "widget"
-#| msgid ""
-#| "You currently have an active cart for this event. If you select more "
-#| "products, they will be added to your existing cart. Click on this message "
-#| "to continue checkout with your cart."
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
-"Du har allerede en aktiv kurv for dette arrangement. Hvis du vælge flere "
-"varer vil de blive tilføjet din eksisterende kurv. Klik på denne besked for "
-"at gå mod kassen med din kurv."
+"Du har allerede en aktiv booking i gang for dette arrangement. Hvis du "
+"vælger flere produkter, så vil de blive tilføjet din eksisterende booking."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Fortsæt booking"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
@@ -422,27 +415,27 @@ msgstr "Vis varianter"
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr ""
+msgstr "Vælg et andet arrangement"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "Vælg en anden dato"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Tilbage"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Næste måned"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Forrige måned"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
