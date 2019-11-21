@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:20+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Carolina Fernández <cfermart@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -14849,8 +14849,7 @@ msgstr ""
 #: pretix/control/forms/vouchers.py:358
 #, python-brace-format
 msgid "CSV input needs to contain a field with the header \"{header}\"."
-msgstr ""
-"El CSV de entrada ha de contener un campo con la cabecera \"{header}\"."
+msgstr "El CSV de entrada ha de contener un campo con la cabecera \"{header}\"."
 
 #: pretix/control/forms/vouchers.py:361
 #, python-brace-format
