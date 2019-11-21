@@ -111,26 +111,22 @@ class ActionView(View):
         }
         try:
             p.confirm(user=self.request.user)
-        except Quota.QuotaExceededException as e:
-            return JsonResponse({
-                'status': 'error',
-                'message': str(e)
-            })
+        except Quota.QuotaExceededException:
+            pass
         except SendMailException:
             return JsonResponse({
                 'status': 'error',
                 'message': _('Problem sending email.')
             })
-        else:
-            trans.state = BankTransaction.STATE_VALID
-            trans.save()
-            trans.order.payments.filter(
-                provider='banktransfer',
-                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
-            ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
-            return JsonResponse({
-                'status': 'ok',
-            })
+        trans.state = BankTransaction.STATE_VALID
+        trans.save()
+        trans.order.payments.filter(
+            provider='banktransfer',
+            state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
+        ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+        return JsonResponse({
+            'status': 'ok',
+        })
 
     def _assign(self, trans, code):
         try:
