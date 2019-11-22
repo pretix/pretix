@@ -78,7 +78,7 @@ class VoucherSerializer(I18nAwareModelSerializer):
 
         if full_data.get('seat'):
             data['seat'] = Voucher.clean_seat_id(
-                full_data, full_data.get('item'), self.context.get('event'),
+                full_data, full_data.get('item'), full_data.get('quota'), self.context.get('event'),
                 self.instance.pk if self.instance else None
             )
 

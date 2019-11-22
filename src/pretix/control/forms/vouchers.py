@@ -113,7 +113,6 @@ class VoucherForm(I18nModelForm):
             }
         )
         self.fields['itemvar'].widget.choices = self.fields['itemvar'].choices
-        self.fields['itemvar'].required = True
 
         if self.instance.event.seating_plan or self.instance.event.subevents.filter(seating_plan__isnull=False).exists():
             self.fields['seat'] = forms.CharField(
@@ -124,11 +123,14 @@ class VoucherForm(I18nModelForm):
                 initial=self.instance.seat.seat_guid if self.instance.seat else '',
                 help_text=str(self.instance.seat) if self.instance.seat else '',
             )
+            self.fields['itemvar'].required = False
+        else:
+            self.fields['itemvar'].required = True
 
     def clean(self):
         data = super().clean()
 
-        if not self._errors:
+        if not self._errors and self.data.get('itemvar'):
             try:
                 itemid = quotaid = None
                 iv = self.data.get('itemvar', '')
@@ -162,7 +164,8 @@ class VoucherForm(I18nModelForm):
 
         Voucher.clean_item_properties(
             data, self.instance.event,
-            self.instance.quota, self.instance.item, self.instance.variation
+            self.instance.quota, self.instance.item, self.instance.variation,
+            seats_given=data.get('seat') or data.get('seats')
         )
         if not self.instance.show_hidden_items and (
             (self.instance.quota and all(i.hide_without_voucher for i in self.instance.quota.items.all()))
@@ -190,7 +193,10 @@ class VoucherForm(I18nModelForm):
             )
         Voucher.clean_voucher_code(data, self.instance.event, self.instance.pk)
         if 'seat' in self.fields and data.get('seat'):
-            self.instance.seat = Voucher.clean_seat_id(data, self.instance.item, self.instance.event, self.instance.pk)
+            self.instance.seat = Voucher.clean_seat_id(
+                data, self.instance.item, self.instance.quota, self.instance.event, self.instance.pk
+            )
+            self.instance.item = self.instance.seat.product
 
         voucher_form_validation.send(sender=self.instance.event, form=self, data=data)
 
@@ -357,7 +363,10 @@ class VoucherBulkForm(VoucherForm):
             data['seats'] = []
             for s in seatids:
                 data['seat'] = s
-                data['seats'].append(Voucher.clean_seat_id(data, self.instance.item, self.instance.event, None))
+                data['seats'].append(Voucher.clean_seat_id(
+                    data, self.instance.item, self.instance.quota, self.instance.event, None
+                ))
+            self.instance.seat = data['seats'][0]  # Trick model-level validation
         else:
             data['seats'] = []
 
@@ -371,6 +380,7 @@ class VoucherBulkForm(VoucherForm):
             obj.code = code
             try:
                 obj.seat = self.cleaned_data['seats'].pop()
+                obj.item = obj.seat.product
             except IndexError:
                 pass
             data = dict(self.cleaned_data)
