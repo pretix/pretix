@@ -259,7 +259,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 op.order.code,
                 Paragraph(name, self.get_style()),
                 Paragraph(str(op.item) + (" – " + str(op.variation.value) if op.variation else "") + "<br/>" +
-                          ((str(op.seat) + " / ") if op.seat else None) +
+                          ((str(op.seat) + " / ") if op.seat else "") +
                           money_filter(op.price, self.event.currency), self.get_style()),
             ]
             acache = {}
