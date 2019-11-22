@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:19+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -19531,8 +19531,8 @@ msgid ""
 "Are you sure you want to generate a new client secret for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
-"هل أنت متأكد أنك تريد توليد سر عميل جديد لتطبيق على <strong>%(application)s</"
-"strong>؟"
+"هل أنت متأكد أنك تريد توليد سر عميل جديد لتطبيق على "
+"<strong>%(application)s</strong>؟"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:15
 msgid "Roll secret"
@@ -19861,8 +19861,7 @@ msgstr "تغيير المعلومات المحلية"
 
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:18
 msgid "This language will be used whenever emails are sent to the users."
-msgstr ""
-"وهذه اللغة استخدامها كلما يتم إرسال رسائل البريد الإلكتروني للمستخدمين."
+msgstr "وهذه اللغة استخدامها كلما يتم إرسال رسائل البريد الإلكتروني للمستخدمين."
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:9
 msgid "Change order information"
@@ -22290,8 +22289,8 @@ msgid ""
 "fonts."
 msgstr ""
 "يتم اختبار المحرر مع الإصدارات الأخيرة من جوجل كروم، وموزيلا فايرفوكس "
-"وأوبرا. المتصفحات الأخرى، وخاصة برنامج Internet Explorer أو Microsoft "
-"الحافة، قد تواجه مشاكل في عرض خلفيتك PDF أو تحميل الخطوط الصحيحة."
+"وأوبرا. المتصفحات الأخرى، وخاصة برنامج Internet Explorer أو Microsoft الحافة،"
+" قد تواجه مشاكل في عرض خلفيتك PDF أو تحميل الخطوط الصحيحة."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:131
 msgid ""
@@ -23562,8 +23561,8 @@ msgid ""
 "Are you sure you want to delete the following waiting list entry "
 "<strong>%(entry)s</strong>?"
 msgstr ""
-"هل أنت متأكد أنك تريد حذف ما يلي انتظار دخول قائمة على <strong>%(entry)s</"
-"strong>؟"
+"هل أنت متأكد أنك تريد حذف ما يلي انتظار دخول قائمة على "
+"<strong>%(entry)s</strong>؟"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
@@ -24716,8 +24715,7 @@ msgstr "لا يمكنك استرداد أكثر من مبلغ الدفعة ال�
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
-msgstr ""
-"لقد حددت استرداد جزئي لطريقة الدفع التي تدعم فقط المبالغ المستردة كامل."
+msgstr "لقد حددت استرداد جزئي لطريقة الدفع التي تدعم فقط المبالغ المستردة كامل."
 
 #: pretix/control/views/orders.py:1057
 msgid ""
