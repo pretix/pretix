@@ -705,6 +705,8 @@ class CheckInFilterForm(FilterForm):
         '-timestamp': (FixedOrderBy(F('last_checked_in'), nulls_last=True, descending=True), '-order__code'),
         'item': ('item__name', 'variation__value', 'order__code'),
         '-item': ('-item__name', '-variation__value', '-order__code'),
+        'seat': ('seat__sorting_rank', 'seat__guid'),
+        '-seat': ('-seat__sorting_rank', '-seat__guid'),
         'name': {'_order': F('display_name').asc(nulls_first=True),
                  'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')},
         '-name': {'_order': F('display_name').desc(nulls_last=True),

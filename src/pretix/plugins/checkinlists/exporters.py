@@ -103,7 +103,7 @@ class CheckInListMixin(BaseExporter):
             )
         ).prefetch_related(
             'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
-        ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address', 'voucher')
+        ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address', 'voucher', 'seat')
 
         if not cl.all_products:
             qs = qs.filter(item__in=cl.limit_products.values_list('id', flat=True))
@@ -259,6 +259,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 op.order.code,
                 Paragraph(name, self.get_style()),
                 Paragraph(str(op.item) + (" – " + str(op.variation.value) if op.variation else "") + "<br/>" +
+                          ((str(op.seat) + " / ") if op.seat else None) +
                           money_filter(op.price, self.event.currency), self.get_style()),
             ]
             acache = {}

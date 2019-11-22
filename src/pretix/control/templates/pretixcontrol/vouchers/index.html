@@ -115,7 +115,9 @@
                                 {% endif %}
                             </td>
                             <td>
+                                {% if not v.is_active %}<del>{% endif %}
                                 <strong><a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
+                                {% if not v.is_active %}</del>{% endif %}
                             </td>
                             <td>{{ v.redeemed }} / {{ v.max_usages }}</td>
                             <td>{{ v.valid_until|date }}</td>

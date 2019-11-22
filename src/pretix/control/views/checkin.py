@@ -68,6 +68,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['checkinlist'] = self.list
+        ctx['seats'] = self.list.subevent.seating_plan if self.list.subevent else self.request.event.seating_plan
         ctx['filter_form'] = self.filter_form
         for e in ctx['entries']:
             if e.last_checked_in:
