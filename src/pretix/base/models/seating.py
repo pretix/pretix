@@ -63,8 +63,8 @@ class SeatingPlan(LoggedModel):
         # This returns all seats in a plan and assignes each of them a rank. The rank is used for sorting lists of
         # seats later. The rank does not say anything about the *quality* of a seat, and is only meant as a heuristic
         # to make it easier for humas to process lists of seats. The current algorithm assumes that there are less
-        # than 10'000 zones, less than 10'000 rows in every zone and less than 10'0000 seats in every row.
-        # Respectively, no row/seat numbers may be numeric with a value of 10'0000 or more. The resulting ranks
+        # than 10'000 zones, less than 10'000 rows in every zone and less than 10'000 seats in every row.
+        # Respectively, no row/seat numbers may be numeric with a value of 10'000 or more. The resulting ranks
         # *will* have gaps. We chose this way over just sorting the seats and continuously enumerating them as an
         # optimization, because this way we do not need to update the rank of very seat if we change a plan a little.
         for zi, z in enumerate(self.layout_data['zones']):
