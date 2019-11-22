@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-20 13:59+0000\n"
+"PO-Revision-Date: 2019-11-21 17:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -18309,8 +18309,8 @@ msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
-"Gem venligst det følgende link, hvis du vil ændre i din booking senere. Vi "
-"har også sendt linket til den emailadress, du har oplyst."
+"Gem venligst det nedenstående link, hvis du vil ændre i din booking senere. "
+"Vi har også sendt linket til den emailadresse, du har oplyst."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:52
 #: pretix/presale/templates/pretixpresale/event/position.html:18
@@ -18351,7 +18351,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:121
 #: pretix/presale/templates/pretixpresale/event/order.html:204
 msgid "Change details"
-msgstr "Ændr detaljer"
+msgstr "Ret oplysningerne"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:134
 #, fuzzy
@@ -18386,7 +18386,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:284
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:16
 msgid "This will invalidate all tickets in this order."
-msgstr ""
+msgstr "Dette vil annullere alle billetter i ordren."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:268
 msgid ""
@@ -18395,10 +18395,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:281
-#, fuzzy
-#| msgid "You cannot cancel this order."
 msgid "You can cancel this order using the following button."
-msgstr "Du kan ikke annullere denne bestilling."
+msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:8
 #, python-format
