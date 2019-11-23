@@ -220,9 +220,9 @@ Vue.component('availbox', {
         },
         waiting_list_url: function () {
             if (this.item.has_variations) {
-                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id;
+                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + escape(this.$root.widget_data_json);
             } else {
-                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id;
+                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + escape(this.$root.widget_data_json);
             }
         }
     }
