@@ -102,13 +102,13 @@ class EventWizardBasicsForm(I18nModelForm):
     )
 
     team = forms.ModelChoiceField(
-        label=_("Team owner"),
-        help_text=_("Your user is allowed to create events under this organizer, however you do not have permission "
-                    "to edit all events under this organizer. Please select one of your existing teams to grant access"
-                    " to."),
+        label=_("Grant access to team"),
+        help_text=_("You are allowed to create events under this organizer, however you do not have permission "
+                    "to edit all events under this organizer. Please select one of your existing teams that will"
+                    " be granted access to this event."),
         queryset=Team.objects.none(),
         required=False,
-        empty_label=_('Provision new team specifically for this event.')
+        empty_label=_('Create a new team for this event with me as the only member')
     )
 
     class Meta:
@@ -161,7 +161,7 @@ class EventWizardBasicsForm(I18nModelForm):
             del self.fields['team']
         else:
             self.fields['team'].queryset = self.user.teams.filter(organizer=self.organizer)
-            if not self.organizer.settings.get("event_team_provisioning", "True"):
+            if not self.organizer.settings.get("event_team_provisioning", True, as_type=bool):
                 self.fields['team'].required = True
                 self.fields['team'].empty_label = None
                 self.fields['team'].initial = 0

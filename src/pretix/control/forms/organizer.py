@@ -213,12 +213,11 @@ class OrganizerSettingsForm(SettingsForm):
     )
 
     event_team_provisioning = forms.BooleanField(
-        label=_('Allow team provisioning for newly created events.'),
+        label=_('Allow creating a new team during event creation'),
         help_text=_('Users that do not have access to all events under this organizer, must select one of their teams '
                     'to have access to the created event. This setting allows users to create an event-specified team'
-                    'on-the-fly.'),
+                    ' on-the-fly, even when they do not have \"Can change teams and permissions\" permission.'),
         required=False,
-        initial=True,
     )
 
     primary_color = forms.CharField(

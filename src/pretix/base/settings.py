@@ -672,6 +672,10 @@ Your {event} team"""))
         'default': '',
         'type': LazyI18nString
     },
+    'event_team_provisioning': {
+        'default': 'True',
+        'type': bool
+    },
     'update_check_ack': {
         'default': 'False',
         'type': bool
