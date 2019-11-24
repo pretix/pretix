@@ -474,6 +474,33 @@ class DownloadReminderTests(TestCase):
         assert '/order/' not in djmail.outbox[1].body
 
     @classscope(attr='o')
+    def test_send_to_attendees_subevent_past(self):
+        se1 = self.event.subevents.create(name="Foo", date_from=now() - timedelta(days=2))
+        self.op1.subevent = se1
+        self.op1.attendee_email = 'attendee@dummy.test'
+        self.op1.save()
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    @classscope(attr='o')
+    def test_send_to_attendees_subevent_future(self):
+        self.event.settings.mail_send_download_reminder_attendee = True
+        self.event.settings.mail_days_download_reminder = 2
+        se1 = self.event.subevents.create(name="Foo", date_from=now() + timedelta(days=2))
+        se2 = self.event.subevents.create(name="Foo", date_from=now() + timedelta(days=8))
+        self.op1.subevent = se1
+        self.op1.attendee_email = 'attendee@dummy.test'
+        self.op1.save()
+        self.op2 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None, subevent=se2, attendee_email="attendee2@dummy.test",
+            price=Decimal("23.00"), attendee_name_parts={"full_name": "Peter"}, positionid=1
+        )
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 2
+        assert djmail.outbox[0].to == ['dummy@dummy.test']
+        assert djmail.outbox[1].to == ['attendee@dummy.test']
+
+    @classscope(attr='o')
     def test_send_not_to_attendees_with_same_address(self):
         self.event.settings.mail_send_download_reminder_attendee = True
         self.event.settings.mail_days_download_reminder = 2

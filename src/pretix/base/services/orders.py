@@ -9,8 +9,8 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Exists, F, Max, OuterRef, Q, Sum
-from django.db.models.functions import Greatest
+from django.db.models import Exists, F, Max, Min, OuterRef, Q, Sum
+from django.db.models.functions import Coalesce, Greatest
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
@@ -918,54 +918,76 @@ def send_expiry_warnings(sender, **kwargs):
 @scopes_disabled()
 def send_download_reminders(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0, microsecond=0)
+    qs = Order.objects.annotate(
+        first_date=Coalesce(
+            Min('all_positions__subevent__date_from'),
+            F('event__date_from')
+        )
+    ).filter(
+        status=Order.STATUS_PAID,
+        download_reminder_sent=False,
+        datetime__lte=now() - timedelta(hours=2),
+        first_date__gte=today,
+    ).only('pk', 'event_id').order_by('event_id')
+    event_id = None
+    days = None
+    event = None
 
-    for e in Event.objects.filter(date_from__gte=today):
+    for o in qs:
+        if o.event_id != event_id:
+            days = o.event.settings.get('mail_days_download_reminder', as_type=int)
+            event = o.event
+            event_id = o.event_id
 
-        days = e.settings.get('mail_days_download_reminder', as_type=int)
         if days is None:
             continue
 
-        reminder_date = (e.date_from - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
-
+        reminder_date = (o.first_date - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
         if now() < reminder_date:
             continue
-        for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False, datetime__lte=now() - timedelta(hours=2)).only('pk'):
-            with transaction.atomic():
-                o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
-                if o.download_reminder_sent:
-                    # Race condition
-                    continue
-                if not all([r for rr, r in allow_ticket_download.send(e, order=o)]):
-                    continue
 
-                with language(o.locale):
-                    o.download_reminder_sent = True
-                    o.save(update_fields=['download_reminder_sent'])
-                    email_template = e.settings.mail_text_download_reminder
-                    email_context = get_email_context(event=e, order=o)
-                    email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
-                    try:
-                        o.send_mail(
-                            email_subject, email_template, email_context,
-                            'pretix.event.order.email.download_reminder_sent',
-                            attach_tickets=True
-                        )
-                    except SendMailException:
-                        logger.exception('Reminder email could not be sent')
+        with transaction.atomic():
+            o = Order.objects.select_for_update().get(pk=o.pk)
+            if o.download_reminder_sent:
+                # Race condition
+                continue
+            if not all([r for rr, r in allow_ticket_download.send(event, order=o)]):
+                continue
 
-                    if e.settings.mail_send_download_reminder_attendee:
-                        for p in o.positions.all():
-                            if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
-                                email_template = e.settings.mail_text_download_reminder_attendee
-                                email_context = get_email_context(event=e, order=o, position=p)
-                                try:
-                                    o.send_mail(
-                                        email_subject, email_template, email_context,
-                                        'pretix.event.order.email.download_reminder_sent',
-                                        attach_tickets=True, position=p
-                                    )
-                                except SendMailException:
-                                    logger.exception('Reminder email could not be sent to attendee')
+            with language(o.locale):
+                o.download_reminder_sent = True
+                o.save(update_fields=['download_reminder_sent'])
+                email_template = event.settings.mail_text_download_reminder
+                email_context = get_email_context(event=event, order=o)
+                email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
+                try:
+                    o.send_mail(
+                        email_subject, email_template, email_context,
+                        'pretix.event.order.email.download_reminder_sent',
+                        attach_tickets=True
+                    )
+                except SendMailException:
+                    logger.exception('Reminder email could not be sent')
+
+                if event.settings.mail_send_download_reminder_attendee:
+                    for p in o.positions.all():
+                        if p.subevent_id:
+                            reminder_date = (p.subevent.date_from - timedelta(days=days)).replace(
+                                hour=0, minute=0, second=0, microsecond=0
+                            )
+                            if now() < reminder_date:
+                                continue
+                        if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
+                            email_template = event.settings.mail_text_download_reminder_attendee
+                            email_context = get_email_context(event=event, order=o, position=p)
+                            try:
+                                o.send_mail(
+                                    email_subject, email_template, email_context,
+                                    'pretix.event.order.email.download_reminder_sent',
+                                    attach_tickets=True, position=p
+                                )
+                            except SendMailException:
+                                logger.exception('Reminder email could not be sent to attendee')
 
 
 def notify_user_changed_order(order, user=None, auth=None):
