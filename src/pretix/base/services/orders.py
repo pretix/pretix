@@ -864,7 +864,7 @@ def expire_orders(sender, **kwargs):
     for o in Order.objects.filter(expires__lt=now(), status=Order.STATUS_PENDING,
                                   require_approval=False).select_related('event').order_by('event_id'):
         if o.event_id != event_id:
-            expire = settings.get('payment_term_expire_automatically', as_type=bool)
+            expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             event_id = o.event_id
         if expire:
             mark_order_expired(o)
