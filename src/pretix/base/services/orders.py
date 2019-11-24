@@ -7,6 +7,7 @@ from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Exists, F, Max, OuterRef, Q, Sum
 from django.db.models.functions import Greatest
@@ -857,14 +858,14 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
 @receiver(signal=periodic_task)
 @scopes_disabled()
 def expire_orders(sender, **kwargs):
-    eventcache = {}
+    event_id = None
+    expire = None
 
     for o in Order.objects.filter(expires__lt=now(), status=Order.STATUS_PENDING,
-                                  require_approval=False).select_related('event'):
-        expire = eventcache.get(o.event.pk, None)
-        if expire is None:
-            expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
-            eventcache[o.event.pk] = expire
+                                  require_approval=False).select_related('event').order_by('event_id'):
+        if o.event_id != event_id:
+            expire = settings.get('payment_term_expire_automatically', as_type=bool)
+            event_id = o.event_id
         if expire:
             mark_order_expired(o)
 
@@ -872,31 +873,34 @@ def expire_orders(sender, **kwargs):
 @receiver(signal=periodic_task)
 @scopes_disabled()
 def send_expiry_warnings(sender, **kwargs):
-    eventcache = {}
     today = now().replace(hour=0, minute=0, second=0)
+    days = None
+    event_id = None
 
     for o in Order.objects.filter(
         expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING,
         datetime__lte=now() - timedelta(hours=2), require_approval=False
-    ).only('pk'):
-        with transaction.atomic():
-            o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
-            if o.status != Order.STATUS_PENDING or o.expiry_reminder_sent:
-                # Race condition
-                continue
-            eventsettings = eventcache.get(o.event.pk, None)
-            if eventsettings is None:
-                eventsettings = o.event.settings
-                eventcache[o.event.pk] = eventsettings
+    ).only('pk', 'event_id').order_by('event_id'):
+        if event_id != o.event_id:
+            settings = o.event.settings
+            days = cache.get_or_set('{}:{}:setting_mail_days_order_expire_warning'.format('event', o.event_id),
+                                    default=lambda: settings.get('mail_days_order_expire_warning', as_type=int),
+                                    timeout=3600)
+            event_id = o.event_id
 
-            days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
-            if days and (o.expires - today).days <= days:
+        if days and (o.expires - today).days <= days:
+            with transaction.atomic():
+                o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
+                if o.status != Order.STATUS_PENDING or o.expiry_reminder_sent:
+                    # Race condition
+                    continue
+
                 with language(o.locale):
                     o.expiry_reminder_sent = True
                     o.save(update_fields=['expiry_reminder_sent'])
-                    email_template = eventsettings.mail_text_order_expire_warning
+                    email_template = settings.mail_text_order_expire_warning
                     email_context = get_email_context(event=o.event, order=o)
-                    if eventsettings.payment_term_expire_automatically:
+                    if settings.payment_term_expire_automatically:
                         email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
                     else:
                         email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
