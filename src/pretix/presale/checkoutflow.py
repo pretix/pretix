@@ -152,6 +152,7 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
     def get_context_data(self, **kwargs):
         kwargs.setdefault('step', self)
         kwargs.setdefault('event', self.event)
+        kwargs.setdefault('has_prev', self.get_prev_applicable(self.request) is not None)
         kwargs.setdefault('prev_url', self.get_prev_url(self.request))
         kwargs.setdefault('checkout_flow', [
             step

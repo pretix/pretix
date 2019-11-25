@@ -37,6 +37,12 @@
             </div>
         </div>
     </details>
+    {% if not has_prev and request.event.has_subevents and request.session.iframe_session %}
+        <a class="btn btn-primary btn-block btn-lg" href="{{ prev_url }}">
+            <span class="fa fa-reply"></span>
+            {% trans "Add tickets for a different date" %}
+        </a>
+    {% endif %}
     <h2>{% trans "Checkout" %}</h2>
     {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     {% block inner %}
