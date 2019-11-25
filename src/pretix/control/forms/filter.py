@@ -289,7 +289,7 @@ class EventOrderFilterForm(OrderFilterForm):
                 answers = QuestionAnswer.objects.filter(
                     question_id=q.pk,
                     orderposition__order_id=OuterRef('pk'),
-                    answer__iexact=fdata.get('answer')
+                    answer__exact=fdata.get('answer')
                 )
                 qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
 
