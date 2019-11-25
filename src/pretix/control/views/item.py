@@ -477,8 +477,8 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             question=self.object, orderposition__isnull=False,
             orderposition__order__event=self.request.event
         )
-        if self.request.GET.get("status", "np") != "":
-            s = self.request.GET.get("status", "np")
+        s = self.request.GET.get("status", "np")
+        if s != "":
             if s == 'o':
                 qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING,
                                orderposition__order__expires__lt=now().replace(hour=0, minute=0, second=0))
@@ -488,6 +488,9 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
                 qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:
                 qs = qs.filter(orderposition__order__status=s)
+
+        if s not in (Order.STATUS_CANCELED, ""):
+            qs = qs.filter(orderposition__canceled=False)
         if self.request.GET.get("item", "") != "":
             i = self.request.GET.get("item", "")
             qs = qs.filter(orderposition__item_id__in=(i,))
