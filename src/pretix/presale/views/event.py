@@ -22,6 +22,7 @@ from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
+from pretix.presale.signals import item_description
 from pretix.presale.views.organizer import (
     EventListMixin, add_subevents_for_days, filter_qs_by_attr,
     weeks_for_template,
@@ -126,6 +127,11 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 item._remove = True
                 continue
 
+        item.description = str(item.description)
+        for recv, resp in item_description.send(sender=event, item=item, variation=None):
+            if resp:
+                item.description += ("<br/>" if item.description else "") + resp
+
         if not item.has_variations:
             item._remove = False
             if not bool(item._subevent_quotas):
@@ -171,6 +177,11 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
+                var.description = str(var.description)
+                for recv, resp in item_description.send(sender=event, item=item, variation=var):
+                    if resp:
+                        var.description += ("<br/>" if var.description else "") + resp
+
                 if voucher and (voucher.allow_ignore_quota or voucher.block_quota):
                     var.cached_availability = (
                         Quota.AVAILABILITY_OK, voucher.max_usages - voucher.redeemed

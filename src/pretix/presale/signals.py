@@ -256,3 +256,12 @@ invoice address, confirmations) will be optional, except for questions. Use with
 As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
 argument will contain the request object.
 """
+
+item_description = EventPluginSignal(
+    providing_args=["item", "variation"]
+)
+"""
+This signal is sent out when the description of an item or variation is rendered and allows you to append
+additional text to the description. You are passed the ``item`` and ``variation`` and expected to return
+HTML.
+"""
