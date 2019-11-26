@@ -54,7 +54,8 @@ class VoucherSerializer(I18nAwareModelSerializer):
 
         Voucher.clean_item_properties(
             full_data, self.context.get('event'),
-            full_data.get('quota'), full_data.get('item'), full_data.get('variation')
+            full_data.get('quota'), full_data.get('item'), full_data.get('variation'),
+            block_quota=full_data.get('block_quota')
         )
         Voucher.clean_subevent(
             full_data, self.context.get('event')

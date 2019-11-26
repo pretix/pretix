@@ -75,7 +75,7 @@ event_permission_sub_urls = [
     ('delete', 'can_change_event_settings', 'taxrules/1/', 404),
     ('get', 'can_view_vouchers', 'vouchers/', 200),
     ('get', 'can_view_vouchers', 'vouchers/1/', 404),
-    ('post', 'can_change_vouchers', 'vouchers/', 400),
+    ('post', 'can_change_vouchers', 'vouchers/', 201),
     ('put', 'can_change_vouchers', 'vouchers/1/', 404),
     ('patch', 'can_change_vouchers', 'vouchers/1/', 404),
     ('delete', 'can_change_vouchers', 'vouchers/1/', 404),

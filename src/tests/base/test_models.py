@@ -718,6 +718,14 @@ class VoucherTestCase(BaseQuotaTestCase):
         self.assertFalse(v.applies_to(self.var1.item, self.var2))
 
     @classscope(attr='o')
+    def test_voucher_applicability_all(self):
+        v = Voucher.objects.create(event=self.event)
+        self.assertTrue(v.applies_to(self.item1))
+        self.assertTrue(v.applies_to(self.var1.item))
+        self.assertTrue(v.applies_to(self.var1.item, self.var1))
+        self.assertTrue(v.applies_to(self.var1.item, self.var2))
+
+    @classscope(attr='o')
     def test_voucher_applicability_variation_through_quota(self):
         self.quota.variations.add(self.var1)
         self.quota.items.add(self.var1.item)
