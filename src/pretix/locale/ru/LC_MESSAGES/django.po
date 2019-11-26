@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-20 09:02+0000\n"
+"PO-Revision-Date: 2019-11-26 15:41+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -5157,7 +5157,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:411
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr ""
+msgstr "на базе <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
