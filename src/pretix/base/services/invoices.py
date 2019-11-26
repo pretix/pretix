@@ -24,7 +24,7 @@ from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
 from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
-from pretix.base.signals import periodic_task
+from pretix.base.signals import invoice_line_text, periodic_task
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.models import modelcopy
@@ -139,6 +139,9 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 desc = "  + " + desc
             if invoice.event.settings.invoice_attendee_name and p.attendee_name:
                 desc += "<br />" + pgettext("invoice", "Attendee: {name}").format(name=p.attendee_name)
+            for recv, resp in invoice_line_text.send(sender=invoice.event, position=p):
+                if resp:
+                    desc += "<br/>" + resp
 
             for answ in p.answers.all():
                 if not answ.question.print_on_invoice:

@@ -622,3 +622,11 @@ order_split = EventPluginSignal(
 This signal is sent out when an order is split into two orders and allows you to copy related models
 to the new order. You will be passed the old order as ``original`` and the new order as ``split_order``.
 """
+
+invoice_line_text = EventPluginSignal(
+    providing_args=["position"]
+)
+"""
+This signal is sent out when an invoice is built for an order. You can return additional text that
+should be shown on the invoice for the given ``position``.
+"""
