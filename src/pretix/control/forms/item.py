@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max
@@ -687,6 +689,10 @@ class ItemBundleForm(I18nModelForm):
 
     def clean(self):
         d = super().clean()
+        if not self.cleaned_data['designated_price']:
+            d['designated_price'] = Decimal('0.00')
+            self.instance.designated_price = Decimal('0.00')
+
         if 'itemvar' in self.cleaned_data:
             if '-' in self.cleaned_data['itemvar']:
                 itemid, varid = self.cleaned_data['itemvar'].split('-')

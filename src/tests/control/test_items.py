@@ -500,12 +500,13 @@ class ItemsTest(ItemFormTest):
             'bundles-0-id': '',
             'bundles-0-itemvar': str(self.item1.pk),
             'bundles-0-count': '2',
-            'bundles-0-designated_price': '2.00',
+            'bundles-0-designated_price': '',
         })
         self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item2.id), d)
         with scopes_disabled():
             assert self.item2.bundles.exists()
             assert self.item2.bundles.first().bundled_item == self.item1
+            assert self.item2.bundles.first().designated_price == Decimal('0.000')
         d.update({
             'bundles-TOTAL_FORMS': '1',
             'bundles-INITIAL_FORMS': '1',
