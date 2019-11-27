@@ -1830,6 +1830,8 @@ def test_order_create_fee_as_percentage(token_client, organizer, event, item, qu
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['fees'][0]['_treat_value_as_percentage'] = True
     res['fees'][0]['value'] = '10.00'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
@@ -1849,6 +1851,8 @@ def test_order_create_fee_with_auto_tax(token_client, organizer, event, item, qu
     res['fees'][0]['_split_taxes_like_products'] = True
     res['fees'][0]['_treat_value_as_percentage'] = True
     res['fees'][0]['value'] = '10.00'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
     item.tax_rule = taxrule
     item.save()
     resp = token_client.post(
