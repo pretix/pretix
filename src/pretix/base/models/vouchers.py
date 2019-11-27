@@ -222,7 +222,7 @@ class Voucher(LoggedModel):
         )
 
     @staticmethod
-    def clean_item_properties(data, event, quota, item, variation, seats_given=False):
+    def clean_item_properties(data, event, quota, item, variation, block_quota=False, seats_given=False):
         if quota:
             if quota.event != event:
                 raise ValidationError(_('You cannot select a quota that belongs to a different event.'))
@@ -241,8 +241,12 @@ class Voucher(LoggedModel):
                                         'Otherwise it might be unclear which quotas to block.'))
             if item.category and item.category.is_addon:
                 raise ValidationError(_('It is currently not possible to create vouchers for add-on products.'))
-        elif not seats_given:
-            raise ValidationError(_('You need to specify either a quota or a product.'))
+        elif block_quota:
+            raise ValidationError(_('You need to select a specific product or quota if this voucher should reserve '
+                                    'tickets.'))
+        elif variation:
+            raise ValidationError(_('You cannot select a variation without having selected a product that provides '
+                                    'variations.'))
 
     @staticmethod
     def clean_max_usages(data, redeemed):
@@ -331,7 +335,8 @@ class Voucher(LoggedModel):
         elif item and not item.has_variations:
             avail = item.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
         else:
-            raise ValidationError(_('You need to specify either a quota or a product.'))
+            raise ValidationError(_('You need to select a specific product or quota if this voucher should reserve '
+                                    'tickets.'))
 
         if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < cnt):
             raise ValidationError(_('You cannot create a voucher that blocks quota as the selected product or '
@@ -410,7 +415,9 @@ class Voucher(LoggedModel):
             return item.quotas.filter(pk=self.quota_id).exists()
         if self.item_id and not self.variation_id:
             return self.item_id == item.pk
-        return (self.item_id == item.pk) and (variation and self.variation_id == variation.pk)
+        if self.item_id:
+            return (self.item_id == item.pk) and (variation and self.variation_id == variation.pk)
+        return True
 
     def is_active(self):
         """

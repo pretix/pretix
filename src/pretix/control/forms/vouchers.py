@@ -109,9 +109,10 @@ class VoucherForm(I18nModelForm):
                     'event': instance.event.slug,
                     'organizer': instance.event.organizer.slug,
                 }),
-                'data-placeholder': ''
+                'data-placeholder': _('All products')
             }
         )
+        self.fields['itemvar'].required = False
         self.fields['itemvar'].widget.choices = self.fields['itemvar'].choices
 
         if self.instance.event.seating_plan or self.instance.event.subevents.filter(seating_plan__isnull=False).exists():
@@ -123,9 +124,6 @@ class VoucherForm(I18nModelForm):
                 initial=self.instance.seat.seat_guid if self.instance.seat else '',
                 help_text=str(self.instance.seat) if self.instance.seat else '',
             )
-            self.fields['itemvar'].required = False
-        else:
-            self.fields['itemvar'].required = True
 
     def clean(self):
         data = super().clean()
@@ -165,7 +163,8 @@ class VoucherForm(I18nModelForm):
         Voucher.clean_item_properties(
             data, self.instance.event,
             self.instance.quota, self.instance.item, self.instance.variation,
-            seats_given=data.get('seat') or data.get('seats')
+            seats_given=data.get('seat') or data.get('seats'),
+            block_quota=data.get('block_quota')
         )
         if not self.instance.show_hidden_items and (
             (self.instance.quota and all(i.hide_without_voucher for i in self.instance.quota.items.all()))

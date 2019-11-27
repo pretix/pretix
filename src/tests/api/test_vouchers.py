@@ -251,8 +251,12 @@ def create_voucher(token_client, organizer, event, data, expected_failure=False)
 def test_voucher_require_item(token_client, organizer, event, item):
     create_voucher(
         token_client, organizer, event,
-        data={},
+        data={'block_quota': True},
         expected_failure=True
+    )
+    create_voucher(
+        token_client, organizer, event,
+        data={},
     )
 
 
