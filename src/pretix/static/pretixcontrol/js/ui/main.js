@@ -742,3 +742,7 @@ $(function () {
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
     moment.locale($("body").attr("data-datetimelocale"));
 });
+
+$(document).ready(function () {
+    $('.form-horizontal').areYouSure( {'message': gettext('You have unsaved changes!')});
+});
