@@ -364,12 +364,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 self.request.event.has_subevents or self.request.event.presale_is_running
             )
         )
-        context['show_dates'] = (
-            self.request.event.has_subevents and (
-                'cart_namespace' not in self.kwargs
-                or not self.subevent
-            )
-        )
         if self.request.event.settings.redirect_to_checkout_directly:
             context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
                                                     kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})

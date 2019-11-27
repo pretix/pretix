@@ -89,10 +89,11 @@
         </details>
     {% endif %}
 
-    {% if show_dates %}
+    {% if request.event.has_subevents %}
         {% if subevent and "year" not in request.GET %}
             {% if show_cart %}
                 <a class="subevent-toggle btn btn-primary btn-block btn-lg">
+                    <span class="fa fa-reply"></span>
                     {% trans "Add tickets for a different date" %}
                 </a>
             {% else %}
