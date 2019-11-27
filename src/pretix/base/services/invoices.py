@@ -20,7 +20,9 @@ from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
-from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
+from pretix.base.models import (
+    Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
+)
 from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
@@ -177,9 +179,12 @@ def build_invoice(invoice: Invoice) -> Invoice:
 
         offset = len(positions)
         for i, fee in enumerate(invoice.order.fees.all()):
-            fee_title = _(fee.get_fee_type_display())
-            if fee.description:
-                fee_title += " - " + fee.description
+            if fee.fee_type == OrderFee.FEE_TYPE_OTHER and fee.description:
+                fee_title = fee.description
+            else:
+                fee_title = _(fee.get_fee_type_display())
+                if fee.description:
+                    fee_title += " - " + fee.description
             InvoiceLine.objects.create(
                 position=i + offset,
                 invoice=invoice,
