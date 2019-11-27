@@ -845,6 +845,14 @@ Creating orders
       * ``description``
       * ``internal_type``
       * ``tax_rule``
+      * ``_treat_value_as_percentage`` (Optional convenience flag. If set to ``true``, your ``value`` parameter will
+        be treated as a percentage and the fee will be calculated using that percentage and the sum of all product
+        prices. Note that this will not include other fees and is calculated once during order generation and will not
+        be respected automatically when the order changes later.)
+      * ``_split_taxes_like_products`` (Optional convenience flag. If set to ``true``, your ``tax_rule`` will be ignored
+        and the fee will be taxed like the products in the order. If the products have multiple tax rates, multiple fees
+        will be generated with weights adjusted to the net price of the products. Note that this will be calculated once
+        during order generation and is not respected automatically when the order changes later.)
 
    * ``force`` (optional). If set to ``true``, quotas will be ignored.
    * ``send_mail`` (optional). If set to ``true``, the same emails will be sent as for a regular order. Defaults to

@@ -1,5 +1,5 @@
 import json
-from collections import Counter
+from collections import Counter, defaultdict
 from decimal import Decimal
 
 import pycountry
@@ -14,10 +14,11 @@ from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Item, ItemVariation, Order,
-    OrderPosition, Question, QuestionAnswer, Seat, SubEvent, Voucher,
+    OrderPosition, Question, QuestionAnswer, Seat, SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund,
@@ -477,9 +478,13 @@ class AnswerCreateSerializer(I18nAwareModelSerializer):
 
 
 class OrderFeeCreateSerializer(I18nAwareModelSerializer):
+    _treat_value_as_percentage = serializers.BooleanField(default=False, required=False)
+    _split_taxes_like_products = serializers.BooleanField(default=False, required=False)
+
     class Meta:
         model = OrderFee
-        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rule')
+        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rule',
+                  '_treat_value_as_percentage', '_split_taxes_like_products')
 
     def validate_tax_rule(self, tr):
         if tr and tr.event != self.context['event']:
@@ -863,13 +868,48 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             for cp in delete_cps:
                 cp.delete()
 
+        order.total = sum([p.price for p in order.positions.all()])
         for fee_data in fees_data:
-            f = OrderFee(**fee_data)
-            f.order = order
-            f._calculate_tax()
-            f.save()
+            is_percentage = fee_data.pop('_treat_value_as_percentage', False)
+            if is_percentage:
+                fee_data['value'] = round_decimal(order.total * (fee_data['value'] / Decimal('100.00')),
+                                                  self.context['event'].currency)
+            is_split_taxes = fee_data.pop('_split_taxes_like_products', False)
 
-        order.total = sum([p.price for p in order.positions.all()]) + sum([f.value for f in order.fees.all()])
+            if is_split_taxes:
+                d = defaultdict(lambda: Decimal('0.00'))
+                trz = TaxRule.zero()
+                for p in pos_map.values():
+                    tr = p.tax_rule
+                    d[tr] += p.price - p.tax_value
+
+                base_values = sorted([tuple(t) for t in d.items()], key=lambda t: (t[0] or trz).rate)
+                sum_base = sum(t[1] for t in base_values)
+                fee_values = [(t[0], round_decimal(fee_data['value'] * t[1] / sum_base, self.context['event'].currency))
+                              for t in base_values]
+                sum_fee = sum(t[1] for t in fee_values)
+
+                # If there are rounding differences, we fix them up, but always leaning to the benefit of the tax
+                # authorities
+                if sum_fee > fee_data['value']:
+                    fee_values[0] = (fee_values[0][0], fee_values[0][1] + (fee_data['value'] - sum_fee))
+                elif sum_fee < fee_data['value']:
+                    fee_values[-1] = (fee_values[-1][0], fee_values[-1][1] + (fee_data['value'] - sum_fee))
+
+                for tr, val in fee_values:
+                    fee_data['tax_rule'] = tr
+                    fee_data['value'] = val
+                    f = OrderFee(**fee_data)
+                    f.order = order
+                    f._calculate_tax()
+                    f.save()
+            else:
+                f = OrderFee(**fee_data)
+                f.order = order
+                f._calculate_tax()
+                f.save()
+
+        order.total += sum([f.value for f in order.fees.all()])
         order.save(update_fields=['total'])
 
         if order.total == Decimal('0.00') and validated_data.get('status') == Order.STATUS_PAID and not payment_provider:
