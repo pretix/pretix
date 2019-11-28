@@ -1149,7 +1149,7 @@ class GiftCardPayment(BasePaymentProvider):
     @transaction.atomic()
     def execute_refund(self, refund: OrderRefund):
         from .models import GiftCard
-        gc = GiftCard.objects.get(pk=refund.payment.info_data.get('gift_card'))
+        gc = GiftCard.objects.get(pk=refund.info_data.get('gift_card') or refund.payment.info_data.get('gift_card'))
         trans = gc.transactions.create(
             value=refund.amount,
             order=refund.order,

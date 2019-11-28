@@ -5,6 +5,7 @@ import os
 import re
 from datetime import datetime, time, timedelta
 from decimal import Decimal, DecimalException
+from urllib.parse import urlencode
 
 import vat_moss.id
 from django.conf import settings
@@ -709,6 +710,33 @@ class OrderRefundView(OrderView):
                         provider='manual'
                     ))
 
+            giftcard_value = self.request.POST.get('refund-new-giftcard', '0') or '0'
+            giftcard_value = formats.sanitize_separators(giftcard_value)
+            try:
+                giftcard_value = Decimal(giftcard_value)
+            except (DecimalException, TypeError):
+                messages.error(self.request, _('You entered an invalid number.'))
+                is_valid = False
+            else:
+                if giftcard_value:
+                    refund_selected += giftcard_value
+                    giftcard = self.request.organizer.issued_gift_cards.create(
+                        currency=self.request.event.currency,
+                        testmode=self.order.testmode
+                    )
+                    refunds.append(OrderRefund(
+                        order=self.order,
+                        payment=None,
+                        source=OrderRefund.REFUND_SOURCE_ADMIN,
+                        state=OrderRefund.REFUND_STATE_CREATED,
+                        execution_date=now(),
+                        amount=giftcard_value,
+                        provider='giftcard',
+                        info=json.dumps({
+                            'gift_card': giftcard.pk
+                        })
+                    ))
+
             offsetting_value = self.request.POST.get('refund-offsetting', '0') or '0'
             offsetting_value = formats.sanitize_separators(offsetting_value)
             try:
@@ -779,7 +807,7 @@ class OrderRefundView(OrderView):
                         'local_id': r.local_id,
                         'provider': r.provider,
                     }, user=self.request.user)
-                    if r.payment or r.provider == "offsetting":
+                    if r.payment or r.provider == "offsetting" or r.provider == "giftcard":
                         try:
                             r.payment_provider.execute_refund(r)
                         except PaymentException as e:
@@ -816,6 +844,23 @@ class OrderRefundView(OrderView):
                             )
                             self.order.save(update_fields=['status', 'expires'])
 
+                    if giftcard_value and self.order.email:
+                        messages.success(self.request, _('A new gift card was created. You can now send the user their '
+                                                         'gift card code.'))
+                        return redirect(reverse('control:event.order.sendmail', kwargs={
+                            'event': self.request.event.slug,
+                            'organizer': self.request.event.organizer.slug,
+                            'code': self.order.code
+                        }) + '?' + urlencode({
+                            'subject': _('Your gift card code'),
+                            'message': _('Hello,\n\nwe have refunded you {amount} for your order.\n\nYou can use the gift '
+                                         'card code {giftcard} to pay for future ticket purchases in our shop.\n\n'
+                                         'Your {event} team').format(
+                                event="{event}",
+                                amount=money_filter(giftcard_value, self.request.event.currency),
+                                giftcard=giftcard.secret,
+                            )
+                        }))
                 return redirect(self.get_order_url())
             else:
                 messages.error(self.request, _('The refunds you selected do not match the selected total refund '
@@ -1563,6 +1608,11 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
             event=self.request.event,
             code=self.kwargs['code'].upper()
         )
+        kwargs['initial'] = {}
+        if self.request.GET.get('subject'):
+            kwargs['initial']['subject'] = self.request.GET.get('subject')
+        if self.request.GET.get('message'):
+            kwargs['initial']['message'] = self.request.GET.get('message')
         return kwargs
 
     def form_invalid(self, form):

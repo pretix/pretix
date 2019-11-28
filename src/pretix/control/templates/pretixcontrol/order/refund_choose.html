@@ -87,6 +87,27 @@
                     <tr>
                         <td></td>
                         <td></td>
+                        <td>
+                            <strong>{% trans "Create a new gift card" %}</strong>
+                        </td>
+                        <td></td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" name="refund-new-giftcard"
+                                       title="" class="form-control" value="{{ 0|floatformat:2 }}">
+                                <span class="input-group-addon">
+                                    {{ request.event.currency }}
+                                </span>
+                            </div>
+                            <div class="text-muted">
+                                {% trans "The gift card can be used to buy tickets for all events of this organizer." %}
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
                         <td><strong>{% trans "Manual refund" %}</strong></td>
                         <td></td>
                         <td>
