@@ -1,26 +1,39 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import CartPosition, Seat
 
 
-class SeatProtected(Exception):
-    pass
+class SeatProtected(LazyLocaleException):
+    def __init__(self, *args):
+        msg = args[0]
+        msgargs = args[1] if len(args) > 1 else None
+        self.args = args
+        if msgargs:
+            msg = _(msg) % msgargs
+        else:
+            msg = _(msg)
+        super().__init__(msg)
 
 
 def validate_plan_change(event, subevent, plan):
     current_taken_seats = set(
         event.seats.select_related('product').annotate(
             has_op=Count('orderposition')
-        ).annotate(has_v=Count('vouchers')).filter(subevent=subevent, has_op=True).values_list('seat_guid', flat=True)
+        ).annotate(has_v=Count('vouchers')).filter(
+            subevent=subevent,
+        ).filter(
+            Q(has_v=True) | Q(has_op=True)
+        ).values_list('seat_guid', flat=True)
     )
     new_seats = {
         ss.guid for ss in plan.iter_all_seats()
     } if plan else set()
     leftovers = list(current_taken_seats - new_seats)
     if leftovers:
-        raise SeatProtected(_('You can not change the plan since seat "{}" is not present in the new plan and is '
-                              'already sold.').format(leftovers[0]))
+        raise SeatProtected(_('You can not change the plan since seat "%s" is not present in the new plan and is '
+                              'already sold.'), leftovers[0])
 
 
 def generate_seats(event, subevent, plan, mapping):
@@ -70,8 +83,11 @@ def generate_seats(event, subevent, plan, mapping):
 
     for s in current_seats.values():
         if s.has_op:
-            raise SeatProtected(_('You can not change the plan since seat "{}" is not present in the new plan and is '
-                                  'already sold.').format(s.name))
+            raise SeatProtected(_('You can not change the plan since seat "%s" is not present in the new plan and is '
+                                  'already sold.', s.name))
+        if s.has_v:
+            raise SeatProtected(_('You can not change the plan since seat "%s" is not present in the new plan and is '
+                                  'already used in a voucher.', s.name))
 
     Seat.objects.bulk_create(create_seats)
     CartPosition.objects.filter(seat__in=[s.pk for s in current_seats.values()]).delete()
