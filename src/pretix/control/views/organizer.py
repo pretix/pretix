@@ -932,7 +932,7 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
     def get_queryset(self):
         qs = self.request.organizer.issued_gift_cards.annotate(
-            cached_value=Sum('transactions__value')
+            cached_value=Coalesce(Sum('transactions__value'), Decimal('0.00'))
         )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)

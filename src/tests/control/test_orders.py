@@ -12,8 +12,9 @@ from tests.base import SoupTest
 from tests.plugins.stripe.test_provider import MockedCharge
 
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderFee, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, Question, QuestionAnswer, Quota, Team, User,
+    Event, GiftCard, InvoiceAddress, Item, Order, OrderFee, OrderPayment,
+    OrderPosition, OrderRefund, Organizer, Question, QuestionAnswer, Quota,
+    Team, User,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
@@ -2044,6 +2045,34 @@ def test_refund_paid_order_offsetting(client, env):
         assert p2.provider == "offsetting"
         assert p2.amount == Decimal('5.00')
         assert p2.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+
+@pytest.mark.django_db
+def test_refund_paid_order_giftcard(client, env):
+    with scopes_disabled():
+        p = env[2].payments.last()
+        p.confirm()
+        client.login(email='dummy@dummy.dummy', password='dummy')
+
+    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '5.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-new-giftcard': '5.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    with scopes_disabled():
+        r = env[2].refunds.last()
+        assert r.provider == "giftcard"
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('5.00')
+        assert env[2].status == Order.STATUS_PENDING
+        gk = GiftCard.objects.get(pk=r.info_data['gift_card'])
+        assert gk.value == Decimal('5.00')
 
 
 @pytest.mark.django_db
