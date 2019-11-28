@@ -53,6 +53,14 @@ class SalesChannel:
         """
         return True
 
+    @property
+    def unlimited_items_per_order(self) -> bool:
+        """
+        If this property is ``True``, purchases made using this sales channel are not limited to the maximum amount of
+        items defined in the event settings.
+        """
+        return False
+
 
 def get_all_sales_channels():
     global _ALL_CHANNELS

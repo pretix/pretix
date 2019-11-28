@@ -4,6 +4,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
+from django.dispatch import receiver
 from django.test import TestCase
 from django.utils.timezone import now
 from django_countries.fields import Country
@@ -21,6 +22,7 @@ from pretix.base.models.items import (
 from pretix.base.services.cart import (
     CartError, CartManager, error_messages, update_tax_rates,
 )
+from pretix.base.signals import register_sales_channels
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
 
@@ -29,7 +31,15 @@ class FoobarSalesChannel(SalesChannel):
     identifier = "bar"
     verbose_name = "Foobar"
     icon = "home"
-    testmode_supported = True
+    testmode_supported = False
+    unlimited_items_per_order = True
+
+
+@receiver(register_sales_channels, dispatch_uid="test_cart_register_sales_channels")
+def base_sales_channels(sender, **kwargs):
+    return (
+        FoobarSalesChannel(),
+    )
 
 
 class CartTestMixin:
@@ -813,6 +823,23 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('more than', doc.select('.alert-danger')[0].text)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+
+    def test_max_items_unlimited_sales_channel(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.event.settings.max_items_per_order = 5
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '5',
+        }, follow=True, PRETIX_SALES_CHANNEL=FoobarSalesChannel)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertNotIn('more than', doc.select('.alert-danger')[0].text)
         with scopes_disabled():
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
 
