@@ -278,6 +278,8 @@ class OrderListExporter(MultiSheetListExporter):
         ]
         if self.event.has_subevents:
             headers.append(pgettext('subevent', 'Date'))
+            headers.append(_('Start date'))
+            headers.append(_('End date'))
         headers += [
             _('Product'),
             _('Variation'),
@@ -323,7 +325,12 @@ class OrderListExporter(MultiSheetListExporter):
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
             ]
             if self.event.has_subevents:
-                row.append(op.subevent)
+                row.append(op.subevent.name)
+                row.append(op.subevent.date_from.astimezone(self.event.timezone).strftime('%Y-%m-%d %H:%M:%S'))
+                if op.subevent.date_to:
+                    row.append(op.subevent.date_to.astimezone(self.event.timezone).strftime('%Y-%m-%d %H:%M:%S'))
+                else:
+                    row.append('')
             row += [
                 str(op.item),
                 str(op.variation) if op.variation else '',

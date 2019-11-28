@@ -339,6 +339,8 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
 
         if self.event.has_subevents:
             headers.append(pgettext('subevent', 'Date'))
+            headers.append(_('Start date'))
+            headers.append(_('End date'))
 
         for q in questions:
             headers.append(str(q.question))
@@ -389,7 +391,14 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 row.append(op.secret)
             row.append(op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '') or op.order.email or '')
             if self.event.has_subevents:
-                row.append(str(op.subevent))
+                row.append(str(op.subevent.name))
+                row.append(date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT'))
+                if op.subevent.date_to:
+                    row.append(
+                        date_format(op.subevent.date_to.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                    )
+                else:
+                    row.append('')
             acache = {}
             if op.addon_to:
                 for a in op.addon_to.answers.all():
