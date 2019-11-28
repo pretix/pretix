@@ -203,6 +203,9 @@ class OrderDetail(OrderView):
         for p in ctx['payments']:
             if p.payment_provider:
                 p.html_info = (p.payment_provider.payment_control_render(self.request, p) or "").strip()
+        for r in ctx['refunds']:
+            if r.payment_provider:
+                r.html_info = (r.payment_provider.refund_control_render(self.request, r) or "").strip()
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={
             'comment': self.order.comment,

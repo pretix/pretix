@@ -645,12 +645,28 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            {% if staff_session %}
+                                            {% if r.html_info %}
+                                                <tr>
+                                                    <td colspan="1"></td>
+                                                    <td colspan="7">
+                                                        {{ r.html_info|safe }}
+                                                        {% if staff_session %}
+                                                            <p>
+                                                                <a href="" class="btn btn-default btn-xs" data-expandrefund
+                                                                   data-id="{{ r.pk }}">
+                                                                    <span class="fa-eye fa fa-fw"></span>
+                                                                    {% trans "Inspect" %}
+                                                                </a>
+                                                            </p>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% elif staff_session %}
                                                 <tr>
                                                     <td colspan="1"></td>
                                                     <td colspan="7">
                                                         <a href="" class="btn btn-default btn-xs" data-expandrefund
-                                                                data-id="{{ r.pk }}">
+                                                           data-id="{{ r.pk }}">
                                                             <span class="fa-eye fa fa-fw"></span>
                                                             {% trans "Inspect" %}
                                                         </a>

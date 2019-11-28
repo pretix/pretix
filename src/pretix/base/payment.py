@@ -651,6 +651,19 @@ class BasePaymentProvider:
         """
         return ''
 
+    def refund_control_render(self, request: HttpRequest, refund: OrderRefund) -> str:
+        """
+        Will be called if the *event administrator* views the details of a refund.
+
+        It should return HTML code containing information regarding the current refund
+        status and, if applicable, next steps.
+
+        The default implementation returns an empty string.
+
+        :param order: The order object
+        """
+        return ''
+
     def payment_refund_supported(self, payment: OrderPayment) -> bool:
         """
         Will be called to check if the provider supports automatic refunding for this
@@ -964,6 +977,20 @@ class GiftCardPayment(BasePaymentProvider):
 
     def checkout_confirm_render(self, request) -> str:
         return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({})
+
+    def refund_control_render(self, request, refund) -> str:
+        from .models import GiftCard
+
+        if 'gift_card' in refund.info_data:
+            gc = GiftCard.objects.get(pk=refund.info_data.get('gift_card'))
+            template = get_template('pretixcontrol/giftcards/payment.html')
+
+            ctx = {
+                'request': request,
+                'event': self.event,
+                'gc': gc,
+            }
+            return template.render(ctx)
 
     def payment_control_render(self, request, payment) -> str:
         from .models import GiftCard

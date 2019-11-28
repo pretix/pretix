@@ -110,6 +110,8 @@ The provider class
 
    .. automethod:: execute_refund
 
+   .. automethod:: refund_control_render
+
    .. automethod:: api_payment_details
 
    .. automethod:: shred_payment_info
