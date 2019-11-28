@@ -165,9 +165,6 @@ $(function () {
         }
     })
     $("input[id^=id_name_parts_], #id_email").change(function () {
-        console.log(copy_to_first_ticket);
-        console.log($(".questions-form").first().select("input[id*=attendee_email]"));
-        console.log($("#id_email").val());
         if (copy_to_first_ticket) {
             $(".questions-form").first().find("input[id*=attendee_email]").val($("#id_email").val());
             $(".questions-form").first().find("input[id*=attendee_name_parts]").each(function () {
