@@ -328,17 +328,21 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def contact_form(self):
+        wd = self.cart_session.get('widget_data', {})
         initial = {
             'email': (
                 self.cart_session.get('email', '') or
-                self.cart_session.get('widget_data', {}).get('email', '')
+                wd.get('email', '')
             )
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
-        return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
-                           event=self.request.event,
-                           request=self.request,
-                           initial=initial, all_optional=self.all_optional)
+        f = ContactForm(data=self.request.POST if self.request.method == "POST" else None,
+                        event=self.request.event,
+                        request=self.request,
+                        initial=initial, all_optional=self.all_optional)
+        if wd.get('email', '') and wd.get('fix', '') == "true":
+            f.fields['email'].disabled = True
+        return f
 
     @cached_property
     def eu_reverse_charge_relevant(self):
@@ -347,35 +351,42 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def invoice_form(self):
+        wd = self.cart_session.get('widget_data', {})
         if not self.invoice_address.pk:
-            initial = {
+            wd_initial = {
                 'name_parts': {
                     k[21:].replace('-', '_'): v
-                    for k, v in self.cart_session.get('widget_data', {}).items()
+                    for k, v in wd.items()
                     if k.startswith('invoice-address-name-')
                 },
-                'company': self.cart_session.get('widget_data', {}).get('invoice-address-company', ''),
-                'is_business': bool(self.cart_session.get('widget_data', {}).get('invoice-address-company', '')),
-                'street': self.cart_session.get('widget_data', {}).get('invoice-address-street', ''),
-                'zipcode': self.cart_session.get('widget_data', {}).get('invoice-address-zipcode', ''),
-                'city': self.cart_session.get('widget_data', {}).get('invoice-address-city', ''),
-                'country': self.cart_session.get('widget_data', {}).get('invoice-address-country', ''),
+                'company': wd.get('invoice-address-company', ''),
+                'is_business': bool(wd.get('invoice-address-company', '')),
+                'street': wd.get('invoice-address-street', ''),
+                'zipcode': wd.get('invoice-address-zipcode', ''),
+                'city': wd.get('invoice-address-city', ''),
+                'country': wd.get('invoice-address-country', ''),
             }
         else:
-            initial = {}
+            wd_initial = {}
+        initial = dict(wd_initial)
         if not self.address_asked and self.request.event.settings.invoice_name_required:
-            return InvoiceNameForm(data=self.request.POST if self.request.method == "POST" else None,
+            f = InvoiceNameForm(data=self.request.POST if self.request.method == "POST" else None,
+                                event=self.request.event,
+                                request=self.request,
+                                instance=self.invoice_address,
+                                initial=initial,
+                                validate_vat_id=False, all_optional=self.all_optional)
+        else:
+            f = InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                    event=self.request.event,
                                    request=self.request,
-                                   instance=self.invoice_address,
                                    initial=initial,
-                                   validate_vat_id=False, all_optional=self.all_optional)
-        return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
-                                  event=self.request.event,
-                                  request=self.request,
-                                  initial=initial,
-                                  instance=self.invoice_address,
-                                  validate_vat_id=self.eu_reverse_charge_relevant, all_optional=self.all_optional)
+                                   instance=self.invoice_address,
+                                   validate_vat_id=self.eu_reverse_charge_relevant, all_optional=self.all_optional)
+        for name, field in f.fields.items():
+            if wd_initial.get(name) and wd.get('fix', '') == 'true':
+                field.disabled = True
+        return f
 
     @cached_property
     def address_asked(self):

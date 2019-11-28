@@ -256,6 +256,11 @@ This works for the pretix Button as well. Currently, the following attributes ar
   naming scheme such as ``name-title`` or ``name-given-name`` (see above). ``country`` expects a two-character
   country code.
 
+* If ``data-fix="true"`` is given, the user will not be able to change the other given values later. This currently
+  only works for the order email address as well as the invoice address. Attendee-level fields and questions can
+  always be modified. Note that this is not a security feature and can easily be overridden by users, so do not rely
+  on this for authentification.
+
 Any configured pretix plugins might understand more data fields. For example, if the appropriate plugins on pretix
 Hosted or pretix Enterprise are active, you can pass the following fields:
 
