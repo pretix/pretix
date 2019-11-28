@@ -12,6 +12,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext as _
 from django_scopes import scopes_disabled
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemBundle, ItemVariation, Seat,
@@ -218,13 +219,14 @@ class CartManager:
         })
 
     def _check_max_cart_size(self):
-        cartsize = self.positions.filter(addon_to__isnull=True).count()
-        cartsize += sum([op.count for op in self._operations if isinstance(op, self.AddOperation) and not op.addon_to])
-        cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation) if
-                         not op.position.addon_to_id])
-        if cartsize > int(self.event.settings.max_items_per_order):
-            # TODO: i18n plurals
-            raise CartError(_(error_messages['max_items']) % (self.event.settings.max_items_per_order,))
+        if not get_all_sales_channels()[self._sales_channel].unlimited_items_per_order:
+            cartsize = self.positions.filter(addon_to__isnull=True).count()
+            cartsize += sum([op.count for op in self._operations if isinstance(op, self.AddOperation) and not op.addon_to])
+            cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation) if
+                             not op.position.addon_to_id])
+            if cartsize > int(self.event.settings.max_items_per_order):
+                # TODO: i18n plurals
+                raise CartError(_(error_messages['max_items']) % (self.event.settings.max_items_per_order,))
 
     def _check_item_constraints(self, op):
         if isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
