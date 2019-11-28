@@ -851,6 +851,32 @@ class UserFilterForm(FilterForm):
 
 class VoucherFilterForm(FilterForm):
     orders = {
+        'code': 'code',
+        '-code': '-code',
+        'redeemed': 'redeemed',
+        '-redeemed': '-redeemed',
+        'valid_until': 'valid_until',
+        '-valid_until': '-valid_until',
+        'tag': 'tag',
+        '-tag': '-tag',
+        'item': (
+            'seat__sorting_rank',
+            'item__category__position',
+            'item__category',
+            'item__position',
+            'item__variation__position',
+            'quota__name',
+        ),
+        'subevent': 'subevent__date_from',
+        '-subevent': '-subevent__date_from',
+        '-item': (
+            '-seat__sorting_rank',
+            '-item__category__position',
+            '-item__category',
+            '-item__position',
+            '-item__variation__position',
+            '-quota__name',
+        )
     }
     status = forms.ChoiceField(
         label=_('Status'),
@@ -987,7 +1013,15 @@ class VoucherFilterForm(FilterForm):
             qs = qs.filter(subevent_id=fdata.get('subevent').pk)
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.get_order_by())
+            ob = self.orders[fdata.get('ordering')]
+            if isinstance(ob, dict):
+                ob = dict(ob)
+                o = ob.pop('_order')
+                qs = qs.annotate(**ob).order_by(o)
+            elif isinstance(ob, (list, tuple)):
+                qs = qs.order_by(*ob)
+            else:
+                qs = qs.order_by(ob)
 
         return qs
 

@@ -95,13 +95,37 @@
                                 <input type="checkbox" data-toggle-table />
                             {% endif %}
                         </th>
-                        <th>{% trans "Voucher code" %}</th>
-                        <th>{% trans "Redemptions" %}</th>
-                        <th>{% trans "Expiry" %}</th>
-                        <th>{% trans "Tag" %}</th>
-                        <th>{% trans "Product" %}</th>
+                        <th>
+                            {% trans "Voucher code" %}
+                            <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'code' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th>
+                            {% trans "Redemptions" %}
+                            <a href="?{% url_replace request 'ordering' '-redeemed' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'redeemed' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th>
+                            {% trans "Expiry" %}
+                            <a href="?{% url_replace request 'ordering' '-valid_until' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'valid_until' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th>
+                            {% trans "Tag" %}
+                            <a href="?{% url_replace request 'ordering' '-tag' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'tag' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th>
+                            {% trans "Product" %}
+                            <a href="?{% url_replace request 'ordering' '-item' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'item' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
                         {% if request.event.has_subevents %}
-                            <th>{% trans "Date" context "subevent" %}</th>
+                            <th>
+                                {% trans "Date" context "subevent" %}
+                                <a href="?{% url_replace request 'ordering' '-subevent' %}"><i class="fa fa-caret-down"></i></a>
+                                <a href="?{% url_replace request 'ordering' 'subevent' %}"><i class="fa fa-caret-up"></i></a>
+                            </th>
                         {% endif %}
                         <th></th>
                     </tr>
