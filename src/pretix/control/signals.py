@@ -301,3 +301,14 @@ oauth_application_registered = Signal(
 """
 This signal will be called whenever a user registers a new OAuth application.
 """
+
+order_search_filter_q = Signal(
+    providing_args=["query"]
+)
+"""
+This signal will be called whenever a free-text order search is performed. You are expected to return one
+Q object that will be OR-ed with existing search queries. As order search exists on a global level as well,
+this is not an Event signal and will be called even if your plugin is not active. ``sender`` will contain the
+event if the search is performed within an event, and ``None`` otherwise. The search query will be passed as
+``query``.
+"""

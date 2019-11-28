@@ -18,6 +18,7 @@ from pretix.base.models import (
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
+from pretix.control.signals import order_search_filter_q
 from pretix.helpers.database import FixedOrderBy, rolledback_transaction
 from pretix.helpers.i18n import i18ncomp
 
@@ -139,7 +140,7 @@ class OrderFilterForm(FilterForm):
                 )
             ).values('id')
 
-            qs = qs.annotate(has_pos=Exists(matching_positions)).filter(
+            mainq = (
                 code
                 | Q(email__icontains=u)
                 | Q(invoice_address__name_cached__icontains=u)
@@ -147,6 +148,11 @@ class OrderFilterForm(FilterForm):
                 | Q(pk__in=matching_invoices)
                 | Q(comment__icontains=u)
                 | Q(has_pos=True)
+            )
+            for recv, q in order_search_filter_q.send(sender=getattr(self, 'event', None), query=u):
+                mainq = mainq | q
+            qs = qs.annotate(has_pos=Exists(matching_positions)).filter(
+                mainq
             )
 
         if fdata.get('status'):
