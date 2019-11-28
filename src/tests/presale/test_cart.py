@@ -31,7 +31,7 @@ class FoobarSalesChannel(SalesChannel):
     identifier = "bar"
     verbose_name = "Foobar"
     icon = "home"
-    testmode_supported = True
+    testmode_supported = False
     unlimited_items_per_order = True
 
 
