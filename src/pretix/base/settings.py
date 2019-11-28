@@ -672,6 +672,13 @@ Your {event} team"""))
         'default': '',
         'type': LazyI18nString
     },
+    'checkout_email_helptext': {
+        'default': LazyI18nString.from_gettext(ugettext_noop(
+            'Make sure to enter a valid email address. We will send you an order '
+            'confirmation including a link that you need to access your order later.'
+        )),
+        'type': LazyI18nString
+    },
     'organizer_info_text': {
         'default': '',
         'type': LazyI18nString

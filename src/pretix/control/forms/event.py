@@ -502,6 +502,12 @@ class EventSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea
     )
+    checkout_email_helptext = I18nFormField(
+        label=_("Help text of the email field"),
+        required=False,
+        widget_kwargs={'attrs': {'rows': '2'}},
+        widget=I18nTextarea
+    )
     presale_has_ended_text = I18nFormField(
         label=_("End of presale text"),
         required=False,

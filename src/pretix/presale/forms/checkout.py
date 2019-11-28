@@ -26,8 +26,6 @@ from pretix.presale.signals import contact_form_fields
 class ContactForm(forms.Form):
     required_css_class = 'required'
     email = forms.EmailField(label=_('E-mail'),
-                             help_text=_('Make sure to enter a valid email address. We will send you an order '
-                                         'confirmation including a link that you need to access your order later.'),
                              validators=[EmailBanlistValidator()],
                              widget=forms.EmailInput(attrs={'autocomplete': 'section-contact email'})
                              )
@@ -49,6 +47,7 @@ class ContactForm(forms.Form):
             # is an autofocus field. Who would have thought… See e.g. here:
             # https://floatboxjs.com/forum/topic.php?post=8440&usebb_sid=2e116486a9ec6b7070e045aea8cded5b#post8440
             self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
+        self.fields['email'].help_text = self.event.settings.checkout_email_helptext
 
         responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in responses:
