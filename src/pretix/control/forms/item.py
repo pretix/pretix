@@ -425,7 +425,7 @@ class ItemUpdateForm(I18nModelForm):
                     'event': self.event.slug,
                     'organizer': self.event.organizer.slug,
                 }),
-                'data-placeholder': _('Quota')
+                'data-placeholder': _('Shown independently of other products')
             }
         )
         self.fields['hidden_if_available'].widget.choices = self.fields['hidden_if_available'].choices
