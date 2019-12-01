@@ -24,6 +24,15 @@
             {% endblocktrans %}
         </div>
     {% endif %}
+    {% if object.hidden_if_available and object.hidden_if_available.availability.0 == 100 %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+                This product is currently not being shown since you configured below that it should only be visible
+                if a certain other quota is already sold out.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
+
     {% block inside %}
     {% endblock %}
 {% endblock %}
