@@ -97,8 +97,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 ))
             if len(ql) == 2:
                 opq = opq.filter(ql[0] | ql[1])
-            else:
+            elif ql:
                 opq = opq.filter(ql[0])
+            else:
+                opq = opq.none()
 
         if form.cleaned_data.get('subevent'):
             opq = opq.filter(subevent=form.cleaned_data.get('subevent'))
