@@ -16,6 +16,7 @@ from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, QuestionAnswer,
 )
 from pretix.base.services.cart import get_fees
+from pretix.helpers.cookies import set_cookie_without_samesite
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import question_form_fields
 
@@ -305,9 +306,15 @@ def iframe_entry_view_wrapper(view_func):
             with language(locale):
                 resp = view_func(request, *args, **kwargs)
             max_age = 10 * 365 * 24 * 60 * 60
-            resp.set_cookie(settings.LANGUAGE_COOKIE_NAME, locale, max_age=max_age,
-                            expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime('%a, %d-%b-%Y %H:%M:%S GMT'),
-                            domain=settings.SESSION_COOKIE_DOMAIN)
+            set_cookie_without_samesite(
+                request,
+                resp,
+                settings.LANGUAGE_COOKIE_NAME,
+                locale,
+                max_age=max_age,
+                expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime('%a, %d-%b-%Y %H:%M:%S GMT'),
+                domain=settings.SESSION_COOKIE_DOMAIN
+            )
             return resp
 
         resp = view_func(request, *args, **kwargs)
