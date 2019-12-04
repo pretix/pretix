@@ -99,7 +99,7 @@ setup(
         'django-filter==2.1.*',
         'django-scopes==1.1.*',
         'reportlab==3.5.*',
-        'Pillow==5.*',
+        'Pillow==6.*',
         'PyPDF2==1.26.*',
         'django-libsass',
         'libsass',

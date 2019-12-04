@@ -12,7 +12,7 @@ django-filter==2.1.*
 django-scopes==1.1.*
 reportlab==3.5.*
 PyPDF2==1.26.*
-Pillow==5.*
+Pillow==6.*
 django-libsass
 libsass
 django-otp==0.5.*
