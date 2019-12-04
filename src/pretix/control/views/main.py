@@ -232,7 +232,7 @@ class EventWizard(SafeSessionWizardView):
                 if basics_data["team"] is not None:
                     t = basics_data["team"]
                     t.limit_events.add(event)
-                elif event.organizer.settings.get("event_team_provisioning", "True"):
+                elif event.organizer.settings.event_team_provisioning:
                     t = Team.objects.create(
                         organizer=event.organizer, name=_('Team {event}').format(event=event.name),
                         can_change_event_settings=True, can_change_items=True,
