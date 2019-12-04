@@ -14,7 +14,10 @@ import requests
 from bs4 import BeautifulSoup
 from celery import chain
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import (
+    EmailMultiAlternatives, SafeMIMEMultipart, get_connection,
+)
+from django.core.mail.message import SafeMIMEText
 from django.template.loader import get_template
 from django.utils.translation import pgettext, ugettext as _
 from django_scopes import scope, scopes_disabled
@@ -232,16 +235,32 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         chain(*task_chain).apply_async()
 
 
+class CustomEmail(EmailMultiAlternatives):
+    def _create_mime_attachment(self, content, mimetype):
+        """
+        Convert the content, mimetype pair into a MIME attachment object.
+
+        If the mimetype is message/rfc822, content may be an
+        email.Message or EmailMessage object, as well as a str.
+        """
+        basetype, subtype = mimetype.split('/', 1)
+        if basetype == 'multipart' and isinstance(content, SafeMIMEMultipart):
+            return content
+        return super()._create_mime_attachment(content, mimetype)
+
+
 @app.task(base=TransactionAwareTask, bind=True)
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int=None, position: int=None, headers: dict=None, bcc: List[str]=None,
                    invoices: List[int]=None, order: int=None, attach_tickets=False, user=None,
                    attach_ical=False) -> bool:
-    email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
+    email = CustomEmail(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
+        html_message = SafeMIMEMultipart(_subtype='related', encoding=settings.DEFAULT_CHARSET)
         html_with_cid, cid_images = replace_images_with_cid_paths(html)
-        email = attach_cid_images(email, cid_images, verify_ssl=True)
-        email.attach_alternative(html_with_cid, "text/html")
+        html_message.attach(SafeMIMEText(html_with_cid, 'html', settings.DEFAULT_CHARSET))
+        attach_cid_images(html_message, cid_images, verify_ssl=True)
+        email.attach_alternative(html_message, "multipart/related")
 
     if user:
         user = User.objects.get(pk=user)
@@ -408,8 +427,6 @@ def attach_cid_images(msg, cid_images, verify_ssl=True):
                     msg.attach(mime_image)
             except:
                 logger.exception("ERROR attaching CID image %s[%s]" % (cid, image))
-
-    return msg
 
 
 def encoder_linelength(msg):
