@@ -28,7 +28,7 @@ def parse(data, hint):
             resrow['amount'] = re.sub('[^0-9,+.-]', '', resrow['amount'])
         if hint.get('date') is not None:
             resrow['date'] = row[int(hint.get('date'))].strip()
-        if len(resrow['amount']) == 0 or 'amount' not in resrow or resrow['date'] == '':
+        if len(resrow['amount']) == 0 or 'amount' not in resrow or resrow.get('date') == '':
             # This is probably a headline or something other special.
             continue
         if resrow.get('reference') or resrow.get('payer'):
