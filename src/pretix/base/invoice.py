@@ -467,7 +467,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.invoice_to_vat_id:
             story.append(Paragraph(
-                pgettext('invoice', 'Customer VAT ID') + ':<br />' +
+                pgettext('invoice', 'Customer VAT ID') + ': ' +
                 bleach.clean(self.invoice.invoice_to_vat_id, tags=[]).replace("\n", "<br />\n"),
                 self.stylesheet['Normal']
             ))
