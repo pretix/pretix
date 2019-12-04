@@ -744,5 +744,7 @@ $(function () {
 });
 
 $(document).ready(function () {
-    $('.form-horizontal').areYouSure( {'message': gettext('You have unsaved changes!')});
+   $('form[method=post]').filter(function () {
+       return $(this).find("button:not([type=button]), input[type=submit]").length > 0;
+   }).areYouSure( {'message': gettext('You have unsaved changes!')});
 });
