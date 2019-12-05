@@ -10,7 +10,7 @@ django-compressor==2.2.*
 django-hierarkey==1.0.*,>=1.0.3
 django-filter==2.1.*
 django-scopes==1.1.*
-reportlab==3.5.*
+reportlab>=3.5.18*
 PyPDF2==1.26.*
 Pillow==6.*
 django-libsass

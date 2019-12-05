@@ -98,7 +98,7 @@ setup(
         'django-hierarkey==1.0.*,>=1.0.2',
         'django-filter==2.1.*',
         'django-scopes==1.1.*',
-        'reportlab==3.5.*',
+        'reportlab>=3.5.18',
         'Pillow==6.*',
         'PyPDF2==1.26.*',
         'django-libsass',
