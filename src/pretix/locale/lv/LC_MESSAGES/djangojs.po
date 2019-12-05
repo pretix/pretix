@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-30 16:23+0000\n"
+"POT-Creation-Date: 2019-12-05 13:34+0000\n"
 "PO-Revision-Date: 2019-11-13 06:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
-"Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/lv/>\n"
+"Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/lv/>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -98,7 +98,9 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:125
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
-msgid "The request took to long. Please try again."
+#, fuzzy
+#| msgid "The request took to long. Please try again."
+msgid "The request took too long. Please try again."
 msgstr "Mēģinājums izpildīt pieprasījumu ir ieildzis. Lūdzu, mēģiniet vēlreiz."
 
 #: pretix/static/pretixbase/js/asynctask.js:150
@@ -179,7 +181,8 @@ msgstr "Saglabāšana neizdevās."
 #: pretix/static/pretixcontrol/js/ui/editor.js:736
 #: pretix/static/pretixcontrol/js/ui/editor.js:774
 msgid "Error while uploading your PDF file, please try again."
-msgstr "Radusies kļūda augšupielādējot jūsu PDF failu, lūdzu, mēģiniet vēlreiz."
+msgstr ""
+"Radusies kļūda augšupielādējot jūsu PDF failu, lūdzu, mēģiniet vēlreiz."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:759
 msgid "Do you really want to leave the editor without saving your changes?"
@@ -233,6 +236,10 @@ msgstr "Izmantojiet citu nosaukumu iekšēji"
 msgid "Click to close"
 msgstr "Noklikšķiniet, lai aizvērtu"
 
+#: pretix/static/pretixcontrol/js/ui/main.js:749
+msgid "You have unsaved changes!"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
 msgid "Calculating default price…"
 msgstr "Aprēķina pamata cenu…"
@@ -275,7 +282,7 @@ msgstr[0] "Preces jūsu grozā ir rezervētas nulle minūtes."
 msgstr[1] "Preces jūsu grozā ir rezervētas uz vienu minūti."
 msgstr[2] "Preces jūsu grozā ir rezervētas uz {num} minūtēm."
 
-#: pretix/static/pretixpresale/js/ui/main.js:213
+#: pretix/static/pretixpresale/js/ui/main.js:210
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
 
@@ -359,7 +366,8 @@ msgstr "Biļešu veikals nevarēja ielādēties."
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "Iepirkumu grozu nebija iespējams izveidot. Lūdzu mēģiniet vēlreiz vēlāk"
+msgstr ""
+"Iepirkumu grozu nebija iespējams izveidot. Lūdzu mēģiniet vēlreiz vēlāk"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
@@ -382,145 +390,144 @@ msgstr "Turpināt veikt pirkumu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
-msgid ""
-"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
-"ticketing powered by pretix</a>"
-msgstr ""
-"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">pretix "
-"atbalstīta pasākuma biļešu pārdošana </a>"
-
-#: pretix/static/pretixpresale/js/widget/widget.js:37
-msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Izmantot kuponu"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Izmantot"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:39
+#: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Kupona kods"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:40
+#: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Close"
 msgstr "Aizvērt"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Continue"
 msgstr "Turpināt"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "See variations"
 msgstr "Apskatīt iespējas"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "Izvēlēties citu pasākumu"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "Izvēlēties citu datumu"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:45
+#: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Back"
 msgstr "Atpakaļ"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Next month"
 msgstr "Nākamais mēnesis"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Previous month"
 msgstr "Iepriekšējais mēnesis"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:48
+#: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "Atvērt sēdvietu izvēlni"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js:48
 msgid "Mo"
 msgstr "Pi"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:49
 msgid "Tu"
 msgstr "Ot"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "We"
 msgstr "Tr"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:53
+#: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Th"
 msgstr "Ce"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Fr"
 msgstr "Pi"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Sa"
 msgstr "Se"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:56
+#: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "Su"
 msgstr "Sv"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "January"
 msgstr "Janvāris"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "February"
 msgstr "Februāris"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "March"
 msgstr "Marts"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "April"
 msgstr "Aprīlis"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "May"
 msgstr "Maijs"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "June"
 msgstr "Jūnijs"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "July"
 msgstr "Jūlijs"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "August"
 msgstr "Augusts"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "September"
 msgstr "Septembris"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "October"
 msgstr "Oktobris"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "November"
 msgstr "Novembris"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "December"
 msgstr "Decembris"
+
+#~ msgctxt "widget"
+#~ msgid ""
+#~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
+#~ "ticketing powered by pretix</a>"
+#~ msgstr ""
+#~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">pretix "
+#~ "atbalstīta pasākuma biļešu pārdošana </a>"

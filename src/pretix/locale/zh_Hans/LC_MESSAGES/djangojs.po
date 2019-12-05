@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-30 16:23+0000\n"
+"POT-Creation-Date: 2019-12-05 13:34+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -96,7 +96,9 @@ msgstr "我们目前无法连接到服务器，但我们一直在尝试。最后
 
 #: pretix/static/pretixbase/js/asynctask.js:125
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
-msgid "The request took to long. Please try again."
+#, fuzzy
+#| msgid "The request took to long. Please try again."
+msgid "The request took too long. Please try again."
 msgstr "服务器请求超时。请再试一次。"
 
 #: pretix/static/pretixbase/js/asynctask.js:150
@@ -222,6 +224,10 @@ msgstr "在内部使用一个不同的名称"
 msgid "Click to close"
 msgstr "点此关闭"
 
+#: pretix/static/pretixcontrol/js/ui/main.js:749
+msgid "You have unsaved changes!"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
 #, fuzzy
 #| msgid "Contacting Stripe …"
@@ -262,7 +268,7 @@ msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "购物车中的物品将为您保留{num}分钟。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:213
+#: pretix/static/pretixpresale/js/ui/main.js:210
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
@@ -369,49 +375,40 @@ msgstr "继续结账"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
-msgid ""
-"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
-"ticketing powered by pretix</a>"
-msgstr ""
-"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">票务由pretix"
-"驱动</a>"
-
-#: pretix/static/pretixpresale/js/widget/widget.js:37
-msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "兑换优惠券"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Redeem"
 msgstr "兑换"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:39
+#: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "优惠券代码"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:40
+#: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Close"
 msgstr "关闭"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Continue"
 msgstr "继续"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "See variations"
 msgstr "查看变化"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "选择一个不同的活动"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/js/widget/widget.js:42
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Choose a different event"
@@ -419,101 +416,109 @@ msgctxt "widget"
 msgid "Choose a different date"
 msgstr "选择一个不同的活动"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:45
+#: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Back"
 msgstr "后退"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Next month"
 msgstr "下个月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Previous month"
 msgstr "上个月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:48
+#: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js:48
 msgid "Mo"
 msgstr "周一"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:49
 msgid "Tu"
 msgstr "周二"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "We"
 msgstr "周三"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:53
+#: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Th"
 msgstr "周四"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Fr"
 msgstr "周五"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Sa"
 msgstr "周六"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:56
+#: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "Su"
 msgstr "周天"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "January"
 msgstr "一月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "February"
 msgstr "二月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "March"
 msgstr "三月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "April"
 msgstr "四月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "May"
 msgstr "五月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "June"
 msgstr "六月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "July"
 msgstr "七月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "August"
 msgstr "八月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "September"
 msgstr "九月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "October"
 msgstr "十月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "November"
 msgstr "十一月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "December"
 msgstr "十二月"
+
+#~ msgctxt "widget"
+#~ msgid ""
+#~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
+#~ "ticketing powered by pretix</a>"
+#~ msgstr ""
+#~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">票务由"
+#~ "pretix驱动</a>"
 
 #~ msgid "Ja"
 #~ msgstr "是"
