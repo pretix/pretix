@@ -48,7 +48,7 @@ from pretix.base.services.orders import (
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
-    order_modified, order_placed, register_ticket_outputs,
+    order_modified, order_paid, order_placed, register_ticket_outputs,
 )
 from pretix.base.templatetags.money import money_filter
 
@@ -465,6 +465,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         with language(order.locale):
             order_placed.send(self.request.event, order=order)
+            if order.status == Order.STATUS_PAID:
+                order_paid.send(self.request.event, order=order)
 
             gen_invoice = invoice_qualified(order) and (
                 (order.event.settings.get('invoice_generate') == 'True') or
