@@ -368,6 +368,7 @@ class Event(EventMixin, LoggedModel):
         This will be called after event creation, but only if the event was not created by copying an existing one.
         This way, we can use this to introduce new default settings to pretix that do not affect existing events.
         """
+        self.settings.invoice_renderer = 'modern1'
 
     @property
     def social_image(self):
