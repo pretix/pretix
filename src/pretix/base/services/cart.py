@@ -15,7 +15,7 @@ from django_scopes import scopes_disabled
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Item, ItemBundle, ItemVariation, Seat,
+    CartPosition, Event, InvoiceAddress, Item, ItemVariation, Seat,
     SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
@@ -364,10 +364,10 @@ class CartManager:
             cp.item.requires_seat = cp.requires_seat
 
             if cp.is_bundled:
-                try:
-                    bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
+                bundle = cp.addon_to.item.bundles.filter(bundled_item=cp.item, bundled_variation=cp.variation).first()
+                if bundle:
                     price = bundle.designated_price or 0
-                except ItemBundle.DoesNotExist:
+                else:
                     price = cp.price
 
                 changed_prices[cp.pk] = price
