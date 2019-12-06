@@ -369,6 +369,7 @@ class Event(EventMixin, LoggedModel):
         This way, we can use this to introduce new default settings to pretix that do not affect existing events.
         """
         self.settings.invoice_renderer = 'modern1'
+        self.settings.invoice_include_expire_date = True
 
     @property
     def social_image(self):

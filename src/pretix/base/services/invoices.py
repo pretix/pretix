@@ -13,6 +13,7 @@ from django.db import transaction
 from django.db.models import Count
 from django.dispatch import receiver
 from django.utils import timezone
+from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
 from django_countries.fields import Country
@@ -52,11 +53,17 @@ def build_invoice(invoice: Invoice) -> Invoice:
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
         if lp and lp.payment_provider:
             if 'payment' in inspect.signature(lp.payment_provider.render_invoice_text).parameters:
-                payment = lp.payment_provider.render_invoice_text(invoice.order, lp)
+                payment = str(lp.payment_provider.render_invoice_text(invoice.order, lp))
             else:
-                payment = lp.payment_provider.render_invoice_text(invoice.order)
+                payment = str(lp.payment_provider.render_invoice_text(invoice.order))
         else:
             payment = ""
+        if invoice.event.settings.invoice_include_expire_date and invoice.order.status == Order.STATUS_PENDING:
+            if payment:
+                payment += "<br />"
+            payment += pgettext("invoice", "Please complete your payment before {expire_date}.").format(
+                expire_date=date_format(invoice.order.expires, "SHORT_DATE_FORMAT")
+            )
 
         invoice.introductory_text = str(introductory).replace('\n', '<br />')
         invoice.additional_text = str(additional).replace('\n', '<br />')

@@ -870,6 +870,11 @@ class InvoiceSettingsForm(SettingsForm):
         label=_("Show attendee names on invoices"),
         required=False
     )
+    invoice_include_expire_date = forms.BooleanField(
+        label=_("Show expiration date of order"),
+        help_text=_("The expiration date will not be shown if the invoice is generated after the order is paid."),
+        required=False
+    )
     invoice_email_attachment = forms.BooleanField(
         label=_("Attach invoices to emails"),
         help_text=_("If invoices are automatically generated for all orders, they will be attached to the order "

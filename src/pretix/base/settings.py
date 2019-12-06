@@ -85,6 +85,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool,
     },
+    'invoice_include_expire_date': {
+        'default': 'False',
+        'type': bool,
+    },
     'invoice_numbers_consecutive': {
         'default': 'True',
         'type': bool,
