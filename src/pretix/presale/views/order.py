@@ -187,6 +187,11 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             )
         )
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and can_generate_invoice
+        if ctx['can_generate_invoice']:
+            if not self.order.payments.exclude(
+                    state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
+            ).exists() and self.order.status == Order.STATUS_PENDING:
+                ctx['generate_invoice_requires'] = 'payment'
         ctx['url'] = build_absolute_uri(
             self.request.event, 'presale:event.order', kwargs={
                 'order': self.order.code,
@@ -603,6 +608,10 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
                     self.request.event.settings.get('invoice_generate') == 'paid'
                     and self.order.status == Order.STATUS_PAID
                 )
+            ) and not (
+                not self.order.payments.exclude(
+                    state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
+                ).exists() and self.order.status == Order.STATUS_PENDING
             )
         )
         if not can_generate_invoice or not invoice_qualified(self.order):

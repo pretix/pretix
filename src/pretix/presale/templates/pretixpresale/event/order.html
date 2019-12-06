@@ -182,13 +182,19 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                        <form class="form-inline helper-display-inline" method="post"
-                                action="{% eventurl event "presale:event.order.geninvoice" order=order.code secret=order.secret %}">
-                            {% csrf_token %}
-                            <button class="btn btn-default">
-                                {% trans "Request invoice" %}
-                            </button>
-                        </form>
+                        {% if generate_invoice_requires == "payment" %}
+                            <div class="alert alert-info">
+                                {% trans "You need to select a payment method above before you can request an invoice." %}
+                            </div>
+                        {% else %}
+                            <form class="form-inline helper-display-inline" method="post"
+                                    action="{% eventurl event "presale:event.order.geninvoice" order=order.code secret=order.secret %}">
+                                {% csrf_token %}
+                                <button class="btn btn-default">
+                                    {% trans "Request invoice" %}
+                                </button>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -446,8 +446,20 @@ class OrdersTest(BaseOrdersTest):
             {})
         assert 404 == response.status_code
 
+    def test_invoice_create_require_payment(self):
+        self.event.settings.set('invoice_generate', 'user')
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {}, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        with scopes_disabled():
+            assert not self.order.invoices.exists()
+
     def test_invoice_create_ok(self):
         self.event.settings.set('invoice_generate', 'user')
+        with scopes_disabled():
+            self.order.payments.create(provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                                       amount=self.order.total)
         response = self.client.post(
             '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {}, follow=True)
