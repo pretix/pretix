@@ -267,17 +267,19 @@ class EventWizard(SafeSessionWizardView):
                 event.copy_data_from(from_event)
             elif self.clone_from:
                 event.copy_data_from(self.clone_from)
-            elif event.has_subevents:
-                event.checkin_lists.create(
-                    name=str(se),
-                    all_products=True,
-                    subevent=se
-                )
             else:
-                event.checkin_lists.create(
-                    name=_('Default'),
-                    all_products=True
-                )
+                if event.has_subevents:
+                    event.checkin_lists.create(
+                        name=str(se),
+                        all_products=True,
+                        subevent=se
+                    )
+                else:
+                    self.checkin_lists.create(
+                        name=_('Default'),
+                        all_products=True
+                    )
+                event.set_defaults()
 
             if basics_data['tax_rate']:
                 if not event.settings.tax_rate_default or event.settings.tax_rate_default.rate != basics_data['tax_rate']:

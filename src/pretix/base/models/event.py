@@ -363,6 +363,12 @@ class Event(EventMixin, LoggedModel):
     def __str__(self):
         return str(self.name)
 
+    def set_defaults(self):
+        """
+        This will be called after event creation, but only if the event was not created by copying an existing one.
+        This way, we can use this to introduce new default settings to pretix that do not affect existing events.
+        """
+
     @property
     def social_image(self):
         from pretix.multidomain.urlreverse import build_absolute_uri
