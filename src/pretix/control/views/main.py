@@ -275,7 +275,7 @@ class EventWizard(SafeSessionWizardView):
                         subevent=se
                     )
                 else:
-                    self.checkin_lists.create(
+                    event.checkin_lists.create(
                         name=_('Default'),
                         all_products=True
                     )
