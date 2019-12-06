@@ -2054,6 +2054,13 @@ class InvoiceAddress(models.Model):
         super().save(**kwargs)
 
     @property
+    def is_empty(self):
+        return (
+            not self.name_cached and not self.company and not self.street and not self.zipcode and not self.city
+            and not self.internal_reference and not self.beneficiary
+        )
+
+    @property
     def state_name(self):
         sd = pycountry.subdivisions.get(code='{}-{}'.format(self.country, self.state))
         if sd:

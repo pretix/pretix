@@ -176,17 +176,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
         ctx['invoices'] = list(self.order.invoices.all())
-        can_generate_invoice = (
-            self.order.sales_channel in self.request.event.settings.get('invoice_generate_sales_channels')
-            and (
-                self.request.event.settings.get('invoice_generate') in ('user', 'True')
-                or (
-                    self.request.event.settings.get('invoice_generate') == 'paid'
-                    and self.order.status == Order.STATUS_PAID
-                )
-            )
-        )
-        ctx['can_generate_invoice'] = invoice_qualified(self.order) and can_generate_invoice
+        ctx['can_generate_invoice'] = can_generate_invoice(self.request.event, self.order, True)
         if ctx['can_generate_invoice']:
             if not self.order.payments.exclude(
                     state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
@@ -590,6 +580,28 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         })
 
 
+def can_generate_invoice(event, order, ignore_payments=False):
+    v = (
+        order.sales_channel in event.settings.get('invoice_generate_sales_channels')
+        and (
+            event.settings.get('invoice_generate') in ('user', 'True')
+            or (
+                event.settings.get('invoice_generate') == 'paid'
+                and order.status == Order.STATUS_PAID
+            )
+        ) and (
+            invoice_qualified(order)
+        )
+    )
+    if not ignore_payments:
+        v = v and not (
+            not order.payments.exclude(
+                state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
+            ).exists() and order.status == Order.STATUS_PENDING
+        )
+    return v
+
+
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
 
@@ -600,21 +612,7 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        can_generate_invoice = (
-            self.order.sales_channel in self.request.event.settings.get('invoice_generate_sales_channels')
-            and (
-                self.request.event.settings.get('invoice_generate') in ('user', 'True')
-                or (
-                    self.request.event.settings.get('invoice_generate') == 'paid'
-                    and self.order.status == Order.STATUS_PAID
-                )
-            ) and not (
-                not self.order.payments.exclude(
-                    state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
-                ).exists() and self.order.status == Order.STATUS_PENDING
-            )
-        )
-        if not can_generate_invoice or not invoice_qualified(self.order):
+        if not can_generate_invoice(self.request.event, self.order):
             messages.error(self.request, _('You cannot generate an invoice for this order.'))
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))
@@ -632,6 +630,12 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
     form_class = QuestionsForm
     invoice_form_class = InvoiceAddressForm
     template_name = "pretixpresale/event/order_modify.html"
+
+    @cached_property
+    def positions(self):
+        if self.request.GET.get('generate_invoice') == 'true':
+            return []
+        return super().positions
 
     def post(self, request, *args, **kwargs):
         failed = not self.save() or not self.invoice_form.is_valid()
@@ -651,11 +655,17 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
             } for f in self.forms]
         })
         order_modified.send(sender=self.request.event, order=self.order)
-        if self.invoice_form.has_changed():
-            messages.success(self.request, _('Your invoice address has been updated. Please contact us if you need us '
-                                             'to regenerate your invoice.'))
-        else:
-            messages.success(self.request, _('Your changes have been saved.'))
+        if request.GET.get('generate_invoice') == 'true':
+            if not can_generate_invoice(self.request.event, self.order):
+                messages.error(self.request, _('You cannot generate an invoice for this order.'))
+            elif self.order.invoices.exists():
+                messages.error(self.request, _('An invoice for this order already exists.'))
+            else:
+                i = generate_invoice(self.order)
+                self.order.log_action('pretix.event.order.invoice.generated', data={
+                    'invoice': i.pk
+                })
+                messages.success(self.request, _('The invoice has been generated.'))
 
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
         CachedTicket.objects.filter(order_position__order=self.order).delete()

@@ -186,6 +186,11 @@
                             <div class="alert alert-info">
                                 {% trans "You need to select a payment method above before you can request an invoice." %}
                             </div>
+                        {% elif invoice_address_asked and order.invoice_address.is_empty %}
+                            <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}?generate_invoice=true"
+                                class="btn btn-default">
+                                {% trans "Request invoice" %}
+                            </a>
                         {% else %}
                             <form class="form-inline helper-display-inline" method="post"
                                     action="{% eventurl event "presale:event.order.geninvoice" order=order.code secret=order.secret %}">
