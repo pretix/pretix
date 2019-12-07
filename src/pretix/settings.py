@@ -401,19 +401,20 @@ ALL_LANGUAGES = [
     ('en', _('English')),
     ('de', _('German')),
     ('de-informal', _('German (informal)')),
+    ('ar', _('Arabic')),
+    ('zh-hans', _('Chinese (simplified)')),
+    ('da', _('Danish')),
     ('nl', _('Dutch')),
     ('nl-informal', _('Dutch (informal)')),
-    ('da', _('Danish')),
     ('fr', _('French')),
+    ('el', _('Greek')),
+    ('it', _('Italian')),
+    ('lv', _('Latvian')),
+    ('pl', _('Polish')),
     ('pt-br', _('Portuguese (Brazil)')),
+    ('ru', _('Russian')),
     ('es', _('Spanish')),
     ('tr', _('Turkish')),
-    ('pl', _('Polish')),
-    ('it', _('Italian')),
-    ('ru', _('Russian')),
-    ('lv', _('Latvian')),
-    ('zh-hans', _('Chinese (simplified)')),
-    ('el', _('Greek'))
 ]
 LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
