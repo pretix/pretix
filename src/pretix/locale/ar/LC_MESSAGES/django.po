@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-12-07 12:23+0000\n"
+"PO-Revision-Date: 2019-12-07 13:20+0000\n"
 "Last-Translator: saad91 <saad.almoosa@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -4978,13 +4978,13 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"تم إلغاء طلبك {كود} عن {الأحداث}.\n"
+"تم إلغاء طلبك {code} عن {event}.\n"
 "\n"
 "يمكنك عرض تفاصيل طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:524
 #, python-brace-format
@@ -5005,17 +5005,17 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"وافقنا طلبك {} الحدث وسوف نكون سعداء أن أرحب بكم\n"
+"وافقنا طلبك {event} وسوف نكون سعداء أن أرحب بكم\n"
 "في هذا الحدث.\n"
 "\n"
-"الرجاء الاستمرار عن طريق دفع لطلبك قبل {EXPIRE_DATE}.\n"
+"الرجاء الاستمرار عن طريق دفع لطلبك قبل {expire_date}.\n"
 "\n"
 "يمكنك تحديد طريقة الدفع وإجراء الدفع هنا:\n"
 "\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:540
 #, python-brace-format
@@ -5035,16 +5035,16 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"للأسف، نحن رفض طلب طلبك {} الحدث.\n"
+"للأسف، نحن رفض طلب طلبك {event}.\n"
 "\n"
-"{تعليق}\n"
+"{comment}\n"
 "\n"
 "ويمكنك الاطلاع على تفاصيل طلبك هنا:\n"
 "\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:555
 #, python-brace-format
@@ -5060,10 +5060,10 @@ msgstr ""
 "مرحبا،\n"
 "\n"
 "يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:573
 #, python-brace-format
@@ -5080,13 +5080,13 @@ msgid ""
 msgstr ""
 "مرحبا {attendee_name}،\n"
 "\n"
-"أنت مسجل ل{} الحدث.\n"
+"أنت مسجل ل{event}.\n"
 "\n"
 "إذا كنت لم تفعل ذلك بالفعل، يمكنك تحميل تذكرتك هنا:\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:585
 #, python-brace-format
@@ -5103,13 +5103,13 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"اشتريت تذكرة ل{} الحدث.\n"
+"اشتريت تذكرة ل{event}.\n"
 "\n"
 "إذا كنت لم تفعل ذلك بالفعل، يمكنك تحميل تذكرتك هنا:\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:677
 msgid ""
@@ -5502,19 +5502,19 @@ msgstr "يتم إرسال رسائل تذكيرية تحميل"
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
-msgstr "المنتج \"{اسم}\" يصبح متوفرا"
+msgstr "المنتج \"{name}\" يصبح متوفرا"
 
 #: pretix/base/timeline.py:164
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr "المنتج \"{اسم}\" يصبح غير متوفر"
+msgstr "المنتج \"{name}\" يصبح غير متوفر"
 
 #: pretix/base/timeline.py:187
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
-msgstr "مقدم الدفع \"{اسم}\" لم يعد من الممكن اختيار"
+msgstr "مقدم الدفع \"{name}\" لم يعد من الممكن اختيار"
 
 #: pretix/base/validators.py:15
 #, python-format
@@ -6071,7 +6071,7 @@ msgstr ""
 #: pretix/control/forms/event.py:616
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
-msgstr "طلب {} الحقول، العرض مثل {سبيل المثال}"
+msgstr "طلب {fields}، العرض مثل {example}"
 
 #: pretix/control/forms/event.py:622
 msgid "Free text input"
@@ -6501,7 +6501,7 @@ msgstr "التوقيع"
 #: pretix/control/forms/event.py:1034
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
-msgstr "وسيلحق هذا على كل البريد الإلكتروني. النائبة المتاحة: {الحدث}"
+msgstr "وسيلحق هذا على كل البريد الإلكتروني. النائبة المتاحة: {event}"
 
 #: pretix/control/forms/event.py:1039
 msgid "e.g. your contact details"
@@ -6634,7 +6634,7 @@ msgstr "تمكين عادة على المنفذ 465."
 #: pretix/control/forms/vouchers.py:255 pretix/plugins/sendmail/forms.py:49
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "النائبة المتاحة: {قائمة}"
+msgstr "النائبة المتاحة: {list}"
 
 #: pretix/control/forms/event.py:1280
 msgid ""
@@ -6924,7 +6924,7 @@ msgstr "جميع المنتجات"
 #: pretix/control/forms/vouchers.py:100 pretix/control/views/typeahead.py:460
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr "{المنتج} - أي تباين"
+msgstr "{product} - أي تباين"
 
 #: pretix/control/forms/filter.py:351 pretix/control/forms/filter.py:356
 #: pretix/control/forms/filter.py:565 pretix/control/forms/filter.py:570
@@ -7086,7 +7086,7 @@ msgstr "بحث قسيمة"
 #: pretix/control/views/vouchers.py:79
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr "أي منتج في الحصص \"الكوتا {}\""
+msgstr "أي منتج في الحصص \"{quota}\""
 
 #: pretix/control/forms/filter.py:1075
 msgid "Refund status"
@@ -7869,13 +7869,12 @@ msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
 msgstr ""
-"موقف # {بوسيد}: {old_item} ({} old_price) تغيرت إلى {NEW_ITEM} ({} "
-"new_price)."
+"موقف # {posid}: {old_item} ({old_price}) تغيرت إلى {new_item} ({new_price})."
 
 #: pretix/control/logdisplay.py:46
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr "موقف # {} بوسيد: مقعد \"{old_seat}\" تغير إلى \"{new_seat}\"."
+msgstr "موقف # {posid}: مقعد \"{old_seat}\" تغير إلى \"{new_seat}\"."
 
 #: pretix/control/logdisplay.py:54
 #, python-brace-format
@@ -7883,13 +7882,13 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"موقف # {بوسيد}: تاريخ الحدث \"{old_event}\" ({} old_price) تغير الى \""
-"{new_event}\" ({} new_price)."
+"موقف # {posid}: تاريخ الحدث \"{old_event}\" ({old_price}) تغير الى \""
+"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:62
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr "سعر موقف # {} بوسيد تغير من {old_price} إلى {new_price}."
+msgstr "سعر موقف # {posid} تغير من {old_price} إلى {new_price}."
 
 #: pretix/control/logdisplay.py:69
 #, python-brace-format
@@ -7904,37 +7903,36 @@ msgstr ""
 #: pretix/control/logdisplay.py:81
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr "موقف # {بوسيد} ({old_item}، {} old_price) الملغاة."
+msgstr "موقف # {posid} ({old_item}، {old_price}) الملغاة."
 
 #: pretix/control/logdisplay.py:92
 #, python-brace-format
 msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
-msgstr ""
-"موقف # {} بوسيد الانشاء: {البند} ({} السعر) كإضافة إلى موقف # {addon_to}."
+msgstr "موقف # {posid} الانشاء: {item} ({price}) كإضافة إلى موقف # {addon_to}."
 
 #: pretix/control/logdisplay.py:99
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr "موقف # {} بوسيد الانشاء: {البند} ({} السعر)."
+msgstr "موقف # {posid} الانشاء: {item} ({price})."
 
 #: pretix/control/logdisplay.py:105
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr "تم إنشاء سر جديد لموقف # {بوسيد}."
+msgstr "تم إنشاء سر جديد لموقف # {posid}."
 
 #: pretix/control/logdisplay.py:117
 #, python-brace-format
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
-"موقف # {بوسيد} ({old_item}، {} old_price) تنقسم إلى النظام الجديد: {أجل}"
+"موقف #{posid} ({old_item}، {old_price}) تنقسم إلى النظام الجديد: {order}"
 
 #: pretix/control/logdisplay.py:124
 #, python-brace-format
 msgid "This order has been created by splitting the order {order}"
-msgstr "تم إنشاء هذا النظام من خلال تقسيم ترتيب {أجل}"
+msgstr "تم إنشاء هذا النظام من خلال تقسيم ترتيب {order}"
 
 #: pretix/control/logdisplay.py:143 pretix/control/logdisplay.py:145
 #: pretix/control/logdisplay.py:372 pretix/control/logdisplay.py:374
@@ -7946,12 +7944,12 @@ msgstr "(غير معروف)"
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
-msgstr "موقف # {} بوسيد تم إيداعه في {التاريخ والوقت} لقائمة \"{قائمة}\"."
+msgstr "موقف # {posid} تم إيداعه في {datetime} لقائمة \"{list}\"."
 
 #: pretix/control/logdisplay.py:155
 #, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr "وقد تم التحقق من موقف # {} بوسيد في لائحة \"{قائمة}\"."
+msgstr "وقد تم التحقق من موقف # {posid} في لائحة \"{list}\"."
 
 #: pretix/control/logdisplay.py:162
 #, python-brace-format
@@ -7959,8 +7957,8 @@ msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
-"تفحص لموقف # {بوسيد} في {التاريخ والوقت} لقائمة \"{قائمة}\" تم تحميلها حتى "
-"لو تم مسحها بالفعل."
+"تفحص لموقف #{posid} في{datetime} لقائمة \"{list}\" تم تحميلها حتى لو تم "
+"مسحها بالفعل."
 
 #: pretix/control/logdisplay.py:170
 #, python-brace-format
@@ -7968,8 +7966,8 @@ msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
-"موقف # {} بوسيد تم مسحها ضوئيا ورفض لأنه قد تم فحصها من قبل على قائمة \""
-"{قائمة}\"."
+"موقف #{posid} تم مسحها ضوئيا ورفض لأنه قد تم فحصها من قبل على قائمة \"{list}"
+"\"."
 
 #: pretix/control/logdisplay.py:181
 msgid "The event's internal comment has been updated."
@@ -8011,7 +8009,7 @@ msgstr "تم إلغاء هذا الأمر."
 #: pretix/control/logdisplay.py:190
 #, python-brace-format
 msgid "The test mode order {code} has been deleted."
-msgstr "تم حذف أجل وضع الاختبار {كود}."
+msgstr "تم حذف أجل وضع الاختبار {code}."
 
 #: pretix/control/logdisplay.py:191
 msgid "The order has been created."
@@ -8034,7 +8032,7 @@ msgstr "تم رفض الطلب."
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
 msgstr ""
-"تم تغيير عنوان البريد الإلكتروني من \"{OLD_EMAIL}\" إلى \"{NEW_EMAIL}\"."
+"تم تغيير عنوان البريد الإلكتروني من \"{old_email}\" إلى \"{new_email}\"."
 
 #: pretix/control/logdisplay.py:197
 msgid "The order locale has been changed."
@@ -8174,7 +8172,7 @@ msgstr "فشلت الدفع {local_id}."
 #: pretix/control/logdisplay.py:230
 #, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr "لا يمكن أن تكون وضعت النظام كما المدفوعة: {رسالة}"
+msgstr "لا يمكن أن تكون وضعت النظام كما المدفوعة: {message}"
 
 #: pretix/control/logdisplay.py:231
 msgid "The order has been overpaid."
@@ -8192,7 +8190,7 @@ msgstr "تم إنشاء استرداد {local_id}."
 #: pretix/control/logdisplay.py:234
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
-msgstr "تم إنشاء استرداد {} local_id كيان خارجي."
+msgstr "تم إنشاء استرداد {local_id} كيان خارجي."
 
 #: pretix/control/logdisplay.py:235
 msgid "The customer requested you to issue a refund."
@@ -8236,14 +8234,14 @@ msgstr "وقد جددت بك رموز الطوارئ اثنين عامل."
 msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
-msgstr "A اثنين عامل جهاز التوثيق جديد \"{اسم}\" قد أضيفت إلى حسابك."
+msgstr "A اثنين عامل جهاز التوثيق جديد \"{name}\" قد أضيفت إلى حسابك."
 
 #: pretix/control/logdisplay.py:245
 #, python-brace-format
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
-msgstr "الجهاز اثنين عامل التوثيق \"{اسم}\" تمت إزالة من حسابك."
+msgstr "الجهاز اثنين عامل التوثيق \"{name}\" تمت إزالة من حسابك."
 
 #: pretix/control/logdisplay.py:247
 msgid "Notifications have been enabled."
@@ -8272,7 +8270,7 @@ msgstr "وقد تم إعادة تعيين كلمة المرور."
 #: pretix/control/logdisplay.py:255
 #, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr "منظم \"{اسم}\" تم حذفها."
+msgstr "منظم \"{name}\" تم حذفها."
 
 #: pretix/control/logdisplay.py:256
 msgid "The voucher has been created."
@@ -8310,17 +8308,17 @@ msgstr "تم حذف المنتج."
 #: pretix/control/logdisplay.py:265
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
-msgstr "الاختلاف \"{القيمة}\" تم إنشاؤه."
+msgstr "الاختلاف \"{value}\" تم إنشاؤه."
 
 #: pretix/control/logdisplay.py:266
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr "الاختلاف \"{القيمة}\" تم حذفها."
+msgstr "الاختلاف \"{value}\" تم حذفها."
 
 #: pretix/control/logdisplay.py:267
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr "الاختلاف \"{القيمة}\" تم تغيير."
+msgstr "الاختلاف \"{value}\" تم تغيير."
 
 #: pretix/control/logdisplay.py:268
 msgid "An add-on has been added to this product."
@@ -8578,47 +8576,45 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
-"وقد تم التحقق من موقف # {} بوسيد في يدويا في {التاريخ والوقت} على قائمة \""
-"{قائمة}\"."
+"وقد تم التحقق من موقف # {posid} في يدويا في{datetime} على قائمة \"{list}\"."
 
 #: pretix/control/logdisplay.py:382
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
-"وقد تم التحقق من موقف # {} بوسيد الدخول مرة أخرى في {التاريخ والوقت} على "
-"قائمة \"{قائمة}\"."
+"وقد تم التحقق من موقف # {posid} الدخول مرة أخرى في{datetime} على قائمة \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:397
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "في الاختيار من موقف # {} بوسيد على قائمة \"{قائمة}\" وقد عادت."
+msgstr "في الاختيار من موقف # {posid} على قائمة \"{list}\" وقد عادت."
 
 #: pretix/control/logdisplay.py:403
 #, python-brace-format
 msgid "{user} has been added to the team."
-msgstr "{المستخدم} قد أضيفت إلى الفريق."
+msgstr "{user} قد أضيفت إلى الفريق."
 
 #: pretix/control/logdisplay.py:406
 #, python-brace-format
 msgid "{user} has been removed from the team."
-msgstr "تمت إزالة الفيديوهات من الفريق."
+msgstr "{user} تمت إزالته من الفريق."
 
 #: pretix/control/logdisplay.py:409
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
-msgstr ""
-"وقد انضمت الفيديوهات الفريق باستخدام دعوة إرسالها إلى البريد الإلكتروني {}."
+msgstr "{user} انضم إلى الفريق باستخدام دعوة إرسالها إلى {email}."
 
 #: pretix/control/logdisplay.py:414
 #, python-brace-format
 msgid "{user} has been invited to the team."
-msgstr "{المستخدم} وقد وجهت الدعوة للفريق."
+msgstr "{user} وقد وجهت الدعوة للفريق."
 
 #: pretix/control/logdisplay.py:417
 #, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr "دعوة ل{المستخدم} لديه كان يستاء."
+msgstr "دعوة ل{user} لديه كان يستاء."
 
 #: pretix/control/logdisplay.py:420
 #, python-brace-format
