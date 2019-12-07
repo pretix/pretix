@@ -157,7 +157,7 @@ $(function () {
     "use strict";
     $("body").on('submit', 'form[data-asynctask]', function (e) {
         e.preventDefault();
-        $(this).removeClass("dirty);  // Avoid problems with are-you-sure.js
+        $(this).removeClass("dirty");  // Avoid problems with are-you-sure.js
         if ($("body").data('ajaxing')) {
             return;
         }
