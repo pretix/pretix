@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-12-07 13:20+0000\n"
+"PO-Revision-Date: 2019-12-07 13:56+0000\n"
 "Last-Translator: saad91 <saad.almoosa@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -189,7 +189,7 @@ msgstr "الكشف عن تبعية دائرية بين الأسئلة."
 
 #: pretix/api/serializers/item.py:271 pretix/control/forms/item.py:86
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "هذا السوال لا يمكن سؤاله خلال تسجيل الدخول."
 
 #: pretix/api/serializers/organizer.py:43 pretix/control/forms/organizer.py:363
 msgid ""
@@ -1726,11 +1726,11 @@ msgstr "موقعك"
 
 #: pretix/base/models/event.py:333 pretix/base/models/event.py:974
 msgid "Latitude"
-msgstr ""
+msgstr "خطوط الطول"
 
 #: pretix/base/models/event.py:337 pretix/base/models/event.py:978
 msgid "Longitude"
-msgstr ""
+msgstr "خطوط العرض"
 
 #: pretix/base/models/event.py:342 pretix/control/navigation.py:44
 msgid "Plugins"
@@ -2361,7 +2361,7 @@ msgstr "رمز البلد (ISO 3166-1 ألفا 2)"
 
 #: pretix/base/models/items.py:991
 msgid "Phone number"
-msgstr ""
+msgstr "رقم الهاتف"
 
 #: pretix/base/models/items.py:1002 pretix/base/models/items.py:1056
 #: pretix/control/forms/item.py:43
@@ -3095,7 +3095,7 @@ msgstr "في حالة التمكين، والقسيمة صالحة لأي منت
 
 #: pretix/base/models/vouchers.py:178
 msgid "Specific seat"
-msgstr ""
+msgstr "المقعد المحدد"
 
 #: pretix/base/models/vouchers.py:182
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:114
@@ -3193,37 +3193,37 @@ msgstr "قسيمة مع هذا الرمز موجود بالفعل."
 
 #: pretix/base/models/vouchers.py:355
 msgid "You need to choose a date if you select a seat."
-msgstr ""
+msgstr "يجب إختيار تاريخ إذا إخترت مقعد"
 
 #: pretix/base/models/vouchers.py:364
 #, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr ""
+msgstr "المقعد المحدد برقم \"{id}\" غير متواجد في هذا الإيفينت."
 
 #: pretix/base/models/vouchers.py:368
 #, python-brace-format
 msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
-msgstr ""
+msgstr "المقعد \"{id}\" حاليا غير متاح (محجوب، مباع مسبقا أو في قسيمة أخرى)."
 
 #: pretix/base/models/vouchers.py:373
 msgid "You need to choose a specific product if you select a seat."
-msgstr ""
+msgstr "يجب أن تختار منتج محدد إذا أخترت مقعد محدد."
 
 #: pretix/base/models/vouchers.py:376
 msgid "Seat-specific vouchers can only be used once."
-msgstr ""
+msgstr "القسائم المحددة بمقاعد يمكن إستخدامها مره واحدة فقط."
 
 #: pretix/base/models/vouchers.py:379
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr ""
+msgstr "يجب أن تختار المنتج \"{prod}\" لهذا المقعد."
 
 #: pretix/base/models/vouchers.py:382
 #, python-brace-format
 msgid "The seat \"{id}\" is already sold or currently blocked."
-msgstr ""
+msgstr "المقعد \"{id}\" مباع مسبقا أو محجوب."
 
 #: pretix/base/models/waitinglist.py:37
 msgid "On waiting list since"
@@ -3329,7 +3329,7 @@ msgstr "حالة الطلب"
 
 #: pretix/base/notifications.py:194
 msgid "Purchased products"
-msgstr ""
+msgstr "المنتجات المشتراة"
 
 #: pretix/base/notifications.py:195
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:40
@@ -3495,12 +3495,12 @@ msgstr ""
 
 #: pretix/base/payment.py:291
 msgid "Restrict to specific sales channels"
-msgstr ""
+msgstr "حصر لقنوات بيع محددة"
 
 #: pretix/base/payment.py:299
 msgid ""
 "Only allow the usage of this payment provider in the following sales channels"
-msgstr ""
+msgstr "إسمح بإستخدام مقدم المدفوعات هذا في القنوات التالية"
 
 #: pretix/base/payment.py:331
 msgctxt "invoice"
@@ -3676,7 +3676,7 @@ msgstr "تذكرة التعليمات البرمجية (محتوى البارك�
 
 #: pretix/base/pdf.py:57
 msgid "Order position number"
-msgstr ""
+msgstr "رقم موقع الطلب"
 
 #: pretix/base/pdf.py:62 pretix/control/forms/event.py:1563
 #: pretix/control/templates/pretixcontrol/items/index.html:33
@@ -4079,7 +4079,7 @@ msgstr "هذه القسيمة غير صالح لهذا المنتج."
 
 #: pretix/base/services/cart.py:84
 msgid "This voucher is not valid for this seat."
-msgstr ""
+msgstr "هذة القسيمة غير صالحة لهذا المقعد."
 
 #: pretix/base/services/cart.py:86
 msgid "Your voucher is valid for a product that is currently not for sale."
@@ -4563,6 +4563,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
+"لا تستطيع تغيير خطة المقاعد لأن المقعد \"%s\" غير متواجد في الخطة الجديدة و "
+"قد تم أستخدامه في قسيمة."
 
 #: pretix/base/services/shredder.py:71
 msgid ""
@@ -4640,7 +4642,7 @@ msgstr "المساعد: %s"
 #: pretix/base/services/vouchers.py:35 pretix/control/logdisplay.py:257
 #, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr ""
+msgstr "القسيمة تم إرسالها إلى {recipient}."
 
 #: pretix/base/settings.py:330
 #, python-brace-format
@@ -8619,17 +8621,17 @@ msgstr "دعوة ل{user} لديه كان يستاء."
 #: pretix/control/logdisplay.py:420
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
-msgstr "أن تدعو لالفيديوهات تم إبطال."
+msgstr "الدعوة المرسلة إلى {user} تم إلغائها."
 
 #: pretix/control/logdisplay.py:423
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
-msgstr "ورمزي \"{اسم}\" تم إنشاؤه."
+msgstr "ورمزي \"{name}\" تم إنشاؤه."
 
 #: pretix/control/logdisplay.py:426
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr "ورمزي \"{اسم}\" تم إبطال."
+msgstr "ورمزي \"{name}\" تم إبطال."
 
 #: pretix/control/logdisplay.py:429
 msgid "Your account settings have been changed."
@@ -8638,7 +8640,7 @@ msgstr "تم تغيير إعدادات حسابك."
 #: pretix/control/logdisplay.py:431 pretix/control/views/user.py:191
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
-msgstr "تم تغيير عنوان البريد الإلكتروني الخاص بك إلى {البريد الإلكتروني}."
+msgstr "تم تغيير عنوان البريد الإلكتروني الخاص بك إلى {email}."
 
 #: pretix/control/logdisplay.py:433 pretix/control/views/user.py:188
 msgid "Your password has been changed."
@@ -14119,7 +14121,7 @@ msgstr "الحضور (المدفوعة)"
 #: pretix/control/views/dashboards.py:98
 #, python-brace-format
 msgid "Total revenue ({currency})"
-msgstr "إجمالي الإيرادات ({} العملة)"
+msgstr "إجمالي الإيرادات ({currency})"
 
 #: pretix/control/views/dashboards.py:108
 msgid "Active products"
@@ -14136,7 +14138,7 @@ msgstr "إجمالي طول قائمة الانتظار"
 #: pretix/control/views/dashboards.py:181
 #, python-brace-format
 msgid "{quota} left"
-msgstr "{} الحصص اليسار"
+msgstr "{quota} اليسار"
 
 #: pretix/control/views/dashboards.py:201
 msgid "Your ticket shop is"
@@ -14165,7 +14167,7 @@ msgstr "في وضع الاختبار الخاص"
 #: pretix/control/views/dashboards.py:233
 #, python-brace-format
 msgid "Checked in – {list}"
-msgstr "إيداعه - {قائمة}"
+msgstr "إيداعه - {list}"
 
 #: pretix/control/views/dashboards.py:251
 msgid "Welcome to pretix!"
@@ -14495,7 +14497,7 @@ msgstr "ليس لديك إذن لاستنساخ هذا الحدث."
 #: pretix/control/views/main.py:237
 #, python-brace-format
 msgid "Team {event}"
-msgstr "فريق {الحدث}"
+msgstr "فريق {event}"
 
 #: pretix/control/views/main.py:278 pretix/plugins/badges/__init__.py:23
 #: pretix/plugins/badges/models.py:27
@@ -14783,7 +14785,7 @@ msgstr "لم نتمكن من إرسال البريد الإلكتروني. ان�
 #: pretix/control/views/orders.py:1634 pretix/plugins/sendmail/views.py:133
 #, python-brace-format
 msgid "Subject: {subject}"
-msgstr "الموضوع الموضوع}"
+msgstr "الموضوع: {subject}"
 
 #: pretix/control/views/orders.py:1646
 msgid "Your message has been queued and will be sent to {}."
@@ -15138,7 +15140,7 @@ msgstr "تم حذف قسيمة المحدد."
 #: pretix/control/views/vouchers.py:254
 #, python-brace-format
 msgid "The new voucher has been created: {code}"
-msgstr "تم إنشاء قسيمة جديدة: {كود}"
+msgstr "تم إنشاء قسيمة جديدة: {code}"
 
 #: pretix/control/views/vouchers.py:279
 msgid "There is no voucher with the given voucher code."
@@ -15159,7 +15161,7 @@ msgstr "تم حذف قسائم المحددة أو تعطيل."
 #: pretix/control/views/waitinglist.py:32
 #, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
-msgstr "وقد تم إنشاء {الأسطوانات} القسائم وترسل عبر البريد الإلكتروني."
+msgstr "وقد تم إنشاء {num} القسائم وترسل عبر البريد الإلكتروني."
 
 #: pretix/control/views/waitinglist.py:57
 msgid "You do not have permission to do this"
@@ -15293,7 +15295,7 @@ msgstr "شارة نسق يتغير."
 #: pretix/plugins/badges/signals.py:168
 #, python-brace-format
 msgid "Badge layout {val}"
-msgstr "تصميم شارة {فال}"
+msgstr "تصميم شارة {val}"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
@@ -15750,7 +15752,7 @@ msgstr "أجل دفع بالفعل"
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
-msgstr ""
+msgstr "القيم السالبة و لكن الإسترجاع لايمكن تسجيله، فضلا أنشئ إسترجاع يدوي."
 
 #: pretix/plugins/banktransfer/views.py:90
 msgid "The order is already marked as paid."
@@ -15902,7 +15904,7 @@ msgstr ""
 #: pretix/plugins/paypal/payment.py:121
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr "تواصل مع {رمز} باي بال"
+msgstr "تواصل مع {icon} باي بال"
 
 #: pretix/plugins/paypal/payment.py:131
 msgid "Disconnect from PayPal"
@@ -15948,15 +15950,15 @@ msgstr "برد مبلغ عن طريق PayPal فشل: {}"
 
 #: pretix/plugins/paypal/payment.py:541 pretix/plugins/paypal/payment.py:549
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "الدفع لهذه الفاتورة تم إستلامه مسبقا."
 
 #: pretix/plugins/paypal/payment.py:542 pretix/plugins/paypal/payment.py:550
 msgid "PayPal payment ID"
-msgstr ""
+msgstr "رقم المرجعي لعملية الدفع في باي بال"
 
 #: pretix/plugins/paypal/payment.py:544
 msgid "PayPal sale ID"
-msgstr ""
+msgstr "رقم البيع في باي بال"
 
 #: pretix/plugins/paypal/signals.py:30
 msgid "Payment completed."
@@ -16368,7 +16370,7 @@ msgstr "أوامر من قبل المنتج"
 #: pretix/plugins/reports/exporters.py:202
 #, python-brace-format
 msgid "{axis} between {start} and {end}"
-msgstr "{محور} بين {بداية} و {نهاية}"
+msgstr "{axis} بين {start} و {end}"
 
 #: pretix/plugins/reports/exporters.py:227
 #: pretix/plugins/reports/exporters.py:228
@@ -16385,7 +16387,7 @@ msgstr "قائمة الطلبات مع الضرائب (PDF)"
 #: pretix/plugins/reports/exporters.py:375
 #, python-brace-format
 msgid "Orders by tax rate ({currency})"
-msgstr "أوامر من سعر الضريبة ({} العملة)"
+msgstr "أوامر من سعر الضريبة ({currency})"
 
 #: pretix/plugins/reports/exporters.py:384
 #: pretix/plugins/reports/exporters.py:518
@@ -16450,11 +16452,11 @@ msgstr "إرسال فقط للأشخاص الذين اشتروا"
 
 #: pretix/plugins/sendmail/forms.py:32
 msgid "Filter check-in status"
-msgstr ""
+msgstr "تصفية حالة تسجيل الدخول"
 
 #: pretix/plugins/sendmail/forms.py:36
 msgid "Send to customers not checked in"
-msgstr ""
+msgstr "أرسل للعملاء اللذين لم يسجلوا دخول"
 
 #: pretix/plugins/sendmail/forms.py:39
 msgid "Only send to customers of"
@@ -16487,7 +16489,7 @@ msgstr "ارسل الى الزبائن مع حالة الطلب"
 
 #: pretix/plugins/sendmail/forms.py:114 pretix/plugins/sendmail/forms.py:118
 msgid "Send to customers checked in on list"
-msgstr ""
+msgstr "أرسل للعملاء اللذين تم تسجيل دخولهم في القائمة"
 
 #: pretix/plugins/sendmail/signals.py:48
 msgid "Email was sent"
@@ -16507,7 +16509,7 @@ msgstr "إرسالها إلى أوامر:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:28
 msgid "All customers not checked in"
-msgstr ""
+msgstr "كل العملاء لم يتم تسجيل دخولهم"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:38
 msgid "Attendee contact addresses"
@@ -17120,7 +17122,7 @@ msgstr "جميع تذاكر PDF في ملف واحد"
 #: pretix/plugins/ticketoutputpdf/forms.py:25
 #, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr "تخطيط PDF تذكرة ل{} قناة"
+msgstr "تخطيط PDF تذكرة ل {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:28
 msgid "(Same as above)"
@@ -17151,7 +17153,7 @@ msgstr "تخطيط تذكرة يتغير."
 #: pretix/plugins/ticketoutputpdf/signals.py:115
 #, python-brace-format
 msgid "Ticket layout {val}"
-msgstr "تخطيط تذكرة {فال}"
+msgstr "تخطيط تذكرة {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
@@ -17303,8 +17305,8 @@ msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
-"تأكد من إدخال عنوان بريد إلكتروني صالح. سوف نرسل لك تأكيد الطلب بما في ذلك "
-"وجود صلة التي تحتاجها للوصول إلى طلبك في وقت لاحق."
+"تأكد من إدخال عنوان البريد الألكتروني بشكل صحيح. سوف نرسل تأكيد الطلب  مرفقا "
+"معه رابط سوف تحتاجه للدخول لطلبك لاحقا."
 
 #: pretix/presale/forms/checkout.py:43
 msgid "E-mail address (repeated)"
@@ -17324,17 +17326,17 @@ msgstr "يرجى إدخال عنوان البريد الإلكتروني نفس�
 #: pretix/presale/forms/checkout.py:160
 #, python-brace-format
 msgid "{name} (+ {price})"
-msgstr "{اسم} (+ {سعر})"
+msgstr "{name} (+ {price})"
 
 #: pretix/presale/forms/checkout.py:164
 #, python-brace-format
 msgid "{name} (+ {price} plus {taxes}% {taxname})"
-msgstr "{اسم} (+ {سعر} بالإضافة إلى {الضرائب}٪ {} taxname)"
+msgstr "{name} (+ {price} بالإضافة إلى {taxes}٪ {taxname})"
 
 #: pretix/presale/forms/checkout.py:169
 #, python-brace-format
 msgid "{name} (+ {price} incl. {taxes}% {taxname})"
-msgstr "{اسم} (+ {} السعر بما في ذلك {الضرائب}٪ {} taxname)"
+msgstr "{name} (+ {price} بما في ذلك {taxes}٪ {taxname})"
 
 #: pretix/presale/forms/checkout.py:176
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:5
@@ -17358,17 +17360,17 @@ msgstr "لا اختيار"
 #: pretix/presale/ical.py:52
 #, python-brace-format
 msgid "Tickets: {url}"
-msgstr "تذاكر: {رابط}"
+msgstr "تذاكر: {url}"
 
 #: pretix/presale/ical.py:55
 #, python-brace-format
 msgid "Admission: {datetime}"
-msgstr "القبول: {التاريخ والوقت}"
+msgstr "القبول: {datetime}"
 
 #: pretix/presale/ical.py:59
 #, python-brace-format
 msgid "Organizer: {organizer}"
-msgstr "منظم: {المنظم}"
+msgstr "منظم: {organizer}"
 
 #: pretix/presale/templates/pretixpresale/base_footer.html:36
 #, python-format
@@ -17403,6 +17405,8 @@ msgid ""
 "Orders made through this sales channel cannot be deleted - even if the "
 "ticket shop is in test mode!"
 msgstr ""
+"الطلبات المنشئة عن طريق قناة البيع هذة لا يمكن حذفها - حتى لو كان متجر "
+"التذاكر في حالة التجربة!"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:114
 msgid "Contact event organizer"
@@ -17428,12 +17432,12 @@ msgstr "نحاول الآن لحجز هذه الوظائف الإضافية با
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "يجب أن لاتختار أية خيار من هذا التصنيف."
+msgstr[1] "يجب أن تختار خيار واحد فقط من هذا التصنيف."
+msgstr[2] "يجب أن تختار خيارين فقط من هذا التصنيف."
+msgstr[3] "يجب أن تختار %(min_count)s خيارات من هذا التصنيف."
+msgstr[4] "يجب أن تختار %(min_count)s خيارات من هذا التصنيف."
+msgstr[5] "يجب أن تختار %(min_count)s خيارات من هذا التصنيف."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:46
 #, python-format
@@ -17550,11 +17554,11 @@ msgstr "يرجى اختيار الطريقة التي تريد أن تدفع."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
 msgid "This sales channel does not provide support for testmode."
-msgstr ""
+msgstr "قناة البيع هذه لا توفر دعم لحالة تجربة المتجر."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
 msgid "If you continue, you might pay an actual order with non-existing money!"
-msgstr ""
+msgstr "إذا أكملت العملية يمكن أن تدفع طلب حقيقي بمال لايوجد!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:49
 msgid "This payment provider does not provide support for testmode."
@@ -17788,7 +17792,7 @@ msgstr "اذهب"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 #: pretix/presale/views/widget.py:290 pretix/presale/views/widget.py:302
 msgid "Book now"
-msgstr ""
+msgstr "إحجز الآن"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:35
 #: pretix/presale/templates/pretixpresale/organizers/index.html:90
@@ -17816,7 +17820,7 @@ msgstr "الشروع في الخروج"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:100
 msgid "Add tickets for a different date"
-msgstr "إضافة تذاكر لتاريخ مختلف"
+msgstr "أضف تذاكر لتاريخ أخر"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:104
 msgid "View other date"
@@ -18461,7 +18465,7 @@ msgstr ""
 #: pretix/presale/views/widget.py:243
 msgctxt "widget"
 msgid "event ticketing powered by pretix"
-msgstr ""
+msgstr "هذا المتجر يعمل ب pretix"
 
 #: pretix/presale/views/widget.py:258
 msgid "This ticket shop is currently disabled."
@@ -18482,7 +18486,7 @@ msgstr "من %(start_date)s"
 
 #: pretix/presale/views/widget.py:311
 msgid "Sale soon"
-msgstr ""
+msgstr "البيع قريبا"
 
 #: pretix/settings.py:401
 msgid "English"
@@ -18534,11 +18538,11 @@ msgstr "الإيطالي"
 
 #: pretix/settings.py:413
 msgid "Russian"
-msgstr ""
+msgstr "روسي"
 
 #: pretix/settings.py:414
 msgid "Latvian"
-msgstr ""
+msgstr "لاتفيفي"
 
 #: pretix/settings.py:415
 msgid "Chinese (simplified)"
