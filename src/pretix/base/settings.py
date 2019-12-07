@@ -683,6 +683,10 @@ Your {event} team"""))
         )),
         'type': LazyI18nString
     },
+    'order_import_settings': {
+        'default': '{}',
+        'type': dict
+    },
     'organizer_info_text': {
         'default': '',
         'type': LazyI18nString
