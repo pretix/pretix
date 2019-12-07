@@ -10,7 +10,7 @@ import pytz
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.cache import cache
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.db.models import Q
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
@@ -136,6 +136,8 @@ def widget_js(request, lang, **kwargs):
     fname = gs.settings.get('widget_file_{}'.format(lang))
     resp = None
     if fname and not settings.DEBUG:
+        if isinstance(fname, File):
+            fname = fname.name
         try:
             resp = HttpResponse(default_storage.open(fname).read(), content_type='text/javascript')
         except:
