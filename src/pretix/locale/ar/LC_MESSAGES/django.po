@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-11-22 10:01+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2019-12-07 12:23+0000\n"
+"Last-Translator: saad91 <saad.almoosa@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -1303,7 +1303,7 @@ msgstr "تركيب النائب صالح: يمكنك استخدام عدد مخ�
 #: pretix/base/forms/validators.py:39
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr "النائب صالح (ق):٪ (القيمة) ق"
+msgstr "نائب الكان خاطئ: %(value)s"
 
 #: pretix/base/forms/widgets.py:134 pretix/base/forms/widgets.py:139
 #: pretix/base/models/orders.py:2020
@@ -1318,7 +1318,7 @@ msgstr "العملاء الفردية"
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "الصفحة٪ d من٪ د"
+msgstr "صفحة %d من %d"
 
 #: pretix/base/invoice.py:246
 msgctxt "invoice"
@@ -1870,13 +1870,13 @@ msgstr "بطاقة وضع الاختبار"
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr "VAT-ID:٪ ق"
+msgstr "رقم السجل الضريبي للقيمة المضافة: %s"
 
 #: pretix/base/models/invoices.py:129
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr "رقم التعريف الضريبي:٪ ق"
+msgstr "رقم التعريف الضريبي: %s"
 
 #: pretix/base/models/items.py:50
 msgid "Category name"
@@ -2657,7 +2657,7 @@ msgstr "المقعد \"{seat}\" تتوفر لم تعد."
 #: pretix/presale/templates/pretixpresale/event/order.html:44
 #, python-format
 msgid "Your order: %(code)s"
-msgstr "طلبك:٪ (رمز) ق"
+msgstr "طلبك هو: %(code)s"
 
 #: pretix/base/models/orders.py:903
 msgid "<file>"
@@ -2705,12 +2705,12 @@ msgstr "معلومات الدفع"
 #: pretix/base/models/orders.py:1343
 #, python-format
 msgid "Event registration confirmed: %(code)s"
-msgstr "أكد تسجيل الحدث:٪ (رمز) ق"
+msgstr "تم تأكيد تسجيل الإيفينت: %(code)s"
 
 #: pretix/base/models/orders.py:1361
 #, python-format
 msgid "Payment received for your order: %(code)s"
-msgstr "الدفع وردت عن طلبك:٪ (رمز) ق"
+msgstr "تم إستلام الدفع لطلبك: %(code)s"
 
 #: pretix/base/models/orders.py:1467
 msgctxt "refund_state"
@@ -2795,7 +2795,7 @@ msgstr "موقف ترتيب"
 #: pretix/base/models/orders.py:1947 pretix/base/services/orders.py:745
 #, python-format
 msgid "Your event registration: %(code)s"
-msgstr "لديك تسجيل الحدث:٪ (رمز) ق"
+msgstr "تسجيلك للإيفينت: %(code)s"
 
 #: pretix/base/models/orders.py:1976
 msgid "Cart ID (e.g. session key)"
@@ -2913,7 +2913,7 @@ msgstr "يمكن تغيير قسائم"
 #: pretix/base/models/organizer.py:209
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr "٪ (الاسم) ق على٪ (كائن) ق"
+msgstr "%(name)s علي %(object)s"
 
 #: pretix/base/models/organizer.py:241
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:82
@@ -2941,12 +2941,12 @@ msgstr "ملف تخطيط ليست خطة جلوس صالحة. رسالة خطأ
 #: pretix/base/models/seating.py:131
 #, python-brace-format
 msgid "Row {number}"
-msgstr "رقم الصف}"
+msgstr "صف {number}"
 
 #: pretix/base/models/seating.py:133
 #, python-brace-format
 msgid "Seat {number}"
-msgstr "رقم المقعد}"
+msgstr "مقعد {number}"
 
 #: pretix/base/models/tax.py:98
 msgid "Should be short, e.g. \"VAT\""
@@ -3167,8 +3167,8 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"وقد تم هذا بالفعل قسيمة٪ المستردة (استبدال) الصورة مرات. لا يمكنك تقليل عدد "
-"أقصى من الأعراف أقل من هذا العدد."
+"القسيمة تم إستخدامها مسبقا %(redeemed)s مره. لا تستطيع تقليل عدد المرات للحد "
+"الأقصى لإستخدام القسيمة تحت الحد المذكور."
 
 #: pretix/base/models/vouchers.py:265 pretix/base/models/vouchers.py:323
 msgid ""
@@ -3567,8 +3567,8 @@ msgid ""
 "{total_with_currency}"
 msgstr ""
 "وسيتم إدراج هذا النص ل{payment_info} نائبا في رسائل تأكيد الطلب. يجب أن "
-"إرشاد المستخدم على كيفية المضي قدما في الدفع. يمكنك usethe النائبة {أجل}، "
-"{مجموع}، {العملة} و {total_with_currency}"
+"إرشاد المستخدم على كيفية المضي قدما في الدفع. يمكنك إستخدام النائبة {order}، "
+"{total}، {currency}و {total_with_currency}"
 
 #: pretix/base/payment.py:856
 msgid "Payment process description for pending orders"
@@ -3582,8 +3582,8 @@ msgid ""
 "usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
 "سيتم عرض هذا النص على صفحة تأكيد أمر الأوامر المعلقة. يجب أن إرشاد المستخدم "
-"على كيفية المضي قدما في الدفع. يمكنك usethe النائبة {أجل}، {مجموع}، {العملة} "
-"و {total_with_currency}"
+"على كيفية المضي قدما في الدفع. يمكنك إستخدام النائبة {order}، {total}، "
+"{currency} و {total_with_currency}"
 
 #: pretix/base/payment.py:903
 msgid "Offsetting"
@@ -3596,7 +3596,7 @@ msgstr "لقد أدخلت أمر لا يمكن العثور عليها."
 #: pretix/base/payment.py:946
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr "متوازنة ضد أوامر:٪ ق"
+msgstr "تم تسجيلها على الطلبات: %s"
 
 #: pretix/base/payment.py:967
 msgid "In test mode, only test cards will work."
@@ -3888,12 +3888,12 @@ msgstr "مقعد: عدد المقاعد"
 #: pretix/base/pdf.py:301
 #, python-brace-format
 msgid "Question: {question}"
-msgstr "سؤال: {سؤال}"
+msgstr "سؤال: {question}"
 
 #: pretix/base/pdf.py:302
 #, python-brace-format
 msgid "<Answer: {question}>"
-msgstr "<الجواب: {سؤال}>"
+msgstr "<الجواب: {question}>"
 
 #: pretix/base/pdf.py:322 pretix/plugins/badges/exporters.py:113
 #: pretix/plugins/checkinlists/exporters.py:55
@@ -3901,12 +3901,12 @@ msgstr "<الجواب: {سؤال}>"
 #: pretix/plugins/ticketoutputpdf/exporters.py:42
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "اسم الحضور: {جزء}"
+msgstr "اسم الحضور: {part}"
 
 #: pretix/base/pdf.py:332
 #, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr "الفاتورة اسم عنوان: {جزء}"
+msgstr "الفاتورة اسم عنوان: {part}"
 
 #: pretix/base/pdf.py:470 pretix/plugins/ticketoutputpdf/ticketoutput.py:76
 msgid "Ticket"
@@ -3986,17 +3986,17 @@ msgstr ""
 #: pretix/base/services/cart.py:61
 #, python-format
 msgid "You cannot select more than %s items per order."
-msgstr "لا يمكنك تحديد أكثر من٪ سلع في النظام."
+msgstr "لا يمكنك تحديد أكثر من %s سلعة لكل طلب."
 
 #: pretix/base/services/cart.py:62
 #, python-format
 msgid "You cannot select more than %(max)s items of the product %(product)s."
-msgstr "لا يمكنك تحديد أكثر من٪ (كحد أقصى) سلع من المنتج٪ (المنتج) ق."
+msgstr "لا يمكنك تحديد أكثر من %(max)s سلع من المنتج %(product)s."
 
 #: pretix/base/services/cart.py:63
 #, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
-msgstr "تحتاج إلى تحديد ما لا يقل عن٪ (دقيقة) سلع من المنتج٪ (المنتج) ق."
+msgstr "تحتاج إلى تحديد ما لا يقل عن %(min)s سلع من المنتج %(product)s."
 
 #: pretix/base/services/cart.py:64
 #, python-format
@@ -4004,7 +4004,7 @@ msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr ""
-"أزلنا٪ (المنتج) ق من عربة التسوق كما لا يمكنك شراء أقل من٪ (دقيقة) سلع منه."
+"أزلنا %(product)s من عربة التسوق كما لا يمكنك شراء أقل من %(min)s سلع منه."
 
 #: pretix/base/services/cart.py:66 pretix/base/services/orders.py:68
 msgid "The presale period for this event has not yet started."
@@ -4054,12 +4054,12 @@ msgid ""
 msgstr ""
 "تم تأمين هذا كود قسيمة حاليا لأنه هو وارد أصلا في عربة. وهذا قد يعني أن شخصا "
 "آخر هو التعويض هذه القسائم في الوقت الحالي، أو أنك حاولت استرداد قيمتها من "
-"قبل ولكن لم يكمل عملية السحب. يمكنك محاولة استخدامه مرة أخرى في٪ d دقيقة."
+"قبل ولكن لم يكمل عملية السحب. يمكنك محاولة استخدامه مرة أخرى في %d دقيقة."
 
 #: pretix/base/services/cart.py:79
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "هذا الرمز قسيمة يمكن أن يكون إلا مطفية٪ د أكثر من مرة."
+msgstr "هذا الرمز قسيمة يمكن أن يكون إلا مطفي %d أكثر من مرة."
 
 #: pretix/base/services/cart.py:80
 msgid ""
@@ -4113,8 +4113,8 @@ msgid ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr ""
-"يمكنك تحديد في معظم٪ (كحد أقصى) الصورة إضافات من فئة٪ (القط) ليالي للمنتج و٪ "
-"(القاعدة) ق."
+"يمكنك تحديد في معظم %(max)s الصورة إضافات من فئة %(cat)s ليالي للمنتج "
+"%(base)s."
 
 #: pretix/base/services/cart.py:93
 #, python-format
@@ -4122,8 +4122,8 @@ msgid ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr ""
-"تحتاج إلى تحديد ما لا يقل عن٪ (دقيقة) الصورة إضافات من فئة٪ (القط) S للمنتج٪ "
-"(القاعدة) ق."
+"تحتاج إلى تحديد ما لا يقل عن %(min)s الصورة إضافات من فئة %(cat)s S للمنتج "
+"%(base)s."
 
 #: pretix/base/services/cart.py:95
 msgid ""
@@ -4201,16 +4201,16 @@ msgid ""
 "{country}"
 msgstr ""
 "{i.company}\n"
-"{أنا اسم}\n"
+"{i.name}\n"
 "{i.street}\n"
-"{i.zipcode} {} {i.city الدولة}\n"
-"{بلد}"
+"{i.zipcode} {i.city} {state}\n"
+"{country}"
 
 #: pretix/base/services/invoices.py:143
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr "الحضور: {اسم}"
+msgstr "الحضور: {name}"
 
 #: pretix/base/services/invoices.py:158 pretix/plugins/reports/exporters.py:215
 msgctxt "subevent"
@@ -4255,7 +4255,7 @@ msgstr "عينة المنتج A"
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr "كنت تتلقى هذا البريد الإلكتروني لشخص ما وضعت أمر {} حدث لك."
+msgstr "كنت تتلقى هذا البريد الإلكتروني لشخص ما وضعت أمر {event} حدث لك."
 
 #: pretix/base/services/mail.py:171 pretix/base/services/mail.py:187
 #, python-brace-format
@@ -4269,7 +4269,7 @@ msgstr ""
 #: pretix/base/services/mail.py:183
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr "كنت تتلقى هذا البريد الإلكتروني لأنك وضعت على أمر ل{} الحدث."
+msgstr "كنت تتلقى هذا البريد الإلكتروني لأنك وضعت على أمر ل{event} الحدث."
 
 #: pretix/base/services/orders.py:56
 msgid ""
@@ -4309,7 +4309,7 @@ msgid ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr ""
-"لا يمكنك تحديد أكثر من٪ (كحد أقصى) سلع من المنتج٪ (المنتج) ق. أزلنا المواد "
+"لا يمكنك تحديد أكثر من %(max)s سلع من المنتج %(product)s. أزلنا المواد "
 "الفائضة من عربة التسوق."
 
 #: pretix/base/services/orders.py:69
@@ -4389,17 +4389,17 @@ msgstr "هذا النظام لم يتم انتظار الموافقة."
 #: pretix/base/services/orders.py:209
 #, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr "ترتيب المعتمدة وأكد:٪ (رمز) ق"
+msgstr "ترتيب المعتمدة وأكد: %(code)s"
 
 #: pretix/base/services/orders.py:212
 #, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr "أجل الموافقة عليها وتنتظر السداد:٪ (رمز) ق"
+msgstr "أجل الموافقة عليها وتنتظر السداد: %(code)s"
 
 #: pretix/base/services/orders.py:258
 #, python-format
 msgid "Order denied: %(code)s"
-msgstr "نفى أجل:٪ (رمز) ق"
+msgstr "نفى أجل: %(code)s"
 
 #: pretix/base/services/orders.py:292 pretix/presale/views/order.py:680
 #: pretix/presale/views/order.py:712
@@ -4412,7 +4412,7 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
-"لا يمكن إلغاء هذا النظام منذ بطاقة هدية {بطاقة} شراؤها في هذا النظام قد تم "
+"لا يمكن إلغاء هذا النظام منذ بطاقة هدية {card} شراؤها في هذا النظام قد تم "
 "استبدالها."
 
 #: pretix/base/services/orders.py:331 pretix/control/forms/orders.py:112
@@ -4423,7 +4423,7 @@ msgstr "رسوم الإلغاء لا يمكن أن يكون أعلى من الا
 #: pretix/base/services/orders.py:354
 #, python-format
 msgid "Order canceled: %(code)s"
-msgstr "من أجل إلغاء:٪ (رمز) ق"
+msgstr "من أجل إلغاء: %(code)s"
 
 #: pretix/base/services/orders.py:702
 msgid ""
@@ -4438,22 +4438,22 @@ msgstr ""
 #: pretix/base/services/orders.py:905
 #, python-format
 msgid "Your order is about to expire: %(code)s"
-msgstr "النظام الخاص بك هو على وشك الانتهاء:٪ (رمز) ق"
+msgstr "النظام الخاص بك هو على وشك الانتهاء: %(code)s"
 
 #: pretix/base/services/orders.py:907
 #, python-format
 msgid "Your order is pending payment: %(code)s"
-msgstr "طلبك في انتظار دفع:٪ (رمز) ق"
+msgstr "طلبك في انتظار دفع: %(code)s"
 
 #: pretix/base/services/orders.py:963
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
-msgstr "تذكرتك جاهز للتحميل:٪ (رمز) ق"
+msgstr "تذكرتك جاهز للتحميل: %(code)s"
 
 #: pretix/base/services/orders.py:998
 #, python-format
 msgid "Your order has been changed: %(code)s"
-msgstr "تم تغيير طلبك:٪ (رمز) ق"
+msgstr "تم تغيير طلبك: %(code)s"
 
 #: pretix/base/services/orders.py:1010
 msgid "You need to select a variation of the product."
@@ -4515,7 +4515,7 @@ msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr ""
-"لك مقعد المحدد \"{مقعد}\" عن التاريخ الذي لا يتطابق مع تاريخ التذكرة المحدد. "
+"لك مقعد المحدد \"{seat}\" عن التاريخ الذي لا يتطابق مع تاريخ التذكرة المحدد. "
 "الرجاء اختيار المقعد مرة أخرى."
 
 #: pretix/base/services/orders.py:1023
@@ -4538,7 +4538,7 @@ msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
-"لا يمكن إلغاء A المنصب منذ بطاقة هدية {بطاقة} شراؤها في هذا النظام قد تم "
+"لا يمكن إلغاء A المنصب منذ بطاقة هدية {card} شراؤها في هذا النظام قد تم "
 "استبدالها."
 
 #: pretix/base/services/orders.py:1758
@@ -4555,7 +4555,7 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
-"لا يمكنك تغيير الخطة منذ مقعد \"{}\" غير موجود في الخطة الجديدة ويباع بالفعل."
+"لا يمكنك تغيير الخطة منذ مقعد \"%s\" غير موجود في الخطة الجديدة ويباع بالفعل."
 
 #: pretix/base/services/seating.py:89
 #, python-format
@@ -4621,7 +4621,7 @@ msgstr ""
 "متاح للpretix أو لأحد الإضافات المثبتة في تركيب pretix بك تحديثا. الرجاء "
 "النقر على الرابط التالي لمزيد من المعلومات:\n"
 "\n"
-" {رابط}\n"
+"{url}\n"
 "\n"
 "يمكنك دائما العثور على معلومات عن آخر التحديثات على pretix.eu بلوق:\n"
 "\n"
@@ -4635,7 +4635,7 @@ msgstr ""
 #: pretix/base/services/update_check.py:126
 #, python-format
 msgid "Plugin: %s"
-msgstr "المساعد:٪ ق"
+msgstr "المساعد: %s"
 
 #: pretix/base/services/vouchers.py:35 pretix/control/logdisplay.py:257
 #, python-brace-format
@@ -4659,13 +4659,13 @@ msgstr ""
 "مرحبا،\n"
 "\n"
 "تلقيت هذه الرسالة لأنك طلبت منا أن نرسل لك الرابط\n"
-"لطلبك {} الحدث.\n"
+"لطلبك {event}.\n"
 "\n"
 "يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:343
 #, python-brace-format
@@ -4682,13 +4682,13 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"طلب شخص ما على قائمة من الأوامر الخاصة بك ل{} الحدث.\n"
+"طلب شخص ما على قائمة من الأوامر الخاصة بك ل{event}.\n"
 "والقائمة على النحو التالي:\n"
 "\n"
-"{أوامر}\n"
+"{orders}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:355
 #, python-brace-format
@@ -4705,13 +4705,13 @@ msgid ""
 msgstr ""
 "مرحبا {attendee_name}،\n"
 "\n"
-"كنت قد سجلت ل{} الحدث بنجاح.\n"
+"كنت قد سجلت ل{event} بنجاح.\n"
 "\n"
 "يمكنك عرض التفاصيل ووضع التذكرة هنا:\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:367
 #, python-brace-format
@@ -4729,14 +4729,14 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"كان طلبك {} الحدث الناجح. كما كنت قد طلبت فقط المنتجات الخالية،\n"
+"كان طلبك {event} الناجح. كما كنت قد طلبت فقط المنتجات الخالية،\n"
 "لا يلزم الدفع.\n"
 "\n"
 "يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:384
 #, python-brace-format
@@ -4755,15 +4755,15 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"تلقينا طلبك بنجاح ل{} الحدث. منذ كنت قد طلبت\n"
+"تلقينا طلبك بنجاح ل{event}. منذ كنت قد طلبت\n"
 "المنتج الذي يتطلب موافقة من قبل منظم الحدث، نطلب منك\n"
 "التحلي بالصبر والانتظار لدينا البريد الإلكتروني التالي.\n"
 "\n"
 "يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:398
 #, python-brace-format
@@ -4784,16 +4784,16 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"تلقينا طلبك بنجاح ل{} حدث بقيمة إجمالية\n"
-"من {total_with_currency}. يرجى إتمام عملية الدفع قبل {EXPIRE_DATE}.\n"
+"تلقينا طلبك بنجاح ل{event} بقيمة إجمالية\n"
+"من {total_with_currency}. يرجى إتمام عملية الدفع قبل {expire_date}.\n"
 "\n"
-"{معلومات الدفع}\n"
+"{payment_info}\n"
 "\n"
 "يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:417
 #, python-brace-format
@@ -4810,13 +4810,13 @@ msgid ""
 msgstr ""
 "مرحبا {attendee_name}،\n"
 "\n"
-"وقد أمر تذكرة ل{} حدث لك.\n"
+"وقد أمر تذكرة ل{event} لك.\n"
 "\n"
 "يمكنك عرض التفاصيل ووضع التذكرة هنا:\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:429
 #, python-brace-format
@@ -4833,13 +4833,13 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"تم تغيير طلبك {} الحدث.\n"
+"تم تغيير طلبك {event}.\n"
 "\n"
 "يمكنك عرض حالة طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:441
 #, python-brace-format
@@ -4858,15 +4858,15 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"تلقينا بنجاح دفعك ل{} الحدث. شكرا جزيلا!\n"
+"تلقينا بنجاح دفعك ل{event}. شكرا جزيلا!\n"
 "\n"
-"{معلومات الدفع}\n"
+"{payment_info}\n"
 "\n"
 "يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:459
 #, python-brace-format
@@ -4883,13 +4883,13 @@ msgid ""
 msgstr ""
 "مرحبا {attendee_name}،\n"
 "\n"
-"والآن يدفع تذكرة ل{} الحدث الذي قد أمرت لك.\n"
+"والآن يدفع تذكرة ل{event} الذي قد أمرت لك.\n"
 "\n"
 "يمكنك عرض التفاصيل ووضع التذكرة هنا:\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:475
 #, python-brace-format
@@ -4908,15 +4908,15 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"أننا لم نتلق حتى الآن على دفع كامل لطلبك ل{} الحدث.\n"
+"أننا لم نتلق حتى الآن على دفع كامل لطلبك ل{event}.\n"
 "يرجى أن نضع في اعتبارنا أن نضمن فقط طلبك إذا تلقينا\n"
-"الدفع الخاص بك قبل {EXPIRE_DATE}.\n"
+"الدفع الخاص بك قبل {expire_date}.\n"
 "\n"
 "يمكنك عرض معلومات الدفع وحالة طلبك في\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:489
 #, python-brace-format
@@ -4944,24 +4944,24 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"قمت بتقديم نفسك إلى قائمة انتظار {} الحدث،\n"
-"للمنتج {المنتج}.\n"
+"قمت بتقديم نفسك إلى قائمة انتظار {event}،\n"
+"للمنتج {product}.\n"
 "\n"
 "لدينا الآن تذكرة على استعداد للكم! يمكنك استبدال عليها في متجر تذكرة لنا\n"
-"ضمن {ساعات} ساعة القادمة عن طريق إدخال رمز القسيمة التالية:\n"
+"ضمن {hours} ساعة القادمة عن طريق إدخال رمز القسيمة التالية:\n"
 "\n"
-"{الشفرة}\n"
+"{code}\n"
 "\n"
 "بدلا من ذلك، يمكنك فقط اضغط على الرابط التالي:\n"
 "\n"
-"{رابط}\n"
+"{url}\n"
 "\n"
-"يرجى ملاحظة أن هذا الارتباط هو صالح فقط داخل {ساعات} ساعة القادمة!\n"
+"يرجى ملاحظة أن هذا الارتباط هو صالح فقط داخل{hours} ساعة القادمة!\n"
 "سنقوم إعادة تعيين التذكرة للشخص المقبل على لائحة اذا كنت لا\n"
 "استبدال القسيمة في هذا الإطار الزمني.\n"
 "\n"
 "تحياتي الحارة،\n"
-"لديك {الحدث} فريق"
+"لديك {event} فريق"
 
 #: pretix/base/settings.py:512
 #, python-brace-format
@@ -5519,7 +5519,7 @@ msgstr "مقدم الدفع \"{اسم}\" لم يعد من الممكن اختي�
 #: pretix/base/validators.py:15
 #, python-format
 msgid "This field has an invalid value: %(value)s."
-msgstr "هذا الحقل يحتوي على قيمة غير صالحة:٪ (القيمة) ق."
+msgstr "هذا الحقل يحتوي على قيمة غير صالحة: %(value)s"
 
 #: pretix/base/views/errors.py:19
 msgid ""
@@ -7296,9 +7296,8 @@ msgid ""
 "by a user or currently is in a user's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
-"الاختلاف \"٪ ليالي\" لا يمكن حذفها لأنه قد تم بالفعل أمر بذلك من قبل مستخدم "
-"أو حاليا هي في عربة المستخدم. الرجاء ضبط التباين بأنه \"غير نشطة\" بدلا من "
-"ذلك."
+"الاختلاف \"%s\" لا يمكن حذفها لأنه قد تم بالفعل أمر بذلك من قبل مستخدم أو "
+"حاليا هي في عربة المستخدم. الرجاء ضبط التباين بأنه \"غير نشطة\" بدلا من ذلك."
 
 #: pretix/control/forms/item.py:556
 msgid "Add-ons"
@@ -8860,7 +8859,7 @@ msgid ""
 "accept the invitation with your existing account."
 msgstr ""
 "إذا كان لديك بالفعل حساب على هذا الموقع مع عنوان بريد إلكتروني مختلف، يمكنك <"
-"a ٪(login_href)s> تسجيل الدخول </A> أولا ثم الضغط على هذا الرابط مرة أخرى "
+"a %(login_href)s> تسجيل الدخول </A> أولا ثم الضغط على هذا الرابط مرة أخرى "
 "لقبول دعوة مع حسابك الحالي."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
@@ -9120,7 +9119,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:407
 #, python-format
 msgid "Times displayed in %(tz)s"
-msgstr "عرض مرة في٪ (زد) الصورة"
+msgstr "عرض مرة في %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html:417
 msgid "running in development mode"
@@ -9183,7 +9182,7 @@ msgstr "رقم البطاقة"
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:13
 #, python-format
 msgid "Check-in list: %(name)s"
-msgstr "٪ (الاسم) الصورة: تحقق في قائمة"
+msgstr "%(name)s: تحقق في قائمة"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
 msgid "Edit list"
@@ -9492,7 +9491,7 @@ msgstr ""
 "يمكنك طلب كلمة مرور جديدة. يرجى الدخول إلى الصفحة التالية لإعادة تعيين كلمة "
 "المرور الخاصة بك:\n"
 "\n"
-"٪ (رابط) ق\n"
+"%(url)s\n"
 "\n"
 "تحياتي الحارة،\n"
 "فريق pretix الخاص بك\n"
@@ -9522,11 +9521,11 @@ msgstr ""
 "كنت قد دعيت لفريق على pretix، منصة لأداء الحدث\n"
 "بيع التذاكر.\n"
 "\n"
-"منظم:٪ (منظم) ق\n"
-"فريق:٪ (فريق) ق\n"
+"منظم:%(organizer)s\n"
+"فريق: %(team)s\n"
 "\n"
 "إذا كنت ترغب في الانضمام لفريق، فقط اضغط على الرابط التالي:\n"
-"٪ (رابط) ق\n"
+"%(url)s\n"
 "\n"
 "إذا كنت لا ترغب في الانضمام، يمكنك تجاهل أو حذف هذا البريد الإلكتروني.\n"
 "\n"
@@ -9559,13 +9558,13 @@ msgstr ""
 "هذا هو أن أحيطكم علما بأن وكانت معلومات الحساب من حساب pretix الخاص بك\n"
 "تغير. على وجه الخصوص، تم إجراء التغييرات التالية:\n"
 "\n"
-"٪ (الرسائل) ق\n"
+"%(messages)s\n"
 "\n"
 "إذا لم يتم تنفيذ هذا التغيير من قبلك، يرجى الاتصال بنا على الفور.\n"
 "\n"
 "يمكنك مراجعة وتغيير إعدادات حسابك هنا:\n"
 "\n"
-"٪ (رابط) ق\n"
+"%(url)s\n"
 "\n"
 "تحياتي الحارة،\n"
 "فريق pretix الخاص بك\n"
@@ -9633,8 +9632,8 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"للتأكد من أنك تريد حقا هذا، يرجى كتابة اسم من الحدث القصير ( \"٪ (سبيكة) ق\")"
-" هنا:"
+"للتأكد من أنك تريد حقا هذا، يرجى كتابة اسم من الحدث القصير ( \"%(slug)s\") "
+"هنا:"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:28
 msgid ""
@@ -10022,7 +10021,7 @@ msgid ""
 "payment plugins."
 msgstr ""
 "لا توجد مقدمي خدمات الدفع المتاحة. يرجى الدخول إلى <a "
-"٪(plugin_settings_href)s> المساعد إعدادات </A> وتفعيل واحد أو أكثر من "
+"%(plugin_settings_href)s> المساعد إعدادات </A> وتفعيل واحد أو أكثر من "
 "الإضافات الدفع."
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:60
@@ -10087,12 +10086,12 @@ msgstr "تم حفظ التغييرات."
 #: pretix/control/templates/pretixcontrol/event/plugins.html:20
 #, python-format
 msgid "Version %(v)s by <em>%(a)s</em>"
-msgstr "الإصدار٪ (ت) بنسبة <em>%(a)s</em>"
+msgstr "الإصدار%(v)s بنسبة <em>%(a)s</em>"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:24
 #, python-format
 msgid "Version %(v)s"
-msgstr "الإصدار٪ (ت) ق"
+msgstr "الإصدار %(v)s"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:31
 msgid ""
@@ -10350,7 +10349,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:14
 #, python-format
 msgid "Tax rule: %(name)s"
-msgstr "حكم الضرائب:٪ (الاسم) ق"
+msgstr "حكم الضرائب: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:31
 #, python-format
@@ -10431,7 +10430,7 @@ msgid ""
 "%(plugin_settings_href)s>plugin settings</a> and activate one or more ticket "
 "output plugins."
 msgstr ""
-"لا توجد مخرجات تذكرة متوفرة. يرجى الدخول إلى <a ٪(plugin_settings_href)s> "
+"لا توجد مخرجات تذكرة متوفرة. يرجى الدخول إلى <a %(plugin_settings_href)s> "
 "المساعد إعدادات </A> وتفعيل واحد أو أكثر من تذكرة الناتج الإضافات."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
@@ -10467,8 +10466,7 @@ msgid ""
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
 "تم تعطيل جافا سكريبت في المتصفح الخاص بك. للوصول إلى متجر تذكرة بدون جافا "
-"سكريبت، يرجى العلامة & lt؛ ل٪ (a_attr) S & GT؛ انقر هنا العلامة & lt؛ / أ & "
-"GT؛."
+"سكريبت، يرجى &lt; ل %(a_attr)s&gt; انقر هنا &lt;/a&gt;"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:15
@@ -10489,7 +10487,7 @@ msgstr "إنشاء رمز القطعة"
 #: pretix/control/templates/pretixcontrol/events/create_base.html:6
 #, python-format
 msgid "Step %(step)s"
-msgstr "خطوة٪ (الخطوة) ق"
+msgstr "خطوة %(step)s"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:31
 msgid ""
@@ -10614,12 +10612,12 @@ msgstr "الحصة:"
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
 #, python-format
 msgid "Numbers as of %(date)s"
-msgstr "أرقام اعتبارا من٪ (التاريخ) ق"
+msgstr "أرقام اعتبارا من %(date)s"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
 #, python-format
 msgid "Currently available: %(num)s"
-msgstr "المتاحة حاليا:٪ (الأسطوانات) ق"
+msgstr "المتاحة حاليا: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:4
 msgid ""
@@ -10709,7 +10707,7 @@ msgstr "ويبدو أن هذا التثبيت ليكون التركيب التن
 #: pretix/control/templates/pretixcontrol/global_update.html:47
 #, python-format
 msgid "Last updated: %(date)s"
-msgstr "آخر تحديث:٪ (التاريخ) ق"
+msgstr "آخر تحديث: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:59
 msgid "Component"
@@ -10787,7 +10785,7 @@ msgstr "المنتج حذف"
 msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered."
-msgstr "لا يمكنك حذف المنتج على <strong>%(items)s</strong> لأنه بالفعل قد أمرت."
+msgstr "لا يمكنك حذف المنتج على <strong>%(item)s</strong> لأنه بالفعل قد أمرت."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:19
 #, python-format
@@ -10817,7 +10815,7 @@ msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered, but you can deactivate it."
 msgstr ""
-"لا يمكنك حذف المنتج على <strong>%(items)s</strong> لأنه بالفعل قد أمرت، ولكن "
+"لا يمكنك حذف المنتج على <strong>%(item)s</strong> لأنه بالفعل قد أمرت، ولكن "
 "يمكنك إلغاء تنشيطه."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:41
@@ -10943,7 +10941,7 @@ msgstr "بيعت (في انتظار أوامر)"
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:8
 #, python-format
 msgid "%(num)s available"
-msgstr "٪ (الأسطوانات) هو متاح"
+msgstr "%(num)s هو متاح"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:11
 msgid "Unlimited"
@@ -11015,7 +11013,7 @@ msgstr "لا يمكن إلا أن يكون اشترى استخدام قسيمة"
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:15
 #, python-format
 msgid "Question: %(name)s"
-msgstr "سؤال:٪ (الاسم) ق"
+msgstr "سؤال: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:13
 #: pretix/control/templates/pretixcontrol/items/question.html:54
@@ -11091,7 +11089,7 @@ msgstr "فقط ينطبق إذا اخترت \"اختيار واحد / متعدد
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:54
 #, python-format
 msgid "Answer option %(id)s"
-msgstr "الجواب خيار٪ (معرف) ق"
+msgstr "الجواب خيار %(id)s"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:85
 msgid "New answer option"
@@ -11133,7 +11131,7 @@ msgstr "طرح خلال التسجيل في مكتب الاستقبال"
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:13
 #, python-format
 msgid "Quota: %(name)s"
-msgstr "الحصة:٪ (الاسم) ق"
+msgstr "الحصة: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:14
 msgid "Edit quota"
@@ -11185,7 +11183,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quota.html:83
 #, python-format
 msgid "This quota is currently overbooked by %(num)s tickets."
-msgstr "ومكتظا بالنزلاء هذه الحصة حاليا٪ (الأسطوانات) ق التذاكر."
+msgstr "ومكتظا بالنزلاء هذه الحصة حاليا %(num)s التذاكر."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:90
 msgid ""
@@ -11444,7 +11442,7 @@ msgstr "نعم، إلغاء الطلب"
 #: pretix/control/templates/pretixcontrol/order/change.html:13
 #, python-format
 msgid "Change order: %(code)s"
-msgstr "تغيير النظام:٪ (رمز) ق"
+msgstr "تغيير النظام: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:18
 #: pretix/control/templates/pretixcontrol/order/change_contact.html:12
@@ -11514,7 +11512,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:68
 #, python-format
 msgid "Add-On to position #%(posid)s"
-msgstr "إضافة على ل٪ (بوسيد) موقف #"
+msgstr "إضافة على #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:85
 #: pretix/control/templates/pretixcontrol/order/change.html:278
@@ -11639,7 +11637,7 @@ msgstr "تمديد فترة السداد"
 #: pretix/control/templates/pretixcontrol/order/index.html:16
 #, python-format
 msgid "Order details: %(code)s"
-msgstr "تفاصيل الطلب:٪ (رمز) ق"
+msgstr "تفاصيل الطلب: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:14
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:5
@@ -11683,12 +11681,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:96
 #, python-format
 msgid "This order is currently overpaid by %(amount)s."
-msgstr "وزائدة هذا النظام حاليا من قبل٪ (كمية) ق."
+msgstr "وزائدة هذا النظام حاليا من قبل %(amount)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:100
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr "بدء استرداد٪ (كمية) ق"
+msgstr "بدء استرداد %(amount)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:113
 #: pretix/presale/templates/pretixpresale/event/order.html:7
@@ -11752,12 +11750,12 @@ msgstr "المواد المطلوبة"
 #: pretix/control/templates/pretixcontrol/order/index.html:259
 #, python-format
 msgid "Automatically checked in: %(date)s"
-msgstr "التحقق تلقائيا في:٪ (التاريخ) ق"
+msgstr "التحقق تلقائيا في: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:261
 #, python-format
 msgid "First scanned: %(date)s"
-msgstr "الممسوحة ضوئيا أولا:٪ (التاريخ) ق"
+msgstr "الممسوحة ضوئيا أولا: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:274
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:25
@@ -11803,7 +11801,7 @@ msgstr "UNSAFE"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:205
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
-msgstr "<strong> زائد </strong>٪ (معدل) الصورة ٪٪٪ (taxname) ق"
+msgstr "<strong> زائد </strong> %(rate)s%% %(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:406
 #: pretix/control/templates/pretixcontrol/order/index.html:440
@@ -11811,7 +11809,7 @@ msgstr "<strong> زائد </strong>٪ (معدل) الصورة ٪٪٪ (taxname) �
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:215
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr "بما في ذلك ٪ (معدل) الصورة ٪٪٪ (taxname) ق"
+msgstr "بما في ذلك %(rate)s%% %(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:453
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:228
@@ -12104,10 +12102,10 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
 "%(total)s</strong>."
 msgstr ""
-"نحن رسفيد لاحظ أن <strong>٪ (كمية) ق </strong> كان ردها عبر <strong>٪ (طريقة)"
-" ق </strong>. إذا تم معالجة هذا المبلغ، وسوف يكون النظام يتقاضون أجورا التي "
-"كتبها <strong>٪ (معلقة) ق </strong>. مجموع النظام هو على <strong>٪ (الكل) ق "
-"</strong>."
+"نحن رسفيد لاحظ أن <strong>%(amount)s</strong> كان ردها عبر "
+"<strong>%(method)s</strong>. إذا تم معالجة هذا المبلغ، وسوف يكون النظام "
+"يتقاضون أجورا التي كتبها <strong>%(pending)s</strong>. مجموع النظام هو على "
+"<strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:29
 msgid "What should happen to the ticket order?"
@@ -12199,7 +12197,7 @@ msgstr "اذهب!"
 #: pretix/control/templates/pretixcontrol/orders/index.html:78
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr "قائمة تمت تصفيتها عن طريق الإجابة على السؤال \"٪ (السؤال) ق\"."
+msgstr "قائمة تمت تصفيتها عن طريق الإجابة على السؤال \"%(question)s\"."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
 msgid "Remove filter"
@@ -12307,8 +12305,8 @@ msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"للتأكد من أنك تريد حقا هذا، يرجى كتابة اسم من المنظم قصيرة ( \"٪ (سبيكة) ق\")"
-" هنا:"
+"للتأكد من أنك تريد حقا هذا، يرجى كتابة اسم من المنظم قصيرة ( \"%(slug)s\") "
+"هنا:"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
 msgid ""
@@ -12320,7 +12318,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:6
 #, python-format
 msgid "Organizer: %(name)s"
-msgstr "منظم:٪ (الاسم) ق"
+msgstr "منظم: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:6
 msgid "Connect to device:"
@@ -12496,7 +12494,7 @@ msgstr "إضافة خاصية"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
 #, python-format
 msgid "Gift card: %(card)s"
-msgstr "هدية بطاقة:٪ (بطاقة) ق"
+msgstr "هدية بطاقة: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:17
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:66
@@ -12658,7 +12656,7 @@ msgstr "أفراد"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:33
 #, python-format
 msgid "+ %(count)s invited"
-msgstr "+٪ (عدد) ق دعوة"
+msgstr "+ %(count)s دعوة"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:6
 msgid "Modify webhook"
@@ -12671,7 +12669,7 @@ msgstr "إنشاء webhook جديدة"
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:5
 #, python-format
 msgid "Logs for webhook %(url)s"
-msgstr "السجلات ل٪ (رابط) الصورة webhook"
+msgstr "السجلات ل %(url)s الصورة webhook"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:7
 msgid "This page shows all calls to your webhook in the past 30 days."
@@ -12730,13 +12728,13 @@ msgstr "سجلات"
 #: pretix/control/templates/pretixcontrol/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s (%(count)s elements)"
-msgstr "الصفحة٪ (صفحة) s من٪ (من) ق (٪ (عدد) الصورة العناصر)"
+msgstr "الصفحة %(page)s من %(of)s (%(count)s عناصر)"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:28
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:28
 #, python-format
 msgid "%(count)s elements"
-msgstr "٪ (عدد) ق العناصر"
+msgstr "%(count)s العناصر"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:38
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:38
@@ -12746,7 +12744,7 @@ msgstr "تظهر في الصفحة:"
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:14
 #, python-format
 msgid "Page %(page)s"
-msgstr "الصفحة٪ (صفحة) ق"
+msgstr "الصفحة %(page)s"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:5
 #: pretix/control/templates/pretixcontrol/pdf/index.html:15
@@ -13074,7 +13072,7 @@ msgstr "حكم تكرار"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:192
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr "كرر كل٪ (فاصل) ق٪ (التكرار) ق، ابتداء من الساعة٪ (بدء) ق."
+msgstr "كرر كل %(interval)s %(freq)s، ابتداء من الساعة%(start)s."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:89
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:200
@@ -13085,7 +13083,7 @@ msgstr "في نفس التاريخ من كل عام"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:204
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr "على٪ (setpos) ق٪ (أيام الأسبوع) s من٪ (شهر) ق"
+msgstr "على%(setpos)s %(weekday)s من %(month)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:103
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:214
@@ -13096,19 +13094,19 @@ msgstr "في نفس التاريخ كل شهر"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:218
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr "على٪ (setpos) ق٪ (أيام الأسبوع) ق"
+msgstr "على%(setpos)s %(weekday)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:120
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:231
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr "كرر ل٪ (عدد) ق مرات"
+msgstr "كرر ل %(count)s مرات"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:126
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:237
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr "كرر حتى٪ (حتى) ق"
+msgstr "كرر حتى %(until)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:258
 msgctxt "subevent"
@@ -13305,7 +13303,7 @@ msgstr "حذف جهاز اثنين عامل التوثيق"
 #, python-format
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
-msgstr "هل أنت متأكد أنك تريد حذف مصادقة الجهاز \"٪ (الجهاز) ليالي\"؟"
+msgstr "هل أنت متأكد أنك تريد حذف مصادقة الجهاز \"%(device)s\"؟"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
@@ -13625,7 +13623,7 @@ msgstr "عضوية فريق"
 #: pretix/control/templates/pretixcontrol/users/form.html:55
 #, python-format
 msgid "Team \"%(team)s\" of organizer \"%(organizer)s\""
-msgstr "فريق \"٪ (فريق) ليالي\" منظم \"٪ (منظم) ليالي\""
+msgstr "فريق \"%(team)s\" منظم \"%(organizer)s\""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:74
 msgid "User history"
@@ -13730,7 +13728,7 @@ msgstr "هذه القسائم بالفعل تم استخدامها. فمن غي�
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
 msgid "Order %(code)s"
-msgstr "ترتيب٪ (رمز) ق"
+msgstr "ترتيب %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
 msgid "Voucher link"
@@ -13782,7 +13780,7 @@ msgstr "انقضاء"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:158
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr "أي منتج في حصة \"٪ (الكوتا) ليالي\""
+msgstr "أي منتج في حصة \"%(quota)s\""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:169
 msgid "Use as a template for new vouchers"
@@ -13934,8 +13932,8 @@ msgid ""
 "                                "
 msgstr ""
 "\n"
-"                                    الانتظار، والمنتج٪ (الأسطوانات) SX متاح\n"
-"                                "
+"                                    الانتظار، والمنتج%(num)s متاح\n"
+"                                "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:179
 msgid "Waiting, product unavailable"
@@ -14242,7 +14240,7 @@ msgstr "عدم وجود هذا مزود خدمة الدفع أو تعطيل ال
 #: pretix/control/views/event.py:516
 #, python-format
 msgid "An error occurred while contacting the SMTP server: %s"
-msgstr "حدث خطأ أثناء الاتصال بالخادم SMTP:٪ ق"
+msgstr "حدث خطأ أثناء الاتصال بالخادم SMTP %s"
 
 #: pretix/control/views/event.py:519
 msgid ""
@@ -15320,7 +15318,7 @@ msgstr "هل أنت متأكد أنك تريد حذف تخطيط شارة على
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr "شارة التخطيط:٪ (الاسم) ق"
+msgstr "شارة التخطيط: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
 msgid "Badge design"
@@ -15493,7 +15491,7 @@ msgstr "بيانات البنك استيراد"
 #: pretix/plugins/banktransfer/tasks.py:31
 #, python-format
 msgid "Your order received an incomplete payment: %(code)s"
-msgstr "تلقى طلبك دفعة ناقصة:٪ (رمز) ق"
+msgstr "تلقى طلبك دفعة ناقصة: %(code)s"
 
 #: pretix/plugins/banktransfer/tasks.py:99
 #: pretix/plugins/banktransfer/views.py:95
@@ -15542,9 +15540,9 @@ msgstr ""
 "\n"
 "يرجى تحويل المبلغ كاملا إلى الحساب المصرفي التالي.\n"
 "\n"
-"    إشارة:٪ (رمز) ق\n"
-"    المبلغ:٪ (الكل) ق\n"
-"٪(البنوك\n"
+"    إشارة: %(code)s\n"
+"    المبلغ: %(total)s\n"
+"%(bank)s\n"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -15566,8 +15564,8 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
-"في إعدادات دفع هذا الحدث الخاص بك، يمكنك تعيين٪ (التاريخ) ق موعدا الأخير من "
-"أي مدفوعات. لذلك، فلن تكون قادرا على تمييز أي أمر كما دفعت هنا."
+"في إعدادات دفع هذا الحدث الخاص بك، يمكنك تعيين %(date)s موعدا الأخير من أي "
+"مدفوعات. لذلك، فلن تكون قادرا على تمييز أي أمر كما دفعت هنا."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:16
 msgid "Upload a new file"
@@ -16007,7 +16005,7 @@ msgid ""
 "has already been paid by other means. Please double check and refund the "
 "money via PayPal's interface."
 msgstr ""
-"باي بال المعاملات٪ (الدفع) ق نجحت، ولكن النظام٪ (الترتيب) ق تم بالفعل دفع "
+"باي بال المعاملات %(payment)s نجحت، ولكن النظا %(order)s تم بالفعل دفع "
 "بوسائل أخرى. يرجى التحقق من ضعف وسنرد على المال عن طريق واجهة باي بال ل."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_overpaid.html:5
@@ -16018,7 +16016,7 @@ msgid ""
 "could not be accepted. Please contact the user and refund the money via "
 "PayPal's interface."
 msgstr ""
-"باي بال المعاملات٪ (الدفع) ق نجحت، ولكن النظام٪ (الترتيب) s غير منتهية "
+"باي بال المعاملات %(payment)s نجحت، ولكن النظام %(order)s غير منتهية "
 "الصلاحية وتم بيع المنتج في هذه الأثناء. لذلك، لا يمكن قبول الدفع. يرجى "
 "الاتصال بالمستخدم وسنرد على المال عن طريق واجهة باي بال ل."
 
@@ -16028,8 +16026,8 @@ msgid ""
 "PayPal reported that the payment %(payment)s has been refunded or reversed. "
 "Do you want to mark the matching order (%(order)s) as refunded?"
 msgstr ""
-"ذكرت باي بال أن دفع٪ (الدفع) قد كان ردها أو عكسه. هل تريد وضع علامة ترتيب "
-"المطابقة (٪ (النظام)) كما هو ردها؟"
+"ذكرت باي بال أن دفع %(payment)s قد كان ردها أو عكسه. هل تريد وضع علامة ترتيب "
+"المطابقة (%(order)s) كما هو ردها؟"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 msgid ""
@@ -16355,12 +16353,12 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:114
 #, python-format
 msgid "Page %d"
-msgstr "الصفحة٪ د"
+msgstr "الصفحة %d"
 
 #: pretix/plugins/reports/exporters.py:116
 #, python-format
 msgid "Created: %s"
-msgstr "مكون:٪ ق"
+msgstr "مكون: %s"
 
 #: pretix/plugins/reports/exporters.py:153
 msgid "Order overview (PDF)"
@@ -16545,7 +16543,7 @@ msgid ""
 "Your message has been queued and will be sent to the contact addresses of %d "
 "orders in the next minutes."
 msgstr ""
-"وقد اصطف رسالتك وسوف يتم ارسالهم الى عناوين الاتصال٪ د أوامر في الدقائق "
+"وقد اصطف رسالتك وسوف يتم ارسالهم الى عناوين الاتصال %d أوامر في الدقائق "
 "القادمة."
 
 #: pretix/plugins/statistics/__init__.py:9
@@ -16613,9 +16611,7 @@ msgstr "يسمح هذا البرنامج المساعد لك لتلقي مدفو
 msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
-msgstr ""
-"مفتاح تقدم \"٪ (القيمة) ليالي\" لا تبدو صحيحة. يجب أن تبدأ مع \"٪ (اختصار) "
-"ليالي\"."
+msgstr "مفتاح تقدم \"%(value)s\" لا تبدو صحيحة. يجب أن تبدأ مع \"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:30 pretix/plugins/stripe/signals.py:126
 msgid "Stripe Connect: App fee (percent)"
@@ -16773,7 +16769,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:415 pretix/plugins/stripe/payment.py:772
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr "ذكرت شريط خطأ:٪ ق"
+msgstr "ذكرت شريط خطأ: %s"
 
 #: pretix/plugins/stripe/payment.py:466
 msgid "No payment information found."
@@ -16936,9 +16932,9 @@ msgid ""
 "the order %(order)s has already been paid by other means. Please double-"
 "check and refund the money via Stripe's interface."
 msgstr ""
-"الصفقة الشريط <a ٪(stripe_href)s>٪ نجحت (تهمة) الصورة </A>، ولكن النظام٪ "
-"(الترتيب) ق تم بالفعل دفع بوسائل أخرى. الرجاء انقر نقرا مزدوجا الاختيار "
-"واسترداد الاموال عن طريق واجهة الشريط ل."
+"الصفقة الشريط <a %(stripe_href)s>%(charge)s نجحت </A>، ولكن النظام%(order)s "
+"تم بالفعل دفع بوسائل أخرى. الرجاء انقر نقرا مزدوجا الاختيار واسترداد الاموال "
+"عن طريق واجهة الشريط ل."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_overpaid.html:5
 #, python-format
@@ -16948,9 +16944,9 @@ msgid ""
 "Therefore, the payment could not be accepted. Please contact the user and "
 "refund the money via Stripe's interface."
 msgstr ""
-"الصفقة الشريط <a ٪(stripe_href)s>٪ نجحت (تهمة) الصورة </A>، ولكن النظام٪ "
-"(الترتيب) s غير منتهية الصلاحية وتم بيع المنتج في هذه الأثناء. لذلك، لا يمكن "
-"قبول الدفع. يرجى الاتصال بالمستخدم وسنرد على المال عن طريق واجهة الشريط ل."
+"الصفقة الشريط <a %(stripe_href)s>نجحت %(charge)s </A>، ولكن النظام %(order)s "
+"غير منتهية الصلاحية وتم بيع المنتج في هذه الأثناء. لذلك، لا يمكن قبول الدفع. "
+"يرجى الاتصال بالمستخدم وسنرد على المال عن طريق واجهة الشريط ل."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:5
 #, python-format
@@ -16959,8 +16955,8 @@ msgid ""
 "been refunded. Do you want to refund mark the matching order (%(order)s) as "
 "refunded?"
 msgstr ""
-"ذكرت الشريط أن الصفقة <a ٪(stripe_href)s>٪ (مقابل) ق </A> كان ردها. هل تريد "
-"علامة استرداد ترتيب المطابقة (٪ (النظام)) كما هو ردها؟"
+"ذكرت الشريط أن الصفقة <a %(stripe_href)s>%(charge)s</A> كان ردها. هل تريد "
+"علامة استرداد ترتيب المطابقة (%(order)s) كما هو ردها؟"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
@@ -17066,7 +17062,7 @@ msgstr "ترتيب الأجور"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
 #, python-format
 msgid "Confirm payment: %(code)s"
-msgstr "تأكيد الدفع:٪ (رمز) ق"
+msgstr "تأكيد الدفع: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:18
 msgid "Confirming your payment…"
@@ -17171,13 +17167,13 @@ msgstr "تخطيط تذكرة"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
-msgstr "هل أنت متأكد أنك تريد حذف تخطيط على <strong>٪ (التخطيط) ق </strong>؟"
+msgstr "هل أنت متأكد أنك تريد حذف تخطيط على <strong>%(layout)s</strong>؟"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
 #, python-format
 msgid "Ticket layout: %(name)s"
-msgstr "تخطيط تذكرة:٪ (الاسم) ق"
+msgstr "تخطيط تذكرة: %(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
@@ -17357,7 +17353,7 @@ msgstr "غير متاح حاليا"
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr "٪ (الأسطوانات) هو متاح حاليا"
+msgstr "%(num)s هو متاح حاليا"
 
 #: pretix/presale/forms/checkout.py:264
 msgid "no selection"
@@ -17381,7 +17377,7 @@ msgstr "منظم: {المنظم}"
 #: pretix/presale/templates/pretixpresale/base_footer.html:36
 #, python-format
 msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
-msgstr "<a ٪(a_attr)s> الحدث التذاكر مدعوم من pretix </A>"
+msgstr "<a %(a_attr)s> الحدث التذاكر مدعوم من pretix </A>"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:26
 msgid "This shop is currently only visible to you and your team."
@@ -17394,7 +17390,7 @@ msgstr "أعتبر نعيش الآن"
 #: pretix/presale/templates/pretixpresale/event/base.html:39
 #, python-format
 msgid "Show all events of %(name)s"
-msgstr "عرض كل الأحداث من٪ (الاسم) ق"
+msgstr "عرض كل الأحداث من %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:76
 #: pretix/presale/templates/pretixpresale/event/base.html:100
@@ -17449,7 +17445,7 @@ msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
 msgstr ""
-"يمكنك الاختيار بين٪ (min_count) s و٪ (MAX_COUNT) الصورة خيارات من هذه الفئة."
+"يمكنك الاختيار بين%(min_count)s و %(max_count)s الصورة خيارات من هذه الفئة."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:56
 msgid "There are no add-ons available for this product."
@@ -17484,7 +17480,7 @@ msgstr "انتهت العربة"
 #: pretix/presale/templates/pretixpresale/event/index.html:53
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr "محجوزة البنود في عربة التسوق لك ل٪ (دقيقة) ق دقائق."
+msgstr "محجوزة البنود في عربة التسوق لك ل %(minutes)s دقائق."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
@@ -17668,7 +17664,7 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
-"وبمجرد أن تكون هذه البنود في عربة التسوق، سيكون لديك٪ (الوقت) ق دقائق لإتمام "
+"وبمجرد أن تكون هذه البنود في عربة التسوق، سيكون لديك %(time)s دقائق لإتمام "
 "عملية الشراء."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:138
@@ -17695,7 +17691,7 @@ msgstr "تحميل جميع تذاكر في وقت واحد:"
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:29
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
-msgstr "سوف تكون قادرة على تحميل التذاكر الخاصة بك هنا تبدأ على٪ (التاريخ) ق."
+msgstr "سوف تكون قادرة على تحميل التذاكر الخاصة بك هنا تبدأ على %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Payment pending"
@@ -17705,12 +17701,12 @@ msgstr "انتظار الدفع"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:200
 #, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr "الحد الأدنى لأجل:٪ (الأسطوانات) ق"
+msgstr "الحد الأدنى لأجل: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:54
 #, python-format
 msgid "from %(price)s"
-msgstr "من٪ (سعر) ق"
+msgstr "من %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:60
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:115
@@ -17732,7 +17728,7 @@ msgstr "مشاهدة المتغيرات"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:226
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr "سعر تعديل ل٪ (البند) ق"
+msgstr "سعر تعديل ل %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:126
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:240
@@ -17754,7 +17750,7 @@ msgstr "بما في ذلك الضرائب"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:247
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
-msgstr "<strong> زائد </strong>٪ (معدل) الصورة ٪٪٪ (الاسم) ق"
+msgstr "<strong> زائد </strong> %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:135
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:249
@@ -17762,7 +17758,7 @@ msgstr "<strong> زائد </strong>٪ (معدل) الصورة ٪٪٪ (الاسم
 #: pretix/presale/templates/pretixpresale/event/voucher.html:251
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
-msgstr "بما في ذلك ٪ (معدل]) [س ٪٪٪ (الاسم) ق"
+msgstr "بما في ذلك %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:143
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:257
@@ -17774,14 +17770,14 @@ msgstr "إدخال رمز قسيمة أدناه لشراء هذه التذاكر
 #: pretix/presale/templates/pretixpresale/event/voucher.html:169
 #, python-format
 msgid "Amount of %(item)s – %(var)s to order"
-msgstr "كمية٪ (البند) ق -٪ (فار) ق للنظام"
+msgstr "كمية %(item)s - %(var)s للطلب"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:275
 #: pretix/presale/templates/pretixpresale/event/voucher.html:266
 #: pretix/presale/templates/pretixpresale/event/voucher.html:275
 #, python-format
 msgid "Amount of %(item)s to order"
-msgstr "كمية٪ (البند) ق للنظام"
+msgstr "كمية %(item)s للنظام"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
@@ -17802,7 +17798,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:90
 #, python-format
 msgid "Sale starts %(date)s"
-msgstr "بيع يبدأ٪ (التاريخ) ق"
+msgstr "بيع يبدأ %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:40
 #: pretix/presale/templates/pretixpresale/organizers/index.html:95
@@ -17848,7 +17844,7 @@ msgstr "فترة [خبر] لهذا الحدث قد انتهت."
 #: pretix/presale/views/widget.py:486
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr "من [خبر] لهذا الحدث سيبدأ على٪ (التاريخ) ق في٪ (الوقت) ق."
+msgstr "من [خبر] لهذا الحدث سيبدأ على%(date)s في %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:152
 #: pretix/presale/views/widget.py:491
@@ -17974,12 +17970,12 @@ msgstr "عرض في الخلفية"
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr "ودفع٪ (الكل) ليالي لا يزال معلقا لهذا النظام."
+msgstr "ودفع %(total)s ليالي لا يزال معلقا لهذا النظام."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:69
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr "يرجى إتمام عملية الدفع قبل٪ (التاريخ) ق"
+msgstr "يرجى إتمام عملية الدفع قبل %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:78
 msgid "Re-try payment or choose another payment method"
@@ -17993,7 +17989,7 @@ msgstr "ادفع الآن"
 #: pretix/presale/templates/pretixpresale/event/order.html:100
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
-msgstr "A استرداد٪ (كمية) ق سيتم إرسالها لكم في وقت قريب، يرجى التحلي بالصبر."
+msgstr "A استرداد %(amount)s سيتم إرسالها لكم في وقت قريب، يرجى التحلي بالصبر."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:104
 #, python-format
@@ -18001,8 +17997,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
-"ق تم ارسال استرداد٪ (كمية) لك. اعتمادا على طريقة الدفع، أرجو أن تسمحوا لمدة "
-"تصل إلى 14 يوما حتى يظهر على بيانكم."
+"ق تم ارسال استرداد %(amount)s لك. اعتمادا على طريقة الدفع، أرجو أن تسمحوا "
+"لمدة تصل إلى 14 يوما حتى يظهر على بيانكم."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:121
 #: pretix/presale/templates/pretixpresale/event/order.html:204
@@ -18055,7 +18051,7 @@ msgstr "يمكنك إلغاء هذا النظام باستخدام زر التا
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:8
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr "إلغاء النظام:٪ (رمز) ق"
+msgstr "إلغاء النظام: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:22
 #, python-format
@@ -18064,7 +18060,7 @@ msgid ""
 "original payment method. Depending on the payment method, please allow for "
 "up to two weeks before this appears on your statement."
 msgstr ""
-"ق سيتم تلقائيا إرسال المبلغ المسترد من٪ (كمية) مرة أخرى إلى طريقة الدفع "
+"ق سيتم تلقائيا إرسال المبلغ المسترد من %(amount)s مرة أخرى إلى طريقة الدفع "
 "الأصلي. اعتمادا على طريقة الدفع، أرجو أن تسمحوا لمدة تصل إلى أسبوعين قبل هذا "
 "يظهر على بيانكم."
 
@@ -18087,7 +18083,7 @@ msgstr "تعديل الترتيب"
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr "تعديل النظام:٪ (رمز) ق"
+msgstr "تعديل النظام: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:18
 msgid ""
@@ -18105,7 +18101,7 @@ msgstr "حفظ التغييرات"
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr "أجل الدفع:٪ (رمز) ق"
+msgstr "أجل الدفع: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
@@ -18114,7 +18110,7 @@ msgstr "قم بتغيير آلية الدفع"
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:8
 #, python-format
 msgid "Choose payment method: %(code)s"
-msgstr "اختيار طريقة الدفع:٪ (رمز) ق"
+msgstr "اختيار طريقة الدفع: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:13
 msgid ""
@@ -18135,7 +18131,7 @@ msgstr "يرجى تأكيد تفاصيل الدفع التالية."
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
 msgid "Total: %(total)s"
-msgstr "المجموع:٪ (الكل) ق"
+msgstr "المجموع: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
 msgid "Registration details"
@@ -18159,8 +18155,8 @@ msgid ""
 "This order is managed for you by %(email)s. Please contact them for any "
 "questions regarding payment, cancellation or changes to this order."
 msgstr ""
-"ويدير هذا النظام بالنسبة لك بواسطة٪ (البريد الإلكتروني) ق. يرجى الاتصال بهم "
-"عن أي أسئلة بخصوص دفع أو إلغاء أو تغييرات على هذا النظام."
+"ويدير هذا النظام بالنسبة لك بواسطة %(email)s. يرجى الاتصال بهم عن أي أسئلة "
+"بخصوص دفع أو إلغاء أو تغييرات على هذا النظام."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid ""
@@ -18191,7 +18187,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:76
 #, python-format
 msgid "from %(minprice)s"
-msgstr "من٪ (minprice) ق"
+msgstr "من %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
@@ -18205,7 +18201,7 @@ msgid ""
 "ticket until we assign it to the next person on the list."
 msgstr ""
 "إذا أصبحت تذاكر متوفرة مرة أخرى، وسوف نبلغ الاشخاص الأول على قائمة الانتظار. "
-"إذا كان لنا أن يخطر لك، سيكون لديك٪ (ساعة) ق ساعات من الوقت لشراء تذكرة حتى "
+"إذا كان لنا أن يخطر لك، سيكون لديك %(hours)s ساعات من الوقت لشراء تذكرة حتى "
 "وإسناد ذلك إلى الشخص التالي في القائمة."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:34
@@ -18220,8 +18216,8 @@ msgid ""
 "                                                    "
 msgstr ""
 "\n"
-"                                                        من٪ (تاريخ_البدء) ق\n"
-"                                                    "
+"                                                        من %(start_date)s\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
@@ -18233,7 +18229,7 @@ msgid ""
 "This is a self-hosted installation of <a %(a_attr)s>pretix, your free and "
 "open source ticket sales software</a>."
 msgstr ""
-"هذا هو تركيب الذاتي استضافت من <a ٪(a_attr)s> pretix، يا حرة ومفتوحة المصدر "
+"هذا هو تركيب الذاتي استضافت من <a %(a_attr)s> pretix، يا حرة ومفتوحة المصدر "
 "تذكرة مبيعات البرمجيات </A>."
 
 #: pretix/presale/templates/pretixpresale/index.html:15
@@ -18249,7 +18245,7 @@ msgstr ""
 msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
-msgstr "إذا كنت تبحث لتكوين هذا التثبيت، يرجى <a ٪(a_attr)s> رأسا على هنا </a>."
+msgstr "إذا كنت تبحث لتكوين هذا التثبيت، يرجى <a %(a_attr)s> رأسا على هنا </a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
@@ -18308,7 +18304,7 @@ msgstr "لا توجد أحداث قادمة العامة."
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr "الصفحة٪ (صفحة) s من٪ (من) ق"
+msgstr "الصفحة%(page)s من %(of)s"
 
 #: pretix/presale/utils.py:38 pretix/presale/utils.py:133
 #: pretix/presale/utils.py:134
@@ -18486,7 +18482,7 @@ msgstr "هذه ليست سلسلة الحدث."
 #: pretix/presale/views/widget.py:308
 #, python-format
 msgid "from %(start_date)s"
-msgstr "من٪ (تاريخ_البدء) ق"
+msgstr "من %(start_date)s"
 
 #: pretix/presale/views/widget.py:311
 msgid "Sale soon"
