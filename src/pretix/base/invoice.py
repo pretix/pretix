@@ -490,10 +490,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         story = [
             NextPageTemplate('FirstPage'),
-            Paragraph(pgettext('invoice', 'Invoice')
-                      if not self.invoice.is_cancellation
-                      else pgettext('invoice', 'Cancellation'),
-                      self.stylesheet['Heading1']),
+            Paragraph(
+                (
+                    pgettext('invoice', 'Tax Invoice') if str(self.invoice.invoice_from_country) == 'AU'
+                    else pgettext('invoice', 'Invoice')
+                ) if not self.invoice.is_cancellation else pgettext('invoice', 'Cancellation'),
+                self.stylesheet['Heading1']
+            ),
             Spacer(1, 5 * mm),
             NextPageTemplate('OtherPages'),
         ]
