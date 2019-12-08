@@ -15,6 +15,7 @@ Contents:
    placeholder
    invoice
    shredder
+   import
    customview
    auth
    general
