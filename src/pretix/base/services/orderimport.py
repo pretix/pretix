@@ -11,7 +11,9 @@ from django.db import transaction
 from django.utils import formats
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext as _, gettext_lazy
+from django.utils.translation import (
+    gettext as _, gettext_lazy, pgettext, pgettext_lazy,
+)
 from django_countries import countries
 from django_countries.fields import Country
 
@@ -20,7 +22,7 @@ from pretix.base.forms.questions import guess_country
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
     CachedFile, Event, InvoiceAddress, ItemVariation, Order, OrderPayment,
-    OrderPosition, QuestionOption, User,
+    OrderPosition, QuestionOption, Seat, User,
 )
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
 from pretix.base.services.pricing import get_price
@@ -85,6 +87,32 @@ class EmailColumn(ImportColumn):
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         order.email = value
+
+
+class SubeventColumn(ImportColumn):
+    identifier = 'subevent'
+    verbose_name = pgettext_lazy('subevents', 'Date')
+    default_value = None
+
+    @cached_property
+    def subevents(self):
+        return list(self.event.subevents.filter(active=True).order_by('date_from'))
+
+    def static_choices(self):
+        return [
+            (str(p.pk), str(p)) for p in self.subevents
+        ]
+
+    def clean(self, value, previous_values):
+        matches = [
+            p for p in self.subevents
+            if str(p.pk) == value or any((v and v == value) for v in p.name.data.values()) or p.date_from.isoformat() == value
+        ]
+        if len(matches) == 0:
+            raise ValidationError(pgettext("subevent", "No matching date was found."))
+        if len(matches) > 1:
+            raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
+        return matches[0]
 
 
 class ItemColumn(ImportColumn):
@@ -405,6 +433,29 @@ class Saleschannel(ImportColumn):
         order.sales_channel = value
 
 
+class SeatColumn(ImportColumn):
+    identifier = 'seat'
+    verbose_name = gettext_lazy('Seat ID')
+
+    def clean(self, value, previous_values):
+        if value:
+            try:
+                value = Seat.objects.get(
+                    seat_guid=value,
+                    subevent=previous_values.get('subevent')
+                )
+            except Seat.DoesNotExist:
+                raise ValidationError(_('No matching seat was found.'))
+            if not value.is_available():
+                raise ValidationError(_('The seat you selected has already been taken. Please select a different seat.'))
+        elif previous_values['item'].seat_category_mappings.filter(subevent=previous_values.get('subevent')).exists():
+            raise ValidationError(_('You need to select a specific seat.'))
+        return value
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.seat = value
+
+
 class Comment(ImportColumn):
     identifier = 'comment'
     verbose_name = gettext_lazy('Comment')
@@ -443,7 +494,10 @@ class QuestionColumn(ImportColumn):
 
 
 def get_all_columns(event):
-    default = [
+    default = []
+    if event.has_subevents:
+        default.append(SubeventColumn(event))
+    default += [
         EmailColumn(event),
         ItemColumn(event),
         Variation(event),
@@ -469,13 +523,12 @@ def get_all_columns(event):
         Secret(event),
         Locale(event),
         Saleschannel(event),
+        SeatColumn(event),
         Comment(event)
     ]
     for q in event.questions.exclude(type='F'):
         default.append(QuestionColumn(event, q))
 
-    # TODO: seat
-    # TODO: subevent
     # TODO: plugins
 
     return default
