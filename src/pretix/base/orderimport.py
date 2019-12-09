@@ -146,16 +146,24 @@ class SubeventColumn(ImportColumn):
         ]
 
     def clean(self, value, previous_values):
+        if not value:
+            raise ValidationError(pgettext("subevent", "You need to select a date."))
         matches = [
             p for p in self.subevents
             if str(p.pk) == value or any(
-                (v and v == value) for v in p.name.data.values()) or p.date_from.isoformat() == value
+                (v and v == value) for v in i18n_flat(p.name)) or p.date_from.isoformat() == value
         ]
         if len(matches) == 0:
             raise ValidationError(pgettext("subevent", "No matching date was found."))
         if len(matches) > 1:
             raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
         return matches[0]
+
+
+def i18n_flat(l):
+    if isinstance(l.data, dict):
+        return l.data.values()
+    return [l.data]
 
 
 class ItemColumn(ImportColumn):
@@ -176,7 +184,7 @@ class ItemColumn(ImportColumn):
         matches = [
             p for p in self.items
             if str(p.pk) == value or (p.internal_name and p.internal_name == value) or any(
-                (v and v == value) for v in p.name.data.values())
+                (v and v == value) for v in i18n_flat(p.name))
         ]
         if len(matches) == 0:
             raise ValidationError(_("No matching product was found."))
@@ -207,7 +215,7 @@ class Variation(ImportColumn):
         if value:
             matches = [
                 p for p in self.items
-                if str(p.pk) == value or any((v and v == value) for v in p.value.data.values()) and p.item_id == previous_values['item'].pk
+                if str(p.pk) == value or any((v and v == value) for v in i18n_flat(p.value)) and p.item_id == previous_values['item'].pk
             ]
             if len(matches) == 0:
                 raise ValidationError(_("No matching variation was found."))
@@ -328,7 +336,7 @@ class InvoiceAddressState(ImportColumn):
             ]
             if len(match) == 0:
                 raise ValidationError(_("Please enter a valid state."))
-            return match[0]
+            return match[0].code[3:]
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         invoice_address.state = value or ''
@@ -419,11 +427,16 @@ class Secret(ImportColumn):
     verbose_name = gettext_lazy('Ticket code')
     default_label = gettext_lazy('Generate automatically')
 
+    def __init__(self, *args):
+        self._cached = set()
+        super().__init__(*args)
+
     def clean(self, value, previous_values):
-        if value and OrderPosition.all.filter(order__event=self.event, secret=value).exists():
+        if value and (value in self._cached or OrderPosition.all.filter(order__event=self.event, secret=value).exists()):
             raise ValidationError(
                 _('You cannot assign a position secret that already exists.')
             )
+        self._cached.add(value)
         return value
 
     def assign(self, value, order, position, invoice_address, **kwargs):
