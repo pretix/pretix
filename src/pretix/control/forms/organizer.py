@@ -302,6 +302,12 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
                     'We recommend a size of at least 200x200px to accomodate most devices.')
     )
+    giftcard_length = forms.IntegerField(
+        label=_('Length of gift card codes'),
+        help_text=_('The system generates by default {}-character long gift card codes. However, if a different length '
+                    'is required, it can be set here.'.format(settings.ENTROPY['giftcard_secret'])),
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -10,10 +10,10 @@ from pretix.base.banlist import banned
 from pretix.base.models import LoggedModel
 
 
-def gen_giftcard_secret():
+def gen_giftcard_secret(length):
     charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
     while True:
-        code = get_random_string(length=settings.ENTROPY['giftcard_secret'], allowed_chars=charset)
+        code = get_random_string(length=length, allowed_chars=charset)
         if not banned(code) and not GiftCard.objects.filter(secret=code).exists():
             return code
 
@@ -48,7 +48,6 @@ class GiftCard(LoggedModel):
     )
     secret = models.CharField(
         max_length=190,
-        default=gen_giftcard_secret,
         db_index=True,
         verbose_name=_('Gift card code'),
     )
@@ -68,6 +67,12 @@ class GiftCard(LoggedModel):
 
     def accepted_by(self, organizer):
         return self.issuer == organizer or GiftCardAcceptance.objects.filter(issuer=self.issuer, collector=organizer).exists()
+
+    def save(self, *args, **kwargs):
+        if not self.secret:
+            self.secret = gen_giftcard_secret(self.issuer.settings.giftcard_length)
+
+        super().save(*args, **kwargs)
 
     class Meta:
         unique_together = (('secret', 'issuer'),)

@@ -746,6 +746,10 @@ Your {event} team"""))
     'name_scheme': {
         'default': 'full',
         'type': str
+    },
+    'giftcard_length': {
+        'default': settings.ENTROPY['giftcard_secret'],
+        'type': int
     }
 }
 PERSON_NAME_TITLE_GROUPS = OrderedDict([
