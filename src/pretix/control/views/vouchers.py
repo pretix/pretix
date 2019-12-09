@@ -77,6 +77,8 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
                     prod = '%s' % str(v.item)
             elif v.quota:
                 prod = _('Any product in quota "{quota}"').format(quota=str(v.quota.name))
+            else:
+                prod = _('Any product')
             row = [
                 v.code,
                 v.valid_until.isoformat() if v.valid_until else "",
