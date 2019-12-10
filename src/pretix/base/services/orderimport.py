@@ -43,7 +43,7 @@ def parse_csv(file, length=None):
     if '\r' in data and '\n' not in data:
         data = data.replace('\r', '\n')
 
-    dialect = csv.Sniffer().sniff(data, delimiters=";,.#:")
+    dialect = csv.Sniffer().sniff(data.split("\n")[0], delimiters=";,.#:")
     if dialect is None:
         return None
 
@@ -151,7 +151,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                     o._address.order = o
                     o._address.save()
                     for c in cols:
-                        c.save(order)
+                        c.save(o)
                     o.log_action(
                         'pretix.event.order.placed',
                         user=user,

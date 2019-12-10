@@ -16,7 +16,7 @@ from django_countries.fields import Country
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import (
-    ItemVariation, OrderPosition, QuestionOption, Seat,
+    ItemVariation, OrderPosition, QuestionAnswer, QuestionOption, Seat,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import (
@@ -158,6 +158,9 @@ class SubeventColumn(ImportColumn):
         if len(matches) > 1:
             raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
         return matches[0]
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.subevent = value
 
 
 def i18n_flat(l):
@@ -494,6 +497,10 @@ class SeatColumn(ImportColumn):
     identifier = 'seat'
     verbose_name = gettext_lazy('Seat ID')
 
+    def __init__(self, *args):
+        self._cached = set()
+        super().__init__(*args)
+
     def clean(self, value, previous_values):
         if value:
             try:
@@ -503,9 +510,10 @@ class SeatColumn(ImportColumn):
                 )
             except Seat.DoesNotExist:
                 raise ValidationError(_('No matching seat was found.'))
-            if not value.is_available():
+            if not value.is_available() or value in self._cached:
                 raise ValidationError(
                     _('The seat you selected has already been taken. Please select a different seat.'))
+            self._cached.add(value)
         elif previous_values['item'].seat_category_mappings.filter(subevent=previous_values.get('subevent')).exists():
             raise ValidationError(_('You need to select a specific seat.'))
         return value
@@ -541,14 +549,25 @@ class QuestionColumn(ImportColumn):
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         if value:
+            if not hasattr(order, '_answers'):
+                order._answers = []
             if isinstance(value, QuestionOption):
-                a = position.answers.create(question=self.q, answer=str(value))
-                a.options.add(value)
+                a = QuestionAnswer(orderposition=position, question=self.q, answer=str(value))
+                a._options = [value]
+                order._answers.append(a)
             elif isinstance(value, list):
-                a = position.answers.create(question=self.q, answer=', '.join(str(v) for v in value))
-                a.options.add(*value)
+                a = QuestionAnswer(orderposition=position, question=self.q, answer=', '.join(str(v) for v in value))
+                a._options = value
+                order._answers.append(a)
             else:
-                position.answers.create(question=self.q, answer=str(value))
+                order._answers.append(QuestionAnswer(question=self.q, answer=str(value), orderposition=position))
+
+    def save(self, order):
+        for a in getattr(order, '_answers', []):
+            a.orderposition = a.orderposition  # This is apparently required after save() again
+            a.save()
+            if hasattr(a, '_options'):
+                a.options.add(*a._options)
 
 
 def get_all_columns(event):

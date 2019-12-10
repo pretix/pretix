@@ -10,7 +10,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import (
     CachedFile, Event, Item, Order, OrderPayment, OrderPosition, Organizer,
-    User,
+    Question, QuestionAnswer, User,
 )
 from pretix.base.services.orderimport import DataImportError, import_orders
 
@@ -46,6 +46,7 @@ def inputfile_factory():
             'F': '0.00',
             'G': 'US',
             'H': 'Texas',
+            'I': 'Foo',
         },
         {
             'A': 'Daniel',
@@ -56,6 +57,7 @@ def inputfile_factory():
             'F': '0.00',
             'G': 'DE',
             'H': '',
+            'I': 'Bar',
         },
         {
             'A': 'Anke',
@@ -66,10 +68,11 @@ def inputfile_factory():
             'F': '0.00',
             'G': 'AU',
             'H': '',
+            'I': 'Foo,Bar',
         },
     ]
     f = StringIO()
-    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
+    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', "I"], dialect=csv.excel)
     w.writeheader()
     w.writerows(d)
     f.seek(0)
@@ -521,6 +524,165 @@ def test_import_secret_dupl(user, event, item):
            'secret that already exists.' in str(excinfo.value)
 
 
-# TODO: require/validate subevent
-# TODO: validate seat
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_seat_required(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+        ).get()
+    assert 'Error while importing value "" for column "Seat ID" in line "1": You need to select ' \
+           'a specific seat.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_seat_blocked(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['seat'] = 'csv:D'
+
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    event.seats.create(name="Test", product=item, seat_guid="Test", blocked=True)
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+        ).get()
+    assert 'Error while importing value "Test" for column "Seat ID" in line "1": The seat you selected has already ' \
+           'been taken. Please select a different seat.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_seat_dbl(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['seat'] = 'csv:D'
+
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    event.seats.create(name="Test", product=item, seat_guid="Test")
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+        ).get()
+    assert 'Error while importing value "Test" for column "Seat ID" in line "2": The seat you selected has already ' \
+           'been taken. Please select a different seat.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_seat(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['seat'] = 'csv:E'
+
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    s1 = event.seats.create(name="Foo", product=item, seat_guid="Foo")
+    s2 = event.seats.create(name="Bar", product=item, seat_guid="Bar")
+    s3 = event.seats.create(name="Baz", product=item, seat_guid="Baz")
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    ).get()
+    assert not s1.is_available()
+    assert not s2.is_available()
+    assert not s3.is_available()
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_subevent_invalid(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    event.has_subevents = True
+    event.save()
+    event.subevents.create(name='Foo', date_from=now(), active=True)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['subevent'] = 'csv:E'
+
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+        ).get()
+    assert 'Error while importing value "Bar" for column "Date" in line "2": No matching date was found.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_subevent_required(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    event.has_subevents = True
+    event.save()
+    settings['item'] = 'static:{}'.format(item.pk)
+
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+        ).get()
+    assert 'Error while importing value "" for column "Date" in line "1": You need to select a date.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_subevent(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    event.has_subevents = True
+    event.save()
+    s = event.subevents.create(name='Test', date_from=now(), active=True)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['subevent'] = 'csv:D'
+
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    ).get()
+    assert OrderPosition.objects.filter(subevent=s).count() == 3
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_question_validate(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    q = event.questions.create(question='Foo', type=Question.TYPE_NUMBER)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['question_{}'.format(q.pk)] = 'csv:D'
+
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+        ).get()
+    assert 'Error while importing value "Test" for column "Question: Foo" in line "1": Invalid number input.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_question_valid(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    q = event.questions.create(question='Foo', type=Question.TYPE_CHOICE_MULTIPLE)
+    o1 = q.options.create(answer='Foo', identifier='Foo')
+    o2 = q.options.create(answer='Bar', identifier='Bar')
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['attendee_email'] = 'csv:C'
+    settings['question_{}'.format(q.pk)] = 'csv:I'
+
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    ).get()
+    assert QuestionAnswer.objects.filter(question=q).count() == 3
+    a1 = OrderPosition.objects.get(attendee_email='schneider@example.org').answers.first()
+    assert a1.question == q
+    assert list(a1.options.all()) == [o1]
+    a3 = OrderPosition.objects.get(attendee_email__isnull=True).answers.first()
+    assert a3.question == q
+    assert set(a3.options.all()) == {o1, o2}
+
 # TODO: validate question
