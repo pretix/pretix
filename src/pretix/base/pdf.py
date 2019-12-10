@@ -10,6 +10,8 @@ from functools import partial
 from io import BytesIO
 
 import bleach
+from arabic_reshaper import ArabicReshaper
+from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
@@ -449,6 +451,16 @@ class Renderer:
                 tags=["br"], attributes={}, styles=[], strip=True
             )
         )
+
+        # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
+        # to resolve all ligatures and python-bidi to switch RTL texts.
+        configuration = {
+            'delete_harakat': True,
+            'support_ligatures': False,
+        }
+        reshaper = ArabicReshaper(configuration=configuration)
+        text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
+
         p = Paragraph(text, style=style)
         p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
         # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
