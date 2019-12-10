@@ -1111,12 +1111,20 @@ class Question(LoggedModel):
                 raise ValidationError(_('Invalid option selected.'))
         elif self.type == Question.TYPE_CHOICE_MULTIPLE:
             if isinstance(answer, str):
-                return list(self.options.filter(
+                l_ = list(self.options.filter(
                     Q(pk__in=[a for a in answer.split(",") if a.isdigit()]) |
                     Q(identifier__in=answer.split(","))
                 ))
+                llen = len(answer.split(','))
             else:
-                return list(self.options.filter(pk__in=answer))
+                l_ = list(self.options.filter(
+                    Q(pk__in=[a for a in answer if isinstance(a, int) or a.isdigit()]) |
+                    Q(identifier__in=answer)
+                ))
+                llen = len(answer)
+            if len(l_) != llen:
+                raise ValidationError(_('Invalid option selected.'))
+            return l_
         elif self.type == Question.TYPE_BOOLEAN:
             return answer in ('true', 'True', True)
         elif self.type == Question.TYPE_NUMBER:

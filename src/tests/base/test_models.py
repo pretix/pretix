@@ -2277,7 +2277,9 @@ def test_question_answer_validation_multiple_choice():
         assert q.clean_answer([str(o1.pk), str(o2.pk)]) == [o1, o2]
         assert q.clean_answer([str(o1.pk)]) == [o1]
         assert q.clean_answer([o1.pk]) == [o1]
-        assert q.clean_answer([o1.pk, o3.pk]) == [o1]
-        assert q.clean_answer([o1.pk, o3.pk + 1000]) == [o1]
+        with pytest.raises(ValidationError):
+            assert q.clean_answer([o1.pk, o3.pk]) == [o1]
+        with pytest.raises(ValidationError):
+            assert q.clean_answer([o1.pk, o3.pk + 1000]) == [o1]
         with pytest.raises(ValidationError):
             assert q.clean_answer([o1.pk, 'FOO']) == [o1]
