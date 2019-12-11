@@ -143,7 +143,7 @@ class CheckInListMixin(BaseExporter):
                 'resolved_name_part'
             )
 
-        if form_data['attention_only']:
+        if form_data.get('attention_only'):
             qs = qs.filter(Q(item__checkin_attention=True) | Q(order__checkin_attention=True))
 
         if not cl.include_pending:
