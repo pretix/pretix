@@ -450,7 +450,17 @@ class CartManager:
             if voucher.subevent_id and voucher.subevent_id != p.subevent_id:
                 continue
 
-            price = self._get_price(p.item, p.variation, voucher, None, p.subevent)
+            if p.is_bundled:
+                continue
+
+            bundled_sum = Decimal('0.00')
+            if not p.addon_to_id:
+                for bundledp in p.addons.all():
+                    if bundledp.is_bundled:
+                        bundledprice = bundledp.price
+                        bundled_sum += bundledprice
+
+            price = self._get_price(p.item, p.variation, voucher, None, p.subevent, bundled_sum=bundled_sum)
             if price.gross > p.price:
                 continue
 
