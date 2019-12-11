@@ -164,6 +164,7 @@ class CartMixin:
 
         return {
             'positions': positions,
+            'all_with_voucher': all(p.voucher_id for p in positions),
             'raw': cartpos,
             'total': total,
             'net_total': net_total,

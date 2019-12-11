@@ -1725,6 +1725,178 @@ class CartTest(CartTestMixin, TestCase):
             positions = CartPosition.objects.filter(cart_id=self.session_key, event=self.event)
             assert positions.count() == 1
 
+    def test_voucher_apply_matching(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=15, expires=now() + timedelta(minutes=10)
+            )
+            v = Voucher.objects.create(
+                event=self.event, item=self.ticket, price_mode='set', value=Decimal('4.00')
+            )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-success' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert cp1.voucher == v
+            assert cp1.price == Decimal('4.00')
+            assert cp2.voucher is None
+
+    def test_voucher_apply_partial_in_price_order(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=150, expires=now() + timedelta(minutes=10)
+            )
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', value=Decimal('4.00'), max_usages=100, redeemed=99
+            )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-success' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert cp1.voucher is None
+            assert cp1.price == Decimal('23.00')
+            assert cp2.voucher == v
+            assert cp2.price == Decimal('4.00')
+
+    def test_voucher_apply_multiple(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=150, expires=now() + timedelta(minutes=10)
+            )
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('4.00'), max_usages=100
+            )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-success' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert cp1.voucher == v
+            assert cp1.price == Decimal('4.00')
+            assert cp2.voucher == v
+            assert cp2.price == Decimal('4.00')
+
+    def test_voucher_apply_only_one_per_line(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            v2 = Voucher.objects.create(
+                event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('4.00'), max_usages=100
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=150, expires=now() + timedelta(minutes=10), voucher=v2
+            )
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('4.00'), max_usages=100
+            )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-success' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert cp1.voucher == v
+            assert cp1.price == Decimal('4.00')
+            assert cp2.voucher == v2
+            assert cp2.price == Decimal('150.00')
+
+    def test_voucher_apply_only_positive(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=15, expires=now() + timedelta(minutes=10)
+            )
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', value=Decimal('40.00'), max_usages=100
+            )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert cp1.voucher is None
+            assert cp2.voucher is None
+
+    def test_voucher_apply_expired(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=15, expires=now() + timedelta(minutes=10)
+            )
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', value=Decimal('40.00'), max_usages=100,
+                valid_until=now() - timedelta(days=1)
+            )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert cp1.voucher is None
+            assert cp2.voucher is None
+
+    def test_voucher_apply_used(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=15, expires=now() + timedelta(minutes=10)
+            )
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', value=Decimal('40.00'), max_usages=100, redeemed=100
+            )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert cp1.voucher is None
+            assert cp2.voucher is None
+
 
 class CartAddonTest(CartTestMixin, TestCase):
     @scopes_disabled()

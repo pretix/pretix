@@ -23,7 +23,8 @@ from pretix.base.models import (
     CartPosition, InvoiceAddress, QuestionAnswer, SubEvent, Voucher,
 )
 from pretix.base.services.cart import (
-    CartError, add_items_to_cart, clear_cart, remove_cart_position,
+    CartError, add_items_to_cart, apply_voucher, clear_cart,
+    remove_cart_position,
 )
 from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
@@ -325,6 +326,26 @@ def cart_session(request):
     request.session.modified = True
     cart_id = get_or_create_cart_id(request)
     return request.session['carts'][cart_id]
+
+
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
+    task = apply_voucher
+    known_errortypes = ['CartError']
+
+    def get_success_message(self, value):
+        return _('We applied the voucher to as many products in your cart as we could.')
+
+    def post(self, request, *args, **kwargs):
+        if 'voucher' in request.POST:
+            return self.do(self.request.event.id, request.POST.get('voucher'), get_or_create_cart_id(self.request), translation.get_language())
+        else:
+            if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
+                return JsonResponse({
+                    'redirect': self.get_error_url()
+                })
+            else:
+                return redirect(self.get_error_url())
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
