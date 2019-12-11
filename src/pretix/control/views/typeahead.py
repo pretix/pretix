@@ -251,7 +251,7 @@ def seat_select2(request, **kwargs):
         'results': [
             {
                 'id': e.pk,
-                'text': '{} ({})'.format(e.name, str(e.product)),
+                'text': '{} ({})'.format(str(e), str(e.product)),
                 'product': e.product_id,
                 'event': str(e.subevent) if e.subevent else ''
 
