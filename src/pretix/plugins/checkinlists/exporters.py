@@ -3,7 +3,9 @@ from collections import OrderedDict
 import dateutil.parser
 from django import forms
 from django.conf import settings
-from django.db.models import Case, Exists, Max, OuterRef, Subquery, Value, When
+from django.db.models import (
+    Case, Exists, Max, OuterRef, Q, Subquery, Value, When,
+)
 from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -42,6 +44,11 @@ class CheckInListMixin(BaseExporter):
                 ('secrets',
                  forms.BooleanField(
                      label=_('Include QR-code secret'),
+                     required=False
+                 )),
+                ('attention_only',
+                 forms.BooleanField(
+                     label=_('Only tickets requiring special attention'),
                      required=False
                  )),
                 ('sort',
@@ -135,6 +142,9 @@ class CheckInListMixin(BaseExporter):
             ).order_by(
                 'resolved_name_part'
             )
+
+        if form_data['attention_only']:
+            qs = qs.filter(Q(item__checkin_attention=True) | Q(order__checkin_attention=True))
 
         if not cl.include_pending:
             qs = qs.filter(order__status=Order.STATUS_PAID)
