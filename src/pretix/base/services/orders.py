@@ -418,7 +418,8 @@ def _check_date(event: Event, now_dt: datetime):
                 raise OrderError(error_messages['ended'])
 
 
-def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition], address: InvoiceAddress=None):
+def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition], address: InvoiceAddress=None,
+                     sales_channel='web'):
     err = None
     errargs = None
     _check_date(event, now_dt)
@@ -512,7 +513,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if cp.seat:
             # Unlike quotas (which we blindly trust as long as the position is not expired), we check seats every
             # time, since we absolutely can not overbook a seat.
-            if not cp.seat.is_available(ignore_cart=cp, ignore_voucher_id=cp.voucher_id) or cp.seat.blocked:
+            if not cp.seat.is_available(ignore_cart=cp, ignore_voucher_id=cp.voucher_id, sales_channel=sales_channel):
                 err = err or error_messages['seat_unavailable']
                 cp.delete()
                 continue
@@ -806,7 +807,7 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, now_dt, positions, address=addr)
+        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel)
         order, payment = _create_order(event, email, positions, now_dt, pprov,
                                        locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
                                        gift_cards=gift_cards, shown_total=shown_total)
@@ -1197,7 +1198,7 @@ class OrderChangeManager:
         for seat, diff in self._seatdiff.items():
             if diff <= 0:
                 continue
-            if not seat.is_available() or diff > 1:
+            if not seat.is_available(sales_channel=self.order.sales_channel) or diff > 1:
                 raise OrderError(self.error_messages['seat_unavailable'].format(seat=seat.name))
 
         if self.event.has_subevents:

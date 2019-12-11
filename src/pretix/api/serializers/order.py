@@ -778,7 +778,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         errs[i]['seat'] = ['The specified seat does not exist.']
                     else:
                         pos_data['seat'] = seat
-                        if (seat not in free_seats and not seat.is_available()) or seat in seats_seen:
+                        if (seat not in free_seats and not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web'))) or seat in seats_seen:
                             errs[i]['seat'] = [ugettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
                         seats_seen.add(seat)
                 elif seated:

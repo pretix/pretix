@@ -385,7 +385,7 @@ class Event(EventMixin, LoggedModel):
         if img:
             return urljoin(build_absolute_uri(self, 'presale:event.index'), img)
 
-    def free_seats(self, ignore_voucher=None):
+    def free_seats(self, ignore_voucher=None, sales_channel='web'):
         from .orders import CartPosition, Order, OrderPosition
         from .vouchers import Voucher
         vqs = Voucher.objects.filter(
@@ -397,7 +397,7 @@ class Event(EventMixin, LoggedModel):
         )
         if ignore_voucher:
             vqs = vqs.exclude(pk=ignore_voucher.pk)
-        return self.seats.annotate(
+        qs = self.seats.annotate(
             has_order=Exists(
                 OrderPosition.objects.filter(
                     order__event=self,
@@ -415,7 +415,10 @@ class Event(EventMixin, LoggedModel):
             has_voucher=Exists(
                 vqs
             )
-        ).filter(has_order=False, has_cart=False, has_voucher=False, blocked=False)
+        ).filter(has_order=False, has_cart=False, has_voucher=False)
+        if sales_channel not in self.settings.seating_allow_blocked_seats_for_channel:
+            qs = qs.filter(blocked=False)
+        return qs
 
     @property
     def presale_has_ended(self):
@@ -1006,7 +1009,7 @@ class SubEvent(EventMixin, LoggedModel):
     def __str__(self):
         return '{} - {}'.format(self.name, self.get_date_range_display())
 
-    def free_seats(self, ignore_voucher=None):
+    def free_seats(self, ignore_voucher=None, sales_channel='web'):
         from .orders import CartPosition, Order, OrderPosition
         from .vouchers import Voucher
         vqs = Voucher.objects.filter(
@@ -1019,7 +1022,7 @@ class SubEvent(EventMixin, LoggedModel):
         )
         if ignore_voucher:
             vqs = vqs.exclude(pk=ignore_voucher.pk)
-        return self.seats.annotate(
+        qs = self.seats.annotate(
             has_order=Exists(
                 OrderPosition.objects.filter(
                     order__event_id=self.event_id,
@@ -1039,7 +1042,10 @@ class SubEvent(EventMixin, LoggedModel):
             has_voucher=Exists(
                 vqs
             )
-        ).filter(has_order=False, has_cart=False, blocked=False, has_voucher=False)
+        ).filter(has_order=False, has_cart=False, has_voucher=False)
+        if sales_channel not in self.settings.seating_allow_blocked_seats_for_channel:
+            qs = qs.filter(blocked=False)
+        return qs
 
     @cached_property
     def settings(self):

@@ -135,10 +135,10 @@ class Seat(models.Model):
             return self.name
         return ', '.join(parts)
 
-    def is_available(self, ignore_cart=None, ignore_orderpos=None, ignore_voucher_id=None):
+    def is_available(self, ignore_cart=None, ignore_orderpos=None, ignore_voucher_id=None, sales_channel='web'):
         from .orders import Order
 
-        if self.blocked:
+        if self.blocked and sales_channel not in self.event.settings.seating_allow_blocked_seats_for_channel:
             return False
         opqs = self.orderposition_set.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
         cpqs = self.cartposition_set.filter(expires__gte=now())
