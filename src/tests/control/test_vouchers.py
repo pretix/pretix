@@ -92,8 +92,10 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
             self.event.vouchers.create(item=self.ticket, code='ABCDEFG')
         doc = self.client.get('/control/event/%s/%s/vouchers/?download=yes' % (self.orga.slug, self.event.slug))
         assert doc.content.decode().strip() == '"Voucher code","Valid until","Product","Reserve quota",' \
-                                               '"Bypass quota","Price effect","Value","Tag","Redeemed","Maximum usages"' \
-                                               '\r\n"ABCDEFG","","Early-bird ticket","No","No","No effect","","","0","1"'
+                                               '"Bypass quota","Price effect","Value","Tag","Redeemed",' \
+                                               '"Maximum usages","Seat"' \
+                                               '\r\n"ABCDEFG","","Early-bird ticket","No","No","No effect","","","0",' \
+                                               '"1",""'
 
     def test_filter_status_valid(self):
         with scopes_disabled():
