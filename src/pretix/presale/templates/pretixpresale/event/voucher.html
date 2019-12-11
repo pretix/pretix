@@ -30,7 +30,7 @@
             <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
             <input type="hidden" name="_voucher_code" value="{{ voucher.code }}">
 
-            {% if voucher.seating_available %}
+            {% if seating_available %}
                 {% if event.has_subevents %}
                     {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request subevent=subevent voucher=voucher %}
                 {% else %}

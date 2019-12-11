@@ -460,7 +460,7 @@ class Voucher(LoggedModel):
 
         return Order.objects.filter(all_positions__voucher__in=[self]).distinct()
 
-    def seating_available(self):
+    def seating_available(self, subevent):
         kwargs = {}
         if self.subevent:
             kwargs['subevent'] = self.subevent
@@ -469,4 +469,4 @@ class Voucher(LoggedModel):
         elif self.item_id:
             return self.item.seat_category_mappings.filter(**kwargs).exists()
         else:
-            return False
+            return bool(subevent.seating_plan) if subevent else self.event.seating_plan

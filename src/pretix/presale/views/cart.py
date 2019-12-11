@@ -435,6 +435,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
         context['items_by_category'] = item_group_by_category(items)
 
         context['subevent'] = self.subevent
+        context['seating_available'] = self.voucher.seating_available(self.subevent)
 
         context['new_tab'] = (
             'require_cookie' in self.request.GET and
