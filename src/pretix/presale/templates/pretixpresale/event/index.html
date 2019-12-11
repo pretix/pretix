@@ -290,5 +290,7 @@
                 <div class="clearfix"></div>
             </div>
         </section>
+    {% else %}
+        {% eventsignal event "pretix.presale.signals.front_page_bottom_widget" subevent=subevent request=request %}
     {% endif %}
 {% endblock %}

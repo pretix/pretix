@@ -246,6 +246,17 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 receivers are expected to return HTML.
 """
 
+front_page_bottom_widget = EventPluginSignal(
+    providing_args=["request", "subevent"]
+)
+"""
+This signal is sent out to display additional information on the frontpage below the list
+of products if the front page is shown in the widget.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. The
+receivers are expected to return HTML.
+"""
+
 checkout_all_optional = EventPluginSignal(
     providing_args=['request']
 )
