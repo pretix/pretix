@@ -4,12 +4,15 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from pytz import UTC
 
+from pretix.base.channels import SalesChannel
 from pretix.base.models import Question, SeatingPlan
 from pretix.base.models.orders import CartPosition
+from pretix.base.signals import register_sales_channels
 
 
 @pytest.fixture
@@ -47,6 +50,21 @@ def quota(event, item):
     q = event.quotas.create(name="Budget Quota", size=200)
     q.items.add(item)
     return q
+
+
+class FoobarSalesChannel(SalesChannel):
+    identifier = "bar"
+    verbose_name = "Foobar"
+    icon = "home"
+    testmode_supported = False
+    unlimited_items_per_order = True
+
+
+@receiver(register_sales_channels, dispatch_uid="test_cart_register_sales_channels")
+def base_sales_channels(sender, **kwargs):
+    return (
+        FoobarSalesChannel(),
+    )
 
 
 TEST_CARTPOSITION_RES = {
@@ -163,6 +181,7 @@ CARTPOS_CREATE_PAYLOAD = {
     'subevent': None,
     'expires': '2018-06-11T10:00:00Z',
     'includes_tax': True,
+    'sales_channel': 'web',
     'answers': []
 }
 
@@ -665,6 +684,23 @@ def test_cartpos_create_with_blocked_seat(token_client, organizer, event, item, 
     )
     assert resp.status_code == 400
     assert resp.data == ['The selected seat "A1" is not available.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_blocked_seat_allowed(token_client, organizer, event, item, quota, seat, question):
+    seat.blocked = True
+    seat.save()
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['seat'] = seat.seat_guid
+    res['sales_channel'] = 'bar'
+    event.settings.seating_allow_blocked_seats_for_channel = ['bar']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
 
 
 @pytest.mark.django_db

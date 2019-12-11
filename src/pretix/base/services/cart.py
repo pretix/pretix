@@ -271,7 +271,7 @@ class CartManager:
                 raise CartError(error_messages['ended'])
 
             seated = self._is_seated(op.item, op.subevent)
-            if seated and (not op.seat or op.seat.blocked):
+            if seated and (not op.seat or (op.seat.blocked and self._sales_channel not in self.event.settings.seating_allow_blocked_seats_for_channel)):
                 raise CartError(error_messages['seat_invalid'])
             elif op.seat and not seated:
                 raise CartError(error_messages['seat_forbidden'])
@@ -830,7 +830,7 @@ class CartManager:
                     available_count = 0
 
                 if isinstance(op, self.AddOperation):
-                    if op.seat and not op.seat.is_available(ignore_voucher_id=op.voucher.id if op.voucher else None):
+                    if op.seat and not op.seat.is_available(ignore_voucher_id=op.voucher.id if op.voucher else None, sales_channel=self._sales_channel):
                         available_count = 0
                         err = err or error_messages['seat_unavailable']
 
@@ -878,7 +878,7 @@ class CartManager:
 
                         new_cart_positions.append(cp)
                 elif isinstance(op, self.ExtendOperation):
-                    if op.seat and not op.seat.is_available(ignore_cart=op.position,
+                    if op.seat and not op.seat.is_available(ignore_cart=op.position, sales_channel=self._sales_channel,
                                                             ignore_voucher_id=op.position.voucher_id):
                         err = err or error_messages['seat_unavailable']
                         op.position.addons.all().delete()

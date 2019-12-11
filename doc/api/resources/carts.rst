@@ -194,6 +194,7 @@ Cart position endpoints
    * ``subevent`` (optional)
    * ``expires`` (optional)
    * ``includes_tax`` (optional)
+   * ``sales_channel`` (optional)
    * ``answers``
 
       * ``question``

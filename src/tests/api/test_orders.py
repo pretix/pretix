@@ -2742,6 +2742,24 @@ def test_order_create_with_seat(token_client, organizer, event, item, quota, sea
 
 
 @pytest.mark.django_db
+def test_order_create_with_blocked_seat_allowed(token_client, organizer, event, item, quota, seat, question):
+    seat.blocked = True
+    seat.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['seat'] = seat.seat_guid
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['sales_channel'] = 'bar'
+    event.settings.seating_allow_blocked_seats_for_channel = ['bar']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+
+
+@pytest.mark.django_db
 def test_order_create_with_blocked_seat(token_client, organizer, event, item, quota, seat, question):
     seat.blocked = True
     seat.save()

@@ -30,11 +30,12 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
     expires = serializers.DateTimeField(required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)
     seat = serializers.CharField(required=False, allow_null=True)
+    sales_channel = serializers.CharField(required=False, default='sales_channel')
 
     class Meta:
         model = CartPosition
         fields = ('cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
-                  'subevent', 'expires', 'includes_tax', 'answers', 'seat')
+                  'subevent', 'expires', 'includes_tax', 'answers', 'seat', 'sales_channel')
 
     def create(self, validated_data):
         answers_data = validated_data.pop('answers')
@@ -86,11 +87,12 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                     raise ValidationError('The specified seat ID is not unique.')
                 else:
                     validated_data['seat'] = seat
-                    if not seat.is_available():
+                    if not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web')):
                         raise ValidationError(ugettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name))
             elif seated:
                 raise ValidationError('The specified product requires to choose a seat.')
 
+            validated_data.pop('sales_channel')
             cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
 
         for answ_data in answers_data:

@@ -754,7 +754,11 @@ Your {event} team"""))
     'giftcard_length': {
         'default': settings.ENTROPY['giftcard_secret'],
         'type': int
-    }
+    },
+    'seating_allow_blocked_seats_for_channel': {
+        'default': [],
+        'type': list
+    },
 }
 PERSON_NAME_TITLE_GROUPS = OrderedDict([
     ('english_common', (_('Most common English titles'), (
