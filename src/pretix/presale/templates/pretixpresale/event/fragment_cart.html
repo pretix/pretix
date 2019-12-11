@@ -246,11 +246,31 @@
     <div class="product">
         <strong>{% trans "Total" %}</strong>
     </div>
-    <div class="count hidden-xs">
+    <div class="count hidden-xs hidden-sm">
         <strong>{{ cart.itemcount }}</strong>
     </div>
     <div class="col-md-3 col-xs-6 col-md-offset-3 price">
         <strong>{{ cart.total|money:event.currency }}</strong>
+
+        {% if editable and show_vouchers and not cart.all_with_voucher %}
+            <br>
+            <a class="js-only apply-voucher-toggle" href="#">
+                <span class="fa fa-tag"></span> {% trans "Redeem a voucher" %}
+            </a>
+            <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
+                  data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
+                  method="post" data-asynctask class="apply-voucher">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" class="form-control" name="voucher" placeholder="{% trans "Voucher code" %}">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">
+                            <span class="fa fa-check"></span>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        {% endif %}
     </div>
     <div class="clearfix"></div>
 </div>

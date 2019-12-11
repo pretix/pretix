@@ -18,6 +18,7 @@ import pretix.presale.views.widget
 
 frame_wrapped_urls = [
     url(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
+    url(r'^cart/voucher$', pretix.presale.views.cart.CartApplyVoucher.as_view(), name='event.cart.voucher'),
     url(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
     url(r'^cart/answer/(?P<answer>[^/]+)/$',
         pretix.presale.views.cart.AnswerDownload.as_view(),

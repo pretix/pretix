@@ -70,4 +70,13 @@ $(function () {
     if ($("#cart-deadline").length) {
         cart.init();
     }
+
+    $(".apply-voucher").hide();
+    $(".apply-voucher-toggle").click(function (e) {
+        $(".apply-voucher-toggle").hide();
+        $(".apply-voucher").show();
+        $(".apply-voucher input[ŧype=text]").first().focus();
+        e.preventDefault();
+        return true;
+    });
 });

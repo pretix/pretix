@@ -73,6 +73,12 @@
     }
 }
 
+.apply-voucher {
+    input {
+        height: 32px;
+    }
+}
+
 @media(max-width: $screen-sm-max) {
     .cart-row {
         .download-mobile {

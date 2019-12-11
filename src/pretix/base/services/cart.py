@@ -82,6 +82,9 @@ error_messages = {
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
     'voucher_invalid_seat': _('This voucher is not valid for this seat.'),
+    'voucher_no_match': _('We did not find any position in your cart that we could use this voucher for. If you want '
+                          'to add something new to your cart using that voucher, you can do so with the voucher '
+                          'redemption option on the bottom of the page.'),
     'voucher_item_not_available': _(
         'Your voucher is valid for a product that is currently not for sale.'),
     'voucher_invalid_subevent': pgettext_lazy('subevent', 'This voucher is not valid for this event date.'),
@@ -107,10 +110,12 @@ class CartManager:
     AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'price', 'voucher', 'quotas',
                                                'addon_to', 'subevent', 'includes_tax', 'bundled', 'seat'))
     RemoveOperation = namedtuple('RemoveOperation', ('position',))
+    VoucherOperation = namedtuple('VoucherOperation', ('position', 'voucher', 'price'))
     ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'price', 'voucher',
                                                      'quotas', 'subevent', 'seat'))
     order = {
         RemoveOperation: 10,
+        VoucherOperation: 15,
         ExtendOperation: 20,
         AddOperation: 30
     }
@@ -418,6 +423,58 @@ class CartManager:
 
             self._operations.append(op)
         return err
+
+    def apply_voucher(self, voucher_code: str):
+        if self._operations:
+            raise CartError('Applying a voucher to the whole cart should not be combined with other operations.')
+        try:
+            voucher = self.event.vouchers.get(code__iexact=voucher_code.strip())
+        except Voucher.DoesNotExist:
+            raise CartError(error_messages['voucher_invalid'])
+        voucher_use_diff = Counter()
+        ops = []
+
+        if not voucher.is_active():
+            raise CartError(error_messages['voucher_expired'])
+
+        for p in self.positions:
+            if p.voucher_id:
+                continue
+
+            if not voucher.applies_to(p.item, p.variation):
+                continue
+
+            if voucher.seat and voucher.seat != p.seat:
+                continue
+
+            if voucher.subevent_id and voucher.subevent_id != p.subevent_id:
+                continue
+
+            if p.is_bundled:
+                continue
+
+            bundled_sum = Decimal('0.00')
+            if not p.addon_to_id:
+                for bundledp in p.addons.all():
+                    if bundledp.is_bundled:
+                        bundledprice = bundledp.price
+                        bundled_sum += bundledprice
+
+            price = self._get_price(p.item, p.variation, voucher, None, p.subevent, bundled_sum=bundled_sum)
+            if price.gross > p.price:
+                continue
+
+            voucher_use_diff[voucher] += 1
+            ops.append((p.price - price.gross, self.VoucherOperation(p, voucher, price)))
+
+        # If there are not enough voucher usages left for the full cart, let's apply them in the order that benefits
+        # the user the most.
+        ops.sort(key=lambda k: k[0], reverse=True)
+        self._operations += [k[1] for k in ops]\
+
+        if not voucher_use_diff:
+            raise CartError(error_messages['voucher_no_match'])
+        self._voucher_use_diff += voucher_use_diff
 
     def add_new_items(self, items: List[dict]):
         # Fetch items from the database
@@ -762,7 +819,7 @@ class CartManager:
         self._operations.sort(key=lambda a: self.order[type(a)])
         seats_seen = set()
 
-        for op in self._operations:
+        for iop, op in enumerate(self._operations):
             if isinstance(op, self.RemoveOperation):
                 if op.position.expires > self.now_dt:
                     for q in op.position.quotas:
@@ -896,6 +953,19 @@ class CartManager:
                         op.position.delete()
                     else:
                         raise AssertionError("ExtendOperation cannot affect more than one item")
+            elif isinstance(op, self.VoucherOperation):
+                if vouchers_ok[op.voucher] < 1:
+                    if iop == 0:
+                        raise CartError(error_messages['voucher_redeemed'])
+                    else:
+                        # We fail silently if we could only apply the voucher to part of the cart, since that might
+                        # be expected
+                        continue
+
+                op.position.price = op.price.gross
+                op.position.voucher = op.voucher
+                op.position.save()
+                vouchers_ok[op.voucher] -= 1
 
         for p in new_cart_positions:
             if getattr(p, '_answers', None):
@@ -1053,6 +1123,26 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
                 cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, widget_data=widget_data,
                                  sales_channel=sales_channel)
                 cm.add_new_items(items)
+                cm.commit()
+            except LockTimeoutException:
+                self.retry()
+        except (MaxRetriesExceededError, LockTimeoutException):
+            raise CartError(error_messages['busy'])
+
+
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='en') -> None:
+    """
+    Removes a list of items from a user's cart.
+    :param event: The event ID in question
+    :param voucher: A voucher code
+    :param session: Session ID of a guest
+    """
+    with language(locale):
+        try:
+            try:
+                cm = CartManager(event=event, cart_id=cart_id)
+                cm.apply_voucher(voucher)
                 cm.commit()
             except LockTimeoutException:
                 self.retry()
