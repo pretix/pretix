@@ -1106,17 +1106,25 @@ class Question(LoggedModel):
 
         if self.type == Question.TYPE_CHOICE:
             try:
-                return self.options.get(pk=answer)
+                return self.options.get(Q(pk=answer) | Q(identifier=answer))
             except:
                 raise ValidationError(_('Invalid option selected.'))
         elif self.type == Question.TYPE_CHOICE_MULTIPLE:
-            try:
-                if isinstance(answer, str):
-                    return list(self.options.filter(pk__in=answer.split(",")))
-                else:
-                    return list(self.options.filter(pk__in=answer))
-            except:
+            if isinstance(answer, str):
+                l_ = list(self.options.filter(
+                    Q(pk__in=[a for a in answer.split(",") if a.isdigit()]) |
+                    Q(identifier__in=answer.split(","))
+                ))
+                llen = len(answer.split(','))
+            else:
+                l_ = list(self.options.filter(
+                    Q(pk__in=[a for a in answer if isinstance(a, int) or a.isdigit()]) |
+                    Q(identifier__in=answer)
+                ))
+                llen = len(answer)
+            if len(l_) != llen:
                 raise ValidationError(_('Invalid option selected.'))
+            return l_
         elif self.type == Question.TYPE_BOOLEAN:
             return answer in ('true', 'True', True)
         elif self.type == Question.TYPE_NUMBER:

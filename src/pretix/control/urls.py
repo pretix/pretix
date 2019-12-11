@@ -2,8 +2,8 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, geo, global_settings, item, main, oauth,
-    orders, organizer, pdf, search, shredder, subevents, typeahead, user,
-    users, vouchers, waitinglist,
+    orderimport, orders, organizer, pdf, search, shredder, subevents,
+    typeahead, user, users, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -257,6 +257,8 @@ urlpatterns = [
         url(r'^invoice/(?P<invoice>[^/]+)$', orders.InvoiceDownload.as_view(),
             name='event.invoice.download'),
         url(r'^orders/overview/$', orders.OverView.as_view(), name='event.orders.overview'),
+        url(r'^orders/import/$', orderimport.ImportView.as_view(), name='event.orders.import'),
+        url(r'^orders/import/(?P<file>[^/]+)/$', orderimport.ProcessView.as_view(), name='event.orders.import.process'),
         url(r'^orders/export/$', orders.ExportView.as_view(), name='event.orders.export'),
         url(r'^orders/export/do$', orders.ExportDoView.as_view(), name='event.orders.export.do'),
         url(r'^orders/refunds/$', orders.RefundList.as_view(), name='event.orders.refunds'),

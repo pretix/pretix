@@ -2033,7 +2033,7 @@ class InvoiceAddress(models.Model):
     internal_reference = models.TextField(
         verbose_name=_('Internal reference'),
         help_text=_('This reference will be printed on your invoice for your convenience.'),
-        blank=True
+        blank=True,
     )
     beneficiary = models.TextField(
         verbose_name=_('Beneficiary'),

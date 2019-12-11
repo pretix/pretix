@@ -630,3 +630,14 @@ invoice_line_text = EventPluginSignal(
 This signal is sent out when an invoice is built for an order. You can return additional text that
 should be shown on the invoice for the given ``position``.
 """
+
+order_import_columns = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out if the user performs an import of orders from an external source. You can use this
+to define additional columns that can be read during import. You are expected to return a list of instances of
+``ImportColumn`` subclasses.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""

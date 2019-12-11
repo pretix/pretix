@@ -1,0 +1,31 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Import attendees" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Import attendees" %}</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Upload a new file" %}</h3>
+        </div>
+        <div class="panel-body">
+            <form action="" method="post" enctype="multipart/form-data" class="form-inline">
+                {% csrf_token %}
+                <p>
+                    {% blocktrans trimmed %}
+                        The uploaded file should be a CSV file with a header row. You will be able to assign the
+                        meanings of the different columns in the next step.
+                    {% endblocktrans %}
+                </p>
+                <div class="form-group">
+                    <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file" name="file"/>
+                </div>
+                <div class="clearfix"></div>
+                <button class="btn btn-primary pull-right flip" type="submit">
+                    <span class="icon icon-upload"></span> {% trans "Start import" %}
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load getitem %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Import attendees" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Import attendees" %}</h1>
+    <form action="" method="post" class="form-horizontal" data-asynctask data-asynctask-long>
+        {% csrf_token %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Data preview" %}</h3>
+            </div>
+            <div class="table-responsive panel-body">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        {% for fn in parsed.fieldnames %}
+                            <th>{{ fn }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for r in sample_rows %}
+                        <tr>
+                            {% for fn in parsed.fieldnames %}
+                                <td>{{ r|getitem:fn }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td class="text-center" colspan="{{ parsed.fieldnames|length }}">
+                            …
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Import settings" %}</h3>
+            </div>
+            <div class="panel-body">
+                {% bootstrap_form_errors form %}
+                {% bootstrap_form form layout="horizontal" %}
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        The import will be performed regardless of your quotas, so it will be possible to overbook your event using this option.
+                    {% endblocktrans %}
+                </div>
+            </div>
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Perform import" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

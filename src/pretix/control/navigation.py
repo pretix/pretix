@@ -169,6 +169,57 @@ def get_event_navigation(request: HttpRequest):
         })
 
     if 'can_view_orders' in request.eventpermset:
+        children = [
+            {
+                'label': _('All orders'),
+                'url': reverse('control:event.orders', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.event.organizer.slug,
+                }),
+                'active': url.url_name in ('event.orders', 'event.order') or "event.order." in url.url_name,
+            },
+            {
+                'label': _('Overview'),
+                'url': reverse('control:event.orders.overview', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.event.organizer.slug,
+                }),
+                'active': 'event.orders.overview' in url.url_name,
+            },
+            {
+                'label': _('Refunds'),
+                'url': reverse('control:event.orders.refunds', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.event.organizer.slug,
+                }),
+                'active': 'event.orders.refunds' in url.url_name,
+            },
+            {
+                'label': _('Export'),
+                'url': reverse('control:event.orders.export', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.event.organizer.slug,
+                }),
+                'active': 'event.orders.export' in url.url_name,
+            },
+            {
+                'label': _('Waiting list'),
+                'url': reverse('control:event.orders.waitinglist', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.event.organizer.slug,
+                }),
+                'active': 'event.orders.waitinglist' in url.url_name,
+            },
+        ]
+        if 'can_change_orders' in request.eventpermset:
+            children.append({
+                'label': _('Import'),
+                'url': reverse('control:event.orders.import', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.event.organizer.slug,
+                }),
+                'active': 'event.orders.import' in url.url_name,
+            })
         nav.append({
             'label': _('Orders'),
             'url': reverse('control:event.orders', kwargs={
@@ -177,48 +228,7 @@ def get_event_navigation(request: HttpRequest):
             }),
             'active': False,
             'icon': 'shopping-cart',
-            'children': [
-                {
-                    'label': _('All orders'),
-                    'url': reverse('control:event.orders', kwargs={
-                        'event': request.event.slug,
-                        'organizer': request.event.organizer.slug,
-                    }),
-                    'active': url.url_name in ('event.orders', 'event.order') or "event.order." in url.url_name,
-                },
-                {
-                    'label': _('Overview'),
-                    'url': reverse('control:event.orders.overview', kwargs={
-                        'event': request.event.slug,
-                        'organizer': request.event.organizer.slug,
-                    }),
-                    'active': 'event.orders.overview' in url.url_name,
-                },
-                {
-                    'label': _('Refunds'),
-                    'url': reverse('control:event.orders.refunds', kwargs={
-                        'event': request.event.slug,
-                        'organizer': request.event.organizer.slug,
-                    }),
-                    'active': 'event.orders.refunds' in url.url_name,
-                },
-                {
-                    'label': _('Export'),
-                    'url': reverse('control:event.orders.export', kwargs={
-                        'event': request.event.slug,
-                        'organizer': request.event.organizer.slug,
-                    }),
-                    'active': 'event.orders.export' in url.url_name,
-                },
-                {
-                    'label': _('Waiting list'),
-                    'url': reverse('control:event.orders.waitinglist', kwargs={
-                        'event': request.event.slug,
-                        'organizer': request.event.organizer.slug,
-                    }),
-                    'active': 'event.orders.waitinglist' in url.url_name,
-                },
-            ]
+            'children': children
         })
 
     if 'can_view_vouchers' in request.eventpermset:

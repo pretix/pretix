@@ -311,7 +311,7 @@ var form_handlers = function (el) {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-    $("select[name$=state]").each(function () {
+    $("select[name$=state]:not([data-static])").each(function () {
         var dependent = $(this),
             counter = 0,
             dependency = $(this).closest("form").find('select[name$=country]'),
