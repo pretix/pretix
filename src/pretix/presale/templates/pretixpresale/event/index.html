@@ -206,7 +206,7 @@
 
             </div>
 
-            {% eventsignal event "pretix.presale.signals.front_page_top" %}
+            {% eventsignal event "pretix.presale.signals.front_page_top" request=request subevent=subevent %}
         {% endif %}
 
         {% if ev.presale_is_running or event.settings.show_items_outside_presale_period %}
@@ -269,7 +269,7 @@
         </section>
     {% endif %}
     {% if not cart_namespace %}
-        {% eventsignal event "pretix.presale.signals.front_page_bottom" %}
+        {% eventsignal event "pretix.presale.signals.front_page_bottom" subevent=subevent request=request %}
         <section class="front-page">
             <h3>{% trans "If you already ordered a ticket" %}</h3>
             <div>

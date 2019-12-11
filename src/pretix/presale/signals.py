@@ -213,7 +213,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 """
 
 front_page_top = EventPluginSignal(
-    providing_args=[]
+    providing_args=["request", "subevent"]
 )
 """
 This signal is sent out to display additional information on the frontpage above the list
@@ -236,7 +236,7 @@ receivers are expected to return HTML.
 """
 
 front_page_bottom = EventPluginSignal(
-    providing_args=[]
+    providing_args=["request", "subevent"]
 )
 """
 This signal is sent out to display additional information on the frontpage below the list
