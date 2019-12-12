@@ -461,8 +461,10 @@ class CartManager:
                         bundled_sum += bundledprice
 
             price = self._get_price(p.item, p.variation, voucher, None, p.subevent, bundled_sum=bundled_sum)
+            """
             if price.gross > p.price:
                 continue
+            """
 
             voucher_use_diff[voucher] += 1
             ops.append((p.price - price.gross, self.VoucherOperation(p, voucher, price)))
