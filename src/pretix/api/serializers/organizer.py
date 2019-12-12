@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
@@ -26,7 +28,7 @@ class SeatingPlanSerializer(I18nAwareModelSerializer):
 
 
 class GiftCardSerializer(I18nAwareModelSerializer):
-    value = serializers.DecimalField(max_digits=10, decimal_places=2)
+    value = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
 
     def validate(self, data):
         data = super().validate(data)

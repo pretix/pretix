@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import transaction
 from rest_framework import filters, serializers, status, viewsets
 from rest_framework.decorators import action
@@ -136,6 +138,10 @@ class GiftCardViewSet(viewsets.ModelViewSet):
         value = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
             request.data.get('value')
         )
+        if gc.value + value < Decimal('0.00'):
+            return Response({
+                'value': ['The gift card does not have sufficient credit for this operation.']
+            }, status=status.HTTP_409_CONFLICT)
         gc.transactions.create(value=value)
         gc.log_action(
             'pretix.giftcards.transaction.manual',

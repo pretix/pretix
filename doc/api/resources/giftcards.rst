@@ -221,9 +221,14 @@ Endpoints
         "value": "15.37"
       }
 
+   .. versionchanged:: 3.5
+
+      This endpoint now returns status code ``409`` if the transaction would lead to a negative gift card value.
+
    :param organizer: The ``slug`` field of the organizer to modify
    :param id: The ``id`` field of the gift card to modify
    :statuscode 200: no error
    :statuscode 400: The gift card could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to change this resource.
+   :statuscode 409: There is not sufficient credit on the gift card.

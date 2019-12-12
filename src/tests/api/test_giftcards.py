@@ -100,6 +100,18 @@ def test_giftcard_patch(token_client, organizer, event, giftcard):
 
 
 @pytest.mark.django_db
+def test_giftcard_patch_min_value(token_client, organizer, event, giftcard):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/giftcards/{}/'.format(organizer.slug, giftcard.pk),
+        {
+            'value': '-10.00',
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
 def test_giftcard_transact(token_client, organizer, event, giftcard):
     resp = token_client.post(
         '/api/v1/organizers/{}/giftcards/{}/transact/'.format(organizer.slug, giftcard.pk),
@@ -111,6 +123,21 @@ def test_giftcard_transact(token_client, organizer, event, giftcard):
     assert resp.status_code == 200
     giftcard.refresh_from_db()
     assert giftcard.value == Decimal('33.00')
+
+
+@pytest.mark.django_db
+def test_giftcard_transact_min_zero(token_client, organizer, event, giftcard):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/giftcards/{}/transact/'.format(organizer.slug, giftcard.pk),
+        {
+            'value': '-100.00',
+        },
+        format='json'
+    )
+    assert resp.status_code == 409
+    assert resp.data == {'value': ['The gift card does not have sufficient credit for this operation.']}
+    giftcard.refresh_from_db()
+    assert giftcard.value == Decimal('23.00')
 
 
 @pytest.mark.django_db
