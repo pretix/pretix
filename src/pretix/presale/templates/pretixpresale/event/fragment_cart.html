@@ -252,7 +252,7 @@
     <div class="col-md-3 col-xs-6 col-md-offset-3 price">
         <strong>{{ cart.total|money:event.currency }}</strong>
 
-        {% if editable and show_vouchers and not cart.all_with_voucher %}
+        {% if editable and vouchers_exist and not cart.all_with_voucher %}
             <br>
             <a class="js-only apply-voucher-toggle" href="#">
                 <span class="fa fa-tag"></span> {% trans "Redeem a voucher" %}

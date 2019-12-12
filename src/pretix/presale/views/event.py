@@ -306,6 +306,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # Show voucher option if an event is selected and vouchers exist
+        vouchers_exist = self.request.event.cache.get('vouchers_exist')
+        if vouchers_exist is None:
+            vouchers_exist = self.request.event.vouchers.exists()
+            self.request.event.cache.set('vouchers_exist', vouchers_exist)
+
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
             items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
@@ -316,14 +323,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['items_by_category'] = item_group_by_category(items)
             context['display_add_to_cart'] = display_add_to_cart
 
-            # Show voucher option if an event is selected and vouchers exist
-            vouchers_exist = self.request.event.cache.get('vouchers_exist')
-            if vouchers_exist is None:
-                vouchers_exist = self.request.event.vouchers.exists()
-                self.request.event.cache.set('vouchers_exist', vouchers_exist)
             context['show_vouchers'] = vouchers_exist
+            context['vouchers_exist'] = vouchers_exist
         else:
             context['show_vouchers'] = False
+            context['vouchers_exist'] = vouchers_exist
 
         context['ev'] = self.subevent or self.request.event
         context['subevent'] = self.subevent
