@@ -338,7 +338,8 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
 
     def post(self, request, *args, **kwargs):
         if 'voucher' in request.POST:
-            return self.do(self.request.event.id, request.POST.get('voucher'), get_or_create_cart_id(self.request), translation.get_language())
+            return self.do(self.request.event.id, request.POST.get('voucher'), get_or_create_cart_id(self.request),
+                           translation.get_language(), request.sales_channel.identifier)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -362,7 +363,8 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
 
     def post(self, request, *args, **kwargs):
         if 'id' in request.POST:
-            return self.do(self.request.event.id, request.POST.get('id'), get_or_create_cart_id(self.request), translation.get_language())
+            return self.do(self.request.event.id, request.POST.get('id'), get_or_create_cart_id(self.request),
+                           translation.get_language(), request.sales_channel.identifier)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -382,7 +384,8 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
         return _('Your cart is now empty.')
 
     def post(self, request, *args, **kwargs):
-        return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language())
+        return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language(),
+                       request.sales_channel.identifier)
 
 
 @method_decorator(allow_cors_if_namespaced, 'dispatch')

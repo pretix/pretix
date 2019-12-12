@@ -1131,7 +1131,7 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='en') -> None:
+def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='en', sales_channel='web') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -1141,7 +1141,7 @@ def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='e
     with language(locale):
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id)
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
                 cm.apply_voucher(voucher)
                 cm.commit()
             except LockTimeoutException:
@@ -1151,7 +1151,7 @@ def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='e
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def remove_cart_position(self, event: Event, position: int, cart_id: str=None, locale='en') -> None:
+def remove_cart_position(self, event: Event, position: int, cart_id: str=None, locale='en', sales_channel='web') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -1161,7 +1161,7 @@ def remove_cart_position(self, event: Event, position: int, cart_id: str=None, l
     with language(locale):
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id)
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
                 cm.remove_item(position)
                 cm.commit()
             except LockTimeoutException:
@@ -1171,7 +1171,7 @@ def remove_cart_position(self, event: Event, position: int, cart_id: str=None, l
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def clear_cart(self, event: Event, cart_id: str=None, locale='en') -> None:
+def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel='web') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -1180,7 +1180,7 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en') -> None:
     with language(locale):
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id)
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
                 cm.clear()
                 cm.commit()
             except LockTimeoutException:
