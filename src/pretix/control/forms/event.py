@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
@@ -270,12 +272,18 @@ class EventMetaValueForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['value'].required = False
         self.fields['value'].widget.attrs['placeholder'] = self.property.default
+        self.fields['value'].widget.attrs['data-typeahead-url'] = (
+            reverse('control:events.meta.typeahead') + '?' + urlencode({
+                'property': self.property.name,
+                'organizer': self.property.organizer.slug,
+            })
+        )
 
     class Meta:
         model = EventMetaValue
         fields = ['value']
         widgets = {
-            'value': forms.TextInput
+            'value': forms.TextInput()
         }
 
 

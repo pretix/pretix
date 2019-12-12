@@ -1,7 +1,9 @@
 from datetime import timedelta
+from urllib.parse import urlencode
 
 from django import forms
 from django.forms import formset_factory
+from django.urls import reverse
 from django.utils.dates import MONTHS, WEEKDAYS
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -171,6 +173,12 @@ class SubEventMetaValueForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['value'].required = False
         self.fields['value'].widget.attrs['placeholder'] = self.default or self.property.default
+        self.fields['value'].widget.attrs['data-typeahead-url'] = (
+            reverse('control:events.meta.typeahead') + '?' + urlencode({
+                'property': self.property.name,
+                'organizer': self.property.organizer.slug,
+            })
+        )
 
     class Meta:
         model = SubEventMetaValue
