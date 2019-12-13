@@ -44,6 +44,7 @@ from pretix.control.forms.event import (
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.multidomain.urlreverse import get_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
@@ -824,7 +825,7 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         })
 
 
-class EventDelete(EventPermissionRequiredMixin, FormView):
+class EventDelete(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, FormView):
     permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/delete.html'
     form_class = EventDeleteForm
@@ -837,7 +838,6 @@ class EventDelete(EventPermissionRequiredMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
         kwargs['event'] = self.request.event
         return kwargs
 
