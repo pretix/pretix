@@ -1,3 +1,4 @@
+import os
 import sys
 from enum import Enum
 from typing import List
@@ -51,7 +52,7 @@ class PluginConfig(AppConfig):
         if not hasattr(self, 'PretixPluginMeta'):
             raise ImproperlyConfigured("A pretix plugin config should have a PretixPluginMeta inner class.")
 
-        if hasattr(self.PretixPluginMeta, 'compatibility') and not self.IGNORE:
+        if hasattr(self.PretixPluginMeta, 'compatibility') and not os.environ.get("PRETIX_IGNORE_CONFLICTS") == "True":
             import pkg_resources
             try:
                 pkg_resources.require(self.PretixPluginMeta.compatibility)

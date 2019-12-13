@@ -42,15 +42,14 @@ except:
 class CustomBuild(build):
     def run(self):
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
+        os.environ.setdefault("PRETIX_IGNORE_CONFLICTS", "True")
         import django
         django.setup()
         from django.conf import settings
         from django.core import management
-        from pretix.base.plugins import PluginConfig
 
         settings.COMPRESS_ENABLED = True
         settings.COMPRESS_OFFLINE = True
-        PluginConfig.IGNORE = True
 
         management.call_command('compilemessages', verbosity=1)
         management.call_command('compilejsi18n', verbosity=1)
