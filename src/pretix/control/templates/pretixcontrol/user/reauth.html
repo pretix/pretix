@@ -9,7 +9,7 @@
         <h3>{% trans "Welcome back!" %}</h3>
         <p>
             {% if form.backend.url %}
-                {% blocktrans trimmed with verbose_name=form.backend.verbose_name %}We just want to make sure it's really you. Please re-authenticate with '{{ verbose_name}}'.{% endblocktrans %}
+                {% blocktrans trimmed with login_provider=form.backend.verbose_name %}We just want to make sure it's really you. Please re-authenticate with '{{ login_provider }}'.{% endblocktrans %}
             {% else %}
                 {% trans "We just want to make sure it's really you. Please re-enter your password to continue." %}
             {% endif %}

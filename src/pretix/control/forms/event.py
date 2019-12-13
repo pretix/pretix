@@ -1433,7 +1433,6 @@ class WidgetCodeForm(forms.Form):
 
 class EventDeleteForm(forms.Form):
     error_messages = {
-        'pw_current_wrong': _("The password you entered was not correct."),
         'slug_wrong': _("The slug you entered was not correct."),
     }
     slug = forms.CharField(
