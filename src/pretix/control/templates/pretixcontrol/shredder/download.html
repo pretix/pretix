@@ -40,12 +40,12 @@
         <fieldset>
             <legend>{% trans "Step 3: Confirm deletion" %}</legend>
             <p>
-                {% blocktrans trimmed with event=request.event.name %}
+                {% blocktrans trimmed with event=request.event.name slug=request.event.slug %}
                 Please re-check that you are fully certain that you want to delete the selected categories of data from the event <strong>{{ event }}</strong>.
-                    In this case, please enter your user password here:
+                    To confirm you really want this, please type out the event's short name ("{{ slug }}") here:
                 {% endblocktrans %}
             </p>
-            <input type="password" class="form-control" name="password" required placeholder="{% trans "Your password" %}">
+            <input type="text" class="form-control" name="slug" required placeholder="{% trans "Event short name" %}">
         </fieldset>
         <input type="hidden" name="file" value="{{ file.pk }}">
         <div class="form-group submit-group">
