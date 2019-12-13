@@ -1,3 +1,4 @@
+import time
 from datetime import timedelta
 
 import pytest
@@ -354,6 +355,9 @@ def test_correct_event_permission_all_events(perf_patch, client, env, perm, url,
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
+    session = client.session
+    session['pretix_auth_login_time'] = int(time.time())
+    session.save()
     response = client.get('/control/event/dummy/dummy/' + url)
     assert response.status_code == code
 
@@ -367,6 +371,9 @@ def test_correct_event_permission_limited(perf_patch, client, env, perm, url, co
     t.members.add(env[1])
     t.limit_events.add(env[0])
     client.login(email='dummy@dummy.dummy', password='dummy')
+    session = client.session
+    session['pretix_auth_login_time'] = int(time.time())
+    session.save()
     response = client.get('/control/event/dummy/dummy/' + url)
     assert response.status_code == code
 
@@ -419,5 +426,7 @@ def test_correct_organizer_permission(perf_patch, client, env, perm, url, code):
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
+    client.session['pretix_auth_login_time'] = int(time.time())
+    client.session.save()
     response = client.get('/control/' + url)
     assert response.status_code == code

@@ -1,4 +1,5 @@
 import datetime
+import time
 from decimal import Decimal
 
 import pytz
@@ -1553,8 +1554,10 @@ class EventDeletionTest(SoupTest):
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
     def test_delete_allowed(self):
+        session = self.client.session
+        session['pretix_auth_login_time'] = int(time.time())
+        session.save()
         self.client.post('/control/event/ccc/30c3/delete/', {
-            'user_pw': 'dummy',
             'slug': '30c3'
         })
 
