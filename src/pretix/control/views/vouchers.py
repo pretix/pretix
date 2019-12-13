@@ -309,6 +309,7 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
         if self.copy_from:
             i = modelcopy(self.copy_from)
             i.pk = None
+            i.redeemed = 0
             kwargs['instance'] = i
         else:
             kwargs['instance'] = Voucher(event=self.request.event)
