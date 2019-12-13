@@ -8,7 +8,11 @@
         {% csrf_token %}
         <h3>{% trans "Welcome back!" %}</h3>
         <p>
-            {% trans "We just want to make sure it's really you. Please re-enter your password to continue." %}
+            {% if form.backend.url %}
+                {% blocktrans trimmed with verbose_name=form.backend.verbose_name %}We just want to make sure it's really you. Please re-authenticate with '{{ verbose_name}}'.{% endblocktrans %}
+            {% else %}
+                {% trans "We just want to make sure it's really you. Please re-enter your password to continue." %}
+            {% endif %}
         </p>
         {% bootstrap_form form %}
         <input class="form-control" id="webauthn-response" name="webauthn"
@@ -23,9 +27,15 @@
             </small></p>
         {% endif %}
         <div class="form-group text-right flip">
-            <button type="submit" class="btn btn-primary btn-block">
-                {% trans "Continue" %}
-            </button>
+            {% if form.backend.url %}
+                <a href="{{ form.backend.url }}" class="btn btn-primary btn-block">
+                    {% trans "Continue" %}
+                </a>
+            {% else %}
+                <button type="submit" class="btn btn-primary btn-block">
+                    {% trans "Continue" %}
+                </button>
+            {% endif %}
             <a href="{% url "control:auth.logout" %}" class="btn btn-link btn-block">
                 {% trans "Log in as someone else" %}
             </a>
