@@ -44,13 +44,14 @@ def get_all_plugins(event=None) -> List[type]:
 
 
 class PluginConfig(AppConfig):
+    IGNORE = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not hasattr(self, 'PretixPluginMeta'):
             raise ImproperlyConfigured("A pretix plugin config should have a PretixPluginMeta inner class.")
 
-        if hasattr(self.PretixPluginMeta, 'compatibility'):
+        if hasattr(self.PretixPluginMeta, 'compatibility') and not self.IGNORE:
             import pkg_resources
             try:
                 pkg_resources.require(self.PretixPluginMeta.compatibility)

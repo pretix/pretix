@@ -46,9 +46,11 @@ class CustomBuild(build):
         django.setup()
         from django.conf import settings
         from django.core import management
+        from pretix.base.plugins import PluginConfig
 
         settings.COMPRESS_ENABLED = True
         settings.COMPRESS_OFFLINE = True
+        PluginConfig.IGNORE = True
 
         management.call_command('compilemessages', verbosity=1)
         management.call_command('compilejsi18n', verbosity=1)
