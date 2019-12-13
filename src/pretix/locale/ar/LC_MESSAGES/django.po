@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-12-13 11:55+0000\n"
+"PO-Revision-Date: 2019-12-13 14:52+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -17772,10 +17772,9 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
-"إذا كنت تريد أن ترى أو تغيير حالة وتفاصيل طلبك، انقر على الرابط في واحدة من "
-"رسائل البريد الإلكتروني التي أرسلناها إليك أثناء عملية النظام. إذا لم تتمكن "
-"من العثور على وصلة، انقر على زر التالي للطلب على الرابط لطلبك ليتم إرسالها لك "
-"مرة أخرى."
+"إذا كنت تريد أن ترى أو تغير حالة وتفاصيل طلبك، اضغط على زر إعادة الإرسال "
+"ليتم إعادة ارسال تفاصيل طلبك إلى إيميلك ومن ثم قم بالضغط على الرابط في "
+"الإيميل."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:287
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
@@ -17789,7 +17788,7 @@ msgstr "شكرا جزيلا!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 msgid "Your order has been placed successfully. See below for details."
-msgstr "وقد وضعت طلبك بنجاح. انظر أدناه للحصول على التفاصيل."
+msgstr "تم إتمام الطلب بنجاح، تجد التفاصيل في الأسفل."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:19
 msgid ""
@@ -17809,7 +17808,7 @@ msgstr "وقد تم تجهيز طلبك بنجاح! انظر أدناه للحص
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
-msgstr "تلقينا بنجاح دفعتك. انظر أدناه للحصول على التفاصيل."
+msgstr "تم إتمام عملية الدفع بنجاح. تجد التفاصيل في الأسفل."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid ""
