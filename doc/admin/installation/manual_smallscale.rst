@@ -85,6 +85,8 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     url=https://pretix.mydomain.com
     currency=EUR
     datadir=/var/pretix/data
+    trust_x_forwarded_for=on
+    trust_x_forwarded_proto=on
 
     [database]
     ; For MySQL, replace with "mysql"

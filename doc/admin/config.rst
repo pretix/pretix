@@ -90,6 +90,11 @@ Example::
     proxy that actively removes and re-adds the header to make sure the correct client IP is the first value.
     Defaults to ``off``.
 
+``trust_x_forwarded_proto``
+    Specifies whether the ``X-Forwarded-Proto`` header can be trusted. Only set to ``on`` if you have a reverse
+    proxy that actively removes and re-adds the header to make sure the correct client IP is the first value.
+    Defaults to ``off``.
+
 
 Locale settings
 ---------------

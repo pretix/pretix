@@ -125,6 +125,8 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     ; DO NOT change the following value, it has to be set to the location of the
     ; directory *inside* the docker container
     datadir=/data
+    trust_x_forwarded_for=on
+    trust_x_forwarded_proto=on
 
     [database]
     ; Replace postgresql with mysql for MySQL
