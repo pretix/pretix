@@ -1,6 +1,5 @@
 from django import forms
 from django.conf import settings
-from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, validate_email
 from django.db.models import Q
