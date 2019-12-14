@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-12-14 05:00+0000\n"
+"PO-Revision-Date: 2019-12-14 19:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -449,7 +449,7 @@ msgstr "بيانات الطلبيات"
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 msgid "Orders"
-msgstr "أوامر"
+msgstr "الطلبات"
 
 #: pretix/base/exporters/orderlist.py:29 pretix/base/models/orders.py:1775
 #: pretix/base/notifications.py:190
@@ -458,11 +458,11 @@ msgstr "مواقف ترتيب"
 
 #: pretix/base/exporters/orderlist.py:30
 msgid "Order fees"
-msgstr "رسوم إشتراك"
+msgstr "رسوم الطلب"
 
 #: pretix/base/exporters/orderlist.py:39
 msgid "Only paid orders"
-msgstr "أوامر دفع فقط"
+msgstr "الطلبات المدفوعة"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:198
 #: pretix/base/exporters/orderlist.py:273 pretix/base/exporters/orderlist.py:507
@@ -490,7 +490,7 @@ msgstr "رمز الطلب"
 #: pretix/plugins/reports/exporters.py:380
 #: pretix/plugins/reports/exporters.py:517
 msgid "Order total"
-msgstr "الطلب الكلي"
+msgstr "المجموع"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:199
 #: pretix/base/exporters/orderlist.py:275 pretix/base/exporters/orderlist.py:434
@@ -572,7 +572,7 @@ msgstr "شركة"
 #: pretix/presale/templates/pretixpresale/event/order.html:222
 #: pretix/presale/templates/pretixpresale/organizers/index.html:56
 msgid "Name"
-msgstr "اسم"
+msgstr "الاسم"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:216
 #: pretix/base/exporters/orderlist.py:312 pretix/base/exporters/orderlist.py:513
@@ -1308,7 +1308,7 @@ msgstr "تاريخ الفاتورة"
 #: pretix/base/invoice.py:378
 msgctxt "invoice"
 msgid "Event"
-msgstr "هدف"
+msgstr "الفعالية"
 
 #: pretix/base/invoice.py:397
 #, python-brace-format
@@ -1693,7 +1693,7 @@ msgstr "سلسلة الحدث"
 #: pretix/control/templates/pretixcontrol/search/orders.html:39
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:18
 msgid "Event"
-msgstr "هدف"
+msgstr "الفعالية"
 
 #: pretix/base/models/event.py:359 pretix/control/navigation.py:295
 #: pretix/control/navigation.py:397
@@ -3446,7 +3446,7 @@ msgstr "لا يتم اعتماد مبلغ معاد الأوتوماتيكية ه
 msgid ""
 "No payment is required as this order only includes products which are free of "
 "charge."
-msgstr "لا يلزم الدفع في هذا النظام يشمل فقط المنتجات التي هي مجانا."
+msgstr "جميع التذاكر في طلبك مجانية."
 
 #: pretix/base/payment.py:742
 msgid "Free of charge"
@@ -4185,7 +4185,7 @@ msgstr "عينة المنتج A"
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr "كنت تتلقى هذا البريد الإلكتروني لشخص ما وضعت أمر {event} حدث لك."
+msgstr "لقد استلمت هذا البريد لأن الحجز مسجل بايميلك ل {event}."
 
 #: pretix/base/services/mail.py:171 pretix/base/services/mail.py:187
 #, python-brace-format
@@ -4199,7 +4199,7 @@ msgstr ""
 #: pretix/base/services/mail.py:183
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr "كنت تتلقى هذا البريد الإلكتروني لأنك وضعت على أمر ل{event} الحدث."
+msgstr "تلقيت هذا البريد لأنك قمت بالحجز في{event}."
 
 #: pretix/base/services/orders.py:56
 msgid ""
@@ -4609,13 +4609,12 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"طلب شخص ما على قائمة من الأوامر الخاصة بك ل{event}.\n"
-"والقائمة على النحو التالي:\n"
+"تجد في الأسفل التذاكر المسجلة بإيميلك ل{event}.\n"
 "\n"
 "{orders}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق {event}"
 
 #: pretix/base/settings.py:355
 #, python-brace-format
@@ -4656,14 +4655,13 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"كان طلبك {event} الناجح. كما كنت قد طلبت فقط المنتجات الخالية،\n"
-"لا يلزم الدفع.\n"
+"حجزك ل {event}. هذا الحجز مجاني.\n"
 "\n"
 "يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق {event}"
 
 #: pretix/base/settings.py:384
 #, python-brace-format
@@ -5316,8 +5314,7 @@ msgstr "انقر هنا تعطيل كافة الإخطارات على الفور
 msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
-msgstr ""
-"كنت تتلقى هذا البريد الإلكتروني لشخص ما وقعت أنت على مستوى الحدث التالي:"
+msgstr "تلقيت هذا البريد لأنك قمت بالحجز في:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:28
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:36
@@ -5342,7 +5339,7 @@ msgstr "عرض تفاصيل التسجيل"
 msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
-msgstr "كنت تتلقى هذا البريد الإلكتروني لأنك وضعت على أمر لهذا الحدث التالية:"
+msgstr "تلقيت هذا البريد لأنك قمت بالحجز في:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
@@ -5808,7 +5805,7 @@ msgstr "محجوزة عدد الدقائق البنود في عربة المست
 
 #: pretix/control/forms/event.py:467 pretix/control/forms/event.py:1499
 msgid "Imprint URL"
-msgstr "بصمة URL"
+msgstr "مقدم الخدمة URL"
 
 #: pretix/control/forms/event.py:468 pretix/control/forms/event.py:1500
 msgid ""
@@ -9026,7 +9023,7 @@ msgstr "يعمل في نمط التنمية"
 #: pretix/control/templates/pretixcontrol/base.html:427
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "نحن معالجة طلبك ..."
+msgstr "يتم تجهيز تذكرتك …"
 
 #: pretix/control/templates/pretixcontrol/base.html:429
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:12
@@ -17280,11 +17277,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:114
 msgid "Contact event organizer"
-msgstr "الاتصال الحدث منظم"
+msgstr "تواصل مع المنظمين"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:117
 msgid "Imprint"
-msgstr "بصمة"
+msgstr "المنظم"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:7
 msgid ""
@@ -17507,15 +17504,15 @@ msgstr "كل المنتجات المتبقية هي محجوزة لكنها قد
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:106
 msgid "Okay, we're removing that…"
-msgstr "حسنا، نحن إزالة هذا ..."
+msgstr "يتم الآن إلغاء التذكرة…"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:110
 msgid "Remove one"
-msgstr "إزالة واحد"
+msgstr "إزالة تذكرة"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:122
 msgid "We're trying to reserve another one for you!"
-msgstr "نحاول حجز واحد آخر لك!"
+msgstr "إضافة تذكرة!"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:123
 #: pretix/presale/templates/pretixpresale/event/index.html:215
@@ -17525,9 +17522,7 @@ msgstr "نحاول حجز واحد آخر لك!"
 msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
-msgstr ""
-"وبمجرد أن تكون هذه البنود في عربة التسوق، سيكون لديك %(time)s دقائق لإتمام "
-"عملية الشراء."
+msgstr "سيكون لديك %(time)s دقائق لإتمام عملية الشراء."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:138
 msgid "Add one more"
@@ -17548,7 +17543,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:11
 msgid "Download all tickets at once:"
-msgstr "تحميل جميع تذاكر في وقت واحد:"
+msgstr "تحميل جميع التذاكر:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:29
 #, python-format
@@ -17578,7 +17573,7 @@ msgstr "من %(price)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:231
 msgctxt "price"
 msgid "FREE"
-msgstr "حر"
+msgstr "مجانا"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:68
 msgid "Show variants"
@@ -17590,7 +17585,7 @@ msgstr "مشاهدة المتغيرات"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:226
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr "سعر تعديل ل %(item)s"
+msgstr "تعديل سعر %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:126
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:240
@@ -17632,7 +17627,7 @@ msgstr "إدخال رمز قسيمة أدناه لشراء هذه التذاكر
 #: pretix/presale/templates/pretixpresale/event/voucher.html:169
 #, python-format
 msgid "Amount of %(item)s – %(var)s to order"
-msgstr "كمية %(item)s - %(var)s للطلب"
+msgstr "عدد %(item)s - %(var)s للطلب"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:275
 #: pretix/presale/templates/pretixpresale/event/voucher.html:266
@@ -17669,7 +17664,7 @@ msgstr "ليس بعد على بيع"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:9
 msgid "Presale"
-msgstr "[خبر]"
+msgstr "بيع أولي"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 #: pretix/presale/templates/pretixpresale/event/index.html:82
@@ -17690,7 +17685,7 @@ msgstr "عرض تاريخ آخر"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:105
 msgid "Choose date to buy a ticket"
-msgstr "تاريخ اختيار لشراء تذكرة"
+msgstr "تاريخ شراء التذاكر"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:110
 msgctxt "subevent"
@@ -17700,7 +17695,7 @@ msgstr "تواريخ أخرى"
 #: pretix/presale/templates/pretixpresale/event/index.html:143
 #: pretix/presale/views/widget.py:484
 msgid "The presale period for this event is over."
-msgstr "فترة [خبر] لهذا الحدث قد انتهت."
+msgstr "انتهت فترة بيع التذاكر."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:148
 #: pretix/presale/views/widget.py:486
@@ -17895,7 +17890,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:284
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:16
 msgid "This will invalidate all tickets in this order."
-msgstr "وهذا يبطل جميع التذاكر في هذا النظام."
+msgstr "سيتم إلغاء جميع التذاكر في هذا الطلب."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:268
 msgid ""
@@ -17905,7 +17900,7 @@ msgstr "يمكنك إلغاء هذا النظام والحصول على كامل
 
 #: pretix/presale/templates/pretixpresale/event/order.html:281
 msgid "You can cancel this order using the following button."
-msgstr "يمكنك إلغاء هذا النظام باستخدام زر التالي."
+msgstr "يمكنك إلغاء الحجز باستخدام الزر التالي."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:8
 #, python-format
@@ -18023,9 +18018,8 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
-"إذا كنت فقدت تصل إلى طلبك أو أوامر، يرجى إدخال عنوان البريد الإلكتروني الذي "
-"استخدمته لطلبك. سوف نرسل لك رسالة بالبريد الالكتروني مع وصلات لجميع أوامر كنت "
-"قد وضعت باستخدام عنوان البريد الإلكتروني هذا."
+"إذا فقدت تذكرتك، يرجى إدخال إيميلك الذي استخدمته أثناء الطلب، وسوف نقوم "
+"بإرسال التذاكر مجددا لإيميلك."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:26
 msgid "Send links"
@@ -18200,7 +18194,7 @@ msgstr "عربة التسوق الخاصة بك الآن فارغة."
 
 #: pretix/presale/views/cart.py:375
 msgid "The products have been successfully added to your cart."
-msgstr "تم إضافة منتجات بنجاح إلى سلة التسوق الخاصة بك."
+msgstr "تم إضافة التذاكر إلى سلة التسوق."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
@@ -18256,7 +18250,7 @@ msgstr ""
 
 #: pretix/presale/views/order.py:665
 msgid "You cannot modify this order"
-msgstr "لا يمكنك تعديل هذا النظام"
+msgstr "لا يمكنك تعديل هذا الطلب"
 
 #: pretix/presale/views/order.py:780
 msgid "Ticket download is not (yet) enabled for this order."
@@ -18276,9 +18270,7 @@ msgstr "طلباتكم ل{}"
 
 #: pretix/presale/views/user.py:53
 msgid "We have trouble sending emails right now, please check back later."
-msgstr ""
-"لدينا رسائل البريد الإلكتروني المرسلة من المتاعب في الوقت الراهن، يرجى التحقق "
-"مرة أخرى في وقت لاحق."
+msgstr "لدينا مشكلة في إرسال البريد حاليا، يرجى التحقق مرة أخرى في وقت لاحق."
 
 #: pretix/presale/views/user.py:56
 msgid ""
