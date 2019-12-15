@@ -108,11 +108,12 @@ error_messages = {
 
 class CartManager:
     AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'price', 'voucher', 'quotas',
-                                               'addon_to', 'subevent', 'includes_tax', 'bundled', 'seat'))
+                                               'addon_to', 'subevent', 'includes_tax', 'bundled', 'seat',
+                                               'price_before_voucher'))
     RemoveOperation = namedtuple('RemoveOperation', ('position',))
     VoucherOperation = namedtuple('VoucherOperation', ('position', 'voucher', 'price'))
     ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'price', 'voucher',
-                                                     'quotas', 'subevent', 'seat'))
+                                                     'quotas', 'subevent', 'seat', 'price_before_voucher'))
     order = {
         RemoveOperation: 10,
         VoucherOperation: 15,
@@ -384,6 +385,7 @@ class CartManager:
                 else:
                     price = self._get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent,
                                             force_custom_price=True)
+                pbv = TAXED_ZERO
             else:
                 bundled_sum = Decimal('0.00')
                 if not cp.addon_to_id:
@@ -396,9 +398,14 @@ class CartManager:
                     price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
                                             cp_is_net=True, bundled_sum=bundled_sum)
                     price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
+                    pbv = self._get_price(cp.item, cp.variation, None, cp.price, cp.subevent,
+                                          cp_is_net=True, bundled_sum=bundled_sum)
+                    pbv = TaxedPrice(net=pbv.net, gross=pbv.net, rate=0, tax=0, name='')
                 else:
                     price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
                                             bundled_sum=bundled_sum)
+                    pbv = self._get_price(cp.item, cp.variation, None, cp.price, cp.subevent,
+                                          bundled_sum=bundled_sum)
 
             quotas = list(cp.quotas)
             if not quotas:
@@ -414,7 +421,7 @@ class CartManager:
 
             op = self.ExtendOperation(
                 position=cp, item=cp.item, variation=cp.variation, voucher=cp.voucher, count=1,
-                price=price, quotas=quotas, subevent=cp.subevent, seat=cp.seat
+                price=price, quotas=quotas, subevent=cp.subevent, seat=cp.seat, price_before_voucher=pbv
             )
             self._check_item_constraints(op)
 
@@ -569,16 +576,18 @@ class CartManager:
                 bop = self.AddOperation(
                     count=bundle.count, item=bitem, variation=bvar, price=bprice,
                     voucher=None, quotas=bundle_quotas, addon_to='FAKE', subevent=subevent,
-                    includes_tax=bool(bprice.rate), bundled=[], seat=None
+                    includes_tax=bool(bprice.rate), bundled=[], seat=None, price_before_voucher=bprice,
                 )
                 self._check_item_constraints(bop)
                 bundled.append(bop)
 
             price = self._get_price(item, variation, voucher, i.get('price'), subevent, bundled_sum=bundled_sum)
+            pbv = self._get_price(item, variation, None, i.get('price'), subevent, bundled_sum=bundled_sum)
 
             op = self.AddOperation(
                 count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas,
-                addon_to=False, subevent=subevent, includes_tax=bool(price.rate), bundled=bundled, seat=seat
+                addon_to=False, subevent=subevent, includes_tax=bool(price.rate), bundled=bundled, seat=seat,
+                price_before_voucher=pbv
             )
             self._check_item_constraints(op)
             operations.append(op)
@@ -898,7 +907,8 @@ class CartManager:
                             event=self.event, item=op.item, variation=op.variation,
                             price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
                             voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
-                            subevent=op.subevent, includes_tax=op.includes_tax, seat=op.seat
+                            subevent=op.subevent, includes_tax=op.includes_tax, seat=op.seat,
+                            price_before_voucher=op.price_before_voucher.gross
                         )
                         if self.event.settings.attendee_names_asked:
                             scheme = PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)
@@ -945,6 +955,7 @@ class CartManager:
                     elif available_count == 1:
                         op.position.expires = self._expiry
                         op.position.price = op.price.gross
+                        op.position.price_before_voucher = op.price_before_voucher.gross
                         try:
                             op.position.save(force_update=True)
                         except DatabaseError:
@@ -964,6 +975,7 @@ class CartManager:
                         # be expected
                         continue
 
+                op.position.price_before_voucher = op.position.price
                 op.position.price = op.price.gross
                 op.position.voucher = op.voucher
                 op.position.save()

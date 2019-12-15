@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import F, OuterRef, Q, Subquery, Sum
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -17,7 +17,7 @@ from ..decimal import round_decimal
 from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Quota
-from .orders import Order
+from .orders import CartPosition, Order, OrderPosition
 
 
 def _generate_random_code(prefix=None):
@@ -113,6 +113,13 @@ class Voucher(LoggedModel):
     redeemed = models.PositiveIntegerField(
         verbose_name=_("Redeemed"),
         default=0
+    )
+    budget = models.DecimalField(
+        verbose_name=_("Maximum discount budget"),
+        help_text=_("This is the maximum monetary amount that will be discounted using this voucher. If this is reached, "
+                    "the voucher becomes inactive."),
+        decimal_places=2, max_digits=10,
+        null=True, blank=True
     )
     valid_until = models.DateTimeField(
         blank=True, null=True, db_index=True,
@@ -470,3 +477,38 @@ class Voucher(LoggedModel):
             return self.item.seat_category_mappings.filter(**kwargs).exists()
         else:
             return bool(subevent.seating_plan) if subevent else self.event.seating_plan
+
+    @classmethod
+    def annotate_budget_used_orders(cls, qs):
+        opq = OrderPosition.objects.filter(
+            voucher_id=OuterRef('pk'),
+            price_before_voucher__isnull=False,
+            order__status__in=[
+                Order.STATUS_PAID,
+                Order.STATUS_PENDING
+                # TODO: reason about expired orders
+            ]
+        ).order_by().values('voucher_id').annotate(s=Sum(F('price_before_voucher') - F('price'))).values('s')
+        return qs.annotate(budget_used_orders=Subquery(opq, output_field=models.DecimalField(max_digits=10, decimal_places=2)))
+
+    def budget_used(self, ignore_cartpos=None):
+        ops = OrderPosition.objects.filter(
+            voucher=self,
+            price_before_voucher__isnull=False,
+            order__status__in=[
+                Order.STATUS_PAID,
+                Order.STATUS_PENDING
+                # TODO: reason about expired orders
+            ]
+        ).aggregate(s=Sum(F('price_before_voucher') - F('price')))['s'] or Decimal('0.00')
+        cpq = CartPosition.objects.filter(
+            voucher=self,
+            price_before_voucher__isnull=False,
+            expires__gt=now()
+        )
+        if isinstance(ignore_cartpos, (tuple, list)):
+            cpq = cpq.exclude(pk__in=ignore_cartpos)
+        else:
+            cpq = cpq.exclude(pk=ignore_cartpos)
+        cps = cpq.aggregate(s=Sum(F('price_before_voucher') - F('price')))['s'] or Decimal('0.00')
+        return ops + cps
