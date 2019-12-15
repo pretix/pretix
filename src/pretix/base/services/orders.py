@@ -530,6 +530,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 bprice = cp.price
             price = get_price(cp.item, cp.variation, cp.voucher, bprice, cp.subevent, custom_price_is_net=False,
                               invoice_address=address, force_custom_price=True)
+            pbv = get_price(cp.item, cp.variation, None, bprice, cp.subevent, custom_price_is_net=False,
+                            invoice_address=address, force_custom_price=True)
             changed_prices[cp.pk] = bprice
         else:
             bundled_sum = 0
@@ -540,6 +542,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
             price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
                               addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum)
+            pbv = get_price(cp.item, cp.variation, None, cp.price, cp.subevent, custom_price_is_net=False,
+                            addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum)
 
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
@@ -551,6 +555,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 err = err or error_messages['voucher_expired']
                 delete(cp)
                 continue
+
+        cp.price_before_voucher = pbv.gross
 
         if price.gross != cp.price and not (cp.item.free_price and cp.price > price.gross):
             cp.price = price.gross

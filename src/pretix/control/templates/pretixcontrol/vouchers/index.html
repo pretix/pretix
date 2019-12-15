@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load urlreplace %}
+{% load money %}
 {% block title %}{% trans "Vouchers" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Vouchers" %}</h1>
@@ -143,7 +144,15 @@
                                 <strong><a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
                                 {% if not v.is_active %}</del>{% endif %}
                             </td>
-                            <td>{{ v.redeemed }} / {{ v.max_usages }}</td>
+                            <td>
+                                {{ v.redeemed }} / {{ v.max_usages }}
+                                {% if v.budget|default_if_none:"NONE" != "NONE" %}
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ v.budget_used_orders|money:request.event.currency }} / {{ v.budget|money:request.event.currency }}
+                                    </small>
+                                {% endif %}
+                            </td>
                             <td>{{ v.valid_until|date }}</td>
                             <td>
                                 {{ v.tag }}
