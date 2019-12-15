@@ -522,6 +522,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             # Other checks are not necessary
             continue
 
+        pbv = None
         if cp.is_bundled:
             try:
                 bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
@@ -556,7 +557,10 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 delete(cp)
                 continue
 
-        cp.price_before_voucher = pbv.gross
+        if pbv is not None and pbv.gross != price.gross:
+            cp.price_before_voucher = pbv.gross
+        else:
+            cp.price_before_voucher = None
 
         if price.gross != cp.price and not (cp.item.free_price and cp.price > price.gross):
             cp.price = price.gross

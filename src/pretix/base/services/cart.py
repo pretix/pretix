@@ -693,7 +693,8 @@ class CartManager:
 
                 op = self.AddOperation(
                     count=1, item=item, variation=variation, price=price, voucher=None, quotas=quotas,
-                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[], seat=None
+                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[], seat=None,
+                    price_before_voucher=None
                 )
                 self._check_item_constraints(op)
                 operations.append(op)
@@ -908,7 +909,7 @@ class CartManager:
                             price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
                             voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
                             subevent=op.subevent, includes_tax=op.includes_tax, seat=op.seat,
-                            price_before_voucher=op.price_before_voucher.gross
+                            price_before_voucher=op.price_before_voucher.gross if op.price_before_voucher is not None else None
                         )
                         if self.event.settings.attendee_names_asked:
                             scheme = PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)
@@ -955,7 +956,8 @@ class CartManager:
                     elif available_count == 1:
                         op.position.expires = self._expiry
                         op.position.price = op.price.gross
-                        op.position.price_before_voucher = op.price_before_voucher.gross
+                        if op.price_before_voucher is not None:
+                            op.position.price_before_voucher = op.price_before_voucher.gross
                         try:
                             op.position.save(force_update=True)
                         except DatabaseError:

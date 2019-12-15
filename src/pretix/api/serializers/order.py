@@ -860,7 +860,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         invoice_address=ia,
                     )
                     pos.price = price.gross
-                    pos.price_before_voucher = pbv
+                    pos.price_before_voucher = pbv.gross
                     pos.tax_rate = price.rate
                     pos.tax_value = price.tax
                     pos.tax_rule = pos.item.tax_rule
