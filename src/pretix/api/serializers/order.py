@@ -850,17 +850,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         addon_to=pos.addon_to,
                         invoice_address=ia,
                     )
-                    pbv = get_price(
-                        item=pos.item,
-                        variation=pos.variation,
-                        voucher=None,
-                        custom_price=None,
-                        subevent=pos.subevent,
-                        addon_to=pos.addon_to,
-                        invoice_address=ia,
-                    )
                     pos.price = price.gross
-                    pos.price_before_voucher = pbv
                     pos.tax_rate = price.rate
                     pos.tax_value = price.tax
                     pos.tax_rule = pos.item.tax_rule
