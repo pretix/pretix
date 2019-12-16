@@ -178,6 +178,7 @@ def _display_checkin(event, logentry):
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")
 def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     plains = {
+        'pretix.object.cloned': _('This object has been created by cloning.'),
         'pretix.event.comment': _('The event\'s internal comment has been updated.'),
         'pretix.event.order.modified': _('The order details have been changed.'),
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),

@@ -522,6 +522,7 @@ class Event(EventMixin, LoggedModel):
         self.is_public = other.is_public
         self.testmode = other.testmode
         self.save()
+        self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
 
         tax_map = {}
         for t in other.tax_rules.all():
@@ -529,6 +530,7 @@ class Event(EventMixin, LoggedModel):
             t.pk = None
             t.event = self
             t.save()
+            t.log_action('pretix.object.cloned')
 
         category_map = {}
         for c in ItemCategory.objects.filter(event=other):
@@ -536,6 +538,7 @@ class Event(EventMixin, LoggedModel):
             c.pk = None
             c.event = self
             c.save()
+            c.log_action('pretix.object.cloned')
 
         item_map = {}
         variation_map = {}
@@ -551,6 +554,7 @@ class Event(EventMixin, LoggedModel):
             if i.tax_rule_id:
                 i.tax_rule = tax_map[i.tax_rule_id]
             i.save()
+            i.log_action('pretix.object.cloned')
             for v in vars:
                 variation_map[v.pk] = v
                 v.pk = None
@@ -575,6 +579,7 @@ class Event(EventMixin, LoggedModel):
             q.cached_availability_time = None
             q.closed = False
             q.save()
+            q.log_action('pretix.object.cloned')
             for i in items:
                 if i.pk in item_map:
                     q.items.add(item_map[i.pk])
@@ -590,6 +595,7 @@ class Event(EventMixin, LoggedModel):
             q.pk = None
             q.event = self
             q.save()
+            q.log_action('pretix.object.cloned')
 
             for i in items:
                 q.items.add(item_map[i.pk])
@@ -607,6 +613,7 @@ class Event(EventMixin, LoggedModel):
             cl.pk = None
             cl.event = self
             cl.save()
+            cl.log_action('pretix.object.cloned')
             for i in items:
                 cl.limit_products.add(item_map[i.pk])
 
