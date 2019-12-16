@@ -2,7 +2,6 @@ from urllib.parse import urlencode
 
 from django import forms
 from django.conf import settings
-from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, validate_email
 from django.db.models import Q
@@ -1446,14 +1445,8 @@ class WidgetCodeForm(forms.Form):
 
 class EventDeleteForm(forms.Form):
     error_messages = {
-        'pw_current_wrong': _("The password you entered was not correct."),
         'slug_wrong': _("The slug you entered was not correct."),
     }
-    user_pw = forms.CharField(
-        max_length=255,
-        label=_("Your password"),
-        widget=forms.PasswordInput()
-    )
     slug = forms.CharField(
         max_length=255,
         label=_("Event slug"),
@@ -1461,18 +1454,7 @@ class EventDeleteForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
-        self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
-
-    def clean_user_pw(self):
-        user_pw = self.cleaned_data.get('user_pw')
-        if not check_password(user_pw, self.user.password):
-            raise forms.ValidationError(
-                self.error_messages['pw_current_wrong'],
-                code='pw_current_wrong',
-            )
-
-        return user_pw
 
     def clean_slug(self):
         slug = self.cleaned_data.get('slug')

@@ -1,5 +1,6 @@
 import datetime
 import json
+import time
 from io import BytesIO
 from zipfile import ZipFile
 
@@ -35,6 +36,9 @@ class EventShredderTest(SoupTest):
         )
 
         self.client.login(email='dummy@dummy.dummy', password='dummy')
+        session = self.client.session
+        session['pretix_auth_login_time'] = int(time.time()) * 2
+        session.save()
 
     def test_shred_simple(self):
         doc = self.get_doc('/control/event/%s/%s/shredder/' % (self.orga1.slug, self.event1.slug))
@@ -60,7 +64,7 @@ class EventShredderTest(SoupTest):
         doc = self.post_doc('/control/event/%s/%s/shredder/shred' % (self.orga1.slug, self.event1.slug), {
             'confirm_code': indexdata['confirm_code'],
             'file': doc.select("input[name=file]")[0].attrs['value'],
-            'password': 'dummy'
+            'slug': self.event1.slug
         })
         assert doc.select('.alert-success')
         self.order.refresh_from_db()

@@ -24,12 +24,6 @@
                 {% endblocktrans %}
             </p>
             {% bootstrap_field form.slug layout="inline" %}
-            <p>
-                {% blocktrans trimmed with slug=request.event.slug %}
-                    Also, to make sure it's really you, please enter your user password here:
-                {% endblocktrans %}
-            </p>
-            {% bootstrap_field form.user_pw layout="inline" %}
 
             <div class="form-group submit-group">
                 <button type="submit" class="btn btn-danger btn-save">

@@ -198,6 +198,7 @@ class ReauthForm(forms.Form):
         self.request = request
         self.user = user
         self.backend = backend
+        self.backend.url = backend.authentication_url(self.request)
         super().__init__(*args, **kwargs)
         for k, f in backend.login_form_fields.items():
             self.fields[k] = f

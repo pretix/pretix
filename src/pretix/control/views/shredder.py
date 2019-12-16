@@ -13,6 +13,7 @@ from pretix.base.services.shredder import export, shred
 from pretix.base.shredder import ShredError, shred_constraints
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views.user import RecentAuthenticationRequiredMixin
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ class ShredderMixin:
         )
 
 
-class StartShredView(EventPermissionRequiredMixin, ShredderMixin, TemplateView):
+class StartShredView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, TemplateView):
     permission = 'can_change_orders'
     template_name = 'pretixcontrol/shredder/index.html'
 
@@ -37,7 +38,7 @@ class StartShredView(EventPermissionRequiredMixin, ShredderMixin, TemplateView):
         return ctx
 
 
-class ShredDownloadView(EventPermissionRequiredMixin, ShredderMixin, TemplateView):
+class ShredDownloadView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, TemplateView):
     permission = 'can_change_orders'
     template_name = 'pretixcontrol/shredder/download.html'
 
@@ -48,7 +49,7 @@ class ShredDownloadView(EventPermissionRequiredMixin, ShredderMixin, TemplateVie
         return ctx
 
 
-class ShredExportView(EventPermissionRequiredMixin, ShredderMixin, AsyncAction, View):
+class ShredExportView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, AsyncAction, View):
     permission = 'can_change_orders'
     task = export
     known_errortypes = ['ShredError']
@@ -77,7 +78,7 @@ class ShredExportView(EventPermissionRequiredMixin, ShredderMixin, AsyncAction, 
         return self.do(self.request.event.id, request.POST.getlist("shredder"))
 
 
-class ShredDoView(EventPermissionRequiredMixin, ShredderMixin, AsyncAction, View):
+class ShredDoView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, AsyncAction, View):
     permission = 'can_change_orders'
     task = shred
     known_errortypes = ['ShredError']
@@ -103,7 +104,7 @@ class ShredDoView(EventPermissionRequiredMixin, ShredderMixin, AsyncAction, View
         if constr:
             return self.error(ShredError(self.get_error_url()))
 
-        if not self.request.user.check_password(request.POST.get("password")):
-            return self.error(ShredError(_("The current password you entered was not correct.")))
+        if request.event.slug != request.POST.get("slug"):
+            return self.error(ShredError(_("The slug you entered was not correct.")))
 
         return self.do(self.request.event.id, request.POST.get("file"), request.POST.get("confirm_code"))
