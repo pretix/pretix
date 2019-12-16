@@ -513,9 +513,12 @@ class OrderTaxListReport(ListExporter):
         )
         tax_rates = sorted(tax_rates)
 
-        yield [
-            _('Order code'), _('Order date'), _('Status'), _('Payment date'), _('Order total'),
+        headers = [
+            _('Order code'), _('Order date'),
+            _('Company'), _('Name'),
+            _('Country'), _('VAT ID'), _('Status'), _('Payment date'), _('Order total'),
         ] + sum(([str(t) + ' % ' + _('Gross'), str(t) + ' % ' + _('Tax')] for t in tax_rates), [])
+        yield headers
 
         op_date = OrderPayment.objects.filter(
             order=OuterRef('order'),
@@ -531,7 +534,8 @@ class OrderTaxListReport(ListExporter):
             order__event=self.event,
         ).annotate(payment_date=Subquery(op_date, output_field=models.DateTimeField())).values(
             'order__code', 'order__datetime', 'payment_date', 'order__total', 'tax_rate', 'order__status',
-            'order__id'
+            'order__id', 'order__invoice_address__name_cached', 'order__invoice_address__company',
+            'order__invoice_address__country', 'order__invoice_address__vat_id'
         ).annotate(prices=Sum('price'), tax_values=Sum('tax_value')).order_by(
             'order__datetime' if form_data['sort'] == 'datetime' else 'payment_date',
             'order__datetime',
@@ -557,6 +561,10 @@ class OrderTaxListReport(ListExporter):
                 row = [
                     op['order__code'],
                     date_format(op['order__datetime'].astimezone(tz), "SHORT_DATE_FORMAT"),
+                    op['order__invoice_address__company'],
+                    op['order__invoice_address__name_cached'],
+                    op['order__invoice_address__country'],
+                    op['order__invoice_address__vat_id'],
                     status_labels[op['order__status']],
                     date_format(op['payment_date'], "SHORT_DATE_FORMAT") if op['payment_date'] else '',
                     round_decimal(op['order__total'], self.event.currency),
@@ -565,21 +573,21 @@ class OrderTaxListReport(ListExporter):
                 for i, rate in enumerate(tax_rates):
                     odata = fee_sum_cache.get((op['order__id'], rate))
                     if odata:
-                        row[5 + 2 * i] = odata['grosssum'] or 0
-                        row[6 + 2 * i] = odata['taxsum'] or 0
+                        row[9 + 2 * i] = odata['grosssum'] or 0
+                        row[10 + 2 * i] = odata['taxsum'] or 0
                         tax_sums[rate] += odata['taxsum'] or 0
                         price_sums[rate] += odata['grosssum'] or 0
 
             i = tax_rates.index(op['tax_rate'])
-            row[5 + 2 * i] = round_decimal(row[5 + 2 * i] + op['prices'], self.event.currency)
-            row[6 + 2 * i] = round_decimal(row[6 + 2 * i] + op['tax_values'], self.event.currency)
+            row[9 + 2 * i] = round_decimal(row[9 + 2 * i] + op['prices'], self.event.currency)
+            row[10 + 2 * i] = round_decimal(row[10 + 2 * i] + op['tax_values'], self.event.currency)
             tax_sums[op['tax_rate']] += op['tax_values']
             price_sums[op['tax_rate']] += op['prices']
 
         if row:
             yield row
         yield [
-            _('Total'), '', '', '', ''
+            _('Total'), '', '', '', '', '', '', '', ''
         ] + sum(([
             round_decimal(price_sums.get(t) or Decimal('0.00'), self.event.currency),
             round_decimal(tax_sums.get(t) or Decimal('0.00'), self.event.currency)
