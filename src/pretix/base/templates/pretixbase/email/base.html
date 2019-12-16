@@ -139,6 +139,14 @@
             text-decoration: none;
             color: {{ color }};
         }
+        {% if rtl %}
+            body {
+                direction: rtl;
+            }
+            .content table td {
+                text-align: right;
+            }
+        {% endif %}
 
         {% block addcss %}{% endblock %}
     </style>

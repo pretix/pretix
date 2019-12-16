@@ -9,7 +9,7 @@ from django.core.mail.backends.smtp import EmailBackend
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language, ugettext_lazy as _
 from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import LazyCurrencyNumber, LazyDate, LazyNumber
@@ -112,7 +112,8 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
             'site_url': settings.SITE_URL,
             'body': body_md,
             'subject': str(subject),
-            'color': '#8E44B3'
+            'color': '#8E44B3',
+            'rtl': get_language() in settings.LANGUAGES_RTL
         }
         if self.event:
             htmlctx['event'] = self.event
