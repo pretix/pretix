@@ -140,7 +140,10 @@ class Seat(models.Model):
 
         if self.blocked and sales_channel not in self.event.settings.seating_allow_blocked_seats_for_channel:
             return False
-        opqs = self.orderposition_set.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
+        opqs = self.orderposition_set.filter(
+            order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID],
+            canceled=False
+        )
         cpqs = self.cartposition_set.filter(expires__gte=now())
         vqs = self.vouchers.filter(
             Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now())) &
