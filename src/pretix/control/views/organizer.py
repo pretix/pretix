@@ -28,6 +28,7 @@ from pretix.base.models import (
     Device, GiftCard, Organizer, Team, TeamInvite, User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
+from pretix.base.models.giftcards import gen_giftcard_secret
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.filter import (
@@ -1038,7 +1039,8 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         kwargs = super().get_form_kwargs()
         any_event = self.request.organizer.events.first()
         kwargs['initial'] = {
-            'currency': any_event.currency if any_event else settings.DEFAULT_CURRENCY
+            'currency': any_event.currency if any_event else settings.DEFAULT_CURRENCY,
+            'secret': gen_giftcard_secret(self.request.organizer.settings.giftcard_length)
         }
         kwargs['organizer'] = self.request.organizer
         return kwargs
