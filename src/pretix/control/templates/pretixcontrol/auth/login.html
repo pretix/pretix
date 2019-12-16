@@ -22,9 +22,16 @@
         {% csrf_token %}
         {% bootstrap_form form %}
         <div class="form-group buttons">
+            {% if backend.login_form_fields %}
             <button type="submit" class="btn btn-primary btn-block">
                 {% trans "Log in" %}
             </button>
+            {% endif %}
+            {% if backend.url %}
+                <a href="{{ backend.url }}" class="btn btn-primary btn-block">
+                    {{ backend.verbose_name }}
+                </a>
+            {% endif %}
             {% if backend.identifier == "native" %}
                 {% if can_reset %}
                     <a href="{% url "control:auth.forgot" %}" class="btn btn-link btn-block">
