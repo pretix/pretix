@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-05 13:33+0000\n"
-"PO-Revision-Date: 2019-11-19 15:55+0000\n"
+"PO-Revision-Date: 2019-12-16 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -192,10 +192,8 @@ msgid "Circular dependency between questions detected."
 msgstr "Kringafhankelijkheid tussen vragen gedetecteerd."
 
 #: pretix/api/serializers/item.py:271 pretix/control/forms/item.py:86
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "This type of question cannot be asked during check-in."
-msgstr "Deze vraag zal bij het inchecken worden gesteld."
+msgstr "Deze soort vraag kan niet bij het inchecken worden gesteld."
 
 #: pretix/api/serializers/organizer.py:43 pretix/control/forms/organizer.py:363
 msgid ""
@@ -2398,10 +2396,8 @@ msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr "Landcode (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py:991
-#, fuzzy
-#| msgid "Line number"
 msgid "Phone number"
-msgstr "Regelnummer"
+msgstr "Telefoonnummer"
 
 #: pretix/base/models/items.py:1002 pretix/base/models/items.py:1056
 #: pretix/control/forms/item.py:43
@@ -3149,7 +3145,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:178
 msgid "Specific seat"
-msgstr ""
+msgstr "Specifieke zitplaats"
 
 #: pretix/base/models/vouchers.py:182
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:114
@@ -3216,12 +3212,12 @@ msgstr ""
 "Het is op dit moment niet mogelijk om vouchers voor add-onproducten te maken."
 
 #: pretix/base/models/vouchers.py:245 pretix/base/models/vouchers.py:338
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
-msgstr "Je kan niet tegelijk een quotum en een specifiek product selecteren."
+msgstr ""
+"Je moet een specifiek product of quotum kiezen als er kaartjes moeten worden "
+"gereserveerd voor deze voucher."
 
 #: pretix/base/models/vouchers.py:255
 #, python-format
@@ -3258,16 +3254,13 @@ msgid "A voucher with this code already exists."
 msgstr "Er bestaat al een voucher met deze code."
 
 #: pretix/base/models/vouchers.py:355
-#, fuzzy
-#| msgid "You need to select a specific seat."
 msgid "You need to choose a date if you select a seat."
-msgstr "Je moet een specifieke stoel kiezen."
+msgstr "Je moet een datum kiezen als je een stoel kiest."
 
 #: pretix/base/models/vouchers.py:364
-#, fuzzy, python-brace-format
-#| msgid "The selected date does not exist in this event series."
+#, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr "De geselecteerde datum bestaat niet in deze evenementenreeks."
+msgstr "De gekozen stoel met nummer \"{id}\" bestaat niet voor dit evenement."
 
 #: pretix/base/models/vouchers.py:368
 #, python-brace-format
@@ -3275,31 +3268,27 @@ msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
 msgstr ""
+"De stoel \"{id}\" is momenteel niet beschikbaar (geblokkeerd, al verkocht of "
+"toegewezen aan een andere voucher)."
 
 #: pretix/base/models/vouchers.py:373
-#, fuzzy
-#| msgid "You need to select a specific seat."
 msgid "You need to choose a specific product if you select a seat."
-msgstr "Je moet een specifieke stoel kiezen."
+msgstr "Je moet een specifiek product kiezen als je een stoel kiest."
 
 #: pretix/base/models/vouchers.py:376
-#, fuzzy
-#| msgid "This gift card can only be used in test mode."
 msgid "Seat-specific vouchers can only be used once."
-msgstr "Deze cadeaubon kan alleen in de testmodus worden gebruikt."
+msgstr ""
+"Vouchers voor een specifieke stoel kunnen maar één keer worden gebruikt."
 
 #: pretix/base/models/vouchers.py:379
-#, fuzzy, python-brace-format
-#| msgid "You need to choose exactly one option from this category."
-#| msgid_plural "You need to choose %(min_count)s options from this category."
+#, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "Je moet precies één optie kiezen uit deze categorie."
+msgstr "Je moet het product \"{prod}\" kiezen voor deze stoel."
 
 #: pretix/base/models/vouchers.py:382
-#, fuzzy, python-brace-format
-#| msgid "The identifier \"{}\" is already used for a different option."
+#, python-brace-format
 msgid "The seat \"{id}\" is already sold or currently blocked."
-msgstr "Het kenmerk \"{}\" wordt al voor een andere optie gebruikt."
+msgstr "De stoel \"{id}\" is al verkocht of geblokkeerd."
 
 #: pretix/base/models/waitinglist.py:37
 msgid "On waiting list since"
@@ -3581,12 +3570,14 @@ msgstr ""
 
 #: pretix/base/payment.py:291
 msgid "Restrict to specific sales channels"
-msgstr ""
+msgstr "Beperken tot specifieke verkoopkanalen"
 
 #: pretix/base/payment.py:299
 msgid ""
 "Only allow the usage of this payment provider in the following sales channels"
 msgstr ""
+"Sta het gebruik van deze betalingsprovider alleen toe voor de volgende "
+"verkoopkanalen"
 
 #: pretix/base/payment.py:331
 msgctxt "invoice"
@@ -3770,10 +3761,8 @@ msgid "Ticket code (barcode content)"
 msgstr "Kaartjescode (waarde van QR-code)"
 
 #: pretix/base/pdf.py:57
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position number"
-msgstr "Besteld product"
+msgstr "Plaatsnummer van bestelling"
 
 #: pretix/base/pdf.py:62 pretix/control/forms/event.py:1563
 #: pretix/control/templates/pretixcontrol/items/index.html:33
@@ -4179,11 +4168,8 @@ msgid "This voucher is not valid for this product."
 msgstr "Deze voucher is niet geldig voor dit product."
 
 #: pretix/base/services/cart.py:84
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This voucher is not valid for this seat."
-msgstr "Deze voucher is niet geldig voor deze evenementsdatum."
+msgstr "Deze voucher is niet geldig voor deze stoel."
 
 #: pretix/base/services/cart.py:86
 msgid "Your voucher is valid for a product that is currently not for sale."
@@ -4680,28 +4666,22 @@ msgstr ""
 "contact op met de organisator van het evenement voor meer informatie."
 
 #: pretix/base/services/seating.py:35 pretix/base/services/seating.py:86
-#, fuzzy, python-format
-#| msgid ""
-#| "You can not change the plan since seat \"{}\" is not present in the new "
-#| "plan and is already sold."
+#, python-format
 msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
-"Je kan de plattegrond niet veranderen, omdat stoel \"{}\" niet aanwezig is "
+"Je kan de plattegrond niet veranderen, omdat stoel \"%s\" niet aanwezig is "
 "in de nieuwe plattegrond, en deze stoel al is verkocht."
 
 #: pretix/base/services/seating.py:89
-#, fuzzy, python-format
-#| msgid ""
-#| "You can not change the plan since seat \"{}\" is not present in the new "
-#| "plan and is already sold."
+#, python-format
 msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
-"Je kan de plattegrond niet veranderen, omdat stoel \"{}\" niet aanwezig is "
-"in de nieuwe plattegrond, en deze stoel al is verkocht."
+"Je kan de plattegrond niet veranderen, omdat stoel \"%s\" niet aanwezig is "
+"in de nieuwe plattegrond, en deze stoel al is gebruikt voor een voucher."
 
 #: pretix/base/services/shredder.py:71
 msgid ""
@@ -5781,7 +5761,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:105
 msgid "Grant access to team"
-msgstr ""
+msgstr "Geef toegang aan team"
 
 #: pretix/control/forms/event.py:106
 msgid ""
@@ -5789,10 +5769,13 @@ msgid ""
 "have permission to edit all events under this organizer. Please select one "
 "of your existing teams that will be granted access to this event."
 msgstr ""
+"Je kan evenementen aanmaken voor deze organisator, maar je hebt geen "
+"toestemming om alle evenementen van deze organisator te bewerken. Geef één "
+"van de teams waar je in zit toegang tot dit evenement."
 
 #: pretix/control/forms/event.py:111
 msgid "Create a new team for this event with me as the only member"
-msgstr ""
+msgstr "Maak een nieuw team voor dit evenement aan met mij als het enige lid"
 
 #: pretix/control/forms/event.py:153 pretix/control/forms/event.py:291
 msgid ""
@@ -6152,7 +6135,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:518
 msgid "Social media image"
-msgstr ""
+msgstr "Social media-afbeelding"
 
 #: pretix/control/forms/event.py:521
 msgid ""
@@ -6162,10 +6145,17 @@ msgid ""
 "preview, so we recommend to make sure it still looks good only the center "
 "square is shown. If you do not fill this, we will use the logo given above."
 msgstr ""
+"Deze afbeelding zal als voorvertoning worden gebruikt als je links naar je "
+"kaartjeswinkel op sociale media plaatst. Facebook raadt aan om een "
+"afbeeldingsgrootte van 1200 bij 630 pixels te gebruiken, maar sommige "
+"platforms zoals WhatsApp en Reddit tonen alleen een vierkante voorvertoning. "
+"We raden aan om je afbeelding zo te ontwerpen zodat hij er nog steeds goed "
+"uitziet als alleen het middelste vierkant wordt getoond. Als je hier geen "
+"afbeelding uploadt zullen we het logo dat hierboven is geüpload gebruiken."
 
 #: pretix/control/forms/event.py:532
 msgid "Help text of the email field"
-msgstr ""
+msgstr "Helptekst van het e-mailveld"
 
 #: pretix/control/forms/event.py:538
 msgid "End of presale text"
@@ -7512,7 +7502,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:428
 msgid "Shown independently of other products"
-msgstr ""
+msgstr "Toon onafhankelijk van andere producten"
 
 #: pretix/control/forms/item.py:507
 #, python-format
@@ -7811,7 +7801,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:216
 msgid "Allow creating a new team during event creation"
-msgstr ""
+msgstr "Sta het aanmaken van nieuwe teams bij het aanmaken van evenementen toe"
 
 #: pretix/control/forms/organizer.py:217
 msgid ""
@@ -7820,6 +7810,11 @@ msgid ""
 "allows users to create an event-specified team on-the-fly, even when they do "
 "not have \"Can change teams and permissions\" permission."
 msgstr ""
+"Gebruikers die geen toegang hebben tot alle evenementen onder deze "
+"organisator moeten een van hun teams selecteren om toegang te geven aan hun "
+"aangemaakte evenement. Deze instelling staat gebruikers toe om een nieuw "
+"team aan te maken tijdens het aanmaken van een evenement, zelfs als de "
+"gebruikers niet de permissie \"Kan teams en machtigingen aanpassen\" hebben."
 
 #: pretix/control/forms/organizer.py:244
 msgid "We strongly suggest to use a shade of red."
@@ -7977,7 +7972,7 @@ msgstr "Je wijzigingen konden niet worden opgeslagen. Zie onder voor details."
 
 #: pretix/control/forms/vouchers.py:120
 msgid "Specific seat ID"
-msgstr ""
+msgstr "Specifiek stoelnummer"
 
 #: pretix/control/forms/vouchers.py:155
 msgid "Invalid product selected."
@@ -8070,7 +8065,7 @@ msgstr "Het aantal keren dat ELKE van deze vouchers kan worden gebruikt."
 
 #: pretix/control/forms/vouchers.py:293
 msgid "Specific seat IDs"
-msgstr ""
+msgstr "Specifieke stoelnummers"
 
 #: pretix/control/forms/vouchers.py:307
 msgid "CSV input needs to contain a header row in the first line."
@@ -8115,10 +8110,8 @@ msgid ""
 msgstr "Je genereerde {codes} vouchers, maar hebt {recp} ontvangers opgegeven."
 
 #: pretix/control/forms/vouchers.py:361
-#, fuzzy
-#| msgid "You need to specify either a quota or a product."
 msgid "You need to specify as many seats as voucher codes."
-msgstr "Je moet een quotum of een product opgeven."
+msgstr "Je moet evenveel stoelnummers als vouchercodes opgeven."
 
 #: pretix/control/logdisplay.py:30
 msgid "The order has been changed:"
@@ -8442,10 +8435,9 @@ msgid "Payment {local_id} has been canceled."
 msgstr "Betaling {local_id} is geannuleerd."
 
 #: pretix/control/logdisplay.py:228
-#, fuzzy, python-brace-format
-#| msgid "Payment {local_id} has failed."
+#, python-brace-format
 msgid "Cancelling payment {local_id} has failed."
-msgstr "Betaling {local_id} is mislukt."
+msgstr "Het annuleren van betaling {local_id} is mislukt."
 
 #: pretix/control/logdisplay.py:229
 #, python-brace-format
@@ -11096,16 +11088,13 @@ msgstr ""
 "het alleen binnen een bepaalde tijd beschikbaar moet zijn."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:29
-#, fuzzy
-#| msgid ""
-#| "This product is currently not being sold since you configured below that "
-#| "it should only be available in a certain timeframe."
 msgid ""
 "This product is currently not being shown since you configured below that it "
 "should only be visible if a certain other quota is already sold out."
 msgstr ""
-"Dit product is momenteel niet te koop, omdat je hieronder hebt ingesteld dat "
-"het alleen binnen een bepaalde tijd beschikbaar moet zijn."
+"Dit product wordt momenteel niet getoond, omdat je hieronder hebt ingesteld "
+"dat het product alleen moet worden getoond wanneer een bepaald ander quotum "
+"al is uitverkocht."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
@@ -12420,12 +12409,11 @@ msgid "Create a new gift card"
 msgstr "Nieuwe cadeaubon aanmaken"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:103
-#, fuzzy
-#| msgid "This gift card is not accepted by this event organizer."
 msgid ""
 "The gift card can be used to buy tickets for all events of this organizer."
 msgstr ""
-"Deze cadeaubon wordt niet geaccepteerd door de organisator van dit evenement."
+"Deze cadeaubon kan worden gebruikt om kaartjes te kopen voor alle "
+"evenementen van deze organisator."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:111
 msgid "Manual refund"
@@ -15082,17 +15070,15 @@ msgstr ""
 "Je kan de terugbetaling hieronder als voltooid aanmerken."
 
 #: pretix/control/views/orders.py:848
-#, fuzzy
-#| msgid "The gift card has been created and can now be used."
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
-msgstr "De cadeaubon is aangemaakt en kan nu worden gebruikt."
+msgstr ""
+"De cadeaubon is aangemaakt. Je kan de cadeauboncode nu naar de gebruiker "
+"sturen."
 
 #: pretix/control/views/orders.py:855
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Your gift card code"
-msgstr "Cadeauboncode"
+msgstr "Je cadeauboncode"
 
 #: pretix/control/views/orders.py:856
 #, python-brace-format
@@ -15106,6 +15092,14 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Hallo,\n"
+"\n"
+"We hebben je {amount} voor je bestelling terugbetaald.\n"
+"\n"
+"Je kan de cadeauboncode {giftcard} gebruiken om te betalen voor toekomstige "
+"bestellingen in onze winkel.\n"
+"\n"
+"De organisatie van {event}"
 
 #: pretix/control/views/orders.py:866
 msgid "The refunds you selected do not match the selected total refund amount."
@@ -16245,6 +16239,8 @@ msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
 msgstr ""
+"Negatief bedrag maar terugbetaling kan niet worden opgeslagen, maak eerst "
+"een handmatige terugbetaling aan."
 
 #: pretix/plugins/banktransfer/views.py:90
 msgid "The order is already marked as paid."
@@ -19014,11 +19010,9 @@ msgstr ""
 "weer kaartjes beschikbaar zijn."
 
 #: pretix/presale/views/widget.py:243
-#, fuzzy
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
 msgctxt "widget"
 msgid "event ticketing powered by pretix"
-msgstr "<a %(a_attr)s>kaartverkoop mogelijk gemaakt door pretix</a>"
+msgstr "kaartverkoop mogelijk gemaakt door pretix"
 
 #: pretix/presale/views/widget.py:258
 msgid "This ticket shop is currently disabled."
@@ -19091,11 +19085,11 @@ msgstr "Italiaans"
 
 #: pretix/settings.py:413
 msgid "Russian"
-msgstr ""
+msgstr "Russisch"
 
 #: pretix/settings.py:414
 msgid "Latvian"
-msgstr ""
+msgstr "Lets"
 
 #: pretix/settings.py:415
 msgid "Chinese (simplified)"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-05 13:34+0000\n"
-"PO-Revision-Date: 2019-08-03 22:00+0000\n"
+"PO-Revision-Date: 2019-12-16 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nl_Informal/>\n"
@@ -97,8 +97,6 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:125
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
-#, fuzzy
-#| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "De aanvraag duurde te lang, probeer het alsjeblieft opnieuw."
 
@@ -233,7 +231,7 @@ msgstr "Klik om te sluiten"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:749
 msgid "You have unsaved changes!"
-msgstr ""
+msgstr "Je hebt nog niet opgeslagen wijzigingen!"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
 msgid "Calculating default price…"
