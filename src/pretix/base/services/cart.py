@@ -233,7 +233,7 @@ class CartManager:
                 # TODO: i18n plurals
                 raise CartError(_(error_messages['max_items']) % (self.event.settings.max_items_per_order,))
 
-    def _check_item_constraints(self, op):
+    def _check_item_constraints(self, op, current_ops=[]):
         if isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
             if not (
                 (isinstance(op, self.AddOperation) and op.addon_to == 'FAKE') or
@@ -305,10 +305,10 @@ class CartManager:
             if op.item.max_per_order or op.item.min_per_order:
                 new_total = (
                     len([1 for p in self.positions if p.item_id == op.item.pk]) +
-                    sum([_op.count for _op in self._operations
+                    sum([_op.count for _op in self._operations + current_ops
                          if isinstance(_op, self.AddOperation) and _op.item == op.item]) +
                     op.count -
-                    len([1 for _op in self._operations
+                    len([1 for _op in self._operations + current_ops
                          if isinstance(_op, self.RemoveOperation) and _op.position.item_id == op.item.pk])
                 )
 
@@ -571,7 +571,7 @@ class CartManager:
                     voucher=None, quotas=bundle_quotas, addon_to='FAKE', subevent=subevent,
                     includes_tax=bool(bprice.rate), bundled=[], seat=None
                 )
-                self._check_item_constraints(bop)
+                self._check_item_constraints(bop, operations)
                 bundled.append(bop)
 
             price = self._get_price(item, variation, voucher, i.get('price'), subevent, bundled_sum=bundled_sum)
@@ -580,7 +580,7 @@ class CartManager:
                 count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas,
                 addon_to=False, subevent=subevent, includes_tax=bool(price.rate), bundled=bundled, seat=seat
             )
-            self._check_item_constraints(op)
+            self._check_item_constraints(op, operations)
             operations.append(op)
 
         self._quota_diff.update(quota_diff)
@@ -686,7 +686,7 @@ class CartManager:
                     count=1, item=item, variation=variation, price=price, voucher=None, quotas=quotas,
                     addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[], seat=None
                 )
-                self._check_item_constraints(op)
+                self._check_item_constraints(op, operations)
                 operations.append(op)
 
         # Check constraints on the add-on combinations

@@ -843,6 +843,20 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
 
+    def test_max_per_item_variations_failed(self):
+        self.shirt.max_per_order = 1
+        self.shirt.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('more than', doc.select('.alert-danger')[0].text)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
     def test_max_per_item_failed(self):
         self.ticket.max_per_order = 2
         self.ticket.save()
