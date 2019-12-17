@@ -191,6 +191,9 @@ class Invoice(models.Model):
             self.prefix = self.event.settings.invoice_numbers_prefix or (self.event.slug.upper() + '-')
             if self.is_cancellation:
                 self.prefix = self.event.settings.invoice_numbers_prefix_cancellations or self.prefix
+            if '%' in self.prefix:
+                self.prefix = self.date.strftime(self.prefix)
+
         if not self.invoice_no:
             if self.order.testmode:
                 self.prefix += 'TEST-'

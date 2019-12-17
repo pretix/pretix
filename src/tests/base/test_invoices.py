@@ -419,6 +419,10 @@ def test_invoice_number_prefixes(env):
     assert i.number == 'inv_00001'
     assert generate_cancellation(i).number == 'crd_00001'
 
+    event2.settings.set('invoice_numbers_prefix', 'inv_%Y%m%d_')
+    i = generate_invoice(order2)
+    assert i.number == 'inv_%s_00001' % now().date().strftime('%Y%m%d')
+
     # Test database uniqueness check
     with pytest.raises(DatabaseError):
         with transaction.atomic():
