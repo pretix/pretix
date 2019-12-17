@@ -132,7 +132,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         else:
             sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
 
-        subject = str(subject)
+        subject = raw_subject = str(subject)
         signature = ""
 
         bcc = []
@@ -198,13 +198,13 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
         try:
             if 'position' in inspect.signature(renderer.render).parameters:
-                body_html = renderer.render(content_plain, signature, str(subject), order, position)
+                body_html = renderer.render(content_plain, signature, raw_subject, order, position)
             else:
                 # Backwards compatibility
                 warnings.warn('E-mail renderer called without position argument because position argument is not '
                               'supported.',
                               DeprecationWarning)
-                body_html = renderer.render(content_plain, signature, str(subject), order)
+                body_html = renderer.render(content_plain, signature, raw_subject, order)
         except:
             logger.exception('Could not render HTML body')
             body_html = None
