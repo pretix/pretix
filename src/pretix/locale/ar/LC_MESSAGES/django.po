@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-12-14 19:00+0000\n"
+"PO-Revision-Date: 2019-12-19 02:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -5287,7 +5287,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:412
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "مدعوم من <a %(a_attr)s>pretix</a>"
+msgstr "المنصة من<a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
@@ -17664,7 +17664,7 @@ msgstr "ليس بعد على بيع"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:9
 msgid "Presale"
-msgstr "بيع أولي"
+msgstr "مبيعات"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 #: pretix/presale/templates/pretixpresale/event/index.html:82
