@@ -1303,6 +1303,7 @@ class OrderChange(OrderView):
         positions = list(self.order.positions.all())
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
+                                             initial={'seat': p.seat.seat_guid if p.seat else None},
                                              data=self.request.POST if self.request.method == "POST" else None)
             try:
                 ia = self.order.invoice_address
@@ -1398,11 +1399,11 @@ class OrderChange(OrderView):
                     if item != p.item or variation != p.variation:
                         ocm.change_item(p, item, variation)
 
-                if p.seat and p.form.cleaned_data['seat'] and p.form.cleaned_data['seat'] != p.seat:
-                    ocm.change_seat(p, p.form.cleaned_data['seat'])
-
                 if self.request.event.has_subevents and p.form.cleaned_data['subevent'] and p.form.cleaned_data['subevent'] != p.subevent:
                     ocm.change_subevent(p, p.form.cleaned_data['subevent'])
+
+                if p.seat and p.form.cleaned_data['seat'] and p.form.cleaned_data['seat'] != p.seat.seat_guid:
+                    ocm.change_seat(p, p.form.cleaned_data['seat'])
 
                 if p.form.cleaned_data['price'] != p.price:
                     ocm.change_price(p, p.form.cleaned_data['price'])

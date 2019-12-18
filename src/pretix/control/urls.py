@@ -147,7 +147,6 @@ urlpatterns = [
         url(r'^pdf/editor/(?P<filename>[^/]+).pdf$', pdf.PdfView.as_view(), name='pdf.background'),
         url(r'^subevents/$', subevents.SubEventList.as_view(), name='event.subevents'),
         url(r'^subevents/select2$', typeahead.subevent_select2, name='event.subevents.select2'),
-        url(r'^seats/select2$', typeahead.seat_select2, name='event.seats.select2'),
         url(r'^subevents/(?P<subevent>\d+)/$', subevents.SubEventUpdate.as_view(), name='event.subevent'),
         url(r'^subevents/(?P<subevent>\d+)/delete$', subevents.SubEventDelete.as_view(),
             name='event.subevent.delete'),

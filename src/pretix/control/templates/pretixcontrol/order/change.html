@@ -73,7 +73,7 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <div class="form-order-change" data-pricecalc-endpoint="{% url "api-v1:orderposition-price_calc" organizer=order.event.organizer.slug event=order.event.slug pk=position.pk %}" {% if position.subevent %}data-subevent="{{ position.subevent.id }}{% endif %}">
+                    <div class="form-order-change" data-pricecalc-endpoint="{% url "api-v1:orderposition-price_calc" organizer=order.event.organizer.slug event=order.event.slug pk=position.pk %}" {% if position.subevent %}data-subevent="{{ position.subevent.id }}"{% endif %} data-position="{{ position.pk }}">
                         {% bootstrap_form_errors position.form %}
                         {% if position.custom_error %}
                             <div class="alert alert-danger">
@@ -181,7 +181,7 @@
             {% bootstrap_formset_errors add_formset %}
             <div data-formset-body>
                 {% for add_form in add_formset %}
-                    <div class="panel panel-default items" data-formset-form>
+                    <div class="panel panel-default items" data-formset-form data-subevent="0">
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 <button type="button" class="btn btn-danger btn-xs pull-right flip"
@@ -219,7 +219,7 @@
             </div>
             <script type="form-template" data-formset-empty-form>
                 {% escapescript %}
-                    <div class="panel panel-default items" data-formset-form>
+                    <div class="panel panel-default items" data-formset-form data-subevent="0">
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 <button type="button" class="btn btn-danger btn-xs pull-right flip"

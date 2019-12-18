@@ -11,9 +11,7 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.widgets import DatePickerWidget
-from pretix.base.models import (
-    InvoiceAddress, ItemAddOn, Order, OrderPosition, Seat,
-)
+from pretix.base.models import InvoiceAddress, ItemAddOn, Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
 from pretix.control.forms.widgets import Select2
@@ -204,11 +202,10 @@ class OrderPositionAddForm(forms.Form):
         required=False,
         label=_('Add-on to'),
     )
-    seat = forms.ModelChoiceField(
-        Seat.objects.none(),
+    seat = forms.CharField(
         required=False,
-        label=_('Seat'),
-        empty_label=_('General admission')
+        widget=forms.TextInput(attrs={'placeholder': _('General admission'), 'data-seat-guid-field': 'true'}),
+        label=_('Seat')
     )
     price = forms.DecimalField(
         required=False,
@@ -254,19 +251,6 @@ class OrderPositionAddForm(forms.Form):
             )
         else:
             del self.fields['addon_to']
-
-        self.fields['seat'].queryset = order.event.seats.all()
-        self.fields['seat'].widget = Select2(
-            attrs={
-                'data-model-select2': 'seat',
-                'data-select2-url': reverse('control:event.seats.select2', kwargs={
-                    'event': order.event.slug,
-                    'organizer': order.event.organizer.slug,
-                }),
-                'data-placeholder': _('General admission')
-            }
-        )
-        self.fields['seat'].widget.choices = self.fields['seat'].choices
 
         if order.event.has_subevents:
             self.fields['subevent'].queryset = order.event.subevents.all()
@@ -318,10 +302,9 @@ class OrderPositionChangeForm(forms.Form):
         required=False,
         empty_label=_('(Unchanged)')
     )
-    seat = forms.ModelChoiceField(
-        Seat.objects.none(),
+    seat = forms.CharField(
         required=False,
-        empty_label=_('(Unchanged)')
+        widget=forms.TextInput(attrs={'placeholder': _('(Unchanged)'), 'data-seat-guid-field': 'true'})
     )
     price = forms.DecimalField(
         required=False,
@@ -366,20 +349,7 @@ class OrderPositionChangeForm(forms.Form):
         else:
             del self.fields['subevent']
 
-        if instance.seat:
-            self.fields['seat'].queryset = instance.order.event.seats.all()
-            self.fields['seat'].widget = Select2(
-                attrs={
-                    'data-model-select2': 'seat',
-                    'data-select2-url': reverse('control:event.seats.select2', kwargs={
-                        'event': instance.order.event.slug,
-                        'organizer': instance.order.event.organizer.slug,
-                    }),
-                    'data-placeholder': _('(Unchanged)')
-                }
-            )
-            self.fields['seat'].widget.choices = self.fields['seat'].choices
-        else:
+        if not instance.seat:
             del self.fields['seat']
 
         choices = [

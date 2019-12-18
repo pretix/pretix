@@ -1065,6 +1065,21 @@ class OrderChangeManager:
         self._operations.append(self.ItemOperation(position, item, variation))
 
     def change_seat(self, position: OrderPosition, seat: Seat):
+        if isinstance(seat, str):
+            subev = None
+            if self.event.has_subevents:
+                subev = position.subevent
+                for p in self._operations:
+                    if isinstance(p, self.SubeventOperation) and p.position == position:
+                        subev = p.subevent
+            try:
+                seat = Seat.objects.get(
+                    event=self.event,
+                    subevent=subev,
+                    seat_guid=seat
+                )
+            except Seat.DoesNotExist:
+                raise OrderError(error_messages['seat_invalid'])
         if position.seat:
             self._seatdiff.subtract([position.seat])
         if seat:
@@ -1148,6 +1163,19 @@ class OrderChangeManager:
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order = None,
                      subevent: SubEvent = None, seat: Seat = None):
+        if isinstance(seat, str):
+            if not seat:
+                seat = None
+            else:
+                try:
+                    seat = Seat.objects.get(
+                        event=self.event,
+                        subevent=subevent,
+                        seat_guid=seat
+                    )
+                except Seat.DoesNotExist:
+                    raise OrderError(error_messages['seat_invalid'])
+
         if price is None:
             price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
         else:
@@ -1171,7 +1199,7 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['seat_required'])
         elif not seated and seat:
             raise OrderError(self.error_messages['seat_forbidden'])
-        if seat and subevent and seat.subevent_id != subevent:
+        if seat and subevent and seat.subevent_id != subevent.pk:
             raise OrderError(self.error_messages['seat_subevent_mismatch'].format(seat=seat.name))
 
         new_quotas = (variation.quotas.filter(subevent=subevent)
