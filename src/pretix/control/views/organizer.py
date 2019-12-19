@@ -689,7 +689,7 @@ class DeviceListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     def get_queryset(self):
         return self.request.organizer.devices.prefetch_related(
             'limit_events'
-        ).order_by('-device_id')
+        ).order_by('revoked', '-device_id')
 
 
 class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
