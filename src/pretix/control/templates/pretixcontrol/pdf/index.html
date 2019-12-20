@@ -198,9 +198,22 @@
                         </div>
                         <div class="col-sm-12 help-inline">
                             <p>
-                                After you changed the page size, you need to create a new empty background. If you
-                                want to use a custom background, it already needs to have the correct size.
+                                {% blocktrans trimmed %}
+                                    After you changed the page size, you need to create a new empty background. If you
+                                    want to use a custom background, it already needs to have the correct size.
+                                {% endblocktrans %}
                             </p>
+                        </div>
+                    </div>
+                    <div class="row control-group pdf-info">
+                        <div class="col-sm-12">
+                            <label>{% trans "Prefered language" %}</label><br>
+                            <select class="form-control" id="pdf-info-locale">
+                                <option value="">{% trans "Order locale" %}</option>
+                                {% for l in locales %}
+                                    <option value="{{ l.0 }}">{{ l.1 }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="row control-group position">

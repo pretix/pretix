@@ -119,6 +119,7 @@ var editor = {
                 var col = (new fabric.Color(o.getFill()))._source;
                 d.push({
                     type: "textarea",
+                    locale: $("#pdf-info-locale").val(),
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height - top).toFixed(2),
                     fontsize: editor._px2pt(o.getFontSize()).toFixed(1),
@@ -177,6 +178,10 @@ var editor = {
                 o.setText(d.text);
             } else {
                 o.setText(editor._get_text_sample(d.content));
+            }
+            if (d.locale) {
+                // The data format allows to set the locale per text field but we currently only expose a global field
+                $("#pdf-info-locale").val(d.locale);
             }
         }
 

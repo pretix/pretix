@@ -34,6 +34,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
+from pretix.base.i18n import language
 from pretix.base.invoice import ThumbnailingImageReader
 from pretix.base.models import Order, OrderPosition
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -407,7 +408,11 @@ class Renderer:
     def _get_ev(self, op, order):
         return op.subevent or order.event
 
-    def _get_text_content(self, op: OrderPosition, order: Order, o: dict):
+    def _get_text_content(self, op: OrderPosition, order: Order, o: dict, inner=False):
+        if o.get('locale', None) and not inner:
+            with language(o['locale']):
+                return self._get_text_content(op, order, o, True)
+
         ev = self._get_ev(op, order)
         if not o['content']:
             return '(error)'

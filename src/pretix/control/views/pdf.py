@@ -4,6 +4,7 @@ import mimetypes
 from datetime import timedelta
 from io import BytesIO
 
+from django.conf import settings
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -217,6 +218,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         ctx['variables'] = self.get_variables()
         ctx['layout'] = json.dumps(self.get_current_layout())
         ctx['title'] = self.title
+        ctx['locales'] = [p for p in settings.LANGUAGES if p[0] in self.request.event.settings.locales]
         return ctx
 
 
