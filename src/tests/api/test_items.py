@@ -1740,7 +1740,9 @@ def test_quota_availability(token_client, organizer, event, quota, item):
 
 @pytest.fixture
 def question(event, item):
-    q = event.questions.create(question="T-Shirt size", type="C", identifier="ABC")
+    q = event.questions.create(
+        question="T-Shirt size", type="C", identifier="ABC", help_text="This is an example question"
+    )
     q.items.add(item)
     q.options.create(answer="XL", identifier="LVETRWVU")
     return q
@@ -1759,6 +1761,7 @@ TEST_QUESTION_RES = {
     "dependency_question": None,
     "dependency_value": None,
     "dependency_values": [],
+    "help_text": {"en": "This is an example question"},
     "options": [
         {
             "id": 0,
