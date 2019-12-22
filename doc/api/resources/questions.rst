@@ -18,6 +18,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the question
 question                              multi-lingual string       The field label shown to the customer
+help_text                             multi-lingual string       The help text shown to the customer
 type                                  string                     The expected type of answer. Valid options:
 
                                                                  * ``N`` – number
@@ -87,6 +88,10 @@ dependency_value                      string                     An old version 
 
   The attribute ``print_on_invoice`` has been added.
 
+.. versionchanged:: 3.5
+
+  The attribute ``help_text`` has been added.
+
 Endpoints
 ---------
 
@@ -123,6 +128,7 @@ Endpoints
           {
             "id": 1,
             "question": {"en": "T-Shirt size"},
+            "help_text": {"en": "Choose your preferred t-shirt-size"},
             "type": "C",
             "required": false,
             "items": [1, 2],
@@ -193,6 +199,7 @@ Endpoints
       {
         "id": 1,
         "question": {"en": "T-Shirt size"},
+        "help_text": {"en": "Choose your preferred t-shirt-size"},
         "type": "C",
         "required": false,
         "items": [1, 2],
@@ -248,6 +255,7 @@ Endpoints
 
       {
         "question": {"en": "T-Shirt size"},
+        "help_text": {"en": "Choose your preferred t-shirt-size"},
         "type": "C",
         "required": false,
         "items": [1, 2],
@@ -282,6 +290,7 @@ Endpoints
       {
         "id": 1,
         "question": {"en": "T-Shirt size"},
+        "help_text": {"en": "Choose your preferred t-shirt-size"},
         "type": "C",
         "required": false,
         "items": [1, 2],
@@ -356,6 +365,7 @@ Endpoints
       {
         "id": 1,
         "question": {"en": "T-Shirt size"},
+        "help_text": {"en": "Choose your preferred t-shirt-size"},
         "type": "C",
         "required": false,
         "items": [1, 2],
