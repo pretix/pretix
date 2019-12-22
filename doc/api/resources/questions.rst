@@ -88,7 +88,7 @@ dependency_value                      string                     An old version 
 
   The attribute ``print_on_invoice`` has been added.
 
-.. versionchanged:: 3.4.1
+.. versionchanged:: 3.5
 
   The attribute ``help_text`` has been added.
 
