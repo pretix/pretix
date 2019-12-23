@@ -788,7 +788,9 @@ class OrderDownloadMixin:
         ct = self.get_last_ct()
         if ct:
             return self.success(ct)
-        return self.http_method_not_allowed(request)
+        return self.do('orderposition' if 'position' in kwargs else 'order',
+                       self.order_position.pk if 'position' in kwargs else self.order.pk,
+                       self.output.identifier)
 
     def post(self, request, *args, **kwargs):
         if not self.output or not self.output.is_enabled:
