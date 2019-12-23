@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-12-19 02:00+0000\n"
+"PO-Revision-Date: 2019-12-24 06:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -793,7 +793,7 @@ msgstr "تاريخ"
 #: pretix/plugins/reports/exporters.py:219
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:10
 msgid "Product"
-msgstr "المنتج"
+msgstr "التذاكر"
 
 #: pretix/base/exporters/orderlist.py:285 pretix/base/models/orders.py:991
 msgid "Variation"
@@ -809,7 +809,7 @@ msgstr "الاختلاف"
 #: pretix/plugins/ticketoutputpdf/exporters.py:39
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:46
 msgid "Attendee name"
-msgstr "اسم الحضور"
+msgstr "الاسم"
 
 #: pretix/base/exporters/orderlist.py:297 pretix/base/forms/questions.py:253
 #: pretix/base/models/orders.py:1008
@@ -4657,7 +4657,8 @@ msgstr ""
 "\n"
 "حجزك ل {event}. هذا الحجز مجاني.\n"
 "\n"
-"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
+"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك من خلال:\n"
+"\n"
 "{url}\n"
 "\n"
 "تحياتنا،\n"
@@ -4709,15 +4710,15 @@ msgstr ""
 "مرحبا،\n"
 "\n"
 "تلقينا طلبك بنجاح ل{event} بقيمة إجمالية\n"
-"من {total_with_currency}. يرجى إتمام عملية الدفع قبل {expire_date}.\n"
+"{total_with_currency}. يرجى إتمام عملية الدفع قبل {expire_date}.\n"
 "\n"
 "{payment_info}\n"
 "\n"
-"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
+"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك من خلال\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:417
 #, python-brace-format
@@ -4734,13 +4735,13 @@ msgid ""
 msgstr ""
 "مرحبا {attendee_name}،\n"
 "\n"
-"وقد أمر تذكرة ل{event} لك.\n"
+"تم طلب تذكرة لك لحضور {event}.\n"
 "\n"
-"يمكنك عرض التفاصيل ووضع التذكرة هنا:\n"
+"يمكنك عرض تفاصيل الحجز من خلال:\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:429
 #, python-brace-format
@@ -4762,8 +4763,8 @@ msgstr ""
 "يمكنك عرض حالة طلبك في\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:441
 #, python-brace-format
@@ -4786,11 +4787,11 @@ msgstr ""
 "\n"
 "{payment_info}\n"
 "\n"
-"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
+"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك من خلال\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:459
 #, python-brace-format
@@ -4807,13 +4808,13 @@ msgid ""
 msgstr ""
 "مرحبا {attendee_name}،\n"
 "\n"
-"والآن يدفع تذكرة ل{event} الذي قد أمرت لك.\n"
+"تم دفع تذكرة لك لحضور {event}.\n"
 "\n"
-"يمكنك عرض التفاصيل ووضع التذكرة هنا:\n"
+"يمكنك عرض تفاصيل التذكرة من خلال:\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق {event}"
 
 #: pretix/base/settings.py:475
 #, python-brace-format
@@ -4832,15 +4833,15 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"أننا لم نتلق حتى الآن على دفع كامل لطلبك ل{event}.\n"
-"يرجى أن نضع في اعتبارنا أن نضمن فقط طلبك إذا تلقينا\n"
-"الدفع الخاص بك قبل {expire_date}.\n"
+"لم يتم دفع كامل المبلغ حتى الآن لطلبك ل{event}.\n"
+"يرجى أن تضع في عين الإعتبار أننا نضمن طلبك إذا قمت بالدفع قبل {expire_date}."
 "\n"
-"يمكنك عرض معلومات الدفع وحالة طلبك في\n"
+"\n"
+"يمكنك عرض معلومات الدفع وحالة طلبك من خلال\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:489
 #, python-brace-format
@@ -4868,24 +4869,25 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"قمت بتقديم نفسك إلى قائمة انتظار {event}،\n"
-"للمنتج {product}.\n"
+"قمت بتسجيل اسمك إلى قائمة انتظار لحضور {event}،\n"
+"نوع التذكرة: {product}.\n"
 "\n"
-"لدينا الآن تذكرة على استعداد للكم! يمكنك استبدال عليها في متجر تذكرة لنا\n"
-"ضمن {hours} ساعة القادمة عن طريق إدخال رمز القسيمة التالية:\n"
+"لدينا الآن تذكرة جاهزة! \n"
+"يجب اكمال الحجز قبل {hours} ساعة القادمة، للحصول على التذكرة استخدم الكود "
+"التالي:\n"
 "\n"
 "{code}\n"
 "\n"
-"بدلا من ذلك، يمكنك فقط اضغط على الرابط التالي:\n"
+"أو يمكنك فقط اضغط على الرابط التالي:\n"
 "\n"
 "{url}\n"
 "\n"
-"يرجى ملاحظة أن هذا الارتباط هو صالح فقط داخل{hours} ساعة القادمة!\n"
-"سنقوم إعادة تعيين التذكرة للشخص المقبل على لائحة اذا كنت لا\n"
-"استبدال القسيمة في هذا الإطار الزمني.\n"
+"يرجى ملاحظة أن هذا الرابط صالح فقط خلال{hours} ساعة القادمة!\n"
+"ستكون التذكرة من نصيب الشخص التالي على الإنتظار \n"
+"اذا لم تقم باستكمال الحجز في المدة المطلوبة.\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:512
 #, python-brace-format
@@ -4902,13 +4904,13 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"تم إلغاء طلبك {code} عن {event}.\n"
+"تم إلغاء طلبك {code} من{event}.\n"
 "\n"
-"يمكنك عرض تفاصيل طلبك في\n"
+"يمكنك عرض تفاصيل طلبك من خلال\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:524
 #, python-brace-format
@@ -4929,17 +4931,16 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"وافقنا طلبك {event} وسوف نكون سعداء أن أرحب بكم\n"
-"في هذا الحدث.\n"
+"وافقنا طلبك {event} ونسعد بقدومكم.\n"
 "\n"
-"الرجاء الاستمرار عن طريق دفع لطلبك قبل {expire_date}.\n"
+"الرجاء اكمال عملية الدفع قبل {expire_date}.\n"
 "\n"
 "يمكنك تحديد طريقة الدفع وإجراء الدفع هنا:\n"
 "\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:540
 #, python-brace-format
@@ -4959,7 +4960,7 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"للأسف، نحن رفض طلب طلبك {event}.\n"
+"نعتذر منك، تم رفض طلبك {event}.\n"
 "\n"
 "{comment}\n"
 "\n"
@@ -4967,8 +4968,8 @@ msgstr ""
 "\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:555
 #, python-brace-format
@@ -4983,11 +4984,11 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
+"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك من خلال\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:573
 #, python-brace-format
@@ -5004,13 +5005,13 @@ msgid ""
 msgstr ""
 "مرحبا {attendee_name}،\n"
 "\n"
-"أنت مسجل ل{event}.\n"
+"أنت مسجل في {event}.\n"
 "\n"
-"إذا كنت لم تفعل ذلك بالفعل، يمكنك تحميل تذكرتك هنا:\n"
+"يمكنك تحميل تذكرتك من خلال الرابط:\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:585
 #, python-brace-format
@@ -5027,13 +5028,13 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"اشتريت تذكرة ل{event}.\n"
+"اشتريت تذكرة لحضور {event}.\n"
 "\n"
-"إذا كنت لم تفعل ذلك بالفعل، يمكنك تحميل تذكرتك هنا:\n"
+" يمكنك تحميل تذكرتك هنا:\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق{event}"
 
 #: pretix/base/settings.py:748
 msgid "Most common English titles"
@@ -17347,7 +17348,7 @@ msgstr "انتهت العربة"
 #: pretix/presale/templates/pretixpresale/event/index.html:53
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr "سيتم الغاء الحجز بعد %(minutes)s دقائق."
+msgstr "سيتم الغاء الحجز تلقائيا بعد %(minutes)s دقائق."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
@@ -17358,7 +17359,7 @@ msgstr "العناصر الموجودة في سلة التسوق الخاصة ب
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
 msgid "Review order"
-msgstr "أجل مراجعة"
+msgstr "مراجعة الحجز"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:10
 msgid "Please review the details below and confirm your order."
@@ -17736,7 +17737,7 @@ msgstr "إضافة إلى التقويم"
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:25
 msgid "We're now trying to reserve this for you!"
-msgstr "!نجهز حجزك"
+msgstr "نجهز حجزك!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:233
 #: pretix/presale/templates/pretixpresale/event/voucher.html:300
@@ -17784,7 +17785,7 @@ msgstr "تم إتمام الطلب بنجاح، تجد التفاصيل في ا�
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
-msgstr "يرجى ملاحظة أننا لا نزال ننتظر موافقة من قبل منظم الحدث."
+msgstr "يرجى ملاحظة أننا لا نزال ننتظر موافقة منظم الفعالية."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:23
 msgid "Please note that we still await your payment to complete the process."
@@ -17792,7 +17793,7 @@ msgstr "يرجى دفع المبلغ المطلوب لإكمال الحجز."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid "Your order has been processed successfully! See below for details."
-msgstr "وقد تم تجهيز طلبك بنجاح! انظر أدناه للحصول على التفاصيل."
+msgstr "تم طلبك بنجاح! تجد التفاصيل في الأسفل."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
@@ -17804,9 +17805,8 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
-"يرجى الإشارة المرجعية أو حفظ الارتباط إلى هذه الصفحة بالضبط إذا كنت ترغب في "
-"الحصول على طلبك في وقت لاحق. علينا أيضا أن أرسل لك رسالة بريد إلكتروني تحتوي "
-"على رابط إلى العنوان الذي حددته."
+"الرجاء حفظ الصفحة في المفضلة، أو حفظ الرابط حتى يمكنك مراجعة طلبك لاحقا. "
+"قمنا أيضا بإرسال الرابط للإيميل المسجل في الطلب."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
@@ -17824,7 +17824,7 @@ msgstr "عرض في الخلفية"
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr "ودفع %(total)s ليالي لا يزال معلقا لهذا النظام."
+msgstr "تبقى دفع %(total)s لإتمام طلبك."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:69
 #, python-format
@@ -17851,8 +17851,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment method, "
 "please allow for up to 14 days until it shows up on your statement."
 msgstr ""
-"ق تم ارسال استرداد %(amount)s لك. اعتمادا على طريقة الدفع، أرجو أن تسمحوا "
-"لمدة تصل إلى 14 يوما حتى يظهر على بيانكم."
+"تم طلب استرداد مبلغ %(amount)s لحسابك، قد تستغرق العملية 14 يوم حتى تظهر في "
+"حسابك."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:121
 #: pretix/presale/templates/pretixpresale/event/order.html:204
