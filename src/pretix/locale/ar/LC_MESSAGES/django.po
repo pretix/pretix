@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-30 16:23+0000\n"
-"PO-Revision-Date: 2019-12-24 06:00+0000\n"
+"PO-Revision-Date: 2019-12-25 01:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -9024,7 +9024,7 @@ msgstr "يعمل في نمط التنمية"
 #: pretix/control/templates/pretixcontrol/base.html:427
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "يتم تجهيز تذكرتك …"
+msgstr "نقوم بمعالجة طلبك …"
 
 #: pretix/control/templates/pretixcontrol/base.html:429
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:12
