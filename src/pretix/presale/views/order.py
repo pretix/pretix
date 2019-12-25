@@ -30,7 +30,9 @@ from pretix.base.services.invoices import (
     generate_invoice, invoice_pdf, invoice_pdf_task, invoice_qualified,
 )
 from pretix.base.services.mail import SendMailException
-from pretix.base.services.orders import cancel_order, change_payment_provider
+from pretix.base.services.orders import (
+    OrderError, cancel_order, change_payment_provider,
+)
 from pretix.base.services.tickets import generate, invalidate_cache
 from pretix.base.signals import (
     allow_ticket_download, order_modified, register_ticket_outputs,
@@ -782,20 +784,20 @@ class OrderDownloadMixin:
 
     def get(self, request, *args, **kwargs):
         if not self.output or not self.output.is_enabled:
-            return self.error(_('You requested an invalid ticket output type.'))
+            return self.error(OrderError(_('You requested an invalid ticket output type.')))
         if 'async_id' in request.GET and settings.HAS_CELERY:
             return self.get_result(request)
         return self.post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if not self.output or not self.output.is_enabled:
-            return self.error(_('You requested an invalid ticket output type.'))
+            return self.error(OrderError(_('You requested an invalid ticket output type.')))
         if not self.order or ('position' in kwargs and not self.order_position):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if not self.order.ticket_download_available:
-            return self.error(_('Ticket download is not (yet) enabled for this order.'))
+            return self.error(OrderError(_('Ticket download is not (yet) enabled for this order.')))
         if 'position' in kwargs and not self.order_position.generate_ticket:
-            return self.error(_('Ticket download is not enabled for this product.'))
+            return self.error(OrderError(_('Ticket download is not enabled for this product.')))
 
         ct = self.get_last_ct()
         if ct:
@@ -852,6 +854,7 @@ class OrderDownloadMixin:
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderDownload(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncAction, View):
     task = generate
+    known_errortypes = ['OrderError']
 
     def get_error_url(self):
         return self.get_order_url()
