@@ -17,6 +17,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
 from django_otp import match_token
 
@@ -53,7 +54,7 @@ def process_login(request, user, keep_logged_in):
             return redirect(request.GET.get("next"))
         return redirect(reverse('control:index'))
 
-
+@ensure_csrf_cookie
 def login(request):
     """
     Render and process a most basic login form. Takes an URL as GET
