@@ -2490,6 +2490,30 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert cp.price == 23 - 1.5
         assert cp.addons.count() == 1
         assert cp.voucher == v
+        assert cp.price_before_voucher == 23 - 1.5
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+        assert not a.voucher
+
+    @classscope(attr='orga')
+    def test_discounted_voucher_on_base_product(self):
+        v = self.event.vouchers.create(code="foo", item=self.ticket, price_mode='subtract', value=Decimal('1.50'))
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'voucher': v.code,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5 - 1.5
+        assert cp.addons.count() == 1
+        assert cp.voucher == v
+        assert cp.price_before_voucher == 23 - 1.5
         a = cp.addons.get()
         assert a.item == self.trans
         assert a.price == 1.5

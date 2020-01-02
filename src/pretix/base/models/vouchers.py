@@ -117,8 +117,8 @@ class Voucher(LoggedModel):
     )
     budget = models.DecimalField(
         verbose_name=_("Maximum discount budget"),
-        help_text=_("This is the maximum monetary amount that will be discounted using this voucher. If this is reached, "
-                    "the voucher becomes inactive."),
+        help_text=_("This is the maximum monetary amount that will be discounted using this voucher across all usages. "
+                    "If this is sum reached, the voucher can no longer be used."),
         decimal_places=2, max_digits=10,
         null=True, blank=True
     )
@@ -489,7 +489,6 @@ class Voucher(LoggedModel):
             order__status__in=[
                 Order.STATUS_PAID,
                 Order.STATUS_PENDING
-                # TODO: reason about expired orders
             ]
         ).order_by().values('voucher_id').annotate(s=Sum(F('price_before_voucher') - F('price'))).values('s')
         return qs.annotate(budget_used_orders=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=10, decimal_places=2)), Decimal('0.00')))
@@ -501,7 +500,6 @@ class Voucher(LoggedModel):
             order__status__in=[
                 Order.STATUS_PAID,
                 Order.STATUS_PENDING
-                # TODO: reason about expired orders
             ]
         ).aggregate(s=Sum(F('price_before_voucher') - F('price')))['s'] or Decimal('0.00')
         return ops

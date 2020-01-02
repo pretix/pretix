@@ -846,6 +846,69 @@ def test_order_extend_expired_quota_partial(client, env):
 
 
 @pytest.mark.django_db
+def test_order_extend_expired_voucher_budget_ok(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.expires = now() - timedelta(days=5)
+        o.status = Order.STATUS_EXPIRED
+        o.save()
+        v = env[0].vouchers.create(
+            code="foo", price_mode='subtract', value=Decimal('1.50'), budget=Decimal('1.50')
+        )
+        p = o.positions.first()
+        p.voucher = v
+        p.price_before_voucher = p.price
+        p.price -= Decimal('1.50')
+        p.save()
+
+        q = Quota.objects.create(event=env[0], size=100)
+        q.items.add(env[3])
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+        'expires': newdate
+    }, follow=True)
+    assert b'alert-success' in response.content
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        assert o.status == Order.STATUS_PENDING
+        assert v.budget_used() == Decimal('1.50')
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_voucher_budget_fail(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.expires = now() - timedelta(days=5)
+        o.status = Order.STATUS_EXPIRED
+        olddate = o.expires
+        o.save()
+        v = env[0].vouchers.create(
+            code="foo", price_mode='subtract', value=Decimal('1.50'), budget=Decimal('0.00')
+        )
+        p = o.positions.first()
+        p.voucher = v
+        p.price_before_voucher = p.price
+        p.price -= Decimal('1.50')
+        p.save()
+
+        q = Quota.objects.create(event=env[0], size=100)
+        q.items.add(env[3])
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+        'expires': newdate
+    }, follow=True)
+    assert b'alert-danger' in response.content
+    assert b'The voucher &quot;FOO&quot; no longer has sufficient budget.' in response.content
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
+        assert o.status == Order.STATUS_EXPIRED
+        assert v.budget_used() == Decimal('0.00')
+
+
+@pytest.mark.django_db
 def test_order_mark_paid_overdue_quota_blocked_by_waiting_list(client, env):
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
