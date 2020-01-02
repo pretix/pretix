@@ -11,81 +11,95 @@
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
     </h1>
-    <div class="panel panel-primary items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Details" %}
-            </h3>
-        </div>
-        <div class="panel-body">
-            <dl class="dl-horizontal">
-                <dt>{% trans "Gift card code" %}</dt>
-                <dd>{{ card.secret }}</dd>
-                <dt>{% trans "Creation date" %}</dt>
-                <dd>{{ card.issuance|date:"SHORT_DATETIME_FORMAT" }}</dd>
-                <dt>{% trans "Current value" %}</dt>
-                <dd>{{ card.value|money:card.currency }}</dd>
-                <dt>{% trans "Currency" %}</dt>
-                <dd>{{ card.currency }}</dd>
-                {% if card.issued_in %}
-                    <dt>{% trans "Issued through sale" %}</dt>
-                    <dd>
-                        <a href="{% url "control:event.order" event=card.issued_in.order.event.slug organizer=card.issued_in.order.event.organizer.slug code=card.issued_in.order.code %}">
-                            {{ card.issued_in.order.full_code }}</a>-{{ card.issued_in.positionid }}
-                    </dd>
-                {% endif %}
-            </dl>
-        </div>
-    </div>
-    <div class="panel panel-default items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Transactions" %}
-            </h3>
-        </div>
-        <table class="panel-body table">
-            <thead>
-            <tr>
-                <th>{% trans "Date" %}</th>
-                <th>{% trans "Order" %}</th>
-                <th class="text-right">{% trans "Value" %}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for t in card.transactions.all %}
-                <tr>
-                    <td>{{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
-                    <td>
-                        {% if t.order %}
-                            <a href="{% url "control:event.order" event=t.order.event.slug organizer=t.order.event.organizer.slug code=t.order.code %}">
-                                {{ t.order.full_code }}
-                            </a>
-                        {% else %}
-                            <em>{% trans "Manual transaction" %}</em>
+    <div class="row">
+        <div class="col-md-10 col-xs-12">
+            <div class="panel panel-primary items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Details" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>{% trans "Gift card code" %}</dt>
+                        <dd>{{ card.secret }}</dd>
+                        <dt>{% trans "Creation date" %}</dt>
+                        <dd>{{ card.issuance|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                        <dt>{% trans "Current value" %}</dt>
+                        <dd>{{ card.value|money:card.currency }}</dd>
+                        <dt>{% trans "Currency" %}</dt>
+                        <dd>{{ card.currency }}</dd>
+                        {% if card.issued_in %}
+                            <dt>{% trans "Issued through sale" %}</dt>
+                            <dd>
+                                <a href="{% url "control:event.order" event=card.issued_in.order.event.slug organizer=card.issued_in.order.event.organizer.slug code=card.issued_in.order.code %}">
+                                    {{ card.issued_in.order.full_code }}</a>-{{ card.issued_in.positionid }}
+                            </dd>
                         {% endif %}
-                    </td>
-                    <td class="text-right">
-                        {{ t.value|money:card.currency }}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            <tfoot>
-            <tr>
-                <td></td>
-                <td></td>
-                <td class="text-right">
-                    <form class="helper-display-inline form-inline" method="post" action="">
-                        {% csrf_token %}
-                        <input type="text" class="form-control input-sm" placeholder="{% trans "Value" %}" name="value">
-                        <button class="btn btn-primary">
-                            <span class="fa fa-plus"></span>
-                        </button>
-                    </form>
-                </td>
+                    </dl>
+                </div>
+            </div>
+            <div class="panel panel-default items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Transactions" %}
+                    </h3>
+                </div>
+                <table class="panel-body table">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Order" %}</th>
+                        <th class="text-right">{% trans "Value" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for t in card.transactions.all %}
+                        <tr>
+                            <td>{{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+                            <td>
+                                {% if t.order %}
+                                    <a href="{% url "control:event.order" event=t.order.event.slug organizer=t.order.event.organizer.slug code=t.order.code %}">
+                                        {{ t.order.full_code }}
+                                    </a>
+                                {% else %}
+                                    <em>{% trans "Manual transaction" %}</em>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {{ t.value|money:card.currency }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right">
+                            <form class="helper-display-inline form-inline" method="post" action="">
+                                {% csrf_token %}
+                                <input type="text" class="form-control input-sm" placeholder="{% trans "Value" %}" name="value">
+                                <button class="btn btn-primary">
+                                    <span class="fa fa-plus"></span>
+                                </button>
+                            </form>
+                        </td>
 
-            </tr>
-            </tfoot>
-        </table>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Gift card history" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=card %}
+            </div>
+        </div>
     </div>
 {% endblock %}

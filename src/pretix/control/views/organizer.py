@@ -1056,9 +1056,11 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         form.instance.transactions.create(
             value=form.cleaned_data['value']
         )
-        form.instance.log_action('pretix.giftcards.transaction.manual', user=self.request.user, data={
-            'value': form.cleaned_data['value']
-        })
+        form.instance.log_action('pretix.giftcards.created', user=self.request.user, data={})
+        if form.cleaned_data['value']:
+            form.instance.log_action('pretix.giftcards.transaction.manual', user=self.request.user, data={
+                'value': form.cleaned_data['value']
+            })
         return redirect(reverse(
             'control:organizer.giftcard',
             kwargs={
