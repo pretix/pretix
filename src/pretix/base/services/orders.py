@@ -838,7 +838,10 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         lockfn = event.lock
 
     with lockfn() as now_dt:
-        positions = list(positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons'))
+        positions = list(
+            positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons')
+        )
+        positions.sort(key=lambda k: position_ids.index(k.pk))
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
