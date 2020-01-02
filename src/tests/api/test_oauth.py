@@ -478,7 +478,7 @@ def test_token_revoke_refresh_token(client, admin_user, organizer, application: 
         'grant_type': 'refresh_token',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
         ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
-    assert resp.status_code == 401
+    assert resp.status_code == 400
 
 
 @pytest.mark.django_db
@@ -573,4 +573,4 @@ def test_user_revoke(client, admin_user, organizer, application: OAuthApplicatio
         'grant_type': 'refresh_token',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
         ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
-    assert resp.status_code == 401
+    assert resp.status_code == 400

@@ -145,7 +145,7 @@ setup(
         'django-hijack>=2.1.10,<2.2.0',
         'openpyxl',
         'django-oauth-toolkit==1.2.*',
-        'oauthlib==2.1.*',
+        'oauthlib==3.1.*',
         'urllib3==1.24.*',  # required by current requests
         'django-phonenumber-field==3.0.*',
         'phonenumberslite==8.10.*',
