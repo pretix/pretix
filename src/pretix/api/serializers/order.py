@@ -720,6 +720,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             consume_carts = validated_data.pop('consume_carts', [])
             delete_cps = []
             quota_avail_cache = {}
+            v_budget = {}
             voucher_usage = Counter()
             if consume_carts:
                 for cp in CartPosition.objects.filter(
@@ -742,8 +743,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             errs = [{} for p in positions_data]
 
             for i, pos_data in enumerate(positions_data):
+
                 if pos_data.get('voucher'):
                     v = pos_data['voucher']
+
+                    if pos_data.get('addon_to'):
+                        errs[i]['voucher'] = ['Vouchers are currently not supported for add-on products.']
+                        continue
 
                     if not v.applies_to(pos_data['item'], pos_data.get('variation')):
                         errs[i]['voucher'] = [error_messages['voucher_invalid_item']]
@@ -767,6 +773,44 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                             errs[i]['voucher'] = [
                                 'The voucher has already been used the maximum number of times.'
                             ]
+
+                    if v.budget is not None:
+                        price = pos_data.get('price')
+                        if price is None:
+                            price = get_price(
+                                item=pos_data.get('item'),
+                                variation=pos_data.get('variation'),
+                                voucher=v,
+                                custom_price=None,
+                                subevent=pos_data.get('subevent'),
+                                addon_to=pos_data.get('addon_to'),
+                                invoice_address=ia,
+                            ).gross
+                        pbv = get_price(
+                            item=pos_data['item'],
+                            variation=pos_data.get('variation'),
+                            voucher=None,
+                            custom_price=None,
+                            subevent=pos_data.get('subevent'),
+                            addon_to=pos_data.get('addon_to'),
+                            invoice_address=ia,
+                        )
+
+                        if v not in v_budget:
+                            v_budget[v] = v.budget - v.budget_used()
+                        disc = pbv.gross - price
+                        if disc > v_budget[v]:
+                            new_disc = v_budget[v]
+                            v_budget[v] -= new_disc
+                            if new_disc == Decimal('0.00') or pos_data.get('price') is not None:
+                                errs[i]['voucher'] = [
+                                    'The voucher has a remaining budget of {}, therefore a discount of {} can not be '
+                                    'given.'.format(v_budget[v] + new_disc, disc)
+                                ]
+                                continue
+                            pos_data['price'] = price + (disc - new_disc)
+                        else:
+                            v_budget[v] -= disc
 
                 seated = pos_data.get('item').seat_category_mappings.filter(subevent=pos_data.get('subevent')).exists()
                 if pos_data.get('seat'):
@@ -850,22 +894,23 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         addon_to=pos.addon_to,
                         invoice_address=ia,
                     )
-                    pbv = get_price(
-                        item=pos.item,
-                        variation=pos.variation,
-                        voucher=None,
-                        custom_price=None,
-                        subevent=pos.subevent,
-                        addon_to=pos.addon_to,
-                        invoice_address=ia,
-                    )
                     pos.price = price.gross
-                    pos.price_before_voucher = pbv.gross
                     pos.tax_rate = price.rate
                     pos.tax_value = price.tax
                     pos.tax_rule = pos.item.tax_rule
                 else:
                     pos._calculate_tax()
+
+                pos.price_before_voucher = get_price(
+                    item=pos.item,
+                    variation=pos.variation,
+                    voucher=None,
+                    custom_price=None,
+                    subevent=pos.subevent,
+                    addon_to=pos.addon_to,
+                    invoice_address=ia,
+                ).gross
+
                 if pos.voucher:
                     Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
                 pos.save()

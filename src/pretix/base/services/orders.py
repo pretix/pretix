@@ -569,6 +569,9 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                             addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
                             max_discount=max_discount)
 
+        if max_discount is not None:
+            v_budget[cp.voucher] = v_budget[cp.voucher] + current_discount - (pbv.gross - price.gross)
+
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
             delete(cp)

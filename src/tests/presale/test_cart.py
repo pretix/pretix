@@ -2424,6 +2424,20 @@ class CartAddonTest(CartTestMixin, TestCase):
         assert cp2.expires > now()
         assert cp2.addon_to_id == cp1.pk
 
+    @classscope(attr='orga')
+    def test_expand_expired_refresh_voucher(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('20.00'), event=self.event, price_mode='set',
+                                   valid_until=now() + timedelta(days=2), max_usages=999, redeemed=0)
+        cp1 = CartPosition.objects.create(
+            expires=now() - timedelta(minutes=10), item=self.ticket, price=Decimal('21.50'),
+            event=self.event, cart_id=self.session_key, voucher=v
+        )
+        self.cm.extend_expired_positions()
+        self.cm.commit()
+        cp1.refresh_from_db()
+        assert cp1.expires > now()
+        assert cp1.price_before_voucher == Decimal('23.00')
+
 
 class CartBundleTest(CartTestMixin, TestCase):
     @scopes_disabled()
