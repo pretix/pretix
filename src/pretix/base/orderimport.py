@@ -317,7 +317,7 @@ class InvoiceAddressCountry(ImportColumn):
         return value
 
     def assign(self, value, order, position, invoice_address, **kwargs):
-        invoice_address.country = value
+        invoice_address.country = value or ''
 
 
 class InvoiceAddressState(ImportColumn):
