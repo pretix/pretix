@@ -844,7 +844,9 @@ class InvoiceSettingsForm(SettingsForm):
         help_text=_("This will be prepended to invoice numbers. If you leave this field empty, your event slug will "
                     "be used followed by a dash. Attention: If multiple events within the same organization use the "
                     "same value in this field, they will share their number range, i.e. every full number will be "
-                    "used at most once over all of your events. This setting only affects future invoices."),
+                    "used at most once over all of your events. This setting only affects future invoices. You can "
+                    "use %Y (with century) %y (without century) to insert the year of the invoice, or %m and %d for "
+                    "the day of month."),
         required=False,
     )
     invoice_numbers_prefix_cancellations = forms.CharField(
