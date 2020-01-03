@@ -584,6 +584,9 @@ var editor = {
     _on_keydown: function (e) {
         var step = e.shiftKey ? editor._mm2px(10) : editor._mm2px(1);
         var thing = editor.fabric.getActiveObject() ? editor.fabric.getActiveObject() : editor.fabric.getActiveGroup();
+        if ($("#source-container").is(':visible')) {
+            return true;
+        }
         switch (e.keyCode) {
             case 38:  /* Up arrow */
                 thing.set('top', thing.get('top') - step);
