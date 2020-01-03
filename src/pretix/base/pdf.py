@@ -472,10 +472,15 @@ class Renderer:
         text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
 
         p = Paragraph(text, style=style)
-        p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
+        w, h = p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
         # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
         ad = getAscentDescent(font, float(o['fontsize']))
-        p.drawOn(canvas, float(o['left']) * mm, float(o['bottom']) * mm - ad[1])
+        canvas.saveState()
+        canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm + h)
+        canvas.rotate(o['rotation'] * -1)
+        # Debugging: canvas.rect(0, - h, w, h)
+        p.drawOn(canvas, 0, -h - ad[1])
+        canvas.restoreState()
 
     def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition):
         for o in self.layout:

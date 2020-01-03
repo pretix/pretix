@@ -131,6 +131,7 @@ var editor = {
                     width: editor._px2mm(o.width).toFixed(2),
                     content: o.content,
                     text: o.text,
+                    rotation: o.angle,
                     align: o.textAlign,
                 });
             } else  if (o.type === "barcodearea") {
@@ -174,6 +175,7 @@ var editor = {
             o.setWidth(editor._mm2px(d.width));
             o.content = d.content;
             o.setTextAlign(d.align);
+            o.rotate(d.rotation);
             if (d.content === "other") {
                 o.setText(d.text);
             } else {
@@ -268,6 +270,7 @@ var editor = {
         editor.fabric.on('object:selected', editor._update_toolbox);
         editor.fabric.on('object:moving', editor._update_toolbox_values);
         editor.fabric.on('object:modified', editor._update_toolbox_values);
+        editor.fabric.on('object:rotating', editor._update_toolbox_values);
         editor.fabric.on('object:scaling', editor._update_toolbox_values);
         editor._update_toolbox();
 
@@ -342,6 +345,7 @@ var editor = {
             $("#toolbox").find("button[data-action=center]").toggleClass('active', o.textAlign === 'center');
             $("#toolbox").find("button[data-action=right]").toggleClass('active', o.textAlign === 'right');
             $("#toolbox-textwidth").val(editor._px2mm(o.width).toFixed(2));
+            $("#toolbox-textrotation").val((o.angle || 0.0).toFixed(1));
             if (o.type === "textarea") {
                 $("#toolbox-content").val(o.content);
                 $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
@@ -404,6 +408,7 @@ var editor = {
                 o.setTextAlign(align);
             }
             o.setWidth(editor._mm2px($("#toolbox-textwidth").val()));
+            o.rotate(parseFloat($("#toolbox-textrotation").val()));
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
@@ -452,7 +457,7 @@ var editor = {
             left: 100,
             top: 100,
             width: editor._mm2px(50),
-            lockRotation: true,
+            lockRotation: false,
             fontFamily: 'Open Sans',
             lineHeight: 1,
             content: 'item',
@@ -468,7 +473,7 @@ var editor = {
             'mb': false,
             'mr': true,
             'ml': true,
-            'mtr': false
+            'mtr': true
         });
         editor.fabric.add(text);
         editor._create_savepoint();
