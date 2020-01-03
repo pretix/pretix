@@ -201,6 +201,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Sample company"),
         "evaluate": lambda op, order, ev: escape(order.invoice_address.company if getattr(order, 'invoice_address', None) else '')
     }),
+    ("invoice_city", {
+        "label": _("Invoice address city"),
+        "editor_sample": _("Sample city"),
+        "evaluate": lambda op, order, ev: escape(order.invoice_address.city if getattr(order, 'invoice_address', None) else '')
+    }),
     ("addons", {
         "label": _("List of Add-Ons"),
         "editor_sample": _("Addon 1\nAddon 2"),
