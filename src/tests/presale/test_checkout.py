@@ -3095,3 +3095,45 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         assert self.cp1.price == Decimal('21.00')
         self.cp2.refresh_from_db()
         assert self.cp2.price == Decimal('22.50')
+
+    @scopes_disabled()
+    def test_budget_exceeded_expired_cart(self):
+        self.v.budget = Decimal('0.00')
+        self.v.value = Decimal('21.00')
+        self.v.save()
+        self.cp1.expires = now() - timedelta(hours=1)
+        self.cp1.save()
+        self.cp2.expires = now() - timedelta(hours=1)
+        self.cp2.save()
+
+        with self.assertRaises(OrderError):
+            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+                           'web')
+        self.cp1.refresh_from_db()
+        assert self.cp1.price == Decimal('23.00')
+        self.cp2.refresh_from_db()
+        assert self.cp2.price == Decimal('23.00')
+
+    @scopes_disabled()
+    def test_budget_overbooked_expired_cart(self):
+        self.v.budget = Decimal('1.50')
+        self.v.value = Decimal('21.50')
+        self.v.save()
+        self.cp1.expires = now() - timedelta(hours=1)
+        self.cp1.save()
+        self.cp2.expires = now() - timedelta(hours=1)
+        self.cp2.save()
+        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {},
+                             'web')
+        o = Order.objects.get(pk=oid)
+        op = o.positions.first()
+
+        assert op.item == self.ticket
+        self.v.budget = Decimal('1.00')
+        self.v.save()
+
+        with self.assertRaises(OrderError):
+            _perform_order(self.event, 'manual', [self.cp2.pk], 'admin@example.org', 'en', None, {},
+                           'web')
+        self.cp2.refresh_from_db()
+        assert self.cp2.price == Decimal('23.00')

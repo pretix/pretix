@@ -476,7 +476,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                     v_budget[cp.voucher] = cp.voucher.budget - cp.voucher.budget_used()
                 disc = cp.price_before_voucher - cp.price
                 if disc > v_budget[cp.voucher]:
-                    new_disc = v_budget[cp.voucher]
+                    new_disc = max(0, v_budget[cp.voucher])
                     cp.price = cp.price + (disc - new_disc)
                     cp.save()
                     err = err or error_messages['voucher_budget_used']
@@ -542,7 +542,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         max_discount = None
         if cp.price_before_voucher is not None and cp.voucher in v_budget:
             current_discount = cp.price_before_voucher - cp.price
-            max_discount = v_budget[cp.voucher] + current_discount
+            max_discount = max(v_budget[cp.voucher] + current_discount, 0)
 
         if cp.is_bundled:
             try:
