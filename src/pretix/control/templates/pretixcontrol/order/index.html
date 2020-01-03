@@ -272,7 +272,9 @@
                                 {% endif %}
                                 {% if line.voucher %}
                                     <br/><span class="fa fa-tags"></span> {% trans "Voucher code used:" %}
-                                    <a href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
+                                    <a
+                                            {% if line.price_before_voucher|default_if_none:"NONE" != "NONE" %}data-toggle="tooltip" title="{% blocktrans trimmed with price=line.price_before_voucher|money:request.event.currency %}Original price: {{ price }}{% endblocktrans %}"{% endif %}
+                                            href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
                                         {{ line.voucher.code }}
                                     </a>
                                 {% endif %}

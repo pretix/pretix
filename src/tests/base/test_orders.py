@@ -879,6 +879,36 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.tax_rule == self.shirt.tax_rule
 
     @classscope(attr='o')
+    def test_change_item_change_price_before_voucher(self):
+        self.op1.voucher = self.event.vouchers.create(item=self.shirt, redeemed=1, price_mode='set', value='5.00')
+        self.op1.price = Decimal('5.00')
+        self.op1.price_before_voucher = Decimal('23.00')
+        self.op1.save()
+        p = self.op1.price
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.shirt
+        assert self.op1.price == p
+        assert self.op1.price_before_voucher == Decimal('12.00')
+
+    @classscope(attr='o')
+    def test_change_item_change_price_before_voucher_minimum_value(self):
+        self.op1.voucher = self.event.vouchers.create(item=self.shirt, redeemed=1, price_mode='set', value='20.00')
+        self.op1.price = Decimal('20.00')
+        self.op1.price_before_voucher = Decimal('23.00')
+        self.op1.save()
+        p = self.op1.price
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.shirt
+        assert self.op1.price == p
+        assert self.op1.price_before_voucher == Decimal('20.00')
+
+    @classscope(attr='o')
     def test_change_item_success(self):
         self.ocm.change_item(self.op1, self.shirt, None)
         self.ocm.commit()

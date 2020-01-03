@@ -70,6 +70,8 @@ error_messages = {
     'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
     'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
                           'number of times allowed. We removed this item from your cart.'),
+    'voucher_budget_used': _('The voucher code used for one of the items in your cart has already been too often. We '
+                             'adjusted the price of the item in your cart.'),
     'voucher_expired': _('The voucher code used for one of the items in your cart is expired. We removed this item '
                          'from your cart.'),
     'voucher_invalid_item': _('The voucher code used for one of the items in your cart is not valid for this item. We '
@@ -426,6 +428,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
     products_seen = Counter()
     changed_prices = {}
+    v_budget = {}
     deleted_positions = set()
     seats_seen = set()
 
@@ -467,6 +470,20 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 err = err or error_messages['voucher_redeemed']
                 delete(cp)
                 continue
+
+            if cp.voucher.budget is not None:
+                if cp.voucher not in v_budget:
+                    v_budget[cp.voucher] = cp.voucher.budget - cp.voucher.budget_used()
+                disc = cp.price_before_voucher - cp.price
+                if disc > v_budget[cp.voucher]:
+                    new_disc = max(0, v_budget[cp.voucher])
+                    cp.price = cp.price + (disc - new_disc)
+                    cp.save()
+                    err = err or error_messages['voucher_budget_used']
+                    v_budget[cp.voucher] -= new_disc
+                    continue
+                else:
+                    v_budget[cp.voucher] -= disc
 
         if cp.subevent and cp.subevent.presale_start and now_dt < cp.subevent.presale_start:
             err = err or error_messages['some_subevent_not_started']
@@ -522,6 +539,11 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             # Other checks are not necessary
             continue
 
+        max_discount = None
+        if cp.price_before_voucher is not None and cp.voucher in v_budget:
+            current_discount = cp.price_before_voucher - cp.price
+            max_discount = max(v_budget[cp.voucher] + current_discount, 0)
+
         if cp.is_bundled:
             try:
                 bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
@@ -529,7 +551,9 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             except ItemBundle.DoesNotExist:
                 bprice = cp.price
             price = get_price(cp.item, cp.variation, cp.voucher, bprice, cp.subevent, custom_price_is_net=False,
-                              invoice_address=address, force_custom_price=True)
+                              invoice_address=address, force_custom_price=True, max_discount=max_discount)
+            pbv = get_price(cp.item, cp.variation, None, bprice, cp.subevent, custom_price_is_net=False,
+                            invoice_address=address, force_custom_price=True, max_discount=max_discount)
             changed_prices[cp.pk] = bprice
         else:
             bundled_sum = 0
@@ -539,7 +563,14 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                         bundled_sum += changed_prices.get(bundledp.pk, bundledp.price)
 
             price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
-                              addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum)
+                              addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
+                              max_discount=max_discount)
+            pbv = get_price(cp.item, cp.variation, None, cp.price, cp.subevent, custom_price_is_net=False,
+                            addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
+                            max_discount=max_discount)
+
+        if max_discount is not None:
+            v_budget[cp.voucher] = v_budget[cp.voucher] + current_discount - (pbv.gross - price.gross)
 
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
@@ -551,6 +582,11 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 err = err or error_messages['voucher_expired']
                 delete(cp)
                 continue
+
+        if pbv is not None and pbv.gross != price.gross:
+            cp.price_before_voucher = pbv.gross
+        else:
+            cp.price_before_voucher = None
 
         if price.gross != cp.price and not (cp.item.free_price and cp.price > price.gross):
             cp.price = price.gross
@@ -802,7 +838,10 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         lockfn = event.lock
 
     with lockfn() as now_dt:
-        positions = list(positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons'))
+        positions = list(
+            positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons')
+        )
+        positions.sort(key=lambda k: position_ids.index(k.pk))
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
@@ -1362,6 +1401,16 @@ class OrderChangeManager:
                 op.position.item = op.item
                 op.position.variation = op.variation
                 op.position._calculate_tax()
+                if op.position.price_before_voucher is not None and op.position.voucher and not op.position.addon_to_id:
+                    op.position.price_before_voucher = max(
+                        op.position.price,
+                        get_price(
+                            op.position.item, op.position.variation,
+                            subevent=op.position.subevent,
+                            custom_price=op.position.price,
+                            invoice_address=self._invoice_address
+                        ).gross
+                    )
                 op.position.save()
             elif isinstance(op, self.SeatOperation):
                 self.order.log_action('pretix.event.order.changed.seat', user=self.user, auth=self.auth, data={
@@ -1385,6 +1434,16 @@ class OrderChangeManager:
                 })
                 op.position.subevent = op.subevent
                 op.position.save()
+                if op.position.price_before_voucher is not None and op.position.voucher and not op.position.addon_to_id:
+                    op.position.price_before_voucher = max(
+                        op.position.price,
+                        get_price(
+                            op.position.item, op.position.variation,
+                            subevent=op.position.subevent,
+                            custom_price=op.position.price,
+                            invoice_address=self._invoice_address
+                        ).gross
+                    )
             elif isinstance(op, self.FeeValueOperation):
                 self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
                     'fee': op.fee.pk,

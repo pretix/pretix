@@ -795,6 +795,31 @@ class VoucherTestCase(BaseQuotaTestCase):
         v = Voucher.objects.create(event=self.event, price_mode='percent', value=Decimal('23.00'))
         assert v.calculate_price(Decimal('100.00')) == Decimal('77.00')
 
+    @classscope(attr='o')
+    def test_calculate_price_max_discount(self):
+        v = Voucher.objects.create(event=self.event, price_mode='subtract', value=Decimal('10.00'))
+        assert v.calculate_price(Decimal('23.42'), max_discount=Decimal('5.00')) == Decimal('18.42')
+
+    @classscope(attr='o')
+    def test_calculate_budget_used(self):
+        v = Voucher.objects.create(event=self.event, price_mode='sset', value=Decimal('20.00'))
+
+        order = Order.objects.create(
+            status=Order.STATUS_PENDING, event=self.event,
+            datetime=now() - timedelta(days=5), expires=now() + timedelta(days=5), total=46,
+        )
+        OrderPosition.objects.create(order=order, item=self.item1, voucher=v, price=Decimal('20.00'),
+                                     price_before_voucher=Decimal('23.00'))
+        assert v.budget_used() == Decimal('3.00')
+
+        order = Order.objects.create(
+            status=Order.STATUS_PAID, event=self.event,
+            datetime=now() - timedelta(days=5), expires=now() + timedelta(days=5), total=46,
+        )
+        OrderPosition.objects.create(order=order, item=self.item1, voucher=v, price=Decimal('20.00'),
+                                     price_before_voucher=Decimal('23.00'))
+        assert v.budget_used() == Decimal('6.00')
+
 
 class OrderTestCase(BaseQuotaTestCase):
     def setUp(self):

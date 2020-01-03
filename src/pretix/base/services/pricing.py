@@ -12,7 +12,8 @@ def get_price(item: Item, variation: ItemVariation = None,
               voucher: Voucher = None, custom_price: Decimal = None,
               subevent: SubEvent = None, custom_price_is_net: bool = False,
               addon_to: AbstractPosition = None, invoice_address: InvoiceAddress = None,
-              force_custom_price: bool = False, bundled_sum: Decimal = Decimal('0.00')) -> TaxedPrice:
+              force_custom_price: bool = False, bundled_sum: Decimal = Decimal('0.00'),
+              max_discount: Decimal = None) -> TaxedPrice:
     if addon_to:
         try:
             iao = addon_to.item.addons.get(addon_category_id=item.category_id)
@@ -32,7 +33,7 @@ def get_price(item: Item, variation: ItemVariation = None,
             price = subevent.var_price_overrides[variation.pk]
 
     if voucher:
-        price = voucher.calculate_price(price)
+        price = voucher.calculate_price(price, max_discount=max_discount)
 
     if item.tax_rule:
         tax_rule = item.tax_rule

@@ -80,6 +80,15 @@
                                 {{ position.custom_error }}
                             </div>
                         {% endif %}
+                        {% if position.voucher and position.voucher.budget %}
+                            <div class="alert alert-warning">
+                                {% blocktrans trimmed %}
+                                    This position has been created with a voucher with a limited budget. If you
+                                    change the price or item, the discount will still be calculated from the original
+                                    price at the time of purchase.
+                                {% endblocktrans %}
+                            </div>
+                        {% endif %}
                         <div class="row">
                             <div class="col-sm-5 col-sm-offset-3">
                                 <strong>{% trans "Current value" %}</strong>

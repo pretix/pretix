@@ -3106,6 +3106,81 @@ def test_order_create_auto_pricing_reverse_charge_require_valid_vatid(token_clie
 
 
 @pytest.mark.django_db
+def test_order_create_autopricing_voucher_budget_partially(token_client, organizer, event, item, quota, question,
+                                                           taxrule):
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=21.50, item=item, budget=Decimal('2.50'),
+                                        max_usages=999)
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['voucher'] = voucher.code
+    del res['positions'][0]['price']
+    del res['positions'][0]['positionid']
+    res['positions'].append(res['positions'][0])
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    print(resp.data)
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+        p2 = o.positions.last()
+    assert p.price == Decimal('21.50')
+    assert p2.price == Decimal('22.00')
+
+
+@pytest.mark.django_db
+def test_order_create_autopricing_voucher_budget_full(token_client, organizer, event, item, quota, question, taxrule):
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=21.50, item=item, budget=Decimal('0.50'),
+                                        max_usages=999)
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['voucher'] = voucher.code
+    del res['positions'][0]['price']
+    del res['positions'][0]['positionid']
+    res['positions'].append(res['positions'][0])
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{}, {'voucher': ['The voucher has a remaining budget of 0.00, therefore a '
+                                                        'discount of 1.50 can not be given.']}]}
+
+
+@pytest.mark.django_db
+def test_order_create_voucher_budget_exceeded(token_client, organizer, event, item, quota, question, taxrule):
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=21.50, item=item, budget=Decimal('3.00'),
+                                        max_usages=999)
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['voucher'] = voucher.code
+    res['positions'][0]['price'] = '19.00'
+    del res['positions'][0]['positionid']
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    print(resp.data)
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'voucher': ['The voucher has a remaining budget of 3.00, therefore a '
+                                                    'discount of 4.00 can not be given.']}]}
+
+
+@pytest.mark.django_db
 def test_order_create_voucher_price(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk

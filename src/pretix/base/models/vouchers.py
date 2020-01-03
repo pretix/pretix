@@ -4,7 +4,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import F, OuterRef, Q, Subquery, Sum
+from django.db.models.functions import Coalesce
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -17,7 +18,7 @@ from ..decimal import round_decimal
 from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Quota
-from .orders import Order
+from .orders import Order, OrderPosition
 
 
 def _generate_random_code(prefix=None):
@@ -113,6 +114,13 @@ class Voucher(LoggedModel):
     redeemed = models.PositiveIntegerField(
         verbose_name=_("Redeemed"),
         default=0
+    )
+    budget = models.DecimalField(
+        verbose_name=_("Maximum discount budget"),
+        help_text=_("This is the maximum monetary amount that will be discounted using this voucher across all usages. "
+                    "If this is sum reached, the voucher can no longer be used."),
+        decimal_places=2, max_digits=10,
+        null=True, blank=True
     )
     valid_until = models.DateTimeField(
         blank=True, null=True, db_index=True,
@@ -430,7 +438,7 @@ class Voucher(LoggedModel):
             return False
         return True
 
-    def calculate_price(self, original_price: Decimal) -> Decimal:
+    def calculate_price(self, original_price: Decimal, max_discount: Decimal=None) -> Decimal:
         """
         Returns how the price given in original_price would be modified if this
         voucher is applied, i.e. replaced by a different price or reduced by a
@@ -448,7 +456,9 @@ class Voucher(LoggedModel):
                 p = original_price
             places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
             if places < 2:
-                return p.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
+                p = p.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
+            if max_discount is not None:
+                p = max(p, original_price - max_discount)
             return p
         return original_price
 
@@ -470,3 +480,26 @@ class Voucher(LoggedModel):
             return self.item.seat_category_mappings.filter(**kwargs).exists()
         else:
             return bool(subevent.seating_plan) if subevent else self.event.seating_plan
+
+    @classmethod
+    def annotate_budget_used_orders(cls, qs):
+        opq = OrderPosition.objects.filter(
+            voucher_id=OuterRef('pk'),
+            price_before_voucher__isnull=False,
+            order__status__in=[
+                Order.STATUS_PAID,
+                Order.STATUS_PENDING
+            ]
+        ).order_by().values('voucher_id').annotate(s=Sum(F('price_before_voucher') - F('price'))).values('s')
+        return qs.annotate(budget_used_orders=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=10, decimal_places=2)), Decimal('0.00')))
+
+    def budget_used(self):
+        ops = OrderPosition.objects.filter(
+            voucher=self,
+            price_before_voucher__isnull=False,
+            order__status__in=[
+                Order.STATUS_PAID,
+                Order.STATUS_PENDING
+            ]
+        ).aggregate(s=Sum(F('price_before_voucher') - F('price')))['s'] or Decimal('0.00')
+        return ops
