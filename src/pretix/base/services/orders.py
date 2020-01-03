@@ -1380,7 +1380,7 @@ class OrderChangeManager:
                             op.position.item, op.position.variation,
                             subevent=op.position.subevent,
                             custom_price=op.position.price,
-                            invoice_address=self.order.invoice_address
+                            invoice_address=self._invoice_address
                         ).gross
                     )
                 op.position.save()
@@ -1413,7 +1413,7 @@ class OrderChangeManager:
                             op.position.item, op.position.variation,
                             subevent=op.position.subevent,
                             custom_price=op.position.price,
-                            invoice_address=self.order.invoice_address
+                            invoice_address=self._invoice_address
                         ).gross
                     )
             elif isinstance(op, self.FeeValueOperation):
