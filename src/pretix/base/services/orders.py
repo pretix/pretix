@@ -1373,6 +1373,16 @@ class OrderChangeManager:
                 op.position.item = op.item
                 op.position.variation = op.variation
                 op.position._calculate_tax()
+                if op.position.price_before_voucher is not None and op.position.voucher and not op.position.addon_to_id:
+                    op.position.price_before_voucher = max(
+                        op.position.price,
+                        get_price(
+                            op.position.item, op.position.variation,
+                            subevent=op.position.subevent,
+                            custom_price=op.position.price,
+                            invoice_address=self.order.invoice_address
+                        ).gross
+                    )
                 op.position.save()
             elif isinstance(op, self.SeatOperation):
                 self.order.log_action('pretix.event.order.changed.seat', user=self.user, auth=self.auth, data={
@@ -1396,6 +1406,16 @@ class OrderChangeManager:
                 })
                 op.position.subevent = op.subevent
                 op.position.save()
+                if op.position.price_before_voucher is not None and op.position.voucher and not op.position.addon_to_id:
+                    op.position.price_before_voucher = max(
+                        op.position.price,
+                        get_price(
+                            op.position.item, op.position.variation,
+                            subevent=op.position.subevent,
+                            custom_price=op.position.price,
+                            invoice_address=self.order.invoice_address
+                        ).gross
+                    )
             elif isinstance(op, self.FeeValueOperation):
                 self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
                     'fee': op.fee.pk,
