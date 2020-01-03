@@ -1374,6 +1374,32 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('21.00'))
+        self.assertEqual(objs[0].price_before_voucher, Decimal('23.00'))
+
+    def test_voucher_free_price_before_voucher_cap(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.ticket, value=Decimal('10.00'), price_mode='percent', event=self.event)
+        self.ticket.free_price = True
+        self.ticket.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '41.00',
+            '_voucher_code': v.code,
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
+        self.assertIn('41', doc.select('.cart .cart-row')[0].select('.price')[0].text)
+        self.assertIn('41', doc.select('.cart .cart-row')[0].select('.price')[1].text)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, Decimal('41.00'))
+        self.assertEqual(objs[0].price_before_voucher, Decimal('41.00'))
 
     def test_voucher_free_price_lower_bound(self):
         with scopes_disabled():
@@ -1398,6 +1424,7 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('20.70'))
+        self.assertEqual(objs[0].price_before_voucher, Decimal('23.00'))
 
     def test_voucher_redemed(self):
         with scopes_disabled():
