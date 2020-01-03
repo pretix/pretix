@@ -206,7 +206,8 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
                     ctx['can_pay'] = True
                     break
 
-            if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
+            if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
+                                       OrderPayment.PAYMENT_STATE_CANCELED):
                 ctx['last_payment'] = self.order.payments.last()
 
                 pp = lp.payment_provider
