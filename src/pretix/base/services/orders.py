@@ -984,7 +984,7 @@ def send_download_reminders(sender, **kwargs):
             continue
 
         reminder_date = (o.first_date - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
-        if now() < reminder_date:
+        if now() < reminder_date or o.datetime > reminder_date:
             continue
 
         with transaction.atomic():

@@ -434,7 +434,7 @@ class DownloadReminderTests(TestCase):
             self.order = Order.objects.create(
                 code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PAID, locale='en',
-                datetime=now() - timedelta(hours=4),
+                datetime=now() - timedelta(days=4),
                 expires=now() - timedelta(hours=4) + timedelta(days=10),
                 total=Decimal('46.00'),
             )
@@ -528,6 +528,14 @@ class DownloadReminderTests(TestCase):
     @classscope(attr='o')
     def test_not_sent_too_soon_after_purchase(self):
         self.order.datetime = now()
+        self.order.save()
+        self.event.settings.mail_days_download_reminder = 2
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    @classscope(attr='o')
+    def test_not_sent_after_reminder_date(self):
+        self.order.datetime = self.event.date_from - timedelta(days=1)
         self.order.save()
         self.event.settings.mail_days_download_reminder = 2
         send_download_reminders(sender=self.event)
