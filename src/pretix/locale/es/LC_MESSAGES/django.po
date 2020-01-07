@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-05 13:33+0000\n"
-"PO-Revision-Date: 2019-11-22 10:01+0000\n"
-"Last-Translator: Carolina Fernández <cfermart@gmail.com>\n"
+"PO-Revision-Date: 2020-01-08 03:00+0000\n"
+"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -3168,7 +3168,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:178
 msgid "Specific seat"
-msgstr ""
+msgstr "Asiento especifico"
 
 #: pretix/base/models/vouchers.py:182
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:114
@@ -5928,7 +5928,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:105
 msgid "Grant access to team"
-msgstr ""
+msgstr "Dar acceso al equipo"
 
 #: pretix/control/forms/event.py:106
 msgid ""
@@ -6319,7 +6319,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:518
 msgid "Social media image"
-msgstr ""
+msgstr "Imagen de redes sociales"
 
 #: pretix/control/forms/event.py:521
 msgid ""
@@ -19645,11 +19645,11 @@ msgstr "Italiano"
 
 #: pretix/settings.py:413
 msgid "Russian"
-msgstr ""
+msgstr "Ruso"
 
 #: pretix/settings.py:414
 msgid "Latvian"
-msgstr ""
+msgstr "Letón"
 
 #: pretix/settings.py:415
 msgid "Chinese (simplified)"
