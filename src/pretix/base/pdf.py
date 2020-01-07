@@ -476,10 +476,16 @@ class Renderer:
         # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
         ad = getAscentDescent(font, float(o['fontsize']))
         canvas.saveState()
-        canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm + h)
-        canvas.rotate(o['rotation'] * -1)
-        # Debugging: canvas.rect(0, - h, w, h)
-        p.drawOn(canvas, 0, -h - ad[1])
+        # The ascent/descent offsets here are not really proven to be correct, they're just empirical values to get
+        # reportlab render similarly to browser canvas.
+        if o.get('downward', False):
+            canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm)
+            canvas.rotate(o.get('rotation', 0) * -1)
+            p.drawOn(canvas, 0, -h - ad[1] / 2)
+        else:
+            canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm + h)
+            canvas.rotate(o.get('rotation', 0) * -1)
+            p.drawOn(canvas, 0, -h - ad[1])
         canvas.restoreState()
 
     def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition):

@@ -117,11 +117,15 @@ var editor = {
             }
             if (o.type === "textarea") {
                 var col = (new fabric.Color(o.getFill()))._source;
+                var bottom = editor.pdf_viewport.height - o.height - top;
+                if (o.downward) {
+                    bottom = editor.pdf_viewport.height - top;
+                }
                 d.push({
                     type: "textarea",
                     locale: $("#pdf-info-locale").val(),
                     left: editor._px2mm(left).toFixed(2),
-                    bottom: editor._px2mm(editor.pdf_viewport.height - o.height - top).toFixed(2),
+                    bottom: editor._px2mm(bottom).toFixed(2),
                     fontsize: editor._px2pt(o.getFontSize()).toFixed(1),
                     color: col,
                     //lineheight: o.lineHeight,
@@ -129,6 +133,7 @@ var editor = {
                     bold: o.fontWeight === 'bold',
                     italic: o.fontStyle === 'italic',
                     width: editor._px2mm(o.width).toFixed(2),
+                    downward: o.downward || false,
                     content: o.content,
                     text: o.text,
                     rotation: o.angle,
@@ -173,6 +178,7 @@ var editor = {
             o.setFontWeight(d.bold ? 'bold' : 'normal');
             o.setFontStyle(d.italic ? 'italic' : 'normal');
             o.setWidth(editor._mm2px(d.width));
+            o.downward = d.downward || false;
             o.content = d.content;
             o.setTextAlign(d.align);
             o.rotate(d.rotation);
@@ -188,6 +194,9 @@ var editor = {
         }
 
         var new_top = editor.pdf_viewport.height - editor._mm2px(d.bottom) - (o.height * o.scaleY);
+        if (o.downward) {
+            new_top = editor.pdf_viewport.height - editor._mm2px(d.bottom);
+        }
         o.set('left', editor._mm2px(d.left));
         o.set('top', new_top);
         o.setCoords();
@@ -325,8 +334,12 @@ var editor = {
                 return;
             }
         }
+        var bottom = editor.pdf_viewport.height - o.height * o.scaleY - o.top;
+        if (o.downward) {
+            bottom = editor.pdf_viewport.height - o.top;
+        }
         $("#toolbox-position-x").val(editor._px2mm(o.left).toFixed(2));
-        $("#toolbox-position-y").val(editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - o.top).toFixed(2));
+        $("#toolbox-position-y").val(editor._px2mm(bottom).toFixed(2));
 
         if (o.type === "barcodearea") {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
@@ -341,6 +354,7 @@ var editor = {
             $("#toolbox-fontfamily").val(o.fontFamily);
             $("#toolbox").find("button[data-action=bold]").toggleClass('active', o.fontWeight === 'bold');
             $("#toolbox").find("button[data-action=italic]").toggleClass('active', o.fontStyle === 'italic');
+            $("#toolbox").find("button[data-action=downward]").toggleClass('active', o.downward || false);
             $("#toolbox").find("button[data-action=left]").toggleClass('active', o.textAlign === 'left');
             $("#toolbox").find("button[data-action=center]").toggleClass('active', o.textAlign === 'center');
             $("#toolbox").find("button[data-action=right]").toggleClass('active', o.textAlign === 'right');
@@ -368,6 +382,11 @@ var editor = {
         }
 
         var new_top = editor.pdf_viewport.height - editor._mm2px($("#toolbox-position-y").val()) - o.height * o.scaleY;
+        if (o.type === "textarea" || o.type === "text") {
+            if ($("#toolbox").find("button[data-action=downward]").is('.active')) {
+                new_top = editor.pdf_viewport.height - editor._mm2px($("#toolbox-position-y").val());
+            }
+        }
         o.set('left', editor._mm2px($("#toolbox-position-x").val()));
         o.set('top', new_top);
 
@@ -408,6 +427,7 @@ var editor = {
                 o.setTextAlign(align);
             }
             o.setWidth(editor._mm2px($("#toolbox-textwidth").val()));
+            o.downward = $("#toolbox").find("button[data-action=downward]").is('.active');
             o.rotate(parseFloat($("#toolbox-textrotation").val()));
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
             o.content = $("#toolbox-content").val();
@@ -464,6 +484,7 @@ var editor = {
             editable: false,
             fontSize: editor._pt2px(13)
         });
+        text.downward = true;
         text.setControlsVisibility({
             'tr': false,
             'tl': false,
