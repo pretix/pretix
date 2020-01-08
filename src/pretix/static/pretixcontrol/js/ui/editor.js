@@ -181,7 +181,9 @@ var editor = {
             o.downward = d.downward || false;
             o.content = d.content;
             o.setTextAlign(d.align);
-            o.rotate(d.rotation);
+            if (d.rotation) {
+                o.rotate(d.rotation);
+            }
             if (d.content === "other") {
                 o.setText(d.text);
             } else {
