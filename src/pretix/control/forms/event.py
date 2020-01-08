@@ -3,7 +3,9 @@ from urllib.parse import urlencode
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator, validate_email
+from django.core.validators import (
+    MaxValueValidator, MinValueValidator, RegexValidator, validate_email,
+)
 from django.db.models import Q
 from django.forms import formset_factory
 from django.urls import reverse
@@ -680,6 +682,9 @@ class PaymentSettingsForm(SettingsForm):
                     "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
                     "payment methods, we recommend still setting two or three days to allow people to retry failed "
                     "payments."),
+        validators=[MinValueValidator(0),
+                    MaxValueValidator(1000000)]
+
     )
     payment_term_last = RelativeDateField(
         label=_('Last date of payments'),
