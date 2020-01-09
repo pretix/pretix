@@ -149,7 +149,8 @@ class EventWizardBasicsForm(I18nModelForm):
         self.user = kwargs.pop('user')
         kwargs.pop('session')
         super().__init__(*args, **kwargs)
-        self.initial['timezone'] = get_current_timezone_name()
+        if 'timezone' not in self.initial:
+            self.initial['timezone'] = get_current_timezone_name()
         self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
         self.fields['location'].widget.attrs['rows'] = '3'
         self.fields['location'].widget.attrs['placeholder'] = _(
