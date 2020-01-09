@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-05 13:33+0000\n"
-"PO-Revision-Date: 2019-12-16 04:00+0000\n"
+"PO-Revision-Date: 2020-01-09 22:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -11728,7 +11728,7 @@ msgstr "Beheer je eigen applicaties"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:18
 msgid "Permissions"
-msgstr "Rechten"
+msgstr "Permissies"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:59
 msgid "No applications have access to your pretix account."
