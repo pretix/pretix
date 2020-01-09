@@ -3,7 +3,14 @@
 {% load static %}
 {% block title %}{% trans "Import bank data" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Import bank data" %}</h1>
+    <h1>
+        {% trans "Import bank data" %}
+        {% if runningimport %}
+            <small>{% trans "Import currently running…" %}</small>
+        {% else %}
+            <small>{% blocktrans trimmed with date=lastimport.created|date:"SHORT_DATETIME_FORMAT" %}Last import: {{ date }}{% endblocktrans %}</small>
+        {% endif %}
+    </h1>
     {% block inner %}
     {% endblock %}
 {% endblock %}
