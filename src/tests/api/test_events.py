@@ -76,6 +76,7 @@ TEST_EVENT_RES = {
     "seating_plan": None,
     "seat_category_mapping": {},
     "meta_data": {"type": "Conference"},
+    'timezone': 'Europe/Berlin',
     'plugins': [
         'pretix.plugins.banktransfer',
         'pretix.plugins.ticketoutputpdf'
@@ -174,7 +175,8 @@ def test_event_create(token_client, organizer, event, meta_prop):
             "slug": "2030",
             "meta_data": {
                 meta_prop.name: "Conference"
-            }
+            },
+            "timezone": "Europe/Amsterdam"
         },
         format='json'
     )
@@ -185,6 +187,7 @@ def test_event_create(token_client, organizer, event, meta_prop):
             property__name=meta_prop.name, value="Conference"
         ).exists()
         assert organizer.events.get(slug="2030").plugins == settings.PRETIX_PLUGINS_DEFAULT
+        assert organizer.events.get(slug="2030").settings.timezone == "Europe/Amsterdam"
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/'.format(organizer.slug),
@@ -291,7 +294,8 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
             },
             "plugins": [
                 "pretix.plugins.ticketoutputpdf"
-            ]
+            ],
+            "timezone": "Europe/Vienna"
         },
         format='json'
     )
@@ -305,6 +309,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
         assert organizer.events.get(slug="2030").meta_values.filter(
             property__name=meta_prop.name, value="Conference"
         ).exists()
+        assert cloned_event.settings.timezone == "Europe/Vienna"
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),

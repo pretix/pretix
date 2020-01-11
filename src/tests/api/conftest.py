@@ -38,6 +38,7 @@ def event(organizer, meta_prop):
         is_public=True
     )
     e.meta_values.create(property=meta_prop, value="Conference")
+    e.settings.timezone = 'Europe/Berlin'
     return e
 
 

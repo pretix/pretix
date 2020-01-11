@@ -4,7 +4,8 @@ from django.db import transaction
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
 from django_countries.serializers import CountryFieldMixin
-from rest_framework.fields import Field
+from pytz import common_timezones
+from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -61,17 +62,27 @@ class PluginsField(Field):
         }
 
 
+class TimeZoneField(ChoiceField):
+    def get_attribute(self, instance):
+        return instance.cache.get_or_set(
+            'timezone_name',
+            lambda: instance.settings.timezone,
+            3600
+        )
+
+
 class EventSerializer(I18nAwareModelSerializer):
     meta_data = MetaDataField(required=False, source='*')
     plugins = PluginsField(required=False, source='*')
     seat_category_mapping = SeatCategoryMappingField(source='*', required=False)
+    timezone = TimeZoneField(required=False, choices=[(a, a) for a in common_timezones])
 
     class Meta:
         model = Event
         fields = ('name', 'slug', 'live', 'testmode', 'currency', 'date_from',
                   'date_to', 'date_admission', 'is_public', 'presale_start',
                   'presale_end', 'location', 'geo_lat', 'geo_lon', 'has_subevents', 'meta_data', 'seating_plan',
-                  'plugins', 'seat_category_mapping')
+                  'plugins', 'seat_category_mapping', 'timezone')
 
     def validate(self, data):
         data = super().validate(data)
@@ -156,7 +167,11 @@ class EventSerializer(I18nAwareModelSerializer):
         meta_data = validated_data.pop('meta_data', None)
         validated_data.pop('seat_category_mapping', None)
         plugins = validated_data.pop('plugins', settings.PRETIX_PLUGINS_DEFAULT.split(','))
+        tz = validated_data.pop('timezone', None)
         event = super().create(validated_data)
+
+        if tz:
+            event.settings.timezone = tz
 
         # Meta data
         if meta_data is not None:
@@ -182,7 +197,11 @@ class EventSerializer(I18nAwareModelSerializer):
         meta_data = validated_data.pop('meta_data', None)
         plugins = validated_data.pop('plugins', None)
         seat_category_mapping = validated_data.pop('seat_category_mapping', None)
+        tz = validated_data.pop('timezone', None)
         event = super().update(instance, validated_data)
+
+        if tz:
+            event.settings.timezone = tz
 
         # Meta data
         if meta_data is not None:
@@ -240,6 +259,7 @@ class CloneEventSerializer(EventSerializer):
         is_public = validated_data.pop('is_public', None)
         testmode = validated_data.pop('testmode', None)
         has_subevents = validated_data.pop('has_subevents', None)
+        tz = validated_data.pop('timezone', None)
         new_event = super().create(validated_data)
 
         event = Event.objects.filter(slug=self.context['event'], organizer=self.context['organizer'].pk).first()
@@ -254,6 +274,8 @@ class CloneEventSerializer(EventSerializer):
         if has_subevents is not None:
             new_event.has_subevents = has_subevents
         new_event.save()
+        if tz:
+            new_event.settings.timezone = tz
 
         return new_event
 

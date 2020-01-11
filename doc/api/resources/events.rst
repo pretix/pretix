@@ -42,6 +42,7 @@ seating_plan                          integer                    If reserved sea
                                                                  plan. Otherwise ``null``.
 seat_category_mapping                 object                     An object mapping categories of the seating plan
                                                                  (strings) to items in the event (integers or ``null``).
+timezone                              string                     Event timezone name
 ===================================== ========================== =======================================================
 
 
@@ -73,6 +74,10 @@ seat_category_mapping                 object                     An object mappi
 .. versionchanged:: 3.3
 
    The attributes ``geo_lat`` and ``geo_lon`` have been added.
+
+.. versionchanged:: 3.4
+
+   The attribute ``timezone`` has been added.
 
 Endpoints
 ---------
@@ -127,6 +132,7 @@ Endpoints
             "meta_data": {},
             "seating_plan": null,
             "seat_category_mapping": {},
+            "timezone": "Europe/Berlin",
             "plugins": [
               "pretix.plugins.banktransfer"
               "pretix.plugins.stripe"
@@ -197,6 +203,7 @@ Endpoints
         "seating_plan": null,
         "seat_category_mapping": {},
         "meta_data": {},
+        "timezone": "Europe/Berlin",
         "plugins": [
           "pretix.plugins.banktransfer"
           "pretix.plugins.stripe"
@@ -248,6 +255,7 @@ Endpoints
         "geo_lon": null,
         "has_subevents": false,
         "meta_data": {},
+        "timezone": "Europe/Berlin",
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
@@ -281,6 +289,7 @@ Endpoints
         "seat_category_mapping": {},
         "has_subevents": false,
         "meta_data": {},
+        "timezone": "Europe/Berlin",
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
@@ -334,6 +343,7 @@ Endpoints
         "seat_category_mapping": {},
         "has_subevents": false,
         "meta_data": {},
+        "timezone": "Europe/Berlin",
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
@@ -367,6 +377,7 @@ Endpoints
         "seating_plan": null,
         "seat_category_mapping": {},
         "meta_data": {},
+        "timezone": "Europe/Berlin",
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
@@ -432,6 +443,7 @@ Endpoints
         "seating_plan": null,
         "seat_category_mapping": {},
         "meta_data": {},
+        "timezone": "Europe/Berlin",
         "plugins": [
           "pretix.plugins.banktransfer",
           "pretix.plugins.stripe",
