@@ -446,7 +446,7 @@ List of all orders
                                     ``require_approval`` will be returned.
    :query include_canceled_positions: If set to ``true``, the output will contain canceled order positions. Note that this
                                       only affects position-level cancellations, not fully-canceled orders.
-   :query include_canceled_fees: If set to ``true``, the output will contain cancaled order fees.
+   :query include_canceled_fees: If set to ``true``, the output will contain canceled order fees.
    :query string email: Only return orders created with the given email address
    :query string locale: Only return orders with the given customer locale
    :query datetime modified_since: Only return orders that have changed since the given date. Be careful: We only
@@ -595,7 +595,7 @@ Fetching individual orders
    :param code: The ``code`` field of the order to fetch
    :query include_canceled_positions: If set to ``true``, the output will contain canceled order positions. Note that this
                                       only affects position-level cancellations, not fully-canceled orders.
-   :query include_canceled_fees: If set to ``true``, the output will contain cancaled order fees.
+   :query include_canceled_fees: If set to ``true``, the output will contain canceled order fees.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
