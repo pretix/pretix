@@ -143,7 +143,7 @@ setup(
         'django-localflavor',
         'jsonschema',
         'django-hijack>=2.1.10,<2.2.0',
-        'openpyxl',
+        'openpyxl==3.0.*',
         'django-oauth-toolkit==1.2.*',
         'oauthlib==3.1.*',
         'urllib3==1.24.*',  # required by current requests

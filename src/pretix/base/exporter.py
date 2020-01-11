@@ -128,7 +128,7 @@ class ListExporter(BaseExporter):
 
     def _render_xlsx(self, form_data, output_file=None):
         wb = Workbook()
-        ws = wb.get_active_sheet()
+        ws = wb.active
         try:
             ws.title = str(self.verbose_name)
         except:
@@ -207,7 +207,7 @@ class MultiSheetListExporter(ListExporter):
 
     def _render_xlsx(self, form_data, output_file=None):
         wb = Workbook()
-        ws = wb.get_active_sheet()
+        ws = wb.active
         wb.remove(ws)
         for s, l in self.sheets:
             ws = wb.create_sheet(str(l))
