@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import smtplib
+import ssl
 import warnings
 from email.mime.image import MIMEImage
 from email.utils import formataddr
@@ -365,6 +366,8 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
 
             raise SendMailException('Failed to send an email to {}.'.format(to))
         except Exception as e:
+            if isinstance(e, (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, ssl.SSLError, OSError)):
+                self.retry(max_retries=5, countdown=2 ** (self.request.retries * 2))
             if order:
                 order.log_action(
                     'pretix.event.order.email.error',
