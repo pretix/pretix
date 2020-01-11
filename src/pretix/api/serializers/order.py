@@ -204,7 +204,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat')
+                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -284,7 +284,7 @@ class OrderPaymentDateField(serializers.DateField):
 class OrderFeeSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderFee
-        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule')
+        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule', 'canceled')
 
 
 class PaymentURLField(serializers.URLField):

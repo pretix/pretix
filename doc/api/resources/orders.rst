@@ -61,9 +61,10 @@ invoice_address                       object                     Invoice address
 └ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
                                                                  happens in rare cases.
-positions                             list of objects            List of non-canceled order positions (see below)
-fees                                  list of objects            List of non-canceled fees included in the order total
-                                                                 (i.e. payment fees)
+positions                             list of objects            List of order positions (see below). By default, only
+                                                                 non-canceled positions are included.
+fees                                  list of objects            List of fees included in the order total. By default, only
+                                                                 non-canceled fees are included.
 ├ fee_type                            string                     Type of fee (currently ``payment``, ``passbook``,
                                                                  ``other``)
 ├ value                               money (string)             Fee amount
@@ -72,7 +73,8 @@ fees                                  list of objects            List of non-can
                                                                  can be empty
 ├ tax_rate                            decimal (string)           VAT rate applied for this fee
 ├ tax_value                           money (string)             VAT included in this fee
-└ tax_rule                            integer                    The ID of the used tax rule (or ``null``)
+├ tax_rule                            integer                    The ID of the used tax rule (or ``null``)
+└ canceled                            boolean                    Whether or not this fee has been canceled.
 downloads                             list of objects            List of ticket download options for order-wise ticket
                                                                  downloading. This might be a multi-page PDF or a ZIP
                                                                  file of tickets for outputs that do not support
@@ -145,6 +147,10 @@ last_modified                         datetime                   Last modificati
    The ``invoice_address.state`` and ``url`` attributes have been added. When creating orders through the API,
    vouchers are now supported and many fields are now optional.
 
+.. versionchanged:: 3.5
+
+   The ``order.fees.canceled`` attribute has been added.
+
 
 .. _order-position-resource:
 
@@ -159,6 +165,8 @@ Field                                 Type                       Description
 id                                    integer                    Internal ID of the order position
 order                                 string                     Order code of the order the position belongs to
 positionid                            integer                    Number of the position within the order
+canceled                              boolean                    Whether or not this position has been canceled. Note that
+                                                                 by default, only non-canceled positions are shown.
 item                                  integer                    ID of the purchased item
 variation                             integer                    ID of the purchased variation (or ``null``)
 price                                 money (string)             Price of this position
@@ -223,6 +231,10 @@ pdf_data                              object                     Data object req
 
   The ``url`` of a ticket ``download`` can now also return a ``text/uri-list`` instead of a file. See
   :ref:`order-position-ticket-download` for details.
+
+.. versionchanged:: 3.5
+
+  The attribute ``canceled`` has been added.
 
 .. _order-payment-resource:
 
@@ -290,6 +302,10 @@ List of all orders
 
    Filtering for emails or order codes is now case-insensitive.
 
+.. versionchanged:: 3.5
+
+   The ``include_canceled_positions`` and ``include_canceled_fees`` query parameters have been added.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/
 
    Returns a list of all orders within a given event.
@@ -355,6 +371,7 @@ List of all orders
                 "id": 23442,
                 "order": "ABC12",
                 "positionid": 1,
+                "canceled": false,
                 "item": 1345,
                 "variation": null,
                 "price": "23.00",
@@ -427,6 +444,9 @@ List of all orders
    :query boolean testmode: Only return orders with ``testmode`` set to ``true`` or ``false``
    :query boolean require_approval: If set to ``true`` or ``false``, only categories with this value for the field
                                     ``require_approval`` will be returned.
+   :query include_canceled_positions: If set to ``true``, the output will contain canceled order positions. Note that this
+                                      only affects position-level cancellations, not fully-canceled orders.
+   :query include_canceled_fees: If set to ``true``, the output will contain cancaled order fees.
    :query string email: Only return orders created with the given email address
    :query string locale: Only return orders with the given customer locale
    :query datetime modified_since: Only return orders that have changed since the given date. Be careful: We only
@@ -443,6 +463,10 @@ List of all orders
 
 Fetching individual orders
 --------------------------
+
+.. versionchanged:: 3.5
+
+   The ``include_canceled_positions`` and ``include_canceled_fees`` query parameters have been added.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/
 
@@ -503,6 +527,7 @@ Fetching individual orders
             "id": 23442,
             "order": "ABC12",
             "positionid": 1,
+            "canceled": false,
             "item": 1345,
             "variation": null,
             "price": "23.00",
@@ -568,6 +593,9 @@ Fetching individual orders
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :param code: The ``code`` field of the order to fetch
+   :query include_canceled_positions: If set to ``true``, the output will contain canceled order positions. Note that this
+                                      only affects position-level cancellations, not fully-canceled orders.
+   :query include_canceled_fees: If set to ``true``, the output will contain cancaled order fees.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
@@ -1313,8 +1341,9 @@ List of all order positions
 
   The value ``auto_checked_in`` has been added to the ``checkins``-attribute.
 
+.. versionchanged:: 3.5
 
-.. note:: Individually canceled order positions are currently not visible via the API at all.
+   The ``include_canceled_positions`` and ``include_canceled_fees`` query parameters have been added.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
 
@@ -1345,6 +1374,7 @@ List of all order positions
             "id": 23442,
             "order": "ABC12",
             "positionid": 1,
+            "canceled": false,
             "item": 1345,
             "variation": null,
             "price": "23.00",
@@ -1414,6 +1444,8 @@ List of all order positions
                                 comma-separated IDs.
    :query string voucher: Only return positions with a specific voucher.
    :query string voucher__code: Only return positions with a specific voucher code.
+   :query include_canceled_positions: If set to ``true``, the output will contain canceled order positions. Note that this
+                                      only affects position-level cancellations, not fully-canceled orders.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
@@ -1447,6 +1479,7 @@ Fetching individual positions
         "id": 23442,
         "order": "ABC12",
         "positionid": 1,
+        "canceled": false,
         "item": 1345,
         "variation": null,
         "price": "23.00",
@@ -1491,6 +1524,7 @@ Fetching individual positions
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :param id: The ``id`` field of the order position to fetch
+   :query include_canceled_positions: If set to ``true``, canceled positions may be returned (otherwise, they return 404).
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.

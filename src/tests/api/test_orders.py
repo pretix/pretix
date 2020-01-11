@@ -114,6 +114,8 @@ def order(event, item, taxrule, question):
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
                       tax_value=Decimal('0.05'), tax_rule=taxrule)
+        o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
+                      tax_value=Decimal('0.05'), tax_rule=taxrule, canceled=True)
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'),
                                       vat_id="DE123", vat_id_validated=True)
         op = OrderPosition.objects.create(
@@ -174,7 +176,8 @@ TEST_ORDERPOSITION_RES = {
             "option_identifiers": []
         }
     ],
-    "subevent": None
+    "subevent": None,
+    "canceled": False,
 }
 TEST_PAYMENTS_RES = [
     {
@@ -226,6 +229,7 @@ TEST_ORDER_RES = {
     "sales_channel": "web",
     "fees": [
         {
+            "canceled": False,
             "fee_type": "payment",
             "value": "0.25",
             "description": "",
@@ -318,6 +322,22 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
     ))
     assert [] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?include_canceled_positions=false'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results'][0]['positions']) == 1
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?include_canceled_positions=true'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results'][0]['positions']) == 2
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?include_canceled_fees=false'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results'][0]['fees']) == 1
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?include_canceled_fees=true'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results'][0]['fees']) == 2
+
 
 @pytest.mark.django_db
 def test_order_detail(token_client, organizer, event, order, item, taxrule, question):
@@ -353,6 +373,16 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
                                                                                 order.code))
     assert len(resp.data['downloads']) == 1
     assert len(resp.data['positions'][0]['downloads']) == 1
+
+    assert len(resp.data['positions']) == 1
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?include_canceled_positions=true'.format(organizer.slug, event.slug, order.code))
+    assert resp.status_code == 200
+    assert len(resp.data['positions']) == 2
+
+    assert len(resp.data['fees']) == 1
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?include_canceled_fees=true'.format(organizer.slug, event.slug, order.code))
+    assert resp.status_code == 200
+    assert len(resp.data['fees']) == 2
 
 
 @pytest.mark.django_db
@@ -743,6 +773,13 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
                                                                              subevent.pk + 1))
     assert [] == resp.data['results']
 
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?include_canceled_positions=false'.format(organizer.slug, event.slug))
+    assert len(resp.data['results']) == 1
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?include_canceled_positions=true'.format(organizer.slug, event.slug))
+    assert len(resp.data['results']) == 2
+
 
 @pytest.mark.django_db
 def test_orderposition_detail(token_client, organizer, event, order, item, question):
@@ -766,12 +803,15 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
 
 
 @pytest.mark.django_db
-def test_orderposition_detail_no_canceled(token_client, organizer, event, order, item, question):
+def test_orderposition_detail_canceled(token_client, organizer, event, order, item, question):
     with scopes_disabled():
         op = order.all_positions.filter(canceled=True).first()
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
                                                                                         op.pk))
     assert resp.status_code == 404
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/?include_canceled_positions=true'.format(
+        organizer.slug, event.slug, op.pk))
+    assert resp.status_code == 200
 
 
 @pytest.mark.django_db

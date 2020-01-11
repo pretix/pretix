@@ -30,8 +30,8 @@ from pretix.api.serializers.order import (
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Device, Event, Invoice, InvoiceAddress,
-    Order, OrderPayment, OrderPosition, OrderRefund, Quota, TeamAPIToken,
-    generate_position_secret, generate_secret,
+    Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota,
+    TeamAPIToken, generate_position_secret, generate_secret,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services import tickets
@@ -82,20 +82,29 @@ class OrderViewSet(viewsets.ModelViewSet):
         return ctx
 
     def get_queryset(self):
+        if self.request.query_params.get('include_canceled_fees', 'false') == 'true':
+            fqs = OrderFee.all
+        else:
+            fqs = OrderFee.objects
         qs = self.request.event.orders.prefetch_related(
-            'fees', 'payments', 'refunds', 'refunds__payment'
+            Prefetch('fees', queryset=fqs.all()),
+            'payments', 'refunds', 'refunds__payment'
         ).select_related(
             'invoice_address'
         )
 
+        if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
+            opq = OrderPosition.all
+        else:
+            opq = OrderPosition.objects
         if self.request.query_params.get('pdf_data', 'false') == 'true':
             qs = qs.prefetch_related(
                 Prefetch(
                     'positions',
-                    OrderPosition.objects.all().prefetch_related(
+                    opq.all().prefetch_related(
                         'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
                         'item__category', 'addon_to', 'seat',
-                        Prefetch('addons', OrderPosition.objects.select_related('item', 'variation', 'seat'))
+                        Prefetch('addons', opq.select_related('item', 'variation', 'seat'))
                     )
                 )
             )
@@ -103,7 +112,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             qs = qs.prefetch_related(
                 Prefetch(
                     'positions',
-                    OrderPosition.objects.all().prefetch_related(
+                    opq.all().prefetch_related(
                         'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question', 'seat',
                     )
                 )
@@ -654,11 +663,16 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
     }
 
     def get_queryset(self):
-        qs = OrderPosition.objects.filter(order__event=self.request.event)
+        if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
+            qs = OrderPosition.all
+        else:
+            qs = OrderPosition.objects
+
+        qs = qs.filter(order__event=self.request.event)
         if self.request.query_params.get('pdf_data', 'false') == 'true':
             qs = qs.prefetch_related(
                 'checkins', 'answers', 'answers__options', 'answers__question',
-                Prefetch('addons', OrderPosition.objects.select_related('item', 'variation')),
+                Prefetch('addons', qs.select_related('item', 'variation')),
                 Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
                     Prefetch(
                         'event',
@@ -666,7 +680,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
                     ),
                     Prefetch(
                         'positions',
-                        OrderPosition.objects.prefetch_related(
+                        qs.prefetch_related(
                             'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
                         )
                     )
@@ -676,7 +690,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
             )
         else:
             qs = qs.prefetch_related(
-                'checkins', 'answers', 'answers__options', 'answers__question'
+                'checkins', 'answers', 'answers__options', 'answers__question',
             ).select_related(
                 'item', 'order', 'order__event', 'order__event__organizer', 'seat'
             )
