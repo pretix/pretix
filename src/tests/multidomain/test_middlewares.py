@@ -119,6 +119,9 @@ def test_with_forwarded_host(env, client):
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.59.10 (KHTML, like Gecko) Version/5.1.9 '
     'Safari/534.59.10',
+    'Mozilla 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit 537.36 (KHTML, like Gecko) Chrome 78.0.3904.97 Safari 537.36 OPR 65.0.3467.48',
+    'Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.0.0',
 ])
 def test_cookie_samesite_none(env, client, agent):
     client.post('/mrmcd/2015/cart/add', HTTP_HOST='example.com', HTTP_USER_AGENT=agent,

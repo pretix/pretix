@@ -52,7 +52,7 @@ def drops_unrecognized_same_site_cookies(useragent):
 
 # Regex parsing of User-Agent string. (See note above!)
 RE_CHROMIUM = re.compile(r"Chrom(e|ium)")
-RE_CHROMIUM_VERSION = re.compile(r"Chrom[^ /]+/([0-9]+)[.0-9]*")
+RE_CHROMIUM_VERSION = re.compile(r"Chrom[^ /]+[ /]([0-9]+)[.0-9]*")
 RE_UC_VERSION = re.compile(r"UCBrowser/([0-9]+)\.([0-9]+)\.([0-9]+)[.0-9]* ")
 RE_IOS_VERSION = re.compile(r"\(iP.+; CPU .*OS ([0-9]+)[_0-9]*.*\) AppleWebKit/")
 RE_MAC_VERSION = re.compile(r"\(Macintosh;.*Mac OS X ([0-9]+)_([0-9]+)[_0-9]*.*\) AppleWebKit/")
@@ -90,7 +90,10 @@ def is_chromium_based(useragent):
 
 def is_chromium_version_at_least(major, useragent):
     # Extract digits from first capturing group.
-    version = int(RE_CHROMIUM_VERSION.search(useragent).group(1))
+    match = RE_CHROMIUM_VERSION.search(useragent)
+    if not match:
+        return False
+    version = int(match.group(1))
     return version >= major
 
 
