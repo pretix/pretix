@@ -26,7 +26,8 @@ Checkins
 """"""""
 
 .. automodule:: pretix.base.signals
-   :members: position_checked_in
+   :members: checkin_created
+
 
 Frontend
 --------

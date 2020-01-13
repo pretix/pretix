@@ -405,12 +405,13 @@ the deletion of the order.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-position_checked_in = EventPluginSignal(
+checkin_created = EventPluginSignal(
     providing_args=["checkin"],
 )
 """
-This signal is sent out every time an order position is marked as checked in. The checkin
-object is given as the first argument
+This signal is sent out every time a checkin is created (i.e. an order position is marked as
+cheked in). It is not send if the position was already checked in and is force-checked-in a second time.
+The checkin object is given as the first argument
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
