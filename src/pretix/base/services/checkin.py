@@ -7,7 +7,7 @@ from django.utils.translation import ugettext as _
 from pretix.base.models import (
     Checkin, CheckinList, Order, OrderPosition, Question, QuestionOption,
 )
-from pretix.base.signals import order_placed
+from pretix.base.signals import order_placed, position_checked_in
 
 
 class CheckInError(Exception):
@@ -143,6 +143,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'datetime': dt,
                 'list': clist.pk
             }, user=user, auth=auth)
+            position_checked_in.send(op.order.event, checkin=ci)
     else:
         if not force:
             raise CheckInError(
@@ -171,4 +172,5 @@ def order_placed(sender, **kwargs):
     for op in order.positions.all():
         for cl in cls:
             if cl.all_products or op.item_id in {i.pk for i in cl.limit_products.all()}:
-                Checkin.objects.create(position=op, list=cl, auto_checked_in=True)
+                ci = Checkin.objects.create(position=op, list=cl, auto_checked_in=True)
+                position_checked_in.send(event, checkin=ci)

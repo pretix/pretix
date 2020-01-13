@@ -405,6 +405,16 @@ the deletion of the order.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+position_checked_in = EventPluginSignal(
+    providing_args=["checkin"],
+)
+"""
+This signal is sent out every time an order position is marked as checked in. The checkin
+object is given as the first argument
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 logentry_display = EventPluginSignal(
     providing_args=["logentry"]
 )

@@ -14,6 +14,7 @@ from pytz import UTC
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
+from pretix.base.signals import position_checked_in
 from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import CheckInFilterForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -124,6 +125,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
                         'list': self.list.pk,
                         'web': True
                     }, user=request.user)
+                    position_checked_in.send(op.order.event, checkin=ci)
 
             messages.success(request, _('The selected tickets have been marked as checked in.'))
 
