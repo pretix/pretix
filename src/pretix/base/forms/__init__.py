@@ -3,7 +3,6 @@ import logging
 import i18nfield.forms
 from django import forms
 from django.forms.models import ModelFormMetaclass
-from django.utils import six
 from django.utils.crypto import get_random_string
 from formtools.wizard.views import SessionWizardView
 from hierarkey.forms import HierarkeyForm
@@ -25,7 +24,7 @@ class BaseI18nModelForm(i18nfield.forms.BaseI18nModelForm):
         super().__init__(*args, **kwargs)
 
 
-class I18nModelForm(six.with_metaclass(ModelFormMetaclass, BaseI18nModelForm)):
+class I18nModelForm(metaclass=(ModelFormMetaclass, BaseI18nModelForm)):
     pass
 
 
