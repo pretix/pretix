@@ -15,7 +15,7 @@ PyPDF2==1.26.*
 Pillow==7.*
 django-libsass
 libsass==0.19.2  # Bump when https://github.com/sass/libsass/issues/3053 is fixed
-django-otp==0.7.*,>0.7.5
+django-otp==0.7.*,>=0.7.5
 python-u2flib-server==4.*
 webauthn==0.4.*
 django-formtools==2.2
