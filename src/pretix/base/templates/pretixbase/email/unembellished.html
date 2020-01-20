@@ -125,7 +125,9 @@
         .content table td {
             vertical-align: top;
             text-align: left;
-            padding: 0;
+        }
+        table.layout > tr > td.containertd {
+            padding: 15px 0;
         }
 
         a.button {
@@ -196,9 +198,6 @@
             </td>
         </tr>
         <tr>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
             <td class="containertd">
                 <!--[if gte mso 9]>
                         <table cellpadding="20"><tr><td>
@@ -212,9 +211,6 @@
             </td>
         </tr>
         {% if order %}
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
             <tr>
                 <td class="order containertd">
                     <!--[if gte mso 9]>
@@ -246,9 +242,6 @@
             </tr>
         {% endif %}
         {% if signature %}
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
             <tr>
                 <td class="order containertd">
                     <!--[if gte mso 9]>
