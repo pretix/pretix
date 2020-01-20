@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-05 13:33+0000\n"
-"PO-Revision-Date: 2019-09-03 06:00+0000\n"
-"Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
+"PO-Revision-Date: 2020-01-14 22:00+0000\n"
+"Last-Translator: Luka <nova@deviator.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
@@ -61,7 +61,7 @@ msgstr "URIji za preusmeritev"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr "Seznam dovoljenih URI naslovov, ločenih z vejico"
+msgstr "Seznam dovoljenih URI naslovov, ločenih s presledkom"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:71
 msgid "Client ID"
@@ -122,10 +122,8 @@ msgid "The subevent does not belong to this event."
 msgstr "Poddogodek ne pripada temu dogodku."
 
 #: pretix/api/serializers/checkin.py:41
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Unknown sales channel."
-msgstr "Prodajni kanal"
+msgstr "Neznan prodajni kanal"
 
 #: pretix/api/serializers/event.py:101
 msgid ""

@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-05 13:33+0000\n"
-"PO-Revision-Date: 2019-11-21 17:00+0000\n"
+"PO-Revision-Date: 2020-01-14 22:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -18037,6 +18037,7 @@ msgstr "Kurv udløbet"
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
+"Bookingerne i din indkøbskurv er reserveret til dig i %(minutes)s minutter."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
@@ -18046,10 +18047,8 @@ msgstr "Varerne i din kurv er ikke længere reserverede for dig."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:43
 #: pretix/presale/templates/pretixpresale/event/index.html:97
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "Add tickets for a different date"
-msgstr "Dette id bruges allerede af et andet spørgsmål."
+msgstr "Tilføj booking til en ny dato"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
@@ -18062,7 +18061,7 @@ msgstr "Kontroller venligst detaljerne nedenfor og bekræft din bestilling."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "Hæng venligst på, mens vi gør din booking færdig!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:19
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
