@@ -142,9 +142,16 @@ class ClassicMailRenderer(TemplateBasedMailRenderer):
     template_name = 'pretixbase/email/plainwrapper.html'
 
 
+class UnembellishedMailRenderer(TemplateBasedMailRenderer):
+    verbose_name = _('pretix unembellished')
+    identifier = 'unembellished'
+    thumbnail_filename = 'pretixbase/email/thumb_unembellished.png'
+    template_name = 'pretixbase/email/unembellished.html'
+
+
 @receiver(register_html_mail_renderers, dispatch_uid="pretixbase_email_renderers")
 def base_renderers(sender, **kwargs):
-    return [ClassicMailRenderer]
+    return [ClassicMailRenderer, UnembellishedMailRenderer]
 
 
 class BaseMailTextPlaceholder:
