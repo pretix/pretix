@@ -1,0 +1,270 @@
+{% load eventurl %}
+{% load i18n %}
+{% load thumb %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=false">
+    <style type="text/css">
+        body {
+            background-color: #eee;
+            background-position: top;
+            background-repeat: repeat-x;
+            font-family: "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 20px;
+            color: #333;
+            margin: 0;
+            padding-top: 20px;
+        }
+
+        table.layout > tr > td {
+            background-color: white;
+            padding: 0;
+        }
+
+        table.layout > tr > td.header {
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header h2 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 22px;
+            line-height: 26px;
+        }
+
+        .header h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 26px;
+            line-height: 30px;
+        }
+
+        .header h2 a, .header h1 a, .content h2 a, .content h3 a {
+            text-decoration: none;
+        }
+
+        .content h2, .content h3 {
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        a {
+            color: {{ color }};
+            font-weight: bold;
+        }
+
+        a:hover, a:focus {
+            color: {{ color }};
+            text-decoration: underline;
+        }
+
+        a:hover, a:active {
+            outline: 0;
+        }
+
+        p {
+            margin: 0 0 10px;
+
+            /* These are technically the same, but use both */
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+
+            -ms-word-break: break-all;
+            /* This is the dangerous one in WebKit, as it breaks things wherever */
+            word-break: break-all;
+            /* Instead use this non-standard one: */
+            word-break: break-word;
+
+            /* Adds a hyphen where the word breaks, if supported (No Blink) */
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+        }
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        .footer {
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .content {
+            padding: 0 18px;
+        }
+
+        ::selection {
+            background: {{ color }};
+            color: #FFF;
+        }
+
+        table.layout {
+            width: 100%;
+            max-width: 600px;
+            border-spacing: 0px;
+            border-collapse: separate;
+            margin: auto;
+        }
+
+        img.wide {
+            width: 100%;
+            height: auto;
+        }
+
+        .content table {
+            width: 100%;
+        }
+
+        .content table td {
+            vertical-align: top;
+            text-align: left;
+        }
+        table.layout > tr > td.containertd {
+            padding: 15px 0;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 10px 16px;
+            font-size: 14px;
+            line-height: 1.33333;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            margin: 5px;
+            text-decoration: none;
+            color: {{ color }};
+        }
+        {% if rtl %}
+            body {
+                direction: rtl;
+            }
+            .content table td {
+                text-align: right;
+            }
+        {% endif %}
+
+        {% block addcss %}{% endblock %}
+    </style>
+    <!--[if mso]>
+        <style type="text/css">
+        body, table, td {
+            font-family: "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+        }
+        </style>
+    <![endif]-->
+</head>
+<body align="center">
+    <!--[if gte mso 9]>
+    <table width="100%"><tr><td align="center">
+    <table width="600"><tr><td align="center"
+    <![endif]-->
+    <table class="layout" width="600" border="0" cellspacing="0">
+        {% if event.settings.logo_image %}
+            <!--[if !mso]><!-- -->
+            <tr>
+                <td style="line-height: 0" align="center">
+                    <img src="{{ site_url }}{{ event.settings.logo_image|thumb:'5000x120' }}" alt="{{ event.name }}"
+                         style="height: auto; max-width: 100%;" />
+                </td>
+            </tr>
+            <!--<![endif]-->
+        {% endif %}
+        <tr>
+            <td class="header" align="center">
+                <!--[if gte mso 9]>
+                    <table cellpadding="20"><tr><td align="center">
+                <![endif]-->
+                {% if event %}
+                    <h2><a href="{% abseventurl event "presale:event.index" %}" target="_blank">{{ event.name }}</a>
+                    </h2>
+                {% else %}
+                    <h2><a href="{{ site_url }}" target="_blank">{{ site }}</a></h2>
+                {% endif %}
+                {% block header %}
+                    <h1>{{ subject }}</h1>
+                {% endblock %}
+                <!--[if gte mso 9]>
+                    </td></tr></table>
+                <![endif]-->
+            </td>
+        </tr>
+        <tr>
+            <td class="containertd">
+                <!--[if gte mso 9]>
+                        <table cellpadding="20"><tr><td>
+                    <![endif]-->
+                <div class="content">
+                    {{ body|safe }}
+                </div>
+                <!--[if gte mso 9]>
+                        </td></tr></table>
+                    <![endif]-->
+            </td>
+        </tr>
+        {% if order %}
+            <tr>
+                <td class="order containertd">
+                    <!--[if gte mso 9]>
+                        <table cellpadding="20"><tr><td>
+                    <![endif]-->
+                    <div class="content">
+                        {% if position %}
+                            {% trans "You are receiving this email because someone signed you up for the following event:" %}<br>
+                            <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
+                            <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
+                            <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
+                            <a href="{% abseventurl event "presale:event.order.position" order=order.code secret=position.web_secret position=position.positionid %}">
+                                {% trans "View registration details" %}
+                            </a>
+                        {% else %}
+                            {% trans "You are receiving this email because you placed an order for the following event:" %}<br>
+                            <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
+                            <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
+                            <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
+                            <a href="{% abseventurl event "presale:event.order.open" hash=order.email_confirm_hash order=order.code secret=order.secret %}">
+                                {% trans "View order details" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                    <!--[if gte mso 9]>
+                        </td></tr></table>
+                    <![endif]-->
+                </td>
+            </tr>
+        {% endif %}
+        {% if signature %}
+            <tr>
+                <td class="order containertd">
+                    <!--[if gte mso 9]>
+                        <table cellpadding="20"><tr><td>
+                    <![endif]-->
+                    <div class="content">
+                        {{ signature | safe }}
+                    </div>
+                    <!--[if gte mso 9]>
+                        </td></tr></table>
+                    <![endif]-->
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+    <div class="footer">
+        {% include "pretixbase/email/email_footer.html" %}
+    </div>
+    <br/>
+    <br/>
+    <!--[if gte mso 9]>
+    </td></tr></table>
+    </td></tr></table>
+    <![endif]-->
+</body>
+</html>
