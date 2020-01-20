@@ -7,6 +7,7 @@ import django_libsass
 import sass
 from compressor.filters.cssmin import CSSCompressorFilter
 from django.conf import settings
+from django.core.cache import cache
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.dispatch import Signal
@@ -68,15 +69,22 @@ def compile_scss(object, file="main.scss", fonts=True):
         for recv, resp in sass_postamble.send(object, filename=file):
             sassrules.append(resp)
 
-    cf = dict(django_libsass.CUSTOM_FUNCTIONS)
-    cf['static'] = static
-    css = sass.compile(
-        string="\n".join(sassrules),
-        include_paths=[sassdir], output_style='nested',
-        custom_functions=cf
-    )
-    cssf = CSSCompressorFilter(css)
-    css = cssf.output()
+    sasssrc = "\n".join(sassrules)
+    srcchecksum = hashlib.sha1(sasssrc.encode('utf-8')).hexdigest()
+
+    css = cache.get('sass_compile_{}'.format(srcchecksum))
+    if not css:
+        cf = dict(django_libsass.CUSTOM_FUNCTIONS)
+        cf['static'] = static
+        css = sass.compile(
+            string=sasssrc,
+            include_paths=[sassdir], output_style='nested',
+            custom_functions=cf
+        )
+        cssf = CSSCompressorFilter(css)
+        css = cssf.output()
+        cache.set('sass_compile_{}'.format(srcchecksum), css, 3600)
+
     checksum = hashlib.sha1(css.encode('utf-8')).hexdigest()
     return css, checksum
 
