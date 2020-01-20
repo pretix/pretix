@@ -1,4 +1,5 @@
 import copy
+import itertools
 import logging
 import os
 import re
@@ -314,6 +315,8 @@ def variables_from_questions(sender, *args, **kwargs):
 
 
 def _get_attendee_name_part(key, op, order, ev):
+    if isinstance(key, tuple):
+        return ' '.join(_get_attendee_name_part(c[0], op, order, ev) for c in key)
     return escape(op.attendee_name_parts.get(key, ''))
 
 
@@ -331,6 +334,13 @@ def get_variables(event):
             'editor_sample': scheme['sample'][key],
             'evaluate': partial(_get_attendee_name_part, key)
         }
+    for i in range(2, len(scheme['fields']) + 1):
+        for comb in itertools.combinations(scheme['fields'], i):
+            v['attendee_name_%s' % ('_'.join(c[0] for c in comb))] = {
+                'label': _("Attendee name: {part}").format(part=' + '.join(str(c[1]) for c in comb)),
+                'editor_sample': ' '.join(str(scheme['sample'][c[0]]) for c in comb),
+                'evaluate': partial(_get_attendee_name_part, comb)
+            }
 
     v['invoice_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
     v['attendee_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
