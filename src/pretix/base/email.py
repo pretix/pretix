@@ -136,17 +136,17 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
 
 
 class ClassicMailRenderer(TemplateBasedMailRenderer):
-    verbose_name = _('pretix default')
+    verbose_name = _('Default')
     identifier = 'classic'
     thumbnail_filename = 'pretixbase/email/thumb.png'
     template_name = 'pretixbase/email/plainwrapper.html'
 
 
 class UnembellishedMailRenderer(TemplateBasedMailRenderer):
-    verbose_name = _('pretix unembellished')
-    identifier = 'unembellished'
-    thumbnail_filename = 'pretixbase/email/thumb_unembellished.png'
-    template_name = 'pretixbase/email/unembellished.html'
+    verbose_name = _('Simple with logo')
+    identifier = 'simple_logo'
+    thumbnail_filename = 'pretixbase/email/thumb_simple_logo.png'
+    template_name = 'pretixbase/email/simple_logo.html'
 
 
 @receiver(register_html_mail_renderers, dispatch_uid="pretixbase_email_renderers")
