@@ -2,7 +2,6 @@ import copy
 import itertools
 import logging
 import os
-import re
 import subprocess
 import tempfile
 import uuid
@@ -10,14 +9,13 @@ from collections import OrderedDict
 from functools import partial
 from io import BytesIO
 
-import bleach
 from arabic_reshaper import ArabicReshaper
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.html import escape
+from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from PyPDF2 import PdfFileReader
@@ -65,32 +63,32 @@ DEFAULT_VARIABLES = OrderedDict((
     ("item", {
         "label": _("Product name"),
         "editor_sample": _("Sample product"),
-        "evaluate": lambda orderposition, order, event: escape(str(orderposition.item.name))
+        "evaluate": lambda orderposition, order, event: str(orderposition.item.name)
     }),
     ("variation", {
         "label": _("Variation name"),
         "editor_sample": _("Sample variation"),
-        "evaluate": lambda op, order, event: escape(str(op.variation) if op.variation else '')
+        "evaluate": lambda op, order, event: str(op.variation) if op.variation else ''
     }),
     ("item_description", {
         "label": _("Product description"),
         "editor_sample": _("Sample product description"),
-        "evaluate": lambda orderposition, order, event: escape(str(orderposition.item.description))
+        "evaluate": lambda orderposition, order, event: str(orderposition.item.description)
     }),
     ("itemvar", {
         "label": _("Product name and variation"),
         "editor_sample": _("Sample product – sample variation"),
-        "evaluate": lambda orderposition, order, event: escape((
+        "evaluate": lambda orderposition, order, event: (
             '{} - {}'.format(orderposition.item.name, orderposition.variation)
             if orderposition.variation else str(orderposition.item.name)
-        ))
+        )
     }),
     ("item_category", {
         "label": _("Product category"),
         "editor_sample": _("Ticket category"),
-        "evaluate": lambda orderposition, order, event: escape((
+        "evaluate": lambda orderposition, order, event: (
             str(orderposition.item.category.name) if orderposition.item.category else ""
-        ))
+        )
     }),
     ("price", {
         "label": _("Price"),
@@ -109,12 +107,12 @@ DEFAULT_VARIABLES = OrderedDict((
     ("attendee_name", {
         "label": _("Attendee name"),
         "editor_sample": _("John Doe"),
-        "evaluate": lambda op, order, ev: escape(op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''))
+        "evaluate": lambda op, order, ev: op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '')
     }),
     ("event_name", {
         "label": _("Event name"),
         "editor_sample": _("Sample event name"),
-        "evaluate": lambda op, order, ev: escape(str(ev.name))
+        "evaluate": lambda op, order, ev: str(ev.name)
     }),
     ("event_date", {
         "label": _("Event date"),
@@ -190,27 +188,27 @@ DEFAULT_VARIABLES = OrderedDict((
     ("event_location", {
         "label": _("Event location"),
         "editor_sample": _("Random City"),
-        "evaluate": lambda op, order, ev: str(ev.location).replace("\n", "<br/>\n")
+        "evaluate": lambda op, order, ev: str(ev.location)
     }),
     ("invoice_name", {
         "label": _("Invoice address name"),
         "editor_sample": _("John Doe"),
-        "evaluate": lambda op, order, ev: escape(order.invoice_address.name if getattr(order, 'invoice_address', None) else '')
+        "evaluate": lambda op, order, ev: order.invoice_address.name if getattr(order, 'invoice_address', None) else ''
     }),
     ("invoice_company", {
         "label": _("Invoice address company"),
         "editor_sample": _("Sample company"),
-        "evaluate": lambda op, order, ev: escape(order.invoice_address.company if getattr(order, 'invoice_address', None) else '')
+        "evaluate": lambda op, order, ev: order.invoice_address.company if getattr(order, 'invoice_address', None) else ''
     }),
     ("invoice_city", {
         "label": _("Invoice address city"),
         "editor_sample": _("Sample city"),
-        "evaluate": lambda op, order, ev: escape(order.invoice_address.city if getattr(order, 'invoice_address', None) else '')
+        "evaluate": lambda op, order, ev: order.invoice_address.city if getattr(order, 'invoice_address', None) else ''
     }),
     ("addons", {
         "label": _("List of Add-Ons"),
         "editor_sample": _("Addon 1\nAddon 2"),
-        "evaluate": lambda op, order, ev: "<br/>".join([
+        "evaluate": lambda op, order, ev: "\n".join([
             '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
             for p in (
                 op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
@@ -222,7 +220,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("organizer", {
         "label": _("Organizer name"),
         "editor_sample": _("Event organizer company"),
-        "evaluate": lambda op, order, ev: escape(str(order.event.organizer.name))
+        "evaluate": lambda op, order, ev: str(order.event.organizer.name)
     }),
     ("organizer_info_text", {
         "label": _("Organizer info text"),
@@ -302,7 +300,7 @@ def variables_from_questions(sender, *args, **kwargs):
         if not a:
             return ""
         else:
-            return escape(str(a)).replace("\n", "<br/>\n")
+            return str(a)
 
     d = {}
     for q in sender.questions.all():
@@ -317,11 +315,11 @@ def variables_from_questions(sender, *args, **kwargs):
 def _get_attendee_name_part(key, op, order, ev):
     if isinstance(key, tuple):
         return ' '.join(_get_attendee_name_part(c[0], op, order, ev) for c in key)
-    return escape(op.attendee_name_parts.get(key, ''))
+    return op.attendee_name_parts.get(key, '')
 
 
 def _get_ia_name_part(key, op, order, ev):
-    return escape(order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else '')
+    return order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
 
 
 def get_variables(event):
@@ -432,7 +430,7 @@ class Renderer:
         if not o['content']:
             return '(error)'
         if o['content'] == 'other':
-            return o['text'].replace("\n", "<br/>\n")
+            return o['text']
         elif o['content'].startswith('meta:'):
             return ev.meta_data.get(o['content'][5:]) or ''
         elif o['content'] in self.variables:
@@ -464,13 +462,9 @@ class Renderer:
             textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
             alignment=align_map[o['align']]
         )
-        text = re.sub(
-            "<br[^>]*>", "<br/>",
-            bleach.clean(
-                self._get_text_content(op, order, o) or "",
-                tags=["br"], attributes={}, styles=[], strip=True
-            )
-        )
+        text = conditional_escape(
+            self._get_text_content(op, order, o) or "",
+        ).replace("\n", "<br/>\n")
 
         # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
         # to resolve all ligatures and python-bidi to switch RTL texts.
