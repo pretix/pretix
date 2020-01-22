@@ -314,7 +314,7 @@ def variables_from_questions(sender, *args, **kwargs):
 
 def _get_attendee_name_part(key, op, order, ev):
     if isinstance(key, tuple):
-        return ' '.join(_get_attendee_name_part(c[0], op, order, ev) for c in key)
+        return ' '.join(p for p in [_get_attendee_name_part(c[0], op, order, ev) for c in key] if p)
     return op.attendee_name_parts.get(key, '')
 
 
