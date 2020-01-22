@@ -402,6 +402,48 @@ def test_payment_detail(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_payment_create_confirmed(token_client, organizer, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'provider': 'banktransfer',
+        'state': 'confirmed',
+        'amount': order.total,
+        'info': {
+            'foo': 'bar'
+        }
+    })
+    with scopes_disabled():
+        p = order.payments.last()
+    assert resp.status_code == 201
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    assert p.info_data == {'foo': 'bar'}
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_payment_create_pending(token_client, organizer, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'provider': 'banktransfer',
+        'state': 'pending',
+        'amount': order.total,
+        'info': {
+            'foo': 'bar'
+        }
+    })
+    with scopes_disabled():
+        p = order.payments.last()
+    assert resp.status_code == 201
+    assert p.state == OrderPayment.PAYMENT_STATE_PENDING
+    assert p.info_data == {'foo': 'bar'}
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
 def test_payment_confirm(token_client, organizer, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/confirm/'.format(
         organizer.slug, event.slug, order.code

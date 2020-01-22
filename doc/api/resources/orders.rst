@@ -1621,6 +1621,10 @@ Order payment endpoints
 
   These endpoints have been added.
 
+.. versionchanged:: 3.6
+
+   Payments can now be created through the API.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/payments/
 
    Returns a list of all payments for an order.
@@ -1828,6 +1832,61 @@ Order payment endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order or payment does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/payments/
+
+   Creates a new payment.
+
+   Be careful with the ``info`` parameter: You can pass a nested JSON object that will be set as the internal ``info``
+   value of the payment object that will be created. How this value is handled is up to the payment provider and you
+   should only use this if you know the specific payment provider in detail. Please keep in mind that the payment
+   provider will not be called to do anything about this (i.e. if you pass a bank account to a debit provider, *no*
+   charge will be created), this is just informative in case you *handled the payment already*.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/payments/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "state": "confirmed",
+        "amount": "23.00",
+        "payment_date": "2017-12-04T12:13:12Z",
+        "info": {},
+        "provider": "banktransfer"
+      }
+
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "local_id": 1,
+        "state": "confirmed",
+        "amount": "23.00",
+        "created": "2017-12-01T10:00:00Z",
+        "payment_date": "2017-12-04T12:13:12Z",
+        "payment_url": null,
+        "details": {},
+        "provider": "banktransfer"
+      }
+
+   :param organizer: The ``slug`` field of the organizer to access
+   :param event: The ``slug`` field of the event to access
+   :param order: The ``code`` field of the order to access
+   :statuscode 201: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
 
 
 Order refund endpoints

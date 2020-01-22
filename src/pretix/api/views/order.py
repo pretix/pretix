@@ -23,9 +23,10 @@ from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.order import (
-    InvoiceSerializer, OrderCreateSerializer, OrderPaymentSerializer,
-    OrderPositionSerializer, OrderRefundCreateSerializer,
-    OrderRefundSerializer, OrderSerializer, PriceCalcSerializer,
+    InvoiceSerializer, OrderCreateSerializer, OrderPaymentCreateSerializer,
+    OrderPaymentSerializer, OrderPositionSerializer,
+    OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
+    PriceCalcSerializer,
 )
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -825,16 +826,61 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
             raise ValidationError(str(e))
 
 
-class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
+class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderPaymentSerializer
     queryset = OrderPayment.objects.none()
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
     lookup_field = 'local_id'
 
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['order'] = get_object_or_404(Order, code=self.kwargs['order'], event=self.request.event)
+        return ctx
+
     def get_queryset(self):
         order = get_object_or_404(Order, code=self.kwargs['order'], event=self.request.event)
         return order.payments.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = OrderPaymentCreateSerializer(data=request.data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+        with transaction.atomic():
+            mark_confirmed = False
+            if serializer.validated_data['state'] == OrderPayment.PAYMENT_STATE_CONFIRMED:
+                serializer.validated_data['state'] = OrderPayment.PAYMENT_STATE_PENDING
+                mark_confirmed = True
+            self.perform_create(serializer)
+            r = serializer.instance
+            if mark_confirmed:
+                try:
+                    r.confirm(
+                        user=self.request.user if self.request.user.is_authenticated else None,
+                        auth=self.request.auth,
+                        count_waitinglist=False,
+                        force=request.data.get('force', False)
+                    )
+                except Quota.QuotaExceededException:
+                    pass
+                except SendMailException:
+                    pass
+
+            serializer = OrderPaymentSerializer(r, context=serializer.context)
+
+            r.order.log_action(
+                'pretix.event.order.payment.started', {
+                    'local_id': r.local_id,
+                    'provider': r.provider,
+                },
+                user=request.user if request.user.is_authenticated else None,
+                auth=request.auth
+            )
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
 
     @action(detail=True, methods=['POST'])
     def confirm(self, request, **kwargs):

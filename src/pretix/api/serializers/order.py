@@ -1034,6 +1034,20 @@ class InvoiceSerializer(I18nAwareModelSerializer):
                   'internal_reference')
 
 
+class OrderPaymentCreateSerializer(I18nAwareModelSerializer):
+    provider = serializers.CharField(required=True, allow_null=False, allow_blank=False)
+    info = CompatibleJSONField(required=False)
+
+    class Meta:
+        model = OrderPayment
+        fields = ('state', 'amount', 'payment_date', 'provider', 'info')
+
+    def create(self, validated_data):
+        order = OrderPayment(order=self.context['order'], **validated_data)
+        order.save()
+        return order
+
+
 class OrderRefundCreateSerializer(I18nAwareModelSerializer):
     payment = serializers.IntegerField(required=False, allow_null=True)
     provider = serializers.CharField(required=True, allow_null=False, allow_blank=False)
