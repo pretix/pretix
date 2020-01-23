@@ -8,21 +8,23 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-06 19:43+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-01-24 08:00+0000\n"
+"Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
+"Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
+"hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:144
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:98
 #: pretix/control/views/dashboards.py:437
 msgid "Shop disabled"
-msgstr ""
+msgstr "Áruház letiltva"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:965
 #: pretix/control/forms/filter.py:396 pretix/control/forms/filter.py:554
@@ -30,7 +32,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:100
 #: pretix/control/templates/pretixcontrol/subevents/index.html:115
 msgid "Presale over"
-msgstr ""
+msgstr "Elővétel vége"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:967
 #: pretix/control/forms/filter.py:395 pretix/control/forms/filter.py:553
@@ -38,7 +40,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:102
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 msgid "Presale not started"
-msgstr ""
+msgstr "Elővétel nem kezdődött el"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:969
 #: pretix/control/templates/pretixcontrol/events/index.html:150
@@ -46,50 +48,50 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
 #: pretix/control/views/dashboards.py:443
 msgid "On sale"
-msgstr ""
+msgstr "Eladó"
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr ""
+msgstr "Alkalmazás név"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Átirányítási URI-k"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Engedélyezett URI lista, szóközzel elválasztva"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:71
 msgid "Client ID"
-msgstr ""
+msgstr "Kliens ID"
 
 #: pretix/api/models.py:29
 msgid "Client secret"
-msgstr ""
+msgstr "Kliens titok"
 
 #: pretix/api/models.py:76
 msgid "Enable webhook"
-msgstr ""
+msgstr "Webhook engedélyezése"
 
 #: pretix/api/models.py:77
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Cél URL"
 
 #: pretix/api/models.py:78 pretix/base/models/devices.py:46
 #: pretix/base/models/organizer.py:161
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Összes esemény (új események is)"
 
 #: pretix/api/models.py:79 pretix/base/models/devices.py:47
 #: pretix/base/models/organizer.py:162
 msgid "Limit to events"
-msgstr ""
+msgstr "Események limitje"
 
 #: pretix/api/serializers/cart.py:58 pretix/api/serializers/order.py:797
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "\"{}\" termékhez nincs kvóta rendelve."
 
 #: pretix/api/serializers/cart.py:66 pretix/api/serializers/order.py:809
 msgid ""
@@ -100,51 +102,53 @@ msgstr ""
 #: pretix/base/services/orders.py:1021
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
 
 #: pretix/api/serializers/checkin.py:28 pretix/base/models/event.py:1093
 #: pretix/base/models/items.py:1166 pretix/base/models/items.py:1521
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Egy vagy több tétel nem ehhez az eseményhez tartozik."
 
 #: pretix/api/serializers/checkin.py:32 pretix/base/models/items.py:1530
 #: pretix/base/models/waitinglist.py:149
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "Az eseményhez tartozó részesemény nem maradhat üresen."
 
 #: pretix/api/serializers/checkin.py:34 pretix/api/serializers/checkin.py:37
 #: pretix/base/models/items.py:1532 pretix/base/models/items.py:1535
 #: pretix/base/models/waitinglist.py:151 pretix/base/models/waitinglist.py:154
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "Az eseményhez nem tartozik részesemény."
 
 #: pretix/api/serializers/checkin.py:41
 msgid "Unknown sales channel."
-msgstr ""
+msgstr "Ismeretlen eladási csatorna."
 
 #: pretix/api/serializers/event.py:101
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Az eseményt nem lehet aktiválni. A kvóták és fizetés hozzáadása kötelező az "
+"eseményhez, az árusítás megkezdése előtt."
 
 #: pretix/api/serializers/event.py:116 pretix/api/serializers/event.py:335
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "A {name} meta adat tulajdonsága nem létezik."
 
 #: pretix/api/serializers/event.py:150
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Ismeretlen plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:709
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "A csomag-termék nem lehet azonos a csomagba való termékkel."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:711
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "A csomag-termék nem tartalmazhat csomag-terméket."
 
 #: pretix/api/serializers/item.py:128
 msgid ""
@@ -688,7 +692,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:111
 #: pretix/presale/checkoutflow.py:664
 msgid "Yes"
-msgstr ""
+msgstr "Igen"
 
 #: pretix/base/exporters/orderlist.py:184
 #: pretix/base/exporters/orderlist.py:579 pretix/base/models/orders.py:901
@@ -701,7 +705,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:111
 #: pretix/presale/checkoutflow.py:666
 msgid "No"
-msgstr ""
+msgstr "Nem"
 
 #: pretix/base/exporters/orderlist.py:202
 msgid "Fee type"
@@ -905,7 +909,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:726
 msgid "Paid orders"
-msgstr ""
+msgstr "Kifizetett megrendelések"
 
 #: pretix/base/exporters/orderlist.py:468 pretix/control/views/item.py:731
 msgid "Pending orders"
@@ -6327,7 +6331,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:102
 msgid "All"
-msgstr ""
+msgstr "Összes"
 
 #: pretix/control/forms/filter.py:393 pretix/control/forms/filter.py:551
 msgid "Shop live and presale running"
@@ -8421,7 +8425,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:427
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "A kérés feldolgozása folyamatban…"
 
 #: pretix/control/templates/pretixcontrol/base.html:429
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:12
@@ -10124,7 +10128,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Count"
-msgstr ""
+msgstr "Számítás"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Question history"
@@ -10851,7 +10855,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:582
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:247
 msgid "Total"
-msgstr ""
+msgstr "Teljes"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:487
 msgid "Payments"
@@ -14505,7 +14509,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:79
 msgid "Comment:"
-msgstr ""
+msgstr "Megjegyzés:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:91
 msgid "No order code detected"
@@ -15848,7 +15852,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr ""
+msgstr "Jegy design"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
@@ -16120,7 +16124,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 #: pretix/presale/templates/pretixpresale/event/index.html:41
 msgid "Cart expired"
-msgstr ""
+msgstr "A kosár lejárt"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:30
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:41
@@ -16133,7 +16137,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:57
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "A kosárba helyezett termékek tovább nincsenek tovább foglalva."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:43
 #: pretix/presale/templates/pretixpresale/event/index.html:97
