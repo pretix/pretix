@@ -37,7 +37,7 @@ class Organizer(LoggedModel):
             "once. This is being used in URLs to refer to your organizer accounts and your events."),
         validators=[
             RegexValidator(
-                regex="^[a-zA-Z0-9.-]+$",
+                regex="^[a-zA-Z0-9][a-zA-Z0-9.-]+$",
                 message=_("The slug may only contain letters, numbers, dots and dashes.")
             ),
             OrganizerSlugBanlistValidator()
