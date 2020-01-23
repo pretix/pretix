@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-05 13:33+0000\n"
-"PO-Revision-Date: 2020-01-14 22:00+0000\n"
+"PO-Revision-Date: 2020-01-23 17:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -19033,10 +19033,9 @@ msgid "This is not an event series."
 msgstr "Dette er en arrangementsrække"
 
 #: pretix/presale/views/widget.py:308
-#, fuzzy, python-format
-#| msgid "Show start date"
+#, python-format
 msgid "from %(start_date)s"
-msgstr "Vis startdato"
+msgstr "Book fra %(start_date)s"
 
 #: pretix/presale/views/widget.py:311
 #, fuzzy
