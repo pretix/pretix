@@ -176,6 +176,7 @@ def test_event_create(token_client, organizer, event, meta_prop):
             "meta_data": {
                 meta_prop.name: "Conference"
             },
+            "seat_category_mapping": {},
             "timezone": "Europe/Amsterdam"
         },
         format='json'

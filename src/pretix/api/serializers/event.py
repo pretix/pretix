@@ -138,8 +138,11 @@ class EventSerializer(I18nAwareModelSerializer):
         return value
 
     def validate_seat_category_mapping(self, value):
-        if value and value['seat_category_mapping'] and (not self.instance or not self.instance.pk):
-            raise ValidationError('You cannot specify seat category mappings on event creation.')
+        if not self.instance or not self.instance.pk:
+            if value and value['seat_category_mapping']:
+                raise ValidationError('You cannot specify seat category mappings on event creation.')
+            else:
+                return {'seat_category_mapping': {}}
         item_cache = {i.pk: i for i in self.instance.items.all()}
         result = {}
         for k, item in value['seat_category_mapping'].items():
