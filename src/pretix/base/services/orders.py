@@ -292,9 +292,10 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
         if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
+        invoices = []
         i = order.invoices.filter(is_cancellation=False, refered__isnull=True).last()
         if i:
-            generate_cancellation(i)
+            invoices.append(generate_cancellation(i))
 
         for position in order.positions.all():
             for gc in position.issued_gift_cards.all():
@@ -336,7 +337,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 order.save(update_fields=['status', 'total'])
 
             if i:
-                generate_invoice(order)
+                invoices.append(generate_invoice(order))
         else:
             with order.event.lock():
                 order.status = Order.STATUS_CANCELED
@@ -357,7 +358,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 try:
                     order.send_mail(
                         email_subject, email_template, email_context,
-                        'pretix.event.order.email.order_canceled', user
+                        'pretix.event.order.email.order_canceled', user,
+                        invoices=invoices if order.event.settings.invoice_email_attachment else []
                     )
                 except SendMailException:
                     logger.exception('Order canceled email could not be sent')
@@ -1031,7 +1033,7 @@ def send_download_reminders(sender, **kwargs):
                                 logger.exception('Reminder email could not be sent to attendee')
 
 
-def notify_user_changed_order(order, user=None, auth=None):
+def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
     with language(order.locale):
         email_template = order.event.settings.mail_text_order_changed
         email_context = get_email_context(event=order.event, order=order)
@@ -1039,7 +1041,7 @@ def notify_user_changed_order(order, user=None, auth=None):
         try:
             order.send_mail(
                 email_subject, email_template, email_context,
-                'pretix.event.order.email.order_changed', user, auth=auth
+                'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices,
             )
         except SendMailException:
             logger.exception('Order changed email could not be sent')
@@ -1089,6 +1091,7 @@ class OrderChangeManager:
         self._operations = []
         self.notify = notify
         self._invoice_dirty = False
+        self._invoices = []
 
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
@@ -1705,8 +1708,8 @@ class OrderChangeManager:
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
         if self.reissue_invoice and i and self._invoice_dirty:
-            generate_cancellation(i)
-            generate_invoice(self.order)
+            self._invoices.append(generate_cancellation(i))
+            self._invoices.append(generate_invoice(self.order))
 
     def _check_complete_cancel(self):
         current = self.order.positions.count()
@@ -1752,9 +1755,15 @@ class OrderChangeManager:
         self._check_paid_to_free()
 
         if self.notify:
-            notify_user_changed_order(self.order, self.user, self.auth)
+            notify_user_changed_order(
+                self.order, self.user, self.auth,
+                self._invoices if self.event.settings.invoice_email_attachment else []
+            )
             if self.split_order:
-                notify_user_changed_order(self.split_order, self.user, self.auth)
+                notify_user_changed_order(
+                    self.split_order, self.user, self.auth,
+                    list(self.split_order.invoices.all()) if self.event.settings.invoice_email_attachment else []
+                )
 
         order_changed.send(self.order.event, order=self.order)
 
