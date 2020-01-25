@@ -9,8 +9,9 @@ from rest_framework.response import Response
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
     GiftCardSerializer, OrganizerSerializer, SeatingPlanSerializer,
+    TeamSerializer,
 )
-from pretix.base.models import GiftCard, Organizer, SeatingPlan
+from pretix.base.models import GiftCard, Organizer, SeatingPlan, Team
 from pretix.helpers.dicts import merge_dicts
 
 
@@ -153,3 +154,43 @@ class GiftCardViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         raise MethodNotAllowed("Gift cards cannot be deleted.")
+
+
+class TeamViewSet(viewsets.ModelViewSet):
+    serializer_class = TeamSerializer
+    queryset = Team.objects.none()
+    permission = 'can_change_teams'
+    write_permission = 'can_change_teams'
+
+    def get_queryset(self):
+        return self.request.organizer.teams.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
+        inst.log_action(
+            'pretix.team.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=merge_dicts(self.request.data, {'id': inst.pk})
+        )
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save()
+        inst.log_action(
+            'pretix.team.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+        return inst
+
+    def perform_destroy(self, instance):
+        instance.log_action('pretix.team.deleted', user=self.request.user, auth=self.request.auth)
+        instance.delete()

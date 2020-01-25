@@ -142,6 +142,21 @@ org_permission_sub_urls = [
     ('get', 'can_manage_gift_cards', 'giftcards/1/', 404),
     ('put', 'can_manage_gift_cards', 'giftcards/1/', 404),
     ('patch', 'can_manage_gift_cards', 'giftcards/1/', 404),
+    ('get', 'can_change_teams', 'teams/', 200),
+    ('post', 'can_change_teams', 'teams/', 400),
+    ('get', 'can_change_teams', 'teams/1/', 404),
+    ('put', 'can_change_teams', 'teams/1/', 404),
+    ('patch', 'can_change_teams', 'teams/1/', 404),
+    ('get', 'can_change_teams', 'teams/1/members/', 404),
+    ('delete', 'can_change_teams', 'teams/1/members/2/', 404),
+    ('get', 'can_change_teams', 'teams/1/invites/', 404),
+    ('get', 'can_change_teams', 'teams/1/invites/2/', 404),
+    ('delete', 'can_change_teams', 'teams/1/invites/2/', 404),
+    ('post', 'can_change_teams', 'teams/1/invites/', 404),
+    ('get', 'can_change_teams', 'teams/1/tokens/', 404),
+    ('get', 'can_change_teams', 'teams/1/tokens/2/', 404),
+    ('delete', 'can_change_teams', 'teams/1/tokens/2/', 404),
+    ('post', 'can_change_teams', 'teams/1/tokens/', 404),
 ]
 
 

@@ -20,6 +20,7 @@ orga_router.register(r'subevents', event.SubEventViewSet)
 orga_router.register(r'webhooks', webhooks.WebHookViewSet)
 orga_router.register(r'seatingplans', organizer.SeatingPlanViewSet)
 orga_router.register(r'giftcards', organizer.GiftCardViewSet)
+orga_router.register(r'teams', organizer.TeamViewSet)
 
 event_router = routers.DefaultRouter()
 event_router.register(r'subevents', event.SubEventViewSet)
