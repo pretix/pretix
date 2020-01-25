@@ -71,6 +71,8 @@ def event3(organizer, meta_prop):
 def team(organizer):
     return Team.objects.create(
         organizer=organizer,
+        name="Test-Team",
+        can_change_teams=True,
         can_manage_gift_cards=True,
         can_change_items=True,
         can_create_events=True,
