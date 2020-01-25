@@ -483,7 +483,7 @@ Team invite endpoints
       Content-Type: application/json
 
       {
-        "id": "1",
+        "id": 1,
         "email": "mark@example.org"
       }
 

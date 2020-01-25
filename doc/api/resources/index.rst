@@ -27,3 +27,4 @@ Resources and endpoints
    webhooks
    seatingplans
    billing_invoices
+   billing_var
