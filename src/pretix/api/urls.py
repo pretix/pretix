@@ -24,6 +24,7 @@ orga_router.register(r'teams', organizer.TeamViewSet)
 
 team_router = routers.DefaultRouter()
 team_router.register(r'members', organizer.TeamMemberViewSet)
+team_router.register(r'invites', organizer.TeamInviteViewSet)
 
 event_router = routers.DefaultRouter()
 event_router.register(r'subevents', event.SubEventViewSet)

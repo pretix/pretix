@@ -1,16 +1,19 @@
 from decimal import Decimal
 
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language, ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
+from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
     GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
+from pretix.base.services.mail import SendMailException, mail
+from pretix.helpers.urls import build_absolute_uri
 
 
 class OrganizerSerializer(I18nAwareModelSerializer):
@@ -89,6 +92,60 @@ class TeamInviteSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'email'
         )
+
+    def _send_invite(self, instance):
+        try:
+            mail(
+                instance.email,
+                _('pretix account invitation'),
+                'pretixcontrol/email/invitation.txt',
+                {
+                    'user': self,
+                    'organizer': self.context['organizer'].name,
+                    'team': instance.team.name,
+                    'url': build_absolute_uri('control:auth.invite', kwargs={
+                        'token': instance.token
+                    })
+                },
+                event=None,
+                locale=get_language()  # TODO: expose?
+            )
+        except SendMailException:
+            pass  # Already logged
+
+    def create(self, validated_data):
+        try:
+            user = User.objects.get(email__iexact=validated_data['email'])
+        except User.DoesNotExist:
+            if self.context['team'].invites.filter(email__iexact=validated_data['email']).exists():
+                raise ValidationError(_('This user already has been invited for this team.'))
+            if 'native' not in get_auth_backends():
+                raise ValidationError('Users need to have a pretix account before they can be invited.')
+
+            invite = self.context['team'].invites.create(email=validated_data['email'])
+            self._send_invite(invite)
+            invite.team.log_action(
+                'pretix.team.invite.created',
+                data={
+                    'email': validated_data['email']
+                },
+                **self.context['log_kwargs']
+            )
+            return invite
+        else:
+            if self.context['team'].members.filter(pk=user.pk).exists():
+                raise ValidationError(_('This user already has permissions for this team.'))
+
+            self.context['team'].members.add(user)
+            self.context['team'].log_action(
+                'pretix.team.member.added',
+                data={
+                    'email': user.email,
+                    'user': user.pk,
+                },
+                **self.context['log_kwargs']
+            )
+            return TeamInvite(email=user.email)
 
 
 class TeamAPITokenSerializer(serializers.ModelSerializer):

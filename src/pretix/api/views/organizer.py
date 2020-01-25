@@ -6,15 +6,17 @@ from django.utils.functional import cached_property
 from rest_framework import filters, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
-from rest_framework.mixins import DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
     GiftCardSerializer, OrganizerSerializer, SeatingPlanSerializer,
-    TeamMemberSerializer, TeamSerializer,
+    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
 )
-from pretix.base.models import GiftCard, Organizer, SeatingPlan, Team, User
+from pretix.base.models import (
+    GiftCard, Organizer, SeatingPlan, Team, TeamInvite, User,
+)
 from pretix.helpers.dicts import merge_dicts
 
 
@@ -225,3 +227,39 @@ class TeamMemberViewSet(DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
                 'user': instance.pk
             }
         )
+
+
+class TeamInviteViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = TeamInviteSerializer
+    queryset = TeamInvite.objects.none()
+    permission = 'can_change_teams'
+    write_permission = 'can_change_teams'
+
+    @cached_property
+    def team(self):
+        return get_object_or_404(self.request.organizer.teams, pk=self.kwargs.get('team'))
+
+    def get_queryset(self):
+        return self.team.invites.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        ctx['team'] = self.team
+        ctx['log_kwargs'] = {
+            'user': self.request.user,
+            'auth': self.request.auth,
+        }
+        return ctx
+
+    def perform_destroy(self, instance):
+        self.team.log_action(
+            'pretix.team.invite.deleted', user=self.request.user, auth=self.request.auth, data={
+                'email': instance.email,
+            }
+        )
+        instance.delete()
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        serializer.save(organizer=self.request.organizer)

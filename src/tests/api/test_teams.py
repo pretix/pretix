@@ -1,4 +1,5 @@
 import pytest
+from django.core import mail
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Team, User
@@ -138,3 +139,69 @@ def test_team_members_delete(token_client, organizer, event, team, user):
     assert resp.status_code == 204
     assert team.members.count() == 0
     assert User.objects.filter(pk=user.pk).exists()
+
+
+@pytest.fixture
+def invite(team):
+    return team.invites.create(email='foo@bar.com')
+
+
+TEST_TEAM_INVITE_RES = {
+    'email': 'foo@bar.com',
+}
+
+
+@pytest.mark.django_db
+def test_team_invites_list(token_client, organizer, event, user, team, invite):
+    res = dict(TEST_TEAM_INVITE_RES)
+    res["id"] = invite.pk
+
+    resp = token_client.get('/api/v1/organizers/{}/teams/{}/invites/'.format(organizer.slug, team.pk))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_team_invites_detail(token_client, organizer, event, team, user, invite):
+    res = dict(TEST_TEAM_INVITE_RES)
+    res["id"] = invite.pk
+    resp = token_client.get('/api/v1/organizers/{}/teams/{}/invites/{}/'.format(organizer.slug, team.pk, invite.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_team_invites_delete(token_client, organizer, event, team, user, invite):
+    resp = token_client.delete('/api/v1/organizers/{}/teams/{}/invites/{}/'.format(organizer.slug, team.pk, invite.pk))
+    assert resp.status_code == 204
+    assert team.invites.count() == 0
+
+
+@pytest.mark.django_db
+def test_team_invites_create(token_client, organizer, event, team, user):
+    resp = token_client.post('/api/v1/organizers/{}/teams/{}/invites/'.format(organizer.slug, team.pk), {
+        'email': 'newmail@dummy.dummy'
+    })
+    assert resp.status_code == 201
+    assert team.invites.get().email == 'newmail@dummy.dummy'
+    assert len(mail.outbox) == 1
+
+    resp = token_client.post('/api/v1/organizers/{}/teams/{}/invites/'.format(organizer.slug, team.pk), {
+        'email': 'newmail@dummy.dummy'
+    })
+    assert resp.status_code == 400
+    assert resp.content.decode() == '["This user already has been invited for this team."]'
+
+    resp = token_client.post('/api/v1/organizers/{}/teams/{}/invites/'.format(organizer.slug, team.pk), {
+        'email': user.email
+    })
+    assert resp.status_code == 201
+    assert not resp.data.get('id')
+    assert team.invites.count() == 1
+    assert user in team.members.all()
+
+    resp = token_client.post('/api/v1/organizers/{}/teams/{}/invites/'.format(organizer.slug, team.pk), {
+        'email': user.email
+    })
+    assert resp.status_code == 400
+    assert resp.content.decode() == '["This user already has permissions for this team."]'
