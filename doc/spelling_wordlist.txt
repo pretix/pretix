@@ -103,6 +103,7 @@ regex
 renderer
 renderers
 reportlab
+reseller
 SaaS
 scalability
 screenshot
