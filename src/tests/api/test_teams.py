@@ -205,3 +205,56 @@ def test_team_invites_create(token_client, organizer, event, team, user):
     })
     assert resp.status_code == 400
     assert resp.content.decode() == '["This user already has permissions for this team."]'
+
+
+TEST_TEAM_TOKEN_RES = {
+    'name': 'Testtoken',
+    'active': True,
+}
+
+
+@pytest.fixture
+def token(second_team):
+    t = second_team.tokens.create(name='Testtoken')
+    return t
+
+
+@pytest.mark.django_db
+def test_team_tokens_list(token_client, organizer, event, user, second_team, token):
+    res = dict(TEST_TEAM_TOKEN_RES)
+    res["id"] = token.pk
+
+    resp = token_client.get('/api/v1/organizers/{}/teams/{}/tokens/'.format(organizer.slug, second_team.pk))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_team_tokens_detail(token_client, organizer, event, second_team, token):
+    res = dict(TEST_TEAM_TOKEN_RES)
+    res["id"] = token.pk
+    resp = token_client.get(
+        '/api/v1/organizers/{}/teams/{}/tokens/{}/'.format(organizer.slug, second_team.pk, token.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_team_tokens_delete(token_client, organizer, event, second_team, token):
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/teams/{}/tokens/{}/'.format(organizer.slug, second_team.pk, token.pk))
+    assert resp.status_code == 200
+    token.refresh_from_db()
+    assert not token.active
+
+
+@pytest.mark.django_db
+def test_team_token_create(token_client, organizer, event, second_team):
+    resp = token_client.post('/api/v1/organizers/{}/teams/{}/tokens/'.format(organizer.slug, second_team.pk), {
+        'name': 'New token'
+    })
+    assert resp.status_code == 201
+    t = second_team.tokens.get()
+    assert t.name == 'New token'
+    assert t.active
+    assert resp.data['token'] == t.token

@@ -12,10 +12,11 @@ from rest_framework.response import Response
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
     GiftCardSerializer, OrganizerSerializer, SeatingPlanSerializer,
-    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
+    TeamAPITokenSerializer, TeamInviteSerializer, TeamMemberSerializer,
+    TeamSerializer,
 )
 from pretix.base.models import (
-    GiftCard, Organizer, SeatingPlan, Team, TeamInvite, User,
+    GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.helpers.dicts import merge_dicts
 
@@ -61,6 +62,7 @@ class SeatingPlanViewSet(viewsets.ModelViewSet):
         ctx['organizer'] = self.request.organizer
         return ctx
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         inst = serializer.save(organizer=self.request.organizer)
         self.request.organizer.log_action(
@@ -70,6 +72,7 @@ class SeatingPlanViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'id': inst.pk})
         )
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         if serializer.instance.events.exists() or serializer.instance.subevents.exists():
             raise PermissionDenied('This plan can not be changed while it is in use for an event.')
@@ -82,6 +85,7 @@ class SeatingPlanViewSet(viewsets.ModelViewSet):
         )
         return inst
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         if instance.events.exists() or instance.subevents.exists():
             raise PermissionDenied('This plan can not be deleted while it is in use for an event.')
@@ -219,6 +223,7 @@ class TeamMemberViewSet(DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
         ctx['organizer'] = self.request.organizer
         return ctx
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         self.team.members.remove(instance)
         self.team.log_action(
@@ -252,6 +257,7 @@ class TeamInviteViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyMo
         }
         return ctx
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         self.team.log_action(
             'pretix.team.invite.deleted', user=self.request.user, auth=self.request.auth, data={
@@ -262,4 +268,64 @@ class TeamInviteViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyMo
 
     @transaction.atomic()
     def perform_create(self, serializer):
-        serializer.save(organizer=self.request.organizer)
+        serializer.save(team=self.team)
+
+
+class TeamAPITokenViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = TeamAPITokenSerializer
+    queryset = TeamAPIToken.objects.none()
+    permission = 'can_change_teams'
+    write_permission = 'can_change_teams'
+
+    @cached_property
+    def team(self):
+        return get_object_or_404(self.request.organizer.teams, pk=self.kwargs.get('team'))
+
+    def get_queryset(self):
+        return self.team.tokens.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        ctx['team'] = self.team
+        ctx['log_kwargs'] = {
+            'user': self.request.user,
+            'auth': self.request.auth,
+        }
+        return ctx
+
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.active = False
+        instance.save()
+        self.team.log_action(
+            'pretix.team.token.deleted', user=self.request.user, auth=self.request.auth, data={
+                'name': instance.name,
+            }
+        )
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        instance = serializer.save(team=self.team)
+        self.team.log_action(
+            'pretix.team.token.created', auth=self.request.auth, user=self.request.user, data={
+                'name': instance.name,
+                'id': instance.pk
+            }
+        )
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        d = serializer.data
+        d['token'] = serializer.instance.token
+        return Response(d, status=status.HTTP_201_CREATED, headers=headers)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        serializer = self.get_serializer_class()(instance)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)

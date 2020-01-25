@@ -114,41 +114,46 @@ class TeamInviteSerializer(serializers.ModelSerializer):
             pass  # Already logged
 
     def create(self, validated_data):
-        try:
-            user = User.objects.get(email__iexact=validated_data['email'])
-        except User.DoesNotExist:
-            if self.context['team'].invites.filter(email__iexact=validated_data['email']).exists():
-                raise ValidationError(_('This user already has been invited for this team.'))
-            if 'native' not in get_auth_backends():
-                raise ValidationError('Users need to have a pretix account before they can be invited.')
+        if 'email' in validated_data:
+            try:
+                user = User.objects.get(email__iexact=validated_data['email'])
+            except User.DoesNotExist:
+                if self.context['team'].invites.filter(email__iexact=validated_data['email']).exists():
+                    raise ValidationError(_('This user already has been invited for this team.'))
+                if 'native' not in get_auth_backends():
+                    raise ValidationError('Users need to have a pretix account before they can be invited.')
 
-            invite = self.context['team'].invites.create(email=validated_data['email'])
-            self._send_invite(invite)
-            invite.team.log_action(
-                'pretix.team.invite.created',
-                data={
-                    'email': validated_data['email']
-                },
-                **self.context['log_kwargs']
-            )
-            return invite
+                invite = self.context['team'].invites.create(email=validated_data['email'])
+                self._send_invite(invite)
+                invite.team.log_action(
+                    'pretix.team.invite.created',
+                    data={
+                        'email': validated_data['email']
+                    },
+                    **self.context['log_kwargs']
+                )
+                return invite
+            else:
+                if self.context['team'].members.filter(pk=user.pk).exists():
+                    raise ValidationError(_('This user already has permissions for this team.'))
+
+                self.context['team'].members.add(user)
+                self.context['team'].log_action(
+                    'pretix.team.member.added',
+                    data={
+                        'email': user.email,
+                        'user': user.pk,
+                    },
+                    **self.context['log_kwargs']
+                )
+                return TeamInvite(email=user.email)
         else:
-            if self.context['team'].members.filter(pk=user.pk).exists():
-                raise ValidationError(_('This user already has permissions for this team.'))
-
-            self.context['team'].members.add(user)
-            self.context['team'].log_action(
-                'pretix.team.member.added',
-                data={
-                    'email': user.email,
-                    'user': user.pk,
-                },
-                **self.context['log_kwargs']
-            )
-            return TeamInvite(email=user.email)
+            raise ValidationError('No email address given.')
 
 
 class TeamAPITokenSerializer(serializers.ModelSerializer):
+    active = serializers.BooleanField(default=True, read_only=True)
+
     class Meta:
         model = TeamAPIToken
         fields = (

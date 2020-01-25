@@ -144,19 +144,19 @@ org_permission_sub_urls = [
     ('patch', 'can_manage_gift_cards', 'giftcards/1/', 404),
     ('get', 'can_change_teams', 'teams/', 200),
     ('post', 'can_change_teams', 'teams/', 400),
-    ('get', 'can_change_teams', 'teams/1/', 404),
-    ('put', 'can_change_teams', 'teams/1/', 404),
-    ('patch', 'can_change_teams', 'teams/1/', 404),
-    ('get', 'can_change_teams', 'teams/1/members/', 404),
-    ('delete', 'can_change_teams', 'teams/1/members/2/', 404),
-    ('get', 'can_change_teams', 'teams/1/invites/', 404),
-    ('get', 'can_change_teams', 'teams/1/invites/2/', 404),
-    ('delete', 'can_change_teams', 'teams/1/invites/2/', 404),
-    ('post', 'can_change_teams', 'teams/1/invites/', 404),
-    ('get', 'can_change_teams', 'teams/1/tokens/', 404),
-    ('get', 'can_change_teams', 'teams/1/tokens/2/', 404),
-    ('delete', 'can_change_teams', 'teams/1/tokens/2/', 404),
-    ('post', 'can_change_teams', 'teams/1/tokens/', 404),
+    ('get', 'can_change_teams', 'teams/{team_id}/', 200),
+    ('put', 'can_change_teams', 'teams/{team_id}/', 400),
+    ('patch', 'can_change_teams', 'teams/{team_id}/', 200),
+    ('get', 'can_change_teams', 'teams/{team_id}/members/', 200),
+    ('delete', 'can_change_teams', 'teams/{team_id}/members/2/', 404),
+    ('get', 'can_change_teams', 'teams/{team_id}/invites/', 200),
+    ('get', 'can_change_teams', 'teams/{team_id}/invites/2/', 404),
+    ('delete', 'can_change_teams', 'teams/{team_id}/invites/2/', 404),
+    ('post', 'can_change_teams', 'teams/{team_id}/invites/', 400),
+    ('get', 'can_change_teams', 'teams/{team_id}/tokens/', 200),
+    ('get', 'can_change_teams', 'teams/{team_id}/tokens/0/', 404),
+    ('delete', 'can_change_teams', 'teams/{team_id}/tokens/0/', 404),
+    ('post', 'can_change_teams', 'teams/{team_id}/tokens/', 400),
 ]
 
 
@@ -445,7 +445,7 @@ def test_token_org_subresources_permission_allowed(token_client, team, organizer
         setattr(team, urlset[1], True)
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/{}'.format(
-        organizer.slug, urlset[2]))
+        organizer.slug, urlset[2].format(team_id=team.pk)))
     assert resp.status_code == urlset[3]
 
 
@@ -459,7 +459,7 @@ def test_token_org_subresources_permission_not_allowed(token_client, team, organ
         setattr(team, urlset[1], False)
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/{}'.format(
-        organizer.slug, urlset[2]))
+        organizer.slug, urlset[2].format(team_id=team.pk)))
     if urlset[3] == 404:
         assert resp.status_code == 403
     else:
