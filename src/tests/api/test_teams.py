@@ -1,7 +1,7 @@
 import pytest
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Team
+from pretix.base.models import Team, User
 
 
 @pytest.fixture
@@ -37,7 +37,6 @@ def test_team_list(token_client, organizer, event, team):
 
     resp = token_client.get('/api/v1/organizers/{}/teams/'.format(organizer.slug))
     assert resp.status_code == 200
-    print(dict(resp.data['results'][0]))
     assert [res] == resp.data['results']
 
 
@@ -102,3 +101,40 @@ def test_team_delete(token_client, organizer, event, second_team):
     )
     assert resp.status_code == 204
     assert organizer.teams.count() == 1
+
+
+TEST_TEAM_MEMBER_RES = {
+    'email': 'dummy@dummy.dummy',
+    'fullname': None,
+    'require_2fa': False
+}
+
+
+@pytest.mark.django_db
+def test_team_members_list(token_client, organizer, event, user, team):
+    team.members.add(user)
+    res = dict(TEST_TEAM_MEMBER_RES)
+    res["id"] = user.pk
+
+    resp = token_client.get('/api/v1/organizers/{}/teams/{}/members/'.format(organizer.slug, team.pk))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_team_members_detail(token_client, organizer, event, team, user):
+    team.members.add(user)
+    res = dict(TEST_TEAM_MEMBER_RES)
+    res["id"] = user.pk
+    resp = token_client.get('/api/v1/organizers/{}/teams/{}/members/{}/'.format(organizer.slug, team.pk, user.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_team_members_delete(token_client, organizer, event, team, user):
+    team.members.add(user)
+    resp = token_client.delete('/api/v1/organizers/{}/teams/{}/members/{}/'.format(organizer.slug, team.pk, user.pk))
+    assert resp.status_code == 204
+    assert team.members.count() == 0
+    assert User.objects.filter(pk=user.pk).exists()

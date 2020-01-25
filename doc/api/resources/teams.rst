@@ -32,8 +32,54 @@ can_view_vouchers                     boolean
 can_change_vouchers                   boolean
 ===================================== ========================== =======================================================
 
-Endpoints
----------
+Team member resource
+--------------------
+
+The team member resource contains the following public fields:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID of the user
+email                                 string                     The user's email address
+fullname                              string                     The user's full name (or ``null``)
+require_2fa                           boolean                    Whether this user uses two-factor-authentication
+===================================== ========================== =======================================================
+
+Team invite resource
+--------------------
+
+The team invite resource contains the following public fields:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID of the invite
+email                                 string                     The invitee's email address
+===================================== ========================== =======================================================
+
+Team API token resource
+-----------------------
+
+The team API token resource contains the following public fields:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID of the invite
+name                                  string                     Name of this API token
+active                                boolean                    Whether this API token is active (can never set to
+                                                                 ``true`` again once ``false``)
+===================================== ========================== =======================================================
+
+Team endpoints
+--------------
 
 .. http:get:: /api/v1/organizers/(organizer)/teams/
 
@@ -220,6 +266,111 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param id: The ``id`` field of the team to delete
-   :statuscode 200: no error
+   :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to change this resource.
+
+Team member endpoints
+---------------------
+
+.. http:get:: /api/v1/organizers/(organizer)/teams/(team)/members/
+
+   Returns a list of all members of a team.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/teams/1/members/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "fullname": "John Doe",
+            "email": "john@example.com",
+            "require_2fa": true
+          }
+        ]
+      }
+
+   :query integer page: The page number in case of a multi-page result set, default is 1
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param team: The ``id`` field of the team to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested team does not exist
+
+.. http:get:: /api/v1/organizers/(organizer)/teams/(team)/members/(id)/
+
+   Returns information on one team member, identified by their ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/teams/1/members/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "fullname": "John Doe",
+        "email": "john@example.com",
+        "require_2fa": true
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param team: The ``id`` field of the team to fetch
+   :param id: The ``id`` field of the member to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested team or member does not exist
+
+.. http:delete:: /api/v1/organizers/(organizer)/teams/(team)/members/(id)/
+
+   Removes a member from the team.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/teams/1/members/1/ HTTP/1.1
+      Host: pretix.eu
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param team: The ``id`` field of the team to modify
+   :param id: The ``id`` field of the member to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
+   :statuscode 404: The requested team or member does not exist
