@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-06 19:43+0000\n"
-"PO-Revision-Date: 2019-12-06 20:47+0100\n"
+"PO-Revision-Date: 2020-01-26 04:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
-"Language: de\n"
+"Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -15016,8 +15016,7 @@ msgstr "Der Zugriff für die ausgewählte App zu deinem Konto wurde entfernt."
 #: pretix/presale/views/order.py:697 pretix/presale/views/order.py:729
 #: pretix/presale/views/order.py:797 pretix/presale/views/order.py:905
 msgid "Unknown order code or not authorized to access this order."
-msgstr ""
-"Unbekannte Bestellnummer oder Bestellung gehört einem anderen Benutzer."
+msgstr "Ungültige Bestellnummer oder kein Zugriff auf diese Bestellung."
 
 #: pretix/control/views/orders.py:328 pretix/presale/views/order.py:801
 msgid "Ticket download is not enabled for this product."
