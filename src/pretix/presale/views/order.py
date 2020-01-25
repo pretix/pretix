@@ -877,6 +877,7 @@ class OrderDownload(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncA
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPositionDownload(OrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):
     task = generate
+    known_errortypes = ['OrderError']
 
     def get_error_url(self):
         return self.get_position_url()
