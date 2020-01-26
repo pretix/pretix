@@ -108,7 +108,7 @@ Endpoints
 
 .. http:post:: /api/v1/var/(id)/create_organizer/
 
-   Creates a new organizer account that will be associated with a given reseller acocunt.
+   Creates a new organizer account that will be associated with a given reseller account.
 
    **Example request**:
 
