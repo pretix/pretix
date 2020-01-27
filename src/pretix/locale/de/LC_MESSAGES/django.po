@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-06 19:43+0000\n"
-"PO-Revision-Date: 2020-01-26 04:00+0000\n"
+"PO-Revision-Date: 2020-01-27 15:53+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -7818,8 +7818,7 @@ msgstr "Sie müssen für eine Teilrückerstattung auch einen Betrag angeben."
 
 #: pretix/control/forms/organizer.py:28
 msgid "This slug is already in use. Please choose a different one."
-msgstr ""
-"Diese Kurzform ist bereits in Verwendung, bitte wählen Sie eine andere."
+msgstr "Diese Kurzform ist bereits in Verwendung. Bitte wählen Sie eine andere."
 
 #: pretix/control/forms/organizer.py:86
 msgid "Custom domain"
