@@ -633,6 +633,8 @@ class Event(EventMixin, LoggedModel):
         for s in other.seats.filter(subevent__isnull=True):
             s.pk = None
             s.event = self
+            if s.product_id:
+                s.product = item_map[s.product_id]
             s.save()
 
         for s in other.settings._objects.all():
