@@ -432,6 +432,9 @@ class StripeMethod(BasePaymentProvider):
         }
         return template.render(ctx)
 
+    def matching_id(self, payment: OrderPayment):
+        return payment.info_data.get("id", None)
+
     def api_payment_details(self, payment: OrderPayment):
         return {
             "id": payment.info_data.get("id", None),

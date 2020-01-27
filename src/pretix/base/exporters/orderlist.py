@@ -531,10 +531,11 @@ class InvoiceDataExporter(MultiSheetListExporter):
                 _('Foreign currency rate'),
                 _('Total value (with taxes)'),
                 _('Total value (without taxes)'),
+                _('Payment matching IDs'),
             ]
             qs = self.event.invoices.order_by('full_invoice_no').select_related(
                 'order', 'refers'
-            ).annotate(
+            ).prefetch_related('order__payments').annotate(
                 total_gross=Subquery(
                     InvoiceLine.objects.filter(
                         invoice=OuterRef('pk')
@@ -551,6 +552,16 @@ class InvoiceDataExporter(MultiSheetListExporter):
                 )
             )
             for i in qs:
+                pmis = []
+                for p in i.order.payments.all():
+                    if p.state in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_CREATED,
+                                   OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_REFUNDED):
+                        pprov = p.payment_provider
+                        if pprov:
+                            mid = pprov.matching_id(p)
+                            if mid:
+                                pmis.append(mid)
+                pmi = '\n'.join(pmis)
                 yield [
                     i.full_invoice_no,
                     date_format(i.date, "SHORT_DATE_FORMAT"),
@@ -581,6 +592,7 @@ class InvoiceDataExporter(MultiSheetListExporter):
                     i.foreign_currency_rate,
                     i.total_gross if i.total_gross else Decimal('0.00'),
                     Decimal(i.total_net if i.total_net else '0.00').quantize(Decimal('0.01')),
+                    pmi
                 ]
         elif sheet == 'lines':
             yield [

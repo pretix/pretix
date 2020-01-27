@@ -396,6 +396,14 @@ class Paypal(BasePaymentProvider):
                'retry': retry, 'order': payment.order}
         return template.render(ctx)
 
+    def matching_id(self, payment: OrderPayment):
+        sale_id = None
+        for trans in payment.info_data.get('transactions', []):
+            for res in trans.get('related_resources', []):
+                if 'sale' in res and 'id' in res['sale']:
+                    sale_id = res['sale']['id']
+        return sale_id or payment.info_data.get('id', None)
+
     def api_payment_details(self, payment: OrderPayment):
         sale_id = None
         for trans in payment.info_data.get('transactions', []):

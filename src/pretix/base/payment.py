@@ -721,6 +721,16 @@ class BasePaymentProvider:
         """
         return {}
 
+    def matching_id(self, payment: OrderPayment):
+        """
+        Will be called to get an ID for a matching this payment when comparing pretix records with records of an external
+        source. This should return the main transaction ID for your API.
+
+        :param payment: The payment in question.
+        :return: A string or None
+        """
+        return None
+
 
 class PaymentException(Exception):
     pass
