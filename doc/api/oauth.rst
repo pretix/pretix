@@ -61,7 +61,7 @@ access to the API. The ``token`` endpoint expects you to authenticate using `HTT
 ID as a username and your client secret as a password. You are also required to again supply the same ``redirect_uri``
 parameter that you used for the authorization.
 
-.. http:get:: /api/v1/oauth/token
+.. http:post:: /api/v1/oauth/token
 
    Request a new access token
 
