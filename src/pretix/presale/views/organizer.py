@@ -214,11 +214,11 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         for event in ctx['events']:
-            tz = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
+            event.tzname = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
             if event.has_subevents:
                 event.daterange = daterange(
-                    event.min_from.astimezone(tz),
-                    (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
+                    event.min_from.astimezone(event.tzname),
+                    (event.max_fromto or event.max_to or event.max_from).astimezone(event.tzname)
                 )
         return ctx
 
