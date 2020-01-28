@@ -41,6 +41,13 @@ def test_event_on_custom_domain(env, client):
 
 
 @pytest.mark.django_db
+def test_path_without_trailing_slash_on_custom_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    r = client.get('/widget/product_list', HTTP_HOST='foobar')
+    assert r.status_code == 200
+
+
+@pytest.mark.django_db
 def test_event_with_custom_domain_on_main_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
