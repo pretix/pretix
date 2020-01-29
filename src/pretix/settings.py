@@ -367,7 +367,7 @@ except ImportError:
 
 
 if METRICS_ENABLED:
-    MIDDLEWARE.insert(MIDDLEWARE.index('pretix.multidomain.middlewares.MultiDomainMiddleware') + 1,
+    MIDDLEWARE.insert(MIDDLEWARE.index('pretix.multidomain.middlewares.CommonMiddleware') + 1,
                       'pretix.helpers.metrics.middleware.MetricsMiddleware')
 
 

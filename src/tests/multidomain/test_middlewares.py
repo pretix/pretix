@@ -28,6 +28,13 @@ def test_control_only_on_main_domain(env, client):
 
 
 @pytest.mark.django_db
+def test_append_slash(env, client):
+    r = client.get('/control')
+    assert r.status_code == 301
+    assert r['Location'] == '/control/'
+
+
+@pytest.mark.django_db
 def test_unknown_domain(env, client):
     r = client.get('/control/login', HTTP_HOST='foobar')
     assert r.status_code == 400

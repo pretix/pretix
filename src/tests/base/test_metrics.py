@@ -189,3 +189,11 @@ def test_metrics_view(monkeypatch, client):
     # test metrics-view
     basic_auth = {"HTTP_AUTHORIZATION": base64.b64encode(bytes("foo:bar", "utf-8"))}
     assert "{} {}".format(fullname, counter_value) not in client.get("/metrics", headers=basic_auth)
+
+
+@pytest.mark.django_db
+@override_settings(HAS_REDIS=True, METRICS_USER="foo", METRICS_PASSPHRASE="bar")
+def test_do_not_break_append_slash(monkeypatch, client):
+    r = client.get('/control')
+    assert r.status_code == 301
+    assert r['Location'] == '/control/'
