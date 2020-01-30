@@ -9,7 +9,7 @@ from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware, now
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import mixins, serializers, status, viewsets

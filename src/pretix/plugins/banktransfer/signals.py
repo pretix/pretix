@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import resolve, reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.signals import register_payment_providers
 from pretix.control.signals import html_head, nav_event, nav_organizer

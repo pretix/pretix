@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, gettext_lazy as _
 from django_countries import Countries
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (

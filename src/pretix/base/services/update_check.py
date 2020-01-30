@@ -5,7 +5,7 @@ from datetime import timedelta
 import requests
 from django.dispatch import receiver
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, ugettext_noop
+from django.utils.translation import gettext_lazy as _, gettext_noop
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 
@@ -91,7 +91,7 @@ def send_update_notification_email():
         gs.settings.update_check_email,
         _('pretix update available'),
         LazyI18nString.from_gettext(
-            ugettext_noop(
+            gettext_noop(
                 'Hi!\n\nAn update is available for pretix or for one of the plugins you installed in your '
                 'pretix installation. Please click on the following link for more information:\n\n {url} \n\n'
                 'You can always find information on the latest updates on the pretix.eu blog:\n\n'

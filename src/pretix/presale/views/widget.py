@@ -18,7 +18,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import get_language, pgettext, ugettext
+from django.utils.translation import get_language, gettext, pgettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -274,7 +274,7 @@ class WidgetAPIProductList(EventListMixin, View):
 
         if not request.event.live:
             return self.response({
-                'error': ugettext('This ticket shop is currently disabled.')
+                'error': gettext('This ticket shop is currently disabled.')
             })
 
         self.subevent = None
@@ -283,14 +283,14 @@ class WidgetAPIProductList(EventListMixin, View):
                 self.subevent = request.event.subevents.filter(pk=kwargs['subevent'], active=True).first()
                 if not self.subevent:
                     return self.response({
-                        'error': ugettext('The selected date does not exist in this event series.')
+                        'error': gettext('The selected date does not exist in this event series.')
                     })
             else:
                 return self._get_event_list(request, **kwargs)
         else:
             if 'subevent' in kwargs:
                 return self.response({
-                    'error': ugettext('This is not an event series.')
+                    'error': gettext('This is not an event series.')
                 })
         return self._get_event_view(request, **kwargs)
 
@@ -306,28 +306,28 @@ class WidgetAPIProductList(EventListMixin, View):
         if ev.presale_is_running and event.settings.event_list_availability and ev.best_availability_state is not None:
             if ev.best_availability_state == Quota.AVAILABILITY_OK:
                 availability['color'] = 'green'
-                availability['text'] = ugettext('Book now')
+                availability['text'] = gettext('Book now')
             elif event.settings.waiting_list_enabled and ev.best_availability_state >= 0:
                 availability['color'] = 'orange'
-                availability['text'] = ugettext('Waiting list')
+                availability['text'] = gettext('Waiting list')
             elif ev.best_availability_state == Quota.AVAILABILITY_RESERVED:
                 availability['color'] = 'orange'
-                availability['text'] = ugettext('Reserved')
+                availability['text'] = gettext('Reserved')
             elif ev.best_availability_state < Quota.AVAILABILITY_RESERVED:
                 availability['color'] = 'red'
-                availability['text'] = ugettext('Sold out')
+                availability['text'] = gettext('Sold out')
         elif ev.presale_is_running:
             availability['color'] = 'green'
-            availability['text'] = ugettext('Book now')
+            availability['text'] = gettext('Book now')
         elif ev.presale_has_ended:
             availability['color'] = 'red'
-            availability['text'] = ugettext('Sale over')
+            availability['text'] = gettext('Sale over')
         elif event.settings.presale_start_show_date and ev.presale_start:
             availability['color'] = 'orange'
-            availability['text'] = ugettext('from %(start_date)s') % {'start_date': date_format(ev.presale_start, "SHORT_DATE_FORMAT")}
+            availability['text'] = gettext('from %(start_date)s') % {'start_date': date_format(ev.presale_start, "SHORT_DATE_FORMAT")}
         else:
             availability['color'] = 'orange'
-            availability['text'] = ugettext('Sale soon')
+            availability['text'] = gettext('Sale soon')
         return availability
 
     def _serialize_events(self, ebd):
@@ -442,7 +442,7 @@ class WidgetAPIProductList(EventListMixin, View):
                             event.min_from.astimezone(tz),
                             (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
                         )
-                        avail = {'color': 'none', 'text': ugettext('Event series')}
+                        avail = {'color': 'none', 'text': gettext('Event series')}
                     else:
                         dr = event.get_date_range_display(tz) + (
                             " " + event.get_time_from_display(tz) if event.settings.show_times else ""
@@ -498,14 +498,14 @@ class WidgetAPIProductList(EventListMixin, View):
                 if request.event.settings.presale_has_ended_text:
                     data['error'] = str(request.event.settings.presale_has_ended_text)
                 else:
-                    data['error'] = ugettext('The presale period for this event is over.')
+                    data['error'] = gettext('The presale period for this event is over.')
             elif request.event.settings.presale_start_show_date:
-                data['error'] = ugettext('The presale for this event will start on %(date)s at %(time)s.') % {
+                data['error'] = gettext('The presale for this event will start on %(date)s at %(time)s.') % {
                     'date': date_format(ev.presale_start.astimezone(request.event.timezone), "SHORT_DATE_FORMAT"),
                     'time': date_format(ev.presale_start.astimezone(request.event.timezone), "TIME_FORMAT"),
                 }
             else:
-                data['error'] = ugettext('The presale for this event has not yet started.')
+                data['error'] = gettext('The presale for this event has not yet started.')
 
         self.voucher = None
         if 'voucher' in request.GET:

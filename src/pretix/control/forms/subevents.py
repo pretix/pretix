@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.dates import MONTHS, WEEKDAYS
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm

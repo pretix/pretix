@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, resolve_url
 from django.template.response import TemplateResponse
 from django.urls import get_script_prefix, resolve, reverse
 from django.utils.encoding import force_str
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django_scopes import scope
 from hijack.templatetags.hijack_tags import is_hijacked
 

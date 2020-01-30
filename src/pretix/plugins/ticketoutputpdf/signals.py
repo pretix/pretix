@@ -4,7 +4,7 @@ import json
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.signals import (  # NOQA: legacy import

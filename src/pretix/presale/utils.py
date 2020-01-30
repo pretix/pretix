@@ -8,7 +8,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import resolve
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_scopes import scope
 
 from pretix.base.channels import WebshopSalesChannel

@@ -13,7 +13,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 

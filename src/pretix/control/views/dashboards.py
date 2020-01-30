@@ -18,7 +18,7 @@ from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.timezone import now
-from django.utils.translation import pgettext, ugettext_lazy as _, ungettext
+from django.utils.translation import gettext_lazy as _, pgettext, ungettext
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (

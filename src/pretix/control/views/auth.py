@@ -16,7 +16,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from django_otp import match_token
 

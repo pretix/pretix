@@ -2,7 +2,7 @@ import logging
 from collections import OrderedDict
 
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.signals import register_sales_channels
 

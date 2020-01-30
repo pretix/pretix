@@ -11,7 +11,7 @@ from pycountry import currencies
 import django.conf.locale
 from django.contrib.messages import constants as messages  # NOQA
 from django.utils.crypto import get_random_string
-from django.utils.translation import ugettext_lazy as _  # NOQA
+from django.utils.translation import gettext_lazy as _  # NOQA
 from pkg_resources import iter_entry_points
 from . import __version__
 

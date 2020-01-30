@@ -9,7 +9,7 @@ from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
-from django.utils.translation import pgettext_lazy, ugettext as _
+from django.utils.translation import gettext as _, pgettext_lazy
 from django_scopes import scopes_disabled
 
 from pretix.base.channels import get_all_sales_channels

@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
 from pretix.base.models import CachedFile

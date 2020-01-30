@@ -11,7 +11,7 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db.models import Exists, OuterRef
 from django.db.models.functions import Coalesce
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy
 from jsonfallback.functions import JSONExtract
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm

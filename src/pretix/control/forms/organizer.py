@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea
 

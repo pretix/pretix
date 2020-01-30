@@ -5,7 +5,7 @@ from django import forms
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db.models.functions import Coalesce
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy
 from jsonfallback.functions import JSONExtract
 from PyPDF2.merger import PdfFileMerger
 
@@ -19,7 +19,7 @@ from .ticketoutput import PdfTicketOutput
 
 class AllTicketsPDF(BaseExporter):
     name = "alltickets"
-    verbose_name = ugettext_lazy("All PDF tickets in one file")
+    verbose_name = gettext_lazy("All PDF tickets in one file")
     identifier = "pdfoutput_all_tickets"
 
     @property

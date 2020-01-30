@@ -24,7 +24,7 @@ class BaseI18nModelForm(i18nfield.forms.BaseI18nModelForm):
         super().__init__(*args, **kwargs)
 
 
-class I18nModelForm(metaclass=(ModelFormMetaclass, BaseI18nModelForm)):
+class I18nModelForm(BaseI18nModelForm, metaclass=ModelFormMetaclass):
     pass
 
 

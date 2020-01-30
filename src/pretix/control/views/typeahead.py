@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.formats import get_format
 from django.utils.timezone import make_aware
-from django.utils.translation import pgettext, ugettext as _
+from django.utils.translation import gettext as _, pgettext
 
 from pretix.base.models import (
     EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue, Order,

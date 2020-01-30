@@ -15,7 +15,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import pgettext, ugettext as _
+from django.utils.translation import gettext as _, pgettext
 from django_countries.fields import Country
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString

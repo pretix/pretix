@@ -3,7 +3,7 @@ import os
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language

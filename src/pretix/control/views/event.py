@@ -21,7 +21,7 @@ from django.urls import reverse
 from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic import DeleteView, FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
@@ -667,14 +667,14 @@ class MailSettingsRendererPreview(MailSettingsPreview):
             with rolledback_transaction():
                 order = request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
                                                     expires=now(), code="PREVIEW", total=119)
-                item = request.event.items.create(name=ugettext("Sample product"), default_price=42.23,
-                                                  description=ugettext("Sample product description"))
-                p = order.positions.create(item=item, attendee_name_parts={'_legacy': ugettext("John Doe")},
+                item = request.event.items.create(name=gettext("Sample product"), default_price=42.23,
+                                                  description=gettext("Sample product description"))
+                p = order.positions.create(item=item, attendee_name_parts={'_legacy': gettext("John Doe")},
                                            price=item.default_price)
                 v = renderers[request.GET.get('renderer')].render(
                     v,
                     str(request.event.settings.mail_text_signature),
-                    ugettext('Your order: %(code)s') % {'code': order.code},
+                    gettext('Your order: %(code)s') % {'code': order.code},
                     order,
                     position=p
                 )
@@ -1058,7 +1058,7 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
 
     def get_initial(self):
         return {
-            'name': LazyI18nString.from_gettext(ugettext('VAT'))
+            'name': LazyI18nString.from_gettext(gettext('VAT'))
         }
 
     def post(self, request, *args, **kwargs):
@@ -1317,9 +1317,9 @@ class QuickSetupView(FormView):
         tax_rule = self.request.event.tax_rules.first()
         if any(f not in self.formset.deleted_forms for f in self.formset):
             category = self.request.event.categories.create(
-                name=LazyI18nString.from_gettext(ugettext('Tickets'))
+                name=LazyI18nString.from_gettext(gettext('Tickets'))
             )
-            category.log_action('pretix.event.category.added', data={'name': ugettext('Tickets')},
+            category.log_action('pretix.event.category.added', data={'name': gettext('Tickets')},
                                 user=self.request.user)
 
         subevent = self.request.event.subevents.first()
@@ -1350,12 +1350,12 @@ class QuickSetupView(FormView):
 
         if form.cleaned_data['total_quota']:
             quota = self.request.event.quotas.create(
-                name=ugettext('Tickets'),
+                name=gettext('Tickets'),
                 size=form.cleaned_data['total_quota'],
                 subevent=subevent,
             )
             quota.log_action('pretix.event.quota.added', user=self.request.user, data={
-                'name': ugettext('Tickets'),
+                'name': gettext('Tickets'),
                 'size': quota.size
             })
             quota.items.add(*items)
@@ -1381,12 +1381,12 @@ class QuickSetupView(FormView):
             event=self.request.event,
             initial=[
                 {
-                    'name': LazyI18nString.from_gettext(ugettext('Regular ticket')),
+                    'name': LazyI18nString.from_gettext(gettext('Regular ticket')),
                     'default_price': Decimal('35.00'),
                     'quota': 100,
                 },
                 {
-                    'name': LazyI18nString.from_gettext(ugettext('Reduced ticket')),
+                    'name': LazyI18nString.from_gettext(gettext('Reduced ticket')),
                     'default_price': Decimal('29.00'),
                     'quota': 50,
                 },

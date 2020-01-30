@@ -2,7 +2,7 @@ from django.db import transaction
 from django.db.models import Prefetch
 from django.dispatch import receiver
 from django.utils.timezone import now
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from pretix.base.models import (
     Checkin, CheckinList, Order, OrderPosition, Question, QuestionOption,

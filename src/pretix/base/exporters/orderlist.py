@@ -8,7 +8,7 @@ from django.db.models import (
 )
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
+from django.utils.translation import pgettext, gettext as _, gettext_lazy
 
 from pretix.base.models import (
     InvoiceAddress, InvoiceLine, Order, OrderPosition, Question,
@@ -22,7 +22,7 @@ from ..signals import register_data_exporters
 
 class OrderListExporter(MultiSheetListExporter):
     identifier = 'orderlist'
-    verbose_name = ugettext_lazy('Order data')
+    verbose_name = gettext_lazy('Order data')
 
     @property
     def sheets(self):
@@ -414,7 +414,7 @@ class OrderListExporter(MultiSheetListExporter):
 
 class PaymentListExporter(ListExporter):
     identifier = 'paymentlist'
-    verbose_name = ugettext_lazy('Order payments and refunds')
+    verbose_name = gettext_lazy('Order payments and refunds')
 
     @property
     def additional_form_fields(self):
@@ -485,7 +485,7 @@ class PaymentListExporter(ListExporter):
 
 class QuotaListExporter(ListExporter):
     identifier = 'quotalist'
-    verbose_name = ugettext_lazy('Quota availabilities')
+    verbose_name = gettext_lazy('Quota availabilities')
 
     def iterate_list(self, form_data):
         headers = [
@@ -514,7 +514,7 @@ class QuotaListExporter(ListExporter):
 
 class InvoiceDataExporter(MultiSheetListExporter):
     identifier = 'invoicedata'
-    verbose_name = ugettext_lazy('Invoice data')
+    verbose_name = gettext_lazy('Invoice data')
 
     @property
     def sheets(self):

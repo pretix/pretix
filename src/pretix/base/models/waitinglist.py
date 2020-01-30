@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils.timezone import now
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
 
 from pretix.base.email import get_email_context

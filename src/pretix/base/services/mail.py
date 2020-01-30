@@ -20,7 +20,7 @@ from django.core.mail import (
 )
 from django.core.mail.message import SafeMIMEText
 from django.template.loader import get_template
-from django.utils.translation import pgettext, ugettext as _
+from django.utils.translation import gettext as _, pgettext
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 

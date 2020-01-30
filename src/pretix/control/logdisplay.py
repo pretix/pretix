@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import (

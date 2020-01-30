@@ -26,7 +26,7 @@ from django.utils import formats
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import make_aware, now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
     DetailView, FormView, ListView, TemplateView, View,
 )

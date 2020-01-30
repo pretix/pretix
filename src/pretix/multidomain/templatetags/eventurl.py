@@ -3,7 +3,7 @@ from django.template import TemplateSyntaxError
 from django.template.base import kwarg_re
 from django.template.defaulttags import URLNode
 from django.urls import NoReverseMatch
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.html import conditional_escape
 
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -20,7 +20,7 @@ class EventURLNode(URLNode):
     def render(self, context):
         from pretix.multidomain.urlreverse import eventreverse
         kwargs = {
-            smart_text(k, 'ascii'): v.resolve(context)
+            smart_str(k, 'ascii'): v.resolve(context)
             for k, v in self.kwargs.items()
         }
         view_name = self.view_name.resolve(context)

@@ -6,7 +6,6 @@ from itertools import groupby
 
 from django.conf import settings
 from django.db.models import Prefetch, Sum
-from django.utils.decorators import available_attrs
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
@@ -282,7 +281,7 @@ def allow_frame_if_namespaced(view_func):
         if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
             resp.xframe_options_exempt = True
         return resp
-    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
+    return wraps(view_func)(wrapped_view)
 
 
 def allow_cors_if_namespaced(view_func):
@@ -295,7 +294,7 @@ def allow_cors_if_namespaced(view_func):
         if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
             resp['Access-Control-Allow-Origin'] = '*'
         return resp
-    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
+    return wraps(view_func)(wrapped_view)
 
 
 def iframe_entry_view_wrapper(view_func):
@@ -321,4 +320,4 @@ def iframe_entry_view_wrapper(view_func):
 
         resp = view_func(request, *args, **kwargs)
         return resp
-    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
+    return wraps(view_func)(wrapped_view)

@@ -3,11 +3,11 @@ from itertools import chain
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.formats import number_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseQuestionsForm,
@@ -105,7 +105,7 @@ class AddOnRadioSelect(forms.RadioSelect):
             groups.append((group_name, subgroup, index))
 
             selected = (
-                force_text(option_value) in value and
+                force_str(option_value) in value and
                 (has_selected is False or self.allow_multiple_selected)
             )
             if selected is True and has_selected is False:
@@ -121,9 +121,9 @@ class AddOnRadioSelect(forms.RadioSelect):
 
 class AddOnVariationField(forms.ChoiceField):
     def valid_value(self, value):
-        text_value = force_text(value)
+        text_value = force_str(value)
         for k, v, d in self.choices:
-            if value == k or text_value == force_text(k):
+            if value == k or text_value == force_str(k):
                 return True
         return False
 

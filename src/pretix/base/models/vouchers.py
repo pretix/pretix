@@ -8,7 +8,7 @@ from django.db.models import F, OuterRef, Q, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.banlist import banned

@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from pytz import common_timezones
 
 from pretix.base.models import User

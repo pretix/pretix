@@ -10,7 +10,7 @@ from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.translation import (
-    get_language, pgettext_lazy, ugettext_lazy as _,
+    get_language, gettext_lazy as _, pgettext_lazy,
 )
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
