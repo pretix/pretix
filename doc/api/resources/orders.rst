@@ -2006,7 +2006,8 @@ Order refund endpoints
         "payment": 1,
         "execution_date": null,
         "provider": "manual",
-        "mark_canceled": false
+        "mark_canceled": false,
+        "mark_pending": true
       }
 
    **Example response**:

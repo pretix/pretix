@@ -1061,6 +1061,7 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             mark_refunded = request.data.pop('mark_refunded', False)
         else:
             mark_refunded = request.data.pop('mark_canceled', False)
+        mark_pending = request.data.pop('mark_pending', False)
         serializer = OrderRefundCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():
@@ -1082,6 +1083,15 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                     user=request.user if request.user.is_authenticated else None,
                     auth=(request.auth if request.auth else None),
                 )
+            elif mark_pending:
+                if r.order.status == Order.STATUS_PAID and r.order.pending_sum > 0:
+                    r.order.status = Order.STATUS_PENDING
+                    r.order.set_expires(
+                        now(),
+                        r.order.event.subevents.filter(
+                            id__in=r.order.positions.values_list('subevent_id', flat=True))
+                    )
+                    r.order.save(update_fields=['status', 'expires'])
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
