@@ -27,7 +27,7 @@ from django.views.decorators.http import condition
 from django.views.i18n import (
     JavaScriptCatalog, get_formats, js_catalog_template,
 )
-from lxml import etree
+from lxml import html
 
 from pretix.base.i18n import language
 from pretix.base.models import CartPosition, Event, Quota, SubEvent, Voucher
@@ -74,7 +74,7 @@ def widget_css(request, **kwargs):
         return resp
     else:
         tpl = get_template('pretixpresale/widget_dummy.html')
-        et = etree.fromstring(tpl.render({})).attrib['href'].replace(settings.STATIC_URL, '')
+        et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
         f = finders.find(et)
         resp = FileResponse(open(f, 'rb'), content_type='text/css')
         return resp

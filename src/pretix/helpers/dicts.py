@@ -7,3 +7,8 @@ def merge_dicts(*dict_args):
     for dictionary in dict_args:
         result.update(dictionary)
     return result
+
+
+def move_to_end(d, k):
+    v = d.pop(k)
+    d[k] = v
