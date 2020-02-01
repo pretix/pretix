@@ -312,7 +312,7 @@ class OrganizerSettingsForm(SettingsForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['primary_font'].choices += [
-            (a, a) for a in get_fonts()
+            (a, {"title": a, "data": v}) for a, v in get_fonts().items()
         ]
 
 

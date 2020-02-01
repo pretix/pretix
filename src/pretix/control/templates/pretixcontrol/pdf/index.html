@@ -403,9 +403,12 @@
     <img src="{% static 'pretixpresale/pdf/powered_by_pretix_white.png' %}" id="poweredby-white" class="sr-only">
     {% for family, styles in fonts.items %}
     {% for style, formats in styles.items %}
+        {% if "sample" not in style %}
         <span class="preload-font" data-family="{{ family }}" data-style="{{ style }}">
             giItT1WQy@!-/#
+            {% if "_sample" in styles %}{{ styles.sample }}{% endif %}
         </span>
+        {% endif %}
     {% endfor %}
     {% endfor %}
 {% endblock %}

@@ -1,2 +1,2 @@
-{% load i18n %}{% if widget.wrap_label %}<label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %} class="preload-font"
-        data-family="{{ widget.label }}" data-style="regular">{% endif %}{% include "django/forms/widgets/input.html" %}{% if widget.wrap_label %} <strong>{{ widget.label }}</strong><br>{% trans "The quick brown fox jumps over the lazy dog." context "typography" %}</label>{% endif %}
+{% load getitem %}{% load i18n %}{% if widget.wrap_label %}<label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %} class="preload-font"
+        data-family="{{ widget.label.title }}" data-style="regular">{% endif %}{% include "django/forms/widgets/input.html" %}{% if widget.wrap_label %} <strong>{{ widget.label.title }}</strong><br>{% trans "The quick brown fox jumps over the lazy dog." context "typography" %}{% if "sample" in widget.label.data %}<br>{{ widget.label.data.sample }}{% endif %}</label>{% endif %}

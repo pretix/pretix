@@ -639,7 +639,7 @@ class EventSettingsForm(SettingsForm):
         if not event.has_subevents:
             del self.fields['frontpage_subevent_ordering']
         self.fields['primary_font'].choices += [
-            (a, a) for a in get_fonts()
+            (a, {"title": a, "data": v}) for a, v in get_fonts().items()
         ]
 
 

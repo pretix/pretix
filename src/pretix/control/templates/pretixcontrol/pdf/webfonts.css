@@ -1,7 +1,20 @@
 {% load static %}
+@font-face {
+    font-family: 'AND';
+    font-style: normal;
+    font-weight: normal;
+    src: url('{% static "fonts/AND-Regular.ttf" %}') format('truetype');
+}
+@font-face {
+    font-family: 'AND';
+    font-style: normal;
+    font-weight: bold;
+    src: url('{% static "fonts/AND-Regular.ttf" %}') format('truetype');
+}
 
 {% for family, styles in fonts.items %}
 {% for style, formats in styles.items %}
+{% if "sample" not in style %}
 @font-face {
     font-family: '{{ family }}';
     {% if style == "italic" or style == "bolditalic" %}
@@ -19,7 +32,7 @@
          {% if "truetype" in formats %}url('{% static formats.truetype %}') format('truetype'){% endif %};
 }
 .preload-font[data-family="{{family}}"][data-style="{{style}}"] {
-    font-family: '{{ family }}';
+    font-family: '{{ family }}', 'AND';
     {% if style == "italic" or style == "bolditalic" %}
         font-style: italic;
     {% else %}
@@ -32,5 +45,6 @@
     {% endif %}
 
 }
+{% endif %}
 {% endfor %}
 {% endfor %}
