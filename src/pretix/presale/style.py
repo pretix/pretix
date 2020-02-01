@@ -175,6 +175,8 @@ def get_font_stylesheet(font_name):
     stylesheet = []
     font = get_fonts()[font_name]
     for sty, formats in font.items():
+        if sty == 'sample':
+            continue
         stylesheet.append('@font-face { ')
         stylesheet.append('font-family: "{}";'.format(font_name))
         if sty in ("italic", "bolditalic"):
