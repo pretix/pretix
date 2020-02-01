@@ -1448,6 +1448,54 @@ window.PretixWidget.buildWidgets = function () {
         }
     });
 };
+
+window.PretixWidget.open = function (target_url, voucher, subevent, items, widget_data, skip_ssl_check) {
+    if (!target_url.match(/\/$/)) {
+        target_url += "/";
+    }
+
+    var all_widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
+    if (widget_data) {
+        Object.keys(widget_data).forEach(function(key) { all_widget_data[key] = widget_data[key]; });
+    }
+    var root = document.createElement("div");
+    document.body.appendChild(root);
+    root.classList.add("pretix-widget-hidden");
+    root.innerHTML = "<pretix-button ref='btn'></pretix-button>";
+    var app = new Vue({
+        el: root,
+        data: function () {
+            return {
+                target_url: target_url,
+                subevent: subevent || null,
+                is_button: true,
+                skip_ssl: skip_ssl_check || false,
+                voucher_code: voucher || null,
+                items: items || [],
+                error: null,
+                filter: null,
+                frame_dismissed: false,
+                widget_data: all_widget_data,
+                widget_id: 'pretix-widget-' + widget_id,
+                button_text: ""
+            }
+        },
+        created: function () {
+        },
+        computed: shared_root_computed,
+        methods: shared_root_methods
+    });
+    create_overlay(app);
+    app.$nextTick(function () {
+        if (this.$root.useIframe) {
+            this.$refs.btn.buy();
+        } else {
+            console.log(this.$refs.btn.$refs.form);
+            this.$refs.btn.$refs.form.submit();
+        }
+    })
+};
+
 if (typeof window.pretixWidgetCallback !== "undefined") {
     window.pretixWidgetCallback();
 }

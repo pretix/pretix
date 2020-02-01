@@ -183,6 +183,24 @@ Just as the widget, the button supports the optional attributes ``voucher`` and 
 
 You can style the button using the ``pretix-button`` CSS class.
 
+Dynamically opening the widget
+------------------------------
+
+You can get the behaviour of the pretix Button without a button at all, so you can trigger it from your own code in
+response to a user action. Usually, this will open an overlay with your ticket shop, however in some cases, such as
+missing HTTPS encryption on your case or a really small screen (mobile), it will open a new tab instead of an overlay.
+Therefore, make sure you call this *in direct response to a user action*, otherwise most browser will block it as an
+unwanted popup.
+
+.. js:function:: window.PretixWidget.open(target_url [, voucher [, subevent [, items, [, widget_data [, skip_ssl_check ]]]]])
+
+   :param string target_url: The URL of the ticket shop.
+   :param string voucher: A voucher code to be pre-selected, or ``null``.
+   :param string subevent: A subevent to be pre-selected, or ``null``.
+   :param array items: A collection of items to be put in the cart, of the form ``[{"item": "item_3", "count": 1}, {"item": "variation_5_6", "count": 4}]``
+   :param object widget_data: Additional data to be passed to the shop, see below.
+   :param boolean skip_ssl_check: Whether to ignore the check for HTTPS. Only to be used during development.
+
 Dynamically loading the widget
 ------------------------------
 
@@ -238,7 +256,8 @@ with that information::
         data-question-L9G8NG9M="Foobar">
     </pretix-widget>
 
-This works for the pretix Button as well. Currently, the following attributes are understood by pretix itself:
+This works for the pretix Button as well, if you also specify a product.
+Currently, the following attributes are understood by pretix itself:
 
 * ``data-email`` will pre-fill the order email field as well as the attendee email field (if enabled).
 
@@ -302,5 +321,9 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
 
    Data passing options have been added in pretix 2.3. If you use a self-hosted version of pretix, they only work
    fully if you configured a redis server.
+
+.. versionchanged:: 3.6
+
+   Dynamically opening the widget has been added in pretix 3.6.
 
 .. _Let's Encrypt: https://letsencrypt.org/

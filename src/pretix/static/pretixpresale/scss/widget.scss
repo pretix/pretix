@@ -2,6 +2,9 @@
 @import "../../bootstrap/scss/bootstrap/variables";
 @import "../../bootstrap/scss/bootstrap/mixins";
 
+.pretix-widget-hidden {
+  display: none;
+}
 .pretix-widget, .pretix-widget-alert-box {
   a {
     color: $link-color;
