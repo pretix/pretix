@@ -186,11 +186,11 @@ You can style the button using the ``pretix-button`` CSS class.
 Dynamically opening the widget
 ------------------------------
 
-You can get the behaviour of the pretix Button without a button at all, so you can trigger it from your own code in
+You can get the behavior of the pretix Button without a button at all, so you can trigger it from your own code in
 response to a user action. Usually, this will open an overlay with your ticket shop, however in some cases, such as
 missing HTTPS encryption on your case or a really small screen (mobile), it will open a new tab instead of an overlay.
 Therefore, make sure you call this *in direct response to a user action*, otherwise most browser will block it as an
-unwanted popup.
+unwanted pop-up.
 
 .. js:function:: window.PretixWidget.open(target_url [, voucher [, subevent [, items, [, widget_data [, skip_ssl_check ]]]]])
 
