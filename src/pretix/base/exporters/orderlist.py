@@ -264,7 +264,7 @@ class OrderListExporter(MultiSheetListExporter):
             'order', 'order__invoice_address', 'item', 'variation',
             'voucher', 'tax_rule'
         ).prefetch_related(
-            'answers', 'answers__question'
+            'answers', 'answers__question', 'answers__options'
         )
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID)
@@ -299,8 +299,15 @@ class OrderListExporter(MultiSheetListExporter):
             _('Pseudonymization ID'),
         ]
         questions = list(self.event.questions.all())
+        options = {}
         for q in questions:
-            headers.append(str(q.question))
+            if q.type == Question.TYPE_CHOICE_MULTIPLE:
+                options[q.pk] = []
+                for o in q.options.all():
+                    headers.append(str(q.question) + ' – ' + str(o.answer))
+                    options[q.pk].append(o)
+            else:
+                headers.append(str(q.question))
         headers += [
             _('Company'),
             _('Invoice address name'),
@@ -354,12 +361,19 @@ class OrderListExporter(MultiSheetListExporter):
             for a in op.answers.all():
                 # We do not want to localize Date, Time and Datetime question answers, as those can lead
                 # to difficulties parsing the data (for example 2019-02-01 may become Février, 2019 01 in French).
-                if a.question.type in Question.UNLOCALIZED_TYPES:
+                if a.question.type == Question.TYPE_CHOICE_MULTIPLE:
+                    acache[a.question_id] = set(o.pk for o in a.options.all())
+                elif a.question.type in Question.UNLOCALIZED_TYPES:
                     acache[a.question_id] = a.answer
                 else:
                     acache[a.question_id] = str(a)
             for q in questions:
-                row.append(acache.get(q.pk, ''))
+                if q.type == Question.TYPE_CHOICE_MULTIPLE:
+                    for o in options[q.pk]:
+                        row.append(_('Yes') if o.pk in acache.get(q.pk, set()) else _('No'))
+                else:
+                    row.append(acache.get(q.pk, ''))
+
             try:
                 row += [
                     order.invoice_address.company,
