@@ -114,6 +114,7 @@ serializable
 serializers
 serializers
 sexualized
+SQL
 startup
 stdout
 stylesheet
