@@ -474,6 +474,8 @@ class SubEventFilterForm(FilterForm):
 
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by('-date_from')
 
         return qs
 
