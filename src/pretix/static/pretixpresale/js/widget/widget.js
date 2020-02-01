@@ -1036,9 +1036,11 @@ Vue.component('pretix-widget', {
 Vue.component('pretix-button', {
     template: ('<div class="pretix-widget-wrapper">'
         + '<div class="pretix-widget-button-container">'
-        + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
+        + '<form :method="$root.formMethod" :action="$root.formTarget" ref="form" target="_blank">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
+        + '<input type="hidden" name="voucher" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
+        + '<input type="hidden" name="locale" :value="$root.lang" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
         + '<input type="hidden" v-for="item in $root.items" :name="item.item" :value="item.count" />'
         + '<button class="pretix-button" @click="buy">{{ $root.button_text }}</button>'
@@ -1204,7 +1206,20 @@ var shared_root_computed = {
         }
         return form_target;
     },
+    formMethod: function () {
+        if (!this.useIframe && this.is_button && this.items.length === 0) {
+            return 'get';
+        }
+        return 'post';
+    },
     formTarget: function () {
+        if (!this.useIframe && this.is_button && this.items.length === 0) {
+            var target = this.target_url;
+            if (this.voucher_code) {
+                target = this.target_url + 'redeem';
+            }
+            return target;
+        }
         var checkout_url = "/" + this.target_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "w/" + widget_id + "/";
         if (!this.$root.cart_exists) {
             checkout_url += "checkout/start";
