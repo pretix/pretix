@@ -1079,6 +1079,9 @@ var shared_root_methods = {
     },
     reload: function () {
         var url;
+        if (this.$root.is_button) {
+            return;
+        }
         if (this.$root.subevent) {
             url = this.$root.target_url + this.$root.subevent + '/widget/product_list?lang=' + lang;
         } else {
