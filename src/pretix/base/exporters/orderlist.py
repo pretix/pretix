@@ -5,7 +5,7 @@ import pytz
 from django import forms
 from django.db.models import DateTimeField, F, Max, OuterRef, Subquery, Sum
 from django.dispatch import receiver
-from django.utils.formats import date_format, localize
+from django.utils.formats import date_format
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
 
 from pretix.base.models import (
@@ -134,7 +134,7 @@ class OrderListExporter(MultiSheetListExporter):
         for order in qs.order_by('datetime'):
             row = [
                 order.code,
-                localize(order.total),
+                order.total,
                 order.get_status_display(),
                 order.email,
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
@@ -163,7 +163,7 @@ class OrderListExporter(MultiSheetListExporter):
 
             row += [
                 order.payment_date.astimezone(tz).strftime('%Y-%m-%d') if order.payment_date else '',
-                localize(full_fee_sum_cache.get(order.id) or Decimal('0.00')),
+                full_fee_sum_cache.get(order.id) or Decimal('0.00'),
                 order.locale,
             ]
 
@@ -173,10 +173,12 @@ class OrderListExporter(MultiSheetListExporter):
                                                        {'grosssum': Decimal('0.00'), 'taxsum': Decimal('0.00')})
 
                 row += [
-                    localize(taxrate_values['grosssum'] + fee_taxrate_values['grosssum']),
-                    localize(taxrate_values['grosssum'] - taxrate_values['taxsum']
-                             + fee_taxrate_values['grosssum'] - fee_taxrate_values['taxsum']),
-                    localize(taxrate_values['taxsum'] + fee_taxrate_values['taxsum']),
+                    taxrate_values['grosssum'] + fee_taxrate_values['grosssum'],
+                    (
+                        taxrate_values['grosssum'] - taxrate_values['taxsum'] +
+                        fee_taxrate_values['grosssum'] - fee_taxrate_values['taxsum']
+                    ),
+                    taxrate_values['taxsum'] + fee_taxrate_values['taxsum'],
                 ]
 
             row.append(', '.join([i.number for i in order.invoices.all()]))
@@ -464,7 +466,7 @@ class PaymentListExporter(ListExporter):
                 d2,
                 obj.get_state_display(),
                 obj.state,
-                localize(obj.amount * (-1 if isinstance(obj, OrderRefund) else 1)),
+                obj.amount * (-1 if isinstance(obj, OrderRefund) else 1),
                 provider_names.get(obj.provider, obj.provider)
             ]
             yield row

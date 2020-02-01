@@ -1,10 +1,12 @@
 import io
 import tempfile
 from collections import OrderedDict
+from decimal import Decimal
 from typing import Tuple
 
 from defusedcsv import csv
 from django import forms
+from django.utils.formats import localize
 from django.utils.translation import ugettext, ugettext_lazy as _
 from openpyxl import Workbook
 from openpyxl.cell.cell import KNOWN_TYPES
@@ -117,12 +119,20 @@ class ListExporter(BaseExporter):
         if output_file:
             writer = csv.writer(output_file, **kwargs)
             for line in self.iterate_list(form_data):
+                line = [
+                    localize(f) if isinstance(f, Decimal) else f
+                    for f in line
+                ]
                 writer.writerow(line)
             return self.get_filename() + '.csv', 'text/csv', None
         else:
             output = io.StringIO()
             writer = csv.writer(output, **kwargs)
             for line in self.iterate_list(form_data):
+                line = [
+                    localize(f) if isinstance(f, Decimal) else f
+                    for f in line
+                ]
                 writer.writerow(line)
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
@@ -196,12 +206,20 @@ class MultiSheetListExporter(ListExporter):
         if output_file:
             writer = csv.writer(output_file, **kwargs)
             for line in self.iterate_sheet(form_data, sheet):
+                line = [
+                    localize(f) if isinstance(f, Decimal) else f
+                    for f in line
+                ]
                 writer.writerow(line)
             return self.get_filename() + '.csv', 'text/csv', None
         else:
             output = io.StringIO()
             writer = csv.writer(output, **kwargs)
             for line in self.iterate_sheet(form_data, sheet):
+                line = [
+                    localize(f) if isinstance(f, Decimal) else f
+                    for f in line
+                ]
                 writer.writerow(line)
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
