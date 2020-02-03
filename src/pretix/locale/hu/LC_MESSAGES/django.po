@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-06 19:43+0000\n"
-"PO-Revision-Date: 2020-01-24 08:00+0000\n"
-"Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
+"PO-Revision-Date: 2020-01-26 04:00+0000\n"
+"Last-Translator: András Veres-Szentkirályi <vsza@vsza.hu>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
 "Language: hu\n"
@@ -96,7 +96,7 @@ msgstr "\"{}\" termékhez nincs kvóta rendelve."
 #: pretix/api/serializers/cart.py:66 pretix/api/serializers/order.py:809
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "Nem áll elegendő \"{}\" kvóta rendelkezésre a művelet végrehajtásához."
 
 #: pretix/api/serializers/cart.py:90 pretix/api/serializers/order.py:782
 #: pretix/base/services/orders.py:1021
@@ -16825,7 +16825,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Szia!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -16849,40 +16849,40 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "Sok sikert!"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 msgid "Event overview"
-msgstr ""
+msgstr "Esemény áttekintése"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:37
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:71
 msgid "Note that the events in this view are in different timezones."
-msgstr ""
+msgstr "Figyelj, hogy az itt látható események eltérő időzónában vannak."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:7
 msgid "Event list"
-msgstr ""
+msgstr "Eseménylista"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:24
 msgid "Past events"
-msgstr ""
+msgstr "Elmúlt események"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:26
 msgid "Upcoming events"
-msgstr ""
+msgstr "Következő események"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:47
 msgid "Show upcoming"
-msgstr ""
+msgstr "Következő események megjelenítése"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:49
 msgid "Show past events"
-msgstr ""
+msgstr "Elmúlt események megjelenítése"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:100
 #: pretix/presale/templates/pretixpresale/organizers/index.html:101
@@ -16938,115 +16938,118 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:340 pretix/presale/views/cart.py:361
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "A kosarad üres."
 
 #: pretix/presale/views/cart.py:375
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "A termékek sikeresen bekerültek a kosaradba."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
-msgstr ""
+msgstr "A kosarad üres"
 
 #: pretix/presale/views/checkout.py:38
 msgid "The presale for this event is over or has not yet started."
-msgstr ""
+msgstr "Az elővétel ehhez eseményhez még nem kezdődött el."
 
 #: pretix/presale/views/event.py:432
 msgid "Unknown event code or not authorized to access this event."
-msgstr ""
+msgstr "Ismeretlen eseménykód vagy nincs jogod az eseményhez."
 
 #: pretix/presale/views/event.py:439
 msgctxt "subevent"
 msgid "No date selected."
-msgstr ""
+msgstr "Nincs dátum kiválasztva."
 
 #: pretix/presale/views/event.py:442
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr ""
+msgstr "Ismeretlen dátum került kiválasztásra."
 
 #: pretix/presale/views/event.py:465 pretix/presale/views/event.py:473
 #: pretix/presale/views/event.py:476
 msgid "Please go back and try again."
-msgstr ""
+msgstr "Menj vissza és próbáld újra."
 
 #: pretix/presale/views/order.py:289 pretix/presale/views/order.py:354
 #: pretix/presale/views/order.py:411
 msgid "The payment for this order cannot be continued."
-msgstr ""
+msgstr "A rendeléshez tartozó fizetési folyamatot nem lehet folytatni."
 
 #: pretix/presale/views/order.py:294 pretix/presale/views/order.py:363
 #: pretix/presale/views/order.py:420 pretix/presale/views/order.py:459
 msgid "The payment is too late to be accepted."
-msgstr ""
+msgstr "A fizetés túl későn történt meg az elfogadáshoz."
 
 #: pretix/presale/views/order.py:454
 msgid "The payment method for this order cannot be changed."
-msgstr ""
+msgstr "A rendeléshez tartozó fizetési mód nem változtatható meg."
 
 #: pretix/presale/views/order.py:465
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "A rendeléshez tartozó fizetés jelenleg függőben van."
 
 #: pretix/presale/views/order.py:684
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "Nem módosíthatod ezt a rendelést"
 
 #: pretix/presale/views/order.py:799
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr ""
+msgstr "A jegyek letöltése (még) nem engedélyezett ehhez a rendeléshez."
 
 #: pretix/presale/views/user.py:26
 msgid "We had difficulties processing your input."
-msgstr ""
+msgstr "Az általad beírt adatok feldolgozása nehézségekbe ütközött."
 
 #: pretix/presale/views/user.py:35
 msgid "We already sent you an email in the last 24 hours."
-msgstr ""
+msgstr "Már küldtünk neked emailt az elmúlt 24 órában."
 
 #: pretix/presale/views/user.py:45
 msgid "Your orders for {}"
-msgstr ""
+msgstr "{} rendeléseid"
 
 #: pretix/presale/views/user.py:53
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
+"Jelenleg problémáink vannak az e-mail küldéssel, kérlek nézz vissza később."
 
 #: pretix/presale/views/user.py:56
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
-msgstr ""
+msgstr "Ha a felhasználónak vannak rendelései, emailt kap a rendelési kódokkal."
 
 #: pretix/presale/views/waiting.py:77
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "Az eseményhez jelenleg nem érhető el várólista."
 
 #: pretix/presale/views/waiting.py:81
 msgid "We could not identify the product you selected."
-msgstr ""
+msgstr "Nem tudtuk beazonosítani az általad választott terméket."
 
 #: pretix/presale/views/waiting.py:85
 msgid "The waiting list is disabled for this product."
-msgstr ""
+msgstr "A termékhez nem elérhető várólista."
 
 #: pretix/presale/views/waiting.py:94
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr ""
+msgstr "Válassz egy dátumot."
 
 #: pretix/presale/views/waiting.py:106
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
-msgstr ""
+msgstr "Nem kerülhetsz fel a várólistára, mivel a termék jelenleg elérhető."
 
 #: pretix/presale/views/waiting.py:111
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
+"Felvettünk a várólistára. Amint elérhetővé válik a termék, kapni fogsz egy "
+"emailt."
 
 #: pretix/presale/views/widget.py:243
 msgctxt "widget"
@@ -17055,93 +17058,93 @@ msgstr ""
 
 #: pretix/presale/views/widget.py:258
 msgid "This ticket shop is currently disabled."
-msgstr ""
+msgstr "A jegyvásárlás jelenleg le van tiltva."
 
 #: pretix/presale/views/widget.py:267
 msgid "The selected date does not exist in this event series."
-msgstr ""
+msgstr "A kiválasztott dátum nem érvényes erre az eseménysorozatra."
 
 #: pretix/presale/views/widget.py:274
 msgid "This is not an event series."
-msgstr ""
+msgstr "Ez nem egy eseménysorozat."
 
 #: pretix/presale/views/widget.py:308
 #, python-format
 msgid "from %(start_date)s"
-msgstr ""
+msgstr "%(start_date)s-tól"
 
 #: pretix/presale/views/widget.py:311
 msgid "Sale soon"
-msgstr ""
+msgstr "Hamarosan kapható"
 
 #: pretix/settings.py:401
 msgid "English"
-msgstr ""
+msgstr "angol"
 
 #: pretix/settings.py:402
 msgid "German"
-msgstr ""
+msgstr "német"
 
 #: pretix/settings.py:403
 msgid "German (informal)"
-msgstr ""
+msgstr "német (informális)"
 
 #: pretix/settings.py:404
 msgid "Dutch"
-msgstr ""
+msgstr "holland"
 
 #: pretix/settings.py:405
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "holland (informális)"
 
 #: pretix/settings.py:406
 msgid "Danish"
-msgstr ""
+msgstr "dán"
 
 #: pretix/settings.py:407
 msgid "French"
-msgstr ""
+msgstr "francia"
 
 #: pretix/settings.py:408
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "portugál (brazil)"
 
 #: pretix/settings.py:409
 msgid "Spanish"
-msgstr ""
+msgstr "spanyol"
 
 #: pretix/settings.py:410
 msgid "Turkish"
-msgstr ""
+msgstr "török"
 
 #: pretix/settings.py:411
 msgid "Polish"
-msgstr ""
+msgstr "lengyel"
 
 #: pretix/settings.py:412
 msgid "Italian"
-msgstr ""
+msgstr "olasz"
 
 #: pretix/settings.py:413
 msgid "Russian"
-msgstr ""
+msgstr "orosz"
 
 #: pretix/settings.py:414
 msgid "Latvian"
-msgstr ""
+msgstr "lett"
 
 #: pretix/settings.py:415
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "kínai (egyszerűsített)"
 
 #: pretix/settings.py:416
 msgid "Greek"
-msgstr ""
+msgstr "görög"
 
 #: pretix/settings.py:706
 msgid "Read access"
-msgstr ""
+msgstr "Olvasási jog"
 
 #: pretix/settings.py:707
 msgid "Write access"
-msgstr ""
+msgstr "Írási jog"
