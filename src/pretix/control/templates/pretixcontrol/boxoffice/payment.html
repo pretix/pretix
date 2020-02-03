@@ -5,7 +5,12 @@
     <dd>{{ payment_info.pos_id }}</dd>
     <dt>{% trans "Receipt ID" %}</dt>
     <dd>{{ payment_info.receipt_id }}</dd>
-    {% if payment_info.payment_type == "sumup" %}
+    {% if payment_info.payment_type == "stripe_terminal" %}
+        <dt>{% trans "Payment provider" %}</dt>
+        <dd>Stripe Terminal</dd>
+        <dt>{% trans "ID" %}</dt>
+        <dd>{{ payment_info.payment_data.payment_intent }}</dd>
+    {% elif payment_info.payment_type == "sumup" %}
         <dt>{% trans "Payment provider" %}</dt>
         <dd>SumUp</dd>
         <dt>{% trans "Transaction Code" %}</dt>
