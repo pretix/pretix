@@ -478,6 +478,35 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
 class EventSettingsSerializer(serializers.Serializer):
     default_fields = [
         'imprint_url',
+        'checkout_email_helptext',
+        'presale_has_ended_text',
+        'voucher_explanation_text',
+        'show_date_to',
+        'show_times',
+        'show_items_outside_presale_period',
+        'display_net_prices',
+        'presale_start_show_date',
+        'locales',
+        'locale',
+        'show_quota_left',
+        'waiting_list_enabled',
+        'waiting_list_hours',
+        'waiting_list_auto',
+        'max_items_per_order',
+        'reservation_time',
+        'contact_mail',
+        'show_variations_expanded',
+        'hide_sold_out',
+        'meta_noindex',
+        'redirect_to_checkout_directly',
+        'frontpage_subevent_ordering',
+        'frontpage_text',
+        'attendee_names_asked',
+        'attendee_names_required',
+        'attendee_emails_asked',
+        'attendee_emails_required',
+        'confirm_text',
+        'order_email_asked_twice',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -487,6 +516,8 @@ class EventSettingsSerializer(serializers.Serializer):
             kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
             kwargs.setdefault('required', False)
             form_kwargs = DEFAULTS[fname].get('form_kwargs', {})
+            if 'serializer_class' not in DEFAULTS[fname]:
+                raise ValidationError('{} has no serializer class'.format(fname))
             f = DEFAULTS[fname]['serializer_class'](
                 **kwargs
             )

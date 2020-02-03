@@ -111,7 +111,7 @@ scss
 searchable
 selectable
 serializable
-serializers
+serializer
 serializers
 sexualized
 SQL
@@ -141,6 +141,7 @@ untrusted
 uptime
 username
 url
+validator
 versa
 versioning
 viewable

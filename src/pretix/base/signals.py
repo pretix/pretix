@@ -646,7 +646,7 @@ validate_event_settings = EventPluginSignal(
     providing_args=["settings_dict"]
 )
 """
-This signal is sent out if the user performs an update of event settings through the API.
+This signal is sent out if the user performs an update of event settings through the API or web interface.
 You are passed a ``settings_dict`` dictionary with the new state of the event settings object and are expected
 to raise a ``django.core.exceptions.ValidationError`` if the new state is not valid.
 You can not modify the dictionary. This is only recommended to use if you have multiple settings

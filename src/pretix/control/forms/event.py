@@ -12,9 +12,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
-from django.utils.translation import (
-    pgettext, pgettext_lazy, ugettext_lazy as _,
-)
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries import Countries, countries
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
@@ -29,9 +27,10 @@ from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
+from pretix.base.signals import validate_event_settings
 from pretix.control.forms import (
-    ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
-    SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
+    ExtFileField, FontSelect, MultipleLanguagesWidget, SlugWidget,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -340,33 +339,6 @@ class EventUpdateForm(I18nModelForm):
 
 
 class EventSettingsForm(SettingsForm):
-    show_date_to = forms.BooleanField(
-        label=_("Show event end date"),
-        help_text=_("If disabled, only event's start date will be displayed to the public."),
-        required=False
-    )
-    show_times = forms.BooleanField(
-        label=_("Show dates with time"),
-        help_text=_("If disabled, the event's start and end date will be displayed without the time of day."),
-        required=False
-    )
-    show_items_outside_presale_period = forms.BooleanField(
-        label=_("Show items outside presale period"),
-        help_text=_("Show item details before presale has started and after presale has ended"),
-        required=False
-    )
-    display_net_prices = forms.BooleanField(
-        label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
-        help_text=_("Independent of your choice, the cart will show gross prices as this is the price that needs to be "
-                    "paid"),
-        required=False
-    )
-    presale_start_show_date = forms.BooleanField(
-        label=_("Show start date"),
-        help_text=_("Show the presale start date before presale has started."),
-        widget=forms.CheckboxInput,
-        required=False
-    )
     last_order_modification_date = RelativeDateTimeField(
         label=_('Last date of modifications'),
         help_text=_("The last date users can modify details of their orders, such as attendee names or "
@@ -377,56 +349,6 @@ class EventSettingsForm(SettingsForm):
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Event timezone"),
-    )
-    locales = forms.MultipleChoiceField(
-        choices=settings.LANGUAGES,
-        widget=MultipleLanguagesWidget,
-        label=_("Available languages"),
-    )
-    locale = forms.ChoiceField(
-        choices=settings.LANGUAGES,
-        widget=SingleLanguageWidget,
-        label=_("Default language"),
-    )
-    show_quota_left = forms.BooleanField(
-        label=_("Show number of tickets left"),
-        help_text=_("Publicly show how many tickets of a certain type are still available."),
-        required=False
-    )
-    waiting_list_enabled = forms.BooleanField(
-        label=_("Enable waiting list"),
-        help_text=_("Once a ticket is sold out, people can add themselves to a waiting list. As soon as a ticket "
-                    "becomes available again, it will be reserved for the first person on the waiting list and this "
-                    "person will receive an email notification with a voucher that can be used to buy a ticket."),
-        required=False
-    )
-    waiting_list_hours = forms.IntegerField(
-        label=_("Waiting list response time"),
-        min_value=6,
-        help_text=_("If a ticket voucher is sent to a person on the waiting list, it has to be redeemed within this "
-                    "number of hours until it expires and can be re-assigned to the next person on the list."),
-        required=False,
-        widget=forms.NumberInput(),
-    )
-    waiting_list_auto = forms.BooleanField(
-        label=_("Automatic waiting list assignments"),
-        help_text=_("If ticket capacity becomes free, automatically create a voucher and send it to the first person "
-                    "on the waiting list for that product. If this is not active, mails will not be send automatically "
-                    "but you can send them manually via the control panel. If you disable the waiting list but keep "
-                    "this option enabled, tickets will still be sent out."),
-        required=False,
-        widget=forms.CheckboxInput(),
-    )
-    attendee_names_asked = forms.BooleanField(
-        label=_("Ask for attendee names"),
-        help_text=_("Ask for a name for all tickets which include admission to the event."),
-        required=False,
-    )
-    attendee_names_required = forms.BooleanField(
-        label=_("Require attendee names"),
-        help_text=_("Require customers to fill in the names of all attendees."),
-        required=False,
-        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_names_asked'}),
     )
     name_scheme = forms.ChoiceField(
         label=_("Name format"),
@@ -439,77 +361,6 @@ class EventSettingsForm(SettingsForm):
         help_text=_("If the naming scheme you defined above allows users to input a title, you can use this to "
                     "restrict the set of selectable titles."),
         required=False,
-    )
-    attendee_emails_asked = forms.BooleanField(
-        label=_("Ask for email addresses per ticket"),
-        help_text=_("Normally, pretix asks for one email address per order and the order confirmation will be sent "
-                    "only to that email address. If you enable this option, the system will additionally ask for "
-                    "individual email addresses for every admission ticket. This might be useful if you want to "
-                    "obtain individual addresses for every attendee even in case of group orders. However, "
-                    "pretix will send the order confirmation by default only to the one primary email address, not to "
-                    "the per-attendee addresses. You can however enable this in the E-mail settings."),
-        required=False
-    )
-    attendee_emails_required = forms.BooleanField(
-        label=_("Require email addresses per ticket"),
-        help_text=_("Require customers to fill in individual e-mail addresses for all admission tickets. See the "
-                    "above option for more details. One email address for the order confirmation will always be "
-                    "required regardless of this setting."),
-        required=False,
-        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_emails_asked'}),
-    )
-    order_email_asked_twice = forms.BooleanField(
-        label=_("Ask for the order email address twice"),
-        help_text=_("Require customers to fill in the primary email address twice to avoid errors."),
-        required=False,
-    )
-    max_items_per_order = forms.IntegerField(
-        min_value=1,
-        label=_("Maximum number of items per order"),
-        help_text=_("Add-on products will not be counted.")
-    )
-    reservation_time = forms.IntegerField(
-        min_value=0,
-        label=_("Reservation period"),
-        help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
-    )
-    confirm_text = I18nFormField(
-        label=_('Confirmation text'),
-        help_text=_('This text needs to be confirmed by the user before a purchase is possible. You could for example '
-                    'link your terms of service here. If you use the Pages feature to publish your terms of service, '
-                    'you don\'t need this setting since you can configure it there.'),
-        required=False,
-        widget=I18nTextarea
-    )
-    contact_mail = forms.EmailField(
-        label=_("Contact address"),
-        required=False,
-        help_text=_("We'll show this publicly to allow attendees to contact you.")
-    )
-    show_variations_expanded = forms.BooleanField(
-        label=_("Show variations of a product expanded by default"),
-        required=False
-    )
-    hide_sold_out = forms.BooleanField(
-        label=_("Hide all products that are sold out"),
-        required=False
-    )
-    meta_noindex = forms.BooleanField(
-        label=_('Ask search engines not to index the ticket shop'),
-        required=False
-    )
-    redirect_to_checkout_directly = forms.BooleanField(
-        label=_('Directly redirect to check-out after a product has been added to the cart.'),
-        required=False
-    )
-    frontpage_subevent_ordering = forms.ChoiceField(
-        label=pgettext('subevent', 'Date ordering'),
-        choices=[
-            ('date_ascending', _('Event start time')),
-            ('date_descending', _('Event start time (descending)')),
-            ('name_ascending', _('Name')),
-            ('name_descending', _('Name (descending)')),
-        ],  # When adding a new ordering, remember to also define it in the event model
     )
     logo_image = ExtFileField(
         label=_('Logo image'),
@@ -526,33 +377,6 @@ class EventSettingsForm(SettingsForm):
                     'Facebook advises to use a picture size of 1200 x 630 pixels, however some platforms like '
                     'WhatsApp and Reddit only show a square preview, so we recommend to make sure it still looks good '
                     'only the center square is shown. If you do not fill this, we will use the logo given above.')
-    )
-    frontpage_text = I18nFormField(
-        label=_("Frontpage text"),
-        required=False,
-        widget=I18nTextarea
-    )
-    checkout_email_helptext = I18nFormField(
-        label=_("Help text of the email field"),
-        required=False,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        widget=I18nTextarea
-    )
-    presale_has_ended_text = I18nFormField(
-        label=_("End of presale text"),
-        required=False,
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        help_text=_("This text will be shown above the ticket shop once the designated sales timeframe for this event "
-                    "is over. You can use it to describe other options to get a ticket, such as a box office.")
-    )
-    voucher_explanation_text = I18nFormField(
-        label=_("Voucher explanation"),
-        required=False,
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        help_text=_("This text will be shown next to the input for a voucher code. You can use it e.g. to explain "
-                    "how to obtain a voucher code.")
     )
     primary_color = forms.CharField(
         label=_("Primary color"),
@@ -593,27 +417,47 @@ class EventSettingsForm(SettingsForm):
     )
 
     auto_fields = [
-        'imprint_url'
+        'imprint_url',
+        'checkout_email_helptext',
+        'presale_has_ended_text',
+        'voucher_explanation_text',
+        'show_date_to',
+        'show_times',
+        'show_items_outside_presale_period',
+        'display_net_prices',
+        'presale_start_show_date',
+        'locales',
+        'locale',
+        'show_quota_left',
+        'waiting_list_enabled',
+        'waiting_list_hours',
+        'waiting_list_auto',
+        'max_items_per_order',
+        'reservation_time',
+        'contact_mail',
+        'show_variations_expanded',
+        'hide_sold_out',
+        'meta_noindex',
+        'redirect_to_checkout_directly',
+        'frontpage_subevent_ordering',
+        'frontpage_text',
+        'attendee_names_asked',
+        'attendee_names_required',
+        'attendee_emails_asked',
+        'attendee_emails_required',
+        'confirm_text',
+        'order_email_asked_twice',
     ]
 
     def clean(self):
         data = super().clean()
-        if 'locales' in data and data['locale'] not in data['locales']:
-            raise ValidationError({
-                'locale': _('Your default locale must also be enabled for your event (see box above).')
-            })
-        if data['attendee_names_required'] and not data['attendee_names_asked']:
-            raise ValidationError({
-                'attendee_names_required': _('You cannot require specifying attendee names if you do not ask for them.')
-            })
-        if data['attendee_emails_required'] and not data['attendee_emails_asked']:
-            raise ValidationError({
-                'attendee_emails_required': _('You have to ask for attendee emails if you want to make them required.')
-            })
+        settings_dict = self.event.settings.freeze()
+        settings_dict.update(data)
+        validate_event_settings(self.event, data)
         return data
 
     def __init__(self, *args, **kwargs):
-        event = kwargs['obj']
+        self.event = kwargs['obj']
         super().__init__(*args, **kwargs)
         self.fields['confirm_text'].widget.attrs['rows'] = '3'
         self.fields['confirm_text'].widget.attrs['placeholder'] = _(
@@ -634,7 +478,7 @@ class EventSettingsForm(SettingsForm):
             ))
             for k, v in PERSON_NAME_TITLE_GROUPS.items()
         ]
-        if not event.has_subevents:
+        if not self.event.has_subevents:
             del self.fields['frontpage_subevent_ordering']
         self.fields['primary_font'].choices += [
             (a, {"title": a, "data": v}) for a, v in get_fonts().items()
