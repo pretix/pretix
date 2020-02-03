@@ -4,6 +4,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
+from django import forms
 from django.conf import settings
 from django.core.files import File
 from django.db.models import Model
@@ -12,6 +13,7 @@ from django.utils.translation import (
 )
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.strings import LazyI18nString
+from rest_framework import serializers
 
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
@@ -291,11 +293,18 @@ DEFAULTS = {
     },
     'contact_mail': {
         'default': None,
-        'type': str
+        'type': str,
     },
     'imprint_url': {
         'default': None,
-        'type': str
+        'type': str,
+        'form_class': forms.URLField,
+        'form_kwargs': dict(
+            label=_("Imprint URL"),
+            help_text=_("This should point e.g. to a part of your website that has your contact details and legal "
+                        "information."),
+        ),
+        'serializer_class': serializers.URLField,
     },
     'confirm_text': {
         'default': None,
@@ -1021,3 +1030,9 @@ class SettingsSandbox:
 
     def set(self, key: str, value: Any):
         self._event.settings.set(self._convert_key(key), value)
+
+
+def validate_settings(event, settings_dict):
+    from pretix.base.signals import validate_event_settings
+
+    validate_event_settings.send(sender=event, settings_dict=settings_dict)

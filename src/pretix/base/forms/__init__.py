@@ -10,6 +10,7 @@ from hierarkey.forms import HierarkeyForm
 
 from pretix.base.models import Event
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
+from pretix.base.settings import DEFAULTS
 
 from .validators import PlaceholderValidator  # NOQA
 
@@ -51,6 +52,7 @@ class I18nInlineFormSet(i18nfield.forms.I18nInlineFormSet):
 
 
 class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
+    auto_fields = []
 
     def __init__(self, *args, **kwargs):
         self.obj = kwargs.get('obj', None)
@@ -59,6 +61,12 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
         kwargs['locales'] = self.locales
         kwargs['initial'] = self.obj.settings.freeze()
         super().__init__(*args, **kwargs)
+        for fname in self.auto_fields:
+            kwargs = DEFAULTS[fname].get('form_kwargs', {})
+            kwargs.setdefault('required', False)
+            self.fields[fname] = DEFAULTS[fname]['form_class'](
+                **kwargs
+            )
         for k, f in self.fields.items():
             if isinstance(f, (RelativeDateTimeField, RelativeDateField)):
                 f.set_event(self.obj)

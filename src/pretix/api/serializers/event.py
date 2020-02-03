@@ -4,7 +4,9 @@ from django.db import transaction
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
 from django_countries.serializers import CountryFieldMixin
+from hierarkey.proxy import HierarkeyProxy
 from pytz import common_timezones
+from rest_framework import serializers
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
@@ -15,6 +17,8 @@ from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
+from pretix.base.settings import DEFAULTS, validate_settings
+from pretix.base.signals import api_event_settings_fields
 
 
 class MetaDataField(Field):
@@ -469,3 +473,40 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
     class Meta:
         model = TaxRule
         fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country')
+
+
+class EventSettingsSerializer(serializers.Serializer):
+    default_fields = [
+        'imprint_url',
+    ]
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        for fname in self.default_fields:
+            kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
+            kwargs.setdefault('required', False)
+            form_kwargs = DEFAULTS[fname].get('form_kwargs', {})
+            f = DEFAULTS[fname]['serializer_class'](
+                **kwargs
+            )
+            f._label = form_kwargs.get('label', fname)
+            f._help_text = form_kwargs.get('help_text')
+            self.fields[fname] = f
+
+        for recv, resp in api_event_settings_fields.send(sender=self.event):
+            for fname, field in resp.items():
+                field.required = False
+                self.fields[fname] = field
+
+    def update(self, instance: HierarkeyProxy, validated_data):
+        for attr, value in validated_data.items():
+            instance.set(attr, value)
+        return instance
+
+    def validate(self, data):
+        data = super().validate(data)
+        settings_dict = self.instance.freeze()
+        settings_dict.update(data)
+        validate_settings(self.event, settings_dict)
+        return data

@@ -473,12 +473,6 @@ class EventSettingsForm(SettingsForm):
         label=_("Reservation period"),
         help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
     )
-    imprint_url = forms.URLField(
-        label=_("Imprint URL"),
-        help_text=_("This should point e.g. to a part of your website that has your contact details and legal "
-                    "information."),
-        required=False,
-    )
     confirm_text = I18nFormField(
         label=_('Confirmation text'),
         help_text=_('This text needs to be confirmed by the user before a purchase is possible. You could for example '
@@ -597,6 +591,10 @@ class EventSettingsForm(SettingsForm):
         widget=FontSelect,
         help_text=_('Only respected by modern browsers.')
     )
+
+    auto_fields = [
+        'imprint_url'
+    ]
 
     def clean(self):
         data = super().clean()
