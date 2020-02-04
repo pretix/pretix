@@ -1,3 +1,4 @@
+import copy
 import json
 from collections import OrderedDict
 from io import BytesIO
@@ -7,14 +8,13 @@ from django import forms
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files import File
-from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db.models import Exists, OuterRef
 from django.db.models.functions import Coalesce
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, ugettext_lazy
 from jsonfallback.functions import JSONExtract
-from PyPDF2 import PdfFileMerger
 from reportlab.lib import pagesizes
+from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 
 from pretix.base.exporter import BaseExporter
@@ -36,7 +36,84 @@ def _renderer(event, layout):
     return Renderer(event, json.loads(layout.layout), bgf)
 
 
-def render_pdf(event, positions):
+OPTIONS = OrderedDict([
+    ('one', {
+        'name': ugettext_lazy('One badge per page'),
+        'cols': 1,
+        'rows': 1,
+        'margins': [0, 0, 0, 0],
+        'offsets': [0, 0],
+        'pagesize': None,
+    }),
+    ('a4_a6l', {
+        'name': ugettext_lazy('4 landscape A6 pages on one A4 page'),
+        'cols': 2,
+        'rows': 2,
+        'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
+        'offsets': [pagesizes.landscape(pagesizes.A4)[0] / 2, pagesizes.landscape(pagesizes.A4)[1] / 2],
+        'pagesize': pagesizes.landscape(pagesizes.A4),
+    }),
+    ('a4_a6p', {
+        'name': ugettext_lazy('4 portrait A6 pages on one A4 page'),
+        'cols': 2,
+        'rows': 2,
+        'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
+        'offsets': [pagesizes.portrait(pagesizes.A4)[0] / 2, pagesizes.portrait(pagesizes.A4)[0] / 2],
+        'pagesize': pagesizes.portrait(pagesizes.A4),
+    }),
+    ('a4_a7l', {
+        'name': ugettext_lazy('8 landscape A7 pages on one A4 page'),
+        'cols': 2,
+        'rows': 4,
+        'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
+        'offsets': [pagesizes.portrait(pagesizes.A4)[0] / 2, pagesizes.portrait(pagesizes.A4)[1] / 4],
+        'pagesize': pagesizes.portrait(pagesizes.A4),
+    }),
+    ('a4_a7p', {
+        'name': ugettext_lazy('8 portrait A7 pages on one A4 page'),
+        'cols': 4,
+        'rows': 2,
+        'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
+        'offsets': [pagesizes.landscape(pagesizes.A4)[0] / 4, pagesizes.landscape(pagesizes.A4)[0] / 2],
+        'pagesize': pagesizes.landscape(pagesizes.A4),
+    }),
+    ('durable_54x90', {
+        'name': 'DURABLE BADGEMAKER® 54 x 90 mm (1445-02)',
+        'cols': 2,
+        'rows': 5,
+        'margins': [12 * mm, 15 * mm, 15 * mm, 15 * mm],
+        'offsets': [90 * mm, 54 * mm],
+        'pagesize': pagesizes.A4,
+    }),
+    ('durable_40x75', {
+        'name': 'DURABLE BADGEMAKER® 40 x 75 mm (1453-02)',
+        'cols': 2,
+        'rows': 6,
+        'margins': [28.5 * mm, 30 * mm, 28.5 * mm, 30 * mm],
+        'offsets': [75 * mm, 40 * mm],
+        'pagesize': pagesizes.A4,
+    }),
+    ('durable_60x90', {
+        'name': 'DURABLE BADGEMAKER® 60 x 90 mm (1456-02)',
+        'cols': 2,
+        'rows': 4,
+        'margins': [28.5 * mm, 15 * mm, 28.5 * mm, 15 * mm],
+        'offsets': [90 * mm, 60 * mm],
+        'pagesize': pagesizes.A4,
+    }),
+    ('durable_fix_40x75', {
+        'name': 'DURABLE BADGEFIX® 40 x 75 mm (8334-02)',
+        'cols': 2,
+        'rows': 6,
+        'margins': [28.5 * mm, 30 * mm, 28.5 * mm, 30 * mm],
+        'offsets': [93 * mm, 60 * mm],
+        'pagesize': pagesizes.A4,
+    }),
+])
+
+
+def render_pdf(event, positions, opt):
+    from PyPDF2 import PdfFileWriter, PdfFileReader
     Renderer._register_fonts()
 
     renderermap = {
@@ -47,26 +124,60 @@ def render_pdf(event, positions):
         default_renderer = _renderer(event, event.badge_layouts.get(default=True))
     except BadgeLayout.DoesNotExist:
         default_renderer = None
-    merger = PdfFileMerger()
+    output_pdf_writer = PdfFileWriter()
 
     any = False
+    npp = opt['cols'] * opt['rows']
+
+    def render_page(positions):
+        buffer = BytesIO()
+        p = canvas.Canvas(buffer, pagesize=pagesizes.A4)
+        for i, (op, r) in enumerate(positions):
+            offsetx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
+            offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
+            p.translate(offsetx, offsety)
+            with language(op.order.locale):
+                r.draw_page(p, op.order, op, show_page=False)
+            p.translate(-offsetx, -offsety)
+
+        if opt['pagesize']:
+            p.setPageSize(opt['pagesize'])
+        p.showPage()
+        p.save()
+        buffer.seek(0)
+        canvas_pdf_reader = PdfFileReader(buffer)
+        empty_pdf_page = output_pdf_writer.addBlankPage(
+            width=opt['pagesize'][0] if opt['pagesize'] else positions[0][1].bg_pdf.getPage(0).mediaBox[2],
+            height=opt['pagesize'][1] if opt['pagesize'] else positions[0][1].bg_pdf.getPage(0).mediaBox[3],
+        )
+        for i, (op, r) in enumerate(positions):
+            bg_page = copy.copy(r.bg_pdf.getPage(0))
+            offsetx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
+            offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
+            empty_pdf_page.mergeTranslatedPage(
+                bg_page,
+                tx=offsetx,
+                ty=offsety
+            )
+        empty_pdf_page.mergePage(canvas_pdf_reader.getPage(0))
+
+    pagebuffer = []
+    outbuffer = BytesIO()
     for op in positions:
         r = renderermap.get(op.item_id, default_renderer)
         if not r:
             continue
         any = True
+        pagebuffer.append((op, r))
+        if len(pagebuffer) == npp:
+            render_page(pagebuffer)
+            pagebuffer.clear()
 
-        with language(op.order.locale):
-            buffer = BytesIO()
-            p = canvas.Canvas(buffer, pagesize=pagesizes.A4)
-            r.draw_page(p, op.order, op)
-            p.save()
-            outbuffer = r.render_background(buffer, 'Badge')
-            merger.append(ContentFile(outbuffer.read()))
-
-    outbuffer = BytesIO()
-    merger.write(outbuffer)
-    merger.close()
+    output_pdf_writer.addMetadata({
+        '/Title': 'Badges',
+        '/Creator': 'pretix',
+    })
+    output_pdf_writer.write(outbuffer)
     outbuffer.seek(0)
     if not any:
         raise OrderError(_("None of the selected products is configured to print badges."))
@@ -102,6 +213,17 @@ class BadgeExporter(BaseExporter):
                  forms.BooleanField(
                      label=_('Include add-on or bundled positions'),
                      required=False
+                 )),
+                ('rendering',
+                 forms.ChoiceField(
+                     label=_('Rendering option'),
+                     choices=[
+                         (k, r['name']) for k, r in OPTIONS.items()
+                     ],
+                     required=True,
+                     help_text=_('This option allows you to align multiple badges on one page, for example if you '
+                                 'want to print to a sheet of stickers with a regular office printer. Please note '
+                                 'that your individual badge layouts must already be in the correct size.')
                  )),
                 ('order_by',
                  forms.ChoiceField(
@@ -140,12 +262,13 @@ class BadgeExporter(BaseExporter):
         elif form_data.get('order_by', '').startswith('name:'):
             part = form_data['order_by'][5:]
             qs = qs.annotate(
-                resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts', 'order__invoice_address__name_parts')
+                resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts',
+                                       'order__invoice_address__name_parts')
             ).annotate(
                 resolved_name_part=JSONExtract('resolved_name', part)
             ).order_by(
                 'resolved_name_part'
             )
 
-        outbuffer = render_pdf(self.event, qs)
+        outbuffer = render_pdf(self.event, qs, OPTIONS[form_data.get('rendering', 'one')])
         return 'badges.pdf', 'application/pdf', outbuffer.read()

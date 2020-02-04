@@ -492,7 +492,7 @@ class Renderer:
             p.drawOn(canvas, 0, -h - ad[1])
         canvas.restoreState()
 
-    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition):
+    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True):
         for o in self.layout:
             if o['type'] == "barcodearea":
                 self._draw_barcodearea(canvas, op, o)
@@ -502,7 +502,8 @@ class Renderer:
                 self._draw_poweredby(canvas, op, o)
             if self.bg_pdf:
                 canvas.setPageSize((self.bg_pdf.getPage(0).mediaBox[2], self.bg_pdf.getPage(0).mediaBox[3]))
-        canvas.showPage()
+        if show_page:
+            canvas.showPage()
 
     def render_background(self, buffer, title=_('Ticket')):
         if settings.PDFTK:
