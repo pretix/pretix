@@ -22,8 +22,9 @@
         Please scan the barcode below to complete your WeChat payment.
         Once you have completed your payment, you can refresh this page.
     {% endblocktrans %}</p>
-
-    <div class="qrcode-canvas text-center" data-qrdata="{{ payment_info.wechat.qr_code_url }}"></div>
+    <div class="text-center">
+        <script type="text/plain" data-size="150" data-replace-with-qr>{{ payment_info.wechat.qr_code_url }}</script>
+    </div>
 {% else %}
     <p>{% blocktrans trimmed %}
         The payment transaction could not be completed for the following reason:
