@@ -4,7 +4,13 @@
     <dt>{% trans "Device ID" %}</dt>
     <dd>{{ payment_info.pos_id }}</dd>
     <dt>{% trans "Receipt ID" %}</dt>
-    <dd>{{ payment_info.receipt_id }}</dd>
+    <dd>
+        <a href="{% url "plugins:pretix_posbackend:organizer.transaction" organizer=request.organizer.slug device=payment_info.pos_id receipt_id=payment_info.receipt_id %}">
+            <span class="fa fa-file"></span> {{ payment_info.receipt_id }}
+        </a>&nbsp;<a href="{% url "plugins:pretix_posbackend:organizer.transaction.pdf" organizer=request.organizer.slug device=payment_info.pos_id receipt_id=payment_info.receipt_id %}">
+            <span class="fa fa-file-pdf-o"></span> {% trans "PDF" %}
+        </a>
+    </dd>
     {% if payment_info.payment_type == "stripe_terminal" %}
         <dt>{% trans "Payment provider" %}</dt>
         <dd>Stripe Terminal</dd>

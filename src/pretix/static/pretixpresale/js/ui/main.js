@@ -298,6 +298,14 @@ $(function () {
         dependency.on("change", update);
     });
 
+    $(".qrcode-canvas").each(function () {
+        $(this).qrcode(
+            {
+                text: $.trim($(this).attr("data-qrdata"))
+            }
+        );
+    });
+
     form_handlers($("body"));
 
     // Lightbox

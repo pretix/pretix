@@ -17,7 +17,13 @@
         </div>
         <div class="clearfix"></div>
     </p>
+{% elif payment.state == "created" and payment.provider == "stripe_wechatpay" %}
+    <p>{% blocktrans trimmed %}
+        Please scan the barcode below to complete your WeChat payment.
+        Once you have completed your payment, you can refresh this page.
+    {% endblocktrans %}</p>
 
+    <div class="qrcode-canvas text-center" data-qrdata="{{ payment_info.wechat.qr_code_url }}"></div>
 {% else %}
     <p>{% blocktrans trimmed %}
         The payment transaction could not be completed for the following reason:
