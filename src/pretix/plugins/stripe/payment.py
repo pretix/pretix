@@ -102,7 +102,7 @@ class StripeSettingsHolder(BasePaymentProvider):
             moto_settings = [
                 ('reseller_moto',
                  forms.BooleanField(
-                     label=_('Enable MOTO payments for Resellers'),
+                     label=_('Enable MOTO payments for resellers'),
                      help_text=(
                          _('Gated feature, that needs to be enabled for your account by Stripe support first.') +
                          '<div class="alert alert-danger">%s</div>' % _(
