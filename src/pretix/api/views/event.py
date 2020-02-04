@@ -4,13 +4,14 @@ from django.db.models import ProtectedError, Q
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import filters, viewsets
+from rest_framework import filters, views, viewsets
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
 
 from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.serializers.event import (
-    CloneEventSerializer, EventSerializer, SubEventSerializer,
-    TaxRuleSerializer,
+    CloneEventSerializer, EventSerializer, EventSettingsSerializer,
+    SubEventSerializer, TaxRuleSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
@@ -333,3 +334,33 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
             auth=self.request.auth,
         )
         super().perform_destroy(instance)
+
+
+class EventSettingsView(views.APIView):
+    permission = 'can_change_event_settings'
+
+    def get(self, request, *args, **kwargs):
+        s = EventSettingsSerializer(instance=request.event.settings, event=request.event)
+        if 'explain' in request.GET:
+            return Response({
+                fname: {
+                    'value': s.data[fname],
+                    'label': getattr(field, '_label', fname),
+                    'help_text': getattr(field, '_help_text', None)
+                } for fname, field in s.fields.items()
+            })
+        return Response(s.data)
+
+    def patch(self, request, *wargs, **kwargs):
+        s = EventSettingsSerializer(instance=request.event.settings, data=request.data, partial=True,
+                                    event=request.event)
+        s.is_valid(raise_exception=True)
+        with transaction.atomic():
+            s.save()
+            self.request.event.log_action(
+                'pretix.event.settings', user=self.request.user, auth=self.request.auth, data={
+                    k: v for k, v in s.validated_data.items()
+                }
+            )
+        s = EventSettingsSerializer(instance=request.event.settings, event=request.event)
+        return Response(s.data)

@@ -486,3 +486,123 @@ Endpoints
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
+
+Event settings
+--------------
+
+pretix events have lots and lots of parameters of different types that are stored in a key-value store on our system.
+Since many of these settings depend on each other in complex ways, we can not give direct access to all of these
+settings through the API. However, we do expose many of the simple and useful flags through the API.
+
+Please note that the available settings flags change between pretix versions and also between events, depending on the
+installed plugins, and we do not give a guarantee on backwards-compatibility like with other parts of the API.
+Therefore, we're also not including a list of the options here, but instead recommend to look at the endpoint output
+to see available options. The ``explain=true`` flag enables a verbose mode that provides you with human-readable
+information about the properties.
+
+.. note:: Please note that this is not a complete representation of all event settings. You will find more settings
+          in the web interface.
+
+.. warning:: This API is intended for advanced users. Even though we take care to validate your input, you will be
+             able to break your event using this API by creating situations of conflicting settings. Please take care.
+
+.. versionchanged:: 3.6
+
+   Initial support for settings has been added to the API.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/settings/
+
+   Get current values of event settings.
+
+   Permission required: "Can change event settings"
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/settings/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example standard response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "imprint_url": "https://pretix.eu",
+        …
+      }
+
+   **Example verbose response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "imprint_url":
+          {
+            "value": "https://pretix.eu",
+            "label": "Imprint URL",
+            "help_text": "This should point e.g. to a part of your website that has your contact details and legal information."
+          }
+        },
+        …
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event to access
+   :param event: The ``slug`` field of the event to access
+   :query explain: Set to ``true`` to enable verbose response mode
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/settings/
+
+   Updates event settings. Note that ``PUT`` is not allowed here, only ``PATCH``.
+
+    .. warning::
+
+       Settings can be stored at different levels in pretix. If a value is not set on event level, a default setting
+       from a higher level (organizer, global) will be returned. If you explicitly set a setting on event level, it
+       will no longer be inherited from the higher levels. Therefore, we recommend you to send only settings that you
+       explicitly want to set on event level. To unset a settings, pass ``null``.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/settings/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "imprint_url": "https://example.org/imprint/"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "imprint_url": "https://example.org/imprint/",
+        …
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event to update
+   :param event: The ``slug`` field of the event to update
+   :statuscode 200: no error
+   :statuscode 400: The event could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.

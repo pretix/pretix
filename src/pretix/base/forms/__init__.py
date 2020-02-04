@@ -8,7 +8,6 @@ from django.utils.crypto import get_random_string
 from formtools.wizard.views import SessionWizardView
 from hierarkey.forms import HierarkeyForm
 
-from pretix.base.models import Event
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 
 from .validators import PlaceholderValidator  # NOQA
@@ -51,19 +50,33 @@ class I18nInlineFormSet(i18nfield.forms.I18nInlineFormSet):
 
 
 class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
+    auto_fields = []
 
     def __init__(self, *args, **kwargs):
+        from pretix.base.settings import DEFAULTS
+
         self.obj = kwargs.get('obj', None)
         self.locales = self.obj.settings.get('locales') if self.obj else kwargs.pop('locales', None)
         kwargs['attribute_name'] = 'settings'
         kwargs['locales'] = self.locales
         kwargs['initial'] = self.obj.settings.freeze()
         super().__init__(*args, **kwargs)
+        for fname in self.auto_fields:
+            kwargs = DEFAULTS[fname].get('form_kwargs', {})
+            kwargs.setdefault('required', False)
+            field = DEFAULTS[fname]['form_class'](
+                **kwargs
+            )
+            if isinstance(field, i18nfield.forms.I18nFormField):
+                field.widget.enabled_locales = self.locales
+            self.fields[fname] = field
         for k, f in self.fields.items():
             if isinstance(f, (RelativeDateTimeField, RelativeDateField)):
                 f.set_event(self.obj)
 
     def get_new_filename(self, name: str) -> str:
+        from pretix.base.models import Event
+
         nonce = get_random_string(length=8)
         if isinstance(self.obj, Event):
             fname = '%s/%s/%s.%s.%s' % (

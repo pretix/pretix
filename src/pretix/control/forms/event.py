@@ -3,19 +3,15 @@ from urllib.parse import urlencode
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import (
-    MaxValueValidator, MinValueValidator, RegexValidator, validate_email,
-)
+from django.core.validators import RegexValidator, validate_email
 from django.db.models import Q
 from django.forms import formset_factory
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
-from django.utils.translation import (
-    pgettext, pgettext_lazy, ugettext_lazy as _,
-)
-from django_countries import Countries, countries
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_countries import Countries
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
@@ -28,10 +24,12 @@ from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
-from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
+from pretix.base.settings import (
+    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_settings,
+)
 from pretix.control.forms import (
-    ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
-    SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
+    ExtFileField, FontSelect, MultipleLanguagesWidget, SlugWidget,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -340,93 +338,9 @@ class EventUpdateForm(I18nModelForm):
 
 
 class EventSettingsForm(SettingsForm):
-    show_date_to = forms.BooleanField(
-        label=_("Show event end date"),
-        help_text=_("If disabled, only event's start date will be displayed to the public."),
-        required=False
-    )
-    show_times = forms.BooleanField(
-        label=_("Show dates with time"),
-        help_text=_("If disabled, the event's start and end date will be displayed without the time of day."),
-        required=False
-    )
-    show_items_outside_presale_period = forms.BooleanField(
-        label=_("Show items outside presale period"),
-        help_text=_("Show item details before presale has started and after presale has ended"),
-        required=False
-    )
-    display_net_prices = forms.BooleanField(
-        label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
-        help_text=_("Independent of your choice, the cart will show gross prices as this is the price that needs to be "
-                    "paid"),
-        required=False
-    )
-    presale_start_show_date = forms.BooleanField(
-        label=_("Show start date"),
-        help_text=_("Show the presale start date before presale has started."),
-        widget=forms.CheckboxInput,
-        required=False
-    )
-    last_order_modification_date = RelativeDateTimeField(
-        label=_('Last date of modifications'),
-        help_text=_("The last date users can modify details of their orders, such as attendee names or "
-                    "answers to questions. If you use the event series feature and an order contains tickets for "
-                    "multiple event dates, the earliest date will be used."),
-        required=False,
-    )
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Event timezone"),
-    )
-    locales = forms.MultipleChoiceField(
-        choices=settings.LANGUAGES,
-        widget=MultipleLanguagesWidget,
-        label=_("Available languages"),
-    )
-    locale = forms.ChoiceField(
-        choices=settings.LANGUAGES,
-        widget=SingleLanguageWidget,
-        label=_("Default language"),
-    )
-    show_quota_left = forms.BooleanField(
-        label=_("Show number of tickets left"),
-        help_text=_("Publicly show how many tickets of a certain type are still available."),
-        required=False
-    )
-    waiting_list_enabled = forms.BooleanField(
-        label=_("Enable waiting list"),
-        help_text=_("Once a ticket is sold out, people can add themselves to a waiting list. As soon as a ticket "
-                    "becomes available again, it will be reserved for the first person on the waiting list and this "
-                    "person will receive an email notification with a voucher that can be used to buy a ticket."),
-        required=False
-    )
-    waiting_list_hours = forms.IntegerField(
-        label=_("Waiting list response time"),
-        min_value=6,
-        help_text=_("If a ticket voucher is sent to a person on the waiting list, it has to be redeemed within this "
-                    "number of hours until it expires and can be re-assigned to the next person on the list."),
-        required=False,
-        widget=forms.NumberInput(),
-    )
-    waiting_list_auto = forms.BooleanField(
-        label=_("Automatic waiting list assignments"),
-        help_text=_("If ticket capacity becomes free, automatically create a voucher and send it to the first person "
-                    "on the waiting list for that product. If this is not active, mails will not be send automatically "
-                    "but you can send them manually via the control panel. If you disable the waiting list but keep "
-                    "this option enabled, tickets will still be sent out."),
-        required=False,
-        widget=forms.CheckboxInput(),
-    )
-    attendee_names_asked = forms.BooleanField(
-        label=_("Ask for attendee names"),
-        help_text=_("Ask for a name for all tickets which include admission to the event."),
-        required=False,
-    )
-    attendee_names_required = forms.BooleanField(
-        label=_("Require attendee names"),
-        help_text=_("Require customers to fill in the names of all attendees."),
-        required=False,
-        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_names_asked'}),
     )
     name_scheme = forms.ChoiceField(
         label=_("Name format"),
@@ -439,83 +353,6 @@ class EventSettingsForm(SettingsForm):
         help_text=_("If the naming scheme you defined above allows users to input a title, you can use this to "
                     "restrict the set of selectable titles."),
         required=False,
-    )
-    attendee_emails_asked = forms.BooleanField(
-        label=_("Ask for email addresses per ticket"),
-        help_text=_("Normally, pretix asks for one email address per order and the order confirmation will be sent "
-                    "only to that email address. If you enable this option, the system will additionally ask for "
-                    "individual email addresses for every admission ticket. This might be useful if you want to "
-                    "obtain individual addresses for every attendee even in case of group orders. However, "
-                    "pretix will send the order confirmation by default only to the one primary email address, not to "
-                    "the per-attendee addresses. You can however enable this in the E-mail settings."),
-        required=False
-    )
-    attendee_emails_required = forms.BooleanField(
-        label=_("Require email addresses per ticket"),
-        help_text=_("Require customers to fill in individual e-mail addresses for all admission tickets. See the "
-                    "above option for more details. One email address for the order confirmation will always be "
-                    "required regardless of this setting."),
-        required=False,
-        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_emails_asked'}),
-    )
-    order_email_asked_twice = forms.BooleanField(
-        label=_("Ask for the order email address twice"),
-        help_text=_("Require customers to fill in the primary email address twice to avoid errors."),
-        required=False,
-    )
-    max_items_per_order = forms.IntegerField(
-        min_value=1,
-        label=_("Maximum number of items per order"),
-        help_text=_("Add-on products will not be counted.")
-    )
-    reservation_time = forms.IntegerField(
-        min_value=0,
-        label=_("Reservation period"),
-        help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
-    )
-    imprint_url = forms.URLField(
-        label=_("Imprint URL"),
-        help_text=_("This should point e.g. to a part of your website that has your contact details and legal "
-                    "information."),
-        required=False,
-    )
-    confirm_text = I18nFormField(
-        label=_('Confirmation text'),
-        help_text=_('This text needs to be confirmed by the user before a purchase is possible. You could for example '
-                    'link your terms of service here. If you use the Pages feature to publish your terms of service, '
-                    'you don\'t need this setting since you can configure it there.'),
-        required=False,
-        widget=I18nTextarea
-    )
-    contact_mail = forms.EmailField(
-        label=_("Contact address"),
-        required=False,
-        help_text=_("We'll show this publicly to allow attendees to contact you.")
-    )
-    show_variations_expanded = forms.BooleanField(
-        label=_("Show variations of a product expanded by default"),
-        required=False
-    )
-    hide_sold_out = forms.BooleanField(
-        label=_("Hide all products that are sold out"),
-        required=False
-    )
-    meta_noindex = forms.BooleanField(
-        label=_('Ask search engines not to index the ticket shop'),
-        required=False
-    )
-    redirect_to_checkout_directly = forms.BooleanField(
-        label=_('Directly redirect to check-out after a product has been added to the cart.'),
-        required=False
-    )
-    frontpage_subevent_ordering = forms.ChoiceField(
-        label=pgettext('subevent', 'Date ordering'),
-        choices=[
-            ('date_ascending', _('Event start time')),
-            ('date_descending', _('Event start time (descending)')),
-            ('name_ascending', _('Name')),
-            ('name_descending', _('Name (descending)')),
-        ],  # When adding a new ordering, remember to also define it in the event model
     )
     logo_image = ExtFileField(
         label=_('Logo image'),
@@ -532,33 +369,6 @@ class EventSettingsForm(SettingsForm):
                     'Facebook advises to use a picture size of 1200 x 630 pixels, however some platforms like '
                     'WhatsApp and Reddit only show a square preview, so we recommend to make sure it still looks good '
                     'only the center square is shown. If you do not fill this, we will use the logo given above.')
-    )
-    frontpage_text = I18nFormField(
-        label=_("Frontpage text"),
-        required=False,
-        widget=I18nTextarea
-    )
-    checkout_email_helptext = I18nFormField(
-        label=_("Help text of the email field"),
-        required=False,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        widget=I18nTextarea
-    )
-    presale_has_ended_text = I18nFormField(
-        label=_("End of presale text"),
-        required=False,
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        help_text=_("This text will be shown above the ticket shop once the designated sales timeframe for this event "
-                    "is over. You can use it to describe other options to get a ticket, such as a box office.")
-    )
-    voucher_explanation_text = I18nFormField(
-        label=_("Voucher explanation"),
-        required=False,
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        help_text=_("This text will be shown next to the input for a voucher code. You can use it e.g. to explain "
-                    "how to obtain a voucher code.")
     )
     primary_color = forms.CharField(
         label=_("Primary color"),
@@ -598,24 +408,49 @@ class EventSettingsForm(SettingsForm):
         help_text=_('Only respected by modern browsers.')
     )
 
+    auto_fields = [
+        'imprint_url',
+        'checkout_email_helptext',
+        'presale_has_ended_text',
+        'voucher_explanation_text',
+        'show_date_to',
+        'show_times',
+        'show_items_outside_presale_period',
+        'display_net_prices',
+        'presale_start_show_date',
+        'locales',
+        'locale',
+        'show_quota_left',
+        'waiting_list_enabled',
+        'waiting_list_hours',
+        'waiting_list_auto',
+        'max_items_per_order',
+        'reservation_time',
+        'contact_mail',
+        'show_variations_expanded',
+        'hide_sold_out',
+        'meta_noindex',
+        'redirect_to_checkout_directly',
+        'frontpage_subevent_ordering',
+        'frontpage_text',
+        'attendee_names_asked',
+        'attendee_names_required',
+        'attendee_emails_asked',
+        'attendee_emails_required',
+        'confirm_text',
+        'order_email_asked_twice',
+        'last_order_modification_date',
+    ]
+
     def clean(self):
         data = super().clean()
-        if 'locales' in data and data['locale'] not in data['locales']:
-            raise ValidationError({
-                'locale': _('Your default locale must also be enabled for your event (see box above).')
-            })
-        if data['attendee_names_required'] and not data['attendee_names_asked']:
-            raise ValidationError({
-                'attendee_names_required': _('You cannot require specifying attendee names if you do not ask for them.')
-            })
-        if data['attendee_emails_required'] and not data['attendee_emails_asked']:
-            raise ValidationError({
-                'attendee_emails_required': _('You have to ask for attendee emails if you want to make them required.')
-            })
+        settings_dict = self.event.settings.freeze()
+        settings_dict.update(data)
+        validate_settings(self.event, data)
         return data
 
     def __init__(self, *args, **kwargs):
-        event = kwargs['obj']
+        self.event = kwargs['obj']
         super().__init__(*args, **kwargs)
         self.fields['confirm_text'].widget.attrs['rows'] = '3'
         self.fields['confirm_text'].widget.attrs['placeholder'] = _(
@@ -636,7 +471,7 @@ class EventSettingsForm(SettingsForm):
             ))
             for k, v in PERSON_NAME_TITLE_GROUPS.items()
         ]
-        if not event.has_subevents:
+        if not self.event.has_subevents:
             del self.fields['frontpage_subevent_ordering']
         self.fields['primary_font'].choices += [
             (a, {"title": a, "data": v}) for a, v in get_fonts().items()
@@ -644,77 +479,26 @@ class EventSettingsForm(SettingsForm):
 
 
 class CancelSettingsForm(SettingsForm):
-    cancel_allow_user = forms.BooleanField(
-        label=_("Customers can cancel their unpaid orders"),
-        required=False
-    )
-    cancel_allow_user_until = RelativeDateTimeField(
-        label=_("Do not allow cancellations after"),
-        required=False
-    )
-    cancel_allow_user_paid = forms.BooleanField(
-        label=_("Customers can cancel their paid orders"),
-        help_text=_("Paid money will be automatically paid back if the payment method allows it. "
-                    "Otherwise, a manual refund will be created for you to process manually."),
-        required=False
-    )
-    cancel_allow_user_paid_keep = forms.DecimalField(
-        label=_("Keep a fixed cancellation fee"),
-        required=False
-    )
-    cancel_allow_user_paid_keep_fees = forms.BooleanField(
-        label=_("Keep payment, shipping and service fees"),
-        required=False
-    )
-    cancel_allow_user_paid_keep_percentage = forms.DecimalField(
-        label=_("Keep a percentual cancellation fee"),
-        required=False
-    )
-    cancel_allow_user_paid_until = RelativeDateTimeField(
-        label=_("Do not allow cancellations after"),
-        required=False
-    )
+    auto_fields = [
+        'cancel_allow_user',
+        'cancel_allow_user_until',
+        'cancel_allow_user_paid',
+        'cancel_allow_user_paid_until',
+        'cancel_allow_user_paid_keep',
+        'cancel_allow_user_paid_keep_fees',
+        'cancel_allow_user_paid_keep_percentage',
+    ]
 
 
 class PaymentSettingsForm(SettingsForm):
-    payment_term_days = forms.IntegerField(
-        label=_('Payment term in days'),
-        help_text=_("The number of days after placing an order the user has to pay to preserve their reservation. If "
-                    "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
-                    "payment methods, we recommend still setting two or three days to allow people to retry failed "
-                    "payments."),
-        validators=[MinValueValidator(0),
-                    MaxValueValidator(1000000)]
-
-    )
-    payment_term_last = RelativeDateField(
-        label=_('Last date of payments'),
-        help_text=_("The last date any payments are accepted. This has precedence over the number of "
-                    "days configured above. If you use the event series feature and an order contains tickets for "
-                    "multiple dates, the earliest date will be used."),
-        required=False,
-    )
-    payment_term_weekdays = forms.BooleanField(
-        label=_('Only end payment terms on weekdays'),
-        help_text=_("If this is activated and the payment term of any order ends on a Saturday or Sunday, it will be "
-                    "moved to the next Monday instead. This is required in some countries by civil law. This will "
-                    "not effect the last date of payments configured above."),
-        required=False,
-    )
-    payment_term_expire_automatically = forms.BooleanField(
-        label=_('Automatically expire unpaid orders'),
-        help_text=_("If checked, all unpaid orders will automatically go from 'pending' to 'expired' "
-                    "after the end of their payment deadline. This means that those tickets go back to "
-                    "the pool and can be ordered by other people."),
-        required=False
-    )
-    payment_term_accept_late = forms.BooleanField(
-        label=_('Accept late payments'),
-        help_text=_("Accept payments for orders even when they are in 'expired' state as long as enough "
-                    "capacity is available. No payments will ever be accepted after the 'Last date of payments' "
-                    "configured above."),
-        required=False
-    )
+    auto_fields = [
+        'payment_term_days',
+        'payment_term_last',
+        'payment_term_weekdays',
+        'payment_term_expire_automatically',
+        'payment_term_accept_late',
+        'payment_explanation',
+    ]
     tax_rate_default = forms.ModelChoiceField(
         queryset=TaxRule.objects.none(),
         label=_('Tax rule for payment fees'),
@@ -722,27 +506,13 @@ class PaymentSettingsForm(SettingsForm):
         help_text=_("The tax rule that applies for additional fees you configured for single payment methods. This "
                     "will set the tax rate and reverse charge rules, other settings of the tax rule are ignored.")
     )
-    payment_explanation = I18nFormField(
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {
-            'rows': 3,
-        }},
-        required=False,
-        label=_("Guidance text"),
-        help_text=_("This text will be shown above the payment options. You can explain the choices to the user here, "
-                    "if you want.")
-    )
 
     def clean(self):
-        cleaned_data = super().clean()
-        payment_term_last = cleaned_data.get('payment_term_last')
-        if payment_term_last and self.obj.presale_end:
-            if payment_term_last.date(self.obj) < self.obj.presale_end.date():
-                self.add_error(
-                    'payment_term_last',
-                    _('The last payment date cannot be before the end of presale.'),
-                )
-        return cleaned_data
+        data = super().clean()
+        settings_dict = self.obj.settings.freeze()
+        settings_dict.update(data)
+        validate_settings(self.obj, data)
+        return data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -790,90 +560,37 @@ class ProviderForm(SettingsForm):
 
 
 class InvoiceSettingsForm(SettingsForm):
-    allcountries = list(countries)
-    allcountries.insert(0, ('', _('Select country')))
 
-    invoice_address_asked = forms.BooleanField(
-        label=_("Ask for invoice address"),
-        required=False
-    )
-    invoice_address_required = forms.BooleanField(
-        label=_("Require invoice address"),
-        required=False,
-        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
-    )
-    invoice_address_company_required = forms.BooleanField(
-        label=_("Require a business addresses"),
-        help_text=_('This will require users to enter a company name.'),
-        required=False,
-        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_required'}),
-    )
-    invoice_name_required = forms.BooleanField(
-        label=_("Require customer name"),
-        required=False,
-    )
-    invoice_address_vatid = forms.BooleanField(
-        label=_("Ask for VAT ID"),
-        help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
-        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
-        required=False
-    )
-    invoice_address_beneficiary = forms.BooleanField(
-        label=_("Ask for beneficiary"),
-        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
-        required=False
-    )
-    invoice_address_not_asked_free = forms.BooleanField(
-        label=_('Do not ask for invoice address if an order is free'),
-        required=False
-    )
-    invoice_include_free = forms.BooleanField(
-        label=_("Show free products on invoices"),
-        help_text=_("Note that invoices will never be generated for orders that contain only free "
-                    "products."),
-        required=False
-    )
-    invoice_address_explanation_text = I18nFormField(
-        label=_("Invoice address explanation"),
-        required=False,
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {'rows': '2'}},
-        help_text=_("This text will be shown above the invoice address form during checkout.")
-    )
-    invoice_numbers_consecutive = forms.BooleanField(
-        label=_("Generate invoices with consecutive numbers"),
-        help_text=_("If deactivated, the order code will be used in the invoice number."),
-        required=False
-    )
-    invoice_numbers_prefix = forms.CharField(
-        label=_("Invoice number prefix"),
-        help_text=_("This will be prepended to invoice numbers. If you leave this field empty, your event slug will "
-                    "be used followed by a dash. Attention: If multiple events within the same organization use the "
-                    "same value in this field, they will share their number range, i.e. every full number will be "
-                    "used at most once over all of your events. This setting only affects future invoices. You can "
-                    "use %Y (with century) %y (without century) to insert the year of the invoice, or %m and %d for "
-                    "the day of month."),
-        required=False,
-    )
-    invoice_numbers_prefix_cancellations = forms.CharField(
-        label=_("Invoice number prefix for cancellations"),
-        help_text=_("This will be prepended to invoice numbers of cancellations. If you leave this field empty, "
-                    "the same numbering scheme will be used that you configured for regular invoices."),
-        required=False,
-    )
-    invoice_generate = forms.ChoiceField(
-        label=_("Generate invoices"),
-        required=False,
-        widget=forms.RadioSelect,
-        choices=(
-            ('False', _('Do not generate invoices')),
-            ('admin', _('Only manually in admin panel')),
-            ('user', _('Automatically on user request')),
-            ('True', _('Automatically for all created orders')),
-            ('paid', _('Automatically on payment')),
-        ),
-        help_text=_("Invoices will never be automatically generated for free orders.")
-    )
+    auto_fields = [
+        'invoice_address_asked',
+        'invoice_address_required',
+        'invoice_address_vatid',
+        'invoice_address_company_required',
+        'invoice_address_beneficiary',
+        'invoice_name_required',
+        'invoice_address_not_asked_free',
+        'invoice_include_free',
+        'invoice_generate',
+        'invoice_attendee_name',
+        'invoice_include_expire_date',
+        'invoice_numbers_consecutive',
+        'invoice_numbers_prefix',
+        'invoice_numbers_prefix_cancellations',
+        'invoice_address_explanation_text',
+        'invoice_email_attachment',
+        'invoice_address_from_name',
+        'invoice_address_from',
+        'invoice_address_from_zipcode',
+        'invoice_address_from_city',
+        'invoice_address_from_country',
+        'invoice_address_from_tax_id',
+        'invoice_address_from_vat_id',
+        'invoice_introductory_text',
+        'invoice_additional_text',
+        'invoice_footer_text',
+
+    ]
+
     invoice_generate_sales_channels = forms.MultipleChoiceField(
         label=_('Generate invoices for Sales channels'),
         choices=[],
@@ -881,104 +598,10 @@ class InvoiceSettingsForm(SettingsForm):
         help_text=_("If you have enabled invoice generation in the previous setting, you can limit it here to specific "
                     "sales channels.")
     )
-    invoice_attendee_name = forms.BooleanField(
-        label=_("Show attendee names on invoices"),
-        required=False
-    )
-    invoice_include_expire_date = forms.BooleanField(
-        label=_("Show expiration date of order"),
-        help_text=_("The expiration date will not be shown if the invoice is generated after the order is paid."),
-        required=False
-    )
-    invoice_email_attachment = forms.BooleanField(
-        label=_("Attach invoices to emails"),
-        help_text=_("If invoices are automatically generated for all orders, they will be attached to the order "
-                    "confirmation mail. If they are automatically generated on payment, they will be attached to the "
-                    "payment confirmation mail. If they are not automatically generated, they will not be attached "
-                    "to emails."),
-        required=False
-    )
     invoice_renderer = forms.ChoiceField(
         label=_("Invoice style"),
         required=True,
         choices=[]
-    )
-    invoice_address_from_name = forms.CharField(
-        label=_("Company name"),
-        required=False,
-    )
-    invoice_address_from = forms.CharField(
-        label=_("Address line"),
-        widget=forms.Textarea(attrs={
-            'rows': 2,
-            'placeholder': _(
-                'Albert Einstein Road 52'
-            )
-        }),
-        required=False,
-    )
-    invoice_address_from_zipcode = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'placeholder': '12345'
-        }),
-        required=False,
-        label=_("ZIP code"),
-    )
-    invoice_address_from_city = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'placeholder': _('Random City')
-        }),
-        required=False,
-        label=_("City"),
-    )
-    invoice_address_from_country = forms.ChoiceField(
-        choices=allcountries,
-        required=False,
-        label=_("Country"),
-    )
-    invoice_address_from_tax_id = forms.CharField(
-        required=False,
-        label=_("Domestic tax ID"),
-    )
-    invoice_address_from_vat_id = forms.CharField(
-        required=False,
-        label=_("EU VAT ID"),
-    )
-    invoice_introductory_text = I18nFormField(
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {
-            'rows': 3,
-            'placeholder': _(
-                'e.g. With this document, we sent you the invoice for your ticket order.'
-            )
-        }},
-        required=False,
-        label=_("Introductory text"),
-        help_text=_("Will be printed on every invoice above the invoice rows.")
-    )
-    invoice_additional_text = I18nFormField(
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {
-            'rows': 3,
-            'placeholder': _(
-                'e.g. Thank you for your purchase! You can find more information on the event at ...'
-            )
-        }},
-        required=False,
-        label=_("Additional text"),
-        help_text=_("Will be printed on every invoice below the invoice total.")
-    )
-    invoice_footer_text = I18nFormField(
-        widget=I18nTextarea,
-        widget_kwargs={'attrs': {
-            'rows': 5,
-            'placeholder': _(
-                'e.g. your bank details, legal details like your VAT ID, registration numbers, etc.'
-            )
-        }},
-        required=False,
-        label=_("Footer"),
-        help_text=_("Will be printed centered and in a smaller font at the end of every invoice page.")
     )
     invoice_language = forms.ChoiceField(
         widget=forms.Select, required=True,
@@ -1009,6 +632,13 @@ class InvoiceSettingsForm(SettingsForm):
             (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
         )
 
+    def clean(self):
+        data = super().clean()
+        settings_dict = self.obj.settings.freeze()
+        settings_dict.update(data)
+        validate_settings(self.obj, data)
+        return data
+
 
 def multimail_validate(val):
     s = val.split(',')
@@ -1018,22 +648,13 @@ def multimail_validate(val):
 
 
 class MailSettingsForm(SettingsForm):
-    mail_prefix = forms.CharField(
-        label=_("Subject prefix"),
-        help_text=_("This will be prepended to the subject of all outgoing emails, formatted as [prefix]. "
-                    "Choose, for example, a short form of your event name."),
-        required=False
-    )
-    mail_from = forms.EmailField(
-        label=_("Sender address"),
-        help_text=_("Sender address for outgoing emails"),
-    )
-    mail_from_name = forms.CharField(
-        label=_("Sender name"),
-        help_text=_("Sender name used in conjunction with the sender address for outgoing emails. "
-                    "Defaults to your event name."),
-        required=False
-    )
+    auto_fields = [
+        'mail_prefix',
+        'mail_from',
+        'mail_from_name',
+        'mail_attach_ical',
+    ]
+
     mail_bcc = forms.CharField(
         label=_("Bcc address"),
         help_text=_("All emails will be sent to this address as a Bcc copy"),
@@ -1041,12 +662,6 @@ class MailSettingsForm(SettingsForm):
         required=False,
         max_length=255
     )
-    mail_attach_ical = forms.BooleanField(
-        label=_("Attach calendar files"),
-        help_text=_("If enabled, we will attach an .ics calendar file to order confirmation emails."),
-        required=False
-    )
-
     mail_text_signature = I18nFormField(
         label=_("Signature"),
         required=False,
@@ -1065,7 +680,6 @@ class MailSettingsForm(SettingsForm):
         required=True,
         choices=[]
     )
-
     mail_text_order_placed = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
@@ -1301,30 +915,13 @@ class MailSettingsForm(SettingsForm):
 
 
 class TicketSettingsForm(SettingsForm):
-    ticket_download = forms.BooleanField(
-        label=_("Use feature"),
-        help_text=_("Use pretix to generate tickets for the user to download and print out."),
-        required=False
-    )
-    ticket_download_date = RelativeDateTimeField(
-        label=_("Download date"),
-        help_text=_("Ticket download will be offered after this date. If you use the event series feature and an order "
-                    "contains tickets for multiple event dates, download of all tickets will be available if at least "
-                    "one of the event dates allows it."),
-        required=False,
-    )
-    ticket_download_addons = forms.BooleanField(
-        label=_("Offer to download tickets separately for add-on products"),
-        required=False,
-    )
-    ticket_download_nonadm = forms.BooleanField(
-        label=_("Generate tickets for non-admission products"),
-        required=False,
-    )
-    ticket_download_pending = forms.BooleanField(
-        label=_("Offer to download tickets even before an order is paid"),
-        required=False,
-    )
+    auto_fields = [
+        'ticket_download',
+        'ticket_download_date',
+        'ticket_download_addons',
+        'ticket_download_nonadm',
+        'ticket_download_pending',
+    ]
 
     def prepare_fields(self):
         # See clean()

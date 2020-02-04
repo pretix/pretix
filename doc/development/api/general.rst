@@ -81,3 +81,9 @@ Ticket designs
 
 .. automodule:: pretix.plugins.ticketoutputpdf.signals
    :members: override_layout
+
+API
+---
+
+.. automodule:: pretix.base.signals
+   :members: validate_event_settings, api_event_settings_fields

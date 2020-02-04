@@ -941,3 +941,102 @@ def test_event_create_with_seating_maps(token_client, organizer, event, meta_pro
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"seat_category_mapping":["You cannot specify seat category mappings on event creation."]}'
+
+
+@pytest.mark.django_db
+def test_get_event_settings(token_client, organizer, event):
+    event.settings.imprint_url = "https://example.org"
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+    )
+    assert resp.status_code == 200
+    assert resp.data['imprint_url'] == "https://example.org"
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/settings/?explain=true'.format(organizer.slug, event.slug),
+    )
+    assert resp.status_code == 200
+    assert resp.data['imprint_url'] == {
+        "value": "https://example.org",
+        "label": "Imprint URL",
+        "help_text": "This should point e.g. to a part of your website that has your contact details and legal "
+                     "information."
+    }
+
+
+@pytest.mark.django_db
+def test_patch_event_settings(token_client, organizer, event):
+    organizer.settings.imprint_url = 'https://example.org'
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': 'https://example.com'
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['imprint_url'] == "https://example.com"
+    event.settings.flush()
+    assert event.settings.imprint_url == 'https://example.com'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': None,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['imprint_url'] == "https://example.org"
+    event.settings.flush()
+    assert event.settings.imprint_url == 'https://example.org'
+
+    resp = token_client.put(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': 'invalid'
+        },
+        format='json'
+    )
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_patch_event_settings_validation(token_client, organizer, event):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': 'invalid'
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'imprint_url': ['Enter a valid URL.']
+    }
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'invoice_address_required': True,
+            'invoice_address_asked': False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'invoice_address_required': ['You have to ask for invoice addresses if you want to make them required.']
+    }
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'cancel_allow_user_until': 'RELDATE/3/12:00/foobar/',
+            'invoice_address_asked': False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'cancel_allow_user_until': ['Invalid relative date']
+    }

@@ -1,5 +1,4 @@
 from django.apps import AppConfig
-from django.conf import settings
 
 
 class PretixBaseConfig(AppConfig):
@@ -14,6 +13,7 @@ class PretixBaseConfig(AppConfig):
         from . import notifications  # NOQA
         from . import email  # NOQA
         from .services import auth, checkin, export, mail, tickets, cart, orderimport, orders, invoices, cleanup, update_check, quotas, notifications, vouchers  # NOQA
+        from django.conf import settings
 
         try:
             from .celery_app import app as celery_app  # NOQA

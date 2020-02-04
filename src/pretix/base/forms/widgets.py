@@ -6,9 +6,6 @@ from django.utils.functional import lazy
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import OrderPosition
-from pretix.multidomain.urlreverse import eventreverse
-
 
 class DatePickerWidget(forms.DateInput):
     def __init__(self, attrs=None, date_format=None):
@@ -71,6 +68,9 @@ class UploadedFileWidget(forms.ClearableFileInput):
 
         @property
         def url(self):
+            from pretix.base.models import OrderPosition
+            from pretix.multidomain.urlreverse import eventreverse
+
             if isinstance(self.position, OrderPosition):
                 return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
                     'order': self.position.order.code,

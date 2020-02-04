@@ -4,7 +4,9 @@ from django.db import transaction
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
 from django_countries.serializers import CountryFieldMixin
+from hierarkey.proxy import HierarkeyProxy
 from pytz import common_timezones
+from rest_framework import serializers
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
@@ -15,6 +17,8 @@ from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
+from pretix.base.settings import DEFAULTS, validate_settings
+from pretix.base.signals import api_event_settings_fields
 
 
 class MetaDataField(Field):
@@ -469,3 +473,124 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
     class Meta:
         model = TaxRule
         fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country')
+
+
+class EventSettingsSerializer(serializers.Serializer):
+    default_fields = [
+        'imprint_url',
+        'checkout_email_helptext',
+        'presale_has_ended_text',
+        'voucher_explanation_text',
+        'show_date_to',
+        'show_times',
+        'show_items_outside_presale_period',
+        'display_net_prices',
+        'presale_start_show_date',
+        'locales',
+        'locale',
+        'last_order_modification_date',
+        'show_quota_left',
+        'waiting_list_enabled',
+        'waiting_list_hours',
+        'waiting_list_auto',
+        'max_items_per_order',
+        'reservation_time',
+        'contact_mail',
+        'show_variations_expanded',
+        'hide_sold_out',
+        'meta_noindex',
+        'redirect_to_checkout_directly',
+        'frontpage_subevent_ordering',
+        'frontpage_text',
+        'attendee_names_asked',
+        'attendee_names_required',
+        'attendee_emails_asked',
+        'attendee_emails_required',
+        'confirm_text',
+        'order_email_asked_twice',
+        'payment_term_days',
+        'payment_term_last',
+        'payment_term_weekdays',
+        'payment_term_expire_automatically',
+        'payment_term_accept_late',
+        'payment_explanation',
+        'ticket_download',
+        'ticket_download_date',
+        'ticket_download_addons',
+        'ticket_download_nonadm',
+        'ticket_download_pending',
+        'mail_prefix',
+        'mail_from',
+        'mail_from_name',
+        'mail_attach_ical',
+        'invoice_address_asked',
+        'invoice_address_required',
+        'invoice_address_vatid',
+        'invoice_address_company_required',
+        'invoice_address_beneficiary',
+        'invoice_name_required',
+        'invoice_address_not_asked_free',
+        'invoice_include_free',
+        'invoice_generate',
+        'invoice_numbers_consecutive',
+        'invoice_numbers_prefix',
+        'invoice_numbers_prefix_cancellations',
+        'invoice_attendee_name',
+        'invoice_include_expire_date',
+        'invoice_address_explanation_text',
+        'invoice_email_attachment',
+        'invoice_address_from_name',
+        'invoice_address_from',
+        'invoice_address_from_zipcode',
+        'invoice_address_from_city',
+        'invoice_address_from_country',
+        'invoice_address_from_tax_id',
+        'invoice_address_from_vat_id',
+        'invoice_introductory_text',
+        'invoice_additional_text',
+        'invoice_footer_text',
+        'cancel_allow_user',
+        'cancel_allow_user_until',
+        'cancel_allow_user_paid',
+        'cancel_allow_user_paid_until',
+        'cancel_allow_user_paid_keep',
+        'cancel_allow_user_paid_keep_fees',
+        'cancel_allow_user_paid_keep_percentage',
+    ]
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        for fname in self.default_fields:
+            kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
+            kwargs.setdefault('required', False)
+            kwargs.setdefault('allow_null', True)
+            form_kwargs = DEFAULTS[fname].get('form_kwargs', {})
+            if 'serializer_class' not in DEFAULTS[fname]:
+                raise ValidationError('{} has no serializer class'.format(fname))
+            f = DEFAULTS[fname]['serializer_class'](
+                **kwargs
+            )
+            f._label = form_kwargs.get('label', fname)
+            f._help_text = form_kwargs.get('help_text')
+            self.fields[fname] = f
+
+        for recv, resp in api_event_settings_fields.send(sender=self.event):
+            for fname, field in resp.items():
+                field.required = False
+                self.fields[fname] = field
+
+    def update(self, instance: HierarkeyProxy, validated_data):
+        for attr, value in validated_data.items():
+            if value is None:
+                instance.delete(attr)
+            elif instance.get(attr, as_type=type(value)) != value:
+                instance.set(attr, value)
+        return instance
+
+    def validate(self, data):
+        data = super().validate(data)
+        settings_dict = self.instance.freeze()
+        settings_dict.update(data)
+        validate_settings(self.event, settings_dict)
+        return data
