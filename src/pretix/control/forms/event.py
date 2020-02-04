@@ -509,9 +509,9 @@ class PaymentSettingsForm(SettingsForm):
 
     def clean(self):
         data = super().clean()
-        settings_dict = self.event.settings.freeze()
+        settings_dict = self.obj.settings.freeze()
         settings_dict.update(data)
-        validate_settings(self.event, data)
+        validate_settings(self.obj, data)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -634,9 +634,9 @@ class InvoiceSettingsForm(SettingsForm):
 
     def clean(self):
         data = super().clean()
-        settings_dict = self.event.settings.freeze()
+        settings_dict = self.obj.settings.freeze()
         settings_dict.update(data)
-        validate_settings(self.event, data)
+        validate_settings(self.obj, data)
         return data
 
 
