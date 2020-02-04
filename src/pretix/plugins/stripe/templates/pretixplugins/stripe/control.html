@@ -36,6 +36,19 @@
                 <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
             {% endif %}
         {% endif %}
+        {% if payment_info.charges.data.0 %}
+            {% if payment_info.charges.data.0.payment_method_details.card %}
+                <dt>{% trans "Card type" %}</dt>
+                <dd>{{ payment_info.charges.data.0.payment_method_details.card.brand }}</dd>
+                <dt>{% trans "Card number" %}</dt>
+                <dd>
+                    **** **** **** {{ payment_info.charges.data.0.payment_method_details.card.last4 }}
+                    {% if payment_info.charges.data.0.payment_method_details.card.moto %}
+                        <span class="label label-info">{% trans "MOTO" %}</span>
+                    {% endif %}
+                </dd>
+            {% endif %}
+        {% endif %}
         {% if "amount" in payment_info %}
             <dt>{% trans "Total value" %}</dt>
             <dd>{{ payment_info.amount|floatformat:2 }}</dd>
