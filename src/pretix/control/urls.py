@@ -160,6 +160,7 @@ urlpatterns = [
         url(r'^items/(?P<item>\d+)/down$', item.item_move_down, name='event.items.down'),
         url(r'^items/(?P<item>\d+)/delete$', item.ItemDelete.as_view(), name='event.items.delete'),
         url(r'^categories/$', item.CategoryList.as_view(), name='event.items.categories'),
+        url(r'^categories/select2$', typeahead.category_select2, name='event.items.categories.select2'),
         url(r'^categories/(?P<category>\d+)/delete$', item.CategoryDelete.as_view(),
             name='event.items.categories.delete'),
         url(r'^categories/(?P<category>\d+)/up$', item.category_move_up, name='event.items.categories.up'),

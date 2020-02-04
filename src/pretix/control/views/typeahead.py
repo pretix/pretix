@@ -320,6 +320,36 @@ def quotas_select2(request, **kwargs):
 
 
 @event_permission_required(None)
+def category_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qs = request.event.categories.filter(
+        name__icontains=i18ncomp(query)
+    ).order_by('name')
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': e.pk,
+                'text': str(e),
+            }
+            for e in qs[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@event_permission_required(None)
 def checkinlist_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
@@ -327,7 +357,7 @@ def checkinlist_select2(request, **kwargs):
     except ValueError:
         page = 1
 
-    qf = Q(name__icontains=i18ncomp(query))
+    qf = Q(name__icontains=query)
 
     try:
         dt = parse(query)

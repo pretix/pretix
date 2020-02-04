@@ -227,6 +227,18 @@ class ItemCreateForm(I18nModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['category'].queryset = self.instance.event.categories.all()
+        self.fields['category'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.items.categories.select2', kwargs={
+                    'event': self.instance.event.slug,
+                    'organizer': self.instance.event.organizer.slug,
+                }),
+                'data-placeholder': _('No category'),
+            }
+        )
+        self.fields['category'].widget.choices = self.fields['category'].choices
+
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
         change_decimal_field(self.fields['default_price'], self.instance.event.currency)
         self.fields['tax_rule'].empty_label = _('No taxation')
@@ -399,7 +411,6 @@ class TicketNullBooleanSelect(forms.NullBooleanSelect):
 class ItemUpdateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
         self.fields['description'].widget.attrs['placeholder'] = _(
             'e.g. This reduced price is available for full-time students, jobless and people '
@@ -430,6 +441,19 @@ class ItemUpdateForm(I18nModelForm):
         )
         self.fields['hidden_if_available'].widget.choices = self.fields['hidden_if_available'].choices
         self.fields['hidden_if_available'].required = False
+
+        self.fields['category'].queryset = self.instance.event.categories.all()
+        self.fields['category'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.items.categories.select2', kwargs={
+                    'event': self.instance.event.slug,
+                    'organizer': self.instance.event.organizer.slug,
+                }),
+                'data-placeholder': _('No category'),
+            }
+        )
+        self.fields['category'].widget.choices = self.fields['category'].choices
 
     def clean(self):
         d = super().clean()
@@ -604,6 +628,16 @@ class ItemAddOnForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['addon_category'].queryset = self.event.categories.all()
+        self.fields['addon_category'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.items.categories.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+            }
+        )
+        self.fields['addon_category'].widget.choices = self.fields['addon_category'].choices
 
     class Meta:
         model = ItemAddOn
