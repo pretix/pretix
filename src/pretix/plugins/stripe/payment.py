@@ -104,7 +104,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.BooleanField(
                      label=_('Enable MOTO payments for resellers'),
                      help_text=(
-                         _('Gated feature, that needs to be enabled for your account by Stripe support first.') +
+                         _('Gated feature (needs to be enabled for your account by Stripe support first)') +
                          '<div class="alert alert-danger">%s</div>' % _(
                              'We can flag the credit card transaction you make through the reseller interface as MOTO '
                              '(Mail Order / Telephone Order), which will exempt them from Strong Customer '
