@@ -79,7 +79,7 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
 
         @property
         def is_img(self):
-            return any(self.file.name.endswith(e) for e in ('.jpg', '.jpeg', '.png', '.gif'))
+            return any(self.file.name.lower().endswith(e) for e in ('.jpg', '.jpeg', '.png', '.gif'))
 
         def __str__(self):
             return os.path.basename(self.file.name).split('.', 1)[-1]

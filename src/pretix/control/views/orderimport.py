@@ -29,7 +29,7 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
                 'event': request.event.slug,
                 'organizer': request.organizer.slug,
             }))
-        if not request.FILES['file'].name.endswith('.csv'):
+        if not request.FILES['file'].name.lower().endswith('.csv'):
             messages.error(request, _('Please only upload CSV files.'))
             return redirect(reverse('control:event.orders.import', kwargs={
                 'event': request.event.slug,
