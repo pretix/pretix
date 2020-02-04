@@ -170,6 +170,19 @@ Date                  String in ISO 8601 format    ``2017-12-27``
 Multi-lingual string  Object of strings            ``{"en": "red", "de": "rot", "de_Informal": "rot"}``
 Money                 String with decimal number   ``"23.42"``
 Currency              String with ISO 4217 code    ``"EUR"``, ``"USD"``
+Relative datetime     *either* String in ISO 8601  ``"2017-12-27T10:00:00.596934Z"``,
+                      format *or* specification of ``"RELDATE/3/12:00:00/presale_start/"``
+                      a relative datetime,
+                      constructed from a number of
+                      days before the base point,
+                      a time of day, and the base
+                      point.
+Relative date         *either* String in ISO 8601  ``"2017-12-27"``,
+                      format *or* specification of ``"RELDATE/3/-/presale_start/"``
+                      a relative date,
+                      constructed from a number of
+                      days before the base point
+                      and the base point.
 ===================== ============================ ===================================
 
 Query parameters

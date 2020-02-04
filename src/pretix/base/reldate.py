@@ -8,6 +8,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import serializers
 
 BASE_CHOICES = (
     ('date_from', _('Event start')),
@@ -115,6 +116,8 @@ class RelativeDateWrapper:
                     base_date_name=parts[3],
                     time=time
                 )
+            if data.base_date_name not in [k[0] for k in BASE_CHOICES]:
+                raise ValueError('{} is not a valid base date'.format(data.base_date_name))
         else:
             data = parser.parse(input)
         return RelativeDateWrapper(data)
@@ -330,3 +333,39 @@ class ModelRelativeDateTimeField(models.CharField):
         defaults = {'form_class': self.form_class}
         defaults.update(kwargs)
         return super().formfield(**defaults)
+
+
+class SerializerRelativeDateField(serializers.CharField):
+
+    def to_internal_value(self, data):
+        if data is None:
+            return None
+        try:
+            r = RelativeDateWrapper.from_string(data)
+            if isinstance(r.data, RelativeDate):
+                if r.data.time is not None:
+                    raise ValidationError("Do not specify a time for a date field")
+            return r
+        except:
+            raise ValidationError("Invalid relative date")
+
+    def to_representation(self, value: RelativeDateWrapper):
+        if value is None:
+            return None
+        return value.to_string()
+
+
+class SerializerRelativeDateTimeField(serializers.CharField):
+
+    def to_internal_value(self, data):
+        if data is None:
+            return None
+        try:
+            return RelativeDateWrapper.from_string(data)
+        except:
+            raise ValidationError("Invalid relative date")
+
+    def to_representation(self, value: RelativeDateWrapper):
+        if value is None:
+            return None
+        return value.to_string()

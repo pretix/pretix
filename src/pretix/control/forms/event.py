@@ -338,13 +338,6 @@ class EventUpdateForm(I18nModelForm):
 
 
 class EventSettingsForm(SettingsForm):
-    last_order_modification_date = RelativeDateTimeField(
-        label=_('Last date of modifications'),
-        help_text=_("The last date users can modify details of their orders, such as attendee names or "
-                    "answers to questions. If you use the event series feature and an order contains tickets for "
-                    "multiple event dates, the earliest date will be used."),
-        required=False,
-    )
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Event timezone"),
@@ -446,6 +439,7 @@ class EventSettingsForm(SettingsForm):
         'attendee_emails_required',
         'confirm_text',
         'order_email_asked_twice',
+        'last_order_modification_date',
     ]
 
     def clean(self):
@@ -487,36 +481,24 @@ class EventSettingsForm(SettingsForm):
 class CancelSettingsForm(SettingsForm):
     auto_fields = [
         'cancel_allow_user',
+        'cancel_allow_user_until',
         'cancel_allow_user_paid',
+        'cancel_allow_user_paid_until',
         'cancel_allow_user_paid_keep',
         'cancel_allow_user_paid_keep_fees',
         'cancel_allow_user_paid_keep_percentage',
     ]
-    cancel_allow_user_until = RelativeDateTimeField(
-        label=_("Do not allow cancellations after"),
-        required=False
-    )
-    cancel_allow_user_paid_until = RelativeDateTimeField(
-        label=_("Do not allow cancellations after"),
-        required=False
-    )
 
 
 class PaymentSettingsForm(SettingsForm):
     auto_fields = [
         'payment_term_days',
+        'payment_term_last',
         'payment_term_weekdays',
         'payment_term_expire_automatically',
         'payment_term_accept_late',
         'payment_explanation',
     ]
-    payment_term_last = RelativeDateField(
-        label=_('Last date of payments'),
-        help_text=_("The last date any payments are accepted. This has precedence over the number of "
-                    "days configured above. If you use the event series feature and an order contains tickets for "
-                    "multiple dates, the earliest date will be used."),
-        required=False,
-    )
     tax_rate_default = forms.ModelChoiceField(
         queryset=TaxRule.objects.none(),
         label=_('Tax rule for payment fees'),
@@ -935,17 +917,11 @@ class MailSettingsForm(SettingsForm):
 class TicketSettingsForm(SettingsForm):
     auto_fields = [
         'ticket_download',
+        'ticket_download_date',
         'ticket_download_addons',
         'ticket_download_nonadm',
         'ticket_download_pending',
     ]
-    ticket_download_date = RelativeDateTimeField(
-        label=_("Download date"),
-        help_text=_("Ticket download will be offered after this date. If you use the event series feature and an order "
-                    "contains tickets for multiple event dates, download of all tickets will be available if at least "
-                    "one of the event dates allows it."),
-        required=False,
-    )
 
     def prepare_fields(self):
         # See clean()

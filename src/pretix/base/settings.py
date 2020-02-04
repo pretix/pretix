@@ -21,7 +21,10 @@ from rest_framework import serializers
 
 from pretix.api.serializers.i18n import I18nField
 from pretix.base.models.tax import TaxRule
-from pretix.base.reldate import RelativeDateWrapper
+from pretix.base.reldate import (
+    RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
+    SerializerRelativeDateField, SerializerRelativeDateTimeField,
+)
 from pretix.control.forms import MultipleLanguagesWidget, SingleLanguageWidget
 
 allcountries = list(countries)
@@ -334,6 +337,14 @@ DEFAULTS = {
     'payment_term_last': {
         'default': None,
         'type': RelativeDateWrapper,
+        'form_class': RelativeDateField,
+        'serializer_class': SerializerRelativeDateField,
+        'form_kawrgs': dict(
+            label=_('Last date of payments'),
+            help_text=_("The last date any payments are accepted. This has precedence over the number of "
+                        "days configured above. If you use the event series feature and an order contains tickets for "
+                        "multiple dates, the earliest date will be used."),
+        )
     },
     'payment_term_weekdays': {
         'default': 'True',
@@ -399,6 +410,15 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('False', _('Do not generate invoices')),
+                ('admin', _('Only manually in admin panel')),
+                ('user', _('Automatically on user request')),
+                ('True', _('Automatically for all created orders')),
+                ('paid', _('Automatically on payment')),
+            ),
+        ),
         'form_kwargs': dict(
             label=_("Generate invoices"),
             widget=forms.RadioSelect,
@@ -717,7 +737,15 @@ DEFAULTS = {
     },
     'ticket_download_date': {
         'default': None,
-        'type': RelativeDateWrapper
+        'type': RelativeDateWrapper,
+        'form_class': RelativeDateTimeField,
+        'serializer_class': SerializerRelativeDateTimeField,
+        'form_kwargs': dict(
+            label=_("Download date"),
+            help_text=_("Ticket download will be offered after this date. If you use the event series feature and an order "
+                        "contains tickets for multiple event dates, download of all tickets will be available if at least "
+                        "one of the event dates allows it."),
+        )
     },
     'ticket_download_addons': {
         'default': 'False',
@@ -756,7 +784,15 @@ DEFAULTS = {
     },
     'last_order_modification_date': {
         'default': None,
-        'type': RelativeDateWrapper
+        'type': RelativeDateWrapper,
+        'form_class': RelativeDateTimeField,
+        'serializer_class': SerializerRelativeDateTimeField,
+        'form_kwargs': dict(
+            label=_('Last date of modifications'),
+            help_text=_("The last date users can modify details of their orders, such as attendee names or "
+                        "answers to questions. If you use the event series feature and an order contains tickets for "
+                        "multiple event dates, the earliest date will be used."),
+        )
     },
     'cancel_allow_user': {
         'default': 'True',
@@ -770,6 +806,11 @@ DEFAULTS = {
     'cancel_allow_user_until': {
         'default': None,
         'type': RelativeDateWrapper,
+        'form_class': RelativeDateTimeField,
+        'serializer_class': SerializerRelativeDateTimeField,
+        'form_kwargs': dict(
+            label=_("Do not allow cancellations after"),
+        )
     },
     'cancel_allow_user_paid': {
         'default': 'False',
@@ -787,6 +828,9 @@ DEFAULTS = {
         'type': Decimal,
         'form_class': forms.DecimalField,
         'serializer_class': serializers.DecimalField,
+        'serializer_kwargs': dict(
+            max_digits=10, decimal_places=2
+        ),
         'form_kwargs': dict(
             label=_("Keep a fixed cancellation fee"),
         )
@@ -803,8 +847,11 @@ DEFAULTS = {
     'cancel_allow_user_paid_keep_percentage': {
         'default': '0.00',
         'type': Decimal,
-        'form_class': forms.BooleanField,
-        'serializer_class': serializers.BooleanField,
+        'form_class': forms.DecimalField,
+        'serializer_class': serializers.DecimalField,
+        'serializer_kwargs': dict(
+            max_digits=10, decimal_places=2
+        ),
         'form_kwargs': dict(
             label=_("Keep a percentual cancellation fee"),
         )
@@ -812,6 +859,11 @@ DEFAULTS = {
     'cancel_allow_user_paid_until': {
         'default': None,
         'type': RelativeDateWrapper,
+        'form_class': RelativeDateTimeField,
+        'serializer_class': SerializerRelativeDateTimeField,
+        'form_kwargs': dict(
+            label=_("Do not allow cancellations after"),
+        )
     },
     'contact_mail': {
         'default': None,

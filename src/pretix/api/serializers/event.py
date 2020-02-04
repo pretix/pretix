@@ -488,6 +488,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'presale_start_show_date',
         'locales',
         'locale',
+        'last_order_modification_date',
         'show_quota_left',
         'waiting_list_enabled',
         'waiting_list_hours',
@@ -508,11 +509,13 @@ class EventSettingsSerializer(serializers.Serializer):
         'confirm_text',
         'order_email_asked_twice',
         'payment_term_days',
+        'payment_term_last',
         'payment_term_weekdays',
         'payment_term_expire_automatically',
         'payment_term_accept_late',
         'payment_explanation',
         'ticket_download',
+        'ticket_download_date',
         'ticket_download_addons',
         'ticket_download_nonadm',
         'ticket_download_pending',
@@ -547,7 +550,9 @@ class EventSettingsSerializer(serializers.Serializer):
         'invoice_additional_text',
         'invoice_footer_text',
         'cancel_allow_user',
+        'cancel_allow_user_until',
         'cancel_allow_user_paid',
+        'cancel_allow_user_paid_until',
         'cancel_allow_user_paid_keep',
         'cancel_allow_user_paid_keep_fees',
         'cancel_allow_user_paid_keep_percentage',
@@ -559,6 +564,7 @@ class EventSettingsSerializer(serializers.Serializer):
         for fname in self.default_fields:
             kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
             kwargs.setdefault('required', False)
+            kwargs.setdefault('allow_null', True)
             form_kwargs = DEFAULTS[fname].get('form_kwargs', {})
             if 'serializer_class' not in DEFAULTS[fname]:
                 raise ValidationError('{} has no serializer class'.format(fname))
@@ -576,7 +582,10 @@ class EventSettingsSerializer(serializers.Serializer):
 
     def update(self, instance: HierarkeyProxy, validated_data):
         for attr, value in validated_data.items():
-            instance.set(attr, value)
+            if value is None:
+                instance.delete(attr)
+            elif instance.get(attr, as_type=type(value)) != value:
+                instance.set(attr, value)
         return instance
 
     def validate(self, data):

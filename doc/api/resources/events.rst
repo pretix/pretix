@@ -500,6 +500,12 @@ Therefore, we're also not including a list of the options here, but instead reco
 to see available options. The ``explain=true`` flag enables a verbose mode that provides you with human-readable
 information about the properties.
 
+.. note:: Please note that this is not a complete representation of all event settings. You will find more settings
+          in the web interface.
+
+.. warning:: This API is intended for advanced users. Even though we take care to validate your input, you will be
+             able to break your event using this API by creating situations of conflicting settings. Please take care.
+
 .. versionchanged:: 3.6
 
    Initial support for settings has been added to the API.
@@ -560,6 +566,13 @@ information about the properties.
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/settings/
 
    Updates event settings. Note that ``PUT`` is not allowed here, only ``PATCH``.
+
+    .. warning::
+
+       Settings can be stored at different levels in pretix. If a value is not set on event level, a default setting
+       from a higher level (organizer, global) will be returned. If you explicitly set a setting on event level, it
+       will no longer be inherited from the higher levels. Therefore, we recommend you to send only settings that you
+       explicitly want to set on event level. To unset a settings, pass ``null``.
 
    **Example request**:
 

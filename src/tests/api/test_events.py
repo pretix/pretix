@@ -966,6 +966,7 @@ def test_get_event_settings(token_client, organizer, event):
 
 @pytest.mark.django_db
 def test_patch_event_settings(token_client, organizer, event):
+    organizer.settings.imprint_url = 'https://example.org'
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
@@ -975,7 +976,33 @@ def test_patch_event_settings(token_client, organizer, event):
     )
     assert resp.status_code == 200
     assert resp.data['imprint_url'] == "https://example.com"
+    event.settings.flush()
+    assert event.settings.imprint_url == 'https://example.com'
 
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': None,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['imprint_url'] == "https://example.org"
+    event.settings.flush()
+    assert event.settings.imprint_url == 'https://example.org'
+
+    resp = token_client.put(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': 'invalid'
+        },
+        format='json'
+    )
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_patch_event_settings_validation(token_client, organizer, event):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
@@ -988,13 +1015,28 @@ def test_patch_event_settings(token_client, organizer, event):
         'imprint_url': ['Enter a valid URL.']
     }
 
-    resp = token_client.put(
+    resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
-            'imprint_url': 'invalid'
+            'invoice_address_required': True,
+            'invoice_address_asked': False,
         },
         format='json'
     )
-    assert resp.status_code == 405
+    assert resp.status_code == 400
+    assert resp.data == {
+        'invoice_address_required': ['You have to ask for invoice addresses if you want to make them required.']
+    }
 
-    # nullables?
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'cancel_allow_user_until': 'RELDATE/3/12:00/foobar/',
+            'invoice_address_asked': False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'cancel_allow_user_until': ['Invalid relative date']
+    }
