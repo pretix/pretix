@@ -2,6 +2,10 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block title %}{% trans "Resend order links" %}{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
+    <meta name="robots" content="noindex, nofollow">
+{% endblock %}
 {% block content %}
     <h2>
         {% trans "Resend order links" %}
