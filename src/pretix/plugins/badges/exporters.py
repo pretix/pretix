@@ -45,6 +45,38 @@ OPTIONS = OrderedDict([
         'offsets': [0, 0],
         'pagesize': None,
     }),
+    ('a4_a6l', {
+        'name': ugettext_lazy('4 landscape A6 pages on one A4 page'),
+        'cols': 2,
+        'rows': 2,
+        'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
+        'offsets': [pagesizes.landscape(pagesizes.A4)[0] / 2, pagesizes.landscape(pagesizes.A4)[1] / 2],
+        'pagesize': pagesizes.landscape(pagesizes.A4),
+    }),
+    ('a4_a6p', {
+        'name': ugettext_lazy('4 portrait A6 pages on one A4 page'),
+        'cols': 2,
+        'rows': 2,
+        'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
+        'offsets': [pagesizes.portrait(pagesizes.A4)[0] / 2, pagesizes.portrait(pagesizes.A4)[0] / 2],
+        'pagesize': pagesizes.portrait(pagesizes.A4),
+    }),
+    ('a4_a7l', {
+        'name': ugettext_lazy('8 landscape A7 pages on one A4 page'),
+        'cols': 2,
+        'rows': 4,
+        'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
+        'offsets': [pagesizes.portrait(pagesizes.A4)[0] / 2, pagesizes.portrait(pagesizes.A4)[1] / 4],
+        'pagesize': pagesizes.portrait(pagesizes.A4),
+    }),
+    ('a4_a7p', {
+        'name': ugettext_lazy('8 portrait A7 pages on one A4 page'),
+        'cols': 4,
+        'rows': 2,
+        'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
+        'offsets': [pagesizes.landscape(pagesizes.A4)[0] / 4, pagesizes.landscape(pagesizes.A4)[0] / 2],
+        'pagesize': pagesizes.landscape(pagesizes.A4),
+    }),
     ('durable_54x90', {
         'name': 'DURABLE BADGEMAKER® 54 x 90 mm (1445-02)',
         'cols': 2,
@@ -188,7 +220,10 @@ class BadgeExporter(BaseExporter):
                      choices=[
                          (k, r['name']) for k, r in OPTIONS.items()
                      ],
-                     required=True
+                     required=True,
+                     help_text=_('This option allows you to align multiple badges on one page, for example if you '
+                                 'want to print to a sheet of stickers with a regular office printer. Please note '
+                                 'that your individual badge layouts must already be in the correct size.')
                  )),
                 ('order_by',
                  forms.ChoiceField(
