@@ -24,6 +24,10 @@ from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.control.forms import MultipleLanguagesWidget, SingleLanguageWidget
 
+allcountries = list(countries)
+allcountries.insert(0, ('', _('Select country')))
+
+
 DEFAULTS = {
     'max_items_per_order': {
         'default': '10',
@@ -110,58 +114,150 @@ DEFAULTS = {
     'invoice_address_asked': {
         'default': 'True',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Ask for invoice address"),
+        )
     },
     'invoice_address_not_asked_free': {
         'default': 'False',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Do not ask for invoice address if an order is free'),
+        )
     },
     'invoice_name_required': {
         'default': 'False',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Require customer name"),
+        )
     },
     'invoice_attendee_name': {
         'default': 'True',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show attendee names on invoices"),
+        )
     },
     'invoice_address_required': {
         'default': 'False',
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
         'type': bool,
+        'form_kwargs': dict(
+            label=_("Require invoice address"),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
+        )
     },
     'invoice_address_company_required': {
         'default': 'False',
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
         'type': bool,
+        'form_kwargs': dict(
+            label=_("Require a business addresses"),
+            help_text=_('This will require users to enter a company name.'),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_required'}),
+        )
     },
     'invoice_address_beneficiary': {
         'default': 'False',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Ask for beneficiary"),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
+            required=False
+        )
     },
     'invoice_address_vatid': {
         'default': 'False',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Ask for VAT ID"),
+            help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
+        )
     },
     'invoice_address_explanation_text': {
         'default': '',
-        'type': LazyI18nString
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            label=_("Invoice address explanation"),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_("This text will be shown above the invoice address form during checkout.")
+        )
     },
     'invoice_include_free': {
         'default': 'True',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show free products on invoices"),
+            help_text=_("Note that invoices will never be generated for orders that contain only free "
+                        "products."),
+        )
     },
     'invoice_include_expire_date': {
         'default': 'False',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show expiration date of order"),
+            help_text=_("The expiration date will not be shown if the invoice is generated after the order is paid."),
+        )
     },
     'invoice_numbers_consecutive': {
         'default': 'True',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Generate invoices with consecutive numbers"),
+            help_text=_("If deactivated, the order code will be used in the invoice number."),
+        )
     },
     'invoice_numbers_prefix': {
         'default': '',
         'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            label=_("Invoice number prefix"),
+            help_text=_("This will be prepended to invoice numbers. If you leave this field empty, your event slug will "
+                        "be used followed by a dash. Attention: If multiple events within the same organization use the "
+                        "same value in this field, they will share their number range, i.e. every full number will be "
+                        "used at most once over all of your events. This setting only affects future invoices. You can "
+                        "use %Y (with century) %y (without century) to insert the year of the invoice, or %m and %d for "
+                        "the day of month."),
+        )
     },
     'invoice_numbers_prefix_cancellations': {
         'default': '',
         'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            label=_("Invoice number prefix for cancellations"),
+            help_text=_("This will be prepended to invoice numbers of cancellations. If you leave this field empty, "
+                        "the same numbering scheme will be used that you configured for regular invoices."),
+        )
     },
     'invoice_renderer': {
         'default': 'classic',
@@ -202,11 +298,38 @@ DEFAULTS = {
     },
     'payment_explanation': {
         'default': '',
-        'type': LazyI18nString
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {
+                'rows': 3,
+            }},
+            required=False,
+            label=_("Guidance text"),
+            help_text=_("This text will be shown above the payment options. You can explain the choices to the user here, "
+                        "if you want.")
+        )
     },
     'payment_term_days': {
         'default': '14',
-        'type': int
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_('Payment term in days'),
+            help_text=_("The number of days after placing an order the user has to pay to preserve their reservation. If "
+                        "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
+                        "payment methods, we recommend still setting two or three days to allow people to retry failed "
+                        "payments."),
+            validators=[MinValueValidator(0),
+                        MaxValueValidator(1000000)]
+        ),
+        'serializer_kwargs': dict(
+            validators=[MinValueValidator(0),
+                        MaxValueValidator(1000000)]
+        )
     },
     'payment_term_last': {
         'default': None,
@@ -214,11 +337,27 @@ DEFAULTS = {
     },
     'payment_term_weekdays': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Only end payment terms on weekdays'),
+            help_text=_("If this is activated and the payment term of any order ends on a Saturday or Sunday, it will be "
+                        "moved to the next Monday instead. This is required in some countries by civil law. This will "
+                        "not effect the last date of payments configured above."),
+        )
     },
     'payment_term_expire_automatically': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Automatically expire unpaid orders'),
+            help_text=_("If checked, all unpaid orders will automatically go from 'pending' to 'expired' "
+                        "after the end of their payment deadline. This means that those tickets go back to "
+                        "the pool and can be ordered by other people."),
+        )
     },
     'payment_giftcard__enabled': {
         'default': 'True',
@@ -230,7 +369,15 @@ DEFAULTS = {
     },
     'payment_term_accept_late': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Accept late payments'),
+            help_text=_("Accept payments for orders even when they are in 'expired' state as long as enough "
+                        "capacity is available. No payments will ever be accepted after the 'Last date of payments' "
+                        "configured above."),
+        )
     },
     'presale_start_show_date': {
         'default': 'True',
@@ -249,7 +396,21 @@ DEFAULTS = {
     },
     'invoice_generate': {
         'default': 'False',
-        'type': str
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'form_kwargs': dict(
+            label=_("Generate invoices"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('False', _('Do not generate invoices')),
+                ('admin', _('Only manually in admin panel')),
+                ('user', _('Automatically on user request')),
+                ('True', _('Automatically for all created orders')),
+                ('paid', _('Automatically on payment')),
+            ),
+            help_text=_("Invoices will never be automatically generated for free orders.")
+        )
     },
     'invoice_generate_sales_channels': {
         'default': json.dumps(['web']),
@@ -257,19 +418,133 @@ DEFAULTS = {
     },
     'invoice_address_from': {
         'default': '',
-        'type': str
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            label=_("Address line"),
+            widget=forms.Textarea(attrs={
+                'rows': 2,
+                'placeholder': _(
+                    'Albert Einstein Road 52'
+                )
+            }),
+        )
+    },
+    'invoice_address_from_name': {
+        'default': '',
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            label=_("Company name"),
+        )
+    },
+    'invoice_address_from_zipcode': {
+        'default': '',
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            widget=forms.TextInput(attrs={
+                'placeholder': '12345'
+            }),
+            label=_("ZIP code"),
+        )
+    },
+    'invoice_address_from_city': {
+        'default': '',
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            widget=forms.TextInput(attrs={
+                'placeholder': _('Random City')
+            }),
+            label=_("City"),
+        )
+    },
+    'invoice_address_from_country': {
+        'default': '',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=allcountries,
+        ),
+        'form_kwargs': dict(
+            choices=allcountries,
+            label=_("Country"),
+        )
+    },
+    'invoice_address_from_tax_id': {
+        'default': '',
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            label=_("Domestic tax ID"),
+        )
+    },
+    'invoice_address_from_vat_id': {
+        'default': '',
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            label=_("EU VAT ID"),
+        )
     },
     'invoice_introductory_text': {
         'default': '',
-        'type': LazyI18nString
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {
+                'rows': 3,
+                'placeholder': _(
+                    'e.g. With this document, we sent you the invoice for your ticket order.'
+                )
+            }},
+            label=_("Introductory text"),
+            help_text=_("Will be printed on every invoice above the invoice rows.")
+        )
     },
     'invoice_additional_text': {
         'default': '',
-        'type': LazyI18nString
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {
+                'rows': 3,
+                'placeholder': _(
+                    'e.g. Thank you for your purchase! You can find more information on the event at ...'
+                )
+            }},
+            label=_("Additional text"),
+            help_text=_("Will be printed on every invoice below the invoice total.")
+        )
     },
     'invoice_footer_text': {
         'default': '',
-        'type': LazyI18nString
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {
+                'rows': 5,
+                'placeholder': _(
+                    'e.g. your bank details, legal details like your VAT ID, registration numbers, etc.'
+                )
+            }},
+            label=_("Footer"),
+            help_text=_("Will be printed centered and in a smaller font at the end of every invoice page.")
+        )
     },
     'invoice_language': {
         'default': '__user__',
@@ -277,7 +552,16 @@ DEFAULTS = {
     },
     'invoice_email_attachment': {
         'default': 'False',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Attach invoices to emails"),
+            help_text=_("If invoices are automatically generated for all orders, they will be attached to the order "
+                        "confirmation mail. If they are automatically generated on payment, they will be attached to the "
+                        "payment confirmation mail. If they are not automatically generated, they will not be attached "
+                        "to emails."),
+        )
     },
     'show_items_outside_presale_period': {
         'default': 'True',
@@ -423,7 +707,13 @@ DEFAULTS = {
     },
     'ticket_download': {
         'default': 'False',
-        'type': bool
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Use feature"),
+            help_text=_("Use pretix to generate tickets for the user to download and print out."),
+        )
     },
     'ticket_download_date': {
         'default': None,
@@ -431,11 +721,30 @@ DEFAULTS = {
     },
     'ticket_download_addons': {
         'default': 'False',
-        'type': bool
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Offer to download tickets separately for add-on products"),
+        )
     },
     'ticket_download_nonadm': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Generate tickets for non-admission products"),
+        )
+    },
+    'ticket_download_pending': {
+        'default': 'False',
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Offer to download tickets even before an order is paid"),
+        )
     },
     'event_list_availability': {
         'default': 'True',
@@ -451,7 +760,12 @@ DEFAULTS = {
     },
     'cancel_allow_user': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Customers can cancel their unpaid orders"),
+        )
     },
     'cancel_allow_user_until': {
         'default': None,
@@ -460,18 +774,40 @@ DEFAULTS = {
     'cancel_allow_user_paid': {
         'default': 'False',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Customers can cancel their paid orders"),
+            help_text=_("Paid money will be automatically paid back if the payment method allows it. "
+                        "Otherwise, a manual refund will be created for you to process manually."),
+        )
     },
     'cancel_allow_user_paid_keep': {
         'default': '0.00',
         'type': Decimal,
+        'form_class': forms.DecimalField,
+        'serializer_class': serializers.DecimalField,
+        'form_kwargs': dict(
+            label=_("Keep a fixed cancellation fee"),
+        )
     },
     'cancel_allow_user_paid_keep_fees': {
         'default': 'False',
         'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Keep payment, shipping and service fees"),
+        )
     },
     'cancel_allow_user_paid_keep_percentage': {
         'default': '0.00',
         'type': Decimal,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Keep a percentual cancellation fee"),
+        )
     },
     'cancel_allow_user_paid_until': {
         'default': None,
@@ -517,11 +853,24 @@ DEFAULTS = {
     },
     'mail_attach_ical': {
         'default': 'False',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Attach calendar files"),
+            help_text=_("If enabled, we will attach an .ics calendar file to order confirmation emails."),
+        )
     },
     'mail_prefix': {
         'default': None,
-        'type': str
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'form_kwargs': dict(
+            label=_("Subject prefix"),
+            help_text=_("This will be prepended to the subject of all outgoing emails, formatted as [prefix]. "
+                        "Choose, for example, a short form of your event name."),
+        )
     },
     'mail_bcc': {
         'default': None,
@@ -529,11 +878,24 @@ DEFAULTS = {
     },
     'mail_from': {
         'default': settings.MAIL_FROM,
-        'type': str
+        'type': str,
+        'form_class': forms.EmailField,
+        'serializer_class': serializers.EmailField,
+        'form_kwargs': dict(
+            label=_("Sender address"),
+            help_text=_("Sender address for outgoing emails"),
+        )
     },
     'mail_from_name': {
         'default': None,
-        'type': str
+        'type': str,
+        'form_class': forms.EmailField,
+        'serializer_class': serializers.EmailField,
+        'form_kwargs': dict(
+            label=_("Sender name"),
+            help_text=_("Sender name used in conjunction with the sender address for outgoing emails. "
+                        "Defaults to your event name."),
+        )
     },
     'mail_text_signature': {
         'type': LazyI18nString,
@@ -1290,5 +1652,20 @@ def validate_settings(event, settings_dict):
         raise ValidationError({
             'attendee_emails_required': _('You have to ask for attendee emails if you want to make them required.')
         })
+    if settings_dict['invoice_address_required'] and not settings_dict['invoice_address_asked']:
+        raise ValidationError({
+            'invoice_address_required': _('You have to ask for invoice addresses if you want to make them required.')
+        })
+    if settings_dict['invoice_address_company_required'] and not settings_dict['invoice_address_required']:
+        raise ValidationError({
+            'invoice_address_company_requred': _('You have to require invoice addresses to require for company names.')
+        })
+
+    payment_term_last = settings_dict.get('payment_term_last')
+    if payment_term_last and event.presale_end:
+        if payment_term_last.date(event) < event.presale_end.date():
+            raise ValidationError({
+                'payment_term_last': _('The last payment date cannot be before the end of presale.')
+            })
 
     validate_event_settings.send(sender=event, settings_dict=settings_dict)

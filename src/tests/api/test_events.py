@@ -996,3 +996,5 @@ def test_patch_event_settings(token_client, organizer, event):
         format='json'
     )
     assert resp.status_code == 405
+
+    # nullables?
