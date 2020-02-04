@@ -1696,19 +1696,19 @@ def validate_settings(event, settings_dict):
         raise ValidationError({
             'locale': _('Your default locale must also be enabled for your event (see box above).')
         })
-    if settings_dict['attendee_names_required'] and not settings_dict['attendee_names_asked']:
+    if settings_dict.get('attendee_names_required') and not settings_dict.get('attendee_names_asked'):
         raise ValidationError({
             'attendee_names_required': _('You cannot require specifying attendee names if you do not ask for them.')
         })
-    if settings_dict['attendee_emails_required'] and not settings_dict['attendee_emails_asked']:
+    if settings_dict.get('attendee_emails_required') and not settings_dict.get('attendee_emails_asked'):
         raise ValidationError({
             'attendee_emails_required': _('You have to ask for attendee emails if you want to make them required.')
         })
-    if settings_dict['invoice_address_required'] and not settings_dict['invoice_address_asked']:
+    if settings_dict.get('invoice_address_required') and not settings_dict.get('invoice_address_asked'):
         raise ValidationError({
             'invoice_address_required': _('You have to ask for invoice addresses if you want to make them required.')
         })
-    if settings_dict['invoice_address_company_required'] and not settings_dict['invoice_address_required']:
+    if settings_dict.get('invoice_address_company_required') and not settings_dict.get('invoice_address_required'):
         raise ValidationError({
             'invoice_address_company_requred': _('You have to require invoice addresses to require for company names.')
         })
