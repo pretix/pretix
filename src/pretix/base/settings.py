@@ -8,10 +8,12 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files import File
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Model
 from django.utils.translation import (
     pgettext, pgettext_lazy, ugettext_lazy as _, ugettext_noop,
 )
+from django_countries import countries
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.forms import I18nFormField, I18nTextarea
 from i18nfield.strings import LazyI18nString

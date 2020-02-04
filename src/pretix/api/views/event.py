@@ -355,6 +355,12 @@ class EventSettingsView(views.APIView):
         s = EventSettingsSerializer(instance=request.event.settings, data=request.data, partial=True,
                                     event=request.event)
         s.is_valid(raise_exception=True)
-        s.save()
+        with transaction.atomic():
+            s.save()
+            self.request.event.log_action(
+                'pretix.event.settings', user=self.request.user, auth=self.request.auth, data={
+                    k: v for k, v in s.validated_data.items()
+                }
+            )
         s = EventSettingsSerializer(instance=request.event.settings, event=request.event)
         return Response(s.data)

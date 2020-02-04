@@ -26,8 +26,9 @@ from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
-from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
-from pretix.base.signals import validate_event_settings
+from pretix.base.settings import (
+    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_settings,
+)
 from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget, SlugWidget,
     SplitDateTimeField, SplitDateTimePickerWidget,
@@ -453,7 +454,7 @@ class EventSettingsForm(SettingsForm):
         data = super().clean()
         settings_dict = self.event.settings.freeze()
         settings_dict.update(data)
-        validate_event_settings(self.event, data)
+        validate_settings(self.event, data)
         return data
 
     def __init__(self, *args, **kwargs):
