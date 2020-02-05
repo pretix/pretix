@@ -941,8 +941,8 @@ DEFAULTS = {
     'mail_from_name': {
         'default': None,
         'type': str,
-        'form_class': forms.EmailField,
-        'serializer_class': serializers.EmailField,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("Sender name"),
             help_text=_("Sender name used in conjunction with the sender address for outgoing emails. "
