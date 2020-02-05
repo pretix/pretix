@@ -324,6 +324,7 @@ class BasePaymentProvider:
                      'data-display-dependency': '#id_%s_hidden' % self.settings.get_prefix(),
                      'value': hidden_url,
                  }),
+                 required=False,
                  initial=hidden_url,
                  help_text=_(
                      'Share this link with customers who should use this payment method.'
