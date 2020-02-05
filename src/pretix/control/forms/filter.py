@@ -440,14 +440,25 @@ class SubEventFilterForm(FilterForm):
             ).filter(
                 Q(presale_start__isnull=True) | Q(presale_start__lte=now())
             ).filter(
-                Q(presale_end__isnull=True) | Q(presale_end__gte=now())
+                Q(Q(presale_end__isnull=True) & Q(
+                    Q(date_to__gte=now()) |
+                    Q(date_to__isnull=True, date_from__gte=now())
+                )) |
+                Q(presale_end__gte=now())
             )
         elif fdata.get('status') == 'inactive':
             qs = qs.filter(active=False)
         elif fdata.get('status') == 'future':
             qs = qs.filter(presale_start__gte=now())
         elif fdata.get('status') == 'past':
-            qs = qs.filter(presale_end__lte=now())
+            qs = qs.filter(
+                Q(presale_end__lte=now()) | Q(
+                    Q(presale_end__isnull=True) & Q(
+                        Q(date_to__lte=now()) |
+                        Q(date_to__isnull=True, date_from__gte=now())
+                    )
+                )
+            )
 
         if fdata.get('weekday'):
             qs = qs.annotate(wday=ExtractWeekDay('date_from')).filter(wday=fdata.get('weekday'))
