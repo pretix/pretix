@@ -10,7 +10,7 @@ from pretix.base.services.orders import OrderError
 from pretix.base.services.tasks import EventTask
 from pretix.celery_app import app
 
-from .exporters import render_pdf
+from .exporters import OPTIONS, render_pdf
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 def badges_create_pdf(event: Event, fileid: int, positions: List[int]) -> int:
     file = CachedFile.objects.get(id=fileid)
 
-    pdfcontent = render_pdf(event, OrderPosition.objects.filter(id__in=positions))
+    pdfcontent = render_pdf(event, OrderPosition.objects.filter(id__in=positions), opt=OPTIONS['one'])
     file.file.save(cachedfile_name(file, file.filename), ContentFile(pdfcontent.read()))
     file.save()
     return file.pk
