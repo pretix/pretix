@@ -175,6 +175,11 @@ def timeline_for_event(event, subevent=None):
     for pprov in pprovs.values():
         if not pprov.settings.get('_enabled', as_type=bool):
             continue
+        try:
+            if not pprov.is_enabled:
+                continue
+        except:
+            pass
         availability_date = pprov.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:
             d = make_aware(datetime.combine(
