@@ -1285,6 +1285,9 @@ class OrderPayment(models.Model):
             locked_instance = OrderPayment.objects.select_for_update().get(pk=self.pk)
             if locked_instance.state == self.PAYMENT_STATE_CONFIRMED:
                 # Race condition detected, this payment is already confirmed
+                logger.info('Confirmed payment {} but ignored due to likely race condition.'.format(
+                    self.full_id,
+                ))
                 return
 
             locked_instance.state = self.PAYMENT_STATE_CONFIRMED
@@ -1305,6 +1308,7 @@ class OrderPayment(models.Model):
         }, user=user, auth=auth)
 
         if self.order.status in (Order.STATUS_PAID, Order.STATUS_CANCELED):
+            logger.info('Confirmed payment {} but order is in status {}.'.format(self.full_id, self.order.status))
             return
 
         payment_sum = self.order.payments.filter(
@@ -1315,6 +1319,9 @@ class OrderPayment(models.Model):
                        OrderRefund.REFUND_STATE_CREATED)
         ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
         if payment_sum - refund_sum < self.order.total:
+            logger.info('Confirmed payment {} but payment sum is {} and refund sum is.'.format(
+                self.full_id, payment_sum, refund_sum
+            ))
             return
 
         if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(hours=12)) or not lock:

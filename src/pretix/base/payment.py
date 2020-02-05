@@ -687,7 +687,7 @@ class BasePaymentProvider:
         On failure, you should raise a PaymentException.
         """
         payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-        payment.save()
+        payment.save(update_fields=['state'])
 
     def execute_refund(self, refund: OrderRefund):
         """

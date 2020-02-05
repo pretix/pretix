@@ -11,6 +11,7 @@ from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Exists, F, Max, Min, OuterRef, Q, Sum
 from django.db.models.functions import Coalesce, Greatest
+from django.db.transaction import get_connection
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
@@ -1863,6 +1864,9 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
 
 def change_payment_provider(order: Order, payment_provider, amount=None, new_payment=None, create_log=True,
                             recreate_invoices=True):
+    if not get_connection().in_atomic_block:
+        raise Exception('change_payment_provider should only be called in atomic transaction!')
+
     oldtotal = order.total
     e = OrderPayment.objects.filter(fee=OuterRef('pk'), state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED,
                                                                    OrderPayment.PAYMENT_STATE_REFUNDED))
@@ -1883,34 +1887,32 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
     new_fee = payment_provider.calculate_fee(
         order.pending_sum - old_fee if amount is None else amount
     )
-    with transaction.atomic():
-        if new_fee:
-            fee.value = new_fee
-            fee.internal_type = payment_provider.identifier
-            fee._calculate_tax()
-            fee.save()
-        else:
-            if fee.pk:
-                fee.delete()
-            fee = None
+    if new_fee:
+        fee.value = new_fee
+        fee.internal_type = payment_provider.identifier
+        fee._calculate_tax()
+        fee.save()
+    else:
+        if fee.pk:
+            fee.delete()
+        fee = None
 
     open_payment = None
     if new_payment:
-        lp = order.payments.exclude(pk=new_payment.pk).last()
+        lp = order.payments.select_for_update().exclude(pk=new_payment.pk).last()
     else:
-        lp = order.payments.last()
-    if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
+        lp = order.payments.select_for_update().last()
+
+    if lp and lp.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
         open_payment = lp
 
-    if open_payment and open_payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
-                                               OrderPayment.PAYMENT_STATE_CREATED):
+    if open_payment:
         try:
-            with transaction.atomic():
-                open_payment.payment_provider.cancel_payment(open_payment)
-                order.log_action('pretix.event.order.payment.canceled', {
-                    'local_id': open_payment.local_id,
-                    'provider': open_payment.provider,
-                })
+            open_payment.payment_provider.cancel_payment(open_payment)
+            order.log_action('pretix.event.order.payment.canceled', {
+                'local_id': open_payment.local_id,
+                'provider': open_payment.provider,
+            })
         except PaymentException as e:
             order.log_action(
                 'pretix.event.order.payment.canceled.failed',
