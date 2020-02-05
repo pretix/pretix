@@ -68,7 +68,7 @@
                     </td>
                     <td>
                         {{ e.daterange|default:e.get_date_range_display }}
-                        {% if e.settings.show_times %}
+                        {% if e.settings.show_times and not e.has_subevents %}
                             {% timezone e.tzname %}
                                 <br><small class="text-muted">
                                     {{ e.date_from|date:"TIME_FORMAT" }}
