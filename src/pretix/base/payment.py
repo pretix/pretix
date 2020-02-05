@@ -310,6 +310,7 @@ class BasePaymentProvider:
             ('_hidden',
              forms.BooleanField(
                  label=_('Hide payment method'),
+                 required=False,
                  help_text=_(
                      'The payment method will not be shown by default but only to people who enter the shop through '
                      'a special link.'
