@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from django.views import View
 from django.views.generic import TemplateView
 
 from pretix.base.email import get_email_context
@@ -60,3 +61,13 @@ class ResendLinkView(EventViewMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['form'] = self.link_form
         return context
+
+
+class UnlockHashView(EventViewMixin, View):
+    # Allows to register an unlock hash in the user's session, e.g. to unlock a hidden payment provider
+
+    def get(self, request, *args, **kwargs):
+        hashes = request.session.get('pretix_unlock_hashes', [])
+        hashes.append(kwargs.get('hash'))
+        request.session['pretix_unlock_hashes'] = hashes
+        return redirect(eventreverse(self.request.event, 'presale:event.index'))

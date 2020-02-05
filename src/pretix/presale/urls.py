@@ -53,6 +53,8 @@ event_patterns = [
         csrf_exempt(pretix.presale.views.cart.CartAdd.as_view()),
         name='event.cart.add'),
 
+    url(r'unlock/(?P<hash>[a-z0-9]{64})/$', pretix.presale.views.user.UnlockHashView.as_view(),
+        name='event.payment.unlock'),
     url(r'resend/$', pretix.presale.views.user.ResendLinkView.as_view(), name='event.resend_link'),
 
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/open/(?P<hash>[a-z0-9]+)/$', pretix.presale.views.order.OrderOpen.as_view(),

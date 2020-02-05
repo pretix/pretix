@@ -1,3 +1,4 @@
+import hashlib
 import json
 import logging
 from collections import OrderedDict
@@ -14,6 +15,7 @@ from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries import Countries
@@ -32,7 +34,7 @@ from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.money import DecimalTextInput
-from pretix.multidomain.urlreverse import eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.views import get_cart, get_cart_total
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
@@ -204,6 +206,13 @@ class BasePaymentProvider:
                      implementation.
         """
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
+
+        if not self.settings.get('_hidden_seed'):
+            self.settings.set('_hidden_seed', get_random_string(64))
+        hidden_url = build_absolute_uri(self.event, 'presale:event.payment.unlock', kwargs={
+            'hash': hashlib.sha256((self.settings._hidden_seed + self.event.slug).encode()).hexdigest(),
+        })
+
         d = OrderedDict([
             ('_enabled',
              forms.BooleanField(
@@ -297,7 +306,28 @@ class BasePaymentProvider:
                  widget=forms.CheckboxSelectMultiple,
                  help_text=_(
                      'Only allow the usage of this payment provider in the following sales channels'),
-             ))
+             )),
+            ('_hidden',
+             forms.BooleanField(
+                 label=_('Hide payment method'),
+                 help_text=_(
+                     'The payment method will not be shown by default but only to people who enter the shop through '
+                     'a special link.'
+                 ),
+             )),
+            ('_hidden_url',
+             forms.URLField(
+                 label=_('Link to enable payment method'),
+                 widget=forms.TextInput(attrs={
+                     'readonly': 'readonly',
+                     'data-display-dependency': '#id_%s_hidden' % self.settings.get_prefix(),
+                     'value': hidden_url,
+                 }),
+                 initial=hidden_url,
+                 help_text=_(
+                     'Share this link with customers who should use this payment method.'
+                 ),
+             )),
         ])
         d['_restricted_countries']._as_type = list
         d['_restrict_to_sales_channels']._as_type = list
@@ -432,6 +462,11 @@ class BasePaymentProvider:
 
         if self.settings._total_min is not None:
             pricing = pricing and total >= Decimal(self.settings._total_min)
+
+        if self.settings._hidden:
+            hashes = request.session.get('pretix_unlock_hashes', [])
+            if hashlib.sha256((self.settings._hidden_seed + self.event.slug).encode()).hexdigest() not in hashes:
+                return False
 
         def get_invoice_address():
             if not hasattr(request, '_checkout_flow_invoice_address'):
@@ -600,6 +635,9 @@ class BasePaymentProvider:
             return False
 
         if self.settings._total_min is not None and ps < Decimal(self.settings._total_min):
+            return False
+
+        if self.settings._hidden:
             return False
 
         restricted_countries = self.settings.get('_restricted_countries', as_type=list)

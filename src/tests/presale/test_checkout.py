@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import json
 import os
 from datetime import timedelta
@@ -9,6 +10,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
@@ -700,6 +702,43 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(response.status_code, 200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         assert doc.select(".alert-danger")
+
+    def test_payment_hidden(self):
+        self.event.settings.set('payment_stripe__enabled', True)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_banktransfer__hidden', True)
+        self.event.settings.set('payment_banktransfer__hidden_seed', get_random_string(32))
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 1)
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer'
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        assert doc.select(".alert-danger")
+
+        self.client.get('/%s/%s/unlock/%s/' % (
+            self.orga.slug, self.event.slug,
+            hashlib.sha256(
+                (self.event.settings.payment_banktransfer__hidden_seed + self.event.slug).encode()
+            ).hexdigest(),
+        ), follow=True)
+
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer'
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        assert not doc.select(".alert-danger")
 
     def test_payment_min_value(self):
         self.event.settings.set('payment_stripe__enabled', True)
