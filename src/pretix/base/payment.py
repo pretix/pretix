@@ -465,7 +465,7 @@ class BasePaymentProvider:
         if self.settings._total_min is not None:
             pricing = pricing and total >= Decimal(self.settings._total_min)
 
-        if self.settings._hidden:
+        if self.settings.get('_hidden', as_type=bool):
             hashes = request.session.get('pretix_unlock_hashes', [])
             if hashlib.sha256((self.settings._hidden_seed + self.event.slug).encode()).hexdigest() not in hashes:
                 return False
@@ -639,7 +639,7 @@ class BasePaymentProvider:
         if self.settings._total_min is not None and ps < Decimal(self.settings._total_min):
             return False
 
-        if self.settings._hidden:
+        if self.settings.get('_hidden', as_type=bool):
             return False
 
         restricted_countries = self.settings.get('_restricted_countries', as_type=list)
