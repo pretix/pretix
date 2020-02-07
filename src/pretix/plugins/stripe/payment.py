@@ -375,16 +375,9 @@ class StripeMethod(BasePaymentProvider):
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
             logger.info('Stripe card error: %s' % str(err))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
@@ -395,16 +388,9 @@ class StripeMethod(BasePaymentProvider):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
@@ -432,14 +418,7 @@ class StripeMethod(BasePaymentProvider):
                 return
             else:
                 logger.info('Charge failed: %s' % str(charge))
-                payment.info = str(charge)
-                payment.state = OrderPayment.PAYMENT_STATE_FAILED
-                payment.save()
-                payment.order.log_action('pretix.event.order.payment.failed', {
-                    'local_id': payment.local_id,
-                    'provider': payment.provider,
-                    'info': str(charge)
-                })
+                payment.fail(info=str(charge))
                 raise PaymentException(_('Stripe reported an error: %s') % charge.failure_message)
 
     def payment_pending_render(self, request, payment) -> str:
@@ -540,16 +519,9 @@ class StripeMethod(BasePaymentProvider):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
@@ -712,16 +684,9 @@ class StripeCC(StripeMethod):
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
             logger.info('Stripe card error: %s' % str(err))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
@@ -732,16 +697,9 @@ class StripeCC(StripeMethod):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
@@ -786,20 +744,11 @@ class StripeCC(StripeMethod):
             elif intent.status == 'requires_payment_method':
                 if request:
                     messages.warning(request, _('Your payment failed. Please try again.'))
-                payment.info = str(intent)
-                payment.state = OrderPayment.PAYMENT_STATE_FAILED
-                payment.save()
+                payment.fail(info=str(intent))
                 return
             else:
                 logger.info('Charge failed: %s' % str(intent))
-                payment.info = str(intent)
-                payment.state = OrderPayment.PAYMENT_STATE_FAILED
-                payment.save()
-                payment.order.log_action('pretix.event.order.payment.failed', {
-                    'local_id': payment.local_id,
-                    'provider': payment.provider,
-                    'info': str(intent)
-                })
+                payment.fail(info=str(intent))
                 raise PaymentException(_('Stripe reported an error: %s') % intent.last_payment_error.message)
 
     def _confirm_payment_intent(self, request, payment):
@@ -830,16 +779,9 @@ class StripeCC(StripeMethod):
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
             logger.info('Stripe card error: %s' % str(err))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
         except stripe.error.InvalidRequestError as e:
@@ -849,16 +791,9 @@ class StripeCC(StripeMethod):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
@@ -1362,16 +1297,9 @@ class StripeWeChatPay(StripeMethod):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))

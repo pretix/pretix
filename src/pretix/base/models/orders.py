@@ -1258,6 +1258,36 @@ class OrderPayment(models.Model):
             self.order.log_action('pretix.event.order.overpaid', {}, user=user, auth=auth)
         order_paid.send(self.order.event, order=self.order)
 
+    def fail(self, info=None, user=None, auth=None):
+        """
+        Marks the order as failed and sets info to ``info``, but only if the order is in ``created`` or ``pending``
+        state. This is equivalent to setting ``state`` to ``OrderPayment.PAYMENT_STATE_FAILED`` and logging a failure,
+        but it adds strong database logging since we do not want to report a failure for an order that has just
+        been marked as paid.
+        """
+        with transaction.atomic():
+            locked_instance = OrderPayment.objects.select_for_update().get(pk=self.pk)
+            if locked_instance.state not in (OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING):
+                # Race condition detected, this payment is already confirmed
+                logger.info('Failed payment {} but ignored due to likely race condition.'.format(
+                    self.full_id,
+                ))
+                return
+
+            if isinstance(info, str):
+                locked_instance.info = info
+            elif info:
+                locked_instance.info_data = info
+            locked_instance.state = OrderPayment.PAYMENT_STATE_FAILED
+            locked_instance.save(update_fields=['state', 'info'])
+
+        self.refresh_from_db()
+        self.order.log_action('pretix.event.order.payment.failed', {
+            'local_id': self.local_id,
+            'provider': self.provider,
+            'info': info,
+        }, user=user, auth=auth)
+
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
                 ignore_date=False, lock=True, payment_date=None):
         """
