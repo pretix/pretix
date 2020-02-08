@@ -47,7 +47,7 @@ author             string               Your name
 version            string               A human-readable version code of your plugin
 description        string               A more verbose description of what your plugin does.
 category           string               Category of a plugin. Either one of ``"FEATURE"``, ``"PAYMENT"``,
-                                        ``"INTEGRATION"``, ``"CUSTOMIZATION"``, ``"FORMATS"``, or ``"API"``,
+                                        ``"INTEGRATION"``, ``"CUSTOMIZATION"``, ``"FORMAT"``, or ``"API"``,
                                         or any other string.
 visible            boolean (optional)   ``True`` by default, can hide a plugin so it cannot be normally activated.
 restricted         boolean (optional)   ``False`` by default, restricts a plugin such that it can only be enabled

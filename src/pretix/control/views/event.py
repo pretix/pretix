@@ -221,7 +221,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
             'PAYMENT',
             'INTEGRATION',
             'CUSTOMIZATION',
-            'FORMATS',
+            'FORMAT',
             'API',
         ]
         labels = {
@@ -229,7 +229,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
             'PAYMENT': _('Payment providers'),
             'INTEGRATION': _('Integrations'),
             'CUSTOMIZATION': _('Customizations'),
-            'FORMATS': _('Output and export formats'),
+            'FORMAT': _('Output and export formats'),
             'API': _('API features'),
         }
         context['plugins'] = sorted([
