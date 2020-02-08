@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 13:34+0000\n"
+"POT-Creation-Date: 2020-02-08 11:42+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -107,11 +107,11 @@ msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "我们目前无法连接到服务器。请再试一次。错误代码为:{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:171
+#: pretix/static/pretixbase/js/asynctask.js:172
 msgid "We are processing your request …"
 msgstr "我们正在处理你的请求…"
 
-#: pretix/static/pretixbase/js/asynctask.js:179
+#: pretix/static/pretixbase/js/asynctask.js:180
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -120,7 +120,7 @@ msgstr ""
 "我们正在将您的请求发送到服务器。如果超过一分钟，请检查您的互联网连接，然后刷"
 "新此页面，并重试。"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:217
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "关闭消息"
@@ -141,44 +141,44 @@ msgstr "导入扫描QR码"
 msgid "Check-in QR"
 msgstr "签到QR码"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:249
+#: pretix/static/pretixcontrol/js/ui/editor.js:267
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "由于以下原因无法加载PDF背景文件:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:418
+#: pretix/static/pretixcontrol/js/ui/editor.js:450
 msgid "Group of objects"
 msgstr "对象组"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:424
+#: pretix/static/pretixcontrol/js/ui/editor.js:456
 msgid "Text object"
 msgstr "文本对象"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:426
+#: pretix/static/pretixcontrol/js/ui/editor.js:458
 msgid "Barcode area"
 msgstr "条码区"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:428
+#: pretix/static/pretixcontrol/js/ui/editor.js:460
 msgid "Powered by pretix"
 msgstr "由pretix驱动"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:430
+#: pretix/static/pretixcontrol/js/ui/editor.js:462
 msgid "Object"
 msgstr "对象"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:434
+#: pretix/static/pretixcontrol/js/ui/editor.js:466
 msgid "Ticket design"
 msgstr "门票设计"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:687
+#: pretix/static/pretixcontrol/js/ui/editor.js:723
 msgid "Saving failed."
 msgstr "保存失败."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:736
-#: pretix/static/pretixcontrol/js/ui/editor.js:774
+#: pretix/static/pretixcontrol/js/ui/editor.js:772
+#: pretix/static/pretixcontrol/js/ui/editor.js:810
 msgid "Error while uploading your PDF file, please try again."
 msgstr "上传PDF文件时出错，请重试。"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:759
+#: pretix/static/pretixcontrol/js/ui/editor.js:795
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "你真的想离开编辑器而不保存你的更改吗?"
 

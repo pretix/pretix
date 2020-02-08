@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 13:34+0000\n"
+"POT-Creation-Date: 2020-02-08 11:42+0000\n"
 "PO-Revision-Date: 2019-10-01 01:00+0000\n"
 "Last-Translator: Fabian Rodriguez <magicfab@legoutdulibre.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -109,11 +109,11 @@ msgstr ""
 "Actuellement, nous ne pouvons pas atteindre le serveur. Veuillez réessayer. "
 "Code d'erreur: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:171
+#: pretix/static/pretixbase/js/asynctask.js:172
 msgid "We are processing your request …"
 msgstr "Nous traitons votre demande …"
 
-#: pretix/static/pretixbase/js/asynctask.js:179
+#: pretix/static/pretixbase/js/asynctask.js:180
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -123,7 +123,7 @@ msgstr ""
 "d'une minute, veuillez vérifier votre connexion Internet, puis recharger "
 "cette page et réessayer."
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:217
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Fermer le message"
@@ -144,47 +144,47 @@ msgstr "Balayage du QR code"
 msgid "Check-in QR"
 msgstr "Enregistrement QR code"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:249
+#: pretix/static/pretixcontrol/js/ui/editor.js:267
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 "Le fichier PDF généré en arrière-plan n'a pas pu être chargé pour la raison "
 "suivante :"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:418
+#: pretix/static/pretixcontrol/js/ui/editor.js:450
 msgid "Group of objects"
 msgstr "Groupe d'objets"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:424
+#: pretix/static/pretixcontrol/js/ui/editor.js:456
 msgid "Text object"
 msgstr "Objet texte"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:426
+#: pretix/static/pretixcontrol/js/ui/editor.js:458
 msgid "Barcode area"
 msgstr "Zone de code-barres"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:428
+#: pretix/static/pretixcontrol/js/ui/editor.js:460
 msgid "Powered by pretix"
 msgstr "Généré par pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:430
+#: pretix/static/pretixcontrol/js/ui/editor.js:462
 msgid "Object"
 msgstr "Objet"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:434
+#: pretix/static/pretixcontrol/js/ui/editor.js:466
 msgid "Ticket design"
 msgstr "Conception des billets"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:687
+#: pretix/static/pretixcontrol/js/ui/editor.js:723
 msgid "Saving failed."
 msgstr "L'enregistrement a échoué."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:736
-#: pretix/static/pretixcontrol/js/ui/editor.js:774
+#: pretix/static/pretixcontrol/js/ui/editor.js:772
+#: pretix/static/pretixcontrol/js/ui/editor.js:810
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Erreur lors du téléchargement de votre fichier PDF, veuillez réessayer."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:759
+#: pretix/static/pretixcontrol/js/ui/editor.js:795
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"

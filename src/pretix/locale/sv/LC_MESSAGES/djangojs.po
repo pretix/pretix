@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 13:34+0000\n"
+"POT-Creation-Date: 2020-02-08 11:42+0000\n"
 "PO-Revision-Date: 2019-08-11 00:00+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -108,11 +108,11 @@ msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "Just nu kan vi inte nå servern. Vänligen försök igen. Felkod: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:171
+#: pretix/static/pretixbase/js/asynctask.js:172
 msgid "We are processing your request …"
 msgstr "Vi behandlar din förfrågan …"
 
-#: pretix/static/pretixbase/js/asynctask.js:179
+#: pretix/static/pretixbase/js/asynctask.js:180
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -122,7 +122,7 @@ msgstr ""
 "kontrollera din internetanslutning och ladda sedan den här sidan och försök "
 "igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:217
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Stäng meddelande"
@@ -143,44 +143,44 @@ msgstr "Skanna QR-koden"
 msgid "Check-in QR"
 msgstr "QR-kod för att Checka in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:249
+#: pretix/static/pretixcontrol/js/ui/editor.js:267
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Bakgrunds-filen till PDFen kunde inte laddas av följande orsak:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:418
+#: pretix/static/pretixcontrol/js/ui/editor.js:450
 msgid "Group of objects"
 msgstr "Grupp av objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:424
+#: pretix/static/pretixcontrol/js/ui/editor.js:456
 msgid "Text object"
 msgstr "Textobjekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:426
+#: pretix/static/pretixcontrol/js/ui/editor.js:458
 msgid "Barcode area"
 msgstr "QR-kod-område"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:428
+#: pretix/static/pretixcontrol/js/ui/editor.js:460
 msgid "Powered by pretix"
 msgstr "Drivs av pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:430
+#: pretix/static/pretixcontrol/js/ui/editor.js:462
 msgid "Object"
 msgstr "Object"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:434
+#: pretix/static/pretixcontrol/js/ui/editor.js:466
 msgid "Ticket design"
 msgstr "Biljettdesign"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:687
+#: pretix/static/pretixcontrol/js/ui/editor.js:723
 msgid "Saving failed."
 msgstr "Misslyckades att spara."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:736
-#: pretix/static/pretixcontrol/js/ui/editor.js:774
+#: pretix/static/pretixcontrol/js/ui/editor.js:772
+#: pretix/static/pretixcontrol/js/ui/editor.js:810
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Ett fel uppstod när du laddade upp din PDF-fil, vänligen försök igen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:759
+#: pretix/static/pretixcontrol/js/ui/editor.js:795
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Vill du verkligen lämna editorn utan att spara dina ändringar?"
 
