@@ -2,6 +2,7 @@ import json
 import re
 from collections import OrderedDict
 from decimal import Decimal
+from itertools import groupby
 from urllib.parse import urlsplit
 
 from django.conf import settings
@@ -213,8 +214,32 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         from pretix.base.plugins import get_all_plugins
 
         context = super().get_context_data(*args, **kwargs)
-        context['plugins'] = [p for p in get_all_plugins(self.object) if not p.name.startswith('.')
-                              and getattr(p, 'visible', True)]
+        plugins = [p for p in get_all_plugins(self.object) if not p.name.startswith('.')
+                   and getattr(p, 'visible', True)]
+        order = [
+            'FEATURE',
+            'PAYMENT',
+            'INTEGRATION',
+            'CUSTOMIZATION',
+            'FORMATS',
+            'API',
+        ]
+        labels = {
+            'FEATURE': _('Features'),
+            'PAYMENT': _('Payment providers'),
+            'INTEGRATION': _('Integrations'),
+            'CUSTOMIZATION': _('Customizations'),
+            'FORMATS': _('Output and export formats'),
+            'API': _('API features'),
+        }
+        context['plugins'] = sorted([
+            (c, labels.get(c, c), list(plist))
+            for c, plist
+            in groupby(
+                sorted(plugins, key=lambda p: str(getattr(p, 'category', _('Other')))),
+                lambda p: str(getattr(p, 'category', _('Other')))
+            )
+        ], key=lambda c: (order.index(c[0]), c[1]) if c[0] in order else (999, str(c[1])))
         context['plugins_active'] = self.object.get_plugins()
         return context
 

@@ -12,6 +12,7 @@ class BankTransferApp(AppConfig):
     class PretixPluginMeta:
         name = _("Bank transfer")
         author = _("the pretix team")
+        category = 'PAYMENT'
         version = version
         description = _("This plugin allows you to receive payments " +
                         "via bank transfer ")

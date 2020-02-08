@@ -10,62 +10,75 @@
                 {% trans "Your changes have been saved." %}
             </div>
         {% endif %}
-        <div class="table-responsive">
-            <table class="table">
-                {% for plugin in plugins %}
-                    <tr class="{% if plugin.app.compatibility_errors %}warning{% elif plugin.module in plugins_active %}success{% else %}default{% endif %}">
-                        <td>
-                            <strong>{{ plugin.name }}</strong>
-                            {% if plugin.author %}
-                                <p class="meta text-muted">{% blocktrans trimmed with v=plugin.version a=plugin.author %}
-                                    Version {{ v }} by <em>{{ a }}</em>
-                                {% endblocktrans %}</p>
-                            {% else %}
-                                <p class="meta text-muted">{% blocktrans trimmed with v=plugin.version a=plugin.author %}
-                                    Version {{ v }}
-                                {% endblocktrans %}</p>
-                            {% endif %}
-                            <p>{{ plugin.description }}</p>
-                            {% if plugin.restricted and not request.user.is_staff %}
-                                <span class="text-muted">
-                                    {% trans "This plugin needs to be enabled by a system administrator for your event." %}
-                                </span>
-                            {% endif %}
-                            {% if plugin.app.compatibility_errors %}
-                                <div class="alert alert-warning">
-                                    {% trans "This plugin cannot be enabled for the following reasons:" %}
-                                    <ul>
-                                        {% for e in plugin.app.compatibility_errors %}
-                                            <li>{{ e }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-                            {% if plugin.app.compatibility_warnings %}
-                                <div class="alert alert-warning">
-                                    {% trans "This plugin reports the following problems:" %}
-                                    <ul>
-                                        {% for e in plugin.app.compatibility_warnings %}
-                                            <li>{{ e }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td class="text-right flip">
-                            {% if plugin.app.compatibility_errors %}
-                                <button class="btn disabled btn-block btn-default" disabled="disabled">{% trans "Incompatible" %}</button>
-                            {% elif plugin.restricted and not staff_session %}
-                                <button class="btn disabled btn-block btn-default" disabled="disabled">{% trans "Not available" %}</button>
-                            {% elif plugin.module in plugins_active %}
-                                <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}" value="disable">{% trans "Disable" %}</button>
-                            {% else %}
-                                <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}" value="enable">{% trans "Enable" %}</button>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+        <div class="tabbed-form">
+            {% for cat, catlabel, plist in plugins %}
+                <fieldset>
+                    <legend>{{ catlabel }}</legend>
+                    <div class="table-responsive">
+                        <table class="table">
+                            {% for plugin in plist %}
+                                <tr class="{% if plugin.app.compatibility_errors %}warning{% elif plugin.module in plugins_active %}success{% else %}default{% endif %}">
+                                    <td>
+                                        <strong>{{ plugin.name }}</strong>
+                                        {% if plugin.author %}
+                                            <p class="meta text-muted">
+                                                {% blocktrans trimmed with v=plugin.version a=plugin.author %}
+                                                    Version {{ v }} by <em>{{ a }}</em>
+                                                {% endblocktrans %}</p>
+                                        {% else %}
+                                            <p class="meta text-muted">
+                                                {% blocktrans trimmed with v=plugin.version a=plugin.author %}
+                                                    Version {{ v }}
+                                                {% endblocktrans %}</p>
+                                        {% endif %}
+                                        <p>{{ plugin.description }}</p>
+                                        {% if plugin.restricted and not request.user.is_staff %}
+                                            <span class="text-muted">
+                                                {% trans "This plugin needs to be enabled by a system administrator for your event." %}
+                                            </span>
+                                        {% endif %}
+                                        {% if plugin.app.compatibility_errors %}
+                                            <div class="alert alert-warning">
+                                                {% trans "This plugin cannot be enabled for the following reasons:" %}
+                                                <ul>
+                                                    {% for e in plugin.app.compatibility_errors %}
+                                                        <li>{{ e }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                        {% if plugin.app.compatibility_warnings %}
+                                            <div class="alert alert-warning">
+                                                {% trans "This plugin reports the following problems:" %}
+                                                <ul>
+                                                    {% for e in plugin.app.compatibility_warnings %}
+                                                        <li>{{ e }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-right flip">
+                                        {% if plugin.app.compatibility_errors %}
+                                            <button class="btn disabled btn-block btn-default"
+                                                    disabled="disabled">{% trans "Incompatible" %}</button>
+                                            {% elif plugin.restricted and not staff_session %}
+                                            <button class="btn disabled btn-block btn-default"
+                                                    disabled="disabled">{% trans "Not available" %}</button>
+                                            {% elif plugin.module in plugins_active %}
+                                            <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}"
+                                                    value="disable">{% trans "Disable" %}</button>
+                                        {% else %}
+                                            <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}"
+                                                    value="enable">{% trans "Enable" %}</button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </fieldset>
+            {% endfor %}
         </div>
     </form>
 {% endblock %}

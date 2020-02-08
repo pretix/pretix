@@ -13,6 +13,7 @@ class ReportsApp(AppConfig):
         name = _("Report exporter")
         author = _("the pretix team")
         version = version
+        category = 'FORMATS'
         description = _("This plugin allows you to generate printable reports about your sales.")
 
     def ready(self):

@@ -13,6 +13,7 @@ class PaypalApp(AppConfig):
         name = _("PayPal")
         author = _("the pretix team")
         version = version
+        category = 'PAYMENT'
         description = _("This plugin allows you to receive payments via PayPal")
 
     def ready(self):

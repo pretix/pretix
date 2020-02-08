@@ -13,6 +13,7 @@ class StripeApp(AppConfig):
         name = _("Stripe")
         author = _("the pretix team")
         version = version
+        category = 'PAYMENT'
         description = _("This plugin allows you to receive credit card payments " +
                         "via Stripe")
 

@@ -46,6 +46,9 @@ name               string               The human-readable name of your plugin
 author             string               Your name
 version            string               A human-readable version code of your plugin
 description        string               A more verbose description of what your plugin does.
+category           string               Category of a plugin. Either one of ``"FEATURE"``, ``"PAYMENT"``,
+                                        ``"INTEGRATION"``, ``"CUSTOMIZATION"``, ``"FORMATS"``, or ``"API"``,
+                                        or any other string.
 visible            boolean (optional)   ``True`` by default, can hide a plugin so it cannot be normally activated.
 restricted         boolean (optional)   ``False`` by default, restricts a plugin such that it can only be enabled
                                         for an event by system administrators / superusers.
@@ -69,6 +72,7 @@ A working example would be::
             name = _("PayPal")
             author = _("the pretix team")
             version = '1.0.0'
+            category = 'PAYMENT
             visible = True
             restricted = False
             description = _("This plugin allows you to receive payments via PayPal")

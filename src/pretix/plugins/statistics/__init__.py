@@ -12,6 +12,7 @@ class StatisticsApp(AppConfig):
         name = _("Statistics")
         author = _("the pretix team")
         version = version
+        category = 'FEATURE'
         description = _("This plugin shows you various statistics.")
 
     def ready(self):

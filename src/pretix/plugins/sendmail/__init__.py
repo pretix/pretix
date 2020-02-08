@@ -11,6 +11,7 @@ class SendMailApp(AppConfig):
     class PretixPluginMeta:
         name = _("Send out emails")
         author = _("the pretix team")
+        category = 'FEATURE'
         version = version
         description = _("This plugin allows you to send out emails " +
                         "to all your customers.")

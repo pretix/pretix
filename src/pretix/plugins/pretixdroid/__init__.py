@@ -13,6 +13,7 @@ class PretixdroidApp(AppConfig):
         author = _("the pretix team")
         version = version
         visible = True
+        category = 'INTEGRATION'
         description = _("This plugin allows you to use the pretixdroid and pretixdesk apps for your event.")
 
     def ready(self):
