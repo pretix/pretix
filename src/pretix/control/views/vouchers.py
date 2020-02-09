@@ -320,11 +320,9 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
     @transaction.atomic
     def form_valid(self, form):
         log_entries = []
-        form.save(self.request.event)
-        # We need to query them again as form.save() uses bulk_create which does not fill in .pk values on databases
-        # other than PostgreSQL
+        objs = form.save(self.request.event)
         voucherids = []
-        for v in self.request.event.vouchers.filter(code__in=form.cleaned_data['codes']):
+        for v in objs:
             log_entries.append(
                 v.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user, save=False)
             )

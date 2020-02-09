@@ -388,4 +388,9 @@ class VoucherBulkForm(VoucherForm):
             del data['codes']
             objs.append(obj)
         Voucher.objects.bulk_create(objs)
+        objs = []
+        for v in event.vouchers.filter(code__in=self.cleaned_data['codes']):
+            # We need to query them again as bulk_create does not fill in .pk values on databases
+            # other than PostgreSQL
+            objs.append(v)
         return objs
