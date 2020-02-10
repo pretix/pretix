@@ -12,7 +12,7 @@ from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation, Question,
     QuestionOption, Quota, SubEventItem, SubEventItemVariation,
-    itempicture_upload_to,
+    itempicture_upload_to, ItemMetaProperty, ItemMetaValue
 )
 from .log import LogEntry
 from .notifications import NotificationSetting

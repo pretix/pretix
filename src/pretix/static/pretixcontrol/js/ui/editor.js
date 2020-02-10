@@ -216,7 +216,9 @@ var editor = {
     },
 
     _get_text_sample: function (key) {
-        if (key.startsWith('meta:')) {
+        if (key.startsWith('itemmeta:')) {
+            return key.substr(9);
+        } else if (key.startsWith('meta:')) {
             return key.substr(5);
         }
         return $('#toolbox-content option[value='+key+']').attr('data-sample') || '';

@@ -1,6 +1,6 @@
 import sys
 import uuid
-from collections import Counter
+from collections import Counter, OrderedDict
 from datetime import date, datetime, time
 from decimal import Decimal, DecimalException
 from typing import Tuple
@@ -9,6 +9,7 @@ import dateutil.parser
 import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import F, Func, Q, Sum
 from django.utils import formats
@@ -590,6 +591,16 @@ class Item(LoggedModel):
         if from_date is not None and until_date is not None:
             if from_date > until_date:
                 raise ValidationError(_('The item\'s availability cannot end before it starts.'))
+
+    @property
+    def meta_data(self):
+        data = {p.name: p.default for p in self.event.meta_properties.all()}
+        if hasattr(self, 'meta_values_cached'):
+            data.update({v.property.name: v.value for v in self.meta_values_cached})
+        else:
+            data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
+
+        return OrderedDict((k, v) for k, v in sorted(data.items(), key=lambda k: k[0]))
 
 
 class ItemVariation(models.Model):
@@ -1541,3 +1552,57 @@ class Quota(LoggedModel):
         else:
             if subevent:
                 raise ValidationError(_('The subevent does not belong to this event.'))
+
+
+class ItemMetaProperty(LoggedModel):
+    """
+    An event can have ItemMetaProperty objects attached to define meta information fields
+    for its items. This information can be re-used for example in ticket layouts.
+
+    :param event: The event this property is defined for.
+    :type event: Event
+    :param name: Name
+    :type name: Name of the property, used in various places
+    :param default: Default value
+    :type default: str
+    """
+    event = models.ForeignKey(Event, related_name="meta_properties", on_delete=models.CASCADE)
+    name = models.CharField(
+        max_length=50, db_index=True,
+        help_text=_(
+            "Can not contain spaces or special characters except underscores"
+        ),
+        validators=[
+            RegexValidator(
+                regex="^[a-zA-Z0-9_]+$",
+                message=_("The property name may only contain letters, numbers and underscores."),
+            ),
+        ],
+        verbose_name=_("Name"),
+    )
+    default = models.TextField(blank=True)
+
+
+class ItemMetaValue(LoggedModel):
+    """
+    A meta-data value assigned to an item.
+
+    :param item: The item this metadata is valid for
+    :type item: Item
+    :param property: The property this value belongs to
+    :type property: ItemMetaProperty
+    :param value: The actual value
+    :type value: str
+    """
+    item = models.ForeignKey('Item', on_delete=models.CASCADE, related_name='meta_values')
+    property = models.ForeignKey('ItemMetaProperty', on_delete=models.CASCADE, related_name='item_values')
+    value = models.TextField()
+
+    class Meta:
+        unique_together = ('item', 'property')
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)

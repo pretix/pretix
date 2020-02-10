@@ -1200,3 +1200,11 @@ QuickSetupProductFormSet = formset_factory(
     formset=BaseQuickSetupProductFormSet,
     can_order=False, can_delete=True, extra=0
 )
+
+
+class ItemMetaPropertyForm(forms.ModelForm):
+    class Meta:
+        fields = ['name', 'default']
+        widgets = {
+            'default': forms.TextInput()
+        }

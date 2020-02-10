@@ -2,9 +2,11 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
+from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation, Question,
@@ -110,6 +112,7 @@ class ItemSerializer(I18nAwareModelSerializer):
     bundles = InlineItemBundleSerializer(many=True, required=False)
     variations = InlineItemVariationSerializer(many=True, required=False)
     tax_rate = ItemTaxRateField(source='*', read_only=True)
+    meta_data = MetaDataField(required=False, source='*')
 
     class Meta:
         model = Item
@@ -119,7 +122,7 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
-                  'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard')
+                  'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard', 'meta_data')
         read_only_fields = ('has_variations', 'picture')
 
     def validate(self, data):
@@ -167,18 +170,40 @@ class ItemSerializer(I18nAwareModelSerializer):
                 ItemAddOn.clean_max_min_count(addon_data['max_count'], addon_data['min_count'])
         return value
 
+    @cached_property
+    def meta_properties(self):
+        return {
+            p.name: p for p in self.context['request'].organizer.meta_properties.all()
+        }
+
+    def validate_meta_data(self, value):
+        for key in value['meta_data'].keys():
+            if key not in self.meta_properties:
+                raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
+        return value
+
     @transaction.atomic
     def create(self, validated_data):
         variations_data = validated_data.pop('variations') if 'variations' in validated_data else {}
         addons_data = validated_data.pop('addons') if 'addons' in validated_data else {}
         bundles_data = validated_data.pop('bundles') if 'bundles' in validated_data else {}
         item = Item.objects.create(**validated_data)
+        meta_data = validated_data.pop('meta_data', None)
+
         for variation_data in variations_data:
             ItemVariation.objects.create(item=item, **variation_data)
         for addon_data in addons_data:
             ItemAddOn.objects.create(base_item=item, **addon_data)
         for bundle_data in bundles_data:
             ItemBundle.objects.create(base_item=item, **bundle_data)
+
+        # Meta data
+        if meta_data is not None:
+            for key, value in meta_data.items():
+                Item.meta_values.create(
+                    property=self.meta_properties.get(key),
+                    value=value
+                )
         return item
 
 
