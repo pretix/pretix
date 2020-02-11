@@ -3,7 +3,9 @@ from decimal import Decimal
 
 import pytz
 from django import forms
-from django.db.models import DateTimeField, F, Max, OuterRef, Subquery, Sum
+from django.db.models import (
+    Count, DateTimeField, F, IntegerField, Max, OuterRef, Subquery, Sum,
+)
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
@@ -80,8 +82,12 @@ class OrderListExporter(MultiSheetListExporter):
             'm'
         ).order_by()
 
+        s = OrderPosition.objects.filter(
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
         qs = self.event.orders.annotate(
-            payment_date=Subquery(p_date, output_field=DateTimeField())
+            payment_date=Subquery(p_date, output_field=DateTimeField()),
+            pcnt=Subquery(s, output_field=IntegerField())
         ).select_related('invoice_address').prefetch_related('invoices')
         if form_data['paid_only']:
             qs = qs.filter(status=Order.STATUS_PAID)
@@ -111,6 +117,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Sales channel'))
         headers.append(_('Requires special attention'))
         headers.append(_('Comment'))
+        headers.append(_('Positions'))
 
         yield headers
 
@@ -185,6 +192,7 @@ class OrderListExporter(MultiSheetListExporter):
             row.append(order.sales_channel)
             row.append(_('Yes') if order.checkin_attention else _('No'))
             row.append(order.comment or "")
+            row.append(order.pcnt)
             yield row
 
     def iterate_fees(self, form_data: dict):
