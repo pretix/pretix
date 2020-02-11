@@ -729,16 +729,9 @@ class StripeCC(StripeMethod):
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
             logger.info('Stripe card error: %s' % str(err))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
@@ -749,16 +742,9 @@ class StripeCC(StripeMethod):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
@@ -803,20 +789,11 @@ class StripeCC(StripeMethod):
             elif intent.status == 'requires_payment_method':
                 if request:
                     messages.warning(request, _('Your payment failed. Please try again.'))
-                payment.info = str(intent)
-                payment.state = OrderPayment.PAYMENT_STATE_FAILED
-                payment.save()
+                payment.fail(info=str(intent))
                 return
             else:
                 logger.info('Charge failed: %s' % str(intent))
-                payment.info = str(intent)
-                payment.state = OrderPayment.PAYMENT_STATE_FAILED
-                payment.save()
-                payment.order.log_action('pretix.event.order.payment.failed', {
-                    'local_id': payment.local_id,
-                    'provider': payment.provider,
-                    'info': str(intent)
-                })
+                payment.fail(info=str(intent))
                 raise PaymentException(_('Stripe reported an error: %s') % intent.last_payment_error.message)
 
     def _confirm_payment_intent(self, request, payment):
@@ -847,16 +824,9 @@ class StripeCC(StripeMethod):
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
             logger.info('Stripe card error: %s' % str(err))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
         except stripe.error.InvalidRequestError as e:
@@ -866,16 +836,9 @@ class StripeCC(StripeMethod):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
-            payment.info_data = {
+            payment.fail(info={
                 'error': True,
                 'message': err['message'],
-            }
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'message': err['message']
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
@@ -888,7 +851,7 @@ class StripeGiropay(StripeMethod):
     method = 'giropay'
 
     def payment_form_render(self, request) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form_giropay.html')
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
         ctx = {
             'request': request,
             'event': self.event,
@@ -917,9 +880,7 @@ class StripeGiropay(StripeMethod):
                 owner={
                     'name': request.session.get('payment_stripe_giropay_account') or ugettext('unknown name')
                 },
-                giropay={
-                    'statement_descriptor': self.statement_descriptor(payment, 35),
-                },
+                statement_descriptor=self.statement_descriptor(payment, 35),
                 redirect={
                     'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
                         'order': payment.order.code,
@@ -954,7 +915,7 @@ class StripeIdeal(StripeMethod):
     method = 'ideal'
 
     def payment_form_render(self, request) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple_noform.html')
         ctx = {
             'request': request,
             'event': self.event,
@@ -972,9 +933,7 @@ class StripeIdeal(StripeMethod):
                 'event': self.event.id,
                 'code': payment.order.code
             },
-            ideal={
-                'statement_descriptor': self.statement_descriptor(payment)
-            },
+            statement_descriptor=self.statement_descriptor(payment),
             redirect={
                 'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
                     'order': payment.order.code,
@@ -1000,7 +959,7 @@ class StripeAlipay(StripeMethod):
     method = 'alipay'
 
     def payment_form_render(self, request) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple_noform.html')
         ctx = {
             'request': request,
             'event': self.event,
@@ -1043,7 +1002,7 @@ class StripeBancontact(StripeMethod):
     method = 'bancontact'
 
     def payment_form_render(self, request) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form_bancontact.html')
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
         ctx = {
             'request': request,
             'event': self.event,
@@ -1072,9 +1031,7 @@ class StripeBancontact(StripeMethod):
                 owner={
                     'name': request.session.get('payment_stripe_bancontact_account') or ugettext('unknown name')
                 },
-                bancontact={
-                    'statement_descriptor': self.statement_descriptor(payment, 35)
-                },
+                statement_descriptor=self.statement_descriptor(payment, 35),
                 redirect={
                     'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
                         'order': payment.order.code,
@@ -1109,7 +1066,7 @@ class StripeSofort(StripeMethod):
     method = 'sofort'
 
     def payment_form_render(self, request) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form_sofort.html')
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
         ctx = {
             'request': request,
             'event': self.event,
@@ -1140,9 +1097,9 @@ class StripeSofort(StripeMethod):
                 'event': self.event.id,
                 'code': payment.order.code
             },
+            statement_descriptor=self.statement_descriptor(payment, 35),
             sofort={
                 'country': request.session.get('payment_stripe_sofort_bank_country'),
-                'statement_descriptor': self.statement_descriptor(payment, 35)
             },
             redirect={
                 'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
@@ -1169,3 +1126,237 @@ class StripeSofort(StripeMethod):
 
     def payment_can_retry(self, payment):
         return payment.state != OrderPayment.PAYMENT_STATE_PENDING and self._is_still_available(order=payment.order)
+
+
+class StripeEPS(StripeMethod):
+    identifier = 'stripe_eps'
+    verbose_name = _('EPS via Stripe')
+    public_name = _('EPS')
+    method = 'eps'
+
+    def payment_form_render(self, request) -> str:
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'form': self.payment_form(request)
+        }
+        return template.render(ctx)
+
+    @property
+    def payment_form_fields(self):
+        return OrderedDict([
+            ('account', forms.CharField(label=_('Account holder'))),
+        ])
+
+    def _create_source(self, request, payment):
+        try:
+            source = stripe.Source.create(
+                type='eps',
+                amount=self._get_amount(payment),
+                currency=self.event.currency.lower(),
+                metadata={
+                    'order': str(payment.order.id),
+                    'event': self.event.id,
+                    'code': payment.order.code
+                },
+                owner={
+                    'name': request.session.get('payment_stripe_eps_account') or ugettext('unknown name')
+                },
+                statement_descriptor=self.statement_descriptor(payment),
+                redirect={
+                    'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
+                        'order': payment.order.code,
+                        'payment': payment.pk,
+                        'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                    })
+                },
+                **self.api_kwargs
+            )
+            return source
+        finally:
+            if 'payment_stripe_eps_account' in request.session:
+                del request.session['payment_stripe_eps_account']
+
+    def payment_is_valid_session(self, request):
+        return (
+            request.session.get('payment_stripe_eps_account', '') != ''
+        )
+
+    def checkout_prepare(self, request, cart):
+        form = self.payment_form(request)
+        if form.is_valid():
+            request.session['payment_stripe_eps_account'] = form.cleaned_data['account']
+            return True
+        return False
+
+
+class StripeMultibanco(StripeMethod):
+    identifier = 'stripe_multibanco'
+    verbose_name = _('Multibanco via Stripe')
+    public_name = _('Multibanco')
+    method = 'multibanco'
+
+    def payment_form_render(self, request) -> str:
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple_noform.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'form': self.payment_form(request)
+        }
+        return template.render(ctx)
+
+    def _create_source(self, request, payment):
+        source = stripe.Source.create(
+            type='multibanco',
+            amount=self._get_amount(payment),
+            currency=self.event.currency.lower(),
+            metadata={
+                'order': str(payment.order.id),
+                'event': self.event.id,
+                'code': payment.order.code
+            },
+            owner={
+                'email': payment.order.email
+            },
+            redirect={
+                'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
+                    'order': payment.order.code,
+                    'payment': payment.pk,
+                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                })
+            },
+            **self.api_kwargs
+        )
+        return source
+
+    def payment_is_valid_session(self, request):
+        return True
+
+    def checkout_prepare(self, request, cart):
+        return True
+
+
+class StripePrzelewy24(StripeMethod):
+    identifier = 'stripe_przelewy24'
+    verbose_name = _('Przelewy24 via Stripe')
+    public_name = _('Przelewy24')
+    method = 'przelewy24'
+
+    def payment_form_render(self, request) -> str:
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple_noform.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'form': self.payment_form(request)
+        }
+        return template.render(ctx)
+
+    def _create_source(self, request, payment):
+        source = stripe.Source.create(
+            type='p24',
+            amount=self._get_amount(payment),
+            currency=self.event.currency.lower(),
+            metadata={
+                'order': str(payment.order.id),
+                'event': self.event.id,
+                'code': payment.order.code
+            },
+            owner={
+                'email': payment.order.email
+            },
+            statement_descriptor=self.statement_descriptor(payment, 35),
+            redirect={
+                'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
+                    'order': payment.order.code,
+                    'payment': payment.pk,
+                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                })
+            },
+            **self.api_kwargs
+        )
+        return source
+
+    def payment_is_valid_session(self, request):
+        return True
+
+    def checkout_prepare(self, request, cart):
+        return True
+
+
+class StripeWeChatPay(StripeMethod):
+    identifier = 'stripe_wechatpay'
+    verbose_name = _('WeChat Pay via Stripe')
+    public_name = _('WeChat Pay')
+    method = 'wechatpay'
+
+    def payment_form_render(self, request) -> str:
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple_noform.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'form': self.payment_form(request)
+        }
+        return template.render(ctx)
+
+    def _create_source(self, request, payment):
+        source = stripe.Source.create(
+            type='wechat',
+            amount=self._get_amount(payment),
+            currency=self.event.currency.lower(),
+            metadata={
+                'order': str(payment.order.id),
+                'event': self.event.id,
+                'code': payment.order.code
+            },
+            statement_descriptor=self.statement_descriptor(payment, 32),
+            redirect={
+                'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
+                    'order': payment.order.code,
+                    'payment': payment.pk,
+                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                })
+            },
+            **self.api_kwargs
+        )
+        return source
+
+    def payment_is_valid_session(self, request):
+        return True
+
+    def checkout_prepare(self, request, cart):
+        return True
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        self._init_api()
+        try:
+            source = self._create_source(request, payment)
+        except stripe.error.StripeError as e:
+            if e.json_body and 'err' in e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                err = {'message': str(e)}
+                logger.exception('Stripe error: %s' % str(e))
+            payment.fail(info={
+                'error': True,
+                'message': err['message'],
+            })
+            raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '	
+                                     'with us if this problem persists.'))
+
+        ReferencedStripeObject.objects.get_or_create(
+            reference=source.id,
+            defaults={'order': payment.order, 'payment': payment}
+        )
+        payment.info = str(source)
+        payment.save()
+
+        return eventreverse(request.event, 'presale:event.order', kwargs={
+            'order': payment.order.code,
+            'secret': payment.order.secret
+        })
