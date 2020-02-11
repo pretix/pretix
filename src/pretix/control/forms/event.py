@@ -570,6 +570,7 @@ class InvoiceSettingsForm(SettingsForm):
         'invoice_name_required',
         'invoice_address_not_asked_free',
         'invoice_include_free',
+        'invoice_show_payments',
         'invoice_generate',
         'invoice_attendee_name',
         'invoice_include_expire_date',

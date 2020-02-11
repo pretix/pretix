@@ -28,7 +28,7 @@ from reportlab.platypus import (
 )
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import Event, Invoice
+from pretix.base.models import Event, Invoice, Order
 from pretix.base.signals import register_invoice_renderers
 from pretix.base.templatetags.money import money_filter
 
@@ -558,6 +558,20 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 pgettext('invoice', 'Invoice total'), '', money_filter(total, self.invoice.event.currency)
             ])
             colwidths = [a * doc.width for a in (.65, .05, .30)]
+
+        if self.invoice.event.settings.invoice_show_payments and not self.invoice.is_cancellation and \
+                self.invoice.order.status == Order.STATUS_PENDING:
+            pending_sum = self.invoice.order.pending_sum
+            if pending_sum != total:
+                tdata.append([pgettext('invoice', 'Received payments')] + (['', '', ''] if has_taxes else ['']) + [
+                    money_filter(pending_sum - total, self.invoice.event.currency)
+                ])
+                tdata.append([pgettext('invoice', 'Outstanding payments')] + (['', '', ''] if has_taxes else ['']) + [
+                    money_filter(pending_sum, self.invoice.event.currency)
+                ])
+                tstyledata += [
+                    ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
+                ]
 
         table = Table(tdata, colWidths=colwidths, repeatRows=1)
         table.setStyle(TableStyle(tstyledata))

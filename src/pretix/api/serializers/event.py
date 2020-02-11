@@ -530,6 +530,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'invoice_address_beneficiary',
         'invoice_name_required',
         'invoice_address_not_asked_free',
+        'invoice_show_payments',
         'invoice_include_free',
         'invoice_generate',
         'invoice_numbers_consecutive',

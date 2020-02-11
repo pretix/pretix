@@ -205,6 +205,17 @@ DEFAULTS = {
             help_text=_("This text will be shown above the invoice address form during checkout.")
         )
     },
+    'invoice_show_payments': {
+        'default': 'True',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show paid amount on partially paid invoices"),
+            help_text=_("If an invoice has already been paid partially, this option will add the paid and pending "
+                        "amount to the invoice."),
+        )
+    },
     'invoice_include_free': {
         'default': 'True',
         'type': bool,
