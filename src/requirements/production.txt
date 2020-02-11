@@ -34,7 +34,7 @@ markdown<=2.2
 bleach==3.1.*
 sentry-sdk==0.7.*
 babel
-django-i18nfield>=1.4.0
+django-i18nfield>=1.7.0
 django-hijack>=2.1.10,<2.2.0
 jsonschema
 openpyxl==2.6.*  # Bump to 3.0 after python 3.5 is dropped

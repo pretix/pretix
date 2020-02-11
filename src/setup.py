@@ -130,7 +130,7 @@ setup(
         'stripe==2.32.*',
         'chardet<3.1.0,>=3.0.2',
         'mt-940==3.2',
-        'django-i18nfield>=1.4.0',
+        'django-i18nfield>=1.7.0',
         'django-jsonfallback>=2.1.2',
         'psycopg2-binary',
         'vobject==0.9.*',

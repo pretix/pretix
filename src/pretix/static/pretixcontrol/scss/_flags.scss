@@ -19,6 +19,13 @@ div[lang] {
   min-height: 30px;
 }
 
+.i18n-form-single-language {
+  input[lang], textarea[lang], div[lang], pre[lang] {
+    background: none;
+    padding-left: 12px;
+  }
+}
+
 pre[lang=ad], input[lang=ad], textarea[lang=ad], div[lang=ad] { background-image: url(static('pretixbase/img/flags/ad.png')); }
 pre[lang=ae], input[lang=ae], textarea[lang=ae], div[lang=ae] { background-image: url(static('pretixbase/img/flags/ae.png')); }
 pre[lang=af], input[lang=af], textarea[lang=af], div[lang=af] { background-image: url(static('pretixbase/img/flags/af.png')); }
