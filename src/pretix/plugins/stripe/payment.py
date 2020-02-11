@@ -1346,7 +1346,7 @@ class StripeWeChatPay(StripeMethod):
                 'error': True,
                 'message': err['message'],
             })
-            raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '	
+            raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
 
         ReferencedStripeObject.objects.get_or_create(
