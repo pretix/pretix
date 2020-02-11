@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-11 15:55+0000\n"
-"PO-Revision-Date: 2020-02-08 12:44+0000\n"
+"PO-Revision-Date: 2020-02-11 16:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1527,18 +1527,14 @@ msgid "Invoice total"
 msgstr "Rechnungsbetrag"
 
 #: pretix/base/invoice.py:566
-#, fuzzy
-#| msgid "Ignored payments"
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Ignorierte Zahlungen"
+msgstr "Bereits eingegangene Zahlungen"
 
 #: pretix/base/invoice.py:569
-#, fuzzy
-#| msgid "Invalid payments"
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr "Ungültige Zahlungen"
+msgstr "Offener Betrag"
 
 #: pretix/base/invoice.py:598
 msgctxt "invoice"
@@ -5218,13 +5214,16 @@ msgstr "Dieser Text wird über der Eingabe der Rechnungsadresse angezeigt."
 
 #: pretix/base/settings.py:214
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "Zeige bezahlten Anteil auf teilweise bezahlten Rechnungen an"
 
 #: pretix/base/settings.py:215
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
+"Wenn eine Rechnung bereits teilweise beglichen wurde, wird mit dieser Option "
+"der bereits bezahlte und der noch ausstehende Betrag auf der Rechnung "
+"dargestellt."
 
 #: pretix/base/settings.py:225
 msgid "Show free products on invoices"
@@ -17780,18 +17779,16 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:105
 msgid "Enable MOTO payments for resellers"
-msgstr ""
+msgstr "MOTO-Zahlungen für Vorverkaufsstellen aktivieren"
 
 #: pretix/plugins/stripe/payment.py:107
-#, fuzzy
-#| msgid "Needs to be enabled in your Stripe account first."
 msgid ""
 "Gated feature (needs to be enabled for your account by Stripe support first)"
-msgstr "Muss erst im Stripe-Account aktiviert werden."
+msgstr "Eingeschränktes Feature (muss erst vom Stripe-Support aktiviert werden)"
 
 #: pretix/plugins/stripe/payment.py:115
 msgid "Stripe Integration security guide"
-msgstr ""
+msgstr "Stripe Integration Security Guide"
 
 #: pretix/plugins/stripe/payment.py:109
 #, python-format
@@ -17803,6 +17800,11 @@ msgid ""
 "like the 40 page SAQ D. Please consult the %s for further information on "
 "this subject."
 msgstr ""
+"Wir können von Vorverkaufsstellen ausgelöste Buchungen als MOTO (Mail Order /"
+" Telephone Order) markieren, wodurch keine Strong Customer Authentication "
+"(SCA) notwendig wird. Allerdings werden Sie dadurch verpflichtet, jährlich "
+"PCI-DSS-Formulare wie z.B. das 40-seitige SAQ D auszufüllen. Bitte "
+"überprüfen Sie %s für weitere Infos zum Thema."
 
 #: pretix/plugins/stripe/payment.py:131
 msgid "Stripe account"
@@ -18181,6 +18183,8 @@ msgid ""
 "This transaction will be marked as Mail Order/Telephone Order, exempting it "
 "from Strong Customer Authentication (SCA) whenever possible"
 msgstr ""
+"Diese Transaktion wird als Mail Order/Telephone Order markiert, wodurch wenn "
+"möglich keine Starke Kundenauthentifizierung (SCA) nötig ist"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:16
 msgid "For a credit card payment, please turn on JavaScript."
