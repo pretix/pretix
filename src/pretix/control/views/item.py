@@ -1074,7 +1074,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
     def post(self, request, *args, **kwargs):
         self.get_object()
         form = self.get_form()
-        if self.is_valid(form):
+        if self.is_valid(form) and all([f.is_valid() for f in self.meta_forms]):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)

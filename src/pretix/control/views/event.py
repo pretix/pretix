@@ -187,7 +187,8 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        if form.is_valid() and self.sform.is_valid() and all([f.is_valid() for f in self.meta_forms]):
+        if form.is_valid() and self.sform.is_valid() and all([f.is_valid() for f in self.meta_forms]) and \
+                self.formset.is_valid():
             # reset timezone
             zone = timezone(self.sform.cleaned_data['timezone'])
             event = form.instance
@@ -228,7 +229,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 continue
             if self.formset._should_delete_form(form):
                 continue
-            form.instance.organizer = obj
+            form.instance.event = obj
             form.save()
 
 
