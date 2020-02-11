@@ -49,6 +49,18 @@ class I18nInlineFormSet(i18nfield.forms.I18nInlineFormSet):
         super().__init__(*args, **kwargs)
 
 
+class I18nMarkdownTextarea(i18nfield.forms.I18nTextarea):
+    def format_output(self, rendered_widgets) -> str:
+        rendered_widgets = ['<div class="i18n-field-markdown">%s</div>' % widget for widget in rendered_widgets]
+        return super().format_output(rendered_widgets)
+
+
+class I18nMarkdownTextInput(i18nfield.forms.I18nTextInput):
+    def format_output(self, rendered_widgets) -> str:
+        rendered_widgets = ['<div class="i18n-field-markdown">%s</div>' % widget for widget in rendered_widgets]
+        return super().format_output(rendered_widgets)
+
+
 class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
     auto_fields = []
 
