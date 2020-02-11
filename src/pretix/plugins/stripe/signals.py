@@ -85,6 +85,7 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
 
 
 settings_hierarkey.add_default('payment_stripe_method_cc', True, bool)
+settings_hierarkey.add_default('payment_stripe_reseller_moto', False, bool)
 
 
 @receiver(register_global_settings, dispatch_uid='stripe_global_settings')
