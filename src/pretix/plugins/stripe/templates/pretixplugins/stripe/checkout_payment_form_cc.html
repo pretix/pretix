@@ -1,13 +1,6 @@
 {% load i18n %}
 
 <div class="form-horizontal stripe-container">
-    {% if is_moto %}
-        <h1>
-            <span class="label label-info pull-right flip" data-toggle="tooltip_html" title="{% trans "This transaction will be marked as Mail Order/Telephone Order, exempting it from Strong Customer Authentication (SCA) whenever possible" %}">MOTO</span>
-        </h1>
-        <div class="clearfix"></div>
-    {% endif %}
-
     <div class="stripe-errors sr-only">
 
     </div>
