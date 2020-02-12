@@ -9,8 +9,8 @@ from rest_framework import serializers
 from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
-    Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation, Question,
-    QuestionOption, Quota,
+    Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemVariation,
+    Question, QuestionOption, Quota,
 )
 
 
@@ -187,8 +187,8 @@ class ItemSerializer(I18nAwareModelSerializer):
         variations_data = validated_data.pop('variations') if 'variations' in validated_data else {}
         addons_data = validated_data.pop('addons') if 'addons' in validated_data else {}
         bundles_data = validated_data.pop('bundles') if 'bundles' in validated_data else {}
-        item = Item.objects.create(**validated_data)
         meta_data = validated_data.pop('meta_data', None)
+        item = Item.objects.create(**validated_data)
 
         for variation_data in variations_data:
             ItemVariation.objects.create(item=item, **variation_data)
@@ -200,10 +200,35 @@ class ItemSerializer(I18nAwareModelSerializer):
         # Meta data
         if meta_data is not None:
             for key, value in meta_data.items():
-                Item.meta_values.create(
+                ItemMetaValue.objects.create(
                     property=self.item_meta_properties.get(key),
-                    value=value
+                    value=value,
+                    item=item
                 )
+        return item
+
+    def update(self, instance, validated_data):
+        meta_data = validated_data.pop('meta_data', None)
+        item = super().update(instance, validated_data)
+
+        # Meta data
+        if meta_data is not None:
+            current = {mv.property: mv for mv in item.meta_values.select_related('property')}
+            for key, value in meta_data.items():
+                prop = self.item_meta_properties.get(key)
+                if prop in current:
+                    current[prop].value = value
+                    current[prop].save()
+                else:
+                    item.meta_values.create(
+                        property=self.item_meta_properties.get(key),
+                        value=value
+                    )
+
+            for prop, current_object in current.items():
+                if prop.name not in meta_data:
+                    current_object.delete()
+
         return item
 
 

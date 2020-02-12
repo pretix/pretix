@@ -198,7 +198,9 @@ def test_category_delete(token_client, organizer, event, category3, item):
 
 @pytest.fixture
 def item(event):
-    return event.items.create(name="Budget Ticket", default_price=23)
+    item = event.items.create(name="Budget Ticket", default_price=23)
+    item.meta_values.create(property=event.item_meta_properties.first(), value="Tuesday")
+    return item
 
 
 @pytest.fixture
@@ -244,7 +246,10 @@ TEST_ITEM_RES = {
     "addons": [],
     "bundles": [],
     "show_quota_left": None,
-    "original_price": None
+    "original_price": None,
+    "meta_data": {
+        "day": "Tuesday"
+    }
 }
 
 
@@ -403,13 +408,17 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
             "min_per_order": None,
             "max_per_order": None,
             "checkin_attention": False,
-            "has_variations": True
+            "has_variations": True,
+            "meta_data": {
+                "day": "Wednesday"
+            }
         },
         format='json'
     )
     assert resp.status_code == 201
     with scopes_disabled():
         assert Item.objects.get(pk=resp.data['id']).sales_channels == ["web", "pretixpos"]
+        assert Item.objects.get(pk=resp.data['id']).meta_data == {'day': 'Wednesday'}
 
 
 @pytest.mark.django_db
@@ -938,6 +947,31 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     assert resp.status_code == 400
     assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
                                     'the dedicated nested endpoint."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "meta_data": {
+                "day": "Friday"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert Item.objects.get(pk=item.pk).meta_data == {'day': 'Friday'}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "meta_data": {
+                "foo": "bar"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"meta_data":["Item meta data property \'foo\' does not exist."]}'
 
 
 @pytest.mark.django_db

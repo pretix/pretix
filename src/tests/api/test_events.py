@@ -80,7 +80,10 @@ TEST_EVENT_RES = {
     'plugins': [
         'pretix.plugins.banktransfer',
         'pretix.plugins.ticketoutputpdf'
-    ]
+    ],
+    'item_meta_properties': {
+        'day': 'Monday',
+    }
 }
 
 
