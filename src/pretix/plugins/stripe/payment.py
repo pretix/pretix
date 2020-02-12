@@ -25,6 +25,7 @@ from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
+from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
@@ -97,6 +98,30 @@ class StripeSettingsHolder(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
+        if 'pretix_resellers' in [p.module for p in get_all_plugins()]:
+            moto_settings = [
+                ('reseller_moto',
+                 forms.BooleanField(
+                     label=_('Enable MOTO payments for resellers'),
+                     help_text=(
+                         _('Gated feature (needs to be enabled for your account by Stripe support first)') +
+                         '<div class="alert alert-danger">%s</div>' % _(
+                             'We can flag the credit card transaction you make through the reseller interface as MOTO '
+                             '(Mail Order / Telephone Order), which will exempt them from Strong Customer '
+                             'Authentication (SCA) requirements. However: By enabling this feature, you will need to '
+                             'fill out yearly PCI-DSS self-assessment forms like the 40 page SAQ D. Please consult the '
+                             '%s for further information on this subject.' %
+                             '<a href="https://stripe.com/docs/security">{}</a>'.format(
+                                 _('Stripe Integration security guide')
+                             )
+                         )
+                     ),
+                     required=False,
+                 ))
+            ]
+        else:
+            moto_settings = []
+
         if self.settings.connect_client_id and not self.settings.secret_key:
             # Stripe connect
             if self.settings.connect_user_id:
@@ -228,7 +253,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      help_text=_('Needs to be enabled in your Stripe account first.'),
                      required=False,
                  )),
-            ] + list(super().settings_form_fields.items())
+            ] + list(super().settings_form_fields.items()) + moto_settings
         )
         d.move_to_end('_enabled', last=False)
         return d
@@ -609,6 +634,7 @@ class StripeCC(StripeMethod):
             'event': self.event,
             'total': self._decimal_to_int(total),
             'settings': self.settings,
+            'is_moto': self.is_moto(request)
         }
         return template.render(ctx)
 
@@ -631,6 +657,20 @@ class StripeCC(StripeMethod):
         finally:
             del request.session['payment_stripe_payment_method_id']
 
+    def is_moto(self, request, payment=None) -> bool:
+        # We don't have a payment yet when checking if we should display the MOTO-flag
+        # However, before we execute the payment, we absolutely have to check if the request-SalesChannel as well as the
+        # order are tagged as a reseller-transaction. Else, a user with a valid reseller-session might be able to place
+        # a MOTO transaction trough the WebShop.
+
+        moto = self.settings.get('reseller_moto', False, as_type=bool) and \
+            request.sales_channel.identifier == 'resellers'
+
+        if payment:
+            return moto and payment.order.sales_channel == 'resellers'
+
+        return moto
+
     def _handle_payment_intent(self, request, payment, intent=None):
         self._init_api()
 
@@ -639,6 +679,16 @@ class StripeCC(StripeMethod):
                 params = {}
                 params.update(self._connect_kwargs(payment))
                 params.update(self.api_kwargs)
+
+                if self.is_moto(request, payment):
+                    params.update({
+                        'payment_method_options': {
+                            'card': {
+                                'moto': True
+                            }
+                        }
+                    })
+
                 intent = stripe.PaymentIntent.create(
                     amount=self._get_amount(payment),
                     currency=self.event.currency.lower(),
