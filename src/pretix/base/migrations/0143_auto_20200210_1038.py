@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('name', models.CharField(db_index=True, max_length=50)),
                 ('default', models.TextField()),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='meta_properties', to='pretixbase.Event')),
+                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='item_meta_properties', to='pretixbase.Event')),
             ],
             options={
                 'abstract': False,

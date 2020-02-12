@@ -34,6 +34,19 @@ class MetaDataField(Field):
         }
 
 
+class MetaPropertyField(Field):
+
+    def to_representation(self, value):
+        return {
+            v.name: v.default for v in value.item_meta_properties.all()
+        }
+
+    def to_internal_value(self, data):
+        return {
+            'item_meta_properties': data
+        }
+
+
 class SeatCategoryMappingField(Field):
 
     def to_representation(self, value):
@@ -77,6 +90,7 @@ class TimeZoneField(ChoiceField):
 
 class EventSerializer(I18nAwareModelSerializer):
     meta_data = MetaDataField(required=False, source='*')
+    item_meta_properties = MetaPropertyField(required=False, source='*')
     plugins = PluginsField(required=False, source='*')
     seat_category_mapping = SeatCategoryMappingField(source='*', required=False)
     timezone = TimeZoneField(required=False, choices=[(a, a) for a in common_timezones])
@@ -86,7 +100,7 @@ class EventSerializer(I18nAwareModelSerializer):
         fields = ('name', 'slug', 'live', 'testmode', 'currency', 'date_from',
                   'date_to', 'date_admission', 'is_public', 'presale_start',
                   'presale_end', 'location', 'geo_lat', 'geo_lon', 'has_subevents', 'meta_data', 'seating_plan',
-                  'plugins', 'seat_category_mapping', 'timezone')
+                  'plugins', 'seat_category_mapping', 'timezone', 'item_meta_properties')
 
     def validate(self, data):
         data = super().validate(data)
@@ -131,6 +145,12 @@ class EventSerializer(I18nAwareModelSerializer):
                 raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
         return value
 
+    @cached_property
+    def item_meta_props(self):
+        return {
+            p.name: p for p in self.context['request'].event.item_meta_properties.all()
+        }
+
     def validate_seating_plan(self, value):
         if value and value.organizer != self.context['request'].organizer:
             raise ValidationError('Invalid seating plan.')
@@ -172,6 +192,7 @@ class EventSerializer(I18nAwareModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         meta_data = validated_data.pop('meta_data', None)
+        item_meta_properties = validated_data.pop('item_meta_properties', None)
         validated_data.pop('seat_category_mapping', None)
         plugins = validated_data.pop('plugins', settings.PRETIX_PLUGINS_DEFAULT.split(','))
         tz = validated_data.pop('timezone', None)
@@ -188,6 +209,15 @@ class EventSerializer(I18nAwareModelSerializer):
                     value=value
                 )
 
+        # Item Meta properties
+        if item_meta_properties is not None:
+            for key, value in item_meta_properties.items():
+                event.item_meta_properties.create(
+                    name=key,
+                    default=value,
+                    event=event
+                )
+
         # Seats
         if event.seating_plan:
             generate_seats(event, None, event.seating_plan, {})
@@ -202,6 +232,7 @@ class EventSerializer(I18nAwareModelSerializer):
     @transaction.atomic
     def update(self, instance, validated_data):
         meta_data = validated_data.pop('meta_data', None)
+        item_meta_properties = validated_data.pop('item_meta_properties', None)
         plugins = validated_data.pop('plugins', None)
         seat_category_mapping = validated_data.pop('seat_category_mapping', None)
         tz = validated_data.pop('timezone', None)
@@ -227,6 +258,26 @@ class EventSerializer(I18nAwareModelSerializer):
             for prop, current_object in current.items():
                 if prop.name not in meta_data:
                     current_object.delete()
+
+        # Item Meta properties
+        if item_meta_properties is not None:
+            current = [imp for imp in event.item_meta_properties.all()]
+            for key, value in item_meta_properties.items():
+                prop = self.item_meta_props.get(key)
+                if prop in current:
+                    prop.default = value
+                    prop.save()
+                else:
+                    prop = event.item_meta_properties.create(
+                        name=key,
+                        default=value,
+                        event=event
+                    )
+                    current.append(prop)
+
+            for prop in current:
+                if prop.name not in list(item_meta_properties.keys()):
+                    prop.delete()
 
         # Seats
         if seat_category_mapping is not None or ('seating_plan' in validated_data and validated_data['seating_plan'] is None):

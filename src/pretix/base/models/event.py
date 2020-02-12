@@ -515,7 +515,7 @@ class Event(EventMixin, LoggedModel):
         ), tz)
 
     def copy_data_from(self, other):
-        from . import ItemAddOn, ItemCategory, Item, Question, Quota
+        from . import ItemAddOn, ItemCategory, Item, Question, Quota, ItemMetaValue
         from ..signals import event_copy_data
 
         self.plugins = other.plugins
@@ -540,6 +540,14 @@ class Event(EventMixin, LoggedModel):
             c.save()
             c.log_action('pretix.object.cloned')
 
+        item_meta_properties_map = {}
+        for imp in other.item_meta_properties.all():
+            item_meta_properties_map[imp.pk] = imp
+            imp.pk = None
+            imp.event = self
+            imp.save()
+            imp.log_action('pretix.object.cloned')
+
         item_map = {}
         variation_map = {}
         for i in Item.objects.filter(event=other).prefetch_related('variations'):
@@ -560,6 +568,12 @@ class Event(EventMixin, LoggedModel):
                 v.pk = None
                 v.item = i
                 v.save()
+
+        for imv in ItemMetaValue.objects.filter(item__event=other).prefetch_related('item', 'property'):
+            imv.pk = None
+            imv.property = item_meta_properties_map[imv.property.pk]
+            imv.item = item_map[imv.item.pk]
+            imv.save()
 
         for ia in ItemAddOn.objects.filter(base_item__event=other).prefetch_related('base_item', 'addon_category'):
             ia.pk = None

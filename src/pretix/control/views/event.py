@@ -212,7 +212,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             form=ItemMetaPropertyForm, can_order=False, can_delete=True, extra=0
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
-                            instance=self.object, queryset=self.object.meta_properties.all())
+                            instance=self.object, queryset=self.object.item_meta_properties.all())
 
     def save_formset(self, obj):
         for form in self.formset.initial_forms:

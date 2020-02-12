@@ -955,7 +955,7 @@ class MetaDataEditorMixin:
 
         formlist = []
 
-        for p in self.request.event.meta_properties.all():
+        for p in self.request.event.item_meta_properties.all():
             formlist.append(self._make_meta_form(p, val_instances))
         return formlist
 

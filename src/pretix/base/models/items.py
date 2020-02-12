@@ -594,7 +594,7 @@ class Item(LoggedModel):
 
     @property
     def meta_data(self):
-        data = {p.name: p.default for p in self.event.meta_properties.all()}
+        data = {p.name: p.default for p in self.event.item_meta_properties.all()}
         if hasattr(self, 'meta_values_cached'):
             data.update({v.property.name: v.value for v in self.meta_values_cached})
         else:
@@ -1566,7 +1566,7 @@ class ItemMetaProperty(LoggedModel):
     :param default: Default value
     :type default: str
     """
-    event = models.ForeignKey(Event, related_name="meta_properties", on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, related_name="item_meta_properties", on_delete=models.CASCADE)
     name = models.CharField(
         max_length=50, db_index=True,
         help_text=_(

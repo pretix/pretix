@@ -171,15 +171,15 @@ class ItemSerializer(I18nAwareModelSerializer):
         return value
 
     @cached_property
-    def meta_properties(self):
+    def item_meta_properties(self):
         return {
-            p.name: p for p in self.context['request'].organizer.meta_properties.all()
+            p.name: p for p in self.context['request'].event.item_meta_properties.all()
         }
 
     def validate_meta_data(self, value):
         for key in value['meta_data'].keys():
-            if key not in self.meta_properties:
-                raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
+            if key not in self.item_meta_properties:
+                raise ValidationError(_('Item meta data property \'{name}\' does not exist.').format(name=key))
         return value
 
     @transaction.atomic
@@ -201,7 +201,7 @@ class ItemSerializer(I18nAwareModelSerializer):
         if meta_data is not None:
             for key, value in meta_data.items():
                 Item.meta_values.create(
-                    property=self.meta_properties.get(key),
+                    property=self.item_meta_properties.get(key),
                     value=value
                 )
         return item
