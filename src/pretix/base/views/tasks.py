@@ -23,7 +23,11 @@ class AsyncAction:
         if not isinstance(self.task, app.Task):
             raise TypeError('Method has no task attached')
 
-        res = self.task.apply_async(args=args, kwargs=kwargs)
+        try:
+            res = self.task.apply_async(args=args, kwargs=kwargs)
+        except ConnectionError:
+            # Task very likely not yet sent, due to redis restarting etc. Let's try once agan
+            res = self.task.apply_async(args=args, kwargs=kwargs)
 
         if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
             data = self._return_ajax_result(res)
@@ -60,6 +64,14 @@ class AsyncAction:
                 res.get(timeout=timeout, propagate=False)
             except celery.exceptions.TimeoutError:
                 pass
+            except ConnectionError:
+                # Redis probably just restarted, let's just report not ready and retry next time
+                data = self._ajax_response_data()
+                data.update({
+                    'async_id': res.id,
+                    'ready': False
+                })
+                return data
 
         ready = res.ready()
         data = self._ajax_response_data()
