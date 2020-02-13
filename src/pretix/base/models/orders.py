@@ -1910,9 +1910,10 @@ class OrderPosition(AbstractPosition):
         if self.tax_rate is None:
             self._calculate_tax()
         self.order.touch()
-        if self.pk is None:
-            while OrderPosition.all.filter(secret=self.secret).exists():
-                self.secret = generate_position_secret()
+        if not self.secret:
+            with scopes_disabled():
+                while OrderPosition.all.filter(secret=self.secret).exists():
+                    self.secret = generate_position_secret()
 
         if not self.pseudonymization_id:
             self.assign_pseudonymization_id()
@@ -1928,9 +1929,10 @@ class OrderPosition(AbstractPosition):
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=10, allowed_chars=charset)
-            if not OrderPosition.all.filter(pseudonymization_id=code).exists():
-                self.pseudonymization_id = code
-                return
+            with scopes_disabled():
+                if not OrderPosition.all.filter(pseudonymization_id=code).exists():
+                    self.pseudonymization_id = code
+                    return
 
     @property
     def event(self):
