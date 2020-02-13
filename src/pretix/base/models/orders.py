@@ -1910,10 +1910,9 @@ class OrderPosition(AbstractPosition):
         if self.tax_rate is None:
             self._calculate_tax()
         self.order.touch()
-        if not self.secret:
-            with scopes_disabled():
-                while OrderPosition.all.filter(secret=self.secret).exists():
-                    self.secret = generate_position_secret()
+        if not self.pk:
+            while OrderPosition.all.filter(secret=self.secret).exists():
+                self.secret = generate_position_secret()
 
         if not self.pseudonymization_id:
             self.assign_pseudonymization_id()
