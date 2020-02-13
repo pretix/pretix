@@ -206,10 +206,11 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
                 status[s] for s in log.pdata['sendto']
             ]
             log.pdata['items'] = [
-                itemcache[i['id']] for i in log.pdata.get('items', [])
+                itemcache.get(i['id'], '?') for i in log.pdata.get('items', [])
             ]
             log.pdata['checkin_lists'] = [
-                checkin_list_cache[i['id']] for i in log.pdata.get('checkin_lists', []) if i['id'] in checkin_list_cache
+                checkin_list_cache.get(i['id'], '?')
+                for i in log.pdata.get('checkin_lists', []) if i['id'] in checkin_list_cache
             ]
             if log.pdata.get('subevent'):
                 try:
