@@ -5,7 +5,9 @@
 
 window.PretixWidget = {
     'build_widgets': true,
-    'widget_data': {}
+    'widget_data': {
+        'referer': location.href
+    }
 };
 
 var Vue = module.exports;
