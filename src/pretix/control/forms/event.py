@@ -571,6 +571,7 @@ class InvoiceSettingsForm(SettingsForm):
         'invoice_address_not_asked_free',
         'invoice_include_free',
         'invoice_show_payments',
+        'invoice_reissue_after_modify',
         'invoice_generate',
         'invoice_attendee_name',
         'invoice_include_expire_date',

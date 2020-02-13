@@ -27,7 +27,8 @@ from pretix.base.models.orders import (
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
-    generate_invoice, invoice_pdf, invoice_pdf_task, invoice_qualified,
+    generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
+    invoice_qualified,
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
@@ -669,6 +670,19 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                     'invoice': i.pk
                 })
                 messages.success(self.request, _('The invoice has been generated.'))
+        elif self.request.event.settings.invoice_reissue_after_modify:
+            if self.invoice_form.changed_data:
+                inv = self.order.invoices.last()
+                if inv and not inv.canceled and not inv.shredded:
+                    c = generate_cancellation(inv)
+                    if self.order.status != Order.STATUS_CANCELED:
+                        inv = generate_invoice(self.order)
+                    else:
+                        inv = c
+                    self.order.log_action('pretix.event.order.invoice.reissued', data={
+                        'invoice': inv.pk
+                    })
+                    messages.success(self.request, _('The invoice has been reissued.'))
 
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
         CachedTicket.objects.filter(order_position__order=self.order).delete()

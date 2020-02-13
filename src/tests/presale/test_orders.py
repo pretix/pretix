@@ -311,6 +311,50 @@ class OrdersTest(BaseOrdersTest):
         with scopes_disabled():
             assert self.ticket_pos.answers.get(question=self.question).answer == 'ABC'
 
+    def test_modify_invoice_regenerate(self):
+        self.event.settings.set('invoice_reissue_after_modify', True)
+        self.event.settings.set('invoice_address_asked', True)
+        with scopes_disabled():
+            generate_invoice(self.order)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        # Only questions changed
+        with scopes_disabled():
+            assert self.order.invoices.count() == 1
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                'zipcode': '1234',
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        with scopes_disabled():
+            assert self.order.invoices.count() == 3
+
+        self.event.settings.set('invoice_reissue_after_modify', False)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                'zipcode': '54321',
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        with scopes_disabled():
+            assert self.order.invoices.count() == 3
+
     def test_orders_cancel_invalid(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()

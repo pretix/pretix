@@ -443,6 +443,18 @@ DEFAULTS = {
             help_text=_("Invoices will never be automatically generated for free orders.")
         )
     },
+    'invoice_reissue_after_modify': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Automatically cancel and reissue invoice on address changes"),
+            help_text=_("If customers change their invoice address on an existing order, the invoice will "
+                        "automatically be canceled and a new invoice will be issued. This setting does not affect "
+                        "changes made through the backend."),
+        )
+    },
     'invoice_generate_sales_channels': {
         'default': json.dumps(['web']),
         'type': list
