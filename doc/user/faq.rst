@@ -40,6 +40,24 @@ If you created a product and it doesn't show up, please follow the following ste
 6. If the sale period has not started yet or is already over, check the "Show items outside presale period" setting of
    your event.
 
+Can I have different payment deadlines for different payment methods?
+---------------------------------------------------------------------
+
+No. We do not think it makes a lot of sense, for a number of reasons. First of all we believe it is not very
+customer-friendly. You might for example want to configure a 1-day deadline for credit card payments and 2 weeks for
+bank transfers. However, think for example of a customer who wants to pay by card and then the payment fails because
+the bank locked the card or refused the payment. The customer now needs to worry about not getting their ticket, or
+needs to create a new order with a different payment method. A payment deadline is a guarantee to your customer to hold
+the ticket if it is paid for within a certain time frame. If you give a two-week guarantee to some of your customers,
+why not to others?
+
+There are some other issues with it as well. pretix allows customers to switch payment methods as long as their payment
+has not been started or if it has failed. For example, a customer who selected bank transfer can later switch to credit
+card if they haven't sent the money yet, or a customer with a failed credit card payment can switch to a different
+method without creating a new order. If payment deadlines were dependent on the payment method, switching back and
+forth could either allow someone to extend their deadline forever, or render someones order invalid by moving the date
+back in the past.
+
 How can I revert a check-in?
 ----------------------------
 
