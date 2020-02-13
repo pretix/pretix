@@ -723,7 +723,7 @@ class ItemBundleForm(I18nModelForm):
 
     def clean(self):
         d = super().clean()
-        if not self.cleaned_data['designated_price']:
+        if not self.cleaned_data.get('designated_price'):
             d['designated_price'] = Decimal('0.00')
             self.instance.designated_price = Decimal('0.00')
 
