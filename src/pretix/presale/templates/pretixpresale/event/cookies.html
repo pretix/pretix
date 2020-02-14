@@ -1,6 +1,7 @@
 {% extends "error.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load urlreplace %}
 
 {% block content %}
     {% if cart_namespace %}
@@ -28,11 +29,16 @@
         </div>
     {% else %}
         <h1>{% trans "Cookies not supported" %}</h1>
-        <div class="alert alert-error">
+        <p>
             {% blocktrans trimmed %}
                 Your browser does not accept cookies from us. However, we need to set a cookie to remember who
                 you are and what is in your cart. Please change your browser settings accordingly.
             {% endblocktrans %}
+        </p>
+        <div class="text-center">
+            <a href="?{% url_replace request 'require_cookie' '' %}" class="btn btn-primary btn-lg">
+                {% trans "Try again" %}
+            </a>
         </div>
     {% endif %}
 {% endblock %}
