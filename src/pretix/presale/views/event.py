@@ -341,7 +341,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
 
-        if context['list_type'] == "calendar":
+        if context['list_type'] == "calendar" and self.request.event.has_subevents:
             self._set_month_year()
             tz = pytz.timezone(self.request.event.settings.timezone)
             _, ndays = calendar.monthrange(self.year, self.month)
@@ -362,7 +362,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['years'] = range(now().year - 2, now().year + 3)
-        else:
+        elif self.request.event.has_subevents:
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
             )
