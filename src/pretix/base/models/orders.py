@@ -400,10 +400,13 @@ class Order(LockModel, LoggedModel):
         term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
         if term_last:
             if self.event.has_subevents and subevents:
-                term_last = min([
+                terms = [
                     term_last.datetime(se).date()
                     for se in subevents
-                ])
+                ]
+                if not terms:
+                    return
+                term_last = min(terms)
             else:
                 term_last = term_last.datetime(self.event).date()
             term_last = make_aware(datetime.combine(
@@ -434,10 +437,11 @@ class Order(LockModel, LoggedModel):
             until = self.event.settings.get('cancel_allow_user_until', as_type=RelativeDateWrapper)
         if until:
             if self.event.has_subevents:
-                return min([
+                terms = [
                     until.datetime(se)
                     for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-                ])
+                ]
+                return min(terms) if terms else None
             else:
                 return until.datetime(self.event)
 
@@ -586,10 +590,11 @@ class Order(LockModel, LoggedModel):
 
         modify_deadline = self.event.settings.get('last_order_modification_date', as_type=RelativeDateWrapper)
         if self.event.has_subevents and modify_deadline:
-            modify_deadline = min([
+            dates = [
                 modify_deadline.datetime(se)
                 for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-            ])
+            ]
+            modify_deadline = min(dates) if dates else None
         elif modify_deadline:
             modify_deadline = modify_deadline.datetime(self.event)
 
@@ -620,10 +625,11 @@ class Order(LockModel, LoggedModel):
         dl_date = self.event.settings.get('ticket_download_date', as_type=RelativeDateWrapper)
         if dl_date:
             if self.event.has_subevents:
-                dl_date = min([
+                dates = [
                     dl_date.datetime(se)
                     for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-                ])
+                ]
+                dl_date = min(dates) if dates else None
             else:
                 dl_date = dl_date.datetime(self.event)
         return dl_date
@@ -648,10 +654,14 @@ class Order(LockModel, LoggedModel):
         term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
         if term_last:
             if self.event.has_subevents:
-                term_last = min([
+                terms = [
                     term_last.datetime(se).date()
                     for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-                ])
+                ]
+                if terms:
+                    term_last = min(terms)
+                else:
+                    term_last = None
             else:
                 term_last = term_last.datetime(self.event).date()
             term_last = make_aware(datetime.combine(
