@@ -359,7 +359,7 @@ class Paypal(BasePaymentProvider):
             return
 
         if payment.state != 'approved':
-            payment_obj.fail(info=str(payment))
+            payment_obj.fail(info=payment)
             logger.error('Invalid state: %s' % str(payment))
             raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                      'proceed.'))
