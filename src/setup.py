@@ -151,6 +151,7 @@ setup(
         'phonenumberslite==8.10.*',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
+        'packaging',
     ],
     extras_require={
         'dev': [
