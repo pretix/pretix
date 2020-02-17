@@ -13,7 +13,8 @@ from django.utils.timezone import make_aware
 from django.utils.translation import pgettext, ugettext as _
 
 from pretix.base.models import (
-    EventMetaProperty, EventMetaValue, Order, Organizer, User, Voucher,
+    EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue, Order,
+    Organizer, User, Voucher,
 )
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import event_permission_required
@@ -582,6 +583,40 @@ def meta_values(request):
                 Q(event__organizer_id__in=request.user.teams.filter(all_events=True).values_list('organizer', flat=True))
                 | Q(event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
             )
+
+    return JsonResponse({
+        'results': [
+            {'name': v, 'id': v}
+            for v in sorted(set(defaults.values_list('default', flat=True)[:10]) | set(matches.values_list('value', flat=True)[:10]))
+        ]
+    })
+
+
+def item_meta_values(request, organizer, event):
+    q = request.GET.get('q')
+    propname = request.GET.get('property')
+
+    matches = ItemMetaValue.objects.filter(
+        value__icontains=q,
+        property__name=propname
+    )
+    defaults = ItemMetaProperty.objects.filter(
+        name=propname,
+        default__icontains=q
+    )
+
+    organizer = get_object_or_404(Organizer, slug=organizer)
+    if not request.user.has_organizer_permission(organizer, request=request):
+        raise PermissionDenied()
+
+    defaults = defaults.filter(event__organizer_id=organizer.pk)
+    matches = matches.filter(item__event__organizer_id=organizer.pk)
+    all_access = (
+        (request and request.user.has_active_staff_session(request.session.session_key))
+        or request.user.teams.filter(all_events=True, organizer=organizer).exists()
+    )
+    if not all_access:
+        matches = matches.filter(event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
 
     return JsonResponse({
         'results': [

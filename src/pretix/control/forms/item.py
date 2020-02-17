@@ -1,4 +1,5 @@
 from decimal import Decimal
+from urllib.parse import urlencode
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -765,12 +766,14 @@ class ItemMetaValueForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['value'].required = False
         self.fields['value'].widget.attrs['placeholder'] = self.property.default
-        # self.fields['value'].widget.attrs['data-typeahead-url'] = (
-        #     reverse('control:events.meta.typeahead') + '?' + urlencode({
-        #         'property': self.property.name,
-        #         'organizer': self.property.organizer.slug,
-        #     })
-        # )
+        self.fields['value'].widget.attrs['data-typeahead-url'] = (
+            reverse('control:event.items.meta.typeahead', kwargs={
+                'organizer': self.property.event.organizer.slug,
+                'event': self.property.event.slug
+            }) + '?' + urlencode({
+                'property': self.property.name,
+            })
+        )
 
     class Meta:
         model = ItemMetaValue
