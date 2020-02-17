@@ -28,7 +28,8 @@ class SeatingPlanLayoutValidator:
         try:
             jsonschema.validate(val, schema)
         except jsonschema.ValidationError as e:
-            raise ValidationError(_('Your layout file is not a valid seating plan. Error message: {}').format(str(e)))
+            e = str(e).replace('%', '%%')
+            raise ValidationError(_('Your layout file is not a valid seating plan. Error message: {}').format(e))
 
 
 class SeatingPlan(LoggedModel):
