@@ -410,28 +410,31 @@ class BasePaymentProvider:
         availability_date = self.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:
             if self.event.has_subevents and cart_id:
-                availability_date = min([
+                dates = [
                     availability_date.datetime(se).date()
                     for se in self.event.subevents.filter(
                         id__in=CartPosition.objects.filter(
                             cart_id=cart_id, event=self.event
                         ).values_list('subevent', flat=True)
                     )
-                ])
+                ]
+                availability_date = min(dates) if dates else None
             elif self.event.has_subevents and order:
-                availability_date = min([
+                dates = [
                     availability_date.datetime(se).date()
                     for se in self.event.subevents.filter(
                         id__in=order.positions.values_list('subevent', flat=True)
                     )
-                ])
+                ]
+                availability_date = min(dates) if dates else None
             elif self.event.has_subevents:
                 logger.error('Payment provider is not subevent-ready.')
                 return False
             else:
                 availability_date = availability_date.datetime(self.event).date()
 
-            return availability_date >= now_dt.astimezone(tz).date()
+            if availability_date:
+                return availability_date >= now_dt.astimezone(tz).date()
 
         return True
 
