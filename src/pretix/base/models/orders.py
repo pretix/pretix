@@ -1921,7 +1921,8 @@ class OrderPosition(AbstractPosition):
             self._calculate_tax()
         self.order.touch()
         if not self.pk:
-            while OrderPosition.all.filter(secret=self.secret).exists():
+            while OrderPosition.all.filter(secret=self.secret,
+                                           order__event__organizer_id=self.order.event.organizer_id).exists():
                 self.secret = generate_position_secret()
 
         if not self.pseudonymization_id:
