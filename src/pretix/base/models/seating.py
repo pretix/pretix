@@ -40,7 +40,7 @@ class SeatingPlan(LoggedModel):
     layout = models.TextField(validators=[SeatingPlanLayoutValidator()])
 
     Category = namedtuple('Categrory', 'name')
-    RawSeat = namedtuple('Seat', 'name guid number row category zone sorting_rank')
+    RawSeat = namedtuple('Seat', 'name guid number row category zone sorting_rank row_label seat_label')
 
     def __str__(self):
         return self.name
@@ -69,11 +69,17 @@ class SeatingPlan(LoggedModel):
         # optimization, because this way we do not need to update the rank of very seat if we change a plan a little.
         for zi, z in enumerate(self.layout_data['zones']):
             for ri, r in enumerate(z['rows']):
+                row_label = None
+                if r.get('row_label'):
+                    row_label = r['row_label'].replace("%s", r.get('row_number', str(ri)))
                 try:
                     row_rank = int(r['row_number'])
                 except ValueError:
                     row_rank = ri
                 for si, s in enumerate(r['seats']):
+                    seat_label = None
+                    if r.get('seat_label'):
+                        seat_label = r['seat_label'].replace("%s", s.get('seat_number', str(si)))
                     try:
                         seat_rank = int(s['seat_number'])
                     except ValueError:
@@ -87,6 +93,8 @@ class SeatingPlan(LoggedModel):
                         guid=s['seat_guid'],
                         name='{} {}'.format(r['row_number'], s['seat_number']),  # TODO: Zone? Variable scheme?
                         row=r['row_number'],
+                        row_label=row_label,
+                        seat_label=seat_label,
                         zone=z['name'],
                         category=s['category'],
                         sorting_rank=rank
@@ -114,7 +122,9 @@ class Seat(models.Model):
     name = models.CharField(max_length=190)
     zone_name = models.CharField(max_length=190, blank=True, default="")
     row_name = models.CharField(max_length=190, blank=True, default="")
+    row_label = models.CharField(max_length=190, null=True)
     seat_number = models.CharField(max_length=190, blank=True, default="")
+    seat_label = models.CharField(max_length=190, null=True)
     seat_guid = models.CharField(max_length=190, db_index=True)
     product = models.ForeignKey('Item', null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
     blocked = models.BooleanField(default=False)
@@ -127,10 +137,17 @@ class Seat(models.Model):
         parts = []
         if self.zone_name:
             parts.append(self.zone_name)
-        if self.row_name:
+
+        if self.row_label:
+            parts.append(self.row_label)
+        elif self.row_name:
             parts.append(gettext('Row {number}').format(number=self.row_name))
-        if self.seat_number:
+
+        if self.seat_label:
+            parts.append(self.seat_label)
+        elif self.seat_number:
             parts.append(gettext('Seat {number}').format(number=self.seat_number))
+
         if not parts:
             return self.name
         return ', '.join(parts)

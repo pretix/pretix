@@ -29,7 +29,7 @@
       "additionalProperties": false
     }
   },
-  "required": ["zones", "name", "categories"],
+  "required": ["zones", "name", "categories", "size"],
   "additionalProperties": false,
   "definitions": {
     "zone": {
@@ -68,6 +68,14 @@
         "row_number": {
           "type": "string",
           "description": "Row number or name by which it can be identified"
+        },
+        "row_label": {
+          "type": ["string", "null"],
+          "description": "Human-readable name for the row. May include %s as a placeholder for the row_number value. Not used for rendering the plan, but for describing the seats in text."
+        },
+        "seat_label": {
+          "type": ["string", "null"],
+          "description": "Human-readable name for the seats in this. May include %s as a placeholder for the seat_number values. Not used for rendering the plan, but for describing the seats in text."
         },
         "seats": {
           "type": "array",
