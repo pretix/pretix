@@ -11,7 +11,7 @@ from pretix.base.banlist import banned
 from pretix.base.models import LoggedModel
 
 
-def gen_giftcard_secret(length):
+def gen_giftcard_secret(length=8):
     charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
     while True:
         code = get_random_string(length=length, allowed_chars=charset)
