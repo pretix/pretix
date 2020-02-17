@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-17 15:22+0000\n"
-"PO-Revision-Date: 2020-02-11 16:20+0000\n"
+"PO-Revision-Date: 2020-02-17 15:30+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -5460,7 +5460,7 @@ msgstr ""
 
 #: pretix/base/settings.py:452
 msgid "Automatically cancel and reissue invoice on address changes"
-msgstr ""
+msgstr "Bei Adressänderungen automatisch Rechnung stornieren und neu ausstellen"
 
 #: pretix/base/settings.py:453
 msgid ""
@@ -5468,6 +5468,9 @@ msgid ""
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
 msgstr ""
+"Wenn Kunden die Rechnungsadresse einer bestehenden Bestellung nachträglich "
+"ändern, wird die Rechnung automatisch storniert und neu ausgestellt. Diese "
+"Einstellung betrifft keine Änderungen, die über das Backend getätigt werden."
 
 #: pretix/base/settings.py:468
 msgid "Address line"
