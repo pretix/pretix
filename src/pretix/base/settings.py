@@ -527,6 +527,7 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("Domestic tax ID"),
+            help_text=_("e.g. tax number in Germany, ABN in Australia, …")
         )
     },
     'invoice_address_from_vat_id': {

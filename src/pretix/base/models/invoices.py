@@ -120,13 +120,19 @@ class Invoice(models.Model):
 
     @property
     def full_invoice_from(self):
+        taxidrow = ""
+        if self.invoice_from_tax_id:
+            if str(self.invoice_from_country) == "AU":
+                taxidrow = "ABN: %s" % self.invoice_from_tax_id
+            else:
+                taxidrow = pgettext("invoice", "Tax ID: %s") % self.invoice_from_tax_id
         parts = [
             self.invoice_from_name,
             self.invoice_from,
             (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
             self.invoice_from_country.name if self.invoice_from_country else "",
             pgettext("invoice", "VAT-ID: %s") % self.invoice_from_vat_id if self.invoice_from_vat_id else "",
-            pgettext("invoice", "Tax ID: %s") % self.invoice_from_tax_id if self.invoice_from_tax_id else "",
+            taxidrow,
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])
 
