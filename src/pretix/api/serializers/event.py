@@ -528,6 +528,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'invoice_address_vatid',
         'invoice_address_company_required',
         'invoice_address_beneficiary',
+        'invoice_address_custom_field',
         'invoice_name_required',
         'invoice_address_not_asked_free',
         'invoice_show_payments',

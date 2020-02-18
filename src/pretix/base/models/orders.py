@@ -2094,6 +2094,7 @@ class InvoiceAddress(models.Model):
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'),
                               help_text=_('Only for business customers within the EU.'))
     vat_id_validated = models.BooleanField(default=False)
+    custom_field = models.CharField(max_length=255, null=True, blank=True)
     internal_reference = models.TextField(
         verbose_name=_('Internal reference'),
         help_text=_('This reference will be printed on your invoice for your convenience.'),

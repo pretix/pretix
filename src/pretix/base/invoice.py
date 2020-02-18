@@ -459,6 +459,12 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
     def _get_intro(self):
         story = []
+        if self.invoice.custom_field:
+            story.append(Paragraph(
+                '{}: {}'.format(self.invoice.event.settings.invoice_address_custom_field, self.invoice.custom_field),
+                self.stylesheet['Normal']
+            ))
+
         if self.invoice.internal_reference:
             story.append(Paragraph(
                 pgettext('invoice', 'Customer reference: {reference}').format(reference=self.invoice.internal_reference),

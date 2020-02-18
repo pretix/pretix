@@ -734,6 +734,10 @@
                                             {% endif %}
                                         </dd>
                                     {% endif %}
+                                    {% if request.event.settings.invoice_address_custom_field and order.invoice_address.custom_field %}
+                                        <dt>{{ request.event.settings.invoice_address_custom_field }}</dt>
+                                        <dd>{{ order.invoice_address.custom_field }}</dd>
+                                    {% endif %}
                                     <dt>{% trans "Internal reference" %}</dt>
                                     <dd>{{ order.invoice_address.internal_reference }}</dd>
                                 </dl>

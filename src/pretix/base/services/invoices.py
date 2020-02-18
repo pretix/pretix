@@ -85,6 +85,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 ).split("\n") if a.strip()
             )
             invoice.internal_reference = ia.internal_reference
+            invoice.custom_field = ia.custom_field
             invoice.invoice_to_company = ia.company
             invoice.invoice_to_name = ia.name
             invoice.invoice_to_street = ia.street

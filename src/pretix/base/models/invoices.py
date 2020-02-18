@@ -111,6 +111,7 @@ class Invoice(models.Model):
 
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename, max_length=255)
     internal_reference = models.TextField(blank=True)
+    custom_field = models.CharField(max_length=255, null=True)
 
     objects = ScopedManager(organizer='event__organizer')
 

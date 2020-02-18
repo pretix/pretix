@@ -15,7 +15,7 @@ from django.utils.translation import (
 )
 from django_countries import countries
 from hierarkey.models import GlobalSettingsBase, Hierarkey
-from i18nfield.forms import I18nFormField, I18nTextarea
+from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 from rest_framework import serializers
 
@@ -180,6 +180,20 @@ DEFAULTS = {
             label=_("Ask for beneficiary"),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
             required=False
+        )
+    },
+    'invoice_address_custom_field': {
+        'default': '',
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            label=_("Custom address field"),
+            widget=I18nTextInput,
+            help_text=_("If you want to add a custom text field, e.g. for a country-specific registration number, to "
+                        "your invoice address form, please fill in the label here. This label will both be used for "
+                        "asking the user to input their details as well as for displaying the value on the invoice. "
+                        "The field will not be required.")
         )
     },
     'invoice_address_vatid': {

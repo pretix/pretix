@@ -457,7 +457,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
     class Meta:
         model = InvoiceAddress
         fields = ('is_business', 'company', 'name_parts', 'street', 'zipcode', 'city', 'country', 'state',
-                  'vat_id', 'internal_reference', 'beneficiary')
+                  'vat_id', 'internal_reference', 'beneficiary', 'custom_field')
         widgets = {
             'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={
@@ -560,6 +560,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         if not event.settings.invoice_address_beneficiary:
             del self.fields['beneficiary']
+
+        if event.settings.invoice_address_custom_field:
+            self.fields['custom_field'].label = event.settings.invoice_address_custom_field
+        else:
+            del self.fields['custom_field']
 
         for k, v in self.fields.items():
             if v.widget.attrs.get('autocomplete') or k == 'name_parts':
