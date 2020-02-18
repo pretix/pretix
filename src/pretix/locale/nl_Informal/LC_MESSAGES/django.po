@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-17 15:22+0000\n"
-"PO-Revision-Date: 2020-01-09 22:00+0000\n"
+"PO-Revision-Date: 2020-02-18 19:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -331,7 +331,7 @@ msgstr "Standaard"
 
 #: pretix/base/email.py:146
 msgid "Simple with logo"
-msgstr ""
+msgstr "Simpel met logo"
 
 #: pretix/base/email.py:340 pretix/base/email.py:403 pretix/base/email.py:419
 #: pretix/base/email.py:428 pretix/base/pdf.py:109 pretix/base/pdf.py:195
@@ -1161,10 +1161,8 @@ msgid "Total value (without taxes)"
 msgstr "Totaalbedrag (exclusief belasting)"
 
 #: pretix/base/exporters/orderlist.py:558
-#, fuzzy
-#| msgid "Payment settings"
 msgid "Payment matching IDs"
-msgstr "Betalingsinstellingen"
+msgstr "ID's voor betalingstoewijzing"
 
 #: pretix/base/exporters/orderlist.py:594
 #: pretix/base/exporters/orderlist.py:676
@@ -1478,11 +1476,9 @@ msgid "Beneficiary"
 msgstr "Ontvanger"
 
 #: pretix/base/invoice.py:495
-#, fuzzy
-#| msgid "Invoice"
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "Factuur"
+msgstr "Belastingfactuur"
 
 #: pretix/base/invoice.py:496
 msgctxt "invoice"
@@ -1532,18 +1528,14 @@ msgid "Invoice total"
 msgstr "Factuurbedrag"
 
 #: pretix/base/invoice.py:566
-#, fuzzy
-#| msgid "Ignored payments"
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Genegeerde betalingen"
+msgstr "Ontvangen betalingen"
 
 #: pretix/base/invoice.py:569
-#, fuzzy
-#| msgid "Invalid payments"
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr "Ongeldige betalingen"
+msgstr "Openstaande betalingen"
 
 #: pretix/base/invoice.py:598
 msgctxt "invoice"
@@ -1955,10 +1947,9 @@ msgid "Gift card code"
 msgstr "Cadeauboncode"
 
 #: pretix/base/models/giftcards.py:57
-#, fuzzy
-#| msgid "The slug may only contain letters, numbers, dots and dashes."
 msgid "The giftcard code may only contain letters, numbers, dots and dashes."
-msgstr "De slug mag alleen letters, cijfers, punten en streepjes bevatten."
+msgstr ""
+"De cadeauboncode mag alleen letters, cijfers, punten en streepjes bevatten."
 
 #: pretix/base/models/giftcards.py:62
 msgid "Test mode card"
@@ -2772,7 +2763,7 @@ msgstr ""
 #: pretix/base/models/orders.py:698
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr "Het bestelde product \"{item}\" is niet langer beschikbaar."
+msgstr "Het bestelde product \"{item}\" is niet meer beschikbaar."
 
 #: pretix/base/models/orders.py:699
 #, python-brace-format
@@ -2782,7 +2773,7 @@ msgstr "De stoel \"{seat}\" is niet meer beschikbaar."
 #: pretix/base/models/orders.py:700
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "De voucher \"{voucher}\" heeft niet genoeg budget over."
 
 #: pretix/base/models/orders.py:817 pretix/base/services/orders.py:770
 #: pretix/control/views/event.py:635
@@ -3180,10 +3171,8 @@ msgid "Redeemed"
 msgstr "Ingewisseld"
 
 #: pretix/base/models/vouchers.py:119
-#, fuzzy
-#| msgid "Maximum amount per order"
 msgid "Maximum discount budget"
-msgstr "Maximum aantal per bestelling"
+msgstr "Maximaal kortingsbudget"
 
 #: pretix/base/models/vouchers.py:120
 msgid ""
@@ -3191,6 +3180,9 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
+"Dit is het maximale geldbedrag dat als korting kan worden gegeven met deze "
+"voucher over alle gebruiken. Als dit bedrag wordt bereikt zal deze voucher "
+"niet meer bruikbaar zijn."
 
 #: pretix/base/models/vouchers.py:127 pretix/control/views/vouchers.py:69
 msgid "Valid until"
@@ -3574,16 +3566,14 @@ msgstr "Je bent gevraagd om bestelling {order.code} terug te betalen."
 
 #: pretix/base/orderimport.py:63
 msgid "Keep empty"
-msgstr ""
+msgstr "Leeg laten"
 
 #: pretix/base/orderimport.py:90
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr ""
+msgstr "Ongeldige instelling voor kolom \"{header}\"."
 
 #: pretix/base/orderimport.py:136
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevents"
 msgid "Date"
 msgstr "Datum"
@@ -3594,97 +3584,66 @@ msgid "You need to select a date."
 msgstr "Je moet een datum selecteren."
 
 #: pretix/base/orderimport.py:157
-#, fuzzy
-#| msgid "No matching answers found."
 msgctxt "subevent"
 msgid "No matching date was found."
-msgstr "Geen overeenkomende antwoorden gevonden."
+msgstr "Geen overeenkomende datum gevonden."
 
 #: pretix/base/orderimport.py:159
-#, fuzzy
-#| msgid "No matching answers found."
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr "Geen overeenkomende antwoorden gevonden."
+msgstr "Er zijn meerdere overeenkomende datums gevonden."
 
 #: pretix/base/orderimport.py:193
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "No matching product was found."
-msgstr "Geen overeenkomende antwoorden gevonden."
+msgstr "Geen overeenkomend product gevonden."
 
 #: pretix/base/orderimport.py:195
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "Multiple matching products were found."
-msgstr "Geen overeenkomende antwoorden gevonden."
+msgstr "Er zijn meerdere overeenkomende producten gevonden."
 
 #: pretix/base/orderimport.py:224
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "No matching variation was found."
-msgstr "Geen overeenkomende antwoorden gevonden."
+msgstr "Geen overeenkomende variant gevonden."
 
 #: pretix/base/orderimport.py:226
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "Multiple matching variations were found."
-msgstr "Geen overeenkomende antwoorden gevonden."
+msgstr "Er zijn meerdere overeenkomende varianten gevonden."
 
 #: pretix/base/orderimport.py:229
-#, fuzzy
-#| msgid "You need to select a variation of the product."
 msgid "You need to select a variation for this product."
-msgstr "Je moet een variant van het product selecteren."
+msgstr "Je moet een variant van dit product selecteren."
 
 #: pretix/base/orderimport.py:241 pretix/base/orderimport.py:256
 #: pretix/base/orderimport.py:271 pretix/base/orderimport.py:282
 #: pretix/base/orderimport.py:293 pretix/base/orderimport.py:309
 #: pretix/base/orderimport.py:328 pretix/base/orderimport.py:353
 #: pretix/base/orderimport.py:364
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address"
-msgstr "Factuuradressen"
+msgstr "Factuuradres"
 
 #: pretix/base/orderimport.py:316
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "Please enter a valid country code."
-msgstr "Vul alsjeblieft een geldig e-mailadres in."
+msgstr "Vul een geldige landcode in."
 
 #: pretix/base/orderimport.py:328
-#, fuzzy
-#| msgctxt "address"
-#| msgid "State"
 msgid "State"
 msgstr "Staat"
 
 #: pretix/base/orderimport.py:333
-#, fuzzy
-#| msgid "Automatic refunds are not supported by this payment provider."
 msgid "States are not supported for this country."
-msgstr ""
-"Automatische terugbetalingen worden niet ondersteund door deze "
-"betalingsprovider."
+msgstr "Staten worden voor dit land niet ondersteund."
 
 #: pretix/base/orderimport.py:341
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Please enter a valid state."
-msgstr "Kies een geldige beschikbare stoel."
+msgstr "Kies een geldige staat."
 
 #: pretix/base/orderimport.py:390
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee e-mail address"
 msgstr "E-mailadres van gast"
 
 #: pretix/base/orderimport.py:404
-#, fuzzy
-#| msgid "Create a first product"
 msgid "Calculate from product"
-msgstr "Maak een eerste product aan"
+msgstr "Bereken uit productgegevens"
 
 #: pretix/base/orderimport.py:412 pretix/control/views/orders.py:695
 #: pretix/control/views/orders.py:718 pretix/control/views/orders.py:746
@@ -3699,10 +3658,8 @@ msgid "Ticket code"
 msgstr "Kaartjescode"
 
 #: pretix/base/orderimport.py:431
-#, fuzzy
-#| msgid "Checked in automatically"
 msgid "Generate automatically"
-msgstr "Automatisch ingecheckt"
+msgstr "Automatisch genereren"
 
 #: pretix/base/orderimport.py:440
 msgid "You cannot assign a position secret that already exists."
