@@ -12,6 +12,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.dispatch import Signal
 from django.templatetags.static import static as _static
+from django.utils.timezone import now
 from django_scopes import scope
 
 from pretix.base.models import Event, Event_SettingsStore, Organizer
@@ -72,7 +73,8 @@ def compile_scss(object, file="main.scss", fonts=True):
     sasssrc = "\n".join(sassrules)
     srcchecksum = hashlib.sha1(sasssrc.encode('utf-8')).hexdigest()
 
-    css = cache.get('sass_compile_{}'.format(srcchecksum))
+    cp = cache.get_or_set('sass_compile_prefix', now().isoformat())
+    css = cache.get('sass_compile_{}_{}'.format(cp, srcchecksum))
     if not css:
         cf = dict(django_libsass.CUSTOM_FUNCTIONS)
         cf['static'] = static
