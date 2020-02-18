@@ -12,19 +12,23 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
-ALLOWED_TAGS = [
+ALLOWED_TAGS_SNIPPET = [
     'a',
     'abbr',
     'acronym',
     'b',
-    'blockquote',
     'br',
     'code',
     'em',
     'i',
+    'strong',
+    'span',
+    # Update doc/user/markdown.rst if you change this!
+]
+ALLOWED_TAGS = ALLOWED_TAGS_SNIPPET + [
+    'blockquote',
     'li',
     'ol',
-    'strong',
     'ul',
     'p',
     'table',
@@ -34,7 +38,6 @@ ALLOWED_TAGS = [
     'td',
     'th',
     'div',
-    'span',
     'hr',
     'h1',
     'h2',
@@ -95,7 +98,8 @@ def markdown_compile_email(source):
     ), parse_email=True)
 
 
-def markdown_compile(source):
+def markdown_compile(source, snippet=False):
+    tags = ALLOWED_TAGS_SNIPPET if snippet else ALLOWED_TAGS
     return bleach.clean(
         markdown.markdown(
             source,
@@ -104,7 +108,8 @@ def markdown_compile(source):
                 'markdown.extensions.nl2br'
             ]
         ),
-        tags=ALLOWED_TAGS,
+        strip=snippet,
+        tags=tags,
         attributes=ALLOWED_ATTRIBUTES,
         protocols=ALLOWED_PROTOCOLS,
     )
@@ -118,6 +123,20 @@ def rich_text(text: str, **kwargs):
     text = str(text)
     body_md = bleach.linkify(
         markdown_compile(text),
+        callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
+        parse_email=True
+    )
+    return mark_safe(body_md)
+
+
+@register.filter
+def rich_text_snippet(text: str, **kwargs):
+    """
+    Processes markdown and cleans HTML in a text input.
+    """
+    text = str(text)
+    body_md = bleach.linkify(
+        markdown_compile(text, snippet=True),
         callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
         parse_email=True
     )

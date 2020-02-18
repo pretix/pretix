@@ -21,6 +21,7 @@ from pretix.base.services.cart import (
     get_fees, set_cart_addons, update_tax_rates,
 )
 from pretix.base.services.orders import perform_order
+from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
@@ -664,7 +665,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
                     v = _('Yes')
                 elif v is False:
                     v = _('No')
-                ctx['contact_info'].append((value.label, v))
+                ctx['contact_info'].append((rich_text_snippet(value.label), v))
 
         return ctx
 
