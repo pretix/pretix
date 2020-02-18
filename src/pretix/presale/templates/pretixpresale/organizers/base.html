@@ -7,9 +7,14 @@
     {% block title %}{% endblock %}{% if url_name != "organizer.index" %} :: {% endif %}{{ organizer.name }}
 {% endblock %}
 {% block page %}
-    <div class="page-header">
-        <div class="pull-left flip">
-            {% if organizer_logo %}
+    <div class="page-header {% if organizer_logo and organizer.settings.organizer_logo_image_large %}logo-large{% endif %}">
+        <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-left flip{% endif %}">
+            {% if organizer_logo and organizer.settings.organizer_logo_image_large %}
+                <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">
+                    <img src="{{ organizer_logo|thumb:'1170x5000' }}" alt="{{ organizer.name }}"
+                         class="organizer-logo" />
+                </a>
+            {% elif organizer_logo %}
                 <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">
                     <img src="{{ organizer_logo|thumb:'5000x120' }}" alt="{{ organizer.name }}"
                             class="organizer-logo" />
@@ -18,16 +23,16 @@
                 <h1><a href="{% eventurl organizer "presale:organizer.index" %}">{{ organizer.name }}</a></h1>
             {% endif %}
         </div>
-        <div class="pull-right flip loginbox">
-            {% if organizer.settings.locales|length > 1 %}
+        {% if organizer.settings.locales|length > 1 %}
+            <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-right flip{% endif %} loginbox">
                 <div class="locales">
                     {% for l in languages %}
                         <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
                             {{ l.name_local }}</a>
                     {% endfor %}
                 </div>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <div class="clearfix"></div>
     </div>
     {% if messages %}

@@ -1330,6 +1330,18 @@ Your {event} team"""))
         'default': None,
         'type': File
     },
+    'logo_image_large': {
+        'default': 'False',
+        'type': bool
+    },
+    'organizer_logo_image': {
+        'default': None,
+        'type': File
+    },
+    'organizer_logo_image_large': {
+        'default': 'False',
+        'type': bool
+    },
     'og_image': {
         'default': None,
         'type': File

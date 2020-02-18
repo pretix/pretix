@@ -41,9 +41,14 @@
     {% endif %}
 {% endblock %}
 {% block page %}
-    <div class="page-header">
-        <div class="pull-left flip">
-            {% if event_logo %}
+    <div class="page-header {% if event_logo and event.settings.logo_image_large %}logo-large{% endif %}">
+        <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-left flip{% endif %}">
+            {% if event_logo and event.settings.logo_image_large %}
+                <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
+                   title="{{ event.name }}">
+                    <img src="{{ event_logo|thumb:'1170x5000' }}" alt="{{ event.name }}" class="event-logo" />
+                </a>
+            {% elif event_logo %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
                         title="{{ event.name }}">
                     <img src="{{ event_logo|thumb:'5000x120' }}" alt="{{ event.name }}" class="event-logo" />
@@ -57,16 +62,16 @@
                 </h1>
             {% endif %}
         </div>
-        <div class="pull-right flip loginbox">
-            {% if request.event.settings.locales|length > 1 %}
+        {% if request.event.settings.locales|length > 1 %}
+            <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox">
                 <div class="locales">
                     {% for l in languages %}
                         <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
                             {{ l.name_local }}</a>
                     {% endfor %}
                 </div>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <div class="clearfix"></div>
     </div>
     {% if request.event.testmode %}
