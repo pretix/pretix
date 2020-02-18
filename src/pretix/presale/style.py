@@ -52,6 +52,10 @@ def compile_scss(object, file="main.scss", fonts=True):
         sassrules.append('$brand-danger: {};'.format(object.settings.get('theme_color_danger')))
     if object.settings.get('theme_color_background'):
         sassrules.append('$body-bg: {};'.format(object.settings.get('theme_color_background')))
+    if not object.settings.get('theme_round_borders'):
+        sassrules.append('$border-radius-base: 0;')
+        sassrules.append('$border-radius-large: 0;')
+        sassrules.append('$border-radius-small: 0;')
 
     font = object.settings.get('primary_font')
     if font != 'Open Sans' and fonts:

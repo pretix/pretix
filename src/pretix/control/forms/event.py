@@ -409,6 +409,10 @@ class EventSettingsForm(SettingsForm):
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield no-contrast'})
     )
+    theme_round_borders = forms.BooleanField(
+        label=_("Use round edges"),
+        required=False,
+    )
     primary_font = forms.ChoiceField(
         label=_('Font'),
         choices=[

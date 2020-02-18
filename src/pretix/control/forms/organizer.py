@@ -260,6 +260,10 @@ class OrganizerSettingsForm(SettingsForm):
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield no-contrast'})
     )
+    theme_round_borders = forms.BooleanField(
+        label=_("Use round edges"),
+        required=False,
+    )
     organizer_homepage_text = I18nFormField(
         label=_('Homepage text'),
         required=False,

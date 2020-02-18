@@ -1302,6 +1302,10 @@ Your {event} team"""))
         'default': '#FFFFFF',
         'type': str
     },
+    'theme_round_borders': {
+        'default': 'True',
+        'type': bool
+    },
     'primary_font': {
         'default': 'Open Sans',
         'type': str
