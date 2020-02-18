@@ -48,9 +48,16 @@
   .loginbox {
     text-align: right;
     padding: 10px;
+    html.rtl & {
+      text-align: left;
+    }
   }
 
   border-bottom: none;
+}
+
+h2.content-header {
+  margin-top: 0;
 }
 
 @media (min-width: $screen-sm-min) {

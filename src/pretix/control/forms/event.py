@@ -368,6 +368,11 @@ class EventSettingsForm(SettingsForm):
         help_text=_('We recommend to upload a picture at least 1170 pixels wide.'),
         required=False,
     )
+    logo_show_title = forms.BooleanField(
+        label=_('Show event title even if a header image is present'),
+        help_text=_('The title will only be shown on the event front page.'),
+        required=False,
+    )
     og_image = ExtFileField(
         label=_('Social media image'),
         ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),

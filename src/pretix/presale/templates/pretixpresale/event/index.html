@@ -25,6 +25,7 @@
             {{ ev.event_microdata }}
         </script>
     {% endautoescape %}
+
     {% if show_cart %}
         <details class="panel panel-primary cart" open>
             <summary class="panel-heading">
@@ -125,6 +126,14 @@
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
         {% endif %}
+    {% endif %}
+    {% if event_logo and request.event.settings.logo_show_title and not subevent %}
+        <h2 class="content-header">
+            {{ event.name }}
+            {% if not event.has_subevents %}
+                <small>{{ event.get_date_range_display }}</small>
+            {% endif %}
+        </h2>
     {% endif %}
 
     {% if frontpage_text and not cart_namespace %}

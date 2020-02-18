@@ -1334,6 +1334,10 @@ Your {event} team"""))
         'default': 'False',
         'type': bool
     },
+    'logo_show_title': {
+        'default': 'True',
+        'type': bool
+    },
     'organizer_logo_image': {
         'default': None,
         'type': File
