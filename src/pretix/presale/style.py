@@ -50,6 +50,8 @@ def compile_scss(object, file="main.scss", fonts=True):
         sassrules.append('$brand-success: {};'.format(object.settings.get('theme_color_success')))
     if object.settings.get('theme_color_danger'):
         sassrules.append('$brand-danger: {};'.format(object.settings.get('theme_color_danger')))
+    if object.settings.get('theme_color_background'):
+        sassrules.append('$body-bg: {};'.format(object.settings.get('theme_color_background')))
 
     font = object.settings.get('primary_font')
     if font != 'Open Sans' and fonts:

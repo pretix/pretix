@@ -1298,6 +1298,10 @@ Your {event} team"""))
         'default': '#D36060',
         'type': str
     },
+    'theme_color_background': {
+        'default': '#FFFFFF',
+        'type': str
+    },
     'primary_font': {
         'default': 'Open Sans',
         'type': str

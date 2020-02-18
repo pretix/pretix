@@ -250,6 +250,16 @@ class OrganizerSettingsForm(SettingsForm):
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
+    theme_color_background = forms.CharField(
+        label=_("Page background color"),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield no-contrast'})
+    )
     organizer_homepage_text = I18nFormField(
         label=_('Homepage text'),
         required=False,

@@ -30,18 +30,18 @@
             </div>
         </div>
     {% endif %}
+    {% if request.event.settings.organizer_link_back %}
+        <div class="container page-header-link-parent">
+            <a href="{% eventurl request.organizer "presale:organizer.index" %}">
+                &laquo; {% blocktrans trimmed with name=request.organizer.name %}
+                Show all events of {{ name }}
+            {% endblocktrans %}
+            </a>
+        </div>
+    {% endif %}
 {% endblock %}
 {% block page %}
     <div class="page-header">
-        {% if request.event.settings.organizer_link_back %}
-            <p>
-                <a href="{% eventurl request.organizer "presale:organizer.index" %}">
-                    &laquo; {% blocktrans trimmed with name=request.organizer.name %}
-                        Show all events of {{ name }}
-                    {% endblocktrans %}
-                </a>
-            </p>
-        {% endif %}
         <div class="pull-left flip">
             {% if event_logo %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"

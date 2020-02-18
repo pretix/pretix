@@ -1,0 +1,34 @@
+@import "../../pretixbase/scss/_contrast.scss";
+
+.main-box {
+  background: $main-box-bg;
+}
+
+.page-header-link-parent {
+  @if ($body-bg != #FFFFFF) {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  } @else {
+    padding-top: 5px;
+    margin-bottom: -15px;
+  }
+
+  a {
+    color: choose-contrast-color($body-bg, white, $link-color);
+  }
+}
+
+@media (min-width: $screen-sm-min) {
+  .main-box {
+    @if ($body-bg != #FFFFFF) {
+      margin: 20px auto;
+      border-radius: $border-radius-large;
+    }
+  }
+  .page-header-link-parent {
+    margin-bottom: -15px;
+    @if ($body-bg != #FFFFFF) {
+      padding: 10px 0;
+    }
+  }
+}

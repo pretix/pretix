@@ -4,6 +4,7 @@
 @import "../../datetimepicker/_bootstrap-datetimepicker.scss";
 @import "../../fontawesome/scss/font-awesome.scss";
 
+@import "_theme.scss";
 @import "_event.scss";
 @import "_cart.scss";
 @import "_forms.scss";
@@ -24,6 +25,7 @@ footer {
 .page-header {
     position: relative;
     padding-bottom: 9px;
+    margin-top: 20px;
 
     h1 {
         margin: 0;

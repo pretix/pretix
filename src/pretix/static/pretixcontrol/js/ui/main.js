@@ -226,19 +226,21 @@ var form_handlers = function (el) {
         if ($(this).val() === "") {
             $note.remove();
         }
-        if (c > 7) {
-            $note.html("<span class='fa fa-fw fa-check-circle'></span>")
-                .append(gettext('Your color has great contrast and is very easy to read!'));
-            $note.addClass("text-success").removeClass("text-warning").removeClass("text-danger");
-        } else if (c > 2.5) {
-            $note.html("<span class='fa fa-fw fa-info-circle'></span>")
-                .append(gettext('Your color has decent contrast and is probably good-enough to read!'));
-            $note.removeClass("text-success").removeClass("text-warning").removeClass("text-danger");
-        } else {
-            $note.html("<span class='fa fa-fw fa-warning'></span>")
-                .append(gettext('Your color has bad contrast for text on white background, please choose a darker ' +
-                    'shade.'));
-            $note.addClass("text-danger").removeClass("text-success").removeClass("text-warning");
+        if (!$(this).is(".no-contrast")) {
+            if (c > 7) {
+                $note.html("<span class='fa fa-fw fa-check-circle'></span>")
+                    .append(gettext('Your color has great contrast and is very easy to read!'));
+                $note.addClass("text-success").removeClass("text-warning").removeClass("text-danger");
+            } else if (c > 2.5) {
+                $note.html("<span class='fa fa-fw fa-info-circle'></span>")
+                    .append(gettext('Your color has decent contrast and is probably good-enough to read!'));
+                $note.removeClass("text-success").removeClass("text-warning").removeClass("text-danger");
+            } else {
+                $note.html("<span class='fa fa-fw fa-warning'></span>")
+                    .append(gettext('Your color has bad contrast for text on white background, please choose a darker ' +
+                        'shade.'));
+                $note.addClass("text-danger").removeClass("text-success").removeClass("text-warning");
+            }
         }
     });
 
