@@ -14,11 +14,13 @@
     </div>
     <h2>{% trans "Your upcoming events" %}</h2>
     <div class="dashboard">
-        <div class="widget-small widget-container">
-            <a href="{% url "control:events.add" %}" class="widget">
-                <div class="newevent"><span class="fa fa-plus-circle"></span>{% trans "Create a new event" %}</div>
-            </a>
-        </div>
+        {% if can_create_event %}
+            <div class="widget-small widget-container">
+                <a href="{% url "control:events.add" %}" class="widget">
+                    <div class="newevent"><span class="fa fa-plus-circle"></span>{% trans "Create a new event" %}</div>
+                </a>
+            </div>
+        {% endif %}
         {% for w in upcoming %}
             <div class="widget-{{ w.display_size|default:"small" }} {{ w.container_class|default:"widget-container" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
                 <div class="widget">
