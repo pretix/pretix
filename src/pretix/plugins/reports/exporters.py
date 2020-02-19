@@ -238,6 +238,7 @@ class OverviewReport(Report):
             date_filter=form_data.get('date_axis'),
             date_from=form_data.get('date_from'),
             date_until=form_data.get('date_until'),
+            fees=True
         )
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         states = (

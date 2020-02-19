@@ -1727,10 +1727,12 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
                 date_filter=self.filter_form.cleaned_data['date_axis'],
                 date_from=self.filter_form.cleaned_data['date_from'],
                 date_until=self.filter_form.cleaned_data['date_until'],
+                fees=True
             )
         else:
             ctx['items_by_category'], ctx['total'] = order_overview(
                 self.request.event,
+                fees=True
             )
         ctx['subevent_warning'] = (
             self.request.event.has_subevents and
