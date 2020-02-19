@@ -1,3 +1,4 @@
+from datetime import date, datetime, time
 from decimal import Decimal
 
 from django import forms
@@ -5,7 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.email import get_available_placeholders
@@ -25,16 +26,17 @@ class ExtendForm(I18nModelForm):
                     'and you having sold more tickets than you planned!'),
         required=False
     )
+    expires = forms.DateField(
+        label=_("Expiration date"),
+        widget=forms.DateInput(attrs={
+            'class': 'datepickerfield',
+            'data-is-payment-date': 'true'
+        }),
+    )
 
     class Meta:
         model = Order
-        fields = ['expires']
-        widgets = {
-            'expires': forms.DateInput(attrs={
-                'class': 'datepickerfield',
-                'data-is-payment-date': 'true'
-            })
-        }
+        fields = []
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -45,10 +47,21 @@ class ExtendForm(I18nModelForm):
 
     def clean(self):
         data = super().clean()
-        data['expires'] = data['expires'].replace(hour=23, minute=59, second=59)
-        if data['expires'] < now():
-            raise ValidationError(_('The new expiry date needs to be in the future.'))
+        if data.get('expires'):
+            if isinstance(data['expires'], date):
+                data['expires'] = make_aware(datetime.combine(
+                    data['expires'],
+                    time(hour=23, minute=59, second=59)
+                ), self.instance.event.timezone)
+            else:
+                data['expires'] = data['expires'].replace(hour=23, minute=59, second=59)
+            if data['expires'] < now():
+                raise ValidationError(_('The new expiry date needs to be in the future.'))
         return data
+
+    def save(self, commit=True):
+        self.instance.expires = self.cleaned_data['expires']
+        return super().save(commit)
 
 
 class ConfirmPaymentForm(forms.Form):
