@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.template.loader import get_template
+from django.utils.timezone import override
 from django_scopes import scope, scopes_disabled
 from inlinestyler.utils import inline_css
 
@@ -79,7 +80,7 @@ def send_notification(logentry_id: int, action_type: str, user_id: int, method: 
         if not notification_type:
             return  # Ignore, e.g. plugin not active for this event
 
-        with language(user.locale):
+        with language(user.locale), override(logentry.event.timezone if logentry.event else user.timezone):
             notification = notification_type.build_notification(logentry)
 
             if method == "mail":
