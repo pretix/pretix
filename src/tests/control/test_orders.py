@@ -594,7 +594,7 @@ def test_order_extend_not_expired(client, env):
         q.items.add(env[3])
         o = Order.objects.get(id=env[2].id)
         generate_invoice(o)
-    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
@@ -614,7 +614,7 @@ def test_order_extend_overdue_quota_empty(client, env):
         o.save()
         q = Quota.objects.create(event=env[0], size=0)
         q.items.add(env[3])
-    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
@@ -637,7 +637,7 @@ def test_order_extend_overdue_quota_blocked_by_waiting_list(client, env):
         env[0].waitinglistentries.create(item=env[3], email='foo@bar.com')
         generate_cancellation(generate_invoice(o))
 
-    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
@@ -660,7 +660,7 @@ def test_order_extend_expired_quota_left(client, env):
         generate_cancellation(generate_invoice(o))
         q = Quota.objects.create(event=env[0], size=3)
         q.items.add(env[3])
-    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     with scopes_disabled():
         assert o.invoices.count() == 2
@@ -686,7 +686,7 @@ def test_order_extend_expired_quota_empty(client, env):
     with scopes_disabled():
         q = Quota.objects.create(event=env[0], size=0)
         q.items.add(env[3])
-    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
@@ -707,7 +707,7 @@ def test_order_extend_expired_quota_empty_ignore(client, env):
         o.save()
         q = Quota.objects.create(event=env[0], size=0)
         q.items.add(env[3])
-    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate,
@@ -733,7 +733,7 @@ def test_order_extend_expired_seat_free(client, env):
         p.save()
         q = Quota.objects.create(event=env[0], size=3)
         q.items.add(env[3])
-        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
         client.login(email='dummy@dummy.dummy', password='dummy')
         assert o.invoices.count() == 2
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
@@ -762,7 +762,7 @@ def test_order_extend_expired_seat_blocked(client, env):
 
         q = Quota.objects.create(event=env[0], size=100)
         q.items.add(env[3])
-        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
@@ -804,7 +804,7 @@ def test_order_extend_expired_seat_taken(client, env):
 
         q = Quota.objects.create(event=env[0], size=100)
         q.items.add(env[3])
-        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
         client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
@@ -833,7 +833,7 @@ def test_order_extend_expired_quota_partial(client, env):
         o.save()
         q = Quota.objects.create(event=env[0], size=1)
         q.items.add(env[3])
-    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
@@ -863,7 +863,7 @@ def test_order_extend_expired_voucher_budget_ok(client, env):
 
         q = Quota.objects.create(event=env[0], size=100)
         q.items.add(env[3])
-        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
@@ -894,7 +894,7 @@ def test_order_extend_expired_voucher_budget_fail(client, env):
 
         q = Quota.objects.create(event=env[0], size=100)
         q.items.add(env[3])
-        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
