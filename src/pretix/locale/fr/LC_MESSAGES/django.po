@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-17 15:22+0000\n"
-"PO-Revision-Date: 2019-10-31 14:39+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2020-02-26 03:00+0000\n"
+"Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -98,11 +98,9 @@ msgstr ""
 
 #: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:826
 #: pretix/base/services/orders.py:1064
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "The selected event date is not active."
+#, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "La date de l'événement sélectionné n'est pas active."
+msgstr "La place {seat} sélectionné n'est pas disponible."
 
 #: pretix/api/serializers/checkin.py:28 pretix/base/models/event.py:1108
 #: pretix/base/models/items.py:1174 pretix/base/models/items.py:1529
@@ -121,10 +119,8 @@ msgid "The subevent does not belong to this event."
 msgstr "Le sous-événement n'appartient pas à cet événement."
 
 #: pretix/api/serializers/checkin.py:41
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Unknown sales channel."
-msgstr "canaux de vente"
+msgstr "canal de vente inconnu."
 
 #: pretix/api/serializers/event.py:116
 msgid ""
@@ -169,14 +165,13 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Les cartes-cadeaux ne doivent pas être associées à des taux d'imposition non "
+"nuls, car la taxe de vente sera appliquée lors de l'échange de la carte-"
+"cadeau."
 
 #: pretix/api/serializers/item.py:142 pretix/control/forms/item.py:470
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
-"Vous ne pouvez pas sélectionner simultanément un quota et un produit "
-"spécifique."
+msgstr "Cartes cadeaux ne peuvent pas être des billets d'entrée."
 
 #: pretix/api/serializers/item.py:247
 msgid ""
@@ -187,26 +182,26 @@ msgstr ""
 "Veuillez utiliser le point de terminaison imbriqué dédié."
 
 #: pretix/api/serializers/item.py:261 pretix/control/forms/item.py:72
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "Cette question sera posée lors de l'enregistrement."
+msgstr ""
+"Cette question ne doit pas dépendre d'une question qui sera posée lors de "
+"l'enregistrement."
 
 #: pretix/api/serializers/item.py:266 pretix/control/forms/item.py:77
 msgid "Circular dependency between questions detected."
 msgstr "Une dependance réciproque a été réconnue."
 
 #: pretix/api/serializers/item.py:271 pretix/control/forms/item.py:86
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "This type of question cannot be asked during check-in."
-msgstr "Cette question sera posée lors de l'enregistrement."
+msgstr "Ce genre de questions ne peut pas être posé lors de l'enregistrement."
 
 #: pretix/api/serializers/organizer.py:52 pretix/control/forms/organizer.py:369
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Un chèque-cadeau avec le même secret existe déjà dans ce ou un compte "
+"organisateur lié."
 
 #: pretix/api/serializers/organizer.py:100
 #: pretix/control/views/organizer.py:530
@@ -302,10 +297,8 @@ msgid "Ticket check-in reverted"
 msgstr "L'enregistrement a été annulé"
 
 #: pretix/base/auth.py:91
-#, fuzzy
-#| msgid "pretix default"
 msgid "pretix User"
-msgstr "pretix standard"
+msgstr "utilisateur pretix"
 
 #: pretix/base/auth.py:100 pretix/base/forms/auth.py:174
 #: pretix/base/models/auth.py:86 pretix/base/models/notifications.py:25
@@ -337,7 +330,7 @@ msgstr "Défaut"
 
 #: pretix/base/email.py:146
 msgid "Simple with logo"
-msgstr ""
+msgstr "simple avec logo"
 
 #: pretix/base/email.py:340 pretix/base/email.py:403 pretix/base/email.py:419
 #: pretix/base/email.py:428 pretix/base/pdf.py:109 pretix/base/pdf.py:195
@@ -355,13 +348,11 @@ msgstr "Exemple de billet d'entrée"
 
 #: pretix/base/email.py:407
 msgid "An individual text with a reason can be inserted here."
-msgstr ""
+msgstr "Un texte avec un motif peut être inséré ici."
 
 #: pretix/base/email.py:411
-#, fuzzy
-#| msgid "The products have been successfully added to your cart."
 msgid "The amount has been charged to your card."
-msgstr "Les produits ont été ajoutés à votre panier."
+msgstr "Le montant dû a été débité de votre carte."
 
 #: pretix/base/email.py:415
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
@@ -403,10 +394,9 @@ msgid "Questions"
 msgstr "Questions"
 
 #: pretix/base/exporters/dekodi.py:82
-#, fuzzy, python-brace-format
-#| msgid "{event}-{code}"
+#, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr "{event}-{code}"
+msgstr "billet {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:83
 #: pretix/base/exporters/orderlist.py:291 pretix/control/forms/subevents.py:238
@@ -686,11 +676,9 @@ msgstr "Pays"
 #: pretix/control/templates/pretixcontrol/order/index.html:717
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:104
 #: pretix/presale/templates/pretixpresale/event/order.html:243
-#, fuzzy
-#| msgid "Status"
 msgctxt "address"
 msgid "State"
-msgstr "Statut"
+msgstr "État/Province/Région"
 
 #: pretix/base/exporters/orderlist.py:105
 #: pretix/base/exporters/orderlist.py:226
@@ -997,7 +985,7 @@ msgstr "Quota total"
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:726
 msgid "Paid orders"
-msgstr "Ordres payés"
+msgstr "Commandes payées"
 
 #: pretix/base/exporters/orderlist.py:492 pretix/control/views/item.py:731
 msgid "Pending orders"
