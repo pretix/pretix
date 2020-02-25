@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-17 15:22+0000\n"
-"PO-Revision-Date: 2020-02-17 15:30+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2020-02-26 03:00+0000\n"
+"Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -329,7 +329,7 @@ msgstr "Standard"
 
 #: pretix/base/email.py:146
 msgid "Simple with logo"
-msgstr "Simpel mit Logo"
+msgstr "einfach mit Logo"
 
 #: pretix/base/email.py:340 pretix/base/email.py:403 pretix/base/email.py:419
 #: pretix/base/email.py:428 pretix/base/pdf.py:109 pretix/base/pdf.py:195
