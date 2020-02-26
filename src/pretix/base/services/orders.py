@@ -294,8 +294,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
         invoices = []
-        i = order.invoices.filter(is_cancellation=False, refered__isnull=True).last()
-        if i:
+        i = order.invoices.filter(is_cancellation=False).last()
+        if i and not i.refered.exists():
             invoices.append(generate_cancellation(i))
 
         for position in order.positions.all():

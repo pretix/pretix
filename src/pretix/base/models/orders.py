@@ -426,7 +426,7 @@ class Order(LockModel, LoggedModel):
 
     def cancel_allowed(self):
         return (
-            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and self.count_positions
+            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED) and self.count_positions
         )
 
     @cached_property
