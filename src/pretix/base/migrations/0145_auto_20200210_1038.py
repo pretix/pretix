@@ -9,7 +9,7 @@ import pretix.base.models.base
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0142_auto_20191215_1522'),
+        ('pretixbase', '0144_invoiceaddress_custom_field'),
     ]
 
     operations = [
