@@ -612,11 +612,12 @@ def item_meta_values(request, organizer, event):
     defaults = defaults.filter(event__organizer_id=organizer.pk)
     matches = matches.filter(item__event__organizer_id=organizer.pk)
     all_access = (
-        (request and request.user.has_active_staff_session(request.session.session_key))
+        request.user.has_active_staff_session(request.session.session_key)
         or request.user.teams.filter(all_events=True, organizer=organizer).exists()
     )
     if not all_access:
-        matches = matches.filter(event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
+        defaults = matches.filter(event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
+        matches = matches.filter(item__event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
 
     return JsonResponse({
         'results': [
