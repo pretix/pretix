@@ -1148,9 +1148,9 @@ def test_order_mark_canceled_expired(token_client, organizer, event, order):
             organizer.slug, event.slug, order.code
         )
     )
-    assert resp.status_code == 400
+    assert resp.status_code == 200
     order.refresh_from_db()
-    assert order.status == Order.STATUS_EXPIRED
+    assert order.status == Order.STATUS_CANCELED
 
 
 @pytest.mark.django_db
