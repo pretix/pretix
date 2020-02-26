@@ -189,6 +189,11 @@ class PdfDataSerializer(serializers.Field):
             for k, v in ev._cached_meta_data.items():
                 res['meta:' + k] = v
 
+            if not hasattr(instance.item, '_cached_meta_data'):
+                instance.item._cached_meta_data = instance.item.meta_data
+            for k, v in instance.item._cached_meta_data.items():
+                res['itemmeta:' + k] = v
+
         return res
 
 
