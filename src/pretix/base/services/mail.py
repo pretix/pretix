@@ -126,7 +126,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         renderer = ClassicMailRenderer(None)
         content_plain = body_plain = render_mail(template, context)
         subject = str(subject).format_map(TolerantDict(context))
-        sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
+        sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM) or settings.MAIL_FROM
         if event:
             sender_name = event.settings.mail_from_name or str(event.name)
             sender = formataddr((sender_name, sender))
