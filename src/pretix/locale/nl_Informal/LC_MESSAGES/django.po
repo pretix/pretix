@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-17 15:22+0000\n"
-"PO-Revision-Date: 2020-02-18 19:00+0000\n"
+"PO-Revision-Date: 2020-02-26 03:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -3663,31 +3663,23 @@ msgstr "Automatisch genereren"
 
 #: pretix/base/orderimport.py:440
 msgid "You cannot assign a position secret that already exists."
-msgstr ""
+msgstr "Je kan geen ticketcode gebruiken die al bestaat."
 
 #: pretix/base/orderimport.py:469
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "Please enter a valid language code."
-msgstr "Vul alsjeblieft een geldig e-mailadres in."
+msgstr "Vul een geldige taalcode in."
 
 #: pretix/base/orderimport.py:489
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "Please enter a valid sales channel."
-msgstr "Vul alsjeblieft een geldig e-mailadres in."
+msgstr "Vul een geldig verkoopkanaal in."
 
 #: pretix/base/orderimport.py:498
-#, fuzzy
-#| msgid "Seat"
 msgid "Seat ID"
-msgstr "Stoel"
+msgstr "Stoelnummer"
 
 #: pretix/base/orderimport.py:512
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "No matching seat was found."
-msgstr "Geen overeenkomende antwoorden gevonden."
+msgstr "Geen overeenkomende stoel gevonden."
 
 #: pretix/base/orderimport.py:515 pretix/base/services/cart.py:103
 msgid ""
@@ -3811,10 +3803,8 @@ msgstr ""
 "verkoopkanalen"
 
 #: pretix/base/payment.py:312
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Hide payment method"
-msgstr "Betaalmethode inschakelen"
+msgstr "Betaalmethode verbergen"
 
 #: pretix/base/payment.py:315
 msgid ""
@@ -6523,7 +6513,7 @@ msgstr ""
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr "Foutief verzoek"
+msgstr "Bad Request"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
@@ -16772,7 +16762,7 @@ msgstr "Bedrag:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
 msgid "Reference code (important):"
-msgstr "Betalingskenmerk (belangrijk):"
+msgstr "Kenmerk (belangrijk, plaats in omschrijving):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:28
 msgid ""

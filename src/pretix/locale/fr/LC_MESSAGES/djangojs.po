@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-17 15:22+0000\n"
-"PO-Revision-Date: 2019-10-01 01:00+0000\n"
-"Last-Translator: Fabian Rodriguez <magicfab@legoutdulibre.com>\n"
+"PO-Revision-Date: 2020-02-26 03:00+0000\n"
+"Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -36,11 +36,11 @@ msgstr "Commandes passées"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "Ordres payés"
+msgstr "Commandes payées"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr "Revenu total"
+msgstr "chiffre d'affaires total"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
@@ -96,8 +96,6 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:125
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
-#, fuzzy
-#| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "La requête a prit trop de temps. Veuillez réessayer."
 
@@ -237,7 +235,7 @@ msgstr "Cliquez pour fermer"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:749
 msgid "You have unsaved changes!"
-msgstr ""
+msgstr "Vous avez des modifications non sauvegardées !"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
 msgid "Calculating default price…"
