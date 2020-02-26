@@ -1,4 +1,5 @@
 from decimal import Decimal
+from urllib.parse import urlencode
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -18,7 +19,7 @@ from pretix.base.forms import I18nFormSet, I18nModelForm
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
-from pretix.base.models.items import ItemAddOn, ItemBundle
+from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2
@@ -756,3 +757,27 @@ class ItemBundleForm(I18nModelForm):
             'count',
             'designated_price',
         ]
+
+
+class ItemMetaValueForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.property = kwargs.pop('property')
+        super().__init__(*args, **kwargs)
+        self.fields['value'].required = False
+        self.fields['value'].widget.attrs['placeholder'] = self.property.default
+        self.fields['value'].widget.attrs['data-typeahead-url'] = (
+            reverse('control:event.items.meta.typeahead', kwargs={
+                'organizer': self.property.event.organizer.slug,
+                'event': self.property.event.slug
+            }) + '?' + urlencode({
+                'property': self.property.name,
+            })
+        )
+
+    class Meta:
+        model = ItemMetaValue
+        fields = ['value']
+        widgets = {
+            'value': forms.TextInput()
+        }

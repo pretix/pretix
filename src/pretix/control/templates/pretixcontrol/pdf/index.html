@@ -344,6 +344,11 @@
                                         {% trans "Event attribute:" %} {{ p.name }}
                                     </option>
                                 {% endfor %}
+                                {% for p in request.event.item_meta_properties.all %}
+                                    <option value="itemmeta:{{ p.name }}">
+                                        {% trans "Item attribute:" %} {{ p.name }}
+                                    </option>
+                                {% endfor %}
                                 <option value="other">{% trans "Other…" %}</option>
                             </select>
                             <textarea type="text" value="" class="input-block-level form-control"

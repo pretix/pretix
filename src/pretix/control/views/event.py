@@ -11,6 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.db import transaction
 from django.db.models import ProtectedError
+from django.forms import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
     JsonResponse,
@@ -39,9 +40,9 @@ from pretix.base.signals import register_ticket_outputs
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.forms.event import (
     CancelSettingsForm, CommentForm, EventDeleteForm, EventMetaValueForm,
-    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
-    PaymentSettingsForm, ProviderForm, QuickSetupForm,
-    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
+    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm,
+    ItemMetaPropertyForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
+    QuickSetupForm, QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -51,6 +52,7 @@ from pretix.multidomain.urlreverse import get_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
+from ...base.models.items import ItemMetaProperty
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -137,6 +139,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         context = super().get_context_data(*args, **kwargs)
         context['sform'] = self.sform
         context['meta_forms'] = self.meta_forms
+        context['formset'] = self.formset
         return context
 
     @transaction.atomic
@@ -144,6 +147,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         self._save_decoupled(self.sform)
         self.sform.save()
         self.save_meta()
+        self.save_formset(self.object)
         change_css = False
 
         if self.sform.has_changed():
@@ -183,7 +187,8 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        if form.is_valid() and self.sform.is_valid() and all([f.is_valid() for f in self.meta_forms]):
+        if form.is_valid() and self.sform.is_valid() and all([f.is_valid() for f in self.meta_forms]) and \
+                self.formset.is_valid():
             # reset timezone
             zone = timezone(self.sform.cleaned_data['timezone'])
             event = form.instance
@@ -199,6 +204,33 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
     @staticmethod
     def reset_timezone(tz, dt):
         return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
+
+    @cached_property
+    def formset(self):
+        formsetclass = inlineformset_factory(
+            Event, ItemMetaProperty,
+            form=ItemMetaPropertyForm, can_order=False, can_delete=True, extra=0
+        )
+        return formsetclass(self.request.POST if self.request.method == "POST" else None,
+                            instance=self.object, queryset=self.object.item_meta_properties.all())
+
+    def save_formset(self, obj):
+        for form in self.formset.initial_forms:
+            if form in self.formset.deleted_forms:
+                if not form.instance.pk:
+                    continue
+                form.instance.delete()
+                form.instance.pk = None
+            elif form.has_changed():
+                form.save()
+
+        for form in self.formset.extra_forms:
+            if not form.has_changed():
+                continue
+            if self.formset._should_delete_form(form):
+                continue
+            form.instance.event = obj
+            form.save()
 
 
 class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):

@@ -43,6 +43,7 @@ seating_plan                          integer                    If reserved sea
 seat_category_mapping                 object                     An object mapping categories of the seating plan
                                                                  (strings) to items in the event (integers or ``null``).
 timezone                              string                     Event timezone name
+item_meta_properties                  object                     Item-specific meta data parameters and default values.
 ===================================== ========================== =======================================================
 
 
@@ -78,6 +79,10 @@ timezone                              string                     Event timezone 
 .. versionchanged:: 3.4
 
    The attribute ``timezone`` has been added.
+
+.. versionchanged:: 3.6
+
+   The attribute ``item_meta_properties`` has been added.
 
 Endpoints
 ---------
@@ -133,6 +138,7 @@ Endpoints
             "seating_plan": null,
             "seat_category_mapping": {},
             "timezone": "Europe/Berlin",
+            "item_meta_properties": {},
             "plugins": [
               "pretix.plugins.banktransfer"
               "pretix.plugins.stripe"
@@ -204,6 +210,7 @@ Endpoints
         "seat_category_mapping": {},
         "meta_data": {},
         "timezone": "Europe/Berlin",
+        "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.banktransfer"
           "pretix.plugins.stripe"
@@ -256,6 +263,7 @@ Endpoints
         "has_subevents": false,
         "meta_data": {},
         "timezone": "Europe/Berlin",
+        "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
@@ -290,6 +298,7 @@ Endpoints
         "has_subevents": false,
         "meta_data": {},
         "timezone": "Europe/Berlin",
+        "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
@@ -344,6 +353,7 @@ Endpoints
         "has_subevents": false,
         "meta_data": {},
         "timezone": "Europe/Berlin",
+        "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
@@ -378,6 +388,7 @@ Endpoints
         "seat_category_mapping": {},
         "meta_data": {},
         "timezone": "Europe/Berlin",
+        "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
@@ -444,6 +455,7 @@ Endpoints
         "seat_category_mapping": {},
         "meta_data": {},
         "timezone": "Europe/Berlin",
+        "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.banktransfer",
           "pretix.plugins.stripe",

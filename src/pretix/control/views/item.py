@@ -30,13 +30,14 @@ from pretix.base.models import (
     QuestionAnswer, QuestionOption, Quota, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemAddOn, ItemBundle
+from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
-    ItemBundleFormSet, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
-    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
+    ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemUpdateForm,
+    ItemVariationForm, ItemVariationsFormSet, QuestionForm, QuestionOptionForm,
+    QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -939,6 +940,41 @@ class ItemDetailMixin(SingleObjectMixin):
             raise Http404(_("The requested item does not exist."))
 
 
+class MetaDataEditorMixin:
+    meta_form = ItemMetaValueForm
+    meta_model = ItemMetaValue
+
+    @cached_property
+    def meta_forms(self):
+        if hasattr(self, 'object') and self.object:
+            val_instances = {
+                v.property_id: v for v in self.object.meta_values.all()
+            }
+        else:
+            val_instances = {}
+
+        formlist = []
+
+        for p in self.request.event.item_meta_properties.all():
+            formlist.append(self._make_meta_form(p, val_instances))
+        return formlist
+
+    def _make_meta_form(self, p, val_instances):
+        return self.meta_form(
+            prefix='prop-{}'.format(p.pk),
+            property=p,
+            instance=val_instances.get(p.pk, self.meta_model(property=p, item=self.object)),
+            data=(self.request.POST if self.request.method == "POST" else None)
+        )
+
+    def save_meta(self):
+        for f in self.meta_forms:
+            if f.cleaned_data.get('value'):
+                f.save()
+            elif f.instance and f.instance.pk:
+                f.instance.delete()
+
+
 class ItemCreate(EventPermissionRequiredMixin, CreateView):
     form_class = ItemCreateForm
     template_name = 'pretixcontrol/item/create.html'
@@ -985,7 +1021,7 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateView):
+class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
     form_class = ItemUpdateForm
     template_name = 'pretixcontrol/item/index.html'
     permission = 'can_change_items'
@@ -1038,7 +1074,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
     def post(self, request, *args, **kwargs):
         self.get_object()
         form = self.get_form()
-        if self.is_valid(form):
+        if self.is_valid(form) and all([f.is_valid() for f in self.meta_forms]):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -1088,6 +1124,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
 
     @transaction.atomic
     def form_valid(self, form):
+        self.save_meta()
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed() or any(f.has_changed() for f in self.plugin_forms):
             data = {
@@ -1137,6 +1174,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['plugin_forms'] = self.plugin_forms
+        ctx['meta_forms'] = self.meta_forms
         ctx['formsets'] = self.formsets
 
         if not ctx['item'].active and ctx['item'].bundled_with.count() > 0:

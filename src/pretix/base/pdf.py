@@ -431,6 +431,8 @@ class Renderer:
             return '(error)'
         if o['content'] == 'other':
             return o['text']
+        elif o['content'].startswith('itemmeta:'):
+            return op.item.meta_data.get(o['content'][9:]) or ''
         elif o['content'].startswith('meta:'):
             return ev.meta_data.get(o['content'][5:]) or ''
         elif o['content'] in self.variables:

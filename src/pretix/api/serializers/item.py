@@ -2,13 +2,15 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
+from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
-    Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation, Question,
-    QuestionOption, Quota,
+    Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemVariation,
+    Question, QuestionOption, Quota,
 )
 
 
@@ -110,6 +112,7 @@ class ItemSerializer(I18nAwareModelSerializer):
     bundles = InlineItemBundleSerializer(many=True, required=False)
     variations = InlineItemVariationSerializer(many=True, required=False)
     tax_rate = ItemTaxRateField(source='*', read_only=True)
+    meta_data = MetaDataField(required=False, source='*')
 
     class Meta:
         model = Item
@@ -119,7 +122,7 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
-                  'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard')
+                  'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard', 'meta_data')
         read_only_fields = ('has_variations', 'picture')
 
     def validate(self, data):
@@ -167,18 +170,65 @@ class ItemSerializer(I18nAwareModelSerializer):
                 ItemAddOn.clean_max_min_count(addon_data['max_count'], addon_data['min_count'])
         return value
 
+    @cached_property
+    def item_meta_properties(self):
+        return {
+            p.name: p for p in self.context['request'].event.item_meta_properties.all()
+        }
+
+    def validate_meta_data(self, value):
+        for key in value['meta_data'].keys():
+            if key not in self.item_meta_properties:
+                raise ValidationError(_('Item meta data property \'{name}\' does not exist.').format(name=key))
+        return value
+
     @transaction.atomic
     def create(self, validated_data):
         variations_data = validated_data.pop('variations') if 'variations' in validated_data else {}
         addons_data = validated_data.pop('addons') if 'addons' in validated_data else {}
         bundles_data = validated_data.pop('bundles') if 'bundles' in validated_data else {}
+        meta_data = validated_data.pop('meta_data', None)
         item = Item.objects.create(**validated_data)
+
         for variation_data in variations_data:
             ItemVariation.objects.create(item=item, **variation_data)
         for addon_data in addons_data:
             ItemAddOn.objects.create(base_item=item, **addon_data)
         for bundle_data in bundles_data:
             ItemBundle.objects.create(base_item=item, **bundle_data)
+
+        # Meta data
+        if meta_data is not None:
+            for key, value in meta_data.items():
+                ItemMetaValue.objects.create(
+                    property=self.item_meta_properties.get(key),
+                    value=value,
+                    item=item
+                )
+        return item
+
+    def update(self, instance, validated_data):
+        meta_data = validated_data.pop('meta_data', None)
+        item = super().update(instance, validated_data)
+
+        # Meta data
+        if meta_data is not None:
+            current = {mv.property: mv for mv in item.meta_values.select_related('property')}
+            for key, value in meta_data.items():
+                prop = self.item_meta_properties.get(key)
+                if prop in current:
+                    current[prop].value = value
+                    current[prop].save()
+                else:
+                    item.meta_values.create(
+                        property=self.item_meta_properties.get(key),
+                        value=value
+                    )
+
+            for prop, current_object in current.items():
+                if prop.name not in meta_data:
+                    current_object.delete()
+
         return item
 
 

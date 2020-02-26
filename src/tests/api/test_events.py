@@ -80,7 +80,10 @@ TEST_EVENT_RES = {
     'plugins': [
         'pretix.plugins.banktransfer',
         'pretix.plugins.ticketoutputpdf'
-    ]
+    ],
+    'item_meta_properties': {
+        'day': 'Monday',
+    }
 }
 
 
@@ -506,6 +509,35 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"meta_data":["Meta data property \'test\' does not exist."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "item_meta_properties": {
+                "Foo": "Bar"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert organizer.events.get(slug=resp.data['slug']).item_meta_properties.filter(
+            name="Foo", default="Bar"
+        ).exists()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "item_meta_properties": {
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert not organizer.events.get(slug=resp.data['slug']).item_meta_properties.filter(
+            name="Foo"
+        ).exists()
 
 
 @pytest.mark.django_db
