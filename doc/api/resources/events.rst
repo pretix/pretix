@@ -80,7 +80,7 @@ item_meta_properties                  object                     Item-specific m
 
    The attribute ``timezone`` has been added.
 
-.. versionchanged:: 3.6
+.. versionchanged:: 3.7
 
    The attribute ``item_meta_properties`` has been added.
 

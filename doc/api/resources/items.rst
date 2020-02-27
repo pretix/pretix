@@ -155,7 +155,7 @@ meta_data                             object                     Values set for 
 
    The ``show_quota_left``, ``allow_waitinglist``, and ``hidden_if_available`` attributes have been added.
 
-.. versionchanged:: 3.6
+.. versionchanged:: 3.7
 
    The attribute ``meta_data`` has been added.
 
