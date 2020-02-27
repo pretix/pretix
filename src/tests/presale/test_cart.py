@@ -907,6 +907,21 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
 
+    def test_min_per_item_mixed_variations(self):
+        self.quota_shirts.size = 30
+        self.quota_shirts.save()
+        self.event.settings.max_items_per_order = 20
+        self.shirt.min_per_order = 10
+        self.shirt.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.pk): '6',
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.pk): '4',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 10)
+
     def test_min_per_item_success(self):
         self.quota_tickets.size = 30
         self.quota_tickets.save()

@@ -303,32 +303,6 @@ class CartManager:
             if op.item.require_bundling and not op.addon_to == 'FAKE':
                 raise CartError(error_messages['bundled_only'])
 
-            if op.item.max_per_order or op.item.min_per_order:
-                new_total = (
-                    len([1 for p in self.positions if p.item_id == op.item.pk]) +
-                    sum([_op.count for _op in self._operations + current_ops
-                         if isinstance(_op, self.AddOperation) and _op.item == op.item]) +
-                    op.count -
-                    len([1 for _op in self._operations + current_ops
-                         if isinstance(_op, self.RemoveOperation) and _op.position.item_id == op.item.pk])
-                )
-
-            if op.item.max_per_order and new_total > op.item.max_per_order:
-                raise CartError(
-                    _(error_messages['max_items_per_product']) % {
-                        'max': op.item.max_per_order,
-                        'product': op.item.name
-                    }
-                )
-
-            if op.item.min_per_order and new_total < op.item.min_per_order:
-                raise CartError(
-                    _(error_messages['min_items_per_product']) % {
-                        'min': op.item.min_per_order,
-                        'product': op.item.name
-                    }
-                )
-
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal],
                    subevent: Optional[SubEvent], cp_is_net: bool=None, force_custom_price=False,
@@ -787,37 +761,45 @@ class CartManager:
 
         return vouchers_ok
 
-    def _check_min_per_product(self):
-        per_product = Counter()
-        min_per_product = {}
+    def _check_min_max_per_product(self):
+        items = Counter()
         for p in self.positions:
-            per_product[p.item_id] += 1
-            min_per_product[p.item.pk] = p.item.min_per_order
-
+            items[p.item] += 1
         for op in self._operations:
             if isinstance(op, self.AddOperation):
-                per_product[op.item.pk] += op.count
-                min_per_product[op.item.pk] = op.item.min_per_order
+                items[op.item] += op.count
             elif isinstance(op, self.RemoveOperation):
-                per_product[op.position.item_id] -= 1
-                min_per_product[op.position.item.pk] = op.position.item.min_per_order
+                items[op.position.item] -= 1
 
         err = None
-        for itemid, num in per_product.items():
-            min_p = min_per_product[itemid]
-            if min_p and num < min_p:
+        for item, count in items.items():
+            if item.max_per_order and count > item.max_per_order:
+                raise CartError(
+                    _(error_messages['max_items_per_product']) % {
+                        'max': item.max_per_order,
+                        'product': item.name
+                    }
+                )
+
+            if item.min_per_order and count < item.min_per_order:
                 self._operations = [o for o in self._operations if not (
-                    isinstance(o, self.AddOperation) and o.item.pk == itemid
+                    isinstance(o, self.AddOperation) and o.item.pk == item.pk
                 )]
                 removals = [o.position.pk for o in self._operations if isinstance(o, self.RemoveOperation)]
                 for p in self.positions:
-                    if p.item_id == itemid and p.pk not in removals:
+                    if p.item_id == item.pk and p.pk not in removals:
                         self._operations.append(self.RemoveOperation(position=p))
                         err = _(error_messages['min_items_per_product_removed']) % {
-                            'min': min_p,
-                            'product': p.item.name
+                            'min': item.min_per_order,
+                            'product': item.name
                         }
-
+                if not err:
+                    raise CartError(
+                        _(error_messages['min_items_per_product']) % {
+                            'min': item.min_per_order,
+                            'product': item.name
+                        }
+                    )
         return err
 
     def _perform_operations(self):
@@ -826,7 +808,7 @@ class CartManager:
         err = None
         new_cart_positions = []
 
-        err = err or self._check_min_per_product()
+        err = err or self._check_min_max_per_product()
 
         self._operations.sort(key=lambda a: self.order[type(a)])
         seats_seen = set()
