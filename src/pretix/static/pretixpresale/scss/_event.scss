@@ -153,7 +153,7 @@ section.front-page {
     line-height: 22px;
 }
 @media (max-width: $screen-sm-max) {
-    .page-header h1 small {
+    .page-header h1 small, h1.content-header small {
         display: block;
         white-space: normal;
     }

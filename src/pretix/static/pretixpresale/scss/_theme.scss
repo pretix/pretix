@@ -1,0 +1,95 @@
+@import "../../pretixbase/scss/_contrast.scss";
+
+.page-header {
+  position: relative;
+  padding-bottom: 9px;
+  margin-top: 20px;
+
+  h1 {
+    margin: 0;
+  }
+  h1 small {
+    white-space: nowrap;
+  }
+  .loginbox {
+    padding-top: 15px;
+  }
+  .event-logo, .organizer-logo {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.main-box {
+  background: $main-box-bg;
+}
+
+.page-header-links > div.header-part {
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  a {
+    color: choose-contrast-color($body-bg, white, $link-color);
+  }
+  a.active, .locales a.active {
+    border-bottom-color: choose-contrast-color($body-bg, white, $link-color) !important;
+  }
+}
+
+.page-header.logo-large {
+  margin: 0 -15px;
+
+  img {
+    width: 100%;
+  }
+
+  .loginbox {
+    text-align: right;
+    padding: 10px;
+    html.rtl & {
+      text-align: left;
+    }
+  }
+
+  border-bottom: none;
+}
+
+h2.content-header {
+  margin-top: 0;
+}
+@media (max-width: $screen-xs-max) {
+  h2.content-header small {
+    display: block;
+  }
+}
+@media (min-width: $screen-sm-min) {
+  .main-box {
+    @if ($body-bg != #FFFFFF) {
+      margin: 20px auto;
+      border-radius: $border-radius-large;
+    }
+  }
+  .page-header-links {
+    padding: 0;
+  }
+  .page-header-links > div.header-part {
+    @if ($body-bg != #FFFFFF) {
+      padding: 10px 0;
+      margin-bottom: -20px;
+    }
+  }
+
+  .page-header.logo-large {
+    img {
+      @if ($body-bg != #FFFFFF) {
+        border-top-right-radius: $border-radius-large;
+        border-top-left-radius: $border-radius-large;
+      }
+    }
+  }
+  .page-header .loginbox {
+    @if ($body-bg != #FFFFFF) {
+      padding-top: 0;
+    }
+  }
+}

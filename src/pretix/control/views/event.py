@@ -156,6 +156,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             })
             display_properties = (
                 'primary_color', 'theme_color_success', 'theme_color_danger', 'primary_font',
+                'theme_color_background', 'theme_round_borders',
             )
             if any(p in self.sform.changed_data for p in display_properties):
                 change_css = True

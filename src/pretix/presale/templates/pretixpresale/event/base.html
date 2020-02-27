@@ -30,20 +30,40 @@
             </div>
         </div>
     {% endif %}
-{% endblock %}
-{% block page %}
-    <div class="page-header">
+    <div class="container page-header-links">
+        {% if event.settings.locales|length > 1 %}
+            {% if event.settings.theme_color_background|upper != "#FFFFFF" or event.settings.logo_image_large %}
+                <div class="pull-right header-part flip">
+                    <div class="locales">
+                        {% for l in languages %}
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                                {{ l.name_local }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
         {% if request.event.settings.organizer_link_back %}
-            <p>
+            <div class="pull-left header-part flip">
                 <a href="{% eventurl request.organizer "presale:organizer.index" %}">
                     &laquo; {% blocktrans trimmed with name=request.organizer.name %}
-                        Show all events of {{ name }}
-                    {% endblocktrans %}
+                    Show all events of {{ name }}
+                {% endblocktrans %}
                 </a>
-            </p>
+            </div>
         {% endif %}
-        <div class="pull-left flip">
-            {% if event_logo %}
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}
+{% block page %}
+    <div class="page-header {% if event_logo and event.settings.logo_image_large %}logo-large{% endif %}">
+        <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-left flip{% endif %}">
+            {% if event_logo and event.settings.logo_image_large %}
+                <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
+                   title="{{ event.name }}">
+                    <img src="{{ event_logo|thumb:'1170x5000' }}" alt="{{ event.name }}" class="event-logo" />
+                </a>
+            {% elif event_logo %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
                         title="{{ event.name }}">
                     <img src="{{ event_logo|thumb:'5000x120' }}" alt="{{ event.name }}" class="event-logo" />
@@ -57,16 +77,18 @@
                 </h1>
             {% endif %}
         </div>
-        <div class="pull-right flip loginbox">
-            {% if request.event.settings.locales|length > 1 %}
-                <div class="locales">
-                    {% for l in languages %}
-                        <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                            {{ l.name_local }}</a>
-                    {% endfor %}
+        {% if event.settings.locales|length > 1 %}
+            {% if event.settings.theme_color_background|upper == "#FFFFFF" and not event.settings.logo_image_large %}
+                <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox">
+                    <div class="locales">
+                        {% for l in languages %}
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                                {{ l.name_local }}</a>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endif %}
-        </div>
+        {% endif %}
         <div class="clearfix"></div>
     </div>
     {% if request.event.testmode %}

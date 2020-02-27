@@ -250,6 +250,20 @@ class OrganizerSettingsForm(SettingsForm):
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
+    theme_color_background = forms.CharField(
+        label=_("Page background color"),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield no-contrast'})
+    )
+    theme_round_borders = forms.BooleanField(
+        label=_("Use round edges"),
+        required=False,
+    )
     organizer_homepage_text = I18nFormField(
         label=_('Homepage text'),
         required=False,
@@ -257,11 +271,18 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('This will be displayed on the organizer homepage.')
     )
     organizer_logo_image = ExtFileField(
-        label=_('Logo image'),
+        label=_('Header image'),
         ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
         required=False,
         help_text=_('If you provide a logo image, we will by default not show your organization name '
-                    'in the page header. We will show your logo with a maximal height of 120 pixels.')
+                    'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                    'can increase the size with the setting below. We recommend not using small details on the picture '
+                    'as it will be resized on smaller screens.')
+    )
+    organizer_logo_image_large = forms.BooleanField(
+        label=_('Use header image in its full size'),
+        help_text=_('We recommend to upload a picture at least 1170 pixels wide.'),
+        required=False,
     )
     event_list_type = forms.ChoiceField(
         label=_('Default overview style'),

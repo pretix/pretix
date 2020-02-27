@@ -4,6 +4,7 @@
 @import "../../datetimepicker/_bootstrap-datetimepicker.scss";
 @import "../../fontawesome/scss/font-awesome.scss";
 
+@import "_theme.scss";
 @import "_event.scss";
 @import "_cart.scss";
 @import "_forms.scss";
@@ -20,24 +21,6 @@ footer {
     text-align: center;
     padding: 10px 0;
     font-size: 11px;
-}
-.page-header {
-    position: relative;
-    padding-bottom: 9px;
-
-    h1 {
-        margin: 0;
-    }
-    h1 small {
-        white-space: nowrap;
-    }
-    .loginbox {
-        padding-top: 15px;
-    }
-    .event-logo, .organizer-logo {
-        max-width: 100%;
-        height: auto;
-    }
 }
 .js-only {
     display: none;

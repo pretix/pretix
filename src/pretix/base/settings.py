@@ -1298,6 +1298,14 @@ Your {event} team"""))
         'default': '#D36060',
         'type': str
     },
+    'theme_color_background': {
+        'default': '#FFFFFF',
+        'type': str
+    },
+    'theme_round_borders': {
+        'default': 'True',
+        'type': bool
+    },
     'primary_font': {
         'default': 'Open Sans',
         'type': str
@@ -1321,6 +1329,22 @@ Your {event} team"""))
     'logo_image': {
         'default': None,
         'type': File
+    },
+    'logo_image_large': {
+        'default': 'False',
+        'type': bool
+    },
+    'logo_show_title': {
+        'default': 'True',
+        'type': bool
+    },
+    'organizer_logo_image': {
+        'default': None,
+        'type': File
+    },
+    'organizer_logo_image_large': {
+        'default': 'False',
+        'type': bool
     },
     'og_image': {
         'default': None,

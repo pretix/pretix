@@ -37,6 +37,7 @@
             <fieldset>
                 <legend>{% trans "Organizer page" %}</legend>
                 {% bootstrap_field sform.organizer_logo_image layout="control" %}
+                {% bootstrap_field sform.organizer_logo_image_large layout="control" %}
                 {% bootstrap_field sform.organizer_homepage_text layout="control" %}
                 {% bootstrap_field sform.event_list_type layout="control" %}
                 {% bootstrap_field sform.event_list_availability layout="control" %}
@@ -57,6 +58,8 @@
                 {% bootstrap_field sform.primary_color layout="control" %}
                 {% bootstrap_field sform.theme_color_success layout="control" %}
                 {% bootstrap_field sform.theme_color_danger layout="control" %}
+                {% bootstrap_field sform.theme_color_background layout="control" %}
+                {% bootstrap_field sform.theme_round_borders layout="control" %}
                 {% bootstrap_field sform.primary_font layout="control" %}
                 {% bootstrap_field sform.favicon layout="control" %}
             </fieldset>
