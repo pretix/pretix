@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-27 09:54+0000\n"
-"PO-Revision-Date: 2020-02-26 03:00+0000\n"
-"Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
+"PO-Revision-Date: 2020-02-27 10:05+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -171,8 +171,7 @@ msgid "Gift card products should not be admission products at the same time."
 msgstr "Geschenkgutscheine können nicht gleichzeitig zum Einlass berechtigen."
 
 #: pretix/api/serializers/item.py:182
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
 msgstr "Die Meta-Eigenschaft '{name}' existiert nicht."
 
@@ -5201,10 +5200,8 @@ msgid "Ask for beneficiary"
 msgstr "Nach abweichendem Leistungsempfänger fragen"
 
 #: pretix/base/settings.py:191
-#, fuzzy
-#| msgid "E-mail address verified"
 msgid "Custom address field"
-msgstr "E-Mail-Adresse verzifiziert"
+msgstr "Zusätzliches Addressfeld"
 
 #: pretix/base/settings.py:193
 msgid ""
@@ -5214,6 +5211,11 @@ msgid ""
 "details as well as for displaying the value on the invoice. The field will "
 "not be required."
 msgstr ""
+"Wenn Sie ein zusätzliches Textfeld zur Adresse hinzufügen wollen, z.B. für "
+"eine landesspezifische Registrierungsnummer, tragen Sie hier bitte die "
+"Bezeichnung des Feldes ein. Die Bezeichnung wird sowohl bei der Abfrage der "
+"Adresse des Nutzers als auch bei der Anzeige auf der Rechnung verwendet. Das "
+"Feld ist kein Pflichtfeld."
 
 #: pretix/base/settings.py:205
 msgid "Ask for VAT ID"
@@ -5509,7 +5511,7 @@ msgstr "Inländische Steuernummer"
 
 #: pretix/base/settings.py:544
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "z.B. Steuernummer in Deutschland, ABN in Australien, …"
 
 #: pretix/base/settings.py:553
 msgid "EU VAT ID"
@@ -7014,17 +7016,10 @@ msgstr ""
 "Auswahl der Titel mit dieser Option eingeschränkt werden."
 
 #: pretix/control/forms/event.py:358 pretix/control/forms/organizer.py:274
-#, fuzzy
-#| msgid "Sender name"
 msgid "Header image"
-msgstr "Absendername"
+msgstr "Header-Bild"
 
 #: pretix/control/forms/event.py:361
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your events name "
-#| "and date in the page header. We will show your logo with a maximal height "
-#| "of 120 pixels."
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. By default, we show your logo with a size of up to "
@@ -7032,27 +7027,29 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
-"Wenn Sie ein Logo hochladen, zeigen wir den Namen und das Datum der "
-"Veranstaltung nicht mehr oben auf der Seite an. Wir zeigen das Logo mit "
-"einer Höhe von maximal 120 Pixeln an."
+"Wenn Sie ein Bild hochladen, zeigen wir den Namen und das Datum der "
+"Veranstaltung nicht mehr oben auf der Seite an. Standardmäßig zeigen wir das "
+"Bild mit einer Größe von bis zu 1140x120 Pixeln an. Sie können diese Größe "
+"mit den Einstellungen weiter unten vergrößern. Wir raten davon ab, filigrane "
+"Details im Bild zu verwenden, da es auf kleineren Bildschirmen auch kleiner "
+"dargestellt wird."
 
 #: pretix/control/forms/event.py:367 pretix/control/forms/organizer.py:283
 msgid "Use header image in its full size"
-msgstr ""
+msgstr "Volle Höhe des Header-Bildes verwenden"
 
 #: pretix/control/forms/event.py:368 pretix/control/forms/organizer.py:284
 msgid "We recommend to upload a picture at least 1170 pixels wide."
-msgstr ""
+msgstr "Das Header-Bild sollte mindestens 1170 Pixel breit sein."
 
 #: pretix/control/forms/event.py:372
 msgid "Show event title even if a header image is present"
 msgstr ""
+"Veranstaltungs-Titel auch anzeigen, obwohl ein Header-Bild hochgeladen wurde"
 
 #: pretix/control/forms/event.py:373
-#, fuzzy
-#| msgid "This question will only show up in the backend."
 msgid "The title will only be shown on the event front page."
-msgstr "Diese Frage wird nur im Backend angezeigt."
+msgstr "Der Titel wird nur auf der Startseite angezeigt."
 
 #: pretix/control/forms/event.py:377
 msgid "Social media image"
@@ -7102,11 +7099,11 @@ msgstr "Wir empfehlen dringend, einen dunklen Rotton zu verwenden."
 
 #: pretix/control/forms/event.py:415 pretix/control/forms/organizer.py:254
 msgid "Page background color"
-msgstr ""
+msgstr "Hintergrundfarbe der Seite"
 
 #: pretix/control/forms/event.py:425 pretix/control/forms/organizer.py:264
 msgid "Use round edges"
-msgstr ""
+msgstr "Runde Ecken verwenden"
 
 #: pretix/control/forms/event.py:429 pretix/control/forms/organizer.py:312
 #: pretix/control/templates/pretixcontrol/pdf/index.html:305
@@ -8310,11 +8307,6 @@ msgid "This will be displayed on the organizer homepage."
 msgstr "Dieser Text wird auf der Veranstalter-Seite angezeigt."
 
 #: pretix/control/forms/organizer.py:277
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your "
-#| "organization name in the page header. We will show your logo with a "
-#| "maximal height of 120 pixels."
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. By default, we show your logo with a size of up to "
@@ -8322,9 +8314,12 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
-"Wenn Sie ein Logo hochladen, zeigen wir den Namen des Veranstalters nicht "
-"mehr oben auf der Seite an. Wir zeigen das Logo mit einer Höhe von maximal "
-"120 Pixeln an."
+"Wenn Sie ein Bild hochladen, zeigen wir den Namen des Veranstalters nicht "
+"mehr oben auf der Seite an. Standardmäßig zeigen wir das Bild mit einer "
+"Größe von bis zu 1140x120 Pixeln an. Sie können diese Größe mit den "
+"Einstellungen weiter unten vergrößern. Wir raten davon ab, filigrane Details "
+"im Bild zu verwenden, da es auf kleineren Bildschirmen auch kleiner "
+"dargestellt wird."
 
 #: pretix/control/forms/organizer.py:288
 msgid "Default overview style"
@@ -11151,27 +11146,19 @@ msgid "Cart"
 msgstr "Warenkorb"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:148
-#, fuzzy
-#| msgid "Event metadata"
 msgid "Item metadata"
-msgstr "Veranstaltungs-Metadaten"
+msgstr "Produkt-Metadaten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:150
-#, fuzzy
-#| msgid ""
-#| "You can here define a set of metadata properties (i.e. variables) that "
-#| "you can later set for your events and re-use in places like ticket "
-#| "layouts. This is an useful timesaver if you create lots and lots of "
-#| "events."
 msgid ""
 "You can here define a set of metadata properties (i.e. variables) that you "
 "can later set for your items and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of items."
 msgstr ""
 "Sie können hier Meta-Eigenschaften (sog. Variablen) definieren, die Sie "
-"später für Ihre Veranstaltungen setzen können und an Orten wie in Ihren "
-"Ticket-Layouts einsetzen können. Dies spart Ihnen Zeit, wenn Sie sehr viele "
-"Veranstaltungen verwalten."
+"später für Ihre Produkte setzen können und an Orten wie in Ihren Ticket-"
+"Layouts einsetzen können. Dies spart Ihnen Zeit, wenn Sie sehr viele "
+"Produkte verwalten."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:202
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:121
@@ -13938,10 +13925,8 @@ msgid "Event attribute:"
 msgstr "Event-Eigenschaft:"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:349
-#, fuzzy
-#| msgid "Event attribute:"
 msgid "Item attribute:"
-msgstr "Event-Eigenschaft:"
+msgstr "Produkt-Eigenschaft:"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:352
 msgid "Other…"
