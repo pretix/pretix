@@ -6,6 +6,22 @@
 {% block thetitle %}
     {% block title %}{% endblock %}{% if url_name != "organizer.index" %} :: {% endif %}{{ organizer.name }}
 {% endblock %}
+{% block above %}
+    {% if organizer.settings.locales|length > 1 %}
+        {% if organizer.settings.theme_color_background|upper != "#FFFFFF" or organizer.settings.organizer_logo_image_large %}
+            <div class="container page-header-links">
+                <div class="pull-right header-part flip">
+                    <div class="locales">
+                        {% for l in languages %}
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                                {{ l.name_local }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
 {% block page %}
     <div class="page-header {% if organizer_logo and organizer.settings.organizer_logo_image_large %}logo-large{% endif %}">
         <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-left flip{% endif %}">
@@ -24,14 +40,16 @@
             {% endif %}
         </div>
         {% if organizer.settings.locales|length > 1 %}
-            <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-right flip{% endif %} loginbox">
-                <div class="locales">
-                    {% for l in languages %}
-                        <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                            {{ l.name_local }}</a>
-                    {% endfor %}
+            {% if organizer.settings.theme_color_background|upper == "#FFFFFF" and not organizer.settings.organizer_logo_image_large %}
+                <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-right flip{% endif %} loginbox">
+                    <div class="locales">
+                        {% for l in languages %}
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                                {{ l.name_local }}</a>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         {% endif %}
         <div class="clearfix"></div>
     </div>

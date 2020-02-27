@@ -24,17 +24,15 @@
   background: $main-box-bg;
 }
 
-.page-header-link-parent {
-  @if ($body-bg != #FFFFFF) {
-    padding-top: 15px;
-    padding-bottom: 15px;
-  } @else {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
+.page-header-links > div.header-part {
+  padding-top: 15px;
+  padding-bottom: 15px;
 
   a {
     color: choose-contrast-color($body-bg, white, $link-color);
+  }
+  a.active, .locales a.active {
+    border-bottom-color: choose-contrast-color($body-bg, white, $link-color) !important;
   }
 }
 
@@ -59,7 +57,11 @@
 h2.content-header {
   margin-top: 0;
 }
-
+@media (max-width: $screen-xs-max) {
+  h2.content-header small {
+    display: block;
+  }
+}
 @media (min-width: $screen-sm-min) {
   .main-box {
     @if ($body-bg != #FFFFFF) {
@@ -67,10 +69,13 @@ h2.content-header {
       border-radius: $border-radius-large;
     }
   }
-  .page-header-link-parent {
+  .page-header-links {
+    padding: 0;
+  }
+  .page-header-links > div.header-part {
     @if ($body-bg != #FFFFFF) {
       padding: 10px 0;
-      margin-bottom: -15px;
+      margin-bottom: -20px;
     }
   }
 

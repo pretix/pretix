@@ -30,15 +30,30 @@
             </div>
         </div>
     {% endif %}
-    {% if request.event.settings.organizer_link_back %}
-        <div class="container page-header-link-parent">
-            <a href="{% eventurl request.organizer "presale:organizer.index" %}">
-                &laquo; {% blocktrans trimmed with name=request.organizer.name %}
-                Show all events of {{ name }}
-            {% endblocktrans %}
-            </a>
-        </div>
-    {% endif %}
+    <div class="container page-header-links">
+        {% if event.settings.locales|length > 1 %}
+            {% if event.settings.theme_color_background|upper != "#FFFFFF" or event.settings.logo_image_large %}
+                <div class="pull-right header-part flip">
+                    <div class="locales">
+                        {% for l in languages %}
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                                {{ l.name_local }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if request.event.settings.organizer_link_back %}
+            <div class="pull-left header-part flip">
+                <a href="{% eventurl request.organizer "presale:organizer.index" %}">
+                    &laquo; {% blocktrans trimmed with name=request.organizer.name %}
+                    Show all events of {{ name }}
+                {% endblocktrans %}
+                </a>
+            </div>
+        {% endif %}
+        <div class="clearfix"></div>
+    </div>
 {% endblock %}
 {% block page %}
     <div class="page-header {% if event_logo and event.settings.logo_image_large %}logo-large{% endif %}">
@@ -62,15 +77,17 @@
                 </h1>
             {% endif %}
         </div>
-        {% if request.event.settings.locales|length > 1 %}
-            <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox">
-                <div class="locales">
-                    {% for l in languages %}
-                        <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                            {{ l.name_local }}</a>
-                    {% endfor %}
+        {% if event.settings.locales|length > 1 %}
+            {% if event.settings.theme_color_background|upper == "#FFFFFF" and not event.settings.logo_image_large %}
+                <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox">
+                    <div class="locales">
+                        {% for l in languages %}
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                                {{ l.name_local }}</a>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         {% endif %}
         <div class="clearfix"></div>
     </div>

@@ -47,7 +47,7 @@ html.rtl {
   .fa-arrow-left::before {
     content: $fa-var-arrow-right;
   }
-  .page-header h1 {
+  .page-header h1, h2.content-header {
     direction: rtl;
     * {
       display: inline-block;
