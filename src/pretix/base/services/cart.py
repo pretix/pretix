@@ -773,6 +773,9 @@ class CartManager:
 
         err = None
         for item, count in items.items():
+            if count == 0:
+                continue
+
             if item.max_per_order and count > item.max_per_order:
                 raise CartError(
                     _(error_messages['max_items_per_product']) % {
