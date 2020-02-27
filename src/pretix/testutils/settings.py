@@ -53,6 +53,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
+DATABASE_REPLICA = 'default'
 
 # Don't run migrations
 
