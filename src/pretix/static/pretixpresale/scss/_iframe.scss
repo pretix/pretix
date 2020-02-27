@@ -1,5 +1,12 @@
-.in-iframe .page-header {
+.in-iframe .page-header, .in-iframe .page-header-links {
   display: none;
+}
+body.in-iframe {
+  background: white !important;
+}
+.in-iframe .main-box {
+  margin: auto;
+  border-radius: 0 !important;
 }
 .in-iframe .container {
   padding-top: 10px;
