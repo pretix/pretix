@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-17 15:22+0000\n"
+"POT-Creation-Date: 2020-02-27 09:55+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -144,44 +144,44 @@ msgstr "Lead Scan QR"
 msgid "Check-in QR"
 msgstr "QR koda za check-in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:267
+#: pretix/static/pretixcontrol/js/ui/editor.js:269
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Ozadja PDF ni bilo mogoče naložiti zaradi naslednjega razloga:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:450
+#: pretix/static/pretixcontrol/js/ui/editor.js:452
 msgid "Group of objects"
 msgstr "Skupina objektov"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:456
+#: pretix/static/pretixcontrol/js/ui/editor.js:458
 msgid "Text object"
 msgstr "Tekstovni objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:458
+#: pretix/static/pretixcontrol/js/ui/editor.js:460
 msgid "Barcode area"
 msgstr "Področje za črtno kodo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:460
+#: pretix/static/pretixcontrol/js/ui/editor.js:462
 msgid "Powered by pretix"
 msgstr "Powered by pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:462
+#: pretix/static/pretixcontrol/js/ui/editor.js:464
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:466
+#: pretix/static/pretixcontrol/js/ui/editor.js:468
 msgid "Ticket design"
 msgstr "Oblikovanje vstopnice"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:723
+#: pretix/static/pretixcontrol/js/ui/editor.js:725
 msgid "Saving failed."
 msgstr "Shranjevanje ni bilo uspešno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:772
-#: pretix/static/pretixcontrol/js/ui/editor.js:810
+#: pretix/static/pretixcontrol/js/ui/editor.js:774
+#: pretix/static/pretixcontrol/js/ui/editor.js:812
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Napaka pri nalaganju datoteke PDF. Poskusite ponovno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:795
+#: pretix/static/pretixcontrol/js/ui/editor.js:797
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Ali zares želite zapustiti urejevalnik ne da bi shranili spremembe?"
 
@@ -197,15 +197,15 @@ msgstr "Pripravljam sporočilo …"
 msgid "Unknown error."
 msgstr "Neznana napaka."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:231
+#: pretix/static/pretixcontrol/js/ui/main.js:232
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Vaša barva ima dober kontrast in je lepo čitljiva!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:235
+#: pretix/static/pretixcontrol/js/ui/main.js:236
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "Vaša barva ima zadovoljiv kontrast in je berljiva!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:239
+#: pretix/static/pretixcontrol/js/ui/main.js:240
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -213,23 +213,23 @@ msgstr ""
 "Vaša barva ima slab kontrast za besedilo na belem ozadju. Izberite temnejši "
 "odtenek."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:355
+#: pretix/static/pretixcontrol/js/ui/main.js:357
 msgid "All"
 msgstr "Vse"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:356
+#: pretix/static/pretixcontrol/js/ui/main.js:358
 msgid "None"
 msgstr "Nič"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:677
+#: pretix/static/pretixcontrol/js/ui/main.js:679
 msgid "Use a different name internally"
 msgstr "Uporabite drugo interno ime"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:734
+#: pretix/static/pretixcontrol/js/ui/main.js:736
 msgid "Click to close"
 msgstr "Kliknite za zapiranje"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:749
+#: pretix/static/pretixcontrol/js/ui/main.js:751
 msgid "You have unsaved changes!"
 msgstr ""
 

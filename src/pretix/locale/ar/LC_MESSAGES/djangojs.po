@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-17 15:22+0000\n"
+"POT-Creation-Date: 2020-02-27 09:55+0000\n"
 "PO-Revision-Date: 2019-12-25 01:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -139,44 +139,44 @@ msgstr "يؤدي مسح QR"
 msgid "Check-in QR"
 msgstr "تحقق في QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:267
+#: pretix/static/pretixcontrol/js/ui/editor.js:269
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "لا يمكن تحميل ملف PDF الخلفية للأسباب التالية:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:450
+#: pretix/static/pretixcontrol/js/ui/editor.js:452
 msgid "Group of objects"
 msgstr "مجموعة من الكائنات"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:456
+#: pretix/static/pretixcontrol/js/ui/editor.js:458
 msgid "Text object"
 msgstr "كائن النص"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:458
+#: pretix/static/pretixcontrol/js/ui/editor.js:460
 msgid "Barcode area"
 msgstr "منطقة الباركود"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:460
+#: pretix/static/pretixcontrol/js/ui/editor.js:462
 msgid "Powered by pretix"
 msgstr "مدعوم من pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:462
+#: pretix/static/pretixcontrol/js/ui/editor.js:464
 msgid "Object"
 msgstr "موضوع"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:466
+#: pretix/static/pretixcontrol/js/ui/editor.js:468
 msgid "Ticket design"
 msgstr "تصميم تذكرة"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:723
+#: pretix/static/pretixcontrol/js/ui/editor.js:725
 msgid "Saving failed."
 msgstr "فشل الادخار."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:772
-#: pretix/static/pretixcontrol/js/ui/editor.js:810
+#: pretix/static/pretixcontrol/js/ui/editor.js:774
+#: pretix/static/pretixcontrol/js/ui/editor.js:812
 msgid "Error while uploading your PDF file, please try again."
 msgstr "خطأ أثناء تحميل ملف PDF الخاصة بك، يرجى المحاولة مرة أخرى."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:795
+#: pretix/static/pretixcontrol/js/ui/editor.js:797
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "هل تريد حقا أن تترك المحرر دون حفظ التغييرات؟"
 
@@ -192,37 +192,37 @@ msgstr "توليد رسائل ..."
 msgid "Unknown error."
 msgstr "خطأ غير معروف."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:231
+#: pretix/static/pretixcontrol/js/ui/main.js:232
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "اللون لديه التباين الكبير وهو من السهل جدا أن تقرأ!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:235
+#: pretix/static/pretixcontrol/js/ui/main.js:236
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "اللون لديه النقيض لائق وهو على الارجح جيدة بما فيه الكفاية لقراءة!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:239
+#: pretix/static/pretixcontrol/js/ui/main.js:240
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr "اللون لديه النقيض سيئة للنص على خلفية بيضاء، يرجى اختيار الظل أغمق."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:355
+#: pretix/static/pretixcontrol/js/ui/main.js:357
 msgid "All"
 msgstr "الكل"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:356
+#: pretix/static/pretixcontrol/js/ui/main.js:358
 msgid "None"
 msgstr "لا شيء"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:677
+#: pretix/static/pretixcontrol/js/ui/main.js:679
 msgid "Use a different name internally"
 msgstr "استخدام اسم مختلف داخليا"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:734
+#: pretix/static/pretixcontrol/js/ui/main.js:736
 msgid "Click to close"
 msgstr "انقر لقريب"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:749
+#: pretix/static/pretixcontrol/js/ui/main.js:751
 msgid "You have unsaved changes!"
 msgstr ""
 

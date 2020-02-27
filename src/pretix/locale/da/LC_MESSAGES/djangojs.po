@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-17 15:22+0000\n"
+"POT-Creation-Date: 2020-02-27 09:55+0000\n"
 "PO-Revision-Date: 2019-11-20 14:41+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -142,44 +142,44 @@ msgstr ""
 msgid "Check-in QR"
 msgstr "Check-in QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:267
+#: pretix/static/pretixcontrol/js/ui/editor.js:269
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Baggrunds-pdf'en kunne ikke hentes af følgende grund:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:450
+#: pretix/static/pretixcontrol/js/ui/editor.js:452
 msgid "Group of objects"
 msgstr "Gruppe af objekter"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:456
+#: pretix/static/pretixcontrol/js/ui/editor.js:458
 msgid "Text object"
 msgstr "Tekstobjekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:458
+#: pretix/static/pretixcontrol/js/ui/editor.js:460
 msgid "Barcode area"
 msgstr "QR-kode-område"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:460
+#: pretix/static/pretixcontrol/js/ui/editor.js:462
 msgid "Powered by pretix"
 msgstr "Drevet af pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:462
+#: pretix/static/pretixcontrol/js/ui/editor.js:464
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:466
+#: pretix/static/pretixcontrol/js/ui/editor.js:468
 msgid "Ticket design"
 msgstr "Billetdesign"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:723
+#: pretix/static/pretixcontrol/js/ui/editor.js:725
 msgid "Saving failed."
 msgstr "Gem fejlede."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:772
-#: pretix/static/pretixcontrol/js/ui/editor.js:810
+#: pretix/static/pretixcontrol/js/ui/editor.js:774
+#: pretix/static/pretixcontrol/js/ui/editor.js:812
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Fejl under upload af pdf. Prøv venligt igen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:795
+#: pretix/static/pretixcontrol/js/ui/editor.js:797
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Er du sikker på at du vil forlade editoren uden at gemme dine ændringer?"
@@ -196,37 +196,37 @@ msgstr "Opretter beskeder …"
 msgid "Unknown error."
 msgstr "Ukendt fejl."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:231
+#: pretix/static/pretixcontrol/js/ui/main.js:232
 msgid "Your color has great contrast and is very easy to read!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:235
+#: pretix/static/pretixcontrol/js/ui/main.js:236
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:239
+#: pretix/static/pretixcontrol/js/ui/main.js:240
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:355
+#: pretix/static/pretixcontrol/js/ui/main.js:357
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:356
+#: pretix/static/pretixcontrol/js/ui/main.js:358
 msgid "None"
 msgstr "Ingen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:677
+#: pretix/static/pretixcontrol/js/ui/main.js:679
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:734
+#: pretix/static/pretixcontrol/js/ui/main.js:736
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:749
+#: pretix/static/pretixcontrol/js/ui/main.js:751
 msgid "You have unsaved changes!"
 msgstr ""
 

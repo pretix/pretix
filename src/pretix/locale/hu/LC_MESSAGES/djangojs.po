@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-17 15:22+0000\n"
+"POT-Creation-Date: 2020-02-27 09:55+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -142,44 +142,44 @@ msgstr "QR Scan"
 msgid "Check-in QR"
 msgstr "Check in QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:267
+#: pretix/static/pretixcontrol/js/ui/editor.js:269
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "A PDF háttér fájl nem tölthető be a következők miatt:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:450
+#: pretix/static/pretixcontrol/js/ui/editor.js:452
 msgid "Group of objects"
 msgstr "tárgy csoport"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:456
+#: pretix/static/pretixcontrol/js/ui/editor.js:458
 msgid "Text object"
 msgstr "Szöveg"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:458
+#: pretix/static/pretixcontrol/js/ui/editor.js:460
 msgid "Barcode area"
 msgstr "Vonalkód terület"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:460
+#: pretix/static/pretixcontrol/js/ui/editor.js:462
 msgid "Powered by pretix"
 msgstr "pretix által működtetett"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:462
+#: pretix/static/pretixcontrol/js/ui/editor.js:464
 msgid "Object"
 msgstr "objektum"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:466
+#: pretix/static/pretixcontrol/js/ui/editor.js:468
 msgid "Ticket design"
 msgstr "Jegy design"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:723
+#: pretix/static/pretixcontrol/js/ui/editor.js:725
 msgid "Saving failed."
 msgstr "Mentés sikertelen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:772
-#: pretix/static/pretixcontrol/js/ui/editor.js:810
+#: pretix/static/pretixcontrol/js/ui/editor.js:774
+#: pretix/static/pretixcontrol/js/ui/editor.js:812
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Hiba a PDF fájl feltöltése közben, próbálja újra."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:795
+#: pretix/static/pretixcontrol/js/ui/editor.js:797
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Biztosan ki akar lépni a szerkesztőből a változtatások mentése nélkül?"
 
@@ -195,16 +195,16 @@ msgstr "Üzenetek generálása…"
 msgid "Unknown error."
 msgstr "Ismeretlen hiba."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:231
+#: pretix/static/pretixcontrol/js/ui/main.js:232
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "A választott színek remek kontrasztot adnak, és nagyon könnyű olvasni!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:235
+#: pretix/static/pretixcontrol/js/ui/main.js:236
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "A választott színek kontrasztja elégséges, és valószínűleg jól olvasható!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:239
+#: pretix/static/pretixcontrol/js/ui/main.js:240
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -212,23 +212,23 @@ msgstr ""
 "A választott színek kontrasztja elégtelen, kérjük válassz sötétebb "
 "árnyalatot."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:355
+#: pretix/static/pretixcontrol/js/ui/main.js:357
 msgid "All"
 msgstr "Összes"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:356
+#: pretix/static/pretixcontrol/js/ui/main.js:358
 msgid "None"
 msgstr "Semmi"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:677
+#: pretix/static/pretixcontrol/js/ui/main.js:679
 msgid "Use a different name internally"
 msgstr "Használj másik nevet"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:734
+#: pretix/static/pretixcontrol/js/ui/main.js:736
 msgid "Click to close"
 msgstr "Bezárásért kattints"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:749
+#: pretix/static/pretixcontrol/js/ui/main.js:751
 msgid "You have unsaved changes!"
 msgstr "Mentetlen változtatások!"
 

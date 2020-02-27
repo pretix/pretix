@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-17 15:22+0000\n"
+"POT-Creation-Date: 2020-02-27 09:55+0000\n"
 "PO-Revision-Date: 2019-03-19 09:00+0000\n"
 "Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -152,44 +152,44 @@ msgstr "Ler QR"
 msgid "Check-in QR"
 msgstr "QR Check-in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:267
+#: pretix/static/pretixcontrol/js/ui/editor.js:269
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "O arquivo de fundo PDF não pôde ser carregado pelo seguinte motivo:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:450
+#: pretix/static/pretixcontrol/js/ui/editor.js:452
 msgid "Group of objects"
 msgstr "Grupo de objetos"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:456
+#: pretix/static/pretixcontrol/js/ui/editor.js:458
 msgid "Text object"
 msgstr "Objeto de texto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:458
+#: pretix/static/pretixcontrol/js/ui/editor.js:460
 msgid "Barcode area"
 msgstr "Área de código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:460
+#: pretix/static/pretixcontrol/js/ui/editor.js:462
 msgid "Powered by pretix"
 msgstr "Distribuído por pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:462
+#: pretix/static/pretixcontrol/js/ui/editor.js:464
 msgid "Object"
 msgstr "Objeto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:466
+#: pretix/static/pretixcontrol/js/ui/editor.js:468
 msgid "Ticket design"
 msgstr "Design de bilhetes"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:723
+#: pretix/static/pretixcontrol/js/ui/editor.js:725
 msgid "Saving failed."
 msgstr "Erro ao salvar."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:772
-#: pretix/static/pretixcontrol/js/ui/editor.js:810
+#: pretix/static/pretixcontrol/js/ui/editor.js:774
+#: pretix/static/pretixcontrol/js/ui/editor.js:812
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Erro durante o upload do seu arquivo PDF, tente novamente."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:795
+#: pretix/static/pretixcontrol/js/ui/editor.js:797
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Você realmente quer deixar o editor sem salvar suas mudanças?"
 
@@ -205,17 +205,17 @@ msgstr "Gerando mensagens …"
 msgid "Unknown error."
 msgstr "Erro desconhecido."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:231
+#: pretix/static/pretixcontrol/js/ui/main.js:232
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Sua cor tem grande contraste e é muito fácil de ler!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:235
+#: pretix/static/pretixcontrol/js/ui/main.js:236
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Sua cor tem um contraste aceitável e provavelmente é boa o suficiente para "
 "ler!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:239
+#: pretix/static/pretixcontrol/js/ui/main.js:240
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -223,23 +223,23 @@ msgstr ""
 "Sua cor tem um contraste ruim para o texto sobre fundo branco, por favor, "
 "escolha um tom mais escuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:355
+#: pretix/static/pretixcontrol/js/ui/main.js:357
 msgid "All"
 msgstr "Todos"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:356
+#: pretix/static/pretixcontrol/js/ui/main.js:358
 msgid "None"
 msgstr "Nenhum"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:677
+#: pretix/static/pretixcontrol/js/ui/main.js:679
 msgid "Use a different name internally"
 msgstr "Use um nome diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:734
+#: pretix/static/pretixcontrol/js/ui/main.js:736
 msgid "Click to close"
 msgstr "Clique para fechar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:749
+#: pretix/static/pretixcontrol/js/ui/main.js:751
 msgid "You have unsaved changes!"
 msgstr ""
 
