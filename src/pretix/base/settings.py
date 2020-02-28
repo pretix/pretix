@@ -351,6 +351,7 @@ DEFAULTS = {
                         "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
                         "payment methods, we recommend still setting two or three days to allow people to retry failed "
                         "payments."),
+            required=True,
             validators=[MinValueValidator(0),
                         MaxValueValidator(1000000)]
         ),
