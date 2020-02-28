@@ -65,6 +65,8 @@
                         <td class="text-right flip">
                             {% if "can_change_event_settings" in request.eventpermset %}
                                 <a href="{% url "plugins:ticketoutputpdf:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "plugins:ticketoutputpdf:add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ l.id }}"
+                                        class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
                                 <a href="{% url "plugins:ticketoutputpdf:delete" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             {% endif %}
                         </td>

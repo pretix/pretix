@@ -23,6 +23,7 @@ from pretix.base.pdf import Renderer
 from pretix.base.services.tickets import invalidate_cache
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.pdf import BaseEditorView
+from pretix.helpers.models import modelcopy
 from pretix.plugins.ticketoutputpdf.forms import TicketLayoutForm
 from pretix.plugins.ticketoutputpdf.ticketoutput import PdfTicketOutput
 
@@ -91,6 +92,8 @@ class LayoutCreate(EventPermissionRequiredMixin, CreateView):
             form.instance.default = True
         messages.success(self.request, _('The new ticket layout has been created.'))
         super().form_valid(form)
+        if form.instance.background and form.instance.background.name:
+            form.instance.background.save('background.pdf', form.instance.background)
         form.instance.log_action('pretix.plugins.ticketoutputpdf.layout.added', user=self.request.user,
                                  data=dict(form.cleaned_data))
         return redirect(reverse('plugins:ticketoutputpdf:edit', kwargs={
@@ -105,6 +108,24 @@ class LayoutCreate(EventPermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
+
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.ticket_layouts.get(pk=self.request.GET.get("copy_from"))
+            except TicketLayout.DoesNotExist:
+                pass
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+            kwargs.setdefault('initial', {})
+        return kwargs
 
 
 class LayoutSetDefault(EventPermissionRequiredMixin, DetailView):
