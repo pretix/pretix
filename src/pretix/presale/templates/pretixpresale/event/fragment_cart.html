@@ -94,9 +94,13 @@
             <div class="count">&nbsp;</div>
             <div class="singleprice price">
                 {% if event.settings.display_net_prices %}
-                    {{ line.net_price|money:event.currency }}
+                    {% if not event.settings.hide_free_prices or line.net_price > 0 %}
+                        {{ line.net_price|money:event.currency }}
+                    {% endif %}
                 {% else %}
-                    {{ line.price|money:event.currency }}
+                    {% if not event.settings.hide_free_prices or line.price > 0 %}
+                        {{ line.price|money:event.currency }}
+                    {% endif %}
                 {% endif %}
             </div>
         {% else %}
@@ -143,32 +147,40 @@
             </div>
             <div class="singleprice price">
                 {% if event.settings.display_net_prices %}
-                    {{ line.net_price|money:event.currency }}
+                    {% if not event.settings.hide_free_prices or line.net_price > 0 %}
+                        {{ line.net_price|money:event.currency }}
+                    {% endif %}
                 {% else %}
-                    {{ line.price|money:event.currency }}
+                    {% if not event.settings.hide_free_prices or line.price > 0 %}
+                        {{ line.price|money:event.currency }}
+                    {% endif %}
                 {% endif %}
             </div>
         {% endif %}
         <div class="totalprice price">
             {% if event.settings.display_net_prices %}
-                <strong>{{ line.net_total|money:event.currency }}</strong>
-                {% if line.tax_rate and line.total %}
-                    <br />
-                    <small>
-                        {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
-                            <strong>plus</strong> {{ rate }}% {{ taxname }}
-                        {% endblocktrans %}
-                    </small>
+                {% if not event.settings.hide_free_prices or line.net_total > 0 %}
+                    <strong>{{ line.net_total|money:event.currency }}</strong>
+                    {% if line.tax_rate and line.total %}
+                        <br />
+                        <small>
+                            {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
+                                <strong>plus</strong> {{ rate }}% {{ taxname }}
+                            {% endblocktrans %}
+                        </small>
+                    {% endif %}
                 {% endif %}
             {% else %}
-                <strong>{{ line.total|money:event.currency }}</strong>
-                {% if line.tax_rate and line.total %}
-                    <br />
-                    <small>
-                        {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
-                            incl. {{ rate }}% {{ taxname }}
-                        {% endblocktrans %}
-                    </small>
+                {% if not event.settings.hide_free_prices or line.total > 0 %}
+                    <strong>{{ line.total|money:event.currency }}</strong>
+                    {% if line.tax_rate and line.total %}
+                        <br />
+                        <small>
+                            {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
+                                incl. {{ rate }}% {{ taxname }}
+                            {% endblocktrans %}
+                        </small>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </div>
@@ -198,24 +210,28 @@
         </div>
         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
             {% if event.settings.display_net_prices %}
-                <strong>{{ fee.net_value|money:event.currency }}</strong>
-                {% if fee.tax_rate %}
-                    <br />
-                    <small>
-                        {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
-                            <strong>plus</strong> {{ rate }}% {{ taxname }}
-                        {% endblocktrans %}
-                    </small>
+                {% if not event.settings.hide_free_prices or fee.net_value > 0 %}
+                    <strong>{{ fee.net_value|money:event.currency }}</strong>
+                    {% if fee.tax_rate %}
+                        <br />
+                        <small>
+                            {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
+                                <strong>plus</strong> {{ rate }}% {{ taxname }}
+                            {% endblocktrans %}
+                        </small>
+                    {% endif %}
                 {% endif %}
             {% else %}
-                <strong>{{ fee.value|money:event.currency }}</strong>
-                {% if fee.tax_rate %}
-                    <br />
-                    <small>
-                        {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
-                            incl. {{ rate }}% {{ taxname }}
-                        {% endblocktrans %}
-                    </small>
+                {% if not event.settings.hide_free_prices or line.price > 0 %}
+                    <strong>{{ fee.value|money:event.currency }}</strong>
+                    {% if fee.tax_rate %}
+                        <br />
+                        <small>
+                            {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
+                                incl. {{ rate }}% {{ taxname }}
+                            {% endblocktrans %}
+                        </small>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </div>
@@ -223,24 +239,26 @@
     </div>
 {% endfor %}
 {% if event.settings.display_net_prices and cart.tax_total %}
-    <div class="row cart-row total">
-        <div class="col-md-4 col-xs-6">
-            <strong>{% trans "Net total" %}</strong>
+    {% if not event.settings.hide_free_prices or cart.net_total > 0 %}
+        <div class="row cart-row total">
+            <div class="col-md-4 col-xs-6">
+                <strong>{% trans "Net total" %}</strong>
+            </div>
+            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                {{ cart.net_total|money:event.currency }}
+            </div>
+            <div class="clearfix"></div>
         </div>
-        <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-            {{ cart.net_total|money:event.currency }}
+        <div class="row cart-row">
+            <div class="col-md-4 col-xs-6">
+                <strong>{% trans "Taxes" %}</strong>
+            </div>
+            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                {{ cart.tax_total|money:event.currency }}
+            </div>
+            <div class="clearfix"></div>
         </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="row cart-row">
-        <div class="col-md-4 col-xs-6">
-            <strong>{% trans "Taxes" %}</strong>
-        </div>
-        <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-            {{ cart.tax_total|money:event.currency }}
-        </div>
-        <div class="clearfix"></div>
-    </div>
+    {% endif %}
 {% endif %}
 <div class="row cart-row total">
     <div class="product">
@@ -249,28 +267,30 @@
     <div class="count hidden-xs hidden-sm">
         <strong>{{ cart.itemcount }}</strong>
     </div>
-    <div class="col-md-3 col-xs-6 col-md-offset-3 price">
-        <strong>{{ cart.total|money:event.currency }}</strong>
+    {% if not event.settings.hide_free_prices or cart.total > 0 %}
+        <div class="col-md-3 col-xs-6 col-md-offset-3 price">
+            <strong>{{ cart.total|money:event.currency }}</strong>
 
-        {% if editable and vouchers_exist and not cart.all_with_voucher %}
-            <br>
-            <a class="js-only apply-voucher-toggle" href="#">
-                <span class="fa fa-tag"></span> {% trans "Redeem a voucher" %}
-            </a>
-            <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
-                  data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
-                  method="post" data-asynctask class="apply-voucher">
-                {% csrf_token %}
-                <div class="input-group">
-                    <input type="text" class="form-control" name="voucher" placeholder="{% trans "Voucher code" %}">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit">
-                            <span class="fa fa-check"></span>
-                        </button>
-                    </span>
-                </div>
-            </form>
-        {% endif %}
-    </div>
+            {% if editable and vouchers_exist and not cart.all_with_voucher %}
+                <br>
+                <a class="js-only apply-voucher-toggle" href="#">
+                    <span class="fa fa-tag"></span> {% trans "Redeem a voucher" %}
+                </a>
+                <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
+                      data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
+                      method="post" data-asynctask class="apply-voucher">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="voucher" placeholder="{% trans "Voucher code" %}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-check"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
     <div class="clearfix"></div>
 </div>

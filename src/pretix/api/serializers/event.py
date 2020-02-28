@@ -550,6 +550,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'show_variations_expanded',
         'hide_sold_out',
         'meta_noindex',
+        'hide_free_prices',
         'redirect_to_checkout_directly',
         'frontpage_subevent_ordering',
         'frontpage_text',

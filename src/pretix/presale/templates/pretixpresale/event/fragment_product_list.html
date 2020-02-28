@@ -58,7 +58,11 @@
                             {% elif item.min_price != item.max_price %}
                                 {{ item.min_price|money:event.currency  }} – {{ item.max_price|money:event.currency  }}
                             {% elif not item.min_price and not item.max_price %}
-                                {% trans "FREE" context "price" %}
+                                {% if event.settings.hide_free_prices %}
+                                    &nbsp;
+                                {% else %}
+                                    {% trans "FREE" context "price" %}
+                                {% endif %}
                             {% else %}
                                 {{ item.min_price|money:event.currency }}
                             {% endif %}
@@ -113,8 +117,12 @@
                                             >
                                         </div>
                                     {% elif not var.display_price.gross %}
-                                        {% trans "FREE" context "price" %}
-                                        {% elif event.settings.display_net_prices %}
+                                        {% if event.settings.hide_free_prices %}
+                                            &nbsp;
+                                        {% else %}
+                                            {% trans "FREE" context "price" %}
+                                        {% endif %}
+                                    {% elif event.settings.display_net_prices %}
                                         {{ var.display_price.net|money:event.currency }}
                                     {% else %}
                                         {{ var.display_price.gross|money:event.currency }}
@@ -227,8 +235,12 @@
                                        step="any">
                             </div>
                         {% elif not item.display_price.gross %}
-                            {% trans "FREE" context "price" %}
-                            {% elif event.settings.display_net_prices %}
+                            {% if event.settings.hide_free_prices %}
+                                &nbsp;
+                            {% else %}
+                                {% trans "FREE" context "price" %}
+                            {% endif %}
+                        {% elif event.settings.display_net_prices %}
                             {{ item.display_price.net|money:event.currency }}
                         {% else %}
                             {{ item.display_price.gross|money:event.currency }}

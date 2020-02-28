@@ -716,6 +716,16 @@ DEFAULTS = {
             label=_('Ask search engines not to index the ticket shop'),
         )
     },
+    'hide_free_prices': {
+        'default': 'False',
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Hide price of free products"),
+            help_text=_("Do not show the price of a product if it is free"),
+        )
+    },
     'show_variations_expanded': {
         'default': 'False',
         'type': bool,
