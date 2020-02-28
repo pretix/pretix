@@ -91,7 +91,7 @@ def compile_scss(object, file="main.scss", fonts=True):
         )
         cssf = CSSCompressorFilter(css)
         css = cssf.output()
-        cache.set('sass_compile_{}_{}'.format(cp, srcchecksum), css, 3600)
+        cache.set('sass_compile_{}_{}'.format(cp, srcchecksum), css, 600)
 
     checksum = hashlib.sha1(css.encode('utf-8')).hexdigest()
     return css, checksum
