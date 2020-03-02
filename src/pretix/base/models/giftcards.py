@@ -119,6 +119,7 @@ class GiftCardTransaction(models.Model):
         blank=True,
         on_delete=models.PROTECT
     )
+    text = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ("datetime",)

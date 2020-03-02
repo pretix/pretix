@@ -1010,12 +1010,14 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                     messages.error(request, _('Gift cards are not allowed to have negative values.'))
                 else:
                     self.object.transactions.create(
-                        value=value
+                        value=value,
+                        text=request.POST.get('text') or None,
                     )
                     self.object.log_action(
                         'pretix.giftcards.transaction.manual',
                         data={
-                            'value': value
+                            'value': value,
+                            'text': request.POST.get('text')
                         },
                         user=self.request.user,
                     )

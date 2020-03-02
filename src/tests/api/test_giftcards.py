@@ -149,6 +149,18 @@ def test_giftcard_transact(token_client, organizer, event, giftcard):
     assert resp.status_code == 200
     giftcard.refresh_from_db()
     assert giftcard.value == Decimal('33.00')
+    resp = token_client.post(
+        '/api/v1/organizers/{}/giftcards/{}/transact/'.format(organizer.slug, giftcard.pk),
+        {
+            'value': '10.00',
+            'text': 'bla'
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    giftcard.refresh_from_db()
+    assert giftcard.value == Decimal('43.00')
+    assert giftcard.transactions.last().text == 'bla'
 
 
 @pytest.mark.django_db

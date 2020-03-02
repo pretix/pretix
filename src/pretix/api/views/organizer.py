@@ -168,16 +168,19 @@ class GiftCardViewSet(viewsets.ModelViewSet):
         value = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
             request.data.get('value')
         )
+        text = serializers.CharField(allow_blank=True, allow_null=True).to_internal_value(
+            request.data.get('text', '')
+        )
         if gc.value + value < Decimal('0.00'):
             return Response({
                 'value': ['The gift card does not have sufficient credit for this operation.']
             }, status=status.HTTP_409_CONFLICT)
-        gc.transactions.create(value=value)
+        gc.transactions.create(value=value, text=text)
         gc.log_action(
             'pretix.giftcards.transaction.manual',
             user=self.request.user,
             auth=self.request.auth,
-            data={'value': value}
+            data={'value': value, 'text': text}
         )
         return Response(GiftCardSerializer(gc).data, status=status.HTTP_200_OK)
 
