@@ -1078,11 +1078,14 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                 auth=request.auth
             )
             if mark_refunded:
-                mark_order_refunded(
-                    r.order,
-                    user=request.user if request.user.is_authenticated else None,
-                    auth=(request.auth if request.auth else None),
-                )
+                try:
+                    mark_order_refunded(
+                        r.order,
+                        user=request.user if request.user.is_authenticated else None,
+                        auth=(request.auth if request.auth else None),
+                    )
+                except OrderError as e:
+                    raise ValidationError(str(e))
             elif mark_pending:
                 if r.order.status == Order.STATUS_PAID and r.order.pending_sum > 0:
                     r.order.status = Order.STATUS_PENDING
