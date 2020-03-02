@@ -59,6 +59,9 @@ Endpoints
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
+   :query string secret: Only show gift cards with the given secret.
+   :query boolean testmode: Filter for gift cards that are (not) in test mode.
+   :query boolean include_accepted: Also show gift cards issued by other organizers that are accepted by this organizer.
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
@@ -94,6 +97,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param id: The ``id`` field of the gift card to fetch
+   :query boolean include_accepted: Also show gift cards issued by other organizers that are accepted by this organizer.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
@@ -227,6 +231,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param id: The ``id`` field of the gift card to modify
+   :query boolean include_accepted: Also show gift cards issued by other organizers that are accepted by this organizer.
    :statuscode 200: no error
    :statuscode 400: The gift card could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure

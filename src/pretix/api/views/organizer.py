@@ -1,8 +1,11 @@
 from decimal import Decimal
 
+import django_filters
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from django_scopes import scopes_disabled
 from rest_framework import filters, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
@@ -98,14 +101,29 @@ class SeatingPlanViewSet(viewsets.ModelViewSet):
         instance.delete()
 
 
+with scopes_disabled():
+    class GiftCardFilter(FilterSet):
+        secret = django_filters.CharFilter(field_name='secret', lookup_expr='iexact')
+
+        class Meta:
+            model = GiftCard
+            fields = ['secret', 'testmode']
+
+
 class GiftCardViewSet(viewsets.ModelViewSet):
     serializer_class = GiftCardSerializer
     queryset = GiftCard.objects.none()
     permission = 'can_manage_gift_cards'
     write_permission = 'can_manage_gift_cards'
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = GiftCardFilter
 
     def get_queryset(self):
-        return self.request.organizer.issued_gift_cards.all()
+        if self.request.GET.get('include_accepted') == 'true':
+            qs = self.request.organizer.accepted_gift_cards
+        else:
+            qs = self.request.organizer.issued_gift_cards.all()
+        return qs
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -126,6 +144,8 @@ class GiftCardViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_update(self, serializer):
+        if 'include_accepted' in self.request.GET:
+            raise PermissionDenied("Accepted gift cards cannot be updated, use transact instead.")
         GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
         old_value = serializer.instance.value
         value = serializer.validated_data.pop('value')

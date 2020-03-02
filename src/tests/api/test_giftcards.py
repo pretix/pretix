@@ -4,13 +4,21 @@ from decimal import Decimal
 import pytest
 from django_scopes import scopes_disabled
 
-from pretix.base.models import GiftCard
+from pretix.base.models import GiftCard, Organizer
 
 
 @pytest.fixture
 def giftcard(organizer, event):
     gc = organizer.issued_gift_cards.create(secret="ABCDEF", currency="EUR")
     gc.transactions.create(value=Decimal('23.00'))
+    return gc
+
+
+@pytest.fixture
+def other_giftcard(organizer, event):
+    o = Organizer.objects.create(name='Dummy2', slug='dummy2')
+    organizer.gift_card_issuer_acceptance.create(issuer=o)
+    gc = o.issued_gift_cards.create(secret="GHIJK", currency="EUR")
     return gc
 
 
@@ -24,7 +32,7 @@ TEST_GC_RES = {
 
 
 @pytest.mark.django_db
-def test_giftcard_list(token_client, organizer, event, giftcard):
+def test_giftcard_list(token_client, organizer, event, giftcard, other_giftcard):
     res = dict(TEST_GC_RES)
     res["id"] = giftcard.pk
     res["issuance"] = giftcard.issuance.isoformat().replace('+00:00', 'Z')
@@ -32,6 +40,24 @@ def test_giftcard_list(token_client, organizer, event, giftcard):
     resp = token_client.get('/api/v1/organizers/{}/giftcards/'.format(organizer.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?testmode=true'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?testmode=false'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?secret=DEF'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?secret=ABCDEF'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?include_accepted=true'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert 2 == len(resp.data['results'])
 
 
 @pytest.mark.django_db
