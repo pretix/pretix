@@ -122,6 +122,7 @@ class LayoutCreate(EventPermissionRequiredMixin, CreateView):
 
         if self.copy_from:
             i = modelcopy(self.copy_from)
+            i.default = False
             i.pk = None
             kwargs['instance'] = i
             kwargs.setdefault('initial', {})
