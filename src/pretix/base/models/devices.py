@@ -94,6 +94,7 @@ class Device(LoggedModel):
         return {
             'can_view_orders',
             'can_change_orders',
+            'can_manage_gift_cards'
         }
 
     def get_event_permission_set(self, organizer, event) -> set:
