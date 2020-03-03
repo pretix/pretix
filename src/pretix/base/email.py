@@ -268,6 +268,10 @@ def base_placeholders(sender, **kwargs):
             'event', ['event'], lambda event: event.name, lambda event: event.name
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'event', ['event_or_subevent'], lambda event_or_subevent: event_or_subevent.name,
+            lambda event_or_subevent: event_or_subevent.name
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'event_slug', ['event'], lambda event: event.slug, lambda event: event.slug
         ),
         SimpleFunctionalMailTextPlaceholder(
@@ -278,6 +282,11 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleFunctionalMailTextPlaceholder(
             'currency', ['event'], lambda event: event.currency, lambda event: event.currency
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'refund_amount', ['event_or_subevent', 'refund_amount'],
+            lambda event_or_subevent, refund_amount: LazyCurrencyNumber(refund_amount, event_or_subevent.currency),
+            lambda event_or_subevent: LazyCurrencyNumber(Decimal('42.23'), event_or_subevent.currency)
         ),
         SimpleFunctionalMailTextPlaceholder(
             'total_with_currency', ['event', 'order'], lambda event, order: LazyCurrencyNumber(order.total,

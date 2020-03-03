@@ -7,7 +7,11 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.timezone import make_aware, now
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import (
+    gettext_noop, pgettext_lazy, ugettext_lazy as _,
+)
+from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
@@ -514,3 +518,99 @@ class OrderRefundForm(forms.Form):
         if data.get('mode') == 'partial' and not data.get('partial_amount'):
             raise ValidationError(_('You need to specify an amount for a partial refund.'))
         return data
+
+
+class EventCancelForm(forms.Form):
+    subevent = forms.ModelChoiceField(
+        SubEvent.objects.none(),
+        label=pgettext_lazy('subevent', 'Date'),
+        required=True,
+        empty_label=None
+    )
+    auto_refund = forms.BooleanField(
+        label=_('Automatically refund money if possible'),
+        initial=True,
+        required=False
+    )
+    keep_fee_fixed = forms.DecimalField(
+        label=_("Keep a fixed cancellation fee"),
+        max_digits=10, decimal_places=2,
+        required=False
+    )
+    keep_fee_percentage = forms.DecimalField(
+        label=_("Keep a percentual cancellation fee"),
+        max_digits=10, decimal_places=2,
+        required=False
+    )
+    keep_fees = forms.BooleanField(
+        label=_("Keep payment, shipping and service fees"),
+        required=False,
+    )
+    send = forms.BooleanField(
+        label=_("Send information via email"),
+        required=False
+    )
+    send_subject = forms.CharField()
+    send_message = forms.CharField()
+
+    def _set_field_placeholders(self, fn, base_parameters):
+        phs = [
+            '{%s}' % p
+            for p in sorted(get_available_placeholders(self.event, base_parameters).keys())
+        ]
+        ht = _('Available placeholders: {list}').format(
+            list=', '.join(phs)
+        )
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(phs)
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        self.fields['send_subject'] = I18nFormField(
+            label=_("Subject"),
+            required=True,
+            initial=_('Canceled: {event}'),
+            widget=I18nTextInput,
+            locales=self.event.settings.get('locales'),
+        )
+        self.fields['send_message'] = I18nFormField(
+            label=_('Message'),
+            widget=I18nTextarea,
+            required=True,
+            locales=self.event.settings.get('locales'),
+            initial=LazyI18nString.from_gettext(gettext_noop(
+                'Hello,\n\n'
+                'with this email, we regret to inform you that {event} has been canceled.\n\n'
+                'We will refund you {refund_amount} to your original payment method.\n\n'
+                'You can view the current state of your order here:\n\n{url}\n\nBest regards,\n\n'
+                'Your {event} team'
+            ))
+        )
+        self._set_field_placeholders('send_subject', ['event_or_subevent', 'refund_amount', 'position_or_address',
+                                                      'order', 'event'])
+        self._set_field_placeholders('send_message', ['event_or_subevent', 'refund_amount', 'position_or_address',
+                                                      'order', 'event'])
+
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+            self.fields['subevent'].required = True
+        else:
+            del self.fields['subevent']
+        change_decimal_field(self.fields['keep_fee_fixed'], self.event.currency)

@@ -209,15 +209,10 @@
                 {% trans "Save" %}
             </button>
             <div class="pull-left">
-                <a href="{% url "control:event.delete" organizer=request.organizer.slug event=request.event.slug %}"
-                        class="btn {% if request.event.allow_delete %}{% endif %} btn-danger btn-lg">
-                    <span class="fa fa-trash"></span>
-                    {% trans "Delete event" %}
-                </a>
-                <a href="{% url "control:event.shredder.start" organizer=request.organizer.slug event=request.event.slug %}"
+                <a href="{% url "control:event.dangerzone" organizer=request.organizer.slug event=request.event.slug %}"
                         class="btn btn-danger btn-lg">
-                    <span class="fa fa-eraser"></span>
-                    {% trans "Delete personal data" %}
+                    <span class="fa fa-trash"></span>
+                    {% trans "Cancel or delete event" %}
                 </a>
                 <a href="{% url "control:events.add" %}?clone={{ request.event.pk }}"
                         class="btn btn-default btn-lg">

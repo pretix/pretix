@@ -279,7 +279,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
     """
     with transaction.atomic():
         if isinstance(order, int):
-            order = Order.objects.get(pk=order)
+            order = Order.objects.select_for_update().get(pk=order)
         if isinstance(user, int):
             user = User.objects.get(pk=user)
         if isinstance(api_token, int):
@@ -1075,6 +1075,7 @@ class OrderChangeManager:
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value'))
+    AddFeeOperation = namedtuple('AddFeeOperation', ('fee',))
     CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee',))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
@@ -1187,6 +1188,11 @@ class OrderChangeManager:
         self._totaldiff -= fee.value
         self._operations.append(self.CancelFeeOperation(fee))
         self._invoice_dirty = True
+
+    def add_fee(self, fee: OrderFee):
+        self._totaldiff += fee.value
+        self._invoice_dirty = True
+        self._operations.append(self.AddFeeOperation(fee))
 
     def change_fee(self, fee: OrderFee, value: Decimal):
         value = (fee.tax_rule or TaxRule.zero()).tax(value, base_price_is='gross')
@@ -1448,6 +1454,13 @@ class OrderChangeManager:
                             invoice_address=self._invoice_address
                         ).gross
                     )
+            elif isinstance(op, self.AddFeeOperation):
+                self.order.log_action('pretix.event.order.changed.addfee', user=self.user, auth=self.auth, data={
+                    'fee': op.fee.pk,
+                })
+                op.fee.order = self.order
+                op.fee._calculate_tax()
+                op.fee.save()
             elif isinstance(op, self.FeeValueOperation):
                 self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
                     'fee': op.fee.pk,
@@ -1800,6 +1813,61 @@ def perform_order(self, event: Event, payment_provider: str, positions: List[str
             raise OrderError(str(error_messages['busy']))
 
 
+def _try_auto_refund(order):
+    notify_admin = False
+    error = False
+    if isinstance(order, int):
+        order = Order.objects.get(pk=order)
+    refund_amount = order.pending_sum * -1
+    if refund_amount <= Decimal('0.00'):
+        return
+
+    proposals = order.propose_auto_refunds(refund_amount)
+    can_auto_refund = sum(proposals.values()) == refund_amount
+    if can_auto_refund:
+        for p, value in proposals.items():
+            with transaction.atomic():
+                r = order.refunds.create(
+                    payment=p,
+                    source=OrderRefund.REFUND_SOURCE_BUYER,
+                    state=OrderRefund.REFUND_STATE_CREATED,
+                    amount=value,
+                    provider=p.provider
+                )
+                order.log_action('pretix.event.order.refund.created', {
+                    'local_id': r.local_id,
+                    'provider': r.provider,
+                })
+
+            try:
+                r.payment_provider.execute_refund(r)
+            except PaymentException as e:
+                with transaction.atomic():
+                    r.state = OrderRefund.REFUND_STATE_FAILED
+                    r.save()
+                    order.log_action('pretix.event.order.refund.failed', {
+                        'local_id': r.local_id,
+                        'provider': r.provider,
+                        'error': str(e)
+                    })
+                error = True
+                notify_admin = True
+            else:
+                if r.state != OrderRefund.REFUND_STATE_DONE:
+                    notify_admin = True
+    elif refund_amount != Decimal('0.00'):
+        notify_admin = True
+
+    if notify_admin:
+        order.log_action('pretix.event.order.refund.requested')
+    if error:
+        raise OrderError(
+            _(
+                'There was an error while trying to send the money back to you. Please contact the event organizer '
+                'for further information.')
+        )
+
+
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 @scopes_disabled()
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
@@ -1809,52 +1877,7 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
             ret = _cancel_order(order, user, send_mail, api_token, device, oauth_application,
                                 cancellation_fee)
             if try_auto_refund:
-                notify_admin = False
-                error = False
-                order = Order.objects.get(pk=order)
-                refund_amount = order.pending_sum * -1
-                proposals = order.propose_auto_refunds(refund_amount)
-                can_auto_refund = sum(proposals.values()) == refund_amount
-                if can_auto_refund:
-                    for p, value in proposals.items():
-                        with transaction.atomic():
-                            r = order.refunds.create(
-                                payment=p,
-                                source=OrderRefund.REFUND_SOURCE_BUYER,
-                                state=OrderRefund.REFUND_STATE_CREATED,
-                                amount=value,
-                                provider=p.provider
-                            )
-                            order.log_action('pretix.event.order.refund.created', {
-                                'local_id': r.local_id,
-                                'provider': r.provider,
-                            })
-
-                        try:
-                            r.payment_provider.execute_refund(r)
-                        except PaymentException as e:
-                            with transaction.atomic():
-                                r.state = OrderRefund.REFUND_STATE_FAILED
-                                r.save()
-                                order.log_action('pretix.event.order.refund.failed', {
-                                    'local_id': r.local_id,
-                                    'provider': r.provider,
-                                    'error': str(e)
-                                })
-                            error = True
-                            notify_admin = True
-                        else:
-                            if r.state != OrderRefund.REFUND_STATE_DONE:
-                                notify_admin = True
-                elif refund_amount != Decimal('0.00'):
-                    notify_admin = True
-
-                if notify_admin:
-                    order.log_action('pretix.event.order.refund.requested')
-                if error:
-                    raise OrderError(
-                        _('There was an error while trying to send the money back to you. Please contact the event organizer for further information.')
-                    )
+                _try_auto_refund(order)
             return ret
         except LockTimeoutException:
             self.retry()

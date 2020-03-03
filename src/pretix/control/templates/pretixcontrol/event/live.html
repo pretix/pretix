@@ -112,4 +112,11 @@
             <div class="clear"></div>
         </div>
     </div>
+    <div class="text-right">
+        <a href="{% url "control:event.dangerzone" organizer=request.organizer.slug event=request.event.slug %}"
+                class="btn btn-default btn-lg">
+            <span class="fa fa-trash"></span>
+            {% trans "Cancel or delete event" %}
+        </a>
+    </div>
 {% endblock %}

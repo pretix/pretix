@@ -1,0 +1,52 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load eventsignal %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Cancel event" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Cancel event" %}</h1>
+    <div class="alert alert-warning">
+        {% blocktrans trimmed %}
+            You can use this page to cancel and refund all orders at once in case you need to call of your event.
+            This will also disable all products so no new orders can be created. Make sure that you check afterwards
+            for any overpaid orders or pending refunds that you need to take care of manually.
+        {% endblocktrans %}
+        <br><br>
+        {% blocktrans trimmed %}
+            After starting this operation, depending on the size of your event, it might take a few minutes or longer
+            until all orders are processed.
+        {% endblocktrans %}
+        <br><br>
+        <strong>
+            {% trans "All actions performed on this page are irreversible. If in doubt, please contact support before using it." %}
+        </strong>
+    </div>
+    <form action="" method="post" class="form-horizontal" data-asynctask data-asynctask-download data-asynctask-long>
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% if request.event.has_subevents %}
+            <fieldset>
+                <legend>{% trans "Select date" context "subevents" %}</legend>
+                {% bootstrap_field form.subevent layout="control" %}
+            </fieldset>
+        {% endif %}
+        <fieldset>
+            <legend>{% trans "Refund options" %}</legend>
+            {% bootstrap_field form.auto_refund layout="control" %}
+            {% bootstrap_field form.keep_fee_fixed layout="control" %}
+            {% bootstrap_field form.keep_fee_percentage layout="control" %}
+            {% bootstrap_field form.keep_fees layout="control" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Send out emails" %}</legend>
+            {% bootstrap_field form.send layout="control" %}
+            {% bootstrap_field form.send_subject layout="horizontal" %}
+            {% bootstrap_field form.send_message layout="horizontal" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Cancel all orders" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
