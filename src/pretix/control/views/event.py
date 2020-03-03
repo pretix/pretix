@@ -530,6 +530,11 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
         return resp
 
 
+class DangerZone(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_event_settings'
+    template_name = 'pretixcontrol/event/dangerzone.html'
+
+
 class DisplaySettings(View):
     def get(self, request, *wargs, **kwargs):
         return redirect(reverse('control:event.settings', kwargs={

@@ -65,6 +65,8 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
+    elif logentry.action_type == 'pretix.event.order.changed.addfee':
+        return text + ' ' + str(_('A fee has been added'))
     elif logentry.action_type == 'pretix.event.order.changed.feevalue':
         return text + ' ' + _('A fee was changed from {old_price} to {new_price}.').format(
             old_price=money_filter(Decimal(data['old_price']), event.currency),
@@ -213,6 +215,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.email.expire_warning_sent': _('An email has been sent with a warning that the order is about '
                                                           'to expire.'),
         'pretix.event.order.email.order_canceled': _('An email has been sent to notify the user that the order has been canceled.'),
+        'pretix.event.order.email.event_canceled': _('An email has been sent to notify the user that the event has '
+                                                     'been canceled.'),
         'pretix.event.order.email.order_changed': _('An email has been sent to notify the user that the order has been changed.'),
         'pretix.event.order.email.order_free': _('An email has been sent to notify the user that the order has been received.'),
         'pretix.event.order.email.order_paid': _('An email has been sent to notify the user that payment has been received.'),

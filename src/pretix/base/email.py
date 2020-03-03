@@ -268,6 +268,10 @@ def base_placeholders(sender, **kwargs):
             'event', ['event'], lambda event: event.name, lambda event: event.name
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'event', ['event_or_subevent'], lambda event_or_subevent: event_or_subevent.name,
+            lambda event_or_subevent: event_or_subevent.name
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'event_slug', ['event'], lambda event: event.slug, lambda event: event.slug
         ),
         SimpleFunctionalMailTextPlaceholder(
@@ -280,6 +284,11 @@ def base_placeholders(sender, **kwargs):
             'currency', ['event'], lambda event: event.currency, lambda event: event.currency
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'refund_amount', ['event_or_subevent', 'refund_amount'],
+            lambda event_or_subevent, refund_amount: LazyCurrencyNumber(refund_amount, event_or_subevent.currency),
+            lambda event_or_subevent: LazyCurrencyNumber(Decimal('42.23'), event_or_subevent.currency)
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'total_with_currency', ['event', 'order'], lambda event, order: LazyCurrencyNumber(order.total,
                                                                                                event.currency),
             lambda event: LazyCurrencyNumber(Decimal('42.23'), event.currency)
@@ -288,6 +297,18 @@ def base_placeholders(sender, **kwargs):
             'expire_date', ['event', 'order'], lambda event, order: LazyDate(order.expires.astimezone(event.timezone)),
             lambda event: LazyDate(now() + timedelta(days=15))
             # TODO: This used to be "date" in some placeholders, add a migration!
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'url', ['order', 'event_or_subevent'],
+            lambda order, event_or_subevent: "Placeholder for validation only, will be overridden",
+            lambda event_or_subevent: build_absolute_uri(
+                event_or_subevent if isinstance(event_or_subevent, Event) else event_or_subevent.event,
+                'presale:event.order.open', kwargs={
+                    'order': 'F8VVL',
+                    'secret': '6zzjnumtsx136ddy',
+                    'hash': '98kusd8ofsj8dnkd'
+                }
+            ),
         ),
         SimpleFunctionalMailTextPlaceholder(
             'url', ['order', 'event'], lambda order, event: build_absolute_uri(

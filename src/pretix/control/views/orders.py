@@ -46,6 +46,7 @@ from pretix.base.models.orders import (
 from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.payment import PaymentException
 from pretix.base.services import tickets
+from pretix.base.services.cancelevent import cancel_event
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
@@ -71,10 +72,11 @@ from pretix.control.forms.filter import (
     EventOrderFilterForm, OverviewFilterForm, RefundFilterForm,
 )
 from pretix.control.forms.orders import (
-    CancelForm, CommentForm, ConfirmPaymentForm, ExporterForm, ExtendForm,
-    MarkPaidForm, OrderContactForm, OrderFeeChangeForm, OrderLocaleForm,
-    OrderMailForm, OrderPositionAddForm, OrderPositionAddFormset,
-    OrderPositionChangeForm, OrderRefundForm, OtherOperationsForm,
+    CancelForm, CommentForm, ConfirmPaymentForm, EventCancelForm, ExporterForm,
+    ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeChangeForm,
+    OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
+    OrderPositionAddFormset, OrderPositionChangeForm, OrderRefundForm,
+    OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -1883,3 +1885,63 @@ class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def filter_form(self):
         return RefundFilterForm(data=self.request.GET, event=self.request.event,
                                 initial={'status': 'open'})
+
+
+class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
+    template_name = 'pretixcontrol/orders/cancel.html'
+    permission = 'can_change_orders'
+    form_class = EventCancelForm
+    task = cancel_event
+    known_errortypes = ['OrderError']
+
+    def get(self, request, *args, **kwargs):
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
+        return FormView.get(self, request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        k = super().get_form_kwargs()
+        k['event'] = self.request.event
+        return k
+
+    def form_valid(self, form):
+        return self.do(
+            self.request.event.pk,
+            subevent=form.cleaned_data['subevent'].pk if form.cleaned_data.get('subevent') else None,
+            auto_refund=form.cleaned_data.get('auto_refund'),
+            keep_fee_fixed=form.cleaned_data.get('keep_fee_fixed'),
+            keep_fee_percentage=form.cleaned_data.get('keep_fee_percentage'),
+            keep_fees=form.cleaned_data.get('keep_fees'),
+            send=form.cleaned_data.get('send'),
+            send_subject=form.cleaned_data.get('send_subject').data,
+            send_message=form.cleaned_data.get('send_message').data,
+            user=self.request.user.pk,
+        )
+
+    def get_success_message(self, value):
+        if value == 0:
+            return _('All orders have been canceled.')
+        else:
+            return _('The orders have been canceled. An error occured with {count} orders, please '
+                     'check all uncanceled orders.').format(count=value)
+
+    def get_success_url(self, value):
+        return reverse('control:event.cancel', kwargs={
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_error_url(self):
+        return reverse('control:event.cancel', kwargs={
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_error_message(self, exception):
+        if isinstance(exception, str):
+            return exception
+        return super().get_error_message(exception)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your input was not valid.'))
+        return super().form_invalid(form)
