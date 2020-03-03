@@ -593,9 +593,9 @@ class EventCancelForm(forms.Form):
             ))
         )
         self._set_field_placeholders('send_subject', ['event_or_subevent', 'refund_amount', 'position_or_address',
-                                                      'order'])
+                                                      'order', 'event'])
         self._set_field_placeholders('send_message', ['event_or_subevent', 'refund_amount', 'position_or_address',
-                                                      'order'])
+                                                      'order', 'event'])
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()

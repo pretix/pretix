@@ -24,8 +24,8 @@ from pretix.celery_app import app
 logger = logging.getLogger(__name__)
 
 
-def send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent,
-              refund_amount: Decimal, user: User):
+def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent,
+               refund_amount: Decimal, user: User, positions: list):
     with language(order.locale):
         try:
             ia = order.invoice_address
@@ -43,7 +43,10 @@ def send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, su
         except SendMailException:
             logger.exception('Order canceled email could not be sent')
 
-        for p in order.positions.all():
+        for p in positions:
+            if subevent and p.subevent_id != subevent.id:
+                continue
+
             if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
                 email_context = get_email_context(event_or_subevent=subevent or order.event,
                                                   event=order.event,
@@ -67,7 +70,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
                  send_message: dict, user: int):
     send_subject = LazyI18nString(send_subject)
     send_message = LazyI18nString(send_message)
-    user = User.objects.get(pk=user)
+    if user:
+        user = User.objects.get(pk=user)
 
     s = OrderPosition.objects.filter(
         order=OuterRef('pk')
@@ -120,16 +124,17 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             refund_amount = Decimal('0.00')
 
             fee = Decimal('0.00')
-            if keep_fee_fixed:
-                fee += Decimal(keep_fee_fixed)
-            if keep_fee_percentage:
-                fee += Decimal(keep_fee_percentage) / Decimal('100.00') * o.total
             if keep_fees:
                 fee += o.fees.filter(
-                    fee_type__in=(OrderFee.FEE_TYPE_PAYMENT, OrderFee.FEE_TYPE_SHIPPING, OrderFee.FEE_TYPE_SERVICE)
+                    fee_type__in=(OrderFee.FEE_TYPE_PAYMENT, OrderFee.FEE_TYPE_SHIPPING, OrderFee.FEE_TYPE_SERVICE,
+                                  OrderFee.FEE_TYPE_CANCELLATION)
                 ).aggregate(
                     s=Sum('value')
                 )['s'] or 0
+            if keep_fee_percentage:
+                fee += Decimal(keep_fee_percentage) / Decimal('100.00') * (o.total - fee)
+            if keep_fee_fixed:
+                fee += Decimal(keep_fee_fixed)
             fee = round_decimal(min(fee, o.payment_refund_sum), event.currency)
 
             _cancel_order(o.pk, user, send_mail=False, cancellation_fee=fee)
@@ -137,7 +142,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
                 _try_auto_refund(o.pk)
 
             if send:
-                send_mail(o, send_subject, send_message, subevent, refund_amount, user)
+                _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all())
         except LockTimeoutException:
             logger.exception("Could not cancel order")
             failed += 1
@@ -150,12 +155,14 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             o = event.orders.select_for_update().get(pk=o)
             refund_amount = Decimal('0.00')
             total = Decimal('0.00')
+            positions = []
 
             ocm = OrderChangeManager(o, user=user, notify=False)
             for p in o.positions.all():
                 if p.subevent == subevent:
                     total += p.price
                     ocm.cancel(p)
+                    positions.append(p)
 
             fee = Decimal('0.00')
             if keep_fee_fixed:
@@ -178,6 +185,6 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
                 _try_auto_refund(o.pk)
 
             if send:
-                send_mail(o, send_subject, send_message, subevent, refund_amount, user)
+                _send_mail(o, send_subject, send_message, subevent, refund_amount, user, positions)
 
     return failed

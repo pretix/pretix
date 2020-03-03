@@ -299,18 +299,6 @@ def base_placeholders(sender, **kwargs):
             # TODO: This used to be "date" in some placeholders, add a migration!
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'url', ['order', 'event_or_subevent'],
-            lambda order, event_or_subevent: "Placeholder for validation only, will be overridden",
-            lambda event_or_subevent: build_absolute_uri(
-                event_or_subevent if isinstance(event_or_subevent, Event) else event_or_subevent.event,
-                'presale:event.order.open', kwargs={
-                    'order': 'F8VVL',
-                    'secret': '6zzjnumtsx136ddy',
-                    'hash': '98kusd8ofsj8dnkd'
-                }
-            ),
-        ),
-        SimpleFunctionalMailTextPlaceholder(
             'url', ['order', 'event'], lambda order, event: build_absolute_uri(
                 event,
                 'presale:event.order.open', kwargs={

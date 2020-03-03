@@ -109,6 +109,8 @@ def logged_in_client(client, event):
 
     ('/control/event/{orga}/{event}/', 200),
     ('/control/event/{orga}/{event}/live/', 200),
+    ('/control/event/{orga}/{event}/dangerzone/', 200),
+    ('/control/event/{orga}/{event}/cancel/', 200),
     ('/control/event/{orga}/{event}/settings/', 200),
     ('/control/event/{orga}/{event}/settings/plugins', 200),
     ('/control/event/{orga}/{event}/settings/payment', 200),
