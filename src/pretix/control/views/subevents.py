@@ -540,7 +540,7 @@ class SubEventBulkAction(EventPermissionRequiredMixin, View):
                 )
                 obj.active = True
                 obj.save(update_fields=['active'])
-            messages.success(request, pgettext_lazy('subevent', 'The selected dates have been disabled.'))
+            messages.success(request, pgettext_lazy('subevent', 'The selected dates have been enabled.'))
         elif request.POST.get('action') == 'delete':
             return render(request, 'pretixcontrol/subevents/delete_bulk.html', {
                 'allowed': self.objects.filter(orderposition__isnull=True),
