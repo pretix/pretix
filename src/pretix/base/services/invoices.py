@@ -314,7 +314,7 @@ def build_preview_invoice_pdf(event):
 
     with rolledback_transaction(), language(locale):
         order = event.orders.create(status=Order.STATUS_PENDING, datetime=timezone.now(),
-                                    expires=timezone.now(), code="PREVIEW", total=119)
+                                    expires=timezone.now(), code="PREVIEW", total=100 * event.tax_rules.count())
         invoice = Invoice(
             order=order, event=event, invoice_no="PREVIEW",
             date=timezone.now().date(), locale=locale, organizer=event.organizer
@@ -352,7 +352,7 @@ def build_preview_invoice_pdf(event):
 
         if event.tax_rules.exists():
             for i, tr in enumerate(event.tax_rules.all()):
-                tax = tr.tax(Decimal('100.00'))
+                tax = tr.tax(Decimal('100.00'), base_price_is='gross')
                 InvoiceLine.objects.create(
                     invoice=invoice, description=_("Sample product {}").format(i + 1),
                     gross_value=tax.gross, tax_value=tax.tax,
