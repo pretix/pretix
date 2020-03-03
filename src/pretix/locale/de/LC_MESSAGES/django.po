@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-27 09:54+0000\n"
-"PO-Revision-Date: 2020-03-03 15:55+0000\n"
+"PO-Revision-Date: 2020-03-03 16:11+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -8238,35 +8238,20 @@ msgid "You need to specify an amount for a partial refund."
 msgstr "Sie müssen für eine Teilrückerstattung auch einen Betrag angeben."
 
 #: pretix/control/forms/orders.py:531
-#, fuzzy
-#| msgid "Automatically refund charge with Stripe"
 msgid "Automatically refund money if possible"
-msgstr "Automatisch über Stripe zurückbuchen"
+msgstr "Geld automatisch zurückerstatten wenn möglich"
 
 #: pretix/control/forms/orders.py:550
-#, fuzzy
-#| msgid "Send vouchers via email"
 msgid "Send information via email"
-msgstr "Gutscheine per E-Mail verschicken"
+msgstr "Informationen per E-Mail verschicken"
 
 #: pretix/control/forms/orders.py:578
-#, fuzzy, python-brace-format
-#| msgid "Can create events"
+#, python-brace-format
 msgid "Canceled: {event}"
-msgstr "Kann Veranstaltungen erstellen"
+msgstr "Storniert: {event}"
 
 #: pretix/control/forms/orders.py:588
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "a ticket for {event} that has been ordered for you is now paid.\n"
-#| "\n"
-#| "You can view the details and status of your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8282,15 +8267,18 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Hallo {attendee_name},\n"
+"Hallo,\n"
 "\n"
-"ein Ticket für {event}, das für Sie bestellt wurde, ist nun bezahlt.\n"
+"mit dieser E-Mail müssen wir Sie leider darüber informieren, dass {event} "
+"abgesagt wurde.\n"
 "\n"
-"Sie können die Details und den Status Ihres Tickets unter folgender Adresse "
-"einsehen:\n"
+"Wir erstatten Ihnen {refund_amount} auf Ihre ursprüngliche Zahlungsmethode "
+"zurück.\n"
+"\n"
+"Sie können die Details und den Status Ihrer Tickets hier einsehen:\n"
 "{url}\n"
 "\n"
-"Viele Grüße,\n"
+"Freundliche Grüße,\n"
 "Das {event} Team"
 
 #: pretix/control/forms/organizer.py:28
@@ -8713,10 +8701,8 @@ msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "Preis von Position #{posid} von  {old_price} auf {new_price} geändert."
 
 #: pretix/control/logdisplay.py:69
-#, fuzzy
-#| msgid "The quota has been added."
 msgid "A fee has been added"
-msgstr "Das Kontingent wurde erstellt."
+msgstr "Eine Gebühr wurde hinzugefügt"
 
 #: pretix/control/logdisplay.py:71
 #, python-brace-format
@@ -8944,15 +8930,11 @@ msgstr ""
 "Bestellung hinweist."
 
 #: pretix/control/logdisplay.py:218
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "canceled."
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
 msgstr ""
 "Eine E-Mail wurde verschickt, die den Benutzer auf die Stornierung der "
-"Bestellung hinweist."
+"Veranstaltung hinweist."
 
 #: pretix/control/logdisplay.py:220
 msgid ""
@@ -10512,10 +10494,8 @@ msgstr "Benachrichtigungs-Einstellungen ändern"
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:119
 #: pretix/control/templates/pretixcontrol/event/settings.html:215
-#, fuzzy
-#| msgid "Can create events"
 msgid "Cancel or delete event"
-msgstr "Kann Veranstaltungen erstellen"
+msgstr "Veranstaltung absagen oder löschen"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
@@ -10529,21 +10509,23 @@ msgid ""
 "You can take your event offline. Nobody except your team will be able to see "
 "or access it any more."
 msgstr ""
+"Sie können diese Veranstaltung offline nehmen. Außer Ihrem Team kann sie "
+"dann niemand mehr sehen oder darauf zugreifen."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:34
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
-#, fuzzy
-#| msgid "Clone event"
 msgid "Cancel event"
-msgstr "Veranstaltung klonen"
+msgstr "Veranstaltung absagen"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
 msgid ""
 "If you need to call of your event you want to cancel and refund all tickets, "
 "you can do so through this option."
 msgstr ""
+"Wenn Sie diese Veranstaltung absagen und alle Tickets zurückerstatten "
+"müssen, können Sie das mit dieser Option tun."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:55
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:68
@@ -10558,6 +10540,9 @@ msgid ""
 "event and only retain the finanical information such as the number and type "
 "of ticekts sold."
 msgstr ""
+"Sie können personenbezogene Daten wie Namen und E-Mail-Adressen aus deiner "
+"Veranstaltung entfernen und nur finanzielle Infos wie die Anzahl und Art der "
+"verkauften Tickets aufbewahren."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
@@ -10570,6 +10555,9 @@ msgid ""
 "You can delete your event completely only as long as it does not contain any "
 "undeletable data, such as orders not performed in test mode."
 msgstr ""
+"Sie können die Veranstaltung nur komplett löschen, solange sie keine "
+"unlöschbaren Daten enthält, wie z.B. Bestellungen, die nicht im Testmodus "
+"getätigt wurden."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:9
 msgid ""
@@ -13223,32 +13211,38 @@ msgid ""
 "orders can be created. Make sure that you check afterwards for any overpaid "
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
+"Sie können diese Seite verwenden, um alle Bestellungen auf einmal zu "
+"stornieren und zurückzuerstatten, z.B. wenn Sie die Veranstaltung absagen "
+"müssen. Dies deaktiviert weiterhin alle Produkte, sodass keine neuen "
+"Bestellungen eingehen können. Überprüfen Sie die Veranstaltung danach auf "
+"überbezahlte Bestellungen oder ausstehende Erstattungen, die manuell "
+"bearbeitet werden müssen."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
 msgid ""
 "After starting this operation, depending on the size of your event, it might "
 "take a few minutes or longer until all orders are processed."
 msgstr ""
+"Nachdem Sie diesen Vorgang gestartet haben, kann es je nach Anzahl der "
+"Tickets einige Minuten oder länger dauern, bis alle Bestellungen verarbeitet "
+"wurden."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:21
 msgid ""
 "All actions performed on this page are irreversible. If in doubt, please "
 "contact support before using it."
 msgstr ""
+"Alle Aktionen auf dieser Seite können nicht rückgängig gemacht werden. Wenn "
+"Sie sich unsicher sind, kontaktieren Sie bitte zunächst den Support."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:29
-#, fuzzy
-#| msgctxt "address"
-#| msgid "Select state"
 msgctxt "subevents"
 msgid "Select date"
-msgstr "Bundesstaat auswählen"
+msgstr "Termin auswählen"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:34
-#, fuzzy
-#| msgid "Rendering option"
 msgid "Refund options"
-msgstr "Ausgabemodus"
+msgstr "Rückzahlungsoptionen"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:41
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:82
@@ -13261,10 +13255,8 @@ msgid "Send out emails"
 msgstr "E-Mails verschicken"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:48
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Cancel all orders"
-msgstr "Stornieren"
+msgstr "Alle Bestellungen stornieren"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
@@ -16115,10 +16107,8 @@ msgid "There was a problem processing your input. See below for error details."
 msgstr "Die Eingabe konnte nicht verarbeitet werden."
 
 #: pretix/control/views/orders.py:1923
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "All orders have been canceled."
-msgstr "Die Bestellung wurde storniert."
+msgstr "Alle Bestellungen wurden storniert."
 
 #: pretix/control/views/orders.py:1925
 #, python-brace-format
@@ -16126,12 +16116,12 @@ msgid ""
 "The orders have been canceled. An error occured with {count} orders, please "
 "check all uncanceled orders."
 msgstr ""
+"Die Bestellungen wurden storniert. Bei {count} ist ein Fehler aufgetreten, "
+"bitte prüfe alle nicht stornierten Bestellungen."
 
 #: pretix/control/views/orders.py:1946
-#, fuzzy
-#| msgid "Your input was invalid, please try again."
 msgid "Your input was not valid."
-msgstr "Die Eingabe war nicht korrekt, bitte erneut versuchen."
+msgstr "Die Eingabe war nicht korrekt."
 
 #: pretix/control/views/organizer.py:81
 msgid "Token name"
@@ -16315,12 +16305,9 @@ msgid "The selected dates have been disabled."
 msgstr "Die ausgewählten Termine wurden deaktiviert."
 
 #: pretix/control/views/subevents.py:543
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been disabled."
 msgctxt "subevent"
 msgid "The selected dates have been enabled."
-msgstr "Die ausgewählten Termine wurden gelöscht."
+msgstr "Die ausgewählten Termine wurden aktiviert."
 
 #: pretix/control/views/subevents.py:564
 msgctxt "subevent"
