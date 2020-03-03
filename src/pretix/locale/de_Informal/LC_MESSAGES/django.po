@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-03 15:55+0000\n"
-"PO-Revision-Date: 2020-02-27 10:05+0000\n"
+"POT-Creation-Date: 2020-02-27 09:54+0000\n"
+"PO-Revision-Date: 2020-03-03 15:55+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -16281,7 +16281,7 @@ msgstr "Eine neuer Termin wurde erstellt."
 #: pretix/control/views/subevents.py:533
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
-msgstr "Die ausgewählten Termine wurden gelöscht."
+msgstr "Die ausgewählten Termine wurden deaktiviert."
 
 #: pretix/control/views/subevents.py:543
 #, fuzzy
