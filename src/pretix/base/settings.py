@@ -1773,7 +1773,7 @@ def validate_settings(event, settings_dict):
         })
     if settings_dict.get('invoice_address_company_required') and not settings_dict.get('invoice_address_required'):
         raise ValidationError({
-            'invoice_address_company_requred': _('You have to require invoice addresses to require for company names.')
+            'invoice_address_company_required': _('You have to require invoice addresses to require for company names.')
         })
 
     payment_term_last = settings_dict.get('payment_term_last')
