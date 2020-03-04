@@ -43,7 +43,11 @@ def parse_csv(file, length=None):
     if '\r' in data and '\n' not in data:
         data = data.replace('\r', '\n')
 
-    dialect = csv.Sniffer().sniff(data.split("\n")[0], delimiters=";,.#:")
+    try:
+        dialect = csv.Sniffer().sniff(data.split("\n")[0], delimiters=";,.#:")
+    except csv.Error:
+        return None
+
     if dialect is None:
         return None
 
