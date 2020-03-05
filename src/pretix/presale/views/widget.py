@@ -22,6 +22,7 @@ from django.utils.translation import get_language, pgettext, ugettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
+from django.views.decorators.gzip import gzip_page
 from django.views.decorators.http import condition
 from django.views.i18n import (
     JavaScriptCatalog, get_formats, js_catalog_template,
@@ -62,6 +63,7 @@ def widget_js_etag(request, lang, **kwargs):
     return gs.settings.get('widget_checksum_{}'.format(lang))
 
 
+@gzip_page
 @condition(etag_func=widget_css_etag)
 @cache_page(60)
 def widget_css(request, **kwargs):
@@ -126,6 +128,7 @@ def generate_widget_js(lang):
     return ''.join(code)
 
 
+@gzip_page
 @condition(etag_func=widget_js_etag)
 @cache_page(1 if settings.DEBUG else 60)
 def widget_js(request, lang, **kwargs):
