@@ -105,6 +105,9 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             has_subevent=True, has_other_subevent=False
         )
 
+        subevent.log_action(
+            'pretix.subevent.canceled', user=user,
+        )
         subevent.active = False
         subevent.save(update_fields=['active'])
         subevent.log_action(
@@ -112,6 +115,9 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
         )
     else:
         orders_to_change = event.orders.none()
+        subevent.log_action(
+            'pretix.event.canceled', user=user,
+        )
 
         for i in event.items.filter(active=True):
             i.active = False

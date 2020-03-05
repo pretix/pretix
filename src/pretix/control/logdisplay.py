@@ -182,6 +182,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     plains = {
         'pretix.object.cloned': _('This object has been created by cloning.'),
         'pretix.event.comment': _('The event\'s internal comment has been updated.'),
+        'pretix.event.canceled': _('The event has been canceled.'),
         'pretix.event.order.modified': _('The order details have been changed.'),
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
         'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),
@@ -318,6 +319,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.team.changed': _('The team settings have been changed.'),
         'pretix.team.deleted': _('The team has been deleted.'),
         'pretix.subevent.deleted': pgettext_lazy('subevent', 'The event date has been deleted.'),
+        'pretix.subevent.canceled': pgettext_lazy('subevent', 'The event date has been canceled.'),
         'pretix.subevent.changed': pgettext_lazy('subevent', 'The event date has been changed.'),
         'pretix.subevent.added': pgettext_lazy('subevent', 'The event date has been created.'),
         'pretix.subevent.quota.added': pgettext_lazy('subevent', 'A quota has been added to the event date.'),
