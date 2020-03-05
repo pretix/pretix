@@ -150,9 +150,9 @@ def test_retry_canceled(env, client):
     r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
         'action_{}'.format(trans.pk): 'retry',
     }).content.decode('utf-8'))
-    assert r['status'] == 'error'
+    assert r['status'] == 'ok'
     trans.refresh_from_db()
-    assert trans.state == BankTransaction.STATE_ERROR
+    assert trans.state == BankTransaction.STATE_VALID
     env[3].refresh_from_db()
     assert env[3].status == Order.STATUS_CANCELED
 
@@ -169,9 +169,9 @@ def test_retry_refunded(env, client):
     r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
         'action_{}'.format(trans.pk): 'retry',
     }).content.decode('utf-8'))
-    assert r['status'] == 'error'
+    assert r['status'] == 'ok'
     trans.refresh_from_db()
-    assert trans.state == BankTransaction.STATE_ERROR
+    assert trans.state == BankTransaction.STATE_VALID
     env[3].refresh_from_db()
     assert env[3].status == Order.STATUS_CANCELED
 
@@ -188,9 +188,9 @@ def test_retry_paid(env, client):
     r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
         'action_{}'.format(trans.pk): 'retry',
     }).content.decode('utf-8'))
-    assert r['status'] == 'error'
+    assert r['status'] == 'ok'
     trans.refresh_from_db()
-    assert trans.state == BankTransaction.STATE_ERROR
+    assert trans.state == BankTransaction.STATE_VALID
     env[3].refresh_from_db()
     assert env[3].status == Order.STATUS_PAID
 
