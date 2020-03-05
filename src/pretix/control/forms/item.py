@@ -684,6 +684,27 @@ class ItemBundleFormSet(I18nFormSet):
         self.add_fields(form, None)
         return form
 
+    def clean(self):
+        super().clean()
+        ivs = set()
+        for i in range(0, self.total_form_count()):
+            form = self.forms[i]
+            if self.can_delete:
+                if self._should_delete_form(form):
+                    # This form is going to be deleted so any of its errors
+                    # should not cause the entire formset to be invalid.
+                    try:
+                        ivs.remove(form.cleaned_data['itemvar'])
+                    except KeyError:
+                        pass
+                    continue
+
+            if 'itemvar' in form.cleaned_data:
+                if form.cleaned_data['itemvar'] in ivs:
+                    raise ValidationError(_('You added the same bundled product twice'))
+
+                ivs.add(form.cleaned_data['itemvar'])
+
 
 class ItemBundleForm(I18nModelForm):
     itemvar = forms.ChoiceField(label=_('Bundled product'))

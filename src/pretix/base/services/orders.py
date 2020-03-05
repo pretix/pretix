@@ -553,6 +553,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 bprice = bundle.designated_price or 0
             except ItemBundle.DoesNotExist:
                 bprice = cp.price
+            except ItemBundle.MultipleObjectsReturned:
+                raise OrderError("Invalid product configuration (duplicate bundle)")
             price = get_price(cp.item, cp.variation, cp.voucher, bprice, cp.subevent, custom_price_is_net=False,
                               invoice_address=address, force_custom_price=True, max_discount=max_discount)
             pbv = get_price(cp.item, cp.variation, None, bprice, cp.subevent, custom_price_is_net=False,
