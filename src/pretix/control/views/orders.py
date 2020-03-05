@@ -1915,6 +1915,9 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
             send=form.cleaned_data.get('send'),
             send_subject=form.cleaned_data.get('send_subject').data,
             send_message=form.cleaned_data.get('send_message').data,
+            send_waitinglist=form.cleaned_data.get('send'),
+            send_waitinglist_subject=form.cleaned_data.get('send_waitinglist_subject').data,
+            send_waitinglist_message=form.cleaned_data.get('send_waitinglist_message').data,
             user=self.request.user.pk,
         )
 

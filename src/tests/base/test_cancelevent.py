@@ -6,7 +6,9 @@ from django.test import TestCase
 from django.utils.timezone import now
 from django_scopes import scope
 
-from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
+from pretix.base.models import (
+    Event, Item, Order, OrderPosition, Organizer, Voucher, WaitingListEntry,
+)
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.services.cancelevent import cancel_event
 from pretix.base.services.invoices import generate_invoice
@@ -310,3 +312,22 @@ class SubEventCancelTests(TestCase):
         assert self.order.positions.filter(subevent=self.se1).count() == 0
         f = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_CANCELLATION)
         assert f.value == Decimal('1.80')
+
+    @classscope(attr='o')
+    def test_cancel_send_mail_waitinglist(self):
+        v = Voucher.objects.create(event=self.event, block_quota=True, redeemed=1)
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.ticket, variation=None, email='foo@bar.com', voucher=v
+        )
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.ticket, variation=None, email='foo@example.org'
+        )
+        cancel_event(
+            self.event.pk, subevent=None,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            keep_fees=True, send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            send_waitinglist=True, send_waitinglist_message="Event canceled", send_waitinglist_subject=":(",
+            user=None
+        )
+        assert len(djmail.outbox) == 1
+        assert djmail.outbox[0].to == ['foo@example.org']

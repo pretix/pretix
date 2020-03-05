@@ -43,6 +43,26 @@
             {% bootstrap_field form.send_subject layout="horizontal" %}
             {% bootstrap_field form.send_message layout="horizontal" %}
         </fieldset>
+        <fieldset>
+            <legend>{% trans "Waiting list" %}</legend>
+            <p>
+                {% blocktrans trimmed %}
+                    Your waiting list will not be deleted automatically, but it will receive no new tickets due to the
+                    products being disabled. You can choose to inform people on the waiting list by using this option.
+                {% endblocktrans %}
+            </p>
+            <p>
+                <strong>
+                    {% blocktrans trimmed %}
+                        You should not execute this function multiple times for the same event, or everyone on the
+                        waiting list will get multiple emails.
+                    {% endblocktrans %}
+                </strong>
+            </p>
+            {% bootstrap_field form.send_waitinglist layout="control" %}
+            {% bootstrap_field form.send_waitinglist_subject layout="horizontal" %}
+            {% bootstrap_field form.send_waitinglist_message layout="horizontal" %}
+        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-danger btn-save">
                 {% trans "Cancel all orders" %}

@@ -552,6 +552,12 @@ class EventCancelForm(forms.Form):
     )
     send_subject = forms.CharField()
     send_message = forms.CharField()
+    send_waitinglist = forms.BooleanField(
+        label=_("Send information to waiting list"),
+        required=False
+    )
+    send_waitinglist_subject = forms.CharField()
+    send_waitinglist_message = forms.CharField()
 
     def _set_field_placeholders(self, fn, base_parameters):
         phs = [
@@ -596,6 +602,28 @@ class EventCancelForm(forms.Form):
                                                       'order', 'event'])
         self._set_field_placeholders('send_message', ['event_or_subevent', 'refund_amount', 'position_or_address',
                                                       'order', 'event'])
+        self.fields['send_waitinglist_subject'] = I18nFormField(
+            label=_("Subject"),
+            required=True,
+            initial=_('Canceled: {event}'),
+            widget=I18nTextInput,
+            locales=self.event.settings.get('locales'),
+        )
+        self.fields['send_waitinglist_message'] = I18nFormField(
+            label=_('Message'),
+            widget=I18nTextarea,
+            required=True,
+            locales=self.event.settings.get('locales'),
+            initial=LazyI18nString.from_gettext(gettext_noop(
+                'Hello,\n\n'
+                'with this email, we regret to inform you that {event} has been canceled.\n\n'
+                'You will therefore not receive a ticket from the waiting list.\n\n'
+                'Best regards,\n\n'
+                'Your {event} team'
+            ))
+        )
+        self._set_field_placeholders('send_waitinglist_subject', ['event_or_subevent', 'event'])
+        self._set_field_placeholders('send_waitinglist_message', ['event_or_subevent', 'event'])
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()

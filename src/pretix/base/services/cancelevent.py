@@ -12,9 +12,10 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderFee, OrderPosition, SubEvent, User,
+    WaitingListEntry,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException, TolerantDict
+from pretix.base.services.mail import SendMailException, TolerantDict, mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _cancel_order, _try_auto_refund,
 )
@@ -22,6 +23,22 @@ from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
 
 logger = logging.getLogger(__name__)
+
+
+def _send_wle_mail(wle: WaitingListEntry, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent):
+    with language(wle.locale):
+        email_context = get_email_context(event_or_subevent=subevent or wle.event, event=wle.event)
+        try:
+            mail(
+                wle.email,
+                str(subject).format_map(TolerantDict(email_context)),
+                message,
+                email_context,
+                wle.event,
+                locale=wle.locale
+            )
+        except SendMailException:
+            logger.exception('Waiting list canceled email could not be sent')
 
 
 def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent,
@@ -68,10 +85,14 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_fixed: str,
-                 keep_fee_percentage: str, keep_fees: bool, send: bool, send_subject: dict,
-                 send_message: dict, user: int):
+                 keep_fee_percentage: str, keep_fees: bool,
+                 send: bool, send_subject: dict, send_message: dict,
+                 send_waitinglist: bool=False, send_waitinglist_subject: dict={}, send_waitinglist_message: dict={},
+                 user: int=None):
     send_subject = LazyI18nString(send_subject)
     send_message = LazyI18nString(send_message)
+    send_waitinglist_subject = LazyI18nString(send_waitinglist_subject)
+    send_waitinglist_message = LazyI18nString(send_waitinglist_message)
     if user:
         user = User.objects.get(pk=user)
 
@@ -115,7 +136,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
         )
     else:
         orders_to_change = event.orders.none()
-        subevent.log_action(
+        event.log_action(
             'pretix.event.canceled', user=user,
         )
 
@@ -194,5 +215,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
 
             if send:
                 _send_mail(o, send_subject, send_message, subevent, refund_amount, user, positions)
+
+    for wle in event.waitinglistentries.filter(subevent=subevent, voucher__isnull=True):
+        _send_wle_mail(wle, send_waitinglist_subject, send_waitinglist_message, subevent)
 
     return failed
