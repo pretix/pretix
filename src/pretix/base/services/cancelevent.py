@@ -14,7 +14,7 @@ from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderFee, OrderPosition, SubEvent, User,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException
+from pretix.base.services.mail import SendMailException, TolerantDict
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _cancel_order, _try_auto_refund,
 )
@@ -34,9 +34,10 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
         email_context = get_email_context(event_or_subevent=subevent or order.event, refund_amount=refund_amount,
                                           order=order, position_or_address=ia, event=order.event)
+        real_subject = str(subject).format_map(TolerantDict(email_context))
         try:
             order.send_mail(
-                subject, message, email_context,
+                real_subject, message, email_context,
                 'pretix.event.order.email.event_canceled',
                 user,
             )
@@ -48,6 +49,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
                 continue
 
             if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
+                real_subject = str(subject).format_map(TolerantDict(email_context))
                 email_context = get_email_context(event_or_subevent=subevent or order.event,
                                                   event=order.event,
                                                   refund_amount=refund_amount,
@@ -55,7 +57,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
                                                   order=order, position=p)
                 try:
                     order.send_mail(
-                        subject, message, email_context,
+                        real_subject, message, email_context,
                         'pretix.event.order.email.event_canceled',
                         position=p,
                         user=user
