@@ -1611,7 +1611,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'id': 0,
                 'order': '',
                 'positionid': 1,
-                'item': 1,
+                'item': item.pk,
                 'variation': None,
                 'price': '23.00',
                 'attendee_name': 'Peter',
