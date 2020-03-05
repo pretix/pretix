@@ -466,6 +466,9 @@ class OrderViewSet(viewsets.ModelViewSet):
             send_mail = serializer._send_mail
             order = serializer.instance
             serializer = OrderSerializer(order, context=serializer.context)
+            if not order.pk:
+                # Simulation
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
             order.log_action(
                 'pretix.event.order.placed',

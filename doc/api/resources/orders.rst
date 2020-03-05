@@ -891,6 +891,13 @@ Creating orders
    IDs in the ``addon_to`` field of another position. Note that all add_ons for a specific position need to come
    immediately after the position itself.
 
+   Starting with pretix 3.7, you can add ``"simulate": true`` to the body to do a "dry run" of your order. This will
+   validate your order and return you an order object with the resulting prices, but will not create an actual order.
+   You can use this for testing or to look up prices. In this case, some attributes are ignored, such as whether
+   to send an email or what payment provider will be used. Note that some returned fields will contain empty values
+   (e.g. all ``id`` fields of positions will be zero) and some will contain fake values (e.g. the order code will
+   always be ``PREVIEW``). pretix plugins will not be triggered, so some special behavior might be missing as well.
+
    **Example request**:
 
    .. sourcecode:: http

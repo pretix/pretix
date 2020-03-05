@@ -25,6 +25,7 @@ from pretix.base.models.orders import (
 )
 from pretix.base.pdf import get_variables
 from pretix.base.services.cart import error_messages
+from pretix.base.services.locking import NoLockManager
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
@@ -96,6 +97,11 @@ class AnswerQuestionOptionsIdentifierField(serializers.Field):
         return [o.identifier for o in instance.options.all()]
 
 
+class AnswerQuestionOptionsField(serializers.Field):
+    def to_representation(self, instance: QuestionAnswer):
+        return [o.pk for o in instance.options.all()]
+
+
 class InlineSeatSerializer(I18nAwareModelSerializer):
 
     class Meta:
@@ -106,6 +112,7 @@ class InlineSeatSerializer(I18nAwareModelSerializer):
 class AnswerSerializer(I18nAwareModelSerializer):
     question_identifier = AnswerQuestionIdentifierField(source='*', read_only=True)
     option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
+    options = AnswerQuestionOptionsField(source='*', read_only=True)
 
     class Meta:
         model = QuestionAnswer
@@ -585,6 +592,28 @@ class CompatibleJSONField(serializers.JSONField):
         return value
 
 
+class WrappedList:
+    def __init__(self, data):
+        self._data = data
+
+    def all(self):
+        return self._data
+
+
+class WrappedModel:
+    def __init__(self, model):
+        self._wrapped = model
+
+    def __getattr__(self, item):
+        return getattr(self._wrapped, item)
+
+    def save(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def delete(self, *args, **kwargs):
+        raise NotImplementedError
+
+
 class OrderCreateSerializer(I18nAwareModelSerializer):
     invoice_address = InvoiceAddressSerializer(required=False)
     positions = OrderPositionCreateSerializer(many=True, required=True)
@@ -605,6 +634,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     force = serializers.BooleanField(default=False, required=False)
     payment_date = serializers.DateTimeField(required=False, allow_null=True)
     send_mail = serializers.BooleanField(default=False, required=False)
+    simulate = serializers.BooleanField(default=False, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -614,7 +644,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'payment_date', 'consume_carts',
-                  'force', 'send_mail')
+                  'force', 'send_mail', 'simulate')
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -706,6 +736,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         payment_info = validated_data.pop('payment_info', '{}')
         payment_date = validated_data.pop('payment_date', now())
         force = validated_data.pop('force', False)
+        simulate = validated_data.pop('simulate', False)
         self._send_mail = validated_data.pop('send_mail', False)
 
         if 'invoice_address' in validated_data:
@@ -719,7 +750,10 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         else:
             ia = None
 
-        with self.context['event'].lock() as now_dt:
+        lockfn = self.context['event'].lock
+        if simulate:
+            lockfn = NoLockManager
+        with lockfn() as now_dt:
             free_seats = set()
             seats_seen = set()
             consume_carts = validated_data.pop('consume_carts', [])
@@ -869,11 +903,20 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             order.set_expires(subevents=[p.get('subevent') for p in positions_data])
             order.meta_info = "{}"
             order.total = Decimal('0.00')
-            order.save()
+            if simulate:
+                order = WrappedModel(order)
+                order.last_modified = now()
+                order.code = 'PREVIEW'
+            else:
+                order.save()
 
             if ia:
-                ia.order = order
-                ia.save()
+                if not simulate:
+                    ia.order = order
+                    ia.save()
+                else:
+                    order.invoice_address = ia
+                    ia.last_modified = now()
 
             pos_map = {}
             for pos_data in positions_data:
@@ -885,7 +928,10 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         '_legacy': attendee_name
                     }
                 pos = OrderPosition(**pos_data)
-                pos.order = order
+                if simulate:
+                    pos.order = order._wrapped
+                else:
+                    pos.order = order
                 if addon_to:
                     pos.addon_to = pos_map[addon_to]
 
@@ -916,19 +962,33 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     invoice_address=ia,
                 ).gross
 
-                if pos.voucher:
-                    Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
-                pos.save()
+                if simulate:
+                    pos = WrappedModel(pos)
+                    pos.id = 0
+                    answers = []
+                    for answ_data in answers_data:
+                        options = answ_data.pop('options', [])
+                        answ = WrappedModel(QuestionAnswer(**answ_data))
+                        answ.options = WrappedList(options)
+                        answers.append(answ)
+                    pos.answers = answers
+                    pos.pseudonymization_id = "PREVIEW"
+                else:
+                    if pos.voucher:
+                        Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
+                    pos.save()
+                    for answ_data in answers_data:
+                        options = answ_data.pop('options', [])
+                        answ = pos.answers.create(**answ_data)
+                        answ.options.add(*options)
                 pos_map[pos.positionid] = pos
-                for answ_data in answers_data:
-                    options = answ_data.pop('options', [])
-                    answ = pos.answers.create(**answ_data)
-                    answ.options.add(*options)
 
-            for cp in delete_cps:
-                cp.delete()
+            if not simulate:
+                for cp in delete_cps:
+                    cp.delete()
 
-        order.total = sum([p.price for p in order.positions.all()])
+        order.total = sum([p.price for p in pos_map.values()])
+        fees = []
         for fee_data in fees_data:
             is_percentage = fee_data.pop('_treat_value_as_percentage', False)
             if is_percentage:
@@ -960,17 +1020,26 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     fee_data['tax_rule'] = tr
                     fee_data['value'] = val
                     f = OrderFee(**fee_data)
-                    f.order = order
+                    f.order = order._wrapped if simulate else order
                     f._calculate_tax()
-                    f.save()
+                    fees.append(f)
+                    if not simulate:
+                        f.save()
             else:
                 f = OrderFee(**fee_data)
-                f.order = order
+                f.order = order._wrapped if simulate else order
                 f._calculate_tax()
-                f.save()
+                fees.append(f)
+                if not simulate:
+                    f.save()
 
-        order.total += sum([f.value for f in order.fees.all()])
-        order.save(update_fields=['total'])
+        order.total += sum([f.value for f in fees])
+        if simulate:
+            order.fees = fees
+            order.positions = pos_map.values()
+            return order  # ignore payments
+        else:
+            order.save(update_fields=['total'])
 
         if order.total == Decimal('0.00') and validated_data.get('status') == Order.STATUS_PAID and not payment_provider:
             payment_provider = 'free'
