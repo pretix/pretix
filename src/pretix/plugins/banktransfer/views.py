@@ -84,17 +84,6 @@ class ActionView(View):
                     'message': _('Negative amount but refund can\'t be logged, please create manual refund first.')
                 })
 
-        if trans.order.status == Order.STATUS_PAID:
-            return JsonResponse({
-                'status': 'error',
-                'message': _('The order is already marked as paid.')
-            })
-        elif trans.order.status == Order.STATUS_CANCELED:
-            return JsonResponse({
-                'status': 'error',
-                'message': _('The order has already been canceled.')
-            })
-
         p = trans.order.payments.get_or_create(
             amount=trans.amount,
             provider='banktransfer',
