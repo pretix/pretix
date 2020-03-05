@@ -130,10 +130,13 @@ def generate_widget_js(lang):
 
 @gzip_page
 @condition(etag_func=widget_js_etag)
-@cache_page(1 if settings.DEBUG else 60)
 def widget_js(request, lang, **kwargs):
     if lang not in [lc for lc, ll in settings.LANGUAGES]:
         raise Http404()
+
+    cached_js = cache.get('widget_js_data_{}'.format(lang))
+    if cached_js and not settings.DEBUG:
+        return HttpResponse(cached_js, content_type='text/javascript')
 
     gs = GlobalSettingsObject()
     fname = gs.settings.get('widget_file_{}'.format(lang))
@@ -142,7 +145,9 @@ def widget_js(request, lang, **kwargs):
         if isinstance(fname, File):
             fname = fname.name
         try:
-            resp = HttpResponse(default_storage.open(fname).read(), content_type='text/javascript')
+            data = default_storage.open(fname).read()
+            resp = HttpResponse(data, content_type='text/javascript')
+            cache.set('widget_js_data_{}'.format(lang), data, 3600 * 4)
         except:
             logger.exception('Failed to open widget.js')
 
@@ -156,6 +161,7 @@ def widget_js(request, lang, **kwargs):
             )
             gs.settings.set('widget_file_{}'.format(lang), 'file://' + newname)
             gs.settings.set('widget_checksum_{}'.format(lang), checksum)
+            cache.set('widget_js_data_{}'.format(lang), data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
     return resp
 

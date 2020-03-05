@@ -53,6 +53,7 @@ class Command(BaseCommand):
                 )
                 gs.settings.set('widget_file_{}'.format(lc), 'file://' + newname)
                 gs.settings.set('widget_checksum_{}'.format(lc), checksum)
+                cache.delete('widget_js_data_{}'.format(lc))
                 if fname:
                     if isinstance(fname, File):
                         default_storage.delete(fname.name)
