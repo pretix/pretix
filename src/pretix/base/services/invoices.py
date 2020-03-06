@@ -37,6 +37,10 @@ logger = logging.getLogger(__name__)
 
 @transaction.atomic
 def build_invoice(invoice: Invoice) -> Invoice:
+    invoice.locale = invoice.event.settings.get('invoice_language', invoice.event.settings.locale)
+    if invoice.locale == '__user__':
+        invoice.locale = invoice.order.locale or invoice.event.settings.locale
+
     lp = invoice.order.payments.last()
 
     with language(invoice.locale):
@@ -250,17 +254,11 @@ def regenerate_invoice(invoice: Invoice):
 
 
 def generate_invoice(order: Order, trigger_pdf=True):
-    locale = order.event.settings.get('invoice_language', order.event.settings.locale)
-    if locale:
-        if locale == '__user__':
-            locale = order.locale or order.event.settings.locale
-
     invoice = Invoice(
         order=order,
         event=order.event,
         organizer=order.event.organizer,
         date=timezone.now().date(),
-        locale=locale
     )
     invoice = build_invoice(invoice)
     if trigger_pdf:
