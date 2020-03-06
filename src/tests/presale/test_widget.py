@@ -205,6 +205,50 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "voucher_explanation_text": "",
         }
 
+    def test_product_list_view_filter(self):
+        response = self.client.get('/%s/%s/widget/product_list?items=%s' % (self.orga.slug, self.event.slug,
+                                                                            self.ticket.pk))
+        assert response['Access-Control-Allow-Origin'] == '*'
+        data = json.loads(response.content.decode())
+        assert data['items_by_category'] == [
+            {
+                "items": [
+                    {
+                        "require_voucher": False,
+                        "order_min": None,
+                        "max_price": None,
+                        "price": {"gross": "23.00", "net": "19.33", "tax": "3.67", "name": "", "rate": "19.00",
+                                  "includes_mixed_tax_rate": False},
+                        "picture": None,
+                        "has_variations": 0,
+                        "description": None,
+                        "min_price": None,
+                        "avail": [100, None],
+                        "variations": [],
+                        "id": self.ticket.pk,
+                        "free_price": False,
+                        "original_price": None,
+                        "name": "Early-bird ticket",
+                        "order_max": 4
+                    }
+                ],
+                "description": None,
+                "id": self.category.pk,
+                "name": "Everything"
+            }
+        ]
+
+        response = self.client.get('/%s/%s/widget/product_list?categories=0,%s' % (self.orga.slug, self.event.slug,
+                                                                                   self.category.pk))
+        assert response['Access-Control-Allow-Origin'] == '*'
+        data = json.loads(response.content.decode())
+        assert len(data['items_by_category']) == 1
+
+        response = self.client.get('/%s/%s/widget/product_list?categories=0' % (self.orga.slug, self.event.slug))
+        assert response['Access-Control-Allow-Origin'] == '*'
+        data = json.loads(response.content.decode())
+        assert len(data['items_by_category']) == 0
+
     def test_product_list_view_with_voucher(self):
         with scopes_disabled():
             self.event.vouchers.create(item=self.ticket, code="ABCDE")

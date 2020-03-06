@@ -114,6 +114,17 @@ If you want to disable voucher input in the widget, you can pass the ``disable-v
 
    <pretix-widget event="https://pretix.eu/demo/democon/" disable-vouchers></pretix-widget>
 
+Filtering products
+------------------
+
+You can filter the products shown in the widget by passing in a list of product IDs::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" items="23,42"></pretix-widget>
+
+Alternatively, you can select one or more categories to be shown::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" categories="12,25"></pretix-widget>
+
 Multi-event selection
 ---------------------
 

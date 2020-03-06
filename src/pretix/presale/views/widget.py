@@ -184,9 +184,17 @@ def get_picture(event, picture):
 class WidgetAPIProductList(EventListMixin, View):
 
     def _get_items(self):
+        qs = self.request.event.items
+        if 'items' in self.request.GET:
+            qs = qs.filter(pk__in=self.request.GET.get('items').split(","))
+        if 'categories' in self.request.GET:
+            qs = qs.filter(category__pk__in=self.request.GET.get('categories').split(","))
+
         items, display_add_to_cart = get_grouped_items(
-            self.request.event, subevent=self.subevent, voucher=self.voucher, channel='web'
+            self.request.event, subevent=self.subevent, voucher=self.voucher, channel='web',
+            base_qs=qs
         )
+
         grps = []
         for cat, g in item_group_by_category(items):
             grps.append({

@@ -51,8 +51,9 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0):
-    items = event.items.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).select_related(
+def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None):
+    base_qs = base_qs if base_qs is not None else event.items
+    items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).select_related(
         'category', 'tax_rule',  # for re-grouping
         'hidden_if_available',
     ).prefetch_related(

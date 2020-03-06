@@ -1094,6 +1094,12 @@ var shared_root_methods = {
         if (this.$root.filter) {
             url += '&' + this.$root.filter;
         }
+        if (this.$root.item_filter) {
+            url += '&items=' + escape(this.$root.item_filter);
+        }
+        if (this.$root.category_filter) {
+            url += '&categories=' + escape(this.$root.category_filter);
+        }
         var cart_id = getCookie(this.cookieName);
         if (this.$root.voucher_code) {
             url += '&voucher=' + escape(this.$root.voucher_code);
@@ -1308,6 +1314,8 @@ var create_widget = function (element) {
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     var filter = element.attributes.filter ? element.attributes.filter.value : null;
+    var items = element.attributes.items ? element.attributes.items.value : null;
+    var categories = element.attributes.categories ? element.attributes.categories.value : null;
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
@@ -1331,6 +1339,8 @@ var create_widget = function (element) {
                 currency: null,
                 name: null,
                 filter: filter,
+                item_filter: items,
+                category_filter: categories,
                 voucher_code: voucher,
                 display_net_prices: false,
                 voucher_explanation_text: null,
