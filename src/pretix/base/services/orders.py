@@ -1725,7 +1725,8 @@ class OrderChangeManager:
         i = self.order.invoices.filter(is_cancellation=False).last()
         if self.reissue_invoice and i and self._invoice_dirty:
             self._invoices.append(generate_cancellation(i))
-            self._invoices.append(generate_invoice(self.order))
+            if invoice_qualified(self.order):
+                self._invoices.append(generate_invoice(self.order))
 
     def _check_complete_cancel(self):
         current = self.order.positions.count()
