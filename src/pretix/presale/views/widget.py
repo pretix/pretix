@@ -366,9 +366,7 @@ class WidgetAPIProductList(EventListMixin, View):
             request.organizer.slug,
             request.event.slug if hasattr(request, 'event') else '-',
             list_type,
-            request.GET.get("year") or "-",
-            request.GET.get("month") or "-",
-            request.GET.get("old") or "-",
+            request.GET.urlencode(),
             get_language(),
         ])
         cached_data = cache.get(cache_key)
@@ -470,7 +468,7 @@ class WidgetAPIProductList(EventListMixin, View):
             request.organizer.slug,
             request.event.slug,
             str(self.subevent.pk) if self.subevent else "",
-            request.GET.get("voucher") or "-",
+            request.GET.urlencode(),
             get_language(),
         ])
         if "cart_id" not in request.GET:
