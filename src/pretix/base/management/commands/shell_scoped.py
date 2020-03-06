@@ -13,11 +13,17 @@ class Command(BaseCommand):
         return parser
 
     def handle(self, *args, **options):
+        try:
+            from django_extensions.management.commands import shell_plus  # noqa
+            cmd = 'shell_plus'
+        except ImportError:
+            cmd = 'shell'
+
         parser = self.create_parser(sys.argv[0], sys.argv[1])
         flags = parser.parse_known_args(sys.argv[2:])[1]
         if "--override" in flags:
             with scopes_disabled():
-                return call_command("shell_plus", *args, **options)
+                return call_command(cmd, *args, **options)
 
         lookups = {}
         for flag in flags:
@@ -36,4 +42,4 @@ class Command(BaseCommand):
             for app_name, app_value in lookups.items()
         }
         with scope(**scope_options):
-            return call_command("shell_plus", *args, **options)
+            return call_command(cmd, *args, **options)
