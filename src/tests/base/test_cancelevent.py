@@ -43,15 +43,25 @@ class EventCancelTests(TestCase):
 
     @classscope(attr='o')
     def test_cancel_send_mail(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
         cancel_event(
             self.event.pk, subevent=None,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
             user=None
         )
         assert len(djmail.outbox) == 1
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_CANCELED
+        assert '46.00' in djmail.outbox[0].body
 
     @classscope(attr='o')
     def test_cancel_send_mail_attendees(self):
@@ -265,16 +275,24 @@ class SubEventCancelTests(TestCase):
 
     @classscope(attr='o')
     def test_cancel_mixed_order(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
             user=None
         )
         self.order.refresh_from_db()
-        assert self.order.status == Order.STATUS_PENDING
-        assert self.order.positions.filter(subevent=self.se2).count() == 1
-        assert self.order.positions.filter(subevent=self.se1).count() == 0
+        assert self.order.status == Order.STATUS_PAID
+        assert '23.00' in djmail.outbox[0].body
 
     @classscope(attr='o')
     def test_cancel_partially_keep_fees(self):

@@ -150,8 +150,6 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
 
     for o in orders_to_cancel.only('id', 'total'):
         try:
-            refund_amount = Decimal('0.00')
-
             fee = Decimal('0.00')
             if keep_fees:
                 fee += o.fees.filter(
@@ -167,6 +165,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             fee = round_decimal(min(fee, o.payment_refund_sum), event.currency)
 
             _cancel_order(o.pk, user, send_mail=False, cancellation_fee=fee)
+            refund_amount = o.payment_refund_sum
+
             if auto_refund:
                 _try_auto_refund(o.pk)
 
@@ -182,7 +182,6 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
     for o in orders_to_change.values_list('id', flat=True):
         with transaction.atomic():
             o = event.orders.select_for_update().get(pk=o)
-            refund_amount = Decimal('0.00')
             total = Decimal('0.00')
             positions = []
 
@@ -210,6 +209,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
                 ocm.add_fee(f)
 
             ocm.commit()
+            refund_amount = o.payment_refund_sum - o.total
+
             if auto_refund:
                 _try_auto_refund(o.pk)
 
