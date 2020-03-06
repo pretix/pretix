@@ -2,9 +2,11 @@ from datetime import timedelta
 from decimal import Decimal
 
 import pytz
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import (
-    Count, Exists, IntegerField, Max, Min, OuterRef, Q, Subquery, Sum,
+    Count, Exists, IntegerField, Max, Min, OuterRef, Prefetch, Q, Subquery,
+    Sum,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.dispatch import receiver
@@ -20,8 +22,8 @@ from django.utils.translation import pgettext, ugettext_lazy as _, ungettext
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    Item, Order, OrderPosition, OrderRefund, RequiredAction, SubEvent, Voucher,
-    WaitingListEntry,
+    Item, ItemVariation, Order, OrderPosition, OrderRefund, RequiredAction,
+    SubEvent, Voucher, WaitingListEntry,
 )
 from pretix.base.timeline import timeline_for_event
 from pretix.control.forms.event import CommentForm
@@ -122,26 +124,50 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
 
     wles = WaitingListEntry.objects.filter(event=sender, subevent=subevent, voucher__isnull=True)
-    if wles.count():
+    if wles.exists():
         if not lazy:
             quota_cache = {}
-            itemvar_cache = {}
             happy = 0
+            tuples = wles.values('item', 'variation').order_by().annotate(cnt=Count('id'))
 
-            for wle in wles:
-                if (wle.item, wle.variation) not in itemvar_cache:
-                    itemvar_cache[(wle.item, wle.variation)] = (
-                        wle.variation.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
-                        if wle.variation
-                        else wle.item.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
-                    )
-                row = itemvar_cache.get((wle.item, wle.variation))
+            items = {
+                i.pk: i for i in sender.items.filter(id__in=[t['item'] for t in tuples]).prefetch_related(
+                    Prefetch('quotas',
+                             to_attr='_subevent_quotas',
+                             queryset=sender.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
+                )
+            }
+            vars = {
+                i.pk: i for i in ItemVariation.objects.filter(
+                    item__event=sender, id__in=[t['variation'] for t in tuples if t['variation']]
+                ).prefetch_related(
+                    Prefetch('quotas',
+                             to_attr='_subevent_quotas',
+                             queryset=sender.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
+                )
+            }
+
+            for wlt in tuples:
+                item = items.get(wlt['item'])
+                variation = vars.get(wlt['variation'])
+                if not item:
+                    continue
+                quotas = (
+                    variation._get_quotas(subevent=subevent)
+                    if variation
+                    else item._get_quotas(subevent=subevent)
+                )
+                row = (
+                    variation.check_quotas(subevent=subevent, count_waitinglist=False, _cache=quota_cache)
+                    if variation
+                    else item.check_quotas(subevent=subevent, count_waitinglist=False, _cache=quota_cache)
+                )
                 if row[1] is None:
-                    itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1])
                     happy += 1
                 elif row[1] > 0:
-                    itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1] - 1)
                     happy += 1
+                    for q in quotas:
+                        quota_cache[q.pk] = (quota_cache[q.pk][0], quota_cache[q.pk][1] - 1)
 
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(
