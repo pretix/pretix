@@ -29,7 +29,7 @@
             </div>
         </div>
     {% endif %}
-    <div class="container page-header-links">
+    <div class="container page-header-links {% if event.settings.theme_color_background|upper != "#FFFFFF" or event.settings.logo_image_large %}page-header-links-outside{% endif %}">
         {% if event.settings.locales|length > 1 %}
             {% if event.settings.theme_color_background|upper != "#FFFFFF" or event.settings.logo_image_large %}
                 <div class="pull-right header-part flip">

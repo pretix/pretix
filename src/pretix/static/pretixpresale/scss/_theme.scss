@@ -26,7 +26,6 @@
 
 .page-header-links > div.header-part {
   padding-top: 15px;
-  padding-bottom: 15px;
 
   a {
     color: choose-contrast-color($body-bg, white, $link-color);
@@ -34,6 +33,10 @@
   a.active, .locales a.active {
     border-bottom-color: choose-contrast-color($body-bg, white, $link-color) !important;
   }
+}
+
+.page-header-links-outside > div.header-part {
+  padding-bottom: 15px;
 }
 
 .page-header.logo-large {
@@ -69,8 +72,9 @@ h2.content-header {
       border-radius: $border-radius-large;
     }
   }
-  .page-header-links {
-    padding: 0;
+  .page-header-links-outside {
+    padding-left: 0;
+    padding-right: 0;
   }
   .page-header-links > div.header-part {
     @if ($body-bg != #FFFFFF) {
@@ -88,8 +92,6 @@ h2.content-header {
     }
   }
   .page-header .loginbox {
-    @if ($body-bg != #FFFFFF) {
-      padding-top: 0;
-    }
+    padding-top: 0;
   }
 }
