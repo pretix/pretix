@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-03 15:55+0000\n"
-"PO-Revision-Date: 2020-02-26 03:00+0000\n"
+"PO-Revision-Date: 2020-03-09 00:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -174,10 +174,9 @@ msgid "Gift card products should not be admission products at the same time."
 msgstr "Cadeaukaartproducten kunnen niet tegelijkertijd toegangsbewijzen zijn."
 
 #: pretix/api/serializers/item.py:182
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "Metadataeigenschap '{name}' bestaat niet."
+msgstr "De meta-eigenschap '{name}' bestaat niet."
 
 #: pretix/api/serializers/item.py:297
 msgid ""
@@ -3819,16 +3818,17 @@ msgid ""
 "The payment method will not be shown by default but only to people who enter "
 "the shop through a special link."
 msgstr ""
+"De betalingsmethode zal standaard niet getoond worden, maar alleen aan "
+"mensen die de winkel openen via een speciale link."
 
 #: pretix/base/payment.py:321
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Link to enable payment method"
-msgstr "Betaalmethode inschakelen"
+msgstr "Link om betalingsmethode in te schakelen"
 
 #: pretix/base/payment.py:330
 msgid "Share this link with customers who should use this payment method."
 msgstr ""
+"Deel deze link met klanten die deze betalingsmethode moeten kunnen gebruiken."
 
 #: pretix/base/payment.py:363
 msgctxt "invoice"
@@ -4152,10 +4152,8 @@ msgid "Sample company"
 msgstr "Voorbeeldbedrijf"
 
 #: pretix/base/pdf.py:204
-#, fuzzy
-#| msgid "Invoice address company"
 msgid "Invoice address city"
-msgstr "Bedrijf factuuradres"
+msgstr "Stad factuuradres"
 
 #: pretix/base/pdf.py:205 pretix/base/services/invoices.py:342
 msgid "Sample city"
@@ -4439,6 +4437,10 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"We hebben geen product in je winkelwagen gevonden waarvoor deze voucher "
+"gebruikt kan worden. Als je een nieuw product aan je winkelwagen toe wilt "
+"voegen met deze voucher kan je dit doen met de optie om een voucher te "
+"gebruiken onderaan de pagina."
 
 #: pretix/base/services/cart.py:89
 msgid "Your voucher is valid for a product that is currently not for sale."
@@ -4544,11 +4546,10 @@ msgid "Your export did not contain any data."
 msgstr "Je export bevatte geen gegevens."
 
 #: pretix/base/services/invoices.py:64
-#, fuzzy, python-brace-format
-#| msgid "Please complete your payment before %(date)s"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "Voltooi je betaling vóór %(date)s"
+msgstr "Voltooi je betaling vóór {expire_date}."
 
 #: pretix/base/services/invoices.py:75
 #, python-brace-format
@@ -4638,12 +4639,13 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
+"Fout bij het importeren van waarde \"{value}\" voor kolom \"{column}\" in "
+"regel \"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:113
-#, fuzzy, python-brace-format
-#| msgid "Invalid value in row {number}."
+#, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr "Ongeldige waarde op regel {number}."
+msgstr "Ongeldige data op regel {row}: {message}"
 
 #: pretix/base/services/orders.py:57
 msgid ""
@@ -4709,18 +4711,13 @@ msgstr ""
 "verwijderd."
 
 #: pretix/base/services/orders.py:74
-#, fuzzy
-#| msgid ""
-#| "The voucher code used for one of the items in your cart has already been "
-#| "used the maximum number of times allowed. We removed this item from your "
-#| "cart."
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"De vouchercode die is gebruikt voor een van de items in je winkelwagen is al "
-"het maximale aantal keren gebruikt. We hebben dit item uit je winkelwagen "
-"verwijderd."
+"De vouchercode die is gebruikt voor een van de producten in je winkelwagen "
+"is al het maximale aantal keren gebruikt. We hebben de prijs van dit product "
+"in je winkelwagen aangepast."
 
 #: pretix/base/services/orders.py:76
 msgid ""
@@ -5177,10 +5174,8 @@ msgid "Ask for beneficiary"
 msgstr "Vraag om ontvanger"
 
 #: pretix/base/settings.py:191
-#, fuzzy
-#| msgid "E-mail address verified"
 msgid "Custom address field"
-msgstr "E-mailadres gecontroleerd"
+msgstr "Aangepast adresveld"
 
 #: pretix/base/settings.py:193
 msgid ""
@@ -5190,6 +5185,11 @@ msgid ""
 "details as well as for displaying the value on the invoice. The field will "
 "not be required."
 msgstr ""
+"Als je een eigen veld wilt toevoegen aan het adresformulier voor facturen "
+"kan je hier een label invoeren. Dit label zal worden gebruikt in het "
+"formulier waar de gebruiker de gegevens invoert en om op de facturen de "
+"ingevulde waarde te tonen. Deze waarde zal niet verplicht zijn. Deze optie "
+"kan je bijvoorbeeld gebruiken voor een landspecifiek registratienummer."
 
 #: pretix/base/settings.py:205
 msgid "Ask for VAT ID"
@@ -5214,13 +5214,15 @@ msgstr ""
 
 #: pretix/base/settings.py:228
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "Toon betaald bedrag op gedeeltelijk betaalde facturen"
 
 #: pretix/base/settings.py:229
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
+"Als een factuur al gedeeltelijk is betaald zal deze optie het betaalde en "
+"openstaande bedrag op de factuur tonen."
 
 #: pretix/base/settings.py:239
 msgid "Show free products on invoices"
@@ -5235,16 +5237,16 @@ msgstr ""
 "alleen gratis producten bevatten."
 
 #: pretix/base/settings.py:250
-#, fuzzy
-#| msgid "Show overpaid orders"
 msgid "Show expiration date of order"
-msgstr "Toon overbetaalde bestellingen"
+msgstr "Toon verloopdatum van bestelling"
 
 #: pretix/base/settings.py:251
 msgid ""
 "The expiration date will not be shown if the invoice is generated after the "
 "order is paid."
 msgstr ""
+"De verloopdatum zal niet worden getoond als de factuur is gegenereerd nadat "
+"de factuur is betaald."
 
 #: pretix/base/settings.py:260
 msgid "Generate invoices with consecutive numbers"
@@ -5260,14 +5262,6 @@ msgid "Invoice number prefix"
 msgstr "Factuurnummer-prefix"
 
 #: pretix/base/settings.py:271
-#, fuzzy
-#| msgid ""
-#| "This will be prepended to invoice numbers. If you leave this field empty, "
-#| "your event slug will be used followed by a dash. Attention: If multiple "
-#| "events within the same organization use the same value in this field, "
-#| "they will share their number range, i.e. every full number will be used "
-#| "at most once over all of your events. This setting only affects future "
-#| "invoices."
 msgid ""
 "This will be prepended to invoice numbers. If you leave this field empty, "
 "your event slug will be used followed by a dash. Attention: If multiple "
@@ -5282,7 +5276,9 @@ msgstr ""
 "meerdere evenementen binnen dezelfde organisatie dezelfde waarde in dit veld "
 "gebruiken zullen ze een gedeelde nummerreeks gebruiken, en zal ieder getal "
 "dus maximaal één keer worden gebruikt bij al je evenementen. Deze instelling "
-"is alleen van toepassing op nieuw aangemaakte facturen."
+"is alleen van toepassing op nieuw aangemaakte facturen. Je kan %Y (met eeuw) "
+"en %y (zonder eeuw) gebruiken om het jaar van de factuur in te voegen, en %m "
+"en %d om de maand en dag van de factuur in te voegen."
 
 #: pretix/base/settings.py:285
 msgid "Invoice number prefix for cancellations"
@@ -5460,6 +5456,7 @@ msgstr "Facturen zullen nooit worden gegenereerd voor gratis bestellingen."
 #: pretix/base/settings.py:467
 msgid "Automatically cancel and reissue invoice on address changes"
 msgstr ""
+"Bij adresveranderingen automatisch factuur annuleren en opnieuw genereren"
 
 #: pretix/base/settings.py:468
 msgid ""
@@ -5467,6 +5464,10 @@ msgid ""
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
 msgstr ""
+"Met deze optie zal wanneer klanten hun factuuradres voor een bestaande "
+"bestelling wijzigen automatisch de bestaande factuur worden geannuleerd en "
+"zal er een nieuwe factuur worden uitgegeven. Deze instelling is niet van "
+"toepassing op wijzigingen die in de backend worden gemaakt."
 
 #: pretix/base/settings.py:483
 msgid "Address line"
@@ -5482,7 +5483,7 @@ msgstr "Binnenlands belastingnummer"
 
 #: pretix/base/settings.py:545
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "bijv. belastingnummer in Duitsland, ABN in Australië, …"
 
 #: pretix/base/settings.py:554
 msgid "EU VAT ID"
@@ -6426,20 +6427,16 @@ msgstr ""
 "wilt maken."
 
 #: pretix/base/settings.py:1772
-#, fuzzy
-#| msgid ""
-#| "You have to ask for attendee emails if you want to make them required."
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
 msgstr ""
-"Je moet om de e-mailadressen van deelnemers vragen als je de vraag verplicht "
-"wilt maken."
+"Je moet om factuuradressen vragen als je factuuradressen verplicht wilt "
+"maken."
 
 #: pretix/base/settings.py:1776
-#, fuzzy
-#| msgid "This will require users to enter a company name."
 msgid "You have to require invoice addresses to require for company names."
-msgstr "Dit zal gebruikers verplichten om een bedrijfsnaam in te voeren."
+msgstr ""
+"Je moet om factuuradressen vragen als je bedrijfsnamen verplicht wilt maken."
 
 #: pretix/base/settings.py:1783
 msgid "The last payment date cannot be before the end of presale."
@@ -6969,17 +6966,10 @@ msgstr ""
 "in te voeren kan je hier de titels die gekozen kunnen worden beperken."
 
 #: pretix/control/forms/event.py:358 pretix/control/forms/organizer.py:274
-#, fuzzy
-#| msgid "Sender name"
 msgid "Header image"
-msgstr "Naam van afzender"
+msgstr "Header-afbeelding"
 
 #: pretix/control/forms/event.py:361
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your events name "
-#| "and date in the page header. We will show your logo with a maximal height "
-#| "of 120 pixels."
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. By default, we show your logo with a size of up to "
@@ -6988,26 +6978,30 @@ msgid ""
 "smaller screens."
 msgstr ""
 "Als je een logo aanlevert zullen we standaard niet de naam en datum van je "
-"evenement in de header tonen. We zullen je logo tonen met een maximale "
-"hoogte van 120 pixels."
+"evenement in de header tonen. We tonen je logo standaard met een resolutie "
+"van maximaal 1140x120 pixels. Je kan ook met de optie hieronder deze grootte "
+"aanpassen. We raden aan om geen kleine details te gebruiken op de "
+"afbeelding, omdat de afbeelding zal worden geschaald op kleinere schermen."
 
 #: pretix/control/forms/event.py:367 pretix/control/forms/organizer.py:283
 msgid "Use header image in its full size"
-msgstr ""
+msgstr "Gebruik volledige grootte van headerafbeelding"
 
 #: pretix/control/forms/event.py:368 pretix/control/forms/organizer.py:284
 msgid "We recommend to upload a picture at least 1170 pixels wide."
 msgstr ""
+"We raden aan om een afbeelding die ten minste 1170 pixels breed is te "
+"uploaden."
 
 #: pretix/control/forms/event.py:372
 msgid "Show event title even if a header image is present"
-msgstr ""
+msgstr "Toon evenementsnaam ook als er een headerafbeelding is ingesteld"
 
 #: pretix/control/forms/event.py:373
-#, fuzzy
-#| msgid "This question will only show up in the backend."
 msgid "The title will only be shown on the event front page."
-msgstr "Deze vraag zal alleen in de backend zichtbaar zijn."
+msgstr ""
+"De naam van het evenement zal alleen op de voorpagina van het evenement "
+"worden getoond."
 
 #: pretix/control/forms/event.py:377
 msgid "Social media image"
@@ -7058,11 +7052,11 @@ msgstr "We raden sterk aan om een roodtint te gebruiken."
 
 #: pretix/control/forms/event.py:415 pretix/control/forms/organizer.py:254
 msgid "Page background color"
-msgstr ""
+msgstr "Websiteachtergrondkleur"
 
 #: pretix/control/forms/event.py:425 pretix/control/forms/organizer.py:264
 msgid "Use round edges"
-msgstr ""
+msgstr "Gebruik afgeronde hoeken"
 
 #: pretix/control/forms/event.py:429 pretix/control/forms/organizer.py:312
 #: pretix/control/templates/pretixcontrol/pdf/index.html:305
@@ -7837,10 +7831,8 @@ msgstr ""
 "Je kan de variaties in de volgende stap kiezen."
 
 #: pretix/control/forms/item.py:238 pretix/control/forms/item.py:454
-#, fuzzy
-#| msgid "Product category"
 msgid "No category"
-msgstr "Productcategorie"
+msgstr "Geen categorie"
 
 #: pretix/control/forms/item.py:245
 msgid "No taxation"
@@ -7964,39 +7956,33 @@ msgid "inactive"
 msgstr "uitgeschakeld"
 
 #: pretix/control/forms/orderimport.py:9
-#, fuzzy
-#| msgid "Import file"
 msgid "Import mode"
-msgstr "Bestand importeren"
+msgstr "Importmodus"
 
 #: pretix/control/forms/orderimport.py:11
 msgid "Create a separate order for each line"
-msgstr ""
+msgstr "Maak een aparte bestelling voor elke regel"
 
 #: pretix/control/forms/orderimport.py:12
 msgid "Create one order with one position per line"
-msgstr ""
+msgstr "Maak één bestelling met een ticket per regel"
 
 #: pretix/control/forms/orderimport.py:18
-#, fuzzy
-#| msgid "Mark order as paid"
 msgid "Create orders as fully paid"
-msgstr "Markeer bestelling als betaald"
+msgstr "Maak bestellingen als volledig betaald aan"
 
 #: pretix/control/forms/orderimport.py:19
 msgid "Create orders as pending and still require payment"
-msgstr ""
+msgstr "Maak bestellingen als onbetaalde bestellingen aan"
 
 #: pretix/control/forms/orderimport.py:23
-#, fuzzy
-#| msgid "Show all test mode orders"
 msgid "Create orders as test mode orders"
-msgstr "Toon alle testbestellingen"
+msgstr "Maak bestellingen als bestellingen uit de testmodus aan"
 
 #: pretix/control/forms/orderimport.py:36
 #, python-brace-format
 msgid "CSV column: \"{name}\""
-msgstr ""
+msgstr "CSV-kolom: \"{name}\""
 
 #: pretix/control/forms/orders.py:28
 msgid "Overbook quota"
@@ -8209,36 +8195,20 @@ msgid "You need to specify an amount for a partial refund."
 msgstr "Je moet een bedrag opgeven voor een gedeeltelijke terugbetaling."
 
 #: pretix/control/forms/orders.py:531
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Automatically refund"
 msgid "Automatically refund money if possible"
-msgstr "Automatisch terugbetalen"
+msgstr "Geld automatisch terugbetalen indien mogelijk"
 
 #: pretix/control/forms/orders.py:550
-#, fuzzy
-#| msgid "Send vouchers via email"
 msgid "Send information via email"
-msgstr "Stuur vouchers via e-mail"
+msgstr "Stuur informatie via e-mail"
 
 #: pretix/control/forms/orders.py:578
-#, fuzzy, python-brace-format
-#| msgid "Can create events"
+#, python-brace-format
 msgid "Canceled: {event}"
-msgstr "Kan evenementen aanmaken"
+msgstr "Geannuleerd: {event}"
 
 #: pretix/control/forms/orders.py:588
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "a ticket for {event} that has been ordered for you is now paid.\n"
-#| "\n"
-#| "You can view the details and status of your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8254,15 +8224,19 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Hallo {attendee_name},\n"
+"Hallo,\n"
 "\n"
-"Een kaartje dat voor je is besteld voor {event} is nu betaald.\n"
+"Met deze e-mail moeten wij je helaas mededelen dat {event} is geannuleerd.\n"
 "\n"
-"Je kan de details en status van je kaartje hier bekijken:\n"
+"We zullen je {refund_amount} terugbetalen via je oorspronkelijke "
+"betalingsmethode.\n"
+"\n"
+"Je kan de status van je bestelling hier bekijken:\n"
+"\n"
 "{url}\n"
 "\n"
-"Met vriendelijke groeten,\n"
-"De organisatie van {event}"
+"Met vriendelijke groet,\n"
+"Organisatie van {event}"
 
 #: pretix/control/forms/organizer.py:28
 msgid "This slug is already in use. Please choose a different one."
@@ -8339,11 +8313,6 @@ msgid "This will be displayed on the organizer homepage."
 msgstr "Dit zal worden getoond op de homepagina van de organisator."
 
 #: pretix/control/forms/organizer.py:277
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your "
-#| "organization name in the page header. We will show your logo with a "
-#| "maximal height of 120 pixels."
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. By default, we show your logo with a size of up to "
@@ -8352,8 +8321,10 @@ msgid ""
 "smaller screens."
 msgstr ""
 "Als je een logo opgeeft zullen we standaard niet je organisatienaam in de "
-"paginaheader tonen. We zullen je logo met een maximale hoogte van 120 pixels "
-"tonen."
+"paginaheader tonen. We tonen je logo standaard met een maximumgrootte van "
+"1140x120 pixels. Je kan deze grootte aanpassen met de instelling hieronder. "
+"We raden aan om geen kleine details op de afbeelding te gebruiken, omdat de "
+"afbeelding op kleinere schermen zal worden geschaald."
 
 #: pretix/control/forms/organizer.py:288
 msgid "Default overview style"
@@ -8409,16 +8380,16 @@ msgstr ""
 "meeste apparaten te ondersteunen."
 
 #: pretix/control/forms/organizer.py:327
-#, fuzzy
-#| msgid "Your gift card code"
 msgid "Length of gift card codes"
-msgstr "Je cadeauboncode"
+msgstr "Lengte van cadeauboncodes"
 
 #: pretix/control/forms/organizer.py:328
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
 msgstr ""
+"Het systeem genereert standaard cadeauboncodes van {} tekens. Als je een "
+"andere lengte in wilt stellen kan dit hier."
 
 #: pretix/control/forms/organizer.py:343
 msgctxt "webhooks"
@@ -8675,10 +8646,8 @@ msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "Prijs van plaats #{posid} veranderd van {old_price} naar {new_price}."
 
 #: pretix/control/logdisplay.py:69
-#, fuzzy
-#| msgid "The quota has been added."
 msgid "A fee has been added"
-msgstr "Het quotum is toegevoegd."
+msgstr "Een toeslag is toegevoegd"
 
 #: pretix/control/logdisplay.py:71
 #, python-brace-format
@@ -8764,10 +8733,8 @@ msgstr ""
 "\"{list}\"."
 
 #: pretix/control/logdisplay.py:183
-#, fuzzy
-#| msgid "The product has been created."
 msgid "This object has been created by cloning."
-msgstr "Het product is aangemaakt."
+msgstr "Dit object is aangemaakt via kopiëren."
 
 #: pretix/control/logdisplay.py:184
 msgid "The event's internal comment has been updated."
@@ -8909,15 +8876,11 @@ msgstr ""
 "bestelling is geannuleerd."
 
 #: pretix/control/logdisplay.py:218
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "canceled."
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
 msgstr ""
-"Een email is verstuurd om de gebruiker ervan op de hoogte te stellen dat de "
-"bestelling is geannuleerd."
+"Een email is verstuurd om de gebruiker ervan op de hoogte te stellen dat het "
+"evenement is geannuleerd."
 
 #: pretix/control/logdisplay.py:220
 msgid ""
@@ -9395,16 +9358,12 @@ msgstr ""
 "software-update."
 
 #: pretix/control/logdisplay.py:332
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The gift card has been created."
-msgstr "Het team is aangepast."
+msgstr "De cadeaubon is aangemaakt."
 
 #: pretix/control/logdisplay.py:333
-#, fuzzy
-#| msgid "The manual transaction has been saved."
 msgid "A manual transaction has been performed."
-msgstr "De handmatige transactie is opgeslagen."
+msgstr "Een handmatige transactie is uitgevoerd."
 
 #: pretix/control/logdisplay.py:357
 msgid "The settings of a payment provider have been changed."
