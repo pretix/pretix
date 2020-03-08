@@ -5,7 +5,7 @@
 {% load statici18n %}
 {% load thumb %}
 <!DOCTYPE html>
-<html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
+<html{% if rtl %} dir="rtl" class="rtl"{% endif %} lang="{{ html_locale }}">
 <head>
     <title>{% block thetitle %}{% endblock %}</title>
     {% if css_file %}

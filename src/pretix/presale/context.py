@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.utils import translation
 from django.utils.translation import get_language_info
 from django_scopes import get_scope
 from i18nfield.strings import LazyI18nString
@@ -92,6 +93,7 @@ def contextprocessor(request):
     ctx['js_date_format'] = get_javascript_format_without_seconds('DATE_INPUT_FORMATS')
     ctx['js_time_format'] = get_javascript_format_without_seconds('TIME_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
+    ctx['html_locale'] = translation.get_language_info(translation.get_language()).get('public_code', translation.get_language())
     ctx['settings'] = pretix_settings
     ctx['django_settings'] = settings
 

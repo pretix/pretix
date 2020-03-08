@@ -440,13 +440,15 @@ EXTRA_LANG_INFO = {
         'bidi': False,
         'code': 'de-informal',
         'name': 'German (informal)',
-        'name_local': 'Deutsch'
+        'name_local': 'Deutsch',
+        'public_code': 'de',
     },
     'nl-informal': {
         'bidi': False,
         'code': 'nl-informal',
         'name': 'Dutch (informal)',
-        'name_local': 'Nederlands'
+        'name_local': 'Nederlands',
+        'public_code': 'nl',
     },
     'fr': {
         'bidi': False,
