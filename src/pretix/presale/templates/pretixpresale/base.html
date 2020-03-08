@@ -8,9 +8,6 @@
 <html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 <head>
     <title>{% block thetitle %}{% endblock %}</title>
-    {% compress css %}
-        <link rel="stylesheet" type="text/x-scss" href="{% static "lightbox/css/lightbox.scss" %}" />
-    {% endcompress %}
     {% if css_file %}
         <link rel="stylesheet" type="text/css" href="{{ css_file }}" />
     {% else %}
