@@ -204,5 +204,6 @@ def get_font_stylesheet(font_name):
         if "truetype" in formats:
             srcs.append("url(static('{}')) format('truetype')".format(formats['truetype']))
         stylesheet.append("src: {};".format(", ".join(srcs)))
+        stylesheet.append("font-display: swap;")
         stylesheet.append("}")
     return "\n".join(stylesheet)
