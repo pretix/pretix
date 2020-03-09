@@ -206,6 +206,22 @@ class CartTest(CartTestMixin, TestCase):
             assert not objs[0].attendee_name
             assert not objs[0].answers.exists()
 
+    def test_do_not_extend_on_empty_add(self):
+        with scopes_disabled():
+            cp = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.quota_tickets.size = 1
+        self.quota_tickets.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=False)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].expires, cp.expires)
+
     def test_widget_data_session(self):
         self.event.settings.attendee_names_asked = True
         self.event.settings.attendee_emails_asked = True

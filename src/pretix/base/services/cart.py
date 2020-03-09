@@ -1005,8 +1005,9 @@ class CartManager:
         with lockfn() as now_dt:
             with transaction.atomic():
                 self.now_dt = now_dt
-                self._extend_expiry_of_valid_existing_positions()
                 err = self._perform_operations() or err
+                if not err:
+                    self._extend_expiry_of_valid_existing_positions()
             if err:
                 raise CartError(err)
 
