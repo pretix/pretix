@@ -581,6 +581,7 @@ class EventCancelForm(forms.Form):
         self.fields['send_subject'] = I18nFormField(
             label=_("Subject"),
             required=True,
+            widget_kwargs={'attrs': {'data-display-dependency': '#id_send'}},
             initial=_('Canceled: {event}'),
             widget=I18nTextInput,
             locales=self.event.settings.get('locales'),
@@ -589,6 +590,7 @@ class EventCancelForm(forms.Form):
             label=_('Message'),
             widget=I18nTextarea,
             required=True,
+            widget_kwargs={'attrs': {'data-display-dependency': '#id_send'}},
             locales=self.event.settings.get('locales'),
             initial=LazyI18nString.from_gettext(gettext_noop(
                 'Hello,\n\n'
@@ -607,6 +609,7 @@ class EventCancelForm(forms.Form):
             required=True,
             initial=_('Canceled: {event}'),
             widget=I18nTextInput,
+            widget_kwargs={'attrs': {'data-display-dependency': '#id_send_waitinglist'}},
             locales=self.event.settings.get('locales'),
         )
         self.fields['send_waitinglist_message'] = I18nFormField(
@@ -614,6 +617,7 @@ class EventCancelForm(forms.Form):
             widget=I18nTextarea,
             required=True,
             locales=self.event.settings.get('locales'),
+            widget_kwargs={'attrs': {'data-display-dependency': '#id_send_waitinglist'}},
             initial=LazyI18nString.from_gettext(gettext_noop(
                 'Hello,\n\n'
                 'with this email, we regret to inform you that {event} has been canceled.\n\n'
