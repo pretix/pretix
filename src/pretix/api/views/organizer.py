@@ -58,7 +58,7 @@ class SeatingPlanViewSet(viewsets.ModelViewSet):
     write_permission = 'can_change_organizer_settings'
 
     def get_queryset(self):
-        return self.request.organizer.seating_plans.all()
+        return self.request.organizer.seating_plans.order_by('name')
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -195,7 +195,7 @@ class TeamViewSet(viewsets.ModelViewSet):
     write_permission = 'can_change_teams'
 
     def get_queryset(self):
-        return self.request.organizer.teams.all()
+        return self.request.organizer.teams.order_by('pk')
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -268,7 +268,7 @@ class TeamInviteViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyMo
         return get_object_or_404(self.request.organizer.teams, pk=self.kwargs.get('team'))
 
     def get_queryset(self):
-        return self.team.invites.all()
+        return self.team.invites.order_by('email')
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -305,7 +305,7 @@ class TeamAPITokenViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
         return get_object_or_404(self.request.organizer.teams, pk=self.kwargs.get('team'))
 
     def get_queryset(self):
-        return self.team.tokens.all()
+        return self.team.tokens.order_by('name')
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()

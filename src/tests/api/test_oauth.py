@@ -1,8 +1,8 @@
 import base64
 import json
+from urllib.parse import quote
 
 import pytest
-from django.utils.http import urlquote
 
 from pretix.api.models import (
     OAuthAccessToken, OAuthApplication, OAuthGrant, OAuthRefreshToken,
@@ -41,7 +41,7 @@ def application():
 @pytest.mark.django_db
 def test_authorize_require_login(client, application: OAuthApplication):
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s' % (
-        application.client_id, urlquote('https://example.org')
+        application.client_id, quote('https://example.org')
     ))
     assert resp.status_code == 302
     assert resp['Location'].startswith('/control/login')
@@ -51,7 +51,7 @@ def test_authorize_require_login(client, application: OAuthApplication):
 def test_authorize_invalid_redirect_uri(client, admin_user, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s' % (
-        application.client_id, urlquote('https://example.org')
+        application.client_id, quote('https://example.org')
     ))
     assert resp.status_code == 400
 
@@ -60,7 +60,7 @@ def test_authorize_invalid_redirect_uri(client, admin_user, application: OAuthAp
 def test_authorize_missing_response_type(client, admin_user, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 302
     assert resp['Location'] == 'https://pretalx.com?error=invalid_request&error_description=Missing+response_type+parameter.'
@@ -70,11 +70,11 @@ def test_authorize_missing_response_type(client, admin_user, application: OAuthA
 def test_authorize_require_organizer(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ), data={
         'redirect_uri': application.redirect_uris,
         'scope': 'read write',
@@ -89,7 +89,7 @@ def test_authorize_require_organizer(client, admin_user, organizer, application:
 def test_authorize_denied(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -107,7 +107,7 @@ def test_authorize_denied(client, admin_user, organizer, application: OAuthAppli
 def test_authorize_disallow_response_token(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=token' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 302
     assert resp['Location'] == 'https://pretalx.com?error=unauthorized_client'
@@ -117,7 +117,7 @@ def test_authorize_disallow_response_token(client, admin_user, organizer, applic
 def test_authorize_read_scope(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -141,7 +141,7 @@ def test_authorize_read_scope(client, admin_user, organizer, application: OAuthA
 def test_authorize_state(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code&state=asdadf' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -161,7 +161,7 @@ def test_authorize_state(client, admin_user, organizer, application: OAuthApplic
 def test_authorize_default_scope(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -186,7 +186,7 @@ def test_authorize_default_scope(client, admin_user, organizer, application: OAu
 def test_token_from_code_without_auth(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -213,7 +213,7 @@ def test_token_from_code_without_auth(client, admin_user, organizer, application
 def test_token_from_code(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -252,7 +252,7 @@ def test_use_token_for_access_one_organizer(client, admin_user, organizer, appli
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -294,7 +294,7 @@ def test_use_token_for_access_two_organizers(client, admin_user, organizer, appl
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -335,7 +335,7 @@ def test_use_token_for_access_two_organizers(client, admin_user, organizer, appl
 def test_token_refresh(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -377,7 +377,7 @@ def test_token_refresh(client, admin_user, organizer, application: OAuthApplicat
 def test_allow_write(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -409,7 +409,7 @@ def test_allow_write(client, admin_user, organizer, application: OAuthApplicatio
 def test_allow_read_only(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -441,7 +441,7 @@ def test_allow_read_only(client, admin_user, organizer, application: OAuthApplic
 def test_token_revoke_refresh_token(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -485,7 +485,7 @@ def test_token_revoke_refresh_token(client, admin_user, organizer, application: 
 def test_token_revoke_access_token(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={
@@ -533,7 +533,7 @@ def test_token_revoke_access_token(client, admin_user, organizer, application: O
 def test_user_revoke(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
-        application.client_id, urlquote(application.redirect_uris)
+        application.client_id, quote(application.redirect_uris)
     ))
     assert resp.status_code == 200
     resp = client.post('/api/v1/oauth/authorize', data={

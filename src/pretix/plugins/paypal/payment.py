@@ -10,7 +10,6 @@ from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils.http import urlquote
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 from i18nfield.strings import LazyI18nString
 from paypalrestsdk.exceptions import BadRequest
@@ -145,7 +144,7 @@ class Paypal(BasePaymentProvider):
                 client_secret=self.settings.connect_secret_key,
                 openid_client_id=self.settings.connect_client_id,
                 openid_client_secret=self.settings.connect_secret_key,
-                openid_redirect_uri=urlquote(build_global_uri('plugins:paypal:oauth.return')))
+                openid_redirect_uri=urllib.parse.quote(build_global_uri('plugins:paypal:oauth.return')))
         else:
             paypalrestsdk.set_config(
                 mode="sandbox" if "sandbox" in self.settings.get('endpoint') else 'live',

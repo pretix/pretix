@@ -15,7 +15,6 @@ from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.crypto import get_random_string
-from django.utils.http import urlquote
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
@@ -61,7 +60,7 @@ class StripeSettingsHolder(BasePaymentProvider):
         ).format(
             self.settings.connect_client_id,
             request.session['payment_stripe_oauth_token'],
-            urlquote(build_global_uri('plugins:stripe:oauth.return')),
+            urllib.parse.quote(build_global_uri('plugins:stripe:oauth.return')),
         )
 
     def settings_content_render(self, request):
