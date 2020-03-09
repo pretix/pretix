@@ -11,7 +11,7 @@ from django.core.files import File
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Model
 from django.utils.translation import (
-    pgettext, pgettext_lazy, gettext_lazy as _, gettext_noop,
+    gettext_lazy as _, gettext_noop, pgettext, pgettext_lazy,
 )
 from django_countries import countries
 from hierarkey.models import GlobalSettingsBase, Hierarkey

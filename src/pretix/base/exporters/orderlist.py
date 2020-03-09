@@ -8,7 +8,7 @@ from django.db.models import (
 )
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.translation import pgettext, gettext as _, gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, pgettext
 
 from pretix.base.models import (
     InvoiceAddress, InvoiceLine, Order, OrderPosition, Question,
