@@ -135,7 +135,7 @@ setup(
         'psycopg2-binary',
         'vobject==0.9.*',
         'pycountry',
-        'django-countries',
+        'django-countries>=6.0',
         'pyuca',
         'defusedcsv>=1.1.0',
         'vat_moss_forked==2020.3.20.0.11.0',
