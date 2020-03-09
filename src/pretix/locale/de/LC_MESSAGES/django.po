@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-09 10:11+0000\n"
-"PO-Revision-Date: 2020-03-03 16:11+0000\n"
+"PO-Revision-Date: 2020-03-09 10:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -7988,10 +7988,8 @@ msgid "Bundled products"
 msgstr "Enthaltene Produkte"
 
 #: pretix/control/forms/item.py:704
-#, fuzzy
-#| msgid "You added the same add-on category twice"
 msgid "You added the same bundled product twice"
-msgstr "Sie haben dieselbe Kategorie zweimal hinzugefügt."
+msgstr "Sie haben das selbe enthaltene Produkt zweimal hinzugefügt."
 
 #: pretix/control/forms/item.py:710
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
@@ -8253,10 +8251,8 @@ msgid "Send information via email"
 msgstr "Informationen per E-Mail verschicken"
 
 #: pretix/control/forms/orders.py:556
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Send information to waiting list"
-msgstr "Informationen per E-Mail verschicken"
+msgstr "Informationen an die Warteliste verschicken"
 
 #: pretix/control/forms/orders.py:584 pretix/control/forms/orders.py:608
 #, python-brace-format
@@ -8295,21 +8291,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/control/forms/orders.py:618
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "with this email, we regret to inform you that {event} has been canceled.\n"
-#| "\n"
-#| "We will refund you {refund_amount} to your original payment method.\n"
-#| "\n"
-#| "You can view the current state of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8326,10 +8308,7 @@ msgstr ""
 "mit dieser E-Mail müssen wir Sie leider darüber informieren, dass {event} "
 "abgesagt wurde.\n"
 "\n"
-"Wir erstatten Ihnen {refund_amount} auf Ihre ursprüngliche Zahlungsmethode "
-"zurück.\n"
-"\n"
-"Sie können die Details und den Status Ihrer Tickets hier einsehen:\n"
+"Sie werden daher kein Ticket von der Warteliste erhalten.\n"
 "{url}\n"
 "\n"
 "Freundliche Grüße,\n"
@@ -8850,10 +8829,8 @@ msgid "The event's internal comment has been updated."
 msgstr "Der interne Kommentar wurde geändert."
 
 #: pretix/control/logdisplay.py:185
-#, fuzzy
-#| msgid "The refund has been canceled."
 msgid "The event has been canceled."
-msgstr "Die Erstattung wurde abgebrochen."
+msgstr "Die Veranstaltung wurde abgesagt."
 
 #: pretix/control/logdisplay.py:186
 msgid "The order details have been changed."
@@ -9415,12 +9392,9 @@ msgid "The event date has been deleted."
 msgstr "Der Termin wurde gelöscht."
 
 #: pretix/control/logdisplay.py:322
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been changed."
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr "Der Termin wurde geändert."
+msgstr "Der Termin wurde abgesagt."
 
 #: pretix/control/logdisplay.py:323
 msgctxt "subevent"
@@ -13328,12 +13302,17 @@ msgid ""
 "new tickets due to the products being disabled. You can choose to inform "
 "people on the waiting list by using this option."
 msgstr ""
+"Die Warteliste wird nicht automatisch gelöscht, aber erhält auch keine "
+"Tickets mehr, da die Produkte deaktiviert werden. Sie können mit dieser "
+"Option die Nutzer auf der Warteliste informieren, wenn Sie möchten."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:56
 msgid ""
 "You should not execute this function multiple times for the same event, or "
 "everyone on the waiting list will get multiple emails."
 msgstr ""
+"Sie sollten diese Funktion nicht mehrfach für die gleiche Veranstaltung "
+"auswählen, sonst erhält jeder auf der Warteliste mehrere E-Mails."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:68
 msgid "Cancel all orders"
