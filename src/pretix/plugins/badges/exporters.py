@@ -38,7 +38,7 @@ def _renderer(event, layout):
 
 OPTIONS = OrderedDict([
     ('one', {
-        'name': ugettext_lazy('One badge per page'),
+        'name': gettext_lazy('One badge per page'),
         'cols': 1,
         'rows': 1,
         'margins': [0, 0, 0, 0],
@@ -46,7 +46,7 @@ OPTIONS = OrderedDict([
         'pagesize': None,
     }),
     ('a4_a6l', {
-        'name': ugettext_lazy('4 landscape A6 pages on one A4 page'),
+        'name': gettext_lazy('4 landscape A6 pages on one A4 page'),
         'cols': 2,
         'rows': 2,
         'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
@@ -54,7 +54,7 @@ OPTIONS = OrderedDict([
         'pagesize': pagesizes.landscape(pagesizes.A4),
     }),
     ('a4_a6p', {
-        'name': ugettext_lazy('4 portrait A6 pages on one A4 page'),
+        'name': gettext_lazy('4 portrait A6 pages on one A4 page'),
         'cols': 2,
         'rows': 2,
         'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
@@ -62,7 +62,7 @@ OPTIONS = OrderedDict([
         'pagesize': pagesizes.portrait(pagesizes.A4),
     }),
     ('a4_a7l', {
-        'name': ugettext_lazy('8 landscape A7 pages on one A4 page'),
+        'name': gettext_lazy('8 landscape A7 pages on one A4 page'),
         'cols': 2,
         'rows': 4,
         'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],
@@ -70,7 +70,7 @@ OPTIONS = OrderedDict([
         'pagesize': pagesizes.portrait(pagesizes.A4),
     }),
     ('a4_a7p', {
-        'name': ugettext_lazy('8 portrait A7 pages on one A4 page'),
+        'name': gettext_lazy('8 portrait A7 pages on one A4 page'),
         'cols': 4,
         'rows': 2,
         'margins': [0 * mm, 0 * mm, 0 * mm, 0 * mm],

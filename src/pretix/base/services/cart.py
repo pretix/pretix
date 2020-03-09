@@ -213,7 +213,7 @@ class CartManager:
                 has_variations=Count('variations'),
             ).filter(
                 id__in=[i for i in item_ids if i and i not in self._items_cache]
-            )
+            ).order_by()
         })
         self._variations_cache.update({
             v.pk: v
@@ -221,7 +221,7 @@ class CartManager:
                 'quotas'
             ).select_related('item', 'item__event').filter(
                 id__in=[i for i in variation_ids if i and i not in self._variations_cache]
-            )
+            ).order_by()
         })
 
     def _check_max_cart_size(self):

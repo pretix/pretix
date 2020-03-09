@@ -1166,7 +1166,7 @@ class StripeEPS(StripeMethod):
                     'code': payment.order.code
                 },
                 owner={
-                    'name': request.session.get('payment_stripe_eps_account') or ugettext('unknown name')
+                    'name': request.session.get('payment_stripe_eps_account') or gettext('unknown name')
                 },
                 statement_descriptor=self.statement_descriptor(payment),
                 redirect={

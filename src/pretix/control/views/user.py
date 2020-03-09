@@ -15,7 +15,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views import View
@@ -102,7 +102,7 @@ class ReauthView(TemplateView):
             request.session['pretix_auth_login_time'] = t
             request.session['pretix_auth_last_used'] = t
             next_url = get_auth_backends()[request.user.auth_backend].get_next_url(request)
-            if next_url and is_safe_url(next_url, allowed_hosts=None):
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
                 return redirect(next_url)
             return redirect(reverse('control:index'))
         else:
@@ -114,7 +114,7 @@ class ReauthView(TemplateView):
         u = backend.request_authenticate(request)
         if u and u == request.user:
             next_url = backend.get_next_url(request)
-            if next_url and is_safe_url(next_url, allowed_hosts=None):
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
                 return redirect(next_url)
             return redirect(reverse('control:index'))
         return super().get(request, *args, **kwargs)
@@ -700,7 +700,7 @@ class StartStaffSession(StaffMemberRequiredMixin, RecentAuthenticationRequiredMi
                 session_key=request.session.session_key
             )
 
-        if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
+        if "next" in request.GET and url_has_allowed_host_and_scheme(request.GET.get("next"), allowed_hosts=None):
             return redirect(request.GET.get("next"))
         else:
             return redirect(reverse("control:index"))

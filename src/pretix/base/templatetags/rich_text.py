@@ -7,7 +7,7 @@ from django import template
 from django.conf import settings
 from django.core import signing
 from django.urls import reverse
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 
 register = template.Library()
@@ -66,7 +66,7 @@ ALLOWED_PROTOCOLS = ['http', 'https', 'mailto', 'tel']
 
 def safelink_callback(attrs, new=False):
     url = attrs.get((None, 'href'), '/')
-    if not is_safe_url(url, allowed_hosts=None) and not url.startswith('mailto:') and not url.startswith('tel:'):
+    if not url_has_allowed_host_and_scheme(url, allowed_hosts=None) and not url.startswith('mailto:') and not url.startswith('tel:'):
         signer = signing.Signer(salt='safe-redirect')
         attrs[None, 'href'] = reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
         attrs[None, 'target'] = '_blank'

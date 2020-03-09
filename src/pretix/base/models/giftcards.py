@@ -83,6 +83,7 @@ class GiftCard(LoggedModel):
 
     class Meta:
         unique_together = (('secret', 'issuer'),)
+        ordering = ("issuance",)
 
 
 class GiftCardTransaction(models.Model):
