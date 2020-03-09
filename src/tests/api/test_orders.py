@@ -1286,7 +1286,7 @@ def test_order_extend_pending(token_client, organizer, event, order):
     assert resp.status_code == 200
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
-    assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 22:59:59"
+    assert order.expires.astimezone(event.timezone).strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
 
 
 @pytest.mark.django_db
@@ -1326,7 +1326,7 @@ def test_order_extend_expired_quota_ignore(token_client, organizer, event, order
     assert resp.status_code == 200
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
-    assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 22:59:59"
+    assert order.expires.astimezone(event.timezone).strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
 
 
 @pytest.mark.django_db
@@ -1348,7 +1348,7 @@ def test_order_extend_expired_quota_waiting_list(token_client, organizer, event,
     assert resp.status_code == 200
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
-    assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 22:59:59"
+    assert order.expires.astimezone(event.timezone).strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
 
 
 @pytest.mark.django_db
@@ -1368,7 +1368,7 @@ def test_order_extend_expired_quota_left(token_client, organizer, event, order, 
     assert resp.status_code == 200
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
-    assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 22:59:59"
+    assert order.expires.astimezone(event.timezone).strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
 
 
 @pytest.mark.django_db
