@@ -222,6 +222,8 @@ urlpatterns = [
             name='event.order.checkvatid'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/extend$', orders.OrderExtend.as_view(),
             name='event.order.extend'),
+        url(r'^orders/(?P<code>[0-9A-Z]+)/reactivate$', orders.OrderReactivate.as_view(),
+            name='event.order.reactivate'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/contact$', orders.OrderContactChange.as_view(),
             name='event.order.contact'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/locale', orders.OrderLocaleChange.as_view(),

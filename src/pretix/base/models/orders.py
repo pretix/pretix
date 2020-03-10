@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import string
+from collections import Counter
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import Any, Dict, List, Union
@@ -694,16 +695,19 @@ class Order(LockModel, LoggedModel):
 
         return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
 
-    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False) -> Union[bool, str]:
+    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False,
+                            check_voucher_usage=False) -> Union[bool, str]:
         error_messages = {
             'unavailable': _('The ordered product "{item}" is no longer available.'),
             'seat_unavailable': _('The seat "{seat}" is no longer available.'),
             'voucher_budget': _('The voucher "{voucher}" no longer has sufficient budget.'),
+            'voucher_usages': _('The voucher "{voucher}" has been used in the meantime.'),
         }
         now_dt = now_dt or now()
         positions = self.positions.all().select_related('item', 'variation', 'seat', 'voucher')
         quota_cache = {}
         v_budget = {}
+        v_usage = Counter()
         try:
             for i, op in enumerate(positions):
                 if op.seat:
@@ -721,6 +725,13 @@ class Order(LockModel, LoggedModel):
                             voucher=op.voucher.code
                         ))
                     v_budget[op.voucher] -= disc
+
+                if op.voucher and check_voucher_usage:
+                    v_usage[op.voucher.pk] += 1
+                    if v_usage[op.voucher.pk] + op.voucher.redeemed > op.voucher.max_usages:
+                        raise Quota.QuotaExceededException(error_messages['voucher_usages'].format(
+                            voucher=op.voucher.code
+                        ))
 
                 quotas = list(op.quotas)
                 if len(quotas) == 0:

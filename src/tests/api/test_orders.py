@@ -1098,6 +1098,29 @@ def test_order_mark_paid_locked(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_order_reactivate(token_client, organizer, event, order, quota):
+    order.status = Order.STATUS_CANCELED
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/reactivate/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 200
+    assert resp.data['status'] == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_order_reactivate_invalid(token_client, organizer, event, order):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/reactivate/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
 def test_order_mark_canceled_pending(token_client, organizer, event, order):
     djmail.outbox = []
     resp = token_client.post(

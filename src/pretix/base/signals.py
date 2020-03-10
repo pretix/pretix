@@ -341,6 +341,16 @@ as the first argument.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+order_reactivated = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out every time a canceled order is reactivated. The order object is given
+as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 order_expired = EventPluginSignal(
     providing_args=["order"]
 )

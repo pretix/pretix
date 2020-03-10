@@ -44,7 +44,7 @@ from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _order_placed_email,
     _order_placed_email_attendee, approve_order, cancel_order, deny_order,
-    extend_order, mark_order_expired, mark_order_refunded,
+    extend_order, mark_order_expired, mark_order_refunded, reactivate_order,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate
@@ -253,6 +253,29 @@ class OrderViewSet(viewsets.ModelViewSet):
                 oauth_application=request.auth.application if isinstance(request.auth, OAuthAccessToken) else None,
                 send_mail=send_mail,
                 cancellation_fee=cancellation_fee
+            )
+        except OrderError as e:
+            return Response(
+                {'detail': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return self.retrieve(request, [], **kwargs)
+
+    @action(detail=True, methods=['POST'])
+    def reactivate(self, request, **kwargs):
+
+        order = self.get_object()
+        if order.status != Order.STATUS_CANCELED:
+            return Response(
+                {'detail': 'The order is not allowed to be reactivated.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            reactivate_order(
+                order,
+                user=request.user if request.user.is_authenticated else None,
+                auth=request.auth if isinstance(request.auth, (Device, TeamAPIToken, OAuthAccessToken)) else None,
             )
         except OrderError as e:
             return Response(

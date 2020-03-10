@@ -151,6 +151,10 @@ last_modified                         datetime                   Last modificati
 
    The ``order.fees.canceled`` attribute has been added.
 
+.. versionchanged:: 3.8
+
+   The ``reactivate`` operation has been added.
+
 
 .. _order-position-resource:
 
@@ -1053,6 +1057,42 @@ Order state operations
    :param code: The ``code`` field of the order to modify
    :statuscode 200: no error
    :statuscode 400: The order cannot be marked as canceled since the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/reactivate/
+
+   Reactivates a canceled order. This will set the order to pending or paid state. Only possible if all products are
+   still available.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/reactivate/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "n",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be reactivated
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order does not exist.

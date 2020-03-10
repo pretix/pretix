@@ -23,7 +23,8 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, approve_order, cancel_order,
-    deny_order, expire_orders, send_download_reminders, send_expiry_warnings,
+    deny_order, expire_orders, reactivate_order, send_download_reminders,
+    send_expiry_warnings,
 )
 from pretix.base.signals import register_sales_channels
 from pretix.plugins.banktransfer.payment import BankTransfer
@@ -1457,7 +1458,7 @@ class OrderChangeManagerTests(TestCase):
         self.ocm.commit()
         ops = list(self.order.positions.all())
         for op in ops:
-            assert op.price == Decimal('23.01')   # sic. we can't really avoid it.
+            assert op.price == Decimal('23.01')  # sic. we can't really avoid it.
             assert op.tax_value == Decimal('1.51')
             assert op.tax_rate == Decimal('7.00')
 
@@ -2169,7 +2170,8 @@ class OrderChangeManagerTests(TestCase):
     def test_clear_out_order(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
-        self.order.payments.create(amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED, provider='manual')
+        self.order.payments.create(amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                                   provider='manual')
         cancel_order(self.order, cancellation_fee=Decimal('5.00'))
         self.order.refresh_from_db()
         assert self.order.total == Decimal('5.00')
@@ -2187,7 +2189,8 @@ class OrderChangeManagerTests(TestCase):
         self.order.total = Decimal('51.1')
         self.order.save()
 
-        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee, provider="banktransfer")
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee,
+                                   provider="banktransfer")
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('10.00'))
         prov.settings.set('_fee_reverse_calc', False)
@@ -2205,7 +2208,8 @@ class OrderChangeManagerTests(TestCase):
         self.order.total = Decimal('50.60')
         self.order.save()
 
-        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee, provider="banktransfer")
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee,
+                                   provider="banktransfer")
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('10.00'))
         prov.settings.set('_fee_reverse_calc', False)
@@ -2224,7 +2228,8 @@ class OrderChangeManagerTests(TestCase):
         self.order.total = Decimal('50.60')
         self.order.save()
 
-        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee, provider="banktransfer")
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=Decimal('48.5'), fee=fee,
+                                   provider="banktransfer")
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('10.00'))
         prov.settings.set('_fee_reverse_calc', False)
@@ -2463,3 +2468,118 @@ def test_issue_when_paid_and_changed(event):
     op2 = order.positions.last()
     gc2 = op2.issued_gift_cards.get()
     assert gc2.value == op2.price
+
+
+class OrderReactivateTest(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        with scope(organizer=self.o):
+            self.event = Event.objects.create(organizer=self.o, name='Dummy', slug='dummy', date_from=now(),
+                                              plugins='tests.testdummy')
+            self.order = Order.objects.create(
+                code='FOO', event=self.event, email='dummy@dummy.test',
+                status=Order.STATUS_CANCELED, locale='en',
+                datetime=now(), expires=now() + timedelta(days=1),
+                total=Decimal('46.00'),
+            )
+            self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                              default_price=Decimal('23.00'), admission=True)
+            self.op1 = OrderPosition.objects.create(
+                order=self.order, item=self.ticket, variation=None,
+                price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+            )
+            self.op2 = OrderPosition.objects.create(
+                order=self.order, item=self.ticket, variation=None,
+                price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter"}, positionid=2
+            )
+            self.stalls = Item.objects.create(event=self.event, name='Stalls',
+                                              default_price=Decimal('23.00'), admission=True)
+            self.plan = SeatingPlan.objects.create(
+                name="Plan", organizer=self.o, layout="{}"
+            )
+            self.event.seat_category_mappings.create(
+                layout_category='Stalls', product=self.stalls
+            )
+            self.quota = self.event.quotas.create(name='Test', size=None)
+            self.quota.items.add(self.stalls)
+            self.quota.items.add(self.ticket)
+            self.seat_a1 = self.event.seats.create(name="A1", product=self.stalls, seat_guid="A1")
+            generate_invoice(self.order)
+            djmail.outbox = []
+
+    @classscope(attr='o')
+    def test_paid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        with pytest.raises(OrderError):
+            reactivate_order(self.order)
+
+    @classscope(attr='o')
+    def test_reactivate_unpaid(self):
+        e = self.order.expires
+        reactivate_order(self.order)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+        assert self.order.all_logentries().last().action_type == 'pretix.event.order.reactivated'
+        assert self.order.invoices.count() == 3
+        assert self.order.expires > e > now()
+
+    @classscope(attr='o')
+    def test_reactivate_paid(self):
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
+        reactivate_order(self.order)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        assert self.order.all_logentries().last().action_type == 'pretix.event.order.reactivated'
+        assert self.order.invoices.count() == 3
+
+    @classscope(attr='o')
+    def test_reactivate_sold_out(self):
+        self.quota.size = 0
+        self.quota.save()
+        with pytest.raises(OrderError):
+            reactivate_order(self.order)
+
+    @classscope(attr='o')
+    def test_reactivate_seat_taken(self):
+        self.op1.item = self.stalls
+        self.op1.seat = self.seat_a1
+        self.op1.save()
+        self.seat_a1.blocked = True
+        self.seat_a1.save()
+        with pytest.raises(OrderError):
+            reactivate_order(self.order)
+
+    @classscope(attr='o')
+    def test_reactivate_voucher_ok(self):
+        self.op1.voucher = self.event.vouchers.create(code="FOO", item=self.ticket, redeemed=0, max_usages=1)
+        self.op1.save()
+        reactivate_order(self.order)
+        v = self.op1.voucher
+        v.refresh_from_db()
+        assert v.redeemed == 1
+
+    @classscope(attr='o')
+    def test_reactivate_voucher_budget(self):
+        self.op1.voucher = self.event.vouchers.create(code="FOO", item=self.ticket, budget=Decimal('0.00'))
+        self.op1.price_before_voucher = self.op1.price * 2
+        self.op1.save()
+        with pytest.raises(OrderError):
+            reactivate_order(self.order)
+
+    @classscope(attr='o')
+    def test_reactivate_voucher_used(self):
+        self.op1.voucher = self.event.vouchers.create(code="FOO", item=self.ticket, redeemed=1, max_usages=1)
+        self.op1.save()
+        with pytest.raises(OrderError):
+            reactivate_order(self.order)
+        v = self.op1.voucher
+        v.refresh_from_db()
+        assert v.redeemed == 1
+
+    @classscope(attr='o')
+    def test_reactivate_gift_card(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
+        reactivate_order(self.order)
+        assert gc.value == 23
