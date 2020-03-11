@@ -668,6 +668,17 @@ DEFAULTS = {
             label=_("Default language"),
         )
     },
+    'show_dates_on_frontpage': {
+        'default': 'True',
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show event times and dates on the ticket shop"),
+            help_text=_("If disabled, no date or time will be shown on the ticket shop's front page. This settings "
+                        "does however not affect the display in other locations."),
+        )
+    },
     'show_date_to': {
         'default': 'True',
         'type': bool,
