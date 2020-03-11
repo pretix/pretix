@@ -1032,6 +1032,32 @@ def test_patch_event_settings(token_client, organizer, event):
     )
     assert resp.status_code == 405
 
+    locales = event.settings.locales
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'locales': event.settings.locales + ['de', 'de-informal'],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert set(resp.data['locales']) == set(locales + ['de', 'de-informal'])
+    event.settings.flush()
+    assert set(event.settings.locales) == set(locales + ['de', 'de-informal'])
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'locales': locales,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert set(resp.data['locales']) == set(locales)
+    event.settings.flush()
+    assert set(event.settings.locales) == set(locales)
+
 
 @pytest.mark.django_db
 def test_patch_event_settings_validation(token_client, organizer, event):
