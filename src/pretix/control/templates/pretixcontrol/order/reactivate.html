@@ -1,0 +1,38 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% trans "Reactivate order" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Reactivate order" %}
+        <a class="btn btn-link btn-lg"
+           href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+    <p>
+        {% blocktrans trimmed %}
+            By reactivating the order, you reverse its cancellation and transform this back into a pending or paid order.
+            This is only possible as long as all products in the order are still available.
+            If the order is pending payment, the expiry date will be reset.
+        {% endblocktrans %}
+    </p>
+
+    <form method="post" class="form-horizontal" href="">
+        {% csrf_token %}
+        <div class="form-group submit-group">
+            <a class="btn btn-default btn-lg"
+               href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                {% trans "Cancel" %}
+            </a>
+            <button class="btn btn-danger btn-save btn-lg" type="submit">
+                {% trans "Reactivate" %}
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

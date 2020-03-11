@@ -191,6 +191,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.paid': _('The order has been marked as paid.'),
         'pretix.event.order.refunded': _('The order has been refunded.'),
         'pretix.event.order.canceled': _('The order has been canceled.'),
+        'pretix.event.order.reactivated': _('The order has been reactivated.'),
         'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
         'pretix.event.order.placed': _('The order has been created.'),
         'pretix.event.order.placed.require_approval': _('The order requires approval before it can continue to be processed.'),

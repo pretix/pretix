@@ -126,6 +126,10 @@ def register_default_webhook_events(sender, **kwargs):
             _('Order canceled'),
         ),
         ParametrizedOrderWebhookEvent(
+            'pretix.event.order.reactivated',
+            _('Order reactivated'),
+        ),
+        ParametrizedOrderWebhookEvent(
             'pretix.event.order.expired',
             _('Order expired'),
         ),

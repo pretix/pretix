@@ -225,6 +225,12 @@ def register_default_notification_types(sender, **kwargs):
         ),
         ParametrizedOrderNotificationType(
             sender,
+            'pretix.event.order.reactivated',
+            _('Order reactivated'),
+            _('Order {order.code} has been reactivated.')
+        ),
+        ParametrizedOrderNotificationType(
+            sender,
             'pretix.event.order.expired',
             _('Order expired'),
             _('Order {order.code} has been marked as expired.'),

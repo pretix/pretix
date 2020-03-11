@@ -94,6 +94,53 @@ def mark_order_paid(*args, **kwargs):
     raise NotImplementedError("This method is no longer supported since pretix 1.17.")
 
 
+def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None):
+    """
+    Reactivates a canceled order. If ``force`` is not set to ``True``, this will fail if there is not
+    enough quota.
+    """
+    if order.status != Order.STATUS_CANCELED:
+        raise OrderError('The order was not canceled.')
+
+    with order.event.lock() as now_dt:
+        is_available = force or order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True)
+        if is_available is True:
+            if order.payment_refund_sum >= order.total:
+                order.status = Order.STATUS_PAID
+            else:
+                order.status = Order.STATUS_PENDING
+            order.set_expires(now(),
+                              order.event.subevents.filter(id__in=[p.subevent_id for p in order.positions.all()]))
+            with transaction.atomic():
+                order.save(update_fields=['expires', 'status'])
+                order.log_action(
+                    'pretix.event.order.reactivated',
+                    user=user,
+                    auth=auth,
+                    data={
+                        'expires': order.expires,
+                    }
+                )
+                for position in order.positions.all():
+                    if position.voucher:
+                        Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') + 1))
+
+                    for gc in position.issued_gift_cards.all():
+                        gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
+                        gc.transactions.create(value=position.price, order=order)
+                        break
+        else:
+            raise OrderError(is_available)
+
+    order_approved.send(order.event, order=order)
+    if order.status == Order.STATUS_PAID:
+        order_paid.send(order.event, order=order)
+
+    num_invoices = order.invoices.filter(is_cancellation=False).count()
+    if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices and invoice_qualified(order):
+        generate_invoice(order)
+
+
 def extend_order(order: Order, new_date: datetime, force: bool=False, user: User=None, auth=None):
     """
     Extends the deadline of an order. If the order is already expired, the quota will be checked to
@@ -117,9 +164,10 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
                 'state_change': was_expired
             }
         )
+
         if was_expired:
             num_invoices = order.invoices.filter(is_cancellation=False).count()
-            if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices:
+            if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices and invoice_qualified(order):
                 generate_invoice(order)
 
     if order.status == Order.STATUS_PENDING:
@@ -277,6 +325,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
     :param order: The order to change
     :param user: The user that performed the change
     """
+    # If new actions are added to this function, make sure to add the reverse operation to reactivate_order()
     with transaction.atomic():
         if isinstance(order, int):
             order = Order.objects.select_for_update().get(pk=order)

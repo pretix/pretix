@@ -59,6 +59,10 @@
                             <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
                                 {% trans "Cancel order" %}
                             </a>
+                        {% elif order.status == 'c' %}
+                            <a href="{% url "control:event.order.reactivate" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                                {% trans "Reactivate order" %}
+                            </a>
                         {% endif %}
                     {% endif %}
 

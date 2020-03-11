@@ -575,6 +575,37 @@ def test_order_resend_link(client, env):
 
 
 @pytest.mark.django_db
+def test_order_reactivate_not_canceled(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.status = Order.STATUS_PAID
+        o.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/FOO/reactivate', follow=True)
+    assert 'alert-danger' in response.content.decode()
+    response = client.post('/control/event/dummy/dummy/orders/FOO/reactivate', follow=True)
+    assert 'alert-danger' in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_order_reactivate(client, env):
+    with scopes_disabled():
+        q = Quota.objects.create(event=env[0], size=3)
+        q.items.add(env[3])
+        o = Order.objects.get(id=env[2].id)
+        o.status = Order.STATUS_CANCELED
+        o.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/reactivate', {
+    }, follow=True)
+    print(response.content.decode())
+    assert 'alert-success' in response.content.decode()
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        assert o.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
 def test_order_extend_not_pending(client, env):
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)

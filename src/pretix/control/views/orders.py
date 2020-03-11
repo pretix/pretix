@@ -57,7 +57,7 @@ from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
-    notify_user_changed_order,
+    notify_user_changed_order, reactivate_order,
 )
 from pretix.base.services.stats import order_overview
 from pretix.base.services.tickets import generate
@@ -1259,6 +1259,42 @@ class OrderExtend(OrderView):
     def form(self):
         return ExtendForm(instance=self.order,
                           data=self.request.POST if self.request.method == "POST" else None)
+
+
+class OrderReactivate(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        try:
+            reactivate_order(
+                self.order,
+                user=self.request.user
+            )
+            messages.success(self.request, _('The order has been reactivated.'))
+        except OrderError as e:
+            messages.error(self.request, str(e))
+            return self._redirect_here()
+        except LockTimeoutException:
+            messages.error(self.request, _('We were not able to process the request completely as the '
+                                           'server was too busy.'))
+        return self._redirect_back()
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.order.status != Order.STATUS_CANCELED:
+            messages.error(self.request, _('This action is only allowed for canceled orders.'))
+            return self._redirect_back()
+        return super().dispatch(request, *kwargs, **kwargs)
+
+    def _redirect_here(self):
+        return redirect('control:event.order.reactivate',
+                        event=self.request.event.slug,
+                        organizer=self.request.event.organizer.slug,
+                        code=self.order.code)
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/reactivate.html', {
+            'order': self.order,
+        })
 
 
 class OrderChange(OrderView):
