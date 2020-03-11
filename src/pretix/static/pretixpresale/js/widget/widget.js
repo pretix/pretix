@@ -722,6 +722,7 @@ Vue.component('pretix-widget-event-form', {
         + '<input class="pretix-widget-voucher-input" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
         + '</div>'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
+        + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
         + '<input type="hidden" name="locale" value="' + lang + '" />'
         + '<div class="pretix-widget-voucher-button-wrap">'
         + '<button @click="$parent.redeem">' + strings.redeem + '</button>'
