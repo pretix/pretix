@@ -303,6 +303,7 @@ class ItemCreateForm(I18nModelForm):
             self.instance.allow_cancel = self.cleaned_data['copy_from'].allow_cancel
             self.instance.min_per_order = self.cleaned_data['copy_from'].min_per_order
             self.instance.max_per_order = self.cleaned_data['copy_from'].max_per_order
+            self.instance.generate_tickets = self.cleaned_data['copy_from'].generate_tickets
             self.instance.checkin_attention = self.cleaned_data['copy_from'].checkin_attention
             self.instance.free_price = self.cleaned_data['copy_from'].free_price
             self.instance.original_price = self.cleaned_data['copy_from'].original_price
