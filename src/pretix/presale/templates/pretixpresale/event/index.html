@@ -130,7 +130,7 @@
     {% if event_logo and request.event.settings.logo_show_title and not subevent %}
         <h2 class="content-header">
             {{ event.name }}
-            {% if not event.has_subevents %}
+            {% if event.settings.show_dates_on_frontpage and not event.has_subevents %}
                 <small>{{ event.get_date_range_display }}</small>
             {% endif %}
         </h2>
