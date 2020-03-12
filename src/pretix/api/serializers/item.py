@@ -287,8 +287,8 @@ class QuestionSerializer(I18nAwareModelSerializer):
         if value:
             if value.type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
                 raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
-        if value == self.instance:
-            raise ValidationError('A question cannot depend on itself.')
+            if value == self.instance:
+                raise ValidationError('A question cannot depend on itself.')
         return value
 
     def validate(self, data):

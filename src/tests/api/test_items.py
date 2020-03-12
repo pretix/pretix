@@ -1973,6 +1973,31 @@ def test_question_create(token_client, organizer, event, event2, item):
         q2 = Question.objects.get(pk=resp.data['id'])
     assert q2.dependency_question == question
 
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": False,
+            "identifier": None,
+            "dependency_question": None,
+            "dependency_values": [],
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        question = Question.objects.get(pk=resp.data['id'])
+        assert question.question == "What's your name?"
+        assert question.type == "S"
+        assert question.identifier is not None
+        assert len(question.items.all()) == 1
+        assert question.dependency_question is None
+        assert question.dependency_values == []
+
 
 @pytest.mark.django_db
 def test_question_update(token_client, organizer, event, question):
@@ -2004,6 +2029,19 @@ def test_question_update_circular_dependency(token_client, organizer, event, que
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"non_field_errors":["Circular dependency between questions detected."]}'
+
+
+@pytest.mark.django_db
+def test_question_self_dependency(token_client, organizer, event, question):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "dependency_question": question.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"dependency_question":["A question cannot depend on itself."]}'
 
 
 @pytest.mark.django_db
