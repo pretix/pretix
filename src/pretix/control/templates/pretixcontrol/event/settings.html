@@ -121,6 +121,7 @@
             </fieldset>
             <fieldset>
                 <legend>{% trans "Display" %}</legend>
+                {% bootstrap_field sform.show_dates_on_frontpage layout="control" %}
                 {% bootstrap_field sform.show_date_to layout="control" %}
                 {% bootstrap_field sform.show_times layout="control" %}
                 {% bootstrap_field sform.show_quota_left layout="control" %}

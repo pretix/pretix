@@ -66,19 +66,23 @@
                     <td>
                         <a href="{{ url }}">{{ e.name }}</a>
                     </td>
-                    <td>
-                        {{ e.daterange|default:e.get_date_range_display }}
-                        {% if e.settings.show_times and not e.has_subevents %}
-                            {% timezone e.tzname %}
-                                <br><small class="text-muted">
-                                    {{ e.date_from|date:"TIME_FORMAT" }}
-                                    {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
-                                        – {{ e.date_to|date:"TIME_FORMAT" }}
-                                    {% endif %}
-                                </small>
-                            {% endtimezone %}
-                        {% endif %}
-                    </td>
+                    {% if e.settings.show_dates_on_frontpage %}
+                        <td>
+                            {{ e.daterange|default:e.get_date_range_display }}
+                            {% if e.settings.show_times and not e.has_subevents %}
+                                {% timezone e.tzname %}
+                                    <br><small class="text-muted">
+                                        {{ e.date_from|date:"TIME_FORMAT" }}
+                                        {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
+                                            – {{ e.date_to|date:"TIME_FORMAT" }}
+                                        {% endif %}
+                                    </small>
+                                {% endtimezone %}
+                            {% endif %}
+                        </td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
                     <td>
                         {% if e.has_subevents %}
                             <span class="label label-default">{% trans "Event series" %}</span>

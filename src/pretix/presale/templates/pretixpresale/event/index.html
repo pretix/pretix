@@ -130,7 +130,7 @@
     {% if event_logo and request.event.settings.logo_show_title and not subevent %}
         <h2 class="content-header">
             {{ event.name }}
-            {% if not event.has_subevents %}
+            {% if event.settings.show_dates_on_frontpage and not event.has_subevents %}
                 <small>{{ event.get_date_range_display }}</small>
             {% endif %}
         </h2>
@@ -174,44 +174,46 @@
                         </p>
                     </div>
                 {% endif %}
-                <div class="info-row">
-                    <span class="fa fa-clock-o fa-fw"></span>
-                    <p>
-                        {{ ev.get_date_range_display }}
-                        {% if event.settings.show_times %}
-                            <br>
-                            {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
-                                Begin: {{ time }}
-                            {% endblocktrans %}
-                            {% if event.settings.show_date_to and ev.date_to %}
+                {% if ev.settings.show_dates_on_frontpage %}
+                    <div class="info-row">
+                        <span class="fa fa-clock-o fa-fw"></span>
+                        <p>
+                            {{ ev.get_date_range_display }}
+                            {% if event.settings.show_times %}
                                 <br>
-                                {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
-                                    End: {{ time }}
+                                {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
+                                    Begin: {{ time }}
                                 {% endblocktrans %}
+                                {% if event.settings.show_date_to and ev.date_to %}
+                                    <br>
+                                    {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
+                                        End: {{ time }}
+                                    {% endblocktrans %}
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                        {% if ev.date_admission %}
+                            {% if ev.date_admission %}
+                                <br>
+                                {% if ev.date_admission|date:"SHORT_DATE_FORMAT" == ev.date_from|date:"SHORT_DATE_FORMAT" %}
+                                    {% blocktrans trimmed with time=ev.date_admission|date:"TIME_FORMAT" %}
+                                        Admission: {{ time }}
+                                    {% endblocktrans %}
+                                {% else %}
+                                    {% blocktrans trimmed with datetime=ev.date_admission|date:"SHORT_DATETIME_FORMAT" %}
+                                        Admission: {{ datetime }}
+                                    {% endblocktrans %}
+                                {% endif %}
+                            {% endif %}
                             <br>
-                            {% if ev.date_admission|date:"SHORT_DATE_FORMAT" == ev.date_from|date:"SHORT_DATE_FORMAT" %}
-                                {% blocktrans trimmed with time=ev.date_admission|date:"TIME_FORMAT" %}
-                                    Admission: {{ time }}
-                                {% endblocktrans %}
+                            {% if subevent %}
+                                <a href="{% eventurl event "presale:event.ical.download" subevent=subevent.pk %}">
                             {% else %}
-                                {% blocktrans trimmed with datetime=ev.date_admission|date:"SHORT_DATETIME_FORMAT" %}
-                                    Admission: {{ datetime }}
-                                {% endblocktrans %}
+                                <a href="{% eventurl event "presale:event.ical.download" %}">
                             {% endif %}
-                        {% endif %}
-                        <br>
-                        {% if subevent %}
-                            <a href="{% eventurl event "presale:event.ical.download" subevent=subevent.pk %}">
-                        {% else %}
-                            <a href="{% eventurl event "presale:event.ical.download" %}">
-                        {% endif %}
-                            {% trans "Add to Calendar" %}
-                        </a>
-                    </p>
-                </div>
+                                {% trans "Add to Calendar" %}
+                            </a>
+                        </p>
+                    </div>
+                {% endif %}
 
             </div>
 
