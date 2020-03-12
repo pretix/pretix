@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-09 10:11+0000\n"
-"PO-Revision-Date: 2020-03-09 00:00+0000\n"
+"PO-Revision-Date: 2020-03-10 19:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7954,10 +7954,8 @@ msgid "Bundled products"
 msgstr "Gebundelde producten"
 
 #: pretix/control/forms/item.py:704
-#, fuzzy
-#| msgid "You added the same add-on category twice"
 msgid "You added the same bundled product twice"
-msgstr "U heeft twee keer dezelfde add-oncategorie geselecteerd"
+msgstr "U heeft twee keer hetzelfde gebundelde product geselecteerd"
 
 #: pretix/control/forms/item.py:710
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
@@ -8219,10 +8217,8 @@ msgid "Send information via email"
 msgstr "Stuur informatie via e-mail"
 
 #: pretix/control/forms/orders.py:556
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Send information to waiting list"
-msgstr "Stuur informatie via e-mail"
+msgstr "Stuur informatie naar wachtlijst"
 
 #: pretix/control/forms/orders.py:584 pretix/control/forms/orders.py:608
 #, python-brace-format
@@ -8261,21 +8257,7 @@ msgstr ""
 "Organisatie van {event}"
 
 #: pretix/control/forms/orders.py:618
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "with this email, we regret to inform you that {event} has been canceled.\n"
-#| "\n"
-#| "We will refund you {refund_amount} to your original payment method.\n"
-#| "\n"
-#| "You can view the current state of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8291,12 +8273,7 @@ msgstr ""
 "\n"
 "Met deze e-mail moeten wij u helaas mededelen dat {event} is geannuleerd.\n"
 "\n"
-"We zullen u {refund_amount} terugbetalen via uw oorspronkelijke "
-"betalingsmethode.\n"
-"\n"
-"U kunt de status van uw bestelling hier bekijken:\n"
-"\n"
-"{url}\n"
+"U zult hierdoor geen ticket via de wachtlijst kunnen ontvangen.\n"
 "\n"
 "Met vriendelijke groet,\n"
 "Organisatie van {event}"
@@ -8805,10 +8782,8 @@ msgid "The event's internal comment has been updated."
 msgstr "Het interne commentaar van het evenement is bijgewerkt."
 
 #: pretix/control/logdisplay.py:185
-#, fuzzy
-#| msgid "The refund has been canceled."
 msgid "The event has been canceled."
-msgstr "De terugbetaling is geannuleerd."
+msgstr "Het evenement is geannuleerd."
 
 #: pretix/control/logdisplay.py:186
 msgid "The order details have been changed."
@@ -9377,12 +9352,9 @@ msgid "The event date has been deleted."
 msgstr "De evenementsdatum is verwijderd."
 
 #: pretix/control/logdisplay.py:322
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been changed."
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr "De evenementsdatum is aangepast."
+msgstr "De evenementsdatum is geannuleerd."
 
 #: pretix/control/logdisplay.py:323
 msgctxt "subevent"
@@ -11290,8 +11262,8 @@ msgid ""
 "can later set for your items and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of items."
 msgstr ""
-"U kunt hier een set metadataeigenschappen (bijv. variabelen) die u later "
-"kunt instellen voor uw producten en hergebruiken in plaatsen als "
+"U kunt hier een set metadataeigenschappen instellen (bijv. variabelen) die u "
+"later kunt instellen voor uw producten en hergebruiken in plaatsen als "
 "ticketslayouts. Dit kan u tijd schelen als u veel producten aanmaakt."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:202
@@ -13273,12 +13245,18 @@ msgid ""
 "new tickets due to the products being disabled. You can choose to inform "
 "people on the waiting list by using this option."
 msgstr ""
+"Uw wachtlijst zal niet automatisch worden verwijderd, maar er zullen geen "
+"nieuwe tickets worden verstuurd omdat alle producten worden uitgeschakeld. U "
+"kunt ervoor kiezen om de mensen op de wachtlijst te informeren over de "
+"annulering met deze optie."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:56
 msgid ""
 "You should not execute this function multiple times for the same event, or "
 "everyone on the waiting list will get multiple emails."
 msgstr ""
+"Gebruik deze functie niet meerdere keren voor hetzelfde evenement, omdat "
+"anders iedereen op de wachtlijst meerdere e-mails ontvangt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:68
 msgid "Cancel all orders"
@@ -17223,7 +17201,7 @@ msgstr "Inclusief QR-codegeheim"
 
 #: pretix/plugins/checkinlists/exporters.py:51
 msgid "Only tickets requiring special attention"
-msgstr "Alleen tickets met speciale aandacht nodig"
+msgstr "Alleen tickets waarvoor speciale aandacht nodig is"
 
 #: pretix/plugins/checkinlists/exporters.py:71
 msgid "Include questions"
@@ -18098,7 +18076,7 @@ msgstr ""
 "uitvoert aanmerken als MOTO-betalingen (Mail Order / Telephone Order), "
 "waardoor de betalingen niet hoeven te voldoen aan de eisen voor SCA (Strong "
 "Customer Authentication). Door deze functie in te schakelen zult u wel "
-"verplicht worden om jaarlijkse PCI-DSS-evaluaties in te voeren zoals het 40 "
+"verplicht worden om jaarlijkse PCI-DSS-evaluaties in te voeren, zoals het 40 "
 "pagina's tellende SAQ D. Zie de %s voor meer informatie over dit onderwerp."
 
 #: pretix/plugins/stripe/payment.py:131
@@ -18550,8 +18528,8 @@ msgid ""
 "Please scan the barcode below to complete your WeChat payment. Once you have "
 "completed your payment, you can refresh this page."
 msgstr ""
-"Scan de QR-code hieronder om uw WeChat-betaling uitvoeren. Als u de betaling "
-"heeft afgerond kunt u deze pagina verversen."
+"Scan de QR-code hieronder om uw WeChat-betaling uit te voeren. Als u de "
+"betaling heeft afgerond kunt u deze pagina verversen."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:29
 msgid ""
