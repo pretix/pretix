@@ -29,5 +29,14 @@
         <dd>
             <i class="fa fa-cc-{{ payment_info.payment_data.card_type|lower }}"></i> **** **** **** {{ payment_info.payment_data.last4 }}
         </dd>
+    {% elif payment_info.payment_type == "square_pos" %}
+        <dt>{% trans "Payment provider" %}</dt>
+        <dd>Square POS</dd>
+        <dt>{% trans "Client Transaction Code" %}</dt>
+        <dd>{{ payment_info.payment_data.client_transactionId }}</dd>
+        {% if payment_info.payment_data.server_transactionId %}
+            <dt>{% trans "Server Transaction Code" %}</dt>
+            <dd>{{ payment_info.payment_data.server_transactionId }}</dd>
+        {% endif %}
     {% endif %}
 </dl>
