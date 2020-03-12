@@ -85,6 +85,16 @@ class BaseAuthBackend:
         """
         return
 
+    def next_url(self, request):
+        """
+        This method will be called after a successful login to determine the next URL. Pretix in general uses the
+        ``'next'`` query parameter. However, external authentication methods could use custom attributes with hardcoded
+        names for security purposes. For example, OAuth uses ``'status'`` for keeping track of application state.
+        """
+        if "next" in request.GET:
+            return request.GET.get("next")
+        return None
+
 
 class NativeAuthBackend(BaseAuthBackend):
     identifier = 'native'
