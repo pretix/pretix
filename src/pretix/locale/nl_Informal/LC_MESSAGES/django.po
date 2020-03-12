@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-09 10:11+0000\n"
-"PO-Revision-Date: 2020-03-10 19:00+0000\n"
+"PO-Revision-Date: 2020-03-13 07:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -19434,8 +19434,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
-"Jouw bestelling werd met succes afgerond! Meer details vind je hieronder."
+msgstr "Je bestelling is met succes verwerkt! Zie hieronder voor de details."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
