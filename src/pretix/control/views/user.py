@@ -101,7 +101,7 @@ class ReauthView(TemplateView):
             t = int(time.time())
             request.session['pretix_auth_login_time'] = t
             request.session['pretix_auth_last_used'] = t
-            next_url = get_auth_backends()[request.user.auth_backend].next_url(request)
+            next_url = get_auth_backends()[request.user.auth_backend].get_next_url(request)
             if next_url and is_safe_url(next_url, allowed_hosts=None):
                 return redirect(next_url)
             return redirect(reverse('control:index'))
@@ -113,7 +113,7 @@ class ReauthView(TemplateView):
         backend = get_auth_backends()[request.user.auth_backend]
         u = backend.request_authenticate(request)
         if u and u == request.user:
-            next_url = backend.next_url(request)
+            next_url = backend.get_next_url(request)
             if next_url and is_safe_url(next_url, allowed_hosts=None):
                 return redirect(next_url)
             return redirect(reverse('control:index'))

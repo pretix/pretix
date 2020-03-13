@@ -39,7 +39,7 @@ def process_login(request, user, keep_logged_in):
     :return: This method returns a ``HttpResponse``.
     """
     request.session['pretix_auth_long_session'] = settings.PRETIX_LONG_SESSIONS and keep_logged_in
-    next_url = get_auth_backends()[user.auth_backend].next_url(request)
+    next_url = get_auth_backends()[user.auth_backend].get_next_url(request)
     if user.require_2fa:
         request.session['pretix_auth_2fa_user'] = user.pk
         request.session['pretix_auth_2fa_time'] = str(int(time.time()))
@@ -73,7 +73,7 @@ def login(request):
     if not backend.visible:
         backend = [b for b in backends if b.visible][0]
     if request.user.is_authenticated:
-        next_url = backend.next_url(request) or 'control:index'
+        next_url = backend.get_next_url(request) or 'control:index'
         return redirect(next_url)
     if request.method == 'POST':
         form = LoginForm(backend=backend, data=request.POST)
