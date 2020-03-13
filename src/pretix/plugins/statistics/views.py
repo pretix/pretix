@@ -1,9 +1,10 @@
 import datetime
 import json
+from decimal import Decimal
 
 import dateutil.parser
 import dateutil.rrule
-from django.db.models import Count, DateTimeField, Max, OuterRef, Subquery
+from django.db.models import Count, DateTimeField, Max, OuterRef, Q, Subquery
 from django.utils import timezone
 from django.views.generic import TemplateView
 
@@ -161,5 +162,57 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             cache.set('statistics_rev_data' + ckey, ctx['rev_data'])
 
         ctx['has_orders'] = self.request.event.orders.exists()
+
+        ctx['seats'] = {}
+
+        if not self.request.event.has_subevents or (ckey != "all" and subevent):
+            ev = subevent or self.request.event
+            if ev.seating_plan_id is not None:
+                seats_qs = ev.seats.select_related('product').annotate(
+                    has_op=Count('orderposition')
+                ).annotate(has_v=Count('vouchers')).filter(
+                    subevent=subevent,
+                )
+                ctx['seats']['purchased_seats'] = len(set(
+                    seats_qs.filter(
+                        Q(has_op=True)
+                    ).values_list('seat_guid', flat=True)
+                ))
+                ctx['seats']['blocked_seats'] = len(set(
+                    seats_qs.filter(
+                        Q(has_v=True)
+                    ).values_list('seat_guid', flat=True)
+                ))
+                ctx['seats']['free_seats'] = len(ev.free_seats())
+
+                ctx['seats']['products'] = {}
+                for seat in seats_qs.filter(Q(has_op=False)):
+                    if seat.product not in ctx['seats']['products']:
+                        if seat.product and seat.product.has_variations:
+                            price = seat.product.variations.aggregate(Max('default_price'))['default_price__max']
+                        elif seat.product:
+                            price = seat.product.default_price
+                        else:
+                            price = Decimal('0.00')
+
+                        ctx['seats']['products'][seat.product] = {
+                            'free': {
+                                'seats': 0,
+                                'potential': Decimal('0.00'),
+                            },
+                            'blocked': {
+                                'seats': 0,
+                                'potential': Decimal('0.00'),
+                            },
+                            'price': price,
+                        }
+                    data = ctx['seats']['products'][seat.product]
+
+                    if seat.blocked:
+                        data['blocked']['seats'] += 1
+                        data['blocked']['potential'] += data['price']
+                    else:
+                        data['free']['seats'] += 1
+                        data['free']['potential'] += data['price']
 
         return ctx

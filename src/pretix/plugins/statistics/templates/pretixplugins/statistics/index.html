@@ -3,6 +3,7 @@
 {% load compress %}
 {% load static %}
 {% load escapejson %}
+{% load money %}
 {% block title %}{% trans "Statistics" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Statistics" %}</h1>
@@ -59,6 +60,97 @@
                 <div id="obp_chart" class="chart"></div>
             </div>
         </div>
+        {% if seats %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans "Seating Overview" %}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="dashboard">
+                        <div class="widget-container widget-small">
+                            <div class="numwidget">
+                                <span class="num">{{ seats.purchased_seats }}</span>
+                                <span class="text">{% trans "Sold Seats" %}</span>
+                            </div>
+                        </div>
+                        <div class="widget-container widget-small">
+                            <div class="numwidget">
+                                <span class="num">{{ seats.blocked_seats }}</span>
+                                <span class="text">{% trans "Blocked Seats" %}</span>
+                            </div>
+                        </div>
+                        <div class="widget-container widget-small">
+                            <div class="numwidget">
+                                <span class="num">{{ seats.free_seats }}</span>
+                                <span class="text">{% trans "Free Seats" %}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans "Seating Sales Potentials" %}</h3>
+                </div>
+                <div class="panel-body">
+                    {% for item, props in seats.products.items %}
+                        {% if item is not None %}
+                            <h3>{{ item }}</h3>
+                            <div class="dashboard">
+                                <div class="widget-container widget-small">
+                                    <div class="numwidget">
+                                        <span class="num">{{ props.free.seats }}</span>
+                                        <span class="text">{% trans "Free Seats" %}</span>
+                                    </div>
+                                </div>
+                                <div class="widget-container widget-small">
+                                    <div class="numwidget">
+                                        <span class="num">{{ props.blocked.seats }}</span>
+                                        <span class="text">{% trans "Blocked Seats" %}</span>
+                                    </div>
+                                </div>
+                                <div class="widget-container widget-small">
+                                    <div class="numwidget">
+                                        <span class="num">{{ props.price|money:request.event.currency }}</span>
+                                        <span class="text">{% trans "Average Price per Seat" %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dashboard">
+                                <div class="widget-container widget-small">
+                                    <div class="numwidget">
+                                        <span class="num">{{ props.free.potential|money:request.event.currency }}</span>
+                                        <span class="text">{% trans "Potential Profit (Free Seats)" %}</span>
+                                    </div>
+                                </div>
+                                <div class="widget-container widget-small">
+                                    <div class="numwidget">
+                                        <span class="num">{{ props.blocked.potential|money:request.event.currency }}</span>
+                                        <span class="text">{% trans "Potential Profit (Blocked Seats)" %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <h3>{% trans "Seats not attributed to any specific product" %}</h3>
+                            <div class="dashboard">
+                                <div class="widget-container widget-small">
+                                    <div class="numwidget">
+                                        <span class="num">{{ props.free.seats }}</span>
+                                        <span class="text">{% trans "Free Seats" %}</span>
+                                    </div>
+                                </div>
+                                <div class="widget-container widget-small">
+                                    <div class="numwidget">
+                                        <span class="num">{{ props.blocked.seats }}</span>
+                                        <span class="text">{% trans "Blocked Seats" %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
         <script type="application/json" id="obd-data">{{ obd_data|escapejson }}</script>
         <script type="application/json" id="rev-data">{{ rev_data|escapejson }}</script>
         <script type="application/json" id="obp-data">{{ obp_data|escapejson }}</script>
