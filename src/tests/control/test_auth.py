@@ -148,6 +148,11 @@ class LoginFormTest(TestCase):
         response = self.client.get('/control/')
         assert b'hallo@example.org' in response.content
 
+    def test_custom_get_next_url(self):
+        response = self.client.get('/control/login?state=/control/events/', HTTP_X_LOGIN_EMAIL='hallo@example.org')
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/events/', response['Location'])
+
 
 class RegistrationFormTest(TestCase):
 
