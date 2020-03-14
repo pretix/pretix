@@ -19,6 +19,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 from rest_framework import serializers
 
+from pretix.api.serializers.fields import ListMultipleChoiceField
 from pretix.api.serializers.i18n import I18nField
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import (
@@ -639,7 +640,7 @@ DEFAULTS = {
     'locales': {
         'default': json.dumps([settings.LANGUAGE_CODE]),
         'type': list,
-        'serializer_class': serializers.MultipleChoiceField,
+        'serializer_class': ListMultipleChoiceField,
         'serializer_kwargs': dict(
             choices=settings.LANGUAGES,
             required=True,
