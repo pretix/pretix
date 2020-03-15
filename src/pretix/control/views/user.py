@@ -101,18 +101,21 @@ class ReauthView(TemplateView):
             t = int(time.time())
             request.session['pretix_auth_login_time'] = t
             request.session['pretix_auth_last_used'] = t
-            if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
-                return redirect(request.GET.get("next"))
+            next_url = get_auth_backends()[request.user.auth_backend].get_next_url(request)
+            if next_url and is_safe_url(next_url, allowed_hosts=None):
+                return redirect(next_url)
             return redirect(reverse('control:index'))
         else:
             messages.error(request, _('The password you entered was invalid, please try again.'))
             return self.get(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        u = get_auth_backends()[request.user.auth_backend].request_authenticate(request)
+        backend = get_auth_backends()[request.user.auth_backend]
+        u = backend.request_authenticate(request)
         if u and u == request.user:
-            if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
-                return redirect(request.GET.get("next"))
+            next_url = backend.get_next_url(request)
+            if next_url and is_safe_url(next_url, allowed_hosts=None):
+                return redirect(next_url)
             return redirect(reverse('control:index'))
         return super().get(request, *args, **kwargs)
 

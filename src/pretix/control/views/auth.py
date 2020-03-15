@@ -39,18 +39,19 @@ def process_login(request, user, keep_logged_in):
     :return: This method returns a ``HttpResponse``.
     """
     request.session['pretix_auth_long_session'] = settings.PRETIX_LONG_SESSIONS and keep_logged_in
+    next_url = get_auth_backends()[user.auth_backend].get_next_url(request)
     if user.require_2fa:
         request.session['pretix_auth_2fa_user'] = user.pk
         request.session['pretix_auth_2fa_time'] = str(int(time.time()))
         twofa_url = reverse('control:auth.login.2fa')
-        if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
-            twofa_url += '?next=' + quote(request.GET.get('next'))
+        if next_url and is_safe_url(next_url, allowed_hosts=None):
+            twofa_url += '?next=' + quote(next_url)
         return redirect(twofa_url)
     else:
         auth_login(request, user)
         request.session['pretix_auth_login_time'] = int(time.time())
-        if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
-            return redirect(request.GET.get("next"))
+        if next_url and is_safe_url(next_url, allowed_hosts=None):
+            return redirect(next_url)
         return redirect(reverse('control:index'))
 
 
@@ -72,7 +73,8 @@ def login(request):
     if not backend.visible:
         backend = [b for b in backends if b.visible][0]
     if request.user.is_authenticated:
-        return redirect(request.GET.get("next", 'control:index'))
+        next_url = backend.get_next_url(request) or 'control:index'
+        return redirect(next_url)
     if request.method == 'POST':
         form = LoginForm(backend=backend, data=request.POST)
         if form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier:

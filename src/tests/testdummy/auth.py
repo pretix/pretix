@@ -36,3 +36,8 @@ class TestRequestAuthBackend(BaseAuthBackend):
                 email=request.headers['X-Login-Email'],
                 auth_backend='test_request'
             )[0]
+
+    def get_next_url(self, request):
+        if 'state' in request.GET:
+            return request.GET.get('state')
+        return None
