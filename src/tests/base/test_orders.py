@@ -445,7 +445,23 @@ class DownloadReminderTests(TestCase):
                 order=self.order, item=self.ticket, variation=None,
                 price=Decimal("23.00"), attendee_name_parts={"full_name": "Peter"}, positionid=1
             )
+            self.event.settings.ticket_download = True
             djmail.outbox = []
+
+    @classscope(attr='o')
+    def test_downloads_disabled(self):
+        self.event.settings.mail_days_download_reminder = 2
+        self.event.settings.ticket_download = False
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    @classscope(attr='o')
+    def test_downloads_disabled_per_product(self):
+        self.event.settings.mail_days_download_reminder = 2
+        self.ticket.generate_tickets = False
+        self.ticket.save()
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
 
     @classscope(attr='o')
     def test_disabled(self):

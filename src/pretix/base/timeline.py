@@ -133,7 +133,7 @@ def timeline_for_event(event, subevent=None):
 
     if not event.has_subevents:
         days = event.settings.get('mail_days_download_reminder', as_type=int)
-        if days is not None:
+        if days is not None and event.settings.ticket_download:
             reminder_date = (ev.date_from - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
             tl.append(TimelineEvent(
                 event=event, subevent=subevent,
