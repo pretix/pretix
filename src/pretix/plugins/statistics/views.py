@@ -188,11 +188,14 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 for item in seats_qs:
                     product = item_cache[item['product']]
                     if item_cache[item['product']] not in ctx['seats']['products']:
+                        price = None
                         if product and product.has_variations:
-                            price = product.variations.aggregate(Min('default_price'))['default_price__min']
-                        elif product:
+                            price = product.variations.filter(
+                                active=True
+                            ).aggregate(Min('default_price'))['default_price__min']
+                        if product and not price:
                             price = product.default_price
-                        else:
+                        if not price:
                             price = Decimal('0.00')
 
                         ctx['seats']['products'][product] = {
