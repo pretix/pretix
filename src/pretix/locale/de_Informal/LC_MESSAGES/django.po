@@ -11761,7 +11761,7 @@ msgid ""
 "should only be available in a certain timeframe."
 msgstr ""
 "Dieses Produkt wird im Moment nicht verkauft, da unten konfiguriert wurde, "
-"dass es nur in einem bestimmten Zeitrum erhältlich ist."
+"dass es nur in einem bestimmten Zeitraum erhältlich ist."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:29
 msgid ""
