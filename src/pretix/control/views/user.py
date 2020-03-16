@@ -242,6 +242,10 @@ class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
 
         try:
             ctx['static_tokens'] = StaticDevice.objects.get(user=self.request.user, name='emergency').token_set.all()
+        except StaticDevice.MultipleObjectsReturned:
+            ctx['static_tokens'] = StaticDevice.objects.filter(
+                user=self.request.user, name='emergency'
+            ).first().token_set.all()
         except StaticDevice.DoesNotExist:
             d = StaticDevice.objects.create(user=self.request.user, name='emergency')
             for i in range(10):
@@ -543,8 +547,8 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
     template_name = 'pretixcontrol/user/2fa_regenemergency.html'
 
     def post(self, request, *args, **kwargs):
-        d = StaticDevice.objects.get(user=self.request.user, name='emergency')
-        d.token_set.all().delete()
+        StaticDevice.objects.filter(user=self.request.user, name='emergency').delete()
+        d = StaticDevice.objects.create(user=self.request.user, name='emergency')
         for i in range(10):
             d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
         self.request.user.log_action('pretix.user.settings.2fa.regenemergency', user=self.request.user)
