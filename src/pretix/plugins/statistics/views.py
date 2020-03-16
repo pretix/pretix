@@ -174,7 +174,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 ctx['seats']['free_seats'] = seats_qs.filter(blocked=False).count()
 
                 seats_qs = seats_qs.select_related("product").values('product', 'blocked').annotate(count=Count('id'))\
-                    .order_by('product', 'blocked')
+                    .order_by('product__category__position', 'product__position', 'product', 'blocked')
 
                 ctx['seats']['products'] = {}
                 ctx['seats']['stats'] = {}
