@@ -1,9 +1,10 @@
 import datetime
 import json
+from decimal import Decimal
 
 import dateutil.parser
 import dateutil.rrule
-from django.db.models import Count, DateTimeField, Max, OuterRef, Subquery
+from django.db.models import Count, DateTimeField, Max, Min, OuterRef, Subquery
 from django.utils import timezone
 from django.views.generic import TemplateView
 
@@ -161,5 +162,57 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             cache.set('statistics_rev_data' + ckey, ctx['rev_data'])
 
         ctx['has_orders'] = self.request.event.orders.exists()
+
+        ctx['seats'] = {}
+
+        if not self.request.event.has_subevents or (ckey != "all" and subevent):
+            ev = subevent or self.request.event
+            if ev.seating_plan_id is not None:
+                seats_qs = ev.free_seats(sales_channel=None, include_blocked=True)
+                ctx['seats']['blocked_seats'] = seats_qs.filter(blocked=True).count()
+                ctx['seats']['free_seats'] = seats_qs.filter(blocked=False).count()
+                ctx['seats']['purchased_seats'] = \
+                    ev.seats.count() - ctx['seats']['blocked_seats'] - ctx['seats']['free_seats']
+
+                seats_qs = seats_qs.values('product', 'blocked').annotate(count=Count('id'))\
+                    .order_by('product__category__position', 'product__position', 'product', 'blocked')
+
+                ctx['seats']['products'] = {}
+                ctx['seats']['stats'] = {}
+                item_cache = {i.pk: i for i in
+                              ev.items.annotate(has_variations=Count('variations')).filter(
+                                  pk__in={p['product'] for p in seats_qs if p['product']}
+                              )}
+                item_cache[None] = None
+
+                for item in seats_qs:
+                    if item_cache[item['product']] not in ctx['seats']['products']:
+                        product = item_cache[item['product']]
+                        if product and product.has_variations:
+                            price = product.variations.aggregate(Min('default_price'))['default_price__min']
+                        elif product:
+                            price = product.default_price
+                        else:
+                            price = Decimal('0.00')
+
+                        ctx['seats']['products'][product] = {
+                            'free': {
+                                'seats': 0,
+                                'potential': Decimal('0.00'),
+                            },
+                            'blocked': {
+                                'seats': 0,
+                                'potential': Decimal('0.00'),
+                            },
+                            'price': price,
+                        }
+                    data = ctx['seats']['products'][product]
+
+                    if item['blocked']:
+                        data['blocked']['seats'] = item['count']
+                        data['blocked']['potential'] = item['count'] * data['price']
+                    else:
+                        data['free']['seats'] = item['count']
+                        data['free']['potential'] = item['count'] * data['price']
 
         return ctx
