@@ -169,11 +169,12 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             ev = subevent or self.request.event
             if ev.seating_plan_id is not None:
                 seats_qs = ev.free_seats(sales_channel=None, include_blocked=True)
-                ctx['seats']['purchased_seats'] = ev.seats.annotate(has_op=Count('orderposition')).count()
                 ctx['seats']['blocked_seats'] = seats_qs.filter(blocked=True).count()
                 ctx['seats']['free_seats'] = seats_qs.filter(blocked=False).count()
+                ctx['seats']['purchased_seats'] = \
+                    ev.seats.count() - ctx['seats']['blocked_seats'] - ctx['seats']['free_seats']
 
-                seats_qs = seats_qs.select_related("product").values('product', 'blocked').annotate(count=Count('id'))\
+                seats_qs = seats_qs.values('product', 'blocked').annotate(count=Count('id'))\
                     .order_by('product__category__position', 'product__position', 'product', 'blocked')
 
                 ctx['seats']['products'] = {}
