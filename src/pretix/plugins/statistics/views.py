@@ -179,7 +179,9 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 ctx['seats']['products'] = {}
                 ctx['seats']['stats'] = {}
                 item_cache = {i.pk: i for i in
-                              ev.items.all().filter(pk__in={p['product'] for p in seats_qs if p['product']})}
+                              ev.items.annotate(has_variations=Count('variations')).filter(
+                                  pk__in={p['product'] for p in seats_qs if p['product']}
+                              )}
                 item_cache[None] = None
 
                 for item in seats_qs:
