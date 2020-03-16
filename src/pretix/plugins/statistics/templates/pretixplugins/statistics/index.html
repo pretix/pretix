@@ -140,6 +140,7 @@
                                 <th></th>
                                 <th></th>
                             </tr>
+                            {% if None in seats.products %}
                                 {% with seats.products|getitem:None as unattributed %}
                                     <tr class="item categorized">
                                         <td>{% trans "Seats not attributed to any specific product" %}</td>
@@ -149,7 +150,8 @@
                                         <td></td>
                                         <td></td>
                                     </tr>
-                            {% endwith %}
+                                {% endwith %}
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>
