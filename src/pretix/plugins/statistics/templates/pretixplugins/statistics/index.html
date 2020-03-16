@@ -4,6 +4,7 @@
 {% load static %}
 {% load escapejson %}
 {% load money %}
+{% load getitem %}
 {% block title %}{% trans "Statistics" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Statistics" %}</h1>
@@ -93,61 +94,64 @@
                     <h3 class="panel-title">{% trans "Seating Sales Potentials" %}</h3>
                 </div>
                 <div class="panel-body">
-                    {% for item, props in seats.products.items %}
-                        {% if item is not None %}
-                            <h3>{{ item }}</h3>
-                            <div class="dashboard">
-                                <div class="widget-container widget-small">
-                                    <div class="numwidget">
-                                        <span class="num">{{ props.free.seats }}</span>
-                                        <span class="text">{% trans "Free Seats" %}</span>
-                                    </div>
-                                </div>
-                                <div class="widget-container widget-small">
-                                    <div class="numwidget">
-                                        <span class="num">{{ props.blocked.seats }}</span>
-                                        <span class="text">{% trans "Blocked Seats" %}</span>
-                                    </div>
-                                </div>
-                                <div class="widget-container widget-small">
-                                    <div class="numwidget">
-                                        <span class="num">{{ props.price|money:request.event.currency }}</span>
-                                        <span class="text">{% trans "Average Price per Seat" %}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="dashboard">
-                                <div class="widget-container widget-small">
-                                    <div class="numwidget">
-                                        <span class="num">{{ props.free.potential|money:request.event.currency }}</span>
-                                        <span class="text">{% trans "Potential Profit (Free Seats)" %}</span>
-                                    </div>
-                                </div>
-                                <div class="widget-container widget-small">
-                                    <div class="numwidget">
-                                        <span class="num">{{ props.blocked.potential|money:request.event.currency }}</span>
-                                        <span class="text">{% trans "Potential Profit (Blocked Seats)" %}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        {% else %}
-                            <h3>{% trans "Seats not attributed to any specific product" %}</h3>
-                            <div class="dashboard">
-                                <div class="widget-container widget-small">
-                                    <div class="numwidget">
-                                        <span class="num">{{ props.free.seats }}</span>
-                                        <span class="text">{% trans "Free Seats" %}</span>
-                                    </div>
-                                </div>
-                                <div class="widget-container widget-small">
-                                    <div class="numwidget">
-                                        <span class="num">{{ props.blocked.seats }}</span>
-                                        <span class="text">{% trans "Blocked Seats" %}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                    <table class="table table-condensed table-hover table-product-overview">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Product" %}</th>
+                                <th></th>
+                                <th colspan="2" class="text-center">{% trans "Unsold Seats" %}</th>
+                                <th colspan="2" class="text-center">{% trans "Potential Profits" %}</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>{% trans "Minimum Price" %}</th>
+                                <th>{% trans "Blocked" %}</th>
+                                <th>{% trans "Available" %}</th>
+                                <th>{% trans "Blocked" %}</th>
+                                <th>{% trans "Available" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="category">
+                                <th>{% trans "On Sale" %}</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            {% for item, props in seats.products.items %}
+                                {% if item is not None %}
+                                    <tr class="item categorized">
+                                        <td>{{ item }}</td>
+                                        <td>{{ props.price|money:request.event.currency }}</td>
+                                        <td>{{ props.blocked.seats }}</td>
+                                        <td>{{ props.free.seats }}</td>
+                                        <td>{{ props.blocked.potential|money:request.event.currency }}</td>
+                                        <td>{{ props.free.potential|money:request.event.currency }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr class="category">
+                                <th>{% trans "Not on Sale" %}</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                                {% with seats.products|getitem:None as unattributed %}
+                                    <tr class="item categorized">
+                                        <td>{% trans "Seats not attributed to any specific product" %}</td>
+                                        <td></td>
+                                        <td>{{ unattributed.blocked.seats }}</td>
+                                        <td>{{ unattributed.free.seats }}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                            {% endwith %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         {% endif %}

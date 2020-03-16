@@ -4,7 +4,7 @@ from decimal import Decimal
 
 import dateutil.parser
 import dateutil.rrule
-from django.db.models import Count, DateTimeField, Max, OuterRef, Q, Subquery
+from django.db.models import Count, DateTimeField, Max, Min, OuterRef, Subquery
 from django.utils import timezone
 from django.views.generic import TemplateView
 
@@ -168,34 +168,31 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         if not self.request.event.has_subevents or (ckey != "all" and subevent):
             ev = subevent or self.request.event
             if ev.seating_plan_id is not None:
-                seats_qs = ev.seats.select_related('product').annotate(
-                    has_op=Count('orderposition')
-                ).annotate(has_v=Count('vouchers')).filter(
-                    subevent=subevent,
-                )
-                ctx['seats']['purchased_seats'] = len(set(
-                    seats_qs.filter(
-                        Q(has_op=True)
-                    ).values_list('seat_guid', flat=True)
-                ))
-                ctx['seats']['blocked_seats'] = len(set(
-                    seats_qs.filter(
-                        Q(has_v=True)
-                    ).values_list('seat_guid', flat=True)
-                ))
-                ctx['seats']['free_seats'] = len(ev.free_seats())
+                seats_qs = ev.free_seats(sales_channel=None, include_blocked=True)
+                ctx['seats']['purchased_seats'] = len(ev.seats.annotate(has_op=Count('orderposition')))
+                ctx['seats']['blocked_seats'] = len(seats_qs.filter(blocked=True))
+                ctx['seats']['free_seats'] = len(seats_qs.filter(blocked=False))
+
+                seats_qs = seats_qs.select_related("product").values('product', 'blocked').annotate(count=Count('id'))\
+                    .order_by('product', 'blocked')
 
                 ctx['seats']['products'] = {}
-                for seat in seats_qs.filter(Q(has_op=False)):
-                    if seat.product not in ctx['seats']['products']:
-                        if seat.product and seat.product.has_variations:
-                            price = seat.product.variations.aggregate(Max('default_price'))['default_price__max']
-                        elif seat.product:
-                            price = seat.product.default_price
+                ctx['seats']['stats'] = {}
+                item_cache = {i.pk: i for i in
+                              ev.items.all().filter(pk__in={p['product'] for p in seats_qs if p['product']})}
+                item_cache[None] = None
+
+                for item in seats_qs:
+                    if item_cache[item['product']] not in ctx['seats']['products']:
+                        product = item_cache[item['product']]
+                        if product and product.has_variations:
+                            price = product.variations.aggregate(Min('default_price'))['default_price__min']
+                        elif product:
+                            price = product.default_price
                         else:
                             price = Decimal('0.00')
 
-                        ctx['seats']['products'][seat.product] = {
+                        ctx['seats']['products'][product] = {
                             'free': {
                                 'seats': 0,
                                 'potential': Decimal('0.00'),
@@ -206,13 +203,13 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                             },
                             'price': price,
                         }
-                    data = ctx['seats']['products'][seat.product]
+                    data = ctx['seats']['products'][product]
 
-                    if seat.blocked:
-                        data['blocked']['seats'] += 1
-                        data['blocked']['potential'] += data['price']
+                    if item['blocked']:
+                        data['blocked']['seats'] = item['count']
+                        data['blocked']['potential'] = item['count'] * data['price']
                     else:
-                        data['free']['seats'] += 1
-                        data['free']['potential'] += data['price']
+                        data['free']['seats'] = item['count']
+                        data['free']['potential'] = item['count'] * data['price']
 
         return ctx
