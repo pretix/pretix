@@ -33,6 +33,7 @@
         <fieldset>
             <legend>{% trans "Refund options" %}</legend>
             {% bootstrap_field form.auto_refund layout="control" %}
+            {% bootstrap_field form.manual_refund layout="control" %}
             {% bootstrap_field form.keep_fee_fixed layout="control" %}
             {% bootstrap_field form.keep_fee_percentage layout="control" %}
             {% bootstrap_field form.keep_fees layout="control" %}

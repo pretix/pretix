@@ -534,6 +534,15 @@ class EventCancelForm(forms.Form):
         initial=True,
         required=False
     )
+    manual_refund = forms.BooleanField(
+        label=_('Create manual refund if the payment method odes not support automatic refunds'),
+        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_auto_refund'}),
+        initial=True,
+        required=False,
+        help_text=_('If checked, all payments with a payment method not supporting automatic refunds will be on your '
+                    'manual refund to-do list. Do not check if you want to refund some of the orders by offsetting '
+                    'with different orders or issuing gift cards.')
+    )
     keep_fee_fixed = forms.DecimalField(
         label=_("Keep a fixed cancellation fee"),
         max_digits=10, decimal_places=2,

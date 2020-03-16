@@ -9,8 +9,8 @@ from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, InvoiceAddress, Order, OrderFee, OrderPosition, SubEvent, User,
-    WaitingListEntry,
+    Event, InvoiceAddress, Order, OrderFee, OrderPosition, OrderRefund,
+    SubEvent, User, WaitingListEntry,
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, TolerantDict, mail
@@ -83,7 +83,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_fixed: str,
-                 keep_fee_percentage: str, keep_fees: list=None,
+                 keep_fee_percentage: str, keep_fees: list=None, manual_refund: bool=False,
                  send: bool=False, send_subject: dict=None, send_message: dict=None,
                  send_waitinglist: bool=False, send_waitinglist_subject: dict={}, send_waitinglist_message: dict={},
                  user: int=None):
@@ -167,7 +167,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             refund_amount = o.payment_refund_sum
 
             if auto_refund:
-                _try_auto_refund(o.pk)
+                _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True, source=OrderRefund.REFUND_SOURCE_ADMIN)
 
             if send:
                 _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all())
@@ -211,7 +211,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             refund_amount = o.payment_refund_sum - o.total
 
             if auto_refund:
-                _try_auto_refund(o.pk)
+                _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True, source=OrderRefund.REFUND_SOURCE_ADMIN)
 
             if send:
                 _send_mail(o, send_subject, send_message, subevent, refund_amount, user, positions)

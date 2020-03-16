@@ -1888,7 +1888,7 @@ def perform_order(self, event: Event, payment_provider: str, positions: List[str
             raise OrderError(str(error_messages['busy']))
 
 
-def _try_auto_refund(order):
+def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=OrderRefund.REFUND_SOURCE_BUYER):
     notify_admin = False
     error = False
     if isinstance(order, int):
@@ -1898,13 +1898,14 @@ def _try_auto_refund(order):
         return
 
     proposals = order.propose_auto_refunds(refund_amount)
-    can_auto_refund = sum(proposals.values()) == refund_amount
+    can_auto_refund_sum = sum(proposals.values())
+    can_auto_refund = (allow_partial and can_auto_refund_sum) or can_auto_refund_sum == refund_amount
     if can_auto_refund:
         for p, value in proposals.items():
             with transaction.atomic():
                 r = order.refunds.create(
                     payment=p,
-                    source=OrderRefund.REFUND_SOURCE_BUYER,
+                    source=source,
                     state=OrderRefund.REFUND_STATE_CREATED,
                     amount=value,
                     provider=p.provider
@@ -1930,8 +1931,22 @@ def _try_auto_refund(order):
             else:
                 if r.state != OrderRefund.REFUND_STATE_DONE:
                     notify_admin = True
-    elif refund_amount != Decimal('0.00'):
-        notify_admin = True
+
+    if refund_amount - can_auto_refund_sum > Decimal('0.00'):
+        if manual_refund:
+            with transaction.atomic():
+                r = order.refunds.create(
+                    source=source,
+                    state=OrderRefund.REFUND_STATE_CREATED,
+                    amount=refund_amount - can_auto_refund_sum,
+                    provider='manual'
+                )
+                order.log_action('pretix.event.order.refund.created', {
+                    'local_id': r.local_id,
+                    'provider': r.provider,
+                })
+        else:
+            notify_admin = True
 
     if notify_admin:
         order.log_action('pretix.event.order.refund.requested')

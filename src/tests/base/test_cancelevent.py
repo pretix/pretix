@@ -99,7 +99,7 @@ class EventCancelTests(TestCase):
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.amount == Decimal('46.00')
-        assert r.source == OrderRefund.REFUND_SOURCE_BUYER
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
         assert r.payment == p1
         assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
         assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
@@ -150,7 +150,7 @@ class EventCancelTests(TestCase):
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.amount == Decimal('31.40')
-        assert r.source == OrderRefund.REFUND_SOURCE_BUYER
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
         assert r.payment == p1
         assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
         assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
@@ -207,7 +207,7 @@ class EventCancelTests(TestCase):
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.amount == Decimal('36.90')
-        assert r.source == OrderRefund.REFUND_SOURCE_BUYER
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
         assert r.payment == p1
         assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
         assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
@@ -246,6 +246,73 @@ class EventCancelTests(TestCase):
         assert self.order.all_fees.get(fee_type=OrderFee.FEE_TYPE_SHIPPING).canceled
         assert not self.order.all_fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT).canceled
         assert self.order.all_fees.get(fee_type=OrderFee.FEE_TYPE_CANCELLATION).value == Decimal('4.10')
+
+    @classscope(attr='o')
+    def test_cancel_refund_paid_partial_to_manual(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        p1 = self.order.payments.create(
+            amount=Decimal('20.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.payments.create(
+            amount=Decimal('26.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual',
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        cancel_event(
+            self.event.pk, subevent=None, manual_refund=True,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+
+        assert self.order.refunds.count() == 2
+        r = self.order.refunds.get(provider='giftcard')
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('20.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        assert r.payment == p1
+        r = self.order.refunds.get(provider='manual')
+        assert r.state == OrderRefund.REFUND_STATE_CREATED
+        assert r.amount == Decimal('26.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        assert r.payment is None
+
+    @classscope(attr='o')
+    def test_cancel_refund_paid_partial_no_manual(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        p1 = self.order.payments.create(
+            amount=Decimal('20.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.payments.create(
+            amount=Decimal('26.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual',
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        cancel_event(
+            self.event.pk, subevent=None, manual_refund=False,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+
+        assert self.order.refunds.count() == 1
+        r = self.order.refunds.get(provider='giftcard')
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('20.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        assert r.payment == p1
 
 
 class SubEventCancelTests(TestCase):
@@ -354,7 +421,7 @@ class SubEventCancelTests(TestCase):
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.amount == Decimal('16.20')
-        assert r.source == OrderRefund.REFUND_SOURCE_BUYER
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
         assert r.payment == p1
         assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
         assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
