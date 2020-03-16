@@ -186,6 +186,7 @@ class UserSettings2FATest(SoupTest):
         old_tokens = set(t.token for t in d.token_set.all())
         self.client.post('/control/settings/2fa/regenemergency')
         new_tokens = set(t.token for t in d.token_set.all())
+        d = StaticDevice.objects.get(user=self.user, name='emergency')
         assert d.token_set.count() == 10
         assert old_tokens != new_tokens
 
