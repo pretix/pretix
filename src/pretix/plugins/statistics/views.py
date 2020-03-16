@@ -180,14 +180,14 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 ctx['seats']['products'] = {}
                 ctx['seats']['stats'] = {}
                 item_cache = {i.pk: i for i in
-                              ev.items.annotate(has_variations=Count('variations')).filter(
+                              self.request.event.items.annotate(has_variations=Count('variations')).filter(
                                   pk__in={p['product'] for p in seats_qs if p['product']}
                               )}
                 item_cache[None] = None
 
                 for item in seats_qs:
+                    product = item_cache[item['product']]
                     if item_cache[item['product']] not in ctx['seats']['products']:
-                        product = item_cache[item['product']]
                         if product and product.has_variations:
                             price = product.variations.aggregate(Min('default_price'))['default_price__min']
                         elif product:
