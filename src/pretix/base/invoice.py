@@ -264,7 +264,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     invoice_to_top = 52 * mm
 
     def _draw_invoice_to(self, canvas):
-        p = Paragraph(self.invoice.address_invoice_to.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+        p = Paragraph(bleach.clean(self.invoice.address_invoice_to, tags=[]).strip().replace('\n', '<br />\n'),
+                      style=self.stylesheet['Normal'])
         p.wrapOn(canvas, self.invoice_to_width, self.invoice_to_height)
         p_size = p.wrap(self.invoice_to_width, self.invoice_to_height)
         p.drawOn(canvas, self.invoice_to_left, self.pagesize[1] - p_size[1] - self.invoice_to_top)
