@@ -319,7 +319,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
 
 def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device=None, oauth_application=None,
-                  cancellation_fee=None):
+                  cancellation_fee=None, keep_fees=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -367,23 +367,28 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                         Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
                     position.canceled = True
                     position.save(update_fields=['canceled'])
+                new_fee = cancellation_fee
                 for fee in order.fees.all():
-                    fee.canceled = True
-                    fee.save(update_fields=['canceled'])
+                    if keep_fees and fee in keep_fees:
+                        new_fee -= fee.value
+                    else:
+                        fee.canceled = True
+                        fee.save(update_fields=['canceled'])
 
-                f = OrderFee(
-                    fee_type=OrderFee.FEE_TYPE_CANCELLATION,
-                    value=cancellation_fee,
-                    tax_rule=order.event.settings.tax_rate_default,
-                    order=order,
-                )
-                f._calculate_tax()
-                f.save()
+                if new_fee:
+                    f = OrderFee(
+                        fee_type=OrderFee.FEE_TYPE_CANCELLATION,
+                        value=new_fee,
+                        tax_rule=order.event.settings.tax_rate_default,
+                        order=order,
+                    )
+                    f._calculate_tax()
+                    f.save()
 
                 if order.payment_refund_sum < cancellation_fee:
                     raise OrderError(_('The cancellation fee cannot be higher than the payment credit of this order.'))
                 order.status = Order.STATUS_PAID
-                order.total = f.value
+                order.total = cancellation_fee
                 order.save(update_fields=['status', 'total'])
 
             if i:

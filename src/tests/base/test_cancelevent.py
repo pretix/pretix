@@ -55,7 +55,7 @@ class EventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=None,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
             user=None
         )
         assert len(djmail.outbox) == 1
@@ -70,7 +70,7 @@ class EventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=None,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
         assert len(djmail.outbox) == 2
@@ -92,7 +92,7 @@ class EventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=None,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
 
@@ -120,7 +120,7 @@ class EventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=None,
             auto_refund=False, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
 
@@ -143,7 +143,7 @@ class EventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=None,
             auto_refund=True, keep_fee_fixed="10.00", keep_fee_percentage="10.00",
-            keep_fees=True, send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
 
@@ -171,7 +171,7 @@ class EventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=None,
             auto_refund=True, keep_fee_fixed="10.00", keep_fee_percentage="10.00",
-            keep_fees=True, send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
 
@@ -201,9 +201,8 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00",
-            keep_fees=True, send=False, send_subject="Event canceled", send_message="Event canceled :-(",
-            user=None
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00", keep_fees=[OrderFee.FEE_TYPE_PAYMENT],
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(", user=None
         )
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
@@ -213,6 +212,40 @@ class EventCancelTests(TestCase):
         assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
         assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
         assert gc.value == Decimal('36.90')
+
+    @classscope(attr='o')
+    def test_cancel_keep_some_fees(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.op1.price -= Decimal('5.00')
+        self.op1.save()
+        self.order.fees.create(
+            fee_type=OrderFee.FEE_TYPE_PAYMENT,
+            value=Decimal('2.50'),
+        )
+        self.order.fees.create(
+            fee_type=OrderFee.FEE_TYPE_SHIPPING,
+            value=Decimal('2.50'),
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        cancel_event(
+            self.event.pk, subevent=None,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00", keep_fees=[OrderFee.FEE_TYPE_PAYMENT],
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+        r = self.order.refunds.get()
+        assert r.amount == Decimal('39.40')
+        assert self.order.all_fees.get(fee_type=OrderFee.FEE_TYPE_SHIPPING).canceled
+        assert not self.order.all_fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT).canceled
+        assert self.order.all_fees.get(fee_type=OrderFee.FEE_TYPE_CANCELLATION).value == Decimal('4.10')
 
 
 class SubEventCancelTests(TestCase):
@@ -252,7 +285,7 @@ class SubEventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
         assert len(djmail.outbox) == 2
@@ -267,7 +300,7 @@ class SubEventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
         self.order.refresh_from_db()
@@ -287,7 +320,7 @@ class SubEventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
             user=None
         )
         self.order.refresh_from_db()
@@ -315,7 +348,7 @@ class SubEventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00",
-            keep_fees=True, send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
         r = self.order.refunds.get()
@@ -343,7 +376,7 @@ class SubEventCancelTests(TestCase):
         cancel_event(
             self.event.pk, subevent=None,
             auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
-            keep_fees=True, send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             send_waitinglist=True, send_waitinglist_message="Event canceled", send_waitinglist_subject=":(",
             user=None
         )

@@ -2,9 +2,7 @@ import logging
 from decimal import Decimal
 
 from django.db import transaction
-from django.db.models import (
-    Count, Exists, IntegerField, OuterRef, Subquery, Sum,
-)
+from django.db.models import Count, Exists, IntegerField, OuterRef, Subquery
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.decimal import round_decimal
@@ -85,8 +83,8 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_fixed: str,
-                 keep_fee_percentage: str, keep_fees: bool,
-                 send: bool, send_subject: dict, send_message: dict,
+                 keep_fee_percentage: str, keep_fees: list=None,
+                 send: bool=False, send_subject: dict=None, send_message: dict=None,
                  send_waitinglist: bool=False, send_waitinglist_subject: dict={}, send_waitinglist_message: dict={},
                  user: int=None):
     send_subject = LazyI18nString(send_subject)
@@ -151,20 +149,21 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
     for o in orders_to_cancel.only('id', 'total'):
         try:
             fee = Decimal('0.00')
+            fee_sum = Decimal('0.00')
+            keep_fee_objects = []
             if keep_fees:
-                fee += o.fees.filter(
-                    fee_type__in=(OrderFee.FEE_TYPE_PAYMENT, OrderFee.FEE_TYPE_SHIPPING, OrderFee.FEE_TYPE_SERVICE,
-                                  OrderFee.FEE_TYPE_CANCELLATION)
-                ).aggregate(
-                    s=Sum('value')
-                )['s'] or 0
+                for f in o.fees.all():
+                    if f.fee_type in keep_fees:
+                        fee += f.value
+                        keep_fee_objects.append(f)
+                    fee_sum += f.value
             if keep_fee_percentage:
-                fee += Decimal(keep_fee_percentage) / Decimal('100.00') * (o.total - fee)
+                fee += Decimal(keep_fee_percentage) / Decimal('100.00') * (o.total - fee_sum)
             if keep_fee_fixed:
                 fee += Decimal(keep_fee_fixed)
             fee = round_decimal(min(fee, o.payment_refund_sum), event.currency)
 
-            _cancel_order(o.pk, user, send_mail=False, cancellation_fee=fee)
+            _cancel_order(o.pk, user, send_mail=False, cancellation_fee=fee, keep_fees=keep_fee_objects)
             refund_amount = o.payment_refund_sum
 
             if auto_refund:

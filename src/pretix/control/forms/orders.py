@@ -16,7 +16,9 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.widgets import DatePickerWidget
-from pretix.base.models import InvoiceAddress, ItemAddOn, Order, OrderPosition
+from pretix.base.models import (
+    InvoiceAddress, ItemAddOn, Order, OrderFee, OrderPosition,
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
 from pretix.control.forms.widgets import Select2
@@ -542,8 +544,13 @@ class EventCancelForm(forms.Form):
         max_digits=10, decimal_places=2,
         required=False
     )
-    keep_fees = forms.BooleanField(
-        label=_("Keep payment, shipping and service fees"),
+    keep_fees = forms.MultipleChoiceField(
+        label=_("Keep fees"),
+        widget=forms.CheckboxSelectMultiple,
+        choices=[(k, v) for k, v in OrderFee.FEE_TYPES if k != OrderFee.FEE_TYPE_GIFTCARD],
+        help_text=_('The selected types of fees will not be refunded but instead added to the cancellation fee. Fees '
+                    'are never refunded in when an order in an event series is only partially canceled since it '
+                    'consists of tickets for multiple dates.'),
         required=False,
     )
     send = forms.BooleanField(
@@ -600,6 +607,7 @@ class EventCancelForm(forms.Form):
                 'Your {event} team'
             ))
         )
+
         self._set_field_placeholders('send_subject', ['event_or_subevent', 'refund_amount', 'position_or_address',
                                                       'order', 'event'])
         self._set_field_placeholders('send_message', ['event_or_subevent', 'refund_amount', 'position_or_address',
