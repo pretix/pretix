@@ -14,7 +14,9 @@ from django_scopes import scope
 from pretix.base.channels import WebshopSalesChannel
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Event, Organizer
-from pretix.multidomain.urlreverse import get_domain
+from pretix.multidomain.urlreverse import (
+    get_event_domain, get_organizer_domain,
+)
 from pretix.presale.signals import process_request, process_response
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
@@ -31,7 +33,10 @@ def _detect_event(request, require_live=True, require_plugin=None):
 
     url = resolve(request.path_info)
     try:
-        if hasattr(request, 'organizer_domain'):
+        if hasattr(request, 'event_domain'):
+            # We are on an event's custom domain
+            pass
+        elif hasattr(request, 'organizer_domain'):
             # We are on an organizer's custom domain
             if 'organizer' in url.kwargs and url.kwargs['organizer']:
                 if url.kwargs['organizer'] != request.organizer.slug:
@@ -44,6 +49,16 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 organizer=request.organizer,
             )
             request.organizer = request.organizer
+
+            # If this event has a custom domain, send the user there
+            domain = get_event_domain(request.event)
+            if domain:
+                if request.port and request.port not in (80, 443):
+                    domain = '%s:%d' % (domain, request.port)
+                path = request.get_full_path().split("/", 2)[-1]
+                r = redirect(urljoin('%s://%s' % (request.scheme, domain), path))
+                r['Access-Control-Allow-Origin'] = '*'
+                return r
         else:
             # We are on our main domain
             if 'event' in url.kwargs and 'organizer' in url.kwargs:
@@ -55,6 +70,16 @@ def _detect_event(request, require_live=True, require_plugin=None):
                         organizer__slug=url.kwargs['organizer']
                     )
                 request.organizer = request.event.organizer
+
+                # If this event has a custom domain, send the user there
+                domain = get_event_domain(request.event)
+                if domain:
+                    if request.port and request.port not in (80, 443):
+                        domain = '%s:%d' % (domain, request.port)
+                    path = request.get_full_path().split("/", 3)[-1]
+                    r = redirect(urljoin('%s://%s' % (request.scheme, domain), path))
+                    r['Access-Control-Allow-Origin'] = '*'
+                    return r
             elif 'organizer' in url.kwargs:
                 request.organizer = Organizer.objects.using(db).get(
                     slug=url.kwargs['organizer']
@@ -63,7 +88,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 raise Http404()
 
             # If this organizer has a custom domain, send the user there
-            domain = get_domain(request.organizer)
+            domain = get_organizer_domain(request.organizer)
             if domain:
                 if request.port and request.port not in (80, 443):
                     domain = '%s:%d' % (domain, request.port)

@@ -18,7 +18,7 @@ class EventMiddleware:
         if url.namespace != 'presale':
             return self.get_response(request)
 
-        if 'organizer' in url.kwargs or 'event' in url.kwargs:
+        if 'organizer' in url.kwargs or 'event' in url.kwargs or getattr(request, 'event_domain', False):
             redirect = _detect_event(request, require_live=url.url_name != 'event.widget.productlist')
             if redirect:
                 return redirect

@@ -1,15 +1,48 @@
 from urllib.parse import urljoin, urlsplit
 
 from django.conf import settings
+from django.db.models import Q
 from django.urls import reverse
 
 from pretix.base.models import Event, Organizer
 
+from .models import KnownDomain
 
-def get_domain(organizer):
+
+def get_event_domain(event, fallback=False, return_info=False):
+    assert isinstance(event, Event)
+    suffix = ('_fallback' if fallback else '') + ('_info' if return_info else '')
+    domain = getattr(event, '_cached_domain' + suffix, None) or event.cache.get('domain' + suffix)
+    if domain is None:
+        domain = None, None
+        if fallback:
+            domains = KnownDomain.objects.filter(
+                Q(event=event) | Q(organizer_id=event.organizer_id, event__isnull=True)
+            )
+            domains_event = [d for d in domains if d.event_id == event.pk]
+            domains_org = [d for d in domains if not d.event_id]
+            if domains_event:
+                domain = domains_event[0].domainname, "event"
+            elif domains_org:
+                domain = domains_org[0].domainname, "organizer"
+        else:
+            domains = event.domains.all()
+            domain = domains[0].domainname if domains else None, "event"
+        event.cache.set('domain' + suffix, domain or 'none')
+        setattr(event, '_cached_domain' + suffix, domain or 'none')
+    elif domain == 'none':
+        setattr(event, '_cached_domain' + suffix, 'none')
+        domain = None, None
+    else:
+        setattr(event, '_cached_domain' + suffix, domain)
+    return domain if return_info or not isinstance(domain, tuple) else domain[0]
+
+
+def get_organizer_domain(organizer):
+    assert isinstance(organizer, Organizer)
     domain = getattr(organizer, '_cached_domain', None) or organizer.cache.get('domain')
     if domain is None:
-        domains = organizer.domains.all()
+        domains = organizer.domains.filter(event__isnull=True)
         domain = domains[0].domainname if domains else None
         organizer.cache.set('domain', domain or 'none')
         organizer._cached_domain = domain or 'none'
@@ -45,7 +78,7 @@ def mainreverse(name, kwargs=None):
 def eventreverse(obj, name, kwargs=None):
     """
     Works similar to ``django.core.urlresolvers.reverse`` but takes into account that some
-    organizers might have their own (sub)domain instead of a subpath.
+    organizers or events might have their own (sub)domain instead of a subpath.
 
     Non-keyword arguments are not supported as we want do discourage using them for better
     readability.
@@ -58,7 +91,7 @@ def eventreverse(obj, name, kwargs=None):
         needed.
     :returns: An absolute URL (including scheme and host) as a string
     """
-    from pretix.multidomain import subdomain_urlconf, maindomain_urlconf
+    from pretix.multidomain import event_domain_urlconf, organizer_domain_urlconf, maindomain_urlconf
 
     c = None
     if not kwargs:
@@ -69,18 +102,27 @@ def eventreverse(obj, name, kwargs=None):
 
     kwargs = kwargs or {}
     if isinstance(obj, Event):
-        kwargs['event'] = obj.slug
         organizer = obj.organizer
+        event = obj
+        kwargs['event'] = obj.slug
     elif isinstance(obj, Organizer):
         organizer = obj
+        event = None
     else:
         raise TypeError('obj should be Event or Organizer')
-    domain = get_domain(organizer)
+
+    if event:
+        domain, domaintype = get_event_domain(obj, fallback=True, return_info=True)
+    else:
+        domain, domaintype = get_organizer_domain(organizer), "organizer"
+
     if domain:
+        if domaintype == "event" and 'event' in kwargs:
+            del kwargs['event']
         if 'organizer' in kwargs:
             del kwargs['organizer']
 
-        path = reverse(name, kwargs=kwargs, urlconf=subdomain_urlconf)
+        path = reverse(name, kwargs=kwargs, urlconf=event_domain_urlconf if domaintype == "event" else organizer_domain_urlconf)
         siteurlsplit = urlsplit(settings.SITE_URL)
         if siteurlsplit.port and siteurlsplit.port not in (80, 443):
             domain = '%s:%d' % (domain, siteurlsplit.port)

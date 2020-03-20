@@ -15,7 +15,9 @@ from django.utils.translation.trans_real import (
 )
 
 from pretix.base.settings import GlobalSettingsObject
-from pretix.multidomain.urlreverse import get_domain
+from pretix.multidomain.urlreverse import (
+    get_event_domain, get_organizer_domain,
+)
 
 _supported = None
 
@@ -231,7 +233,10 @@ class SecurityMiddleware(MiddlewareMixin):
                 dynamicdomain += " " + settings.SITE_URL
 
         if hasattr(request, 'organizer') and request.organizer:
-            domain = get_domain(request.organizer)
+            if hasattr(request, 'event') and request.event:
+                domain = get_event_domain(request.event, fallback=True)
+            else:
+                domain = get_organizer_domain(request.organizer)
             if domain:
                 siteurlsplit = urlsplit(settings.SITE_URL)
                 if siteurlsplit.port and siteurlsplit.port not in (80, 443):

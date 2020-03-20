@@ -48,7 +48,7 @@ from pretix.control.forms.event import (
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
-from pretix.multidomain.urlreverse import get_domain
+from pretix.multidomain.urlreverse import get_event_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
@@ -184,6 +184,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         kwargs = super().get_form_kwargs()
         if self.request.user.has_active_staff_session(self.request.session.session_key):
             kwargs['change_slug'] = True
+            kwargs['domain'] = True
         return kwargs
 
     def post(self, request, *args, **kwargs):
@@ -1208,7 +1209,7 @@ class WidgetSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['urlprefix'] = settings.SITE_URL
-        domain = get_domain(self.request.organizer)
+        domain = get_event_domain(self.request.event, fallback=True)
         if domain:
             siteurlsplit = urlsplit(settings.SITE_URL)
             if siteurlsplit.port and siteurlsplit.port not in (80, 443):

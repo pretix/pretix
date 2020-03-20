@@ -6,14 +6,14 @@ from django.conf import settings
 
 from pretix.base.services.tasks import EventTask
 from pretix.celery_app import app
-from pretix.multidomain.urlreverse import get_domain
+from pretix.multidomain.urlreverse import get_event_domain
 from pretix.plugins.stripe.models import RegisteredApplePayDomain
 
 logger = logging.getLogger(__name__)
 
 
 def get_domain_for_event(event):
-    domain = get_domain(event.organizer)
+    domain = get_event_domain(event, fallback=True)
     if not domain:
         siteurlsplit = urlsplit(settings.SITE_URL)
         return siteurlsplit.hostname
