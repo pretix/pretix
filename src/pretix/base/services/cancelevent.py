@@ -166,11 +166,12 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             _cancel_order(o.pk, user, send_mail=False, cancellation_fee=fee, keep_fees=keep_fee_objects)
             refund_amount = o.payment_refund_sum
 
-            if auto_refund:
-                _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True, source=OrderRefund.REFUND_SOURCE_ADMIN)
-
-            if send:
-                _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all())
+            try:
+                if auto_refund:
+                    _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True, source=OrderRefund.REFUND_SOURCE_ADMIN)
+            finally:
+                if send:
+                    _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all())
         except LockTimeoutException:
             logger.exception("Could not cancel order")
             failed += 1
