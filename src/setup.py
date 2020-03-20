@@ -138,7 +138,7 @@ setup(
         'django-countries',
         'pyuca',
         'defusedcsv>=1.1.0',
-        'vat_moss==0.11.0',
+        'vat_moss_forked==2020.3.20.0.11.0',
         'django-localflavor>=2.2',
         'django-localflavor',
         'jsonschema',
