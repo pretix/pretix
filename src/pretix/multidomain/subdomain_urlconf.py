@@ -1,5 +1,4 @@
 import importlib.util
-import warnings
 
 from django.apps import apps
 from django.conf.urls import include, url
@@ -32,15 +31,6 @@ for app in apps.get_app_configs():
                 raw_plugin_patterns.append(
                     url(r'', include((patterns, app.label)))
                 )
-
-        elif importlib.util.find_spec(app.name + '.subdomain_urls'):  # noqa
-            warnings.warn('Please put your config in an \'urls\' module using the event_patterns '
-                          'attribute. Support for subdomain_urls in plugins will be dropped in the future.',
-                          DeprecationWarning)
-            urlmod = importlib.import_module(app.name + '.subdomain_urls')
-            raw_plugin_patterns.append(
-                url(r'', include((urlmod, app.label)))
-            )
 
 plugin_patterns = [
     url(r'', include((raw_plugin_patterns, 'plugins')))

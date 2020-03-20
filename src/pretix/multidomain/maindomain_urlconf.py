@@ -1,5 +1,4 @@
 import importlib.util
-import warnings
 
 from django.apps import apps
 from django.conf.urls import include, url
@@ -37,14 +36,6 @@ for app in apps.get_app_configs():
                                                   include(patterns)))
             raw_plugin_patterns.append(
                 url(r'', include((single_plugin_patterns, app.label)))
-            )
-        elif importlib.util.find_spec(app.name + '.maindomain_urls'):  # noqa
-            warnings.warn('Please put your config in an \'urls\' module using the urlpatterns and event_patterns '
-                          'attribute. Support for maindomain_urls in plugins will be dropped in the future.',
-                          DeprecationWarning)
-            urlmod = importlib.import_module(app.name + '.maindomain_urls')
-            raw_plugin_patterns.append(
-                url(r'', include((urlmod, app.label)))
             )
 
 plugin_patterns = [
