@@ -427,19 +427,22 @@ class Paypal(BasePaymentProvider):
     def execute_refund(self, refund: OrderRefund):
         self.init_api()
 
-        sale = None
-        for res in refund.payment.info_data['transactions'][0]['related_resources']:
-            for k, v in res.items():
-                if k == 'sale':
-                    sale = paypalrestsdk.Sale.find(v['id'])
-                    break
+        try:
+            sale = None
+            for res in refund.payment.info_data['transactions'][0]['related_resources']:
+                for k, v in res.items():
+                    if k == 'sale':
+                        sale = paypalrestsdk.Sale.find(v['id'])
+                        break
 
-        pp_refund = sale.refund({
-            "amount": {
-                "total": self.format_price(refund.amount),
-                "currency": refund.order.event.currency
-            }
-        })
+            pp_refund = sale.refund({
+                "amount": {
+                    "total": self.format_price(refund.amount),
+                    "currency": refund.order.event.currency
+                }
+            })
+        except paypalrestsdk.exceptions.ConnectionError as e:
+            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(e)))
         if not pp_refund.success():
             raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(pp_refund.error))
         else:
