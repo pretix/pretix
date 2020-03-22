@@ -12,7 +12,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
-from django.utils.crypto import get_random_string
+from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
@@ -51,6 +51,10 @@ class UserManager(BaseUserManager):
 
 
 def generate_notifications_token():
+    return get_random_string(length=32)
+
+
+def generate_session_token():
     return get_random_string(length=32)
 
 
@@ -110,6 +114,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     )
     notifications_token = models.CharField(max_length=255, default=generate_notifications_token)
     auth_backend = models.CharField(max_length=255, default='native')
+    session_token = models.CharField(max_length=32, default=generate_session_token)
 
     objects = UserManager()
 
@@ -381,6 +386,20 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
             self._staff_session_cache[session_key] = sess
         return self._staff_session_cache[session_key]
+
+    def get_session_auth_hash(self):
+        """
+        Return an HMAC that needs to
+        """
+        key_salt = "pretix.base.models.User.get_session_auth_hash"
+        payload = self.password
+        payload += self.email
+        payload += self.session_token
+        return salted_hmac(key_salt, payload).hexdigest()
+
+    def update_session_token(self):
+        self.session_token = generate_session_token()
+        self.save(update_fields=['session_token'])
 
 
 class StaffSession(models.Model):

@@ -323,6 +323,8 @@ class User2FADeviceDeleteView(RecentAuthenticationRequiredMixin, TemplateView):
             msgs.append(_('Two-factor authentication has been disabled.'))
 
         self.request.user.send_security_notice(msgs)
+        self.request.user.update_session_token()
+        update_session_auth_hash(self.request, self.request.user)
         messages.success(request, _('The device has been removed.'))
         return redirect(reverse('control:user.settings.2fa'))
 
@@ -434,6 +436,8 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
                     _('Two-factor authentication has been enabled.')
                 )
             self.request.user.send_security_notice(notices)
+            self.request.user.update_session_token()
+            update_session_auth_hash(self.request, self.request.user)
 
             note = ''
             if not self.request.user.require_2fa:
@@ -492,6 +496,8 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
                     _('Two-factor authentication has been enabled.')
                 )
             self.request.user.send_security_notice(notices)
+            self.request.user.update_session_token()
+            update_session_auth_hash(self.request, self.request.user)
 
             note = ''
             if not self.request.user.require_2fa:
@@ -526,6 +532,8 @@ class User2FAEnableView(RecentAuthenticationRequiredMixin, TemplateView):
         self.request.user.send_security_notice([
             _('Two-factor authentication has been enabled.')
         ])
+        self.request.user.update_session_token()
+        update_session_auth_hash(self.request, self.request.user)
         return redirect(reverse('control:user.settings.2fa'))
 
 
@@ -540,6 +548,8 @@ class User2FADisableView(RecentAuthenticationRequiredMixin, TemplateView):
         self.request.user.send_security_notice([
             _('Two-factor authentication has been disabled.')
         ])
+        self.request.user.update_session_token()
+        update_session_auth_hash(self.request, self.request.user)
         return redirect(reverse('control:user.settings.2fa'))
 
 
@@ -555,6 +565,8 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
         self.request.user.send_security_notice([
             _('Your two-factor emergency codes have been regenerated.')
         ])
+        self.request.user.update_session_token()
+        update_session_auth_hash(self.request, self.request.user)
         messages.success(request, _('Your emergency codes have been newly generated. Remember to store them in a safe '
                                     'place in case you lose access to your devices.'))
         return redirect(reverse('control:user.settings.2fa'))
