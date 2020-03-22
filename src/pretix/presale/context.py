@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.utils import translation
@@ -11,6 +13,8 @@ from pretix.helpers.i18n import (
 )
 
 from .signals import footer_link, html_footer, html_head, html_page_header
+
+logger = logging.getLogger(__name__)
 
 
 def contextprocessor(request):
@@ -62,11 +66,14 @@ def contextprocessor(request):
             ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)
 
         ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
-        ctx['social_image'] = request.event.cache.get_or_set(
-            'social_image_url',
-            request.event.social_image,
-            60
-        )
+        try:
+            ctx['social_image'] = request.event.cache.get_or_set(
+                'social_image_url',
+                request.event.social_image,
+                60
+            )
+        except:
+            logger.exception('Could not generate social image')
 
         ctx['event'] = request.event
         ctx['languages'] = [get_language_info(code) for code in request.event.settings.locales]
