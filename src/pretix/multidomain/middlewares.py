@@ -39,7 +39,7 @@ class MultiDomainMiddleware(MiddlewareMixin):
         default_domain, default_port = split_domain_port(urlparse(settings.SITE_URL).netloc)
         request.port = int(port) if port else None
         request.host = domain
-        if domain == default_domain or settings.DEBUG or domain in LOCAL_HOST_NAMES:
+        if domain == default_domain:
             request.urlconf = "pretix.multidomain.maindomain_urlconf"
         elif domain:
             cached = cache.get('pretix_multidomain_instance_{}'.format(domain))
@@ -67,7 +67,8 @@ class MultiDomainMiddleware(MiddlewareMixin):
                 request.urlconf = "pretix.multidomain.organizer_domain_urlconf"
             else:
                 raise DisallowedHost("Unknown host: %r" % host)
-
+        elif settings.DEBUG or domain in LOCAL_HOST_NAMES:
+            request.urlconf = "pretix.multidomain.maindomain_urlconf"
         else:
             raise DisallowedHost("Invalid HTTP_HOST header: %r." % host)
 
