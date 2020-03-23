@@ -324,7 +324,7 @@ class ModelRelativeDateTimeField(models.CharField):
             return value.to_string()
         return value
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection):
         if value is None:
             return None
         return RelativeDateWrapper.from_string(value)
