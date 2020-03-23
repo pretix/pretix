@@ -314,7 +314,7 @@ class BaseQuestionsForm(forms.Form):
                     help_text=help_text,
                     widget=forms.Select,
                     empty_label='',
-                    initial=initial.answer if initial else None,
+                    initial=initial.answer if initial else guess_country(event),
                 )
             elif q.type == Question.TYPE_CHOICE:
                 field = forms.ModelChoiceField(
