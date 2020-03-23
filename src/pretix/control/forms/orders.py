@@ -8,7 +8,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.timezone import make_aware, now
 from django.utils.translation import (
-    gettext_noop, pgettext_lazy, ugettext_lazy as _,
+    gettext_lazy as _, gettext_noop, pgettext_lazy,
 )
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString

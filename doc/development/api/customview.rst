@@ -66,7 +66,7 @@ event-related views, there is also a signal that allows you to add the view to t
 
     from django.urls import resolve, reverse
     from django.dispatch import receiver
-    from django.utils.translation import ugettext_lazy as _
+    from django.utils.translation import gettext_lazy as _
     from pretix.control.signals import nav_event
 
 

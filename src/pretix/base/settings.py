@@ -11,7 +11,7 @@ from django.core.files import File
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Model
 from django.utils.translation import (
-    pgettext, pgettext_lazy, ugettext_lazy as _, ugettext_noop,
+    gettext_lazy as _, gettext_noop, pgettext, pgettext_lazy,
 )
 from django_countries import countries
 from hierarkey.models import GlobalSettingsBase, Hierarkey
@@ -1006,7 +1006,7 @@ DEFAULTS = {
     },
     'mail_text_resend_link': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 you receive this message because you asked us to send you the link
 to your order for {event}.
@@ -1019,7 +1019,7 @@ Your {event} team"""))
     },
     'mail_text_resend_all_links': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 somebody requested a list of your orders for {event}.
 The list is as follows:
@@ -1031,7 +1031,7 @@ Your {event} team"""))
     },
     'mail_text_order_free_attendee': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello {attendee_name},
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
 you have been registered for {event} successfully.
 
@@ -1043,7 +1043,7 @@ Your {event} team"""))
     },
     'mail_text_order_free': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 your order for {event} was successful. As you only ordered free products,
 no payment is required.
@@ -1060,7 +1060,7 @@ Your {event} team"""))
     },
     'mail_text_order_placed_require_approval': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 we successfully received your order for {event}. Since you ordered
 a product that requires approval by the event organizer, we ask you to
@@ -1074,7 +1074,7 @@ Your {event} team"""))
     },
     'mail_text_order_placed': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 we successfully received your order for {event} with a total value
 of {total_with_currency}. Please complete your payment before {expire_date}.
@@ -1093,7 +1093,7 @@ Your {event} team"""))
     },
     'mail_text_order_placed_attendee': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello {attendee_name},
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
 a ticket for {event} has been ordered for you.
 
@@ -1105,7 +1105,7 @@ Your {event} team"""))
     },
     'mail_text_order_changed': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 your order for {event} has been changed.
 
@@ -1117,7 +1117,7 @@ Your {event} team"""))
     },
     'mail_text_order_paid': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 we successfully received your payment for {event}. Thank you!
 
@@ -1135,7 +1135,7 @@ Your {event} team"""))
     },
     'mail_text_order_paid_attendee': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello {attendee_name},
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
 a ticket for {event} that has been ordered for you is now paid.
 
@@ -1151,7 +1151,7 @@ Your {event} team"""))
     },
     'mail_text_order_expire_warning': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 we did not yet receive a full payment for your order for {event}.
 Please keep in mind that we only guarantee your order if we receive
@@ -1165,7 +1165,7 @@ Your {event} team"""))
     },
     'mail_text_waiting_list': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 you submitted yourself to the waiting list for {event},
 for the product {product}.
@@ -1188,7 +1188,7 @@ Your {event} team"""))
     },
     'mail_text_order_canceled': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 your order {code} for {event} has been canceled.
 
@@ -1200,7 +1200,7 @@ Your {event} team"""))
     },
     'mail_text_order_approved': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 we approved your order for {event} and will be happy to welcome you
 at our event.
@@ -1216,7 +1216,7 @@ Your {event} team"""))
     },
     'mail_text_order_denied': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 unfortunately, we denied your order request for {event}.
 
@@ -1231,7 +1231,7 @@ Your {event} team"""))
     },
     'mail_text_order_custom_mail': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 You can change your order details and view the status of your order at
 {url}
@@ -1249,7 +1249,7 @@ Your {event} team"""))
     },
     'mail_text_download_reminder_attendee': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello {attendee_name},
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
 you are registered for {event}.
 
@@ -1261,7 +1261,7 @@ Your {event} team"""))
     },
     'mail_text_download_reminder': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 you bought a ticket for {event}.
 
@@ -1391,7 +1391,7 @@ Your {event} team"""))
         )
     },
     'checkout_email_helptext': {
-        'default': LazyI18nString.from_gettext(ugettext_noop(
+        'default': LazyI18nString.from_gettext(gettext_noop(
             'Make sure to enter a valid email address. We will send you an order '
             'confirmation including a link that you need to access your order later.'
         )),

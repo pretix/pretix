@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import override
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import CachedFile, Event, cachedfile_name
@@ -26,7 +26,7 @@ def export(event: Event, fileid: str, provider: str, form_data: Dict[str, Any]) 
                 d = ex.render(form_data)
                 if d is None:
                     raise ExportError(
-                        ugettext('Your export did not contain any data.')
+                        gettext('Your export did not contain any data.')
                     )
                 file.filename, file.type, data = d
                 file.file.save(cachedfile_name(file, file.filename), ContentFile(data))

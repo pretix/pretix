@@ -6,7 +6,7 @@ import django.core.validators
 import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 import pretix.base.validators
 from pretix.base.i18n import language

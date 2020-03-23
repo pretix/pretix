@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Sum
 from django.utils.crypto import get_random_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.banlist import banned
 from pretix.base.models import LoggedModel
@@ -83,6 +83,7 @@ class GiftCard(LoggedModel):
 
     class Meta:
         unique_together = (('secret', 'issuer'),)
+        ordering = ("issuance",)
 
 
 class GiftCardTransaction(models.Model):

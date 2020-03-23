@@ -5,7 +5,7 @@ from decimal import Decimal
 import pycountry
 from django.db.models import F, Q
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 from django_countries.fields import Country
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -862,7 +862,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     else:
                         pos_data['seat'] = seat
                         if (seat not in free_seats and not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web'))) or seat in seats_seen:
-                            errs[i]['seat'] = [ugettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
+                            errs[i]['seat'] = [gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
                         seats_seen.add(seat)
                 elif seated:
                     errs[i]['seat'] = ['The specified product requires to choose a seat.']
@@ -877,7 +877,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                                   if pos_data.get('variation')
                                   else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))
                     if len(new_quotas) == 0:
-                        errs[i]['item'] = [ugettext_lazy('The product "{}" is not assigned to a quota.').format(
+                        errs[i]['item'] = [gettext_lazy('The product "{}" is not assigned to a quota.').format(
                             str(pos_data.get('item'))
                         )]
                     else:
@@ -889,7 +889,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                                 quota_avail_cache[quota][1] -= 1
                                 if quota_avail_cache[quota][1] < 0:
                                     errs[i]['item'] = [
-                                        ugettext_lazy('There is not enough quota available on quota "{}" to perform the operation.').format(
+                                        gettext_lazy('There is not enough quota available on quota "{}" to perform the operation.').format(
                                             quota.name
                                         )
                                     ]

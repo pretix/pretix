@@ -4,7 +4,7 @@ from django import forms
 from django.utils.formats import get_format
 from django.utils.functional import lazy
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class DatePickerWidget(forms.DateInput):

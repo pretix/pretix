@@ -1,5 +1,4 @@
-from django.utils import six
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.functional import keep_lazy
 from django.utils.safestring import SafeText, mark_safe
 
@@ -19,13 +18,13 @@ _json_escapes_attr = {
 }
 
 
-@keep_lazy(six.text_type, SafeText)
+@keep_lazy(str, SafeText)
 def escapejson(value):
     """Hex encodes characters for use in a application/json type script."""
-    return mark_safe(force_text(value).translate(_json_escapes))
+    return mark_safe(force_str(value).translate(_json_escapes))
 
 
-@keep_lazy(six.text_type, SafeText)
+@keep_lazy(str, SafeText)
 def escapejson_attr(value):
     """Hex encodes characters for use in a html attributw script."""
-    return mark_safe(force_text(value).translate(_json_escapes_attr))
+    return mark_safe(force_str(value).translate(_json_escapes_attr))

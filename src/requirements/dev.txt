@@ -1,5 +1,4 @@
-django-debug-toolbar==1.11
-sqlparse==0.3.*  # pinned due to difficulties with django-debug-toolbar
+django-debug-toolbar==2.1
 # Testing requirements
 pycodestyle==2.5.*
 pyflakes==2.1.*
@@ -7,16 +6,16 @@ pep8-naming
 flake8==3.7.*
 codecov
 coverage
-pytest==4.4.*
+pytest==5.3.*
 pytest-django
 isort
-pytest-rerunfailures==7.*
-pytest-mock==1.10.*
+pytest-rerunfailures==8.*
+pytest-mock==2.0.*
 responses
 potypo
 freezegun
 
 # Not really required, just nice to have
-pytest-xdist==1.28.*
+pytest-xdist==1.31.*
 pytest-cache
 pytest-sugar

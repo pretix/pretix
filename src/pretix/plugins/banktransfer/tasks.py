@@ -6,7 +6,7 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
-from django.utils.translation import ugettext, ugettext_noop
+from django.utils.translation import gettext, gettext_noop
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.email import get_email_context
@@ -28,7 +28,7 @@ def notify_incomplete_payment(o: Order):
     with language(o.locale):
         email_template = o.event.settings.mail_text_order_expire_warning
         email_context = get_email_context(event=o.event, order=o)
-        email_subject = ugettext('Your order received an incomplete payment: %(code)s') % {'code': o.code}
+        email_subject = gettext('Your order received an incomplete payment: %(code)s') % {'code': o.code}
 
         try:
             o.send_mail(
@@ -96,7 +96,7 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
         trans.state = BankTransaction.STATE_DUPLICATE
     elif trans.order.status == Order.STATUS_CANCELED:
         trans.state = BankTransaction.STATE_ERROR
-        trans.message = ugettext_noop('The order has already been canceled.')
+        trans.message = gettext_noop('The order has already been canceled.')
     else:
         try:
             p, created = trans.order.payments.get_or_create(

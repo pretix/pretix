@@ -9,7 +9,7 @@ from django.core.files.storage import default_storage
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from PyPDF2 import PdfFileMerger
 
 from pretix.base.i18n import language

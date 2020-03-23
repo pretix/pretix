@@ -1,29 +1,29 @@
 # Functional requirements
-Django==2.2.*
-djangorestframework==3.9.*
+Django==3.0.*
+djangorestframework==3.11.*
 python-dateutil==2.8.*
-requests==2.21.0
+requests==2.22.0
 pytz
-django-bootstrap3==11.0.*
+django-bootstrap3==12.0.*
 django-formset-js-improved==0.5.0.2
-django-compressor==2.2.*
+django-compressor==2.4.*
 django-hierarkey==1.0.*,>=1.0.3
-django-filter==2.1.*
-django-scopes==1.1.*
+django-filter==2.2.*
+django-scopes==1.2.*
 reportlab>=3.5.18*
 PyPDF2==1.26.*
-Pillow==6.*
+Pillow==7.*
 django-libsass
 libsass==0.19.2  # Bump when https://github.com/sass/libsass/issues/3053 is fixed
-django-otp==0.5.*
+django-otp==0.7.*,>=0.7.5
 python-u2flib-server==4.*
 webauthn==0.4.*
-django-formtools==2.1
-celery==4.3.*
-kombu==4.5.*
-django-statici18n==1.8.*
+django-formtools==2.2
+celery==4.4.*
+kombu==4.6.*
+django-statici18n==1.9.*
 inlinestyler==0.2.*
-BeautifulSoup4==4.7.*
+BeautifulSoup4==4.8.*
 slimit
 lxml
 static3==0.7.*
@@ -32,18 +32,18 @@ csscompressor
 django-markup
 markdown<=2.2
 bleach==3.1.*
-sentry-sdk==0.7.*
+sentry-sdk==0.14.*
 babel
 django-i18nfield>=1.7.0
 django-hijack>=2.1.10,<2.2.0
 jsonschema
-openpyxl==2.6.*  # Bump to 3.0 after python 3.5 is dropped
+openpyxl==3.0.*
 django-oauth-toolkit==1.2.*
 oauthlib==3.1.*
 django-jsonfallback>=2.1.2
 psycopg2-binary
 # Stripe
-stripe==2.32.*
+stripe==2.42.*
 # PayPal
 paypalrestsdk==1.13.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147
@@ -52,16 +52,15 @@ chardet<3.1.0,>=3.0.2
 mt-940==3.2
 vobject==0.9.*
 pycountry
-django-countries
+django-countries>=6.0
 pyuca  # for better sorting of country names in django-countries
 defusedcsv>=1.1.0
 vat_moss_forked==2020.3.20.0.11.0
 django-localflavor>=2.2
-urllib3==1.24.*
-django-redis==4.10.*
-redis==3.2.*
-django-phonenumber-field==3.0.*
-phonenumberslite==8.10.*
+django-redis==4.11.*
+redis==3.3.*
+django-phonenumber-field==4.0.*
+phonenumberslite==8.11.*
 python-bidi==0.4.*  # Support for arabic in reportlab
 arabic-reshaper==2.0.15  # Support for Aabic in reportlab
 packaging

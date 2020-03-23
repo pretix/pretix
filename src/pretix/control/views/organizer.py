@@ -16,7 +16,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import (
     CreateView, DeleteView, DetailView, FormView, ListView, UpdateView,
@@ -935,7 +935,7 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     def get_queryset(self):
         qs = self.request.organizer.issued_gift_cards.annotate(
             cached_value=Coalesce(Sum('transactions__value'), Decimal('0.00'))
-        )
+        ).order_by('-issuance')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
         return qs

@@ -10,7 +10,7 @@ from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format, localize
 from django.utils.translation import (
-    get_language, pgettext, ugettext, ugettext_lazy,
+    get_language, gettext, gettext_lazy, pgettext,
 )
 from PIL.Image import BICUBIC
 from reportlab.lib import pagesizes
@@ -423,7 +423,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             canvas.saveState()
             canvas.setFont('OpenSansBd', 30)
             canvas.setFillColorRGB(32, 0, 0)
-            canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, ugettext('TEST MODE'))
+            canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, gettext('TEST MODE'))
             canvas.restoreState()
 
     def _on_first_page(self, canvas: Canvas, doc):
@@ -688,7 +688,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
 class Modern1Renderer(ClassicInvoiceRenderer):
     identifier = 'modern1'
-    verbose_name = ugettext_lazy('Modern Invoice Renderer (pretix 2.7)')
+    verbose_name = gettext_lazy('Modern Invoice Renderer (pretix 2.7)')
     bottom_margin = 16.9 * mm
     top_margin = 16.9 * mm
     right_margin = 20 * mm

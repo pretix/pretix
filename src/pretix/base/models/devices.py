@@ -3,7 +3,7 @@ import string
 from django.db import models
 from django.db.models import Max
 from django.utils.crypto import get_random_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.models import LoggedModel

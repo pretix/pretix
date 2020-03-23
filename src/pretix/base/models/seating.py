@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import F, Q
 from django.utils.deconstruct import deconstructible
 from django.utils.timezone import now
-from django.utils.translation import gettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from pretix.base.models import Event, Item, LoggedModel, Organizer, SubEvent
 

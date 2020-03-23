@@ -18,7 +18,7 @@ from django.forms import Select
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import (
-    get_language, pgettext_lazy, ugettext_lazy as _,
+    get_language, gettext_lazy as _, pgettext_lazy,
 )
 from django_countries import countries
 from django_countries.fields import Country, CountryField

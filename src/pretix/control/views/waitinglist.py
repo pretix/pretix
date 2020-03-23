@@ -10,7 +10,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.utils.timezone import now
-from django.utils.translation import pgettext, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView

@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.db.models import Q
-from django.utils.translation import get_language, ugettext_lazy as _
+from django.utils.translation import get_language, gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 

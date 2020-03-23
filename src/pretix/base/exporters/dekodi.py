@@ -6,7 +6,7 @@ import dateutil
 from django import forms
 from django.core.serializers.json import DjangoJSONEncoder
 from django.dispatch import receiver
-from django.utils.translation import ugettext, ugettext_lazy
+from django.utils.translation import gettext, gettext_lazy
 
 from pretix.base.i18n import language
 from pretix.base.models import Invoice, OrderPayment
@@ -79,7 +79,7 @@ class DekodiNREIExporter(BaseExporter):
                     payments.append({
                         'PTID': '5',
                         'PTN': 'Lastschrift',
-                        'PTNo4': ugettext('Event ticket {event}-{code}').format(
+                        'PTNo4': gettext('Event ticket {event}-{code}').format(
                             event=self.event.slug.upper(),
                             code=invoice.order.code
                         ),
@@ -199,19 +199,19 @@ class DekodiNREIExporter(BaseExporter):
             [
                 ('date_from',
                  forms.DateField(
-                     label=ugettext_lazy('Start date'),
+                     label=gettext_lazy('Start date'),
                      widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                      required=False,
-                     help_text=ugettext_lazy('Only include invoices issued on or after this date. Note that the invoice date does '
-                                             'not always correspond to the order or payment date.')
+                     help_text=gettext_lazy('Only include invoices issued on or after this date. Note that the invoice date does '
+                                            'not always correspond to the order or payment date.')
                  )),
                 ('date_to',
                  forms.DateField(
-                     label=ugettext_lazy('End date'),
+                     label=gettext_lazy('End date'),
                      widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                      required=False,
-                     help_text=ugettext_lazy('Only include invoices issued on or before this date. Note that the invoice date '
-                                             'does not always correspond to the order or payment date.')
+                     help_text=gettext_lazy('Only include invoices issued on or before this date. Note that the invoice date '
+                                            'does not always correspond to the order or payment date.')
                  )),
             ]
         )

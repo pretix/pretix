@@ -26,7 +26,7 @@ from django.utils.encoding import escape_uri_path
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country, CountryField
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString

@@ -6,7 +6,7 @@ from django.db.models import (
     Case, Count, DateTimeField, F, Max, OuterRef, Subquery, Sum, Value, When,
 )
 from django.utils.timezone import make_aware
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
 from pretix.base.models.event import SubEvent

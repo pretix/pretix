@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import translation
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views.generic import FormView
 
 from pretix.base.models.event import SubEvent

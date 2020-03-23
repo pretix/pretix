@@ -8,7 +8,7 @@ from dateutil.parser import parse
 from django.conf import settings
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import CachedFile, Event, cachedfile_name
 from pretix.base.services.tasks import ProfiledEventTask

@@ -1,6 +1,6 @@
 from django.http import HttpRequest
 from django.urls import reverse
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.control.signals import (
     nav_event, nav_event_settings, nav_global, nav_organizer,

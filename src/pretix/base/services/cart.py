@@ -9,7 +9,7 @@ from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
-from django.utils.translation import pgettext_lazy, ugettext as _
+from django.utils.translation import gettext as _, pgettext_lazy
 from django_scopes import scopes_disabled
 
 from pretix.base.channels import get_all_sales_channels
@@ -213,7 +213,7 @@ class CartManager:
                 has_variations=Count('variations'),
             ).filter(
                 id__in=[i for i in item_ids if i and i not in self._items_cache]
-            )
+            ).order_by()
         })
         self._variations_cache.update({
             v.pk: v
@@ -221,7 +221,7 @@ class CartManager:
                 'quotas'
             ).select_related('item', 'item__event').filter(
                 id__in=[i for i in variation_ids if i and i not in self._variations_cache]
-            )
+            ).order_by()
         })
 
     def _check_max_cart_size(self):

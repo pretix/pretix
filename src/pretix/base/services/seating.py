@@ -1,5 +1,5 @@
 from django.db.models import Count, Q
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import CartPosition, Seat
@@ -25,7 +25,7 @@ def validate_plan_change(event, subevent, plan):
             subevent=subevent,
         ).filter(
             Q(has_v=True) | Q(has_op=True)
-        ).values_list('seat_guid', flat=True)
+        ).values_list('seat_guid', flat=True).order_by()
     )
     new_seats = {
         ss.guid for ss in plan.iter_all_seats()
@@ -40,7 +40,7 @@ def generate_seats(event, subevent, plan, mapping):
     current_seats = {}
     for s in event.seats.select_related('product').annotate(
             has_op=Count('orderposition'), has_v=Count('vouchers')
-    ).filter(subevent=subevent):
+    ).filter(subevent=subevent).order_by():
         if s.seat_guid in current_seats:
             s.delete()  # Duplicates should not exist
         else:

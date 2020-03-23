@@ -12,7 +12,7 @@ solution with many things readily set-up, look at :ref:`dockersmallscale`.
              get it right. If you're not feeling comfortable managing a Linux server, check out our hosting and service
              offers at `pretix.eu`_.
 
-We tested this guide on the Linux distribution **Debian 8.0** but it should work very similar on other
+We tested this guide on the Linux distribution **Debian 10.0** but it should work very similar on other
 modern distributions, especially on all systemd-based ones.
 
 Requirements
@@ -133,7 +133,7 @@ command if you're running MySQL::
 
     (venv)$ pip3 install "pretix[postgres]" gunicorn
 
-Note that you need Python 3.5 or newer. You can find out your Python version using ``python -V``.
+Note that you need Python 3.6 or newer. You can find out your Python version using ``python -V``.
 
 We also need to create a data directory::
 

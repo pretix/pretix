@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
-from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, pgettext
 from django_countries import countries
 
 from pretix import __version__
@@ -882,7 +882,7 @@ class StripeGiropay(StripeMethod):
                     'code': payment.order.code
                 },
                 owner={
-                    'name': request.session.get('payment_stripe_giropay_account') or ugettext('unknown name')
+                    'name': request.session.get('payment_stripe_giropay_account') or gettext('unknown name')
                 },
                 statement_descriptor=self.statement_descriptor(payment, 35),
                 redirect={
@@ -1033,7 +1033,7 @@ class StripeBancontact(StripeMethod):
                     'code': payment.order.code
                 },
                 owner={
-                    'name': request.session.get('payment_stripe_bancontact_account') or ugettext('unknown name')
+                    'name': request.session.get('payment_stripe_bancontact_account') or gettext('unknown name')
                 },
                 statement_descriptor=self.statement_descriptor(payment, 35),
                 redirect={
@@ -1166,7 +1166,7 @@ class StripeEPS(StripeMethod):
                     'code': payment.order.code
                 },
                 owner={
-                    'name': request.session.get('payment_stripe_eps_account') or ugettext('unknown name')
+                    'name': request.session.get('payment_stripe_eps_account') or gettext('unknown name')
                 },
                 statement_descriptor=self.statement_descriptor(payment),
                 redirect={

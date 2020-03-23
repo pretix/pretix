@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Exists, OuterRef
 from django.utils.timezone import now
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
 
 from pretix.base.models import LoggedModel

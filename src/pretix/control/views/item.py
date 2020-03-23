@@ -15,7 +15,7 @@ from django.shortcuts import redirect
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import DeleteView
@@ -499,7 +499,7 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
         if self.object.type == Question.TYPE_FILE:
             qs = [
                 {
-                    'answer': ugettext('File uploaded'),
+                    'answer': gettext('File uploaded'),
                     'count': qs.filter(file__isnull=False).count(),
                 }
             ]
@@ -523,7 +523,7 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             if self.object.type == Question.TYPE_BOOLEAN:
                 for a in qs:
                     a['alink'] = a['answer']
-                    a['answer'] = ugettext('Yes') if a['answer'] == 'True' else ugettext('No')
+                    a['answer'] = gettext('Yes') if a['answer'] == 'True' else gettext('No')
                     a['answer_bool'] = a['answer'] == 'True'
             elif self.object.type == Question.TYPE_COUNTRYCODE:
                 for a in qs:
@@ -724,45 +724,45 @@ class QuotaView(ChartContainingView, DetailView):
 
         data = [
             {
-                'label': ugettext('Paid orders'),
+                'label': gettext('Paid orders'),
                 'value': self.object.count_paid_orders(),
                 'sum': True,
             },
             {
-                'label': ugettext('Pending orders'),
+                'label': gettext('Pending orders'),
                 'value': self.object.count_pending_orders(),
                 'sum': True,
             },
             {
-                'label': ugettext('Vouchers and waiting list reservations'),
+                'label': gettext('Vouchers and waiting list reservations'),
                 'value': self.object.count_blocking_vouchers(),
                 'sum': True,
             },
             {
-                'label': ugettext('Current user\'s carts'),
+                'label': gettext('Current user\'s carts'),
                 'value': self.object.count_in_cart(),
                 'sum': True,
             },
         ]
 
         sum_values = sum([d['value'] for d in data if d['sum']])
-        s = self.object.size - sum_values if self.object.size is not None else ugettext('Infinite')
+        s = self.object.size - sum_values if self.object.size is not None else gettext('Infinite')
 
         data.append({
-            'label': ugettext('Available quota'),
+            'label': gettext('Available quota'),
             'value': s,
             'sum': False,
             'strong': True
         })
         data.append({
-            'label': ugettext('Waiting list (pending)'),
+            'label': gettext('Waiting list (pending)'),
             'value': self.object.count_waiting_list_pending(),
             'sum': False,
         })
 
         if self.object.size is not None:
             data.append({
-                'label': ugettext('Currently for sale'),
+                'label': gettext('Currently for sale'),
                 'value': avail[1],
                 'sum': False,
                 'strong': True

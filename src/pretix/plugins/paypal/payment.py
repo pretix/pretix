@@ -10,7 +10,7 @@ from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils.translation import ugettext as __, ugettext_lazy as _
+from django.utils.translation import gettext as __, gettext_lazy as _
 from i18nfield.strings import LazyI18nString
 from paypalrestsdk.exceptions import BadRequest
 from paypalrestsdk.openid_connect import Tokeninfo

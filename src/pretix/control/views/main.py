@@ -10,7 +10,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
 from i18nfield.strings import LazyI18nString
@@ -284,7 +284,7 @@ class EventWizard(SafeSessionWizardView):
             if basics_data['tax_rate']:
                 if not event.settings.tax_rate_default or event.settings.tax_rate_default.rate != basics_data['tax_rate']:
                     event.settings.tax_rate_default = event.tax_rules.create(
-                        name=LazyI18nString.from_gettext(ugettext('VAT')),
+                        name=LazyI18nString.from_gettext(gettext('VAT')),
                         rate=basics_data['tax_rate']
                     )
 

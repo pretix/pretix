@@ -2,7 +2,7 @@ import re
 
 from django.core.exceptions import ValidationError
 from django.core.validators import BaseValidator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
 

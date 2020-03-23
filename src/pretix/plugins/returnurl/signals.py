@@ -2,7 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
 from django.shortcuts import redirect
 from django.urls import resolve, reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.control.signals import nav_event_settings
 from pretix.presale.signals import process_request

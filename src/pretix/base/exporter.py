@@ -7,7 +7,7 @@ from typing import Tuple
 from defusedcsv import csv
 from django import forms
 from django.utils.formats import localize
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from openpyxl import Workbook
 from openpyxl.cell.cell import KNOWN_TYPES
 
@@ -180,9 +180,9 @@ class MultiSheetListExporter(ListExporter):
         ]
         for s, l in self.sheets:
             choices += [
-                (s + ':default', str(l) + ' – ' + ugettext('CSV (with commas)')),
-                (s + ':excel', str(l) + ' – ' + ugettext('CSV (Excel-style)')),
-                (s + ':semicolon', str(l) + ' – ' + ugettext('CSV (with semicolons)')),
+                (s + ':default', str(l) + ' – ' + gettext('CSV (with commas)')),
+                (s + ':excel', str(l) + ' – ' + gettext('CSV (Excel-style)')),
+                (s + ':semicolon', str(l) + ' – ' + gettext('CSV (with semicolons)')),
             ]
         ff = OrderedDict(
             [

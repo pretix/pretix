@@ -17,7 +17,7 @@ from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.html import conditional_escape
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from PyPDF2 import PdfFileReader
 from pytz import timezone
 from reportlab.graphics import renderPDF

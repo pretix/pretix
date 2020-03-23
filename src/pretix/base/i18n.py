@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from django.conf import settings
 from django.utils import translation
 from django.utils.formats import date_format, number_format
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 from i18nfield.fields import (  # noqa
     I18nCharField, I18nTextarea, I18nTextField, I18nTextInput,
 )
@@ -69,6 +69,6 @@ class LazyLocaleException(Exception):
 
     def __str__(self):
         if self.msgargs:
-            return ugettext(self.msg) % self.msgargs
+            return gettext(self.msg) % self.msgargs
         else:
-            return ugettext(self.msg)
+            return gettext(self.msg)

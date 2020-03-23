@@ -10,7 +10,7 @@ from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
-from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, pgettext
 from jsonfallback.functions import JSONExtract
 from pytz import UTC
 from reportlab.lib.units import mm
@@ -180,7 +180,7 @@ class TableTextRotate(Flowable):
 class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
     name = "overview"
     identifier = 'checkinlistpdf'
-    verbose_name = ugettext_lazy('Check-in list (PDF)')
+    verbose_name = gettext_lazy('Check-in list (PDF)')
 
     @property
     def export_form_fields(self):
@@ -312,7 +312,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
 class CSVCheckinList(CheckInListMixin, ListExporter):
     name = "overview"
     identifier = 'checkinlist'
-    verbose_name = ugettext_lazy('Check-in list')
+    verbose_name = gettext_lazy('Check-in list')
 
     @property
     def additional_form_fields(self):

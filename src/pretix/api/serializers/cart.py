@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -56,7 +56,7 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                           else validated_data.get('item').quotas.filter(subevent=validated_data.get('subevent')))
             if len(new_quotas) == 0:
                 raise ValidationError(
-                    ugettext_lazy('The product "{}" is not assigned to a quota.').format(
+                    gettext_lazy('The product "{}" is not assigned to a quota.').format(
                         str(validated_data.get('item'))
                     )
                 )
@@ -64,8 +64,8 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 avail = quota.availability()
                 if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < 1):
                     raise ValidationError(
-                        ugettext_lazy('There is not enough quota available on quota "{}" to perform '
-                                      'the operation.').format(
+                        gettext_lazy('There is not enough quota available on quota "{}" to perform '
+                                     'the operation.').format(
                             quota.name
                         )
                     )
@@ -88,7 +88,7 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 else:
                     validated_data['seat'] = seat
                     if not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web')):
-                        raise ValidationError(ugettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name))
+                        raise ValidationError(gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name))
             elif seated:
                 raise ValidationError('The specified product requires to choose a seat.')
 

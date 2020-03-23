@@ -15,8 +15,8 @@ from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.http import is_safe_url
-from django.utils.translation import ugettext_lazy as _
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from django_otp import match_token
 
@@ -44,13 +44,13 @@ def process_login(request, user, keep_logged_in):
         request.session['pretix_auth_2fa_user'] = user.pk
         request.session['pretix_auth_2fa_time'] = str(int(time.time()))
         twofa_url = reverse('control:auth.login.2fa')
-        if next_url and is_safe_url(next_url, allowed_hosts=None):
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
             twofa_url += '?next=' + quote(next_url)
         return redirect(twofa_url)
     else:
         auth_login(request, user)
         request.session['pretix_auth_login_time'] = int(time.time())
-        if next_url and is_safe_url(next_url, allowed_hosts=None):
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
             return redirect(next_url)
         return redirect(reverse('control:index'))
 
@@ -96,9 +96,9 @@ def logout(request):
     auth_logout(request)
     request.session['pretix_auth_login_time'] = 0
     next = reverse('control:auth.login')
-    if 'next' in request.GET and is_safe_url(request.GET.get('next'), allowed_hosts=None):
+    if 'next' in request.GET and url_has_allowed_host_and_scheme(request.GET.get('next'), allowed_hosts=None):
         next += '?next=' + quote(request.GET.get('next'))
-    if 'back' in request.GET and is_safe_url(request.GET.get('back'), allowed_hosts=None):
+    if 'back' in request.GET and url_has_allowed_host_and_scheme(request.GET.get('back'), allowed_hosts=None):
         return redirect(request.GET.get('back'))
     return redirect(next)
 
@@ -405,7 +405,7 @@ class Login2FAView(TemplateView):
             request.session['pretix_auth_login_time'] = int(time.time())
             del request.session['pretix_auth_2fa_user']
             del request.session['pretix_auth_2fa_time']
-            if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
+            if "next" in request.GET and url_has_allowed_host_and_scheme(request.GET.get("next"), allowed_hosts=None):
                 return redirect(request.GET.get("next"))
             return redirect(reverse('control:index'))
         else:

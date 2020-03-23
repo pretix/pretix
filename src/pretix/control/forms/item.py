@@ -7,7 +7,7 @@ from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.urls import reverse
 from django.utils.translation import (
-    pgettext_lazy, ugettext as __, ugettext_lazy as _,
+    gettext as __, gettext_lazy as _, pgettext_lazy,
 )
 from django_scopes.forms import (
     SafeModelChoiceField, SafeModelMultipleChoiceField,

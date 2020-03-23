@@ -14,7 +14,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_otp.models import Device
 from django_scopes import scopes_disabled
 from u2flib_server.utils import (

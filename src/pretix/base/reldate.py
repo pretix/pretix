@@ -7,7 +7,7 @@ from dateutil import parser
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 BASE_CHOICES = (

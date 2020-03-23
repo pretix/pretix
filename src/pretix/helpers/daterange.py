@@ -1,5 +1,5 @@
 from django.template.defaultfilters import date as _date
-from django.utils.translation import get_language, ugettext_lazy as _
+from django.utils.translation import get_language, gettext_lazy as _
 
 
 def daterange(df, dt):

@@ -61,7 +61,7 @@ A working example would be::
         from pretix.base.plugins import PluginConfig
     except ImportError:
         raise RuntimeError("Please use pretix 2.7 or above to run this plugin!")
-    from django.utils.translation import ugettext_lazy as _
+    from django.utils.translation import gettext_lazy as _
 
 
     class PaypalApp(PluginConfig):

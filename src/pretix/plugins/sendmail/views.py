@@ -6,7 +6,7 @@ from django.db.models import Exists, OuterRef, Q
 from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, ListView
 
 from pretix.base.email import get_available_placeholders

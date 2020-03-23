@@ -3,7 +3,7 @@ from collections import OrderedDict, namedtuple
 
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import Event, LogEntry
 from pretix.base.signals import register_notification_types

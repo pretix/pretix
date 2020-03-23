@@ -5,7 +5,7 @@ import pytz
 import vobject
 from django.conf import settings
 from django.utils.formats import date_format
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from pretix.base.models import Event
 from pretix.multidomain.urlreverse import build_absolute_uri

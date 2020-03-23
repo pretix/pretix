@@ -8,7 +8,7 @@ from django.db.models.functions import Coalesce, ExtractWeekDay
 from django.urls import reverse, reverse_lazy
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (

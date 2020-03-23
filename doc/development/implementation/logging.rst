@@ -69,7 +69,7 @@ We now need a way to translate the action codes like ``pretix.event.changed`` in
 strings. The :py:attr:`pretix.base.signals.logentry_display` signals allows you to do so. A simple
 implementation could look like::
 
-    from django.utils.translation import ugettext as _
+    from django.utils.translation import gettext as _
     from pretix.base.signals import logentry_display
 
     @receiver(signal=logentry_display)

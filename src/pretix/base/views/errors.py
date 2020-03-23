@@ -5,7 +5,7 @@ from django.middleware.csrf import REASON_NO_CSRF_COOKIE, REASON_NO_REFERER
 from django.template import TemplateDoesNotExist, loader
 from django.template.loader import get_template
 from django.utils.functional import Promise
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.csrf import requires_csrf_token
 from sentry_sdk import last_event_id
 

@@ -3,7 +3,7 @@ from urllib.parse import quote
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 
 def event_permission_required(permission):
