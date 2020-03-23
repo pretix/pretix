@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-23 16:01+0000\n"
-"PO-Revision-Date: 2020-03-09 10:20+0000\n"
+"PO-Revision-Date: 2020-03-23 16:55+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -265,10 +265,8 @@ msgid "Order canceled"
 msgstr "Bestellung storniert"
 
 #: pretix/api/webhooks.py:130 pretix/base/notifications.py:229
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order reactivated"
-msgstr "Bestellung abgelehnt"
+msgstr "Bestellung reaktiviert"
 
 #: pretix/api/webhooks.py:134 pretix/base/notifications.py:235
 msgid "Order expired"
@@ -2803,10 +2801,9 @@ msgid "The voucher \"{voucher}\" no longer has sufficient budget."
 msgstr "Der Gutschein \"{voucher}\" hat nicht mehr ausreichend Budget übrig."
 
 #: pretix/base/models/orders.py:704
-#, fuzzy, python-brace-format
-#| msgid "The voucher \"{voucher}\" no longer has sufficient budget."
+#, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr "Der Gutschein \"{voucher}\" hat nicht mehr ausreichend Budget übrig."
+msgstr "Der Gutschein \"{voucher}\" wurde zwischenzeitlich verwendet."
 
 #: pretix/base/models/orders.py:829 pretix/base/services/orders.py:826
 #: pretix/control/views/event.py:677
@@ -3560,10 +3557,9 @@ msgid "Order {order.code} has been canceled."
 msgstr "Bestellung {order.code} wurde storniert."
 
 #: pretix/base/notifications.py:230
-#, fuzzy, python-brace-format
-#| msgid "Order {order.code} has been changed."
+#, python-brace-format
 msgid "Order {order.code} has been reactivated."
-msgstr "Die Bestellung {order.code} wurde geändert."
+msgstr "Die Bestellung {order.code} wurde reaktiviert."
 
 #: pretix/base/notifications.py:236
 #, python-brace-format
@@ -5617,16 +5613,18 @@ msgid "Default language"
 msgstr "Standardsprache"
 
 #: pretix/base/settings.py:678
-#, fuzzy
-#| msgid "Ask search engines not to index the ticket shop"
 msgid "Show event times and dates on the ticket shop"
-msgstr "Der Ticket-Shop soll von Suchmaschinen nicht indiziert werden"
+msgstr "Zeige Event-Uhrzeit und -Datum im Ticketshop an"
 
 #: pretix/base/settings.py:679
 msgid ""
 "If disabled, no date or time will be shown on the ticket shop's front page. "
 "This settings does however not affect the display in other locations."
 msgstr ""
+"Wenn diese Option deaktiviert ist, werden Datum und Uhrzeit der "
+"Veranstaltung auf der Startseite des Shops nicht angezeigt. An anderen "
+"Orten, z.B. in der Liste der Veranstaltungen, werden diese ggf. trotzdem "
+"weiter angezeigt."
 
 #: pretix/base/settings.py:689
 msgid "Show event end date"
@@ -7025,10 +7023,10 @@ msgid "You cannot choose the base domain of this installation."
 msgstr "Du kannst die Basisdomain dieser Installation nicht verwenden."
 
 #: pretix/control/forms/event.py:328 pretix/control/forms/organizer.py:101
-#, fuzzy
-#| msgid "This domain is already in use for a different organizer."
 msgid "This domain is already in use for a different event or organizer."
-msgstr "Diese Domain ist bereits in Verwendung, bitte wähle eine andere."
+msgstr ""
+"Diese Domain ist bereits für eine andere Veranstaltung oder ein anderes "
+"Veranstalterkonto in Verwendung, bitte wähle eine andere."
 
 #: pretix/control/forms/event.py:397
 msgid "Name format"
@@ -8287,11 +8285,11 @@ msgid "Automatically refund money if possible"
 msgstr "Geld automatisch zurückerstatten wenn möglich"
 
 #: pretix/control/forms/orders.py:538
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid ""
 "Create manual refund if the payment method odes not support automatic refunds"
-msgstr "Diese Zahlungsmethode unterstützt keine automatische Erstattung."
+msgstr ""
+"Manuelle Erstattung anlegen wenn die Bezahlmethode keine automatischen "
+"Erstattungen unterstützt"
 
 #: pretix/control/forms/orders.py:542
 msgid ""
@@ -8300,12 +8298,15 @@ msgid ""
 "to refund some of the orders by offsetting with different orders or issuing "
 "gift cards."
 msgstr ""
+"Wenn diese Option aktiviert ist, werden Zahlungen mit einer Zahlungsart, die "
+"keine automatischen Erstattungen unterstützt, automatisch als manuelle "
+"Erstattungen auf deiner Erstattungs-Liste als \"zu erledigen\" auftauchen. "
+"Wähle diese Option nicht, wenn du diese Bestellungen mit anderen "
+"Bestellungen verrechnen oder als Gutschein erstatten möchtest."
 
 #: pretix/control/forms/orders.py:557
-#, fuzzy
-#| msgid "Order fees"
 msgid "Keep fees"
-msgstr "Gebühren"
+msgstr "Gebühren einbehalten"
 
 #: pretix/control/forms/orders.py:560
 msgid ""
@@ -8314,6 +8315,10 @@ msgid ""
 "series is only partially canceled since it consists of tickets for multiple "
 "dates."
 msgstr ""
+"Die gewählten Gebührenarten werden nicht erstattet sondern als Teil der "
+"Stornogebühr einbehalten. Gebühren werden nie erstattet wenn eine Bestellung "
+"in einer Veranstaltungsreihe nur teilweise erstattet wird da sie Tickets für "
+"mehrere Termine enthält."
 
 #: pretix/control/forms/orders.py:566
 msgid "Send information via email"
@@ -8914,10 +8919,8 @@ msgid "The order has been canceled."
 msgstr "Die Bestellung wurde storniert."
 
 #: pretix/control/logdisplay.py:194 pretix/control/views/orders.py:1273
-#, fuzzy
-#| msgid "The order has been created."
 msgid "The order has been reactivated."
-msgstr "Die Bestellung wurde erstellt."
+msgstr "Die Bestellung wurde reaktiviert."
 
 #: pretix/control/logdisplay.py:195
 #, python-brace-format
@@ -10150,16 +10153,12 @@ msgid "Card number"
 msgstr "Kreditkartennummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:35
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Client Transaction Code"
-msgstr "Transaktions-Code"
+msgstr "Client-Transaktions-Code"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:38
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Server Transaction Code"
-msgstr "Transaktions-Code"
+msgstr "Server-Transaktions-Code"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -10624,10 +10623,6 @@ msgid "Cancel event"
 msgstr "Veranstaltung absagen"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
-#, fuzzy
-#| msgid ""
-#| "If you need to call of your event you want to cancel and refund all "
-#| "tickets, you can do so through this option."
 msgid ""
 "If you need to call off your event you want to cancel and refund all "
 "tickets, you can do so through this option."
@@ -12794,10 +12789,8 @@ msgstr "Als bezahlt markieren"
 #: pretix/control/templates/pretixcontrol/order/index.html:64
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:5
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:9
-#, fuzzy
-#| msgid "Received order"
 msgid "Reactivate order"
-msgstr "Bestellung erhalten"
+msgstr "Bestellung reaktivieren"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:71
 msgid "View order as user"
@@ -13124,12 +13117,14 @@ msgid ""
 "products in the order are still available. If the order is pending payment, "
 "the expiry date will be reset."
 msgstr ""
+"Durch die Reaktivierung der Bestellung wird deren Stornierung rückgängig "
+"gemacht. Dies ist nur möglich, solange alle Produkte in der Bestellung noch "
+"verfügbar sind. Wenn die Bestellung noch nicht bezahlt wurde, wird das "
+"Zahlungsziel neu berechnet."
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:33
-#, fuzzy
-#| msgid "Deactivate"
 msgid "Reactivate"
-msgstr "Deaktivieren"
+msgstr "Reaktivieren"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
@@ -16178,10 +16173,8 @@ msgid "This action is only allowed for pending orders."
 msgstr "Diese Aktion ist nur für unbezahlte Bestellungen möglich."
 
 #: pretix/control/views/orders.py:1284
-#, fuzzy
-#| msgid "This action is only allowed for pending orders."
 msgid "This action is only allowed for canceled orders."
-msgstr "Diese Aktion ist nur für unbezahlte Bestellungen möglich."
+msgstr "Diese Aktion ist nur für stornierte Bestellungen möglich."
 
 #: pretix/control/views/orders.py:1306
 msgid "This action is only allowed for pending or paid orders."
@@ -18131,74 +18124,58 @@ msgstr ""
 "Zahlung angezeigt."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:67
-#, fuzzy
-#| msgid "Overview"
 msgid "Seating Overview"
-msgstr "Überblick"
+msgstr "Sitzplatz-Überblick"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
-#, fuzzy
-#| msgid "Sold out"
 msgid "Sold Seats"
-msgstr "Ausverkauft"
+msgstr "Verkaufte Sitze"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:80
 msgid "Blocked Seats"
-msgstr ""
+msgstr "Gesperrte Sitze"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:86
-#, fuzzy
-#| msgid "Free order"
 msgid "Free Seats"
-msgstr "Kostenlose Bestellung"
+msgstr "Freie Sitze"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:94
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Seating Sales Potentials"
-msgstr "Wartelisten-Einträge"
+msgstr "Verkaufspotential Sitzplätze"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:102
 msgid "Unsold Seats"
-msgstr ""
+msgstr "Unverkaufte Sitze"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:103
 msgid "Potential Profits"
-msgstr ""
+msgstr "Potentielle Sitzplätze"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:107
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Minimum Price"
-msgstr "Minimale Anzahl"
+msgstr "Minimaler Preis"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Gesperrt"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
-#, fuzzy
-#| msgid "Available from"
 msgid "Available"
-msgstr "Verfügbar ab"
+msgstr "Verfügbar"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
-#, fuzzy
-#| msgid "Sales"
 msgid "On Sale"
-msgstr "Verkäufe"
+msgstr "Im Verkauf"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:136
-#, fuzzy
-#| msgid "Not yet on sale"
 msgid "Not on Sale"
-msgstr "Noch nicht im Verkauf"
+msgstr "Nicht im Verkauf"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:146
 msgid "Seats not attributed to any specific product"
-msgstr ""
+msgstr "Plätze ohne zugewiesenes Produkt"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:172
 msgid ""
@@ -19219,10 +19196,8 @@ msgid "Please hang tight, we're finalizing your order!"
 msgstr "Einen Moment, deine Bestellung ist fast fertig!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
-#, fuzzy
-#| msgid "Add a new ticket type"
 msgid "Add or remove tickets"
-msgstr "Neue Ticketart hinzufügen"
+msgstr "Tickets hinzufügen oder entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:61
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
