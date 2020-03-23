@@ -162,7 +162,10 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 change_css = True
         if form.has_changed():
             self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
-                k: getattr(self.request.event, k) for k in form.changed_data
+                k: (form.cleaned_data.get(k).name
+                    if isinstance(form.cleaned_data.get(k), File)
+                    else form.cleaned_data.get(k))
+                for k in form.changed_data
             })
 
         if change_css:

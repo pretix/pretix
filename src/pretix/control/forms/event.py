@@ -337,14 +337,16 @@ class EventUpdateForm(I18nModelForm):
             if self.cleaned_data['domain']:
                 if current_domain and current_domain.domainname != self.cleaned_data['domain']:
                     current_domain.delete()
-                    KnownDomain.objects.create(organizer=instance, domainname=self.cleaned_data['domain'])
+                    KnownDomain.objects.create(
+                        organizer=instance.organizer, event=instance, domainname=self.cleaned_data['domain']
+                    )
                 elif not current_domain:
-                    KnownDomain.objects.create(organizer=instance, domainname=self.cleaned_data['domain'])
+                    KnownDomain.objects.create(
+                        organizer=instance.organizer, event=instance, domainname=self.cleaned_data['domain']
+                    )
             elif current_domain:
                 current_domain.delete()
             instance.cache.clear()
-            for ev in instance.events.all():
-                ev.cache.clear()
 
         return instance
 
