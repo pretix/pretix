@@ -95,9 +95,10 @@ class OrganizerUpdateForm(OrganizerForm):
                 raise ValidationError(
                     _('You cannot choose the base domain of this installation.')
                 )
-            if KnownDomain.objects.filter(domainname=d).exclude(organizer=self.instance.pk).exists():
+            if KnownDomain.objects.filter(domainname=d).exclude(organizer=self.instance.pk,
+                                                                event__isnull=True).exists():
                 raise ValidationError(
-                    _('This domain is already in use for a different organizer.')
+                    _('This domain is already in use for a different event or organizer.')
                 )
         return d
 

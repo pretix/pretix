@@ -14,7 +14,7 @@ from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.http import http_date
 
-from pretix.base.models import Organizer
+from pretix.base.models import Event, Organizer
 from pretix.helpers.cookies import set_cookie_without_samesite
 from pretix.multidomain.models import KnownDomain
 
@@ -37,33 +37,42 @@ class MultiDomainMiddleware(MiddlewareMixin):
 
         domain, port = split_domain_port(host)
         default_domain, default_port = split_domain_port(urlparse(settings.SITE_URL).netloc)
-        if domain:
-            request.host = domain
-            request.port = int(port) if port else None
+        request.port = int(port) if port else None
+        request.host = domain
+        if domain == default_domain:
+            request.urlconf = "pretix.multidomain.maindomain_urlconf"
+        elif domain:
+            cached = cache.get('pretix_multidomain_instance_{}'.format(domain))
 
-            orga = cache.get('pretix_multidomain_organizer_instance_{}'.format(domain))
-            if orga is None:
+            if cached is None:
                 try:
-                    kd = KnownDomain.objects.select_related('organizer').get(domainname=domain)  # noqa
+                    kd = KnownDomain.objects.select_related('organizer', 'event').get(domainname=domain)  # noqa
                     orga = kd.organizer
+                    event = kd.event
                 except KnownDomain.DoesNotExist:
                     orga = False
-                cache.set('pretix_multidomain_organizer_instance_{}'.format(domain), orga, 3600)
+                    event = False
+                cache.set('pretix_multidomain_instance_{}'.format(domain), (orga, event), 3600)
+            else:
+                orga, event = cached
 
-            if orga:
+            if event:
+                request.event_domain = True
+                request.organizer = orga if isinstance(orga, Organizer) else Organizer.objects.get(pk=orga)
+                request.event = event if isinstance(event, Event) else orga.events.get(pk=event)
+                request.urlconf = "pretix.multidomain.event_domain_urlconf"
+            elif orga:
                 request.organizer_domain = True
                 request.organizer = orga if isinstance(orga, Organizer) else Organizer.objects.get(pk=orga)
-                request.urlconf = "pretix.multidomain.subdomain_urlconf"
+                request.urlconf = "pretix.multidomain.organizer_domain_urlconf"
+            elif settings.DEBUG or domain in LOCAL_HOST_NAMES:
+                request.urlconf = "pretix.multidomain.maindomain_urlconf"
             else:
-                if settings.DEBUG or domain in LOCAL_HOST_NAMES or domain == default_domain:
-                    request.urlconf = "pretix.multidomain.maindomain_urlconf"
-                else:
-                    raise DisallowedHost("Unknown host: %r" % host)
-
+                raise DisallowedHost("Unknown host: %r" % host)
         else:
             raise DisallowedHost("Invalid HTTP_HOST header: %r." % host)
 
-        # We need to manually set the urlconf for the whole thread. Normally, Django's basic request
+        # We need to manually set the urlconf for the whole thread. Normally, Django's basic request handling
         # would do this for us, but we already need it in place for the other middlewares.
         set_urlconf(request.urlconf)
 

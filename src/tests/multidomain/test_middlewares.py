@@ -26,6 +26,11 @@ def test_control_only_on_main_domain(env, client):
     assert r.status_code == 302
     assert r['Location'] == 'http://example.com/control/login'
 
+    KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
+    r = client.get('/control/login', HTTP_HOST='barfoo')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://example.com/control/login'
+
 
 @pytest.mark.django_db
 def test_append_slash(env, client):
@@ -41,21 +46,30 @@ def test_unknown_domain(env, client):
 
 
 @pytest.mark.django_db
-def test_event_on_custom_domain(env, client):
+def test_event_on_org_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/2015/', HTTP_HOST='foobar')
     assert r.status_code == 200
+    assert b'<meta property="og:title" content="MRMCD2015" />' in r.content
 
 
 @pytest.mark.django_db
-def test_path_without_trailing_slash_on_custom_domain(env, client):
+def test_event_on_custom_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0], event=env[1])
+    r = client.get('/', HTTP_HOST='foobar')
+    assert r.status_code == 200
+    assert b'<meta property="og:title" content="MRMCD2015" />' in r.content
+
+
+@pytest.mark.django_db
+def test_path_without_trailing_slash_on_org_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/widget/product_list', HTTP_HOST='foobar')
     assert r.status_code == 200
 
 
 @pytest.mark.django_db
-def test_event_with_custom_domain_on_main_domain(env, client):
+def test_event_with_org_domain_on_main_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
     assert r.status_code == 302
@@ -63,7 +77,24 @@ def test_event_with_custom_domain_on_main_domain(env, client):
 
 
 @pytest.mark.django_db
-def test_organizer_with_custom_domain_on_main_domain(env, client):
+def test_event_with_custom_domain_on_main_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0], event=env[1])
+    r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://foobar'
+
+
+@pytest.mark.django_db
+def test_event_with_custom_domain_on_org_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
+    r = client.get('/2015/', HTTP_HOST='foobar')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://barfoo'
+
+
+@pytest.mark.django_db
+def test_organizer_with_org_domain_on_main_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/mrmcd/', HTTP_HOST='example.com')
     assert r.status_code == 302
@@ -71,7 +102,7 @@ def test_organizer_with_custom_domain_on_main_domain(env, client):
 
 
 @pytest.mark.django_db
-def test_event_on_custom_domain_only_with_wrong_organizer(env, client):
+def test_event_on_org_domain_only_with_wrong_organizer(env, client):
     organizer2 = Organizer.objects.create(name='Dummy', slug='dummy')
     Event.objects.create(
         organizer=organizer2, name='D1234', slug='1234',
@@ -83,7 +114,7 @@ def test_event_on_custom_domain_only_with_wrong_organizer(env, client):
 
 
 @pytest.mark.django_db
-def test_unknown_event_on_custom_domain(env, client):
+def test_unknown_event_on_org_domain(env, client):
     organizer2 = Organizer.objects.create(name='Dummy', slug='dummy')
     Event.objects.create(
         organizer=organizer2, name='D1234', slug='1234',
@@ -95,10 +126,20 @@ def test_unknown_event_on_custom_domain(env, client):
 
 
 @pytest.mark.django_db
-def test_cookie_domain_on_custom_domain(env, client):
+def test_cookie_domain_on_org_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     client.post('/2015/cart/add', HTTP_HOST='foobar')
     r = client.get('/2015/', HTTP_HOST='foobar')
+    assert r.client.cookies['pretix_csrftoken']['domain'] == ''
+    assert r.client.cookies['pretix_session']['domain'] == ''
+
+
+@pytest.mark.django_db
+def test_cookie_domain_on_event_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
+    client.post('/cart/add', HTTP_HOST='barfoo')
+    r = client.get('/', HTTP_HOST='barfoo')
     assert r.client.cookies['pretix_csrftoken']['domain'] == ''
     assert r.client.cookies['pretix_session']['domain'] == ''
 
@@ -113,12 +154,11 @@ def test_cookie_domain_on_main_domain(env, client):
 
 
 @pytest.mark.django_db
+@override_settings(USE_X_FORWARDED_HOST=True)
 def test_with_forwarded_host(env, client):
-    settings.USE_X_FORWARDED_HOST = True
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/2015/', HTTP_X_FORWARDED_HOST='foobar')
     assert r.status_code == 200
-    settings.USE_X_FORWARDED_HOST = False
 
 
 @pytest.mark.django_db

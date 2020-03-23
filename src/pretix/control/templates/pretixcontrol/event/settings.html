@@ -19,6 +19,9 @@
                 <legend>{% trans "Basics" %}</legend>
                 {% bootstrap_field form.name layout="control" %}
                 {% bootstrap_field form.slug layout="control" %}
+                {% if form.domain %}
+                    {% bootstrap_field form.domain layout="control" %}
+                {% endif %}
                 {% bootstrap_field form.date_from layout="control" %}
                 {% bootstrap_field form.date_to layout="control" %}
                 <div class="geodata-section">

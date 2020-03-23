@@ -14,30 +14,23 @@ and with pretix, you can do this. On this page, you find out the necessary steps
 With the pretix.eu hosted service
 ---------------------------------
 
-Step 1: DNS Configuration
-#########################
+Go to "Organizers" in the backend and select your organizer account. Then, go to "Settings" and "Custom Domain".
+
+This page will show you instructions on how to set up your own domain. Basically, it works like this:
 
 Go to the website of the provider you registered your domain name with. Look for the "DNS" settings page in their
 interface. Unfortunately, we can't tell you exactly how that is named and how it looks, since it is different for every
 domain provider.
 
 Use this interface to add a new subdomain record, e.g. ``tickets`` of the type ``CNAME`` (might also be called "alias").
-The value of the record should be ``www.pretix.eu``.
-
-Step 2: Wait for the DNS entry to propagate
-###########################################
+The value of the record should be the one shown on the "Custom Domain" page in pretix' backend.
 
 Submit your changes and wait a bit, it can regularly take up to three hours for DNS changes to propagate to the caches
 of all DNS servers. You can try checking by accessing your new subdomain, ``http://tickets.awesomepartycorp.com``.
 If DNS was changed successfully, you should see a SSL certificate error. If you ignore the error and access the page
 anyways, you should get a pretix-themed error page with the headline "Unknown domain".
 
-Step 3: Tell us
-###############
-
-Write an email to support@pretix.eu, naming your new domain and your organizer account. We will then generate a SSL
-certificate for you (for free!) and configure the domain.
-
+Now, tell us about your domain on the "Custom Domain" page to get started.
 
 With a custom pretix installation
 ---------------------------------
