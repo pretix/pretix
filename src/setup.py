@@ -126,7 +126,7 @@ setup(
         'paypalrestsdk==1.13.*',
         'pycparser==2.13',
         'django-redis==4.11.*',
-        'redis==3.3.*',
+        'redis==3.4.*',
         'stripe==2.42.*',
         'chardet<3.1.0,>=3.0.2',
         'mt-940==3.2',

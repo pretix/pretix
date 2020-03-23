@@ -58,7 +58,7 @@ defusedcsv>=1.1.0
 vat_moss_forked==2020.3.20.0.11.0
 django-localflavor>=2.2
 django-redis==4.11.*
-redis==3.3.*
+redis==3.4.*
 django-phonenumber-field==4.0.*
 phonenumberslite==8.11.*
 python-bidi==0.4.*  # Support for arabic in reportlab
