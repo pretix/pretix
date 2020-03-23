@@ -30,7 +30,7 @@ matrix:
     - python: 3.8
       env: JOB=translation-spelling
 addons:
-  postgresql: "9.4"
+  postgresql: "10"
   mariadb: '10.3'
   apt:
       packages:
