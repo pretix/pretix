@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load eventurl %}
 {% load money %}
+{% load rich_text %}
 {% load safelink %}
 {% load eventsignal %}
 {% block title %}
@@ -377,6 +378,8 @@
                                                                 <img src="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">
                                                             </a>
                                                         {% endif %}
+                                                    {% elif q.type == "M" %}
+                                                        {{ q.answer|rich_text_snippet }}
                                                     {% else %}
                                                         {{ q.answer|linebreaksbr }}
                                                     {% endif %}

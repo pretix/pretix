@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load safelink %}
+{% load rich_text %}
 {% load money %}
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 {% for line in cart.positions %}
@@ -59,6 +60,8 @@
                                     <a href="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}">
                                         {{ q.answer.file_name }}
                                     </a>
+                                {% elif q.type == "M" %}
+                                    {{ q.answer|rich_text_snippet }}
                                 {% else %}
                                     {{ q.answer|linebreaksbr }}
                                 {% endif %}

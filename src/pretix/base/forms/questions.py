@@ -214,6 +214,10 @@ def guess_country(event):
     return country
 
 
+class QuestionCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+    option_template_name = 'pretixbase/forms/widgets/checkbox_option_with_links.html'
+
+
 class BaseQuestionsForm(forms.Form):
     """
     This form class is responsible for asking order-related questions. This includes
@@ -332,7 +336,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     to_field_name='identifier',
-                    widget=forms.CheckboxSelectMultiple,
+                    widget=QuestionCheckboxSelectMultiple,
                     initial=initial.options.all() if initial else None,
                 )
             elif q.type == Question.TYPE_FILE:
