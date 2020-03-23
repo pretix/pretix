@@ -67,6 +67,8 @@ class MultiDomainMiddleware(MiddlewareMixin):
                 request.urlconf = "pretix.multidomain.organizer_domain_urlconf"
             elif settings.DEBUG or domain in LOCAL_HOST_NAMES:
                 request.urlconf = "pretix.multidomain.maindomain_urlconf"
+            else:
+                raise DisallowedHost("Unknown host: %r" % host)
         else:
             raise DisallowedHost("Invalid HTTP_HOST header: %r." % host)
 
