@@ -65,10 +65,8 @@ class MultiDomainMiddleware(MiddlewareMixin):
                 request.organizer_domain = True
                 request.organizer = orga if isinstance(orga, Organizer) else Organizer.objects.get(pk=orga)
                 request.urlconf = "pretix.multidomain.organizer_domain_urlconf"
-            else:
-                raise DisallowedHost("Unknown host: %r" % host)
-        elif settings.DEBUG or domain in LOCAL_HOST_NAMES:
-            request.urlconf = "pretix.multidomain.maindomain_urlconf"
+            elif settings.DEBUG or domain in LOCAL_HOST_NAMES:
+                request.urlconf = "pretix.multidomain.maindomain_urlconf"
         else:
             raise DisallowedHost("Invalid HTTP_HOST header: %r." % host)
 
