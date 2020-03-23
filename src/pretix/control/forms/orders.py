@@ -526,8 +526,8 @@ class EventCancelForm(forms.Form):
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=pgettext_lazy('subevent', 'Date'),
-        required=True,
-        empty_label=None
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
     )
     auto_refund = forms.BooleanField(
         label=_('Automatically refund money if possible'),
@@ -655,11 +655,10 @@ class EventCancelForm(forms.Form):
                         'event': self.event.slug,
                         'organizer': self.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-            self.fields['subevent'].required = True
         else:
             del self.fields['subevent']
         change_decimal_field(self.fields['keep_fee_fixed'], self.event.currency)

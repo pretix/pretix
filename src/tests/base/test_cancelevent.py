@@ -374,6 +374,17 @@ class SubEventCancelTests(TestCase):
         assert self.order.status == Order.STATUS_CANCELED
 
     @classscope(attr='o')
+    def test_cancel_all_subevents(self):
+        cancel_event(
+            self.event.pk, subevent=None,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_CANCELED
+
+    @classscope(attr='o')
     def test_cancel_mixed_order(self):
         gc = self.o.issued_gift_cards.create(currency="EUR")
         self.order.payments.create(
