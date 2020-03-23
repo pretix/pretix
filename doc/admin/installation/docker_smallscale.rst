@@ -182,7 +182,7 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
         -v /var/pretix-data:/data \
         -v /etc/pretix:/etc/pretix \
         -v /var/run/redis:/var/run/redis \
-        --sysctl net.core.somaxconn=4096
+        --sysctl net.core.somaxconn=4096 \
         pretix/standalone:stable all
     ExecStop=/usr/bin/docker stop %n
 
