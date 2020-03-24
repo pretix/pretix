@@ -92,6 +92,7 @@
             </div>
         </div>
     {% endif %}
+    {% eventsignal event "pretix.presale.signals.order_info_top" order=order %}
     {% if order.status == "p" or order.status == "c" %}
         {% if refunds %}
             <div class="alert alert-info">

@@ -21,6 +21,7 @@
         {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right flip" %}
         <div class="clearfix"></div>
     </h2>
+    {% eventsignal event "pretix.presale.signals.position_info_top" order=order position=position %}
     {% include "pretixpresale/event/fragment_downloads.html" %}
     <div class="panel panel-primary cart">
         <div class="panel-heading">

@@ -179,6 +179,24 @@ This signal is sent out to display additional information on the position detail
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+order_info_top = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out to display additional information on top of the order detail page
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+position_info_top = EventPluginSignal(
+    providing_args=["order", "position"]
+)
+"""
+This signal is sent out to display additional information on top of the position detail page
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 process_request = EventPluginSignal(
     providing_args=["request"]
 )
