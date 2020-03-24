@@ -15,3 +15,4 @@ If you want to **create** a plugin, please go to the
    ticketoutputpdf
    badges
    campaigns
+   digital
