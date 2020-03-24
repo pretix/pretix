@@ -173,6 +173,9 @@ def render_pdf(event, positions, opt):
             render_page(pagebuffer)
             pagebuffer.clear()
 
+    if pagebuffer:
+        render_page(pagebuffer)
+
     output_pdf_writer.addMetadata({
         '/Title': 'Badges',
         '/Creator': 'pretix',

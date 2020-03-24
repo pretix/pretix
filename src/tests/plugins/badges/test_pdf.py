@@ -68,3 +68,17 @@ def test_generate_pdf(env):
     assert ftype == 'application/pdf'
     pdf = PdfFileReader(BytesIO(buf))
     assert pdf.numPages == 2
+
+@pytest.mark.django_db
+def test_generate_pdf_multi(env):
+    event, order, shirt = env
+    event.badge_layouts.create(name="Default", default=True)
+    e = BadgeExporter(event)
+    fname, ftype, buf = e.render({
+        'items': [shirt.pk],
+        'rendering': 'a4_a6l',
+        'include_pending': True
+    })
+    assert ftype == 'application/pdf'
+    pdf = PdfFileReader(BytesIO(buf))
+    assert pdf.numPages == 1
