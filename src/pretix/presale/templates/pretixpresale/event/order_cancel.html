@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load money %}
 {% load eventurl %}
+{% load l10n %}
 {% block title %}{% trans "Cancel order" %}{% endblock %}
 {% block content %}
     <h2>
@@ -9,38 +10,79 @@
             Cancel order: {{ code }}
         {% endblocktrans %}
     </h2>
-    <p>
-        {% blocktrans trimmed %}
-            Do you really want to cancel this order? You cannot revert this action.
-        {% endblocktrans %}
-        {% trans "This will invalidate all tickets in this order." %}
-    </p>
-    {% if refund_amount %}
-        {% if can_auto_refund %}
-            <p>
-                <strong>
-                    {% blocktrans trimmed with amount=refund_amount|money:request.event.currency %}
-                        The refund amount of {{ amount }} will automatically be sent back to your original payment method. Depending on the payment method,
-                        please allow for up to two weeks before this appears on your statement.
-                    {% endblocktrans %}
-                </strong>
-            </p>
-        {% else %}
-            <div class="alert alert-warning">
-                {% blocktrans trimmed with amount=refund_amount|money:request.event.currency %}
-                    With to the payment method you used, the refund amount of {{ amount }} <strong>can not be sent back to you automatically</strong>. Instead, the
-                    event organizer will need to initiate the transfer manually. Please be patient as this might take a bit longer.
-                {% endblocktrans %}
-            </div>
-        {% endif %}
-    {% endif %}
-
     <form method="post" action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}" data-asynctask>
+        <p>
+            {% blocktrans trimmed %}
+                Do you really want to cancel this order? You cannot revert this action.
+            {% endblocktrans %}
+            {% trans "This will invalidate all tickets in this order." %}
+        </p>
+
+        {% if request.event.settings.cancel_allow_user_paid_adjust_fees %}
+            <p>
+                {% if cancel_fee %}
+                    {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
+                        If you want, you can request a refund for the full amount minus a cancellation fee of
+                        {{ fee }}.
+                    {% endblocktrans %}
+                {% else %}
+                    {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
+                        If you want, you can request a full refund.
+                    {% endblocktrans %}
+                {% endif %}
+                {% trans "However, if you want us to help keep the lights on here, please consider using the slider below to request a smaller refund. Thank you!" %}
+            </p>
+            <div class="cancel-fee-slider">
+                <div id="cancel-fee-keep"></div>
+                <input
+                        id="cancel-fee-slider"
+                        type="text"
+                        name="cancel_fee"
+                        class="col-md-6 col-sm-12"
+                        value="{{ cancel_fee|stringformat:".2f" }}"
+                        data-slider-min="{{ cancel_fee|stringformat:".2f" }}"
+                        data-slider-value="{{ cancel_fee|stringformat:".2f" }}"
+                        data-slider-step="0.01"
+                        data-slider-max="{{ order.payment_refund_sum|stringformat:".2f" }}"
+                        data-slider-tooltip="hide"/>
+                <div id="cancel-fee-refund">AS</div>
+            </div>
+            <div class="text-center" id="cancel-fee-custom-link">
+                <a id="cancel-fee-custom"><small>Enter custom amount</small></a>
+            </div>
+        {% else %}
+            <p>
+                <strong>{% trans "Refund amount:" %}</strong> {{ refund_amount|money:request.event.currency }}
+            </p>
+        {% endif %}
+
+        {% if refund_amount %}
+            {% if can_auto_refund %}
+                <p>
+                    <strong>
+                        {% blocktrans trimmed %}
+                            The refund amount will automatically be sent back to your original payment method. Depending
+                            on the payment method, please allow for up to two weeks before this appears on your
+                            statement.
+                        {% endblocktrans %}
+                    </strong>
+                </p>
+            {% else %}
+                <p>
+                    {% blocktrans trimmed %}
+                        With to the payment method you used, the refund amount <strong>can not be sent back to you
+                        automatically</strong>. Instead, the event organizer will need to initiate the transfer
+                        manually. Please be patient as this might take a bit longer.
+                    {% endblocktrans %}
+                </p>
+            {% endif %}
+        {% endif %}
+
         {% csrf_token %}
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
-                   href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}">
+                        href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}">
                     {% trans "No, take me back" %}
                 </a>
             </div>

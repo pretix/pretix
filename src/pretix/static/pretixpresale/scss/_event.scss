@@ -196,3 +196,34 @@ section.front-page {
 h2.subevent-head {
     margin-top: 10px;
 }
+.cancel-fee-slider {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .slider-selection {
+        background: $brand-success;
+    }
+    .slider-handle {
+        @include slider_background-image($brand-success, darken($brand-success, 5%), mix($brand-success, darken($brand-success, 5%)));
+    }
+
+    input {
+        flex: 0;
+    }
+    & > div {
+        flex: 1;
+        font-weight: bold;
+    }
+    & > div:first-child {
+        text-align: right;
+        padding-right: 20px;
+    }
+    & > div:last-child {
+        text-align: left;
+        padding-left: 20px;
+    }
+}
+#cancel-fee-custom-link {
+    margin-bottom: 20px;
+}

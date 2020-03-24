@@ -611,6 +611,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'cancel_allow_user_paid_keep',
         'cancel_allow_user_paid_keep_fees',
         'cancel_allow_user_paid_keep_percentage',
+        'cancel_allow_user_paid_adjust_fees',
     ]
 
     def __init__(self, *args, **kwargs):

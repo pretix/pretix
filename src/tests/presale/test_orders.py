@@ -410,7 +410,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        assert 'alert-warning' not in response.rendered_content
+        assert 'manually' not in response.rendered_content
         response = self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
             }, follow=True)
@@ -424,6 +424,58 @@ class OrdersTest(BaseOrdersTest):
         with scopes_disabled():
             assert self.order.refunds.count() == 1
 
+    def test_orders_cancel_paid_custom_fee_autorefund(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        self.event.settings.cancel_allow_user_paid = True
+        self.event.settings.cancel_allow_user_paid_keep = Decimal('3.00')
+        self.event.settings.cancel_allow_user_paid_adjust_fees = True
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                'cancel_fee': '6.00'
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        assert self.order.total == Decimal('6.00')
+        with scopes_disabled():
+            assert self.order.refunds.count() == 1
+
+    def test_orders_cancel_paid_custom_fee_limit(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        self.event.settings.cancel_allow_user_paid = True
+        self.event.settings.cancel_allow_user_paid_keep = Decimal('3.00')
+        self.event.settings.cancel_allow_user_paid_adjust_fees = True
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                'cancel_fee': '2.00'
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        assert self.order.total == Decimal('23.00')
+        with scopes_disabled():
+            assert self.order.refunds.count() == 0
+
     def test_orders_cancel_paid_fee_no_autorefund(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
@@ -436,13 +488,12 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        print(response.rendered_content)
         assert 'cancellation fee of <strong>€3.00</strong>' in response.rendered_content
         response = self.client.get(
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        assert 'alert-warning' in response.rendered_content
+        assert 'manually' in response.rendered_content
         assert '20.00' in response.rendered_content
         response = self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {

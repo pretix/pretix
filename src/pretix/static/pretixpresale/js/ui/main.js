@@ -14,6 +14,14 @@ function ngettext(singular, plural, count) {
     return plural;
 }
 
+function interpolate(fmt, object, named) {
+    if (named) {
+        return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+        return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+}
+
 var form_handlers = function (el) {
     el.find(".datetimepicker").each(function () {
         $(this).datetimepicker({
@@ -299,6 +307,44 @@ $(function () {
     });
 
     form_handlers($("body"));
+
+    var cancel_fee_slider_update = function () {
+        if (typeof django === "undefined") {
+            window.setTimeout(cancel_fee_slider_update, 100);
+            return;
+        }
+        $("#cancel-fee-keep").text(interpolate(
+            gettext("We keep %(currency)s %(amount)s"),
+            {
+                'currency': $("body").attr("data-currency"),
+                'amount': floatformat(cancel_fee_slider.getValue(), 2)
+            },
+            true
+        ));
+        $("#cancel-fee-refund").text(interpolate(
+            gettext("You get %(currency)s %(amount)s back"),
+            {
+                'currency': $("body").attr("data-currency"),
+                'amount': floatformat((cancel_fee_slider.getAttribute("max") - cancel_fee_slider.getValue()), 2)
+            },
+            true
+        ));
+    }
+    var cancel_fee_slider = $('#cancel-fee-slider').slider({
+    }).on('slide', function () {
+        cancel_fee_slider_update();
+    }).data('slider');
+    if (cancel_fee_slider) {
+        cancel_fee_slider_update();
+        $("#cancel-fee-custom").click(function () {
+            try {
+                var newinp = parseFloat(prompt(gettext("Please enter the amount we can keep."), cancel_fee_slider.getValue().toString()).replace(',', '.'));
+                cancel_fee_slider.setValue(newinp);
+                cancel_fee_slider_update();
+            } catch {
+            }
+        });
+    }
 
     // Lightbox
     lightbox.init();
