@@ -92,7 +92,7 @@
             </div>
         </div>
     {% endif %}
-    {% eventsignal event "pretix.presale.signals.order_info_top" order=order %}
+    {% eventsignal event "pretix.presale.signals.order_info_top" order=order request=request %}
     {% if order.status == "p" or order.status == "c" %}
         {% if refunds %}
             <div class="alert alert-info">
@@ -151,7 +151,7 @@
             {% endif %}
         </div>
     </div>
-    {% eventsignal event "pretix.presale.signals.order_info" order=order %}
+    {% eventsignal event "pretix.presale.signals.order_info" order=order request=request %}
     <div class="row">
         {% if invoices %}
             <div class="col-xs-12 {% if invoice_address_asked or request.event.settings.invoice_name_required %}col-md-6{% endif %}">

@@ -162,7 +162,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 """
 
 order_info = EventPluginSignal(
-    providing_args=["order"]
+    providing_args=["order", "request"]
 )
 """
 This signal is sent out to display additional information on the order detail page
@@ -171,7 +171,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 """
 
 position_info = EventPluginSignal(
-    providing_args=["order", "position"]
+    providing_args=["order", "position", "request"]
 )
 """
 This signal is sent out to display additional information on the position detail page
@@ -180,7 +180,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 """
 
 order_info_top = EventPluginSignal(
-    providing_args=["order"]
+    providing_args=["order", "request"]
 )
 """
 This signal is sent out to display additional information on top of the order detail page
@@ -189,7 +189,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 """
 
 position_info_top = EventPluginSignal(
-    providing_args=["order", "position"]
+    providing_args=["order", "position", "request"]
 )
 """
 This signal is sent out to display additional information on top of the position detail page
