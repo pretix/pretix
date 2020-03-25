@@ -13,9 +13,9 @@
     <form method="post" action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}" data-asynctask>
         <p>
             {% blocktrans trimmed %}
-                Do you really want to cancel this order? You cannot revert this action.
+                If you cancel this order, all tickets will be invalidated and you can no longer use them. You cannot
+                revert this action.
             {% endblocktrans %}
-            {% trans "This will invalidate all tickets in this order." %}
         </p>
 
         {% if request.event.settings.cancel_allow_user_paid_adjust_fees %}
