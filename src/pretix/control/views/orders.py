@@ -13,7 +13,8 @@ from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
-    Count, IntegerField, OuterRef, Prefetch, ProtectedError, Q, Subquery, Sum,
+    Count, Exists, IntegerField, OuterRef, Prefetch, ProtectedError, Q,
+    Subquery, Sum,
 )
 from django.forms import formset_factory
 from django.http import (
@@ -42,7 +43,7 @@ from pretix.base.models import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.orders import (
-    OrderFee, OrderPayment, OrderPosition, OrderRefund,
+    CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
 )
 from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.payment import PaymentException
@@ -117,10 +118,11 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             Order.annotate_overpayments(Order.objects).filter(
                 pk__in=[o.pk for o in ctx['orders']]
             ).annotate(
-                pcnt=Subquery(s, output_field=IntegerField())
+                pcnt=Subquery(s, output_field=IntegerField()),
+                has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk')))
             ).values(
                 'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
-                'has_pending_refund'
+                'has_pending_refund', 'has_cancellation_request'
             )
         }
 
@@ -133,6 +135,7 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             o.is_pending_with_full_payment = annotated.get(o.pk)['is_pending_with_full_payment']
             o.has_external_refund = annotated.get(o.pk)['has_external_refund']
             o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
+            o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
 
         if ctx['page_obj'].paginator.count < 1000:
             # Performance safeguard: Only count positions if the data set is small
@@ -620,8 +623,21 @@ class OrderCancellationRequestDelete(OrderView):
             self.req.delete()
             self.order.log_action('pretix.event.order.cancellationrequest.deleted', {
             }, user=self.request.user)
-            messages.success(self.request, _('The request has been removed.'))
-        return redirect(self.get_order_url())
+
+        messages.success(self.request, _('The request has been removed. If you want, you can now inform the user.'))
+        with language(self.order.locale):
+            return redirect(reverse('control:event.order.sendmail', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug,
+                'code': self.order.code
+            }) + '?' + urlencode({
+                'subject': _('Your cancellation request'),
+                'message': _('Hello,\n\nunfortunately, we were unable to accommodate your request and cancel your '
+                             'order.\n\n'
+                             'Your {event} team').format(
+                    event="{event}",
+                )
+            }))
 
     def get(self, *args, **kwargs):
         return render(self.request, 'pretixcontrol/order/cancellation_request_delete.html', {
