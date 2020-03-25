@@ -158,6 +158,10 @@
                         <dd>{{ order.code }}</dd>
                         <dt>{% trans "Order date" %}</dt>
                         <dd>{{ order.datetime|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                        {% if order.cancellation_date %}
+                            <dt>{% trans "Cancellation date" %}</dt>
+                            <dd>{{ order.cancellation_date|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                        {% endif %}
                         {% if sales_channel %}
                             <dt>{% trans "Sales channel" %}</dt>
                             <dd>{{ sales_channel.verbose_name }}</dd>

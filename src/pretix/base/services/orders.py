@@ -109,10 +109,11 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
                 order.status = Order.STATUS_PAID
             else:
                 order.status = Order.STATUS_PENDING
+            order.cancellation_date = None
             order.set_expires(now(),
                               order.event.subevents.filter(id__in=[p.subevent_id for p in order.positions.all()]))
             with transaction.atomic():
-                order.save(update_fields=['expires', 'status'])
+                order.save(update_fields=['expires', 'status', 'cancellation_date'])
                 order.log_action(
                     'pretix.event.order.reactivated',
                     user=user,
@@ -389,14 +390,16 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     raise OrderError(_('The cancellation fee cannot be higher than the payment credit of this order.'))
                 order.status = Order.STATUS_PAID
                 order.total = cancellation_fee
-                order.save(update_fields=['status', 'total'])
+                order.cancellation_date = now()
+                order.save(update_fields=['status', 'cancellation_date', 'total'])
 
             if i:
                 invoices.append(generate_invoice(order))
         else:
             with order.event.lock():
                 order.status = Order.STATUS_CANCELED
-                order.save(update_fields=['status'])
+                order.cancellation_date = now()
+                order.save(update_fields=['status', 'cancellation_date'])
 
             for position in order.positions.all():
                 if position.voucher:

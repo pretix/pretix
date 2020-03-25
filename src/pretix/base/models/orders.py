@@ -152,6 +152,9 @@ class Order(LockModel, LoggedModel):
     datetime = models.DateTimeField(
         verbose_name=_("Date"), db_index=True
     )
+    cancellation_date = models.DateTimeField(
+        null=True, blank=True
+    )
     expires = models.DateTimeField(
         verbose_name=_("Expiration date")
     )
