@@ -2205,3 +2205,41 @@ def test_refund_list(client, env):
     response = client.get('/control/event/dummy/dummy/orders/refunds/?status=all&provider=banktransfer')
     assert 'R-1' in response.content.decode()
     assert 'R-2' not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_delete_cancellation_request(client, env):
+    with scopes_disabled():
+        r = env[2].cancellation_requests.create(
+            cancellation_fee=Decimal('4.00'),
+            refund_as_giftcard=True
+        )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/cancellationrequests/{}/delete'.format(r.pk), {},
+                           follow=True)
+    assert 'alert-success' in response.content.decode()
+    assert not env[2].cancellation_requests.exists()
+
+
+@pytest.mark.django_db
+def test_approve_cancellation_request(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=o.total)
+        o.status = Order.STATUS_PAID
+        o.save()
+        r = env[2].cancellation_requests.create(
+            cancellation_fee=Decimal('4.00'),
+            refund_as_giftcard=True
+        )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c&req={}'.format(r.pk), {})
+    doc = BeautifulSoup(response.content.decode(), "lxml")
+    assert doc.select('input[name=cancellation_fee]')[0]['value'] == '4.00'
+    response = client.post('/control/event/dummy/dummy/orders/FOO/transition?req={}'.format(r.pk), {
+        'status': 'c',
+        'cancellation_fee': '4.00'
+    }, follow=True)
+    doc = BeautifulSoup(response.content.decode(), "lxml")
+    assert doc.select('input[name=refund-new-giftcard]')[0]['value'] == '10.00'
+    assert not env[2].cancellation_requests.exists()
