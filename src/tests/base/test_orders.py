@@ -606,6 +606,7 @@ class OrderCancelTests(TestCase):
     def test_cancel_unpaid(self):
         cancel_order(self.order.pk)
         self.order.refresh_from_db()
+        assert self.order.cancellation_date
         assert self.order.status == Order.STATUS_CANCELED
         assert self.order.all_logentries().last().action_type == 'pretix.event.order.canceled'
         assert self.order.invoices.count() == 2
@@ -2497,6 +2498,7 @@ class OrderReactivateTest(TestCase):
                 code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_CANCELED, locale='en',
                 datetime=now(), expires=now() + timedelta(days=1),
+                cancellation_date=now(),
                 total=Decimal('46.00'),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
@@ -2549,6 +2551,7 @@ class OrderReactivateTest(TestCase):
         assert self.order.status == Order.STATUS_PAID
         assert self.order.all_logentries().last().action_type == 'pretix.event.order.reactivated'
         assert self.order.invoices.count() == 3
+        assert not self.order.cancellation_date
 
     @classscope(attr='o')
     def test_reactivate_sold_out(self):
