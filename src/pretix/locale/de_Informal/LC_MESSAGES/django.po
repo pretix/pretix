@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-23 16:01+0000\n"
-"PO-Revision-Date: 2020-03-23 16:55+0000\n"
+"PO-Revision-Date: 2020-03-24 23:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1668,7 +1668,7 @@ msgstr "Alle Produkte (auch neu erstellte)"
 
 #: pretix/base/models/checkin.py:15 pretix/plugins/badges/exporters.py:201
 msgid "Limit to products"
-msgstr "Auf Produkte beschränken"
+msgstr "Auf Produkte einschränken"
 
 #: pretix/base/models/checkin.py:18
 msgctxt "checkin"
