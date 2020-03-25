@@ -622,8 +622,10 @@ class Event(EventMixin, LoggedModel):
             q.dependency_question = question_map[q.dependency_question_id]
             q.save(update_fields=['dependency_question'])
 
+        checkin_list_map = {}
         for cl in other.checkin_lists.filter(subevent__isnull=True).prefetch_related('limit_products'):
             items = list(cl.limit_products.all())
+            checkin_list_map[cl.pk] = cl
             cl.pk = None
             cl.event = self
             cl.save()
@@ -678,7 +680,7 @@ class Event(EventMixin, LoggedModel):
         event_copy_data.send(
             sender=self, other=other,
             tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,
-            question_map=question_map
+            question_map=question_map, checkin_list_map=checkin_list_map
         )
 
     def get_payment_providers(self, cached=False) -> dict:

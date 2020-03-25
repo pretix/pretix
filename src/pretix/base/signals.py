@@ -482,7 +482,7 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 """
 
 event_copy_data = EventPluginSignal(
-    providing_args=["other", "tax_map", "category_map", "item_map", "question_map", "variation_map"]
+    providing_args=["other", "tax_map", "category_map", "item_map", "question_map", "variation_map", "checkin_list_map"]
 )
 """
 This signal is sent out when a new event is created as a clone of an existing event, i.e.
@@ -494,9 +494,9 @@ but you might need to modify that data.
 
 The ``sender`` keyword argument will contain the event of the **new** event. The ``other``
 keyword argument will contain the event to **copy from**. The keyword arguments
-``tax_map``, ``category_map``, ``item_map``, ``question_map``, and ``variation_map`` contain
-mappings from object IDs in the original event to objects in the new event of the respective
-types.
+``tax_map``, ``category_map``, ``item_map``, ``question_map``, ``variation_map`` and
+``checkin_list_map`` contain mappings from object IDs in the original event to objects
+in the new event of the respective types.
 """
 
 item_copy_data = EventPluginSignal(
