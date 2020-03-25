@@ -608,7 +608,7 @@ class OrderRefundDone(OrderView):
         })
 
 
-class OrderCancellationRequestIgnore(OrderView):
+class OrderCancellationRequestDelete(OrderView):
     permission = 'can_change_orders'
 
     @cached_property
@@ -618,13 +618,13 @@ class OrderCancellationRequestIgnore(OrderView):
     def post(self, *args, **kwargs):
         with transaction.atomic():
             self.req.delete()
-            self.order.log_action('pretix.event.order.cancellationrequest.ignored', {
+            self.order.log_action('pretix.event.order.cancellationrequest.deleted', {
             }, user=self.request.user)
             messages.success(self.request, _('The request has been removed.'))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
-        return render(self.request, 'pretixcontrol/order/cancellation_request_ignore.html', {
+        return render(self.request, 'pretixcontrol/order/cancellation_request_delete.html', {
             'order': self.order,
         })
 

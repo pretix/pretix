@@ -134,9 +134,9 @@
                             <dd>{{ cr.cancellation_fee|money:request.event.currency }}</dd>
                         </dl>
                         <div class="text-right">
-                            <a href="{% url "control:event.order.cancellationrequests.ignore" event=request.event.slug organizer=request.event.organizer.slug code=order.code req=cr.pk %}"
+                            <a href="{% url "control:event.order.cancellationrequests.delete" event=request.event.slug organizer=request.event.organizer.slug code=order.code req=cr.pk %}"
                                     class="btn btn-default btn-lg" data-toggle="tooltip">
-                                {% trans "Ignore request" %}
+                                {% trans "Delete request" %}
                             </a>
                             <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c&req={{ cr.pk }}" class="btn btn-primary btn-lg">
                                 {% trans "Cancel order" %}
