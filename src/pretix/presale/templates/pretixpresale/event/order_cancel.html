@@ -6,20 +6,35 @@
 {% block title %}{% trans "Cancel order" %}{% endblock %}
 {% block content %}
     <h2>
-        {% blocktrans trimmed with code=order.code %}
-            Cancel order: {{ code }}
-        {% endblocktrans %}
+        {% if request.event.settings.cancel_allow_user_paid_require_approval %}
+            {% blocktrans trimmed with code=order.code %}
+                Request cancellation: {{ code }}
+            {% endblocktrans %}
+        {% else %}
+            {% blocktrans trimmed with code=order.code %}
+                Cancel order: {{ code }}
+            {% endblocktrans %}
+        {% endif %}
     </h2>
     <form method="post"
             action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}"
             data-asynctask
             class="">
-        <p>
-            {% blocktrans trimmed %}
-                If you cancel this order, all tickets will be invalidated and you can no longer use them. You cannot
-                revert this action.
-            {% endblocktrans %}
-        </p>
+        {% if request.event.settings.cancel_allow_user_paid_require_approval %}
+            <p>
+                {% blocktrans trimmed %}
+                    You can request the cancellation of your order on this page. The event organizer will then decide
+                    on your request. If they approve, your order will be canceled and all tickets will be invalidated.
+                {% endblocktrans %}
+            </p>
+        {% else %}
+            <p>
+                {% blocktrans trimmed %}
+                    If you cancel this order, all tickets will be invalidated and you can no longer use them. You cannot
+                    revert this action.
+                {% endblocktrans %}
+            </p>
+        {% endif %}
 
         {% if request.event.settings.cancel_allow_user_paid_adjust_fees %}
             <p>
@@ -36,19 +51,18 @@
                 {% trans "However, if you want us to help keep the lights on here, please consider using the slider below to request a smaller refund. Thank you!" %}
             </p>
             <div class="cancel-fee-slider">
-                <div id="cancel-fee-keep"></div>
+                <div id="cancel-fee-keep">Enter how much we can keep:</div>
                 <input
                         id="cancel-fee-slider"
                         type="text"
                         name="cancel_fee"
-                        class="col-md-6 col-sm-12"
                         value="{{ cancel_fee|stringformat:".2f" }}"
                         data-slider-min="{{ cancel_fee|stringformat:".2f" }}"
                         data-slider-value="{{ cancel_fee|stringformat:".2f" }}"
                         data-slider-step="0.01"
                         data-slider-max="{{ order.payment_refund_sum|stringformat:".2f" }}"
                         data-slider-tooltip="hide"/>
-                <div id="cancel-fee-refund">AS</div>
+                <div id="cancel-fee-refund"></div>
             </div>
             <div class="text-center" id="cancel-fee-custom-link">
                 <a id="cancel-fee-custom"><small>Enter custom amount</small></a>
@@ -128,7 +142,11 @@
             </div>
             <div class="col-md-4 col-md-offset-4">
                 <button class="btn btn-block btn-danger btn-lg" type="submit">
-                    {% trans "Yes, cancel order" %}
+                    {% if request.event.settings.cancel_allow_user_paid_require_approval %}
+                        {% trans "Yes, request cancellation" %}
+                    {% else %}
+                        {% trans "Yes, cancel order" %}
+                    {% endif %}
                 </button>
             </div>
             <div class="clearfix"></div>

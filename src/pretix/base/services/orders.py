@@ -404,6 +404,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
         order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device,
                          data={'cancellation_fee': cancellation_fee})
+        order.cancellation_requests.all().delete()
 
         if send_mail:
             email_template = order.event.settings.mail_text_order_canceled

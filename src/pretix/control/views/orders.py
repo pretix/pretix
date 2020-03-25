@@ -13,7 +13,8 @@ from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
-    Count, IntegerField, OuterRef, Prefetch, ProtectedError, Q, Subquery, Sum,
+    Count, Exists, IntegerField, OuterRef, Prefetch, ProtectedError, Q,
+    Subquery, Sum,
 )
 from django.forms import formset_factory
 from django.http import (
@@ -33,6 +34,7 @@ from django.views.generic import (
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -41,7 +43,7 @@ from pretix.base.models import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.orders import (
-    OrderFee, OrderPayment, OrderPosition, OrderRefund,
+    CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
 )
 from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.payment import PaymentException
@@ -116,10 +118,11 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             Order.annotate_overpayments(Order.objects).filter(
                 pk__in=[o.pk for o in ctx['orders']]
             ).annotate(
-                pcnt=Subquery(s, output_field=IntegerField())
+                pcnt=Subquery(s, output_field=IntegerField()),
+                has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk')))
             ).values(
                 'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
-                'has_pending_refund'
+                'has_pending_refund', 'has_cancellation_request'
             )
         }
 
@@ -132,6 +135,7 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             o.is_pending_with_full_payment = annotated.get(o.pk)['is_pending_with_full_payment']
             o.has_external_refund = annotated.get(o.pk)['has_external_refund']
             o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
+            o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
 
         if ctx['page_obj'].paginator.count < 1000:
             # Performance safeguard: Only count positions if the data set is small
@@ -607,6 +611,40 @@ class OrderRefundDone(OrderView):
         })
 
 
+class OrderCancellationRequestDelete(OrderView):
+    permission = 'can_change_orders'
+
+    @cached_property
+    def req(self):
+        return get_object_or_404(self.order.cancellation_requests, pk=self.kwargs['req'])
+
+    def post(self, *args, **kwargs):
+        with transaction.atomic():
+            self.req.delete()
+            self.order.log_action('pretix.event.order.cancellationrequest.deleted', {
+            }, user=self.request.user)
+
+        messages.success(self.request, _('The request has been removed. If you want, you can now inform the user.'))
+        with language(self.order.locale):
+            return redirect(reverse('control:event.order.sendmail', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug,
+                'code': self.order.code
+            }) + '?' + urlencode({
+                'subject': _('Your cancellation request'),
+                'message': _('Hello,\n\nunfortunately, we were unable to accommodate your request and cancel your '
+                             'order.\n\n'
+                             'Your {event} team').format(
+                    event="{event}",
+                )
+            }))
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/cancellation_request_delete.html', {
+            'order': self.order,
+        })
+
+
 class OrderPaymentConfirm(OrderView):
     permission = 'can_change_orders'
 
@@ -679,7 +717,14 @@ class OrderRefundView(OrderView):
             full_refund = self.order.payment_refund_sum
         else:
             full_refund = self.start_form.cleaned_data.get('partial_amount')
-        proposals = self.order.propose_auto_refunds(full_refund, payments=payments)
+        if self.request.GET.get('giftcard', 'false') == 'true':
+            proposals = {
+                None: full_refund
+            }
+            giftcard_proposal = full_refund
+        else:
+            proposals = self.order.propose_auto_refunds(full_refund, payments=payments)
+            giftcard_proposal = Decimal('0.00')
         to_refund = full_refund - sum(proposals.values())
         for p in payments:
             p.propose_refund = proposals.get(p, 0)
@@ -873,6 +918,7 @@ class OrderRefundView(OrderView):
             'payments': payments,
             'remainder': to_refund,
             'order': self.order,
+            'giftcard_proposal': giftcard_proposal,
             'partial_amount': (
                 self.request.POST.get('start-partial_amount') if self.request.method == 'POST'
                 else self.request.GET.get('start-partial_amount')
@@ -898,6 +944,12 @@ class OrderTransition(OrderView):
     permission = 'can_change_orders'
 
     @cached_property
+    def req(self):
+        if 'req' not in self.request.GET:
+            return None
+        return get_object_or_404(self.order.cancellation_requests, pk=self.request.GET.get('req'))
+
+    @cached_property
     def mark_paid_form(self):
         return MarkPaidForm(
             instance=self.order,
@@ -909,6 +961,9 @@ class OrderTransition(OrderView):
         return CancelForm(
             instance=self.order,
             data=self.request.POST if self.request.method == "POST" else None,
+            initial={
+                'cancellation_fee': self.req.cancellation_fee if self.req else Decimal('0.00')
+            }
         )
 
     def post(self, *args, **kwargs):
@@ -997,8 +1052,9 @@ class OrderTransition(OrderView):
                         'event': self.request.event.slug,
                         'organizer': self.request.event.organizer.slug,
                         'code': self.order.code
-                    }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}'.format(
-                        self.order.pending_sum * -1
+                    }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}&giftcard={}'.format(
+                        round_decimal(self.order.pending_sum * -1),
+                        'true' if self.req and self.req.refund_as_giftcard else 'false'
                     ))
 
                 messages.success(self.request, _('The order has been canceled.'))

@@ -470,6 +470,8 @@ class Order(LockModel, LoggedModel):
         """
         from .checkin import Checkin
 
+        if self.cancellation_requests.exists():
+            return False
         positions = list(
             self.positions.all().annotate(
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
@@ -2206,6 +2208,13 @@ class CachedCombinedTicket(models.Model):
     extension = models.CharField(max_length=255)
     file = models.FileField(null=True, blank=True, upload_to=cachedcombinedticket_name, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
+
+
+class CancellationRequest(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='cancellation_requests')
+    created = models.DateTimeField(auto_now_add=True)
+    cancellation_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    refund_as_giftcard = models.BooleanField(default=False)
 
 
 @receiver(post_delete, sender=CachedTicket)

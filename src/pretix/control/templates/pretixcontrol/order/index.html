@@ -112,6 +112,40 @@
 
     <div class="row">
         <div class="col-xs-12 col-lg-10">
+            {% for cr in order.cancellation_requests.all %}
+                <div class="panel panel-warning items">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "Cancellation request" %}
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        {% trans "The customer asked you to cancel the order with the following settings:" %}
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "Refund method" %}</dt>
+                            <dd>
+                                {% if cr.refund_as_giftcard %}
+                                    {% trans "Gift card" %}
+                                {% else %}
+                                    {% trans "Original payment method" %}
+                                {% endif %}
+                            </dd>
+                            <dt>{% trans "Cancellation fee" %}</dt>
+                            <dd>{{ cr.cancellation_fee|money:request.event.currency }}</dd>
+                        </dl>
+                        <div class="text-right">
+                            <a href="{% url "control:event.order.cancellationrequests.delete" event=request.event.slug organizer=request.event.organizer.slug code=order.code req=cr.pk %}"
+                                    class="btn btn-default btn-lg" data-toggle="tooltip">
+                                {% trans "Delete request" %}
+                            </a>
+                            <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c&req={{ cr.pk }}" class="btn btn-primary btn-lg">
+                                {% trans "Cancel order" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
             <div class="panel panel-primary items">
                 <div class="panel-heading">
                     <h3 class="panel-title">

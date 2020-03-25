@@ -110,6 +110,7 @@ event_urls = [
     "orders/ABC/approve",
     "orders/ABC/deny",
     "orders/ABC/checkvatid",
+    "orders/ABC/cancellationrequests/1/delete",
     "orders/ABC/payments/1/cancel",
     "orders/ABC/payments/1/confirm",
     "orders/ABC/refund",

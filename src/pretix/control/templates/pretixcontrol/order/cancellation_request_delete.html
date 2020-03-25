@@ -1,0 +1,32 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Ignore cancellation request" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Ignore cancellation request" %}
+    </h1>
+    <p>{% blocktrans trimmed %}
+        Do you really want to remove this cancellation request? The user will not be informed automatically, but you
+        will have the option to email them individually in the next step.
+    {% endblocktrans %}</p>
+
+    <form method="post" href="">
+        {% csrf_token %}
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                    {% trans "No, take me back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-danger btn-lg" type="submit">
+                    {% trans "Yes, delete request" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

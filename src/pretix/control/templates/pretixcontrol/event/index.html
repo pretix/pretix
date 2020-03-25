@@ -34,6 +34,15 @@
                     class="btn btn-primary">{% trans "Show pending refunds" %}</a>
         </div>
     {% endif %}
+    {% if has_cancellation_requests %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+                This event contains <strong>requested cancellations</strong> that you should take care of.
+            {% endblocktrans %}
+            <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status=rc"
+                    class="btn btn-primary">{% trans "Show orders requesting cancellation" %}</a>
+        </div>
+    {% endif %}
     {% if has_pending_approvals %}
         <div class="alert alert-warning">
             {% blocktrans trimmed %}

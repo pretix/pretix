@@ -220,6 +220,7 @@ class EventOrderFilterForm(OrderFilterForm):
             ('underpaid', _('Underpaid')),
             ('pendingpaid', _('Pending (but fully paid)')),
             ('testmode', _('Test mode')),
+            ('rc', _('Cancellation requested')),
         ),
         required=False,
     )
@@ -304,6 +305,10 @@ class EventOrderFilterForm(OrderFilterForm):
             qs = qs.filter(
                 Q(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0))
                 | Q(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0))
+            )
+        elif fdata.get('status') == 'rc':
+            qs = qs.filter(
+                cancellation_requests__isnull=False
             )
         elif fdata.get('status') == 'pendingpaid':
             qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
