@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-25 13:14+0000\n"
-"PO-Revision-Date: 2020-03-24 23:00+0000\n"
+"PO-Revision-Date: 2020-03-25 13:58+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -5808,41 +5808,43 @@ msgstr "Prozentuale Stornogebühr einbehalten"
 
 #: pretix/base/settings.py:916
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr ""
+msgstr "Kunden erlauben, freiwillig auf einen Teil der Erstattung zu verzichten"
 
 #: pretix/base/settings.py:917
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
 msgstr ""
+"Mit dieser Option wird euren Kunden angeboten, nur einen Teil des Preises "
+"erstatten zu lassen, um euch mit dem Restbetrag zu unterstützen."
 
 #: pretix/base/settings.py:926
 msgid ""
 "Customers can only request a cancellation that needs to be approved by the "
 "event organizer before the order is canceled and a refund is issued."
 msgstr ""
+"Kunden können eine Stornierung nur anfragen, die aber noch freigegeben "
+"werden muss bevor eine Erstattung erfolgt."
 
 #: pretix/base/settings.py:936 pretix/base/settings.py:945
 msgid "All refunds are issued to the original payment method"
-msgstr ""
+msgstr "Das Geld wird immer auf die ursprüngliche Zahlungsmethode erstattet"
 
 #: pretix/base/settings.py:937 pretix/base/settings.py:946
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
 msgstr ""
+"Kunden können zwischen einem Geschenkgutschein und einer Erstattung auf die "
+"ursprüngliche Zahlungsmethode wählen"
 
 #: pretix/base/settings.py:938 pretix/base/settings.py:947
-#, fuzzy
-#| msgid "Manually issue a gift card"
 msgid "All refunds are issued as gift cards"
-msgstr "Geschenkgutschein manuell ausstellen"
+msgstr "Alle Erstattungen werden als Geschenkgutscheine ausgegeben"
 
 #: pretix/base/settings.py:943
 #: pretix/control/templates/pretixcontrol/order/index.html:125
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund method"
-msgstr "Bestellung erstatten"
+msgstr "Erstattungsweg"
 
 #: pretix/base/settings.py:968 pretix/control/forms/event.py:1189
 msgid "Contact address"
@@ -7650,10 +7652,8 @@ msgid "Test mode"
 msgstr "Testmodus"
 
 #: pretix/control/forms/filter.py:223
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Cancellation requested"
-msgstr "Stornogebühr"
+msgstr "Stornierung angefragt"
 
 #: pretix/control/forms/filter.py:252 pretix/control/forms/filter.py:761
 #: pretix/control/forms/filter.py:967 pretix/control/forms/vouchers.py:112
@@ -8956,10 +8956,8 @@ msgid "The order has been marked as paid."
 msgstr "Die Bestellung wurde als bezahlt markiert."
 
 #: pretix/control/logdisplay.py:192
-#, fuzzy
-#| msgid "The selected question has been deleted."
 msgid "The cancellation request has been deleted."
-msgstr "Die ausgewählte Frage wurde gelöscht."
+msgstr "Die ausgewählte Stornierungsanfrage wurde gelöscht."
 
 #: pretix/control/logdisplay.py:193
 msgid "The order has been refunded."
@@ -10802,22 +10800,16 @@ msgid "Show pending refunds"
 msgstr "Ausstehende Erstattungen anzeigen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:39
-#, fuzzy
-#| msgid ""
-#| "This event contains <strong>pending refunds</strong> that you should take "
-#| "care of."
 msgid ""
 "This event contains <strong>requested cancellations</strong> that you should "
 "take care of."
 msgstr ""
-"Diese Veranstaltung enthält <strong>ausstehende Erstattungen</strong>, um "
+"Diese Veranstaltung enthält <strong>angefragte Stornierungen</strong>, um "
 "die du dich kümmern solltest."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:43
-#, fuzzy
-#| msgid "Show orders pending approval"
 msgid "Show orders requesting cancellation"
-msgstr "Alle Bestellungen ohne Freigabe"
+msgstr "Zeige Bestellungen mit angefragter Stornierung"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:48
 msgid ""
@@ -12620,10 +12612,8 @@ msgstr "Ja, Bestellung stornieren"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:4
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:8
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Ignore cancellation request"
-msgstr "Stornobeleg erstellen"
+msgstr "Stornierungsanfrage ignorieren"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:10
 msgid ""
@@ -12631,12 +12621,13 @@ msgid ""
 "informed automatically, but you will have the option to email them "
 "individually in the next step."
 msgstr ""
+"Soll diese Stornierungsanfrage wirklich gelöscht werden? Der Kunde wird "
+"nicht automatisch informiert, aber du hast danach die Möglichkeit eine "
+"individuelle E-Mail an den Kunden zu verschicken."
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:26
-#, fuzzy
-#| msgid "Yes, delete order"
 msgid "Yes, delete request"
-msgstr "Ja, Bestellung löschen"
+msgstr "Ja, Anfrage löschen"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:7
 #: pretix/control/templates/pretixcontrol/order/change.html:13
@@ -12916,28 +12907,22 @@ msgid "Initiate a refund of %(amount)s"
 msgstr "%(amount)s zurückerstatten"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:119
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Cancellation request"
-msgstr "Stornogebühr"
+msgstr "Stornierungsanfrage"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:123
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid "The customer asked you to cancel the order with the following settings:"
-msgstr "Du kannst diese Bestellung mit dem folgenden Knopf stornieren."
+msgstr ""
+"Der Kunde hat dich gebeten, die Bestellung mit folgenden Einstellungen zu "
+"stornieren:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:130
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Original payment method"
-msgstr "Aktiviere Zahlungsmethode"
+msgstr "Ursprüngliche Zahlungsmethode"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:139
-#, fuzzy
-#| msgid "Delete question"
 msgid "Delete request"
-msgstr "Frage löschen"
+msgstr "Anfrage löschen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:152
 #: pretix/presale/templates/pretixpresale/event/order.html:7
@@ -13608,7 +13593,7 @@ msgstr "Filter entfernen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:132
 msgid "CANCELLATION REQUESTED"
-msgstr ""
+msgstr "STORNO ANGEFRAGT"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:135
 #: pretix/control/templates/pretixcontrol/orders/index.html:137
@@ -16105,32 +16090,17 @@ msgid "The refund has been marked as done."
 msgstr "Die Erstattung wurde als erledigt markiert."
 
 #: pretix/control/views/orders.py:627
-#, fuzzy
-#| msgid "The device has been verified and can now be used."
 msgid "The request has been removed. If you want, you can now inform the user."
-msgstr "Das Gerät wurde bestätigt und kann nun verwendet werden."
+msgstr ""
+"Die Anfrage wurde gelöscht. Wenn du willst, kannst du den Kunden nun "
+"informieren."
 
 #: pretix/control/views/orders.py:634
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Your cancellation request"
-msgstr "Stornogebühr"
+msgstr "Deine Stornierungsanfrage"
 
 #: pretix/control/views/orders.py:635
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "unfortunately, we denied your order request for {event}.\n"
-#| "\n"
-#| "{comment}\n"
-#| "\n"
-#| "You can view the details of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -16141,12 +16111,8 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"deine Bestellung für {event} wurde leider abgelehnt.\n"
-"\n"
-"{comment}\n"
-"\n"
-"Du kannst deine Bestellung unter folgender Adresse einsehen:\n"
-"{url}\n"
+"leider können wir deiner Anfrage nicht entgegenkommen und die Bestellung "
+"stornieren.\n"
 "\n"
 "Viele Grüße,\n"
 "Das {event} Team"
@@ -19866,16 +19832,12 @@ msgid "Pay now"
 msgstr "Jetzt bezahlen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:99
-#, fuzzy
-#| msgid ""
-#| "You can not cancel this order yourself. Please contact the event "
-#| "organizer for more information."
 msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
-"Du kannst diese Bestellung nicht selbstständig stornieren. Bitte kontaktiere "
-"den Veranstalter für weitere Informationen."
+"Wir haben deine Anfrage zur Stornierung dieser Bestellung erhalten. Bitte "
+"gedulde dich, während der Veranstalter über die Stornierung entscheidet."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:109
 #, python-format
@@ -19891,6 +19853,9 @@ msgid ""
 "with us, you can use the gift card code <strong>%(code)s</strong> during "
 "payment."
 msgstr ""
+"Wir haben einen Geschenkgutschein für deine Erstattung von %(amount)s "
+"ausgestellt. Du kannst für deinen nächsten Kauf den Gutscheincode "
+"<strong>%(code)s</strong> zur Zahlung verwenden."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:119
 #, python-format
@@ -19932,17 +19897,16 @@ msgid "Internal Reference"
 msgstr "Interne Referenz"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:292
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
-msgstr "Du kannst diese Bestellung mit dem folgenden Knopf stornieren."
+msgstr ""
+"Du kannst anfragen, diese Bestellung zu stornieren, aber du erhältst keine "
+"Erstattung."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:296
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr "Du kannst diese Bestellung mit dem folgenden Knopf stornieren."
+msgstr ""
+"Du kannst diese Bestellung stornieren, erhältst jedoch keine Erstattung."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:300
 #: pretix/presale/templates/pretixpresale/event/order.html:323
@@ -19952,33 +19916,24 @@ msgid "This will invalidate all tickets in this order."
 msgstr "Dies wird alle Tickets in dieser Bestellung ungültig machen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:305
-#, fuzzy, python-format
-#| msgid ""
-#| "You can cancel this order. In this case, a cancellation fee of <strong>"
-#| "%(fee)s</strong> will be kept and you will receive a refund of the "
-#| "remainder to your original payment method."
+#, python-format
 msgid ""
 "You can request to cancel this order. If your request is approved, a "
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
-"Du kannst diese Bestellung stornieren. In diesem Fall wird eine Stornogebühr "
-"von <strong>%(fee)s</strong> einbehalten und der Restbetrag an deine "
-"ursprüngliche Zahlungsart erstattet."
+"Du kannst eine Anfrage zur Stornierung dieser Bestellung stellen. Wenn die "
+"Stornierung akzeptiert wird, wird eine Stornogebühr von "
+"<strong>%(fee)s</strong> einbehalten und der Restbetrag wird erstattet."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:311
-#, fuzzy, python-format
-#| msgid ""
-#| "You can cancel this order. In this case, a cancellation fee of <strong>"
-#| "%(fee)s</strong> will be kept and you will receive a refund of the "
-#| "remainder to your original payment method."
+#, python-format
 msgid ""
 "You can cancel this order. In this case, a cancellation fee of <strong>"
 "%(fee)s</strong> will be kept and you will receive a refund of the remainder."
 msgstr ""
 "Du kannst diese Bestellung stornieren. In diesem Fall wird eine Stornogebühr "
-"von <strong>%(fee)s</strong> einbehalten und der Restbetrag an deine "
-"ursprüngliche Zahlungsart erstattet."
+"von <strong>%(fee)s</strong> einbehalten und der Restbetrag wird erstattet."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:317
 #: pretix/presale/templates/pretixpresale/event/order.html:338
@@ -19987,49 +19942,45 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
+"Der Erstattungsbetrag wird dir als Geschenkgutschein zugestellt, den du für "
+"weitere Käufe verwenden kannst."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:319
 #: pretix/presale/templates/pretixpresale/event/order.html:340
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
+"Der Erstattungsbetrag kann dir als Geschenkgutschein oder als Rückzahlung "
+"mit deiner ursprünglichen Zahlungsmethode geschickt werden."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:321
 #: pretix/presale/templates/pretixpresale/event/order.html:342
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "The refund will be issued to your original payment method."
 msgstr ""
-"Du kannst diese Bestellung stornieren und eine volle Erstattung auf deine "
-"ursprüngliche Zahlungsmethode erhalten."
+"Der Erstattungsbetrag wird mit deiner ursprüngliche Zahlungsmethode "
+"erstattet."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:328
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
+"Du kannst eine Anfrage für die Stornierung dieser Bestellung stellen. Wird "
+"die Stornierung akzeptiert, erhältst du eine volle Erstattung."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:333
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "You can cancel this order and receive a full refund."
 msgstr ""
-"Du kannst diese Bestellung stornieren und eine volle Erstattung auf deine "
-"ursprüngliche Zahlungsmethode erhalten."
+"Du kannst diese Bestellung stornieren und eine volle Erstattung erhalten."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:354
 msgid "You can cancel this order using the following button."
 msgstr "Du kannst diese Bestellung mit dem folgenden Knopf stornieren."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:10
-#, fuzzy, python-format
-#| msgid "Order canceled: %(code)s"
+#, python-format
 msgid "Request cancellation: %(code)s"
-msgstr "Bestellung storniert: %(code)s"
+msgstr "Stornierung anfragen: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:14
 #, python-format
@@ -20042,12 +19993,18 @@ msgid ""
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
 msgstr ""
+"Du kannst auf dieser Seite eine Stornierung deiner Bestellung anfragen. Der "
+"Veranstalter wird dann eine Entscheidung zu deiner Anfrage treffen. Wird die "
+"Stornierung akzeptiert, wird diese Bestellung storniert und alle Tickets "
+"werden ungültig."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:32
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"Wenn du diese Bestellung stornierst, werden alle Tickets ungültig und können "
+"nicht mehr benutzt werden. Dies kann nicht rückgängig gemacht werden."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:42
 #, python-format
@@ -20055,79 +20012,63 @@ msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
 msgstr ""
+"Wenn du möchtest, kannst du eine Erstattung für den gesamten Betrag "
+"abzüglich einer Stornogebühr von %(fee)s anfragen."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:47
-#, fuzzy
-#| msgid "If you want to, you can publish your ticket shop now."
 msgid "If you want, you can request a full refund."
-msgstr "Du kannst deinen Ticket-Shop jederzeit veröffentlichen."
+msgstr "Wenn du möchtest, kannst du eine vollständige Erstattung anfragen."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:51
 msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
+"Wenn du uns jedoch unterstützen möchtest, unsere Arbeit fortzuführen, denke "
+"bitte darüber nach mit dem Schieber einen niedrigeren Erstattungsbetrag "
+"auszuwählen, sodass wir einen höheren Betrag einbehalten können. Vielen Dank!"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:72
-#, fuzzy
-#| msgid "Refund only"
 msgid "Refund amount:"
-msgstr "Nur diesen Betrag erstatten"
+msgstr "Erstattungsbetrag:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:85
 msgid "I want the refund as a gift card for later purchases"
-msgstr ""
+msgstr "Ich möchte die Erstattung als Gutschein für spätere Käufe erhalten"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:91
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "I want the refund to be sent to my original payment method"
 msgstr ""
-"Du kannst diese Bestellung stornieren und eine volle Erstattung auf deine "
-"ursprüngliche Zahlungsmethode erhalten."
+"Ich möchte die Erstattung an meine ursprüngliche Zahlungsmethode ausgezahlt "
+"erhalten"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:96
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:115
-#, fuzzy
-#| msgid ""
-#| "The refund amount of %(amount)s will automatically be sent back to your "
-#| "original payment method. Depending on the payment method, please allow "
-#| "for up to two weeks before this appears on your statement."
 msgid ""
 "The refund amount will automatically be sent back to your original payment "
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
-"Der Erstattungsbetrag von %(amount)s wird automatisch auf dein "
-"ursprüngliches Zahlungsmittel zurückgebucht. Je nach Zahlungsart kann dies "
-"bis zu zwei Wochen in Anspruch nehmen."
+"Der Erstattungsbetrag wird automatisch auf dein ursprüngliches "
+"Zahlungsmittel zurückgebucht. Je nach Zahlungsart kann dies bis zu zwei "
+"Wochen in Anspruch nehmen."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:104
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:124
-#, fuzzy
-#| msgid ""
-#| "With to the payment method you used, the refund amount of %(amount)s "
-#| "<strong>can not be sent back to you automatically</strong>. Instead, the "
-#| "event organizer will need to initiate the transfer manually. Please be "
-#| "patient as this might take a bit longer."
 msgid ""
 "With the payment method you used, the refund amount <strong>can not be sent "
 "back to you automatically</strong>. Instead, the event organizer will need "
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
-"Mit der verwendeten Zahlungsart kann der Erstattungsbetrag von %(amount)s "
-"<strong>nicht automatisch</strong> zurückgebucht werden. Stattdessen wird "
-"der Veranstalter dir den Betrag manuell zurückerstatten. Bitte habe etwas "
-"Geduld, da dieser Vorgang länger dauern kann."
+"Mit der verwendeten Zahlungsart kann der Erstattungsbetrag <strong>nicht "
+"automatisch</strong> zurückgebucht werden. Stattdessen wird der Veranstalter "
+"dir den Betrag manuell zurückerstatten. Bitte habe etwas Geduld, da dieser "
+"Vorgang länger dauern kann."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:146
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Yes, request cancellation"
-msgstr "Stornobeleg erstellen"
+msgstr "Ja, Storno anfragen"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
@@ -20460,16 +20401,12 @@ msgid "You cannot modify this order"
 msgstr "Du kannst diese Bestellung nicht bearbeiten"
 
 #: pretix/presale/views/order.py:760
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "You chose an invalid cancellation fee."
-msgstr "Feste Stornogebühr einbehalten"
+msgstr "Du hast eine ungültige Stornierungsgebühr gewählt."
 
 #: pretix/presale/views/order.py:785
-#, fuzzy
-#| msgid "The question has been deleted."
 msgid "The cancellation has been requested."
-msgstr "Die Frage wurde gelöscht."
+msgstr "Die Stornierungsanfrage wurde übermittelt."
 
 #: pretix/presale/views/order.py:839
 msgid "Ticket download is not (yet) enabled for this order."
