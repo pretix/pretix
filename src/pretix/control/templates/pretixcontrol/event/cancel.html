@@ -15,6 +15,7 @@
             <fieldset>
                 <legend>{% trans "Paid orders" %}</legend>
                 {% bootstrap_field form.cancel_allow_user_paid layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_paid_require_approval layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_keep layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_keep_percentage layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_keep_fees layout="control" %}

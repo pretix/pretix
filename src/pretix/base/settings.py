@@ -917,6 +917,16 @@ DEFAULTS = {
             help_text=_("With this option enabled, your customers can choose to get a smaller refund to support you.")
         )
     },
+    'cancel_allow_user_paid_require_approval': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Customers can only request a cancellation that needs to be approved by the event organizer "
+                    "before the order is canceled and a refund is issued."),
+        )
+    },
     'cancel_allow_user_paid_refund_as_giftcard': {
         'default': 'off',
         'type': str,

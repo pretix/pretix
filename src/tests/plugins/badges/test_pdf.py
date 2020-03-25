@@ -69,6 +69,7 @@ def test_generate_pdf(env):
     pdf = PdfFileReader(BytesIO(buf))
     assert pdf.numPages == 2
 
+
 @pytest.mark.django_db
 def test_generate_pdf_multi(env):
     event, order, shirt = env

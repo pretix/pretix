@@ -32,6 +32,7 @@ from pretix.control.signals import (
 )
 from pretix.helpers.daterange import daterange
 
+from ...base.models.orders import CancellationRequest
 from ..logdisplay import OVERVIEW_BANLIST
 
 NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="text">{text}</span></div>'
@@ -343,6 +344,9 @@ def event_index(request, organizer, event):
     ctx['has_pending_approvals'] = request.event.orders.filter(
         status=Order.STATUS_PENDING,
         require_approval=True
+    ).exists()
+    ctx['has_cancellation_requests'] = CancellationRequest.objects.filter(
+        order__event=request.event
     ).exists()
 
     for a in ctx['actions']:

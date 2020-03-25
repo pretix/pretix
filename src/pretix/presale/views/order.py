@@ -765,7 +765,15 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
                 self.request.POST.get('giftcard') == 'true'
             )
         )
-        return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True, refund_as_giftcard=giftcard)
+        if self.request.event.settings.cancel_allow_user_paid_require_approval:
+            self.order.cancellation_requests.create(
+                cancellation_fee=fee,
+                refund_as_giftcard=giftcard,
+            )
+            self.order.log_action('pretix.event.order.refund.requested')
+            return self.success(None)
+        else:
+            return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True, refund_as_giftcard=giftcard)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -773,7 +781,10 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         return ctx
 
     def get_success_message(self, value):
-        return _('The order has been canceled.')
+        if self.request.event.settings.cancel_allow_user_paid_require_approval:
+            return _('The cancellation has been requested.')
+        else:
+            return _('The order has been canceled.')
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')

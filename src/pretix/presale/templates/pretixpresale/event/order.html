@@ -94,6 +94,14 @@
     {% endif %}
     {% eventsignal event "pretix.presale.signals.order_info_top" order=order request=request %}
     {% if order.status == "p" or order.status == "c" %}
+        {% if order.cancellation_requests.exists %}
+            <div class="alert alert-info">
+                {% blocktrans trimmed %}
+                    We've received your request to cancel this order. Please stay patient while the event organizer
+                    decides on the cancellation.
+                {% endblocktrans %}
+            </div>
+        {% endif %}
         {% if refunds %}
             <div class="alert alert-info">
                 {% for r in refunds %}
@@ -280,17 +288,31 @@
                 {% if order.status == "p" and order.total != 0 %}
                     {% if order.user_cancel_fee >= order.total %}
                         <p>
-                            {% blocktrans trimmed %}
-                                You can cancel this order, but you will not receive a refund.
-                            {% endblocktrans %}
+                            {% if request.event.settings.cancel_allow_user_paid_require_approval %}
+                                {% blocktrans trimmed %}
+                                    You can request to cancel this order, but you will not receive a refund.
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans trimmed %}
+                                    You can cancel this order, but you will not receive a refund.
+                                {% endblocktrans %}
+                            {% endif %}
                             {% trans "This will invalidate all tickets in this order." %}
                         </p>
                     {% elif order.user_cancel_fee %}
                         <p>
-                            {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
-                                You can cancel this order. In this case, a cancellation fee of <strong>{{ fee }}</strong>
-                                will be kept and you will receive a refund of the remainder.
-                            {% endblocktrans %}
+                            {% if request.event.settings.cancel_allow_user_paid_require_approval %}
+                                {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
+                                    You can request to cancel this order. If your request is approved, a cancellation
+                                    fee of <strong>{{ fee }}</strong> will be kept and you will receive a refund of
+                                    the remainder.
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
+                                    You can cancel this order. In this case, a cancellation fee of <strong>{{ fee }}</strong>
+                                    will be kept and you will receive a refund of the remainder.
+                                {% endblocktrans %}
+                            {% endif %}
                             {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
                                 {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
                             {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "option" %}
@@ -302,9 +324,16 @@
                         </p>
                     {% else %}
                         <p>
-                            {% blocktrans trimmed %}
-                                You can cancel this order and receive a full refund.
-                            {% endblocktrans %}
+                            {% if request.event.settings.cancel_allow_user_paid_require_approval %}
+                                {% blocktrans trimmed %}
+                                    You can request to cancel this order. If your request is approved, you get a full
+                                    refund.
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans trimmed %}
+                                    You can cancel this order and receive a full refund.
+                                {% endblocktrans %}
+                            {% endif %}
                             {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
                                 {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
                             {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "option" %}

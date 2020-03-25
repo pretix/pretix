@@ -33,6 +33,7 @@ from django.views.generic import (
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -607,6 +608,27 @@ class OrderRefundDone(OrderView):
         })
 
 
+class OrderCancellationRequestIgnore(OrderView):
+    permission = 'can_change_orders'
+
+    @cached_property
+    def req(self):
+        return get_object_or_404(self.order.cancellation_requests, pk=self.kwargs['req'])
+
+    def post(self, *args, **kwargs):
+        with transaction.atomic():
+            self.req.delete()
+            self.order.log_action('pretix.event.order.cancellationrequest.ignored', {
+            }, user=self.request.user)
+            messages.success(self.request, _('The request has been removed.'))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/cancellation_request_ignore.html', {
+            'order': self.order,
+        })
+
+
 class OrderPaymentConfirm(OrderView):
     permission = 'can_change_orders'
 
@@ -679,7 +701,14 @@ class OrderRefundView(OrderView):
             full_refund = self.order.payment_refund_sum
         else:
             full_refund = self.start_form.cleaned_data.get('partial_amount')
-        proposals = self.order.propose_auto_refunds(full_refund, payments=payments)
+        if self.request.GET.get('giftcard', 'false') == 'true':
+            proposals = {
+                None: full_refund
+            }
+            giftcard_proposal = full_refund
+        else:
+            proposals = self.order.propose_auto_refunds(full_refund, payments=payments)
+            giftcard_proposal = Decimal('0.00')
         to_refund = full_refund - sum(proposals.values())
         for p in payments:
             p.propose_refund = proposals.get(p, 0)
@@ -873,6 +902,7 @@ class OrderRefundView(OrderView):
             'payments': payments,
             'remainder': to_refund,
             'order': self.order,
+            'giftcard_proposal': giftcard_proposal,
             'partial_amount': (
                 self.request.POST.get('start-partial_amount') if self.request.method == 'POST'
                 else self.request.GET.get('start-partial_amount')
@@ -898,6 +928,12 @@ class OrderTransition(OrderView):
     permission = 'can_change_orders'
 
     @cached_property
+    def req(self):
+        if 'req' not in self.request.GET:
+            return None
+        return get_object_or_404(self.order.cancellation_requests, pk=self.request.GET.get('req'))
+
+    @cached_property
     def mark_paid_form(self):
         return MarkPaidForm(
             instance=self.order,
@@ -909,6 +945,9 @@ class OrderTransition(OrderView):
         return CancelForm(
             instance=self.order,
             data=self.request.POST if self.request.method == "POST" else None,
+            initial={
+                'cancellation_fee': self.req.cancellation_fee if self.req else Decimal('0.00')
+            }
         )
 
     def post(self, *args, **kwargs):
@@ -997,8 +1036,9 @@ class OrderTransition(OrderView):
                         'event': self.request.event.slug,
                         'organizer': self.request.event.organizer.slug,
                         'code': self.order.code
-                    }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}'.format(
-                        self.order.pending_sum * -1
+                    }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}&giftcard={}'.format(
+                        round_decimal(self.order.pending_sum * -1),
+                        'true' if self.req and self.req.refund_as_giftcard else 'false'
                     ))
 
                 messages.success(self.request, _('The order has been canceled.'))
