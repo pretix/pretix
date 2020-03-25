@@ -399,6 +399,68 @@ class OrdersTest(BaseOrdersTest):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_CANCELED
 
+    def test_orders_cancel_paid_fee_autorefund_gift_card_optional(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        self.event.settings.cancel_allow_user_paid = True
+        self.event.settings.cancel_allow_user_paid_keep = Decimal('3.00')
+        self.event.settings.cancel_allow_user_paid_refund_as_giftcard = 'option'
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'manually' not in response.rendered_content
+        assert "gift card" in response.rendered_content
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                'giftcard': 'true'
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        assert "gift card" in response.rendered_content
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        assert self.order.total == Decimal('3.00')
+        with scopes_disabled():
+            r = self.order.refunds.get()
+            assert r.provider == "giftcard"
+            assert r.amount == Decimal('20.00')
+
+    def test_orders_cancel_paid_fee_autorefund_gift_card_force(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        self.event.settings.cancel_allow_user_paid = True
+        self.event.settings.cancel_allow_user_paid_keep = Decimal('3.00')
+        self.event.settings.cancel_allow_user_paid_refund_as_giftcard = 'force'
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'manually' not in response.rendered_content
+        assert "gift card" in response.rendered_content
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                'giftcard': 'false'
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        assert "gift card" in response.rendered_content
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        assert self.order.total == Decimal('3.00')
+        with scopes_disabled():
+            r = self.order.refunds.get()
+            assert r.provider == "giftcard"
+            assert r.amount == Decimal('20.00')
+
     def test_orders_cancel_paid_fee_autorefund(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()

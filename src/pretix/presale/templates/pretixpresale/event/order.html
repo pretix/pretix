@@ -102,10 +102,17 @@
                             A refund of {{ amount }} will be sent out to you soon, please be patient.
                         {% endblocktrans %}
                     {% elif r.state == "done" %}
-                        {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
-                            A refund of {{ amount }} has been sent to you. Depending on the payment method, please allow for up to 14 days until it shows up
-                            on your statement.
-                        {% endblocktrans %}
+                        {% if r.provider == "giftcard" and "gift_card_code" in r.info_data %}
+                            {% blocktrans trimmed with amount=r.amount|money:request.event.currency code=r.info_data.gift_card_code %}
+                                We've issued your refund of {{ amount }} as a gift card. On your next purchase with
+                                us, you can use the gift card code <strong>{{ code }}</strong> during payment.
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
+                                A refund of {{ amount }} has been sent to you. Depending on the payment method, please allow for up to 14 days until it shows up
+                                on your statement.
+                            {% endblocktrans %}
+                        {% endif %}
                     {% endif %}
                     {% if not forloop.last %}<br />{% endif %}
                 {% endfor %}
@@ -271,19 +278,40 @@
             </div>
             <div class="panel-body">
                 {% if order.status == "p" and order.total != 0 %}
-                    {% if order.user_cancel_fee %}
+                    {% if order.user_cancel_fee >= order.total %}
+                        <p>
+                            {% blocktrans trimmed %}
+                                You can cancel this order, but you will not receive a refund.
+                            {% endblocktrans %}
+                            {% trans "This will invalidate all tickets in this order." %}
+                        </p>
+                    {% elif order.user_cancel_fee %}
                         <p>
                             {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
                                 You can cancel this order. In this case, a cancellation fee of <strong>{{ fee }}</strong>
-                                will be kept and you will receive a refund of the remainder to your original payment method.
+                                will be kept and you will receive a refund of the remainder.
                             {% endblocktrans %}
+                            {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
+                                {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
+                            {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "option" %}
+                                {% trans "The refund can be issued to your original payment method or as a gift card." %}
+                            {% else %}
+                                {% trans "The refund will be issued to your original payment method." %}
+                            {% endif %}
                             {% trans "This will invalidate all tickets in this order." %}
                         </p>
                     {% else %}
                         <p>
                             {% blocktrans trimmed %}
-                                You can cancel this order and receive a full refund to your original payment method.
+                                You can cancel this order and receive a full refund.
                             {% endblocktrans %}
+                            {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
+                                {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
+                            {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "option" %}
+                                {% trans "The refund can be issued to your original payment method or as a gift card." %}
+                            {% else %}
+                                {% trans "The refund will be issued to your original payment method." %}
+                            {% endif %}
                             {% trans "This will invalidate all tickets in this order." %}
                         </p>
                     {% endif %}

@@ -10,7 +10,10 @@
             Cancel order: {{ code }}
         {% endblocktrans %}
     </h2>
-    <form method="post" action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}" data-asynctask>
+    <form method="post"
+            action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}"
+            data-asynctask
+            class="">
         <p>
             {% blocktrans trimmed %}
                 If you cancel this order, all tickets will be invalidated and you can no longer use them. You cannot
@@ -57,25 +60,62 @@
         {% endif %}
 
         {% if refund_amount %}
-            {% if can_auto_refund %}
-                <p>
-                    <strong>
+            {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
+                <strong>
+                    {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
+                </strong>
+            {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "option" %}
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="giftcard" value="true" checked>
+                        <strong>{% trans "I want the refund as a gift card for later purchases" %}</strong>
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="giftcard" value="false" checked>
+                        <strong>{% trans "I want the refund to be sent to my original payment method" %}</strong>
+                    </label>
+                </div>
+                {% if can_auto_refund %}
+                    <p class="help-block">
                         {% blocktrans trimmed %}
                             The refund amount will automatically be sent back to your original payment method. Depending
                             on the payment method, please allow for up to two weeks before this appears on your
                             statement.
                         {% endblocktrans %}
-                    </strong>
-                </p>
+                    </p>
+                {% else %}
+                    <p class="help-block">
+                        {% blocktrans trimmed %}
+                            With the payment method you used, the refund amount <strong>can not be sent back to you
+                            automatically</strong>. Instead, the event organizer will need to initiate the transfer
+                            manually. Please be patient as this might take a bit longer.
+                        {% endblocktrans %}
+                    </p>
+                {% endif %}
             {% else %}
-                <p>
-                    {% blocktrans trimmed %}
-                        With the payment method you used, the refund amount <strong>can not be sent back to you
-                        automatically</strong>. Instead, the event organizer will need to initiate the transfer
-                        manually. Please be patient as this might take a bit longer.
-                    {% endblocktrans %}
-                </p>
+                {% if can_auto_refund %}
+                    <p>
+                        <strong>
+                            {% blocktrans trimmed %}
+                                The refund amount will automatically be sent back to your original payment method. Depending
+                                on the payment method, please allow for up to two weeks before this appears on your
+                                statement.
+                            {% endblocktrans %}
+                        </strong>
+                    </p>
+                {% else %}
+                    <p>
+                        {% blocktrans trimmed %}
+                            With the payment method you used, the refund amount <strong>can not be sent back to you
+                            automatically</strong>. Instead, the event organizer will need to initiate the transfer
+                            manually. Please be patient as this might take a bit longer.
+                        {% endblocktrans %}
+                    </p>
+                {% endif %}
             {% endif %}
+
         {% endif %}
 
         {% csrf_token %}
