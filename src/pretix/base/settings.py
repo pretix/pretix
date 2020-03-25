@@ -907,6 +907,16 @@ DEFAULTS = {
             label=_("Keep a percentual cancellation fee"),
         )
     },
+    'cancel_allow_user_paid_adjust_fees': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow customers to voluntarily choose a lower refund"),
+            help_text=_("With this option enabled, your customers can choose to get a smaller refund to support you.")
+        )
+    },
     'cancel_allow_user_paid_until': {
         'default': None,
         'type': RelativeDateWrapper,

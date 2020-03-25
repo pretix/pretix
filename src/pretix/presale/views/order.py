@@ -723,8 +723,10 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
-        refund_amount = self.order.payment_refund_sum - self.order.user_cancel_fee
+        fee = self.order.user_cancel_fee
+        refund_amount = self.order.payment_refund_sum - fee
         proposals = self.order.propose_auto_refunds(refund_amount)
+        ctx['cancel_fee'] = fee
         ctx['refund_amount'] = refund_amount
         ctx['can_auto_refund'] = sum(proposals.values()) == refund_amount
         return ctx
@@ -750,6 +752,13 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         fee = None
         if self.order.status == Order.STATUS_PAID and self.order.total != Decimal('0.00'):
             fee = self.order.user_cancel_fee
+        if 'cancel_fee' in request.POST and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
+            custom_fee = Decimal(request.POST.get('cancel_fee'))
+            if fee <= custom_fee <= self.order.payment_refund_sum:
+                fee = custom_fee
+            else:
+                messages.error(request, _('You chose an invalid cancellation fee.'))
+                return redirect(self.get_order_url())
         return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True)
 
     def get_context_data(self, **kwargs):
