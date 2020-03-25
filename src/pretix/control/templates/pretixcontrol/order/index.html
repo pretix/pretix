@@ -37,7 +37,7 @@
                     {% endif %}
                     {% if order.require_approval and order.status == 'n' %}
                         <a href="{% url "control:event.order.approve" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
-                                class="btn btn-primary">
+                                class="btn btn-success">
                             <span class="fa fa-thumbs-up"></span>
                             {% trans "Approve" %}
                         </a>
@@ -49,7 +49,7 @@
                     {% else %}
                         {% if order.status == 'n' or order.status == 'e' %}
                             <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=p"
-                                    class="btn {% if overpaid >= 0 %}btn-primary{% else %}btn-default{% endif %}">
+                                    class="btn {% if overpaid >= 0 %}btn-success{% else %}btn-default{% endif %}">
                                 {% trans "Mark as paid" %}
                             </a>
                             <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
