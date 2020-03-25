@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-23 16:02+0000\n"
+"POT-Creation-Date: 2020-03-25 13:14+0000\n"
 "PO-Revision-Date: 2019-12-07 06:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -272,9 +272,27 @@ msgstr[0] "De items in uw winkelwagen zijn nog één voor u gereserveerd."
 msgstr[1] ""
 "De items in uw winkelwagen zijn nog {num} minuten voor u gereserveerd."
 
-#: pretix/static/pretixpresale/js/ui/main.js:210
+#: pretix/static/pretixpresale/js/ui/main.js:218
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Voer een hoeveelheid voor een van de producten in."
+
+#: pretix/static/pretixpresale/js/ui/main.js:317
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "from %(currency)s %(price)s"
+msgid "We keep %(currency)s %(amount)s"
+msgstr "vanaf %(currency)s %(price)s"
+
+#: pretix/static/pretixpresale/js/ui/main.js:325
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "from %(currency)s %(price)s"
+msgid "You get %(currency)s %(amount)s back"
+msgstr "vanaf %(currency)s %(price)s"
+
+#: pretix/static/pretixpresale/js/ui/main.js:341
+msgid "Please enter the amount we can keep."
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"

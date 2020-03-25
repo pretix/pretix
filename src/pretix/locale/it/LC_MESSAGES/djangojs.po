@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-23 16:02+0000\n"
+"POT-Creation-Date: 2020-03-25 13:14+0000\n"
 "PO-Revision-Date: 2019-12-20 19:00+0000\n"
 "Last-Translator: Patrick Arminio <patrick.arminio@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -275,8 +275,20 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
 msgstr[1] ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:210
+#: pretix/static/pretixpresale/js/ui/main.js:218
 msgid "Please enter a quantity for one of the ticket types."
+msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:317
+msgid "We keep %(currency)s %(amount)s"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:325
+msgid "You get %(currency)s %(amount)s back"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:341
+msgid "Please enter the amount we can keep."
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17

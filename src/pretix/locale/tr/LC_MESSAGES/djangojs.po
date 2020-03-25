@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-23 16:02+0000\n"
+"POT-Creation-Date: 2020-03-25 13:14+0000\n"
 "PO-Revision-Date: 2018-09-03 06:36+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -291,8 +291,26 @@ msgstr[1] ""
 "Diğer\n"
 "Sepetinizdeki ürünler {num} dakikalığına ayrılmıştır."
 
-#: pretix/static/pretixpresale/js/ui/main.js:210
+#: pretix/static/pretixpresale/js/ui/main.js:218
 msgid "Please enter a quantity for one of the ticket types."
+msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:317
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "from %(currency)s %(price)s"
+msgid "We keep %(currency)s %(amount)s"
+msgstr "% (para birimi) s% (fiyat) s"
+
+#: pretix/static/pretixpresale/js/ui/main.js:325
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "from %(currency)s %(price)s"
+msgid "You get %(currency)s %(amount)s back"
+msgstr "% (para birimi) s% (fiyat) s"
+
+#: pretix/static/pretixpresale/js/ui/main.js:341
+msgid "Please enter the amount we can keep."
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
