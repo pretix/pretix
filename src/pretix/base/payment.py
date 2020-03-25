@@ -1210,6 +1210,7 @@ class GiftCardPayment(BasePaymentProvider):
         )
         refund.info_data = {
             'gift_card': gc.pk,
+            'gift_card_code': gc.secret,
             'transaction_id': trans.pk,
         }
         refund.done()

@@ -1888,7 +1888,8 @@ def perform_order(self, event: Event, payment_provider: str, positions: List[str
             raise OrderError(str(error_messages['busy']))
 
 
-def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=OrderRefund.REFUND_SOURCE_BUYER):
+def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=OrderRefund.REFUND_SOURCE_BUYER,
+                     refund_as_giftcard=False):
     notify_admin = False
     error = False
     if isinstance(order, int):
@@ -1897,9 +1898,49 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
     if refund_amount <= Decimal('0.00'):
         return
 
-    proposals = order.propose_auto_refunds(refund_amount)
-    can_auto_refund_sum = sum(proposals.values())
-    can_auto_refund = (allow_partial and can_auto_refund_sum) or can_auto_refund_sum == refund_amount
+    if refund_as_giftcard:
+        proposals = {}
+        can_auto_refund = True
+        can_auto_refund_sum = refund_amount
+        with transaction.atomic():
+            giftcard = order.event.organizer.issued_gift_cards.create(
+                currency=order.event.currency,
+                testmode=order.testmode
+            )
+            giftcard.log_action('pretix.giftcards.created', data={})
+            r = order.refunds.create(
+                order=order,
+                payment=None,
+                source=source,
+                state=OrderRefund.REFUND_STATE_CREATED,
+                execution_date=now(),
+                amount=can_auto_refund_sum,
+                provider='giftcard',
+                info=json.dumps({
+                    'gift_card': giftcard.pk
+                })
+            )
+            try:
+                r.payment_provider.execute_refund(r)
+            except PaymentException as e:
+                with transaction.atomic():
+                    r.state = OrderRefund.REFUND_STATE_FAILED
+                    r.save()
+                    order.log_action('pretix.event.order.refund.failed', {
+                        'local_id': r.local_id,
+                        'provider': r.provider,
+                        'error': str(e)
+                    })
+                error = True
+                notify_admin = True
+            else:
+                if r.state != OrderRefund.REFUND_STATE_DONE:
+                    notify_admin = True
+
+    else:
+        proposals = order.propose_auto_refunds(refund_amount)
+        can_auto_refund_sum = sum(proposals.values())
+        can_auto_refund = (allow_partial and can_auto_refund_sum) or can_auto_refund_sum == refund_amount
     if can_auto_refund:
         for p, value in proposals.items():
             with transaction.atomic():
@@ -1961,13 +2002,13 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 @scopes_disabled()
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
-                 device=None, cancellation_fee=None, try_auto_refund=False):
+                 device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False):
     try:
         try:
             ret = _cancel_order(order, user, send_mail, api_token, device, oauth_application,
                                 cancellation_fee)
             if try_auto_refund:
-                _try_auto_refund(order)
+                _try_auto_refund(order, refund_as_giftcard=refund_as_giftcard)
             return ret
         except LockTimeoutException:
             self.retry()

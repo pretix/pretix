@@ -917,6 +917,29 @@ DEFAULTS = {
             help_text=_("With this option enabled, your customers can choose to get a smaller refund to support you.")
         )
     },
+    'cancel_allow_user_paid_refund_as_giftcard': {
+        'default': 'off',
+        'type': str,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=[
+                ('off', _('All refunds are issued to the original payment method')),
+                ('option', _('Customers can choose between a gift card and a refund to their payment method')),
+                ('force', _('All refunds are issued as gift cards')),
+            ],
+        ),
+        'form_class': forms.ChoiceField,
+        'form_kwargs': dict(
+            label=_('Refund method'),
+            choices=[
+                ('off', _('All refunds are issued to the original payment method')),
+                ('option', _('Customers can choose between a gift card and a refund to their payment method')),
+                ('force', _('All refunds are issued as gift cards')),
+            ],
+            widget=forms.RadioSelect,
+            # When adding a new ordering, remember to also define it in the event model
+        )
+    },
     'cancel_allow_user_paid_until': {
         'default': None,
         'type': RelativeDateWrapper,

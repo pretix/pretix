@@ -566,6 +566,7 @@ class CancelSettingsForm(SettingsForm):
         'cancel_allow_user_paid_keep_fees',
         'cancel_allow_user_paid_keep_percentage',
         'cancel_allow_user_paid_adjust_fees',
+        'cancel_allow_user_paid_refund_as_giftcard',
     ]
 
 

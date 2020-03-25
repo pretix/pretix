@@ -759,7 +759,13 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             else:
                 messages.error(request, _('You chose an invalid cancellation fee.'))
                 return redirect(self.get_order_url())
-        return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True)
+        giftcard = (
+            self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard == 'force' or (
+                self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard == 'option' and
+                self.request.POST.get('giftcard') == 'true'
+            )
+        )
+        return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True, refund_as_giftcard=giftcard)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
