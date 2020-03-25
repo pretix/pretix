@@ -491,6 +491,11 @@ class WidgetAPIProductList(EventListMixin, View):
 
         ev = self.subevent or request.event
         data['name'] = str(ev.name)
+        data['date_range'] = ev.get_date_range_display() + (
+            " " + date_format(
+                ev.date_from.astimezone(request.event.timezone), "TIME_FORMAT"
+            ) if request.event.settings.show_times else ""
+        )
         fail = False
 
         if not ev.presale_is_running:

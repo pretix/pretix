@@ -690,6 +690,9 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-event-header" v-if="$root.events || $root.weeks">'
         + '<strong>{{ $root.name }}</strong>'
         + '</div>'
+        + '<div class="pretix-widget-event-details" v-if="($root.events || $root.weeks) && $root.date_range">'
+        + '{{ $root.date_range }}'
+        + '</div>'
         + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
@@ -1137,6 +1140,7 @@ var shared_root_methods = {
             } else {
                 root.view = "event";
                 root.name = data.name;
+                root.date_range = data.date_range;
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
@@ -1339,6 +1343,7 @@ var create_widget = function (element) {
                 categories: null,
                 currency: null,
                 name: null,
+                date_range: null,
                 filter: filter,
                 item_filter: items,
                 category_filter: categories,
