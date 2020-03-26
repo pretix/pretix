@@ -1037,7 +1037,7 @@ class SubEvent(EventMixin, LoggedModel):
             self.name,
             self.get_date_range_display(),
             date_format(self.date_from.astimezone(self.timezone), "TIME_FORMAT") if self.settings.show_times else ""
-        )
+        ).strip()
 
     def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
         from .orders import CartPosition, Order, OrderPosition
