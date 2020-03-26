@@ -12,9 +12,7 @@
     <h2>{% trans "Voucher redemption" %}</h2>
     {% if subevent %}
         <h3>{{ subevent.name }}</h3>
-    {% endif %}
-    {% if event.settings.show_dates_on_frontpage %}
-        {% with ev=subevent|default:event %}
+        {% with ev=subevent %}
             <div class="info-row">
                 <span class="fa fa-clock-o fa-fw"></span>
                 <p>
