@@ -8,7 +8,7 @@ from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.utils.formats import get_format
+from django.utils.formats import date_format, get_format
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, pgettext
 
@@ -261,8 +261,10 @@ def subevent_select2(request, **kwargs):
             {
                 'id': e.pk,
                 'name': str(e.name),
-                'date_range': e.get_date_range_display(),
-                'text': '{} – {}'.format(e.name, e.get_date_range_display()),
+                'date_range': e.get_date_range_display() + (
+                    " " + date_format(e.date_from.astimezone(tz), "TIME_FORMAT") if e.settings.show_times else ""
+                ),
+                'text': str(e)
             }
             for e in qs[offset:offset + pagesize]
         ],
