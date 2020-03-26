@@ -16,6 +16,7 @@ from pretix.control.navigation import (
 from ..helpers.i18n import (
     get_javascript_format, get_javascript_output_format, get_moment_locale,
 )
+from ..multidomain.urlreverse import get_event_domain
 from .signals import html_head, nav_topbar
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
@@ -25,6 +26,12 @@ def contextprocessor(request):
     """
     Adds data to all template contexts
     """
+    if not hasattr(request, '_pretix_control_default_context'):
+        request._pretix_control_default_context = _default_context(request)
+    return request._pretix_control_default_context
+
+
+def _default_context(request):
     try:
         url = resolve(request.path_info)
     except Resolver404:
@@ -51,7 +58,7 @@ def contextprocessor(request):
         if request.event.settings.get('payment_term_weekdays'):
             _js_payment_weekdays_disabled = '[0,6]'
 
-        ctx['has_domain'] = request.event.organizer.domains.exists()
+        ctx['has_domain'] = get_event_domain(request.event, fallback=True) is not None
 
         if not request.event.testmode:
             with scope(organizer=request.organizer):

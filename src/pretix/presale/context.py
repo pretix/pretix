@@ -21,6 +21,12 @@ def contextprocessor(request):
     """
     Adds data to all template contexts
     """
+    if not hasattr(request, '_pretix_presale_default_context'):
+        request._pretix_presale_default_context = _default_context(request)
+    return request._pretix_presale_default_context
+
+
+def _default_context(request):
     if request.path.startswith('/control'):
         return {}
 
