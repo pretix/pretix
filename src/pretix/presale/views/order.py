@@ -753,6 +753,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         if self.order.status == Order.STATUS_PAID and self.order.total != Decimal('0.00'):
             fee = self.order.user_cancel_fee
         if 'cancel_fee' in request.POST and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
+            fee = fee or Decimal('0.00')
             custom_fee = Decimal(request.POST.get('cancel_fee'))
             if fee <= custom_fee <= self.order.payment_refund_sum:
                 fee = custom_fee
