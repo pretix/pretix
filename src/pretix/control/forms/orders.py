@@ -241,6 +241,7 @@ class OrderPositionAddForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        self.items = kwargs.pop('items')
         order = kwargs.pop('order')
         super().__init__(*args, **kwargs)
 
@@ -250,11 +251,13 @@ class OrderPositionAddForm(forms.Form):
             ia = None
 
         choices = []
-        for i in order.event.items.prefetch_related('variations').all():
+        for i in self.items:
             pname = str(i)
             if not i.is_available():
                 pname += ' ({})'.format(_('inactive'))
             variations = list(i.variations.all())
+            if i.tax_rule:  # performance optimization
+                i.tax_rule.event = order.event
             if variations:
                 for v in variations:
                     p = get_price(i, v, invoice_address=ia)
@@ -264,7 +267,11 @@ class OrderPositionAddForm(forms.Form):
                 p = get_price(i, invoice_address=ia)
                 choices.append((str(i.pk), '%s (%s)' % (pname, p.print(order.event.currency))))
         self.fields['itemvar'].choices = choices
-        if ItemAddOn.objects.filter(base_item__event=order.event).exists():
+        if order.event.cache.get_or_set(
+                'has_addon_products',
+                default=lambda: ItemAddOn.objects.filter(base_item__event=order.event).exists(),
+                timeout=300
+        ):
             self.fields['addon_to'].queryset = order.positions.filter(addon_to__isnull=True).select_related(
                 'item', 'variation'
             )
@@ -293,10 +300,12 @@ class OrderPositionAddForm(forms.Form):
 class OrderPositionAddFormset(forms.BaseFormSet):
     def __init__(self, *args, **kwargs):
         self.order = kwargs.pop('order', None)
+        self.items = kwargs.pop('items')
         super().__init__(*args, **kwargs)
 
     def _construct_form(self, i, **kwargs):
         kwargs['order'] = self.order
+        kwargs['items'] = self.items
         return super()._construct_form(i, **kwargs)
 
     @property
@@ -307,6 +316,7 @@ class OrderPositionAddFormset(forms.BaseFormSet):
             empty_permitted=True,
             use_required_attribute=False,
             order=self.order,
+            items=self.items,
         )
         self.add_fields(form, None)
         return form
@@ -346,6 +356,7 @@ class OrderPositionChangeForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.pop('instance')
+        items = kwargs.pop('items')
         initial = kwargs.get('initial', {})
 
         initial['price'] = instance.price
@@ -374,7 +385,7 @@ class OrderPositionChangeForm(forms.Form):
         choices = [
             ('', _('(Unchanged)'))
         ]
-        for i in instance.order.event.items.prefetch_related('variations').all():
+        for i in items:
             pname = str(i)
             if not i.is_available():
                 pname += ' ({})'.format(_('inactive'))

@@ -1379,8 +1379,13 @@ class OrderChange(OrderView):
         return ff(
             prefix='add',
             order=self.order,
+            items=self.items,
             data=self.request.POST if self.request.method == "POST" else None
         )
+
+    @cached_property
+    def items(self):
+        return self.request.event.items.prefetch_related('variations', 'tax_rule').all()
 
     @cached_property
     def fees(self):
@@ -1397,9 +1402,9 @@ class OrderChange(OrderView):
 
     @cached_property
     def positions(self):
-        positions = list(self.order.positions.all())
+        positions = list(self.order.positions.select_related('item', 'item__tax_rule'))
         for p in positions:
-            p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
+            p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p, items=self.items,
                                              initial={'seat': p.seat.seat_guid if p.seat else None},
                                              data=self.request.POST if self.request.method == "POST" else None)
             try:
