@@ -173,7 +173,7 @@
                             {% if request.event.has_subevents %}
                                 <td>
                                     {{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}
-                                    {% if v.subevent.settings.show_times %}
+                                    {% if request.event.settings.show_times %}
                                         {{ v.subevent.date_from|date:"TIME_FORMAT" }}
                                     {% endif %}
                                 </td>
