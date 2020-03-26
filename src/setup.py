@@ -102,7 +102,7 @@ setup(
         'reportlab>=3.5.18',
         'Pillow==7.*',
         'PyPDF2==1.26.*',
-        'django-libsass',
+        'django-libsass==0.8',
         'libsass==0.19.2',  # Bump when https://github.com/sass/libsass/issues/3053 is fixed
         'django-otp==0.7.*,>=0.7.5',
         'webauthn==0.4.*',
