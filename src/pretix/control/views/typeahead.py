@@ -264,11 +264,7 @@ def subevent_select2(request, **kwargs):
                 'date_range': e.get_date_range_display() + (
                     " " + date_format(e.date_from.astimezone(tz), "TIME_FORMAT") if e.settings.show_times else ""
                 ),
-                'text': '{} – {} {}'.format(
-                    e.name,
-                    e.get_date_range_display(),
-                    date_format(e.date_from.astimezone(tz), "TIME_FORMAT") if e.settings.show_times else ""
-                ),
+                'text': str(e)
             }
             for e in qs[offset:offset + pagesize]
         ],
