@@ -99,7 +99,7 @@ def register_pdf(sender, **kwargs):
 
 
 def _cached_rendermap(event):
-    if hasattr(event, '_cached_rendermap'):
+    if hasattr(event, '_cached_renderermap'):
         return event._cached_renderermap
     renderermap = {
         bi.item_id: bi.layout_id

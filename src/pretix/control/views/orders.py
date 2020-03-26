@@ -159,8 +159,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         try:
-            return Order.objects.get(
-                event=self.request.event,
+            return self.request.event.orders.get(
                 code=self.kwargs['code'].upper()
             )
         except Order.DoesNotExist:
@@ -174,6 +173,8 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
 
     @cached_property
     def order(self):
+        if hasattr(self, 'object') and self.object:
+            return self.object
         return self.get_object()
 
     def get_context_data(self, **kwargs):
@@ -274,6 +275,7 @@ class OrderDetail(OrderView):
                 p.item.questions.all()
             )
             p.cache_answers()
+            p.order = self.order
 
             positions.append(p)
 
