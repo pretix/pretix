@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-25 13:14+0000\n"
-"PO-Revision-Date: 2019-12-07 06:00+0000\n"
+"PO-Revision-Date: 2020-03-28 23:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -277,22 +277,16 @@ msgid "Please enter a quantity for one of the ticket types."
 msgstr "Voer een hoeveelheid voor een van de producten in."
 
 #: pretix/static/pretixpresale/js/ui/main.js:317
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "from %(currency)s %(price)s"
 msgid "We keep %(currency)s %(amount)s"
-msgstr "vanaf %(currency)s %(price)s"
+msgstr "Wij houden %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:325
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
-msgstr "vanaf %(currency)s %(price)s"
+msgstr "U krijgt %(currency)s %(amount)s terug"
 
 #: pretix/static/pretixpresale/js/ui/main.js:341
 msgid "Please enter the amount we can keep."
-msgstr ""
+msgstr "Voer het bedrag in dat wij mogen houden."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
