@@ -314,7 +314,7 @@ $(function () {
             return;
         }
         $("#cancel-fee-keep").text(interpolate(
-            gettext("We keep %(currency)s %(amount)s"),
+            gettext("The organizer keeps %(currency)s %(amount)s"),
             {
                 'currency': $("body").attr("data-currency"),
                 'amount': floatformat(cancel_fee_slider.getValue(), 2)
@@ -338,7 +338,7 @@ $(function () {
         cancel_fee_slider_update();
         $("#cancel-fee-custom").click(function () {
             try {
-                var newinp = parseFloat(prompt(gettext("Please enter the amount we can keep."), cancel_fee_slider.getValue().toString()).replace(',', '.'));
+                var newinp = parseFloat(prompt(gettext("Please enter the amount the organizer can keep."), cancel_fee_slider.getValue().toString()).replace(',', '.'));
                 cancel_fee_slider.setValue(newinp);
                 cancel_fee_slider_update();
             } catch {
