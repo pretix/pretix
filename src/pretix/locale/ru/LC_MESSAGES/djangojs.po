@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-25 13:14+0000\n"
+"POT-Creation-Date: 2020-03-31 10:47+0000\n"
 "PO-Revision-Date: 2019-11-07 09:31+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -286,7 +286,7 @@ msgstr "Пожалуйста, введите количество для одн�
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
-msgid "We keep %(currency)s %(amount)s"
+msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "от %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:325
@@ -297,7 +297,7 @@ msgid "You get %(currency)s %(amount)s back"
 msgstr "от %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:341
-msgid "Please enter the amount we can keep."
+msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
