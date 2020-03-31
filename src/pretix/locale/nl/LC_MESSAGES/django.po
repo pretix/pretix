@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-25 13:14+0000\n"
-"PO-Revision-Date: 2020-03-28 23:00+0000\n"
+"PO-Revision-Date: 2020-03-31 10:45+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -266,7 +266,7 @@ msgstr "Bestelling geannuleerd"
 
 #: pretix/api/webhooks.py:130 pretix/base/notifications.py:229
 msgid "Order reactivated"
-msgstr "Bestelling opnieuw ingeschakeld"
+msgstr "Bestelling opnieuw geactiveerd"
 
 #: pretix/api/webhooks.py:134 pretix/base/notifications.py:235
 msgid "Order expired"
@@ -3545,7 +3545,7 @@ msgstr "Bestelling {order.code} is geannuleerd."
 #: pretix/base/notifications.py:230
 #, python-brace-format
 msgid "Order {order.code} has been reactivated."
-msgstr "Bestelling {order.code} is opnieuw ingeschakeld."
+msgstr "Bestelling {order.code} is opnieuw geactiveerd."
 
 #: pretix/base/notifications.py:236
 #, python-brace-format
@@ -18248,7 +18248,7 @@ msgstr "Onverkochte zitplaatsen"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:103
 msgid "Potential Profits"
-msgstr "Mogelijke winst"
+msgstr "Mogelijke opbrengst"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:107
 msgid "Minimum Price"
@@ -19859,7 +19859,7 @@ msgstr "Intern kenmerk"
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
 msgstr ""
-"U kunt aanvragen om deze bestelling te annuleren, maar u zult geen "
+"U kunt een verzoek doen om deze bestelling te annuleren, maar u zult geen "
 "terugbetaling ontvangen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:296
@@ -19883,21 +19883,17 @@ msgid ""
 msgstr ""
 "U kunt een verzoek doen om deze bestelling te annuleren. Als dit verzoek "
 "wordt goedgekeurd zal <strong>%(fee)s</strong> aan annuleringskosten worden "
-"ingehouden en zult u een terugbetaling van het resterende bedrag ontvangen."
+"ingehouden en ontvangt u een terugbetaling van het resterende bedrag."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:311
-#, fuzzy, python-format
-#| msgid ""
-#| "You can cancel this order. In this case, a cancellation fee of <strong>"
-#| "%(fee)s</strong> will be kept and you will receive a refund of the "
-#| "remainder to your original payment method."
+#, python-format
 msgid ""
 "You can cancel this order. In this case, a cancellation fee of <strong>"
 "%(fee)s</strong> will be kept and you will receive a refund of the remainder."
 msgstr ""
-"U kunt deze bestelling annuleren. Als u dit doet zal <strong>%(fee)s</"
-"strong> aan annuleringskosten worden ingehouden, en zal het resterende "
-"bedrag worden teruggestort naar het betalingsmiddel waarmee u betaalde."
+"U kunt deze bestelling annuleren. Als u dit doet zal <strong>%(fee)s</strong>"
+" aan annuleringskosten worden ingehouden en ontvangt u een terugbetaling van "
+"het resterende bedrag."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:317
 #: pretix/presale/templates/pretixpresale/event/order.html:338
@@ -19906,49 +19902,46 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
+"De terugbetaling zal worden uitgegeven als cadeaubon die u kunt gebruiken "
+"voor latere aankopen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:319
 #: pretix/presale/templates/pretixpresale/event/order.html:340
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
+"De terugbetaling kan worden verstuurd naar uw oorspronkelijke "
+"betalingsmethode of als cadeaubon."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:321
 #: pretix/presale/templates/pretixpresale/event/order.html:342
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "The refund will be issued to your original payment method."
 msgstr ""
-"U kunt deze bestelling annuleren en al uw geld teruggestort krijgen naar het "
-"betalingsmiddel waar u oorspronkelijk mee betaalde."
+"De terugbetaling zal worden overgemaakt naar uw oorspronkelijke "
+"betalingsmethode."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:328
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
+"U kunt een verzoek doen om deze bestelling te annuleren. Als dit verzoek "
+"wordt goedgekeurd krijgt u het volledige bedrag terug."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:333
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "You can cancel this order and receive a full refund."
 msgstr ""
-"U kunt deze bestelling annuleren en al uw geld teruggestort krijgen naar het "
-"betalingsmiddel waar u oorspronkelijk mee betaalde."
+"U kunt deze bestelling annuleren en het volledige bedrag terugbetaald "
+"krijgen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:354
 msgid "You can cancel this order using the following button."
 msgstr "U kunt deze bestelling annuleren met de volgende knop."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:10
-#, fuzzy, python-format
-#| msgid "Order canceled: %(code)s"
+#, python-format
 msgid "Request cancellation: %(code)s"
-msgstr "Bestelling geannuleerd: %(code)s"
+msgstr "Annuleringsverzoek: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:14
 #, python-format
@@ -19961,12 +19954,18 @@ msgid ""
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
 msgstr ""
+"U kunt op deze pagina een verzoek doen om uw bestelling te annuleren. De "
+"organisator van het evenement zal hierna over uw verzoek kunnen beslissen. "
+"Als uw verzoek wordt goedgekeurd wordt uw bestelling geannuleerd en zullen "
+"alle tickets ongeldig worden gemaakt."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:32
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"Als u deze bestelling annuleert zullen alle tickets ongeldig worden gemaakt "
+"en kunt u deze niet langer gebruiken. U kunt deze actie niet ongedaan maken."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:42
 #, python-format
@@ -19974,64 +19973,49 @@ msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
 msgstr ""
+"U kunt een terugbetaling aanvragen van het aankoopbedrag min %(fee)s aan "
+"annuleringskosten."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:47
-#, fuzzy
-#| msgid "If you want to, you can publish your ticket shop now."
 msgid "If you want, you can request a full refund."
-msgstr "Als u wilt kunt u nu uw ticketwinkel publiceren."
+msgstr "U kunt een volledige terugbetaling aanvragen."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:51
 msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
+"Als u dit wilt kunt u ons ook steunen door een kleinere terugbetaling aan te "
+"vragen met de schuifbalk hieronder. Dank u wel!"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:72
-#, fuzzy
-#| msgid "Refund only"
 msgid "Refund amount:"
-msgstr "Betaal alleen"
+msgstr "Terug te betalen bedrag:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:85
 msgid "I want the refund as a gift card for later purchases"
 msgstr ""
+"Ik wil de terugbetaling ontvangen als een cadeaubon voor latere aankopen"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:91
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "I want the refund to be sent to my original payment method"
 msgstr ""
-"U kunt deze bestelling annuleren en al uw geld teruggestort krijgen naar het "
-"betalingsmiddel waar u oorspronkelijk mee betaalde."
+"Ik wil dat de terugbetaling wordt overgemaakt naar mijn oorspronkelijke "
+"betalingsmethode"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:96
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:115
-#, fuzzy
-#| msgid ""
-#| "The refund amount of %(amount)s will automatically be sent back to your "
-#| "original payment method. Depending on the payment method, please allow "
-#| "for up to two weeks before this appears on your statement."
 msgid ""
 "The refund amount will automatically be sent back to your original payment "
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
-"Het terug te betalen bedrag (%(amount)s) zal automatisch worden teruggestort "
-"op het betalingsmiddel waarmee u heeft betaald. Afhankelijk van de "
-"betalingsmethode kan dit tot twee weken duren voordat dit op uw afschrift "
-"verschijnt."
+"Het terug te betalen bedrag zal automatisch worden teruggestort op het "
+"betalingsmiddel waarmee u heeft betaald. Afhankelijk van de betalingsmethode "
+"kan het tot twee weken duren voordat dit op uw afschrift verschijnt."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:104
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:124
-#, fuzzy
-#| msgid ""
-#| "With to the payment method you used, the refund amount of %(amount)s "
-#| "<strong>can not be sent back to you automatically</strong>. Instead, the "
-#| "event organizer will need to initiate the transfer manually. Please be "
-#| "patient as this might take a bit longer."
 msgid ""
 "With the payment method you used, the refund amount <strong>can not be sent "
 "back to you automatically</strong>. Instead, the event organizer will need "
@@ -20039,15 +20023,13 @@ msgid ""
 "bit longer."
 msgstr ""
 "Met de betalingsmethode die u heeft gebruikt kan het terug te betalen bedrag "
-"(%(amount)s) <strong>niet automatisch worden teruggestort</strong>. In "
-"plaats hiervan moet de organisator het geld handmatig overmaken, wat iets "
-"langer kan duren."
+"<strong>niet automatisch worden teruggestort</strong>. In plaats hiervan "
+"moet de organisator het bedrag handmatig overmaken, wat iets langer kan "
+"duren."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:146
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Yes, request cancellation"
-msgstr "Genereer annulering"
+msgstr "Ja, annulering aanvragen"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
@@ -20379,16 +20361,12 @@ msgid "You cannot modify this order"
 msgstr "U kunt deze bestelling niet aanpassen"
 
 #: pretix/presale/views/order.py:760
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "You chose an invalid cancellation fee."
-msgstr "Houd een vast bedrag als annuleringskosten in"
+msgstr "U heeft een ongeldig bedrag voor de annuleringskosten gekozen."
 
 #: pretix/presale/views/order.py:785
-#, fuzzy
-#| msgid "The question has been deleted."
 msgid "The cancellation has been requested."
-msgstr "De vraag is verwijderd."
+msgstr "De annulering is aangevraagd."
 
 #: pretix/presale/views/order.py:839
 msgid "Ticket download is not (yet) enabled for this order."
