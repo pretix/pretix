@@ -341,7 +341,7 @@ $(function () {
                 var newinp = parseFloat(prompt(gettext("Please enter the amount the organizer can keep."), cancel_fee_slider.getValue().toString()).replace(',', '.'));
                 cancel_fee_slider.setValue(newinp);
                 cancel_fee_slider_update();
-            } catch {
+            } catch (e) {
             }
         });
     }
