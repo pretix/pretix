@@ -1974,7 +1974,7 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
                 error = True
                 notify_admin = True
             else:
-                if r.state != OrderRefund.REFUND_STATE_DONE:
+                if r.state not in (OrderRefund.REFUND_STATE_TRANSIT, OrderRefund.REFUND_STATE_DONE):
                     notify_admin = True
 
     if refund_amount - can_auto_refund_sum > Decimal('0.00'):
