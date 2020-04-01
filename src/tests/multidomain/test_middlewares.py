@@ -195,6 +195,8 @@ def test_cookie_samesite_none(env, client, agent):
     'Mobile/14E5239e Safari/602.1',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_8) AppleWebKit/534.59.10 (KHTML, like Gecko) Version/5.1.9 '
     'Safari/534.59.10',
+    'Mozilla/5.0 (Linux; Android 4.4.2; YOGA Tablet 2-1050L Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) '
+    'Version/4.0 Chrome/30.0.0.0 Safari/537.36 UCBrowser/3.1.0.403',
 ])
 def test_cookie_samesite_none_only_on_compatible_browsers(env, client, agent):
     client.post('/mrmcd/2015/cart/add', HTTP_HOST='example.com', HTTP_USER_AGENT=agent, secure=True)
