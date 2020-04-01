@@ -29,6 +29,7 @@ from pretix.base.models import (
     OrderRefund, Quota,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
+from pretix.base.services.cart import get_fees
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
@@ -1106,7 +1107,15 @@ class GiftCardPayment(BasePaymentProvider):
                 return
             cs['gift_cards'] = cs['gift_cards'] + [gc.pk]
 
-            remainder = cart['total'] - gc.value
+            total = sum(p.total for p in cart['positions'])
+            # Recompute fees. Some plugins, e.g. pretix-servicefees, change their fee schedule if a gift card is
+            # applied.
+            fees = get_fees(
+                self.event, request, total, cart['invoice_address'], cs.get('payment'),
+                cart['raw']
+            )
+            total += sum([f.value for f in fees])
+            remainder = total - gc.value
             if remainder > Decimal('0.00'):
                 del cs['payment']
                 messages.success(request, _("Your gift card has been applied, but {} still need to be paid. Please select a payment method.").format(

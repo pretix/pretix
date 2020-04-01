@@ -163,6 +163,7 @@ class CartMixin:
 
         return {
             'positions': positions,
+            'invoice_address': self.invoice_address,
             'all_with_voucher': all(p.voucher_id for p in positions),
             'raw': cartpos,
             'total': total,
