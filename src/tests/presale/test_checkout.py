@@ -436,6 +436,81 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.attendee_email, 'foo@localhost')
 
+    def test_attendee_company_required(self):
+        self.event.settings.set('attendee_company_asked', True)
+        self.event.settings.set('attendee_company_required', True)
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="%s-company"]' % cr1.id)), 1)
+
+        # Not all required fields filled out, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-company' % cr1.id: '',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Corrected request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-company' % cr1.id: 'foobar',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get(id=cr1.id)
+        self.assertEqual(cr1.company, 'foobar')
+
+    def test_attendee_address_required(self):
+        self.event.settings.set('attendee_addresses_asked', True)
+        self.event.settings.set('attendee_addresses_required', True)
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('textarea[name="%s-street"]' % cr1.id)), 1)
+
+        # Not all required fields filled out, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-street' % cr1.id: '',
+            '%s-zipcode' % cr1.id: '',
+            '%s-city' % cr1.id: '',
+            '%s-country' % cr1.id: '',
+            '%s-state' % cr1.id: '',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Corrected request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-street' % cr1.id: 'Musterstrasse',
+            '%s-zipcode' % cr1.id: '12345',
+            '%s-city' % cr1.id: 'Musterstadt',
+            '%s-country' % cr1.id: 'DE',
+            '%s-state' % cr1.id: '',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get(id=cr1.id)
+        self.assertEqual(cr1.street, 'Musterstrasse')
+        self.assertEqual(cr1.zipcode, '12345')
+        self.assertEqual(cr1.city, 'Musterstadt')
+        self.assertEqual(cr1.country, 'DE')
+
     def test_attendee_name_required(self):
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', True)

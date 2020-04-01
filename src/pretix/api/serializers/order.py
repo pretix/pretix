@@ -39,7 +39,7 @@ class CompatibleCountryField(serializers.Field):
     def to_representation(self, instance: InvoiceAddress):
         if instance.country:
             return str(instance.country)
-        else:
+        elif hasattr(instance, 'country_old'):
             return instance.country_old
 
 
@@ -211,10 +211,12 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
     pdf_data = PdfDataSerializer(source='*')
     seat = InlineSeatSerializer(read_only=True)
+    country = CompatibleCountryField(source='*')
 
     class Meta:
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
+                  'company', 'street', 'zipcode', 'city', 'country', 'state',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled')
 
@@ -516,11 +518,21 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                                      max_digits=10)
     voucher = serializers.SlugRelatedField(slug_field='code', queryset=Voucher.objects.none(),
                                            required=False, allow_null=True)
+    country = CompatibleCountryField(source='*')
 
     class Meta:
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
+                  'company', 'street', 'zipcode', 'city', 'country', 'state',
                   'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for k, v in self.fields.items():
+            if k in ('company', 'street', 'zipcode', 'city', 'country', 'state'):
+                v.required = False
+                v.allow_blank = True
+                v.allow_null = True
 
     def validate_secret(self, secret):
         if secret and OrderPosition.all.filter(order__event=self.context['event'], secret=secret).exists():
@@ -576,6 +588,24 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             )
         if data.get('attendee_name_parts') and '_scheme' not in data.get('attendee_name_parts'):
             data['attendee_name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
+
+        if data.get('country'):
+            if not pycountry.countries.get(alpha_2=data.get('country')):
+                raise ValidationError(
+                    {'country': ['Invalid country code.']}
+                )
+
+        if data.get('state'):
+            cc = str(data.get('country') or self.instance.country or '')
+            if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                raise ValidationError(
+                    {'state': ['States are not supported in country "{}".'.format(cc)]}
+                )
+            if not pycountry.subdivisions.get(code=cc + '-' + data.get('state')):
+                raise ValidationError(
+                    {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
+                )
+
         return data
 
 

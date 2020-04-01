@@ -167,22 +167,35 @@ $(function () {
         return false;
     });
     var copy_to_first_ticket = true;
-    $("input[id*=attendee_name_parts_], input[id*=attendee_email]").each(function () {
+    var attendee_address_fields = $("input[id*=attendee_name_parts_], input[id*=attendee_email], .questions-form" +
+        " input[id$=company], .questions-form[id$=street], .questions-form input[id$=zipcode], .questions-form" +
+        " input[id$=city]");
+    attendee_address_fields.each(function () {
         if ($(this).val()) {
             copy_to_first_ticket = false;
         }
     })
-    $("input[id^=id_name_parts_], #id_email").change(function () {
+    $("select[id^=id_name_parts], input[id^=id_name_parts_], #id_email, #id_street, #id_company, #id_zipcode," +
+        " #id_city, #id_country, #id_state").change(function () {
         if (copy_to_first_ticket) {
             $(".questions-form").first().find("input[id*=attendee_email]").val($("#id_email").val());
-            $(".questions-form").first().find("input[id*=attendee_name_parts]").each(function () {
+            $(".questions-form").first().find("input[id$=company]").val($("#id_company").val());
+            $(".questions-form").first().find("textarea[id$=street]").val($("#id_street").val());
+            $(".questions-form").first().find("input[id$=zipcode]").val($("#id_zipcode").val());
+            $(".questions-form").first().find("input[id$=city]").val($("#id_city").val());
+
+            $(".questions-form").first().find("select[id$=state]").val($("#id_state").val());
+            if ($(".questions-form").first().find("select[id$=country]").val() !== $("#id_country").val()) {
+                $(".questions-form").first().find("select[id$=country]").val($("#id_country").val()).trigger('change');
+            }
+            $(".questions-form").first().find("[id*=attendee_name_parts]").each(function () {
                 var parts = $(this).attr("id").split("_");
                 var num = parts[parts.length - 1];
                 $(this).val($("#id_name_parts_" + num).val());
             });
         }
     });
-    $("input[id*=attendee_name_parts_], input[id*=attendee_email]").change(function () {
+    attendee_address_fields.change(function () {
         copy_to_first_ticket = false;
     });
 
@@ -273,7 +286,7 @@ $(function () {
     $("select[name$=state]").each(function () {
         var dependent = $(this),
             counter = 0,
-            dependency = $(this).closest("form").find('select[name$=country]'),
+            dependency = $(this).closest(".panel-body, form").find('select[name$=country]'),
             update = function (ev) {
                 counter++;
                 var curCounter = counter;

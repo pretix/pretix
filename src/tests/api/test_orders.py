@@ -167,6 +167,12 @@ TEST_ORDERPOSITION_RES = {
     "checkins": [],
     "downloads": [],
     "seat": None,
+    "company": None,
+    "street": None,
+    "zipcode": None,
+    "city": None,
+    "country": None,
+    "state": None,
     "answers": [
         {
             "question": 1,
@@ -1503,6 +1509,7 @@ ORDER_CREATE_PAYLOAD = {
             "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": None,
+            "company": "FOOCORP",
             "answers": [
                 {
                     "question": 1,
@@ -1556,6 +1563,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert pos.item == item
     assert pos.price == Decimal("23.00")
     assert pos.attendee_name_parts == {"full_name": "Peter", "_scheme": "full"}
+    assert pos.company == "FOOCORP"
     with scopes_disabled():
         answ = pos.answers.first()
     assert answ.question == question
@@ -1655,6 +1663,12 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'tax_rule': None,
                 'pseudonymization_id': 'PREVIEW',
                 'seat': None,
+                'company': "FOOCORP",
+                'street': None,
+                'city': None,
+                'zipcode': None,
+                'state': None,
+                'country': None,
                 'canceled': False
             }
         ],

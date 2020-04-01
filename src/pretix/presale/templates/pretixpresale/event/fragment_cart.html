@@ -44,12 +44,51 @@
             {% if line.has_questions %}
                 <dl>
                     {% if line.item.admission and event.settings.attendee_names_asked %}
-                        <dt>{% trans "Attendee name" %}</dt>
-                        <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                        <dt class="sr-only">
+                            {% trans "Attendee name" %}
+                        </dt>
+                        <dd class="toplevel">
+                            <span data-toggle="tooltip" title="{% trans "Attendee name" %}">
+                                {% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}
+                            </span>
+                        </dd>
                     {% endif %}
                     {% if line.item.admission and event.settings.attendee_emails_asked %}
-                        <dt>{% trans "Attendee email" %}</dt>
-                        <dd>{% if line.attendee_email %}{{ line.attendee_email }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
+                        <dt class="sr-only">
+                            {% trans "Attendee email" %}
+                        </dt>
+                        <dd class="toplevel">
+                            <span data-toggle="tooltip" title="{% trans "Attendee email" %}">
+                                {% if line.attendee_email %}{{ line.attendee_email }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}
+                            </span>
+                        </dd>
+                    {% endif %}
+                    {% if line.item.admission and event.settings.attendee_company_asked %}
+                        <dt class="sr-only">
+                            {% trans "Attendee company" %}
+                        </dt>
+                        <dd class="toplevel">
+                            <span data-toggle="tooltip" title="{% trans "Attendee company" %}">
+                                {% if line.company %}{{ line.company }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}
+                            </span>
+                        </dd>
+                    {% endif %}
+                    {% if line.item.admission and event.settings.attendee_addresses_asked %}
+                        <dt class="sr-only">
+                            {% trans "Attendee address" %}
+                        </dt>
+                        <dd class="toplevel">
+                            <span data-toggle="tooltip" title="{% trans "Attendee address" %}">
+                                {% if line.street or line.zipcode or line.city or line.country %}
+                                    {{ line.street|linebreaksbr }}<br>
+                                    {{ line.zipcode }} {{ line.city }}<br>
+                                    {{ line.country.name }}
+                                    {% if line.state %}<br>{{ line.state }}{% endif %}
+                                {% else %}
+                                    <em>{% trans "not answered" %}</em>
+                                {% endif %}
+                            </span>
+                        </dd>
                     {% endif %}
                     {% for q in line.questions %}
                         <dt>{{ q.question }}</dt>

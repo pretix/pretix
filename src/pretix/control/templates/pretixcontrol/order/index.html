@@ -388,6 +388,29 @@
                                                 {% endif %}
                                             </dd>
                                         {% endif %}
+                                        {% if line.item.admission and event.settings.attendee_company_asked %}
+                                            <dt>
+                                                {% trans "Attendee company" %}
+                                            </dt>
+                                            <dd>
+                                                {% if line.company %}{{ line.company }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}
+                                            </dd>
+                                        {% endif %}
+                                        {% if line.item.admission and event.settings.attendee_addresses_asked %}
+                                            <dt>
+                                                {% trans "Attendee address" %}
+                                            </dt>
+                                            <dd>
+                                                {% if line.street or line.zipcode or line.city or line.country %}
+                                                    {{ line.street|linebreaksbr }}<br>
+                                                    {{ line.zipcode }} {{ line.city }}<br>
+                                                    {{ line.country.name }}
+                                                    {% if line.state %}<br>{{ line.state }}{% endif %}
+                                                {% else %}
+                                                    <em>{% trans "not answered" %}</em>
+                                                {% endif %}
+                                            </dd>
+                                        {% endif %}
                                         {% for q in line.questions %}
                                             <dt>
                                                 {{ q.question }}

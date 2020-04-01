@@ -85,10 +85,20 @@ class BaseQuestionsViewMixin:
                 for k, v in form.cleaned_data.items():
                     if k == 'attendee_name_parts':
                         form.pos.attendee_name_parts = v if v else None
-                        form.pos.save()
                     elif k == 'attendee_email':
                         form.pos.attendee_email = v if v != '' else None
-                        form.pos.save()
+                    elif k == 'company':
+                        form.pos.company = v if v != '' else None
+                    elif k == 'street':
+                        form.pos.street = v if v != '' else None
+                    elif k == 'zipcode':
+                        form.pos.zipcode = v if v != '' else None
+                    elif k == 'city':
+                        form.pos.city = v if v != '' else None
+                    elif k == 'country':
+                        form.pos.country = v if v != '' else None
+                    elif k == 'state':
+                        form.pos.state = v if v != '' else None
                     elif k.startswith('question_'):
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
@@ -119,7 +129,7 @@ class BaseQuestionsViewMixin:
                             meta_info['question_form_data'][k] = v
 
             form.pos.meta_info = json.dumps(meta_info)
-            form.pos.save(update_fields=['meta_info'])
+            form.pos.save()
         return not failed
 
     def _save_to_answer(self, field, answer, value):

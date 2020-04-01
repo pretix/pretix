@@ -398,6 +398,99 @@ class AttendeeEmail(ImportColumn):
         position.attendee_email = value
 
 
+class AttendeeCompany(ImportColumn):
+    identifier = 'attendee_company'
+
+    @property
+    def verbose_name(self):
+        return _('Attendee address') + ': ' + _('Company')
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.company = value or ''
+
+
+class AttendeeStreet(ImportColumn):
+    identifier = 'attendee_street'
+
+    @property
+    def verbose_name(self):
+        return _('Attendee address') + ': ' + _('Address')
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.address = value or ''
+
+
+class AttendeeZip(ImportColumn):
+    identifier = 'attendee_zipcode'
+
+    @property
+    def verbose_name(self):
+        return _('Attendee address') + ': ' + _('ZIP code')
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.zipcode = value or ''
+
+
+class AttendeeCity(ImportColumn):
+    identifier = 'attendee_city'
+
+    @property
+    def verbose_name(self):
+        return _('Attendee address') + ': ' + _('City')
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.city = value or ''
+
+
+class AttendeeCountry(ImportColumn):
+    identifier = 'attendee_country'
+    default_value = None
+
+    @property
+    def initial(self):
+        return 'static:' + str(guess_country(self.event))
+
+    @property
+    def verbose_name(self):
+        return _('Attendee address') + ': ' + _('Country')
+
+    def static_choices(self):
+        return list(countries)
+
+    def clean(self, value, previous_values):
+        if value and not Country(value).numeric:
+            raise ValidationError(_("Please enter a valid country code."))
+        return value
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.country = value or ''
+
+
+class AttendeeState(ImportColumn):
+    identifier = 'attendee_state'
+
+    @property
+    def verbose_name(self):
+        return _('Attendee address') + ': ' + _('State')
+
+    def clean(self, value, previous_values):
+        if value:
+            if previous_values.get('attendee_country') not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                raise ValidationError(_("States are not supported for this country."))
+
+            types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[previous_values.get('attendee_country')]
+            match = [
+                s for s in pycountry.subdivisions.get(country_code=previous_values.get('attendee_country'))
+                if s.type in types and (s.code[3:] == value or s.name == value)
+            ]
+            if len(match) == 0:
+                raise ValidationError(_("Please enter a valid state."))
+            return match[0].code[3:]
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.state = value or ''
+
+
 class Price(ImportColumn):
     identifier = 'price'
     verbose_name = gettext_lazy('Price')
@@ -596,6 +689,12 @@ def get_all_columns(event):
         default.append(AttendeeNamePart(event, n, l))
     default += [
         AttendeeEmail(event),
+        AttendeeCompany(event),
+        AttendeeStreet(event),
+        AttendeeZip(event),
+        AttendeeCity(event),
+        AttendeeCountry(event),
+        AttendeeState(event),
         Price(event),
         Secret(event),
         Locale(event),
