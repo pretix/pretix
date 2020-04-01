@@ -65,7 +65,8 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     var c = $(jqXHR.responseText).filter('.container');
     if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
-    } else if (thrownError !== "abort") {
+    } else if (thrownError !== "abort" && thrownError !== "") {
+        console.log(thrownError);
         alert(gettext('Unknown error.'));
     }
 });
