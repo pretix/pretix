@@ -11,7 +11,7 @@ from django.utils.formats import date_format
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
 
 from pretix.base.models import (
-    InvoiceAddress, InvoiceLine, Order, OrderPosition, Question,
+    GiftCard, InvoiceAddress, InvoiceLine, Order, OrderPosition, Question,
 )
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -698,6 +698,45 @@ class InvoiceDataExporter(MultiSheetListExporter):
         return '{}_invoices'.format(self.event.slug)
 
 
+class GiftcardRedemptionListExporter(ListExporter):
+    identifier = 'giftcardredemptionlist'
+    verbose_name = gettext_lazy('Giftcard Redemptions')
+
+    def iterate_list(self, form_data):
+        tz = pytz.timezone(self.event.settings.timezone)
+
+        payments = OrderPayment.objects.filter(
+            order__event=self.event,
+            provider='giftcard'
+        ).order_by('created')
+        refunds = OrderRefund.objects.filter(
+            order__event=self.event,
+            provider='giftcard'
+        ).order_by('created')
+
+        objs = sorted(list(payments) + list(refunds), key=lambda o: (o.order.code, o.created))
+
+        headers = [
+            _('Order'), _('Payment ID'), _('Date'), _('Gift card code'), _('Amount'), _('Issuer')
+        ]
+        yield headers
+
+        for obj in objs:
+            gc = GiftCard.objects.get(pk=obj.info_data.get('gift_card'))
+            row = [
+                obj.order.code,
+                obj.full_id,
+                obj.created.astimezone(tz).date().strftime('%Y-%m-%d'),
+                gc.secret,
+                obj.amount * (-1 if isinstance(obj, OrderRefund) else 1),
+                gc.issuer
+            ]
+            yield row
+
+    def get_filename(self):
+        return '{}_giftcardredemptions'.format(self.event.slug)
+
+
 @receiver(register_data_exporters, dispatch_uid="exporter_orderlist")
 def register_orderlist_exporter(sender, **kwargs):
     return OrderListExporter
@@ -716,3 +755,8 @@ def register_quotalist_exporter(sender, **kwargs):
 @receiver(register_data_exporters, dispatch_uid="exporter_invoicedata")
 def register_invoicedata_exporter(sender, **kwargs):
     return InvoiceDataExporter
+
+
+@receiver(register_data_exporters, dispatch_uid="exporter_giftcardredemptionlist")
+def register_giftcardredemptionlist_exporter(sender, **kwargs):
+    return GiftcardRedemptionListExporter
