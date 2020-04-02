@@ -691,7 +691,7 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
     total = sum([c.price for c in positions])
 
     for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
-                                                 meta_info=meta_info, positions=positions):
+                                                 meta_info=meta_info, positions=positions, gift_cards=gift_cards):
         if resp:
             fees += resp
     total += sum(f.value for f in fees)

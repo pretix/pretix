@@ -527,7 +527,7 @@ an OrderedDict of (setting name, form field).
 """
 
 order_fee_calculation = EventPluginSignal(
-    providing_args=['positions', 'invoice_address', 'meta_info', 'total']
+    providing_args=['positions', 'invoice_address', 'meta_info', 'total', 'gift_cards']
 )
 """
 This signals allows you to add fees to an order while it is being created. You are expected to
@@ -538,7 +538,8 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
 tax calculation). The argument ``meta_info`` contains the order's meta dictionary. The ``total``
 keyword argument will contain the total cart sum without any fees. You should not rely on this
-``total`` value for fee calculations as other fees might interfere.
+``total`` value for fee calculations as other fees might interfere. The ``gift_cards`` argument lists
+the gift cards in use.
 """
 
 order_fee_type_name = EventPluginSignal(
