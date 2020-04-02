@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-31 10:47+0000\n"
+"POT-Creation-Date: 2020-04-02 16:17+0000\n"
 "PO-Revision-Date: 2020-03-31 11:34+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -148,41 +148,41 @@ msgstr "Check-in-QR-Code"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Die Hintergrund-PDF-Datei konnte nicht geladen werden:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:452
+#: pretix/static/pretixcontrol/js/ui/editor.js:461
 msgid "Group of objects"
 msgstr "Gruppe von Objekten"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:458
+#: pretix/static/pretixcontrol/js/ui/editor.js:467
 msgid "Text object"
 msgstr "Text-Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:460
+#: pretix/static/pretixcontrol/js/ui/editor.js:469
 msgid "Barcode area"
 msgstr "QR-Code-Bereich"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:462
+#: pretix/static/pretixcontrol/js/ui/editor.js:471
 msgid "Powered by pretix"
 msgstr "Event-Ticketshop von pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:464
+#: pretix/static/pretixcontrol/js/ui/editor.js:473
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:468
+#: pretix/static/pretixcontrol/js/ui/editor.js:477
 msgid "Ticket design"
 msgstr "Ticket-Design"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:725
+#: pretix/static/pretixcontrol/js/ui/editor.js:734
 msgid "Saving failed."
 msgstr "Speichern fehlgeschlagen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:774
-#: pretix/static/pretixcontrol/js/ui/editor.js:812
+#: pretix/static/pretixcontrol/js/ui/editor.js:783
+#: pretix/static/pretixcontrol/js/ui/editor.js:821
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Es gab ein Problem beim Hochladen der PDF-Datei, bitte erneut versuchen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:797
+#: pretix/static/pretixcontrol/js/ui/editor.js:806
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Möchten Sie den Editor wirklich schließen ohne Ihre Änderungen zu speichern?"
@@ -195,20 +195,20 @@ msgstr "Ein Fehler ist aufgetreten."
 msgid "Generating messages …"
 msgstr "Generiere Nachrichten…"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:69
+#: pretix/static/pretixcontrol/js/ui/main.js:70
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:232
+#: pretix/static/pretixcontrol/js/ui/main.js:233
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Diese Farbe hat einen sehr guten Kontrast und ist sehr gut zu lesen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:236
+#: pretix/static/pretixcontrol/js/ui/main.js:237
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Diese Farbe hat einen ausreichenden Kontrast und wahrscheinlich gut zu lesen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:240
+#: pretix/static/pretixcontrol/js/ui/main.js:241
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -216,23 +216,23 @@ msgstr ""
 "Diese Farbe hat einen schlechten Kontrast für Text auf einem weißen "
 "Hintergrund. Bitte wählen Sie eine dunklere Farbe."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:357
+#: pretix/static/pretixcontrol/js/ui/main.js:358
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:358
+#: pretix/static/pretixcontrol/js/ui/main.js:359
 msgid "None"
 msgstr "Keine"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:679
+#: pretix/static/pretixcontrol/js/ui/main.js:680
 msgid "Use a different name internally"
 msgstr "Intern einen anderen Namen verwenden"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:736
+#: pretix/static/pretixcontrol/js/ui/main.js:737
 msgid "Click to close"
 msgstr "Klicken zum Schließen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:751
+#: pretix/static/pretixcontrol/js/ui/main.js:752
 msgid "You have unsaved changes!"
 msgstr "Sie haben ungespeicherte Änderungen!"
 
@@ -278,19 +278,19 @@ msgstr[0] ""
 msgstr[1] ""
 "Die Produkte in Ihrem Warenkorb sind noch {num} Minuten für Sie reserviert."
 
-#: pretix/static/pretixpresale/js/ui/main.js:218
+#: pretix/static/pretixpresale/js/ui/main.js:231
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Bitte tragen Sie eine Menge für eines der Produkte ein."
 
-#: pretix/static/pretixpresale/js/ui/main.js:317
+#: pretix/static/pretixpresale/js/ui/main.js:330
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Der Veranstalter behält %(currency)s %(price)s ein"
 
-#: pretix/static/pretixpresale/js/ui/main.js:325
+#: pretix/static/pretixpresale/js/ui/main.js:338
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Sie erhalten %(currency)s %(amount)s zurück"
 
-#: pretix/static/pretixpresale/js/ui/main.js:341
+#: pretix/static/pretixpresale/js/ui/main.js:354
 msgid "Please enter the amount the organizer can keep."
 msgstr "Bitte geben Sie den Betrag ein, den der Veranstalter einbehalten darf."
 

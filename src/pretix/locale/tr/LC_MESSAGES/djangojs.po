@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-31 10:47+0000\n"
+"POT-Creation-Date: 2020-04-02 16:17+0000\n"
 "PO-Revision-Date: 2018-09-03 06:36+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -155,40 +155,40 @@ msgstr "Giriş QR"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "PDF arka plan dosyası aşağıdaki nedenden dolayı yüklenemedi:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:452
+#: pretix/static/pretixcontrol/js/ui/editor.js:461
 msgid "Group of objects"
 msgstr "Nesne grubu"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:458
+#: pretix/static/pretixcontrol/js/ui/editor.js:467
 msgid "Text object"
 msgstr "Metin nesnesi"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:460
+#: pretix/static/pretixcontrol/js/ui/editor.js:469
 msgid "Barcode area"
 msgstr "Barkod alanı"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:462
+#: pretix/static/pretixcontrol/js/ui/editor.js:471
 msgid "Powered by pretix"
 msgstr "Pretix tarafından desteklenmektedir"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:464
+#: pretix/static/pretixcontrol/js/ui/editor.js:473
 msgid "Object"
 msgstr "Nesne"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:468
+#: pretix/static/pretixcontrol/js/ui/editor.js:477
 msgid "Ticket design"
 msgstr "Bilet tasarımı"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:725
+#: pretix/static/pretixcontrol/js/ui/editor.js:734
 msgid "Saving failed."
 msgstr "Kaydetme başarısız oldu."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:774
-#: pretix/static/pretixcontrol/js/ui/editor.js:812
+#: pretix/static/pretixcontrol/js/ui/editor.js:783
+#: pretix/static/pretixcontrol/js/ui/editor.js:821
 msgid "Error while uploading your PDF file, please try again."
 msgstr "PDF dosyanızı yüklerken hata oluştu, lütfen tekrar deneyin."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:797
+#: pretix/static/pretixcontrol/js/ui/editor.js:806
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Değişiklikleri kaydetmeden editörden gerçekten ayrılmak istiyor musunuz?"
@@ -201,41 +201,41 @@ msgstr "Bir hata oluştu."
 msgid "Generating messages …"
 msgstr "Mesaj oluşturuluyor…"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:69
+#: pretix/static/pretixcontrol/js/ui/main.js:70
 msgid "Unknown error."
 msgstr "Bilinmeyen hata."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:232
+#: pretix/static/pretixcontrol/js/ui/main.js:233
 msgid "Your color has great contrast and is very easy to read!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:236
+#: pretix/static/pretixcontrol/js/ui/main.js:237
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:240
+#: pretix/static/pretixcontrol/js/ui/main.js:241
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:357
+#: pretix/static/pretixcontrol/js/ui/main.js:358
 msgid "All"
 msgstr "Herşey"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:358
+#: pretix/static/pretixcontrol/js/ui/main.js:359
 msgid "None"
 msgstr "Hiçbiri"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:679
+#: pretix/static/pretixcontrol/js/ui/main.js:680
 msgid "Use a different name internally"
 msgstr "Dahili olarak farklı bir ad kullan"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:736
+#: pretix/static/pretixcontrol/js/ui/main.js:737
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:751
+#: pretix/static/pretixcontrol/js/ui/main.js:752
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -291,25 +291,25 @@ msgstr[1] ""
 "Diğer\n"
 "Sepetinizdeki ürünler {num} dakikalığına ayrılmıştır."
 
-#: pretix/static/pretixpresale/js/ui/main.js:218
+#: pretix/static/pretixpresale/js/ui/main.js:231
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:317
+#: pretix/static/pretixpresale/js/ui/main.js:330
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "% (para birimi) s% (fiyat) s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:325
+#: pretix/static/pretixpresale/js/ui/main.js:338
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "% (para birimi) s% (fiyat) s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:341
+#: pretix/static/pretixpresale/js/ui/main.js:354
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 

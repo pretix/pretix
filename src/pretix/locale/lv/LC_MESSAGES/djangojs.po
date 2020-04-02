@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-31 10:47+0000\n"
+"POT-Creation-Date: 2020-04-02 16:17+0000\n"
 "PO-Revision-Date: 2019-11-13 06:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -150,41 +150,41 @@ msgstr "Reģistrācijas QR"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Fona PDF fails nevarēja ielādēties sekojoša iemesla dēļ:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:452
+#: pretix/static/pretixcontrol/js/ui/editor.js:461
 msgid "Group of objects"
 msgstr "Objektu grupa"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:458
+#: pretix/static/pretixcontrol/js/ui/editor.js:467
 msgid "Text object"
 msgstr "Teksta objekts"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:460
+#: pretix/static/pretixcontrol/js/ui/editor.js:469
 msgid "Barcode area"
 msgstr "Svītru koda lauks"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:462
+#: pretix/static/pretixcontrol/js/ui/editor.js:471
 msgid "Powered by pretix"
 msgstr "Pretix atbalstīts"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:464
+#: pretix/static/pretixcontrol/js/ui/editor.js:473
 msgid "Object"
 msgstr "Objekts"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:468
+#: pretix/static/pretixcontrol/js/ui/editor.js:477
 msgid "Ticket design"
 msgstr "Biļešu dizains"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:725
+#: pretix/static/pretixcontrol/js/ui/editor.js:734
 msgid "Saving failed."
 msgstr "Saglabāšana neizdevās."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:774
-#: pretix/static/pretixcontrol/js/ui/editor.js:812
+#: pretix/static/pretixcontrol/js/ui/editor.js:783
+#: pretix/static/pretixcontrol/js/ui/editor.js:821
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Radusies kļūda augšupielādējot jūsu PDF failu, lūdzu, mēģiniet vēlreiz."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:797
+#: pretix/static/pretixcontrol/js/ui/editor.js:806
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Vai jūs tiešām vēlaties iziet no rediģēšanas lauka bez veikto izmaiņu "
@@ -198,21 +198,21 @@ msgstr "Ir radusies kļūda."
 msgid "Generating messages …"
 msgstr "Ziņas tiek ģenerētas …"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:69
+#: pretix/static/pretixcontrol/js/ui/main.js:70
 msgid "Unknown error."
 msgstr "Nezināma kļūda."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:232
+#: pretix/static/pretixcontrol/js/ui/main.js:233
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Izvēlētā teksta krāsa ļoti labi izceļas un ir viegli lasāma!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:236
+#: pretix/static/pretixcontrol/js/ui/main.js:237
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Izvēlētā teksta krāsa pietiekami izceļas un visdrīzāk būs samērā viegli "
 "lasāma!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:240
+#: pretix/static/pretixcontrol/js/ui/main.js:241
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -220,23 +220,23 @@ msgstr ""
 "Izvēlētā krāsa tekstam neizceļas uz esošā fona, lūdzu, izvēlieties tumšāku "
 "krāsu."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:357
+#: pretix/static/pretixcontrol/js/ui/main.js:358
 msgid "All"
 msgstr "Visi"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:358
+#: pretix/static/pretixcontrol/js/ui/main.js:359
 msgid "None"
 msgstr "Neviens"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:679
+#: pretix/static/pretixcontrol/js/ui/main.js:680
 msgid "Use a different name internally"
 msgstr "Izmantojiet citu nosaukumu iekšēji"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:736
+#: pretix/static/pretixcontrol/js/ui/main.js:737
 msgid "Click to close"
 msgstr "Noklikšķiniet, lai aizvērtu"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:751
+#: pretix/static/pretixcontrol/js/ui/main.js:752
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -282,25 +282,25 @@ msgstr[0] "Preces jūsu grozā ir rezervētas nulle minūtes."
 msgstr[1] "Preces jūsu grozā ir rezervētas uz vienu minūti."
 msgstr[2] "Preces jūsu grozā ir rezervētas uz {num} minūtēm."
 
-#: pretix/static/pretixpresale/js/ui/main.js:218
+#: pretix/static/pretixpresale/js/ui/main.js:231
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
 
-#: pretix/static/pretixpresale/js/ui/main.js:317
+#: pretix/static/pretixpresale/js/ui/main.js:330
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "no %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:325
+#: pretix/static/pretixpresale/js/ui/main.js:338
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "no %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:341
+#: pretix/static/pretixpresale/js/ui/main.js:354
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
