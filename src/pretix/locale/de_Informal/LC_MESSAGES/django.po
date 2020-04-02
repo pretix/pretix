@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-02 16:16+0000\n"
-"PO-Revision-Date: 2020-03-25 13:58+0000\n"
+"PO-Revision-Date: 2020-04-02 16:28+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1230,10 +1230,8 @@ msgid "Event start date"
 msgstr "Veranstaltungsbeginn"
 
 #: pretix/base/exporters/orderlist.py:715
-#, fuzzy
-#| msgid "Redemptions"
 msgid "Giftcard Redemptions"
-msgstr "Einlösungen"
+msgstr "Geschenkgutschein-Einlösungen"
 
 #: pretix/base/exporters/orderlist.py:732 pretix/base/models/giftcards.py:53
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:10
@@ -3724,10 +3722,8 @@ msgstr "Teilnehmer*innen-E-Mail"
 #: pretix/control/templates/pretixcontrol/order/index.html:401
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:78
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:81
-#, fuzzy
-#| msgid "Attendee badges"
 msgid "Attendee address"
-msgstr "Teilnehmer-Badges"
+msgstr "Teilnehmer-Adresse"
 
 #: pretix/base/orderimport.py:497
 msgid "Calculate from product"
@@ -4248,10 +4244,8 @@ msgstr "Musterstadt"
 #: pretix/control/templates/pretixcontrol/order/index.html:393
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:68
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:71
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee company"
-msgstr "Teilnehmer*innen-E-Mail"
+msgstr "Teilnehmer-Firma"
 
 #: pretix/base/pdf.py:214
 msgid "List of Add-Ons"
@@ -5225,28 +5219,20 @@ msgstr ""
 "Mail-Adresse für die Bestellbestätigung ist immer erforderlich."
 
 #: pretix/base/settings.py:114
-#, fuzzy
-#| msgid "Ask for email addresses per ticket"
 msgid "Ask for company per ticket"
-msgstr "E-Mail-Adressen pro Ticket erfassen"
+msgstr "Firmenname pro Ticket erfassen"
 
 #: pretix/base/settings.py:123
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Require company per ticket"
-msgstr "E-Mail-Adressen pro Ticket erfordern"
+msgstr "Firmenname pro Ticket erfordern"
 
 #: pretix/base/settings.py:133
-#, fuzzy
-#| msgid "Ask for email addresses per ticket"
 msgid "Ask for postal addresses per ticket"
-msgstr "E-Mail-Adressen pro Ticket erfassen"
+msgstr "Postadresse pro Ticket erfassen"
 
 #: pretix/base/settings.py:142
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Require postal addresses per ticket"
-msgstr "E-Mail-Adressen pro Ticket erfordern"
+msgstr "Postadresse pro Ticket erfordern"
 
 #: pretix/base/settings.py:152
 msgid "Ask for the order email address twice"
@@ -5797,14 +5783,12 @@ msgstr ""
 "werden."
 
 #: pretix/base/settings.py:823
-#, fuzzy
-#| msgid "Reminder to download tickets"
 msgid "Allow users to download tickets"
-msgstr "Ticket-Download-Erinnerung"
+msgstr "Ticket-Download anschalten"
 
 #: pretix/base/settings.py:824
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "Wenn dies ausgeschaltet ist, kann niemand Tickets herunterladen."
 
 #: pretix/base/settings.py:833
 msgid "Download date"
@@ -5822,10 +5806,8 @@ msgstr ""
 "Zeitpunkt für einen der Termine erreicht ist."
 
 #: pretix/base/settings.py:845
-#, fuzzy
-#| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for add-on products"
-msgstr "Tickets für Produkte generieren, die keinen Zutritt enthalten"
+msgstr "Tickets für Zusatzprodukte generieren"
 
 #: pretix/base/settings.py:846
 msgid ""
@@ -5833,12 +5815,13 @@ msgid ""
 "for add-on products. With this option, a separate ticket is issued for every "
 "add-on product as well."
 msgstr ""
+"Standardmäßig werden Tickets nur für einzeln gekaufte Produkte ausgestellt, "
+"nicht für Zusatzprodukte. Mit dieser Option wird auch für Zusatzprodukte "
+"jeweils ein separates Ticket ausgestellt."
 
 #: pretix/base/settings.py:858
-#, fuzzy
-#| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for all products"
-msgstr "Tickets für Produkte generieren, die keinen Zutritt enthalten"
+msgstr "Tickets für alle Produkte generieren"
 
 #: pretix/base/settings.py:859
 msgid ""
@@ -5846,18 +5829,22 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off tickt "
 "issuing in every product separately."
 msgstr ""
+"Wenn diese Option deaktiviert ist, werden Tickets nur für Produkte "
+"aktiviert, bei denen die Option \"Berechtigt zum Eintritt\" gesetzt ist. Sie "
+"können die Ticketgenerierung auch in den Einstellungen von jedes Produktes "
+"einzeln abschalten."
 
 #: pretix/base/settings.py:871
-#, fuzzy
-#| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for pending orders"
-msgstr "Tickets für Produkte generieren, die keinen Zutritt enthalten"
+msgstr "Tickets für ausstehende Bestellungen generieren"
 
 #: pretix/base/settings.py:872
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
+"Wenn diese Option ausgestellt ist, werden Tickets erst zum Download "
+"angeboten, nachdem eine Bestellung als bezahlt markiert wurde."
 
 #: pretix/base/settings.py:891
 msgid "Last date of modifications"
@@ -6687,22 +6674,16 @@ msgid "This will remove all email addresses from the waiting list."
 msgstr "Dies entfernt alle E-Mail-Adressen von der Warteliste."
 
 #: pretix/base/shredder.py:198
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee info"
-msgstr "Name des/der Teilnehmer*in"
+msgstr "Teilnehmer-Informationen"
 
 #: pretix/base/shredder.py:200
-#, fuzzy
-#| msgid ""
-#| "This will remove all attendee names from order positions, as well as "
-#| "logged changes to them."
 msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
 msgstr ""
-"Dies entfernt alle Teilnehmer*innennamen von Bestellungen, sowie Änderungen "
-"an diesen."
+"Dies entfernt alle Teilnehmernamen und Postadressen von Bestellpositionen, "
+"sowie Änderungen an diesen."
 
 #: pretix/base/shredder.py:254
 msgid "Invoice addresses"
@@ -6930,10 +6911,8 @@ msgid "at"
 msgstr "Datum"
 
 #: pretix/base/ticketoutput.py:145
-#, fuzzy
-#| msgid "Enable test mode"
 msgid "Enable ticket format"
-msgstr "Testmodus aktivieren"
+msgstr "Downloadformat aktivieren"
 
 #: pretix/base/ticketoutput.py:163
 msgid "Download ticket"
@@ -11688,10 +11667,8 @@ msgstr ""
 "oder mehrere Ticketausgabe-Erweiterungen."
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:61
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download time"
-msgstr "Ticket herunterladen"
+msgstr "Download-Zeitpunkt"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
@@ -13044,11 +13021,8 @@ msgid "Order details"
 msgstr "Bestellung"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:162
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Cancellation date"
-msgstr "Korrekturdatum"
+msgstr "Stornodatum"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:177
 msgid "Expiry date"
@@ -19143,7 +19117,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
 msgid "Open Layout Designer"
-msgstr ""
+msgstr "Layout-Designer öffnen"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Advanced mode (multiple layouts)"
