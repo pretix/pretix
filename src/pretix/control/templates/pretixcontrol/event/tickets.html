@@ -1,11 +1,12 @@
 {% extends "pretixcontrol/event/settings_base.html" %}
 {% load i18n %}
+{% load getitem %}
 {% load bootstrap3 %}
 {% block inside %}
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         <h1>{% trans "Ticket download" %}</h1>
-        <div class="tabbed-form">
+        <div class="">
             <fieldset>
                 <legend>{% trans "Download settings" %}</legend>
                 {% if request.event.settings.ticket_download and not any_enabled %}
@@ -17,11 +18,10 @@
                     </div>
                 {% endif %}
                 {% bootstrap_form_errors form %}
-                {% bootstrap_field form.ticket_download layout="control" %}
-                {% bootstrap_field form.ticket_download_date layout="control" %}
-                {% bootstrap_field form.ticket_download_addons layout="control" %}
-                {% bootstrap_field form.ticket_download_nonadm layout="control" %}
-                {% bootstrap_field form.ticket_download_pending layout="control" %}
+                {% bootstrap_field form.ticket_download layout="control" horizontal_label_class='sr-only' horizontal_field_class='col-md-12' %}
+                {% bootstrap_field form.ticket_download_addons layout="control" horizontal_label_class='sr-only' horizontal_field_class='col-md-12' %}
+                {% bootstrap_field form.ticket_download_nonadm layout="control" horizontal_label_class='sr-only' horizontal_field_class='col-md-12' %}
+                {% bootstrap_field form.ticket_download_pending layout="control" horizontal_label_class='sr-only' horizontal_field_class='col-md-12' %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Download formats" %}</legend>
@@ -33,11 +33,15 @@
                                     target="_blank">
                                 {% trans "Preview" %}
                             </a>
-                            <h3 class="panel-title">{{ provider.verbose_name }}</h3>
+                            <h3 class="panel-title">
+                                {% with 'ticketoutput_'|add:provider.identifier|add:'__enabled' as field_name %}
+                                    {% bootstrap_field provider.form|getitem:field_name layout='inline' label=provider.verbose_name %}
+                                {% endwith %}
+                            </h3>
                             <div class="clear"></div>
                         </div>
                         <div class="panel-body">
-                            {% bootstrap_form provider.form layout='horizontal' %}
+                            {% bootstrap_form provider.form exclude='ticketoutput_'|add:provider.identifier|add:'__enabled' layout='horizontal' %}
                             {% with c=provider.settings_content %}
                                 {% if c %}{{ c|safe }}{% endif %}
                             {% endwith %}
@@ -52,6 +56,10 @@
                         {% endblocktrans %}
                     </div>
                 {% endfor %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Download time" %}</legend>
+                {% bootstrap_field form.ticket_download_date layout="control" %}
             </fieldset>
         </div>
         <div class="form-group submit-group">

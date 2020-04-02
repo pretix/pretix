@@ -1,26 +1,20 @@
 {% load i18n %}
-<div class="form-group">
-    <label class="col-md-3 control-label">
-        {% trans "Ticket design" %}
-    </label>
-    <div class="col-md-9">
-        <p>
-            {% blocktrans trimmed %}
-                You can customize the ticket design with our PDF ticket editor. There, you can upload a PDF file used
-                as a background for the tickets and then place various texts and QR codes on the background at the
-                positions of your choice. The editor is easy to use thanks to its drag-and-drop user interface, but it
-                requires a modern browser and a decent internet connection.
-            {% endblocktrans %}
-        </p>
-        <p>
-            <a class="btn btn-primary" target="_blank"
-                    href="{% url "plugins:ticketoutputpdf:getdefault" organizer=request.organizer.slug event=request.event.slug %}">
-                {% trans "Change default layout in a new tab" %}
-            </a>
-            <a class="btn btn-default" target="_blank"
-                    href="{% url "plugins:ticketoutputpdf:index" organizer=request.organizer.slug event=request.event.slug %}">
-                {% trans "Advanced mode (multiple layouts)" %}
-            </a>
-        </p>
-    </div>
-</div>
+<p>
+    {% blocktrans trimmed %}
+        You can customize the ticket design with our PDF ticket editor. There, you can upload a PDF file used
+        as a background for the tickets and then place various texts and QR codes on the background at the
+        positions of your choice. The editor is easy to use thanks to its drag-and-drop user interface, but it
+        requires a modern browser and a decent internet connection.
+    {% endblocktrans %}
+</p>
+<p>
+    <a class="btn btn-primary btn-lg" target="_blank"
+            href="{% url "plugins:ticketoutputpdf:getdefault" organizer=request.organizer.slug event=request.event.slug %}">
+        <span class="fa fa-paint-brush"></span>
+        {% trans "Open Layout Designer" %}
+    </a>
+    <a class="btn btn-default btn-lg" target="_blank"
+            href="{% url "plugins:ticketoutputpdf:index" organizer=request.organizer.slug event=request.event.slug %}">
+        {% trans "Advanced mode (multiple layouts)" %}
+    </a>
+</p>

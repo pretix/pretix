@@ -142,7 +142,7 @@ class BaseTicketOutput:
         return OrderedDict([
             ('_enabled',
              forms.BooleanField(
-                 label=_('Enable output'),
+                 label=_('Enable ticket format'),
                  required=False,
              )),
         ])

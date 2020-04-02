@@ -251,7 +251,7 @@ var form_handlers = function (el) {
             update = function () {
                 var enabled = dependency.prop('checked');
                 dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
-                if (!enabled) {
+                if (!enabled && !$(this).is('[data-checkbox-dependency-visual]')) {
                     dependent.prop('checked', false);
                 }
             };

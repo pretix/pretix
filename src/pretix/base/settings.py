@@ -820,8 +820,8 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Use feature"),
-            help_text=_("Use pretix to generate tickets for the user to download and print out."),
+            label=_("Allow users to download tickets"),
+            help_text=_("If this is off, nobody can download a ticket."),
         )
     },
     'ticket_download_date': {
@@ -842,7 +842,11 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Offer to download tickets separately for add-on products"),
+            label=_("Generate tickets for add-on products"),
+            help_text=_('By default, tickets are only issued for products selected individually, not for add-on '
+                        'products. With this option, a separate ticket is issued for every add-on product as well.'),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_ticket_download',
+                                              'data-checkbox-dependency-visual': 'on'}),
         )
     },
     'ticket_download_nonadm': {
@@ -851,7 +855,11 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Generate tickets for non-admission products"),
+            label=_("Generate tickets for all products"),
+            help_text=_('If turned off, tickets are only issued for products that are marked as an "admission ticket"'
+                        'in the product settings. You can also turn off tickt issuing in every product separately.'),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_ticket_download',
+                                              'data-checkbox-dependency-visual': 'on'}),
         )
     },
     'ticket_download_pending': {
@@ -860,7 +868,10 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Offer to download tickets even before an order is paid"),
+            label=_("Generate tickets for pending orders"),
+            help_text=_('If turned off, ticket downloads are only possible after an order has been marked as paid.'),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_ticket_download',
+                                              'data-checkbox-dependency-visual': 'on'}),
         )
     },
     'event_list_availability': {
