@@ -177,6 +177,13 @@ price                                 money (string)             Price of this p
 attendee_name                         string                     Specified attendee name for this position (or ``null``)
 attendee_name_parts                   object of strings          Decomposition of attendee name (i.e. given name, family name)
 attendee_email                        string                     Specified attendee email address for this position (or ``null``)
+company                               string                     Attendee company name (or ``null``)
+street                                string                     Attendee street (or ``null``)
+zipcode                               string                     Attendee ZIP code (or ``null``)
+city                                  string                     Attendee city (or ``null``)
+country                               string                     Attendee country code (or ``null``)
+state                                 string                     Attendee state (ISO 3166-2 code). Only supported in
+                                                                 AU, BR, CA, CN, MY, MX, and US, otherwise ``null``.
 voucher                               integer                    Internal ID of the voucher used for this position (or ``null``)
 tax_rate                              decimal (string)           VAT rate applied for this position
 tax_value                             money (string)             VAT included in this position
@@ -239,6 +246,10 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 3.5
 
   The attribute ``canceled`` has been added.
+
+.. versionchanged:: 3.8
+
+  The attributes ``company``, ``street``, ``zipcode``, ``city``, ``country``, and ``state`` have been added.
 
 .. _order-payment-resource:
 
@@ -384,6 +395,12 @@ List of all orders
                   "full_name": "Peter",
                 },
                 "attendee_email": null,
+                "company": "Sample company",
+                "street": "Test street 12",
+                "zipcode": "12345",
+                "city": "Testington",
+                "country": "DE",
+                "state": null,
                 "voucher": null,
                 "tax_rate": "0.00",
                 "tax_value": "0.00",
@@ -540,6 +557,12 @@ Fetching individual orders
               "full_name": "Peter",
             },
             "attendee_email": null,
+            "company": "Sample company",
+            "street": "Test street 12",
+            "zipcode": "12345",
+            "city": "Testington",
+            "country": "DE",
+            "state": null,
             "voucher": null,
             "tax_rate": "0.00",
             "tax_rule": null,
@@ -820,9 +843,9 @@ Creating orders
    * ``consume_carts`` (optional) – A list of cart IDs. All cart positions with these IDs will be deleted if the
      order creation is successful. Any quotas or seats that become free by this operation will be credited to your order
      creation.
-   * ``email``
+   * ``email`` (optional)
    * ``locale``
-   * ``sales_channel``
+   * ``sales_channel`` (optional)
    * ``payment_provider`` (optional) – The identifier of the payment provider set for this order. This needs to be an
      existing payment provider. You should use ``"free"`` for free orders, and we strongly advise to use ``"manual"``
      for all orders you create as paid. This field is optional when the order status is ``"n"`` or the order total is
@@ -855,15 +878,21 @@ Creating orders
 
       * ``positionid`` (optional, see below)
       * ``item``
-      * ``variation``
+      * ``variation`` (optional)
       * ``price`` (optional, if set to ``null`` or missing the price will be computed from the given product)
       * ``seat`` (The ``seat_guid`` attribute of a seat. Required when the specified ``item`` requires a seat, otherwise must be ``null``.)
-      * ``attendee_name`` **or** ``attendee_name_parts``
+      * ``attendee_name`` **or** ``attendee_name_parts`` (optional)
       * ``voucher`` (optional, the ``code`` attribute of a valid voucher)
-      * ``attendee_email``
+      * ``attendee_email`` (optional)
+      * ``company`` (optional)
+      * ``street`` (optional)
+      * ``zipcode`` (optional)
+      * ``city`` (optional)
+      * ``country`` (optional)
+      * ``state`` (optional)
       * ``secret`` (optional)
       * ``addon_to`` (optional, see below)
-      * ``subevent``
+      * ``subevent`` (optional)
       * ``answers``
 
         * ``question``

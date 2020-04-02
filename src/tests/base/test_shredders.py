@@ -15,7 +15,7 @@ from pretix.base.models import (
 from pretix.base.services.invoices import generate_invoice, invoice_pdf_task
 from pretix.base.services.tickets import generate
 from pretix.base.shredder import (
-    AttendeeNameShredder, CachedTicketShredder, EmailAddressShredder,
+    AttendeeInfoShredder, CachedTicketShredder, EmailAddressShredder,
     InvoiceAddressShredder, InvoiceShredder, PaymentInfoShredder,
     QuestionAnswerShredder, WaitingListShredder, shred_constraints,
 )
@@ -57,7 +57,8 @@ def order(event, item):
         variation=None,
         price=Decimal("14"),
         attendee_name_parts={'full_name': "Peter", "_scheme": "full"},
-        attendee_email="foo@example.org"
+        attendee_email="foo@example.org",
+        company='Foobar',
     )
     return o
 
@@ -145,15 +146,23 @@ def test_attendee_name_shredder(event, order):
     l1 = order.log_action(
         'pretix.event.order.modified',
         data={
-            "data": [{"attendee_name": "Hans", "question_1": "Test"}],
+            "data": [{"attendee_name": "Peter", "question_1": "Test", "company": "Foobar"}],
             "invoice_data": {"name": "Foo"}
         }
     )
 
-    s = AttendeeNameShredder(event)
+    s = AttendeeInfoShredder(event)
     f = list(s.generate_files())
     assert json.loads(f[0][2]) == {
-        '{}-{}'.format(order.code, 1): 'Peter'
+        '{}-{}'.format(order.code, 1): {
+            'name': 'Peter',
+            'company': 'Foobar',
+            'street': None,
+            'zipcode': None,
+            'city': None,
+            'country': None,
+            'state': None
+        }
     }
     s.shred_data()
     order.refresh_from_db()
@@ -161,6 +170,7 @@ def test_attendee_name_shredder(event, order):
     l1.refresh_from_db()
     assert 'Hans' not in l1.data
     assert 'Foo' in l1.data
+    assert 'Foobar' not in l1.data
     assert 'Test' in l1.data
 
 

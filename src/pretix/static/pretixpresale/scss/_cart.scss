@@ -22,7 +22,7 @@
         padding-left: 20px;
         margin-bottom: 0;
 
-        dd {
+        dd:not(.toplevel) {
             padding-left: 20px;
         }
     }

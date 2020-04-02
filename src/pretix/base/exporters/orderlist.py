@@ -305,6 +305,12 @@ class OrderListExporter(MultiSheetListExporter):
                 headers.append(_('Attendee name') + ': ' + str(label))
         headers += [
             _('Attendee email'),
+            _('Company'),
+            _('Address'),
+            _('ZIP code'),
+            _('City'),
+            _('Country'),
+            pgettext('address', 'State'),
             _('Voucher'),
             _('Pseudonymization ID'),
         ]
@@ -364,6 +370,12 @@ class OrderListExporter(MultiSheetListExporter):
                     )
             row += [
                 op.attendee_email,
+                op.company or '',
+                op.street or '',
+                op.zipcode or '',
+                op.city or '',
+                op.country if op.country else '',
+                op.state or '',
                 op.voucher.code if op.voucher else '',
                 op.pseudonymization_id,
             ]

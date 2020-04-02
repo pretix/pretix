@@ -1065,6 +1065,13 @@ class AbstractPosition(models.Model):
         'Seat', null=True, blank=True, on_delete=models.PROTECT
     )
 
+    company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'), null=True)
+    street = models.TextField(verbose_name=_('Address'), blank=True, null=True)
+    zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=True, null=True)
+    city = models.CharField(max_length=255, verbose_name=_('City'), blank=True, null=True)
+    country = CountryField(verbose_name=_('Country'), blank=True, blank_label=_('Select country'), null=True)
+    state = models.CharField(max_length=255, verbose_name=pgettext_lazy('address', 'State'), blank=True, null=True)
+
     class Meta:
         abstract = True
 

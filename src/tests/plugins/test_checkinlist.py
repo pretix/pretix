@@ -139,15 +139,18 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
             order=order2,
             item=event.items.first(),
             variation=None,
+            company='BARCORP',
             price=Decimal("23"),
             secret='hutjztuxhkbtwnesv2suqv26k6ttytyy'
         )
         InvoiceAddress.objects.create(
             order=event.orders.get(code='BAR'),
+            company='FOOCORP',
             name_parts={"title": "Mr", "given_name": "Albert", "middle_name": "J", "family_name": "Zulu", "_scheme": "title_given_middle_family"}
         )
         InvoiceAddress.objects.create(
             order=event.orders.get(code='FOO'),
+            company='FOOCORP',
             name_parts={"title": "Mr", "given_name": "Paul", "middle_name": "A", "family_name": "Jones", "_scheme": "title_given_middle_family"}
         )
 
@@ -164,9 +167,9 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
 "Checked in","Automatically checked in","Secret","E-mail","Company","Voucher code","Order date","Requires special
  attention","Comment"
 "BAR","Mr Albert J Zulu","Mr","Albert","J","Zulu","Ticket","23.00","","No","hutjztuxhkbtwnesv2suqv26k6ttytyy",
-"dummy@dummy.test","","","2019-02-22","No",""
+"dummy@dummy.test","BARCORP","","2019-02-22","No",""
 "FOO","Mr Paul A Jones","Mr","Paul","A","Jones","Ticket","23.00","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test","","","2019-02-22","No",""
+"dummy@dummy.test","FOOCORP","","2019-02-22","No",""
 """)
     c = CSVCheckinList(event)
     _, _, content = c.render({

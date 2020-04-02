@@ -245,7 +245,7 @@ class BaseQuestionsForm(forms.Form):
         if item.admission and event.settings.attendee_names_asked:
             self.fields['attendee_name_parts'] = NamePartsFormField(
                 max_length=255,
-                required=event.settings.attendee_names_required,
+                required=event.settings.attendee_names_required and not self.all_optional,
                 scheme=event.settings.name_scheme,
                 titles=event.settings.name_scheme_titles,
                 label=_('Attendee name'),
@@ -253,7 +253,7 @@ class BaseQuestionsForm(forms.Form):
             )
         if item.admission and event.settings.attendee_emails_asked:
             self.fields['attendee_email'] = forms.EmailField(
-                required=event.settings.attendee_emails_required,
+                required=event.settings.attendee_emails_required and not self.all_optional,
                 label=_('Attendee email'),
                 initial=(cartpos.attendee_email if cartpos else orderpos.attendee_email),
                 widget=forms.EmailInput(
@@ -262,6 +262,73 @@ class BaseQuestionsForm(forms.Form):
                     }
                 )
             )
+        if item.admission and event.settings.attendee_company_asked:
+            self.fields['company'] = forms.CharField(
+                required=event.settings.attendee_company_required and not self.all_optional,
+                label=_('Company'),
+                initial=(cartpos.company if cartpos else orderpos.company),
+            )
+
+        if item.admission and event.settings.attendee_addresses_asked:
+            self.fields['street'] = forms.CharField(
+                required=event.settings.attendee_addresses_required and not self.all_optional,
+                label=_('Address'),
+                widget=forms.Textarea(attrs={
+                    'rows': 2,
+                    'placeholder': _('Street and Number'),
+                    'autocomplete': 'street-address'
+                }),
+                initial=(cartpos.street if cartpos else orderpos.street),
+            )
+            self.fields['zipcode'] = forms.CharField(
+                required=event.settings.attendee_addresses_required and not self.all_optional,
+                label=_('ZIP code'),
+                initial=(cartpos.zipcode if cartpos else orderpos.zipcode),
+                widget=forms.TextInput(attrs={
+                    'autocomplete': 'postal-code',
+                }),
+            )
+            self.fields['city'] = forms.CharField(
+                required=event.settings.attendee_addresses_required and not self.all_optional,
+                label=_('City'),
+                initial=(cartpos.city if cartpos else orderpos.city),
+                widget=forms.TextInput(attrs={
+                    'autocomplete': 'address-level2',
+                }),
+            )
+            country = (cartpos.country if cartpos else orderpos.country) or guess_country(event)
+            self.fields['country'] = CountryField().formfield(
+                required=event.settings.attendee_addresses_required and not self.all_optional,
+                label=_('Country'),
+                initial=country,
+                widget=forms.Select(attrs={
+                    'autocomplete': 'country',
+                }),
+            )
+            c = [('', pgettext_lazy('address', 'Select state'))]
+            fprefix = str(self.prefix) + '-' if self.prefix is not None and self.prefix != '-' else ''
+            cc = None
+            if fprefix + 'country' in self.data:
+                cc = str(self.data[fprefix + 'country'])
+            elif country:
+                cc = str(country)
+            if cc and cc in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
+                statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
+                c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
+            elif fprefix + 'state' in self.data:
+                self.data = self.data.copy()
+                del self.data[fprefix + 'state']
+
+            self.fields['state'] = forms.ChoiceField(
+                label=pgettext_lazy('address', 'State'),
+                required=False,
+                choices=c,
+                widget=forms.Select(attrs={
+                    'autocomplete': 'address-level1',
+                }),
+            )
+            self.fields['state'].widget.is_required = True
 
         for q in questions:
             # Do we already have an answer? Provide it as the initial value
@@ -422,6 +489,10 @@ class BaseQuestionsForm(forms.Form):
 
     def clean(self):
         d = super().clean()
+
+        if d.get('city') and d.get('country') and str(d['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            if not d.get('state'):
+                self.add_error('state', _('This field is required.'))
 
         question_cache = {f.question.pk: f.question for f in self.fields.values() if getattr(f, 'question', None)}
 

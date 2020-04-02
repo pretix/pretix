@@ -194,15 +194,23 @@ class WaitingListShredder(BaseDataShredder):
             le.save(update_fields=['data', 'shredded'])
 
 
-class AttendeeNameShredder(BaseDataShredder):
-    verbose_name = _('Attendee names')
-    identifier = 'attendee_names'
-    description = _('This will remove all attendee names from order positions, as well as logged changes to them.')
+class AttendeeInfoShredder(BaseDataShredder):
+    verbose_name = _('Attendee info')
+    identifier = 'attendee_info'
+    description = _('This will remove all attendee names and postal addresses from order positions, as well as logged '
+                    'changes to them.')
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
-        yield 'attendee-names.json', 'application/json', json.dumps({
-            '{}-{}'.format(op.order.code, op.positionid): op.attendee_name
-            for op in OrderPosition.all.filter(
+        yield 'attendee-info.json', 'application/json', json.dumps({
+            '{}-{}'.format(op.order.code, op.positionid): {
+                'name': op.attendee_name,
+                'company': op.company,
+                'street': op.street,
+                'zipcode': op.zipcode,
+                'city': op.city,
+                'country': str(op.country) if op.country else None,
+                'state': op.state
+            } for op in OrderPosition.all.filter(
                 order__event=self.event
             ).filter(
                 Q(Q(attendee_name_cached__isnull=False) | Q(attendee_name_parts__isnull=False))
@@ -214,8 +222,10 @@ class AttendeeNameShredder(BaseDataShredder):
         OrderPosition.all.filter(
             order__event=self.event
         ).filter(
-            Q(Q(attendee_name_cached__isnull=False) | Q(attendee_name_parts__isnull=False))
-        ).update(attendee_name_cached=None, attendee_name_parts={'_shredded': True})
+            Q(attendee_name_cached__isnull=False) | Q(attendee_name_parts__isnull=False) |
+            Q(company__isnull=False) | Q(street__isnull=False) | Q(zipcode__isnull=False) | Q(city__isnull=False)
+        ).update(attendee_name_cached=None, attendee_name_parts={'_shredded': True}, company=None, street=None,
+                 zipcode=None, city=None)
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
             d = le.parsed_data
@@ -227,6 +237,14 @@ class AttendeeNameShredder(BaseDataShredder):
                         d['data'][i]['attendee_name_parts'] = {
                             '_legacy': '█'
                         }
+                if 'company' in row:
+                    d['data'][i]['company'] = '█'
+                if 'street' in row:
+                    d['data'][i]['street'] = '█'
+                if 'zipcode' in row:
+                    d['data'][i]['zipcode'] = '█'
+                if 'city' in row:
+                    d['data'][i]['city'] = '█'
                 le.data = json.dumps(d)
                 le.shredded = True
                 le.save(update_fields=['data', 'shredded'])
@@ -357,7 +375,7 @@ class PaymentInfoShredder(BaseDataShredder):
 def register_payment_provider(sender, **kwargs):
     return [
         EmailAddressShredder,
-        AttendeeNameShredder,
+        AttendeeInfoShredder,
         InvoiceAddressShredder,
         QuestionAnswerShredder,
         InvoiceShredder,
