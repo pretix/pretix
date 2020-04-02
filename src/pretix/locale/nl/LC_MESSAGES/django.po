@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-31 10:46+0000\n"
-"PO-Revision-Date: 2020-03-10 19:00+0000\n"
+"PO-Revision-Date: 2020-04-02 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -2758,8 +2758,7 @@ msgid "The voucher \"{voucher}\" no longer has sufficient budget."
 msgstr "De voucher \"{voucher}\" heeft niet genoeg budget over."
 
 #: pretix/base/models/orders.py:709
-#, fuzzy, python-brace-format
-#| msgid "The voucher \"{voucher}\" no longer has sufficient budget."
+#, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgstr "De voucher \"{voucher}\" is in de tussentijd gebruikt."
 
@@ -8293,13 +8292,11 @@ msgid "Automatically refund money if possible"
 msgstr "Geld automatisch terugbetalen indien mogelijk"
 
 #: pretix/control/forms/orders.py:549
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid ""
 "Create manual refund if the payment method odes not support automatic refunds"
 msgstr ""
 "Maak handmatige terugbetaling als de betalingsmethode geen automatische "
-"terugbetaling ondersteunt"
+"terugbetalingen ondersteunt"
 
 #: pretix/control/forms/orders.py:553
 msgid ""
@@ -8315,8 +8312,6 @@ msgstr ""
 "bestellingen of door cadeaubonnen uit te geven."
 
 #: pretix/control/forms/orders.py:568
-#, fuzzy
-#| msgid "Order fees"
 msgid "Keep fees"
 msgstr "Houd toeslagen in"
 
@@ -8928,8 +8923,6 @@ msgid "The order has been canceled."
 msgstr "De bestelling is geannuleerd."
 
 #: pretix/control/logdisplay.py:195 pretix/control/views/orders.py:1331
-#, fuzzy
-#| msgid "The order has been created."
 msgid "The order has been reactivated."
 msgstr "De bestelling is opnieuw geactiveerd."
 
@@ -12904,9 +12897,6 @@ msgid "Order details"
 msgstr "Bestellingsdetails"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:162
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Cancellation date"
 msgstr "Annuleringsdatum"
 
@@ -16070,34 +16060,17 @@ msgid "The refund has been marked as done."
 msgstr "De terugbetaling is gemarkeerd als uitgevoerd."
 
 #: pretix/control/views/orders.py:629
-#, fuzzy
-#| msgid "The device has been verified and can now be used."
 msgid "The request has been removed. If you want, you can now inform the user."
 msgstr ""
 "Het verzoek is verwijderd. Als u dit wilt kunt u nu de gebruiker hierover "
 "informeren."
 
 #: pretix/control/views/orders.py:636
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Your cancellation request"
 msgstr "Uw annuleringsverzoek"
 
 #: pretix/control/views/orders.py:637
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "unfortunately, we denied your order request for {event}.\n"
-#| "\n"
-#| "{comment}\n"
-#| "\n"
-#| "You can view the details of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -16302,8 +16275,6 @@ msgid "This action is only allowed for pending orders."
 msgstr "Deze actie is alleen toegestaan voor openstaande bestellingen."
 
 #: pretix/control/views/orders.py:1342
-#, fuzzy
-#| msgid "This action is only allowed for pending orders."
 msgid "This action is only allowed for canceled orders."
 msgstr "Deze actie is alleen toegestaan voor geannuleerde bestellingen."
 
@@ -20395,14 +20366,10 @@ msgid "You cannot modify this order"
 msgstr "U kunt deze bestelling niet aanpassen"
 
 #: pretix/presale/views/order.py:761
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "You chose an invalid cancellation fee."
 msgstr "U heeft een ongeldig bedrag voor de annuleringskosten gekozen."
 
 #: pretix/presale/views/order.py:786
-#, fuzzy
-#| msgid "The question has been deleted."
 msgid "The cancellation has been requested."
 msgstr "De annulering is aangevraagd."
 
