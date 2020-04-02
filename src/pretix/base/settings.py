@@ -1469,6 +1469,19 @@ Your {event} team"""))
             widget=I18nTextarea
         )
     },
+    'banner_text': {
+        'default': '',
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Banner text"),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_("This text will be shown above and below every page of your shop. Please only use this for "
+                        "very important messages.")
+        )
+    },
     'voucher_explanation_text': {
         'default': '',
         'type': LazyI18nString,

@@ -4,6 +4,7 @@
 {% load thumb %}
 {% load eventurl %}
 {% load safelink %}
+{% load rich_text %}
 {% block thetitle %}
     {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
@@ -112,8 +113,14 @@
             </div>
         {% endfor %}
     {% endif %}
+    {% if request.event.settings.banner_text %}
+        {{ request.event.settings.banner_text|rich_text }}
+    {% endif %}
     {% block content %}
     {% endblock %}
+    {% if request.event.settings.banner_text %}
+        {{ request.event.settings.banner_text|rich_text }}
+    {% endif %}
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-testmode alert-warning">
