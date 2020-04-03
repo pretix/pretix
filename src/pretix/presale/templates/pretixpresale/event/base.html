@@ -118,8 +118,8 @@
     {% endif %}
     {% block content %}
     {% endblock %}
-    {% if request.event.settings.banner_text %}
-        {{ request.event.settings.banner_text|rich_text }}
+    {% if request.event.settings.banner_text_bottom %}
+        {{ request.event.settings.banner_text_bottom|rich_text }}
     {% endif %}
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}

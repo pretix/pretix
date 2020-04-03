@@ -82,17 +82,94 @@
             </fieldset>
             <fieldset>
                 <legend>{% trans "Attendee data" %}</legend>
-                {% bootstrap_field sform.attendee_names_asked layout="control" %}
-                {% bootstrap_field sform.attendee_names_required layout="control" %}
+                {% trans "Asked for every ticket" as ask_label %}
+                {% trans "Required" as req_label %}
+                <div class="form-group">
+                    <label class="col-md-3 control-label">
+                        {% trans "Buyer email" %}
+                    </label>
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                        checked disabled>
+                                {% trans "Asked" %}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                        checked disabled>
+                                {{ req_label }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        {% trans "Ask twice to avoid errors" as label %}
+                        {% bootstrap_field sform.order_email_asked_twice layout="inline" form_group_class="" label=label %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">
+                        {% trans "Buyer name and address" %}
+                    </label>
+                    <div class="col-md-9">
+                        <div class="help-block">
+                            {% url "control:event.settings.invoice" event=request.event.slug organizer=request.organizer.slug as inv_settings %}
+                            {% blocktrans trimmed with a_attr='href="'|add:inv_settings|add:'#tab-0-1-open"'|safe %}
+                                These settings can be modified in the "<a {{ a_attr }}>Invoicing</a>" section.
+                            {% endblocktrans %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">
+                        {% trans "Attendee name" %}
+                    </label>
+                    <div class="col-md-2">
+                        {% bootstrap_field sform.attendee_names_asked layout="inline" form_group_class="" label=ask_label %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field sform.attendee_names_required layout="inline" form_group_class="" label=req_label %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">
+                        {% trans "Attendee email" %}
+                    </label>
+                    <div class="col-md-2">
+                        {% bootstrap_field sform.attendee_emails_asked layout="inline" form_group_class="" label=ask_label %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field sform.attendee_emails_required layout="inline" form_group_class="" label=req_label %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">
+                        {% trans "Attendee company" %}
+                    </label>
+                    <div class="col-md-2">
+                        {% bootstrap_field sform.attendee_company_asked layout="inline" form_group_class="" label=ask_label %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field sform.attendee_company_required layout="inline" form_group_class="" label=req_label %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">
+                        {% trans "Attendee address" %}
+                    </label>
+                    <div class="col-md-2">
+                        {% bootstrap_field sform.attendee_addresses_asked layout="inline" form_group_class="" label=ask_label %}
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_field sform.attendee_addresses_required layout="inline" form_group_class="" label=req_label %}
+                    </div>
+                </div>
                 {% bootstrap_field sform.name_scheme layout="control" %}
                 {% bootstrap_field sform.name_scheme_titles layout="control" %}
-                {% bootstrap_field sform.order_email_asked_twice layout="control" %}
-                {% bootstrap_field sform.attendee_emails_asked layout="control" %}
-                {% bootstrap_field sform.attendee_emails_required layout="control" %}
-                {% bootstrap_field sform.attendee_company_asked layout="control" %}
-                {% bootstrap_field sform.attendee_company_required layout="control" %}
-                {% bootstrap_field sform.attendee_addresses_asked layout="control" %}
-                {% bootstrap_field sform.attendee_addresses_required layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Texts" %}</legend>
@@ -102,6 +179,7 @@
                 {% bootstrap_field sform.confirm_text layout="control" %}
                 {% bootstrap_field sform.checkout_email_helptext layout="control" %}
                 {% bootstrap_field sform.banner_text layout="control" %}
+                {% bootstrap_field sform.banner_text_bottom layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Shop design" %}</legend>

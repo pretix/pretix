@@ -521,6 +521,7 @@ class EventSettingsForm(SettingsForm):
         'attendee_addresses_required',
         'confirm_text',
         'banner_text',
+        'banner_text_bottom',
         'order_email_asked_twice',
         'last_order_modification_date',
     ]

@@ -1475,10 +1475,23 @@ Your {event} team"""))
         'serializer_class': I18nField,
         'form_class': I18nFormField,
         'form_kwargs': dict(
-            label=_("Banner text"),
+            label=_("Banner text (top)"),
             widget=I18nTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
-            help_text=_("This text will be shown above and below every page of your shop. Please only use this for "
+            help_text=_("This text will be shown above every page of your shop. Please only use this for "
+                        "very important messages.")
+        )
+    },
+    'banner_text_bottom': {
+        'default': '',
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Banner text (bottom)"),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_("This text will be shown below every page of your shop. Please only use this for "
                         "very important messages.")
         )
     },
