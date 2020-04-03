@@ -402,9 +402,9 @@
                                             </dt>
                                             <dd>
                                                 {% if line.street or line.zipcode or line.city or line.country %}
-                                                    {{ line.street|linebreaksbr }}<br>
-                                                    {{ line.zipcode }} {{ line.city }}<br>
-                                                    {{ line.country.name }}
+                                                    {{ line.street|default_if_none:""|linebreaksbr }}<br>
+                                                    {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
+                                                    {{ line.country.name|default_if_none:"" }}
                                                     {% if line.state %}<br>{{ line.state }}{% endif %}
                                                 {% else %}
                                                     <em>{% trans "not answered" %}</em>
