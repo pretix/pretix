@@ -1116,10 +1116,13 @@ class Question(LoggedModel):
             return None
 
         if self.type == Question.TYPE_CHOICE:
-            try:
-                return self.options.get(Q(pk=answer) | Q(identifier=answer))
-            except:
+            q = Q(identifier=answer)
+            if answer.isdigit():
+                q |= Q(pk=answer)
+            o = self.options.filter(q).first()
+            if not o:
                 raise ValidationError(_('Invalid option selected.'))
+            return o
         elif self.type == Question.TYPE_CHOICE_MULTIPLE:
             if isinstance(answer, str):
                 l_ = list(self.options.filter(

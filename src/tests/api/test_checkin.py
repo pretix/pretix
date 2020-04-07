@@ -750,6 +750,29 @@ def test_question_choice(token_client, organizer, clist, event, order, question)
 
 
 @pytest.mark.django_db
+def test_question_choice_identifier(token_client, organizer, clist, event, order, question):
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'answers': {question[0].pk: str(question[1].identifier)}}, format='json')
+    print(resp.data)
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert order.positions.first().answers.get(question=question[0]).answer == 'M'
+        assert list(order.positions.first().answers.get(question=question[0]).options.all()) == [question[1]]
+
+
+@pytest.mark.django_db
 def test_question_invalid(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
