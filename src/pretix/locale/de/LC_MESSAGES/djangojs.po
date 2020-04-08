@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-02 16:17+0000\n"
-"PO-Revision-Date: 2020-03-31 11:34+0000\n"
+"PO-Revision-Date: 2020-04-08 13:48+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -284,7 +284,7 @@ msgstr "Bitte tragen Sie eine Menge für eines der Produkte ein."
 
 #: pretix/static/pretixpresale/js/ui/main.js:330
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr "Der Veranstalter behält %(currency)s %(price)s ein"
+msgstr "Der Veranstalter behält %(currency)s %(amount)s ein"
 
 #: pretix/static/pretixpresale/js/ui/main.js:338
 msgid "You get %(currency)s %(amount)s back"
