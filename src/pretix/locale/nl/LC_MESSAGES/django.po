@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-02 16:16+0000\n"
-"PO-Revision-Date: 2020-04-02 05:00+0000\n"
+"PO-Revision-Date: 2020-04-08 13:48+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1229,10 +1229,8 @@ msgid "Event start date"
 msgstr "Startdatum van het evenement"
 
 #: pretix/base/exporters/orderlist.py:715
-#, fuzzy
-#| msgid "Redemptions"
 msgid "Giftcard Redemptions"
-msgstr "Verzilveringen"
+msgstr "Cadeaubonverzilveringen"
 
 #: pretix/base/exporters/orderlist.py:732 pretix/base/models/giftcards.py:53
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:10
@@ -3706,10 +3704,8 @@ msgstr "E-mailadres van aanwezige"
 #: pretix/control/templates/pretixcontrol/order/index.html:401
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:78
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:81
-#, fuzzy
-#| msgid "Attendee badges"
 msgid "Attendee address"
-msgstr "Badges van gasten"
+msgstr "Adres van gast"
 
 #: pretix/base/orderimport.py:497
 msgid "Calculate from product"
@@ -4227,10 +4223,8 @@ msgstr "Voorbeeldstad"
 #: pretix/control/templates/pretixcontrol/order/index.html:393
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:68
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:71
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee company"
-msgstr "E-mailadres van aanwezige"
+msgstr "Bedrijf van gast"
 
 #: pretix/base/pdf.py:214
 msgid "List of Add-Ons"
@@ -5204,28 +5198,20 @@ msgstr ""
 "instelling."
 
 #: pretix/base/settings.py:114
-#, fuzzy
-#| msgid "Ask for email addresses per ticket"
 msgid "Ask for company per ticket"
-msgstr "Vraag om e-mailadressen per ticket"
+msgstr "Vraag om bedrijf per ticket"
 
 #: pretix/base/settings.py:123
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Require company per ticket"
-msgstr "Verplicht e-mailadressen per ticket"
+msgstr "Verplicht bedrijf per ticket"
 
 #: pretix/base/settings.py:133
-#, fuzzy
-#| msgid "Ask for email addresses per ticket"
 msgid "Ask for postal addresses per ticket"
-msgstr "Vraag om e-mailadressen per ticket"
+msgstr "Vraag om postadres per ticket"
 
 #: pretix/base/settings.py:142
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Require postal addresses per ticket"
-msgstr "Verplicht e-mailadressen per ticket"
+msgstr "Verplicht postadres per ticket"
 
 #: pretix/base/settings.py:152
 msgid "Ask for the order email address twice"
@@ -5772,14 +5758,12 @@ msgstr ""
 "aan de volgende persoon op de lijst."
 
 #: pretix/base/settings.py:823
-#, fuzzy
-#| msgid "Reminder to download tickets"
 msgid "Allow users to download tickets"
-msgstr "Herinnering om tickets te downloaden"
+msgstr "Sta gebruikers toe om tickets te downloaden"
 
 #: pretix/base/settings.py:824
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "Als dit is uitgeschakeld kan niemand een ticket downloaden."
 
 #: pretix/base/settings.py:833
 msgid "Download date"
@@ -5797,10 +5781,8 @@ msgstr ""
 "de datums het toestaat."
 
 #: pretix/base/settings.py:845
-#, fuzzy
-#| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for add-on products"
-msgstr "Genereer tickets voor producten die geen toegangsbewijs zijn"
+msgstr "Genereer tickets voor add-onproducten"
 
 #: pretix/base/settings.py:846
 msgid ""
@@ -5808,12 +5790,13 @@ msgid ""
 "for add-on products. With this option, a separate ticket is issued for every "
 "add-on product as well."
 msgstr ""
+"Standaard worden tickets alleen gegenereerd voor individueel geselecteerde "
+"producten, en niet voor add-onproducten. Als deze optie is ingeschakeld "
+"wordt er ook een ticket gegenereerd voor elk add-onproduct."
 
 #: pretix/base/settings.py:858
-#, fuzzy
-#| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for all products"
-msgstr "Genereer tickets voor producten die geen toegangsbewijs zijn"
+msgstr "Genereer tickets voor alle producten"
 
 #: pretix/base/settings.py:859
 msgid ""
@@ -5821,18 +5804,22 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off tickt "
 "issuing in every product separately."
 msgstr ""
+"Als deze optie is uitgeschakeld worden er alleen tickets gegenereerd voor "
+"producten die zijn aangemerkt als \"toegangsbewijs\" in de "
+"productinstellingen. U kunt het genereren van tickets ook voor een specifiek "
+"product uitschakelen."
 
 #: pretix/base/settings.py:871
-#, fuzzy
-#| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for pending orders"
-msgstr "Genereer tickets voor producten die geen toegangsbewijs zijn"
+msgstr "Genereer tickets voor openstaande bestellingen"
 
 #: pretix/base/settings.py:872
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
+"Als dit is uitgeschakeld is het alleen mogelijk om tickets te downloaden "
+"nadat een bestelling is betaald."
 
 #: pretix/base/settings.py:891
 msgid "Last date of modifications"
@@ -6657,22 +6644,16 @@ msgid "This will remove all email addresses from the waiting list."
 msgstr "Dit zal alle e-mailadressen van de wachtlijst verwijderen."
 
 #: pretix/base/shredder.py:198
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee info"
-msgstr "Naam van aanwezige"
+msgstr "Gegevens van gasten"
 
 #: pretix/base/shredder.py:200
-#, fuzzy
-#| msgid ""
-#| "This will remove all attendee names from order positions, as well as "
-#| "logged changes to them."
 msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
 msgstr ""
-"Dit zal alle namen van gasten op bestelde tickets verwijderen, samen met "
-"opgeslagen veranderingen hieraan."
+"Dit zal alle namen en postadressen van gasten op bestelde tickets "
+"verwijderen, samen met opgeslagen veranderingen hieraan."
 
 #: pretix/base/shredder.py:254
 msgid "Invoice addresses"
@@ -6900,10 +6881,8 @@ msgid "at"
 msgstr "op"
 
 #: pretix/base/ticketoutput.py:145
-#, fuzzy
-#| msgid "Enable test mode"
 msgid "Enable ticket format"
-msgstr "Testmodus inschakelen"
+msgstr "Ticketformaat inschakelen"
 
 #: pretix/base/ticketoutput.py:163
 msgid "Download ticket"
@@ -11664,10 +11643,8 @@ msgstr ""
 "meerdere uitvoerplug-ins."
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:61
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download time"
-msgstr "Download ticket"
+msgstr "Downloadtijd"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
@@ -19106,7 +19083,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
 msgid "Open Layout Designer"
-msgstr ""
+msgstr "Open layout-designer"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Advanced mode (multiple layouts)"
