@@ -1117,7 +1117,7 @@ class Question(LoggedModel):
 
         if self.type == Question.TYPE_CHOICE:
             q = Q(identifier=answer)
-            if answer.isdigit():
+            if isinstance(answer, int) or answer.isdigit():
                 q |= Q(pk=answer)
             o = self.options.filter(q).first()
             if not o:
