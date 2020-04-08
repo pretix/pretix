@@ -20,19 +20,8 @@
                 {% bootstrap_field form.cancel_allow_user_paid_keep_percentage layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_keep_fees layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_until layout="control" %}
-                <div class="form-group">
-                    <div class="col-md-9 col-md-offset-3">
-                        <div class="checkbox">
-                            <label data-toggle="collapse" data-target="#cancel_allow_user_paid_adjust_fees_explanation">
-                                {{ form.cancel_allow_user_paid_adjust_fees }} {{ form.cancel_allow_user_paid_adjust_fees.label }}
-                            </label>
-                        </div>
-                        <div class="help-block">
-                            {{ form.cancel_allow_user_paid_adjust_fees.help_text }}
-                        </div>
-                    </div>
-                </div>
-                <div id="cancel_allow_user_paid_adjust_fees_explanation" class="panel-body panel-collapse collapse {% if form.cancel_allow_user_paid_adjust_fees.value %} in {% else %} out {% endif %}">
+                {% bootstrap_field form.cancel_allow_user_paid_adjust_fees layout="control" %}
+                <div data-display-dependency="#id_cancel_allow_user_paid_adjust_fees">
                     {% bootstrap_field form.cancel_allow_user_paid_adjust_fees_explanation layout="control" %}
                 </div>
                 {% bootstrap_field form.cancel_allow_user_paid_refund_as_giftcard layout="control" %}
