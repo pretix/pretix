@@ -21,6 +21,9 @@
                 {% bootstrap_field form.cancel_allow_user_paid_keep_fees layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_until layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_adjust_fees layout="control" %}
+                <div data-display-dependency="#id_cancel_allow_user_paid_adjust_fees">
+                    {% bootstrap_field form.cancel_allow_user_paid_adjust_fees_explanation layout="control" %}
+                </div>
                 {% bootstrap_field form.cancel_allow_user_paid_refund_as_giftcard layout="control" %}
                 {% if not gets_notification %}
                     <div class="alert alert-warning">

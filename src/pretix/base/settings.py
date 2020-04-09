@@ -966,6 +966,23 @@ DEFAULTS = {
             help_text=_("With this option enabled, your customers can choose to get a smaller refund to support you.")
         )
     },
+    'cancel_allow_user_paid_adjust_fees_explanation': {
+        'default': LazyI18nString.from_gettext(gettext_noop(
+            'However, if you want us to help keep the lights on here, please consider using the slider below to '
+            'request a smaller refund. Thank you!'
+        )),
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Voluntary lower refund explanation"),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_("This text will be shown in between the explanation of how the refunds work and the slider "
+                        "which your customers can use to choose the amount they would like to receive. You can use it "
+                        "e.g. to explain choosing a lower refund will help your organisation.")
+        )
+    },
     'cancel_allow_user_paid_require_approval': {
         'default': 'False',
         'type': bool,

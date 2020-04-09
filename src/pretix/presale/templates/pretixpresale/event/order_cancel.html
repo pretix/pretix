@@ -3,6 +3,7 @@
 {% load money %}
 {% load eventurl %}
 {% load l10n %}
+{% load rich_text %}
 {% block title %}{% trans "Cancel order" %}{% endblock %}
 {% block content %}
     <h2>
@@ -48,7 +49,9 @@
                         If you want, you can request a full refund.
                     {% endblocktrans %}
                 {% endif %}
-                {% trans "However, if you want us to help keep the lights on here, please consider using the slider below to request a smaller refund. Thank you!" %}
+            </p>
+            <p>
+                {{ request.event.settings.cancel_allow_user_paid_adjust_fees_explanation|rich_text }}
             </p>
             <div class="cancel-fee-slider">
                 <div id="cancel-fee-keep">Enter how much we can keep:</div>
