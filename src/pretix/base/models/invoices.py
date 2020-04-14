@@ -157,9 +157,12 @@ class Invoice(models.Model):
             state_name = self.invoice_to_state
             if str(self.invoice_to_country) in COUNTRIES_WITH_STATE_IN_ADDRESS:
                 if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.invoice_to_country)][1] == 'long':
-                    state_name = pycountry.subdivisions.get(
-                        code='{}-{}'.format(self.invoice_to_country, self.invoice_to_state)
-                    ).name
+                    try:
+                        state_name = pycountry.subdivisions.get(
+                            code='{}-{}'.format(self.invoice_to_country, self.invoice_to_state)
+                        ).name
+                    except:
+                        pass
 
         parts = [
             self.invoice_to_company,
