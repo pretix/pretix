@@ -404,7 +404,7 @@ DEFAULTS = {
         'type': RelativeDateWrapper,
         'form_class': RelativeDateField,
         'serializer_class': SerializerRelativeDateField,
-        'form_kawrgs': dict(
+        'form_kwargs': dict(
             label=_('Last date of payments'),
             help_text=_("The last date any payments are accepted. This has precedence over the number of "
                         "days configured above. If you use the event series feature and an order contains tickets for "
