@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-02 16:16+0000\n"
-"PO-Revision-Date: 2020-04-02 16:28+0000\n"
+"PO-Revision-Date: 2020-04-15 07:58+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3702,7 +3702,7 @@ msgstr "Bitte gib ein gültiges Länderkürzel ein."
 
 #: pretix/base/orderimport.py:328 pretix/base/orderimport.py:474
 msgid "State"
-msgstr "Bundesstaat"
+msgstr "Zustand"
 
 #: pretix/base/orderimport.py:333 pretix/base/orderimport.py:479
 msgid "States are not supported for this country."
