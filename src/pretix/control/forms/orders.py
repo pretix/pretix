@@ -554,6 +554,12 @@ class EventCancelForm(forms.Form):
                     'manual refund to-do list. Do not check if you want to refund some of the orders by offsetting '
                     'with different orders or issuing gift cards.')
     )
+    refund_as_giftcard = forms.BooleanField(
+        label=_('Refund order value to a gift card instead instead of the original payment method'),
+        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_auto_refund'}),
+        initial=False,
+        required=False,
+    )
     keep_fee_fixed = forms.DecimalField(
         label=_("Keep a fixed cancellation fee"),
         max_digits=10, decimal_places=2,
