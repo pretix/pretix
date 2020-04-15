@@ -1250,7 +1250,7 @@ class QuickSetupForm(I18nForm):
 
 class QuickSetupProductForm(I18nForm):
     name = I18nFormField(
-        max_length=255,
+        max_length=200,  # Max length of Quota.name
         label=_("Product name"),
         widget=I18nTextInput
     )
