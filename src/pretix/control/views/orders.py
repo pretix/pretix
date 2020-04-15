@@ -1487,6 +1487,7 @@ class OrderChange(OrderView):
                     ocm.cancel(p)
                     continue
 
+                change_item = None
                 if p.form.cleaned_data['itemvar']:
                     if '-' in p.form.cleaned_data['itemvar']:
                         itemid, varid = p.form.cleaned_data['itemvar'].split('-')
@@ -1499,10 +1500,18 @@ class OrderChange(OrderView):
                     else:
                         variation = None
                     if item != p.item or variation != p.variation:
-                        ocm.change_item(p, item, variation)
+                        change_item = (item, variation)
 
+                change_subevent = None
                 if self.request.event.has_subevents and p.form.cleaned_data['subevent'] and p.form.cleaned_data['subevent'] != p.subevent:
-                    ocm.change_subevent(p, p.form.cleaned_data['subevent'])
+                    change_subevent = (p.form.cleaned_data['subevent'],)
+
+                if change_item is not None and change_subevent is not None:
+                    ocm.change_item_and_subevent(p, *change_item, *change_subevent)
+                elif change_item is not None:
+                    ocm.change_item(p, *change_item)
+                elif change_subevent is not None:
+                    ocm.change_subevent(p, *change_subevent)
 
                 if p.seat and p.form.cleaned_data['seat'] and p.form.cleaned_data['seat'] != p.seat.seat_guid:
                     ocm.change_seat(p, p.form.cleaned_data['seat'])

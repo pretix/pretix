@@ -1224,6 +1224,27 @@ class OrderChangeManager:
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.SubeventOperation(position, subevent))
 
+    def change_item_and_subevent(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation],
+                                 subevent: SubEvent):
+        if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
+            raise OrderError(self.error_messages['product_without_variation'])
+
+        price = get_price(item, variation, voucher=position.voucher, subevent=subevent,
+                          invoice_address=self._invoice_address)
+
+        if price is None:  # NOQA
+            raise OrderError(self.error_messages['product_invalid'])
+
+        new_quotas = (variation.quotas.filter(subevent=subevent)
+                      if variation else item.quotas.filter(subevent=subevent))
+        if not new_quotas:
+            raise OrderError(self.error_messages['quota_missing'])
+
+        self._quotadiff.update(new_quotas)
+        self._quotadiff.subtract(position.quotas)
+        self._operations.append(self.ItemOperation(position, item, variation))
+        self._operations.append(self.SubeventOperation(position, subevent))
+
     def regenerate_secret(self, position: OrderPosition):
         self._operations.append(self.RegenerateSecretOperation(position))
 

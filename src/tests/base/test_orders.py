@@ -828,6 +828,26 @@ class OrderChangeManagerTests(TestCase):
             self.ocm.change_subevent(self.op1, se2)
 
     @classscope(attr='o')
+    def test_change_subevent_and_product(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+        self.op1.subevent = se1
+        self.op1.save()
+        self.quota.subevent = se1
+        self.quota.save()
+        self.quota.items.remove(self.shirt)
+        q2 = self.event.quotas.create(name="Q2", size=None, subevent=se2)
+        q2.items.add(self.shirt)
+        self.ocm.change_item_and_subevent(self.op1, self.shirt, None, se2)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.subevent == se2
+        assert self.op1.item == self.shirt
+
+    @classscope(attr='o')
     def test_change_subevent_success(self):
         self.event.has_subevents = True
         self.event.save()
