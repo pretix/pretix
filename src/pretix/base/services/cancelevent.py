@@ -86,7 +86,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
                  keep_fee_percentage: str, keep_fees: list=None, manual_refund: bool=False,
                  send: bool=False, send_subject: dict=None, send_message: dict=None,
                  send_waitinglist: bool=False, send_waitinglist_subject: dict={}, send_waitinglist_message: dict={},
-                 user: int=None):
+                 user: int=None, refund_as_giftcard: bool=False):
     send_subject = LazyI18nString(send_subject)
     send_message = LazyI18nString(send_message)
     send_waitinglist_subject = LazyI18nString(send_waitinglist_subject)
@@ -168,7 +168,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
 
             try:
                 if auto_refund:
-                    _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True, source=OrderRefund.REFUND_SOURCE_ADMIN)
+                    _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True,
+                                     source=OrderRefund.REFUND_SOURCE_ADMIN, refund_as_giftcard=refund_as_giftcard)
             finally:
                 if send:
                     _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all())

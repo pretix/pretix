@@ -2008,6 +2008,8 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
             self.request.event.pk,
             subevent=form.cleaned_data['subevent'].pk if form.cleaned_data.get('subevent') else None,
             auto_refund=form.cleaned_data.get('auto_refund'),
+            manual_refund=form.cleaned_data.get('manual_refund'),
+            refund_as_giftcard=form.cleaned_data.get('refund_as_giftcard'),
             keep_fee_fixed=form.cleaned_data.get('keep_fee_fixed'),
             keep_fee_percentage=form.cleaned_data.get('keep_fee_percentage'),
             keep_fees=form.cleaned_data.get('keep_fees'),
