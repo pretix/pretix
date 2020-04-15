@@ -325,7 +325,7 @@ class InvoiceAddressState(ImportColumn):
 
     @property
     def verbose_name(self):
-        return _('Invoice address') + ': ' + _('State')
+        return _('Invoice address') + ': ' + pgettext('address', 'State')
 
     def clean(self, value, previous_values):
         if value:
