@@ -555,20 +555,10 @@ class EventCancelForm(forms.Form):
                     'with different orders or issuing gift cards.')
     )
     refund_as_giftcard = forms.BooleanField(
-        label=_('Refund order value to a gift card instead'),
+        label=_('Refund order value to a gift card instead instead of the original payment method'),
         widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_auto_refund'}),
         initial=False,
         required=False,
-        help_text='{}'
-                  '<div class="alert alert-legal">'
-                  '<strong>{}:</strong> {}'
-                  '</div>'.format(
-            _('If checked, all refunds will be issued as gift cards instead of a payment to the original payment '
-              'method. When this functionality is used, you will need to explain your customers how to access it.'),
-            _('Warning'),
-            _('Depending on your location, refunding a customer with a gift card without their consent might be '
-              'illegal. If in doubt, consult a lawyer or refrain from issuing refunds on gift cards.')
-        )
     )
     keep_fee_fixed = forms.DecimalField(
         label=_("Keep a fixed cancellation fee"),
