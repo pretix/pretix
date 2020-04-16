@@ -276,20 +276,6 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         cm = lambda: scopes_disabled()  # noqa
 
     with cm():
-        if invoices:
-            invoices = Invoice.objects.filter(pk__in=invoices)
-            for inv in invoices:
-                if inv.file:
-                    try:
-                        with language(inv.order.locale):
-                            email.attach(
-                                pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf',
-                                inv.file.file.read(),
-                                'application/pdf'
-                            )
-                    except:
-                        logger.exception('Could not attach invoice to email')
-                        pass
         if event:
             if order:
                 try:
@@ -343,6 +329,21 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                             email.attach('event-{}.ics'.format(i), cal.serialize(), 'text/calendar')
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
+
+        if invoices:
+            invoices = Invoice.objects.filter(pk__in=invoices)
+            for inv in invoices:
+                if inv.file:
+                    try:
+                        with language(inv.order.locale):
+                            email.attach(
+                                pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf',
+                                inv.file.file.read(),
+                                'application/pdf'
+                            )
+                    except:
+                        logger.exception('Could not attach invoice to email')
+                        pass
 
         email = global_email_filter.send_chained(event, 'message', message=email, user=user, order=order)
 
