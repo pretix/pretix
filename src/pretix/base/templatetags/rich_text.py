@@ -65,6 +65,10 @@ ALLOWED_ATTRIBUTES = {
 
 ALLOWED_PROTOCOLS = ['http', 'https', 'mailto', 'tel']
 
+URL_RE = build_url_re(tlds=tld_set)
+
+EMAIL_RE = build_email_re(tlds=tld_set)
+
 
 def safelink_callback(attrs, new=False):
     url = attrs.get((None, 'href'), '/')
@@ -87,8 +91,8 @@ def abslink_callback(attrs, new=False):
 
 def markdown_compile_email(source):
     linker = bleach.Linker(
-        url_re=build_url_re(tlds=tld_set),
-        email_re=build_email_re(tlds=tld_set),
+        url_re=URL_RE,
+        email_re=EMAIL_RE,
         parse_email=True
     )
     return linker.linkify(bleach.clean(
@@ -129,8 +133,8 @@ def rich_text(text: str, **kwargs):
     """
     text = str(text)
     linker = bleach.Linker(
-        url_re=build_url_re(tlds=tld_set),
-        email_re=build_email_re(tlds=tld_set),
+        url_re=URL_RE,
+        email_re=EMAIL_RE,
         callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
         parse_email=True
     )
@@ -145,8 +149,8 @@ def rich_text_snippet(text: str, **kwargs):
     """
     text = str(text)
     linker = bleach.Linker(
-        url_re=build_url_re(tlds=tld_set),
-        email_re=build_email_re(tlds=tld_set),
+        url_re=URL_RE,
+        email_re=EMAIL_RE,
         callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
         parse_email=True
     )
