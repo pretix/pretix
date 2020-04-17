@@ -2,6 +2,7 @@ import json
 import logging
 import urllib.parse
 from collections import OrderedDict
+from decimal import Decimal
 
 import paypalrestsdk
 from django import forms
@@ -25,6 +26,11 @@ from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 
 logger = logging.getLogger('pretix.plugins.paypal')
+
+SUPPORTED_CURRENCIES = ['AUD', 'BRL', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'INR', 'ILS', 'JPY', 'MYR', 'MXN',
+                        'TWD', 'NZD', 'NOK', 'PHP', 'PLN', 'GBP', 'RUB', 'SGD', 'SEK', 'CHF', 'THB', 'USD']
+
+LOCAL_ONLY_CURRENCIES = ['INR']
 
 
 class Paypal(BasePaymentProvider):
@@ -106,10 +112,11 @@ class Paypal(BasePaymentProvider):
         return Tokeninfo.authorize_url({'scope': 'openid profile email'})
 
     def settings_content_render(self, request):
+        settings_content = ""
         if self.settings.connect_client_id and not self.settings.secret:
             # Use PayPal connect
             if not self.settings.connect_user_id:
-                return (
+                settings_content = (
                     "<p>{}</p>"
                     "<a href='{}' class='btn btn-primary btn-lg'>{}</a>"
                 ).format(
@@ -120,7 +127,7 @@ class Paypal(BasePaymentProvider):
                     _('Connect with {icon} PayPal').format(icon='<i class="fa fa-paypal"></i>')
                 )
             else:
-                return (
+                settings_content = (
                     "<button formaction='{}' class='btn btn-danger'>{}</button>"
                 ).format(
                     reverse('plugins:paypal:oauth.disconnect', kwargs={
@@ -130,11 +137,34 @@ class Paypal(BasePaymentProvider):
                     _('Disconnect from PayPal')
                 )
         else:
-            return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
+            settings_content = "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
                 _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
                   'when payments are refunded externally.'),
                 build_global_uri('plugins:paypal:webhook')
             )
+
+        if self.event.currency not in SUPPORTED_CURRENCIES:
+            settings_content += (
+                '<br><br><div class="alert alert-warning">%s '
+                '<a href="https://developer.paypal.com/docs/api/reference/currency-codes/">%s</a>'
+                '</div>'
+            ) % (
+                _("PayPal does not process payments in your event's currency."),
+                _("Please check this PayPal page for a complete list of supported currencies.")
+            )
+
+        if self.event.currency in LOCAL_ONLY_CURRENCIES:
+            settings_content += '<br><br><div class="alert alert-warning">%s''</div>' % (
+                _("Your event's currency is supported by PayPal as a payment and balance currency for in-country "
+                  "accounts only. This means, that the receiving as well as the sending PayPal account must have been "
+                  "created in the same country and use the same currency. Out of country accounts will not be able to "
+                  "send any payments.")
+            )
+
+        return settings_content
+
+    def is_allowed(self, request: HttpRequest, total: Decimal = None) -> bool:
+        return super().is_allowed(request, total) and self.event.currency in SUPPORTED_CURRENCIES
 
     def init_api(self):
         if self.settings.connect_client_id and not self.settings.secret:
