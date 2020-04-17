@@ -151,7 +151,8 @@ setup(
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
         'packaging',
-        'tlds>=2020041600'
+        'tlds>=2020041600',
+        'text-unidecode==1.*'
     ],
     extras_require={
         'dev': [

@@ -4,6 +4,7 @@
 {% load dotdecimal %}
 {% load ibanformat %}
 {% load money %}
+{% load unidecode %}
 
 <p>{% blocktrans trimmed %}
     Please transfer the full amount to the following bank account:
@@ -43,7 +44,7 @@
 2
 SCT
 {{ settings.bank_details_sepa_bic }}
-{{ settings.bank_details_sepa_name }}
+{{ settings.bank_details_sepa_name|unidecode }}
 {{ settings.bank_details_sepa_iban }}
 {{ event.currency }}{{ amount|dotdecimal }}
 
