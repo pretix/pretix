@@ -455,7 +455,8 @@ class Item(LoggedModel):
             t = TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
                            rate=Decimal('0.00'), name='')
         else:
-            t = self.tax_rule.tax(price, base_price_is=base_price_is, currency=currency)
+            t = self.tax_rule.tax(price, base_price_is=base_price_is,
+                                  currency=currency or self.event.currency)
 
         if include_bundled:
             for b in self.bundles.all():

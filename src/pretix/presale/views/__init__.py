@@ -74,10 +74,11 @@ class CartMixin:
             cartpos = self.positions
 
         lcp = list(cartpos)
-        has_addons = {cp.addon_to.pk for cp in lcp if cp.addon_to}
+        has_addons = {cp.addon_to_id for cp in lcp if cp.addon_to_id}
 
         pos_additional_fields = defaultdict(list)
         for cp in lcp:
+            cp.item.event = self.request.event  # will save some SQL queries
             responses = question_form_fields.send(sender=self.request.event, position=cp)
             data = cp.meta_info_data
             for r, response in sorted(responses, key=lambda r: str(r[0])):
@@ -93,13 +94,13 @@ class CartMixin:
         # Django is unable to join related models in a .values() query
         def keyfunc(pos):
             if isinstance(pos, OrderPosition):
-                if pos.addon_to:
+                if pos.addon_to_id:
                     i = pos.addon_to.positionid
                 else:
                     i = pos.positionid
             else:
-                if pos.addon_to:
-                    i = pos.addon_to.pk
+                if pos.addon_to_id:
+                    i = pos.addon_to_id
                 else:
                     i = pos.pk
 
@@ -108,8 +109,8 @@ class CartMixin:
                 or self.request.event.settings.attendee_emails_asked
                 or pos_additional_fields.get(pos.pk)
             )
-            addon_penalty = 1 if pos.addon_to else 0
-            if downloads or pos.pk in has_addons or pos.addon_to:
+            addon_penalty = 1 if pos.addon_to_id else 0
+            if downloads or pos.pk in has_addons or pos.addon_to_id:
                 return i, addon_penalty, pos.pk, 0, 0, 0, 0, (pos.subevent_id or 0), (pos.seat_id or 0)
             if answers and (has_attendee_data or pos.item.questions.all()):
                 return i, addon_penalty, pos.pk, 0, 0, 0, 0, (pos.subevent_id or 0), (pos.seat_id or 0)
@@ -202,7 +203,7 @@ def get_cart(request):
                 'item', 'variation'
             ).select_related(
                 'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
-                'item__tax_rule'
+                'item__tax_rule', 'addon_to'
             )
             for cp in request._cart_cache:
                 cp.event = request.event  # Populate field with known value to save queries
