@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-17 14:26+0000\n"
-"PO-Revision-Date: 2020-04-15 07:58+0000\n"
+"PO-Revision-Date: 2020-04-17 15:11+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -5919,10 +5919,8 @@ msgstr ""
 "auszuwählen, sodass wir einen höheren Betrag einbehalten können. Vielen Dank!"
 
 #: pretix/base/settings.py:978
-#, fuzzy
-#| msgid "Voucher explanation"
 msgid "Voluntary lower refund explanation"
-msgstr "Gutschein-Erklärung"
+msgstr "Erklärung für freiwilligen Verzicht auf Teile der Erstattung"
 
 #: pretix/base/settings.py:981
 msgid ""
@@ -5931,6 +5929,10 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organisation."
 msgstr ""
+"Dieser Text wird angezeigt zwischen der Beschreibung, wie die Erstattung "
+"funktioniert, und dem Eingabefeld mit dem deine Kunden auswählen können, "
+"welchen Betrag sie erstattet haben möchten. Du kannst es z.B. nutzen um zu "
+"erklären, wie eine geringere Erstattung deiner Organisation hilft."
 
 #: pretix/base/settings.py:992
 msgid ""
@@ -6526,29 +6528,27 @@ msgstr ""
 
 #: pretix/base/settings.py:1495
 msgid "Banner text (top)"
-msgstr ""
+msgstr "Bannertext (oben)"
 
 #: pretix/base/settings.py:1498
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the payment options. You can explain the "
-#| "choices to the user here, if you want."
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
-"Dieser Text wird über den Zahlungsoptionen angezeigt. Du kannst hier "
-"beispielsweise die verschiedenen Optionen erklären."
+"Dieser Text wird über jeder Seite des Shops angezeigt. Bitte benutze dies "
+"nur für sehr wichtige Mitteilungen."
 
 #: pretix/base/settings.py:1508
 msgid "Banner text (bottom)"
-msgstr ""
+msgstr "Bannertext (unten)"
 
 #: pretix/base/settings.py:1511
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"Dieser Text wird unter jeder Seite des Shops angezeigt. Bitte benutze dies "
+"nur für sehr wichtige Mitteilungen."
 
 #: pretix/base/settings.py:1521
 msgid "Voucher explanation"
@@ -8491,12 +8491,12 @@ msgstr ""
 "Bestellungen verrechnen oder als Gutschein erstatten möchtest."
 
 #: pretix/control/forms/orders.py:558
-#, fuzzy
-#| msgid "All refunds are issued to the original payment method"
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
-msgstr "Das Geld wird immer auf die ursprüngliche Zahlungsmethode erstattet"
+msgstr ""
+"Geldbeträge als Geschenkgutschein ausgeben statt einer Rückbuchung auf die "
+"ursprüngliche Zahlungsmethode"
 
 #: pretix/control/forms/orders.py:574
 msgid "Keep fees"
@@ -13639,6 +13639,10 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
+"Da du die Erstattungen als Gutschein ausgibst, solltest du deinen Kunden "
+"erklären, wie diese an den Geschenkgutschein gelangen. Der einfachste Weg "
+"ist, eine kurze Erklärung und einen Link zu ihrer Bestellung mit der hier "
+"angebotenen E-Mail-Funktion zu verschicken."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:58
 msgid ""
