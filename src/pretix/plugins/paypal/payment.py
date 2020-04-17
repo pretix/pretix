@@ -442,8 +442,18 @@ class Paypal(BasePaymentProvider):
                 }
             })
         except paypalrestsdk.exceptions.ConnectionError as e:
+            refund.order.log_action('pretix.event.order.refund.failed', {
+                'local_id': refund.local_id,
+                'provider': refund.provider,
+                'error': str(e)
+            })
             raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(e)))
         if not pp_refund.success():
+            refund.order.log_action('pretix.event.order.refund.failed', {
+                'local_id': refund.local_id,
+                'provider': refund.provider,
+                'error': str(pp_refund.error)
+            })
             raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(pp_refund.error))
         else:
             sale = paypalrestsdk.Payment.find(refund.payment.info_data['id'])
