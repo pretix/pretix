@@ -41,6 +41,7 @@ from pretix.base.settings import (
 )
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import SplitDateTimeField
+from pretix.helpers.countries import CachedCountries
 from pretix.helpers.escapejson import escapejson_attr
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.presale.signals import question_form_fields
@@ -297,7 +298,9 @@ class BaseQuestionsForm(forms.Form):
                 }),
             )
             country = (cartpos.country if cartpos else orderpos.country) or guess_country(event)
-            self.fields['country'] = CountryField().formfield(
+            self.fields['country'] = CountryField(
+                countries=CachedCountries
+            ).formfield(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
                 label=_('Country'),
                 initial=country,
@@ -380,7 +383,9 @@ class BaseQuestionsForm(forms.Form):
                     initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_COUNTRYCODE:
-                field = CountryField().formfield(
+                field = CountryField(
+                    countries=CachedCountries
+                ).formfield(
                     label=label, required=required,
                     help_text=help_text,
                     widget=forms.Select,
@@ -574,6 +579,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
+
+        self.fields['country'].choices = CachedCountries()
 
         c = [('', pgettext_lazy('address', 'Select state'))]
         fprefix = self.prefix + '-' if self.prefix else ''

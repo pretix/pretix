@@ -44,6 +44,7 @@ from pretix.base.services.locking import NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
 
+from ...helpers.countries import CachedCountries
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
@@ -2113,7 +2114,8 @@ class InvoiceAddress(models.Model):
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
     country_old = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
-    country = CountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'))
+    country = CountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'),
+                           countries=CachedCountries)
     state = models.CharField(max_length=255, verbose_name=pgettext_lazy('address', 'State'), blank=True)
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'),
                               help_text=_('Only for business customers within the EU.'))
