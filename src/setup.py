@@ -120,7 +120,7 @@ setup(
         'csscompressor',
         'django-markup',
         'markdown<=2.2',
-        'bleach==3.1.*',
+        'bleach>=3.1.3',
         'sentry-sdk==0.14.*',
         'babel',
         'paypalrestsdk==1.13.*',
@@ -151,6 +151,7 @@ setup(
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
         'packaging',
+        'tlds>=2020041600'
     ],
     extras_require={
         'dev': [

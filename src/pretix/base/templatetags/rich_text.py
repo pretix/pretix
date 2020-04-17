@@ -3,12 +3,14 @@ import urllib.parse
 import bleach
 import markdown
 from bleach import DEFAULT_CALLBACKS
+from bleach.linkifier import build_email_re, build_url_re
 from django import template
 from django.conf import settings
 from django.core import signing
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
+from tlds import tld_set
 
 register = template.Library()
 
@@ -84,7 +86,12 @@ def abslink_callback(attrs, new=False):
 
 
 def markdown_compile_email(source):
-    return bleach.linkify(bleach.clean(
+    linker = bleach.Linker(
+        url_re=build_url_re(tlds=tld_set),
+        email_re=build_email_re(tlds=tld_set),
+        parse_email=True
+    )
+    return linker.linkify(bleach.clean(
         markdown.markdown(
             source,
             extensions=[
@@ -95,7 +102,7 @@ def markdown_compile_email(source):
         tags=ALLOWED_TAGS,
         attributes=ALLOWED_ATTRIBUTES,
         protocols=ALLOWED_PROTOCOLS,
-    ), parse_email=True)
+    ))
 
 
 def markdown_compile(source, snippet=False):
@@ -121,11 +128,13 @@ def rich_text(text: str, **kwargs):
     Processes markdown and cleans HTML in a text input.
     """
     text = str(text)
-    body_md = bleach.linkify(
-        markdown_compile(text),
+    linker = bleach.Linker(
+        url_re=build_url_re(tlds=tld_set),
+        email_re=build_email_re(tlds=tld_set),
         callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
         parse_email=True
     )
+    body_md = linker.linkify(markdown_compile(text))
     return mark_safe(body_md)
 
 
@@ -135,9 +144,11 @@ def rich_text_snippet(text: str, **kwargs):
     Processes markdown and cleans HTML in a text input.
     """
     text = str(text)
-    body_md = bleach.linkify(
-        markdown_compile(text, snippet=True),
+    linker = bleach.Linker(
+        url_re=build_url_re(tlds=tld_set),
+        email_re=build_email_re(tlds=tld_set),
         callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
         parse_email=True
     )
+    body_md = linker.linkify(markdown_compile(text, snippet=True))
     return mark_safe(body_md)
