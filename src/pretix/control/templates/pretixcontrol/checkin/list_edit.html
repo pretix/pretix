@@ -17,6 +17,10 @@
         <h1>{% trans "Check-in list" %}</h1>
     {% endif %}
     <form action="" method="post" class="form-horizontal">
+        <script type="text/plain"
+                id="product-select2">{% url "control:event.items.select2" event=request.event.slug organizer=request.organizer.slug %}</script>
+        <script type="text/plain"
+                id="variations-select2">{% url "control:event.items.variations.select2" event=request.event.slug organizer=request.organizer.slug %}</script>
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         <div class="tabbed-form">

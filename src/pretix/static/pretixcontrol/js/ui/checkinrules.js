@@ -18,7 +18,7 @@ $(document).ready(function () {
                 'cardinality': 2,
             },
             'isAfter': {
-                'label': gettext('is before'),
+                'label': gettext('is after'),
                 'cardinality': 2,
             },
         },
@@ -76,6 +76,79 @@ $(document).ready(function () {
         },
     };
 
+    Vue.component("lookup-select2", {
+        props: ["required", "value", "placeholder", "url", "multiple"],
+        template: ('<select>\n' +
+            '        <slot></slot>\n' +
+            '      </select>'),
+        mounted: function () {
+            var vm = this;
+            var multiple = this.multiple;
+            $(this.$el)
+                .select2(this.opts())
+                .val(this.value)
+                .trigger("change")
+                // emit event on change.
+                .on("change", function (e) {
+                    vm.$emit("input", $(this).select2('data'));
+                });
+            for (var i = 0; i < vm.value["objectList"].length; i++) {
+                var option = new Option(vm.value["objectList"][i]["lookup"][2], vm.value["objectList"][i]["lookup"][1], true, true);
+                $(vm.$el).append(option);
+            }
+            $(vm.$el).trigger("change");
+        },
+        methods: {
+            opts: function () {
+                return {
+                    theme: "bootstrap",
+                    delay: 100,
+                    width: '100%',
+                    multiple: true,
+                    allowClear: this.required,
+                    language: $("body").attr("data-select2-locale"),
+                    ajax: {
+                        url: this.url,
+                        data: function (params) {
+                            return {
+                                query: params.term,
+                                page: params.page || 1
+                            }
+                        }
+                    },
+                    templateResult: function (res) {
+                        if (!res.id) {
+                            return res.text;
+                        }
+                        var $ret = $("<span>").append(
+                            $("<span>").addClass("primary").append($("<div>").text(res.text).html())
+                        );
+                        return $ret;
+                    },
+                };
+            }
+        },
+        watch: {
+            placeholder: function (val) {
+                $(this.$el).empty().select2(this.opts());
+                this.build();
+            },
+            required: function (val) {
+                $(this.$el).empty().select2(this.opts());
+                this.build();
+            },
+            url: function (val) {
+                $(this.$el).empty().select2(this.opts());
+                this.build();
+            },
+        },
+        destroyed: function () {
+            $(this.$el)
+                .off()
+                .select2("destroy");
+        }
+    });
+
     Vue.component('checkin-rule', {
         template: ('<div v-bind:class="classObject">'
             + '<button type="button" class="checkin-rule-remove pull-right btn btn-xs btn-default" @click.prevent="remove" v-if="level > 0"><span class="fa fa-trash"></span></button> '
@@ -89,6 +162,8 @@ $(document).ready(function () {
             + '<option v-for="(v, name) in operators" :value="name">{{ v.label }}</option>'
             + '</select> '
             + '<input class="form-control" required type="number" v-if="vartype == \'int\' && cardinality > 1" v-bind:value="rightoperand" v-on:input="setRightOperandNumber">'
+            + '<lookup-select2 required v-if="vartype == \'product\' && operator == \'inList\'" :multiple="true" :value="rightoperand" v-on:input="setRightOperandProductList" :url="productSelectURL"></lookup-select2>'
+            + '<lookup-select2 required v-if="vartype == \'variation\' && operator == \'inList\'" :multiple="true" :value="rightoperand" v-on:input="setRightOperandVariationList" :url="variationSelectURL"></lookup-select2>'
             + '<div class="checkin-rule-childrules" v-if="operator === \'or\' || operator === \'and\'">'
             + '<div v-for="(op, opi) in operands">'
             + '<checkin-rule :rule="op" :index="opi" :level="level + 1" v-if="typeof op === \'object\'"></checkin-rule>'
@@ -112,7 +187,7 @@ $(document).ready(function () {
                 var op = this.operator;
                 if (op === "and" || op === "or") {
                     return null;
-                } else if (this.rule[op] && this.rule[op][1]) {
+                } else if (this.rule[op] && typeof this.rule[op][1] !== "undefined") {
                     return this.rule[op][1];
                 } else {
                     return null;
@@ -143,6 +218,12 @@ $(document).ready(function () {
             },
             operators: function () {
                 return TYPEOPS[this.vartype];
+            },
+            productSelectURL: function () {
+                return $("#product-select2").text();
+            },
+            variationSelectURL: function () {
+                return $("#variations-select2").text();
             },
             vars: function () {
                 return VARS;
@@ -179,6 +260,44 @@ $(document).ready(function () {
                     this.rule[this.operator].push(parseInt(event.target.value));
                 } else {
                     this.$set(this.rule[this.operator], 1, parseInt(event.target.value));
+                }
+            },
+            setRightOperandProductList: function (val) {
+                var products = {
+                    "objectList": []
+                };
+                for (var i = 0; i < val.length; i++) {
+                    products["objectList"].push({
+                        "lookup": [
+                            "product",
+                            val[i].id,
+                            val[i].text
+                        ]
+                    });
+                }
+                if (this.rule[this.operator].length === 1) {
+                    this.rule[this.operator].push(products);
+                } else {
+                    this.$set(this.rule[this.operator], 1, products);
+                }
+            },
+            setRightOperandVariationList: function (val) {
+                var products = {
+                    "objectList": []
+                };
+                for (var i = 0; i < val.length; i++) {
+                    products["objectList"].push({
+                        "lookup": [
+                            "variation",
+                            val[i].id,
+                            val[i].text
+                        ]
+                    });
+                }
+                if (this.rule[this.operator].length === 1) {
+                    this.rule[this.operator].push(products);
+                } else {
+                    this.$set(this.rule[this.operator], 1, products);
                 }
             },
             addOperand: function () {
