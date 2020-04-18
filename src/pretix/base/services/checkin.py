@@ -80,7 +80,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     dt = datetime or now()
 
     # Fetch order position with related objects
-    op = OrderPosition.all.select_related(
+    op = OrderPosition.all.select_for_update().select_related(
         'item', 'variation', 'order', 'addon_to'
     ).prefetch_related(
         'item__questions',
