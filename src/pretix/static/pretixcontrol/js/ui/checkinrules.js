@@ -151,7 +151,12 @@ $(document).ready(function () {
 
     Vue.component('checkin-rule', {
         template: ('<div v-bind:class="classObject">'
-            + '<button type="button" class="checkin-rule-remove pull-right btn btn-xs btn-default" @click.prevent="remove" v-if="level > 0"><span class="fa fa-trash"></span></button> '
+            + '<div class="btn-group pull-right">'
+            + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithOR">OR</button>'
+            + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithAND">AND</button> '
+            + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="cutOut" v-if="operands.length == 1 && (operator === \'or\' || operator == \'and\')"><span class="fa fa-cut"></span></button>'
+            + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="remove" v-if="level > 0"><span class="fa fa-trash"></span></button>'
+            + '</div>'
             + '<select v-bind:value="variable" v-on:input="setVariable" required class="form-control">'
             + '<option value="and">' + gettext('All of the conditions below (AND)') + '</option>'
             + '<option value="or">' + gettext('At least one of the conditions below (OR)') + '</option>'
@@ -302,6 +307,15 @@ $(document).ready(function () {
             },
             addOperand: function () {
                 this.rule[this.operator].push({"": []});
+            },
+            wrapWithOR: function () {
+                this.$set(this.$parent.rule[this.$parent.operator], this.index, {"or": [this.rule]});
+            },
+            wrapWithAND: function () {
+                this.$set(this.$parent.rule[this.$parent.operator], this.index, {"and": [this.rule]});
+            },
+            cutOut: function () {
+                this.$set(this.$parent.rule[this.$parent.operator], this.index, this.operands[0]);
             },
             remove: function () {
                 this.$parent.rule[this.$parent.operator].splice(this.index, 1);
