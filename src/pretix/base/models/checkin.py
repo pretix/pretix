@@ -19,6 +19,11 @@ class CheckinList(LoggedModel):
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '
                                                       'order have not been paid.'))
+    allow_multiple_entries = models.BooleanField(
+        verbose_name=_('Allow multiple entries per ticket'),
+        help_text=_('Use this option to turn off warnings if a ticket is scanned a second time.'),
+        default=False
+    )
 
     auto_checkin_sales_channels = MultiStringField(
         default=[],
@@ -100,9 +105,6 @@ class Checkin(models.Model):
     auto_checked_in = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='position__order__event__organizer')
-
-    class Meta:
-        unique_together = (('list', 'position'),)
 
     def __repr__(self):
         return "<Checkin: pos {} on list '{}' at {}>".format(

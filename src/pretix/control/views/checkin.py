@@ -120,11 +120,14 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
             messages.success(request, _('The selected check-ins have been reverted.'))
         else:
             for op in positions:
-                created = False
                 if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
-                    ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
-                        'datetime': now(),
-                    })
+                    if self.list.allow_multiple_entries:
+                        ci = Checkin.objects.create(position=op, list=self.list, datetime=now())
+                        created = True
+                    else:
+                        ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
+                            'datetime': now(),
+                        })
                     op.order.log_action('pretix.event.checkin', data={
                         'position': op.id,
                         'positionid': op.positionid,

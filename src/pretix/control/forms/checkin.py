@@ -51,7 +51,8 @@ class CheckinListForm(forms.ModelForm):
             'limit_products',
             'subevent',
             'include_pending',
-            'auto_checkin_sales_channels'
+            'auto_checkin_sales_channels',
+            'allow_multiple_entries',
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={

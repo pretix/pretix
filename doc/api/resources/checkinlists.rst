@@ -30,6 +30,7 @@ position_count                        integer                    Number of ticke
 checkin_count                         integer                    Number of check-ins performed on this list (read-only).
 include_pending                       boolean                    If ``true``, the check-in list also contains tickets from orders in pending state.
 auto_checkin_sales_channels           list of strings            All items on the check-in list will be automatically marked as checked-in when purchased through any of the listed sales channels.
+allow_multiple_entries                boolean                    If ``true``, subsequent scans of a ticket on this list should not show a warning but instead be stored as an additional check-in.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.10
@@ -50,7 +51,8 @@ auto_checkin_sales_channels           list of strings            All items on th
 
 .. versionchanged:: 3.9
 
-    The ``subevent`` attribute may now be ``null`` inside event series.
+    The ``subevent`` attribute may now be ``null`` inside event series. The ``allow_multiple_entries`` attribute has
+    been added.
 
 Endpoints
 ---------

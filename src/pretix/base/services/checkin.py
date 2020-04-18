@@ -130,13 +130,22 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             require_answers
         )
     else:
-        try:
-            ci, created = Checkin.objects.get_or_create(position=op, list=clist, defaults={
-                'datetime': dt,
-                'nonce': nonce,
-            })
-        except Checkin.MultipleObjectsReturned:
-            ci, created = Checkin.objects.filter(position=op, list=clist).last(), False
+        if clist.allow_multiple_entries:
+            if nonce:
+                ci, created = Checkin.objects.get_or_create(position=op, list=clist, nonce=nonce, defaults={
+                    'datetime': dt,
+                })
+            else:
+                ci = Checkin.objects.create(position=op, list=clist, datetime=datetime)
+                created = True
+        else:
+            try:
+                ci, created = Checkin.objects.get_or_create(position=op, list=clist, defaults={
+                    'datetime': dt,
+                    'nonce': nonce,
+                })
+            except Checkin.MultipleObjectsReturned:
+                ci, created = Checkin.objects.filter(position=op, list=clist).last(), False
 
     if created or (nonce and nonce == ci.nonce):
         if created:

@@ -125,6 +125,7 @@ TEST_LIST_RES = {
     "position_count": 0,
     "checkin_count": 0,
     "include_pending": False,
+    "allow_multiple_entries": False,
     "subevent": None
 }
 
@@ -637,6 +638,46 @@ def test_reupload_same_nonce(token_client, organizer, clist, event, order):
     ), {'nonce': 'foobar'}, format='json')
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_allow_multiple(token_client, organizer, clist, event, order):
+    clist.allow_multiple_entries = True
+    clist.save()
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert p.checkins.count() == 2
+
+
+@pytest.mark.django_db
+def test_allow_multiple_reupload_same_nonce(token_client, organizer, clist, event, order):
+    clist.allow_multiple_entries = True
+    clist.save()
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'nonce': 'foobar'}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'nonce': 'foobar'}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert p.checkins.count() == 1
 
 
 @pytest.mark.django_db
