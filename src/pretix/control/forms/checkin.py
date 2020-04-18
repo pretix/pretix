@@ -35,11 +35,10 @@ class CheckinListForm(forms.ModelForm):
                         'event': self.event.slug,
                         'organizer': self.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-            self.fields['subevent'].required = True
         else:
             del self.fields['subevent']
 

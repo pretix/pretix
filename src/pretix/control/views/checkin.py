@@ -38,13 +38,16 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
             order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.list.include_pending else [Order.STATUS_PAID],
-            subevent=self.list.subevent
         ).annotate(
             last_checked_in=Subquery(cqs),
             auto_checked_in=Exists(
                 Checkin.objects.filter(position_id=OuterRef('pk'), list_id=self.list.pk, auto_checked_in=True)
             )
         ).select_related('item', 'variation', 'order', 'addon_to')
+        if self.list.subevent:
+            qs = qs.filter(
+                subevent=self.list.subevent
+            )
 
         if not self.list.all_products:
             qs = qs.filter(item__in=self.list.limit_products.values_list('id', flat=True))
@@ -69,7 +72,13 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['checkinlist'] = self.list
-        ctx['seats'] = self.list.subevent.seating_plan if self.list.subevent else self.request.event.seating_plan
+        if self.request.event.has_subevents:
+            ctx['seats'] = (
+                self.list.subevent.seating_plan_id if self.list.subevent
+                else self.request.event.subevents.filter(seating_plan__isnull=False).exists()
+            )
+        else:
+            ctx['seats'] = self.request.event.seating_plan_id
         ctx['filter_form'] = self.filter_form
         for e in ctx['entries']:
             if e.last_checked_in:

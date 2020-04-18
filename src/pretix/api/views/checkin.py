@@ -88,8 +88,9 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         pqs = OrderPosition.objects.filter(
             order__event=clist.event,
             order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
-            subevent=clist.subevent,
         )
+        if clist.subevent:
+            pqs = pqs.filter(subevent=clist.subevent)
         if not clist.all_products:
             pqs = pqs.filter(item__in=clist.limit_products.values_list('id', flat=True))
             cqs = cqs.filter(position__item__in=clist.limit_products.values_list('id', flat=True))
@@ -201,10 +202,13 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
-            subevent=self.checkinlist.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)
         )
+        if self.checkinlist.subevent:
+            qs = qs.filter(
+                subevent=self.checkinlist.subevent
+            )
 
         if self.request.query_params.get('ignore_status', 'false') != 'true' and not ignore_status:
             qs = qs.filter(

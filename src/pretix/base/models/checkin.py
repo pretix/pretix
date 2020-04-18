@@ -41,8 +41,9 @@ class CheckinList(LoggedModel):
         qs = OrderPosition.objects.filter(
             order__event=self.event,
             order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [Order.STATUS_PAID],
-            subevent=self.subevent
         )
+        if self.subevent_id:
+            qs = qs.filter(subevent_id=self.subevent_id)
         if not self.all_products:
             qs = qs.filter(item__in=self.limit_products.values_list('id', flat=True))
         return qs

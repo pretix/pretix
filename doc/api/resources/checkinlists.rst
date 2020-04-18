@@ -48,6 +48,10 @@ auto_checkin_sales_channels           list of strings            All items on th
 
     The ``auto_checkin_sales_channels`` field has been added.
 
+.. versionchanged:: 3.9
+
+    The ``subevent`` attribute may now be ``null`` inside event series.
+
 Endpoints
 ---------
 

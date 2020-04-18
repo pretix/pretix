@@ -111,6 +111,11 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             _('This order position has an invalid product for this check-in list.'),
             'product'
         )
+    elif clist.subevent_id and op.subevent_id != clist.subevent_id:
+        raise CheckInError(
+            _('This order position has an invalid date for this check-in list.'),
+            'product'
+        )
     elif op.order.status != Order.STATUS_PAID and not force and not (
         ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
     ):
@@ -172,5 +177,6 @@ def order_placed(sender, **kwargs):
     for op in order.positions.all():
         for cl in cls:
             if cl.all_products or op.item_id in {i.pk for i in cl.limit_products.all()}:
-                ci = Checkin.objects.create(position=op, list=cl, auto_checked_in=True)
-                checkin_created.send(event, checkin=ci)
+                if not cl.subevent_id or cl.subevent_id == op.subevent_id:
+                    ci = Checkin.objects.create(position=op, list=cl, auto_checked_in=True)
+                    checkin_created.send(event, checkin=ci)

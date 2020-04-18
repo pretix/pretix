@@ -97,7 +97,13 @@
                             </div>
                         </td>
                         {% if request.event.has_subevents %}
-                            <td>{{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }}</td>
+                            {% if cl.subevent %}
+                                <td>{{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }}</td>
+                            {% else %}
+                                <td>
+                                    <em>{% trans "All" %}</em>
+                                </td>
+                            {% endif %}
                         {% endif %}
                         <td>
                             {% for channel in cl.auto_checkin_sales_channels %}
