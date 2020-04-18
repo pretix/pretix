@@ -1,6 +1,8 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load static %}
+{% load compress %}
 {% block title %}
     {% if checkinlist %}
         {% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}
@@ -32,6 +34,20 @@
                 <legend>{% trans "Advanced" %}</legend>
                 {% bootstrap_field form.allow_multiple_entries layout="control" %}
                 {% bootstrap_field form.auto_checkin_sales_channels layout="control" %}
+
+                <h3>{% trans "Custom check-in rule" %}</h3>
+                <div class="alert alert-info">
+                    {% blocktrans trimmed %}
+                        These settings are intended for professional users with very specific check-in situations.
+                        Please reach out to support if you have questions about setting this up.
+                    {% endblocktrans %}
+                </div>
+                <div id="rules-editor" class="form-inline">
+                    <checkin-rules-editor></checkin-rules-editor>
+                </div>
+                <div class="disabled-withoutjs">
+                    {{ form.rules }}
+                </div>
             </fieldset>
         </div>
         <div class="form-group submit-group">
@@ -40,4 +56,8 @@
             </button>
         </div>
     </form>
+    {% compress js %}
+        <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules.js" %}"></script>
+    {% endcompress %}
 {% endblock %}

@@ -189,6 +189,11 @@ class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
     permission = 'can_change_event_settings'
     context_object_name = 'checkinlist'
 
+    def dispatch(self, request, *args, **kwargs):
+        r = super().dispatch(request, *args, **kwargs)
+        r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
+        return r
+
     def get_success_url(self) -> str:
         return reverse('control:event.orders.checkinlists', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -215,6 +220,11 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
     template_name = 'pretixcontrol/checkin/list_edit.html'
     permission = 'can_change_event_settings'
     context_object_name = 'checkinlist'
+
+    def dispatch(self, request, *args, **kwargs):
+        r = super().dispatch(request, *args, **kwargs)
+        r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
+        return r
 
     def get_object(self, queryset=None) -> CheckinList:
         try:

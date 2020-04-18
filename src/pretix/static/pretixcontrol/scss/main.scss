@@ -667,6 +667,13 @@ h1 .label {
     }
 }
 
+.withoutjs {
+    display: none !important;
+}
+.nojs .withoutjs {
+    display: block !important;
+}
+
 .nojs .requirejs {
     display: none !important;
 }

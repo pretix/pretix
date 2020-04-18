@@ -53,12 +53,16 @@ class CheckinListForm(forms.ModelForm):
             'include_pending',
             'auto_checkin_sales_channels',
             'allow_multiple_entries',
+            'rules',
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '<[name$=all_products]'
             }),
-            'auto_checkin_sales_channels': forms.CheckboxSelectMultiple()
+            'auto_checkin_sales_channels': forms.CheckboxSelectMultiple(),
+            'rules': forms.Textarea(attrs={
+                'v-model': 'serialized_rules'
+            })
         }
         field_classes = {
             'limit_products': SafeModelMultipleChoiceField,
