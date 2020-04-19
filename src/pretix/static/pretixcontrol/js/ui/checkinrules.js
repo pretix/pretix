@@ -143,9 +143,11 @@ $(document).ready(function () {
                 .on("change", function (e) {
                     vm.$emit("input", $(this).select2('data'));
                 });
-            for (var i = 0; i < vm.value["objectList"].length; i++) {
-                var option = new Option(vm.value["objectList"][i]["lookup"][2], vm.value["objectList"][i]["lookup"][1], true, true);
-                $(vm.$el).append(option);
+            if (vm.value) {
+                for (var i = 0; i < vm.value["objectList"].length; i++) {
+                    var option = new Option(vm.value["objectList"][i]["lookup"][2], vm.value["objectList"][i]["lookup"][1], true, true);
+                    $(vm.$el).append(option);
+                }
             }
             $(vm.$el).trigger("change");
         },
@@ -205,7 +207,7 @@ $(document).ready(function () {
             + '<div class="btn-group pull-right">'
             + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithOR">OR</button>'
             + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithAND">AND</button> '
-            + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="cutOut" v-if="operands.length == 1 && (operator === \'or\' || operator == \'and\')"><span class="fa fa-cut"></span></button>'
+            + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="cutOut" v-if="operands && operands.length == 1 && (operator === \'or\' || operator == \'and\')"><span class="fa fa-cut"></span></button>'
             + '<button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="remove" v-if="level > 0"><span class="fa fa-trash"></span></button>'
             + '</div>'
             + '<select v-bind:value="variable" v-on:input="setVariable" required class="form-control">'
@@ -435,9 +437,20 @@ $(document).ready(function () {
 
     Vue.component('checkin-rules-editor', {
         template: ('<div class="checkin-rules-editor">'
-            + '<checkin-rule :rule="this.$root.rules" :level="0" :index="0"></checkin-rule>'
+            + '<checkin-rule :rule="this.$root.rules" :level="0" :index="0" v-if="hasRules"></checkin-rule>'
+            + '<button type="button" class="checkin-rule-addchild btn btn-xs btn-default" v-if="!hasRules" @click.prevent="addRule"><span class="fa fa-plus-circle"></span> ' + gettext('Add condition') + '</button>'
             + '</div>'
         ),
+        computed: {
+            hasRules: function () {
+                return hasRules = !!Object.keys(this.$root.rules).length;
+            }
+        },
+        methods: {
+            addRule: function () {
+                this.$set(this.$root.rules, "and", []);
+            },
+        },
     });
 
     var app = new Vue({
@@ -445,6 +458,7 @@ $(document).ready(function () {
         data: function () {
             return {
                 rules: {},
+                hasRules: false,
             };
         },
         created: function () {

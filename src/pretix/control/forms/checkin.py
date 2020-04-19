@@ -53,6 +53,7 @@ class CheckinListForm(forms.ModelForm):
             'include_pending',
             'auto_checkin_sales_channels',
             'allow_multiple_entries',
+            'allow_entry_after_exit',
             'rules',
         ]
         widgets = {
