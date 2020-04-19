@@ -1,9 +1,10 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
 from django_scopes import scope
+from freezegun import freeze_time
 
 from pretix.base.models import Event, Order, OrderPosition, Organizer
 from pretix.base.services.checkin import (
@@ -31,8 +32,7 @@ def clist(event):
 
 @pytest.fixture
 def item(event):
-    c = event.items.create(name="Ticket", default_price=3, admission=True)
-    return c
+    return event.items.create(name="Ticket", default_price=3, admission=True)
 
 
 @pytest.fixture
@@ -306,3 +306,218 @@ def test_single_entry_forced_reentry(position, clist):
 
     assert position.checkins.count() == 1
     assert position.order.all_logentries().count() == 2
+
+
+@pytest.mark.django_db
+def test_rules_simple(position, clist):
+    clist.rules = {'and': [False, True]}
+    clist.save()
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {})
+    assert excinfo.value.code == 'rules'
+
+    clist.rules = {'and': [True, True]}
+    clist.save()
+    perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_product(event, position, clist):
+    i2 = event.items.create(name="Ticket", default_price=3, admission=True)
+    clist.rules = {
+        "inList": [
+            {"var": "product"}, {
+                "objectList": [
+                    {"lookup": ["product", str(i2.pk), "Ticket"]},
+                ]
+            }
+        ]
+    }
+    clist.save()
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {})
+    assert excinfo.value.code == 'rules'
+
+    clist.rules = {
+        "inList": [
+            {"var": "product"}, {
+                "objectList": [
+                    {"lookup": ["product", str(i2.pk), "Ticket"]},
+                    {"lookup": ["product", str(position.item.pk), "Ticket"]},
+                ]
+            }
+        ]
+    }
+    clist.save()
+    perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_variation(item, position, clist):
+    v1 = item.variations.create(value="A")
+    v2 = item.variations.create(value="B")
+    position.variation = v2
+    position.save()
+    clist.rules = {
+        "inList": [
+            {"var": "variation"}, {
+                "objectList": [
+                    {"lookup": ["variation", str(v1.pk), "Ticket – A"]},
+                ]
+            }
+        ]
+    }
+    clist.save()
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {})
+    assert excinfo.value.code == 'rules'
+
+    clist.rules = {
+        "inList": [
+            {"var": "variation"}, {
+                "objectList": [
+                    {"lookup": ["variation", str(v1.pk), "Ticket – A"]},
+                    {"lookup": ["variation", str(v2.pk), "Ticket – B"]},
+                ]
+            }
+        ]
+    }
+    clist.save()
+    perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_scan_number(position, clist):
+    # Ticket is valid three times
+    clist.allow_multiple_entries = True
+    clist.rules = {"<": [{"var": "scans_number"}, 3]}
+    clist.save()
+    perform_checkin(position, clist, {})
+    perform_checkin(position, clist, {})
+    perform_checkin(position, clist, {})
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {})
+    assert excinfo.value.code == 'rules'
+
+
+@pytest.mark.django_db
+def test_rules_scan_today(event, position, clist):
+    # Ticket is valid three times per day
+    event.settings.timezone = 'Europe/Berlin'
+    clist.allow_multiple_entries = True
+    clist.rules = {"<": [{"var": "scans_today"}, 3]}
+    clist.save()
+    with freeze_time("2020-01-01 10:00:00"):
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+    with freeze_time("2020-01-01 22:50:00"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+    with freeze_time("2020-01-01 23:10:00"):
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+
+@pytest.mark.django_db
+def test_rules_scan_days(event, position, clist):
+    # Ticket is valid unlimited times, but only on two arbitrary days
+    event.settings.timezone = 'Europe/Berlin'
+    clist.allow_multiple_entries = True
+    clist.rules = {"or": [{">": [{"var": "scans_today"}, 0]}, {"<": [{"var": "scans_days"}, 2]}]}
+    clist.save()
+    with freeze_time("2020-01-01 10:00:00"):
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+
+    with freeze_time("2020-01-03 10:00:00"):
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+        perform_checkin(position, clist, {})
+
+    with freeze_time("2020-01-03 22:50:00"):
+        perform_checkin(position, clist, {})
+
+    with freeze_time("2020-01-03 23:50:00"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+
+@pytest.mark.django_db
+def test_rules_time_isafter_tolerance(event, position, clist):
+    # Ticket is valid starting 10 minutes before admission time
+    event.settings.timezone = 'Europe/Berlin'
+    event.date_admission = event.timezone.localize(datetime(2020, 1, 1, 12, 0, 0))
+    event.save()
+    clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["date_admission"]}, 10]}
+    clist.save()
+    with freeze_time("2020-01-01 10:45:00"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+    with freeze_time("2020-01-01 10:51:00"):
+        perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_time_isafter_no_tolerance(event, position, clist):
+    # Ticket is valid only after admission time
+    event.settings.timezone = 'Europe/Berlin'
+    event.date_from = event.timezone.localize(datetime(2020, 1, 1, 12, 0, 0))
+    # also tests that date_admission falls back to date_from
+    event.save()
+    clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["date_admission"]}]}
+    clist.save()
+    with freeze_time("2020-01-01 10:51:00"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+    with freeze_time("2020-01-01 11:01:00"):
+        perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_time_isbefore_with_tolerance(event, position, clist):
+    # Ticket is valid until 10 minutes after end time
+    event.settings.timezone = 'Europe/Berlin'
+    event.date_to = event.timezone.localize(datetime(2020, 1, 1, 12, 0, 0))
+    event.save()
+    clist.rules = {"isBefore": [{"var": "now"}, {"buildTime": ["date_to"]}, 10]}
+    clist.save()
+    with freeze_time("2020-01-01 11:11:00"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+    with freeze_time("2020-01-01 11:09:00"):
+        perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_time_isafter_custom_time(event, position, clist):
+    # Ticket is valid starting at a custom time
+    event.settings.timezone = 'Europe/Berlin'
+    clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-01T22:00:00.000Z"]}, None]}
+    clist.save()
+    with freeze_time("2020-01-01 21:55:00"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+    with freeze_time("2020-01-01 22:05:00"):
+        perform_checkin(position, clist, {})

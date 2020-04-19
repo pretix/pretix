@@ -407,13 +407,20 @@ $(document).ready(function () {
                 this.rule[this.operator].push({"": []});
             },
             wrapWithOR: function () {
-                this.$set(this.$parent.rule[this.$parent.operator], this.index, {"or": [this.rule]});
+                var r = JSON.parse(JSON.stringify(this.rule));
+                this.$delete(this.rule, this.operator);
+                this.$set(this.rule, "or", [r]);
             },
             wrapWithAND: function () {
-                this.$set(this.$parent.rule[this.$parent.operator], this.index, {"and": [this.rule]});
+                var r = JSON.parse(JSON.stringify(this.rule));
+                this.$delete(this.rule, this.operator);
+                this.$set(this.rule, "and", [r]);
             },
             cutOut: function () {
-                this.$set(this.$parent.rule[this.$parent.operator], this.index, this.operands[0]);
+                var cop = Object.keys(this.operands[0])[0];
+                var r = this.operands[0][cop];
+                this.$delete(this.rule, this.operator);
+                this.$set(this.rule, cop, r);
             },
             remove: function () {
                 this.$parent.rule[this.$parent.operator].splice(this.index, 1);

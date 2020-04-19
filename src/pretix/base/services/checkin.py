@@ -1,13 +1,88 @@
+from datetime import timedelta
+
+import dateutil
 from django.db import transaction
 from django.db.models import Prefetch
+from django.db.models.functions import TruncDate
 from django.dispatch import receiver
-from django.utils.timezone import now
+from django.utils.functional import cached_property
+from django.utils.timezone import now, override
 from django.utils.translation import gettext as _
 
 from pretix.base.models import (
     Checkin, CheckinList, Order, OrderPosition, Question, QuestionOption,
 )
 from pretix.base.signals import checkin_created, order_placed
+from pretix.helpers.jsonlogic import Logic
+
+
+def get_logic_environment(ev):
+    def build_time(t=None, value=None):
+        if t == "custom":
+            return dateutil.parser.parse(value)
+        elif t == 'date_from':
+            return ev.date_from
+        elif t == 'date_to':
+            return ev.date_to
+        elif t == 'date_admission':
+            return ev.date_admission or ev.date_from
+
+    def is_before(t1, t2, tolerance=None):
+        if tolerance:
+            return t1 < t2 + timedelta(minutes=float(tolerance))
+        else:
+            return t1 < t2
+
+    logic = Logic()
+    logic.add_operation('objectList', lambda *objs: list(objs))
+    logic.add_operation('lookup', lambda model, pk, str: int(pk))
+    logic.add_operation('inList', lambda a, b: a in b)
+    logic.add_operation('buildTime', build_time)
+    logic.add_operation('isBefore', is_before)
+    logic.add_operation('isAfter', lambda t1, t2, tol=None: is_before(t2, t1, tol))
+    return logic
+
+
+class LazyRuleVars:
+    def __init__(self, position, clist, dt):
+        self._position = position
+        self._clist = clist
+        self._dt = dt
+
+    def __getitem__(self, item):
+        if item[0] != '_' and hasattr(self, item):
+            return getattr(self, item)
+        raise KeyError()
+
+    @property
+    def now(self):
+        return self._dt
+
+    @property
+    def product(self):
+        return self._position.item_id
+
+    @property
+    def variation(self):
+        return self._position.variation_id
+
+    @cached_property
+    def scans_number(self):
+        return self._position.checkins.filter(list=self._clist).count()
+
+    @cached_property
+    def scans_today(self):
+        tz = self._clist.event.timezone
+        midnight = now().astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
+        return self._position.checkins.filter(list=self._clist, datetime__gte=midnight).count()
+
+    @cached_property
+    def scans_days(self):
+        tz = self._clist.event.timezone
+        with override(tz):
+            return self._position.checkins.filter(list=self._clist).annotate(
+                day=TruncDate('datetime')
+            ).values('day').distinct().count()
 
 
 class CheckInError(Exception):
@@ -81,7 +156,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
     # Fetch order position with related objects
     op = OrderPosition.all.select_for_update().select_related(
-        'item', 'variation', 'order', 'addon_to'
+        'item', 'variation', 'order', 'addon_to', 'subevent'
     ).prefetch_related(
         'item__questions',
         Prefetch(
@@ -129,23 +204,32 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             'incomplete',
             require_answers
         )
-    else:
-        if clist.allow_multiple_entries:
-            if nonce:
-                ci, created = Checkin.objects.get_or_create(position=op, list=clist, nonce=nonce, defaults={
-                    'datetime': dt,
-                })
-            else:
-                ci = Checkin.objects.create(position=op, list=clist, datetime=dt)
-                created = True
+
+    if clist.rules and not force:
+        rule_data = LazyRuleVars(op, clist, dt)
+        logic = get_logic_environment(op.subevent or clist.event)
+        if not logic.apply(clist.rules, rule_data):
+            raise CheckInError(
+                _('This entry is not permitted due to custom rules.'),
+                'rules'
+            )
+
+    if clist.allow_multiple_entries:
+        if nonce:
+            ci, created = Checkin.objects.get_or_create(position=op, list=clist, nonce=nonce, defaults={
+                'datetime': dt,
+            })
         else:
-            try:
-                ci, created = Checkin.objects.get_or_create(position=op, list=clist, defaults={
-                    'datetime': dt,
-                    'nonce': nonce,
-                })
-            except Checkin.MultipleObjectsReturned:
-                ci, created = Checkin.objects.filter(position=op, list=clist).last(), False
+            ci = Checkin.objects.create(position=op, list=clist, datetime=dt)
+            created = True
+    else:
+        try:
+            ci, created = Checkin.objects.get_or_create(position=op, list=clist, defaults={
+                'datetime': dt,
+                'nonce': nonce,
+            })
+        except Checkin.MultipleObjectsReturned:
+            ci, created = Checkin.objects.filter(position=op, list=clist).last(), False
 
     if created or (nonce and nonce == ci.nonce):
         if created:
