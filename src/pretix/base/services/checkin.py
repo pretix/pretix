@@ -136,7 +136,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     'datetime': dt,
                 })
             else:
-                ci = Checkin.objects.create(position=op, list=clist, datetime=datetime)
+                ci = Checkin.objects.create(position=op, list=clist, datetime=dt)
                 created = True
         else:
             try:
