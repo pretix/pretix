@@ -96,13 +96,24 @@ class CheckinList(LoggedModel):
 
 class Checkin(models.Model):
     """
-    A check-in object is created when a person enters the event.
+    A check-in object is created when a person enters or exits the event.
     """
+    TYPE_ENTRY = 'entry'
+    TYPE_EXIT = 'exit'
+    CHECKIN_TYPES = (
+        (TYPE_ENTRY, _('Entry')),
+        (TYPE_EXIT, _('Exit')),
+    )
     position = models.ForeignKey('pretixbase.OrderPosition', related_name='checkins', on_delete=models.CASCADE)
     datetime = models.DateTimeField(default=now)
     nonce = models.CharField(max_length=190, null=True, blank=True)
     list = models.ForeignKey(
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
+    )
+    type = models.CharField(max_length=100, choices=CHECKIN_TYPES, default=TYPE_ENTRY)
+    forced = models.BooleanField(default=False)
+    device = models.ForeignKey(
+        'pretixbase.Device', related_name='checkins', on_delete=models.PROTECT, null=True, blank=True
     )
     auto_checked_in = models.BooleanField(default=False)
 

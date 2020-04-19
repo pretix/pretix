@@ -10,7 +10,8 @@ from django.utils.timezone import now, override
 from django.utils.translation import gettext as _
 
 from pretix.base.models import (
-    Checkin, CheckinList, Order, OrderPosition, Question, QuestionOption,
+    Checkin, CheckinList, Device, Order, OrderPosition, Question,
+    QuestionOption,
 )
 from pretix.base.signals import checkin_created, order_placed
 from pretix.helpers.jsonlogic import Logic
@@ -214,20 +215,43 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'rules'
             )
 
+    device = None
+    if isinstance(auth, Device):
+        device = auth
+
     if clist.allow_multiple_entries:
         if nonce:
-            ci, created = Checkin.objects.get_or_create(position=op, list=clist, nonce=nonce, defaults={
-                'datetime': dt,
-            })
+            ci, created = Checkin.objects.get_or_create(
+                position=op,
+                list=clist,
+                nonce=nonce,
+                device=device,
+                defaults={
+                    'datetime': dt,
+                    'forced': False,
+                }
+            )
         else:
-            ci = Checkin.objects.create(position=op, list=clist, datetime=dt)
+            ci = Checkin.objects.create(
+                position=op,
+                list=clist,
+                datetime=dt,
+                device=device,
+                forced=False,
+            )
             created = True
     else:
         try:
-            ci, created = Checkin.objects.get_or_create(position=op, list=clist, defaults={
-                'datetime': dt,
-                'nonce': nonce,
-            })
+            ci, created = Checkin.objects.get_or_create(
+                position=op,
+                list=clist,
+                defaults={
+                    'datetime': dt,
+                    'nonce': nonce,
+                    'device': device,
+                    'forced': False,
+                }
+            )
         except Checkin.MultipleObjectsReturned:
             ci, created = Checkin.objects.filter(position=op, list=clist).last(), False
 
@@ -243,19 +267,28 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             }, user=user, auth=auth)
             checkin_created.send(op.order.event, checkin=ci)
     else:
-        if not force:
+        if force:
+            Checkin.objects.create(
+                position=op,
+                list=clist,
+                datetime=dt,
+                device=device,
+                forced=True,
+            )
+            op.order.log_action('pretix.event.checkin', data={
+                'position': op.id,
+                'positionid': op.positionid,
+                'first': False,
+                'forced': force,
+                'datetime': dt,
+                'list': clist.pk
+            }, user=user, auth=auth)
+            checkin_created.send(op.order.event, checkin=ci)
+        else:
             raise CheckInError(
                 _('This ticket has already been redeemed.'),
                 'already_redeemed',
             )
-        op.order.log_action('pretix.event.checkin', data={
-            'position': op.id,
-            'positionid': op.positionid,
-            'first': False,
-            'forced': force,
-            'datetime': dt,
-            'list': clist.pk
-        }, user=user, auth=auth)
 
 
 @receiver(order_placed, dispatch_uid="autocheckin_order_placed")

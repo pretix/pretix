@@ -304,7 +304,8 @@ def test_single_entry_forced_reentry(position, clist):
 
     perform_checkin(position, clist, {}, force=True)
 
-    assert position.checkins.count() == 1
+    assert position.checkins.count() == 2
+    assert position.checkins.last().forced
     assert position.order.all_logentries().count() == 2
 
 
