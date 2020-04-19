@@ -540,6 +540,11 @@ class EventCancelForm(forms.Form):
         required=False,
         empty_label=pgettext_lazy('subevent', 'All dates')
     )
+    all_subevents = forms.BooleanField(
+        label=_('Cancel all dates'),
+        initial=False,
+        required=False
+    )
     auto_refund = forms.BooleanField(
         label=_('Automatically refund money if possible'),
         initial=True,
@@ -678,4 +683,11 @@ class EventCancelForm(forms.Form):
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         else:
             del self.fields['subevent']
+            del self.fields['all_subevents']
         change_decimal_field(self.fields['keep_fee_fixed'], self.event.currency)
+
+    def clean(self):
+        d = super().clean()
+        if self.event.has_subevents and not d['subevent'] and not d['all_subevents']:
+            raise ValidationError(_('Please confirm that you want to cancel ALL dates in this event series.'))
+        return d
