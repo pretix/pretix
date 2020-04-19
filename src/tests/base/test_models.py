@@ -1707,7 +1707,16 @@ class EventTest(TestCase):
         que1.items.add(i1)
         event1.settings.foo_setting = 23
         event1.settings.tax_rate_default = tr7
-        cl1 = event1.checkin_lists.create(name="All", all_products=False)
+        cl1 = event1.checkin_lists.create(
+            name="All", all_products=False,
+            rules={
+                "and": [
+                    {"isBefore": [{"var": "now"}, {"buildTime": ["date_from"]}, None]},
+                    {"inList": [{"var": "product"}, {"objectList": [{"lookup": ["product", str(i1.pk), "Text"]}]}]},
+                    {"inList": [{"var": "variation"}, {"objectList": [{"lookup": ["variation", str(v1.pk), "Text"]}]}]}
+                ]
+            }
+        )
         cl1.limit_products.add(i1)
 
         event2 = Event.objects.create(
@@ -1739,7 +1748,15 @@ class EventTest(TestCase):
         assert event2.settings.foo_setting == '23'
         assert event2.settings.tax_rate_default == trnew
         assert event2.checkin_lists.count() == 1
-        assert [i.pk for i in event2.checkin_lists.first().limit_products.all()] == [i1new.pk]
+        clnew = event2.checkin_lists.first()
+        assert [i.pk for i in clnew.limit_products.all()] == [i1new.pk]
+        assert clnew.rules == {
+            "and": [
+                {"isBefore": [{"var": "now"}, {"buildTime": ["date_from"]}, None]},
+                {"inList": [{"var": "product"}, {"objectList": [{"lookup": ["product", str(i1new.pk), "Text"]}]}]},
+                {"inList": [{"var": "variation"}, {"objectList": [{"lookup": ["variation", str(i1new.variations.get().pk), "Text"]}]}]}
+            ]
+        }
 
     @classscope(attr='organizer')
     def test_presale_has_ended(self):
