@@ -76,6 +76,57 @@ $(document).ready(function () {
         },
     };
 
+    Vue.component("datetimefield", {
+        props: ["required", "value"],
+        template: ('<input class="form-control">'),
+        mounted: function () {
+            var vm = this;
+            var multiple = this.multiple;
+            $(this.$el)
+                .datetimepicker(this.opts())
+                .trigger("change")
+                .on("dp.change", function (e) {
+                    vm.$emit("input", $(this).data('DateTimePicker').date().toISOString());
+                });
+            if (!vm.value) {
+                $(this.$el).data("DateTimePicker").viewDate(moment().hour(0).minute(0).second(0).millisecond(0));
+            } else {
+                $(this.$el).data("DateTimePicker").date(moment(vm.value));
+            }
+        },
+        methods: {
+            opts: function () {
+                return {
+                    format: $("body").attr("data-datetimeformat"),
+                    locale: $("body").attr("data-datetimelocale"),
+                    useCurrent: false,
+                    showClear: this.required,
+                    icons: {
+                        time: 'fa fa-clock-o',
+                        date: 'fa fa-calendar',
+                        up: 'fa fa-chevron-up',
+                        down: 'fa fa-chevron-down',
+                        previous: 'fa fa-chevron-left',
+                        next: 'fa fa-chevron-right',
+                        today: 'fa fa-screenshot',
+                        clear: 'fa fa-trash',
+                        close: 'fa fa-remove'
+                    }
+                };
+            }
+        },
+        watch: {
+            value: function (val) {
+                $(this.$el).data('DateTimePicker').date(moment(val));
+            },
+        },
+        destroyed: function () {
+            $(this.$el)
+                .off()
+                .datetimepicker("destroy");
+        }
+    });
+
     Vue.component("lookup-select2", {
         props: ["required", "value", "placeholder", "url", "multiple"],
         template: ('<select>\n' +
@@ -166,6 +217,14 @@ $(document).ready(function () {
             + '<option></option>'
             + '<option v-for="(v, name) in operators" :value="name">{{ v.label }}</option>'
             + '</select> '
+            + '<select v-bind:value="timeType" v-on:input="setTimeType" required class="form-control" v-if="vartype == \'datetime\'">'
+            + '<option value="date_from">' + gettext('Event start') + '</option>'
+            + '<option value="date_to">' + gettext('Event end') + '</option>'
+            + '<option value="date_admission">' + gettext('Event admission') + '</option>'
+            + '<option value="custom">' + gettext('custom time') + '</option>'
+            + '</select> '
+            + '<datetimefield v-if="vartype == \'datetime\' && timeType == \'custom\'" :value="timeValue" v-on:input="setTimeValue"></datetimefield>'
+            + '<input class="form-control" required type="number" v-if="vartype == \'datetime\' && timeType && timeType != \'custom\'" v-bind:value="timeTolerance" v-on:input="setTimeTolerance" placeholder="' + gettext('Tolerance (minutes)') + '">'
             + '<input class="form-control" required type="number" v-if="vartype == \'int\' && cardinality > 1" v-bind:value="rightoperand" v-on:input="setRightOperandNumber">'
             + '<lookup-select2 required v-if="vartype == \'product\' && operator == \'inList\'" :multiple="true" :value="rightoperand" v-on:input="setRightOperandProductList" :url="productSelectURL"></lookup-select2>'
             + '<lookup-select2 required v-if="vartype == \'variation\' && operator == \'inList\'" :multiple="true" :value="rightoperand" v-on:input="setRightOperandVariationList" :url="variationSelectURL"></lookup-select2>'
@@ -214,6 +273,24 @@ $(document).ready(function () {
             vartype: function () {
                 if (this.variable && VARS[this.variable]) {
                     return VARS[this.variable]['type'];
+                }
+            },
+            timeType: function () {
+                if (this.rightoperand && this.rightoperand['buildTime']) {
+                    return this.rightoperand['buildTime'][0];
+                }
+            },
+            timeTolerance: function () {
+                var op = this.operator;
+                if ((op === "isBefore" || op === "isAfter") && this.rule[op] && typeof this.rule[op][2] !== "undefined") {
+                    return this.rule[op][2];
+                } else {
+                    return null;
+                }
+            },
+            timeValue: function () {
+                if (this.rightoperand && this.rightoperand['buildTime']) {
+                    return this.rightoperand['buildTime'][1];
                 }
             },
             cardinality: function () {
@@ -266,6 +343,27 @@ $(document).ready(function () {
                 } else {
                     this.$set(this.rule[this.operator], 1, parseInt(event.target.value));
                 }
+            },
+            setTimeTolerance: function (event) {
+                if (this.rule[this.operator].length === 2) {
+                    this.rule[this.operator].push(parseInt(event.target.value));
+                } else {
+                    this.$set(this.rule[this.operator], 2, parseInt(event.target.value));
+                }
+            },
+            setTimeType: function (event) {
+                var time = {
+                    "buildTime": [event.target.value]
+                };
+                if (this.rule[this.operator].length === 1) {
+                    this.rule[this.operator].push(time);
+                } else {
+                    this.$set(this.rule[this.operator], 1, time);
+                }
+            },
+            setTimeValue: function (val) {
+                console.log(val);
+                this.$set(this.rule[this.operator][1]["buildTime"], 1, val);
             },
             setRightOperandProductList: function (val) {
                 var products = {
