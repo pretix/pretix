@@ -20,6 +20,10 @@ class CheckinList(LoggedModel):
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '
                                                       'order have not been paid.'))
+    allow_entry_after_exit = models.BooleanField(
+        verbose_name=_('Allow re-entering after an exit scan'),
+        default=True
+    )
     allow_multiple_entries = models.BooleanField(
         verbose_name=_('Allow multiple entries per ticket'),
         help_text=_('Use this option to turn off warnings if a ticket is scanned a second time.'),
@@ -118,6 +122,9 @@ class Checkin(models.Model):
     auto_checked_in = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='position__order__event__organizer')
+
+    class Meta:
+        ordering = (('-datetime'),)
 
     def __repr__(self):
         return "<Checkin: pos {} on list '{}' at {}>".format(

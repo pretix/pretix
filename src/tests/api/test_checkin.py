@@ -126,6 +126,7 @@ TEST_LIST_RES = {
     "checkin_count": 0,
     "include_pending": False,
     "allow_multiple_entries": False,
+    "allow_entry_after_exit": True,
     "subevent": None
 }
 

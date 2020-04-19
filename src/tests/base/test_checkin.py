@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 from decimal import Decimal
 
@@ -6,7 +7,7 @@ from django.utils.timezone import now
 from django_scopes import scope
 from freezegun import freeze_time
 
-from pretix.base.models import Event, Order, OrderPosition, Organizer
+from pretix.base.models import Checkin, Event, Order, OrderPosition, Organizer
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, perform_checkin,
 )
@@ -302,11 +303,56 @@ def test_multi_entry_repeat_nonce(position, clist):
 def test_single_entry_forced_reentry(position, clist):
     perform_checkin(position, clist, {})
 
-    perform_checkin(position, clist, {}, force=True)
+    perform_checkin(position, clist, {}, force=True, nonce='bla')
+    perform_checkin(position, clist, {}, force=True, nonce='bla')
 
     assert position.checkins.count() == 2
-    assert position.checkins.last().forced
+    assert position.checkins.first().forced
     assert position.order.all_logentries().count() == 2
+
+
+@pytest.mark.django_db
+def test_multi_exit(position, clist):
+    perform_checkin(position, clist, {})
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+
+    assert position.checkins.count() == 3
+
+
+@pytest.mark.django_db
+def test_single_entry_after_exit_ordered_by_date(position, clist):
+    dt1 = now() - timedelta(minutes=10)
+    dt2 = now() - timedelta(minutes=5)
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT, datetime=dt2)
+    time.sleep(1)
+    perform_checkin(position, clist, {}, datetime=dt1)
+    perform_checkin(position, clist, {})
+
+    assert position.checkins.count() == 3
+
+
+@pytest.mark.django_db
+def test_single_entry_after_exit(position, clist):
+    perform_checkin(position, clist, {})
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+    perform_checkin(position, clist, {})
+
+    assert position.checkins.count() == 3
+
+
+@pytest.mark.django_db
+def test_single_entry_after_exit_forbidden(position, clist):
+    clist.allow_entry_after_exit = False
+    clist.save()
+
+    perform_checkin(position, clist, {})
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {})
+    assert excinfo.value.code == 'already_redeemed'
+
+    assert position.checkins.count() == 2
 
 
 @pytest.mark.django_db

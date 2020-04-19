@@ -138,7 +138,7 @@ def _save_answers(op, answers, given_answers):
 @transaction.atomic
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
-                    user=None, auth=None, canceled_supported=False):
+                    user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -219,76 +219,43 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     if isinstance(auth, Device):
         device = auth
 
-    if clist.allow_multiple_entries:
-        if nonce:
-            ci, created = Checkin.objects.get_or_create(
-                position=op,
-                list=clist,
-                nonce=nonce,
-                device=device,
-                defaults={
-                    'datetime': dt,
-                    'forced': False,
-                }
-            )
-        else:
-            ci = Checkin.objects.create(
-                position=op,
-                list=clist,
-                datetime=dt,
-                device=device,
-                forced=False,
-            )
-            created = True
-    else:
-        try:
-            ci, created = Checkin.objects.get_or_create(
-                position=op,
-                list=clist,
-                defaults={
-                    'datetime': dt,
-                    'nonce': nonce,
-                    'device': device,
-                    'forced': False,
-                }
-            )
-        except Checkin.MultipleObjectsReturned:
-            ci, created = Checkin.objects.filter(position=op, list=clist).last(), False
+    last_ci = op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce').first()
+    entry_allowed = (
+        type == Checkin.TYPE_EXIT or
+        clist.allow_multiple_entries or
+        last_ci is None or
+        (clist.allow_entry_after_exit and last_ci.type == Checkin.TYPE_EXIT) or
+        force
+    )
 
-    if created or (nonce and nonce == ci.nonce):
-        if created:
-            op.order.log_action('pretix.event.checkin', data={
-                'position': op.id,
-                'positionid': op.positionid,
-                'first': True,
-                'forced': op.order.status != Order.STATUS_PAID,
-                'datetime': dt,
-                'list': clist.pk
-            }, user=user, auth=auth)
-            checkin_created.send(op.order.event, checkin=ci)
+    if nonce and ((last_ci and last_ci.nonce == nonce) or op.checkins.filter(type=type, list=clist, device=device, nonce=nonce).exists()):
+        return
+
+    if entry_allowed:
+        ci = Checkin.objects.create(
+            position=op,
+            type=type,
+            list=clist,
+            datetime=dt,
+            device=device,
+            nonce=nonce,
+            forced=force,
+        )
+        op.order.log_action('pretix.event.checkin', data={
+            'position': op.id,
+            'positionid': op.positionid,
+            'first': True,
+            'forced': force or op.order.status != Order.STATUS_PAID,
+            'datetime': dt,
+            'type': type,
+            'list': clist.pk
+        }, user=user, auth=auth)
+        checkin_created.send(op.order.event, checkin=ci)
     else:
-        if force:
-            Checkin.objects.create(
-                position=op,
-                list=clist,
-                datetime=dt,
-                device=device,
-                forced=True,
-            )
-            op.order.log_action('pretix.event.checkin', data={
-                'position': op.id,
-                'positionid': op.positionid,
-                'first': False,
-                'forced': force,
-                'datetime': dt,
-                'list': clist.pk
-            }, user=user, auth=auth)
-            checkin_created.send(op.order.event, checkin=ci)
-        else:
-            raise CheckInError(
-                _('This ticket has already been redeemed.'),
-                'already_redeemed',
-            )
+        raise CheckInError(
+            _('This ticket has already been redeemed.'),
+            'already_redeemed',
+        )
 
 
 @receiver(order_placed, dispatch_uid="autocheckin_order_placed")
