@@ -5,8 +5,13 @@ https://github.com/jwadhams/json-logic-js
 Implementation is built upon the implementation at https://github.com/nadirizr/json-logic-py
 Copyright (c) 2015 nadirizr, The MIT License
 
-We vendor this library since we (a) want to improve it by adding support for custom operations
-and (b) upstream appears to be unmaintained.
+We vendor this library since it is simple enough and upstream seems unmaintained.
+
+In particular, we changed:
+
+* Full test coverage
+* Fully passing tests against shared tests suite at 2020-04-19
+* Option to add custom operations
 """
 import logging
 from functools import reduce
@@ -172,59 +177,68 @@ operations = {
 }
 
 
-def json_logic(tests, data=None):
-    """Executes the json-logic with given data."""
-    # You've recursed to a primitive, stop!
-    if tests is None or not isinstance(tests, dict):
-        return tests
+class Logic():
+    def __init__(self):
+        self._operations = {}
 
-    data = data or {}
+    def add_operation(self, name, func):
+        self._operations[name] = func
 
-    operator = list(tests.keys())[0]
-    values = tests[operator]
+    def apply(self, tests, data=None):
+        """Executes the json-logic with given data."""
+        # You've recursed to a primitive, stop!
+        if tests is None or not isinstance(tests, dict):
+            return tests
 
-    # Easy syntax for unary operators, like {"var": "x"} instead of strict
-    # {"var": ["x"]}
-    if not isinstance(values, list) and not isinstance(values, tuple):
-        values = [values]
+        data = data or {}
 
-    # Array-level operations
-    if operator == 'none':
-        return not any(json_logic(values[1], i) for i in json_logic(values[0], data))
-    if operator == 'all':
-        elements = json_logic(values[0], data)
-        if not elements:
-            return False
-        return all(json_logic(values[1], i) for i in elements)
-    if operator == 'some':
-        return any(json_logic(values[1], i) for i in json_logic(values[0], data))
-    if operator == 'reduce':
-        return reduce(
-            lambda acc, el: json_logic(values[1], {'current': el, 'accumulator': acc}),
-            json_logic(values[0], data) or [],
-            json_logic(values[2], data)
-        )
-    if operator == 'map':
-        return [
-            json_logic(values[1], i) for i in (json_logic(values[0], data) or [])
-        ]
-    if operator == 'filter':
-        return [
-            i for i in json_logic(values[0], data)
-            if json_logic(values[1], i)
-        ]
+        operator = list(tests.keys())[0]
+        values = tests[operator]
 
-    # Recursion!
-    values = [json_logic(val, data) for val in values]
+        # Easy syntax for unary operators, like {"var": "x"} instead of strict
+        # {"var": ["x"]}
+        if not isinstance(values, list) and not isinstance(values, tuple):
+            values = [values]
 
-    if operator == 'var':
-        return get_var(data, *values)
-    if operator == 'missing':
-        return missing(data, *values)
-    if operator == 'missing_some':
-        return missing_some(data, *values)
+        # Array-level operations
+        if operator == 'none':
+            return not any(self.apply(values[1], i) for i in self.apply(values[0], data))
+        if operator == 'all':
+            elements = self.apply(values[0], data)
+            if not elements:
+                return False
+            return all(self.apply(values[1], i) for i in elements)
+        if operator == 'some':
+            return any(self.apply(values[1], i) for i in self.apply(values[0], data))
+        if operator == 'reduce':
+            return reduce(
+                lambda acc, el: self.apply(values[1], {'current': el, 'accumulator': acc}),
+                self.apply(values[0], data) or [],
+                self.apply(values[2], data)
+            )
+        if operator == 'map':
+            return [
+                self.apply(values[1], i) for i in (self.apply(values[0], data) or [])
+            ]
+        if operator == 'filter':
+            return [
+                i for i in self.apply(values[0], data)
+                if self.apply(values[1], i)
+            ]
 
-    if operator not in operations:
-        raise ValueError("Unrecognized operation %s" % operator)
+        # Recursion!
+        values = [self.apply(val, data) for val in values]
 
-    return operations[operator](*values)
+        if operator == 'var':
+            return get_var(data, *values)
+        if operator == 'missing':
+            return missing(data, *values)
+        if operator == 'missing_some':
+            return missing_some(data, *values)
+
+        if operator in operations:
+            return operations[operator](*values)
+        elif operator in self._operations:
+            return self._operations[operator](*values)
+        else:
+            raise ValueError("Unrecognized operation %s" % operator)
