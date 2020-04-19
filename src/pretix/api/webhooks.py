@@ -170,7 +170,7 @@ def register_default_webhook_events(sender, **kwargs):
 
 @app.task(base=TransactionAwareTask)
 def notify_webhooks(logentry_id: int):
-    logentry = LogEntry.all.get(id=logentry_id)
+    logentry = LogEntry.all.select_related('event', 'event__organizer').get(id=logentry_id)
 
     if not logentry.organizer:
         return  # We need to know the organizer

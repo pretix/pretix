@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 
 import pytest
+from django.conf import settings
 from django.utils.timezone import now
 from django_scopes import scope
 from freezegun import freeze_time
@@ -568,3 +569,12 @@ def test_rules_time_isafter_custom_time(event, position, clist):
 
     with freeze_time("2020-01-01 22:05:00"):
         perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db(transaction=True)
+def test_position_queries(django_assert_num_queries, position, clist):
+    with django_assert_num_queries(11) as captured:
+        perform_checkin(position, clist, {})
+    assert 'BEGIN' in captured[0]['sql']
+    if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
+        assert 'FOR UPDATE' in captured[1]['sql']

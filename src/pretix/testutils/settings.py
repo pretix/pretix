@@ -54,7 +54,6 @@ CACHES = {
     }
 }
 DATABASE_REPLICA = 'default'
-DATABASES['conn2'] = DATABASES['default']
 
 # Don't run migrations
 

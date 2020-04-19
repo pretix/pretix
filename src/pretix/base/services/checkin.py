@@ -156,17 +156,16 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     dt = datetime or now()
 
     # Fetch order position with related objects
-    op = OrderPosition.all.select_for_update().select_related(
+    op = OrderPosition.all.select_related(
         'item', 'variation', 'order', 'addon_to', 'subevent'
     ).prefetch_related(
-        'item__questions',
         Prefetch(
             'item__questions',
             queryset=Question.objects.filter(ask_during_checkin=True),
             to_attr='checkin_questions'
         ),
         'answers'
-    ).get(pk=op.pk)
+    ).select_for_update().get(pk=op.pk)
 
     if op.canceled or op.order.status not in (Order.STATUS_PAID, Order.STATUS_PENDING):
         raise CheckInError(
@@ -174,13 +173,14 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             'canceled' if canceled_supported else 'unpaid'
         )
 
-    answers = {a.question: a for a in op.answers.all()}
     require_answers = []
-    for q in op.item.checkin_questions:
-        if q not in given_answers and q not in answers:
-            require_answers.append(q)
+    if op.item.checkin_questions:
+        answers = {a.question: a for a in op.answers.all()}
+        for q in op.item.checkin_questions:
+            if q not in given_answers and q not in answers:
+                require_answers.append(q)
 
-    _save_answers(op, answers, given_answers)
+        _save_answers(op, answers, given_answers)
 
     if not clist.all_products and op.item_id not in [i.pk for i in clist.limit_products.all()]:
         raise CheckInError(

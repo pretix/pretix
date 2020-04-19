@@ -132,12 +132,12 @@ class Checkin(models.Model):
         )
 
     def save(self, **kwargs):
+        super().save(**kwargs)
         self.position.order.touch()
         self.list.event.cache.delete('checkin_count')
         self.list.touch()
-        super().save(**kwargs)
 
     def delete(self, **kwargs):
-        self.position.order.touch()
         super().delete(**kwargs)
+        self.position.order.touch()
         self.list.touch()
