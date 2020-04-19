@@ -60,9 +60,33 @@ class CheckinListForm(forms.ModelForm):
                 'data-inverse-dependency': '<[name$=all_products]'
             }),
             'auto_checkin_sales_channels': forms.CheckboxSelectMultiple(),
-            'rules': forms.Textarea(attrs={
-                'v-model': 'serialized_rules'
-            })
+        }
+        field_classes = {
+            'limit_products': SafeModelMultipleChoiceField,
+            'subevent': SafeModelChoiceField,
+        }
+
+
+class SimpleCheckinListForm(forms.ModelForm):
+    def __init__(self, **kwargs):
+        self.event = kwargs.pop('event')
+        kwargs.pop('locales', None)
+        super().__init__(**kwargs)
+        self.fields['limit_products'].queryset = self.event.items.all()
+
+    class Meta:
+        model = CheckinList
+        localized_fields = '__all__'
+        fields = [
+            'name',
+            'all_products',
+            'limit_products',
+            'include_pending',
+        ]
+        widgets = {
+            'limit_products': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '<[name$=all_products]'
+            }),
         }
         field_classes = {
             'limit_products': SafeModelMultipleChoiceField,
