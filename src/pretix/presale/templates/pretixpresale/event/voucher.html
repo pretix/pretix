@@ -338,7 +338,15 @@
                 <div class="row-fluid checkout-button-row">
                     <div class="col-md-4 col-md-offset-8 col-xs-12">
                         <button class="btn btn-block btn-primary btn-lg" id="btn-add-to-cart" type="submit">
-                            <i class="fa fa-shopping-cart"></i> {% trans "Add to cart" %}
+                            {% if request.event.settings.redirect_to_checkout_directly %}
+                                {% if allfree %}
+                                    <i class="fa fa-check"></i> {% trans "Register" %}
+                                {% else %}
+                                    <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
+                                {% endif %}
+                            {% else %}
+                                <i class="fa fa-shopping-cart"></i> {% trans "Add to cart" %}
+                            {% endif %}
                         </button>
                     </div>
                     <div class="clearfix"></div>

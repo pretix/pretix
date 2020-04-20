@@ -1,6 +1,7 @@
 import json
 import mimetypes
 import os
+from decimal import Decimal
 
 from django.conf import settings
 from django.contrib import messages
@@ -454,6 +455,16 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
         # check the box right away ;)
         context['options'] = sum([(len(item.available_variations) if item.has_variations else 1)
                                   for item in items])
+
+        context['allfree'] = all(
+            item.display_price.gross == Decimal('0.00') for item in items if not item.has_variations
+        ) and all(
+            all(
+                var.display_price.gross == Decimal('0.00')
+                for var in item.available_variations
+            )
+            for item in items if item.has_variations
+        )
 
         # Regroup those by category
         context['items_by_category'] = item_group_by_category(items)

@@ -2,6 +2,7 @@ import calendar
 import sys
 from collections import defaultdict
 from datetime import date, datetime, timedelta
+from decimal import Decimal
 from importlib import import_module
 
 import pytz
@@ -319,6 +320,15 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
                                                            channel=self.request.sales_channel.identifier)
             context['itemnum'] = len(items)
+            context['allfree'] = all(
+                item.display_price.gross == Decimal('0.00') for item in items if not item.has_variations
+            ) and all(
+                all(
+                    var.display_price.gross == Decimal('0.00')
+                    for var in item.available_variations
+                )
+                for item in items if item.has_variations
+            )
 
             # Regroup those by category
             context['items_by_category'] = item_group_by_category(items)
