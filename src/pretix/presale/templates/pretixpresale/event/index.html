@@ -243,7 +243,7 @@
                                 <button class="btn btn-block btn-primary btn-lg" type="submit" id="btn-add-to-cart">
                                     {% if request.event.settings.redirect_to_checkout_directly %}
                                         {% if allfree %}
-                                            <i class="fa fa-check"></i> {% trans "Register" %}
+                                            <i class="fa fa-check"></i> {% trans "Register" context "free_tickets" %}
                                         {% else %}
                                            <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
                                         {% endif %}
