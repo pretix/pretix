@@ -255,6 +255,9 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=['POST'])
     def redeem(self, *args, **kwargs):
         force = bool(self.request.data.get('force', False))
+        type = self.request.data.get('type', False)
+        if type not in dict(Checkin.CHECKIN_TYPES):
+            raise ValidationError("Invalid check-in type.")
         ignore_unpaid = bool(self.request.data.get('ignore_unpaid', False))
         nonce = self.request.data.get('nonce')
         op = self.get_object(ignore_status=True)
@@ -287,6 +290,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 canceled_supported=self.request.data.get('canceled_supported', False),
                 user=self.request.user,
                 auth=self.request.auth,
+                type=type,
             )
         except RequiredQuestionsError as e:
             return Response({

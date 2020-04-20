@@ -2,7 +2,6 @@ from datetime import timedelta
 
 import dateutil
 from django.db import transaction
-from django.db.models import Prefetch
 from django.db.models.functions import TruncDate
 from django.dispatch import receiver
 from django.utils.functional import cached_property
@@ -10,8 +9,7 @@ from django.utils.timezone import now, override
 from django.utils.translation import gettext as _
 
 from pretix.base.models import (
-    Checkin, CheckinList, Device, Order, OrderPosition, Question,
-    QuestionOption,
+    Checkin, CheckinList, Device, Order, OrderPosition, QuestionOption,
 )
 from pretix.base.signals import checkin_created, order_placed
 from pretix.helpers.jsonlogic import Logic
@@ -158,14 +156,10 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     # Fetch order position with related objects
     op = OrderPosition.all.select_related(
         'item', 'variation', 'order', 'addon_to', 'subevent'
-    ).prefetch_related(
-        Prefetch(
-            'item__questions',
-            queryset=Question.objects.filter(ask_during_checkin=True),
-            to_attr='checkin_questions'
-        ),
-        'answers'
     ).select_for_update().get(pk=op.pk)
+    checkin_questions = list(
+        clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
+    )
 
     if op.canceled or op.order.status not in (Order.STATUS_PAID, Order.STATUS_PENDING):
         raise CheckInError(
@@ -174,9 +168,9 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         )
 
     require_answers = []
-    if op.item.checkin_questions:
+    if checkin_questions:
         answers = {a.question: a for a in op.answers.all()}
-        for q in op.item.checkin_questions:
+        for q in checkin_questions:
             if q not in given_answers and q not in answers:
                 require_answers.append(q)
 
