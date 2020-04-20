@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-17 14:26+0000\n"
-"PO-Revision-Date: 2020-04-08 13:48+0000\n"
+"PO-Revision-Date: 2020-04-19 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -5891,10 +5891,8 @@ msgstr ""
 "te vragen met de schuifbalk hieronder. Dankjewel!"
 
 #: pretix/base/settings.py:978
-#, fuzzy
-#| msgid "Voucher explanation"
 msgid "Voluntary lower refund explanation"
-msgstr "Voucher-uitleg"
+msgstr "Uitleg voor vrijwillig lagere terugbetaling"
 
 #: pretix/base/settings.py:981
 msgid ""
@@ -5903,6 +5901,10 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organisation."
 msgstr ""
+"Deze tekst wordt getoond tussen de uitleg over hoe de terugbetalingen werken "
+"en de schuifbalk die je klanten kunnen gebruiken om het terug te betalen "
+"bedrag te kiezen. Je kan deze tekst bijvoorbeeld gebruiken om uit te leggen "
+"dat het kiezen van een lagere terugbetaling jouw organisatie helpt."
 
 #: pretix/base/settings.py:992
 msgid ""
@@ -6486,29 +6488,27 @@ msgstr ""
 
 #: pretix/base/settings.py:1495
 msgid "Banner text (top)"
-msgstr ""
+msgstr "Bannertekst (boven)"
 
 #: pretix/base/settings.py:1498
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the payment options. You can explain the "
-#| "choices to the user here, if you want."
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
-"Deze tekst wordt boven de betalingsopties getoond. Als je wilt kan je hier "
-"de opties aan de gebruiker uitleggen."
+"Deze tekst zal boven elke pagina van je kaartjeswinkel worden getoond. We "
+"raden aan om deze tekst alleen voor heel belangrijke berichten te gebruiken."
 
 #: pretix/base/settings.py:1508
 msgid "Banner text (bottom)"
-msgstr ""
+msgstr "Bannertekst (onder)"
 
 #: pretix/base/settings.py:1511
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"Deze tekst zal onder elke pagina van je kaartjeswinkel worden getoond. We "
+"raden aan om deze tekst alleen voor heel belangrijke berichten te gebruiken."
 
 #: pretix/base/settings.py:1521
 msgid "Voucher explanation"
@@ -8458,13 +8458,12 @@ msgstr ""
 "bestellingen of door cadeaubonnen uit te geven."
 
 #: pretix/control/forms/orders.py:558
-#, fuzzy
-#| msgid "All refunds are issued to the original payment method"
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
 msgstr ""
-"Alle terugbetalingen worden gedaan naar de oorspronkelijke betalingsmethode"
+"Geldbedrag als cadeaubon uitgeven in plaats van een terugbetaling naar de "
+"oorspronkelijke betalingsmethode"
 
 #: pretix/control/forms/orders.py:574
 msgid "Keep fees"
@@ -13601,6 +13600,10 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
+"Omdat je jouw klanten terugbetaalt met cadeaubonnen moet je je klanten "
+"uitleggen hoe ze bij hun cadeaubonnen kunnen komen. De gemakkelijkste manier "
+"om dit te doen is door een uitleg en een link naar de bestelpagina te "
+"versturen met de hier beschikbare e-mailfunctionaliteit."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:58
 msgid ""
