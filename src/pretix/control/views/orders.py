@@ -770,6 +770,7 @@ class OrderRefundView(OrderView):
                 if giftcard_value:
                     refund_selected += giftcard_value
                     giftcard = self.request.organizer.issued_gift_cards.create(
+                        expires=self.request.organizer.default_gift_card_expiry,
                         currency=self.request.event.currency,
                         testmode=self.order.testmode
                     )

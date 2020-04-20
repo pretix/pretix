@@ -18,6 +18,8 @@ secret                                string                     Gift card code 
 value                                 money (string)             Current gift card value
 currency                              string                     Currency of the value (can not be modified later)
 testmode                              boolean                    Whether this is a test gift card
+expires                               datetime                   Expiry date (or ``null``)
+conditions                            string                     Special terms and conditions for this card (or ``null``)
 ===================================== ========================== =======================================================
 
 Endpoints
@@ -53,6 +55,8 @@ Endpoints
             "secret": "HLBYVELFRC77NCQY",
             "currency": "EUR",
             "testmode": false,
+            "expires": null,
+            "conditions": null,
             "value": "13.37"
           }
         ]
@@ -92,6 +96,8 @@ Endpoints
         "secret": "HLBYVELFRC77NCQY",
         "currency": "EUR",
         "testmode": false,
+        "expires": null,
+        "conditions": null,
         "value": "13.37"
       }
 
@@ -134,6 +140,8 @@ Endpoints
         "secret": "HLBYVELFRC77NCQY",
         "testmode": false,
         "currency": "EUR",
+        "expires": null,
+        "conditions": null,
         "value": "13.37"
       }
 
@@ -180,6 +188,8 @@ Endpoints
         "secret": "HLBYVELFRC77NCQY",
         "testmode": false,
         "currency": "EUR",
+        "expires": null,
+        "conditions": null,
         "value": "14.00"
       }
 
@@ -222,6 +232,8 @@ Endpoints
         "secret": "HLBYVELFRC77NCQY",
         "currency": "EUR",
         "testmode": false,
+        "expires": null,
+        "conditions": null,
         "value": "15.37"
       }
 

@@ -1929,6 +1929,7 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
         can_auto_refund_sum = refund_amount
         with transaction.atomic():
             giftcard = order.event.organizer.issued_gift_cards.create(
+                expires=order.event.organizer.default_gift_card_expiry,
                 currency=order.event.currency,
                 testmode=order.testmode
             )
@@ -2144,7 +2145,8 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                 issued += gc.transactions.first().value
             if p.price - issued > 0:
                 gc = sender.organizer.issued_gift_cards.create(
-                    currency=sender.currency, issued_in=p, testmode=order.testmode
+                    currency=sender.currency, issued_in=p, testmode=order.testmode,
+                    expires=sender.organizer.default_gift_card_expiry,
                 )
                 gc.transactions.create(value=p.price - issued, order=order)
                 any_giftcards = True

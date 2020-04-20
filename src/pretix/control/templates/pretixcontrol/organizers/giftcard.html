@@ -29,6 +29,12 @@
                         <dd>{{ card.value|money:card.currency }}</dd>
                         <dt>{% trans "Currency" %}</dt>
                         <dd>{{ card.currency }}</dd>
+                        <dt>{% trans "Expire date" %}</dt>
+                        <dd>{% if card.expires %}{{ card.expires|date:"SHORT_DATETIME_FORMAT" }}{% else %}–{% endif %}</dd>
+                        {% if card.conditions %}
+                            <dt>{% trans "Special terms and conditions" context "giftcard" %}</dt>
+                            <dd>{{ card.conditions }}</dd>
+                        {% endif %}
                         {% if card.issued_in %}
                             <dt>{% trans "Issued through sale" %}</dt>
                             <dd>

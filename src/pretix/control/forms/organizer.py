@@ -14,9 +14,10 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
+from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import Device, GiftCard, Organizer, Team
 from pretix.control.forms import (
-    ExtFileField, FontSelect, MultipleLanguagesWidget,
+    ExtFileField, FontSelect, MultipleLanguagesWidget, SplitDateTimeField,
 )
 from pretix.control.forms.event import SafeEventMultipleChoiceField
 from pretix.multidomain.models import KnownDomain
@@ -330,6 +331,12 @@ class OrganizerSettingsForm(SettingsForm):
                     'is required, it can be set here.'.format(settings.ENTROPY['giftcard_secret'])),
         required=False
     )
+    giftcard_expiry_years = forms.IntegerField(
+        label=_('Validity of gift card codes in years'),
+        help_text=_('If you set a number here, gift cards will by default expire at the end of the year after this '
+                    'many years. If you keep it empty, gift cards do not have an explicit expiry date.'),
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -378,6 +385,9 @@ class GiftCardCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
+        initial = kwargs.pop('initial', {})
+        initial['expires'] = self.organizer.default_gift_card_expiry
+        kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
 
     def clean_secret(self):
@@ -394,4 +404,11 @@ class GiftCardCreateForm(forms.ModelForm):
 
     class Meta:
         model = GiftCard
-        fields = ['secret', 'currency', 'testmode']
+        fields = ['secret', 'currency', 'testmode', 'expires', 'conditions']
+        field_classes = {
+            'expires': SplitDateTimeField
+        }
+        widgets = {
+            'expires': SplitDateTimePickerWidget,
+            'conditions': forms.Textarea(attrs={"rows": 2})
+        }

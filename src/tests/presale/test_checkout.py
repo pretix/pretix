@@ -1027,6 +1027,21 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert o.payments.get(provider='giftcard').amount == Decimal('18.00')
             assert o.payments.get(provider='banktransfer').amount == Decimal('5.00')
 
+    def test_giftcard_expired(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR", expires=now() - timedelta(days=1))
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'This gift card is no longer valid.' in response.rendered_content
+
     def test_giftcard_invalid_currency(self):
         gc = self.orga.issued_gift_cards.create(currency="USD")
         gc.transactions.create(value=20)
