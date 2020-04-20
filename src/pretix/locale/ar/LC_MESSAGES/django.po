@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 15:45+0000\n"
+"POT-Creation-Date: 2020-04-20 17:06+0000\n"
 "PO-Revision-Date: 2019-12-25 01:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -3161,7 +3161,7 @@ msgstr "تخفيض سعر المنتج بنسبة (٪)"
 #: pretix/control/views/vouchers.py:69 pretix/control/views/waitinglist.py:199
 #: pretix/plugins/checkinlists/exporters.py:359
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:316
-#: pretix/presale/templates/pretixpresale/event/index.html:268
+#: pretix/presale/templates/pretixpresale/event/index.html:276
 msgid "Voucher code"
 msgstr "كود قسيمة"
 
@@ -4330,7 +4330,7 @@ msgid ""
 msgstr ""
 "لم نكن قادرين على معالجة طلبك تماما كما كان الملقم مشغول جدا. حاول مرة اخرى."
 
-#: pretix/base/services/cart.py:53 pretix/presale/views/cart.py:173
+#: pretix/base/services/cart.py:53 pretix/presale/views/cart.py:174
 msgid "You did not select any products."
 msgstr "انت لم تختر أي من المنتجات."
 
@@ -9832,6 +9832,8 @@ msgstr "تسجيل الدخول"
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
+#: pretix/presale/templates/pretixpresale/event/index.html:246
+#: pretix/presale/templates/pretixpresale/event/voucher.html:343
 msgid "Register"
 msgstr "تسجيل"
 
@@ -19223,11 +19225,11 @@ msgstr ""
 "سنقوم بإرسال ايميل لك فور الموافقة على حجزك من المنظمين. إذا تمت الموافقة "
 "على طلبك، سوف تجد رابط في الإيميل يمكنك استخدامه للدفع."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:193
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
 msgid "Place binding order"
 msgstr "اتمام عملية الدفع"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:196
 msgid "Submit registration"
 msgstr "تاكيد التسجيل"
 
@@ -19363,7 +19365,7 @@ msgstr[4] "أضف منتج"
 msgstr[5] "أضف منتج"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:309
-#: pretix/presale/templates/pretixpresale/event/index.html:256
+#: pretix/presale/templates/pretixpresale/event/index.html:264
 msgid "Redeem a voucher"
 msgstr "كود خصم"
 
@@ -19515,6 +19517,8 @@ msgid "Empty cart"
 msgstr "الغاء الحجز"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:75
+#: pretix/presale/templates/pretixpresale/event/index.html:248
+#: pretix/presale/templates/pretixpresale/event/voucher.html:345
 msgid "Proceed with checkout"
 msgstr "إتمام عملية الدفع"
 
@@ -19582,20 +19586,20 @@ msgstr "إضافة إلى التقويم"
 msgid "We're now trying to reserve this for you!"
 msgstr "نجهز حجزك!"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:244
-#: pretix/presale/templates/pretixpresale/event/voucher.html:341
+#: pretix/presale/templates/pretixpresale/event/index.html:251
+#: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
 msgstr "أضف إلى السلة"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:274
+#: pretix/presale/templates/pretixpresale/event/index.html:282
 msgid "Redeem voucher"
 msgstr "ادخل كود الخصم"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:285
+#: pretix/presale/templates/pretixpresale/event/index.html:293
 msgid "If you already ordered a ticket"
 msgstr "إذا كان لديك تذكرة"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:289
+#: pretix/presale/templates/pretixpresale/event/index.html:297
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -19606,7 +19610,7 @@ msgstr ""
 "ليتم إعادة ارسال تفاصيل طلبك إلى إيميلك ومن ثم قم بالضغط على الرابط في "
 "الإيميل."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:298
+#: pretix/presale/templates/pretixpresale/event/index.html:306
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
@@ -20164,28 +20168,28 @@ msgstr "لم يتم تمكين هذه الميزة."
 msgid "The selected organizer was not found."
 msgstr "لم يتم العثور على منظم المحدد."
 
-#: pretix/presale/views/cart.py:112 pretix/presale/views/cart.py:117
-#: pretix/presale/views/cart.py:134 pretix/presale/views/cart.py:146
+#: pretix/presale/views/cart.py:113 pretix/presale/views/cart.py:118
+#: pretix/presale/views/cart.py:135 pretix/presale/views/cart.py:147
 msgid "Please enter numbers only."
 msgstr "برجاء إدخال أرقام فقط."
 
-#: pretix/presale/views/cart.py:119
+#: pretix/presale/views/cart.py:120
 msgid "Please enter positive numbers only."
 msgstr "الرجاء إدخال أرقام موجبة فقط."
 
-#: pretix/presale/views/cart.py:337
+#: pretix/presale/views/cart.py:338
 msgid "We applied the voucher to as many products in your cart as we could."
 msgstr ""
 
-#: pretix/presale/views/cart.py:359
+#: pretix/presale/views/cart.py:360
 msgid "Your cart has been updated."
 msgstr "تم تحديث عربة التسوق."
 
-#: pretix/presale/views/cart.py:362 pretix/presale/views/cart.py:384
+#: pretix/presale/views/cart.py:363 pretix/presale/views/cart.py:385
 msgid "Your cart is now empty."
 msgstr "عربة التسوق الخاصة بك الآن فارغة."
 
-#: pretix/presale/views/cart.py:399
+#: pretix/presale/views/cart.py:400
 msgid "The products have been successfully added to your cart."
 msgstr "تم إضافة التذاكر إلى سلة التسوق."
 
@@ -20197,22 +20201,22 @@ msgstr "عربة التسوق فارغة"
 msgid "The presale for this event is over or has not yet started."
 msgstr "من [خبر] لهذا الحدث هو أكثر أو لم تبدأ بعد."
 
-#: pretix/presale/views/event.py:437
+#: pretix/presale/views/event.py:447
 msgid "Unknown event code or not authorized to access this event."
 msgstr "رمز الحدث غير معروف أو غير مخول للوصول إلى هذا الحدث."
 
-#: pretix/presale/views/event.py:444
+#: pretix/presale/views/event.py:454
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "موعد المحدد."
 
-#: pretix/presale/views/event.py:447
+#: pretix/presale/views/event.py:457
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "التاريخ غير معروف المحدد."
 
-#: pretix/presale/views/event.py:470 pretix/presale/views/event.py:478
-#: pretix/presale/views/event.py:481
+#: pretix/presale/views/event.py:480 pretix/presale/views/event.py:488
+#: pretix/presale/views/event.py:491
 msgid "Please go back and try again."
 msgstr "الرجاء العودة والمحاولة مجددا."
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 15:45+0000\n"
+"POT-Creation-Date: 2020-04-20 17:06+0000\n"
 "PO-Revision-Date: 2020-01-08 03:00+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -3248,7 +3248,7 @@ msgstr "Reducir el precio del producto en (%)"
 #: pretix/control/views/vouchers.py:69 pretix/control/views/waitinglist.py:199
 #: pretix/plugins/checkinlists/exporters.py:359
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:316
-#: pretix/presale/templates/pretixpresale/event/index.html:268
+#: pretix/presale/templates/pretixpresale/event/index.html:276
 msgid "Voucher code"
 msgstr "Código del recibo"
 
@@ -4489,7 +4489,7 @@ msgstr ""
 "No pudimos procesar su solicitud completamente ya que el servidor estaba "
 "demasiado ocupado. Por favor, inténtalo de nuevo."
 
-#: pretix/base/services/cart.py:53 pretix/presale/views/cart.py:173
+#: pretix/base/services/cart.py:53 pretix/presale/views/cart.py:174
 msgid "You did not select any products."
 msgstr "Usted no seleccionó ningún producto."
 
@@ -10431,6 +10431,8 @@ msgstr "Iniciar sesión"
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
+#: pretix/presale/templates/pretixpresale/event/index.html:246
+#: pretix/presale/templates/pretixpresale/event/voucher.html:343
 msgid "Register"
 msgstr "Registrarse"
 
@@ -20291,11 +20293,11 @@ msgstr ""
 "evento apruebe o rechace su pedido. Si su pedido fue aprobado, le enviaremos "
 "un enlace que puede utilizar para pagar."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:193
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
 msgid "Place binding order"
 msgstr "Colocar orden de compra"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:196
 msgid "Submit registration"
 msgstr "Enviar registro"
 
@@ -20443,7 +20445,7 @@ msgstr[0] "Cualquier producto"
 msgstr[1] "Cualquier producto"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:309
-#: pretix/presale/templates/pretixpresale/event/index.html:256
+#: pretix/presale/templates/pretixpresale/event/index.html:264
 msgid "Redeem a voucher"
 msgstr "Canjee un recibo"
 
@@ -20596,6 +20598,8 @@ msgid "Empty cart"
 msgstr "Carrito vacío"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:75
+#: pretix/presale/templates/pretixpresale/event/index.html:248
+#: pretix/presale/templates/pretixpresale/event/voucher.html:345
 msgid "Proceed with checkout"
 msgstr "Proceder con la compra"
 
@@ -20665,20 +20669,20 @@ msgstr "Añadir al Calendario"
 msgid "We're now trying to reserve this for you!"
 msgstr "¡Estamos tratando de reservar esto para ti!"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:244
-#: pretix/presale/templates/pretixpresale/event/voucher.html:341
+#: pretix/presale/templates/pretixpresale/event/index.html:251
+#: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
 msgstr "Agregar al carrito"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:274
+#: pretix/presale/templates/pretixpresale/event/index.html:282
 msgid "Redeem voucher"
 msgstr "Canjear recibo"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:285
+#: pretix/presale/templates/pretixpresale/event/index.html:293
 msgid "If you already ordered a ticket"
 msgstr "Si ya ha pedido un ticket"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:289
+#: pretix/presale/templates/pretixpresale/event/index.html:297
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -20691,7 +20695,7 @@ msgstr ""
 "siguiente botón para solicitar que se le envíe de nuevo el enlace a su "
 "pedido."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:298
+#: pretix/presale/templates/pretixpresale/event/index.html:306
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
@@ -21291,28 +21295,28 @@ msgstr "Esta función no está habilitada."
 msgid "The selected organizer was not found."
 msgstr "No se ha encontrado el organizador seleccionado."
 
-#: pretix/presale/views/cart.py:112 pretix/presale/views/cart.py:117
-#: pretix/presale/views/cart.py:134 pretix/presale/views/cart.py:146
+#: pretix/presale/views/cart.py:113 pretix/presale/views/cart.py:118
+#: pretix/presale/views/cart.py:135 pretix/presale/views/cart.py:147
 msgid "Please enter numbers only."
 msgstr "Ingrese solamente números."
 
-#: pretix/presale/views/cart.py:119
+#: pretix/presale/views/cart.py:120
 msgid "Please enter positive numbers only."
 msgstr "Por favor, introduzca sólo números positivos."
 
-#: pretix/presale/views/cart.py:337
+#: pretix/presale/views/cart.py:338
 msgid "We applied the voucher to as many products in your cart as we could."
 msgstr ""
 
-#: pretix/presale/views/cart.py:359
+#: pretix/presale/views/cart.py:360
 msgid "Your cart has been updated."
 msgstr "Su carrito ha sido actualizado."
 
-#: pretix/presale/views/cart.py:362 pretix/presale/views/cart.py:384
+#: pretix/presale/views/cart.py:363 pretix/presale/views/cart.py:385
 msgid "Your cart is now empty."
 msgstr "Su carrito ha sido vaciado."
 
-#: pretix/presale/views/cart.py:399
+#: pretix/presale/views/cart.py:400
 msgid "The products have been successfully added to your cart."
 msgstr "Los productos se han añadido con éxito a su carrito."
 
@@ -21324,23 +21328,23 @@ msgstr "Su carrito está vacío"
 msgid "The presale for this event is over or has not yet started."
 msgstr "La preventa de este evento ha terminado o aún no ha comenzado."
 
-#: pretix/presale/views/event.py:437
+#: pretix/presale/views/event.py:447
 msgid "Unknown event code or not authorized to access this event."
 msgstr ""
 "Código de evento desconocido o no autorizado para acceder a este evento."
 
-#: pretix/presale/views/event.py:444
+#: pretix/presale/views/event.py:454
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "Fecha no seleccionada."
 
-#: pretix/presale/views/event.py:447
+#: pretix/presale/views/event.py:457
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "Fecha seleccionada desconocida."
 
-#: pretix/presale/views/event.py:470 pretix/presale/views/event.py:478
-#: pretix/presale/views/event.py:481
+#: pretix/presale/views/event.py:480 pretix/presale/views/event.py:488
+#: pretix/presale/views/event.py:491
 msgid "Please go back and try again."
 msgstr "Por favor, vuelve e inténtalo de nuevo."
 

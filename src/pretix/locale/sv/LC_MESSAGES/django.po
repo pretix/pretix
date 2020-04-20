@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 15:45+0000\n"
+"POT-Creation-Date: 2020-04-20 17:06+0000\n"
 "PO-Revision-Date: 2019-10-17 09:50+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -3029,7 +3029,7 @@ msgstr ""
 #: pretix/control/views/vouchers.py:69 pretix/control/views/waitinglist.py:199
 #: pretix/plugins/checkinlists/exporters.py:359
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:316
-#: pretix/presale/templates/pretixpresale/event/index.html:268
+#: pretix/presale/templates/pretixpresale/event/index.html:276
 msgid "Voucher code"
 msgstr "Rabattkod"
 
@@ -4131,7 +4131,7 @@ msgid ""
 "busy. Please try again."
 msgstr ""
 
-#: pretix/base/services/cart.py:53 pretix/presale/views/cart.py:173
+#: pretix/base/services/cart.py:53 pretix/presale/views/cart.py:174
 msgid "You did not select any products."
 msgstr "Du valde ingen av produkterna."
 
@@ -8991,6 +8991,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
+#: pretix/presale/templates/pretixpresale/event/index.html:246
+#: pretix/presale/templates/pretixpresale/event/voucher.html:343
 msgid "Register"
 msgstr ""
 
@@ -17635,11 +17637,11 @@ msgstr ""
 "din beställning. Om den var godkänd, så kommer vi skicka med en länk som "
 "används för att betala."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:193
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
 msgid "Place binding order"
 msgstr "Slutför beställning"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:196
 msgid "Submit registration"
 msgstr "Skicka registrering"
 
@@ -17776,7 +17778,7 @@ msgstr[0] "Extra produkter"
 msgstr[1] "Extra produkter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:309
-#: pretix/presale/templates/pretixpresale/event/index.html:256
+#: pretix/presale/templates/pretixpresale/event/index.html:264
 msgid "Redeem a voucher"
 msgstr ""
 
@@ -17928,6 +17930,8 @@ msgid "Empty cart"
 msgstr "Töm varukorg"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:75
+#: pretix/presale/templates/pretixpresale/event/index.html:248
+#: pretix/presale/templates/pretixpresale/event/voucher.html:345
 msgid "Proceed with checkout"
 msgstr "Fortsätt med köpet"
 
@@ -17995,20 +17999,20 @@ msgstr ""
 msgid "We're now trying to reserve this for you!"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:244
-#: pretix/presale/templates/pretixpresale/event/voucher.html:341
+#: pretix/presale/templates/pretixpresale/event/index.html:251
+#: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:274
+#: pretix/presale/templates/pretixpresale/event/index.html:282
 msgid "Redeem voucher"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:285
+#: pretix/presale/templates/pretixpresale/event/index.html:293
 msgid "If you already ordered a ticket"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:289
+#: pretix/presale/templates/pretixpresale/event/index.html:297
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -18016,7 +18020,7 @@ msgid ""
 "your order to be sent to you again."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:298
+#: pretix/presale/templates/pretixpresale/event/index.html:306
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
@@ -18507,28 +18511,28 @@ msgstr ""
 msgid "The selected organizer was not found."
 msgstr ""
 
-#: pretix/presale/views/cart.py:112 pretix/presale/views/cart.py:117
-#: pretix/presale/views/cart.py:134 pretix/presale/views/cart.py:146
+#: pretix/presale/views/cart.py:113 pretix/presale/views/cart.py:118
+#: pretix/presale/views/cart.py:135 pretix/presale/views/cart.py:147
 msgid "Please enter numbers only."
 msgstr ""
 
-#: pretix/presale/views/cart.py:119
+#: pretix/presale/views/cart.py:120
 msgid "Please enter positive numbers only."
 msgstr ""
 
-#: pretix/presale/views/cart.py:337
+#: pretix/presale/views/cart.py:338
 msgid "We applied the voucher to as many products in your cart as we could."
 msgstr ""
 
-#: pretix/presale/views/cart.py:359
+#: pretix/presale/views/cart.py:360
 msgid "Your cart has been updated."
 msgstr ""
 
-#: pretix/presale/views/cart.py:362 pretix/presale/views/cart.py:384
+#: pretix/presale/views/cart.py:363 pretix/presale/views/cart.py:385
 msgid "Your cart is now empty."
 msgstr ""
 
-#: pretix/presale/views/cart.py:399
+#: pretix/presale/views/cart.py:400
 msgid "The products have been successfully added to your cart."
 msgstr ""
 
@@ -18540,22 +18544,22 @@ msgstr ""
 msgid "The presale for this event is over or has not yet started."
 msgstr ""
 
-#: pretix/presale/views/event.py:437
+#: pretix/presale/views/event.py:447
 msgid "Unknown event code or not authorized to access this event."
 msgstr ""
 
-#: pretix/presale/views/event.py:444
+#: pretix/presale/views/event.py:454
 msgctxt "subevent"
 msgid "No date selected."
 msgstr ""
 
-#: pretix/presale/views/event.py:447
+#: pretix/presale/views/event.py:457
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr ""
 
-#: pretix/presale/views/event.py:470 pretix/presale/views/event.py:478
-#: pretix/presale/views/event.py:481
+#: pretix/presale/views/event.py:480 pretix/presale/views/event.py:488
+#: pretix/presale/views/event.py:491
 msgid "Please go back and try again."
 msgstr ""
 

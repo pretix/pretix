@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 15:45+0000\n"
+"POT-Creation-Date: 2020-04-20 17:06+0000\n"
 "PO-Revision-Date: 2019-10-23 14:41+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -3101,7 +3101,7 @@ msgstr "降低产品价格（％）"
 #: pretix/control/views/vouchers.py:69 pretix/control/views/waitinglist.py:199
 #: pretix/plugins/checkinlists/exporters.py:359
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:316
-#: pretix/presale/templates/pretixpresale/event/index.html:268
+#: pretix/presale/templates/pretixpresale/event/index.html:276
 msgid "Voucher code"
 msgstr "优惠券号"
 
@@ -4256,7 +4256,7 @@ msgid ""
 "busy. Please try again."
 msgstr "由于服务器太忙，我们无法完全处理您的请求。请再次尝试。"
 
-#: pretix/base/services/cart.py:53 pretix/presale/views/cart.py:173
+#: pretix/base/services/cart.py:53 pretix/presale/views/cart.py:174
 msgid "You did not select any products."
 msgstr "您没有选择任何产品。"
 
@@ -9673,6 +9673,8 @@ msgstr "登录"
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
+#: pretix/presale/templates/pretixpresale/event/index.html:246
+#: pretix/presale/templates/pretixpresale/event/voucher.html:343
 msgid "Register"
 msgstr "记录器"
 
@@ -18941,11 +18943,11 @@ msgstr ""
 "我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 如果您的订单获得"
 "批准，我们会向您发送一个可用于支付的链接。"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:193
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
 msgid "Place binding order"
 msgstr "绑定订货"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:196
 msgid "Submit registration"
 msgstr "提交注册"
 
@@ -19078,7 +19080,7 @@ msgid_plural "%(num)s products"
 msgstr[0] "附加产品"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:309
-#: pretix/presale/templates/pretixpresale/event/index.html:256
+#: pretix/presale/templates/pretixpresale/event/index.html:264
 msgid "Redeem a voucher"
 msgstr "兑换优惠券"
 
@@ -19229,6 +19231,8 @@ msgid "Empty cart"
 msgstr "清空购物车"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:75
+#: pretix/presale/templates/pretixpresale/event/index.html:248
+#: pretix/presale/templates/pretixpresale/event/voucher.html:345
 msgid "Proceed with checkout"
 msgstr "进行结账"
 
@@ -19298,20 +19302,20 @@ msgstr "添加到日历"
 msgid "We're now trying to reserve this for you!"
 msgstr "我们现在正试图为您保留这个！"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:244
-#: pretix/presale/templates/pretixpresale/event/voucher.html:341
+#: pretix/presale/templates/pretixpresale/event/index.html:251
+#: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
 msgstr "添加到购物车"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:274
+#: pretix/presale/templates/pretixpresale/event/index.html:282
 msgid "Redeem voucher"
 msgstr "兑换优惠券"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:285
+#: pretix/presale/templates/pretixpresale/event/index.html:293
 msgid "If you already ordered a ticket"
 msgstr "如果您已经订了票"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:289
+#: pretix/presale/templates/pretixpresale/event/index.html:297
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -19322,7 +19326,7 @@ msgstr ""
 "一封电子邮件中的链接。 如果您找不到该链接，请单击以下按钮以请求再次发送给您的"
 "订单链接。"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:298
+#: pretix/presale/templates/pretixpresale/event/index.html:306
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
@@ -19888,28 +19892,28 @@ msgstr "此功能未启用。"
 msgid "The selected organizer was not found."
 msgstr "找不到所选的组织者。"
 
-#: pretix/presale/views/cart.py:112 pretix/presale/views/cart.py:117
-#: pretix/presale/views/cart.py:134 pretix/presale/views/cart.py:146
+#: pretix/presale/views/cart.py:113 pretix/presale/views/cart.py:118
+#: pretix/presale/views/cart.py:135 pretix/presale/views/cart.py:147
 msgid "Please enter numbers only."
 msgstr "请只输入数字。"
 
-#: pretix/presale/views/cart.py:119
+#: pretix/presale/views/cart.py:120
 msgid "Please enter positive numbers only."
 msgstr "请只输入正数。"
 
-#: pretix/presale/views/cart.py:337
+#: pretix/presale/views/cart.py:338
 msgid "We applied the voucher to as many products in your cart as we could."
 msgstr ""
 
-#: pretix/presale/views/cart.py:359
+#: pretix/presale/views/cart.py:360
 msgid "Your cart has been updated."
 msgstr "您的购物车已更新。"
 
-#: pretix/presale/views/cart.py:362 pretix/presale/views/cart.py:384
+#: pretix/presale/views/cart.py:363 pretix/presale/views/cart.py:385
 msgid "Your cart is now empty."
 msgstr "你的购物车现在是空的。"
 
-#: pretix/presale/views/cart.py:399
+#: pretix/presale/views/cart.py:400
 msgid "The products have been successfully added to your cart."
 msgstr "产品已成功添加到您的购物车中。"
 
@@ -19921,22 +19925,22 @@ msgstr "你的购物车是空的"
 msgid "The presale for this event is over or has not yet started."
 msgstr "此活动的预售已结束或尚未开始。"
 
-#: pretix/presale/views/event.py:437
+#: pretix/presale/views/event.py:447
 msgid "Unknown event code or not authorized to access this event."
 msgstr "未知活动代码或未授权访问此事件。"
 
-#: pretix/presale/views/event.py:444
+#: pretix/presale/views/event.py:454
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "未选择日期。"
 
-#: pretix/presale/views/event.py:447
+#: pretix/presale/views/event.py:457
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "选择了未知日期。"
 
-#: pretix/presale/views/event.py:470 pretix/presale/views/event.py:478
-#: pretix/presale/views/event.py:481
+#: pretix/presale/views/event.py:480 pretix/presale/views/event.py:488
+#: pretix/presale/views/event.py:491
 msgid "Please go back and try again."
 msgstr "请返回重试。"
 
