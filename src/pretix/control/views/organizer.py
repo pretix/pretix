@@ -23,11 +23,12 @@ from django.views.generic import (
 from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
-    Device, GiftCard, Organizer, Team, TeamInvite, User,
+    Device, GiftCard, OrderPayment, Organizer, Team, TeamInvite, User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import gen_giftcard_secret
 from pretix.base.models.organizer import TeamAPIToken
+from pretix.base.payment import PaymentException
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.filter import (
     EventFilterForm, GiftCardFilterForm, OrganizerFilterForm,
@@ -998,7 +999,36 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         self.object = GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
-        if 'value' in request.POST:
+        if 'revert' in request.POST:
+            t = get_object_or_404(self.object.transactions.all(), pk=request.POST.get('revert'), order__isnull=False)
+            if self.object.value - t.value < Decimal('0.00'):
+                messages.error(request, _('Gift cards are not allowed to have negative values.'))
+            elif t.value > 0:
+                r = t.order.payments.create(
+                    order=t.order,
+                    state=OrderPayment.PAYMENT_STATE_CREATED,
+                    amount=t.value,
+                    provider='giftcard',
+                    info=json.dumps({
+                        'gift_card': self.object.pk,
+                        'retry': True,
+                    })
+                )
+                try:
+                    r.payment_provider.execute_payment(None, r)
+                except PaymentException as e:
+                    with transaction.atomic():
+                        r.state = OrderPayment.PAYMENT_STATE_FAILED
+                        r.save()
+                        t.order.log_action('pretix.event.order.payment.failed', {
+                            'local_id': r.local_id,
+                            'provider': r.provider,
+                            'error': str(e)
+                        })
+                    messages.error(request, _('The transaction could not be reversed.'))
+                else:
+                    messages.success(request, _('The transaction has been reversed.'))
+        elif 'value' in request.POST:
             try:
                 value = DecimalField(localize=True).to_python(request.POST.get('value'))
             except ValidationError:

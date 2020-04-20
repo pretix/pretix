@@ -1,6 +1,12 @@
-import pytest
+from datetime import timedelta
 
-from pretix.base.models import Organizer, Team, User
+import pytest
+from django.utils.timezone import now
+from django_scopes import scopes_disabled
+
+from pretix.base.models import (
+    Order, OrderPayment, OrderRefund, Organizer, Team, User,
+)
 
 
 @pytest.fixture
@@ -81,6 +87,37 @@ def test_card_detail_view_transact(organizer, admin_user, gift_card, client):
     })
     assert gift_card.value == 23 + 42
     assert gift_card.all_logentries().count() == 1
+
+
+@pytest.mark.django_db
+def test_card_detail_view_transact_revert_refund(organizer, admin_user, gift_card, client):
+    with scopes_disabled():
+        event = organizer.events.create(
+            name='Dummy', slug='dummy',
+            date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.stripe,tests.testdummy'
+        )
+        o = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_CANCELED,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=14, locale='en'
+        )
+        o.payments.create(
+            amount=o.total, provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CONFIRMED
+        )
+        r = o.refunds.create(
+            amount=o.total, provider='giftcard', state=OrderRefund.REFUND_STATE_DONE
+        )
+        t = gift_card.transactions.create(value=14, order=o, refund=r)
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.post('/control/organizer/dummy/giftcard/{}/'.format(gift_card.pk), {
+        'revert': str(t.pk)
+    })
+    assert 'alert-success' in r.rendered_content
+    assert gift_card.value == 42
+    o.refresh_from_db()
+    assert o.pending_sum == -14
 
 
 @pytest.mark.django_db

@@ -64,6 +64,14 @@
                                         <a href="{% url "control:event.order" event=t.order.event.slug organizer=t.order.event.organizer.slug code=t.order.code %}">
                                             {{ t.order.full_code }}
                                         </a>
+                                        {% if t.value > 0 and t.value <= card.value %}
+                                            <button type="submit" name="revert" value="{{ t.pk }}"
+                                                    class="btn btn-default btn-xs" data-toggle="tooltip"
+                                                    title="{% trans "Create a payment on the respective order that cancels out with this transaction. The order will then likely be overpaid." %}">
+                                                <span class="fa fa-repeat"></span>
+                                                {% trans "Revert" %}
+                                            </button>
+                                        {% endif %}
                                     {% else %}
                                         <em>{% trans "Manual transaction" %}{% if t.text %}: {{ t.text }}{% endif %}</em>
                                     {% endif %}
