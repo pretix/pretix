@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 17:14+0000\n"
-"PO-Revision-Date: 2020-04-17 15:11+0000\n"
+"POT-Creation-Date: 2020-04-20 17:06+0000\n"
+"PO-Revision-Date: 2020-04-20 17:17+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2792,7 +2792,7 @@ msgstr "Meta-Informationen"
 
 #: pretix/base/models/orders.py:198
 msgid "E-mail address verified"
-msgstr "E-Mail-Adresse verzifiziert"
+msgstr "E-Mail-Adresse verifiziert"
 
 #: pretix/base/models/orders.py:683
 msgid ""
@@ -8478,10 +8478,8 @@ msgid "You need to specify an amount for a partial refund."
 msgstr "Sie müssen für eine Teilrückerstattung auch einen Betrag angeben."
 
 #: pretix/control/forms/orders.py:544
-#, fuzzy
-#| msgid "Cancel all orders"
 msgid "Cancel all dates"
-msgstr "Alle Bestellungen stornieren"
+msgstr "Alle Termine stornieren"
 
 #: pretix/control/forms/orders.py:549
 msgid "Automatically refund money if possible"
@@ -8601,6 +8599,8 @@ msgstr ""
 #: pretix/control/forms/orders.py:692
 msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr ""
+"Bitte bestätigen Sie, dass Sie ALLE Termine dieser Veranstaltungsreihe "
+"stornieren möchten."
 
 #: pretix/control/forms/organizer.py:28
 msgid "This slug is already in use. Please choose a different one."
@@ -14104,12 +14104,12 @@ msgid ""
 "Create a payment on the respective order that cancels out with this "
 "transaction. The order will then likely be overpaid."
 msgstr ""
+"Erstellt eine Zahlung für diese Bestellung, die sich mit dieser Transaktion "
+"aufhebt. Die Bestellung ist dann vermutlich überzahlt."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:72
-#, fuzzy
-#| msgid "Never"
 msgid "Revert"
-msgstr "Niemals"
+msgstr "Rückbuchen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:76
 msgid "Manual transaction"
@@ -15285,7 +15285,7 @@ msgstr "Passwort-Reset-Link per E-Mail verschicken"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:16
 msgid "Impersonate user"
-msgstr "In Benutzer schlüpfen"
+msgstr "Als Benutzer ausgeben"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:18
 msgid "Anonymize"
@@ -16742,16 +16742,12 @@ msgid "Gift cards are not allowed to have negative values."
 msgstr "Geschenkgutscheine dürfen keine negativen Werte haben."
 
 #: pretix/control/views/organizer.py:1028
-#, fuzzy
-#| msgid "The transaction amount is incorrect."
 msgid "The transaction could not be reversed."
-msgstr "Der Überweisungsbetrag stimmt nicht."
+msgstr "Die Transaktion konnte nicht zurückgebucht werden."
 
 #: pretix/control/views/organizer.py:1030
-#, fuzzy
-#| msgid "The manual transaction has been saved."
 msgid "The transaction has been reversed."
-msgstr "Die manuelle Transaktion wurde gespeichert."
+msgstr "Die Transaktion wurde zurückgebucht."
 
 #: pretix/control/views/organizer.py:1035
 msgid "Your input was invalid, please try again."
@@ -17806,12 +17802,13 @@ msgstr ""
 
 #: pretix/plugins/paypal/payment.py:152
 msgid "PayPal does not process payments in your event's currency."
-msgstr ""
+msgstr "PayPal akzeptiert keine Zahlungen in der Währung dieser Veranstaltung."
 
 #: pretix/plugins/paypal/payment.py:153
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
 msgstr ""
+"Bitte prüfen Sie diese PayPal-Seite für eine Liste unterstützter Währungen."
 
 #: pretix/plugins/paypal/payment.py:158
 msgid ""
@@ -17821,6 +17818,10 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
+"Die Veranstaltungswährung wird von PayPal nur für inländische Zahlungen "
+"unterstützt. Das bedeutet, dass sowohl das Kunden- als auch das Händler-"
+"PayPal-Konto im gleichen Land und mit der gleichen Währung erstellt worden "
+"sein müssen. Andere PayPal-Accounts können keine Zahlungen vornehmen."
 
 #: pretix/plugins/paypal/payment.py:205 pretix/plugins/paypal/payment.py:291
 #: pretix/plugins/paypal/payment.py:306 pretix/plugins/paypal/payment.py:309
@@ -19304,16 +19305,12 @@ msgid "PDF output"
 msgstr "PDF-Ausgabe"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:31
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download tickets (PDF)"
-msgstr "Ticket herunterladen"
+msgstr "Tickets herunterladen (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:32
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download ticket (PDF)"
-msgstr "Ticket herunterladen"
+msgstr "Ticket herunterladen (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:36
 msgid "Default ticket layout"
@@ -19782,12 +19779,11 @@ msgid "Add one more"
 msgstr "Eins mehr hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:294
-#, fuzzy, python-format
-#| msgid "Any product"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Alle Produkte"
-msgstr[1] "Alle Produkte"
+msgstr[0] "Ein Produkt"
+msgstr[1] "%(num)s Produkte"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:309
 #: pretix/presale/templates/pretixpresale/event/index.html:264
@@ -20016,11 +20012,9 @@ msgstr "Wir versuchen nun, die ausgewählten Produkte für Sie zu reservieren!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:246
 #: pretix/presale/templates/pretixpresale/event/voucher.html:343
-#, fuzzy
-#| msgid "Register"
 msgctxt "free_tickets"
 msgid "Register"
-msgstr "Registrieren"
+msgstr "Anmelden"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:251
 #: pretix/presale/templates/pretixpresale/event/voucher.html:348
