@@ -7,11 +7,9 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import transaction
-from django.db.models import (
-    Count, DecimalField, Max, Min, Prefetch, ProtectedError, Sum,
-)
+from django.db.models import Count, Max, Min, Prefetch, ProtectedError, Sum
 from django.db.models.functions import Coalesce, Greatest
-from django.forms import inlineformset_factory
+from django.forms import DecimalField, inlineformset_factory
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -1002,7 +1000,7 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         self.object = GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
         if 'value' in request.POST:
             try:
-                value = DecimalField().to_python(request.POST.get('value'))
+                value = DecimalField(localize=True).to_python(request.POST.get('value'))
             except ValidationError:
                 messages.error(request, _('Your input was invalid, please try again.'))
             else:
