@@ -72,6 +72,8 @@ The output class
 
    .. autoattribute:: download_button_icon
 
+   .. autoattribute:: multi_download_button_text
+
    .. autoattribute:: preview_allowed
 
    .. autoattribute:: javascript_required

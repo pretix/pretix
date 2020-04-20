@@ -15,8 +15,8 @@
                             method="post" data-asynctask data-asynctask-download class="download-btn-form">
                         {% csrf_token %}
                         <button type="submit"
-                                class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                                class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
+                            <span class="fa {{ b.icon }}"></span> {{ b.multi_text }}
                         </button>
                     </form>
                 {% endif %}

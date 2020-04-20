@@ -161,6 +161,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
                 continue
             buttons.append({
                 'text': provider.download_button_text or 'Download',
+                'multi_text': provider.multi_download_button_text or 'Download',
                 'icon': provider.download_button_icon or 'fa-download',
                 'identifier': provider.identifier,
                 'multi': provider.multi_download_enabled,
