@@ -127,7 +127,8 @@ TEST_LIST_RES = {
     "include_pending": False,
     "allow_multiple_entries": False,
     "allow_entry_after_exit": True,
-    "subevent": None
+    "subevent": None,
+    "rules": {}
 }
 
 
@@ -189,7 +190,8 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
             "name": "VIP",
             "limit_products": [item.pk],
             "all_products": False,
-            "subevent": None
+            "subevent": None,
+            "rules": {"==": [0, 1]}
         },
         format='json'
     )
@@ -199,6 +201,7 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
         assert cl.name == "VIP"
         assert cl.limit_products.count() == 1
         assert not cl.all_products
+        assert cl.rules == {"==": [0, 1]}
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
