@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 17:06+0000\n"
+"POT-Creation-Date: 2020-04-20 17:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -8900,8 +8900,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
-#: pretix/presale/templates/pretixpresale/event/index.html:246
-#: pretix/presale/templates/pretixpresale/event/voucher.html:343
 msgid "Register"
 msgstr ""
 
@@ -17803,6 +17801,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:66
 msgid "We're now trying to reserve this for you!"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/index.html:246
+#: pretix/presale/templates/pretixpresale/event/voucher.html:343
+msgctxt "free_tickets"
+msgid "Register"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:251
