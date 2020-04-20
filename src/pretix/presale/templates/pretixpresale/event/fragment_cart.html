@@ -289,10 +289,16 @@
 {% endif %}
 <div class="row cart-row total">
     <div class="product">
-        <strong>{% trans "Total" %}</strong>
+        <strong>{% trans "Total" %}</strong><br>
+        <span class="text-muted">
+            {% blocktrans trimmed count num=cart.itemcount %}
+                One product
+            {% plural %}
+                {{ num }} products
+            {% endblocktrans %}
+        </span>
     </div>
     <div class="count hidden-xs hidden-sm">
-        <strong>{{ cart.itemcount }}</strong>
     </div>
     <div class="col-md-3 col-xs-6 col-md-offset-3 price">
         <strong>{{ cart.total|money:event.currency }}</strong>
