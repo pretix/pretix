@@ -162,6 +162,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             buttons.append({
                 'text': provider.download_button_text or 'Download',
                 'multi_text': provider.multi_download_button_text or 'Download',
+                'long_text': provider.long_download_button_text or 'Download',
                 'icon': provider.download_button_icon or 'fa-download',
                 'identifier': provider.identifier,
                 'multi': provider.multi_download_enabled,
@@ -176,6 +177,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             queryset=self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule'),
             order=self.order
         )
+        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
@@ -256,6 +258,8 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
                 'icon': provider.download_button_icon or 'fa-download',
                 'identifier': provider.identifier,
                 'multi': provider.multi_download_enabled,
+                'multi_text': provider.multi_download_button_text or 'Download',
+                'long_text': provider.long_download_button_text or 'Download',
                 'javascript_required': provider.javascript_required
             })
         return buttons
@@ -271,6 +275,7 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
             ),
             order=self.order
         )
+        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
         return ctx
 
 

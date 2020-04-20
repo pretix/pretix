@@ -163,6 +163,13 @@ class BaseTicketOutput:
         return _('Download ticket')
 
     @property
+    def long_download_button_text(self) -> str:
+        """
+        The text on the large download button in the frontend.
+        """
+        return self.download_button_text
+
+    @property
     def multi_download_button_text(self) -> str:
         """
         The text on the multi download button in the frontend.

@@ -29,6 +29,7 @@ class PdfTicketOutput(BaseTicketOutput):
     verbose_name = _('PDF output')
     download_button_text = _('PDF')
     multi_download_button_text = _('Download tickets (PDF)')
+    long_download_button_text = _('Download ticket (PDF)')
 
     def __init__(self, event, override_layout=None, override_background=None):
         self.override_layout = override_layout
