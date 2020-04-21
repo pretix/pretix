@@ -202,11 +202,11 @@ class EventWizardBasicsForm(I18nModelForm):
         return slug
 
     @staticmethod
-    def has_control_rights(user, organizer):
+    def has_control_rights(user, organizer, request):
         return user.teams.filter(
             organizer=organizer, all_events=True, can_change_event_settings=True, can_change_items=True,
             can_change_orders=True, can_change_vouchers=True
-        ).exists()
+        ).exists() or user.is_staff
 
 
 class EventChoiceMixin:
