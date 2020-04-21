@@ -1,4 +1,4 @@
-name: Django CI
+name: Quality Control
 
 on:
   push:
@@ -20,15 +20,12 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
-      run: |
-        pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
-        cd src
+      run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
     - name: Run checks
-      run: |
-        python manage.py check
+      run: python manage.py check
     - name: Compile
-      run: |
-        make all compress
+      working-directory: ./src
+      run: make all compress
     - name: Run Tests
-      run: |
-        coverage run -m py.test --reruns 5 tests
+      working-directory: ./src
+      run: coverage run -m py.test --reruns 5 tests
