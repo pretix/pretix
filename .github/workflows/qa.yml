@@ -49,7 +49,7 @@ jobs:
         run: make spelling
         working-directory: ./doc
       - name:
-        run: [ ! -s _build/spelling/output.txt ]
+        run: '[ ! -s _build/spelling/output.txt ]'
         working-directory: ./doc
   translation_spelling:
     runs-on: ubuntu-latest
