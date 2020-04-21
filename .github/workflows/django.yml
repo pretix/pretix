@@ -1,0 +1,34 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7, 3.8]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
+        cd src
+    - name: Run checks
+      run: |
+        python manage.py check
+    - name: Compile
+      run: |
+        make all compress
+    - name: Run Tests
+      run: |
+        coverage run -m py.test --reruns 5 tests
