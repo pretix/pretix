@@ -78,7 +78,7 @@ class FilterForm(forms.Form):
 
     def get_order_by(self):
         o = self.cleaned_data.get('ordering')
-        if o.startswith('-'):
+        if o.startswith('-') and o not in self.orders:
             return '-' + self.orders[o[1:]]
         else:
             return self.orders[o]
@@ -530,6 +530,13 @@ class OrganizerFilterForm(FilterForm):
 
 
 class GiftCardFilterForm(FilterForm):
+    orders = {
+        'issuance': 'issuance',
+        'expires': F('expires').asc(nulls_last=True),
+        '-expires': F('expires').desc(nulls_first=True),
+        'secret': 'secret',
+        'value': 'cached_value',
+    }
     testmode = forms.ChoiceField(
         label=_('Test mode'),
         choices=(
@@ -585,6 +592,12 @@ class GiftCardFilterForm(FilterForm):
             qs = qs.exclude(cached_value=0).filter(expires__lt=now())
         elif fdata.get('state') == 'expired':
             qs = qs.filter(expires__lt=now())
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by('-issuance')
+
         return qs.distinct()
 
 

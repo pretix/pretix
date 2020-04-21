@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
+{% load urlreplace %}
 {% load bootstrap3 %}
 {% load money %}
 {% block inner %}
@@ -47,9 +48,18 @@
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>{% trans "Gift card code" %}</th>
-                    <th>{% trans "Creation date" %}</th>
-                    <th class="text-right">{% trans "Current value" %}</th>
+                    <th>{% trans "Gift card code" %}
+                        <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'code' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Creation date" %}
+                        <a href="?{% url_replace request 'ordering' '-issuance' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'issuance' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Expiry date" %}
+                        <a href="?{% url_replace request 'ordering' '-expires' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'expires' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th class="text-right">{% trans "Current value" %}
+                        <a href="?{% url_replace request 'ordering' '-value' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'value' %}"><i class="fa fa-caret-up"></i></a></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -67,6 +77,7 @@
                             {% endif %}
                         </td>
                         <td>{{ g.issuance|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>{% if g.expires %}{{ g.expires|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</td>
                         <td class="text-right">
                             {{ g.cached_value|money:g.currency }}
                         </td>
