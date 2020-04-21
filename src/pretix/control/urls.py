@@ -79,6 +79,8 @@ urlpatterns = [
     url(r'^organizer/(?P<organizer>[^/]+)/giftcards$', organizer.GiftCardListView.as_view(), name='organizer.giftcards'),
     url(r'^organizer/(?P<organizer>[^/]+)/giftcard/add$', organizer.GiftCardCreateView.as_view(), name='organizer.giftcard.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/giftcard/(?P<giftcard>[^/]+)/$', organizer.GiftCardDetailView.as_view(), name='organizer.giftcard'),
+    url(r'^organizer/(?P<organizer>[^/]+)/giftcard/(?P<giftcard>[^/]+)/edit$', organizer.GiftCardUpdateView.as_view(),
+        name='organizer.giftcard.edit'),
     url(r'^organizer/(?P<organizer>[^/]+)/webhooks$', organizer.WebHookListView.as_view(), name='organizer.webhooks'),
     url(r'^organizer/(?P<organizer>[^/]+)/webhook/add$', organizer.WebHookCreateView.as_view(),
         name='organizer.webhook.add'),

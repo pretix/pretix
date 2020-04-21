@@ -55,7 +55,7 @@ class GiftCardSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = GiftCard
-        fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode')
+        fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode', 'expires', 'conditions')
 
 
 class EventSlugField(serializers.SlugRelatedField):

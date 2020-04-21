@@ -1097,6 +1097,9 @@ class GiftCardPayment(BasePaymentProvider):
             if not gc.testmode and self.event.testmode:
                 messages.error(request, _("Only test gift cards can be used in test mode."))
                 return
+            if gc.expires and gc.expires < now():
+                messages.error(request, _("This gift card is no longer valid."))
+                return
             if gc.value <= Decimal("0.00"):
                 messages.error(request, _("All credit on this gift card has been used."))
                 return
@@ -1156,6 +1159,9 @@ class GiftCardPayment(BasePaymentProvider):
             if not gc.testmode and payment.order.testmode:
                 messages.error(request, _("Only test gift cards can be used in test mode."))
                 return
+            if gc.expires and gc.expires < now():
+                messages.error(request, _("This gift card is no longer valid."))
+                return
             if gc.value <= Decimal("0.00"):
                 messages.error(request, _("All credit on this gift card has been used."))
                 return
@@ -1194,6 +1200,9 @@ class GiftCardPayment(BasePaymentProvider):
                 raise PaymentException(_("This gift card is not accepted by this event organizer."))
             if payment.amount > gc.value:  # noqa - just a safeguard
                 raise PaymentException(_("This gift card was used in the meantime. Please try again"))
+            if gc.expires and gc.expires < now():  # noqa - just a safeguard
+                messages.error(request, _("This gift card is no longer valid."))
+                return
             trans = gc.transactions.create(
                 value=-1 * payment.amount,
                 order=payment.order,

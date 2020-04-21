@@ -20,7 +20,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
-    CachedTicket, Invoice, Order, OrderPosition, Quota,
+    CachedTicket, GiftCard, Invoice, Order, OrderPosition, Quota,
 )
 from pretix.base.models.orders import (
     CachedCombinedTicket, OrderFee, OrderPayment, OrderRefund, QuestionAnswer,
@@ -230,6 +230,10 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         ).exclude(
             provider__in=('offsetting', 'reseller', 'boxoffice', 'manual')
         )
+        for r in ctx['refunds']:
+            if r.provider == 'giftcard':
+                gc = GiftCard.objects.get(pk=r.info_data.get('gift_card'))
+                r.giftcard = gc
 
         return ctx
 

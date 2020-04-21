@@ -27,6 +27,8 @@ TEST_GC_RES = {
     "secret": "ABCDEF",
     "value": "23.00",
     "testmode": False,
+    "expires": None,
+    "conditions": None,
     "currency": "EUR"
 }
 

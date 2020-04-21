@@ -770,6 +770,7 @@ class OrderRefundView(OrderView):
                 if giftcard_value:
                     refund_selected += giftcard_value
                     giftcard = self.request.organizer.issued_gift_cards.create(
+                        expires=self.request.organizer.default_gift_card_expiry,
                         currency=self.request.event.currency,
                         testmode=self.order.testmode
                     )
@@ -2019,6 +2020,8 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
             auto_refund=form.cleaned_data.get('auto_refund'),
             manual_refund=form.cleaned_data.get('manual_refund'),
             refund_as_giftcard=form.cleaned_data.get('refund_as_giftcard'),
+            giftcard_expires=form.cleaned_data.get('gift_card_expires'),
+            giftcard_conditions=form.cleaned_data.get('gift_card_conditions'),
             keep_fee_fixed=form.cleaned_data.get('keep_fee_fixed'),
             keep_fee_percentage=form.cleaned_data.get('keep_fee_percentage'),
             keep_fees=form.cleaned_data.get('keep_fees'),

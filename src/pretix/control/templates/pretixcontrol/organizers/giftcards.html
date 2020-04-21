@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
+{% load urlreplace %}
 {% load bootstrap3 %}
 {% load money %}
 {% block inner %}
@@ -21,8 +22,14 @@
         </div>
     {% else %}
         <form class="row filter-form" action="" method="get">
-            <div class="col-md-10 col-sm-6 col-xs-12">
+            <div class="col-md-4 col-sm-6 col-xs-12">
                 {% bootstrap_field filter_form.query layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-6">
+                {% bootstrap_field filter_form.testmode layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-6">
+                {% bootstrap_field filter_form.state layout='inline' %}
             </div>
             <div class="col-md-2 col-sm-6 col-xs-12">
                 <button class="btn btn-primary btn-block" type="submit">
@@ -41,9 +48,18 @@
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>{% trans "Gift card code" %}</th>
-                    <th>{% trans "Creation date" %}</th>
-                    <th class="text-right">{% trans "Current value" %}</th>
+                    <th>{% trans "Gift card code" %}
+                        <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'code' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Creation date" %}
+                        <a href="?{% url_replace request 'ordering' '-issuance' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'issuance' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Expiry date" %}
+                        <a href="?{% url_replace request 'ordering' '-expires' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'expires' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th class="text-right">{% trans "Current value" %}
+                        <a href="?{% url_replace request 'ordering' '-value' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'value' %}"><i class="fa fa-caret-up"></i></a></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -56,8 +72,12 @@
                             {% if g.testmode %}
                                 <span class="label label-warning">{% trans "TEST MODE" %}</span>
                             {% endif %}
+                            {% if g.expired %}
+                                <span class="label label-danger">{% trans "Expired" %}</span>
+                            {% endif %}
                         </td>
                         <td>{{ g.issuance|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>{% if g.expires %}{{ g.expires|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</td>
                         <td class="text-right">
                             {{ g.cached_value|money:g.currency }}
                         </td>

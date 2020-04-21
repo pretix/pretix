@@ -78,7 +78,7 @@ class FilterForm(forms.Form):
 
     def get_order_by(self):
         o = self.cleaned_data.get('ordering')
-        if o.startswith('-'):
+        if o.startswith('-') and o not in self.orders:
             return '-' + self.orders[o[1:]]
         else:
             return self.orders[o]
@@ -530,6 +530,33 @@ class OrganizerFilterForm(FilterForm):
 
 
 class GiftCardFilterForm(FilterForm):
+    orders = {
+        'issuance': 'issuance',
+        'expires': F('expires').asc(nulls_last=True),
+        '-expires': F('expires').desc(nulls_first=True),
+        'secret': 'secret',
+        'value': 'cached_value',
+    }
+    testmode = forms.ChoiceField(
+        label=_('Test mode'),
+        choices=(
+            ('', _('All')),
+            ('yes', _('Test mode')),
+            ('no', _('Live')),
+        ),
+        required=False
+    )
+    state = forms.ChoiceField(
+        label=_('Empty'),
+        choices=(
+            ('', _('All')),
+            ('empty', _('Empty')),
+            ('valid_value', _('Valid and with value')),
+            ('expired_value', _('Expired and with value')),
+            ('expired', _('Expired')),
+        ),
+        required=False
+    )
     query = forms.CharField(
         label=_('Search query'),
         widget=forms.TextInput(attrs={
@@ -548,8 +575,30 @@ class GiftCardFilterForm(FilterForm):
 
         if fdata.get('query'):
             query = fdata.get('query')
-            qs = qs.filter(secret__icontains=query)
-        return qs
+            qs = qs.filter(
+                Q(secret__icontains=query)
+                | Q(transactions__text__icontains=query)
+                | Q(transactions__order__code__icontains=query)
+            )
+        if fdata.get('testmode') == 'yes':
+            qs = qs.filter(testmode=True)
+        elif fdata.get('testmode') == 'no':
+            qs = qs.filter(testmode=False)
+        if fdata.get('state') == 'empty':
+            qs = qs.filter(cached_value=0)
+        elif fdata.get('state') == 'valid_value':
+            qs = qs.exclude(cached_value=0).filter(Q(expires__isnull=True) | Q(expires__gte=now()))
+        elif fdata.get('state') == 'expired_value':
+            qs = qs.exclude(cached_value=0).filter(expires__lt=now())
+        elif fdata.get('state') == 'expired':
+            qs = qs.filter(expires__lt=now())
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by('-issuance')
+
+        return qs.distinct()
 
 
 class EventFilterForm(FilterForm):

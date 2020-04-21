@@ -247,6 +247,12 @@ $(function () {
         $tr.show();
     });
 
+    $(".print-this-page").on("click", function (e) {
+        window.print();
+        e.preventDefault();
+        return true;
+    });
+
     // Invoice address form
     $("input[data-required-if]").each(function () {
         var dependent = $(this),
@@ -263,24 +269,28 @@ $(function () {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-    $("input[data-display-dependency]").each(function () {
+    $("input[data-display-dependency], div[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                var $toggling = dependent;
+                if (dependent.get(0).tagName.toLowerCase() !== "div") {
+                    $toggling = dependent.closest('.form-group');
+                }
                 if (ev) {
                     if (enabled) {
-                        dependent.closest('.form-group').stop().slideDown();
+                        $toggling.stop().slideDown();
                     } else {
-                        dependent.closest('.form-group').stop().slideUp();
+                        $toggling.stop().slideUp();
                     }
                 } else {
-                    dependent.closest('.form-group').toggle(enabled);
+                    $toggling.stop().toggle(enabled);
                 }
             };
         update();
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependency.closest('.form-group, form').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group, form').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
     $("select[name$=state]").each(function () {

@@ -5,7 +5,8 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Sum
 from django.utils.crypto import get_random_string
-from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.banlist import banned
 from pretix.base.models import LoggedModel
@@ -62,11 +63,21 @@ class GiftCard(LoggedModel):
         verbose_name=_('Test mode card'),
         default=False
     )
+    expires = models.DateTimeField(
+        null=True, blank=True, verbose_name=_('Expiry date')
+    )
+    conditions = models.TextField(
+        null=True, blank=True, verbose_name=pgettext_lazy('giftcard', 'Special terms and conditions')
+    )
     CURRENCY_CHOICES = [(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES]
     currency = models.CharField(max_length=10, choices=CURRENCY_CHOICES)
 
     def __str__(self):
         return self.secret
+
+    @property
+    def expired(self):
+        return self.expires and now() > self.expires
 
     @property
     def value(self):

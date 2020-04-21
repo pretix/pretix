@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_countries import Countries
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
@@ -576,6 +576,13 @@ class CancelSettingsForm(SettingsForm):
         'cancel_allow_user_paid_refund_as_giftcard',
         'cancel_allow_user_paid_require_approval',
     ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.obj.settings.giftcard_expiry_years is not None:
+            self.fields['cancel_allow_user_paid_refund_as_giftcard'].help_text = gettext(
+                'You have configured gift cards to be valid {} years plus the year the gift card is issued in.'
+            ).format(self.obj.settings.giftcard_expiry_years)
 
 
 class PaymentSettingsForm(SettingsForm):

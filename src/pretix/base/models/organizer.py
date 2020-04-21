@@ -1,10 +1,12 @@
 import string
+from datetime import date, datetime, time
 
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Exists, OuterRef, Q
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models.base import LoggedModel
@@ -100,6 +102,15 @@ class Organizer(LoggedModel):
         ).filter(
             Q(issuer=self) | Q(accepted=True)
         )
+
+    @property
+    def default_gift_card_expiry(self):
+        if self.settings.giftcard_expiry_years is not None:
+            tz = get_current_timezone()
+            return make_aware(datetime.combine(
+                date(now().astimezone(tz).year + self.settings.get('giftcard_expiry_years', as_type=int), 12, 31),
+                time(hour=23, minute=59, second=59)
+            ), tz)
 
     def allow_delete(self):
         from . import Order, Invoice
