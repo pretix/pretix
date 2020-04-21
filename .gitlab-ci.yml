@@ -5,7 +5,11 @@ tests:
         - virtualenv env
         - source env/bin/activate
         - pip install -U pip wheel setuptools
-        - XDG_CACHE_HOME=/cache bash .travis.sh tests
+        - XDG_CACHE_HOME=/cache pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
+        - cd src
+        - python manage.py check
+        - make all compress
+        - py.test --reruns 3 -n 3 tests
     tags:
         - python3
     except:
