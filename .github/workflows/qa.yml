@@ -65,7 +65,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install system packages
-        run: sudo apt install enchant myspell-de-de aspell-en
+        run: sudo apt install enchant myspell-de-de aspell-en aspell-de
       - name: Install Dependencies
         run: pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
       - name: Spellcheck translations
@@ -103,9 +103,9 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install gettext utils
+      - name: Install system dependencies
         run: sudo apt install gettext mysql-client
-      - name: Install Dependencies
+      - name: Install Python dependencies
         run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt mysqlclient psycopg2-binary
       - name: Run checks
         run: python manage.py check
