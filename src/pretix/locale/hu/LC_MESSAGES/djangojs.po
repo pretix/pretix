@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 17:14+0000\n"
+"POT-Creation-Date: 2020-04-21 13:57+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -276,21 +276,21 @@ msgstr[1] "A kosár tartalma {num} percig foglalva van számodra."
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Adjon meg egy mennyiséget az egyik jegytípusból."
 
-#: pretix/static/pretixpresale/js/ui/main.js:330
+#: pretix/static/pretixpresale/js/ui/main.js:340
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "%(currency) %(price)-tól"
 
-#: pretix/static/pretixpresale/js/ui/main.js:338
+#: pretix/static/pretixpresale/js/ui/main.js:348
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "%(currency) %(price)-tól"
 
-#: pretix/static/pretixpresale/js/ui/main.js:354
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 

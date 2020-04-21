@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 17:14+0000\n"
+"POT-Creation-Date: 2020-04-21 13:57+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -281,21 +281,21 @@ msgstr[3] "Izdelki v vaši košarici bodo rezervirani še več minut."
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Prosimo vnesite količino za eno od vrst vstopnic."
 
-#: pretix/static/pretixpresale/js/ui/main.js:330
+#: pretix/static/pretixpresale/js/ui/main.js:340
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "od %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:338
+#: pretix/static/pretixpresale/js/ui/main.js:348
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "od %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:354
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 17:14+0000\n"
+"POT-Creation-Date: 2020-04-21 13:57+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -287,21 +287,21 @@ msgstr[1] "Τα είδη στο καλάθι θα παραμείνουν δεσ�
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Εισαγάγετε μια ποσότητα για έναν από τους τύπους εισιτηρίων."
 
-#: pretix/static/pretixpresale/js/ui/main.js:330
+#: pretix/static/pretixpresale/js/ui/main.js:340
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "απο %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:338
+#: pretix/static/pretixpresale/js/ui/main.js:348
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "απο %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:354
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 

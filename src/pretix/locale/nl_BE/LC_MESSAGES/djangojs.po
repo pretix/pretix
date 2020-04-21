@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 17:14+0000\n"
+"POT-Creation-Date: 2020-04-21 13:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -260,15 +260,15 @@ msgstr[1] ""
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:330
+#: pretix/static/pretixpresale/js/ui/main.js:340
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:338
+#: pretix/static/pretixpresale/js/ui/main.js:348
 msgid "You get %(currency)s %(amount)s back"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:354
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
