@@ -42,6 +42,7 @@ def item(event):
 @pytest.mark.django_db
 def test_event_dates(event):
     tl = timeline_for_event(event)
+    print(tl)
     assert one([
         e for e in tl
         if e.event == event and e.datetime == event.date_from and e.description == 'Your event starts'
