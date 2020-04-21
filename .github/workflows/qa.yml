@@ -48,6 +48,9 @@ jobs:
       - name: Spellcheck docs
         run: make spelling
         working-directory: ./doc
+      - name:
+        run: [ ! -s _build/spelling/output.txt ]
+        working-directory: ./doc
   translation_spelling:
     runs-on: ubuntu-latest
     name: Translation spellcheck
@@ -70,7 +73,7 @@ jobs:
         working-directory: ./src
   test:
     runs-on: ubuntu-latest
-    name: Tests on SQLite
+    name: Tests
     strategy:
       max-parallel: 4
       matrix:
@@ -94,7 +97,7 @@ jobs:
           postgresql version: '11'
           postgresql db: 'pretix'
           postgresql user: 'postgres'
-          postgresql password: 'postgres'
+          postgresql password: ''
         if: matrix.database == 'postgres'
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
@@ -112,4 +115,10 @@ jobs:
         run: make all compress
       - name: Run tests
         working-directory: ./src
-        run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test --reruns 5 tests
+        run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test -p no:sugar --cov=./ --cov-report=xml --reruns 3 tests
+      - name: Upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          file: src/coverage.xml
+          fail_ci_if_error: true
+        if: matrix.database == 'postgres' && matrix.python-version == '3.8'
