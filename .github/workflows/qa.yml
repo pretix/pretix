@@ -7,6 +7,60 @@ on:
     branches: [ master ]
 
 jobs:
+  style:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
+      - name: Run flake8
+        run: flake8 .
+        working-directory: ./src
+      - name: Run isort
+        working-directory: ./src
+        run: isort -c -rc -df .
+  doc_spelling:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: pip3 install --no-use-pep517 -Ur doc/requirements.txt
+      - name: Spellcheck docs
+        run: make spelling
+        working-directory: ./doc
+  translation_spelling:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
+      - name: Spellcheck translations
+        run: potypo
+        working-directory: ./src
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -23,6 +77,7 @@ jobs:
       run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
     - name: Run checks
       run: python manage.py check
+      working-directory: ./src
     - name: Compile
       working-directory: ./src
       run: make all compress
