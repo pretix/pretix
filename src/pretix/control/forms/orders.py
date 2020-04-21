@@ -15,12 +15,15 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
-from pretix.base.forms.widgets import DatePickerWidget
+from pretix.base.forms.widgets import (
+    DatePickerWidget, SplitDateTimePickerWidget,
+)
 from pretix.base.models import (
     InvoiceAddress, ItemAddOn, Order, OrderFee, OrderPosition,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
+from pretix.control.forms import SplitDateTimeField
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.money import change_decimal_field
 
@@ -565,6 +568,20 @@ class EventCancelForm(forms.Form):
         initial=False,
         required=False,
     )
+    gift_card_expires = SplitDateTimeField(
+        label=_('Gift card validity'),
+        required=False,
+        widget=SplitDateTimePickerWidget(
+            attrs={'data-display-dependency': '#id_refund_as_giftcard'},
+        )
+    )
+    gift_card_conditions = forms.CharField(
+        label=_('Special terms and conditions'),
+        required=False,
+        widget=forms.Textarea(
+            attrs={'rows': 2, 'data-display-dependency': '#id_refund_as_giftcard'},
+        )
+    )
     keep_fee_fixed = forms.DecimalField(
         label=_("Keep a fixed cancellation fee"),
         max_digits=10, decimal_places=2,
@@ -615,6 +632,8 @@ class EventCancelForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
+        kwargs.setdefault('initial', {})
+        kwargs['initial']['gift_card_expires'] = self.event.organizer.default_gift_card_expiry
         super().__init__(*args, **kwargs)
         self.fields['send_subject'] = I18nFormField(
             label=_("Subject"),
