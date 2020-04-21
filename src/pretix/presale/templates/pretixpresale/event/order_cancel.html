@@ -81,36 +81,54 @@
                 <strong>
                     {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
                 </strong>
+                {% if request.event.organizer.default_gift_card_expiry %}
+                    <p class="help-block">
+                        {% blocktrans trimmed with expiry_date=request.event.organizer.default_gift_card_expiry|date:"SHORT_DATE_FORMAT" %}
+                            Your gift card will be valid until {{ expiry_date }}.
+                        {% endblocktrans %}
+                    </p>
+                {% endif %}
             {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "option" %}
                 <div class="radio">
                     <label>
-                        <input type="radio" name="giftcard" value="true" checked>
+                        <input type="radio" name="giftcard" value="true" checked id="id_giftcard">
                         <strong>{% trans "I want the refund as a gift card for later purchases" %}</strong>
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="giftcard" value="false" checked>
+                        <input type="radio" name="giftcard" value="false" checked id="id_payout">
                         <strong>{% trans "I want the refund to be sent to my original payment method" %}</strong>
                     </label>
                 </div>
-                {% if can_auto_refund %}
-                    <p class="help-block">
-                        {% blocktrans trimmed %}
-                            The refund amount will automatically be sent back to your original payment method. Depending
-                            on the payment method, please allow for up to two weeks before this appears on your
-                            statement.
-                        {% endblocktrans %}
-                    </p>
-                {% else %}
-                    <p class="help-block">
-                        {% blocktrans trimmed %}
-                            With the payment method you used, the refund amount <strong>can not be sent back to you
-                            automatically</strong>. Instead, the event organizer will need to initiate the transfer
-                            manually. Please be patient as this might take a bit longer.
-                        {% endblocktrans %}
-                    </p>
-                {% endif %}
+                <div data-display-dependency="#id_giftcard">
+                    {% if request.event.organizer.default_gift_card_expiry %}
+                        <p class="help-block">
+                            {% blocktrans trimmed with expiry_date=request.event.organizer.default_gift_card_expiry|date:"SHORT_DATE_FORMAT" %}
+                                Your gift card will be valid until {{ expiry_date }}.
+                            {% endblocktrans %}
+                        </p>
+                    {% endif %}
+                </div>
+                <div data-display-dependency="#id_payout">
+                    {% if can_auto_refund %}
+                        <p class="help-block">
+                            {% blocktrans trimmed %}
+                                The refund amount will automatically be sent back to your original payment method. Depending
+                                on the payment method, please allow for up to two weeks before this appears on your
+                                statement.
+                            {% endblocktrans %}
+                        </p>
+                    {% else %}
+                        <p class="help-block">
+                            {% blocktrans trimmed %}
+                                With the payment method you used, the refund amount <strong>can not be sent back to you
+                                automatically</strong>. Instead, the event organizer will need to initiate the transfer
+                                manually. Please be patient as this might take a bit longer.
+                            {% endblocktrans %}
+                        </p>
+                    {% endif %}
+                </div>
             {% else %}
                 {% if can_auto_refund %}
                     <p>
