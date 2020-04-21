@@ -8,6 +8,7 @@ on:
 
 jobs:
   style:
+    name: Code style
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -28,6 +29,7 @@ jobs:
         working-directory: ./src
         run: isort -c -rc -df .
   doc_spelling:
+    name: Documentation spellcheck
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -39,6 +41,8 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install system packages
+        run: sudo apt install enchant myspell-de-de aspell-en
       - name: Install Dependencies
         run: pip3 install --no-use-pep517 -Ur doc/requirements.txt
       - name: Spellcheck docs
@@ -46,6 +50,7 @@ jobs:
         working-directory: ./doc
   translation_spelling:
     runs-on: ubuntu-latest
+    name: Translation spellcheck
     strategy:
       max-parallel: 4
       matrix:
@@ -56,6 +61,8 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install system packages
+        run: sudo apt install enchant myspell-de-de aspell-en
       - name: Install Dependencies
         run: pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
       - name: Spellcheck translations
@@ -63,24 +70,46 @@ jobs:
         working-directory: ./src
   test:
     runs-on: ubuntu-latest
+    name: Tests on SQLite
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.7, 3.8]
+        database: [sqlite, postgres, mysql]
+        exclude:
+          - database: mysql
+            python-version: 3.7
+          - database: sqlite
+            python-version: 3.7
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
-    - name: Run checks
-      run: python manage.py check
-      working-directory: ./src
-    - name: Compile
-      working-directory: ./src
-      run: make all compress
-    - name: Run Tests
-      working-directory: ./src
-      run: coverage run -m py.test --reruns 5 tests
+      - uses: actions/checkout@v2
+      - uses: getong/mariadb-action@v1.1
+        with:
+          mariadb version: '10.4'
+          mysql database: 'pretix'
+          mysql root password: ''
+        if: matrix.database == 'mysql'
+      - uses: harmon758/postgresql-action@v1
+        with:
+          postgresql version: '11'
+          postgresql db: 'pretix'
+          postgresql user: 'postgres'
+          postgresql password: 'postgres'
+        if: matrix.database == 'postgres'
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install gettext utils
+        run: sudo apt install gettext mysql-client
+      - name: Install Dependencies
+        run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt mysqlclient psycopg2-binary
+      - name: Run checks
+        run: python manage.py check
+        working-directory: ./src
+      - name: Compile
+        working-directory: ./src
+        run: make all compress
+      - name: Run tests
+        working-directory: ./src
+        run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test --reruns 5 tests
