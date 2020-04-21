@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-21 13:57+0000\n"
-"PO-Revision-Date: 2020-04-20 17:17+0000\n"
+"PO-Revision-Date: 2020-04-21 16:44+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2009,7 +2009,7 @@ msgstr "Ablaufdatum"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Besondere Gutscheinbedingungen"
 
 #: pretix/base/models/invoices.py:129
 #, python-format
@@ -4055,10 +4055,8 @@ msgstr "Im Testmodus können nur Testgutscheine verwendet werden."
 
 #: pretix/base/payment.py:1101 pretix/base/payment.py:1163
 #: pretix/base/payment.py:1204
-#, fuzzy
-#| msgid "This gift card is not known."
 msgid "This gift card is no longer valid."
-msgstr "Dieser Geschenkgutschein ist nicht bekannt."
+msgstr "Dieser Geschenkgutschein ist nicht mehr gültig."
 
 #: pretix/base/payment.py:1104 pretix/base/payment.py:1166
 msgid "All credit on this gift card has been used."
@@ -7388,6 +7386,8 @@ msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
 msgstr ""
+"Sie haben eingestellt, dass Geschenkgutscheine {} Jahre nach Ende des Jahres "
+"der Ausstellung ablaufen."
 
 #: pretix/control/forms/event.py:599
 msgid "Tax rule for payment fees"
@@ -7917,18 +7917,16 @@ msgid "Live"
 msgstr "Live"
 
 #: pretix/control/forms/filter.py:550 pretix/control/forms/filter.py:553
-#, fuzzy
-#| msgid "Empty tag"
 msgid "Empty"
-msgstr "Leerer Tag"
+msgstr "Leer"
 
 #: pretix/control/forms/filter.py:554
 msgid "Valid and with value"
-msgstr ""
+msgstr "Gültig und mit Wert"
 
 #: pretix/control/forms/filter.py:555
 msgid "Expired and with value"
-msgstr ""
+msgstr "Abgelaufen und mit Wert"
 
 #: pretix/control/forms/filter.py:561 pretix/control/forms/filter.py:563
 #: pretix/control/forms/filter.py:886 pretix/control/forms/filter.py:888
@@ -8564,14 +8562,12 @@ msgstr ""
 "ursprüngliche Zahlungsmethode"
 
 #: pretix/control/forms/orders.py:572
-#, fuzzy
-#| msgid "Gift card value"
 msgid "Gift card validity"
-msgstr "Wert des Geschenkgutscheins"
+msgstr "Gültigkeit von Geschenkgutscheinen"
 
 #: pretix/control/forms/orders.py:579
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Besondere Gutscheinbedingungen"
 
 #: pretix/control/forms/orders.py:596
 msgid "Keep fees"
@@ -8804,10 +8800,8 @@ msgstr ""
 "gesetzt werden."
 
 #: pretix/control/forms/organizer.py:335
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Validity of gift card codes in years"
-msgstr "Code-Länge für Geschenkgutscheine"
+msgstr "Gültigkeit von Geschenkgutscheinen in Jahren"
 
 #: pretix/control/forms/organizer.py:336
 msgid ""
@@ -8815,6 +8809,9 @@ msgid ""
 "the year after this many years. If you keep it empty, gift cards do not have "
 "an explicit expiry date."
 msgstr ""
+"Wenn Sie hier eine Zahl eintragen, laufen Geschenkgutscheine standardmäßig "
+"so viele Jahre nach dem Ende des Jahres der Ausstellung ab. Wenn Sie nichts "
+"eintragen, laufen Gutscheine standardmäßig nicht explizit ab."
 
 #: pretix/control/forms/organizer.py:351
 msgctxt "webhooks"
@@ -9805,10 +9802,8 @@ msgid "The gift card has been created."
 msgstr "Der Geschenkgutschein wurde erstellt."
 
 #: pretix/control/logdisplay.py:337 pretix/control/views/organizer.py:1120
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "The gift card has been changed."
-msgstr "Der Geschenkgutschein wurde erstellt."
+msgstr "Der Geschenkgutschein wurde geändert."
 
 #: pretix/control/logdisplay.py:338
 msgid "A manual transaction has been performed."
@@ -14172,8 +14167,6 @@ msgid "Details"
 msgstr "Details"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:36
-#, fuzzy
-#| msgid "Expiry date"
 msgid "Expire date"
 msgstr "Ablaufdatum"
 
@@ -20224,35 +20217,28 @@ msgstr ""
 "Sie etwas Geduld."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:123
-#, fuzzy
-#| msgid "Imprint"
 msgid "Print"
-msgstr "Impressum"
+msgstr "Drucken"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:125
-#, fuzzy, python-format
-#| msgid ""
-#| "We've issued your refund of %(amount)s as a gift card. On your next "
-#| "purchase with us, you can use the gift card code <strong>%(code)s</"
-#| "strong> during payment."
+#, python-format
 msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
 "Wir haben einen Geschenkgutschein für Ihre Erstattung von %(amount)s "
-"ausgestellt. Sie können für Ihren nächsten Kauf den Gutscheincode <strong>"
-"%(code)s</strong> zur Zahlung verwenden."
+"ausgestellt. Sie können für Ihren nächsten Kauf den hier angezeigten "
+"Gutscheincode zur Zahlung verwenden:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:135
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "Der aktuelle Wert Ihres Gutscheins ist %(value)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:142
-#, fuzzy, python-format
-#| msgid "This gift card is not known."
+#, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr "Dieser Geschenkgutschein ist nicht bekannt."
+msgstr "Dieser Geschenkgutschein ist gültig bis %(expiry)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:153
 #, python-format
@@ -20421,10 +20407,9 @@ msgstr "Erstattungsbetrag:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:86
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:107
-#, fuzzy, python-format
-#| msgid "Your gift card has been applied."
+#, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr "Ihr Geschenkgutschein wurde angewendet."
+msgstr "Ihr Geschenkgutschein wird bis %(expiry_date)s gültig sein."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:95
 msgid "I want the refund as a gift card for later purchases"
