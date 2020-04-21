@@ -548,8 +548,12 @@ class GiftCardFilterForm(FilterForm):
 
         if fdata.get('query'):
             query = fdata.get('query')
-            qs = qs.filter(secret__icontains=query)
-        return qs
+            qs = qs.filter(
+                Q(secret__icontains=query)
+                | Q(transactions__text__icontains=query)
+                | Q(transactions__order__code__icontains=query)
+            )
+        return qs.distinct()
 
 
 class EventFilterForm(FilterForm):
