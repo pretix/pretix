@@ -5,6 +5,7 @@ import pytest
 import pytz
 from django_scopes import scope
 
+from pretix.base.i18n import language
 from pretix.base.models import Event, Organizer
 from pretix.base.timeline import timeline_for_event
 
@@ -41,13 +42,13 @@ def item(event):
 
 @pytest.mark.django_db
 def test_event_dates(event):
-    tl = timeline_for_event(event)
-    print(tl)
-    assert one([
-        e for e in tl
-        if e.event == event and e.datetime == event.date_from and e.description == 'Your event starts'
-    ])
-    assert one([
-        e for e in tl
-        if e.event == event and e.datetime == event.date_to and e.description == 'Your event ends'
-    ])
+    with language('en'):
+        tl = timeline_for_event(event)
+        assert one([
+            e for e in tl
+            if e.event == event and e.datetime == event.date_from and e.description == 'Your event starts'
+        ])
+        assert one([
+            e for e in tl
+            if e.event == event and e.datetime == event.date_to and e.description == 'Your event ends'
+        ])
