@@ -393,7 +393,7 @@ class GiftCardCreateForm(forms.ModelForm):
     def clean_secret(self):
         s = self.cleaned_data['secret']
         if GiftCard.objects.filter(
-            secret__iexact=s
+                secret__iexact=s
         ).filter(
             Q(issuer=self.organizer) | Q(issuer__gift_card_collector_acceptance__collector=self.organizer)
         ).exists():
@@ -405,6 +405,19 @@ class GiftCardCreateForm(forms.ModelForm):
     class Meta:
         model = GiftCard
         fields = ['secret', 'currency', 'testmode', 'expires', 'conditions']
+        field_classes = {
+            'expires': SplitDateTimeField
+        }
+        widgets = {
+            'expires': SplitDateTimePickerWidget,
+            'conditions': forms.Textarea(attrs={"rows": 2})
+        }
+
+
+class GiftCardUpdateForm(forms.ModelForm):
+    class Meta:
+        model = GiftCard
+        fields = ['expires', 'conditions']
         field_classes = {
             'expires': SplitDateTimeField
         }

@@ -150,6 +150,7 @@ organizer_urls = [
     'organizer/abc/giftcards',
     'organizer/abc/giftcard/add',
     'organizer/abc/giftcard/1/',
+    'organizer/abc/giftcard/1/edit',
 ]
 
 
@@ -413,6 +414,7 @@ organizer_permission_urls = [
     ("can_manage_gift_cards", "organizer/dummy/giftcards", 200),
     ("can_manage_gift_cards", "organizer/dummy/giftcard/add", 200),
     ("can_manage_gift_cards", "organizer/dummy/giftcard/1/", 404),
+    ("can_manage_gift_cards", "organizer/dummy/giftcard/1/edit", 404),
 ]
 
 

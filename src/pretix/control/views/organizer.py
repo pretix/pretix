@@ -34,9 +34,9 @@ from pretix.control.forms.filter import (
     EventFilterForm, GiftCardFilterForm, OrganizerFilterForm,
 )
 from pretix.control.forms.organizer import (
-    DeviceForm, EventMetaPropertyForm, GiftCardCreateForm, OrganizerDeleteForm,
-    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
-    WebHookForm,
+    DeviceForm, EventMetaPropertyForm, GiftCardCreateForm, GiftCardUpdateForm,
+    OrganizerDeleteForm, OrganizerForm, OrganizerSettingsForm,
+    OrganizerUpdateForm, TeamForm, WebHookForm,
 )
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
@@ -1092,6 +1092,34 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             form.instance.log_action('pretix.giftcards.transaction.manual', user=self.request.user, data={
                 'value': form.cleaned_data['value']
             })
+        return redirect(reverse(
+            'control:organizer.giftcard',
+            kwargs={
+                'organizer': self.request.organizer.slug,
+                'giftcard': self.object.pk
+            }
+        ))
+
+
+class GiftCardUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    template_name = 'pretixcontrol/organizers/giftcard_edit.html'
+    permission = 'can_manage_gift_cards'
+    form_class = GiftCardUpdateForm
+    success_url = 'invalid'
+    context_object_name = 'card'
+    model = GiftCard
+
+    def get_object(self, queryset=None) -> Organizer:
+        return get_object_or_404(
+            self.request.organizer.issued_gift_cards,
+            pk=self.kwargs.get('giftcard')
+        )
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        messages.success(self.request, _('The gift card has been changed.'))
+        super().form_valid(form)
+        form.instance.log_action('pretix.giftcards.modified', user=self.request.user, data=dict(form.cleaned_data))
         return redirect(reverse(
             'control:organizer.giftcard',
             kwargs={

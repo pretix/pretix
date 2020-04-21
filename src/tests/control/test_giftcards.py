@@ -90,6 +90,16 @@ def test_card_detail_view_transact(organizer, admin_user, gift_card, client):
 
 
 @pytest.mark.django_db
+def test_card_detail_edit(organizer, admin_user, gift_card, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.post('/control/organizer/dummy/giftcard/{}/edit'.format(gift_card.pk), {
+        'conditions': 'Foo'
+    })
+    gift_card.refresh_from_db()
+    assert gift_card.conditions == 'Foo'
+
+
+@pytest.mark.django_db
 def test_card_detail_view_transact_revert_refund(organizer, admin_user, gift_card, client):
     with scopes_disabled():
         event = organizer.events.create(

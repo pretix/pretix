@@ -10,6 +10,10 @@
         {% if card.testmode %}
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
+        <a href="{% url "control:organizer.giftcard.edit" organizer=request.organizer.slug giftcard=card.id %}"
+                class="btn btn-default">
+            <i class="fa fa-edit"></i> {% trans "Edit" %}
+        </a>
     </h1>
     <div class="row">
         <div class="col-md-10 col-xs-12">
