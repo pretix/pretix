@@ -247,6 +247,12 @@ $(function () {
         $tr.show();
     });
 
+    $(".print-this-page").on("click", function (e) {
+        window.print();
+        e.preventDefault();
+        return true;
+    });
+
     // Invoice address form
     $("input[data-required-if]").each(function () {
         var dependent = $(this),

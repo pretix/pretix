@@ -103,27 +103,62 @@
             </div>
         {% endif %}
         {% if refunds %}
-            <div class="alert alert-info">
-                {% for r in refunds %}
-                    {% if r.state == "created" or r.state == "transit" %}
-                        {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
-                            A refund of {{ amount }} will be sent out to you soon, please be patient.
-                        {% endblocktrans %}
-                    {% elif r.state == "done" %}
-                        {% if r.provider == "giftcard" and "gift_card_code" in r.info_data %}
-                            {% blocktrans trimmed with amount=r.amount|money:request.event.currency code=r.info_data.gift_card_code %}
-                                We've issued your refund of {{ amount }} as a gift card. On your next purchase with
-                                us, you can use the gift card code <strong>{{ code }}</strong> during payment.
-                            {% endblocktrans %}
-                        {% else %}
-                            {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
-                                A refund of {{ amount }} has been sent to you. Depending on the payment method, please allow for up to 14 days until it shows up
-                                on your statement.
-                            {% endblocktrans %}
-                        {% endif %}
-                    {% endif %}
-                    {% if not forloop.last %}<br />{% endif %}
-                {% endfor %}
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Refunds" %}
+                    </h3>
+                </div>
+                <ul class="list-group">
+                    {% for r in refunds %}
+                        <li class="list-group-item">
+                            {% if r.state == "created" or r.state == "transit" %}
+                                {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
+                                    A refund of {{ amount }} will be sent out to you soon, please be patient.
+                                {% endblocktrans %}
+                            {% elif r.state == "done" %}
+                                {% if r.provider == "giftcard" %}
+                                    <a href="#" class="print-this-page btn btn-default btn-sm pull-right hidden-print">
+                                        <span class="fa fa-print"></span>
+                                        {% trans "Print" %}
+                                    </a>
+                                    {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
+                                        We've issued your refund of {{ amount }} as a gift card. On your next purchase with
+                                        us, you can use the following gift card code during payment:
+                                    {% endblocktrans %}
+                                    <div class="text-center refund-gift-card-code">
+                                        <span class="fa fa-credit-card"></span>
+                                        {{ r.giftcard.secret }}
+                                    </div>
+                                    {% if r.giftcard.value != r.amount %}
+                                        <small>
+                                            {% blocktrans trimmed with value=r.giftcard.value|money:request.event.currency %}
+                                                The current value of your gift card is {{ value }}.
+                                            {% endblocktrans %}
+                                        </small>
+                                    {% endif %}
+                                    {% if r.giftcard.expires %}
+                                        <small>
+                                            {% blocktrans trimmed with expiry=r.giftcard.expires|date:"SHORT_DATE_FORMAT" %}
+                                                This gift card is valid until {{ expiry }}.
+                                            {% endblocktrans %}
+                                        </small>
+                                    {% endif %}
+                                    {% if r.giftcard.conditions %}
+                                        <small>
+                                            {{ r.giftcard.conditions }}
+                                        </small>
+                                    {% endif %}
+                                {% else %}
+                                    {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
+                                        A refund of {{ amount }} has been sent to you. Depending on the payment method, please allow for up to 14 days until it shows up
+                                        on your statement.
+                                    {% endblocktrans %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </li>
+                </ul>
             </div>
         {% endif %}
     {% endif %}
