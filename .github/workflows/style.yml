@@ -16,8 +16,6 @@ jobs:
   isort:
     name: isort
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -32,8 +30,6 @@ jobs:
   flake:
     name: flake8
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
