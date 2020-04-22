@@ -63,15 +63,15 @@ $(document).ready(function () {
             'type': 'datetime',
         },
         'scans_number': {
-            'label': gettext('Number of scans'),
+            'label': gettext('Number of entries'),
             'type': 'int',
         },
         'scans_today': {
-            'label': gettext('Number of scans since midnight'),
+            'label': gettext('Number of entries since midnight'),
             'type': 'int',
         },
         'scans_days': {
-            'label': gettext('Number of days with a scan'),
+            'label': gettext('Number of days with an entry'),
             'type': 'int',
         },
     };
