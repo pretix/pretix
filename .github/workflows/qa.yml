@@ -97,7 +97,7 @@ jobs:
           postgresql version: '11'
           postgresql db: 'pretix'
           postgresql user: 'postgres'
-          postgresql password: ''
+          postgresql password: 'postgres'
         if: matrix.database == 'postgres'
       - name: Wait / Sleep
         if: matrix.database == 'postgres'
