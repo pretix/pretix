@@ -1,0 +1,73 @@
+name: Tests
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - 'doc/**'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - 'doc/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Tests
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+        database: [sqlite, postgres, mysql]
+        exclude:
+          - database: mysql
+            python-version: 3.7
+          - database: sqlite
+            python-version: 3.7
+          - database: mysql
+            python-version: 3.6
+          - database: sqlite
+            python-version: 3.6
+    steps:
+      - uses: actions/checkout@v2
+      - uses: getong/mariadb-action@v1.1
+        with:
+          mariadb version: '10.4'
+          mysql database: 'pretix'
+          mysql root password: ''
+        if: matrix.database == 'mysql'
+      - uses: harmon758/postgresql-action@v1
+        with:
+          postgresql version: '11'
+          postgresql db: 'pretix'
+          postgresql user: 'postgres'
+          postgresql password: 'postgres'
+        if: matrix.database == 'postgres'
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install system dependencies
+        run: sudo apt install gettext mysql-client
+      - name: Install Python dependencies
+        run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt mysqlclient psycopg2-binary
+      - name: Run checks
+        run: python manage.py check
+        working-directory: ./src
+      - name: Compile
+        working-directory: ./src
+        run: make all compress
+      - name: Run tests
+        working-directory: ./src
+        run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test -n 3 -p no:sugar --cov=./ --cov-report=xml --reruns 3 tests --maxfail=100
+      - name: Upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          file: src/coverage.xml
+          fail_ci_if_error: true
+        if: matrix.database == 'postgres' && matrix.python-version == '3.8'

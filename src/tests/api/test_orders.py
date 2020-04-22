@@ -1792,7 +1792,7 @@ def test_order_create_in_test_mode_saleschannel_limited(token_client, organizer,
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'testmode': ['This sales channel does not provide support for testmode.']}
+    assert resp.data == {'testmode': ['This sales channel does not provide support for test mode.']}
 
 
 @pytest.mark.django_db

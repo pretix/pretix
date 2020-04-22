@@ -2038,7 +2038,7 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
         if value == 0:
             return _('All orders have been canceled.')
         else:
-            return _('The orders have been canceled. An error occured with {count} orders, please '
+            return _('The orders have been canceled. An error occurred with {count} orders, please '
                      'check all uncanceled orders.').format(count=value)
 
     def get_success_url(self, value):

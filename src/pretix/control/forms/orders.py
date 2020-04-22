@@ -194,7 +194,7 @@ class OtherOperationsForm(forms.Form):
         initial=True,
         help_text=_(
             'If an invoice exists for this order and this operation would change its contents, the old invoice will '
-            'be cancelled and a new invoice will be issued.'
+            'be canceled and a new invoice will be issued.'
         )
     )
     notify = forms.BooleanField(

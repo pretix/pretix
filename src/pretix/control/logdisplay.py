@@ -233,7 +233,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.email.resend': _('An email with a link to the order detail page has been resent to the user.'),
         'pretix.event.order.payment.confirmed': _('Payment {local_id} has been confirmed.'),
         'pretix.event.order.payment.canceled': _('Payment {local_id} has been canceled.'),
-        'pretix.event.order.payment.canceled.failed': _('Cancelling payment {local_id} has failed.'),
+        'pretix.event.order.payment.canceled.failed': _('Canceling payment {local_id} has failed.'),
         'pretix.event.order.payment.started': _('Payment {local_id} has been started.'),
         'pretix.event.order.payment.failed': _('Payment {local_id} has failed.'),
         'pretix.event.order.quotaexceeded': _('The order could not be marked as paid: {message}'),

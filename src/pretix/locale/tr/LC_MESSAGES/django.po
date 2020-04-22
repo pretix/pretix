@@ -1321,7 +1321,7 @@ msgstr "Etkinlik başlangıç zamanı"
 #: pretix/base/exporters/orderlist.py:715
 #, fuzzy
 #| msgid "Redemptions"
-msgid "Giftcard Redemptions"
+msgid "Gift card redemptions"
 msgstr "Ödeme"
 
 #: pretix/base/exporters/orderlist.py:732 pretix/base/models/giftcards.py:54
@@ -2121,7 +2121,7 @@ msgstr ""
 #: pretix/base/models/giftcards.py:58
 #, fuzzy
 #| msgid "The slug may only contain letters, numbers, dots and dashes."
-msgid "The giftcard code may only contain letters, numbers, dots and dashes."
+msgid "The gift card code may only contain letters, numbers, dots and dashes."
 msgstr "Bu dizi sadece harf, sayı, nokta ve tire içerebilir."
 
 #: pretix/base/models/giftcards.py:63
@@ -4168,7 +4168,7 @@ msgstr "Sipariş onay e-postalarında ödeme süreci açıklaması"
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
-"payment. You can usethe placeholders {order}, {total}, {currency} and "
+"payment. You can use the placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
 "Bu metin, ödeme onay postaları için {payment_info} yer tutucuya dahil "
@@ -4185,7 +4185,7 @@ msgstr "Bekleyen siparişler için ödeme süreci açıklaması"
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can "
-"usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
+"use the placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
 "Bu metin, bekleyen siparişler için sipariş onay sayfasında gösterilecektir. "
 "Ödemeye nasıl devam edileceği konusunda kullanıcıya talimat vermelidir. "
@@ -4476,8 +4476,8 @@ msgstr "Eklenti Listesi"
 
 #: pretix/base/pdf.py:215
 msgid ""
-"Addon 1\n"
-"Addon 2"
+"Add-on 1\n"
+"Add-on 2"
 msgstr ""
 "Eklenti 1\n"
 "Eklenti 2"
@@ -6094,7 +6094,7 @@ msgstr "Kabul edilmeyen ürünler için bilet üret"
 #: pretix/base/settings.py:859
 msgid ""
 "If turned off, tickets are only issued for products that are marked as an "
-"\"admission ticket\"in the product settings. You can also turn off tickt "
+"\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
 
@@ -6193,7 +6193,7 @@ msgid ""
 "This text will be shown in between the explanation of how the refunds work "
 "and the slider which your customers can use to choose the amount they would "
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
-"help your organisation."
+"help your organization."
 msgstr ""
 
 #: pretix/base/settings.py:992
@@ -7595,7 +7595,7 @@ msgstr "Ödeme bilgileri"
 #: pretix/control/forms/event.py:398
 msgid ""
 "This defines how pretix will ask for human names. Changing this after you "
-"already received orders might lead to unexpected behaviour when sorting or "
+"already received orders might lead to unexpected behavior when sorting or "
 "changing names."
 msgstr ""
 
@@ -8792,7 +8792,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:196
 msgid ""
 "If an invoice exists for this order and this operation would change its "
-"contents, the old invoice will be cancelled and a new invoice will be issued."
+"contents, the old invoice will be canceled and a new invoice will be issued."
 msgstr ""
 
 #: pretix/control/forms/orders.py:201
@@ -9183,7 +9183,7 @@ msgstr ""
 #: pretix/control/forms/organizer.py:325
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
-"icon. We recommend a size of at least 200x200px to accomodate most devices."
+"icon. We recommend a size of at least 200x200px to accommodate most devices."
 msgstr ""
 
 #: pretix/control/forms/organizer.py:329
@@ -9255,7 +9255,7 @@ msgid "Interval"
 msgstr "Aralık"
 
 #: pretix/control/forms/subevents.py:257
-msgid "Number of repititions"
+msgid "Number of repetitions"
 msgstr "Tekrar sayısı"
 
 #: pretix/control/forms/subevents.py:267
@@ -9824,7 +9824,7 @@ msgstr "Ödeme {local_id} iptal edildi."
 #: pretix/control/logdisplay.py:236
 #, fuzzy, python-brace-format
 #| msgid "Payment {local_id} has been canceled."
-msgid "Cancelling payment {local_id} has failed."
+msgid "Canceling payment {local_id} has failed."
 msgstr "Ödeme {local_id} iptal edildi."
 
 #: pretix/control/logdisplay.py:237
@@ -11444,8 +11444,8 @@ msgstr "Kişisel verileri sil"
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 msgid ""
 "You can remove personal data such as names and email addresses from your "
-"event and only retain the finanical information such as the number and type "
-"of ticekts sold."
+"event and only retain the financial information such as the number and type "
+"of tickets sold."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
@@ -11712,7 +11712,7 @@ msgstr "Eğer istersen, bilet dükkanını şimdi yayınlayabilirsin."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:71
 msgid ""
-"Your shop is currently in test mode. All orders are not persistant and can "
+"Your shop is currently in test mode. All orders are not persistent and can "
 "be deleted at any point."
 msgstr ""
 
@@ -13175,7 +13175,7 @@ msgid ""
 "define, how many instances of your product pretix will sell. This way, you "
 "can configure whether your event can take an unlimited number of attendees "
 "or the number of attendees is limited. You can assign a product to multiple "
-"quotas to fulfil more complex requirements, e.g. if you want to limit the "
+"quotas to fulfill more complex requirements, e.g. if you want to limit the "
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
@@ -14153,7 +14153,7 @@ msgstr "tamamlandı olarak işaretle"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
 #, python-format
 msgid ""
-"We recevied notice that <strong>%(amount)s</strong> have been refunded via "
+"We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
 "underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
 "%(total)s</strong>."
@@ -14261,7 +14261,7 @@ msgstr "E-posta gönder"
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:51
 msgid ""
 "Since you are refunding your customers orders to gift cards, you should "
-"explain to them how to access their giftcards. The easiest way to do this, "
+"explain to them how to access their gift cards. The easiest way to do this, "
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
@@ -15133,7 +15133,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:210
 #, fuzzy
 #| msgid "Use languages"
-msgid "Prefered language"
+msgid "Preferred language"
 msgstr "Dilleri kullan"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:221
@@ -15241,7 +15241,7 @@ msgstr "1. Adım: Verileri indir"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:16
 msgid ""
-"You are about to permamanently delete data from the server, even though you "
+"You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You should therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
@@ -16404,7 +16404,7 @@ msgstr "Pretix'e hoş geldiniz! Artık \"{}\" ekibinin bir parçasısınız."
 
 #: pretix/control/views/auth.py:257
 msgid ""
-"If the adress is registred to valid account, then we have sent you an e-mail "
+"If the address is registered to valid account, then we have sent you an e-mail "
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
 msgstr ""
@@ -16413,7 +16413,7 @@ msgstr ""
 
 #: pretix/control/views/auth.py:260
 msgid ""
-"If the adress is registred to valid account, then we have sent you an e-mail "
+"If the address is registered to valid account, then we have sent you an e-mail "
 "containing further instructions."
 msgstr ""
 "Adres geçerli bir hesaba kayıtlıysa, size daha fazla talimat içeren bir e-"
@@ -17330,7 +17330,7 @@ msgstr "Sipariş iptal edildi."
 #: pretix/control/views/orders.py:2041
 #, python-brace-format
 msgid ""
-"The orders have been canceled. An error occured with {count} orders, please "
+"The orders have been canceled. An error occurred with {count} orders, please "
 "check all uncanceled orders."
 msgstr ""
 
@@ -18082,7 +18082,7 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:107
-msgid "Do not include a hypen in the payment reference."
+msgid "Do not include a hyphen in the payment reference."
 msgstr "Ödeme referansında kısa çizgi eklemeyin."
 
 #: pretix/plugins/banktransfer/payment.py:108
@@ -18293,7 +18293,7 @@ msgid "An internal error occurred during processing your data."
 msgstr "Verilerinizi işlerken bir iç hata oluştu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
-msgid "Some transactions might be missing, please try ot re-import the file."
+msgid "Some transactions might be missing, please try to re-import the file."
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
@@ -19517,7 +19517,7 @@ msgstr "Gizli anahtar"
 
 #: pretix/plugins/stripe/payment.py:174
 msgid ""
-"The country in which your Stripe-account is registred in. Usually, this is "
+"The country in which your Stripe-account is registered in. Usually, this is "
 "your country of residence."
 msgstr ""
 "Stripe hesabınızın kayıtlı olduğu ülke. Genellikle burası sizin ikamet "
@@ -20473,7 +20473,7 @@ msgstr "Lütfen nasıl ödemek istediğinizi seçin."
 #, fuzzy
 #| msgid ""
 #| "This payment provider does not exist or the respective plugin is disabled."
-msgid "This sales channel does not provide support for testmode."
+msgid "This sales channel does not provide support for test mode."
 msgstr ""
 "Bu ödeme sağlayıcısı mevcut değil veya ilgili eklenti devre dışı bırakıldı."
 
@@ -20485,7 +20485,7 @@ msgstr ""
 #, fuzzy
 #| msgid ""
 #| "This payment provider does not exist or the respective plugin is disabled."
-msgid "This payment provider does not provide support for testmode."
+msgid "This payment provider does not provide support for test mode."
 msgstr ""
 "Bu ödeme sağlayıcısı mevcut değil veya ilgili eklenti devre dışı bırakıldı."
 

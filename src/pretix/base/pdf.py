@@ -212,7 +212,7 @@ DEFAULT_VARIABLES = OrderedDict((
     }),
     ("addons", {
         "label": _("List of Add-Ons"),
-        "editor_sample": _("Addon 1\nAddon 2"),
+        "editor_sample": _("Add-on 1\nAdd-on 2"),
         "evaluate": lambda op, order, ev: "\n".join([
             '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
             for p in (

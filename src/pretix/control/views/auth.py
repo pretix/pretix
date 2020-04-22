@@ -254,10 +254,10 @@ class Forgot(TemplateView):
 
             finally:
                 if has_redis:
-                    messages.info(request, _('If the adress is registred to valid account, then we have sent you an e-mail containing further instructions. '
+                    messages.info(request, _('If the address is registered to valid account, then we have sent you an e-mail containing further instructions. '
                                              'Please note that we will send at most one email every 24 hours.'))
                 else:
-                    messages.info(request, _('If the adress is registred to valid account, then we have sent you an e-mail containing further instructions.'))
+                    messages.info(request, _('If the address is registered to valid account, then we have sent you an e-mail containing further instructions.'))
 
                 return redirect('control:auth.forgot')
         else:

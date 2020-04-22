@@ -1227,7 +1227,7 @@ msgstr "الحدث تاريخ البدء"
 #: pretix/base/exporters/orderlist.py:715
 #, fuzzy
 #| msgid "Redemptions"
-msgid "Giftcard Redemptions"
+msgid "Gift card redemptions"
 msgstr "الاسترداد"
 
 #: pretix/base/exporters/orderlist.py:732 pretix/base/models/giftcards.py:54
@@ -1978,7 +1978,7 @@ msgstr "يمكن أن تحتوي على أي قيمة حرف محدد."
 #: pretix/base/models/giftcards.py:58
 #, fuzzy
 #| msgid "The slug may only contain letters, numbers, dots and dashes."
-msgid "The giftcard code may only contain letters, numbers, dots and dashes."
+msgid "The gift card code may only contain letters, numbers, dots and dashes."
 msgstr "قد تحتوي على سبيكة فقط الحروف والأرقام، أو النقاط وشرطات."
 
 #: pretix/base/models/giftcards.py:63
@@ -3935,7 +3935,7 @@ msgstr "وصف عملية الدفع من أجل رسائل البريد الإ�
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
-"payment. You can usethe placeholders {order}, {total}, {currency} and "
+"payment. You can use the placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
 "وسيتم إدراج هذا النص ل{payment_info} نائبا في رسائل تأكيد الطلب. يجب أن "
@@ -3951,7 +3951,7 @@ msgstr "وصف عملية الدفع لأوامر معلقة"
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can "
-"usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
+"use the placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
 "سيتم عرض هذا النص على صفحة تأكيد أمر الأوامر المعلقة. يجب أن إرشاد المستخدم "
 "على كيفية المضي قدما في الدفع. يمكنك إستخدام النائبة {order}، {total}، "
@@ -4218,8 +4218,8 @@ msgstr "قائمة من الإضافات"
 
 #: pretix/base/pdf.py:215
 msgid ""
-"Addon 1\n"
-"Addon 2"
+"Add-on 1\n"
+"Add-on 2"
 msgstr ""
 "الملحق 1\n"
 "الملحق 2"
@@ -5719,7 +5719,7 @@ msgstr "توليد تذاكر للمنتجات عدم قبول"
 #: pretix/base/settings.py:859
 msgid ""
 "If turned off, tickets are only issued for products that are marked as an "
-"\"admission ticket\"in the product settings. You can also turn off tickt "
+"\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
 
@@ -5809,7 +5809,7 @@ msgid ""
 "This text will be shown in between the explanation of how the refunds work "
 "and the slider which your customers can use to choose the amount they would "
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
-"help your organisation."
+"help your organization."
 msgstr ""
 
 #: pretix/base/settings.py:992
@@ -7067,7 +7067,7 @@ msgstr "تنسيق اسم"
 #: pretix/control/forms/event.py:398
 msgid ""
 "This defines how pretix will ask for human names. Changing this after you "
-"already received orders might lead to unexpected behaviour when sorting or "
+"already received orders might lead to unexpected behavior when sorting or "
 "changing names."
 msgstr ""
 "هذا يعرف كيف pretix سيطلب أسماء الإنسان. تغيير هذا بعد تلقي أوامر بالفعل قد "
@@ -8219,7 +8219,7 @@ msgstr "إصدار فاتورة جديدة إذا لزم الأمر"
 #: pretix/control/forms/orders.py:196
 msgid ""
 "If an invoice exists for this order and this operation would change its "
-"contents, the old invoice will be cancelled and a new invoice will be issued."
+"contents, the old invoice will be canceled and a new invoice will be issued."
 msgstr ""
 "في حالة وجود فاتورة لهذا النظام وهذا من شأنه أن عملية تغيير محتوياته، سيتم "
 "إلغاء الفاتورة القديمة وسيتم إصدار فاتورة جديدة."
@@ -8597,7 +8597,7 @@ msgstr "فافيكون"
 #: pretix/control/forms/organizer.py:325
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
-"icon. We recommend a size of at least 200x200px to accomodate most devices."
+"icon. We recommend a size of at least 200x200px to accommodate most devices."
 msgstr ""
 "إذا قمت بتوفير فافيكون، وسوف نعرض بدلا من الافتراضي pretix رمز. نوصي حجم "
 "200x200px على الأقل لاستيعاب معظم الأجهزة."
@@ -8667,8 +8667,8 @@ msgid "Interval"
 msgstr "فترة"
 
 #: pretix/control/forms/subevents.py:257
-msgid "Number of repititions"
-msgstr "عدد repititions"
+msgid "Number of repetitions"
+msgstr "عدد repetitions"
 
 #: pretix/control/forms/subevents.py:267
 msgid "Last date"
@@ -9173,7 +9173,7 @@ msgstr "تم إلغاء الدفع {local_id}."
 #: pretix/control/logdisplay.py:236
 #, fuzzy, python-brace-format
 #| msgid "Payment {local_id} has failed."
-msgid "Cancelling payment {local_id} has failed."
+msgid "Canceling payment {local_id} has failed."
 msgstr "فشلت الدفع {local_id}."
 
 #: pretix/control/logdisplay.py:237
@@ -10712,8 +10712,8 @@ msgstr "حذف البيانات الشخصية"
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 msgid ""
 "You can remove personal data such as names and email addresses from your "
-"event and only retain the finanical information such as the number and type "
-"of ticekts sold."
+"event and only retain the financial information such as the number and type "
+"of tickets sold."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
@@ -10962,7 +10962,7 @@ msgstr "إذا كنت ترغب في ذلك، يمكنك نشر متجر تذكر
 
 #: pretix/control/templates/pretixcontrol/event/live.html:71
 msgid ""
-"Your shop is currently in test mode. All orders are not persistant and can "
+"Your shop is currently in test mode. All orders are not persistent and can "
 "be deleted at any point."
 msgstr ""
 "متجر الخاص بك هو حاليا في وضع الاختبار. جميع الطلبات ليست فاضحة ويمكن حذفها "
@@ -12387,7 +12387,7 @@ msgid ""
 "define, how many instances of your product pretix will sell. This way, you "
 "can configure whether your event can take an unlimited number of attendees "
 "or the number of attendees is limited. You can assign a product to multiple "
-"quotas to fulfil more complex requirements, e.g. if you want to limit the "
+"quotas to fulfill more complex requirements, e.g. if you want to limit the "
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
@@ -13337,7 +13337,7 @@ msgstr "اعتبره منته"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
 #, python-format
 msgid ""
-"We recevied notice that <strong>%(amount)s</strong> have been refunded via "
+"We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
 "underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
 "%(total)s</strong>."
@@ -13446,7 +13446,7 @@ msgstr "إرسال رسائل البريد الإلكتروني"
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:51
 msgid ""
 "Since you are refunding your customers orders to gift cards, you should "
-"explain to them how to access their giftcards. The easiest way to do this, "
+"explain to them how to access their gift cards. The easiest way to do this, "
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
@@ -14262,7 +14262,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:210
 #, fuzzy
 #| msgid "Use languages"
-msgid "Prefered language"
+msgid "Preferred language"
 msgstr "استخدام اللغات"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:221
@@ -14370,11 +14370,11 @@ msgstr "الخطوة 1: تحميل البيانات"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:16
 msgid ""
-"You are about to permamanently delete data from the server, even though you "
+"You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You should therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
-"كنت على وشك أن البيانات الحذف permamanently من الخادم، حتى ولو كنت قد تكون "
+"كنت على وشك أن البيانات الحذف permanently من الخادم، حتى ولو كنت قد تكون "
 "هناك حاجة للحفاظ على بعض من هذه البيانات في الملف. لذلك يجب عليك تحميل الملف "
 "التالي وتخزينها في مكان آمن:"
 
@@ -15454,7 +15454,7 @@ msgstr "مرحبا بكم في pretix! أنت الآن جزءا من الفري�
 
 #: pretix/control/views/auth.py:257
 msgid ""
-"If the adress is registred to valid account, then we have sent you an e-mail "
+"If the address is registered to valid account, then we have sent you an e-mail "
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
 msgstr ""
@@ -15464,7 +15464,7 @@ msgstr ""
 
 #: pretix/control/views/auth.py:260
 msgid ""
-"If the adress is registred to valid account, then we have sent you an e-mail "
+"If the address is registered to valid account, then we have sent you an e-mail "
 "containing further instructions."
 msgstr ""
 "إذا تم REGISTRED العنوان لحساب صالح، ثم لقد قمنا بإرسال رسالة بريد إلكتروني "
@@ -16341,7 +16341,7 @@ msgstr "تم إلغاء هذا الأمر."
 #: pretix/control/views/orders.py:2041
 #, python-brace-format
 msgid ""
-"The orders have been canceled. An error occured with {count} orders, please "
+"The orders have been canceled. An error occurred with {count} orders, please "
 "check all uncanceled orders."
 msgstr ""
 
@@ -17029,8 +17029,8 @@ msgstr ""
 "بحاجة لنقل الاموال، على سبيل المثال أرقام، أرقام التوجيه، عناوين، الخ حساب"
 
 #: pretix/plugins/banktransfer/payment.py:107
-msgid "Do not include a hypen in the payment reference."
-msgstr "لا تتضمن hypen في إشارة الدفع."
+msgid "Do not include a hyphen in the payment reference."
+msgstr "لا تتضمن hyphen في إشارة الدفع."
 
 #: pretix/plugins/banktransfer/payment.py:108
 msgid "This is required in some countries."
@@ -17230,7 +17230,7 @@ msgid "An internal error occurred during processing your data."
 msgstr "حدث خطأ داخلي أثناء معالجة البيانات الخاصة بك."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
-msgid "Some transactions might be missing, please try ot re-import the file."
+msgid "Some transactions might be missing, please try to re-import the file."
 msgstr ""
 "بعض المعاملات قد يكون في عداد المفقودين، يرجى المحاولة ملف التمديد إعادة "
 "الاستيراد."
@@ -18384,7 +18384,7 @@ msgstr "المفتاح السري"
 
 #: pretix/plugins/stripe/payment.py:174
 msgid ""
-"The country in which your Stripe-account is registred in. Usually, this is "
+"The country in which your Stripe-account is registered in. Usually, this is "
 "your country of residence."
 msgstr ""
 "البلد الذي هو REGISTRED الشريط في الحساب الخاص بك في. عادة، وهذا هو البلد "
@@ -19322,7 +19322,7 @@ msgid "Please select how you want to pay."
 msgstr "يرجى اختيار طريقة الدفع."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
-msgid "This sales channel does not provide support for testmode."
+msgid "This sales channel does not provide support for test mode."
 msgstr "قناة البيع هذه لا توفر دعم لحالة تجربة المتجر."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
@@ -19330,7 +19330,7 @@ msgid "If you continue, you might pay an actual order with non-existing money!"
 msgstr "إذا أكملت العملية يمكن أن تدفع طلب حقيقي بمال لايوجد!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:49
-msgid "This payment provider does not provide support for testmode."
+msgid "This payment provider does not provide support for test mode."
 msgstr "هذا المزود دفع لا توفر الدعم لtestmode."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:51

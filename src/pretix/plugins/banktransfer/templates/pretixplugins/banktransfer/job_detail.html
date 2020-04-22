@@ -16,7 +16,7 @@
         {% if job.state == "error" %}
             <div class="alert alert-danger">
                 {% trans "An internal error occurred during processing your data." %}
-                {% trans "Some transactions might be missing, please try ot re-import the file." %}
+                {% trans "Some transactions might be missing, please try to re-import the file." %}
             </div>
         {% elif transactions_ignored == 0 and transactions_invalid == 0 and transactions_valid == 0 %}
             <div class="alert alert-info">

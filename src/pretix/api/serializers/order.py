@@ -751,7 +751,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 sales_channel = get_all_sales_channels()[self.initial_data['sales_channel']]
 
                 if testmode and not sales_channel.testmode_supported:
-                    raise ValidationError('This sales channel does not provide support for testmode.')
+                    raise ValidationError('This sales channel does not provide support for test mode.')
             except KeyError:
                 # We do not need to raise a ValidationError here, since there is another check to validate the
                 # sales_channel

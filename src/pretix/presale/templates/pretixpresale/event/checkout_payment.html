@@ -38,7 +38,7 @@
                                     </div>
                                     {% if not request.sales_channel.testmode_supported %}
                                         <div class="alert alert-danger">
-                                            {% trans "This sales channel does not provide support for testmode." %}
+                                            {% trans "This sales channel does not provide support for test mode." %}
                                             <strong>
                                                 {% trans "If you continue, you might pay an actual order with non-existing money!" %}
                                             </strong>
@@ -46,7 +46,7 @@
                                     {% endif %}
                                 {% else %}
                                     <div class="alert alert-warning">
-                                        {% trans "This payment provider does not provide support for testmode." %}
+                                        {% trans "This payment provider does not provide support for test mode." %}
                                         <strong>
                                             {% trans "If you continue, actual money might be transferred." %}
                                         </strong>

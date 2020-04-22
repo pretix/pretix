@@ -1,0 +1,42 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - 'src/pretix/locale/**'
+      - 'src/pretix/static/**'
+      - 'src/tests/**'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - 'src/pretix/locale/**'
+      - 'src/pretix/static/**'
+      - 'src/tests/**'
+
+jobs:
+  spelling:
+    name: Spellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install system packages
+        run: sudo apt install enchant hunspell aspell-en
+      - name: Install Dependencies
+        run: pip3 install --no-use-pep517 -Ur doc/requirements.txt
+      - name: Spellcheck docs
+        run: make spelling
+        working-directory: ./doc
+      - name:
+        run: '[ ! -s _build/spelling/output.txt ]'
+        working-directory: ./doc

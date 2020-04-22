@@ -20,7 +20,7 @@
         {% csrf_token %}
         <p>
             {% blocktrans trimmed with amount=refund.amount|money:request.event.currency method=refund.payment_provider.verbose_name pending=pending_sum|money:request.event.currency total=order.total|money:request.event.currency %}
-                We recevied notice that <strong>{{ amount }}</strong> have been refunded via
+                We received notice that <strong>{{ amount }}</strong> have been refunded via
                 <strong>{{ method }}</strong>. If this refund is processed, the order will be underpaid by
                 <strong>{{ pending }}</strong>. The order total is <strong>{{ total }}</strong>.
             {% endblocktrans %}

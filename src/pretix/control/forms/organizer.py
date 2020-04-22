@@ -323,7 +323,7 @@ class OrganizerSettingsForm(SettingsForm):
         ext_whitelist=(".ico", ".png", ".jpg", ".gif", ".jpeg"),
         required=False,
         help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
-                    'We recommend a size of at least 200x200px to accomodate most devices.')
+                    'We recommend a size of at least 200x200px to accommodate most devices.')
     )
     giftcard_length = forms.IntegerField(
         label=_('Length of gift card codes'),

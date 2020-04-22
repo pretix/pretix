@@ -396,7 +396,7 @@ class EventSettingsForm(SettingsForm):
     name_scheme = forms.ChoiceField(
         label=_("Name format"),
         help_text=_("This defines how pretix will ask for human names. Changing this after you already received "
-                    "orders might lead to unexpected behaviour when sorting or changing names."),
+                    "orders might lead to unexpected behavior when sorting or changing names."),
         required=True,
     )
     name_scheme_titles = forms.ChoiceField(

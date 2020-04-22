@@ -857,7 +857,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Generate tickets for all products"),
             help_text=_('If turned off, tickets are only issued for products that are marked as an "admission ticket"'
-                        'in the product settings. You can also turn off tickt issuing in every product separately.'),
+                        'in the product settings. You can also turn off ticket issuing in every product separately.'),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_ticket_download',
                                               'data-checkbox-dependency-visual': 'on'}),
         )
@@ -980,7 +980,7 @@ DEFAULTS = {
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown in between the explanation of how the refunds work and the slider "
                         "which your customers can use to choose the amount they would like to receive. You can use it "
-                        "e.g. to explain choosing a lower refund will help your organisation.")
+                        "e.g. to explain choosing a lower refund will help your organization.")
         )
     },
     'cancel_allow_user_paid_require_approval': {

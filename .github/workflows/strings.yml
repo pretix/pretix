@@ -1,0 +1,60 @@
+name: Strings
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/pretix/locale/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'src/pretix/locale/**'
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    name: Check gettext syntax
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install system packages
+        run: sudo apt install gettext
+      - name: Install Dependencies
+        run: pip3 install --no-use-pep517 -Ur src/requirements.txt
+      - name: Compile messages
+        run: python manage.py compilemessages
+        working-directory: ./src
+      - name: Compile jsi18n
+        run: python manage.py compilejsi18n
+        working-directory: ./src
+  spelling:
+    runs-on: ubuntu-latest
+    name: Spellcheck
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install system packages
+        run: sudo apt install enchant hunspell hunspell-de-de aspell-en aspell-de
+      - name: Install Dependencies
+        run: pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
+      - name: Spellcheck translations
+        run: potypo
+        working-directory: ./src

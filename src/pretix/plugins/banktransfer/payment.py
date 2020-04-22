@@ -104,7 +104,7 @@ class BankTransfer(BasePaymentProvider):
                 required=False
             )),
             ('omit_hyphen', forms.BooleanField(
-                label=_('Do not include a hypen in the payment reference.'),
+                label=_('Do not include a hyphen in the payment reference.'),
                 help_text=_('This is required in some countries.'),
                 required=False
             )),
