@@ -11,7 +11,7 @@ on:
       - 'src/pretix/locale/**'
 
 jobs:
-  compiöe:
+  compile:
     runs-on: ubuntu-latest
     name: Check gettext syntax
     strategy:
