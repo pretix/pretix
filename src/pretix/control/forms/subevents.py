@@ -254,7 +254,7 @@ class RRuleForm(forms.Form):
         widget=forms.RadioSelect
     )
     count = forms.IntegerField(
-        label=_('Number of repititions'),
+        label=_('Number of repetitions'),
         initial=10
     )
     until = forms.DateField(

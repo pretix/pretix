@@ -857,7 +857,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Generate tickets for all products"),
             help_text=_('If turned off, tickets are only issued for products that are marked as an "admission ticket"'
-                        'in the product settings. You can also turn off tickt issuing in every product separately.'),
+                        'in the product settings. You can also turn off ticket issuing in every product separately.'),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_ticket_download',
                                               'data-checkbox-dependency-visual': 'on'}),
         )

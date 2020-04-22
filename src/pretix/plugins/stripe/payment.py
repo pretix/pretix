@@ -171,7 +171,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.ChoiceField(
                      choices=allcountries,
                      label=_('Merchant country'),
-                     help_text=_('The country in which your Stripe-account is registred in. Usually, this is your '
+                     help_text=_('The country in which your Stripe-account is registered in. Usually, this is your '
                                  'country of residence.'),
                  )),
             ]

@@ -55,7 +55,7 @@ class GiftCard(LoggedModel):
         validators=[
             RegexValidator(
                 regex="^[a-zA-Z0-9][a-zA-Z0-9.-]+$",
-                message=_("The giftcard code may only contain letters, numbers, dots and dashes."),
+                message=_("The gift card code may only contain letters, numbers, dots and dashes."),
             )
         ],
     )

@@ -556,7 +556,7 @@ msgstr "Dezember"
 #~ msgid "QR Code"
 #~ msgstr "QR-Code"
 
-#~ msgid "An error of type {code} occured."
+#~ msgid "An error of type {code} occurred."
 #~ msgstr "Ein Fehler ist aufgetreten. Fehlercode: {code}"
 
 #~ msgid ""

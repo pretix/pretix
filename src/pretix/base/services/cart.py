@@ -1108,7 +1108,7 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
     :param event: The event ID in question
     :param items: A list of dicts with the keys item, variation, count, custom_price, voucher, seat ID
     :param cart_id: Session ID of a guest
-    :raises CartError: On any error that occured
+    :raises CartError: On any error that occurred
     """
     with language(locale):
         ia = False
