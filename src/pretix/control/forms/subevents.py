@@ -228,7 +228,8 @@ class RRuleForm(forms.Form):
             ('monthly', _('month(s)')),
             ('weekly', _('week(s)')),
             ('daily', _('day(s)')),
-        ]
+        ],
+        initial='weekly'
     )
     interval = forms.IntegerField(
         label=_('Interval'),
