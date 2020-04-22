@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-21 13:57+0000\n"
-"PO-Revision-Date: 2020-04-21 16:44+0000\n"
+"PO-Revision-Date: 2020-04-22 21:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -7910,9 +7910,6 @@ msgid "Sunday"
 msgstr "Sonntag"
 
 #: pretix/control/forms/filter.py:545
-#, fuzzy
-#| msgctxt "stripe"
-#| msgid "Live"
 msgid "Live"
 msgstr "Live"
 
