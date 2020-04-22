@@ -30,8 +30,8 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install Dependencies
         run: pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
-      - name: Run flake8
-        run: flake8 .
+      - name: Run isort
+        run: isort -c -rc -df .
         working-directory: ./src
   flake:
     name: flake8
