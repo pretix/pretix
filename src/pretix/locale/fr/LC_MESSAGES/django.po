@@ -1870,7 +1870,7 @@ msgid ""
 "organizer account."
 msgstr ""
 "Si cette option est sélectionnée, cet événement peut apparaître sur la page "
-"d'accueil du système de billetterie ou dans un profil d'organisation."
+"d'accueil du système de billetterie ou dans un profil d'organization."
 
 #: pretix/base/models/event.py:319 pretix/base/models/event.py:998
 #: pretix/control/forms/subevents.py:83
@@ -2007,7 +2007,7 @@ msgid ""
 "event."
 msgstr ""
 "Si cette option est sélectionnée, cet événement peut apparaître sur la page "
-"d'accueil du système de billetterie ou dans un profil d'organisation."
+"d'accueil du système de billetterie ou dans un profil d'organization."
 
 #: pretix/base/models/event.py:1022 pretix/base/settings.py:1485
 msgid "Frontpage text"
@@ -5675,7 +5675,7 @@ msgid ""
 msgstr ""
 "Ce numéro sera précédé d'un numéro de facture. Si vous laissez ce champ "
 "vide, votre slug d'événement sera utilisé suivi d'un tiret. Attention: Si "
-"plusieurs événements au sein d'une même organisation utilisent la même "
+"plusieurs événements au sein d'une même organization utilisent la même "
 "valeur dans ce champ, ils partageront leur plage de numéros, c'est-à-dire "
 "que chaque numéro complet sera utilisé au plus une fois sur l'ensemble de "
 "vos événements. Cette option n'affecte que les futures factures."
@@ -6229,7 +6229,7 @@ msgid ""
 "This text will be shown in between the explanation of how the refunds work "
 "and the slider which your customers can use to choose the amount they would "
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
-"help your organisation."
+"help your organization."
 msgstr ""
 
 #: pretix/base/settings.py:992
@@ -9237,7 +9237,7 @@ msgid ""
 "smaller screens."
 msgstr ""
 "Si vous fournissez un logo, nous n'afficherons pas par défaut le nom de "
-"votre organisation dans l'en-tête de la page. Nous afficherons votre logo "
+"votre organization dans l'en-tête de la page. Nous afficherons votre logo "
 "avec une hauteur maximale de 120 pixels."
 
 #: pretix/control/forms/organizer.py:290

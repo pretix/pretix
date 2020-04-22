@@ -5951,7 +5951,7 @@ msgid ""
 "This text will be shown in between the explanation of how the refunds work "
 "and the slider which your customers can use to choose the amount they would "
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
-"help your organisation."
+"help your organization."
 msgstr ""
 "Dieser Text wird angezeigt zwischen der Beschreibung, wie die Erstattung "
 "funktioniert, und dem Eingabefeld mit dem Ihre Kunden auswählen können, "
@@ -18184,7 +18184,7 @@ msgid ""
 msgstr ""
 "Wir haben pretixdesk und pretixdroid in den Ruhestand geschickt und durch "
 "unsere neue App pretixSCAN ersetzt, die auf allen wichtigen Plattformen "
-"läuft, bequemen Wechsel zwischen Events erlaubt, eine bessere Performance "
+"läuft, bequemen Wechsel zwischen Veranstaltungen erlaubt, eine bessere Performance "
 "bei größeren Veranstaltungen bietet und Live-Druck von Namensschildern "
 "unterstützt. Wir empfehlen, dass Sie auf pretixSCAN wechseln, aber Sie "
 "können mindestens noch bis Jahresende 2019 unsere alten Apps nutzen, wenn "
@@ -18840,7 +18840,7 @@ msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:250 pretix/plugins/stripe/payment.py:1297
 msgid "WeChat Pay"
-msgstr "Wechat Pay"
+msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:277
 #, python-brace-format
@@ -18979,7 +18979,7 @@ msgstr "Przelewy24 über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1296
 msgid "WeChat Pay via Stripe"
-msgstr "Wechat Pay über Stripe"
+msgstr "WeChat Pay über Stripe"
 
 #: pretix/plugins/stripe/signals.py:63
 msgid "Charge succeeded."
@@ -19791,7 +19791,7 @@ msgstr ""
 "Wir können Ihnen diesen Ticketshop nicht in die Website eingebettet "
 "darstellen, da Ihr Browser so eingestellt ist, dass er Cookies von "
 "eingebundenen Website-Elementen blockiert. Bitte probieren Sie, den Shop in "
-"einem neuen Tab zu öffnen oder änderen Sie Ihre Browsereinstellungen."
+"einem neuen Tab zu öffnen oder ändern Sie Ihre Browsereinstellungen."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:17
 msgid "We apologize for the inconvenience!"

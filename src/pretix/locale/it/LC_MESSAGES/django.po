@@ -5463,7 +5463,7 @@ msgid ""
 "This text will be shown in between the explanation of how the refunds work "
 "and the slider which your customers can use to choose the amount they would "
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
-"help your organisation."
+"help your organization."
 msgstr ""
 
 #: pretix/base/settings.py:992

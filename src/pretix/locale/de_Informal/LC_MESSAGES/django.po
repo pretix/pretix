@@ -5945,7 +5945,7 @@ msgid ""
 "This text will be shown in between the explanation of how the refunds work "
 "and the slider which your customers can use to choose the amount they would "
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
-"help your organisation."
+"help your organization."
 msgstr ""
 "Dieser Text wird angezeigt zwischen der Beschreibung, wie die Erstattung "
 "funktioniert, und dem Eingabefeld mit dem deine Kunden auswählen können, "
@@ -8017,7 +8017,7 @@ msgstr "Beliebiges Produkt des Kontingents \"{quota}\""
 
 #: pretix/control/forms/filter.py:1142
 msgid "Refund status"
-msgstr "Erstattungs-Status"
+msgstr "Erstattungsstatus"
 
 #: pretix/control/forms/filter.py:1144
 msgid "All open refunds"
@@ -8535,7 +8535,7 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, werden Zahlungen mit einer Zahlungsart, die "
 "keine automatischen Erstattungen unterstützt, automatisch als manuelle "
-"Erstattungen auf deiner Erstattungs-Liste als \"zu erledigen\" auftauchen. "
+"Erstattungen auf deiner Erstattungsliste als \"zu erledigen\" auftauchen. "
 "Wähle diese Option nicht, wenn du diese Bestellungen mit anderen "
 "Bestellungen verrechnen oder als Gutschein erstatten möchtest."
 
@@ -10404,7 +10404,7 @@ msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:16
 msgid "Transaction Code"
-msgstr "Transaktions-Code"
+msgstr "Transaktionscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
 msgid "Merchant Code"
@@ -10436,11 +10436,11 @@ msgstr "Kreditkartennummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:35
 msgid "Client Transaction Code"
-msgstr "Client-Transaktions-Code"
+msgstr "Client-Transaktionscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:38
 msgid "Server Transaction Code"
-msgstr "Server-Transaktions-Code"
+msgstr "Server-Transaktionscode"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -15454,7 +15454,7 @@ msgstr "Bestellung %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
 msgid "Voucher link"
-msgstr "Voucherlink"
+msgstr "Gutschein-Link"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:89
 msgid "Voucher history"
@@ -18144,7 +18144,7 @@ msgid ""
 msgstr ""
 "Wir haben pretixdesk und pretixdroid in den Ruhestand geschickt und durch "
 "unsere neue App pretixSCAN ersetzt, die auf allen wichtigen Plattformen "
-"läuft, bequemen Wechsel zwischen Events erlaubt, eine bessere Performance "
+"läuft, bequemen Wechsel zwischen Veranstaltungen erlaubt, eine bessere Performance "
 "bei größeren Veranstaltungen bietet und Live-Druck von Namensschildern "
 "unterstützt. Wir empfehlen, dass du auf pretixSCAN wechselst, aber du kannst "
 "mindestens noch bis Jahresende 2019 unsere alten Apps nutzen, wenn du "
@@ -18801,7 +18801,7 @@ msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:250 pretix/plugins/stripe/payment.py:1297
 msgid "WeChat Pay"
-msgstr "Wechat Pay"
+msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:277
 #, python-brace-format
