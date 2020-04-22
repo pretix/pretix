@@ -17,13 +17,17 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8]
         database: [sqlite, postgres, mysql]
         exclude:
           - database: mysql
             python-version: 3.7
           - database: sqlite
             python-version: 3.7
+          - database: mysql
+            python-version: 3.6
+          - database: sqlite
+            python-version: 3.6
     steps:
       - uses: actions/checkout@v2
       - uses: getong/mariadb-action@v1.1
