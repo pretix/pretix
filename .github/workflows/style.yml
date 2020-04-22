@@ -1,0 +1,47 @@
+name: Code Style
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - 'src/pretix/locale/**'
+      - 'src/pretix/static/**'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - 'src/pretix/locale/**'
+      - 'src/pretix/static/**'
+
+jobs:
+  isort:
+    name: isort
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install Dependencies
+        run: pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
+      - name: Run flake8
+        run: flake8 .
+        working-directory: ./src
+  flake:
+    name: flake8
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install Dependencies
+        run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt
+      - name: Run flake8
+        run: flake8 .
+        working-directory: ./src
