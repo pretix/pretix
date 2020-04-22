@@ -99,6 +99,17 @@ jobs:
           postgresql user: 'postgres'
           postgresql password: ''
         if: matrix.database == 'postgres'
+      - name: Wait / Sleep
+        if: matrix.database == 'postgres'
+        uses: jakejarvis/wait-action@v0.1.0
+        with:
+          time: '10s'
+      - name: Collect Docker Logs
+        if: matrix.database == 'postgres'
+        uses: jwalton/gh-docker-logs@v1.0.0
+      - name: Check running containers
+        if: matrix.database == 'postgres'
+        run: docker ps -a
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
