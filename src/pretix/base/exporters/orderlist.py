@@ -712,7 +712,7 @@ class InvoiceDataExporter(MultiSheetListExporter):
 
 class GiftcardRedemptionListExporter(ListExporter):
     identifier = 'giftcardredemptionlist'
-    verbose_name = gettext_lazy('Giftcard Redemptions')
+    verbose_name = gettext_lazy('Gift card redemptions')
 
     def iterate_list(self, form_data):
         tz = pytz.timezone(self.event.settings.timezone)

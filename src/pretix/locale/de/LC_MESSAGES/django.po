@@ -373,7 +373,7 @@ msgstr "Exportformat"
 
 #: pretix/base/exporter.py:97
 msgid "Excel (.xlsx)"
-msgstr "Excel (.xslx)"
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:98 pretix/base/exporter.py:183
 msgid "CSV (with commas)"
@@ -389,7 +389,7 @@ msgstr "CSV (mit Semikolon)"
 
 #: pretix/base/exporter.py:179
 msgid "Combined Excel (.xlsx)"
-msgstr "Kombiniertes Excel (.xslx)"
+msgstr "Kombiniertes Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -1229,7 +1229,7 @@ msgid "Event start date"
 msgstr "Veranstaltungsbeginn"
 
 #: pretix/base/exporters/orderlist.py:715
-msgid "Giftcard Redemptions"
+msgid "Gift card redemptions"
 msgstr "Geschenkgutschein-Einlösungen"
 
 #: pretix/base/exporters/orderlist.py:732 pretix/base/models/giftcards.py:54
@@ -4275,8 +4275,8 @@ msgstr "Liste der Zusatz-Produkte"
 
 #: pretix/base/pdf.py:215
 msgid ""
-"Addon 1\n"
-"Addon 2"
+"Add-on 1\n"
+"Add-on 2"
 msgstr ""
 "Workshop 1\n"
 "Workshop 2"
@@ -8549,7 +8549,7 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, werden Zahlungen mit einer Zahlungsart, die "
 "keine automatischen Erstattungen unterstützt, automatisch als manuelle "
-"Erstattungen auf Ihrer Erstattungs-Liste als \"zu erledigen\" auftauchen. "
+"Erstattungen auf Ihrer Erstattungsliste als \"zu erledigen\" auftauchen. "
 "Wählen Sie diese Option nicht, wenn Sie diese Bestellungen mit anderen "
 "Bestellungen verrechnen oder als Gutschein erstatten möchten."
 
@@ -10425,7 +10425,7 @@ msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:16
 msgid "Transaction Code"
-msgstr "Transaktions-Code"
+msgstr "Transaktionscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
 msgid "Merchant Code"
@@ -10457,11 +10457,11 @@ msgstr "Kreditkartennummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:35
 msgid "Client Transaction Code"
-msgstr "Client-Transaktions-Code"
+msgstr "Client-Transaktionscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:38
 msgid "Server Transaction Code"
-msgstr "Server-Transaktions-Code"
+msgstr "Server-Transaktionscode"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -11036,7 +11036,7 @@ msgid ""
 msgstr ""
 "Diese Veranstaltung enthält <strong>überzahlte Bestellungen</strong>, z.B. "
 "durch doppelte Zahlungsversuche. Sie sollten sich diese Fälle genau "
-"anschauen und ggf. den zuviel bezahlten Betrag an den Kunden zurückerstatten."
+"anschauen und ggf. den zu viel bezahlten Betrag an den Kunden zurückerstatten."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:25
 msgid "Show overpaid orders"
@@ -13743,7 +13743,7 @@ msgstr "E-Mails verschicken"
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:51
 msgid ""
 "Since you are refunding your customers orders to gift cards, you should "
-"explain to them how to access their giftcards. The easiest way to do this, "
+"explain to them how to access their gift cards. The easiest way to do this, "
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
@@ -14678,7 +14678,7 @@ msgstr "Schritt 1: Daten herunterladen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:16
 msgid ""
-"You are about to permamanently delete data from the server, even though you "
+"You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You should therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
@@ -15797,7 +15797,7 @@ msgstr "Willkommen bei pretix! Sie haben jetzt Zugriff auf das Team \"{}\"."
 
 #: pretix/control/views/auth.py:257
 msgid ""
-"If the adress is registered to valid account, then we have sent you an e-mail "
+"If the address is registered to valid account, then we have sent you an e-mail "
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
 msgstr ""
@@ -15807,7 +15807,7 @@ msgstr ""
 
 #: pretix/control/views/auth.py:260
 msgid ""
-"If the adress is registered to valid account, then we have sent you an e-mail "
+"If the address is registered to valid account, then we have sent you an e-mail "
 "containing further instructions."
 msgstr ""
 "Wenn die Adresse mit einem uns bekannten Konto verknüpft ist, haben wir "
@@ -19729,7 +19729,7 @@ msgid "Please select how you want to pay."
 msgstr "Bitte wählen Sie die gewünschte Zahlungsmethode aus."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
-msgid "This sales channel does not provide support for testmode."
+msgid "This sales channel does not provide support for test mode."
 msgstr "Diese Verkaufskanal unterstützt den Testmodus nicht."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
@@ -19739,7 +19739,7 @@ msgstr ""
 "existierendem Geld bezahlt!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:49
-msgid "This payment provider does not provide support for testmode."
+msgid "This payment provider does not provide support for test mode."
 msgstr "Diese Zahlungsmethode unterstützt den Testmodus nicht."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:51
@@ -20784,7 +20784,7 @@ msgstr "Sie können diese Bestellung nicht bearbeiten"
 
 #: pretix/presale/views/order.py:771
 msgid "You chose an invalid cancellation fee."
-msgstr "Sie haben eine ungültige Stornierungsgebühr gewählt."
+msgstr "Sie haben eine ungültige Stornogebühr gewählt."
 
 #: pretix/presale/views/order.py:796
 msgid "The cancellation has been requested."

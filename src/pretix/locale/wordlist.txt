@@ -1,3 +1,4 @@
+2FA
 ABN
 Alipay
 anonymize
@@ -21,6 +22,7 @@ csv
 CSV
 Ctrl
 customizable
+Customizations
 datetime
 DSS
 EPS
@@ -29,6 +31,7 @@ filetype
 frontend
 frontpage
 GENEXAMPLE
+Geo
 geocoding
 gift
 giropay
@@ -61,11 +64,13 @@ pretixdroid
 pretixPOS
 pretixSCAN
 Przelewy
+Pseudonymization
 px
-REddit
+Reddit
 redemptions
 Referer
 renderer
+Sa
 Samplecity
 SAQ
 SCA
@@ -85,7 +90,7 @@ timesaver
 timezones
 TOTP
 trustable
-txta
+txt
 uncanceled
 uncategorized
 undeletable
@@ -94,8 +99,10 @@ URIs
 waitinglist
 WebAuthn
 webhook
+webhooks
 webserver
 Wechat
+WeChat
 WhatsApp
 whitespace
 xlsx

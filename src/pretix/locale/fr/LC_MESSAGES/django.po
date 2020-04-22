@@ -1240,7 +1240,7 @@ msgstr "date de début d'événement"
 #: pretix/base/exporters/orderlist.py:715
 #, fuzzy
 #| msgid "Redemptions"
-msgid "Giftcard Redemptions"
+msgid "Gift card redemptions"
 msgstr "Remboursements"
 
 #: pretix/base/exporters/orderlist.py:732 pretix/base/models/giftcards.py:54
@@ -4467,11 +4467,11 @@ msgstr "Liste des Addons"
 
 #: pretix/base/pdf.py:215
 msgid ""
-"Addon 1\n"
-"Addon 2"
+"Add-on 1\n"
+"Add-on 2"
 msgstr ""
-"Addon 1\n"
-"Addon 2"
+"Add-on 1\n"
+"Add-on 2"
 
 #: pretix/base/pdf.py:226 pretix/control/forms/filter.py:505
 #: pretix/control/forms/filter.py:507
@@ -14560,7 +14560,7 @@ msgstr "Envoyer des emails"
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:51
 msgid ""
 "Since you are refunding your customers orders to gift cards, you should "
-"explain to them how to access their giftcards. The easiest way to do this, "
+"explain to them how to access their gift cards. The easiest way to do this, "
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
@@ -15557,7 +15557,7 @@ msgstr "Date de téléchargement"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:16
 msgid ""
-"You are about to permamanently delete data from the server, even though you "
+"You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You should therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
@@ -16780,7 +16780,7 @@ msgstr ""
 
 #: pretix/control/views/auth.py:257
 msgid ""
-"If the adress is registered to valid account, then we have sent you an e-mail "
+"If the address is registered to valid account, then we have sent you an e-mail "
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
 msgstr ""
@@ -16789,7 +16789,7 @@ msgstr ""
 #, fuzzy
 #| msgid "We sent you an e-mail containing further instructions."
 msgid ""
-"If the adress is registered to valid account, then we have sent you an e-mail "
+"If the address is registered to valid account, then we have sent you an e-mail "
 "containing further instructions."
 msgstr "Nous vous avons envoyé un e-mail contenant d'autres instructions."
 
@@ -21024,7 +21024,7 @@ msgstr "Veuillez choisir comment vous voulez payer."
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
 #, fuzzy
 #| msgid "The payment method for this order cannot be changed."
-msgid "This sales channel does not provide support for testmode."
+msgid "This sales channel does not provide support for test mode."
 msgstr "Le mode de paiement de cet ordre ne peut pas être modifié."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
@@ -21034,7 +21034,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:49
 #, fuzzy
 #| msgid "The payment method for this order cannot be changed."
-msgid "This payment provider does not provide support for testmode."
+msgid "This payment provider does not provide support for test mode."
 msgstr "Le mode de paiement de cet ordre ne peut pas être modifié."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:51

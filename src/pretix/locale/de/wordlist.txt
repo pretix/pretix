@@ -1,4 +1,5 @@
 
+2FA
 ABN
 Absenderadresse
 Absendername
@@ -15,6 +16,7 @@ Authenticator
 Authentifizierungsmechanismus
 Backend
 Badge
+Badges
 Bancontact
 Banking
 Bcc
@@ -27,6 +29,7 @@ Benachrichtigungseinstellungen
 Berechtigungs
 Bestätigungs
 Bestellbestätigungs
+Bestellungsänderungen
 Bestellungsstatus
 bez
 BezahlCode
@@ -40,6 +43,8 @@ chardet
 charge
 Checkout
 Chrome
+CONFIRM
+Connect
 Cronjob
 csv
 Customer
@@ -47,7 +52,7 @@ Debug
 Di
 Do
 Doe
-DownloadformatoSocial
+Downloadformat
 Downloadseite
 Dr
 Drag
@@ -62,7 +67,8 @@ EPS
 Erstattungsbetrag
 Erstattungsmethode
 Erstattungsoptionen
-Erstattungweg
+Erstattungsstatus
+Erstattungsweg
 Erweiterungs
 etc
 Event
@@ -75,6 +81,7 @@ Footer
 gehostete
 geht's
 GENEXAMPLE
+Geo
 geocoding
 gescannt
 ggf
@@ -91,6 +98,8 @@ iDEAL
 IDs
 Inc
 inkl
+innenname
+innennamen
 Installations
 integrationen
 invalidiert
@@ -107,9 +116,11 @@ Lead
 Leaflet
 loszulegen
 Ltd
+max
 Meta
 Metadaten
 Mi
+min
 Mo
 MOTO
 Multibanco
@@ -122,6 +133,7 @@ OpenCage
 OpenStreetMap
 Opera
 Output
+parsen
 Pay
 PayPal
 PayPals
@@ -169,8 +181,10 @@ Secret
 Security
 SEPA
 Shirts
+Social
 Sofort
 SOFORT
+Sorry
 Source
 SSL
 STARTTLS
