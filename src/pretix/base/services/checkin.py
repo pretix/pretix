@@ -154,7 +154,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     dt = datetime or now()
 
     # Lock order positions
-    op = OrderPosition.all.select_related('order').select_for_update(of=('self',)).get(pk=op.pk)
+    op = OrderPosition.all.select_for_update().get(pk=op.pk)
     checkin_questions = list(
         clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
     )
