@@ -153,10 +153,8 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     """
     dt = datetime or now()
 
-    # Fetch order position with related objects
-    op = OrderPosition.all.select_related(
-        'item', 'variation', 'order', 'addon_to', 'subevent'
-    ).select_for_update().get(pk=op.pk)
+    # Lock order positions
+    op = OrderPosition.all.select_related('order').select_for_update(of=('self',)).get(pk=op.pk)
     checkin_questions = list(
         clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
     )
@@ -200,7 +198,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             require_answers
         )
 
-    if clist.rules and not force:
+    if type == Checkin.TYPE_ENTRY and clist.rules and not force:
         rule_data = LazyRuleVars(op, clist, dt)
         logic = get_logic_environment(op.subevent or clist.event)
         if not logic.apply(clist.rules, rule_data):
