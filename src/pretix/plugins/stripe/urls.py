@@ -14,12 +14,16 @@ event_patterns = [
         url(r'^redirect/$', redirect_view, name='redirect'),
         url(r'^return/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/$', ReturnView.as_view(), name='return'),
         url(r'^sca/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/$', ScaView.as_view(), name='sca'),
-        url(r'^sca/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/return/$', ScaReturnView.as_view(), name='sca.return'),
+        url(r'^sca/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/return/$',
+            ScaReturnView.as_view(), name='sca.return'),
     ])),
+    url(r'^.well-known/apple-developer-merchantid-domain-association$',
+        applepay_association, name='applepay.association'),
 ]
 
 organizer_patterns = [
-    url(r'^.well-known/apple-developer-merchantid-domain-association$', applepay_association, name='applepay.association'),
+    url(r'^.well-known/apple-developer-merchantid-domain-association$',
+        applepay_association, name='applepay.association'),
 ]
 
 urlpatterns = [
@@ -29,5 +33,6 @@ urlpatterns = [
         OrganizerSettingsFormView.as_view(), name='settings.connect'),
     url(r'^_stripe/webhook/$', webhook, name='webhook'),
     url(r'^_stripe/oauth_return/$', oauth_return, name='oauth.return'),
-    url(r'^.well-known/apple-developer-merchantid-domain-association$', applepay_association, name='applepay.association'),
+    url(r'^.well-known/apple-developer-merchantid-domain-association$',
+        applepay_association, name='applepay.association'),
 ]
