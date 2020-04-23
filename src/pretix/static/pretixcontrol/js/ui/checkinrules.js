@@ -62,15 +62,15 @@ $(document).ready(function () {
             'label': gettext('Current time'),
             'type': 'datetime',
         },
-        'scans_number': {
+        'entries_number': {
             'label': gettext('Number of entries'),
             'type': 'int',
         },
-        'scans_today': {
+        'entries_today': {
             'label': gettext('Number of entries since midnight'),
             'type': 'int',
         },
-        'scans_days': {
+        'entries_days': {
             'label': gettext('Number of days with an entry'),
             'type': 'int',
         },

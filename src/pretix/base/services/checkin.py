@@ -66,17 +66,17 @@ class LazyRuleVars:
         return self._position.variation_id
 
     @cached_property
-    def scans_number(self):
+    def entries_number(self):
         return self._position.checkins.filter(type=Checkin.TYPE_ENTRY, list=self._clist).count()
 
     @cached_property
-    def scans_today(self):
+    def entries_today(self):
         tz = self._clist.event.timezone
         midnight = now().astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
         return self._position.checkins.filter(type=Checkin.TYPE_ENTRY, list=self._clist, datetime__gte=midnight).count()
 
     @cached_property
-    def scans_days(self):
+    def entries_days(self):
         tz = self._clist.event.timezone
         with override(tz):
             return self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).annotate(

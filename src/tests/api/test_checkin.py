@@ -376,7 +376,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         {
             'list': clist_all.pk,
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
-            'auto_checked_in': False
+            'auto_checked_in': False,
+            'type': 'entry',
         }
     ]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?has_checkin=1'.format(
@@ -414,7 +415,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         {
             'list': clist_all.pk,
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
-            'auto_checked_in': False
+            'auto_checked_in': False,
+            'type': 'entry',
         }
     ]
     resp = token_client.get(

@@ -38,7 +38,7 @@ class CheckinList(LoggedModel):
                     'any of the selected sales channels. This option can be useful when tickets sold at the box office '
                     'are not checked again before entry and should be considered validated directly upon purchase.')
     )
-    rules = FallbackJSONField(default=dict)
+    rules = FallbackJSONField(default=dict, blank=True)
 
     objects = ScopedManager(organizer='event__organizer')
 
