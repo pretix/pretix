@@ -218,14 +218,13 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         type == Checkin.TYPE_EXIT or
         clist.allow_multiple_entries or
         last_ci is None or
-        (clist.allow_entry_after_exit and last_ci.type == Checkin.TYPE_EXIT) or
-        force
+        (clist.allow_entry_after_exit and last_ci.type == Checkin.TYPE_EXIT)
     )
 
     if nonce and ((last_ci and last_ci.nonce == nonce) or op.checkins.filter(type=type, list=clist, device=device, nonce=nonce).exists()):
         return
 
-    if entry_allowed:
+    if entry_allowed or force:
         ci = Checkin.objects.create(
             position=op,
             type=type,
@@ -233,7 +232,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             datetime=dt,
             device=device,
             nonce=nonce,
-            forced=force,
+            forced=force and not entry_allowed,
         )
         op.order.log_action('pretix.event.checkin', data={
             'position': op.id,

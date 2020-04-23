@@ -302,12 +302,13 @@ def test_multi_entry_repeat_nonce(position, clist):
 
 @pytest.mark.django_db
 def test_single_entry_forced_reentry(position, clist):
-    perform_checkin(position, clist, {})
+    perform_checkin(position, clist, {}, force=True)
 
     perform_checkin(position, clist, {}, force=True, nonce='bla')
     perform_checkin(position, clist, {}, force=True, nonce='bla')
 
     assert position.checkins.count() == 2
+    assert not position.checkins.last().forced
     assert position.checkins.first().forced
     assert position.order.all_logentries().count() == 2
 

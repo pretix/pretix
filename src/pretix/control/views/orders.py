@@ -38,9 +38,9 @@ from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedFile, CachedTicket, Invoice, InvoiceAddress,
-    Item, ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
-    generate_position_secret, generate_secret,
+    CachedCombinedTicket, CachedFile, CachedTicket, Checkin, Invoice,
+    InvoiceAddress, Item, ItemVariation, LogEntry, Order, QuestionAnswer,
+    Quota, generate_position_secret, generate_secret,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
@@ -252,7 +252,7 @@ class OrderDetail(OrderView):
         ).prefetch_related(
             'item__questions', 'issued_gift_cards',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
-            'checkins', 'checkins__list'
+            Prefetch('checkins', queryset=Checkin.objects.select_related('list').order_by('datetime')),
         ).order_by('positionid')
 
         positions = []
