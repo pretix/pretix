@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-24 07:36+0000\n"
-"PO-Revision-Date: 2020-04-24 07:41+0000\n"
+"PO-Revision-Date: 2020-04-24 07:43+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -19879,36 +19879,24 @@ msgstr "Bestellbestätigung"
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:47
-#, fuzzy
-#| msgid ""
-#| "You can download your tickets using the buttons below. Please have your "
-#| "ticket ready when entering the event."
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
-"Bitte laden Sie Ihr Ticket mit Hilfe der Buttons weiter unten herunter. "
-"Bitte halten Sie das Ticket am Einlass bereit."
+msgstr "Bitte halten Sie das Ticket am Einlass bereit."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:9
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets here:"
-msgstr "Alle Tickets auf einmal herunterladen:"
+msgstr "Laden Sie Ihre Tickets hier herunter:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Download all tickets at once:"
 msgstr "Alle Tickets auf einmal herunterladen:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:31
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download your ticket here:"
-msgstr "Ticket herunterladen"
+msgstr "Laden Sie Ihr Ticket hier herunter:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:50
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets using the buttons below."
-msgstr "Alle Tickets auf einmal herunterladen:"
+msgstr "Laden Sie Ihre Tickets mit den Buttons weiter unten herunter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:58
 #, python-format
