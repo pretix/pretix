@@ -778,7 +778,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         )
         if self.request.event.settings.cancel_allow_user_paid_require_approval:
             self.order.cancellation_requests.create(
-                cancellation_fee=fee,
+                cancellation_fee=fee or Decimal('0.00'),
                 refund_as_giftcard=giftcard,
             )
             self.order.log_action('pretix.event.order.refund.requested')
