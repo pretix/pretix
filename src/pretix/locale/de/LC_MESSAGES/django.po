@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-24 07:36+0000\n"
-"PO-Revision-Date: 2020-04-22 21:00+0000\n"
+"PO-Revision-Date: 2020-04-24 07:41+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -3986,12 +3986,7 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschreibung des Zahlungsvorgangs in Bestellbestätigungs-E-Mails"
 
 #: pretix/base/payment.py:903
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
@@ -4000,20 +3995,15 @@ msgid ""
 msgstr ""
 "Dieser Text wird statt des {payment_info}-Platzhalters in "
 "Bestellbestätigungen verwendet. Er sollte den Kunden darüber informieren, "
-"wie die Zahlung vervollständigt werden kann. Die Platzhalter {order}, "
-"{total}, {currency} und {total_with_currency} können verwendet werden."
+"wie die Zahlung vervollständigt werden kann. Die Platzhalter {order}, {total}"
+", {currency} und {total_with_currency} können verwendet werden."
 
 #: pretix/base/payment.py:910
 msgid "Payment process description for pending orders"
 msgstr "Beschreibung des Zahlungsvorgangs für ausstehende Bestellungen"
 
 #: pretix/base/payment.py:911
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can "
