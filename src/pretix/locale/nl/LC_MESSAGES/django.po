@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-21 13:57+0000\n"
-"PO-Revision-Date: 2020-04-19 05:00+0000\n"
+"PO-Revision-Date: 2020-04-22 21:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2009,7 +2009,7 @@ msgstr "Verloopdatum"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Bijzondere voorwaarden"
 
 #: pretix/base/models/invoices.py:129
 #, python-format
@@ -4032,10 +4032,8 @@ msgstr "Alleen testcadeaubonnen kunnen in de testmodus worden gebruikt."
 
 #: pretix/base/payment.py:1101 pretix/base/payment.py:1163
 #: pretix/base/payment.py:1204
-#, fuzzy
-#| msgid "This gift card is not known."
 msgid "This gift card is no longer valid."
-msgstr "Deze cadeauboncode is onbekend."
+msgstr "Deze cadeaubon is niet meer geldig."
 
 #: pretix/base/payment.py:1104 pretix/base/payment.py:1166
 msgid "All credit on this gift card has been used."
@@ -7347,6 +7345,8 @@ msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
 msgstr ""
+"U heeft ingesteld dat cadeaubonnen {} jaar na het jaar waarin de cadeaubon "
+"is uitgegeven verlopen."
 
 #: pretix/control/forms/event.py:599
 msgid "Tax rule for payment fees"
@@ -7875,25 +7875,20 @@ msgid "Sunday"
 msgstr "Zondag"
 
 #: pretix/control/forms/filter.py:545
-#, fuzzy
-#| msgctxt "stripe"
-#| msgid "Live"
 msgid "Live"
 msgstr "Live"
 
 #: pretix/control/forms/filter.py:550 pretix/control/forms/filter.py:553
-#, fuzzy
-#| msgid "Empty tag"
 msgid "Empty"
-msgstr "Lege tag"
+msgstr "Leeg"
 
 #: pretix/control/forms/filter.py:554
 msgid "Valid and with value"
-msgstr ""
+msgstr "Geldig en met waarde"
 
 #: pretix/control/forms/filter.py:555
 msgid "Expired and with value"
-msgstr ""
+msgstr "Verlopen en met waarde"
 
 #: pretix/control/forms/filter.py:561 pretix/control/forms/filter.py:563
 #: pretix/control/forms/filter.py:886 pretix/control/forms/filter.py:888
@@ -8493,10 +8488,8 @@ msgid "You need to specify an amount for a partial refund."
 msgstr "U moet een bedrag opgeven voor een gedeeltelijke terugbetaling."
 
 #: pretix/control/forms/orders.py:547
-#, fuzzy
-#| msgid "Cancel all orders"
 msgid "Cancel all dates"
-msgstr "Annuleer alle bestellingen"
+msgstr "Annuleer alle datums"
 
 #: pretix/control/forms/orders.py:552
 msgid "Automatically refund money if possible"
@@ -8531,14 +8524,12 @@ msgstr ""
 "oorspronkelijke betalingsmethode"
 
 #: pretix/control/forms/orders.py:572
-#, fuzzy
-#| msgid "Gift card value"
 msgid "Gift card validity"
-msgstr "Waarde van cadeaubon"
+msgstr "Geldigheid van cadeaubonnen"
 
 #: pretix/control/forms/orders.py:579
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Bijzondere voorwaarden"
 
 #: pretix/control/forms/orders.py:596
 msgid "Keep fees"
@@ -8625,7 +8616,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:711
 msgid "Please confirm that you want to cancel ALL dates in this event series."
-msgstr ""
+msgstr "Bevestig dat u ALLE datums in deze evenementenreeks wilt annuleren."
 
 #: pretix/control/forms/organizer.py:29
 msgid "This slug is already in use. Please choose a different one."
@@ -8765,10 +8756,8 @@ msgstr ""
 "andere lengte in wilt stellen kan dit hier."
 
 #: pretix/control/forms/organizer.py:335
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Validity of gift card codes in years"
-msgstr "Lengte van cadeauboncodes"
+msgstr "Geldigheid van cadeauboncodes in jaren"
 
 #: pretix/control/forms/organizer.py:336
 msgid ""
@@ -8776,6 +8765,9 @@ msgid ""
 "the year after this many years. If you keep it empty, gift cards do not have "
 "an explicit expiry date."
 msgstr ""
+"Als u hier een getal invoert zullen cadeaubonnen standaard aan het eind van "
+"het jaar verlopen na dit aantal jaren. Als u deze waarde leeg laat hebben "
+"cadeaubonnen geen expliciete verloopdatum."
 
 #: pretix/control/forms/organizer.py:351
 msgctxt "webhooks"
@@ -9766,10 +9758,8 @@ msgid "The gift card has been created."
 msgstr "De cadeaubon is aangemaakt."
 
 #: pretix/control/logdisplay.py:337 pretix/control/views/organizer.py:1120
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "The gift card has been changed."
-msgstr "De cadeaubon is aangemaakt."
+msgstr "De cadeaubon is gewijzigd."
 
 #: pretix/control/logdisplay.py:338
 msgid "A manual transaction has been performed."
@@ -14117,8 +14107,6 @@ msgid "Details"
 msgstr "Details"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:36
-#, fuzzy
-#| msgid "Expiry date"
 msgid "Expire date"
 msgstr "Verloopdatum"
 
@@ -14135,12 +14123,12 @@ msgid ""
 "Create a payment on the respective order that cancels out with this "
 "transaction. The order will then likely be overpaid."
 msgstr ""
+"Maak een betaling op de bestelling die deze transactie annuleert. De "
+"bestelling zal hierna waarschijnlijk overbetaald zijn."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:82
-#, fuzzy
-#| msgid "Never"
 msgid "Revert"
-msgstr "Nooit"
+msgstr "Terugboeken"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:86
 msgid "Manual transaction"
@@ -16766,16 +16754,12 @@ msgid "Gift cards are not allowed to have negative values."
 msgstr "Cadeaubonnen kunnen geen negatieve waarde hebben."
 
 #: pretix/control/views/organizer.py:1028
-#, fuzzy
-#| msgid "The transaction amount is incorrect."
 msgid "The transaction could not be reversed."
-msgstr "De transactiehoeveelheid is onjuist."
+msgstr "De transactie kon niet worden teruggeboekt."
 
 #: pretix/control/views/organizer.py:1030
-#, fuzzy
-#| msgid "The manual transaction has been saved."
 msgid "The transaction has been reversed."
-msgstr "De handmatige transactie is opgeslagen."
+msgstr "De transactie is teruggeboekt."
 
 #: pretix/control/views/organizer.py:1035
 msgid "Your input was invalid, please try again."
@@ -17827,12 +17811,14 @@ msgstr ""
 
 #: pretix/plugins/paypal/payment.py:152
 msgid "PayPal does not process payments in your event's currency."
-msgstr ""
+msgstr "PayPal accepteert geen betalingen in de munteenheid van uw evenement."
 
 #: pretix/plugins/paypal/payment.py:153
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
 msgstr ""
+"Zie de volgende PayPal-pagina voor een complete lijst van ondersteunde "
+"munteenheden."
 
 #: pretix/plugins/paypal/payment.py:158
 msgid ""
@@ -17842,6 +17828,11 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
+"De munteenheid van uw evenement wordt door PayPal alleen ondersteund als een "
+"munteenheid voor binnenlandse betalingen. Dit betekent dat uw PayPal-account "
+"en de betalende PayPal-accounts in hetzelfde land moeten zijn aangemaakt en "
+"dezelfde munteenheid moeten gebruiken. Buitenlandse PayPal-accounts zullen "
+"geen betalingen kunnen versturen."
 
 #: pretix/plugins/paypal/payment.py:205 pretix/plugins/paypal/payment.py:291
 #: pretix/plugins/paypal/payment.py:306 pretix/plugins/paypal/payment.py:309
@@ -19315,16 +19306,12 @@ msgid "PDF output"
 msgstr "PDF-uitvoer"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:31
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download tickets (PDF)"
-msgstr "Download ticket"
+msgstr "Download tickets (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:32
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download ticket (PDF)"
-msgstr "Download ticket"
+msgstr "Download ticket (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:36
 msgid "Default ticket layout"
@@ -19787,12 +19774,11 @@ msgid "Add one more"
 msgstr "Voeg nog een toe"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:294
-#, fuzzy, python-format
-#| msgid "Any product"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Ieder product"
-msgstr[1] "Ieder product"
+msgstr[0] "Een product"
+msgstr[1] "%(num)s producten"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:309
 #: pretix/presale/templates/pretixpresale/event/index.html:264
@@ -20019,8 +20005,6 @@ msgstr "We proberen dit nu voor u te reserveren!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:246
 #: pretix/presale/templates/pretixpresale/event/voucher.html:343
-#, fuzzy
-#| msgid "Register"
 msgctxt "free_tickets"
 msgid "Register"
 msgstr "Registreren"
@@ -20145,35 +20129,28 @@ msgstr ""
 "Een terugbetaling van %(amount)s zal binnenkort naar u worden overgemaakt."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:123
-#, fuzzy
-#| msgid "Imprint"
 msgid "Print"
-msgstr "Afdruk"
+msgstr "Afdrukken"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:125
-#, fuzzy, python-format
-#| msgid ""
-#| "We've issued your refund of %(amount)s as a gift card. On your next "
-#| "purchase with us, you can use the gift card code <strong>%(code)s</"
-#| "strong> during payment."
+#, python-format
 msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
 "We hebben uw terugbetaling van %(amount)s uitgegeven als een cadeaubon. U "
-"kunt bij uw volgende aankoop bij ons de cadeauboncode <strong>%(code)s</"
-"strong> gebruiken bij de betaling."
+"kunt bij uw volgende aankoop bij ons tijdens de betaling de volgende "
+"cadeauboncode gebruiken:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:135
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "De huidige waarde van uw cadeaubon is %(value)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:142
-#, fuzzy, python-format
-#| msgid "This gift card is not known."
+#, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr "Deze cadeauboncode is onbekend."
+msgstr "Deze cadeaubon is geldig tot %(expiry)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:153
 #, python-format
@@ -20346,10 +20323,9 @@ msgstr "Terug te betalen bedrag:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:86
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:107
-#, fuzzy, python-format
-#| msgid "Your gift card has been applied."
+#, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr "Uw cadeaubon is succesvol gebruikt."
+msgstr "Uw cadeaubon zal geldig zijn tot %(expiry_date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:95
 msgid "I want the refund as a gift card for later purchases"
