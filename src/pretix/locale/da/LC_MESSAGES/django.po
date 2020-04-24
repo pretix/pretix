@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-21 13:57+0000\n"
+"POT-Creation-Date: 2020-04-24 07:36+0000\n"
 "PO-Revision-Date: 2020-01-23 17:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
@@ -436,7 +436,7 @@ msgid "Event ticket {event}-{code}"
 msgstr "{event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:83
-#: pretix/base/exporters/orderlist.py:291 pretix/control/forms/subevents.py:238
+#: pretix/base/exporters/orderlist.py:291 pretix/control/forms/subevents.py:239
 #: pretix/control/templates/pretixcontrol/events/index.html:74
 #: pretix/control/templates/pretixcontrol/order/index.html:566
 #: pretix/control/templates/pretixcontrol/order/index.html:660
@@ -4125,7 +4125,7 @@ msgstr ""
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
-"payment. You can use the placeholders {order}, {total}, {currency} and "
+"payment. You can usethe placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
 
@@ -4138,7 +4138,7 @@ msgstr ""
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can "
-"use the placeholders {order}, {total}, {currency} and {total_with_currency}"
+"usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
 
 #: pretix/base/payment.py:957
@@ -8031,8 +8031,8 @@ msgstr "Shop er live og forsalget er i gang"
 msgid "Inactive"
 msgstr "Inaktive"
 
-#: pretix/control/forms/filter.py:411 pretix/control/forms/subevents.py:299
-#: pretix/control/forms/subevents.py:338
+#: pretix/control/forms/filter.py:411 pretix/control/forms/subevents.py:300
+#: pretix/control/forms/subevents.py:339
 msgid "Weekday"
 msgstr ""
 
@@ -9002,43 +9002,43 @@ msgstr ""
 msgid "day(s)"
 msgstr ""
 
-#: pretix/control/forms/subevents.py:234
+#: pretix/control/forms/subevents.py:235
 msgid "Interval"
 msgstr ""
 
-#: pretix/control/forms/subevents.py:257
+#: pretix/control/forms/subevents.py:258
 msgid "Number of repetitions"
 msgstr "Antal gentagelser"
 
-#: pretix/control/forms/subevents.py:267
+#: pretix/control/forms/subevents.py:268
 msgid "Last date"
 msgstr "Seneste dato"
 
-#: pretix/control/forms/subevents.py:274 pretix/control/forms/subevents.py:321
+#: pretix/control/forms/subevents.py:275 pretix/control/forms/subevents.py:322
 msgctxt "rrule"
 msgid "first"
 msgstr ""
 
-#: pretix/control/forms/subevents.py:275 pretix/control/forms/subevents.py:322
+#: pretix/control/forms/subevents.py:276 pretix/control/forms/subevents.py:323
 msgctxt "rrule"
 msgid "second"
 msgstr ""
 
-#: pretix/control/forms/subevents.py:276 pretix/control/forms/subevents.py:323
+#: pretix/control/forms/subevents.py:277 pretix/control/forms/subevents.py:324
 msgctxt "rrule"
 msgid "third"
 msgstr ""
 
-#: pretix/control/forms/subevents.py:277 pretix/control/forms/subevents.py:324
+#: pretix/control/forms/subevents.py:278 pretix/control/forms/subevents.py:325
 msgctxt "rrule"
 msgid "last"
 msgstr ""
 
-#: pretix/control/forms/subevents.py:298 pretix/control/forms/subevents.py:337
+#: pretix/control/forms/subevents.py:299 pretix/control/forms/subevents.py:338
 msgid "Day"
 msgstr "Dag"
 
-#: pretix/control/forms/subevents.py:300 pretix/control/forms/subevents.py:339
+#: pretix/control/forms/subevents.py:301 pretix/control/forms/subevents.py:340
 msgid "Weekend day"
 msgstr ""
 
@@ -15899,17 +15899,17 @@ msgstr "Velkommen til pretix! Du er nu medlem af gruppen \"{}\"."
 
 #: pretix/control/views/auth.py:257
 msgid ""
-"If the address is registered to valid account, then we have sent you an e-mail "
-"containing further instructions. Please note that we will send at most one "
-"email every 24 hours."
+"If the address is registered to valid account, then we have sent you an e-"
+"mail containing further instructions. Please note that we will send at most "
+"one email every 24 hours."
 msgstr ""
 
 #: pretix/control/views/auth.py:260
 #, fuzzy
 #| msgid "We sent you an e-mail containing further instructions."
 msgid ""
-"If the address is registered to valid account, then we have sent you an e-mail "
-"containing further instructions."
+"If the address is registered to valid account, then we have sent you an e-"
+"mail containing further instructions."
 msgstr "Vi har sendt dig en e-mail med yderligere instruktioner."
 
 #: pretix/control/views/auth.py:280
@@ -19809,11 +19809,11 @@ msgid ""
 "that you can use to pay."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:193
 msgid "Place binding order"
 msgstr "Gennemfør bestilling"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:196
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
 msgid "Submit registration"
 msgstr "Send tilmelding"
 
@@ -19966,19 +19966,41 @@ msgctxt "checkoutflow"
 msgid "Order confirmed"
 msgstr "Bestilling bekræftet"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:5
-msgid ""
-"You can download your tickets using the buttons below. Please have your "
-"ticket ready when entering the event."
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:6
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:28
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:47
+#, fuzzy
+#| msgid ""
+#| "You can download your tickets using the buttons below. Please have your "
+#| "ticket ready when entering the event."
+msgid "Please have your ticket ready when entering the event."
 msgstr ""
 "Du kan downloade dine billetter på knapperne nedenfor. Dine billetter bør "
 "være udskrevet til fremvisning i indgangen."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:10
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:9
+#, fuzzy
+#| msgid "Download all tickets at once:"
+msgid "Download your tickets here:"
+msgstr "Hent alle billetter:"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Download all tickets at once:"
 msgstr "Hent alle billetter:"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:42
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:31
+#, fuzzy
+#| msgid "Download ticket"
+msgid "Download your ticket here:"
+msgstr "Hent billet"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:50
+#, fuzzy
+#| msgid "Download all tickets at once:"
+msgid "Download your tickets using the buttons below."
+msgstr "Hent alle billetter:"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:58
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr ""

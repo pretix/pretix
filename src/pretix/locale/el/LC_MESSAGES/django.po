@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-21 13:57+0000\n"
+"POT-Creation-Date: 2020-04-24 07:36+0000\n"
 "PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
@@ -428,7 +428,7 @@ msgid "Event ticket {event}-{code}"
 msgstr "Εισιτήριο συμβάντος {event} - {code}"
 
 #: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:83
-#: pretix/base/exporters/orderlist.py:291 pretix/control/forms/subevents.py:238
+#: pretix/base/exporters/orderlist.py:291 pretix/control/forms/subevents.py:239
 #: pretix/control/templates/pretixcontrol/events/index.html:74
 #: pretix/control/templates/pretixcontrol/order/index.html:566
 #: pretix/control/templates/pretixcontrol/order/index.html:660
@@ -4111,11 +4111,16 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Περιγραφή διαδικασίας πληρωμής για emails επιβεβαίωσης παραγγελίας"
 
 #: pretix/base/payment.py:903
-#, python-brace-format
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "This text will be included for the {payment_info} placeholder in order "
+#| "confirmation mails. It should instruct the user on how to proceed with "
+#| "the payment. You can use the placeholders {order}, {total}, {currency} "
+#| "and {total_with_currency}"
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
-"payment. You can use the placeholders {order}, {total}, {currency} and "
+"payment. You can usethe placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
 "Αυτό το κείμενο θα συμπεριληφθεί για το {payment_info} placeholder σε mails "
@@ -4128,11 +4133,16 @@ msgid "Payment process description for pending orders"
 msgstr "Περιγραφή διαδικασίας πληρωμής για εκκρεμείς παραγγελίες"
 
 #: pretix/base/payment.py:911
-#, python-brace-format
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "This text will be shown on the order confirmation page for pending "
+#| "orders. It should instruct the user on how to proceed with the payment. "
+#| "You can use the placeholders {order}, {total}, {currency} and "
+#| "{total_with_currency}"
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can "
-"use the placeholders {order}, {total}, {currency} and {total_with_currency}"
+"usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
 "Αυτό το κείμενο θα εμφανιστεί στη σελίδα επιβεβαίωσης παραγγελίας για "
 "εκκρεμείς παραγγελίες. Θα πρέπει να καθοδηγήσει τον χρήστη σχετικά με τον "
@@ -8114,8 +8124,8 @@ msgstr ""
 msgid "Inactive"
 msgstr "Αδρανής"
 
-#: pretix/control/forms/filter.py:411 pretix/control/forms/subevents.py:299
-#: pretix/control/forms/subevents.py:338
+#: pretix/control/forms/filter.py:411 pretix/control/forms/subevents.py:300
+#: pretix/control/forms/subevents.py:339
 msgid "Weekday"
 msgstr "Καθημερινή"
 
@@ -9137,43 +9147,43 @@ msgstr "εβδομάδα (ες)"
 msgid "day(s)"
 msgstr "μέρα (ες)"
 
-#: pretix/control/forms/subevents.py:234
+#: pretix/control/forms/subevents.py:235
 msgid "Interval"
 msgstr "Διάλειμμα (Interval)"
 
-#: pretix/control/forms/subevents.py:257
+#: pretix/control/forms/subevents.py:258
 msgid "Number of repetitions"
 msgstr "Αριθμός αποζημιώσεων"
 
-#: pretix/control/forms/subevents.py:267
+#: pretix/control/forms/subevents.py:268
 msgid "Last date"
 msgstr "Τελευταία ημερομηνία"
 
-#: pretix/control/forms/subevents.py:274 pretix/control/forms/subevents.py:321
+#: pretix/control/forms/subevents.py:275 pretix/control/forms/subevents.py:322
 msgctxt "rrule"
 msgid "first"
 msgstr "πρώτα"
 
-#: pretix/control/forms/subevents.py:275 pretix/control/forms/subevents.py:322
+#: pretix/control/forms/subevents.py:276 pretix/control/forms/subevents.py:323
 msgctxt "rrule"
 msgid "second"
 msgstr "δεύτερος"
 
-#: pretix/control/forms/subevents.py:276 pretix/control/forms/subevents.py:323
+#: pretix/control/forms/subevents.py:277 pretix/control/forms/subevents.py:324
 msgctxt "rrule"
 msgid "third"
 msgstr "τρίτο"
 
-#: pretix/control/forms/subevents.py:277 pretix/control/forms/subevents.py:324
+#: pretix/control/forms/subevents.py:278 pretix/control/forms/subevents.py:325
 msgctxt "rrule"
 msgid "last"
 msgstr "τελευταίο"
 
-#: pretix/control/forms/subevents.py:298 pretix/control/forms/subevents.py:337
+#: pretix/control/forms/subevents.py:299 pretix/control/forms/subevents.py:338
 msgid "Day"
 msgstr "Ημέρα"
 
-#: pretix/control/forms/subevents.py:300 pretix/control/forms/subevents.py:339
+#: pretix/control/forms/subevents.py:301 pretix/control/forms/subevents.py:340
 msgid "Weekend day"
 msgstr "Σαββατοκύριακο"
 
@@ -16316,9 +16326,9 @@ msgstr "Καλώς ήρθατε στο pretix! Είστε τώρα μέλος τ
 
 #: pretix/control/views/auth.py:257
 msgid ""
-"If the address is registered to valid account, then we have sent you an e-mail "
-"containing further instructions. Please note that we will send at most one "
-"email every 24 hours."
+"If the address is registered to valid account, then we have sent you an e-"
+"mail containing further instructions. Please note that we will send at most "
+"one email every 24 hours."
 msgstr ""
 "Αν η διεύθυνση είναι καταχωρημένη σε έγκυρο λογαριασμό, τότε σας έχουμε "
 "στείλει ένα μήνυμα ηλεκτρονικού ταχυδρομείου που περιέχει περισσότερες "
@@ -16326,8 +16336,8 @@ msgstr ""
 
 #: pretix/control/views/auth.py:260
 msgid ""
-"If the address is registered to valid account, then we have sent you an e-mail "
-"containing further instructions."
+"If the address is registered to valid account, then we have sent you an e-"
+"mail containing further instructions."
 msgstr ""
 "Αν η διεύθυνση είναι καταχωρημένη σε έγκυρο λογαριασμό, τότε σας έχουμε "
 "στείλει ένα μήνυμα ηλεκτρονικού ταχυδρομείου που περιέχει περισσότερες "
@@ -20378,11 +20388,11 @@ msgstr ""
 "εγκριθεί, θα σας στείλουμε έναν σύνδεσμο που μπορείτε να χρησιμοποιήσετε για "
 "να πληρώσετε."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:193
 msgid "Place binding order"
 msgstr "Ολοκλήρωση κράτησης"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:196
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
 msgid "Submit registration"
 msgstr "Αγορά"
 
@@ -20541,20 +20551,42 @@ msgctxt "checkoutflow"
 msgid "Order confirmed"
 msgstr "Ολοκλήρωση Παραγγελίας"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:5
-msgid ""
-"You can download your tickets using the buttons below. Please have your "
-"ticket ready when entering the event."
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:6
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:28
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:47
+#, fuzzy
+#| msgid ""
+#| "You can download your tickets using the buttons below. Please have your "
+#| "ticket ready when entering the event."
+msgid "Please have your ticket ready when entering the event."
 msgstr ""
 "Μπορείτε να κατεβάσετε τα εισιτήριά που αγοράσατε κάνοντας κλικ στο παρακάτω "
 "PDF-κουμπί. Πρέπει να έχετε μαζί σας στην είσοδο της εκδήλωσης, τυπωμένο το "
 "εισιτήριό σας γιατί θα σας ζητηθεί."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:10
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:9
+#, fuzzy
+#| msgid "Download all tickets at once:"
+msgid "Download your tickets here:"
+msgstr "Κατεβάστε όλα τα εισιτήρια ταυτόχρονα:"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Download all tickets at once:"
 msgstr "Κατεβάστε όλα τα εισιτήρια ταυτόχρονα:"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:42
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:31
+#, fuzzy
+#| msgid "Download ticket"
+msgid "Download your ticket here:"
+msgstr "Κατεβάστε το εισιτήριο"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:50
+#, fuzzy
+#| msgid "Download all tickets at once:"
+msgid "Download your tickets using the buttons below."
+msgstr "Κατεβάστε όλα τα εισιτήρια ταυτόχρονα:"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:58
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr ""
