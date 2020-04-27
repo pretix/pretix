@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-24 07:37+0000\n"
-"PO-Revision-Date: 2019-11-22 10:01+0000\n"
-"Last-Translator: Carolina Fernández <cfermart@gmail.com>\n"
-"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/es/>\n"
+"PO-Revision-Date: 2020-04-27 20:00+0000\n"
+"Last-Translator: Gonzalo Gabriel Perez <zalitoar@gmail.com>\n"
+"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -237,7 +237,7 @@ msgstr "Click para cerrar"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:752
 msgid "You have unsaved changes!"
-msgstr ""
+msgstr "¡Tienes cambios sin guardar!"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
 msgid "Calculating default price…"
