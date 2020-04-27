@@ -444,8 +444,13 @@ class Paypal(BasePaymentProvider):
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
         template = get_template('pretixplugins/paypal/control.html')
+        sale_id = None
+        for trans in payment.info_data.get('transactions', []):
+            for res in trans.get('related_resources', []):
+                if 'sale' in res and 'id' in res['sale']:
+                    sale_id = res['sale']['id']
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'payment_info': payment.info_data, 'order': payment.order}
+               'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
         return template.render(ctx)
 
     def payment_partial_refund_supported(self, payment: OrderPayment):
