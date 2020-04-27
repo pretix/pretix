@@ -555,6 +555,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'meta_noindex',
         'redirect_to_checkout_directly',
         'frontpage_subevent_ordering',
+        'event_list_type',
         'frontpage_text',
         'attendee_names_asked',
         'attendee_names_required',

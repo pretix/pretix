@@ -141,6 +141,9 @@
                 {% if sform.frontpage_subevent_ordering %}
                     {% bootstrap_field sform.frontpage_subevent_ordering layout="control" %}
                 {% endif %}
+                {% if sform.event_list_type %}
+                    {% bootstrap_field sform.event_list_type layout="control" %}
+                {% endif %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Cart" %}</legend>

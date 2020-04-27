@@ -510,6 +510,7 @@ class EventSettingsForm(SettingsForm):
         'meta_noindex',
         'redirect_to_checkout_directly',
         'frontpage_subevent_ordering',
+        'event_list_type',
         'frontpage_text',
         'attendee_names_asked',
         'attendee_names_required',
@@ -557,6 +558,7 @@ class EventSettingsForm(SettingsForm):
         ]
         if not self.event.has_subevents:
             del self.fields['frontpage_subevent_ordering']
+            del self.fields['event_list_type']
         self.fields['primary_font'].choices += [
             (a, {"title": a, "data": v}) for a, v in get_fonts().items()
         ]

@@ -880,7 +880,22 @@ DEFAULTS = {
     },
     'event_list_type': {
         'default': 'list',
-        'type': str
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('list', _('List')),
+                ('calendar', _('Calendar'))
+            )
+        ),
+        'form_kwargs': dict(
+            label=_('Default overview style'),
+            choices=(
+                ('list', _('List')),
+                ('calendar', _('Calendar'))
+            )
+        ),
     },
     'last_order_modification_date': {
         'default': None,
