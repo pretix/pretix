@@ -18,7 +18,6 @@ from django.template.loader import get_template
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django_countries import Countries
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
@@ -34,6 +33,7 @@ from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.helpers.countries import CachedCountries
 from pretix.helpers.money import DecimalTextInput
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.views import get_cart, get_cart_total
@@ -286,7 +286,7 @@ class BasePaymentProvider:
             ('_restricted_countries',
              forms.MultipleChoiceField(
                  label=_('Restrict to countries'),
-                 choices=Countries(),
+                 choices=CachedCountries(),
                  help_text=_('Only allow choosing this payment provider for invoice addresses in the selected '
                              'countries. If you don\'t select any country, all countries are allowed. This is only '
                              'enabled if the invoice address is required.'),
