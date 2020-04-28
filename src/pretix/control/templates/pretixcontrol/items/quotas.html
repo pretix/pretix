@@ -59,7 +59,7 @@
                         </td>
                         <td>
                             <ul>
-                                {% for item in q.items.all %}
+                                {% for item in cached_items%}
                                     {% if not item.has_variations %}
                                         <li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a></li>
                                     {% endif %}
@@ -74,7 +74,7 @@
                             <td>{{ q.subevent.name }} – {{ q.subevent.get_date_range_display }}</td>
                         {% endif %}
                         <td>{% if q.size == None %}Unlimited{% else %}{{ q.size }}{% endif %}</td>
-                        <td>{% include "pretixcontrol/items/fragment_quota_availability.html" with availability=q.availability closed=q.closed %}</td>
+                        <td>{% include "pretixcontrol/items/fragment_quota_availability.html" with availability=q.cached_avail closed=q.closed %}</td>
                         <td class="text-right flip">
                             <a href="{% url "control:event.items.quotas.edit" organizer=request.event.organizer.slug event=request.event.slug quota=q.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                             <a href="{% url "control:event.items.quotas.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ q.id }}"

@@ -20,6 +20,7 @@ from pretix.base.models import (
     CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation,
     Question, QuestionOption, Quota,
 )
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.dicts import merge_dicts
 
 with scopes_disabled():
@@ -533,14 +534,17 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     def availability(self, request, *args, **kwargs):
         quota = self.get_object()
 
-        avail = quota.availability()
+        q = QuotaAvailability()
+        q.queue(quota)
+        q.compute()
+        avail = q.results[quota]
 
         data = {
-            'paid_orders': quota.count_paid_orders(),
-            'pending_orders': quota.count_pending_orders(),
-            'blocking_vouchers': quota.count_blocking_vouchers(),
-            'cart_positions': quota.count_in_cart(),
-            'waiting_list': quota.count_waiting_list_pending(),
+            'paid_orders': q.count_paid_orders[quota],
+            'pending_orders': q.count_pending_orders[quota],
+            'blocking_vouchers': q.count_vouchers[quota],
+            'cart_positions': q.count_cart[quota],
+            'waiting_list': q.count_pending_orders[quota],
             'available_number': avail[1],
             'available': avail[0] == Quota.AVAILABILITY_OK,
             'total_size': quota.size,

@@ -68,6 +68,7 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
+
         for s in ctx['subevents']:
             s.first_quotas = s.first_quotas[:4]
             for q in s.first_quotas:

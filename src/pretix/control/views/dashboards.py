@@ -25,6 +25,7 @@ from pretix.base.models import (
     Item, ItemVariation, Order, OrderPosition, OrderRefund, RequiredAction,
     SubEvent, Voucher, WaitingListEntry,
 )
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timeline import timeline_for_event
 from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
@@ -199,10 +200,20 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
 @receiver(signal=event_dashboard_widgets)
 def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
+    quotas = sender.quotas.filter(subevent=subevent)
 
-    for q in sender.quotas.filter(subevent=subevent):
+    quotas_to_compute = [
+        q for q in quotas
+        if not q.cache_is_hot(now() + timedelta(seconds=5))
+    ]
+    qa = QuotaAvailability()
+    if quotas_to_compute:
+        qa.queue(*quotas_to_compute)
+        qa.compute()
+
+    for q in quotas:
         if not lazy:
-            status, left = q.availability(allow_cache=True)
+            status, left = qa.results[q] if q in qa.results else q.availability(allow_cache=True)
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(
                 num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
