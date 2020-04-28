@@ -57,7 +57,7 @@ class PdfTicketOutput(BaseTicketOutput):
         return self.event._ticketoutputpdf_cache_default_layout
 
     def _register_fonts(self):
-        Renderer._register_fonts()
+        Renderer._register_fonts(self.event)
 
     def _draw_page(self, layout: TicketLayout, op: OrderPosition, order: Order):
         buffer = BytesIO()

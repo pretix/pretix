@@ -560,7 +560,7 @@ class EventSettingsForm(SettingsForm):
             del self.fields['frontpage_subevent_ordering']
             del self.fields['event_list_type']
         self.fields['primary_font'].choices += [
-            (a, {"title": a, "data": v}) for a, v in get_fonts().items()
+            (a, {"title": a, "data": v}) for a, v in get_fonts(self.event).items()
         ]
 
 

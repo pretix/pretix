@@ -234,7 +234,7 @@ class LayoutEditorView(BaseEditorView):
         return static('pretixpresale/pdf/ticket_default_a4.pdf')
 
     def generate(self, op: OrderPosition, override_layout=None, override_background=None):
-        Renderer._register_fonts()
+        Renderer._register_fonts(self.request.event)
 
         buffer = BytesIO()
         if override_background:

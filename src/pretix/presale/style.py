@@ -19,6 +19,7 @@ from pretix.base.models import Event, Event_SettingsStore, Organizer
 from pretix.base.services.tasks import (
     TransactionAwareProfiledEventTask, TransactionAwareTask,
 )
+from pretix.base.signals import EventPluginSignal
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
@@ -64,7 +65,10 @@ def compile_scss(object, file="main.scss", fonts=True):
 
     font = object.settings.get('primary_font')
     if font != 'Open Sans' and fonts:
-        sassrules.append(get_font_stylesheet(font))
+        if isinstance(object, Event):
+            sassrules.append(get_font_stylesheet(font, object))
+        else:
+            sassrules.append(get_font_stylesheet(font))
         sassrules.append(
             '$font-family-sans-serif: "{}", "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif '
             '!default'.format(
@@ -176,17 +180,47 @@ Return a dictionaries of the following structure. Paths should be relative to st
 }
 """
 
+register_event_fonts = EventPluginSignal()
+"""
+Return a dictionaries of the following structure. Paths should be relative to static root.
 
-def get_fonts():
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+
+{
+    "font name": {
+        "regular": {
+            "truetype": "….ttf",
+            "woff": "…",
+            "woff2": "…"
+        },
+        "bold": {
+            ...
+        },
+        "italic": {
+            ...
+        },
+        "bolditalic": {
+            ...
+        }
+    }
+}
+"""
+
+
+def get_fonts(event: Event=None):
     f = {}
     for recv, value in register_fonts.send(0):
         f.update(value)
+
+    if event:
+        for recv, value in register_event_fonts.send(event):
+            f.update(value)
     return f
 
 
-def get_font_stylesheet(font_name):
+def get_font_stylesheet(font_name, event: Event=None):
     stylesheet = []
-    font = get_fonts()[font_name]
+    font = get_fonts(event)[font_name]
     for sty, formats in font.items():
         if sty == 'sample':
             continue

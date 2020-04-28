@@ -6,7 +6,7 @@
 {% load formset_tags %}
 {% block custom_header %}
     {{ block.super }}
-    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" organizer=request.organizer.slug event=request.event.slug %}">
 {% endblock %}
 {% block inside %}
     <h1>{% trans "General settings" %}</h1>

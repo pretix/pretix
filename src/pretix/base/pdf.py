@@ -35,7 +35,7 @@ from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
 from pretix.base.invoice import ThumbnailingImageReader
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Event, Order, OrderPosition
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_text_variables
 from pretix.base.templatetags.money import money_filter
@@ -375,13 +375,13 @@ class Renderer:
             self.bg_pdf = None
 
     @classmethod
-    def _register_fonts(cls):
+    def _register_fonts(cls, event: Event=None):
         pdfmetrics.registerFont(TTFont('Open Sans', finders.find('fonts/OpenSans-Regular.ttf')))
         pdfmetrics.registerFont(TTFont('Open Sans I', finders.find('fonts/OpenSans-Italic.ttf')))
         pdfmetrics.registerFont(TTFont('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf')))
         pdfmetrics.registerFont(TTFont('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf')))
 
-        for family, styles in get_fonts().items():
+        for family, styles in get_fonts(event).items():
             pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
             if 'italic' in styles:
                 pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))

@@ -18,7 +18,7 @@ from pretix.plugins.ticketoutputpdf.models import (
     TicketLayout, TicketLayoutItem,
 )
 from pretix.presale.style import (  # NOQA: legacy import
-    get_fonts, register_fonts,
+    get_fonts, register_event_fonts, register_fonts,
 )
 
 
