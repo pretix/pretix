@@ -1041,7 +1041,7 @@ class OrderTransition(OrderView):
                 messages.success(self.request, _('The payment has been created successfully.'))
         elif self.order.cancel_allowed() and to == 'c' and self.mark_canceled_form.is_valid():
             try:
-                cancel_order(self.order, user=self.request.user,
+                cancel_order(self.order.pk, user=self.request.user,
                              send_mail=self.mark_canceled_form.cleaned_data['send_email'],
                              cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
             except OrderError as e:
