@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 
+from pretix.base.forms import SecretKeySettingsField
 from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
     requiredaction_display,
@@ -68,7 +69,7 @@ def register_global_settings(sender, **kwargs):
             label=_('PayPal Connect: Client ID'),
             required=False,
         )),
-        ('payment_paypal_connect_secret_key', forms.CharField(
+        ('payment_paypal_connect_secret_key', SecretKeySettingsField(
             label=_('PayPal Connect: Secret key'),
             required=False,
         )),
