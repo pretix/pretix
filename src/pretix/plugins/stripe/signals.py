@@ -7,6 +7,7 @@ from django.template.loader import get_template
 from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
 
+from pretix.base.forms import SecretKeySettingsField
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
@@ -98,7 +99,7 @@ def register_global_settings(sender, **kwargs):
                 StripeKeyValidator('ca_'),
             ),
         )),
-        ('payment_stripe_connect_secret_key', forms.CharField(
+        ('payment_stripe_connect_secret_key', SecretKeySettingsField(
             label=_('Stripe Connect: Secret key'),
             required=False,
             validators=(
@@ -112,7 +113,7 @@ def register_global_settings(sender, **kwargs):
                 StripeKeyValidator('pk_live_'),
             ),
         )),
-        ('payment_stripe_connect_test_secret_key', forms.CharField(
+        ('payment_stripe_connect_test_secret_key', SecretKeySettingsField(
             label=_('Stripe Connect: Secret key (test)'),
             required=False,
             validators=(

@@ -4,7 +4,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
-from pretix.base.forms import SettingsForm
+from pretix.base.forms import SecretKeySettingsField, SettingsForm
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import register_global_settings
 
@@ -37,7 +37,7 @@ class GlobalSettingsForm(SettingsForm):
                 required=False,
                 label=_("Global message banner detail text"),
             )),
-            ('opencagedata_apikey', forms.CharField(
+            ('opencagedata_apikey', SecretKeySettingsField(
                 required=False,
                 label=_("OpenCage API key for geocoding"),
             )),
