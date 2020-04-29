@@ -6,5 +6,5 @@ var inIframe = function () {
     }
 };
 if (inIframe()) {
-    document.body.classList.add('in-iframe');
+    document.documentElement.classList.add('in-iframe');
 }
