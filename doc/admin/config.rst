@@ -92,7 +92,7 @@ Example::
 
 ``trust_x_forwarded_proto``
     Specifies whether the ``X-Forwarded-Proto`` header can be trusted. Only set to ``on`` if you have a reverse
-    proxy that actively removes and re-adds the header to make sure the correct client IP is the first value.
+    proxy that actively removes and re-adds the header to make sure the correct value is set.
     Defaults to ``off``.
 
 
