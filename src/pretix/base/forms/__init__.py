@@ -78,7 +78,7 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
 
     def save(self):
         for k, v in self.cleaned_data.items():
-            if isinstance(self.fields[k], SecretKeySettingsField) and self.cleaned_data[k] == SECRET_REDACTED:
+            if isinstance(self.fields[k], SecretKeySettingsField) and self.cleaned_data.get(k) == SECRET_REDACTED:
                 self.cleaned_data[k] = self.initial[k]
         return super().save()
 
