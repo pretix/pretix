@@ -334,7 +334,9 @@ class OrderListExporter(MultiSheetListExporter):
         headers += [
             _('Address'), _('ZIP code'), _('City'), _('Country'), pgettext('address', 'State'), _('VAT ID'),
         ]
-        headers.append(_('Sales channel'))
+        headers += [
+            _('Sales channel'), _('Order locale'),
+        ]
 
         yield headers
 
@@ -417,7 +419,10 @@ class OrderListExporter(MultiSheetListExporter):
                 ]
             except InvoiceAddress.DoesNotExist:
                 row += [''] * (8 + (len(name_scheme['fields']) if len(name_scheme['fields']) > 1 else 0))
-            row.append(order.sales_channel)
+            row += [
+                order.sales_channel,
+                order.locale
+            ]
             yield row
 
     def get_filename(self):
