@@ -65,9 +65,9 @@ ALLOWED_ATTRIBUTES = {
 
 ALLOWED_PROTOCOLS = ['http', 'https', 'mailto', 'tel']
 
-URL_RE = build_url_re(tlds=tld_set)
+URL_RE = build_url_re(tlds=sorted(tld_set, key=len, reverse=True))
 
-EMAIL_RE = build_email_re(tlds=tld_set)
+EMAIL_RE = build_email_re(tlds=sorted(tld_set, key=len, reverse=True))
 
 
 def safelink_callback(attrs, new=False):
