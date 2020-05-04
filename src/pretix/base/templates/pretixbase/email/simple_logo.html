@@ -25,6 +25,10 @@
             padding: 0;
         }
 
+        table.layout > tr > td.logo {
+            padding: 20px 0 0 0;
+        }
+
         table.layout > tr > td.header {
             padding: 0 20px;
             text-align: center;
@@ -171,7 +175,7 @@
         {% if event.settings.logo_image %}
             <!--[if !mso]><!-- -->
             <tr>
-                <td style="line-height: 0" align="center">
+                <td style="line-height: 0;" align="center" class="logo">
                     {% if event.settings.logo_image|thumb:'5000x120'|first == '/' %}
                         <img src="{{ site_url }}{{ event.settings.logo_image|thumb:'5000x120' }}" alt="{{ event.name }}"
                              style="height: auto; max-width: 100%;" />
