@@ -1834,7 +1834,7 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     'AU': (['State', 'Territory'], 'short'),
     'BR': (['State'], 'short'),
     'CA': (['Province', 'Territory'], 'short'),
-    'CN': (['Province', 'Autonomous region', 'Munincipality'], 'long'),
+    # 'CN': (['Province', 'Autonomous region', 'Munincipality'], 'long'),
     'MY': (['State'], 'long'),
     'MX': (['State', 'Federal District'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
