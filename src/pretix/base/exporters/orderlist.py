@@ -437,10 +437,21 @@ class PaymentListExporter(ListExporter):
     def additional_form_fields(self):
         return OrderedDict(
             [
-                ('successful_only',
-                 forms.BooleanField(
-                     label=_('Only successful payments'),
-                     initial=True,
+                ('payment_states',
+                 forms.MultipleChoiceField(
+                     label=_('Payment states'),
+                     choices=OrderPayment.PAYMENT_STATES,
+                     initial=[OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED],
+                     required=False,
+                     widget=forms.CheckboxSelectMultiple,
+                 )),
+                ('refund_states',
+                 forms.MultipleChoiceField(
+                     label=_('Refund states'),
+                     choices=OrderRefund.REFUND_STATES,
+                     initial=[OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_CREATED,
+                              OrderRefund.REFUND_STATE_TRANSIT],
+                     widget=forms.CheckboxSelectMultiple,
                      required=False
                  )),
             ]
@@ -456,18 +467,12 @@ class PaymentListExporter(ListExporter):
 
         payments = OrderPayment.objects.filter(
             order__event=self.event,
+            state__in=form_data.get('payment_states', [])
         ).order_by('created')
         refunds = OrderRefund.objects.filter(
-            order__event=self.event
+            order__event=self.event,
+            state__in=form_data.get('refund_states', [])
         ).order_by('created')
-
-        if form_data['successful_only']:
-            payments = payments.filter(
-                state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
-            )
-            refunds = refunds.filter(
-                state=OrderRefund.REFUND_STATE_DONE,
-            )
 
         objs = sorted(list(payments) + list(refunds), key=lambda o: o.created)
 
