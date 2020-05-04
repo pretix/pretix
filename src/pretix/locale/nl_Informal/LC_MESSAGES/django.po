@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-24 07:36+0000\n"
-"PO-Revision-Date: 2020-04-22 21:00+0000\n"
+"PO-Revision-Date: 2020-04-27 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -3964,12 +3964,7 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschrijving van betalingsproces in bevestigingsmails"
 
 #: pretix/base/payment.py:903
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
@@ -3979,19 +3974,14 @@ msgstr ""
 "Deze tekst zal worden ingevoegd in de {payment_info}-plaatsaanduiding in "
 "bevestigingsmails voor een bestelling. De tekst moet de gebruiker informeren "
 "hoe verder te gaan met de betaling. Je kan de plaatsaanduidingen {order}, "
-"{total}, {currency}, en {total_with_currency} gebruiken."
+"{total}, {currency} en {total_with_currency} gebruiken."
 
 #: pretix/base/payment.py:910
 msgid "Payment process description for pending orders"
 msgstr "Beschrijving van betalingsproces voor openstaande bestellingen"
 
 #: pretix/base/payment.py:911
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can "
@@ -3999,7 +3989,7 @@ msgid ""
 msgstr ""
 "Deze tekst zal worden getoond op de bevestigingspagina van openstaande "
 "bestellingen. De tekst moet de gebruiker informeren hoe verder te gaan met "
-"de betaling. Je kan de plaatsaanduidingen {order}, {total}, {currency}, en "
+"de betaling. Je kan de plaatsaanduidingen {order}, {total}, {currency} en "
 "{total_with_currency} gebruiken."
 
 #: pretix/base/payment.py:957
@@ -19803,36 +19793,26 @@ msgstr "Bestelling bevestigd"
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:47
-#, fuzzy
-#| msgid ""
-#| "You can download your tickets using the buttons below. Please have your "
-#| "ticket ready when entering the event."
 msgid "Please have your ticket ready when entering the event."
 msgstr ""
-"Je kan je tickets hieronder downloaden. Zorg ervoor dat je de tickets bij de "
-"hand hebt bij aanvang van het evenement."
+"Zorg ervoor dat je je kaartje bij de hand hebt wanneer je aankomt bij het "
+"evenement."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:9
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets here:"
-msgstr "Download alle kaartjes in één keer:"
+msgstr "Download je kaartjes hier:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Download all tickets at once:"
 msgstr "Download alle kaartjes in één keer:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:31
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download your ticket here:"
-msgstr "Download kaartje"
+msgstr "Download je kaartje hier:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:50
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets using the buttons below."
-msgstr "Download alle kaartjes in één keer:"
+msgstr "Download je kaartjes met de knoppen hieronder."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:58
 #, python-format
