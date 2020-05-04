@@ -1,8 +1,10 @@
 import inspect
 import mimetypes
 import os
+import re
 from decimal import Decimal
 
+from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.core.files import File
@@ -764,7 +766,15 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             fee = self.order.user_cancel_fee
         if 'cancel_fee' in request.POST and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
             fee = fee or Decimal('0.00')
-            custom_fee = Decimal(request.POST.get('cancel_fee'))
+            fee_in = re.sub('[^0-9.,]', '', request.POST.get('cancel_fee'))
+            try:
+                custom_fee = forms.DecimalField(localize=True).to_python(fee_in)
+            except:
+                try:
+                    custom_fee = Decimal(fee_in)
+                except:
+                    messages.error(request, _('You chose an invalid cancellation fee.'))
+                    return redirect(self.get_order_url())
             if fee <= custom_fee <= self.order.payment_refund_sum:
                 fee = custom_fee
             else:
