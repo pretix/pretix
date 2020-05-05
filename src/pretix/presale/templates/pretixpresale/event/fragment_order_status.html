@@ -3,12 +3,16 @@
 {% if order.status == "n" %}
     {% if order.require_approval %}
         <span class="label label-warning {{ class }}">{% trans "Approval pending" %}</span>
+    {% elif order.total == 0 %}
+        <span class="label label-warning {{ class }}">{% trans "Confirmation pending" context "order state" %}</span>
     {% else %}
         <span class="label label-warning {{ class }}">{% trans "Payment pending" %}</span>
     {% endif %}
 {% elif order.status == "p" %}
     {% if order.count_positions == 0 %}
         <span class="label label-info {{ class }}">{% trans "Canceled (paid fee)" %}</span>
+    {% elif order.total == 0 %}
+        <span class="label label-success {{ class }}">{% trans "Confirmed" context "order state" %}</span>
     {% else %}
         <span class="label label-success {{ class }}">{% trans "Paid" %}</span>
     {% endif %}
