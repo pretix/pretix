@@ -1348,6 +1348,7 @@ class Quota(LoggedModel):
             self.event.cache.clear()
 
     def save(self, *args, **kwargs):
+        # This is *not* called when the db-level cache is upated, since we use bulk_update there
         clear_cache = kwargs.pop('clear_cache', True)
         super().save(*args, **kwargs)
         if self.event and clear_cache:

@@ -64,6 +64,7 @@ class QuotaAvailability:
 
     def _write_cache(self, quotas, now_dt):
         events = {q.event for q in quotas}
+        update = []
         for e in events:
             e.cache.delete('item_quota_cache')
         for q in quotas:
@@ -77,14 +78,12 @@ class QuotaAvailability:
                 q.cached_availability_time = now_dt
                 if q in self.count_paid_orders:
                     q.cached_availability_paid_orders = self.count_paid_orders[q]
-                q.save(
-                    update_fields=[
-                        'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
-                        'cached_availability_paid_orders'
-                    ],
-                    clear_cache=False,
-                    using='default'
-                )
+                update.append(q)
+        if update:
+            Quota.objects.using('default').bulk_update(update, [
+                'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
+                'cached_availability_paid_orders'
+            ], batch_size=50)
 
     def _close(self, quotas):
         for q in quotas:
