@@ -2,7 +2,11 @@
 {% load eventurl %}
 {% if avail <= 10 %}
     <div class="col-md-2 col-xs-6 availability-box gone">
-        <strong>{% trans "SOLD OUT" %}</strong>
+        {% if price != None and not price %}
+            <strong>{% trans "FULLY BOOKED" %}</strong>
+        {% else %}
+            <strong>{% trans "SOLD OUT" %}</strong>
+        {% endif %}
         {% if event.settings.waiting_list_enabled and item.allow_waitinglist %}
             <br/>
             <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">

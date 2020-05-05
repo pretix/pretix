@@ -164,7 +164,7 @@
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 event=event item=item var=var %}
+                                    {% include "pretixpresale/event/fragment_availability.html" with price=var.display_price.gross avail=var.cached_availability.0 event=event item=item var=var %}
                                 {% endif %}
                                 <div class="clearfix"></div>
                             </div>
@@ -258,7 +258,7 @@
                                 {% trans "Enter a voucher code below to buy this ticket." %}
                             </small>
                         </div>
-                        {% elif item.cached_availability.0 == 100 %}
+                    {% elif item.cached_availability.0 == 100 %}
                         <div class="col-md-2 col-xs-6 availability-box available">
 							{% if item.order_max == 1 %}
                                 <label class="item-checkbox-label">
@@ -277,7 +277,7 @@
                             {% endif %}
                         </div>
                     {% else %}
-                        {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 event=event item=item var=0 %}
+                        {% include "pretixpresale/event/fragment_availability.html" with price=item.display_price.gross avail=item.cached_availability.0 event=event item=item var=0 %}
                     {% endif %}
                     <div class="clearfix"></div>
                 </div>
