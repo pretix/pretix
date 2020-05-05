@@ -215,7 +215,7 @@ class EventMixin:
         items_gone = set()
         vars_gone = set()
 
-        r = self.getattr('_quota_cache', {})
+        r = getattr(self, '_quota_cache', {})
         for q in self.active_quotas:
             res = r[q] if q in r else q.availability(allow_cache=True)
 

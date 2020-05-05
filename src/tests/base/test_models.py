@@ -26,6 +26,7 @@ from pretix.base.models.items import (
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import OrderError, cancel_order, perform_order
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.testutils.scope import classscope
 
 
@@ -274,7 +275,10 @@ class QuotaTestCase(BaseQuotaTestCase):
         if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
             pytest.xfail('This should raise a type error on most databases')
         Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True, max_usages=2, redeemed=4)
-        self.assertEqual(self.quota.count_blocking_vouchers(), 0)
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(self.quota)
+        qa.compute()
+        self.assertEqual(qa.count_vouchers[self.quota], 0)
 
     @classscope(attr='o')
     def test_voucher_quota_multiuse_multiproduct(self):
@@ -293,7 +297,10 @@ class QuotaTestCase(BaseQuotaTestCase):
                                redeemed=2)
         Voucher.objects.create(item=self.item2, variation=self.var2, event=self.event, block_quota=True, max_usages=5,
                                redeemed=2)
-        self.assertEqual(self.quota.count_blocking_vouchers(), 9)
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(self.quota)
+        qa.compute()
+        self.assertEqual(qa.count_vouchers[self.quota], 9)
 
     @classscope(attr='o')
     def test_voucher_quota_expiring_soon(self):
@@ -322,8 +329,11 @@ class QuotaTestCase(BaseQuotaTestCase):
         CartPosition.objects.create(event=self.event, item=self.item1, price=2,
                                     expires=now() + timedelta(days=3), voucher=v)
         self.assertTrue(v.is_in_cart())
-        self.assertEqual(self.quota.count_blocking_vouchers(), 1)
-        self.assertEqual(self.quota.count_in_cart(), 0)
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(self.quota)
+        qa.compute()
+        self.assertEqual(qa.count_vouchers[self.quota], 1)
+        self.assertEqual(qa.count_cart[self.quota], 0)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
     @classscope(attr='o')
@@ -332,8 +342,11 @@ class QuotaTestCase(BaseQuotaTestCase):
         v = Voucher.objects.create(quota=self.quota, event=self.event, block_quota=True)
         CartPosition.objects.create(event=self.event, item=self.item1, price=2,
                                     expires=now() + timedelta(days=3), voucher=v)
-        self.assertEqual(self.quota.count_blocking_vouchers(), 1)
-        self.assertEqual(self.quota.count_in_cart(), 0)
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(self.quota)
+        qa.compute()
+        self.assertEqual(qa.count_vouchers[self.quota], 1)
+        self.assertEqual(qa.count_cart[self.quota], 0)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
     @classscope(attr='o')
@@ -343,8 +356,11 @@ class QuotaTestCase(BaseQuotaTestCase):
                                    block_quota=True)
         CartPosition.objects.create(event=self.event, item=self.item1, price=2,
                                     expires=now() + timedelta(days=3), voucher=v)
-        self.assertEqual(self.quota.count_blocking_vouchers(), 0)
-        self.assertEqual(self.quota.count_in_cart(), 1)
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(self.quota)
+        qa.compute()
+        self.assertEqual(qa.count_vouchers[self.quota], 0)
+        self.assertEqual(qa.count_cart[self.quota], 1)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
     @classscope(attr='o')
@@ -353,8 +369,11 @@ class QuotaTestCase(BaseQuotaTestCase):
         v = Voucher.objects.create(quota=self.quota, event=self.event)
         CartPosition.objects.create(event=self.event, item=self.item1, price=2,
                                     expires=now() + timedelta(days=3), voucher=v)
-        self.assertEqual(self.quota.count_blocking_vouchers(), 0)
-        self.assertEqual(self.quota.count_in_cart(), 1)
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(self.quota)
+        qa.compute()
+        self.assertEqual(qa.count_vouchers[self.quota], 0)
+        self.assertEqual(qa.count_cart[self.quota], 1)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
     @classscope(attr='o')
@@ -388,6 +407,9 @@ class QuotaTestCase(BaseQuotaTestCase):
         WaitingListEntry.objects.create(
             event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com', voucher=v
         )
+        qa = QuotaAvailability()
+        qa.queue(self.quota)
+        qa.compute()
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
         self.assertEqual(self.var1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
 

@@ -1392,10 +1392,9 @@ class Quota(LoggedModel):
 
         if _cache is not None and self.pk in _cache:
             return _cache[self.pk]
-        now_dt = now_dt or now()
         q = QuotaAvailability(count_waitinglist=count_waitinglist, early_out=False)
         q.queue(self)
-        q.compute()
+        q.compute(now_dt=now_dt)
         res = q.results[self]
 
         if _cache is not None:
