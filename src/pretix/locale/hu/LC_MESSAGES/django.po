@@ -3716,7 +3716,7 @@ msgstr ""
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
-"payment. You can usethe placeholders {order}, {total}, {currency} and "
+"payment. You can use the placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
 
@@ -3729,7 +3729,7 @@ msgstr ""
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can "
-"usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
+"use the placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
 
 #: pretix/base/payment.py:957

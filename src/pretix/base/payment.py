@@ -901,7 +901,7 @@ class ManualPayment(BasePaymentProvider):
                 ('email_instructions', I18nFormField(
                     label=_('Payment process description in order confirmation emails'),
                     help_text=_('This text will be included for the {payment_info} placeholder in order confirmation '
-                                'mails. It should instruct the user on how to proceed with the payment. You can use'
+                                'mails. It should instruct the user on how to proceed with the payment. You can use '
                                 'the placeholders {order}, {total}, {currency} and {total_with_currency}'),
                     widget=I18nTextarea,
                     validators=[PlaceholderValidator(['{order}', '{total}', '{currency}', '{total_with_currency}'])],
@@ -909,7 +909,7 @@ class ManualPayment(BasePaymentProvider):
                 ('pending_description', I18nFormField(
                     label=_('Payment process description for pending orders'),
                     help_text=_('This text will be shown on the order confirmation page for pending orders. '
-                                'It should instruct the user on how to proceed with the payment. You can use'
+                                'It should instruct the user on how to proceed with the payment. You can use '
                                 'the placeholders {order}, {total}, {currency} and {total_with_currency}'),
                     widget=I18nTextarea,
                     validators=[PlaceholderValidator(['{order}', '{total}', '{currency}', '{total_with_currency}'])],
