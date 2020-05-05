@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-05 10:42+0000\n"
-"PO-Revision-Date: 2020-05-04 11:15+0000\n"
+"PO-Revision-Date: 2020-05-05 11:15+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -943,14 +943,10 @@ msgid "Order payments and refunds"
 msgstr "Bezahlungen und Erstattungen"
 
 #: pretix/base/exporters/orderlist.py:442
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment states"
-msgstr "Zahlungsdatum"
+msgstr "Zahlungstatus"
 
 #: pretix/base/exporters/orderlist.py:450
-#, fuzzy
-#| msgid "Refund status"
 msgid "Refund states"
 msgstr "Erstattungsstatus"
 
@@ -3991,12 +3987,7 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschreibung des Zahlungsvorgangs in Bestellbestätigungs-E-Mails"
 
 #: pretix/base/payment.py:903
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
@@ -4005,20 +3996,15 @@ msgid ""
 msgstr ""
 "Dieser Text wird statt des {payment_info}-Platzhalters in "
 "Bestellbestätigungen verwendet. Er sollte den Kunden darüber informieren, "
-"wie die Zahlung vervollständigt werden kann. Die Platzhalter {order}, "
-"{total}, {currency} und {total_with_currency} können verwendet werden."
+"wie die Zahlung vervollständigt werden kann. Die Platzhalter {order}, {total}"
+", {currency} und {total_with_currency} können verwendet werden."
 
 #: pretix/base/payment.py:910
 msgid "Payment process description for pending orders"
 msgstr "Beschreibung des Zahlungsvorgangs für ausstehende Bestellungen"
 
 #: pretix/base/payment.py:911
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can "
@@ -18018,10 +18004,8 @@ msgstr ""
 "zurückgeleitet, um deine Bestellung zu bestätigen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
-#, fuzzy
-#| msgid "Sales"
 msgid "Sale ID"
-msgstr "Verkäufe"
+msgstr "Verkaufs-ID"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 msgid "Last update"
@@ -19798,10 +19782,8 @@ msgstr ""
 "ändere deine Browsereinstellungen entsprechend."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
-#, fuzzy
-#| msgid "FULLY PAID"
 msgid "FULLY BOOKED"
-msgstr "VOLL BEZAHLT"
+msgstr "AUSGEBUCHT"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:20
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
@@ -19894,20 +19876,15 @@ msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr "Du kannst deine Tickets hier ab %(date)s herunterladen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
-#, fuzzy
-#| msgid "Confirmation text"
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr "Bestätigungs-Text"
+msgstr "Bestätigung ausstehend"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:9
 msgid "Payment pending"
 msgstr "Zahlung ausstehend"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:15
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "confirmed"
 msgctxt "order state"
 msgid "Confirmed"
 msgstr "bestätigt"
