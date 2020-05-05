@@ -735,6 +735,7 @@ class CartManager:
         for quota, count in self._quota_diff.items():
             if count <= 0:
                 quotas_ok[quota] = 0
+                break
             avail = qa.results[quota]
             if avail[1] is not None and avail[1] < count:
                 quotas_ok[quota] = min(count, avail[1])
