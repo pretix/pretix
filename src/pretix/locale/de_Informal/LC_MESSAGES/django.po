@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-05 10:42+0000\n"
-"PO-Revision-Date: 2020-05-05 11:15+0000\n"
+"PO-Revision-Date: 2020-05-05 14:43+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -944,7 +944,7 @@ msgstr "Bezahlungen und Erstattungen"
 
 #: pretix/base/exporters/orderlist.py:442
 msgid "Payment states"
-msgstr "Zahlungstatus"
+msgstr "Zahlungsstatus"
 
 #: pretix/base/exporters/orderlist.py:450
 msgid "Refund states"
