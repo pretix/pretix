@@ -30,7 +30,7 @@ from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
     CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkForm,
     SubEventForm, SubEventItemForm, SubEventItemVariationForm,
-    SubEventMetaValueForm,
+    SubEventMetaValueForm, TimeFormSet,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
@@ -584,7 +584,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
     form_class = SubEventBulkForm
 
     def is_valid(self, form):
-        return self.rrule_formset.is_valid() and super().is_valid(form)
+        return self.rrule_formset.is_valid() and self.time_formset.is_valid() and super().is_valid(form)
 
     def get_success_url(self) -> str:
         return reverse('control:event.subevents', kwargs={
@@ -599,9 +599,17 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
             prefix='rruleformset'
         )
 
+    @cached_property
+    def time_formset(self):
+        return TimeFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+            prefix='timeformset'
+        )
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['rrule_formset'] = self.rrule_formset
+        ctx['time_formset'] = self.time_formset
         return ctx
 
     @cached_property
@@ -656,6 +664,14 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
         kwargs['initial'] = initial
         return kwargs
 
+    def get_times(self):
+        times = []
+        for f in self.time_formset:
+            if f in self.time_formset.deleted_forms:
+                continue
+            times.append(f.cleaned_data)
+        return times
+
     def get_rrule_set(self):
         s = rruleset()
         for f in self.rrule_formset:
@@ -705,90 +721,91 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
         tz = self.request.event.timezone
         cnt = 0
         for rdate in self.get_rrule_set():
-            se = copy.copy(form.instance)
+            for t in self.get_times():
+                se = copy.copy(form.instance)
 
-            se.date_from = make_aware(datetime.combine(rdate, form.cleaned_data['time_from']), tz)
-            se.date_to = (
-                make_aware(datetime.combine(rdate, form.cleaned_data['time_to']), tz)
-                if form.cleaned_data.get('time_to')
-                else None
-            )
-            se.date_admission = (
-                make_aware(datetime.combine(rdate, form.cleaned_data['time_admission']), tz)
-                if form.cleaned_data.get('time_admission')
-                else None
-            )
-            se.presale_start = (
-                form.cleaned_data['rel_presale_start'].datetime(se)
-                if form.cleaned_data.get('rel_presale_start')
-                else None
-            )
-            se.presale_end = (
-                form.cleaned_data['rel_presale_end'].datetime(se)
-                if form.cleaned_data.get('rel_presale_end')
-                else None
-            )
-            se.save()
-            data = dict(form.cleaned_data)
-            for f in self.plugin_forms:
-                data.update({
-                    k: (f.cleaned_data.get(k).name
-                        if isinstance(f.cleaned_data.get(k), File)
-                        else f.cleaned_data.get(k))
-                    for k in f.cleaned_data
-                })
-            se.log_action('pretix.subevent.added', data=data, user=self.request.user)
+                se.date_from = make_aware(datetime.combine(rdate, t['time_from']), tz)
+                se.date_to = (
+                    make_aware(datetime.combine(rdate, t['time_to']), tz)
+                    if t.get('time_to')
+                    else None
+                )
+                se.date_admission = (
+                    make_aware(datetime.combine(rdate, t['time_admission']), tz)
+                    if t.get('time_admission')
+                    else None
+                )
+                se.presale_start = (
+                    form.cleaned_data['rel_presale_start'].datetime(se)
+                    if form.cleaned_data.get('rel_presale_start')
+                    else None
+                )
+                se.presale_end = (
+                    form.cleaned_data['rel_presale_end'].datetime(se)
+                    if form.cleaned_data.get('rel_presale_end')
+                    else None
+                )
+                se.save()
+                data = dict(form.cleaned_data)
+                for f in self.plugin_forms:
+                    data.update({
+                        k: (f.cleaned_data.get(k).name
+                            if isinstance(f.cleaned_data.get(k), File)
+                            else f.cleaned_data.get(k))
+                        for k in f.cleaned_data
+                    })
+                se.log_action('pretix.subevent.added', data=data, user=self.request.user)
 
-            for f in self.meta_forms:
-                if f.cleaned_data.get('value'):
+                for f in self.meta_forms:
+                    if f.cleaned_data.get('value'):
+                        i = copy.copy(f.instance)
+                        i.subevent = se
+                        i.save()
+
+                for f in self.formset.forms:
+                    if self.formset._should_delete_form(f):
+                        continue
+                    i = copy.copy(f.instance)
+                    i.subevent = se
+                    i.event = se.event
+                    i.save()
+                    selected_items = set(list(self.request.event.items.filter(id__in=[
+                        i.split('-')[0] for i in f.cleaned_data.get('itemvars', [])
+                    ])))
+                    selected_variations = list(ItemVariation.objects.filter(item__event=self.request.event, id__in=[
+                        i.split('-')[1] for i in f.cleaned_data.get('itemvars', []) if '-' in i
+                    ]))
+                    i.items.add(*[_i for _i in selected_items])
+                    i.variations.add(*[_i for _i in selected_variations])
+
+                    change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                    change_data['id'] = i.pk
+                    i.log_action(action='pretix.event.quota.added', user=self.request.user, data=change_data)
+                    se.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data)
+
+                for f in self.cl_formset.forms:
+                    if self.cl_formset._should_delete_form(f):
+                        continue
+                    i = copy.copy(f.instance)
+                    i.subevent = se
+                    i.event = se.event
+                    i.save()
+                    i.limit_products.add(*f.cleaned_data.get('limit_products', []))
+                    change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                    change_data['id'] = i.pk
+                    i.log_action(action='pretix.event.checkinlist.added', user=self.request.user, data=change_data)
+
+                for f in self.itemvar_forms:
                     i = copy.copy(f.instance)
                     i.subevent = se
                     i.save()
 
-            for f in self.formset.forms:
-                if self.formset._should_delete_form(f):
-                    continue
-                i = copy.copy(f.instance)
-                i.subevent = se
-                i.event = se.event
-                i.save()
-                selected_items = set(list(self.request.event.items.filter(id__in=[
-                    i.split('-')[0] for i in f.cleaned_data.get('itemvars', [])
-                ])))
-                selected_variations = list(ItemVariation.objects.filter(item__event=self.request.event, id__in=[
-                    i.split('-')[1] for i in f.cleaned_data.get('itemvars', []) if '-' in i
-                ]))
-                i.items.add(*[_i for _i in selected_items])
-                i.variations.add(*[_i for _i in selected_variations])
+                for f in self.plugin_forms:
+                    f.is_valid()
+                    f.subevent = se
+                    f.save()
 
-                change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
-                change_data['id'] = i.pk
-                i.log_action(action='pretix.event.quota.added', user=self.request.user, data=change_data)
-                se.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data)
-
-            for f in self.cl_formset.forms:
-                if self.cl_formset._should_delete_form(f):
-                    continue
-                i = copy.copy(f.instance)
-                i.subevent = se
-                i.event = se.event
-                i.save()
-                i.limit_products.add(*f.cleaned_data.get('limit_products', []))
-                change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
-                change_data['id'] = i.pk
-                i.log_action(action='pretix.event.checkinlist.added', user=self.request.user, data=change_data)
-
-            for f in self.itemvar_forms:
-                i = copy.copy(f.instance)
-                i.subevent = se
-                i.save()
-
-            for f in self.plugin_forms:
-                f.is_valid()
-                f.subevent = se
-                f.save()
-
-            cnt += 1
+                cnt += 1
 
         messages.success(self.request, pgettext_lazy('subevent', '{} new dates have been created.').format(cnt))
         return redirect(reverse('control:event.subevents', kwargs={

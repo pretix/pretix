@@ -262,11 +262,86 @@
             </div>
         </div>
         <fieldset>
+            <legend>{% trans "Times" context "subevent" %}</legend>
+
+            <div class="row">
+                <div class="col-sm-4"><strong>{% trans "Event start time" %}</strong></div>
+                <div class="col-sm-4">
+                    <strong>{% trans "Event end time" %}</strong><br>
+                    <label><span class="optional">{% trans "Optional" %}</span></label>
+                </div>
+                <div class="col-sm-3">
+                    <strong>{% trans "Admission time" %}</strong><br>
+                    <label><span class="optional">{% trans "Optional" %}</span></label>
+                </div>
+            </div>
+            <div class="formset" data-formset data-formset-prefix="{{ time_formset.prefix }}"
+                    id="time-formset">
+                {{ time_formset.management_form }}
+                {% bootstrap_formset_errors time_formset %}
+                <div data-formset-body>
+                    {% for f in time_formset %}
+                        {% bootstrap_form_errors f %}
+                        <div data-formset-form>
+                            <div class="row form-inline">
+                                <div class="sr-only">
+                                    {{ f.id }}
+                                    {% bootstrap_field f.DELETE form_group_class="" layout="inline" %}
+                                </div>
+                                <div class="col-sm-4">
+                                    {% bootstrap_field f.time_from layout="inline" %}
+                                </div>
+                                <div class="col-sm-4">
+                                    {% bootstrap_field f.time_to layout="inline" %}
+                                </div>
+                                <div class="col-sm-3">
+                                    {% bootstrap_field f.time_admission layout="inline" %}
+                                </div>
+                                <div class="col-sm-1 text-right flip">
+                                    <button type="button" class="btn btn-danger btn-block"
+                                            data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <script type="form-template" data-formset-empty-form>
+                    {% escapescript %}
+                        <div data-formset-form>
+                            <div class="row form-inline">
+                                <div class="sr-only">
+                                    {{ time_formset.empty_form.id }}
+                                    {% bootstrap_field time_formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                </div>
+                                <div class="col-sm-4">
+                                    {% bootstrap_field time_formset.empty_form.time_from layout="inline" %}
+                                </div>
+                                <div class="col-sm-4">
+                                    {% bootstrap_field time_formset.empty_form.time_to layout="inline" %}
+                                </div>
+                                <div class="col-sm-3">
+                                    {% bootstrap_field time_formset.empty_form.time_admission layout="inline" %}
+                                </div>
+                                <div class="col-sm-1 text-right flip">
+                                    <button type="button" class="btn btn-danger btn-block"
+                                            data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endescapescript %}
+                </script>
+                <p>
+                    <button type="button" class="btn btn-default" data-formset-add>
+                        <i class="fa fa-plus"></i> {% trans "Add a new time slot" %}</button>
+                </p>
+            </div>
+        </fieldset>
+        <fieldset>
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="control" %}
             {% bootstrap_field form.active layout="control" %}
-            {% bootstrap_field form.time_from layout="control" %}
-            {% bootstrap_field form.time_to layout="control" %}
             <div class="geodata-section">
                 {% bootstrap_field form.location layout="control" %}
                 <div class="form-group geodata-group" data-tiles="{{ global_settings.leaflet_tiles|default_if_none:"" }}" data-attrib="{{ global_settings.leaflet_tiles_attribution }}" data-icon="{% static "leaflet/images/marker-icon.png" %}" data-shadow="{% static "leaflet/images/marker-shadow.png" %}">
@@ -291,7 +366,6 @@
                     </div>
                 </div>
             </div>
-            {% bootstrap_field form.time_admission layout="control" %}
             {% bootstrap_field form.frontpage_text layout="control" %}
             {% bootstrap_field form.is_public layout="control" %}
             {% if meta_forms %}

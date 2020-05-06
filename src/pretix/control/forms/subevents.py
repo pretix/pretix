@@ -2,6 +2,7 @@ from datetime import timedelta
 from urllib.parse import urlencode
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.urls import reverse
 from django.utils.dates import MONTHS, WEEKDAYS
@@ -59,20 +60,6 @@ class SubEventForm(I18nModelForm):
 
 
 class SubEventBulkForm(SubEventForm):
-    time_from = forms.TimeField(
-        label=_('Event start time'),
-        widget=forms.TimeInput(attrs={'class': 'timepickerfield'})
-    )
-    time_to = forms.TimeField(
-        label=_('Event end time'),
-        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
-        required=False
-    )
-    time_admission = forms.TimeField(
-        label=_('Admission time'),
-        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
-        required=False
-    )
     rel_presale_start = RelativeDateTimeField(
         label=_('Start of presale'),
         help_text=_('Optional. No products will be sold before this date.'),
@@ -375,4 +362,35 @@ class RRuleForm(forms.Form):
 RRuleFormSet = formset_factory(
     RRuleForm,
     can_order=False, can_delete=True, extra=1
+)
+
+
+class TimeForm(forms.Form):
+    time_from = forms.TimeField(
+        label=_('Event start time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        required=True
+    )
+    time_to = forms.TimeField(
+        label=_('Event end time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        required=False
+    )
+    time_admission = forms.TimeField(
+        label=_('Admission time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        required=False
+    )
+
+    def clean(self):
+        d = super().clean()
+        if d.get('time_from') and d.get('time_to') and d['time_from'] > d['time_to']:
+            raise ValidationError({'time_to': _('The end of the event has to be later than its start.')})
+        return d
+
+
+TimeFormSet = formset_factory(
+    TimeForm,
+    min_num=1,
+    can_order=False, can_delete=True, extra=1, validate_min=True
 )
