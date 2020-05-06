@@ -109,6 +109,12 @@ class QuotaAvailability:
                     return
 
         size_left = Counter({q: (sys.maxsize if s is None else s) for q, s in self.sizes.items()})
+        for q in quotas:
+            self.count_paid_orders[q] = 0
+            self.count_pending_orders[q] = 0
+            self.count_cart[q] = 0
+            self.count_vouchers[q] = 0
+            self.count_waitinglist[q] = 0
 
         # Fetch which quotas belong to which items and variations
         q_items = Quota.items.through.objects.filter(
@@ -170,8 +176,6 @@ class QuotaAvailability:
             ) | Q(
                 variation_id__in={i['itemvariation_id'] for i in q_vars if self._quota_objects[i['quota_id']] in quotas})
         ).order_by().values('order__status', 'item_id', 'subevent_id', 'variation_id').annotate(c=Count('*'))
-        for q in quotas:
-            self.count_paid_orders[q] = 0
         for line in sorted(op_lookup, key=lambda li: li['order__status'], reverse=True):  # p before n
             if line['variation_id']:
                 qs = self._var_to_quota[line['variation_id']]
@@ -198,7 +202,6 @@ class QuotaAvailability:
         else:  # NOQA
             func = 'GREATEST'
 
-        # Count blocking vouchers
         subevents = {q.subevent_id for q in quotas}
         seq = Q(subevent_id__in=subevents)
         if None in subevents:
@@ -252,10 +255,13 @@ class QuotaAvailability:
                 | Q(voucher__valid_until__lt=now_dt)
             ) &
             Q(
-                Q(variation_id__isnull=True) &
-                Q(item_id__in={i['item_id'] for i in q_items if self._quota_objects[i['quota_id']] in quotas})
-            ) | Q(
-                variation_id__in={i['itemvariation_id'] for i in q_vars if self._quota_objects[i['quota_id']] in quotas})
+                Q(
+                    Q(variation_id__isnull=True) &
+                    Q(item_id__in={i['item_id'] for i in q_items if self._quota_objects[i['quota_id']] in quotas})
+                ) | Q(
+                    variation_id__in={i['itemvariation_id'] for i in q_vars if self._quota_objects[i['quota_id']] in quotas}
+                )
+            )
         ).order_by().values('item_id', 'subevent_id', 'variation_id').annotate(c=Count('*'))
         for line in cart_lookup:
             if line['variation_id']:
