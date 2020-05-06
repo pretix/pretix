@@ -28,8 +28,8 @@ class QuotaAvailability:
         self._count_waitinglist = count_waitinglist
         self._ignore_closed = ignore_closed
         self._full_results = full_results
-        self._item_to_quota = defaultdict(list)
-        self._var_to_quota = defaultdict(list)
+        self._item_to_quotas = defaultdict(list)
+        self._var_to_quotas = defaultdict(list)
         self._early_out = early_out
         self._quota_objects = {}
         self.results = {}
@@ -121,13 +121,13 @@ class QuotaAvailability:
             quota_id__in=[q.pk for q in quotas]
         ).values('quota_id', 'item_id')
         for m in q_items:
-            self._item_to_quota[m['item_id']].append(self._quota_objects[m['quota_id']])
+            self._item_to_quotas[m['item_id']].append(self._quota_objects[m['quota_id']])
 
         q_vars = Quota.variations.through.objects.filter(
             quota_id__in=[q.pk for q in quotas]
         ).values('quota_id', 'itemvariation_id')
         for m in q_vars:
-            self._var_to_quota[m['itemvariation_id']].append(self._quota_objects[m['quota_id']])
+            self._var_to_quotas[m['itemvariation_id']].append(self._quota_objects[m['quota_id']])
 
         self._compute_orders(quotas, q_items, q_vars, size_left)
 
@@ -178,9 +178,9 @@ class QuotaAvailability:
         ).order_by().values('order__status', 'item_id', 'subevent_id', 'variation_id').annotate(c=Count('*'))
         for line in sorted(op_lookup, key=lambda li: li['order__status'], reverse=True):  # p before n
             if line['variation_id']:
-                qs = self._var_to_quota[line['variation_id']]
+                qs = self._var_to_quotas[line['variation_id']]
             else:
-                qs = self._item_to_quota[line['item_id']]
+                qs = self._item_to_quotas[line['item_id']]
             for q in qs:
                 if q.subevent_id == line['subevent_id']:
                     size_left[q] -= line['c']
@@ -227,9 +227,9 @@ class QuotaAvailability:
         )
         for line in v_lookup:
             if line['variation_id']:
-                qs = self._var_to_quota[line['variation_id']]
+                qs = self._var_to_quotas[line['variation_id']]
             elif line['item_id']:
-                qs = self._item_to_quota[line['item_id']]
+                qs = self._item_to_quotas[line['item_id']]
             else:
                 qs = [self._quota_objects[line['quota_id']]]
             for q in qs:
@@ -265,9 +265,9 @@ class QuotaAvailability:
         ).order_by().values('item_id', 'subevent_id', 'variation_id').annotate(c=Count('*'))
         for line in cart_lookup:
             if line['variation_id']:
-                qs = self._var_to_quota[line['variation_id']]
+                qs = self._var_to_quotas[line['variation_id']]
             else:
-                qs = self._item_to_quota[line['item_id']]
+                qs = self._item_to_quotas[line['item_id']]
             for q in qs:
                 if q.subevent_id == line['subevent_id']:
                     size_left[q] -= line['c']
@@ -295,9 +295,9 @@ class QuotaAvailability:
         ).order_by().values('item_id', 'subevent_id', 'variation_id').annotate(c=Count('*'))
         for line in w_lookup:
             if line['variation_id']:
-                qs = self._var_to_quota[line['variation_id']]
+                qs = self._var_to_quotas[line['variation_id']]
             else:
-                qs = self._item_to_quota[line['item_id']]
+                qs = self._item_to_quotas[line['item_id']]
             for q in qs:
                 if q.subevent_id == line['subevent_id']:
                     size_left[q] -= line['c']

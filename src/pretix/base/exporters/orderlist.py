@@ -518,20 +518,20 @@ class QuotaListExporter(ListExporter):
         yield headers
 
         quotas = list(self.event.quotas.all())
-        q = QuotaAvailability(full_results=True)
-        q.queue(*quotas)
-        q.compute()
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(*quotas)
+        qa.compute()
 
         for quota in quotas:
-            avail = q.results[quota]
+            avail = qa.results[quota]
             row = [
                 quota.name,
                 _('Infinite') if quota.size is None else quota.size,
-                q.count_paid_orders[quota],
-                q.count_pending_orders[quota],
-                q.count_vouchers[quota],
-                q.count_cart[quota],
-                q.count_waitinglist[quota],
+                qa.count_paid_orders[quota],
+                qa.count_pending_orders[quota],
+                qa.count_vouchers[quota],
+                qa.count_cart[quota],
+                qa.count_waitinglist[quota],
                 _('Infinite') if avail[1] is None else avail[1]
             ]
             yield row

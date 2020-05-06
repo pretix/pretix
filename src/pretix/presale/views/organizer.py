@@ -282,12 +282,12 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
             ]
 
     if quotas_to_compute:
-        q = QuotaAvailability()
-        q.queue(*quotas_to_compute)
-        q.compute()
+        qa = QuotaAvailability()
+        qa.queue(*quotas_to_compute)
+        qa.compute()
     for se in qs:
         if quotas_to_compute:
-            se._quota_cache = q.results
+            se._quota_cache = qa.results
         kwargs = {'subevent': se.pk}
         if cart_namespace:
             kwargs['cart_namespace'] = cart_namespace

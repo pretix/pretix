@@ -667,11 +667,11 @@ class QuotaList(PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
 
-        q = QuotaAvailability()
-        q.queue(*ctx['quotas'])
-        q.compute()
+        qa = QuotaAvailability()
+        qa.queue(*ctx['quotas'])
+        qa.compute()
         for quota in ctx['quotas']:
-            q.cached_avail = q.results[quota]
+            qa.cached_avail = qa.results[quota]
 
         return ctx
 
@@ -733,30 +733,30 @@ class QuotaView(ChartContainingView, DetailView):
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data()
 
-        q = QuotaAvailability(full_results=True)
-        q.queue(self.object)
-        q.compute()
-        ctx['avail'] = q.results[self.object]
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(self.object)
+        qa.compute()
+        ctx['avail'] = qa.results[self.object]
 
         data = [
             {
                 'label': gettext('Paid orders'),
-                'value': q.count_paid_orders[self.object],
+                'value': qa.count_paid_orders[self.object],
                 'sum': True,
             },
             {
                 'label': gettext('Pending orders'),
-                'value': q.count_pending_orders[self.object],
+                'value': qa.count_pending_orders[self.object],
                 'sum': True,
             },
             {
                 'label': gettext('Vouchers and waiting list reservations'),
-                'value': q.count_vouchers[self.object],
+                'value': qa.count_vouchers[self.object],
                 'sum': True,
             },
             {
                 'label': gettext('Current user\'s carts'),
-                'value': q.count_cart[self.object],
+                'value': qa.count_cart[self.object],
                 'sum': True,
             },
         ]
@@ -772,7 +772,7 @@ class QuotaView(ChartContainingView, DetailView):
         })
         data.append({
             'label': gettext('Waiting list (pending)'),
-            'value': q.count_waitinglist[self.object],
+            'value': qa.count_waitinglist[self.object],
             'sum': False,
         })
 

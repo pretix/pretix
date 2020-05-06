@@ -534,17 +534,17 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     def availability(self, request, *args, **kwargs):
         quota = self.get_object()
 
-        q = QuotaAvailability()
-        q.queue(quota)
-        q.compute()
-        avail = q.results[quota]
+        qa = QuotaAvailability()
+        qa.queue(quota)
+        qa.compute()
+        avail = qa.results[quota]
 
         data = {
-            'paid_orders': q.count_paid_orders[quota],
-            'pending_orders': q.count_pending_orders[quota],
-            'blocking_vouchers': q.count_vouchers[quota],
-            'cart_positions': q.count_cart[quota],
-            'waiting_list': q.count_pending_orders[quota],
+            'paid_orders': qa.count_paid_orders[quota],
+            'pending_orders': qa.count_pending_orders[quota],
+            'blocking_vouchers': qa.count_vouchers[quota],
+            'cart_positions': qa.count_cart[quota],
+            'waiting_list': qa.count_pending_orders[quota],
             'available_number': avail[1],
             'available': avail[0] == Quota.AVAILABILITY_OK,
             'total_size': quota.size,
