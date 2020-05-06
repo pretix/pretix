@@ -1115,13 +1115,15 @@ class SubEvent(EventMixin, LoggedModel):
         return not self.orderposition_set.exists()
 
     def delete(self, *args, **kwargs):
+        clear_cache = kwargs.pop('clear_cache', False)
         super().delete(*args, **kwargs)
-        if self.event:
+        if self.event and clear_cache:
             self.event.cache.clear()
 
     def save(self, *args, **kwargs):
+        clear_cache = kwargs.pop('clear_cache', False)
         super().save(*args, **kwargs)
-        if self.event:
+        if self.event and clear_cache:
             self.event.cache.clear()
 
     @staticmethod

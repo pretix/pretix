@@ -17,7 +17,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from pretix.base.models import CartPosition
+from pretix.base.models import CartPosition, LogEntry
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import (
@@ -667,7 +667,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
     def get_times(self):
         times = []
         for f in self.time_formset:
-            if f in self.time_formset.deleted_forms:
+            if f in self.time_formset.deleted_forms or not f.cleaned_data.get('time_from'):
                 continue
             times.append(f.cleaned_data)
         return times
@@ -719,7 +719,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
     @transaction.atomic
     def form_valid(self, form):
         tz = self.request.event.timezone
-        cnt = 0
+        subevents = []
         for rdate in self.get_rrule_set():
             for t in self.get_times():
                 se = copy.copy(form.instance)
@@ -745,69 +745,111 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                     if form.cleaned_data.get('rel_presale_end')
                     else None
                 )
-                se.save()
-                data = dict(form.cleaned_data)
-                for f in self.plugin_forms:
-                    data.update({
-                        k: (f.cleaned_data.get(k).name
-                            if isinstance(f.cleaned_data.get(k), File)
-                            else f.cleaned_data.get(k))
-                        for k in f.cleaned_data
-                    })
-                se.log_action('pretix.subevent.added', data=data, user=self.request.user)
+                se.save(clear_cache=False)
+                subevents.append(se)
 
-                for f in self.meta_forms:
-                    if f.cleaned_data.get('value'):
-                        i = copy.copy(f.instance)
-                        i.subevent = se
-                        i.save()
+        data = dict(form.cleaned_data)
+        for f in self.plugin_forms:
+            data.update({
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.cleaned_data
+            })
+        log_entries = []
+        for se in subevents:
+            log_entries.append(se.log_action('pretix.subevent.added', data=data, user=self.request.user, save=False))
 
-                for f in self.formset.forms:
-                    if self.formset._should_delete_form(f):
-                        continue
+        to_save = []
+        for f in self.meta_forms:
+            if f.cleaned_data.get('value'):
+                for se in subevents:
                     i = copy.copy(f.instance)
+                    i.pk = None
                     i.subevent = se
-                    i.event = se.event
-                    i.save()
-                    selected_items = set(list(self.request.event.items.filter(id__in=[
-                        i.split('-')[0] for i in f.cleaned_data.get('itemvars', [])
-                    ])))
-                    selected_variations = list(ItemVariation.objects.filter(item__event=self.request.event, id__in=[
-                        i.split('-')[1] for i in f.cleaned_data.get('itemvars', []) if '-' in i
-                    ]))
-                    i.items.add(*[_i for _i in selected_items])
-                    i.variations.add(*[_i for _i in selected_variations])
+                    to_save.append(i)
+        SubEventMetaValue.objects.bulk_create(to_save)
 
-                    change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
-                    change_data['id'] = i.pk
-                    i.log_action(action='pretix.event.quota.added', user=self.request.user, data=change_data)
-                    se.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data)
+        to_save_items = []
+        to_save_variations = []
+        for f in self.itemvar_forms:
+            for se in subevents:
+                i = copy.copy(f.instance)
+                i.pk = None
+                i.subevent = se
+                if isinstance(i, SubEventItem):
+                    to_save_items.append(i)
+                else:
+                    to_save_variations.append(i)
+        SubEventItem.objects.bulk_create(to_save_items)
+        SubEventItemVariation.objects.bulk_create(to_save_variations)
 
-                for f in self.cl_formset.forms:
-                    if self.cl_formset._should_delete_form(f):
-                        continue
-                    i = copy.copy(f.instance)
-                    i.subevent = se
-                    i.event = se.event
-                    i.save()
-                    i.limit_products.add(*f.cleaned_data.get('limit_products', []))
-                    change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
-                    change_data['id'] = i.pk
-                    i.log_action(action='pretix.event.checkinlist.added', user=self.request.user, data=change_data)
+        to_save_items = []
+        to_save_variations = []
+        for f in self.formset.forms:
+            if self.formset._should_delete_form(f):
+                continue
 
-                for f in self.itemvar_forms:
-                    i = copy.copy(f.instance)
-                    i.subevent = se
-                    i.save()
+            change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+            for se in subevents:
+                i = copy.copy(f.instance)
+                i.pk = None
+                i.subevent = se
+                i.event = se.event
+                i.save(clear_cache=False)
+                selected_items = set(list(self.request.event.items.filter(id__in=[
+                    i.split('-')[0] for i in f.cleaned_data.get('itemvars', [])
+                ])))
+                selected_variations = list(ItemVariation.objects.filter(item__event=self.request.event, id__in=[
+                    i.split('-')[1] for i in f.cleaned_data.get('itemvars', []) if '-' in i
+                ]))
+                for _i in selected_items:
+                    to_save_items.append(Quota.items.through(quota_id=i.pk, item_id=_i.pk))
+                for _i in selected_variations:
+                    to_save_variations.append(Quota.variations.through(quota_id=i.pk, itemvariation_id=_i.pk))
 
-                for f in self.plugin_forms:
-                    f.is_valid()
-                    f.subevent = se
-                    f.save()
+                change_data['id'] = i.pk
+                log_entries.append(
+                    i.log_action(action='pretix.event.quota.added', user=self.request.user,
+                                 data=change_data, save=False)
+                )
+                log_entries.append(
+                    se.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data, save=False)
+                )
+        Quota.items.through.objects.bulk_create(to_save_items)
+        Quota.variations.through.objects.bulk_create(to_save_variations)
 
-                cnt += 1
+        to_save_products = []
+        for f in self.cl_formset.forms:
+            if self.cl_formset._should_delete_form(f):
+                continue
+            change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+            for se in subevents:
+                i = copy.copy(f.instance)
+                i.subevent = se
+                i.event = se.event
+                i.save()
+                for _i in f.cleaned_data.get('limit_products', []):
+                    to_save_products.append(CheckinList.limit_products.through(checkinlist_id=i.pk, item_id=_i.pk))
 
-        messages.success(self.request, pgettext_lazy('subevent', '{} new dates have been created.').format(cnt))
+                change_data['id'] = i.pk
+                log_entries.append(
+                    i.log_action(action='pretix.event.checkinlist.added', user=self.request.user, data=change_data,
+                                 save=False)
+                )
+        CheckinList.limit_products.through.objects.bulk_create(to_save_products)
+
+        for f in self.plugin_forms:
+            f.is_valid()
+            for se in subevents:
+                f.subevent = se
+                f.save()
+
+        LogEntry.objects.bulk_create(log_entries)
+
+        self.request.event.cache.clear()
+        messages.success(self.request, pgettext_lazy('subevent', '{} new dates have been created.').format(len(subevents)))
+        return self.get(self.request, *self.args, **self.kwargs)
         return redirect(reverse('control:event.subevents', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
