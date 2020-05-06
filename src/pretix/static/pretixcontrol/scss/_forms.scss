@@ -406,6 +406,18 @@ table td > .checkbox input[type="checkbox"] {
     line-height: 40px;
   }
 }
+#time-formset {
+  input {
+    display: block;
+    width: 100%;
+  }
+  .form-group {
+    margin: 0;
+  }
+  .row {
+    margin-bottom: 15px;
+  }
+}
 .ticketoutput-panel .panel-heading {
   .checkbox {
     padding: 0;
