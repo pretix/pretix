@@ -55,7 +55,7 @@ class QuotaAvailability:
         self._compute(quotas, now_dt)
 
         for q in quotas_original:
-            for recv, resp in quota_availability.send(sender=q.event, quota=quotas_original, result=self.results[q],
+            for recv, resp in quota_availability.send(sender=q.event, quota=q, result=self.results[q],
                                                       count_waitinglist=self.count_waitinglist):
                 self.results[q] = resp
 
