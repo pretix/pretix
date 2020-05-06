@@ -73,7 +73,24 @@
                         {% endif %}
                     </td>
                     <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
-                    <td class="text-right flip">{{ o.total|money:o.event.currency }}</td>
+                    <td class="text-right flip">
+                        {% if o.has_cancellation_request %}
+                            <span class="label label-warning">{% trans "CANCELLATION REQUESTED" %}</span>
+                        {% endif %}
+                        {% if o.has_external_refund or o.has_pending_refund %}
+                            <span class="label label-danger">{% trans "REFUND PENDING" %}</span>
+                        {% elif o.has_pending_refund %}
+                            <span class="label label-warning">{% trans "REFUND PENDING" %}</span>
+                        {% endif %}
+                        {% if o.is_overpaid %}
+                            <span class="label label-warning">{% trans "OVERPAID" %}</span>
+                        {% elif o.is_underpaid  %}
+                            <span class="label label-danger">{% trans "UNDERPAID" %}</span>
+                        {% elif o.is_pending_with_full_payment %}
+                            <span class="label label-danger">{% trans "FULLY PAID" %}</span>
+                        {% endif %}
+                        {{ o.total|money:o.event.currency }}
+                    </td>
                     <td class="text-right flip">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
                 </tr>
             {% empty %}

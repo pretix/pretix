@@ -363,6 +363,28 @@ class OrderSearchFilterForm(OrderFilterForm):
         )
     )
 
+    status = forms.ChoiceField(
+        label=_('Order status'),
+        choices=(
+            ('', _('All orders')),
+            (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
+            (Order.STATUS_PENDING, _('Pending')),
+            ('o', _('Pending (overdue)')),
+            (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
+            (Order.STATUS_EXPIRED, _('Expired')),
+            (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
+            (Order.STATUS_CANCELED, _('Canceled')),
+            ('cp', _('Canceled (or with paid fee)')),
+            ('pa', _('Approval pending')),
+            ('overpaid', _('Overpaid')),
+            ('underpaid', _('Underpaid')),
+            ('pendingpaid', _('Pending (but fully paid)')),
+            ('testmode', _('Test mode')),
+            ('rc', _('Cancellation requested')),
+        ),
+        required=False,
+    )
+
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
@@ -380,6 +402,47 @@ class OrderSearchFilterForm(OrderFilterForm):
 
         if fdata.get('organizer'):
             qs = qs.filter(event__organizer=fdata.get('organizer'))
+
+        if fdata.get('status') == 'overpaid':
+            qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
+            qs = qs.filter(
+                Q(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0))
+                | Q(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0))
+            )
+        elif fdata.get('status') == 'rc':
+            qs = qs.filter(
+                cancellation_requests__isnull=False
+            )
+        elif fdata.get('status') == 'pendingpaid':
+            qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
+            qs = qs.filter(
+                Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
+                & Q(require_approval=False)
+            )
+        elif fdata.get('status') == 'underpaid':
+            qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
+            qs = qs.filter(
+                status=Order.STATUS_PAID,
+                pending_sum_t__gt=0
+            )
+        elif fdata.get('status') == 'pa':
+            qs = qs.filter(
+                status=Order.STATUS_PENDING,
+                require_approval=True
+            )
+        elif fdata.get('status') == 'testmode':
+            qs = qs.filter(
+                testmode=True
+            )
+        elif fdata.get('status') == 'cp':
+            s = OrderPosition.objects.filter(
+                order=OuterRef('pk')
+            )
+            qs = qs.annotate(
+                has_pc=Exists(s)
+            ).filter(
+                Q(status=Order.STATUS_PAID, has_pc=False) | Q(status=Order.STATUS_CANCELED)
+            )
 
         return qs
 
