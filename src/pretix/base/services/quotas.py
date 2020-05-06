@@ -19,11 +19,50 @@ from ..signals import periodic_task, quota_availability
 
 class QuotaAvailability:
     """
-    This special object allows so tompute the availability of quotas and inspect their results.
-    Initialize, add quotas with .queue(quota), compute with .compute() and access results.
+    This special object allows so compute the availability of multiple quotas, even across events, and inspect their
+    results. The maximum number of SQL queries is constant and not dependent on the number of quotas.
+
+    Usage example::
+
+        qa = QuotaAvailability()
+        qa.queue(quota1, quota2, …)
+        qa.compute()
+        print(qa.results)
+
+    Properties you can access after computation.
+
+    * results (dict mapping quotas to availability tuples)
+    * count_paid_orders (dict mapping quotas to ints)
+    * count_paid_orders (dict mapping quotas to ints)
+    * count_pending_orders (dict mapping quotas to ints)
+    * count_vouchers (dict mapping quotas to ints)
+    * count_waitinglist (dict mapping quotas to ints)
+    * count_cart (dict mapping quotas to ints)
     """
 
     def __init__(self, count_waitinglist=True, ignore_closed=False, full_results=False, early_out=True):
+        """
+        Initialize a new quota availability calculator
+
+        :param count_waitinglist: If ``True`` (default), the waiting list is considered. If ``False``, it is ignored.
+
+        :param ignore_closed: Quotas have a ``closed`` state that always makes the quota return as sold out. If you set
+                              ``ignore_closed`` to ``True``, we will ignore this completely. Default is ``False``.
+
+        :param full_results: Usually, the computation is as efficient as possible, i.e. if after counting the sold
+                             orders we already see that the quota is sold out, we're not going to count the carts,
+                             since it does not matter. This also means that you will not be able to get that number from
+                             ``.count_cart``. If you want all parts to be calculated (i.e. because you want to show
+                             statistics to the user), pass ``full_results`` and we'll skip that optimization.
+                             items
+
+        :param early_out: Usually, if a quota is ``closed`` or if its ``size`` is ``None`` (i.e. unlimited), we will
+                          not need database access to determine the availability and return it right away. If you set
+                          this to ``False``, however, we will *still* count the number of orders, which is required to
+                          keep the database-level quota cache up to date so backend overviews render quickly. If you
+                          do not care about keeping the cache up to date, you can set this to ``False`` for further
+                          performance improvements.
+        """
         self._queue = []
         self._count_waitinglist = count_waitinglist
         self._ignore_closed = ignore_closed
