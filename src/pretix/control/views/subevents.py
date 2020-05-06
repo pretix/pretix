@@ -215,7 +215,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
 
         formsetclass = inlineformset_factory(
             SubEvent, Quota,
-            form=QuotaForm, formset=QuotaFormSet,
+            form=QuotaForm, formset=QuotaFormSet, min_num=1, validate_min=True,
             can_order=False, can_delete=True, extra=extra,
         )
         if self.object:
