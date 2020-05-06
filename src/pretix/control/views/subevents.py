@@ -451,12 +451,17 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
+        initial = kwargs.get('initial', {})
         if self.copy_from:
             i = modelcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
         else:
             kwargs['instance'] = SubEvent(event=self.request.event)
+            initial['location'] = self.request.event.location
+            initial['geo_lat'] = self.request.event.geo_lat
+            initial['geo_lon'] = self.request.event.geo_lon
+        kwargs['initial'] = initial
         return kwargs
 
     @transaction.atomic
@@ -621,7 +626,9 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        initial = {}
+        initial = {
+            'active': True,
+        }
         kwargs['event'] = self.request.event
         tz = self.request.event.timezone
         if self.copy_from:
@@ -643,6 +650,9 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
             )) if i.presale_end else None
         else:
             kwargs['instance'] = SubEvent(event=self.request.event)
+            initial['location'] = self.request.event.location
+            initial['geo_lat'] = self.request.event.geo_lat
+            initial['geo_lon'] = self.request.event.geo_lon
         kwargs['initial'] = initial
         return kwargs
 
