@@ -61,6 +61,7 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
             jqXHR.responseText.indexOf("<body"),
             jqXHR.responseText.indexOf("</body")
         ));
+        form_handlers($("body"));
     } else if (c.length > 0) {
         // This is some kind of 500/404/403 page, show it in an overlay
         $("body").data('ajaxing', false);
@@ -134,6 +135,7 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
                 jqXHR.responseText.indexOf("<body"),
                 jqXHR.responseText.indexOf("</body")
             ));
+            form_handlers($("body"));
         } else if (c.length > 0) {
             waitingDialog.hide();
             ajaxErrDialog.show(c.first().html());
