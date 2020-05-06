@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-13 16:44+0000\n"
-"PO-Revision-Date: 2020-05-05 11:15+0000\n"
+"POT-Creation-Date: 2020-05-05 10:42+0000\n"
+"PO-Revision-Date: 2020-05-06 07:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -4036,12 +4036,7 @@ msgid "Payment process description for pending orders"
 msgstr "Beschreibung des Zahlungsvorgangs für ausstehende Bestellungen"
 
 #: pretix/base/payment.py:911
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
@@ -4050,7 +4045,7 @@ msgstr ""
 "Dieser Text wird auf der Bestellbestätigungsseite angezeigt. Er sollte dem "
 "Kunden erklären, wie mit der Zahlung fortzufahren ist. Die Platzhalter "
 "{order}, {total}, {currency} und {total_with_currency} können verwendet "
-"werden."
+"werden"
 
 #: pretix/base/payment.py:957
 msgid "Offsetting"
