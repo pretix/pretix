@@ -3,7 +3,7 @@
     {% for day in days %}
         <div class="weekday {% if day.events %}has-events{% else %}no-events{% endif %}"
                 data-date="{{ day.date|date:"SHORT_DATE_FORMAT" }}">
-            <h3>{{ day.day|date:day_format }}</h3>
+            <h3>{{ day.day_formatted }}</h3>
             <div class="events">
                 {% for event in day.events %}
                     <a class="event {% if event.continued %}continued{% endif %}"

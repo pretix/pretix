@@ -9,7 +9,7 @@ from django.db.models import Exists, Max, Min, OuterRef, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
 from django.utils.decorators import method_decorator
-from django.utils.formats import get_format
+from django.utils.formats import date_format, get_format
 from django.utils.timezone import now
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -244,7 +244,7 @@ class EventListMixin:
             self.year = now().isocalendar()[0]
             self.month = now().isocalendar()[1]
 
-    def _set_month_week(self):
+    def _set_week_year(self):
         if hasattr(self.request, 'event') and self.subevent:
             tz = pytz.timezone(self.request.event.settings.timezone)
             self.year = self.subevent.date_from.astimezone(tz).year
@@ -395,9 +395,13 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
 
 
 def days_for_template(ebd, week):
+    day_format = get_format('WEEK_DAY_FORMAT')
+    if day_format == 'WEEK_DAY_FORMAT':
+        day_format = 'SHORT_DATE_FORMAT'
     return [
         {
             'day': day,
+            'day_formatted': date_format(day, day_format),
             'date': day,
             'events': ebd.get(day)
         }
@@ -470,7 +474,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     template_name = 'pretixpresale/organizers/calendar_week.html'
 
     def get(self, request, *args, **kwargs):
-        self._set_month_week()
+        self._set_week_year()
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -497,9 +501,6 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['week_format'] = get_format('WEEK_FORMAT')
         if ctx['week_format'] == 'WEEK_FORMAT':
             ctx['week_format'] = WEEK_FORMAT
-        ctx['day_format'] = get_format('WEEK_DAY_FORMAT')
-        if ctx['day_format'] == 'WEEK_DAY_FORMAT':
-            ctx['day_format'] = 'SHORT_DATE_FORMAT'
         ctx['multiple_timezones'] = self._multiple_timezones
 
         return ctx

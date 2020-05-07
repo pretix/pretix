@@ -6,6 +6,7 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta
 from urllib.parse import urljoin
 
+import isoweek
 import pytz
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -43,7 +44,7 @@ from pretix.presale.views.event import (
 )
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
-    filter_qs_by_attr, weeks_for_template,
+    days_for_template, filter_qs_by_attr, weeks_for_template,
 )
 
 logger = logging.getLogger(__name__)
@@ -420,6 +421,48 @@ class WidgetAPIProductList(EventListMixin, View):
                     if not d:
                         continue
                     d['events'] = self._serialize_events(d['events'] or [])
+        elif list_type == "week":
+            self._set_week_year()
+
+            if hasattr(self.request, 'event'):
+                tz = pytz.timezone(self.request.event.settings.timezone)
+            else:
+                tz = pytz.UTC
+
+            week = isoweek.Week(self.year, self.week)
+            data['week'] = [self.year, self.week]
+            before = datetime(
+                week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=tz
+            ) - timedelta(days=1)
+            after = datetime(
+                week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz
+            ) + timedelta(days=1)
+
+            ebd = defaultdict(list)
+            if hasattr(self.request, 'event'):
+                add_subevents_for_days(
+                    filter_qs_by_attr(self.request.event.subevents_annotated('web'), self.request),
+                    before, after, ebd, set(), self.request.event,
+                    kwargs.get('cart_namespace')
+                )
+            else:
+                timezones = set()
+                add_events_for_days(
+                    self.request,
+                    filter_qs_by_attr(Event.annotated(self.request.organizer.events, 'web'), self.request),
+                    before, after, ebd, timezones
+                )
+                add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+                    event__organizer=self.request.organizer,
+                    event__is_public=True,
+                    event__live=True,
+                ).prefetch_related(
+                    'event___settings_objects', 'event__organizer___settings_objects'
+                )), self.request), before, after, ebd, timezones)
+
+            data['days'] = days_for_template(ebd, week)
+            for d in data['days']:
+                d['events'] = self._serialize_events(d['events'] or [])
         else:
             if hasattr(self.request, 'event'):
                 evs = self.request.event.subevents_sorted(
