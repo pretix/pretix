@@ -27,7 +27,7 @@ from django.utils import formats
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic import (
     DetailView, FormView, ListView, TemplateView, View,
 )
@@ -898,20 +898,23 @@ class OrderRefundView(OrderView):
                     if giftcard_value and self.order.email:
                         messages.success(self.request, _('A new gift card was created. You can now send the user their '
                                                          'gift card code.'))
-                        return redirect(reverse('control:event.order.sendmail', kwargs={
-                            'event': self.request.event.slug,
-                            'organizer': self.request.event.organizer.slug,
-                            'code': self.order.code
-                        }) + '?' + urlencode({
-                            'subject': _('Your gift card code'),
-                            'message': _('Hello,\n\nwe have refunded you {amount} for your order.\n\nYou can use the gift '
-                                         'card code {giftcard} to pay for future ticket purchases in our shop.\n\n'
-                                         'Your {event} team').format(
-                                event="{event}",
-                                amount=money_filter(giftcard_value, self.request.event.currency),
-                                giftcard=giftcard.secret,
-                            )
-                        }))
+                        with language(self.order.locale):
+                            return redirect(reverse('control:event.order.sendmail', kwargs={
+                                'event': self.request.event.slug,
+                                'organizer': self.request.event.organizer.slug,
+                                'code': self.order.code
+                            }) + '?' + urlencode({
+                                'subject': gettext('Your gift card code'),
+                                'message': gettext(
+                                    'Hello,\n\nwe have refunded you {amount} for your order.\n\nYou can use the gift '
+                                    'card code {giftcard} to pay for future ticket purchases in our shop.\n\n'
+                                    'Your {event} team'
+                                ).format(
+                                    event="{event}",
+                                    amount=money_filter(giftcard_value, self.request.event.currency),
+                                    giftcard=giftcard.secret,
+                                )
+                            }))
                 return redirect(self.get_order_url())
             else:
                 messages.error(self.request, _('The refunds you selected do not match the selected total refund '
