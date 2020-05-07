@@ -24,6 +24,7 @@ from pretix.base.models.items import (
     ItemVariation, Quota, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
@@ -68,19 +69,28 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
+
+        quotas = []
         for s in ctx['subevents']:
             s.first_quotas = s.first_quotas[:4]
-            for q in s.first_quotas:
-                q.cached_avail = (
-                    (q.cached_availability_state, q.cached_availability_number)
-                    if q.cached_availability_time is not None
-                    else q.availability(allow_cache=True)
+            quotas += list(s.first_quotas)
+
+        qa = QuotaAvailability(early_out=False)
+        for q in quotas:
+            if q.cached_availability_time is None or q.cached_availability_paid_orders is None:
+                qa.queue(q)
+        qa.compute()
+
+        for q in quotas:
+            q.cached_avail = (
+                qa.results[q] if q in qa.results
+                else (q.cached_availability_state, q.cached_availability_number)
+            )
+            if q.size is not None:
+                q.percent_paid = min(
+                    100,
+                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
                 )
-                if q.size is not None:
-                    q.percent_paid = min(
-                        100,
-                        round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
-                    )
         return ctx
 
     @cached_property

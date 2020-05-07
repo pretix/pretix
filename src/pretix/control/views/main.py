@@ -18,6 +18,7 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.forms import SafeSessionWizardView
 from pretix.base.i18n import language
 from pretix.base.models import Event, EventMetaValue, Organizer, Quota, Team
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
@@ -82,19 +83,27 @@ class EventList(PaginationMixin, ListView):
             self.filter_form[k] for k in self.filter_form.fields if k.startswith('meta_')
         ]
 
+        quotas = []
         for s in ctx['events']:
             s.first_quotas = s.first_quotas[:4]
-            for q in s.first_quotas:
-                q.cached_avail = (
-                    (q.cached_availability_state, q.cached_availability_number)
-                    if q.cached_availability_time is not None
-                    else q.availability(allow_cache=True)
+            quotas += list(s.first_quotas)
+
+        qa = QuotaAvailability(early_out=False)
+        for q in quotas:
+            if q.cached_availability_time is None or q.cached_availability_paid_orders is None:
+                qa.queue(q)
+        qa.compute()
+
+        for q in quotas:
+            q.cached_avail = (
+                qa.results[q] if q in qa.results
+                else (q.cached_availability_state, q.cached_availability_number)
+            )
+            if q.size is not None:
+                q.percent_paid = min(
+                    100,
+                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
                 )
-                if q.size is not None:
-                    q.percent_paid = min(
-                        100,
-                        round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
-                    )
         return ctx
 
     @cached_property

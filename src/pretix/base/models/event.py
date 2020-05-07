@@ -214,8 +214,10 @@ class EventMixin:
         vars_reserved = set()
         items_gone = set()
         vars_gone = set()
+
+        r = getattr(self, '_quota_cache', {})
         for q in self.active_quotas:
-            res = q.availability(allow_cache=True)
+            res = r[q] if q in r else q.availability(allow_cache=True)
 
             if res[0] == Quota.AVAILABILITY_OK:
                 if q.active_items:

@@ -31,6 +31,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
 from pretix.control.forms.item import (
@@ -643,9 +644,7 @@ class QuotaList(PaginationMixin, ListView):
     template_name = 'pretixcontrol/items/quotas.html'
 
     def get_queryset(self):
-        qs = Quota.objects.filter(
-            event=self.request.event
-        ).prefetch_related(
+        qs = self.request.event.quotas.prefetch_related(
             Prefetch(
                 "items",
                 queryset=Item.objects.annotate(
@@ -654,12 +653,27 @@ class QuotaList(PaginationMixin, ListView):
                 to_attr="cached_items"
             ),
             "variations",
-            "variations__item"
+            "variations__item",
+            Prefetch(
+                "subevent",
+                queryset=self.request.event.subevents.all()
+            )
         )
         if self.request.GET.get("subevent", "") != "":
             s = self.request.GET.get("subevent", "")
             qs = qs.filter(subevent_id=s)
         return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+
+        qa = QuotaAvailability()
+        qa.queue(*ctx['quotas'])
+        qa.compute()
+        for quota in ctx['quotas']:
+            qa.cached_avail = qa.results[quota]
+
+        return ctx
 
 
 class QuotaCreate(EventPermissionRequiredMixin, CreateView):
@@ -719,28 +733,30 @@ class QuotaView(ChartContainingView, DetailView):
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data()
 
-        avail = self.object.availability()
-        ctx['avail'] = avail
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(self.object)
+        qa.compute()
+        ctx['avail'] = qa.results[self.object]
 
         data = [
             {
                 'label': gettext('Paid orders'),
-                'value': self.object.count_paid_orders(),
+                'value': qa.count_paid_orders[self.object],
                 'sum': True,
             },
             {
                 'label': gettext('Pending orders'),
-                'value': self.object.count_pending_orders(),
+                'value': qa.count_pending_orders[self.object],
                 'sum': True,
             },
             {
                 'label': gettext('Vouchers and waiting list reservations'),
-                'value': self.object.count_blocking_vouchers(),
+                'value': qa.count_vouchers[self.object],
                 'sum': True,
             },
             {
                 'label': gettext('Current user\'s carts'),
-                'value': self.object.count_in_cart(),
+                'value': qa.count_cart[self.object],
                 'sum': True,
             },
         ]
@@ -756,14 +772,14 @@ class QuotaView(ChartContainingView, DetailView):
         })
         data.append({
             'label': gettext('Waiting list (pending)'),
-            'value': self.object.count_waiting_list_pending(),
+            'value': qa.count_waitinglist[self.object],
             'sum': False,
         })
 
         if self.object.size is not None:
             data.append({
                 'label': gettext('Currently for sale'),
-                'value': avail[1],
+                'value': ctx['avail'][1],
                 'sum': False,
                 'strong': True
             })
@@ -786,7 +802,17 @@ class QuotaView(ChartContainingView, DetailView):
         ctx['has_ignore_vouchers'] = Voucher.objects.filter(
             Q(allow_ignore_quota=True) &
             Q(Q(valid_until__isnull=True) | Q(valid_until__gte=now())) &
-            Q(Q(self.object._position_lookup) | Q(quota=self.object)) &
+            Q(
+                (
+                    (  # Orders for items which do not have any variations
+                        Q(variation__isnull=True) &
+                        Q(item_id__in=Quota.items.through.objects.filter(quota_id=self.object.pk).values_list('item_id', flat=True))
+                    ) | (  # Orders for items which do have any variations
+                        Q(variation__in=Quota.variations.through.objects.filter(quota_id=self.object.pk).values_list(
+                            'itemvariation_id', flat=True))
+                    )
+                ) | Q(quota=self.object)
+            ) &
             Q(redeemed__lt=F('max_usages'))
         ).exists()
         if self.object.closed:

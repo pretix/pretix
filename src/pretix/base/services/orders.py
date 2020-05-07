@@ -44,6 +44,7 @@ from pretix.base.services.invoices import (
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
@@ -1391,10 +1392,13 @@ class OrderChangeManager:
                     raise OrderError(self.error_messages['seat_subevent_mismatch'].format(seat=v['seat'].name))
 
     def _check_quotas(self):
+        qa = QuotaAvailability()
+        qa.queue(*[k for k, v in self._quotadiff.items() if v > 0])
+        qa.compute()
         for quota, diff in self._quotadiff.items():
             if diff <= 0:
                 continue
-            avail = quota.availability()
+            avail = qa.results[quota]
             if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < diff):
                 raise OrderError(self.error_messages['quota'].format(name=quota.name))
 

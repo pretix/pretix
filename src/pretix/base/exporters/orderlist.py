@@ -14,6 +14,7 @@ from pretix.base.models import (
     GiftCard, InvoiceAddress, InvoiceLine, Order, OrderPosition, Question,
 )
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from ..exporter import ListExporter, MultiSheetListExporter
@@ -516,16 +517,21 @@ class QuotaListExporter(ListExporter):
         ]
         yield headers
 
-        for quota in self.event.quotas.all():
-            avail = quota.availability()
+        quotas = list(self.event.quotas.all())
+        qa = QuotaAvailability(full_results=True)
+        qa.queue(*quotas)
+        qa.compute()
+
+        for quota in quotas:
+            avail = qa.results[quota]
             row = [
                 quota.name,
                 _('Infinite') if quota.size is None else quota.size,
-                quota.count_paid_orders(),
-                quota.count_pending_orders(),
-                quota.count_blocking_vouchers(),
-                quota.count_in_cart(),
-                quota.count_waiting_list_pending(),
+                qa.count_paid_orders[quota],
+                qa.count_pending_orders[quota],
+                qa.count_vouchers[quota],
+                qa.count_cart[quota],
+                qa.count_waitinglist[quota],
                 _('Infinite') if avail[1] is None else avail[1]
             ]
             yield row

@@ -18,6 +18,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     Event, EventMetaValue, SubEvent, SubEventMetaValue,
 )
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.daterange import daterange
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
@@ -272,7 +273,21 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
     ).order_by(
         'date_from'
     )
+    quotas_to_compute = []
     for se in qs:
+        if se.presale_is_running:
+            quotas_to_compute += [
+                q for q in se.active_quotas
+                if not q.cache_is_hot(now() + timedelta(seconds=5))
+            ]
+
+    if quotas_to_compute:
+        qa = QuotaAvailability()
+        qa.queue(*quotas_to_compute)
+        qa.compute()
+    for se in qs:
+        if quotas_to_compute:
+            se._quota_cache = qa.results
         kwargs = {'subevent': se.pk}
         if cart_namespace:
             kwargs['cart_namespace'] = cart_namespace

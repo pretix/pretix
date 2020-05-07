@@ -22,6 +22,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import ItemVariation, Quota, SeatCategoryMapping
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.signals import item_description
@@ -115,6 +116,24 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     if voucher and voucher.quota_id:
         # If a voucher is set to a specific quota, we need to filter out on that level
         restrict_vars = set(voucher.quota.variations.all())
+
+    quotas_to_compute = []
+    for item in items:
+        if item.has_variations:
+            for v in item.available_variations:
+                for q in v._subevent_quotas:
+                    if q not in quota_cache:
+                        quotas_to_compute.append(q)
+        else:
+            for q in item._subevent_quotas:
+                if q not in quota_cache:
+                    quotas_to_compute.append(q)
+
+    if quotas_to_compute:
+        qa = QuotaAvailability()
+        qa.queue(*quotas_to_compute)
+        qa.compute()
+        quota_cache.update({q.pk: r for q, r in qa.results.items()})
 
     for item in items:
         if voucher and voucher.item_id and voucher.variation_id:
@@ -250,7 +269,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
 
             item._remove = not bool(item.available_variations)
 
-    if not external_quota_cache:
+    if not external_quota_cache and not voucher:
         event.cache.set('item_quota_cache', quota_cache, 5)
     items = [item for item in items
              if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]

@@ -25,6 +25,7 @@ from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.pricing import get_price
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
@@ -728,10 +729,14 @@ class CartManager:
 
     def _get_quota_availability(self):
         quotas_ok = defaultdict(int)
+        qa = QuotaAvailability()
+        qa.queue(*[k for k, v in self._quota_diff.items() if v > 0])
+        qa.compute(now_dt=self.now_dt)
         for quota, count in self._quota_diff.items():
             if count <= 0:
                 quotas_ok[quota] = 0
-            avail = quota.availability(self.now_dt)
+                break
+            avail = qa.results[quota]
             if avail[1] is not None and avail[1] < count:
                 quotas_ok[quota] = min(count, avail[1])
             else:
