@@ -1,0 +1,54 @@
+{% load i18n %}
+<div class="week-calendar">
+    {% for day in days %}
+        <div class="weekday {% if day.events %}has-events{% else %}no-events{% endif %}"
+                data-date="{{ day.date|date:"SHORT_DATE_FORMAT" }}">
+            <h3>{{ day.day|date:day_format }}</h3>
+            <div class="events">
+                {% for event in day.events %}
+                    <a class="event {% if event.continued %}continued{% endif %}"
+                            href="{{ event.url }}">
+                        <span class="event-name">
+                            {{ event.event.name }}
+                        </span>
+                        {% if not event.continued %}
+                            {% if event.time %}
+                                <span class="event-time">
+                                    <span class="fa fa-clock-o"></span>
+                                    {{ event.time|date:"TIME_FORMAT" }}
+                                    {% if multiple_timezones %}
+                                        {{ event.timezone }}
+                                    {% endif %}
+                                </span>
+                            {% endif %}
+                            <span class="event-status">
+                                {% if event.event.presale_is_running and show_avail %}
+                                    {% if event.event.best_availability_state == 100 %}
+                                        <span class="fa fa-ticket"></span> {% trans "Book now" %}
+                                    {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
+                                        <span class="fa fa-ticket"></span> {% trans "Waiting list" %}
+                                    {% elif event.event.best_availability_state == 20 %}
+                                        <span class="fa fa-ticket"></span> {% trans "Reserved" %}
+                                    {% elif event.event.best_availability_state < 20 %}
+                                        <span class="fa fa-ticket"></span> {% trans "Sold out" %}
+                                    {% endif %}
+                                {% elif event.event.presale_is_running %}
+                                    <span class="fa fa-ticket"></span> {% trans "Book now" %}
+                                {% elif event.event.presale_has_ended %}
+                                    <span class="fa fa-ticket"></span> {% trans "Sale over" %}
+                                {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
+                                    <span class="fa fa-ticket"></span>
+                                    {% blocktrans with start_date=event.event.presale_start|date:"SHORT_DATE_FORMAT" %}
+                                        from {{ start_date }}
+                                    {% endblocktrans %}
+                                {% else %}
+                                    <span class="fa fa-ticket"></span> {% trans "Soon" %}
+                                {% endif %}
+                            </span>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

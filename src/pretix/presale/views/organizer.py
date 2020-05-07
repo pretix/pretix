@@ -2,12 +2,14 @@ import calendar
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 
+import isoweek
 import pytz
 from django.conf import settings
 from django.db.models import Exists, Max, Min, OuterRef, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
 from django.utils.decorators import method_decorator
+from django.utils.formats import get_format
 from django.utils.timezone import now
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -20,6 +22,7 @@ from pretix.base.models import (
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.daterange import daterange
+from pretix.helpers.formats.de.formats import WEEK_FORMAT
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.views import OrganizerViewMixin
@@ -193,6 +196,72 @@ class EventListMixin:
             else:
                 self._set_month_to_next_event()
 
+    def _set_week_to_next_subevent(self):
+        tz = pytz.timezone(self.request.event.settings.timezone)
+        next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).filter(
+            active=True,
+            is_public=True,
+            date_from__gte=now()
+        ).select_related('event').order_by('date_from').first()
+
+        if next_sev:
+            datetime_from = next_sev.date_from
+            self.year = datetime_from.astimezone(tz).isocalendar()[0]
+            self.week = datetime_from.astimezone(tz).isocalendar()[1]
+        else:
+            self.year = now().isocalendar()[0]
+            self.month = now().isocalendar()[1]
+
+    def _set_week_to_next_event(self):
+        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
+            organizer=self.request.organizer,
+            live=True,
+            is_public=True,
+            date_from__gte=now(),
+            has_subevents=False
+        ), self.request).order_by('date_from').first()
+        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
+            event__organizer=self.request.organizer,
+            event__is_public=True,
+            event__live=True,
+            active=True,
+            is_public=True,
+            date_from__gte=now()
+        ), self.request).select_related('event').order_by('date_from').first()
+
+        datetime_from = None
+        if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
+            datetime_from = next_sev.date_from
+            next_ev = next_sev.event
+        elif next_ev:
+            datetime_from = next_ev.date_from
+
+        if datetime_from:
+            tz = pytz.timezone(next_ev.settings.timezone)
+            self.year = datetime_from.astimezone(tz).isocalendar()[0]
+            self.month = datetime_from.astimezone(tz).isocalendar[1]
+        else:
+            self.year = now().isocalendar()[0]
+            self.month = now().isocalendar()[1]
+
+    def _set_month_week(self):
+        if hasattr(self.request, 'event') and self.subevent:
+            tz = pytz.timezone(self.request.event.settings.timezone)
+            self.year = self.subevent.date_from.astimezone(tz).year
+            self.month = self.subevent.date_from.astimezone(tz).month
+        if 'year' in self.request.GET and 'week' in self.request.GET:
+            try:
+                self.year = int(self.request.GET.get('year'))
+                self.week = int(self.request.GET.get('week'))
+            except ValueError:
+                self.year = now().isocalendar()[0]
+                self.week = now().isocalendar()[1]
+        else:
+            if hasattr(self.request, 'event'):
+                self._set_week_to_next_subevent()
+            else:
+                self._set_week_to_next_event()
+
 
 class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
     model = Event
@@ -204,6 +273,10 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
         style = request.GET.get("style", request.organizer.settings.event_list_type)
         if style == "calendar":
             cv = CalendarView()
+            cv.request = request
+            return cv.get(request, *args, **kwargs)
+        elif style == "week":
+            cv = WeekCalendarView()
             cv.request = request
             return cv.get(request, *args, **kwargs)
         else:
@@ -321,6 +394,17 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
             })
 
 
+def days_for_template(ebd, week):
+    return [
+        {
+            'day': day,
+            'date': day,
+            'events': ebd.get(day)
+        }
+        for day in week.days()
+    ]
+
+
 def weeks_for_template(ebd, year, month):
     calendar.setfirstweekday(0)  # TODO: Configurable
     return [
@@ -364,6 +448,59 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['weeks'] = weeks_for_template(ebd, self.year, self.month)
         ctx['months'] = [date(self.year, i + 1, 1) for i in range(12)]
         ctx['years'] = range(now().year - 2, now().year + 3)
+
+        return ctx
+
+    def _events_by_day(self, before, after):
+        ebd = defaultdict(list)
+        timezones = set()
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+            event__organizer=self.request.organizer,
+            event__is_public=True,
+            event__live=True,
+        ).prefetch_related(
+            'event___settings_objects', 'event__organizer___settings_objects'
+        )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        self._multiple_timezones = len(timezones) > 1
+        return ebd
+
+
+class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
+    template_name = 'pretixpresale/organizers/calendar_week.html'
+
+    def get(self, request, *args, **kwargs):
+        self._set_month_week()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+
+        week = isoweek.Week(self.year, self.week)
+        before = datetime(
+            week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=UTC
+        ) - timedelta(days=1)
+        after = datetime(
+            week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=UTC
+        ) + timedelta(days=1)
+
+        ctx['date'] = week.monday()
+        ctx['before'] = before
+        ctx['after'] = after
+
+        ebd = self._events_by_day(before, after)
+
+        ctx['days'] = days_for_template(ebd, week)
+        ctx['weeks'] = [date(self.year, i + 1, 1) for i in range(12)]
+        ctx['weeks'] = [i + 1 for i in range(53)]
+        ctx['years'] = range(now().year - 2, now().year + 3)
+        ctx['week_format'] = get_format('WEEK_FORMAT')
+        if ctx['week_format'] == 'WEEK_FORMAT':
+            ctx['week_format'] = WEEK_FORMAT
+        ctx['day_format'] = get_format('WEEK_DAY_FORMAT')
+        if ctx['day_format'] == 'WEEK_DAY_FORMAT':
+            ctx['day_format'] = 'SHORT_DATE_FORMAT'
+        ctx['multiple_timezones'] = self._multiple_timezones
 
         return ctx
 

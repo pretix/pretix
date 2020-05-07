@@ -1,0 +1,42 @@
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+<form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}">
+    {% for f, v in request.GET.items %}
+        {% if f != "week" and f != "year" %}
+            <input type="hidden" name="{{ f }}" value="{{ v }}">
+        {% endif %}
+    {% endfor %}
+    <div class="row">
+        <div class="col-sm-4 hidden-xs text-left flip">
+            <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+                    class="btn btn-default">
+                <span class="fa fa-arrow-left"></span>
+                {{ before|date:week_format }}
+            </a>
+        </div>
+        <div class="col-sm-4 col-xs-12 text-center">
+            <select name="week" class="form-control">
+                {% for w in weeks %}
+                    <option value="{{ w }}" {% if w == date.isocalendar.1 %}selected{% endif %}>{{ w }}</option>
+                {% endfor %}
+            </select>
+            <select name="year" class="form-control">
+                {% for y in years %}
+                    <option value="{{ y }}" {% if y == date.isocalendar.0 %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="js-hidden btn btn-default">
+                {% trans "Go" %}
+            </button>
+        </div>
+        <div class="col-sm-4 hidden-xs text-right flip">
+            <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+                    class="btn btn-default">
+                {{ after|date:week_format }}
+                <span class="fa fa-arrow-right"></span>
+            </a>
+        </div>
+    </div>
+</form>
+{% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability %}

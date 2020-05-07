@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 from importlib import import_module
 
+import isoweek
 import pytz
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -12,6 +13,7 @@ from django.db.models import Count, Exists, OuterRef, Prefetch
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
+from django.utils.formats import get_format
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
@@ -27,10 +29,11 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.signals import item_description
 from pretix.presale.views.organizer import (
-    EventListMixin, add_subevents_for_days, filter_qs_by_attr,
-    weeks_for_template,
+    EventListMixin, add_subevents_for_days, days_for_template,
+    filter_qs_by_attr, weeks_for_template,
 )
 
+from ...helpers.formats.en.formats import WEEK_FORMAT
 from . import (
     CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
     iframe_entry_view_wrapper,
@@ -392,6 +395,38 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['years'] = range(now().year - 2, now().year + 3)
+        elif context['list_type'] == "week" and self.request.event.has_subevents:
+            self._set_month_week()
+            tz = pytz.timezone(self.request.event.settings.timezone)
+            week = isoweek.Week(self.year, self.week)
+            before = datetime(
+                week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=tz
+            ) - timedelta(days=1)
+            after = datetime(
+                week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz
+            ) + timedelta(days=1)
+
+            context['date'] = week.monday()
+            context['before'] = before
+            context['after'] = after
+
+            ebd = defaultdict(list)
+            add_subevents_for_days(
+                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
+                before, after, ebd, set(), self.request.event,
+                kwargs.get('cart_namespace')
+            )
+
+            context['days'] = days_for_template(ebd, week)
+            context['weeks'] = [date(self.year, i + 1, 1) for i in range(12)]
+            context['weeks'] = [i + 1 for i in range(53)]
+            context['years'] = range(now().year - 2, now().year + 3)
+            context['week_format'] = get_format('WEEK_FORMAT')
+            if context['week_format'] == 'WEEK_FORMAT':
+                context['week_format'] = WEEK_FORMAT
+            context['day_format'] = get_format('WEEK_DAY_FORMAT')
+            if context['day_format'] == 'WEEK_DAY_FORMAT':
+                context['day_format'] = 'SHORT_DATE_FORMAT'
         elif self.request.event.has_subevents:
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
