@@ -11,20 +11,13 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from pytz import timezone
 from tests.base import SoupTest
+from tests.testdummy.signals import FoobarSalesChannel
 
-from pretix.base.channels import SalesChannel
 from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, Organizer, Quota, Team,
     User, WaitingListEntry,
 )
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
-
-
-class FoobarSalesChannel(SalesChannel):
-    identifier = "bar"
-    verbose_name = "Foobar"
-    icon = "home"
-    testmode_supported = True
 
 
 class EventTestMixin:
@@ -225,6 +218,25 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("Foo SE1", resp.rendered_content)
         resp = self.client.get('/%s/%s/?year=%d&month=%d' % (self.orga.slug, self.event.slug, se1.date_from.year,
                                                              se1.date_from.month))
+        self.assertIn("Foo SE1", resp.rendered_content)
+        self.assertNotIn("Foo SE2", resp.rendered_content)
+
+    def test_subevent_week_calendar(self):
+        self.event.settings.event_list_type = 'week'
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo SE1', date_from=now() + datetime.timedelta(days=24),
+                                              active=True)
+            self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=12),
+                                        active=True)
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        print(resp.rendered_content)
+        self.assertIn("Foo SE2", resp.rendered_content)
+        self.assertNotIn("Foo SE1", resp.rendered_content)
+        resp = self.client.get('/%s/%s/?year=%d&week=%d' % (self.orga.slug, self.event.slug,
+                                                            se1.date_from.isocalendar()[0],
+                                                            se1.date_from.isocalendar()[1]))
         self.assertIn("Foo SE1", resp.rendered_content)
         self.assertNotIn("Foo SE2", resp.rendered_content)
 

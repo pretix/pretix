@@ -91,6 +91,7 @@ setup(
         'Django==3.0.*',
         'djangorestframework==3.11.*',
         'python-dateutil==2.8.*',
+        'isoweek',
         'requests==2.22.*',
         'pytz',
         'django-bootstrap3==12.0.*',

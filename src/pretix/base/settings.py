@@ -886,14 +886,16 @@ DEFAULTS = {
         'serializer_kwargs': dict(
             choices=(
                 ('list', _('List')),
-                ('calendar', _('Calendar'))
+                ('week', _('Week calendar')),
+                ('calendar', _('Month calendar')),
             )
         ),
         'form_kwargs': dict(
             label=_('Default overview style'),
             choices=(
                 ('list', _('List')),
-                ('calendar', _('Calendar'))
+                ('week', _('Week calendar')),
+                ('calendar', _('Month calendar')),
             )
         ),
     },

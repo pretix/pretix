@@ -4,13 +4,12 @@ from decimal import Decimal
 import pytest
 import pytz
 from django.core import mail as djmail
-from django.dispatch import receiver
 from django.test import TestCase
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
+from tests.testdummy.signals import FoobazSalesChannel
 
-from pretix.base.channels import SalesChannel
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, Order, OrderPosition, Organizer,
@@ -26,23 +25,8 @@ from pretix.base.services.orders import (
     deny_order, expire_orders, reactivate_order, send_download_reminders,
     send_expiry_warnings,
 )
-from pretix.base.signals import register_sales_channels
 from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.testutils.scope import classscope
-
-
-class FoobarSalesChannel(SalesChannel):
-    identifier = "bar"
-    verbose_name = "Foobar"
-    icon = "home"
-    testmode_supported = False
-
-
-@receiver(register_sales_channels, dispatch_uid="test_orders_register_sales_channels")
-def base_sales_channels(sender, **kwargs):
-    return (
-        FoobarSalesChannel(),
-    )
 
 
 @pytest.fixture(scope='function')
@@ -2321,7 +2305,7 @@ def test_saleschannel_testmode_restriction(event):
 
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de', sales_channel=FoobarSalesChannel.identifier)[0]
+                          locale='de', sales_channel=FoobazSalesChannel.identifier)[0]
     assert not order.testmode
 
     event.testmode = True
@@ -2332,7 +2316,7 @@ def test_saleschannel_testmode_restriction(event):
 
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de', sales_channel=FoobarSalesChannel.identifier)[0]
+                          locale='de', sales_channel=FoobazSalesChannel.identifier)[0]
     assert not order.testmode
 
 

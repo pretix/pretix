@@ -4,13 +4,12 @@ from datetime import timedelta
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
-from django.dispatch import receiver
 from django.test import TestCase
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from tests.testdummy.signals import FoobarSalesChannel
 
-from pretix.base.channels import SalesChannel
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemCategory, ItemVariation,
@@ -22,24 +21,8 @@ from pretix.base.models.items import (
 from pretix.base.services.cart import (
     CartError, CartManager, error_messages, update_tax_rates,
 )
-from pretix.base.signals import register_sales_channels
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
-
-
-class FoobarSalesChannel(SalesChannel):
-    identifier = "bar"
-    verbose_name = "Foobar"
-    icon = "home"
-    testmode_supported = False
-    unlimited_items_per_order = True
-
-
-@receiver(register_sales_channels, dispatch_uid="test_cart_register_sales_channels")
-def base_sales_channels(sender, **kwargs):
-    return (
-        FoobarSalesChannel(),
-    )
 
 
 class CartTestMixin:

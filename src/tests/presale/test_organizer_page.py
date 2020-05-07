@@ -139,6 +139,24 @@ def test_calendar(env, client):
 
 
 @pytest.mark.django_db
+def test_week_calendar(env, client):
+    env[0].settings.event_list_type = 'calendar'
+    e = Event.objects.create(
+        organizer=env[0], name='MRMCD2017', slug='2017',
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
+        live=True, is_public=False
+    )
+    r = client.get('/mrmcd/?style=week')
+    assert 'MRMCD2017' not in r.rendered_content
+    e.is_public = True
+    e.save()
+    r = client.get('/mrmcd/?style=week')
+    assert 'MRMCD2017' in r.rendered_content
+    r = client.get('/mrmcd/?style=week&week=2&year=2017')
+    assert 'MRMCD2017' not in r.rendered_content
+
+
+@pytest.mark.django_db
 def test_attributes_in_calendar(env, client):
     env[0].settings.event_list_type = 'calendar'
     e = Event.objects.create(

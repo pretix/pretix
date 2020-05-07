@@ -33,10 +33,15 @@
                 <span class="fa fa-list"></span>
                 {% trans "List" %}
             </a>
+            <a href="?{% url_replace request "style" "week" %}" type="button"
+                    class="btn btn-default">
+                <span class="fa fa-calendar"></span>
+                {% trans "Week" %}
+            </a>
             <a href="?{% url_replace request "style" "calendar" %}" type="button"
                     class="btn btn-default">
                 <span class="fa fa-calendar"></span>
-                {% trans "Calendar" %}
+                {% trans "Month" %}
             </a>
         </div>
         <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "style" "" "month" "" "year" "" %}"

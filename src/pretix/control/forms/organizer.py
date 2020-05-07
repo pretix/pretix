@@ -290,7 +290,8 @@ class OrganizerSettingsForm(SettingsForm):
         label=_('Default overview style'),
         choices=(
             ('list', _('List')),
-            ('calendar', _('Calendar'))
+            ('week', _('Week calendar')),
+            ('calendar', _('Month calendar')),
         )
     )
     event_list_availability = forms.BooleanField(

@@ -45,6 +45,8 @@ var strings = {
     'back': django.pgettext('widget', 'Back'),
     'next_month': django.pgettext('widget', 'Next month'),
     'previous_month': django.pgettext('widget', 'Previous month'),
+    'next_week': django.pgettext('widget', 'Next week'),
+    'previous_week': django.pgettext('widget', 'Previous week'),
     'show_seating': django.pgettext('widget', 'Open seat selection'),
     'days': {
         'MO': django.gettext('Mo'),
@@ -88,6 +90,17 @@ var padNumber = function(number, size) {
     var s = String(number);
     while (s.length < (size || 2)) {s = "0" + s;}
     return s;
+};
+
+var getISOWeeks = function (y) {
+    var d, isLeap;
+
+    d = new Date(y, 0, 1);
+    isLeap = new Date(y, 1, 29).getMonth() === 1;
+
+    //check for a Jan 1 that's a Thursday or a leap year that has a
+    //Wednesday jan 1. Otherwise it's 52
+    return d.getDay() === 4 || isLeap && d.getDay() === 3 ? 53 : 52
 };
 
 /* HTTP API Call helpers */
@@ -679,7 +692,7 @@ Vue.component('pretix-overlay', {
 
 Vue.component('pretix-widget-event-form', {
     template: ('<div class="pretix-widget-event-form">'
-        + '<div class="pretix-widget-event-list-back" v-if="$root.events || $root.weeks">'
+        + '<div class="pretix-widget-event-list-back" v-if="$root.events || $root.weeks || $root.days">'
         + '<a href="#" @click.prevent="back_to_list" v-if="!$root.subevent">&lsaquo; '
         + strings['back_to_list']
         + '</a>'
@@ -687,10 +700,10 @@ Vue.component('pretix-widget-event-form', {
         + strings['back_to_dates']
         + '</a>'
         + '</div>'
-        + '<div class="pretix-widget-event-header" v-if="$root.events || $root.weeks">'
+        + '<div class="pretix-widget-event-header" v-if="$root.events || $root.weeks || $root.days">'
         + '<strong>{{ $root.name }}</strong>'
         + '</div>'
-        + '<div class="pretix-widget-event-details" v-if="($root.events || $root.weeks) && $root.date_range">'
+        + '<div class="pretix-widget-event-details" v-if="($root.events || $root.weeks || $root.days) && $root.date_range">'
         + '{{ $root.date_range }}'
         + '</div>'
         + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
@@ -772,6 +785,8 @@ Vue.component('pretix-widget-event-form', {
             this.$root.trigger_load_callback();
             if (this.$root.events !== undefined) {
                 this.$root.view = "events";
+            } else if (this.$root.days !== undefined) {
+                this.$root.view = "days";
             } else {
                 this.$root.view = "weeks";
             }
@@ -872,7 +887,7 @@ Vue.component('pretix-widget-event-calendar-event', {
 
 Vue.component('pretix-widget-event-calendar-cell', {
     template: ('<td :class="classObject" @click.prevent="selectDay">'
-        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day && show_day">'
         + '{{ daynum }}'
         + '</div>'
         + '<div class="pretix-widget-event-calendar-events" v-if="day">'
@@ -880,7 +895,8 @@ Vue.component('pretix-widget-event-calendar-cell', {
         + '</div>'
         + '</td>'),
     props: {
-        day: Object
+        day: Object,
+        show_day: Boolean
     },
     methods: {
         selectDay: function () {
@@ -930,7 +946,7 @@ Vue.component('pretix-widget-event-calendar-cell', {
 
 Vue.component('pretix-widget-event-calendar-row', {
     template: ('<tr>'
-        + '<pretix-widget-event-calendar-cell v-for="d in week" :day="d"></pretix-widget-event-calendar-cell>'
+        + '<pretix-widget-event-calendar-cell v-for="d in week" :day="d" :show_day="true"></pretix-widget-event-calendar-cell>'
         + '</tr>'),
     props: {
         week: Array
@@ -1007,6 +1023,75 @@ Vue.component('pretix-widget-event-calendar', {
     },
 });
 
+Vue.component('pretix-widget-event-week-calendar', {
+    template: ('<div class="pretix-widget-event-calendar pretix-widget-event-week-calendar" ref="weekcalendar">'
+        + '<div class="pretix-widget-back" v-if="$root.events !== undefined">'
+        + '<a href="#" @click.prevent="back_to_list">&lsaquo; '
+        + strings['back']
+        + '</a>'
+        + '</div>'
+        + '<div class="pretix-widget-event-calendar-head">'
+        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent="prevweek">&laquo; '
+        + strings['previous_week']
+        + '</a> '
+        + '<strong>{{ weekname }}</strong> '
+        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent="nextweek">'
+        + strings['next_week']
+        + ' &raquo;</a>'
+        + '</div>'
+        + '<table class="pretix-widget-event-calendar-table">'
+        + '<thead>'
+        + '<tr>'
+        + '<th v-for="d in $root.days">{{ d.day_formatted }}</th>'
+        + '</tr>'
+        + '</thead>'
+        + '<tbody>'
+        + '<tr>'
+        + '<pretix-widget-event-calendar-cell v-for="d in $root.days" :day="d" :show_day="false">'
+        + '</pretix-widget-event-calendar-cell>'
+        + '</tr>'
+        + '</tbody>'
+        + '</table>'
+        + '</div>'),
+    computed: {
+        weekname: function () {
+            var curWeek = this.$root.week[1];
+            var curYear = this.$root.week[0];
+            return curWeek + ' / ' + curYear;
+        }
+    },
+    methods: {
+        back_to_list: function () {
+            this.$root.weeks = undefined;
+            this.$root.view = "events";
+        },
+        prevweek: function () {
+            var curWeek = this.$root.week[1];
+            var curYear = this.$root.week[0];
+            curWeek--;
+            if (curWeek < 1) {
+                curYear--;
+                curWeek = getISOWeeks(curYear);
+            }
+            this.$root.week = [curYear, curWeek];
+            this.$root.loading++;
+            this.$root.reload();
+        },
+        nextweek: function () {
+            var curWeek = this.$root.week[1];
+            var curYear = this.$root.week[0];
+            curWeek++;
+            if (curWeek > getISOWeeks(curYear)) {
+                curWeek = 1;
+                curYear++;
+            }
+            this.$root.week = [curYear, curWeek];
+            this.$root.loading++;
+            this.$root.reload();
+        }
+    },
+});
+
 Vue.component('pretix-widget', {
     template: ('<div class="pretix-widget-wrapper" ref="wrapper">'
         + '<div :class="classObject">'
@@ -1016,6 +1101,7 @@ Vue.component('pretix-widget', {
         + '<pretix-widget-event-form ref="formcomp" v-if="$root.view === \'event\'"></pretix-widget-event-form>'
         + '<pretix-widget-event-list v-if="$root.view === \'events\'"></pretix-widget-event-list>'
         + '<pretix-widget-event-calendar v-if="$root.view === \'weeks\'"></pretix-widget-event-calendar>'
+        + '<pretix-widget-event-week-calendar v-if="$root.view === \'days\'"></pretix-widget-event-week-calendar>'
         + '<div class="pretix-widget-clear"></div>'
         + '<div class="pretix-widget-attribution" v-if="$root.poweredby" v-html="$root.poweredby">'
         + '</div>'
@@ -1113,6 +1199,8 @@ var shared_root_methods = {
         }
         if (this.$root.date !== null) {
             url += "&year=" + this.$root.date.substr(0, 4) + "&month=" + this.$root.date.substr(5, 2);
+        } else if (this.$root.week !== null) {
+            url += "&year=" + this.$root.week[0] + "&week=" + this.$root.week[1];
         }
         if (this.$root.style !== null) {
             url = url + '&style=' + this.$root.style;
@@ -1131,8 +1219,15 @@ var shared_root_methods = {
             if (data.weeks !== undefined) {
                 root.weeks = data.weeks;
                 root.date = data.date;
+                root.week = null;
                 root.events = undefined;
                 root.view = "weeks";
+            } else if (data.days !== undefined) {
+                root.days = data.days;
+                root.date = null;
+                root.week = data.week;
+                root.events = undefined;
+                root.view = "days";
             } else if (data.events !== undefined) {
                 root.events = data.events;
                 root.weeks = undefined;
@@ -1355,7 +1450,9 @@ var create_widget = function (element) {
                 style: style,
                 error: null,
                 weeks: null,
+                days: null,
                 date: null,
+                week: null,
                 frame_dismissed: false,
                 events: null,
                 view: null,

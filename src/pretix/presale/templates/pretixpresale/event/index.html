@@ -117,6 +117,8 @@
                 <div>
                     {% if list_type == "calendar" %}
                         {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
+                    {% elif list_type == "week" %}
+                        {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
                     {% else %}
                         {% include "pretixpresale/event/fragment_subevent_list.html" %}
                     {% endif %}

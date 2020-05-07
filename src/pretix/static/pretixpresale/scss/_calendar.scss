@@ -1,4 +1,4 @@
-.table-calendar {
+.table-calendar, .week-calendar {
   td, th {
     width: 14.29%;
   }
@@ -16,8 +16,44 @@
     font-size: 12px;
 
     &.continued {
-      background: #888888;
+      background: #888;
       opacity: 0.8;
+      &:hover {
+        background: darken(#888, 15%);
+        opacity: 1;
+      }
+    }
+
+    &.soon {
+      opacity: 0.8;
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &.over {
+      opacity: 0.8;
+      background: #888;
+      &:hover {
+        opacity: 1;
+        background: darken(#888, 15%);
+      }
+    }
+
+    &.available, {
+      background: $brand-success;
+
+      &:hover {
+        background: darken($brand-success, 15%);
+      }
+    }
+
+    &.reserved, &.soldout, {
+      background: $brand-danger;
+
+      &:hover {
+        background: darken($brand-danger, 15%);
+      }
     }
 
     .event-name {
@@ -37,6 +73,38 @@
     display: none;
   }
 }
+.week-calendar {
+  .weekday {
+    margin-bottom: 15px;
+  }
+  h3 {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  .no-events {
+    display: none;
+  }
+}
+@media (min-width: $screen-md-min) {
+  .week-calendar {
+    display: flex;
+    flex-direction: row;
+
+    .weekday {
+      flex: 1;
+      margin: 0 5px;
+    }
+    .weekday:first-child {
+      margin-left: 0;
+    }
+    .weekday:last-child {
+      margin-right: 0;
+    }
+    .no-events {
+      display: block;
+    }
+  }
+}
 @media (max-width: $screen-xs-max) {
   .table-calendar .day .events {
     display: none;
@@ -49,6 +117,9 @@
   .table-calendar td.day.has-events:hover {
     background: darken($brand-primary, 15%);
   }
+}
+#monthselform .row {
+  margin: 0 -15px;
 }
 #monthselform .row > div {
   margin-bottom: 15px;
