@@ -354,6 +354,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                 if not q.cache_is_hot(now() + timedelta(seconds=5))
             ]
 
+    name = None
     if quotas_to_compute:
         qa = QuotaAvailability()
         qa.queue(*quotas_to_compute)
@@ -370,6 +371,10 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
         tz = pytz.timezone(settings.timezone)
         datetime_from = se.date_from.astimezone(tz)
         date_from = datetime_from.date()
+        if name is None:
+            name = str(se.name)
+        elif str(se.name) != name:
+            ebd['_subevents_different_names'] = True
         if se.event.settings.show_date_to and se.date_to:
             date_to = se.date_to.astimezone(tz).date()
             d = max(date_from, before.date())

@@ -396,6 +396,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 kwargs.get('cart_namespace')
             )
 
+            context['show_names'] = ebd.get('_subevents_different_names', False)
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['years'] = range(now().year - 2, now().year + 3)
@@ -421,6 +422,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 kwargs.get('cart_namespace')
             )
 
+            context['show_names'] = ebd.get('_subevents_different_names', False)
             context['days'] = days_for_template(ebd, week)
             context['weeks'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['weeks'] = [i + 1 for i in range(53)]
