@@ -671,7 +671,7 @@ class QuotaList(PaginationMixin, ListView):
         qa.queue(*ctx['quotas'])
         qa.compute()
         for quota in ctx['quotas']:
-            qa.cached_avail = qa.results[quota]
+            quota.cached_avail = qa.results[quota]
 
         return ctx
 
@@ -816,7 +816,10 @@ class QuotaView(ChartContainingView, DetailView):
             Q(redeemed__lt=F('max_usages'))
         ).exists()
         if self.object.closed:
-            ctx['closed_and_sold_out'] = self.object._availability(ignore_closed=True)[0] <= Quota.AVAILABILITY_ORDERED
+            qa = QuotaAvailability(ignore_closed=True)
+            qa.queue(self.object)
+            qa.compute()
+            ctx['closed_and_sold_out'] = qa.results[self.object][0] <= Quota.AVAILABILITY_ORDERED
 
         return ctx
 
