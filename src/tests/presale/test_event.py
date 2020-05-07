@@ -11,20 +11,13 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from pytz import timezone
 from tests.base import SoupTest
+from tests.testdummy.signals import FoobarSalesChannel
 
-from pretix.base.channels import SalesChannel
 from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, Organizer, Quota, Team,
     User, WaitingListEntry,
 )
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
-
-
-class FoobarSalesChannel(SalesChannel):
-    identifier = "bar"
-    verbose_name = "Foobar"
-    icon = "home"
-    testmode_supported = True
 
 
 class EventTestMixin:
@@ -238,6 +231,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
             self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=12),
                                         active=True)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        print(resp.rendered_content)
         self.assertIn("Foo SE2", resp.rendered_content)
         self.assertNotIn("Foo SE1", resp.rendered_content)
         resp = self.client.get('/%s/%s/?year=%d&week=%d' % (self.orga.slug, self.event.slug,

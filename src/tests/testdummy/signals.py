@@ -1,7 +1,9 @@
 from django.dispatch import receiver
 
+from pretix.base.channels import SalesChannel
 from pretix.base.signals import (
-    register_payment_providers, register_ticket_outputs,
+    register_payment_providers, register_sales_channels,
+    register_ticket_outputs,
 )
 
 
@@ -15,3 +17,23 @@ def register_ticket_outputs(sender, **kwargs):
 def register_payment_provider(sender, **kwargs):
     from .payment import DummyPaymentProvider, DummyFullRefundablePaymentProvider, DummyPartialRefundablePaymentProvider
     return [DummyPaymentProvider, DummyFullRefundablePaymentProvider, DummyPartialRefundablePaymentProvider]
+
+
+class FoobazSalesChannel(SalesChannel):
+    identifier = "baz"
+    verbose_name = "Foobar"
+    icon = "home"
+    testmode_supported = False
+
+
+class FoobarSalesChannel(SalesChannel):
+    identifier = "bar"
+    verbose_name = "Foobar"
+    icon = "home"
+    testmode_supported = True
+    unlimited_items_per_order = True
+
+
+@receiver(register_sales_channels, dispatch_uid="sc_dummy")
+def register_sc(sender, **kwargs):
+    return [FoobarSalesChannel, FoobazSalesChannel]

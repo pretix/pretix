@@ -6,7 +6,6 @@ from unittest import mock
 
 import pytest
 from django.core import mail as djmail
-from django.dispatch import receiver
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
@@ -14,7 +13,6 @@ from pytz import UTC
 from stripe.error import APIConnectionError
 from tests.plugins.stripe.test_provider import MockedCharge
 
-from pretix.base.channels import SalesChannel
 from pretix.base.models import (
     InvoiceAddress, Order, OrderPosition, Question, SeatingPlan,
 )
@@ -24,21 +22,6 @@ from pretix.base.models.orders import (
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
 )
-from pretix.base.signals import register_sales_channels
-
-
-class FoobarSalesChannel(SalesChannel):
-    identifier = "bar"
-    verbose_name = "Foobar"
-    icon = "home"
-    testmode_supported = False
-
-
-@receiver(register_sales_channels, dispatch_uid="test_orders_register_sales_channels")
-def base_sales_channels(sender, **kwargs):
-    return (
-        FoobarSalesChannel(),
-    )
 
 
 @pytest.fixture
@@ -1785,7 +1768,7 @@ def test_order_create_in_test_mode_saleschannel_limited(token_client, organizer,
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
     res['testmode'] = True
-    res['sales_channel'] = 'bar'
+    res['sales_channel'] = 'baz'
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
