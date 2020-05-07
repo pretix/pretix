@@ -555,6 +555,44 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 ]
             }
 
+    def test_subevent_week_calendar(self):
+        self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            with scopes_disabled():
+                self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+                se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
+                se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
+
+            response = self.client.get('/%s/%s/widget/product_list?style=week' % (self.orga.slug, self.event.slug))
+            settings.SITE_URL = 'http://example.com'
+            data = json.loads(response.content.decode())
+            assert data == {
+                'list_type': 'week',
+                'week': [2019, 1],
+                'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
+                'days': [
+                    {'day_formatted': 'Mon, Dec 31st', 'date': '2018-12-31', 'events': []},
+                    {'day_formatted': 'Tue, Jan 1st', 'date': '2019-01-01', 'events': [
+                        {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 1, 2019 11:00',
+                         'location': '',
+                         'availability': {'color': 'green', 'text': 'Book now'},
+                         'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}]},
+                    {'day_formatted': 'Wed, Jan 2nd', 'date': '2019-01-02', 'events': []},
+                    {'day_formatted': 'Thu, Jan 3rd', 'date': '2019-01-03', 'events': []},
+                    {'day_formatted': 'Fri, Jan 4th', 'date': '2019-01-04', 'events': [
+                        {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 4, 2019 11:00',
+                         'location': '',
+                         'availability': {'color': 'green', 'text': 'Book now'},
+                         'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}]},
+                    {'day_formatted': 'Sat, Jan 5th', 'date': '2019-01-05', 'events': []},
+                    {'day_formatted': 'Sun, Jan 6th', 'date': '2019-01-06', 'events': []}
+                ],
+            }
+
     def test_event_list(self):
         self.event.has_subevents = True
         self.event.settings.timezone = 'Europe/Berlin'

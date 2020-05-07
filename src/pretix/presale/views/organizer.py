@@ -210,7 +210,7 @@ class EventListMixin:
             self.week = datetime_from.astimezone(tz).isocalendar()[1]
         else:
             self.year = now().isocalendar()[0]
-            self.month = now().isocalendar()[1]
+            self.week = now().isocalendar()[1]
 
     def _set_week_to_next_event(self):
         next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
@@ -239,10 +239,10 @@ class EventListMixin:
         if datetime_from:
             tz = pytz.timezone(next_ev.settings.timezone)
             self.year = datetime_from.astimezone(tz).isocalendar()[0]
-            self.month = datetime_from.astimezone(tz).isocalendar[1]
+            self.week = datetime_from.astimezone(tz).isocalendar()[1]
         else:
             self.year = now().isocalendar()[0]
-            self.month = now().isocalendar()[1]
+            self.week = now().isocalendar()[1]
 
     def _set_week_year(self):
         if hasattr(self.request, 'event') and self.subevent:
@@ -400,7 +400,6 @@ def days_for_template(ebd, week):
         day_format = 'SHORT_DATE_FORMAT'
     return [
         {
-            'day': day,
             'day_formatted': date_format(day, day_format),
             'date': day,
             'events': ebd.get(day)
