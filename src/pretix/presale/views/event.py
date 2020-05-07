@@ -373,6 +373,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
 
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
+        if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.count() > 100:
+            if self.request.event.settings.event_list_type not in ("calendar", "week"):
+                self.request.event.settings.event_list_type = "calendar"
+            context['list_type'] = "calendar"
 
         if context['list_type'] == "calendar" and self.request.event.has_subevents:
             self._set_month_year()

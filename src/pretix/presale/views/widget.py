@@ -360,6 +360,12 @@ class WidgetAPIProductList(EventListMixin, View):
         list_type = self.request.GET.get("style", o.settings.event_list_type)
         data['list_type'] = list_type
 
+        if hasattr(self.request, 'event') and data['list_type'] not in ("calendar", "week"):
+            if self.request.event.subevents.count() > 100:
+                if self.request.event.settings.event_list_type not in ("calendar", "week"):
+                    self.request.event.settings.event_list_type = "calendar"
+                data['list_type'] = list_type = 'calendar'
+
         cache_key = ':'.join([
             'widget.py',
             'eventlist',
