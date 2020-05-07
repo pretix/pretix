@@ -22,7 +22,27 @@
                             <h3>{{ day.day }}</h3>
                             <div class="events">
                                 {% for event in day.events %}
-                                    <a class="event {% if event.continued %}continued{% endif %}"
+                                    <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
+    {% if event.event.presale_is_running and show_avail %}
+        {% if event.event.best_availability_state == 100 %}
+            available
+        {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
+            waitinglist
+        {% elif event.event.best_availability_state == 20 %}
+            reserved
+        {% elif event.event.best_availability_state < 20 %}
+            soldout
+        {% endif %}
+    {% elif event.event.presale_is_running %}
+        running
+    {% elif event.event.presale_has_ended %}
+        over
+    {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
+        soon
+    {% else %}
+        soon
+    {% endif %}
+{% endspaceless %}{% endif %}"
                                        href="{{ event.url }}">
                                         {% if show_names|default_if_none:True %}
                                             <span class="event-name">
@@ -32,8 +52,14 @@
                                         {% if not event.continued %}
                                             {% if event.time %}
                                                 <span class="event-time">
-                                                <span class="fa fa-clock-o"></span>
-                                                {{ event.time|date:"TIME_FORMAT" }}
+                                                    <span class="fa fa-clock-o"></span>
+                                                    {% if not show_names|default_if_none:True %}
+                                                        <strong>
+                                                    {% endif %}
+                                                    {{ event.time|date:"TIME_FORMAT" }}
+                                                    {% if not show_names|default_if_none:True %}
+                                                        </strong>
+                                                    {% endif %}
                                                     {% if multiple_timezones %}
                                                         {{ event.timezone }}
                                                     {% endif %}

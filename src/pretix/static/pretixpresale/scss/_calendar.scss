@@ -16,8 +16,44 @@
     font-size: 12px;
 
     &.continued {
-      background: #888888;
+      background: #888;
       opacity: 0.8;
+      &:hover {
+        background: darken(#888, 15%);
+        opacity: 1;
+      }
+    }
+
+    &.soon {
+      opacity: 0.8;
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &.over {
+      opacity: 0.8;
+      background: #888;
+      &:hover {
+        opacity: 1;
+        background: darken(#888, 15%);
+      }
+    }
+
+    &.available, {
+      background: $brand-success;
+
+      &:hover {
+        background: darken($brand-success, 15%);
+      }
+    }
+
+    &.reserved, &.soldout, {
+      background: $brand-danger;
+
+      &:hover {
+        background: darken($brand-danger, 15%);
+      }
     }
 
     .event-name {
