@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='organizer',
             name='slug',
-            field=models.SlugField(help_text='Should be short, only contain lowercase letters and numbers, and must be unique among your events. This is being used in addresses and bank transfer references.', validators=[django.core.validators.RegexValidator(message='The slug may only contain letters, numbers, dots and dashes.', regex='^[a-zA-Z0-9.-]+$'), pretix.base.validators.OrganizerSlugBanlistValidator()], verbose_name='Short form'),
+            field=models.CharField(max_length=50, db_index=True, help_text='Should be short, only contain lowercase letters and numbers, and must be unique among your events. This is being used in addresses and bank transfer references.', validators=[django.core.validators.RegexValidator(message='The slug may only contain letters, numbers, dots and dashes.', regex='^[a-zA-Z0-9.-]+$'), pretix.base.validators.OrganizerSlugBanlistValidator()], verbose_name='Short form'),
         ),
         migrations.RunPython(merge_names, migrations.RunPython.noop)
     ]
