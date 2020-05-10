@@ -287,7 +287,7 @@ class Event(EventMixin, LoggedModel):
         max_length=200,
         verbose_name=_("Event name"),
     )
-    slug = models.SlugField(
+    slug = models.CharField(
         max_length=50, db_index=True,
         help_text=_(
             "Should be short, only contain lowercase letters, numbers, dots, and dashes, and must be unique among your "
