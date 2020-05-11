@@ -109,6 +109,18 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("John Doe"),
         "evaluate": lambda op, order, ev: op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '')
     }),
+    ("attendee_company", {
+        "label": _("Attendee company"),
+        "editor_sample": _("Sample company"),
+        "evaluate": lambda op, order, ev: op.company or (op.addon_to.company if op.addon_to else '')
+    }),
+    ("attendee_country", {
+        "label": _("Attendee country"),
+        "editor_sample": 'Atlantis',
+        "evaluate": lambda op, order, ev: str(getattr(op.country, 'name', '')) or (
+            str(getattr(op.addon_to.country, 'name', '')) if op.addon_to else ''
+        )
+    }),
     ("event_name", {
         "label": _("Event name"),
         "editor_sample": _("Sample event name"),
@@ -204,11 +216,6 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Invoice address city"),
         "editor_sample": _("Sample city"),
         "evaluate": lambda op, order, ev: order.invoice_address.city if getattr(order, 'invoice_address', None) else ''
-    }),
-    ("attendee_company", {
-        "label": _("Attendee company"),
-        "editor_sample": _("Sample company"),
-        "evaluate": lambda op, order, ev: op.company or (op.addon_to.company if op.addon_to else '')
     }),
     ("addons", {
         "label": _("List of Add-Ons"),
