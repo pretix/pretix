@@ -192,7 +192,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                     'include_pending': False,
                 }
             ]
-            extra = 1
+            extra = 0
 
         formsetclass = inlineformset_factory(
             SubEvent, CheckinList,

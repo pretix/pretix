@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, F, Max, OuterRef, Q, Subquery
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
@@ -51,13 +51,42 @@ class CheckinList(LoggedModel):
 
         qs = OrderPosition.objects.filter(
             order__event=self.event,
-            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [Order.STATUS_PAID],
+            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [
+                Order.STATUS_PAID],
         )
         if self.subevent_id:
             qs = qs.filter(subevent_id=self.subevent_id)
         if not self.all_products:
             qs = qs.filter(item__in=self.limit_products.values_list('id', flat=True))
         return qs
+
+    @property
+    def inside_count(self):
+        return self.positions.annotate(
+            last_entry=Subquery(
+                Checkin.objects.filter(
+                    position_id=OuterRef('pk'),
+                    list_id=self.pk,
+                    type=Checkin.TYPE_ENTRY,
+                ).order_by().values('position_id').annotate(
+                    m=Max('datetime')
+                ).values('m')
+            ),
+            last_exit=Subquery(
+                Checkin.objects.filter(
+                    position_id=OuterRef('pk'),
+                    list_id=self.pk,
+                    type=Checkin.TYPE_EXIT,
+                ).order_by().values('position_id').annotate(
+                    m=Max('datetime')
+                ).values('m')
+            ),
+        ).filter(
+            Q(last_entry__isnull=False)
+            & Q(
+                Q(last_exit__isnull=True) | Q(last_exit__lt=F('last_entry'))
+            )
+        ).count()
 
     @property
     def checkin_count(self):

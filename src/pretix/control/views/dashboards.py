@@ -268,8 +268,8 @@ def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
     for cl in qs:
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(
-                num='{}/{}'.format(cl.checkin_count, cl.position_count),
-                text=_('Checked in – {list}').format(list=escape(cl.name))
+                num='{}/{}'.format(cl.inside_count, cl.position_count),
+                text=_('Present – {list}').format(list=escape(cl.name))
             ),
             'lazy': 'checkin-{}'.format(cl.pk),
             'display_size': 'small',
