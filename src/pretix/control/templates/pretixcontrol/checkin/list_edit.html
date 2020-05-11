@@ -36,33 +36,35 @@
             </fieldset>
             <fieldset>
                 <legend>{% trans "Advanced" %}</legend>
+                <div class="alert alert-info">
+                    {% blocktrans trimmed %}
+                        These settings on this page are intended for professional users with very specific check-in
+                        situations. Please reach out to support if you have questions about setting this up.
+                    {% endblocktrans %}
+                    <br>
+                </div>
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        Make sure to always use the latest version of our scanning apps for these options to work.
+                    {% endblocktrans %}
+                    <br>
+                    <strong>
+                        {% blocktrans trimmed %}
+                            The advanced options currently only work properly with our Android and Desktop scanning
+                            apps, not with our iOS scanning app.
+                        {% endblocktrans %}
+                    </strong>
+                </div>
+
                 {% bootstrap_field form.allow_multiple_entries layout="control" %}
                 {% bootstrap_field form.allow_entry_after_exit layout="control" %}
                 {% bootstrap_field form.auto_checkin_sales_channels layout="control" %}
 
                 <h3>{% trans "Custom check-in rule" %}</h3>
-                <div class="alert alert-info">
-                    {% blocktrans trimmed %}
-                        These settings are intended for professional users with very specific check-in situations.
-                        Please reach out to support if you have questions about setting this up.
-                    {% endblocktrans %}
-                    <br>
-                    <span class="fa fa-android"></span>
-                    <span class="fa fa-windows"></span>
-                    {% blocktrans trimmed %}
-                        In our Android and Desktop scanning apps, custom rules work in online and offline mode. Please make
-                        sure to always use the latest version of the app.
-                    {% endblocktrans %}
-                    <br>
-                    <span class="fa fa-apple"></span>
-                    {% blocktrans trimmed %}
-                        In our iOS scanning app, custom rules only work in online mode.
-                    {% endblocktrans %}
-                </div>
                 <div id="rules-editor" class="form-inline">
                     <checkin-rules-editor></checkin-rules-editor>
                 </div>
-                <div class="disabled-withoutjs">
+                <div class="disabled-withoutjs sr-only">
                     {{ form.rules }}
                 </div>
             </fieldset>
