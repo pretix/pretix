@@ -59,7 +59,7 @@
                         </td>
                         <td>
                             <ul>
-                                {% for item in cached_items%}
+                                {% for item in q.cached_items %}
                                     {% if not item.has_variations %}
                                         <li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a></li>
                                     {% endif %}
