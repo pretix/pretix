@@ -59,19 +59,19 @@ $(document).ready(function () {
             'type': 'variation',
         },
         'now': {
-            'label': gettext('Current time'),
+            'label': gettext('Current date and time'),
             'type': 'datetime',
         },
         'entries_number': {
-            'label': gettext('Number of entries'),
+            'label': gettext('Number of previous entries'),
             'type': 'int',
         },
         'entries_today': {
-            'label': gettext('Number of entries since midnight'),
+            'label': gettext('Number of previous entries since midnight'),
             'type': 'int',
         },
         'entries_days': {
-            'label': gettext('Number of days with an entry'),
+            'label': gettext('Number of days with a previous entry'),
             'type': 'int',
         },
     };
