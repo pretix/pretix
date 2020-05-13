@@ -11,6 +11,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.core import signing
+from django.db import transaction
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
@@ -491,10 +492,12 @@ class StripeMethod(BasePaymentProvider):
         }
         return template.render(ctx)
 
+    @transaction.atomic()
     def execute_refund(self, refund: OrderRefund):
         self._init_api()
 
         payment_info = refund.payment.info_data
+        OrderPayment.objects.select_for_update().get(pk=refund.payment.pk)
 
         if not payment_info:
             raise PaymentException(_('No payment information found.'))

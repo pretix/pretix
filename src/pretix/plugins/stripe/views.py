@@ -238,66 +238,67 @@ def charge_webhook(event, event_json, charge_id, rso):
             return HttpResponse('Order not found', status=200)
         payment = None
 
-    if not payment:
-        payment = order.payments.filter(
-            info__icontains=charge['id'],
-            provider__startswith='stripe',
-            amount=prov._amount_to_decimal(charge['amount']),
-        ).last()
-    if not payment:
-        payment = order.payments.create(
-            state=OrderPayment.PAYMENT_STATE_CREATED,
-            provider=SOURCE_TYPES.get(charge['source'].get('type', charge['source'].get('object', 'card')), 'stripe'),
-            amount=prov._amount_to_decimal(charge['amount']),
-            info=str(charge),
-        )
+    with transaction.atomic():
+        if not payment:
+            payment = order.payments.filter(
+                info__icontains=charge['id'],
+                provider__startswith='stripe',
+                amount=prov._amount_to_decimal(charge['amount']),
+            ).select_for_update().last()
+        if not payment:
+            payment = order.payments.create(
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                provider=SOURCE_TYPES.get(charge['source'].get('type', charge['source'].get('object', 'card')), 'stripe'),
+                amount=prov._amount_to_decimal(charge['amount']),
+                info=str(charge),
+            )
 
-    if payment.provider != prov.identifier:
-        prov = payment.payment_provider
-        prov._init_api()
+        if payment.provider != prov.identifier:
+            prov = payment.payment_provider
+            prov._init_api()
 
-    order.log_action('pretix.plugins.stripe.event', data=event_json)
+        order.log_action('pretix.plugins.stripe.event', data=event_json)
 
-    is_refund = charge['refunds']['total_count'] or charge['dispute']
-    if is_refund:
-        known_refunds = [r.info_data.get('id') for r in payment.refunds.all()]
-        migrated_refund_amounts = [r.amount for r in payment.refunds.all() if not r.info_data.get('id')]
-        for r in charge['refunds']['data']:
-            a = prov._amount_to_decimal(r['amount'])
-            if r['status'] in ('failed', 'canceled'):
-                continue
+        is_refund = charge['refunds']['total_count'] or charge['dispute']
+        if is_refund:
+            known_refunds = [r.info_data.get('id') for r in payment.refunds.all()]
+            migrated_refund_amounts = [r.amount for r in payment.refunds.all() if not r.info_data.get('id')]
+            for r in charge['refunds']['data']:
+                a = prov._amount_to_decimal(r['amount'])
+                if r['status'] in ('failed', 'canceled'):
+                    continue
 
-            if a in migrated_refund_amounts:
-                migrated_refund_amounts.remove(a)
-                continue
-
-            if r['id'] not in known_refunds:
-                payment.create_external_refund(
-                    amount=a,
-                    info=str(r)
-                )
-        if charge['dispute']:
-            if charge['dispute']['status'] != 'won' and charge['dispute']['id'] not in known_refunds:
-                a = prov._amount_to_decimal(charge['dispute']['amount'])
                 if a in migrated_refund_amounts:
                     migrated_refund_amounts.remove(a)
-                else:
+                    continue
+
+                if r['id'] not in known_refunds:
                     payment.create_external_refund(
                         amount=a,
-                        info=str(charge['dispute'])
+                        info=str(r)
                     )
-    elif charge['status'] == 'succeeded' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
-                                                               OrderPayment.PAYMENT_STATE_CREATED,
-                                                               OrderPayment.PAYMENT_STATE_CANCELED,
-                                                               OrderPayment.PAYMENT_STATE_FAILED):
-        try:
-            payment.confirm()
-        except LockTimeoutException:
-            return HttpResponse("Lock timeout, please try again.", status=503)
-        except Quota.QuotaExceededException:
-            pass
-    elif charge['status'] == 'failed' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
-        payment.fail(info=str(charge))
+            if charge['dispute']:
+                if charge['dispute']['status'] != 'won' and charge['dispute']['id'] not in known_refunds:
+                    a = prov._amount_to_decimal(charge['dispute']['amount'])
+                    if a in migrated_refund_amounts:
+                        migrated_refund_amounts.remove(a)
+                    else:
+                        payment.create_external_refund(
+                            amount=a,
+                            info=str(charge['dispute'])
+                        )
+        elif charge['status'] == 'succeeded' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
+                                                                   OrderPayment.PAYMENT_STATE_CREATED,
+                                                                   OrderPayment.PAYMENT_STATE_CANCELED,
+                                                                   OrderPayment.PAYMENT_STATE_FAILED):
+            try:
+                payment.confirm()
+            except LockTimeoutException:
+                return HttpResponse("Lock timeout, please try again.", status=503)
+            except Quota.QuotaExceededException:
+                pass
+        elif charge['status'] == 'failed' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
+            payment.fail(info=str(charge))
 
     return HttpResponse(status=200)
 
