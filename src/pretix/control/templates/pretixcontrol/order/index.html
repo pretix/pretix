@@ -328,6 +328,10 @@
                                 {% if line.subevent %}
                                     <br/>
                                     <span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+                                    {% if event.settings.show_times %}
+                                        <span class="fa fa-clock-o"></span>
+                                        {{ line.subevent.date_from|date:"TIME_FORMAT" }}
+                                    {% endif %}
                                 {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">
