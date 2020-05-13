@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-05 10:42+0000\n"
+"POT-Creation-Date: 2020-05-13 16:45+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -63,7 +63,7 @@ msgid "Contacting your bank …"
 msgstr "正在联系Stripe …"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
-#: pretix/static/pretixbase/js/asynctask.js:105
+#: pretix/static/pretixbase/js/asynctask.js:106
 msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
@@ -72,7 +72,7 @@ msgstr ""
 "间。"
 
 #: pretix/static/pretixbase/js/asynctask.js:45
-#: pretix/static/pretixbase/js/asynctask.js:111
+#: pretix/static/pretixbase/js/asynctask.js:112
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -81,37 +81,37 @@ msgstr ""
 "您的请求已提交到服务器，但仍在等待处理。如果等待超过两分钟，请与我们联系或返"
 "回您的浏览器再试一次。"
 
-#: pretix/static/pretixbase/js/asynctask.js:76
-#: pretix/static/pretixbase/js/asynctask.js:142
-#: pretix/static/pretixbase/js/asynctask.js:147
+#: pretix/static/pretixbase/js/asynctask.js:77
+#: pretix/static/pretixbase/js/asynctask.js:144
+#: pretix/static/pretixbase/js/asynctask.js:149
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "发生类型为{code}的错误。"
 
-#: pretix/static/pretixbase/js/asynctask.js:79
+#: pretix/static/pretixbase/js/asynctask.js:80
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr "我们目前无法连接到服务器，但我们一直在尝试。最后的错误代码为:{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:126
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 #, fuzzy
 #| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "服务器请求超时。请再试一次。"
 
-#: pretix/static/pretixbase/js/asynctask.js:150
+#: pretix/static/pretixbase/js/asynctask.js:152
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "我们目前无法连接到服务器。请再试一次。错误代码为:{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:172
+#: pretix/static/pretixbase/js/asynctask.js:174
 msgid "We are processing your request …"
 msgstr "我们正在处理你的请求…"
 
-#: pretix/static/pretixbase/js/asynctask.js:180
+#: pretix/static/pretixbase/js/asynctask.js:182
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -120,7 +120,7 @@ msgstr ""
 "我们正在将您的请求发送到服务器。如果超过一分钟，请检查您的互联网连接，然后刷"
 "新此页面，并重试。"
 
-#: pretix/static/pretixbase/js/asynctask.js:217
+#: pretix/static/pretixbase/js/asynctask.js:219
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "关闭消息"
@@ -132,6 +132,79 @@ msgstr "已复制!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "按Ctrl-C复制!"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:5
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:11
+msgid "is one of"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:17
+msgid "is before"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:21
+msgid "is after"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
+msgid "Product"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "See variations"
+msgid "Product variation"
+msgstr "查看变化"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:62
+msgid "Current date and time"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:66
+msgid "Number of previous entries"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:70
+msgid "Number of previous entries since midnight"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:74
+msgid "Number of days with a previous entry"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:214
+msgid "All of the conditions below (AND)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:215
+msgid "At least one of the conditions below (OR)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:223
+msgid "Event start"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:224
+msgid "Event end"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:225
+msgid "Event admission"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:226
+msgid "custom time"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
+msgid "Tolerance (minutes)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:237
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:441
+msgid "Add condition"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
@@ -451,82 +524,95 @@ msgstr "上个月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
+msgid "Next week"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:49
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Previous month"
+msgctxt "widget"
+msgid "Previous week"
+msgstr "上个月"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:50
+msgctxt "widget"
 msgid "Open seat selection"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Mo"
 msgstr "周一"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Tu"
 msgstr "周二"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "We"
 msgstr "周三"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:53
+#: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Th"
 msgstr "周四"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Fr"
 msgstr "周五"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "Sa"
 msgstr "周六"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:56
+#: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "Su"
 msgstr "周天"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "January"
 msgstr "一月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "February"
 msgstr "二月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "March"
 msgstr "三月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "April"
 msgstr "四月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "May"
 msgstr "五月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "June"
 msgstr "六月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "July"
 msgstr "七月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "August"
 msgstr "八月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "September"
 msgstr "九月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "October"
 msgstr "十月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:71
 msgid "November"
 msgstr "十一月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
 msgstr "十二月"
 

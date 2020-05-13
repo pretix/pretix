@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-05 10:42+0000\n"
+"POT-Creation-Date: 2020-05-13 16:45+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -62,7 +62,7 @@ msgid "Contacting your bank …"
 msgstr "Povezovanje z banko …"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
-#: pretix/static/pretixbase/js/asynctask.js:105
+#: pretix/static/pretixbase/js/asynctask.js:106
 msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
@@ -71,7 +71,7 @@ msgstr ""
 "lahko traja do nekaj minut, kar je odvisno od velikosti vašega dogodka."
 
 #: pretix/static/pretixbase/js/asynctask.js:45
-#: pretix/static/pretixbase/js/asynctask.js:111
+#: pretix/static/pretixbase/js/asynctask.js:112
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -81,14 +81,14 @@ msgstr ""
 "traja že več kot nekaj minut, nas prosimo kontaktirajte ali pojdite z "
 "brskalnikom nazaj in poskusite ponovno."
 
-#: pretix/static/pretixbase/js/asynctask.js:76
-#: pretix/static/pretixbase/js/asynctask.js:142
-#: pretix/static/pretixbase/js/asynctask.js:147
+#: pretix/static/pretixbase/js/asynctask.js:77
+#: pretix/static/pretixbase/js/asynctask.js:144
+#: pretix/static/pretixbase/js/asynctask.js:149
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Prišlo je do napake tipa {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:79
+#: pretix/static/pretixbase/js/asynctask.js:80
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -96,24 +96,24 @@ msgstr ""
 "Strežnik trenutno ni dosegljiv, bomo pa še poskušali. Zadnja koda napake: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:126
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 #, fuzzy
 #| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "Zahteva traja predolgo. Poskusite ponovno."
 
-#: pretix/static/pretixbase/js/asynctask.js:150
+#: pretix/static/pretixbase/js/asynctask.js:152
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "Strežnik trenutno ni dosegljiv. Poskusite ponovno. Koda napake: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:172
+#: pretix/static/pretixbase/js/asynctask.js:174
 msgid "We are processing your request …"
 msgstr "Obdelujemo vašo zahtevo …"
 
-#: pretix/static/pretixbase/js/asynctask.js:180
+#: pretix/static/pretixbase/js/asynctask.js:182
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -123,7 +123,7 @@ msgstr ""
 "preverite vašo internetno povezavo in nato ponovno naložite spletno stran in "
 "poskusite znova."
 
-#: pretix/static/pretixbase/js/asynctask.js:217
+#: pretix/static/pretixbase/js/asynctask.js:219
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Zapri obvestilo"
@@ -135,6 +135,79 @@ msgstr "Prekopirano!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Za kopiranje pritisnite Ctrl-C!"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:5
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:11
+msgid "is one of"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:17
+msgid "is before"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:21
+msgid "is after"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
+msgid "Product"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "See variations"
+msgid "Product variation"
+msgstr "Poglej vrste"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:62
+msgid "Current date and time"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:66
+msgid "Number of previous entries"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:70
+msgid "Number of previous entries since midnight"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:74
+msgid "Number of days with a previous entry"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:214
+msgid "All of the conditions below (AND)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:215
+msgid "At least one of the conditions below (OR)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:223
+msgid "Event start"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:224
+msgid "Event end"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:225
+msgid "Event admission"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:226
+msgid "custom time"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
+msgid "Tolerance (minutes)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:237
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:441
+msgid "Add condition"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
@@ -457,82 +530,95 @@ msgstr "Prejšnji mesec"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
+msgid "Next week"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:49
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Previous month"
+msgctxt "widget"
+msgid "Previous week"
+msgstr "Prejšnji mesec"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:50
+msgctxt "widget"
 msgid "Open seat selection"
 msgstr "Odpri izbiro sedežev"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Mo"
 msgstr "Pon"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Tu"
 msgstr "Tor"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "We"
 msgstr "Sre"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:53
+#: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Th"
 msgstr "Čet"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Fr"
 msgstr "Pet"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "Sa"
 msgstr "Sob"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:56
+#: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "Su"
 msgstr "Ned"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "January"
 msgstr "Januar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "February"
 msgstr "Februar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "March"
 msgstr "Marec"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "April"
 msgstr "April"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "May"
 msgstr "Maj"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "June"
 msgstr "Junij"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "July"
 msgstr "Julij"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "August"
 msgstr "Avgust"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "September"
 msgstr "September"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "October"
 msgstr "Oktober"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:71
 msgid "November"
 msgstr "November"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
 msgstr "December"
 
