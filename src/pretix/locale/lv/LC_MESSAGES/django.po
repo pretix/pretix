@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-13 16:44+0000\n"
-"PO-Revision-Date: 2019-12-06 11:59+0000\n"
+"POT-Creation-Date: 2020-05-05 10:42+0000\n"
+"PO-Revision-Date: 2020-05-13 11:56+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= "
 "19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -18038,10 +18038,8 @@ msgid "PDF output"
 msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:31
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download tickets (PDF)"
-msgstr "Lejupielādējiet biļeti"
+msgstr "Lejuplādēt biļetes (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:32
 #, fuzzy
