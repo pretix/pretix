@@ -100,7 +100,7 @@
                             </td>
                             <td>{{ e.item }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
                             {% if seats %}
-                                <td>{{ e.seat }}</td>
+                                <td>{{ e.seat|default_if_none:"" }}</td>
                             {% endif %}
                             <td>
                                 {% if e.addon_to and e.addon_to.attendee_email %}
@@ -108,7 +108,7 @@
                                 {% elif e.attendee_email %}
                                     {{ e.attendee_email }}
                                 {% else %}
-                                    {{ e.order.email }}
+                                    {{ e.order.email|default_if_none:"" }}
                                 {% endif %}
                             </td>
                             <td>
