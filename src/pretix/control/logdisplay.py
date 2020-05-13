@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import (
-    CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
+    Checkin, CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
 )
 from pretix.base.signals import logentry_display
 from pretix.base.templatetags.money import money_filter
@@ -134,7 +134,7 @@ def _display_checkin(event, logentry):
     show_dt = False
     if 'datetime' in data:
         dt = dateutil.parser.parse(data.get('datetime'))
-        show_dt = abs((logentry.datetime - dt).total_seconds()) > 60 or 'forced' in data
+        show_dt = abs((logentry.datetime - dt).total_seconds()) > 5 or 'forced' in data
         tz = pytz.timezone(event.settings.timezone)
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
 
@@ -146,6 +146,18 @@ def _display_checkin(event, logentry):
     else:
         checkin_list = _("(unknown)")
 
+    if data.get('type') == Checkin.TYPE_EXIT:
+        if show_dt:
+            return _('Position #{posid} has been checked out at {datetime} for list "{list}".').format(
+                posid=data.get('positionid'),
+                datetime=dt_formatted,
+                list=checkin_list
+            )
+        else:
+            return _('Position #{posid} has been checked out for list "{list}".').format(
+                posid=data.get('positionid'),
+                list=checkin_list
+            )
     if data.get('first'):
         if show_dt:
             return _('Position #{posid} has been checked in at {datetime} for list "{list}".').format(

@@ -58,28 +58,6 @@ method without creating a new order. If payment deadlines were dependent on the 
 forth could either allow someone to extend their deadline forever, or render someones order invalid by moving the date
 back in the past.
 
-How can I revert a check-in?
-----------------------------
-
-Neither our apps nor our web interface can currently undo the check-in of a tickets. We know that this is
-inconvenient for some of you, but we have a good reason for it:
-
-Our Desktop and Android apps both support an asynchronous mode in which they can scan tickets while staying
-independent of their internet connection. When scanning with multiple devices, it can of course happen that two
-devices scan the same ticket without knowing of the other scan. As soon as one of the devices regains connectivity, it
-will upload its activity and the server marks the ticket as checked in -- regardless of the order in which the two
-scans were made and uploaded (which could be two different orders).
-
-If we'd provide a "check out" feature, it would not only be used to fix an accidental scan, but scan at entry and
-exit to count the current number of people inside etc. In this case, the order of operations matters very much for them
-to make sense and provide useful results. This makes implementing an asynchronous mode much more complicated.
-
-In this trade off, we chose offline-capabilities over the check out feature. We plan on solving this problem in the
-future, but we're not there yet.
-
-If you're just *testing* the check-in capabilities and want to clean out everything for the real process, you can just
-delete and re-create the check-in list.
-
 Why does pretix not support any 1D (linear) bar codes?
 ------------------------------------------------------
 

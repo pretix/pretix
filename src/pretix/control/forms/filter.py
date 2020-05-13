@@ -757,10 +757,10 @@ class CheckInFilterForm(FilterForm):
         '-code': ('-order__code', '-item__name'),
         'email': ('order__email', 'item__name'),
         '-email': ('-order__email', '-item__name'),
-        'status': (FixedOrderBy(F('last_checked_in'), nulls_first=True, descending=True), 'order__code'),
-        '-status': (FixedOrderBy(F('last_checked_in'), nulls_last=True), '-order__code'),
-        'timestamp': (FixedOrderBy(F('last_checked_in'), nulls_first=True), 'order__code'),
-        '-timestamp': (FixedOrderBy(F('last_checked_in'), nulls_last=True, descending=True), '-order__code'),
+        'status': (FixedOrderBy(F('last_entry'), nulls_first=True, descending=True), 'order__code'),
+        '-status': (FixedOrderBy(F('last_entry'), nulls_last=True), '-order__code'),
+        'timestamp': (FixedOrderBy(F('last_entry'), nulls_first=True), 'order__code'),
+        '-timestamp': (FixedOrderBy(F('last_entry'), nulls_last=True, descending=True), '-order__code'),
         'item': ('item__name', 'variation__value', 'order__code'),
         '-item': ('-item__name', '-variation__value', '-order__code'),
         'seat': ('seat__sorting_rank', 'seat__guid'),
@@ -783,6 +783,7 @@ class CheckInFilterForm(FilterForm):
         label=_('Check-in status'),
         choices=(
             ('', _('All attendees')),
+            ('2', pgettext_lazy('checkin state', 'Present')),
             ('1', _('Checked in')),
             ('0', _('Not checked in')),
         ),
@@ -823,9 +824,13 @@ class CheckInFilterForm(FilterForm):
         if fdata.get('status'):
             s = fdata.get('status')
             if s == '1':
-                qs = qs.filter(last_checked_in__isnull=False)
+                qs = qs.filter(last_entry__isnull=False)
+            elif s == '2':
+                qs = qs.filter(last_entry__isnull=False).filter(
+                    Q(last_exit__isnull=True) | Q(last_exit__lt=F('last_entry'))
+                )
             elif s == '0':
-                qs = qs.filter(last_checked_in__isnull=True)
+                qs = qs.filter(last_entry__isnull=True)
 
         if fdata.get('ordering'):
             ob = self.orders[fdata.get('ordering')]

@@ -30,7 +30,15 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_queryset(self, filter=True):
         cqs = Checkin.objects.filter(
             position_id=OuterRef('pk'),
-            list_id=self.list.pk
+            list_id=self.list.pk,
+            type=Checkin.TYPE_ENTRY
+        ).order_by().values('position_id').annotate(
+            m=Max('datetime')
+        ).values('m')
+        cqs_exit = Checkin.objects.filter(
+            position_id=OuterRef('pk'),
+            list_id=self.list.pk,
+            type=Checkin.TYPE_EXIT
         ).order_by().values('position_id').annotate(
             m=Max('datetime')
         ).values('m')
@@ -38,13 +46,17 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
             order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.list.include_pending else [Order.STATUS_PAID],
-            subevent=self.list.subevent
         ).annotate(
-            last_checked_in=Subquery(cqs),
+            last_entry=Subquery(cqs),
+            last_exit=Subquery(cqs_exit),
             auto_checked_in=Exists(
                 Checkin.objects.filter(position_id=OuterRef('pk'), list_id=self.list.pk, auto_checked_in=True)
             )
         ).select_related('item', 'variation', 'order', 'addon_to')
+        if self.list.subevent:
+            qs = qs.filter(
+                subevent=self.list.subevent
+            )
 
         if not self.list.all_products:
             qs = qs.filter(item__in=self.list.limit_products.values_list('id', flat=True))
@@ -69,19 +81,35 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['checkinlist'] = self.list
-        ctx['seats'] = self.list.subevent.seating_plan if self.list.subevent else self.request.event.seating_plan
+        if self.request.event.has_subevents:
+            ctx['seats'] = (
+                self.list.subevent.seating_plan_id if self.list.subevent
+                else self.request.event.subevents.filter(seating_plan__isnull=False).exists()
+            )
+        else:
+            ctx['seats'] = self.request.event.seating_plan_id
         ctx['filter_form'] = self.filter_form
         for e in ctx['entries']:
-            if e.last_checked_in:
-                if isinstance(e.last_checked_in, str):
+            if e.last_entry:
+                if isinstance(e.last_entry, str):
                     # Apparently only happens on SQLite
-                    e.last_checked_in_aware = make_aware(dateutil.parser.parse(e.last_checked_in), UTC)
-                elif not is_aware(e.last_checked_in):
+                    e.last_entry_aware = make_aware(dateutil.parser.parse(e.last_entry), UTC)
+                elif not is_aware(e.last_entry):
                     # Apparently only happens on MySQL
-                    e.last_checked_in_aware = make_aware(e.last_checked_in, UTC)
+                    e.last_entry_aware = make_aware(e.last_entry, UTC)
                 else:
                     # This would be correct, so guess on which database it works… Yes, it's PostgreSQL.
-                    e.last_checked_in_aware = e.last_checked_in
+                    e.last_entry_aware = e.last_entry
+            if e.last_exit:
+                if isinstance(e.last_exit, str):
+                    # Apparently only happens on SQLite
+                    e.last_exit_aware = make_aware(dateutil.parser.parse(e.last_exit), UTC)
+                elif not is_aware(e.last_exit):
+                    # Apparently only happens on MySQL
+                    e.last_exit_aware = make_aware(e.last_exit, UTC)
+                else:
+                    # This would be correct, so guess on which database it works… Yes, it's PostgreSQL.
+                    e.last_exit_aware = e.last_exit
         return ctx
 
     def post(self, request, *args, **kwargs):
@@ -111,17 +139,22 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
             messages.success(request, _('The selected check-ins have been reverted.'))
         else:
             for op in positions:
-                created = False
                 if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
-                    ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
-                        'datetime': now(),
-                    })
+                    t = Checkin.TYPE_EXIT if request.POST.get('checkout') == 'true' else Checkin.TYPE_ENTRY
+                    if self.list.allow_multiple_entries or t != Checkin.TYPE_ENTRY:
+                        ci = Checkin.objects.create(position=op, list=self.list, datetime=now(), type=t)
+                        created = True
+                    else:
+                        ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
+                            'datetime': now(),
+                        })
                     op.order.log_action('pretix.event.checkin', data={
                         'position': op.id,
                         'positionid': op.positionid,
                         'first': created,
                         'forced': False,
                         'datetime': now(),
+                        'type': t,
                         'list': self.list.pk,
                         'web': True
                     }, user=request.user)
@@ -177,6 +210,11 @@ class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
     permission = 'can_change_event_settings'
     context_object_name = 'checkinlist'
 
+    def dispatch(self, request, *args, **kwargs):
+        r = super().dispatch(request, *args, **kwargs)
+        r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
+        return r
+
     def get_success_url(self) -> str:
         return reverse('control:event.orders.checkinlists', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -203,6 +241,11 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
     template_name = 'pretixcontrol/checkin/list_edit.html'
     permission = 'can_change_event_settings'
     context_object_name = 'checkinlist'
+
+    def dispatch(self, request, *args, **kwargs):
+        r = super().dispatch(request, *args, **kwargs)
+        r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
+        return r
 
     def get_object(self, queryset=None) -> CheckinList:
         try:

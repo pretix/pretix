@@ -97,7 +97,13 @@
                             </div>
                         </td>
                         {% if request.event.has_subevents %}
-                            <td>{{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }}</td>
+                            {% if cl.subevent %}
+                                <td>{{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }}</td>
+                            {% else %}
+                                <td>
+                                    <em>{% trans "All" %}</em>
+                                </td>
+                            {% endif %}
                         {% endif %}
                         <td>
                             {% for channel in cl.auto_checkin_sales_channels %}
@@ -121,7 +127,7 @@
                         <td class="text-right flip">
                             <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
                             {% if "can_change_event_settings" in request.eventpermset %}
-                                <a href="{% url "control:event.orders.checkinlists.edit" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.orders.checkinlists.edit" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-wrench"></i></a>
                                 <a href="{% url "control:event.orders.checkinlists.delete" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             {% endif %}
                         </td>

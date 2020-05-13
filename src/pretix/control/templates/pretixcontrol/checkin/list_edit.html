@@ -1,6 +1,8 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load static %}
+{% load compress %}
 {% block title %}
     {% if checkinlist %}
         {% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}
@@ -15,35 +17,66 @@
         <h1>{% trans "Check-in list" %}</h1>
     {% endif %}
     <form action="" method="post" class="form-horizontal">
+        <script type="text/plain"
+                id="product-select2">{% url "control:event.items.select2" event=request.event.slug organizer=request.organizer.slug %}</script>
+        <script type="text/plain"
+                id="variations-select2">{% url "control:event.items.variations.select2" event=request.event.slug organizer=request.organizer.slug %}</script>
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        <fieldset>
-            <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="control" %}
-            {% if form.subevent %}
-                {% bootstrap_field form.subevent layout="control" %}
-            {% endif %}
-            {% bootstrap_field form.include_pending layout="control" %}
-        </fieldset>
-        <fieldset>
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "General" %}</legend>
+                {% bootstrap_field form.name layout="control" %}
+                {% if form.subevent %}
+                    {% bootstrap_field form.subevent layout="control" %}
+                {% endif %}
+                {% bootstrap_field form.include_pending layout="control" %}
+                {% bootstrap_field form.all_products layout="control" %}
+                {% bootstrap_field form.limit_products layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Advanced" %}</legend>
+                <div class="alert alert-info">
+                    {% blocktrans trimmed %}
+                        These settings on this page are intended for professional users with very specific check-in
+                        situations. Please reach out to support if you have questions about setting this up.
+                    {% endblocktrans %}
+                    <br>
+                </div>
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        Make sure to always use the latest version of our scanning apps for these options to work.
+                    {% endblocktrans %}
+                    <br>
+                    <strong>
+                        {% blocktrans trimmed %}
+                            If you make use of these advanced options, we recommend using our Android and Desktop apps.
+                            Custom check-in rules do not work offline with our iOS scanning app.
+                        {% endblocktrans %}
+                    </strong>
+                </div>
 
-            <legend>{% trans "Products" %}</legend>
-            <p>
-                {% blocktrans trimmed %}
-                    Please select the products that should be part of this check-in list.
-                {% endblocktrans %}
-            </p>
-            {% bootstrap_field form.all_products layout="control" %}
-            {% bootstrap_field form.limit_products layout="control" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Advanced" %}</legend>
-            {% bootstrap_field form.auto_checkin_sales_channels layout="control" %}
-        </fieldset>
+                {% bootstrap_field form.allow_multiple_entries layout="control" %}
+                {% bootstrap_field form.allow_entry_after_exit layout="control" %}
+                {% bootstrap_field form.auto_checkin_sales_channels layout="control" %}
+
+                <h3>{% trans "Custom check-in rule" %}</h3>
+                <div id="rules-editor" class="form-inline">
+                    <checkin-rules-editor></checkin-rules-editor>
+                </div>
+                <div class="disabled-withoutjs sr-only">
+                    {{ form.rules }}
+                </div>
+            </fieldset>
+        </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
         </div>
     </form>
+    {% compress js %}
+        <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules.js" %}"></script>
+    {% endcompress %}
 {% endblock %}

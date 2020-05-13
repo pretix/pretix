@@ -1,13 +1,87 @@
+from datetime import timedelta
+
+import dateutil
 from django.db import transaction
-from django.db.models import Prefetch
+from django.db.models.functions import TruncDate
 from django.dispatch import receiver
-from django.utils.timezone import now
+from django.utils.functional import cached_property
+from django.utils.timezone import now, override
 from django.utils.translation import gettext as _
 
 from pretix.base.models import (
-    Checkin, CheckinList, Order, OrderPosition, Question, QuestionOption,
+    Checkin, CheckinList, Device, Order, OrderPosition, QuestionOption,
 )
 from pretix.base.signals import checkin_created, order_placed
+from pretix.helpers.jsonlogic import Logic
+
+
+def get_logic_environment(ev):
+    def build_time(t=None, value=None):
+        if t == "custom":
+            return dateutil.parser.parse(value)
+        elif t == 'date_from':
+            return ev.date_from
+        elif t == 'date_to':
+            return ev.date_to
+        elif t == 'date_admission':
+            return ev.date_admission or ev.date_from
+
+    def is_before(t1, t2, tolerance=None):
+        if tolerance:
+            return t1 < t2 + timedelta(minutes=float(tolerance))
+        else:
+            return t1 < t2
+
+    logic = Logic()
+    logic.add_operation('objectList', lambda *objs: list(objs))
+    logic.add_operation('lookup', lambda model, pk, str: int(pk))
+    logic.add_operation('inList', lambda a, b: a in b)
+    logic.add_operation('buildTime', build_time)
+    logic.add_operation('isBefore', is_before)
+    logic.add_operation('isAfter', lambda t1, t2, tol=None: is_before(t2, t1, tol))
+    return logic
+
+
+class LazyRuleVars:
+    def __init__(self, position, clist, dt):
+        self._position = position
+        self._clist = clist
+        self._dt = dt
+
+    def __getitem__(self, item):
+        if item[0] != '_' and hasattr(self, item):
+            return getattr(self, item)
+        raise KeyError()
+
+    @property
+    def now(self):
+        return self._dt
+
+    @property
+    def product(self):
+        return self._position.item_id
+
+    @property
+    def variation(self):
+        return self._position.variation_id
+
+    @cached_property
+    def entries_number(self):
+        return self._position.checkins.filter(type=Checkin.TYPE_ENTRY, list=self._clist).count()
+
+    @cached_property
+    def entries_today(self):
+        tz = self._clist.event.timezone
+        midnight = now().astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
+        return self._position.checkins.filter(type=Checkin.TYPE_ENTRY, list=self._clist, datetime__gte=midnight).count()
+
+    @cached_property
+    def entries_days(self):
+        tz = self._clist.event.timezone
+        with override(tz):
+            return self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).annotate(
+                day=TruncDate('datetime')
+            ).values('day').distinct().count()
 
 
 class CheckInError(Exception):
@@ -62,7 +136,7 @@ def _save_answers(op, answers, given_answers):
 @transaction.atomic
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
-                    user=None, auth=None, canceled_supported=False):
+                    user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -79,18 +153,11 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     """
     dt = datetime or now()
 
-    # Fetch order position with related objects
-    op = OrderPosition.all.select_related(
-        'item', 'variation', 'order', 'addon_to'
-    ).prefetch_related(
-        'item__questions',
-        Prefetch(
-            'item__questions',
-            queryset=Question.objects.filter(ask_during_checkin=True),
-            to_attr='checkin_questions'
-        ),
-        'answers'
-    ).get(pk=op.pk)
+    # Lock order positions
+    op = OrderPosition.all.select_for_update().get(pk=op.pk)
+    checkin_questions = list(
+        clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
+    )
 
     if op.canceled or op.order.status not in (Order.STATUS_PAID, Order.STATUS_PENDING):
         raise CheckInError(
@@ -98,17 +165,23 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             'canceled' if canceled_supported else 'unpaid'
         )
 
-    answers = {a.question: a for a in op.answers.all()}
     require_answers = []
-    for q in op.item.checkin_questions:
-        if q not in given_answers and q not in answers:
-            require_answers.append(q)
+    if checkin_questions:
+        answers = {a.question: a for a in op.answers.all()}
+        for q in checkin_questions:
+            if q not in given_answers and q not in answers:
+                require_answers.append(q)
 
-    _save_answers(op, answers, given_answers)
+        _save_answers(op, answers, given_answers)
 
     if not clist.all_products and op.item_id not in [i.pk for i in clist.limit_products.all()]:
         raise CheckInError(
             _('This order position has an invalid product for this check-in list.'),
+            'product'
+        )
+    elif clist.subevent_id and op.subevent_id != clist.subevent_id:
+        raise CheckInError(
+            _('This order position has an invalid date for this check-in list.'),
             'product'
         )
     elif op.order.status != Order.STATUS_PAID and not force and not (
@@ -124,40 +197,56 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             'incomplete',
             require_answers
         )
-    else:
-        try:
-            ci, created = Checkin.objects.get_or_create(position=op, list=clist, defaults={
-                'datetime': dt,
-                'nonce': nonce,
-            })
-        except Checkin.MultipleObjectsReturned:
-            ci, created = Checkin.objects.filter(position=op, list=clist).last(), False
 
-    if created or (nonce and nonce == ci.nonce):
-        if created:
-            op.order.log_action('pretix.event.checkin', data={
-                'position': op.id,
-                'positionid': op.positionid,
-                'first': True,
-                'forced': op.order.status != Order.STATUS_PAID,
-                'datetime': dt,
-                'list': clist.pk
-            }, user=user, auth=auth)
-            checkin_created.send(op.order.event, checkin=ci)
-    else:
-        if not force:
+    if type == Checkin.TYPE_ENTRY and clist.rules and not force:
+        rule_data = LazyRuleVars(op, clist, dt)
+        logic = get_logic_environment(op.subevent or clist.event)
+        if not logic.apply(clist.rules, rule_data):
             raise CheckInError(
-                _('This ticket has already been redeemed.'),
-                'already_redeemed',
+                _('This entry is not permitted due to custom rules.'),
+                'rules'
             )
+
+    device = None
+    if isinstance(auth, Device):
+        device = auth
+
+    last_ci = op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce').first()
+    entry_allowed = (
+        type == Checkin.TYPE_EXIT or
+        clist.allow_multiple_entries or
+        last_ci is None or
+        (clist.allow_entry_after_exit and last_ci.type == Checkin.TYPE_EXIT)
+    )
+
+    if nonce and ((last_ci and last_ci.nonce == nonce) or op.checkins.filter(type=type, list=clist, device=device, nonce=nonce).exists()):
+        return
+
+    if entry_allowed or force:
+        ci = Checkin.objects.create(
+            position=op,
+            type=type,
+            list=clist,
+            datetime=dt,
+            device=device,
+            nonce=nonce,
+            forced=force and not entry_allowed,
+        )
         op.order.log_action('pretix.event.checkin', data={
             'position': op.id,
             'positionid': op.positionid,
-            'first': False,
-            'forced': force,
+            'first': True,
+            'forced': force or op.order.status != Order.STATUS_PAID,
             'datetime': dt,
+            'type': type,
             'list': clist.pk
         }, user=user, auth=auth)
+        checkin_created.send(op.order.event, checkin=ci)
+    else:
+        raise CheckInError(
+            _('This ticket has already been redeemed.'),
+            'already_redeemed',
+        )
 
 
 @receiver(order_placed, dispatch_uid="autocheckin_order_placed")
@@ -172,5 +261,6 @@ def order_placed(sender, **kwargs):
     for op in order.positions.all():
         for cl in cls:
             if cl.all_products or op.item_id in {i.pk for i in cl.limit_products.all()}:
-                ci = Checkin.objects.create(position=op, list=cl, auto_checked_in=True)
-                checkin_created.send(event, checkin=ci)
+                if not cl.subevent_id or cl.subevent_id == op.subevent_id:
+                    ci = Checkin.objects.create(position=op, list=cl, auto_checked_in=True)
+                    checkin_created.send(event, checkin=ci)

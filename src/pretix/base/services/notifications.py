@@ -16,7 +16,7 @@ from pretix.helpers.urls import build_absolute_uri
 @app.task(base=TransactionAwareTask)
 @scopes_disabled()
 def notify(logentry_id: int):
-    logentry = LogEntry.all.get(id=logentry_id)
+    logentry = LogEntry.all.select_related('event', 'event__organizer').get(id=logentry_id)
     if not logentry.event:
         return  # Ignore, we only have event-related notifications right now
     types = get_all_notification_types(logentry.event)

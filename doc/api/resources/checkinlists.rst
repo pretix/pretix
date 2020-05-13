@@ -30,6 +30,9 @@ position_count                        integer                    Number of ticke
 checkin_count                         integer                    Number of check-ins performed on this list (read-only).
 include_pending                       boolean                    If ``true``, the check-in list also contains tickets from orders in pending state.
 auto_checkin_sales_channels           list of strings            All items on the check-in list will be automatically marked as checked-in when purchased through any of the listed sales channels.
+allow_multiple_entries                boolean                    If ``true``, subsequent scans of a ticket on this list should not show a warning but instead be stored as an additional check-in.
+allow_entry_after_exit                boolean                    If ``true``, subsequent scans of a ticket on this list are valid if the last scan of the ticket was an exit scan.
+rules                                 object                     Custom check-in logic. The contents of this field are currently not considered a stable API and modifications through the API are highly discouraged.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.10
@@ -47,6 +50,11 @@ auto_checkin_sales_channels           list of strings            All items on th
 .. versionchanged:: 3.2
 
     The ``auto_checkin_sales_channels`` field has been added.
+
+.. versionchanged:: 3.9
+
+    The ``subevent`` attribute may now be ``null`` inside event series. The ``allow_multiple_entries``,
+    ``allow_entry_after_exit``, and ``rules`` attributes have been added.
 
 Endpoints
 ---------
@@ -89,6 +97,9 @@ Endpoints
             "limit_products": [],
             "include_pending": false,
             "subevent": null,
+            "allow_multiple_entries": false,
+            "allow_entry_after_exit": true,
+            "rules": {},
             "auto_checkin_sales_channels": [
               "pretixpos"
             ]
@@ -133,6 +144,9 @@ Endpoints
         "limit_products": [],
         "include_pending": false,
         "subevent": null,
+        "allow_multiple_entries": false,
+        "allow_entry_after_exit": true,
+        "rules": {},
         "auto_checkin_sales_channels": [
           "pretixpos"
         ]
@@ -229,6 +243,8 @@ Endpoints
         "all_products": false,
         "limit_products": [1, 2],
         "subevent": null,
+        "allow_multiple_entries": false,
+        "allow_entry_after_exit": true,
         "auto_checkin_sales_channels": [
           "pretixpos"
         ]
@@ -251,6 +267,8 @@ Endpoints
         "limit_products": [1, 2],
         "include_pending": false,
         "subevent": null,
+        "allow_multiple_entries": false,
+        "allow_entry_after_exit": true,
         "auto_checkin_sales_channels": [
           "pretixpos"
         ]
@@ -303,6 +321,8 @@ Endpoints
         "limit_products": [1, 2],
         "include_pending": false,
         "subevent": null,
+        "allow_multiple_entries": false,
+        "allow_entry_after_exit": true,
         "auto_checkin_sales_channels": [
           "pretixpos"
         ]
@@ -696,6 +716,7 @@ Order position endpoints
      ``canceled_supported`` to ``true``, otherwise these orders return ``unpaid``.
    * ``already_redeemed`` - Ticket already has been redeemed
    * ``product`` - Tickets with this product may not be scanned at this device
+   * ``rules`` - Check-in prevented by a user-defined rule
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch

@@ -627,12 +627,29 @@ class Event(EventMixin, LoggedModel):
             q.dependency_question = question_map[q.dependency_question_id]
             q.save(update_fields=['dependency_question'])
 
+        def _walk_rules(rules):
+            if isinstance(rules, dict):
+                for k, v in rules.items():
+                    if k == 'lookup':
+                        if v[0] == 'product':
+                            v[1] = str(item_map.get(int(v[1]), 0).pk)
+                        elif v[0] == 'variation':
+                            v[1] = str(variation_map.get(int(v[1]), 0).pk)
+                    else:
+                        _walk_rules(v)
+            elif isinstance(rules, list):
+                for i in rules:
+                    _walk_rules(i)
+
         checkin_list_map = {}
         for cl in other.checkin_lists.filter(subevent__isnull=True).prefetch_related('limit_products'):
             items = list(cl.limit_products.all())
             checkin_list_map[cl.pk] = cl
             cl.pk = None
             cl.event = self
+            rules = cl.rules
+            _walk_rules(rules)
+            cl.rules = rules
             cl.save()
             cl.log_action('pretix.object.cloned')
             for i in items:

@@ -41,8 +41,8 @@ class ConditionalListView:
             return super().list(request, **kwargs)
 
         lmd = request.event.logentry_set.filter(
-            content_type__model=self.queryset.model._meta.model_name,
-            content_type__app_label=self.queryset.model._meta.app_label,
+            content_type__model=self.get_queryset().model._meta.model_name,
+            content_type__app_label=self.get_queryset().model._meta.app_label,
         ).aggregate(
             m=Max('datetime')
         )['m']

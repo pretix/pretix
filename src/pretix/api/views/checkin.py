@@ -88,8 +88,9 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         pqs = OrderPosition.objects.filter(
             order__event=clist.event,
             order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
-            subevent=clist.subevent,
         )
+        if clist.subevent:
+            pqs = pqs.filter(subevent=clist.subevent)
         if not clist.all_products:
             pqs = pqs.filter(item__in=clist.limit_products.values_list('id', flat=True))
             cqs = cqs.filter(position__item__in=clist.limit_products.values_list('id', flat=True))
@@ -201,10 +202,13 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
-            subevent=self.checkinlist.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)
         )
+        if self.checkinlist.subevent:
+            qs = qs.filter(
+                subevent=self.checkinlist.subevent
+            )
 
         if self.request.query_params.get('ignore_status', 'false') != 'true' and not ignore_status:
             qs = qs.filter(
@@ -251,6 +255,9 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=['POST'])
     def redeem(self, *args, **kwargs):
         force = bool(self.request.data.get('force', False))
+        type = self.request.data.get('type', None) or Checkin.TYPE_ENTRY
+        if type not in dict(Checkin.CHECKIN_TYPES):
+            raise ValidationError("Invalid check-in type.")
         ignore_unpaid = bool(self.request.data.get('ignore_unpaid', False))
         nonce = self.request.data.get('nonce')
         op = self.get_object(ignore_status=True)
@@ -283,6 +290,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 canceled_supported=self.request.data.get('canceled_supported', False),
                 user=self.request.user,
                 auth=self.request.auth,
+                type=type,
             )
         except RequiredQuestionsError as e:
             return Response({

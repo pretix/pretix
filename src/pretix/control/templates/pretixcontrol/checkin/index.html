@@ -12,8 +12,8 @@
         {% if 'can_change_event_settings' in request.eventpermset %}
             <a href="{% url "control:event.orders.checkinlists.edit" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}"
                     class="btn btn-default">
-                <span class="fa fa-edit"></span>
-                {% trans "Edit list" %}
+                <span class="fa fa-wrench"></span>
+                {% trans "Edit list configuration" %}
             </a>
         {% endif %}
         <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=checkinlistpdf&checkinlistpdf-list={{ checkinlist.pk }}"
@@ -122,19 +122,30 @@
                                 {{ e.secret|slice:":10" }}…
                             </td>
                             <td>
-                                {% if not e.last_checked_in %}
+                                {% if not e.last_entry %}
                                     <span class="label label-danger">{% trans "Not checked in" %}</span>
                                 {% else %}
-                                    <span class="label label-success">{% trans "Checked in" %}</span>
-                                    {% if e.auto_checked_in %}
-                                        <span class="fa fa-magic text-muted"
-                                              data-toggle="tooltip" title="{% trans "Checked in automatically" %}"></span>
+                                    {% if e.last_exit and e.last_exit_aware > e.last_entry_aware %}
+                                        <span class="label label-success">{% trans "Checked in but left" %}</span>
+                                    {% else %}
+                                        <span class="label label-success">{% trans "Checked in" %}</span>
+                                        {% if e.auto_checked_in %}
+                                            <span class="fa fa-magic text-muted"
+                                                  data-toggle="tooltip" title="{% trans "Checked in automatically" %}"></span>
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                             </td>
                             <td>
-                                {% if e.last_checked_in %}
-                                    {{ e.last_checked_in_aware|date:"SHORT_DATETIME_FORMAT" }}
+                                {% if e.last_entry %}
+                                    {{ e.last_entry_aware|date:"SHORT_DATETIME_FORMAT" }}
+                                {% endif %}
+                                {% if e.last_exit %}
+                                    <small><br>
+                                        {% blocktrans trimmed with date=e.last_exit_aware|date:"SHORT_DATETIME_FORMAT" %}
+                                            Exit: {{ date }}
+                                        {% endblocktrans %}
+                                    </small>
                                 {% endif %}
                             </td>
                         </tr>
@@ -145,6 +156,9 @@
             {% if "can_change_orders" in request.eventpermset %}
                 <button type="submit" class="btn btn-primary btn-save">
                     {% trans "Check-In selected attendees" %}
+                </button>
+                <button type="submit" class="btn btn-default btn-save" name="checkout" value="true">
+                    {% trans "Check-Out selected attendees" %}
                 </button>
                 <button type="submit" class="btn btn-default btn-save" name="revert" value="true">
                     {% trans "Revert selected check-ins" %}

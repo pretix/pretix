@@ -13,8 +13,8 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, pgettext
 
 from pretix.base.models import (
-    EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue, Order,
-    Organizer, User, Voucher,
+    EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue,
+    ItemVariation, Order, Organizer, User, Voucher,
 )
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import event_permission_required
@@ -314,6 +314,68 @@ def quotas_select2(request, **kwargs):
                 'text': q.name
             }
             for q in qs[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@event_permission_required(None)
+def items_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qs = request.event.items.filter(
+        name__icontains=i18ncomp(query)
+    ).order_by('position')
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': e.pk,
+                'text': str(e),
+            }
+            for e in qs[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@event_permission_required(None)
+def variations_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    q = Q(item__event=request.event)
+    for word in query.split():
+        q &= Q(value__icontains=i18ncomp(word)) | Q(item__name__icontains=i18ncomp(ord))
+
+    qs = ItemVariation.objects.filter(q).order_by('item__position', 'item__name', 'position', 'value').select_related('item')
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': e.pk,
+                'text': str(e.item) + " – " + str(e),
+            }
+            for e in qs[offset:offset + pagesize]
         ],
         'pagination': {
             "more": total >= (offset + pagesize)

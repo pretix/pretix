@@ -1,8 +1,9 @@
 from django.db import models
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, F, Max, OuterRef, Q, Subquery
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
+from jsonfallback.fields import FallbackJSONField
 
 from pretix.base.models import LoggedModel
 from pretix.base.models.fields import MultiStringField
@@ -19,6 +20,15 @@ class CheckinList(LoggedModel):
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '
                                                       'order have not been paid.'))
+    allow_entry_after_exit = models.BooleanField(
+        verbose_name=_('Allow re-entering after an exit scan'),
+        default=True
+    )
+    allow_multiple_entries = models.BooleanField(
+        verbose_name=_('Allow multiple entries per ticket'),
+        help_text=_('Use this option to turn off warnings if a ticket is scanned a second time.'),
+        default=False
+    )
 
     auto_checkin_sales_channels = MultiStringField(
         default=[],
@@ -28,6 +38,7 @@ class CheckinList(LoggedModel):
                     'any of the selected sales channels. This option can be useful when tickets sold at the box office '
                     'are not checked again before entry and should be considered validated directly upon purchase.')
     )
+    rules = FallbackJSONField(default=dict, blank=True)
 
     objects = ScopedManager(organizer='event__organizer')
 
@@ -40,12 +51,42 @@ class CheckinList(LoggedModel):
 
         qs = OrderPosition.objects.filter(
             order__event=self.event,
-            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [Order.STATUS_PAID],
-            subevent=self.subevent
+            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [
+                Order.STATUS_PAID],
         )
+        if self.subevent_id:
+            qs = qs.filter(subevent_id=self.subevent_id)
         if not self.all_products:
             qs = qs.filter(item__in=self.limit_products.values_list('id', flat=True))
         return qs
+
+    @property
+    def inside_count(self):
+        return self.positions.annotate(
+            last_entry=Subquery(
+                Checkin.objects.filter(
+                    position_id=OuterRef('pk'),
+                    list_id=self.pk,
+                    type=Checkin.TYPE_ENTRY,
+                ).order_by().values('position_id').annotate(
+                    m=Max('datetime')
+                ).values('m')
+            ),
+            last_exit=Subquery(
+                Checkin.objects.filter(
+                    position_id=OuterRef('pk'),
+                    list_id=self.pk,
+                    type=Checkin.TYPE_EXIT,
+                ).order_by().values('position_id').annotate(
+                    m=Max('datetime')
+                ).values('m')
+            ),
+        ).filter(
+            Q(last_entry__isnull=False)
+            & Q(
+                Q(last_exit__isnull=True) | Q(last_exit__lt=F('last_entry'))
+            )
+        ).count()
 
     @property
     def checkin_count(self):
@@ -88,20 +129,31 @@ class CheckinList(LoggedModel):
 
 class Checkin(models.Model):
     """
-    A check-in object is created when a person enters the event.
+    A check-in object is created when a person enters or exits the event.
     """
+    TYPE_ENTRY = 'entry'
+    TYPE_EXIT = 'exit'
+    CHECKIN_TYPES = (
+        (TYPE_ENTRY, _('Entry')),
+        (TYPE_EXIT, _('Exit')),
+    )
     position = models.ForeignKey('pretixbase.OrderPosition', related_name='checkins', on_delete=models.CASCADE)
     datetime = models.DateTimeField(default=now)
     nonce = models.CharField(max_length=190, null=True, blank=True)
     list = models.ForeignKey(
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
     )
+    type = models.CharField(max_length=100, choices=CHECKIN_TYPES, default=TYPE_ENTRY)
+    forced = models.BooleanField(default=False)
+    device = models.ForeignKey(
+        'pretixbase.Device', related_name='checkins', on_delete=models.PROTECT, null=True, blank=True
+    )
     auto_checked_in = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='position__order__event__organizer')
 
     class Meta:
-        unique_together = (('list', 'position'),)
+        ordering = (('-datetime'),)
 
     def __repr__(self):
         return "<Checkin: pos {} on list '{}' at {}>".format(
@@ -109,12 +161,12 @@ class Checkin(models.Model):
         )
 
     def save(self, **kwargs):
+        super().save(**kwargs)
         self.position.order.touch()
         self.list.event.cache.delete('checkin_count')
         self.list.touch()
-        super().save(**kwargs)
 
     def delete(self, **kwargs):
-        self.position.order.touch()
         super().delete(**kwargs)
+        self.position.order.touch()
         self.list.touch()

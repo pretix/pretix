@@ -125,7 +125,10 @@ TEST_LIST_RES = {
     "position_count": 0,
     "checkin_count": 0,
     "include_pending": False,
-    "subevent": None
+    "allow_multiple_entries": False,
+    "allow_entry_after_exit": True,
+    "subevent": None,
+    "rules": {}
 }
 
 
@@ -187,7 +190,8 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
             "name": "VIP",
             "limit_products": [item.pk],
             "all_products": False,
-            "subevent": None
+            "subevent": None,
+            "rules": {"==": [0, 1]}
         },
         format='json'
     )
@@ -197,6 +201,7 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
         assert cl.name == "VIP"
         assert cl.limit_products.count() == 1
         assert not cl.all_products
+        assert cl.rules == {"==": [0, 1]}
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -275,8 +280,7 @@ def test_list_create_with_subevent(token_client, organizer, event, event3, item,
         },
         format='json'
     )
-    assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Subevent cannot be null for event series."]}'
+    assert resp.status_code == 201
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -372,7 +376,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         {
             'list': clist_all.pk,
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
-            'auto_checked_in': False
+            'auto_checked_in': False,
+            'type': 'entry',
         }
     ]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?has_checkin=1'.format(
@@ -410,7 +415,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         {
             'list': clist_all.pk,
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
-            'auto_checked_in': False
+            'auto_checked_in': False,
+            'type': 'entry',
         }
     ]
     resp = token_client.get(
@@ -448,6 +454,39 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
     p1['order__status'] = 'n'
     p2['order__status'] = 'n'
     assert [p2, p1] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_list_all_items_positions_by_subevent(token_client, organizer, event, clist, clist_all, item, other_item, order, subevent):
+    with scopes_disabled():
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        pfirst = order.positions.first()
+        pfirst.subevent = se2
+        pfirst.save()
+        p1 = dict(TEST_ORDERPOSITION1_RES)
+        p1["id"] = pfirst.pk
+        p1["subevent"] = se2.pk
+        p1["item"] = item.pk
+        plast = order.positions.last()
+        plast.subevent = subevent
+        plast.save()
+        p2 = dict(TEST_ORDERPOSITION2_RES)
+        p2["id"] = plast.pk
+        p2["item"] = other_item.pk
+        p2["subevent"] = subevent.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
+        organizer.slug, event.slug, clist_all.pk
+    ))
+    assert resp.status_code == 200
+    assert [p1, p2] == resp.data['results']
+
+    clist_all.subevent = subevent
+    clist_all.save()
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
+        organizer.slug, event.slug, clist_all.pk
+    ))
+    assert resp.status_code == 200
+    assert [p2] == resp.data['results']
 
 
 @pytest.mark.django_db
@@ -605,6 +644,46 @@ def test_reupload_same_nonce(token_client, organizer, clist, event, order):
     ), {'nonce': 'foobar'}, format='json')
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_allow_multiple(token_client, organizer, clist, event, order):
+    clist.allow_multiple_entries = True
+    clist.save()
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert p.checkins.count() == 2
+
+
+@pytest.mark.django_db
+def test_allow_multiple_reupload_same_nonce(token_client, organizer, clist, event, order):
+    clist.allow_multiple_entries = True
+    clist.save()
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'nonce': 'foobar'}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'nonce': 'foobar'}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert p.checkins.count() == 1
 
 
 @pytest.mark.django_db

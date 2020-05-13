@@ -298,10 +298,14 @@
                                 {% endif %}
                                 {% if line.checkins.all %}
                                     {% for c in line.checkins.all %}
-                                        {% if c.auto_checked_in %}
+                                        {% if c.type == "exit" %}
+                                            <span class="fa fa-fw fa-sign-out" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Exit scan: {{ date }}{% endblocktrans %}"></span>
+                                        {% elif c.forced %}
+                                            <span class="fa fa-fw fa-warning" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Additional entry scan: {{ date }}{% endblocktrans %}"></span>
+                                        {% elif c.auto_checked_in %}
                                             <span class="fa fa-fw fa-magic" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically checked in: {{ date }}{% endblocktrans %}"></span>
                                         {% else %}
-                                            <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                            <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Entry scan: {{ date }}{% endblocktrans %}"></span>
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
@@ -324,6 +328,10 @@
                                 {% if line.subevent %}
                                     <br/>
                                     <span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+                                    {% if event.settings.show_times %}
+                                        <span class="fa fa-clock-o"></span>
+                                        {{ line.subevent.date_from|date:"TIME_FORMAT" }}
+                                    {% endif %}
                                 {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">
