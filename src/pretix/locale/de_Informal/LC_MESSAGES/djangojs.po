@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-13 16:45+0000\n"
-"PO-Revision-Date: 2020-04-08 13:48+0000\n"
-"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
+"PO-Revision-Date: 2020-05-14 07:31+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -138,75 +138,72 @@ msgstr "Drücke Strg+C zum kopieren!"
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:5
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:11
 msgid "is one of"
-msgstr ""
+msgstr "ist eines von"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:17
 msgid "is before"
-msgstr ""
+msgstr "ist vor"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:21
 msgid "is after"
-msgstr ""
+msgstr "ist nach"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
 msgid "Product"
-msgstr ""
+msgstr "Produkt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgid "Product variation"
-msgstr "Varianten zeigen"
+msgstr "Variante"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:62
 msgid "Current date and time"
-msgstr ""
+msgstr "Aktueller Zeitpunkt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:66
 msgid "Number of previous entries"
-msgstr ""
+msgstr "Anzahl bisheriger Eintritte"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:70
 msgid "Number of previous entries since midnight"
-msgstr ""
+msgstr "Anzahl bisheriger Eintritte seit Mitternacht"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:74
 msgid "Number of days with a previous entry"
-msgstr ""
+msgstr "Anzahl an Tagen mit vorherigem Eintritt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:214
 msgid "All of the conditions below (AND)"
-msgstr ""
+msgstr "Alle der folgenden Bedingungen (UND)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:215
 msgid "At least one of the conditions below (OR)"
-msgstr ""
+msgstr "Mindestens eine der folgenden Bedingungen (ODER)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:223
 msgid "Event start"
-msgstr ""
+msgstr "Veranstaltungsbeginn"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:224
 msgid "Event end"
-msgstr ""
+msgstr "Veranstaltungsende"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:225
 msgid "Event admission"
-msgstr ""
+msgstr "Einlass"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:226
 msgid "custom time"
-msgstr ""
+msgstr "Feste Uhrzeit"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
 msgid "Tolerance (minutes)"
-msgstr ""
+msgstr "Toleranz (Minuten)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:237
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:441
 msgid "Add condition"
-msgstr ""
+msgstr "Bedingung hinzufügen"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
@@ -525,15 +522,12 @@ msgstr "Vorheriger Monat"
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Next week"
-msgstr ""
+msgstr "Nächste Woche"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Previous month"
 msgctxt "widget"
 msgid "Previous week"
-msgstr "Vorheriger Monat"
+msgstr "Vorherige Woche"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
