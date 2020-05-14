@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-05 10:42+0000\n"
-"PO-Revision-Date: 2020-05-06 07:20+0000\n"
+"PO-Revision-Date: 2020-05-14 07:37+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1724,21 +1724,19 @@ msgstr ""
 "Bestellung noch nicht bezahlt wurde."
 
 #: pretix/base/models/checkin.py:24
-#, fuzzy
-#| msgid "Allow creating a new team during event creation"
 msgid "Allow re-entering after an exit scan"
-msgstr "Erlaube das Erstellen neuer Teams während der Event-Erstellung"
+msgstr "Erneuten Eintritt erlauben, wenn Ausgang gescannt wurde"
 
 #: pretix/base/models/checkin.py:28
-#, fuzzy
-#| msgid "Ask for email addresses per ticket"
 msgid "Allow multiple entries per ticket"
-msgstr "E-Mail-Adressen pro Ticket erfassen"
+msgstr "Mehrere Eintritte pro Ticket erlauben"
 
 #: pretix/base/models/checkin.py:29
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
 msgstr ""
+"Mit dieser Option können Sie Warnungen beim erneuten Eintritt mit dem "
+"gleichen Ticket abstellen."
 
 #: pretix/base/models/checkin.py:36
 msgid "Sales channels to automatically check in"
@@ -1758,14 +1756,12 @@ msgstr ""
 "sondern direkt als eingecheckt markiert werden sollen."
 
 #: pretix/base/models/checkin.py:137
-#, fuzzy
-#| msgid "Country"
 msgid "Entry"
-msgstr "Land"
+msgstr "Eingang"
 
 #: pretix/base/models/checkin.py:138
 msgid "Exit"
-msgstr ""
+msgstr "Ausgang"
 
 #: pretix/base/models/devices.py:55
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -4211,10 +4207,8 @@ msgid "Sample company"
 msgstr "Musterfirma GmbH"
 
 #: pretix/base/pdf.py:118
-#, fuzzy
-#| msgid "Attendee company"
 msgid "Attendee country"
-msgstr "Teilnehmer-Firma"
+msgstr "Teilnehmer-Land"
 
 #: pretix/base/pdf.py:126
 msgid "Sample event name"
@@ -4684,10 +4678,8 @@ msgid "This order position has an invalid product for this check-in list."
 msgstr "Diese Bestellposition hat ein für diese Liste ungültiges Produkt."
 
 #: pretix/base/services/checkin.py:184
-#, fuzzy
-#| msgid "This order position has an invalid product for this check-in list."
 msgid "This order position has an invalid date for this check-in list."
-msgstr "Diese Bestellposition hat ein für diese Liste ungültiges Produkt."
+msgstr "Diese Bestellposition hat ein für diese Liste ungültiges Datum."
 
 #: pretix/base/services/checkin.py:191
 msgid "This order is not marked as paid."
@@ -4698,11 +4690,8 @@ msgid "You need to answer questions to complete this check-in."
 msgstr "Sie müssen Fragen beantworten, um den Check-In abzuschließen."
 
 #: pretix/base/services/checkin.py:206
-#, fuzzy
-#| msgid "This entry is anonymized and can no longer be used."
 msgid "This entry is not permitted due to custom rules."
-msgstr ""
-"Dieser Eintrag wurde anonymisiert und kann nicht mehr verwendet werden."
+msgstr "Dieser Eintritt ist aufgrund benutzerdefinierter Regeln nicht erlaubt."
 
 #: pretix/base/services/checkin.py:247
 msgid "This ticket has already been redeemed."
@@ -5932,17 +5921,13 @@ msgstr "Liste"
 
 #: pretix/base/settings.py:889 pretix/base/settings.py:897
 #: pretix/control/forms/organizer.py:293
-#, fuzzy
-#| msgid "Calendar"
 msgid "Week calendar"
-msgstr "Kalender"
+msgstr "Wochenkalender"
 
 #: pretix/base/settings.py:890 pretix/base/settings.py:898
 #: pretix/control/forms/organizer.py:294
-#, fuzzy
-#| msgid "Calendar"
 msgid "Month calendar"
-msgstr "Kalender"
+msgstr "Monatskalender"
 
 #: pretix/base/settings.py:894 pretix/control/forms/organizer.py:290
 msgid "Default overview style"
@@ -8042,11 +8027,9 @@ msgid "All attendees"
 msgstr "Alle Teilnehmer"
 
 #: pretix/control/forms/filter.py:786
-#, fuzzy
-#| msgid "Presale"
 msgctxt "checkin state"
 msgid "Present"
-msgstr "Vorverkauf"
+msgstr "Anwesend"
 
 #: pretix/control/forms/filter.py:787
 #: pretix/control/templates/pretixcontrol/checkin/index.html:131
@@ -9200,19 +9183,16 @@ msgid "(unknown)"
 msgstr "(unbekannt)"
 
 #: pretix/control/logdisplay.py:151
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
 msgstr ""
-"Position #{posid} wurde am {datetime} auf der Liste \"{list}\" eingecheckt."
+"Position #{posid} wurde am {datetime} auf der Liste \"{list}\" ausgecheckt."
 
 #: pretix/control/logdisplay.py:157
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} has been checked in for list \"{list}\"."
+#, python-brace-format
 msgid "Position #{posid} has been checked out for list \"{list}\"."
-msgstr "Ticket #{posid} wurde für die Liste \"{list}\" gescannt."
+msgstr "Position #{posid} wurde auf der Liste \"{list}\" ausgecheckt."
 
 #: pretix/control/logdisplay.py:163
 #, python-brace-format
@@ -10555,10 +10535,8 @@ msgid "Check-in list: %(name)s"
 msgstr "Check-in-Liste: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
-#, fuzzy
-#| msgid "pretixdesk configuration"
 msgid "Edit list configuration"
-msgstr "pretixdesk-Konfiguration"
+msgstr "Liste konfigurieren"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:22
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:30
@@ -10605,30 +10583,25 @@ msgid "unpaid"
 msgstr "unbezahlt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:129
-#, fuzzy
-#| msgid "Checked in – {list}"
 msgid "Checked in but left"
-msgstr "Eingecheckt – {list}"
+msgstr "Betreten und verlassen"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:134
 msgid "Checked in automatically"
 msgstr "Automatisch eingecheckt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:145
-#, fuzzy, python-format
-#| msgid "Last import: %(date)s"
+#, python-format
 msgid "Exit: %(date)s"
-msgstr "Letzter Import: %(date)s"
+msgstr "Ausgang: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:158
 msgid "Check-In selected attendees"
 msgstr "Ausgewählte Teilnehmer einchecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:161
-#, fuzzy
-#| msgid "Check-In selected attendees"
 msgid "Check-Out selected attendees"
-msgstr "Ausgewählte Teilnehmer einchecken"
+msgstr "Ausgewählte Personen auschecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:164
 msgid "Revert selected check-ins"
@@ -10745,12 +10718,17 @@ msgid ""
 "specific check-in situations. Please reach out to support if you have "
 "questions about setting this up."
 msgstr ""
+"Die Einstellungen auf dieser Seite sind für professionelle Anwender mit "
+"spezifischen Check-in-Situationen gedacht. Bitte wenden Sie sich an den "
+"Support, wenn Sie Fragen dazu haben."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:47
 msgid ""
 "Make sure to always use the latest version of our scanning apps for these "
 "options to work."
 msgstr ""
+"Stellen Sie sicher, dass Sie immer die neuste Version unserer Scanning-Apps "
+"verwenden, damit diese Optionen funktionieren."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:52
 msgid ""
@@ -10758,12 +10736,13 @@ msgid ""
 "and Desktop apps. Custom check-in rules do not work offline with our iOS "
 "scanning app."
 msgstr ""
+"Wenn Sie diese erweiterten Optionen verwenden, empfehlen wir unsere Android- "
+"und Desktop-Apps. Eigene Regeln funktionieren derzeit in unserer iOS-App "
+"nicht offline."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:63
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Custom check-in rule"
-msgstr "Automatischer Check-In"
+msgstr "Eigene Check-In-Regeln"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
 msgid ""
@@ -13371,16 +13350,14 @@ msgid "Ordered items"
 msgstr "Bestellte Produkte"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:302
-#, fuzzy, python-format
-#| msgid "First scanned: %(date)s"
+#, python-format
 msgid "Exit scan: %(date)s"
-msgstr "Erster Scan: %(date)s"
+msgstr "Ausgangsscan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:304
-#, fuzzy, python-format
-#| msgid "First scanned: %(date)s"
+#, python-format
 msgid "Additional entry scan: %(date)s"
-msgstr "Erster Scan: %(date)s"
+msgstr "Zusätzlicher Scan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:306
 #, python-format
@@ -13388,10 +13365,9 @@ msgid "Automatically checked in: %(date)s"
 msgstr "Automatisch eingecheckt: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:308
-#, fuzzy, python-format
-#| msgid "First scanned: %(date)s"
+#, python-format
 msgid "Entry scan: %(date)s"
-msgstr "Erster Scan: %(date)s"
+msgstr "Eingangsscan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:321
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:26
@@ -14989,17 +14965,13 @@ msgid "Preview"
 msgstr "Vorschau"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:265
-#, fuzzy
-#| msgid "Time"
 msgctxt "subevent"
 msgid "Times"
-msgstr "Zeit"
+msgstr "Uhrzeiten"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:337
-#, fuzzy
-#| msgid "Add a new ticket type"
 msgid "Add a new time slot"
-msgstr "Neue Ticketart hinzufügen"
+msgstr "Neue Uhrzeit hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:458
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:142
@@ -16095,10 +16067,9 @@ msgid "in private test mode"
 msgstr "offline und im Testmodus"
 
 #: pretix/control/views/dashboards.py:272
-#, fuzzy, python-brace-format
-#| msgid "Checked in – {list}"
+#, python-brace-format
 msgid "Present – {list}"
-msgstr "Eingecheckt – {list}"
+msgstr "Anwesend – {list}"
 
 #: pretix/control/views/dashboards.py:290
 msgid "Welcome to pretix!"
@@ -20596,10 +20567,8 @@ msgid "If you want, you can request a full refund."
 msgstr "Wenn Sie möchten, können sie eine vollständige Erstattung anfragen."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:71
-#, fuzzy
-#| msgid "Internal comment"
 msgid "Enter custom amount"
-msgstr "Interner Kommentar"
+msgstr "Eigenen Betrag eingeben"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:75
 msgid "Refund amount:"
@@ -20797,20 +20766,15 @@ msgstr ""
 "                                "
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:69
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                                        from "
-#| "%(start_date)s\n"
-#| "                                                    "
+#, python-format
 msgid ""
 "\n"
 "                                        from %(start_date)s\n"
 "                                    "
 msgstr ""
 "\n"
-"                                    ab %(start_date)s\n"
-"                                "
+"                                        ab %(start_date)s\n"
+"                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
@@ -20854,18 +20818,14 @@ msgstr "Überblick"
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:30
 #: pretix/presale/templates/pretixpresale/organizers/index.html:39
-#, fuzzy
-#| msgid "Weekday"
 msgid "Week"
-msgstr "Werktag"
+msgstr "Woche"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:36
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:36
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
-#, fuzzy
-#| msgid "month(s)"
 msgid "Month"
-msgstr "Monat(e)"
+msgstr "Monat"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:42
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:42
