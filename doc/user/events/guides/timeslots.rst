@@ -7,7 +7,7 @@ A more advanced use case of pretix is using pretix for time-slot-based access to
 capacity, such as a museum or other attraction. This guide will show you the quickest way to set up such an event
 with pretix.
 
-First of all, wenn creating your event, you need to select that your event represents an "event series":
+First of all, when creating your event, you need to select that your event represents an "event series":
 
 
 .. thumbnail:: ../../../screens/event/create_step1.png
