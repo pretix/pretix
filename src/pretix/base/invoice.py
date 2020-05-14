@@ -672,6 +672,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     table
                 ]))
         elif self.invoice.foreign_currency_display and self.invoice.foreign_currency_rate:
+            foreign_total = round_decimal(total * self.invoice.foreign_currency_rate)
             story.append(Spacer(1, 5 * mm))
             story.append(Paragraph(
                 pgettext(
@@ -679,7 +680,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                                '{date}, the invoice total corresponds to {total}.'
                 ).format(rate=localize(self.invoice.foreign_currency_rate),
                          date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT"),
-                         total=fmt(total)),
+                         total=fmt(foreign_total)),
                 self.stylesheet['Fineprint']
             ))
 
