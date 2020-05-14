@@ -8,7 +8,10 @@ Alipay
 and
 App
 Apps
+auschecken
+Ausgangsscan
 ausgeklappt
+ausgecheckt
 auswahl
 Authentication
 Authenticator
@@ -59,6 +62,7 @@ Droid
 Drop
 DSS
 Edge
+Eingangsscan
 Einlassdatum
 Einlassuhrzeit
 email
