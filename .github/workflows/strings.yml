@@ -4,10 +4,12 @@ on:
   push:
     branches: [ master ]
     paths:
+      - 'doc/**'
       - 'src/pretix/locale/**'
   pull_request:
     branches: [ master ]
     paths:
+      - 'doc/**'
       - 'src/pretix/locale/**'
 
 jobs:
