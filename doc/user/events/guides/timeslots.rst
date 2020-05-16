@@ -17,6 +17,11 @@ First of all, when creating your event, you need to select that your event repre
 You can click :ref:`here <subevents>` for a more general description of event series with pretix, but everything you
 need to know is in this chapter as well.
 
+General event setup
+-------------------
+
+Before you go further, set up your products that you want to sell for each time slot, such as different types of entry.
+
 Creating slots
 --------------
 
