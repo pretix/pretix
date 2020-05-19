@@ -250,7 +250,7 @@ class CustomEmail(EmailMultiAlternatives):
         return super()._create_mime_attachment(content, mimetype)
 
 
-@app.task(base=TransactionAwareTask, bind=True)
+@app.task(base=TransactionAwareTask, bind=True, acks_late=True)
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int=None, position: int=None, headers: dict=None, bcc: List[str]=None,
                    invoices: List[int]=None, order: int=None, attach_tickets=False, user=None,

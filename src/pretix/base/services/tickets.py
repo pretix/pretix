@@ -175,7 +175,7 @@ def get_tickets_for_order(order, base_position=None):
     return tickets
 
 
-@app.task(base=EventTask)
+@app.task(base=EventTask, acks_late=True)
 def invalidate_cache(event: Event, item: int=None, provider: str=None, order: int=None, **kwargs):
     qs = CachedTicket.objects.filter(order_position__order__event=event)
     qsc = CachedCombinedTicket.objects.filter(order__event=event)

@@ -9,7 +9,7 @@ from pretix.base.services.tasks import TransactionAwareProfiledEventTask
 from pretix.celery_app import app
 
 
-@app.task(base=TransactionAwareProfiledEventTask)
+@app.task(base=TransactionAwareProfiledEventTask, acks_late=True)
 def vouchers_send(event: Event, vouchers: list, subject: str, message: str, recipients: list, user: int) -> None:
     vouchers = list(Voucher.objects.filter(id__in=vouchers).order_by('id'))
     user = User.objects.get(pk=user)

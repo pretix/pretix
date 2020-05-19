@@ -81,7 +81,8 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
                     logger.exception('Order canceled email could not be sent to attendee')
 
 
-@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,),
+          acks_late=True)
 def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_fixed: str,
                  keep_fee_percentage: str, keep_fees: list=None, manual_refund: bool=False,
                  send: bool=False, send_subject: dict=None, send_message: dict=None,

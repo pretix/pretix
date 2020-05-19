@@ -70,6 +70,9 @@ and ``checkin_list``.
              only include the minimum amount of data necessary for you to fetch the changed objects from our
              :ref:`rest-api` in an authenticated way.
 
+.. warning:: In very rare cases, you could receive the same webhook notification twice. We try to avoid it, but we
+             prefer it over missing a notification.
+
 If you want to further prevent others from accessing your webhook URL, you can also use `Basic authentication`_ and
 supply the URL to us in the format of ``https://username:password@domain.com/path/``.
 We recommend that you use HTTPS for your webhook URL and might require it in the future. If HTTPS is used, we require
