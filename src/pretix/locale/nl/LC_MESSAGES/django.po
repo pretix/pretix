@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-13 16:44+0000\n"
-"PO-Revision-Date: 2020-04-27 20:00+0000\n"
+"PO-Revision-Date: 2020-05-17 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -936,14 +936,10 @@ msgid "Order payments and refunds"
 msgstr "Betalingen en terugbetalingen van bestelling"
 
 #: pretix/base/exporters/orderlist.py:443
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment states"
-msgstr "Betaaldatum"
+msgstr "Betalingsstatus"
 
 #: pretix/base/exporters/orderlist.py:451
-#, fuzzy
-#| msgid "Refund status"
 msgid "Refund states"
 msgstr "Terugbetalingsstatus"
 
@@ -1728,21 +1724,19 @@ msgstr ""
 "bestelling niet betaald is."
 
 #: pretix/base/models/checkin.py:24
-#, fuzzy
-#| msgid "Allow creating a new team during event creation"
 msgid "Allow re-entering after an exit scan"
-msgstr "Sta het aanmaken van nieuwe teams bij het aanmaken van evenementen toe"
+msgstr "Sta opnieuw binnenkomen na een uitgangsscan toe"
 
 #: pretix/base/models/checkin.py:28
-#, fuzzy
-#| msgid "Ask for email addresses per ticket"
 msgid "Allow multiple entries per ticket"
-msgstr "Vraag om e-mailadressen per ticket"
+msgstr "Sta meerdere keren per ticket binnenkomen toe"
 
 #: pretix/base/models/checkin.py:29
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
 msgstr ""
+"Met deze optie kunt u de waarschuwingen bij een nieuwe binnenkomst met "
+"hetzelfde ticket uitschakelen."
 
 #: pretix/base/models/checkin.py:36
 msgid "Sales channels to automatically check in"
@@ -1762,14 +1756,12 @@ msgstr ""
 "worden beschouwd na de aankoop."
 
 #: pretix/base/models/checkin.py:137
-#, fuzzy
-#| msgid "Country"
 msgid "Entry"
-msgstr "Land"
+msgstr "Binnenkomst"
 
 #: pretix/base/models/checkin.py:138
 msgid "Exit"
-msgstr ""
+msgstr "Vertrek"
 
 #: pretix/base/models/devices.py:55
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -4002,34 +3994,25 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschrijving van betalingsproces in bevestigingsmails"
 
 #: pretix/base/payment.py:903
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
 "payment. You can use the placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
-"Deze tekst zal worden ingevoegd in de {payment_info}-plaatsaanduiding in "
-"bevestigingsmails voor een bestelling. De tekst moet de gebruiker informeren "
-"hoe verder te gaan met de betaling. U kunt de plaatsaanduidingen {order}, "
-"{total}, {currency} en {total_with_currency} gebruiken."
+"Deze tekst zal worden ingevoegd op de plaats van de {payment_info}-"
+"plaatsaanduiding in bevestigingsmails voor een bestelling. De tekst moet de "
+"gebruiker informeren hoe verder te gaan met de betaling. U kunt hier de "
+"plaatsaanduidingen {order}, {total}, {currency} en {total_with_currency} "
+"gebruiken."
 
 #: pretix/base/payment.py:910
 msgid "Payment process description for pending orders"
 msgstr "Beschrijving van betalingsproces voor openstaande bestellingen"
 
 #: pretix/base/payment.py:911
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
@@ -4037,8 +4020,8 @@ msgid ""
 msgstr ""
 "Deze tekst zal worden getoond op de bevestigingspagina van openstaande "
 "bestellingen. De tekst moet de gebruiker informeren hoe verder te gaan met "
-"de betaling. U kunt de plaatsaanduidingen {order}, {total}, {currency} en "
-"{total_with_currency} gebruiken."
+"de betaling. U kunt hier de plaatsaanduidingen {order}, {total}, {currency} "
+"en {total_with_currency} gebruiken."
 
 #: pretix/base/payment.py:957
 msgid "Offsetting"
@@ -4200,10 +4183,8 @@ msgid "Sample company"
 msgstr "Voorbeeldbedrijf"
 
 #: pretix/base/pdf.py:118
-#, fuzzy
-#| msgid "Attendee company"
 msgid "Attendee country"
-msgstr "Bedrijf van gast"
+msgstr "Land van gast"
 
 #: pretix/base/pdf.py:126
 msgid "Sample event name"
@@ -4668,10 +4649,8 @@ msgid "This order position has an invalid product for this check-in list."
 msgstr "Dit ticket heeft een ongeldig product voor deze inchecklijst."
 
 #: pretix/base/services/checkin.py:184
-#, fuzzy
-#| msgid "This order position has an invalid product for this check-in list."
 msgid "This order position has an invalid date for this check-in list."
-msgstr "Dit ticket heeft een ongeldig product voor deze inchecklijst."
+msgstr "Deze positie heeft een ongeldige datum voor deze inchecklijst."
 
 #: pretix/base/services/checkin.py:191
 msgid "This order is not marked as paid."
@@ -4682,10 +4661,8 @@ msgid "You need to answer questions to complete this check-in."
 msgstr "U moet vragen beantwoorden om deze check-in te voltooien."
 
 #: pretix/base/services/checkin.py:206
-#, fuzzy
-#| msgid "This entry is anonymized and can no longer be used."
 msgid "This entry is not permitted due to custom rules."
-msgstr "Dit item is geanonimiseerd en kan niet meer worden gebruikt."
+msgstr "Deze entree is niet toegestaan vanwege aangepaste regels."
 
 #: pretix/base/services/checkin.py:247
 msgid "This ticket has already been redeemed."
@@ -5914,17 +5891,13 @@ msgstr "Lijst"
 
 #: pretix/base/settings.py:889 pretix/base/settings.py:897
 #: pretix/control/forms/organizer.py:293
-#, fuzzy
-#| msgid "Calendar"
 msgid "Week calendar"
-msgstr "Kalender"
+msgstr "Weekkalender"
 
 #: pretix/base/settings.py:890 pretix/base/settings.py:898
 #: pretix/control/forms/organizer.py:294
-#, fuzzy
-#| msgid "Calendar"
 msgid "Month calendar"
-msgstr "Kalender"
+msgstr "Maandkalender"
 
 #: pretix/base/settings.py:894 pretix/control/forms/organizer.py:290
 msgid "Default overview style"
@@ -8020,11 +7993,9 @@ msgid "All attendees"
 msgstr "Alle gasten"
 
 #: pretix/control/forms/filter.py:786
-#, fuzzy
-#| msgid "Presale"
 msgctxt "checkin state"
 msgid "Present"
-msgstr "Voorverkoop"
+msgstr "Aanwezig"
 
 #: pretix/control/forms/filter.py:787
 #: pretix/control/templates/pretixcontrol/checkin/index.html:131
@@ -9166,18 +9137,15 @@ msgid "(unknown)"
 msgstr "(onbekend)"
 
 #: pretix/control/logdisplay.py:151
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
-msgstr "Plaats #{posid} is ingecheckt op {datetime} voor lijst \"{list}\"."
+msgstr "Plaats #{posid} is uitgecheckt op {datetime} voor lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:157
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} has been checked in for list \"{list}\"."
+#, python-brace-format
 msgid "Position #{posid} has been checked out for list \"{list}\"."
-msgstr "Plaats #{posid} is ingecheckt voor lijst \"{list}\"."
+msgstr "Plaats #{posid} is uitgecheckt voor lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:163
 #, python-brace-format
@@ -10520,10 +10488,8 @@ msgid "Check-in list: %(name)s"
 msgstr "Inchecklijst: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
-#, fuzzy
-#| msgid "pretixdesk configuration"
 msgid "Edit list configuration"
-msgstr "pretixdesk-configuratie"
+msgstr "Lijstinstellingen bewerken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:22
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:30
@@ -10570,30 +10536,25 @@ msgid "unpaid"
 msgstr "onbetaald"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:129
-#, fuzzy
-#| msgid "Checked in – {list}"
 msgid "Checked in but left"
-msgstr "Ingecheckt - {list}"
+msgstr "Ingecheckt maar vertrokken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:134
 msgid "Checked in automatically"
 msgstr "Automatisch ingecheckt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:145
-#, fuzzy, python-format
-#| msgid "Last import: %(date)s"
+#, python-format
 msgid "Exit: %(date)s"
-msgstr "Laatste import: %(date)s"
+msgstr "Vertrek: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:158
 msgid "Check-In selected attendees"
 msgstr "Geselecteerde gasten inchecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:161
-#, fuzzy
-#| msgid "Check-In selected attendees"
 msgid "Check-Out selected attendees"
-msgstr "Geselecteerde gasten inchecken"
+msgstr "Geselecteerde gasten uitchecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:164
 msgid "Revert selected check-ins"
@@ -10712,12 +10673,17 @@ msgid ""
 "specific check-in situations. Please reach out to support if you have "
 "questions about setting this up."
 msgstr ""
+"De instellingen op deze pagina zijn bedoeld voor professionele gebruikers "
+"met zeer specifieke inchecksituaties. Neem contact op met onze ondersteuning "
+"als u vragen heeft over hoe dit op te zetten."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:47
 msgid ""
 "Make sure to always use the latest version of our scanning apps for these "
 "options to work."
 msgstr ""
+"Zorg ervoor dat u altijd de nieuwste versie van onze scan-apps gebruikt, "
+"omdat deze opties anders niet werken."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:52
 msgid ""
@@ -10725,12 +10691,13 @@ msgid ""
 "and Desktop apps. Custom check-in rules do not work offline with our iOS "
 "scanning app."
 msgstr ""
+"Als u deze geavanceerde opties gebruikt raden we aan onze Android-app of "
+"onze Desktop-app te gebruiken. Aangepaste incheckregels werken niet offline "
+"met onze iOS-app."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:63
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Custom check-in rule"
-msgstr "Automatisch inchecken"
+msgstr "Aangepaste incheckregel"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
 msgid ""
@@ -13329,16 +13296,14 @@ msgid "Ordered items"
 msgstr "Bestelde items"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:302
-#, fuzzy, python-format
-#| msgid "First scanned: %(date)s"
+#, python-format
 msgid "Exit scan: %(date)s"
-msgstr "Eerste scan: %(date)s"
+msgstr "Uitgangsscan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:304
-#, fuzzy, python-format
-#| msgid "First scanned: %(date)s"
+#, python-format
 msgid "Additional entry scan: %(date)s"
-msgstr "Eerste scan: %(date)s"
+msgstr "Extra ingangsscan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:306
 #, python-format
@@ -13346,10 +13311,9 @@ msgid "Automatically checked in: %(date)s"
 msgstr "Automatisch ingecheckt: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:308
-#, fuzzy, python-format
-#| msgid "First scanned: %(date)s"
+#, python-format
 msgid "Entry scan: %(date)s"
-msgstr "Eerste scan: %(date)s"
+msgstr "Ingangsscan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:321
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:26
@@ -14943,17 +14907,13 @@ msgid "Preview"
 msgstr "Voorbeeld"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:265
-#, fuzzy
-#| msgid "Time"
 msgctxt "subevent"
 msgid "Times"
-msgstr "Tijd"
+msgstr "Tijden"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:337
-#, fuzzy
-#| msgid "Add a new ticket type"
 msgid "Add a new time slot"
-msgstr "Voeg een nieuw tickettype toe"
+msgstr "Voeg een nieuw tijdsslot toe"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:458
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:142
@@ -16042,10 +16002,9 @@ msgid "in private test mode"
 msgstr "in privétestmodus"
 
 #: pretix/control/views/dashboards.py:272
-#, fuzzy, python-brace-format
-#| msgid "Checked in – {list}"
+#, python-brace-format
 msgid "Present – {list}"
-msgstr "Ingecheckt - {list}"
+msgstr "Aanwezig - {list}"
 
 #: pretix/control/views/dashboards.py:290
 msgid "Welcome to pretix!"
@@ -18143,10 +18102,8 @@ msgstr ""
 "te bevestigen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
-#, fuzzy
-#| msgid "Sales"
 msgid "Sale ID"
-msgstr "Verkoop"
+msgstr "Verkoopkenmerk"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 msgid "Last update"
@@ -19915,10 +19872,8 @@ msgstr ""
 "Verander alstublieft uw browserinstellingen om cookies van ons te accepteren."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
-#, fuzzy
-#| msgid "FULLY PAID"
 msgid "FULLY BOOKED"
-msgstr "VOLLEDIG BETAALD"
+msgstr "VOLGEBOEKT"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:20
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
@@ -20014,23 +19969,18 @@ msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr "U zal uw tickets hier kunnen downloaden vanaf %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
-#, fuzzy
-#| msgid "Confirmation text"
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr "Bevestigingstekst"
+msgstr "Wacht op bevestiging"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:9
 msgid "Payment pending"
 msgstr "Wacht op betaling"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:15
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "confirmed"
 msgctxt "order state"
 msgid "Confirmed"
-msgstr "bevestigd"
+msgstr "Bevestigd"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:45
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:201
@@ -20539,10 +20489,8 @@ msgid "If you want, you can request a full refund."
 msgstr "U kunt een volledige terugbetaling aanvragen."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:71
-#, fuzzy
-#| msgid "Internal comment"
 msgid "Enter custom amount"
-msgstr "Interne opmerking"
+msgstr "Voer aangepast bedrag in"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:75
 msgid "Refund amount:"
@@ -20741,20 +20689,15 @@ msgstr ""
 "                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:69
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                                        from "
-#| "%(start_date)s\n"
-#| "                                                    "
+#, python-format
 msgid ""
 "\n"
 "                                        from %(start_date)s\n"
 "                                    "
 msgstr ""
 "\n"
-"                                                        van %(start_date)s\n"
-"                                                    "
+"                                        van %(start_date)s\n"
+"                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
@@ -20796,18 +20739,14 @@ msgstr "Evenementenoverzicht"
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:30
 #: pretix/presale/templates/pretixpresale/organizers/index.html:39
-#, fuzzy
-#| msgid "Weekday"
 msgid "Week"
-msgstr "Weekdag"
+msgstr "Week"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:36
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:36
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
-#, fuzzy
-#| msgid "month(s)"
 msgid "Month"
-msgstr "maand(en)"
+msgstr "Maand"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:42
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:42
