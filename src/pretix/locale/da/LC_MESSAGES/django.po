@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-13 16:44+0000\n"
-"PO-Revision-Date: 2020-01-23 17:00+0000\n"
+"PO-Revision-Date: 2020-05-19 09:19+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -13559,7 +13559,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:591
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
 msgid "Total"
-msgstr "I alt"
+msgstr "Total"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:565
 #, fuzzy
