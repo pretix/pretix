@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-13 16:45+0000\n"
-"PO-Revision-Date: 2019-11-20 14:41+0000\n"
+"PO-Revision-Date: 2020-05-19 09:19+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "da/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -48,7 +48,7 @@ msgstr "Kontakter Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:57
 msgid "Total"
-msgstr "I alt"
+msgstr "Total"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
@@ -137,19 +137,19 @@ msgstr "Tryk Ctrl-C eller ⌘-C for at kopiere!"
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:5
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:11
 msgid "is one of"
-msgstr ""
+msgstr "er en af"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:17
 msgid "is before"
-msgstr ""
+msgstr "er før"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:21
 msgid "is after"
-msgstr ""
+msgstr "er efter"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
 msgid "Product"
-msgstr ""
+msgstr "Produkt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
 #, fuzzy
@@ -545,79 +545,79 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Mo"
-msgstr ""
+msgstr "Man"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Tu"
-msgstr ""
+msgstr "Tirs"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "We"
-msgstr ""
+msgstr "Ons"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Th"
-msgstr ""
+msgstr "Tors"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Fr"
-msgstr ""
+msgstr "Fre"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "Sa"
-msgstr ""
+msgstr "Lør"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "Su"
-msgstr ""
+msgstr "Søn"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "January"
-msgstr ""
+msgstr "Januar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "February"
-msgstr ""
+msgstr "Februar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "March"
-msgstr ""
+msgstr "Marts"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "May"
-msgstr ""
+msgstr "Maj"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "September"
-msgstr ""
+msgstr "September"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
-msgstr ""
+msgstr "December"
 
 #~ msgctxt "widget"
 #~ msgid ""
