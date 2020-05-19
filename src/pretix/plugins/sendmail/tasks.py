@@ -8,7 +8,7 @@ from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
 
 
-@app.task(base=ProfiledEventTask)
+@app.task(base=ProfiledEventTask, acks_late=True)
 def send_mails(event: Event, user: int, subject: dict, message: dict, orders: list, items: list,
                recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list) -> None:
     failures = []
