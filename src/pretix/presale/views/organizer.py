@@ -1,6 +1,6 @@
 import calendar
 from collections import defaultdict
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 
 import isoweek
 import pytz
@@ -399,6 +399,10 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
             })
 
 
+def sort_ev(e):
+    return e['time'] or time(0, 0, 0), str(e['event'])
+
+
 def days_for_template(ebd, week):
     day_format = get_format('WEEK_DAY_FORMAT')
     if day_format == 'WEEK_DAY_FORMAT':
@@ -407,7 +411,7 @@ def days_for_template(ebd, week):
         {
             'day_formatted': date_format(day, day_format),
             'date': day,
-            'events': sorted(ebd.get(day), key=lambda e: (e['time'], str(e['event']))) if day in ebd else []
+            'events': sorted(ebd.get(day), key=sort_ev) if day in ebd else []
         }
         for day in week.days()
     ]
@@ -421,7 +425,7 @@ def weeks_for_template(ebd, year, month):
                 'day': day,
                 'date': date(year, month, day),
                 'events': (
-                    sorted(ebd.get(date(year, month, day)), key=lambda e: (e['time'], str(e['event'])))
+                    sorted(ebd.get(date(year, month, day)), key=sort_ev)
                     if date(year, month, day) in ebd else None
                 )
             }
