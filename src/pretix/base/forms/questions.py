@@ -205,12 +205,13 @@ def guess_country(event):
         valid_countries = countries.countries
         if '-' in locale:
             parts = locale.split('-')
+            # TODO: does this actually work?
             if parts[1].upper() in valid_countries:
                 country = Country(parts[1].upper())
             elif parts[0].upper() in valid_countries:
                 country = Country(parts[0].upper())
         else:
-            if locale in valid_countries:
+            if locale.upper() in valid_countries:
                 country = Country(locale.upper())
     return country
 
