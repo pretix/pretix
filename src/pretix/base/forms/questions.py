@@ -40,7 +40,7 @@ from pretix.base.settings import (
     PERSON_NAME_TITLE_GROUPS,
 )
 from pretix.base.templatetags.rich_text import rich_text
-from pretix.control.forms import SplitDateTimeField
+from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.escapejson import escapejson_attr
 from pretix.helpers.i18n import get_format_without_seconds
@@ -412,11 +412,17 @@ class BaseQuestionsForm(forms.Form):
                     initial=initial.options.all() if initial else None,
                 )
             elif q.type == Question.TYPE_FILE:
-                field = forms.FileField(
+                field = ExtFileField(
                     label=label, required=required,
                     help_text=help_text,
                     initial=initial.file if initial else None,
                     widget=UploadedFileWidget(position=pos, event=event, answer=initial),
+                    ext_whitelist=(
+                        ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
+                        ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
+                        ".bmp", ".tif", ".tiff"
+                    ),
+                    max_size=10 * 1024 * 1024,
                 )
             elif q.type == Question.TYPE_DATE:
                 field = forms.DateField(

@@ -94,7 +94,30 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
         return ctx
 
 
-class ExtFileField(forms.FileField):
+class SizeFileField(forms.FileField):
+
+    def __init__(self, *args, **kwargs):
+        self.max_size = kwargs.pop("max_size")
+        super().__init__(*args, **kwargs)
+
+    @staticmethod
+    def _sizeof_fmt(num, suffix='B'):
+        for unit in ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z']:
+            if abs(num) < 1024.0:
+                return "%3.1f%s%s" % (num, unit, suffix)
+            num /= 1024.0
+        return "%.1f%s%s" % (num, 'Yi', suffix)
+
+    def clean(self, *args, **kwargs):
+        data = super().clean(*args, **kwargs)
+        if data and self.max_size and data.file.size > self.max_size:
+            raise forms.ValidationError(_("Please do not upload files larger than {size}!").format(
+                SizeFileField._sizeof_fmt(self.max_size)
+            ))
+        return data
+
+
+class ExtFileField(SizeFileField):
     widget = ClearableBasenameFileInput
 
     def __init__(self, *args, **kwargs):
