@@ -407,7 +407,7 @@ def days_for_template(ebd, week):
         {
             'day_formatted': date_format(day, day_format),
             'date': day,
-            'events': ebd.get(day)
+            'events': sorted(ebd.get(day), key=lambda e: (e['time'], str(e['event']))) if day in ebd else []
         }
         for day in week.days()
     ]
@@ -420,7 +420,10 @@ def weeks_for_template(ebd, year, month):
             {
                 'day': day,
                 'date': date(year, month, day),
-                'events': ebd.get(date(year, month, day))
+                'events': (
+                    sorted(ebd.get(date(year, month, day)), key=lambda e: (e['time'], str(e['event'])))
+                    if date(year, month, day) in ebd else None
+                )
             }
             if day > 0
             else None
