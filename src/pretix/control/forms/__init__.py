@@ -5,6 +5,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files import File
+from django.core.files.uploadedfile import UploadedFile
 from django.forms.utils import from_current_timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -110,7 +111,7 @@ class SizeFileField(forms.FileField):
 
     def clean(self, *args, **kwargs):
         data = super().clean(*args, **kwargs)
-        if data and self.max_size and data.size > self.max_size:
+        if isinstance(data, UploadedFile) and self.max_size and data.size > self.max_size:
             raise forms.ValidationError(_("Please do not upload files larger than {size}!").format(
                 SizeFileField._sizeof_fmt(self.max_size)
             ))
