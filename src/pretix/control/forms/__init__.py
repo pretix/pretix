@@ -110,7 +110,7 @@ class SizeFileField(forms.FileField):
 
     def clean(self, *args, **kwargs):
         data = super().clean(*args, **kwargs)
-        if data and self.max_size and data.file.size > self.max_size:
+        if data and self.max_size and data.size > self.max_size:
             raise forms.ValidationError(_("Please do not upload files larger than {size}!").format(
                 SizeFileField._sizeof_fmt(self.max_size)
             ))
