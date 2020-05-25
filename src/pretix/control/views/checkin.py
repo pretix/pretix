@@ -145,9 +145,13 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
                         ci = Checkin.objects.create(position=op, list=self.list, datetime=now(), type=t)
                         created = True
                     else:
-                        ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
-                            'datetime': now(),
-                        })
+                        try:
+                            ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
+                                'datetime': now(),
+                            })
+                        except Checkin.MultipleObjectsReturned:
+                            ci, created = Checkin.objects.filter(position=op, list=self.list).first(), False
+
                     op.order.log_action('pretix.event.checkin', data={
                         'position': op.id,
                         'positionid': op.positionid,
