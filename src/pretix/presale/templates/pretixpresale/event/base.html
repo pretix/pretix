@@ -114,12 +114,16 @@
         {% endfor %}
     {% endif %}
     {% if request.event.settings.banner_text %}
-        {{ request.event.settings.banner_text|rich_text }}
+        <div class="banner-top">
+            {{ request.event.settings.banner_text|rich_text }}
+        </div>
     {% endif %}
     {% block content %}
     {% endblock %}
     {% if request.event.settings.banner_text_bottom %}
-        {{ request.event.settings.banner_text_bottom|rich_text }}
+        <div class="banner-bottom">
+            {{ request.event.settings.banner_text_bottom|rich_text }}
+        </div>
     {% endif %}
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
