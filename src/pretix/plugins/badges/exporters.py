@@ -109,6 +109,14 @@ OPTIONS = OrderedDict([
         'offsets': [93 * mm, 60 * mm],
         'pagesize': pagesizes.A4,
     }),
+    ('herma_50x80', {
+        'name': 'HERMA 50 x 80 mm (4412)',
+        'cols': 2,
+        'rows': 5,
+        'margins': [13.5 * mm, 17.5 * mm, 13.5 * mm, 17.5 * mm],
+        'offsets': [95 * mm, 55 * mm],
+        'pagesize': pagesizes.A4,
+    }),
 ])
 
 
