@@ -114,6 +114,12 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Sample company"),
         "evaluate": lambda op, order, ev: op.company or (op.addon_to.company if op.addon_to else '')
     }),
+    ('shipping_address', {
+        'label': _('Full attendee address'),
+        'editor_sample': _('John Doe\nSample company\nSesame Street 42\n12345 Any City\nAtlantis'),
+        'evaluate': lambda op, order, event: order.shipping_address.format() if hasattr(
+            order, 'shipping_address') else ''
+    }),
     ("attendee_country", {
         "label": _("Attendee country"),
         "editor_sample": 'Atlantis',

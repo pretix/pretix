@@ -1165,6 +1165,33 @@ class AbstractPosition(models.Model):
             scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
         return scheme['concatenation'](self.attendee_name_parts).strip()
 
+    @property
+    def state_name(self):
+        sd = pycountry.subdivisions.get(code='{}-{}'.format(self.country, self.state))
+        if sd:
+            return sd.name
+        return self.state
+
+    @property
+    def state_for_address(self):
+        from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+        if not self.state or str(self.country) not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            return ""
+        if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.country)][1] == 'long':
+            return self.state_name
+        return self.state
+
+    def address_format(self):
+        lines = [
+            self.attendee_name,
+            self.company,
+            self.street,
+            self.zipcode + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
+            self.country.name
+        ]
+        lines = [r.strip() for r in lines if r]
+        return '\n'.join(lines).strip()
+
 
 class OrderPayment(models.Model):
     """
