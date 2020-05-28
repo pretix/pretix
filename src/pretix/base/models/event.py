@@ -12,7 +12,7 @@ from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Exists, F, OuterRef, Prefetch, Q, Subquery
+from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.formats import date_format
@@ -391,36 +391,16 @@ class Event(EventMixin, LoggedModel):
             return urljoin(build_absolute_uri(self, 'presale:event.index'), img)
 
     def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
-        from .orders import CartPosition, Order, OrderPosition
-        from .vouchers import Voucher
-        vqs = Voucher.objects.filter(
-            event=self,
-            seat_id=OuterRef('pk'),
-            redeemed__lt=F('max_usages'),
-        ).filter(
-            Q(valid_until__isnull=True) | Q(valid_until__gte=now())
-        )
-        if ignore_voucher:
-            vqs = vqs.exclude(pk=ignore_voucher.pk)
-        qs = self.seats.annotate(
-            has_order=Exists(
-                OrderPosition.objects.filter(
-                    order__event=self,
-                    seat_id=OuterRef('pk'),
-                    order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
-                )
-            ),
-            has_cart=Exists(
-                CartPosition.objects.filter(
-                    event=self,
-                    seat_id=OuterRef('pk'),
-                    expires__gte=now()
-                )
-            ),
-            has_voucher=Exists(
-                vqs
-            )
-        ).filter(has_order=False, has_cart=False, has_voucher=False)
+        from .seating import Seat
+
+        qs_annotated = Seat.annotated(self.seats, self.pk, None,
+                                      ignore_voucher_id=ignore_voucher.pk if ignore_voucher else None,
+                                      minimal_distance=self.settings.seating_minimal_distance)
+
+        qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
+        if self.settings.seating_minimal_distance > 0:
+            qs = qs.filter(has_closeby_taken=False)
+
         if not (sales_channel in self.settings.seating_allow_blocked_seats_for_channel or include_blocked):
             qs = qs.filter(blocked=False)
         return qs
@@ -1061,39 +1041,14 @@ class SubEvent(EventMixin, LoggedModel):
         ).strip()
 
     def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
-        from .orders import CartPosition, Order, OrderPosition
-        from .vouchers import Voucher
-        vqs = Voucher.objects.filter(
-            event_id=self.event_id,
-            subevent=self,
-            seat_id=OuterRef('pk'),
-            redeemed__lt=F('max_usages'),
-        ).filter(
-            Q(valid_until__isnull=True) | Q(valid_until__gte=now())
-        )
-        if ignore_voucher:
-            vqs = vqs.exclude(pk=ignore_voucher.pk)
-        qs = self.seats.annotate(
-            has_order=Exists(
-                OrderPosition.objects.filter(
-                    order__event_id=self.event_id,
-                    subevent=self,
-                    seat_id=OuterRef('pk'),
-                    order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
-                )
-            ),
-            has_cart=Exists(
-                CartPosition.objects.filter(
-                    event_id=self.event_id,
-                    subevent=self,
-                    seat_id=OuterRef('pk'),
-                    expires__gte=now()
-                )
-            ),
-            has_voucher=Exists(
-                vqs
-            )
-        ).filter(has_order=False, has_cart=False, has_voucher=False)
+        from .seating import Seat
+        qs_annotated = Seat.annotated(self.seats, self.event_id, self,
+                                      ignore_voucher_id=ignore_voucher.pk if ignore_voucher else None,
+                                      minimal_distance=self.settings.seating_minimal_distance)
+        qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
+        if self.settings.seating_minimal_distance > 0:
+            qs = qs.filter(has_closeby_taken=False)
+
         if not (sales_channel in self.settings.seating_allow_blocked_seats_for_channel or include_blocked):
             qs = qs.filter(blocked=False)
         return qs

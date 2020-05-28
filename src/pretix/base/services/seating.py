@@ -67,6 +67,8 @@ def generate_seats(event, subevent, plan, mapping):
                     update(seat, 'sorting_rank', ss.sorting_rank),
                     update(seat, 'row_label', ss.row_label),
                     update(seat, 'seat_label', ss.seat_label),
+                    update(seat, 'x', ss.x),
+                    update(seat, 'y', ss.y),
                 ])
                 if updated:
                     seat.save()
@@ -82,6 +84,8 @@ def generate_seats(event, subevent, plan, mapping):
                     sorting_rank=ss.sorting_rank,
                     row_label=ss.row_label,
                     seat_label=ss.seat_label,
+                    x=ss.x,
+                    y=ss.y,
                     product=p,
                 ))
 
