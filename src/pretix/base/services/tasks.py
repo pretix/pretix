@@ -19,7 +19,7 @@ from django_scopes import scope, scopes_disabled
 from pretix.base.metrics import (
     pretix_task_duration_seconds, pretix_task_runs_total,
 )
-from pretix.base.models import Event
+from pretix.base.models import Event, Organizer, User
 from pretix.celery_app import app
 
 
@@ -88,7 +88,54 @@ class EventTask(app.Task):
         return ret
 
 
+class OrganizerUserTask(app.Task):
+    def __call__(self, *args, **kwargs):
+        if 'organizer_id' in kwargs:
+            organizer_id = kwargs.get('organizer_id')
+            with scopes_disabled():
+                organizer = Organizer.objects.get(pk=organizer_id)
+            del kwargs['organizer_id']
+            kwargs['organizer'] = organizer
+        elif 'organizer' in kwargs:
+            organizer_id = kwargs.get('organizer')
+            with scopes_disabled():
+                organizer = Organizer.objects.get(pk=organizer_id)
+            kwargs['organizer'] = organizer
+        else:
+            args = list(args)
+            organizer_id = args[0]
+            with scopes_disabled():
+                organizer = Organizer.objects.get(pk=organizer_id)
+            args[0] = organizer
+
+        if 'user_id' in kwargs:
+            user_id = kwargs.get('user_id')
+            with scopes_disabled():
+                user = User.objects.get(pk=user_id)
+            del kwargs['user_id']
+            kwargs['user'] = user
+        elif 'user' in kwargs:
+            user_id = kwargs.get('user')
+            with scopes_disabled():
+                user = User.objects.get(pk=user_id)
+            kwargs['user'] = user
+        else:
+            args = list(args)
+            user_id = args[1]
+            with scopes_disabled():
+                user = User.objects.get(pk=user_id)
+            args[1] = user
+
+        with scope(organizer=organizer):
+            ret = super().__call__(*args, **kwargs)
+        return ret
+
+
 class ProfiledEventTask(ProfiledTask, EventTask):
+    pass
+
+
+class ProfiledOrganizerUserTask(ProfiledTask, OrganizerUserTask):
     pass
 
 

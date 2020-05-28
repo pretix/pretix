@@ -268,6 +268,16 @@ subclass of pretix.base.exporter.BaseExporter
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+register_multievent_data_exporters = django.dispatch.Signal(
+    providing_args=["event"]
+)
+"""
+This signal is sent out to get all known data exporters, which support exporting data for
+multiple events. Receivers should return a subclass of pretix.base.exporter.BaseExporter
+
+The ``sender`` keyword argument will contain an organizer.
+"""
+
 validate_order = EventPluginSignal(
     providing_args=["payment_provider", "positions", "email", "locale", "invoice_address",
                     "meta_info"]

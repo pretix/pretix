@@ -24,7 +24,7 @@ class AllTicketsPDF(BaseExporter):
 
     @property
     def export_form_fields(self):
-        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.multievent else None
         d = OrderedDict(
             [
                 ('include_pending',
@@ -49,10 +49,8 @@ class AllTicketsPDF(BaseExporter):
 
     def render(self, form_data):
         merger = PdfFileMerger()
-
-        o = PdfTicketOutput(self.event)
         qs = OrderPosition.objects.filter(
-            order__event=self.event
+            order__event__in=self.events
         ).prefetch_related(
             'answers', 'answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to')
@@ -80,6 +78,8 @@ class AllTicketsPDF(BaseExporter):
             if not op.generate_ticket:
                 continue
 
+            o = PdfTicketOutput(op.event)
+
             with language(op.order.locale):
                 layout = o.layout_map.get(
                     (op.item_id, op.order.sales_channel),
@@ -95,4 +95,8 @@ class AllTicketsPDF(BaseExporter):
         merger.write(outbuffer)
         merger.close()
         outbuffer.seek(0)
-        return '{}_tickets.pdf'.format(self.event.slug), 'application/pdf', outbuffer.read()
+
+        if self.multievent:
+            return '{}_tickets.pdf'.format(self.event.first().organizer.slug), 'application/pdf', outbuffer.read()
+        else:
+            return '{}_tickets.pdf'.format(self.event.slug), 'application/pdf', outbuffer.read()

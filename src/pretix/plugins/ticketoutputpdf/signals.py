@@ -10,7 +10,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.signals import (  # NOQA: legacy import
     EventPluginSignal, event_copy_data, item_copy_data, layout_text_variables,
     logentry_display, logentry_object_link, register_data_exporters,
-    register_ticket_outputs,
+    register_multievent_data_exporters, register_ticket_outputs,
 )
 from pretix.control.signals import item_forms
 from pretix.plugins.ticketoutputpdf.forms import TicketLayoutItemForm
@@ -30,6 +30,12 @@ def register_ticket_outputs(sender, **kwargs):
 
 @receiver(register_data_exporters, dispatch_uid="dataexport_pdf")
 def register_data(sender, **kwargs):
+    from .exporters import AllTicketsPDF
+    return AllTicketsPDF
+
+
+@receiver(register_multievent_data_exporters, dispatch_uid="dataexport_multievent_pdf")
+def register_multievent_data(sender, **kwargs):
     from .exporters import AllTicketsPDF
     return AllTicketsPDF
 
