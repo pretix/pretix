@@ -1879,7 +1879,7 @@ def test_refund_propose_equal_payment(client, env):
     }, follow=True)
     doc = BeautifulSoup(response.content.decode(), "lxml")
     assert doc.select("input[name=refund-{}]".format(p2.pk))[0]['value'] == '7.00'
-    assert doc.select("input[name=refund-manual]".format(p2.pk))[0]['value'] == '0.00'
+    assert not doc.select("input[name=refund-manual]".format(p2.pk))[0].get('value')
 
 
 @pytest.mark.django_db
@@ -1900,7 +1900,7 @@ def test_refund_propose_higher_payment(client, env):
     }, follow=True)
     doc = BeautifulSoup(response.content.decode(), "lxml")
     assert doc.select("input[name=refund-{}]".format(p2.pk))[0]['value'] == '7.00'
-    assert doc.select("input[name=refund-manual]".format(p2.pk))[0]['value'] == '0.00'
+    assert not doc.select("input[name=refund-manual]".format(p2.pk))[0].get('value')
 
 
 @pytest.mark.django_db
