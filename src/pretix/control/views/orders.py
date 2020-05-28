@@ -968,7 +968,7 @@ class OrderTransition(OrderView):
             instance=self.order,
             data=self.request.POST if self.request.method == "POST" else None,
             initial={
-                'cancellation_fee': self.req.cancellation_fee if self.req else Decimal('0.00')
+                'cancellation_fee': self.req.cancellation_fee if self.req else None
             }
         )
 

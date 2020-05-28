@@ -5,6 +5,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.timezone import make_aware, now
 from django.utils.translation import (
@@ -121,7 +122,10 @@ class CancelForm(ConfirmPaymentForm):
         prs = self.instance.payment_refund_sum
         if prs > 0:
             change_decimal_field(self.fields['cancellation_fee'], self.instance.event.currency)
-            self.fields['cancellation_fee'].initial = Decimal('0.00')
+            self.fields['cancellation_fee'].widget.attrs['placeholder'] = floatformat(
+                Decimal('0.00'),
+                settings.CURRENCY_PLACES.get(self.instance.event.currency, 2)
+            )
             self.fields['cancellation_fee'].max_value = prs
         else:
             del self.fields['cancellation_fee']

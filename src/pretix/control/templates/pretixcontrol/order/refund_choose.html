@@ -45,7 +45,11 @@
                                     {% trans "Automatically refund" context "amount_label" %}
                                     <div class="input-group">
                                         <input type="text" name="refund-{{ p.pk }}"
+                                                {% if p.propose_refund %}
                                                 value="{{ p.propose_refund|floatformat:2 }}"
+                                                {% else %}
+                                                placeholder="{{ p.propose_refund|floatformat:2 }}"
+                                                {% endif %}
                                                 title="" class="form-control">
                                         <span class="input-group-addon">
                                             {{ request.event.currency }}
@@ -73,7 +77,7 @@
                             {% trans "Transfer" context "amount_label" %}
                             <div class="input-group">
                                 <input type="text" name="refund-offsetting"
-                                       title="" class="form-control" value="{{ 0|floatformat:2 }}">
+                                       title="" class="form-control" placeholder="{{ 0|floatformat:2 }}">
                                 <span class="input-group-addon">
                                             {{ request.event.currency }}
                                         </span>
@@ -94,7 +98,7 @@
                         <td>
                             <div class="input-group">
                                 <input type="text" name="refund-new-giftcard"
-                                       title="" class="form-control" value="{{ giftcard_proposal|floatformat:2 }}">
+                                       title="" class="form-control" placeholder="{{ giftcard_proposal|floatformat:2 }}">
                                 <span class="input-group-addon">
                                     {{ request.event.currency }}
                                 </span>
@@ -114,7 +118,11 @@
                             {% trans "Manually refund" context "amount_label" %}
                             <div class="input-group">
                                 <input type="text" name="refund-manual"
+                                        {% if remainder %}
                                         value="{{ remainder|floatformat:2 }}"
+                                        {% else %}
+                                        placeholder="{{ remainder|floatformat:2 }}"
+                                        {% endif %}
                                         title="" class="form-control">
                                 <span class="input-group-addon">
                                             {{ request.event.currency }}
