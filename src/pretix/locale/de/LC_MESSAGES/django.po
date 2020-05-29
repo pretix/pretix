@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-05 10:42+0000\n"
-"PO-Revision-Date: 2020-05-14 07:37+0000\n"
+"PO-Revision-Date: 2020-05-29 09:43+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -909,7 +909,7 @@ msgstr "Variante"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:48
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:51
 msgid "Attendee name"
-msgstr "Name des Teilnehmers"
+msgstr "Name des Teilnehmenden"
 
 #: pretix/base/exporters/orderlist.py:308 pretix/base/forms/questions.py:258
 #: pretix/base/models/orders.py:1051
@@ -917,7 +917,7 @@ msgstr "Name des Teilnehmers"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:58
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:61
 msgid "Attendee email"
-msgstr "Teilnehmer-E-Mail"
+msgstr "Teilnehmer*innen-E-Mail"
 
 #: pretix/base/exporters/orderlist.py:315 pretix/base/models/vouchers.py:209
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -3755,7 +3755,7 @@ msgstr "Bitte wählen Sie einen gültigen Staat aus."
 
 #: pretix/base/orderimport.py:390
 msgid "Attendee e-mail address"
-msgstr "Teilnehmer-E-Mail-Adresse"
+msgstr "Teilnehmer*innen-E-Mail-Adresse"
 
 #: pretix/base/orderimport.py:406 pretix/base/orderimport.py:417
 #: pretix/base/orderimport.py:428 pretix/base/orderimport.py:439
@@ -3764,7 +3764,7 @@ msgstr "Teilnehmer-E-Mail-Adresse"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:81
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:84
 msgid "Attendee address"
-msgstr "Teilnehmer-Adresse"
+msgstr "Teilnehmer*innen-Adresse"
 
 #: pretix/base/orderimport.py:474
 msgid "State"
@@ -4199,7 +4199,7 @@ msgstr "Preis inklusive Zusatzprodukte"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:71
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:74
 msgid "Attendee company"
-msgstr "Teilnehmer-Firma"
+msgstr "Teilnehmer*innen-Firma"
 
 #: pretix/base/pdf.py:114 pretix/base/pdf.py:212
 #: pretix/base/services/tickets.py:96 pretix/control/views/pdf.py:80
@@ -4208,7 +4208,7 @@ msgstr "Musterfirma GmbH"
 
 #: pretix/base/pdf.py:118
 msgid "Attendee country"
-msgstr "Teilnehmer-Land"
+msgstr "Teilnehmer*innen-Land"
 
 #: pretix/base/pdf.py:126
 msgid "Sample event name"
@@ -4727,7 +4727,7 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr "Teilnehmer: {name}"
+msgstr "Teilnehmer*in: {name}"
 
 #: pretix/base/services/invoices.py:170 pretix/plugins/reports/exporters.py:215
 msgctxt "subevent"
