@@ -13,7 +13,7 @@ from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.translation import gettext as __, gettext_lazy as _
 from i18nfield.strings import LazyI18nString
-from paypalrestsdk.exceptions import BadRequest
+from paypalrestsdk.exceptions import BadRequest, UnauthorizedAccess
 from paypalrestsdk.openid_connect import Tokeninfo
 
 from pretix.base.decimal import round_decimal
@@ -198,7 +198,7 @@ class Paypal(BasePaymentProvider):
 
         if request.event.settings.payment_paypal_connect_user_id:
             try:
-                userinfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token).userinfo()
+                tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
             except BadRequest as ex:
                 ex = json.loads(ex.content)
                 messages.error(request, '{}: {} ({})'.format(
@@ -208,7 +208,14 @@ class Paypal(BasePaymentProvider):
                 )
                 return
 
-            request.event.settings.payment_paypal_connect_user_id = userinfo.email
+            # Even if the token has been refreshed, calling userinfo() can fail. In this case we just don't
+            # get the userinfo again and use the payment_paypal_connect_user_id that we already have on file
+            try:
+                userinfo = tokeninfo.userinfo()
+                request.event.settings.payment_paypal_connect_user_id = userinfo.email
+            except UnauthorizedAccess:
+                pass
+
             payee = {
                 "email": request.event.settings.payment_paypal_connect_user_id,
                 # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
@@ -500,8 +507,25 @@ class Paypal(BasePaymentProvider):
         self.init_api()
 
         if request.event.settings.payment_paypal_connect_user_id:
-            userinfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token).userinfo()
-            request.event.settings.payment_paypal_connect_user_id = userinfo.email
+            try:
+                tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
+            except BadRequest as ex:
+                ex = json.loads(ex.content)
+                messages.error(request, '{}: {} ({})'.format(
+                    _('We had trouble communicating with PayPal'),
+                    ex['error_description'],
+                    ex['correlation_id'])
+                )
+                return
+
+            # Even if the token has been refreshed, calling userinfo() can fail. In this case we just don't
+            # get the userinfo again and use the payment_paypal_connect_user_id that we already have on file
+            try:
+                userinfo = tokeninfo.userinfo()
+                request.event.settings.payment_paypal_connect_user_id = userinfo.email
+            except UnauthorizedAccess:
+                pass
+
             payee = {
                 "email": request.event.settings.payment_paypal_connect_user_id,
                 # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
