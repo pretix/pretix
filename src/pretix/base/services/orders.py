@@ -1375,7 +1375,7 @@ class OrderChangeManager:
         for seat, diff in self._seatdiff.items():
             if diff <= 0:
                 continue
-            if not seat.is_available(sales_channel=self.order.sales_channel) or diff > 1:
+            if not seat.is_available(sales_channel=self.order.sales_channel, ignore_distancing=True) or diff > 1:
                 raise OrderError(self.error_messages['seat_unavailable'].format(seat=seat.name))
 
         if self.event.has_subevents:

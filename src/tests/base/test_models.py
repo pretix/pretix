@@ -2087,8 +2087,8 @@ class SeatingTestCase(TestCase):
             self.event.seat_category_mappings.create(
                 layout_category='Stalls', product=self.ticket
             )
-            self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, blocked=False)
-            self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, blocked=False)
+            self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, blocked=False, x=0, y=0)
+            self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, blocked=False, x=1, y=1)
 
     @classscope(attr='organizer')
     def test_free(self):
@@ -2100,6 +2100,28 @@ class SeatingTestCase(TestCase):
     def test_blocked(self):
         self.seat_a1.blocked = True
         self.seat_a1.save()
+        assert set(self.event.free_seats()) == {self.seat_a2}
+        assert not self.seat_a1.is_available()
+        assert self.seat_a2.is_available()
+
+    @classscope(attr='organizer')
+    def test_blocked_in_proximity(self):
+        o = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            locale='en', status=Order.STATUS_PENDING, datetime=now(),
+            expires=now() + timedelta(days=10),
+        )
+        OrderPosition.objects.create(
+            order=o, item=self.ticket, variation=None, price=Decimal("12"),
+            seat=self.seat_a1
+        )
+
+        self.event.settings.seating_minimal_distance = 1.5
+        assert set(self.event.free_seats()) == set()
+        assert not self.seat_a1.is_available()
+        assert not self.seat_a2.is_available()
+
+        self.event.settings.seating_minimal_distance = 1.4
         assert set(self.event.free_seats()) == {self.seat_a2}
         assert not self.seat_a1.is_available()
         assert self.seat_a2.is_available()

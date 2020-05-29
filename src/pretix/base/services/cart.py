@@ -889,7 +889,9 @@ class CartManager:
                     available_count = 0
 
                 if isinstance(op, self.AddOperation):
-                    if op.seat and not op.seat.is_available(ignore_voucher_id=op.voucher.id if op.voucher else None, sales_channel=self._sales_channel):
+                    if op.seat and not op.seat.is_available(ignore_voucher_id=op.voucher.id if op.voucher else None,
+                                                            sales_channel=self._sales_channel,
+                                                            distance_ignore_cart_id=self.cart_id):
                         available_count = 0
                         err = err or error_messages['seat_unavailable']
 

@@ -5,7 +5,8 @@ import jsonschema
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import F, Q
+from django.db.models import Exists, F, OuterRef, Q, Value
+from django.db.models.functions import Power
 from django.utils.deconstruct import deconstructible
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
@@ -41,7 +42,7 @@ class SeatingPlan(LoggedModel):
     layout = models.TextField(validators=[SeatingPlanLayoutValidator()])
 
     Category = namedtuple('Categrory', 'name')
-    RawSeat = namedtuple('Seat', 'name guid number row category zone sorting_rank row_label seat_label')
+    RawSeat = namedtuple('Seat', 'name guid number row category zone sorting_rank row_label seat_label x y')
 
     def __str__(self):
         return self.name
@@ -69,7 +70,9 @@ class SeatingPlan(LoggedModel):
         # *will* have gaps. We chose this way over just sorting the seats and continuously enumerating them as an
         # optimization, because this way we do not need to update the rank of very seat if we change a plan a little.
         for zi, z in enumerate(self.layout_data['zones']):
+            zpos = (z['position']['x'], z['position']['y'])
             for ri, r in enumerate(z['rows']):
+                rpos = (zpos[0] + r['position']['x'], zpos[1] + r['position']['y'])
                 row_label = None
                 if r.get('row_label'):
                     row_label = r['row_label'].replace("%s", r.get('row_number', str(ri)))
@@ -98,7 +101,9 @@ class SeatingPlan(LoggedModel):
                         seat_label=seat_label,
                         zone=z['name'],
                         category=s['category'],
-                        sorting_rank=rank
+                        sorting_rank=rank,
+                        x=rpos[0] + s['position']['x'],
+                        y=rpos[1] + s['position']['y'],
                     )
 
 
@@ -130,6 +135,8 @@ class Seat(models.Model):
     product = models.ForeignKey('Item', null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
     blocked = models.BooleanField(default=False)
     sorting_rank = models.BigIntegerField(default=0)
+    x = models.FloatField(null=True)
+    y = models.FloatField(null=True)
 
     class Meta:
         ordering = ['sorting_rank', 'seat_guid']
@@ -153,7 +160,66 @@ class Seat(models.Model):
             return self.name
         return ', '.join(parts)
 
-    def is_available(self, ignore_cart=None, ignore_orderpos=None, ignore_voucher_id=None, sales_channel='web'):
+    @classmethod
+    def annotated(cls, qs, event_id, subevent, ignore_voucher_id=None, minimal_distance=0,
+                  ignore_order_id=None, ignore_cart_id=None):
+        from . import Order, OrderPosition, Voucher, CartPosition
+
+        vqs = Voucher.objects.filter(
+            event_id=event_id,
+            subevent=subevent,
+            seat_id=OuterRef('pk'),
+            redeemed__lt=F('max_usages'),
+        ).filter(
+            Q(valid_until__isnull=True) | Q(valid_until__gte=now())
+        )
+        if ignore_voucher_id:
+            vqs = vqs.exclude(pk=ignore_voucher_id)
+        opqs = OrderPosition.objects.filter(
+            order__event_id=event_id,
+            subevent=subevent,
+            seat_id=OuterRef('pk'),
+            order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
+        )
+        if ignore_order_id:
+            opqs = opqs.exclude(order_id=ignore_order_id)
+        cqs = CartPosition.objects.filter(
+            event_id=event_id,
+            subevent=subevent,
+            seat_id=OuterRef('pk'),
+            expires__gte=now()
+        )
+        if ignore_cart_id:
+            cqs = cqs.exclude(cart_id=ignore_cart_id)
+        qs_annotated = qs.annotate(
+            has_order=Exists(
+                opqs
+            ),
+            has_cart=Exists(
+                cqs
+            ),
+            has_voucher=Exists(
+                vqs
+            )
+        )
+
+        if minimal_distance > 0:
+            # TODO: Is there a more performant implementation on PostgreSQL using
+            # https://www.postgresql.org/docs/8.2/functions-geometry.html ?
+            sq_closeby = qs_annotated.annotate(
+                distance=(
+                    Power(F('x') - OuterRef('x'), Value(2), output_field=models.FloatField()) +
+                    Power(F('y') - OuterRef('y'), Value(2), output_field=models.FloatField())
+                )
+            ).filter(
+                Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True),
+                distance__lt=minimal_distance ** 2
+            )
+            qs_annotated = qs_annotated.annotate(has_closeby_taken=Exists(sq_closeby))
+        return qs_annotated
+
+    def is_available(self, ignore_cart=None, ignore_orderpos=None, ignore_voucher_id=None, sales_channel='web',
+                     ignore_distancing=False, distance_ignore_cart_id=None):
         from .orders import Order
 
         if self.blocked and sales_channel not in self.event.settings.seating_allow_blocked_seats_for_channel:
@@ -173,4 +239,30 @@ class Seat(models.Model):
             opqs = opqs.exclude(pk=ignore_orderpos.pk)
         if ignore_voucher_id:
             vqs = vqs.exclude(pk=ignore_voucher_id)
-        return not opqs.exists() and (ignore_cart is True or not cpqs.exists()) and not vqs.exists()
+
+        if opqs.exists() or (ignore_cart is not True and cpqs.exists()) or vqs.exists():
+            return False
+
+        if self.event.settings.seating_minimal_distance > 0 and not ignore_distancing:
+            ev = (self.subevent or self.event)
+            qs_annotated = Seat.annotated(ev.seats, self.event_id, self.subevent,
+                                          ignore_voucher_id=ignore_voucher_id,
+                                          minimal_distance=0,
+                                          ignore_order_id=ignore_orderpos.order_id if ignore_orderpos else None,
+                                          ignore_cart_id=(
+                                              distance_ignore_cart_id or
+                                              (ignore_cart.cart_id if ignore_cart else None)
+                                          ))
+            qs_closeby_taken = qs_annotated.annotate(
+                distance=(
+                    Power(F('x') - Value(self.x), Value(2), output_field=models.FloatField()) +
+                    Power(F('y') - Value(self.y), Value(2), output_field=models.FloatField())
+                )
+            ).exclude(pk=self.pk).filter(
+                Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True),
+                distance__lt=self.event.settings.seating_minimal_distance ** 2
+            )
+            if qs_closeby_taken.exists():
+                return False
+
+        return True

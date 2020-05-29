@@ -1648,6 +1648,10 @@ Your {event} team"""))
         'default': settings.ENTROPY['giftcard_secret'],
         'type': int
     },
+    'seating_minimal_distance': {
+        'default': '0',
+        'type': float
+    },
     'seating_allow_blocked_seats_for_channel': {
         'default': [],
         'type': list
