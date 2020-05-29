@@ -118,8 +118,13 @@ class CheckInListMixin(BaseExporter):
         if cl.subevent:
             qs = qs.filter(subevent=cl.subevent)
 
+        o = tuple()
+        if self.event.has_subevents and not cl.subevent:
+            o = ('subevent__date_from', 'subevent__name')
+
         if form_data['sort'] == 'name':
             qs = qs.order_by(
+                *o,
                 Coalesce(
                     NullIf('attendee_name_cached', Value('')),
                     NullIf('addon_to__attendee_name_cached', Value('')),
@@ -128,7 +133,7 @@ class CheckInListMixin(BaseExporter):
                 )
             )
         elif form_data['sort'] == 'code':
-            qs = qs.order_by('order__code')
+            qs = qs.order_by(*o, 'order__code')
         elif form_data['sort'].startswith('name:'):
             part = form_data['sort'][5:]
             qs = qs.annotate(
@@ -140,6 +145,7 @@ class CheckInListMixin(BaseExporter):
             ).annotate(
                 resolved_name_part=JSONExtract('resolved_name', part)
             ).order_by(
+                *o,
                 'resolved_name_part'
             )
 
@@ -223,6 +229,17 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 cl.name,
                 headlinestyle
             ),
+        ]
+        if cl.subevent:
+            story += [
+                Spacer(1, 3 * mm),
+                Paragraph(
+                    '{} ({} {})'.format(cl.subevent.name, cl.subevent.get_date_range_display(), date_format(cl.subevent.date_from, 'SHORT_TIME_FORMAT')),
+                    self.get_style()
+                ),
+            ]
+
+        story += [
             Spacer(1, 5 * mm)
         ]
 
@@ -234,7 +251,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 TableTextRotate(pgettext('tablehead', 'paid')),
                 _('Order'),
                 _('Name'),
-                _('Product') + '\n' + _('Price'),
+                _('Product') + ' / ' + _('Price'),
             ],
         ]
 
@@ -262,15 +279,24 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
             if iac:
                 name += "<br/>" + iac
 
+            item = "{} ({})".format(
+                str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
+                money_filter(op.price, self.event.currency),
+            )
+            if self.event.has_subevents and not cl.subevent:
+                item += '<br/>{} ({})'.format(
+                    op.subevent.name,
+                    date_format(op.subevent.date_from, 'SHORT_DATETIME_FORMAT')
+                )
+            if op.seat:
+                item += '<br/>' + str(op.seat)
             row = [
                 '!!' if op.item.checkin_attention or op.order.checkin_attention else '',
                 CBFlowable(bool(op.last_checked_in)),
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
                 Paragraph(name, self.get_style()),
-                Paragraph(str(op.item) + (" – " + str(op.variation.value) if op.variation else "") + "<br/>" +
-                          ((str(op.seat) + " / ") if op.seat else "") +
-                          money_filter(op.price, self.event.currency), self.get_style()),
+                Paragraph(item, self.get_style()),
             ]
             acache = {}
             if op.addon_to:

@@ -119,8 +119,11 @@ class ReportlabExportMixin:
         return settings.PRETIX_INSTANCE_NAME
 
     def get_left_header_string(self):
-        return "%s – %s – %s" % (self.event.organizer.name, self.event.name,
-                                 self.event.get_date_range_display())
+        if self.event.has_subevents:
+            return "%s – %s" % (self.event.organizer.name, self.event.name)
+        else:
+            return "%s – %s – %s" % (self.event.organizer.name, self.event.name,
+                                     self.event.get_date_range_display())
 
     def page_header(self, canvas, doc):
         from reportlab.lib.units import mm
