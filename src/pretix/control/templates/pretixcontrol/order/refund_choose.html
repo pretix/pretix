@@ -79,8 +79,8 @@
                                 <input type="text" name="refund-offsetting"
                                        title="" class="form-control" placeholder="{{ 0|floatformat:2 }}">
                                 <span class="input-group-addon">
-                                            {{ request.event.currency }}
-                                        </span>
+                                    {{ request.event.currency }}
+                                </span>
                             </div>
                             {% trans "to" context "order_label" %}
                             <input type="text" name="order-offsetting"
@@ -98,7 +98,13 @@
                         <td>
                             <div class="input-group">
                                 <input type="text" name="refund-new-giftcard"
-                                       title="" class="form-control" placeholder="{{ giftcard_proposal|floatformat:2 }}">
+                                       title="" class="form-control"
+                                        {% if giftcard_proposal %}
+                                            value="{{ giftcard_proposal|floatformat:2 }}"
+                                        {% else %}
+                                            placeholder="{{ giftcard_proposal|floatformat:2 }}"
+                                        {% endif %}
+                                >
                                 <span class="input-group-addon">
                                     {{ request.event.currency }}
                                 </span>
