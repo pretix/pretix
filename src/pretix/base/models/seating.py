@@ -162,7 +162,7 @@ class Seat(models.Model):
 
     @classmethod
     def annotated(cls, qs, event_id, subevent, ignore_voucher_id=None, minimal_distance=0,
-                  ignore_order_id=None, ignore_cart_id=None):
+                  ignore_order_id=None, ignore_cart_id=None, distance_only_within_row=False):
         from . import Order, OrderPosition, Voucher, CartPosition
 
         vqs = Voucher.objects.filter(
@@ -215,6 +215,8 @@ class Seat(models.Model):
                 Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True),
                 distance__lt=minimal_distance ** 2
             )
+            if distance_only_within_row:
+                sq_closeby = sq_closeby.filter(row_name=OuterRef('row_name'))
             qs_annotated = qs_annotated.annotate(has_closeby_taken=Exists(sq_closeby))
         return qs_annotated
 
@@ -262,6 +264,8 @@ class Seat(models.Model):
                 Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True),
                 distance__lt=self.event.settings.seating_minimal_distance ** 2
             )
+            if self.event.settings.seating_distance_within_row:
+                qs_closeby_taken = qs_closeby_taken.filter(row_name=self.row_name)
             if qs_closeby_taken.exists():
                 return False
 

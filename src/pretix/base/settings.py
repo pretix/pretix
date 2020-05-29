@@ -1656,6 +1656,10 @@ Your {event} team"""))
         'default': [],
         'type': list
     },
+    'seating_distance_within_row': {
+        'default': 'False',
+        'type': bool
+    }
 }
 PERSON_NAME_TITLE_GROUPS = OrderedDict([
     ('english_common', (_('Most common English titles'), (

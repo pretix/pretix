@@ -395,7 +395,8 @@ class Event(EventMixin, LoggedModel):
 
         qs_annotated = Seat.annotated(self.seats, self.pk, None,
                                       ignore_voucher_id=ignore_voucher.pk if ignore_voucher else None,
-                                      minimal_distance=self.settings.seating_minimal_distance)
+                                      minimal_distance=self.settings.seating_minimal_distance,
+                                      distance_only_within_row=self.settings.seating_distance_within_row)
 
         qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
         if self.settings.seating_minimal_distance > 0:
@@ -1044,7 +1045,8 @@ class SubEvent(EventMixin, LoggedModel):
         from .seating import Seat
         qs_annotated = Seat.annotated(self.seats, self.event_id, self,
                                       ignore_voucher_id=ignore_voucher.pk if ignore_voucher else None,
-                                      minimal_distance=self.settings.seating_minimal_distance)
+                                      minimal_distance=self.settings.seating_minimal_distance,
+                                      distance_only_within_row=self.settings.seating_distance_within_row)
         qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
         if self.settings.seating_minimal_distance > 0:
             qs = qs.filter(has_closeby_taken=False)
