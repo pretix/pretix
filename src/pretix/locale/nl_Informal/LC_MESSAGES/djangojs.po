@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-13 16:45+0000\n"
-"PO-Revision-Date: 2020-04-08 13:48+0000\n"
+"PO-Revision-Date: 2020-05-29 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nl_Informal/>\n"
@@ -137,75 +137,72 @@ msgstr "Gebruik Ctrl-C om te kopiëren!"
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:5
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:11
 msgid "is one of"
-msgstr ""
+msgstr "is een van"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:17
 msgid "is before"
-msgstr ""
+msgstr "is voor"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:21
 msgid "is after"
-msgstr ""
+msgstr "is na"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
 msgid "Product"
-msgstr ""
+msgstr "Product"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgid "Product variation"
-msgstr "Zie variaties"
+msgstr "Productvariant"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:62
 msgid "Current date and time"
-msgstr ""
+msgstr "Huidige datum en tijd"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:66
 msgid "Number of previous entries"
-msgstr ""
+msgstr "Aantal eerdere binnenkomsten"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:70
 msgid "Number of previous entries since midnight"
-msgstr ""
+msgstr "Aantal eerdere binnenkomsten sinds middernacht"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:74
 msgid "Number of days with a previous entry"
-msgstr ""
+msgstr "Aantal dagen met een eerdere binnenkomst"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:214
 msgid "All of the conditions below (AND)"
-msgstr ""
+msgstr "Alle volgende voorwaarden (EN)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:215
 msgid "At least one of the conditions below (OR)"
-msgstr ""
+msgstr "Ten minste één van de volgende voorwaarden (OF)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:223
 msgid "Event start"
-msgstr ""
+msgstr "Start van het evenement"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:224
 msgid "Event end"
-msgstr ""
+msgstr "Einde van het evenement"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:225
 msgid "Event admission"
-msgstr ""
+msgstr "Toegangstijd evenement"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:226
 msgid "custom time"
-msgstr ""
+msgstr "aangepaste tijd"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
 msgid "Tolerance (minutes)"
-msgstr ""
+msgstr "Speling (minuten)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:237
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:441
 msgid "Add condition"
-msgstr ""
+msgstr "Voorwaarde toevoegen"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
@@ -525,15 +522,12 @@ msgstr "Vorige maand"
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Next week"
-msgstr ""
+msgstr "Volgende week"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Previous month"
 msgctxt "widget"
 msgid "Previous week"
-msgstr "Vorige maand"
+msgstr "Vorige week"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
