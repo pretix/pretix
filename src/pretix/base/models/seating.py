@@ -219,7 +219,7 @@ class Seat(models.Model):
         return qs_annotated
 
     def is_available(self, ignore_cart=None, ignore_orderpos=None, ignore_voucher_id=None, sales_channel='web',
-                     ignore_distancing=False):
+                     ignore_distancing=False, distance_ignore_cart_id=None):
         from .orders import Order
 
         if self.blocked and sales_channel not in self.event.settings.seating_allow_blocked_seats_for_channel:
@@ -249,7 +249,10 @@ class Seat(models.Model):
                                           ignore_voucher_id=ignore_voucher_id,
                                           minimal_distance=0,
                                           ignore_order_id=ignore_orderpos.order_id if ignore_orderpos else None,
-                                          ignore_cart_id=ignore_cart.cart_id if ignore_cart else None)
+                                          ignore_cart_id=(
+                                              distance_ignore_cart_id or
+                                              (ignore_cart.cart_id if ignore_cart else None)
+                                          ))
             qs_closeby_taken = qs_annotated.annotate(
                 distance=(
                     Power(F('x') - Value(self.x), Value(2), output_field=models.FloatField()) +
