@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from datetime import datetime, time, timedelta
 
 import dateutil.parser
 from django import forms
@@ -41,6 +42,20 @@ class CheckInListMixin(BaseExporter):
                      ),
                      initial=self.event.checkin_lists.first()
                  )),
+                ('date_from',
+                 forms.DateField(
+                     label=_('Start date'),
+                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                     required=False,
+                     help_text=_('Only include tickets for dates on or after this date.')
+                 )),
+                ('date_to',
+                 forms.DateField(
+                     label=_('End date'),
+                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                     required=False,
+                     help_text=_('Only include tickets for dates on or before this date.')
+                 )),
                 ('secrets',
                  forms.BooleanField(
                      label=_('Include QR-code secret'),
@@ -76,6 +91,10 @@ class CheckInListMixin(BaseExporter):
                  )),
             ]
         )
+
+        if not self.event.has_subevents:
+            del d['date_from']
+            del d['date_to']
 
         d['list'].queryset = self.event.checkin_lists.all()
         d['list'].widget = Select2(
@@ -117,6 +136,20 @@ class CheckInListMixin(BaseExporter):
 
         if cl.subevent:
             qs = qs.filter(subevent=cl.subevent)
+
+        if form_data.get('date_from'):
+            dt = make_aware(datetime.combine(
+                dateutil.parser.parse(form_data['date_from']).date(),
+                time(hour=0, minute=0, second=0)
+            ), self.event.timezone)
+            qs = qs.filter(subevent__date_from__gte=dt)
+
+        if form_data.get('date_to'):
+            dt = make_aware(datetime.combine(
+                dateutil.parser.parse(form_data['date_to']).date() + timedelta(days=1),
+                time(hour=0, minute=0, second=0)
+            ), self.event.timezone)
+            qs = qs.filter(subevent__date_from__lt=dt)
 
         o = tuple()
         if self.event.has_subevents and not cl.subevent:
