@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-13 16:44+0000\n"
-"PO-Revision-Date: 2020-05-17 05:00+0000\n"
+"PO-Revision-Date: 2020-05-29 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -1729,7 +1729,7 @@ msgstr "Sta opnieuw binnenkomen na een uitgangsscan toe"
 
 #: pretix/base/models/checkin.py:28
 msgid "Allow multiple entries per ticket"
-msgstr "Sta meerdere keren per ticket binnenkomen toe"
+msgstr "Sta meerdere keren binnenkomen met hetzelfde toe"
 
 #: pretix/base/models/checkin.py:29
 msgid ""
