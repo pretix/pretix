@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-13 16:44+0000\n"
-"PO-Revision-Date: 2020-05-19 09:19+0000\n"
-"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
+"PO-Revision-Date: 2020-05-30 15:00+0000\n"
+"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -47,20 +47,16 @@ msgid "On sale"
 msgstr "Til salg"
 
 #: pretix/api/models.py:18
-#, fuzzy
-#| msgid "Variation name"
 msgid "Application name"
-msgstr "Variantnavn"
+msgstr "Applikationsnavn"
 
 #: pretix/api/models.py:21
-#, fuzzy
-#| msgid "Redemptions"
 msgid "Redirection URIs"
-msgstr "Indløsninger"
+msgstr "Viderestillingsurler"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Liste af tilladte urler adskilt af mellemrum"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:76
 msgid "Client ID"
@@ -73,10 +69,8 @@ msgid "Client secret"
 msgstr "Arrangementsrække"
 
 #: pretix/api/models.py:76
-#, fuzzy
-#| msgid "Enable"
 msgid "Enable webhook"
-msgstr "Aktiver"
+msgstr "Aktiver webhook"
 
 #: pretix/api/models.py:77
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
@@ -94,10 +88,8 @@ msgid "Limit to events"
 msgstr "Begræns til arrangementer"
 
 #: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:910
-#, fuzzy
-#| msgid "The order has been marked as paid."
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "Bestillingen er blevet markeret som betalt."
+msgstr "Produktet \"{}\" er ikke tilknyttet en kvote."
 
 #: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:922
 #, fuzzy
@@ -112,11 +104,9 @@ msgstr ""
 
 #: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:895
 #: pretix/base/services/orders.py:1143
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "The selected event date is not active."
+#, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "Den valgte arrangementsdato er ikke aktiv."
+msgstr "Det valgte sæde \"{seat}\" er ikke tilgængeligt."
 
 #: pretix/api/serializers/checkin.py:29 pretix/base/models/event.py:1152
 #: pretix/base/models/items.py:1187 pretix/base/models/items.py:1419
@@ -130,10 +120,8 @@ msgid "The subevent does not belong to this event."
 msgstr "Delarrangementet tilhører ikke dette arrangement."
 
 #: pretix/api/serializers/checkin.py:40
-#, fuzzy
-#| msgid "Save changes"
 msgid "Unknown sales channel."
-msgstr "Gem ændringer"
+msgstr "Ukendt salgskanal."
 
 #: pretix/api/serializers/event.py:130
 msgid ""
@@ -142,15 +130,14 @@ msgid ""
 msgstr ""
 
 #: pretix/api/serializers/event.py:145 pretix/api/serializers/event.py:415
-#, fuzzy, python-brace-format
-#| msgid "The requested product category does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "Den valgte produktkategori findes ikke."
+msgstr "Metadataegenskaben '{name}' findes ikke."
 
 #: pretix/api/serializers/event.py:188
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Ukendt plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:68 pretix/control/forms/item.py:766
 msgid "The bundled item must not be the same item as the bundling one."
@@ -237,7 +224,7 @@ msgstr ""
 #: pretix/api/views/order.py:385 pretix/control/views/orders.py:1097
 #: pretix/presale/views/order.py:632 pretix/presale/views/order.py:676
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Du kan ikke generere en faktura for denne ordre."
 
 #: pretix/api/views/order.py:390 pretix/control/views/orders.py:1099
 #: pretix/presale/views/order.py:634 pretix/presale/views/order.py:678
@@ -20336,7 +20323,7 @@ msgstr "Se anden dato"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:106
 msgid "Choose date to buy a ticket"
-msgstr ""
+msgstr "Vælg en dato for at købe en billet"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:111
 #, fuzzy
