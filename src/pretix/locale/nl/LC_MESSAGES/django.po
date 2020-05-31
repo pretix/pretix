@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-13 16:44+0000\n"
-"PO-Revision-Date: 2020-05-29 20:00+0000\n"
+"PO-Revision-Date: 2020-06-01 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -8466,7 +8466,7 @@ msgstr "Add-on voor"
 #: pretix/control/templates/pretixcontrol/order/change.html:118
 #: pretix/control/views/vouchers.py:70
 msgid "Seat"
-msgstr "Stoel"
+msgstr "Zitplaats"
 
 #: pretix/control/forms/orders.py:237
 msgid "Including taxes, if any. Keep empty for the product's default price"
