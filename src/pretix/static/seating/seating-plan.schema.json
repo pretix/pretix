@@ -110,6 +110,10 @@
           "type": "string",
           "description": "Human-readable seat number."
         },
+        "start_direction": {
+          "type": ["string", "null"],
+          "description": "Declares this seat as a start point for ordered booking in its row. Can contain '<', '>' or '<>'."
+        },
         "radius": {
           "type": "integer",
           "description": "Defaults to 10"
