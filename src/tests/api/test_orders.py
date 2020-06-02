@@ -1665,6 +1665,58 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
 
 
 @pytest.mark.django_db
+def test_order_create_positionids_addons_simulated(token_client, organizer, event, item, quota):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'] = [
+        {
+            "positionid": 1,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "positionid": 2,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "addon_to": 1,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    res['simulate'] = True
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    del resp.data['positions'][0]['secret']
+    del resp.data['positions'][1]['secret']
+    assert [dict(f) for f in resp.data['positions']] == [
+        {'id': 0, 'order': '', 'positionid': 1, 'item': 1, 'variation': None, 'price': '23.00',
+         'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
+         'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
+         'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00',
+         'addon_to': None, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
+         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False},
+        {'id': 0, 'order': '', 'positionid': 2, 'item': 1, 'variation': None, 'price': '23.00',
+         'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
+         'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
+         'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00',
+         'addon_to': 1, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
+         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False}
+    ]
+
+
+@pytest.mark.django_db
 def test_order_create_autocheckin(token_client, organizer, event, item, quota, question, clist_autocheckin):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk

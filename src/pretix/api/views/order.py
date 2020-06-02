@@ -26,7 +26,7 @@ from pretix.api.serializers.order import (
     InvoiceSerializer, OrderCreateSerializer, OrderPaymentCreateSerializer,
     OrderPaymentSerializer, OrderPositionSerializer,
     OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
-    PriceCalcSerializer,
+    PriceCalcSerializer, SimulatedOrderSerializer,
 )
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -488,10 +488,12 @@ class OrderViewSet(viewsets.ModelViewSet):
             self.perform_create(serializer)
             send_mail = serializer._send_mail
             order = serializer.instance
-            serializer = OrderSerializer(order, context=serializer.context)
             if not order.pk:
                 # Simulation
+                serializer = SimulatedOrderSerializer(order, context=serializer.context)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                serializer = OrderSerializer(order, context=serializer.context)
 
             order.log_action(
                 'pretix.event.order.placed',

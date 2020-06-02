@@ -416,6 +416,14 @@ class OrderSerializer(I18nAwareModelSerializer):
         return instance
 
 
+class SimulatedOrderPositionSerializer(OrderPositionSerializer):
+    addon_to = serializers.SlugRelatedField(read_only=True, slug_field='positionid')
+
+
+class SimulatedOrderSerializer(OrderSerializer):
+    positions = SimulatedOrderPositionSerializer(many=True, read_only=True)
+
+
 class PriceCalcSerializer(serializers.Serializer):
     item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
@@ -963,7 +971,10 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 else:
                     pos.order = order
                 if addon_to:
-                    pos.addon_to = pos_map[addon_to]
+                    if simulate:
+                        pos.addon_to = pos_map[addon_to]._wrapped
+                    else:
+                        pos.addon_to = pos_map[addon_to]
 
                 if pos.price is None:
                     price = get_price(
