@@ -98,7 +98,7 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
 class SizeFileField(forms.FileField):
 
     def __init__(self, *args, **kwargs):
-        self.max_size = kwargs.pop("max_size")
+        self.max_size = kwargs.pop("max_size", None)
         super().__init__(*args, **kwargs)
 
     @staticmethod
