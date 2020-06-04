@@ -22,6 +22,9 @@ class OrderSearch(PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['filter_form'] = self.filter_form
+        ctx['meta_fields'] = [
+            self.filter_form[k] for k in self.filter_form.fields if k.startswith('meta_')
+        ]
 
         # Only compute this annotations for this page (query optimization)
         s = OrderPosition.objects.filter(

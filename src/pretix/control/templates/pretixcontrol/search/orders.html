@@ -7,25 +7,30 @@
 {% block title %}{% trans "Order search" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Order search" %}</h1>
-    <form class="row filter-form" action="" method="get">
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            {% bootstrap_field filter_form.query layout='inline' %}
+    <form class="" action="" method="get">
+        <div class="row filter-form">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.query layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.status layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.organizer layout='inline' %}
+            </div>
+            <div class="col-md-2 col-xs-6">
+                {% bootstrap_field filter_form.provider layout='inline' %}
+            </div>
+            {% for mf in meta_fields %}
+                <div class="col-md-2 col-sm-6 col-xs-12">
+                    {% bootstrap_field mf layout='inline' %}
+                </div>
+            {% endfor %}
         </div>
-        <div class="col-md-2 col-sm-6 col-xs-12">
-            {% bootstrap_field filter_form.status layout='inline' %}
-        </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            {% bootstrap_field filter_form.organizer layout='inline' %}
-        </div>
-        <div class="col-md-2 col-xs-6">
-            {% bootstrap_field filter_form.provider layout='inline' %}
-        </div>
-        <div class="col-md-2 col-sm-6 col-xs-12">
-            <button class="btn btn-primary btn-block" type="submit">
+        <div class="text-right">
+            <button class="btn btn-primary" type="submit">
                 <span class="fa fa-filter"></span>
-                <span class="hidden-md">
-                    {% trans "Filter" %}
-                </span>
+                <span class="hidden-md">{% trans "Filter" %}</span>
             </button>
         </div>
     </form>
@@ -84,7 +89,7 @@
                         {% endif %}
                         {% if o.is_overpaid %}
                             <span class="label label-warning">{% trans "OVERPAID" %}</span>
-                        {% elif o.is_underpaid  %}
+                        {% elif o.is_underpaid %}
                             <span class="label label-danger">{% trans "UNDERPAID" %}</span>
                         {% elif o.is_pending_with_full_payment %}
                             <span class="label label-danger">{% trans "FULLY PAID" %}</span>
