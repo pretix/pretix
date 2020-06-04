@@ -63,7 +63,7 @@ class MultiDomainMiddleware(MiddlewareMixin):
             if event:
                 request.event_domain = True
                 request.organizer = orga if isinstance(orga, Organizer) else Organizer.objects.get(pk=orga)
-                request.event = event if isinstance(event, Event) else orga.events.get(pk=event)
+                request.event = event if isinstance(event, Event) else request.organizer.events.get(pk=event)
                 request.urlconf = "pretix.multidomain.event_domain_urlconf"
             elif orga:
                 request.organizer_domain = True
