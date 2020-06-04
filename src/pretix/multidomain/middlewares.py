@@ -13,6 +13,7 @@ from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.http import http_date
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Organizer
 from pretix.helpers.cookies import set_cookie_without_samesite
@@ -62,8 +63,13 @@ class MultiDomainMiddleware(MiddlewareMixin):
 
             if event:
                 request.event_domain = True
-                request.organizer = orga if isinstance(orga, Organizer) else Organizer.objects.get(pk=orga)
-                request.event = event if isinstance(event, Event) else request.organizer.events.get(pk=event)
+                if isinstance(event, Event):
+                    request.organizer = orga
+                    request.event = event
+                else:
+                    with scopes_disabled():
+                        request.event = request.organizer.events.select_related('organizer').get(pk=event)
+                        request.organizer = request.event.organizer
                 request.urlconf = "pretix.multidomain.event_domain_urlconf"
             elif orga:
                 request.organizer_domain = True
