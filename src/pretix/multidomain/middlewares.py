@@ -52,7 +52,11 @@ class MultiDomainMiddleware(MiddlewareMixin):
                 except KnownDomain.DoesNotExist:
                     orga = False
                     event = False
-                cache.set('pretix_multidomain_instance_{}'.format(domain), (orga, event), 3600)
+                cache.set(
+                    'pretix_multidomain_instance_{}'.format(domain),
+                    (orga.pk if orga else None, event.pk if event else None),
+                    3600
+                )
             else:
                 orga, event = cached
 
