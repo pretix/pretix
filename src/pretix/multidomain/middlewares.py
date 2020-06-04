@@ -68,7 +68,7 @@ class MultiDomainMiddleware(MiddlewareMixin):
                     request.event = event
                 else:
                     with scopes_disabled():
-                        request.event = request.organizer.events.select_related('organizer').get(pk=event)
+                        request.event = Event.objects.select_related('organizer').get(pk=event)
                         request.organizer = request.event.organizer
                 request.urlconf = "pretix.multidomain.event_domain_urlconf"
             elif orga:
