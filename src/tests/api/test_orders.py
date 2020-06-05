@@ -1701,13 +1701,13 @@ def test_order_create_positionids_addons_simulated(token_client, organizer, even
     del resp.data['positions'][0]['secret']
     del resp.data['positions'][1]['secret']
     assert [dict(f) for f in resp.data['positions']] == [
-        {'id': 0, 'order': '', 'positionid': 1, 'item': 1, 'variation': None, 'price': '23.00',
+        {'id': 0, 'order': '', 'positionid': 1, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
          'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00',
          'addon_to': None, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False},
-        {'id': 0, 'order': '', 'positionid': 2, 'item': 1, 'variation': None, 'price': '23.00',
+        {'id': 0, 'order': '', 'positionid': 2, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
          'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00',
