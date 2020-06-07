@@ -190,7 +190,7 @@ Vue.component('availbox', {
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!item.require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
-        + '<input type="checkbox" v-model="amount_selected" :name="input_name">'
+        + '<input type="checkbox" :value="amount_selected" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name">'
         + '</label>'
         + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name"'
@@ -216,6 +216,9 @@ Vue.component('availbox', {
                 return this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
             },
             set(value) {
+                // Unary operator to force boolean to integer conversion, as the HTML form submission
+                // needs the value to be integer for all products.
+                value = (+value);
                 if (this.item.has_variations) {
                     this.variation.amount_selected = value;
                 } else {
@@ -819,12 +822,12 @@ Vue.component('pretix-widget-event-form', {
                     if (item.has_variations) {
                         for (k = 0; k < item.variations.length; k++) {
                             var v = item.variations[k];
-                            if (+(v.amount_selected)) {
+                            if (v.amount_selected) {
                                 this.buy_disabled = false;
                                 return;
                             }
                         }
-                    } else if (+(item.amount_selected)) {
+                    } else if (item.amount_selected) {
                         this.buy_disabled = false;
                         return;
                     }
