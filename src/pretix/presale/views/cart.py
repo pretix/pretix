@@ -24,7 +24,7 @@ from pretix.base.models import (
     CartPosition, InvoiceAddress, QuestionAnswer, SubEvent, Voucher,
 )
 from pretix.base.services.cart import (
-    CartError, add_items_to_cart, apply_voucher, clear_cart,
+    CartError, add_items_to_cart, apply_voucher, clear_cart, error_messages,
     remove_cart_position,
 )
 from pretix.base.views.tasks import AsyncAction
@@ -160,6 +160,8 @@ class CartActionMixin:
             pass
 
         items = []
+        if 'raw' in self.request.POST:
+            items += json.loads(self.request.POST.get("raw"))
         for key, values in req_items:
             for value in values:
                 try:
@@ -430,7 +432,9 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
-                    'redirect': self.get_error_url()
+                    'redirect': self.get_error_url(),
+                    'success': False,
+                    'message': str(error_messages['empty'])
                 })
             else:
                 return redirect(self.get_error_url())
