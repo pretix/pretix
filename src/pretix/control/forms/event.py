@@ -154,6 +154,7 @@ class EventWizardBasicsForm(I18nModelForm):
         if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']
+            del self.fields['date_to']
 
         if self.has_control_rights(self.user, self.organizer):
             del self.fields['team']

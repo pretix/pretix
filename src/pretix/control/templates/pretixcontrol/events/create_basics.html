@@ -36,7 +36,9 @@
             </div>
         </div>
         {% bootstrap_field form.date_from layout="control" %}
-        {% bootstrap_field form.date_to layout="control" %}
+        {% if form.date_to %}
+            {% bootstrap_field form.date_to layout="control" %}
+        {% endif %}
         <div class="geodata-section">
             {% bootstrap_field form.location layout="control" %}
             <div class="form-group geodata-group" data-tiles="{{ global_settings.leaflet_tiles|default_if_none:"" }}" data-attrib="{{ global_settings.leaflet_tiles_attribution }}" data-icon="{% static "leaflet/images/marker-icon.png" %}" data-shadow="{% static "leaflet/images/marker-shadow.png" %}">

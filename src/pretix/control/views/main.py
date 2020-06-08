@@ -251,19 +251,6 @@ class EventWizard(SafeSessionWizardView):
                     t.members.add(self.request.user)
                     t.limit_events.add(event)
 
-            if event.has_subevents:
-                se = event.subevents.create(
-                    name=event.name,
-                    date_from=event.date_from,
-                    date_to=event.date_to,
-                    presale_start=event.presale_start,
-                    presale_end=event.presale_end,
-                    location=event.location,
-                    geo_lat=event.geo_lat,
-                    geo_lon=event.geo_lon,
-                    active=True
-                )
-
             logdata = {}
             for f in form_list:
                 logdata.update({
@@ -277,17 +264,10 @@ class EventWizard(SafeSessionWizardView):
             elif self.clone_from:
                 event.copy_data_from(self.clone_from)
             else:
-                if event.has_subevents:
-                    event.checkin_lists.create(
-                        name=str(se),
-                        all_products=True,
-                        subevent=se
-                    )
-                else:
-                    event.checkin_lists.create(
-                        name=_('Default'),
-                        all_products=True
-                    )
+                event.checkin_lists.create(
+                    name=_('Default'),
+                    all_products=True
+                )
                 event.set_defaults()
 
             if basics_data['tax_rate']:
