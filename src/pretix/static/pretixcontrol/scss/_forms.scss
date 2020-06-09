@@ -421,6 +421,7 @@ table td > .checkbox input[type="checkbox"] {
 .ticketoutput-panel .panel-heading {
   .checkbox {
     padding: 0;
+    display: inline-block;
     input[type=checkbox] {
       margin-top: 0;
       margin-right: 5px;
