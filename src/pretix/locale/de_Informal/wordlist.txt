@@ -63,6 +63,7 @@ Drop
 DSS
 Edge
 Eingangsscan
+Einlassbuchung
 Einlassdatum
 Einlassuhrzeit
 email
@@ -114,6 +115,7 @@ JavaScript
 JSON
 Kategoriebeschreibung
 Key
+Kombitickets
 Kompatibilitätsmodus
 Konfigurations
 landesspezifische
@@ -262,6 +264,7 @@ Zahlungsbestätigungs
 zahlungspflichtig
 Zahlungsplugins
 zeitbasiert
+Zeitslotbuchung
 zubuchbaren
 zurückbuchen
 zurückgeleitet
