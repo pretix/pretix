@@ -1186,7 +1186,7 @@ class AbstractPosition(models.Model):
             self.attendee_name,
             self.company,
             self.street,
-            self.zipcode + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
+            (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
             self.country.name
         ]
         lines = [r.strip() for r in lines if r]
