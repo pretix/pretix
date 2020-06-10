@@ -203,10 +203,10 @@ Vue.component('availbox', {
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!item.require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
-        + '<input type="checkbox" value="1" v-bind:name="input_name">'
+        + '<input type="checkbox" :value="amount_selected" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name">'
         + '</label>'
         + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
-        + '       :value="($root.itemnum == 1 && !item.has_variations) ? 1 : false" v-bind:max="order_max" v-bind:name="input_name"'
+        + '       v-model="amount_selected" :max="order_max" :name="input_name"'
         + '       v-if="order_max !== 1">'
         + '</div>'
         + '</div>'),
@@ -214,7 +214,32 @@ Vue.component('availbox', {
         item: Object,
         variation: Object
     },
+    mounted: function() {
+        if (this.item.has_variations) {
+            this.$set(this.variation, 'amount_selected', 0);
+        } else {
+            // Automatically set the only available item to be selected.
+            this.$set(this.item, 'amount_selected', this.$root.itemnum === 1 ? 1 : 0);
+        }
+        this.$root.$emit('amounts_changed')
+    },
     computed: {
+        amount_selected: {
+            get() {
+                return this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
+            },
+            set(value) {
+                // Unary operator to force boolean to integer conversion, as the HTML form submission
+                // needs the value to be integer for all products.
+                value = (+value);
+                if (this.item.has_variations) {
+                    this.variation.amount_selected = value;
+                } else {
+                    this.item.amount_selected = value;
+                }
+                this.$root.$emit("amounts_changed")
+            }
+        },
         input_name: function () {
             if (this.item.has_variations) {
                 return 'variation_' + this.item.id + '_' + this.variation.id;
@@ -222,7 +247,7 @@ Vue.component('availbox', {
                 return 'item_' + this.item.id;
             }
         },
-    order_max: function () {
+        order_max: function () {
             return this.item.has_variations ? this.variation.order_max : this.item.order_max;
         },
         avail: function () {
@@ -726,7 +751,7 @@ Vue.component('pretix-widget-event-form', {
         + '</div>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button @click="$parent.buy" type="submit">{{ this.buy_label }}</button>'
+        + '<button @click="$parent.buy" type="submit" :disabled="buy_disabled">{{ this.buy_label }}</button>'
         + '</div>'
         + '</form>'
         + '<form method="get" :action="$root.voucherFormTarget" target="_blank" '
@@ -747,6 +772,18 @@ Vue.component('pretix-widget-event-form', {
         + '</form>'
         + '</div>'
     ),
+    data: function () {
+        return {
+            buy_disabled: true
+        }
+    },
+    mounted: function() {
+        this.$root.$on('amounts_changed', this.calculate_buy_disabled)
+        this.calculate_buy_disabled()
+    },
+    beforeDestroy: function() {
+        this.$root.$off('amounts_changed', this.calculate_buy_disabled)
+    },
     computed: {
         buy_label: function () {
             var i, j, k, all_free = true;
@@ -790,6 +827,28 @@ Vue.component('pretix-widget-event-form', {
             } else {
                 this.$root.view = "weeks";
             }
+        },
+        calculate_buy_disabled: function() {
+            var i, j, k;
+            for (i = 0; i < this.$root.categories.length; i++) {
+                var cat = this.$root.categories[i];
+                for (j = 0; j < cat.items.length; j++) {
+                    var item = cat.items[j];
+                    if (item.has_variations) {
+                        for (k = 0; k < item.variations.length; k++) {
+                            var v = item.variations[k];
+                            if (v.amount_selected) {
+                                this.buy_disabled = false;
+                                return;
+                            }
+                        }
+                    } else if (item.amount_selected) {
+                        this.buy_disabled = false;
+                        return;
+                    }
+                }
+            }
+            this.buy_disabled = true;
         }
     }
 });
