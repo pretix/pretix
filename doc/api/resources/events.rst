@@ -526,7 +526,7 @@ information about the properties.
 
    Get current values of event settings.
 
-   Permission required: "Can change event settings"
+   Permission required: "Can change event settings" (Exception: with device auth, *some* settings can always be *read*.)
 
    **Example request**:
 

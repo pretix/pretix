@@ -10,8 +10,8 @@ from rest_framework.response import Response
 
 from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.serializers.event import (
-    CloneEventSerializer, EventSerializer, EventSettingsSerializer,
-    SubEventSerializer, TaxRuleSerializer,
+    CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
+    EventSettingsSerializer, SubEventSerializer, TaxRuleSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
@@ -337,10 +337,16 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
 
 
 class EventSettingsView(views.APIView):
-    permission = 'can_change_event_settings'
+    permission = None
+    write_permission = 'can_change_event_settings'
 
     def get(self, request, *args, **kwargs):
-        s = EventSettingsSerializer(instance=request.event.settings, event=request.event)
+        if isinstance(request.auth, Device):
+            s = DeviceEventSettingsSerializer(instance=request.event.settings, event=request.event)
+        elif 'can_change_event_settings' in request.eventpermset:
+            s = EventSettingsSerializer(instance=request.event.settings, event=request.event)
+        else:
+            raise PermissionDenied()
         if 'explain' in request.GET:
             return Response({
                 fname: {

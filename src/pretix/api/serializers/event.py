@@ -660,3 +660,40 @@ class EventSettingsSerializer(serializers.Serializer):
         settings_dict.update(data)
         validate_settings(self.event, settings_dict)
         return data
+
+
+class DeviceEventSettingsSerializer(EventSettingsSerializer):
+    default_fields = [
+        'locales',
+        'locale',
+        'last_order_modification_date',
+        'show_quota_left',
+        'max_items_per_order',
+        'attendee_names_asked',
+        'attendee_names_required',
+        'attendee_emails_asked',
+        'attendee_emails_required',
+        'attendee_addresses_asked',
+        'attendee_addresses_required',
+        'attendee_company_asked',
+        'attendee_company_required',
+        'ticket_download',
+        'ticket_download_addons',
+        'ticket_download_nonadm',
+        'ticket_download_pending',
+        'invoice_address_asked',
+        'invoice_address_required',
+        'invoice_address_vatid',
+        'invoice_address_company_required',
+        'invoice_address_beneficiary',
+        'invoice_address_custom_field',
+        'invoice_name_required',
+        'invoice_address_not_asked_free',
+        'invoice_address_from_name',
+        'invoice_address_from',
+        'invoice_address_from_zipcode',
+        'invoice_address_from_city',
+        'invoice_address_from_country',
+        'invoice_address_from_tax_id',
+        'invoice_address_from_vat_id',
+    ]
