@@ -362,7 +362,7 @@ class WidgetAPIProductList(EventListMixin, View):
         data['list_type'] = list_type
 
         if hasattr(self.request, 'event') and data['list_type'] not in ("calendar", "week"):
-            if self.request.event.subevents.count() > 100:
+            if self.request.event.subevents.count() > 25:
                 if self.request.event.settings.event_list_type not in ("calendar", "week"):
                     self.request.event.settings.event_list_type = "calendar"
                 data['list_type'] = list_type = 'calendar'
