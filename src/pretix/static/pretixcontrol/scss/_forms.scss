@@ -431,6 +431,21 @@ table td > .checkbox input[type="checkbox"] {
     }
   }
 }
+.form-horizontal .big-radio {
+  border: 2px solid #ccc;
+  padding: 0;
+  border-radius: $border-radius-base;
+  label {
+    padding: 15px 15px 15px 30px;
+  }
+
+  .help-block {
+    margin-bottom: 0;
+  }
+}
+.form-horizontal .big-radio:not(:last-child) {
+  margin-bottom: 15px;
+}
 .accordion-radio {
   display: block;
   margin: 0;

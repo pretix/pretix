@@ -655,7 +655,7 @@ class EventsTest(SoupTest):
         with scopes_disabled():
             ev = Event.objects.get(slug='33c3')
             assert ev.has_subevents
-            assert ev.subevents.count() == 1
+            assert ev.subevents.count() == 0
 
     def test_create_event_copy_success(self):
         with scopes_disabled():

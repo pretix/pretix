@@ -47,11 +47,6 @@ class EventWizardFoundationForm(forms.Form):
     )
     has_subevents = forms.BooleanField(
         label=_("This is an event series"),
-        help_text=_('Only recommended for advanced users. If this feature is enabled, this will not only be a '
-                    'single event but a series of very similar events that are handled within a single shop. '
-                    'The single events inside the series can only differ in date, time, location, prices and '
-                    'quotas, but not in other settings, and buying tickets across multiple of these events at '
-                    'the same time is possible. You cannot change this setting for this event later.'),
         required=False,
     )
 
@@ -159,6 +154,7 @@ class EventWizardBasicsForm(I18nModelForm):
         if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']
+            del self.fields['date_to']
 
         if self.has_control_rights(self.user, self.organizer):
             del self.fields['team']
