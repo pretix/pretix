@@ -18,7 +18,7 @@
         <div class="col-sm-4 col-xs-12 text-center">
             <select name="week" class="form-control">
                 {% for w in weeks %}
-                    <option value="{{ w }}" {% if w == date.isocalendar.1 %}selected{% endif %}>{{ w }}</option>
+                    <option value="{{ w }}" {% if w == date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w }}</option>
                 {% endfor %}
             </select>
             <select name="year" class="form-control">
