@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-05-14 07:37+0000\n"
+"PO-Revision-Date: 2020-06-10 16:13+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -4205,10 +4205,8 @@ msgid "Sample company"
 msgstr "Musterfirma GmbH"
 
 #: pretix/base/pdf.py:118
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Full attendee address"
-msgstr "Teilnehmer-Adresse"
+msgstr "Volle Teilnehmer-Adresse"
 
 #: pretix/base/pdf.py:119
 msgid ""
@@ -4218,6 +4216,11 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"Max Mustermann\n"
+"Musterfirma\n"
+"Musterstraße 42\n"
+"12345 Musterstadt\n"
+"Atlantis"
 
 #: pretix/base/pdf.py:123
 msgid "Attendee country"
@@ -7191,10 +7194,9 @@ msgid "The task has been completed."
 msgstr "Die Aufgabe wurde fertiggestellt."
 
 #: pretix/control/forms/__init__.py:115
-#, fuzzy, python-brace-format
-#| msgid "Please do not upload files larger than 10 MB."
+#, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr "Bitte keine Dateien mit mehr als 10 MB hochladen."
+msgstr "Bitte keine Dateien mit mehr als {size} hochladen!"
 
 #: pretix/control/forms/__init__.py:136
 msgid "Filetype not allowed!"
@@ -12056,29 +12058,36 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
-msgstr ""
+msgstr "Einzelveranstaltung oder Shop, der keine Veranstaltung ist"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:15
 msgid ""
 "An event with individual configuration. If you create more events later, you "
 "can copy the event to save yourself some work."
 msgstr ""
+"Veranstaltung mit individueller Konfiguration. Wenn du später weitere "
+"Veranstaltungen anlegst, kannst du die Veranstaltung kopieren um Arbeit zu "
+"sparen."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:21
 msgid ""
 "Examples: Conferences, workshops, trade fairs, one-off concerts, sale of "
 "digital content, multi-day events with combination tickets."
 msgstr ""
+"Beispiele: Konferenzen, Workshops, Messen, einmal stattfindende Konzerte, "
+"Verkauf digitaler Produkte, mehrtägige Veranstaltungen mit Kombitickets."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:32
 msgid "Event series or time slot booking"
-msgstr ""
+msgstr "Veranstaltungsreihe oder Zeitslotbuchung"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:34
 msgid ""
 "A series of events that share the same configuration. They can still be "
 "different in their dates, locations, prices, and capacities."
 msgstr ""
+"Eine Reihe von Veranstaltungen mit gemeinsamer Konfiguration. Die Termine "
+"können sich nach Datum, Uhrzeit, Ort, Preisen und Kontingenten unterscheiden."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:40
 msgid ""
@@ -12086,6 +12095,9 @@ msgid ""
 "locations, museums, libraries, or swimming pools, events that need to be "
 "booked together in one cart."
 msgstr ""
+"Beispiele: Mehrere Vorführungen des selben Programms, Konzerttour, "
+"Einlassbuchung für Museen, Bibliotheken oder Schwimmbäder, verschiedene "
+"Veranstaltungen, die gemeinsam buchbar sein müssen."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:53
 msgid ""
@@ -17919,11 +17931,11 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:50
 msgid "Only include tickets for dates on or after this date."
-msgstr ""
+msgstr "Nur Tickets für Termine an oder nach diesem Datum."
 
 #: pretix/plugins/checkinlists/exporters.py:57
 msgid "Only include tickets for dates on or before this date."
-msgstr ""
+msgstr "Nur Tickets an oder bevor diesem Datum."
 
 #: pretix/plugins/checkinlists/exporters.py:61
 msgid "Include QR-code secret"
@@ -20157,7 +20169,7 @@ msgstr "Los!"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:21
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:48
 msgid "W"
-msgstr ""
+msgstr "KW"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
