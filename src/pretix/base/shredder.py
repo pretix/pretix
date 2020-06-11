@@ -34,11 +34,11 @@ def shred_constraints(event: Event):
             max_fromto=Greatest(Max('date_to'), Max('date_from'))
         )
         max_date = max_date['max_fromto'] or max_date['max_to'] or max_date['max_from']
-        if max_date is not None and max_date > now() - timedelta(days=60):
-            return _('Your event needs to be over for at least 60 days to use this feature.')
+        if max_date is not None and max_date > now() - timedelta(days=30):
+            return _('Your event needs to be over for at least 30 days to use this feature.')
     else:
-        if (event.date_to or event.date_from) > now() - timedelta(days=60):
-            return _('Your event needs to be over for at least 60 days to use this feature.')
+        if (event.date_to or event.date_from) > now() - timedelta(days=30):
+            return _('Your event needs to be over for at least 30 days to use this feature.')
     if event.live:
         return _('Your ticket shop needs to be offline to use this feature.')
     return None

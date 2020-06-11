@@ -341,31 +341,31 @@ def test_shred_constraint_offline(event):
 
 
 @pytest.mark.django_db
-def test_shred_constraint_60_days(event):
+def test_shred_constraint_30_days(event):
     event.live = False
-    event.date_from = now() - timedelta(days=62)
-    event.date_to = now() - timedelta(days=62)
+    event.date_from = now() - timedelta(days=32)
+    event.date_to = now() - timedelta(days=32)
     assert shred_constraints(event) is None
-    event.date_from = now() - timedelta(days=52)
-    event.date_to = now() - timedelta(days=52)
+    event.date_from = now() - timedelta(days=22)
+    event.date_to = now() - timedelta(days=22)
     assert shred_constraints(event)
-    event.date_from = now() - timedelta(days=62)
-    event.date_to = now() - timedelta(days=52)
+    event.date_from = now() - timedelta(days=32)
+    event.date_to = now() - timedelta(days=22)
     assert shred_constraints(event)
 
 
 @pytest.mark.django_db
-def test_shred_constraint_60_days_subevents(event):
+def test_shred_constraint_30_days_subevents(event):
     event.has_subevents = True
     event.live = False
 
     event.subevents.create(
-        date_from=now() - timedelta(days=62),
-        date_to=now() - timedelta(days=62)
+        date_from=now() - timedelta(days=32),
+        date_to=now() - timedelta(days=32)
     )
     assert shred_constraints(event) is None
     event.subevents.create(
-        date_from=now() - timedelta(days=62),
-        date_to=now() - timedelta(days=52)
+        date_from=now() - timedelta(days=22),
+        date_to=now() - timedelta(days=32)
     )
     assert shred_constraints(event)
