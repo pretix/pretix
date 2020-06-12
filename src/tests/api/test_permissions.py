@@ -428,6 +428,8 @@ def test_update_session_activity(user_client, team, organizer, event):
 @pytest.mark.django_db
 @pytest.mark.parametrize("urlset", event_permission_sub_urls)
 def test_device_subresource_permission_check(device_client, device, organizer, event, urlset):
+    if urlset == ('get', 'can_change_event_settings', 'settings/', 200):
+        return
     resp = getattr(device_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
     if urlset[1] is None or urlset[1] in device.permission_set():
