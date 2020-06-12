@@ -5,6 +5,7 @@ from collections import OrderedDict
 from decimal import Decimal
 
 import paypalrestsdk
+import paypalrestsdk.exceptions
 from django import forms
 from django.contrib import messages
 from django.core import signing
@@ -196,68 +197,72 @@ class Paypal(BasePaymentProvider):
         if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
             kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
 
-        if request.event.settings.payment_paypal_connect_user_id:
-            try:
-                tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
-            except BadRequest as ex:
-                ex = json.loads(ex.content)
-                messages.error(request, '{}: {} ({})'.format(
-                    _('We had trouble communicating with PayPal'),
-                    ex['error_description'],
-                    ex['correlation_id'])
-                )
-                return
+        try:
+            if request.event.settings.payment_paypal_connect_user_id:
+                try:
+                    tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
+                except BadRequest as ex:
+                    ex = json.loads(ex.content)
+                    messages.error(request, '{}: {} ({})'.format(
+                        _('We had trouble communicating with PayPal'),
+                        ex['error_description'],
+                        ex['correlation_id'])
+                    )
+                    return
 
-            # Even if the token has been refreshed, calling userinfo() can fail. In this case we just don't
-            # get the userinfo again and use the payment_paypal_connect_user_id that we already have on file
-            try:
-                userinfo = tokeninfo.userinfo()
-                request.event.settings.payment_paypal_connect_user_id = userinfo.email
-            except UnauthorizedAccess:
-                pass
+                # Even if the token has been refreshed, calling userinfo() can fail. In this case we just don't
+                # get the userinfo again and use the payment_paypal_connect_user_id that we already have on file
+                try:
+                    userinfo = tokeninfo.userinfo()
+                    request.event.settings.payment_paypal_connect_user_id = userinfo.email
+                except UnauthorizedAccess:
+                    pass
 
-            payee = {
-                "email": request.event.settings.payment_paypal_connect_user_id,
-                # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
-                # we should use it instead of the merchant's eMail-address
-                # "merchant_id": request.event.settings.payment_paypal_connect_user_id,
-            }
-        else:
-            payee = {}
-
-        payment = paypalrestsdk.Payment({
-            'header': {'PayPal-Partner-Attribution-Id': 'ramiioSoftwareentwicklung_SP'},
-            'intent': 'sale',
-            'payer': {
-                "payment_method": "paypal",
-            },
-            "redirect_urls": {
-                "return_url": build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
-                "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
-            },
-            "transactions": [
-                {
-                    "item_list": {
-                        "items": [
-                            {
-                                "name": __('Order for %s') % str(request.event),
-                                "quantity": 1,
-                                "price": self.format_price(cart['total']),
-                                "currency": request.event.currency
-                            }
-                        ]
-                    },
-                    "amount": {
-                        "currency": request.event.currency,
-                        "total": self.format_price(cart['total'])
-                    },
-                    "description": __('Event tickets for {event}').format(event=request.event.name),
-                    "payee": payee
+                payee = {
+                    "email": request.event.settings.payment_paypal_connect_user_id,
+                    # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
+                    # we should use it instead of the merchant's eMail-address
+                    # "merchant_id": request.event.settings.payment_paypal_connect_user_id,
                 }
-            ]
-        })
-        request.session['payment_paypal_payment'] = None
-        return self._create_payment(request, payment)
+            else:
+                payee = {}
+
+            payment = paypalrestsdk.Payment({
+                'header': {'PayPal-Partner-Attribution-Id': 'ramiioSoftwareentwicklung_SP'},
+                'intent': 'sale',
+                'payer': {
+                    "payment_method": "paypal",
+                },
+                "redirect_urls": {
+                    "return_url": build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
+                    "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
+                },
+                "transactions": [
+                    {
+                        "item_list": {
+                            "items": [
+                                {
+                                    "name": __('Order for %s') % str(request.event),
+                                    "quantity": 1,
+                                    "price": self.format_price(cart['total']),
+                                    "currency": request.event.currency
+                                }
+                            ]
+                        },
+                        "amount": {
+                            "currency": request.event.currency,
+                            "total": self.format_price(cart['total'])
+                        },
+                        "description": __('Event tickets for {event}').format(event=request.event.name),
+                        "payee": payee
+                    }
+                ]
+            })
+            request.session['payment_paypal_payment'] = None
+            return self._create_payment(request, payment)
+        except paypalrestsdk.exceptions.ConnectionError as e:
+            messages.error(request, _('We had trouble communicating with PayPal'))
+            logger.exception('Error on creating payment: ' + str(e))
 
     def format_price(self, value):
         return str(round_decimal(value, self.event.currency, {
@@ -292,29 +297,25 @@ class Paypal(BasePaymentProvider):
         return False
 
     def _create_payment(self, request, payment):
-        try:
-            if payment.create():
-                if payment.state not in ('created', 'approved', 'pending'):
-                    messages.error(request, _('We had trouble communicating with PayPal'))
-                    logger.error('Invalid payment state: ' + str(payment))
-                    return
-                request.session['payment_paypal_id'] = payment.id
-                for link in payment.links:
-                    if link.method == "REDIRECT" and link.rel == "approval_url":
-                        if request.session.get('iframe_session', False):
-                            signer = signing.Signer(salt='safe-redirect')
-                            return (
-                                build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
-                                urllib.parse.quote(signer.sign(link.href))
-                            )
-                        else:
-                            return str(link.href)
-            else:
+        if payment.create():
+            if payment.state not in ('created', 'approved', 'pending'):
                 messages.error(request, _('We had trouble communicating with PayPal'))
-                logger.error('Error on creating payment: ' + str(payment.error))
-        except Exception as e:
+                logger.error('Invalid payment state: ' + str(payment))
+                return
+            request.session['payment_paypal_id'] = payment.id
+            for link in payment.links:
+                if link.method == "REDIRECT" and link.rel == "approval_url":
+                    if request.session.get('iframe_session', False):
+                        signer = signing.Signer(salt='safe-redirect')
+                        return (
+                            build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
+                            urllib.parse.quote(signer.sign(link.href))
+                        )
+                    else:
+                        return str(link.href)
+        else:
             messages.error(request, _('We had trouble communicating with PayPal'))
-            logger.exception('Error on creating payment: ' + str(e))
+            logger.error('Error on creating payment: ' + str(payment.error))
 
     def checkout_confirm_render(self, request) -> str:
         """
@@ -375,7 +376,7 @@ class Paypal(BasePaymentProvider):
             ])
             try:
                 payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
-            except Exception as e:
+            except paypalrestsdk.exceptions.ConnectionError as e:
                 messages.error(request, _('We had trouble communicating with PayPal'))
                 logger.exception('Error on creating payment: ' + str(e))
 
@@ -511,72 +512,76 @@ class Paypal(BasePaymentProvider):
     def payment_prepare(self, request, payment_obj):
         self.init_api()
 
-        if request.event.settings.payment_paypal_connect_user_id:
-            try:
-                tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
-            except BadRequest as ex:
-                ex = json.loads(ex.content)
-                messages.error(request, '{}: {} ({})'.format(
-                    _('We had trouble communicating with PayPal'),
-                    ex['error_description'],
-                    ex['correlation_id'])
-                )
-                return
+        try:
+            if request.event.settings.payment_paypal_connect_user_id:
+                try:
+                    tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
+                except BadRequest as ex:
+                    ex = json.loads(ex.content)
+                    messages.error(request, '{}: {} ({})'.format(
+                        _('We had trouble communicating with PayPal'),
+                        ex['error_description'],
+                        ex['correlation_id'])
+                    )
+                    return
 
-            # Even if the token has been refreshed, calling userinfo() can fail. In this case we just don't
-            # get the userinfo again and use the payment_paypal_connect_user_id that we already have on file
-            try:
-                userinfo = tokeninfo.userinfo()
-                request.event.settings.payment_paypal_connect_user_id = userinfo.email
-            except UnauthorizedAccess:
-                pass
+                # Even if the token has been refreshed, calling userinfo() can fail. In this case we just don't
+                # get the userinfo again and use the payment_paypal_connect_user_id that we already have on file
+                try:
+                    userinfo = tokeninfo.userinfo()
+                    request.event.settings.payment_paypal_connect_user_id = userinfo.email
+                except UnauthorizedAccess:
+                    pass
 
-            payee = {
-                "email": request.event.settings.payment_paypal_connect_user_id,
-                # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
-                # we should use it instead of the merchant's eMail-address
-                # "merchant_id": request.event.settings.payment_paypal_connect_user_id,
-            }
-        else:
-            payee = {}
-
-        payment = paypalrestsdk.Payment({
-            'header': {'PayPal-Partner-Attribution-Id': 'ramiioSoftwareentwicklung_SP'},
-            'intent': 'sale',
-            'payer': {
-                "payment_method": "paypal",
-            },
-            "redirect_urls": {
-                "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
-                "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
-            },
-            "transactions": [
-                {
-                    "item_list": {
-                        "items": [
-                            {
-                                "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(),
-                                                                         code=payment_obj.order.code),
-                                "quantity": 1,
-                                "price": self.format_price(payment_obj.amount),
-                                "currency": payment_obj.order.event.currency
-                            }
-                        ]
-                    },
-                    "amount": {
-                        "currency": request.event.currency,
-                        "total": self.format_price(payment_obj.amount)
-                    },
-                    "description": __('Order {order} for {event}').format(
-                        event=request.event.name,
-                        order=payment_obj.order.code
-                    ),
-                    "payee": payee
+                payee = {
+                    "email": request.event.settings.payment_paypal_connect_user_id,
+                    # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
+                    # we should use it instead of the merchant's eMail-address
+                    # "merchant_id": request.event.settings.payment_paypal_connect_user_id,
                 }
-            ]
-        })
-        request.session['payment_paypal_payment'] = payment_obj.pk
-        return self._create_payment(request, payment)
+            else:
+                payee = {}
+
+            payment = paypalrestsdk.Payment({
+                'header': {'PayPal-Partner-Attribution-Id': 'ramiioSoftwareentwicklung_SP'},
+                'intent': 'sale',
+                'payer': {
+                    "payment_method": "paypal",
+                },
+                "redirect_urls": {
+                    "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
+                    "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
+                },
+                "transactions": [
+                    {
+                        "item_list": {
+                            "items": [
+                                {
+                                    "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(),
+                                                                             code=payment_obj.order.code),
+                                    "quantity": 1,
+                                    "price": self.format_price(payment_obj.amount),
+                                    "currency": payment_obj.order.event.currency
+                                }
+                            ]
+                        },
+                        "amount": {
+                            "currency": request.event.currency,
+                            "total": self.format_price(payment_obj.amount)
+                        },
+                        "description": __('Order {order} for {event}').format(
+                            event=request.event.name,
+                            order=payment_obj.order.code
+                        ),
+                        "payee": payee
+                    }
+                ]
+            })
+            request.session['payment_paypal_payment'] = payment_obj.pk
+            return self._create_payment(request, payment)
+        except paypalrestsdk.exceptions.ConnectionError as e:
+            messages.error(request, _('We had trouble communicating with PayPal'))
+            logger.exception('Error on creating payment: ' + str(e))
 
     def shred_payment_info(self, obj):
         if obj.info:
