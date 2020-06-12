@@ -502,10 +502,16 @@ class Order(LockModel, LoggedModel):
         # Algorithm to choose which payments are to be refunded to create the least hassle
         payments = payments or self.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED)
         for p in payments:
-            p.full_refund_possible = p.payment_provider.payment_refund_supported(p)
-            p.partial_refund_possible = p.payment_provider.payment_partial_refund_supported(p)
-            p.propose_refund = Decimal('0.00')
-            p.available_amount = p.amount - p.refunded_amount
+            if p.payment_provider:
+                p.full_refund_possible = p.payment_provider.payment_refund_supported(p)
+                p.partial_refund_possible = p.payment_provider.payment_partial_refund_supported(p)
+                p.propose_refund = Decimal('0.00')
+                p.available_amount = p.amount - p.refunded_amount
+            else:
+                p.full_refund_possible = False
+                p.partial_refund_possible = False
+                p.propose_refund = Decimal('0.00')
+                p.available_amount = Decimal('0.00')
 
         unused_payments = set(p for p in payments if p.full_refund_possible or p.partial_refund_possible)
         to_refund = amount
