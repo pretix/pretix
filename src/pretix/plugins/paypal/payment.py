@@ -256,7 +256,7 @@ class Paypal(BasePaymentProvider):
                 }
             ]
         })
-        request.session['payment_paypal_order'] = None
+        request.session['payment_paypal_payment'] = None
         return self._create_payment(request, payment)
 
     def format_price(self, value):
