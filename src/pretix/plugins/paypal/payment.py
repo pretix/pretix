@@ -575,7 +575,6 @@ class Paypal(BasePaymentProvider):
                 }
             ]
         })
-        request.session['payment_paypal_order'] = payment_obj.order.pk
         request.session['payment_paypal_payment'] = payment_obj.pk
         return self._create_payment(request, payment)
 
