@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-12 20:00+0000\n"
+"PO-Revision-Date: 2020-06-14 02:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -185,7 +185,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:311 pretix/control/forms/item.py:73
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "La domanda non può dipendere da una domanda fatta durante il check-in."
 
 #: pretix/api/serializers/item.py:316 pretix/control/forms/item.py:78
 msgid "Circular dependency between questions detected."
@@ -302,10 +302,8 @@ msgid "Ticket check-in reverted"
 msgstr "Check-in del biglietto annullato"
 
 #: pretix/base/auth.py:101
-#, fuzzy
-#| msgid "pretix default"
 msgid "pretix User"
-msgstr "pretix Standard"
+msgstr "Utente pretix"
 
 #: pretix/base/auth.py:110 pretix/base/forms/auth.py:175
 #: pretix/base/models/auth.py:90 pretix/base/models/notifications.py:25
@@ -314,12 +312,12 @@ msgstr "pretix Standard"
 #: pretix/presale/checkoutflow.py:665 pretix/presale/forms/checkout.py:28
 #: pretix/presale/forms/user.py:6
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: pretix/base/auth.py:112 pretix/base/forms/auth.py:86
 #: pretix/base/forms/auth.py:138 pretix/control/forms/event.py:936
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #: pretix/base/channels.py:84
 msgid "Online shop"
@@ -333,17 +331,17 @@ msgstr "Vendite online"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 #: pretix/base/email.py:146
 msgid "Simple with logo"
-msgstr ""
+msgstr "semplice con logo"
 
 #: pretix/base/email.py:349 pretix/base/email.py:412 pretix/base/email.py:428
 #: pretix/base/email.py:437 pretix/base/pdf.py:109 pretix/base/pdf.py:212
 #: pretix/base/services/invoices.py:337 pretix/control/views/event.py:672
 msgid "John Doe"
-msgstr ""
+msgstr "Luca Rossi"
 
 #: pretix/base/email.py:353
 msgid "Sample Corporation"
@@ -351,19 +349,19 @@ msgstr ""
 
 #: pretix/base/email.py:391
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "Esempio di biglietto d'ingresso"
 
 #: pretix/base/email.py:416
 msgid "An individual text with a reason can be inserted here."
-msgstr ""
+msgstr "Un testo con una motivazione può essere inserito qui."
 
 #: pretix/base/email.py:420
 msgid "The amount has been charged to your card."
-msgstr ""
+msgstr "L'importo è stato dedotto dalla tua carta."
 
 #: pretix/base/email.py:424
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "Trasferisci i soldi a questo conto bancario: 9999-9999-9999-9999"
 
 #: pretix/base/exporter.py:95 pretix/base/exporter.py:191
 msgid "Export format"
@@ -3845,7 +3843,7 @@ msgstr ""
 
 #: pretix/base/payment.py:971 pretix/control/views/orders.py:805
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Hai inserito un ordine che non è stato trovato."
 
 #: pretix/base/payment.py:1000
 #, python-format
@@ -3854,22 +3852,22 @@ msgstr ""
 
 #: pretix/base/payment.py:1021
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "Nella modalità test funzionano solo carte di test."
 
 #: pretix/base/payment.py:1083 pretix/base/payment.py:1146
 #: pretix/base/payment.py:1190 pretix/base/services/orders.py:743
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr ""
+msgstr "Non puoi pagare con una gift card quando stai comprando una gift card."
 
 #: pretix/base/payment.py:1092 pretix/base/payment.py:1154
 #: pretix/base/payment.py:1198 pretix/base/services/orders.py:734
 msgid "This gift card does not support this currency."
-msgstr ""
+msgstr "Questa gift card non supporta questa valuta."
 
 #: pretix/base/payment.py:1095 pretix/base/payment.py:1157
 #: pretix/base/services/orders.py:736
 msgid "This gift card can only be used in test mode."
-msgstr ""
+msgstr "Questa gift card può essere utilizzata solo in modalità test."
 
 #: pretix/base/payment.py:1098 pretix/base/payment.py:1160
 #: pretix/base/services/orders.py:738
@@ -3879,25 +3877,27 @@ msgstr ""
 #: pretix/base/payment.py:1101 pretix/base/payment.py:1163
 #: pretix/base/payment.py:1204
 msgid "This gift card is no longer valid."
-msgstr ""
+msgstr "Questa gift card non è più valida."
 
 #: pretix/base/payment.py:1104 pretix/base/payment.py:1166
 msgid "All credit on this gift card has been used."
-msgstr ""
+msgstr "Tutti i crediti di questa gift card sono stati utilizzati."
 
 #: pretix/base/payment.py:1109
 msgid "This gift card is already used for your payment."
-msgstr ""
+msgstr "Questa gift card è già stata utilizzzta per il tuo pagamento."
 
 #: pretix/base/payment.py:1124
 msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
 msgstr ""
+"La tua gift card è stata applicata, ma rimane ancora da pagare {}. Scegli un "
+"metodo di pagamento."
 
 #: pretix/base/payment.py:1128
 msgid "Your gift card has been applied."
-msgstr ""
+msgstr "La tua gift card è stata applicata."
 
 #: pretix/base/payment.py:1136 pretix/base/payment.py:1178
 msgid ""
