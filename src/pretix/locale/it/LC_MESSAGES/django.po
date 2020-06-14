@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-14 02:00+0000\n"
+"PO-Revision-Date: 2020-06-14 10:29+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -200,6 +200,7 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Una gift card con lo stesso codice esiste già nel tuo account organizzatore"
 
 #: pretix/api/serializers/organizer.py:100
 #: pretix/control/views/organizer.py:530
@@ -259,10 +260,8 @@ msgid "Order canceled"
 msgstr "Ordine cancellato"
 
 #: pretix/api/webhooks.py:130 pretix/base/notifications.py:229
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order reactivated"
-msgstr "Ordine rifiutato"
+msgstr "Ordine riattivato"
 
 #: pretix/api/webhooks.py:134 pretix/base/notifications.py:235
 msgid "Order expired"
@@ -9660,7 +9659,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:54
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:21
 #: pretix/control/templates/pretixcontrol/event/delete.html:30
@@ -9682,7 +9681,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:16
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:16
 msgid "Delete"
-msgstr ""
+msgstr "Elimina"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:10
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:17
@@ -10783,7 +10782,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/create_base.html:6
 #, python-format
 msgid "Step %(step)s"
-msgstr ""
+msgstr "Passo %(step)s"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:31
 msgid ""
@@ -10796,7 +10795,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/create.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:27
 msgid "Create a new organizer"
-msgstr ""
+msgstr "Crea un nuovo organizzatore"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:7
 #: pretix/control/templates/pretixcontrol/item/create.html:11
@@ -10807,11 +10806,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:342
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:23
 msgid "General information"
-msgstr ""
+msgstr "Informazioni generali"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:14
 msgid "Set to random"
-msgstr ""
+msgstr "Imposta come random"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:18
 msgid ""
@@ -12591,11 +12590,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:21
 msgid "Take your shop live"
-msgstr ""
+msgstr "Metti il negozio Live"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:25
 msgid "Go to the ticket shop"
-msgstr ""
+msgstr "Vai al negozio"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:36
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:21
@@ -12609,19 +12608,19 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
 msgid "Remove filter"
-msgstr ""
+msgstr "Rimuovi filtro"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:132
 #: pretix/control/templates/pretixcontrol/search/orders.html:83
 msgid "CANCELLATION REQUESTED"
-msgstr ""
+msgstr "CANCELLAZIONE RICHIESTA"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:135
 #: pretix/control/templates/pretixcontrol/orders/index.html:137
 #: pretix/control/templates/pretixcontrol/search/orders.html:86
 #: pretix/control/templates/pretixcontrol/search/orders.html:88
 msgid "REFUND PENDING"
-msgstr ""
+msgstr "RIMBORSO IN ATTESA"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:140
 #: pretix/control/templates/pretixcontrol/search/orders.html:91
@@ -16922,7 +16921,7 @@ msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:19
 msgid "Orders by day"
-msgstr ""
+msgstr "Ordini per giorno"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:25
 msgid ""
