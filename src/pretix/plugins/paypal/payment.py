@@ -333,11 +333,6 @@ class Paypal(BasePaymentProvider):
 
         self.init_api()
         pp_payment = paypalrestsdk.Payment.find(request.session.get('payment_paypal_id'))
-        if payment.order.code not in pp_payment.transactions[0].description:
-            logger.error('Order code mismatch: Payment %s vs paypal trans %s' % (payment.id, str(pp_payment)))
-            raise PaymentException(_('We were unable to process your payment. See below for details on how to '
-                                     'proceed.'))
-
         ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_payment.id)
         if str(pp_payment.transactions[0].amount.total) != str(payment.amount) or pp_payment.transactions[0].amount.currency \
                 != self.event.currency:
