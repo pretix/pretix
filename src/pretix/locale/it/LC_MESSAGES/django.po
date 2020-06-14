@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-14 10:29+0000\n"
+"PO-Revision-Date: 2020-06-15 06:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -697,8 +697,6 @@ msgstr "Nazione"
 #: pretix/control/templates/pretixcontrol/order/index.html:793
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:105
 #: pretix/presale/templates/pretixpresale/event/order.html:294
-#, fuzzy
-#| msgid "Status"
 msgctxt "address"
 msgid "State"
 msgstr "Stato"
@@ -942,16 +940,12 @@ msgid "Order payments and refunds"
 msgstr "Ordina pagamenti e rimborsi"
 
 #: pretix/base/exporters/orderlist.py:443
-#, fuzzy
-#| msgid "Payment ID"
 msgid "Payment states"
 msgstr "ID Pagamento"
 
 #: pretix/base/exporters/orderlist.py:451
-#, fuzzy
-#| msgid "Pending orders"
 msgid "Refund states"
-msgstr "Ordini pendenti"
+msgstr "Stato rimborsi"
 
 #: pretix/base/exporters/orderlist.py:481
 #: pretix/base/exporters/orderlist.py:748 pretix/base/models/orders.py:204
@@ -1239,10 +1233,8 @@ msgid "Tax name"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:659
-#, fuzzy
-#| msgid "Start date"
 msgid "Event start date"
-msgstr "Data di Inizio"
+msgstr "Data di Inizio evento"
 
 #: pretix/base/exporters/orderlist.py:731
 msgid "Gift card redemptions"
@@ -1298,11 +1290,9 @@ msgid "Street and Number"
 msgstr ""
 
 #: pretix/base/forms/questions.py:312 pretix/base/forms/questions.py:592
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "address"
 msgid "Select state"
-msgstr "Prevendita non ancora attiva"
+msgstr "Seleziona stato"
 
 #: pretix/base/forms/questions.py:507 pretix/base/forms/questions.py:677
 #: pretix/base/payment.py:51 pretix/control/forms/event.py:651
@@ -1530,11 +1520,9 @@ msgid "Beneficiary"
 msgstr ""
 
 #: pretix/base/invoice.py:502
-#, fuzzy
-#| msgid "Invoices"
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "Fatture"
+msgstr "Fattura fiscale"
 
 #: pretix/base/invoice.py:503
 msgctxt "invoice"
@@ -1584,11 +1572,9 @@ msgid "Invoice total"
 msgstr ""
 
 #: pretix/base/invoice.py:573
-#, fuzzy
-#| msgid "Only successful payments"
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Solo pagamenti con successo"
+msgstr "Pagamenti ricevuti"
 
 #: pretix/base/invoice.py:576
 msgctxt "invoice"
@@ -7270,7 +7256,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1020 pretix/control/forms/filter.py:1022
 msgid "Search voucher"
-msgstr ""
+msgstr "Cerca voucher"
 
 #: pretix/control/forms/filter.py:1068 pretix/control/forms/vouchers.py:91
 #: pretix/control/views/typeahead.py:522 pretix/control/views/typeahead.py:526
@@ -7281,15 +7267,15 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1184
 msgid "Refund status"
-msgstr ""
+msgstr "Stato rimborsi"
 
 #: pretix/control/forms/filter.py:1186
 msgid "All open refunds"
-msgstr ""
+msgstr "Tutti i rimborsi aperti"
 
 #: pretix/control/forms/filter.py:1187
 msgid "All refunds"
-msgstr ""
+msgstr "Tutti i rimborsi"
 
 #: pretix/control/forms/filter.py:1223
 msgid "Date filter"
@@ -7309,31 +7295,31 @@ msgstr "Data dell'ultimo pagamento"
 
 #: pretix/control/forms/filter.py:1232
 msgid "Date from"
-msgstr ""
+msgstr "Data da"
 
 #: pretix/control/forms/filter.py:1237
 msgid "Date until"
-msgstr ""
+msgstr "Data fino a "
 
 #: pretix/control/forms/global_settings.py:21
 msgid "Additional footer text"
-msgstr ""
+msgstr "Testo footer aggiuntivo"
 
 #: pretix/control/forms/global_settings.py:22
 msgid "Will be included as additional text in the footer, site-wide."
-msgstr ""
+msgstr "Verrà aggiunto come testo aggiuntivo nel footer, sul sito"
 
 #: pretix/control/forms/global_settings.py:27
 msgid "Additional footer link"
-msgstr ""
+msgstr "Link footer aggiuntivo"
 
 #: pretix/control/forms/global_settings.py:28
 msgid "Will be included as the link in the additional footer text."
-msgstr ""
+msgstr "Verrà aggiunto come link aggiuntivo nel testo del footer."
 
 #: pretix/control/forms/global_settings.py:33
 msgid "Global message banner"
-msgstr ""
+msgstr "Messaggio generale banner"
 
 #: pretix/control/forms/global_settings.py:38
 msgid "Global message banner detail text"
@@ -11490,7 +11476,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:41
 msgid "Advanced options"
-msgstr ""
+msgstr "Opzioni avanzate"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:7
 msgid ""
