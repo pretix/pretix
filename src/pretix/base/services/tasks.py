@@ -90,23 +90,10 @@ class EventTask(app.Task):
 
 class OrganizerUserTask(app.Task):
     def __call__(self, *args, **kwargs):
-        if 'organizer_id' in kwargs:
-            organizer_id = kwargs.get('organizer_id')
-            with scopes_disabled():
-                organizer = Organizer.objects.get(pk=organizer_id)
-            del kwargs['organizer_id']
-            kwargs['organizer'] = organizer
-        elif 'organizer' in kwargs:
-            organizer_id = kwargs.get('organizer')
-            with scopes_disabled():
-                organizer = Organizer.objects.get(pk=organizer_id)
-            kwargs['organizer'] = organizer
-        else:
-            args = list(args)
-            organizer_id = args[0]
-            with scopes_disabled():
-                organizer = Organizer.objects.get(pk=organizer_id)
-            args[0] = organizer
+        organizer_id = kwargs['organizer]
+        with scopes_disabled():
+            organizer = Organizer.objects.get(pk=organizer_id)
+        kwargs['organizer'] = organizer
 
         if 'user_id' in kwargs:
             user_id = kwargs.get('user_id')
