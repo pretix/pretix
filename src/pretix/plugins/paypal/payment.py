@@ -103,8 +103,8 @@ class Paypal(BasePaymentProvider):
             ('prefix',
              forms.CharField(
                  label=_('Reference prefix'),
-                 help_text=_('Any value entered here will be added in front of the regular booking reference containing '
-                             'the order number.'),
+                 help_text=_('Any value entered here will be added in front of the regular booking reference '
+                             'containing the order number.'),
                  required=False,
              ))
         ]
@@ -113,6 +113,7 @@ class Paypal(BasePaymentProvider):
             fields + extra_fields + list(super().settings_form_fields.items())
         )
 
+        d.move_to_end('prefix')
         d.move_to_end('_enabled', False)
         return d
 
