@@ -155,6 +155,10 @@ last_modified                         datetime                   Last modificati
 
    The ``reactivate`` operation has been added.
 
+.. versionchanged:: 3.10
+
+   The ``search`` query parameter has been added.
+
 
 .. _order-position-resource:
 
@@ -468,6 +472,7 @@ List of all orders
                            ``last_modified``, and ``status``. Default: ``datetime``
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
+   :query string search: Only return orders matching a given search query
    :query boolean testmode: Only return orders with ``testmode`` set to ``true`` or ``false``
    :query boolean require_approval: If set to ``true`` or ``false``, only categories with this value for the field
                                     ``require_approval`` will be returned.

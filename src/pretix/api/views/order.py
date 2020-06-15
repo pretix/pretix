@@ -4,7 +4,7 @@ from decimal import Decimal
 import django_filters
 import pytz
 from django.db import transaction
-from django.db.models import F, Prefetch, Q
+from django.db.models import Exists, F, OuterRef, Prefetch, Q
 from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -52,6 +52,7 @@ from pretix.base.signals import (
     order_modified, order_paid, order_placed, register_ticket_outputs,
 )
 from pretix.base.templatetags.money import money_filter
+from pretix.control.signals import order_search_filter_q
 
 with scopes_disabled():
     class OrderFilter(FilterSet):
@@ -60,10 +61,47 @@ with scopes_disabled():
         status = django_filters.CharFilter(field_name='status', lookup_expr='iexact')
         modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
         created_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
+        search = django_filters.CharFilter(method='search_qs')
 
         class Meta:
             model = Order
             fields = ['code', 'status', 'email', 'locale', 'testmode', 'require_approval']
+
+        def search_qs(self, qs, name, value):
+            u = value
+            if "-" in value:
+                code = (Q(event__slug__icontains=u.rsplit("-", 1)[0])
+                        & Q(code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
+            else:
+                code = Q(code__icontains=Order.normalize_code(u))
+
+            matching_invoices = Invoice.objects.filter(
+                Q(invoice_no__iexact=u)
+                | Q(invoice_no__iexact=u.zfill(5))
+                | Q(full_invoice_no__iexact=u)
+            ).values_list('order_id', flat=True)
+
+            matching_positions = OrderPosition.objects.filter(
+                Q(order=OuterRef('pk')) & Q(
+                    Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
+                    | Q(secret__istartswith=u) | Q(voucher__code__icontains=u)
+                )
+            ).values('id')
+
+            mainq = (
+                code
+                | Q(email__icontains=u)
+                | Q(invoice_address__name_cached__icontains=u)
+                | Q(invoice_address__company__icontains=u)
+                | Q(pk__in=matching_invoices)
+                | Q(comment__icontains=u)
+                | Q(has_pos=True)
+            )
+            for recv, q in order_search_filter_q.send(sender=getattr(self, 'event', None), query=u):
+                mainq = mainq | q
+            return qs.annotate(has_pos=Exists(matching_positions)).filter(
+                mainq
+            )
 
 
 class OrderViewSet(viewsets.ModelViewSet):
