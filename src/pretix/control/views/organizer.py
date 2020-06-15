@@ -1213,7 +1213,13 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, V
         cf.date = now()
         cf.expires = now() + timedelta(days=3)
         cf.save()
-        return self.do(self.request.organizer.id, self.request.user.id, str(cf.id), self.exporter.identifier, self.exporter.form.cleaned_data)
+        return self.do(
+            organizer=self.request.organizer.id, 
+            user=self.request.user.id,
+            fileid=str(cf.id),
+            provider=self.exporter.identifier,
+            form_dataself.exporter.form.cleaned_data
+        )
 
 
 class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, TemplateView):
