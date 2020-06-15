@@ -9,11 +9,14 @@ from django.db.models import Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.models import OrderPayment
+from pretix.base.models import Invoice, OrderPayment
 
+from ...control.forms.filter import get_all_payment_providers
 from ..exporter import BaseExporter
 from ..services.invoices import invoice_pdf_task
-from ..signals import register_data_exporters
+from ..signals import (
+    register_data_exporters, register_multievent_data_exporters,
+)
 
 
 class InvoiceExporter(BaseExporter):
@@ -21,7 +24,7 @@ class InvoiceExporter(BaseExporter):
     verbose_name = _('All invoices')
 
     def render(self, form_data: dict, output_file=None):
-        qs = self.event.invoices.filter(shredded=False)
+        qs = Invoice.objects.filter(event__in=self.events, shredded=False)
 
         if form_data.get('payment_provider'):
             qs = qs.annotate(
@@ -68,11 +71,16 @@ class InvoiceExporter(BaseExporter):
             if not any:
                 return None
 
+            if self.is_multievent:
+                filename = '{}_invoices.zip'.format(self.events.first().organizer.slug)
+            else:
+                filename = '{}_invoices'.format(self.event.slug)
+
             if output_file:
-                return '{}_invoices.zip'.format(self.event.slug), 'application/zip', None
+                return filename, 'application/zip', None
             else:
                 with open(os.path.join(d, 'tmp.zip'), 'rb') as zipf:
-                    return '{}_invoices.zip'.format(self.event.slug), 'application/zip', zipf.read()
+                    return filename, 'application/zip', zipf.read()
 
     @property
     def export_form_fields(self):
@@ -99,7 +107,7 @@ class InvoiceExporter(BaseExporter):
                      label=_('Payment provider'),
                      choices=[
                          ('', _('All payment providers')),
-                     ] + [
+                     ] + get_all_payment_providers() if self.is_multievent else [
                          (k, v.verbose_name) for k, v in self.event.get_payment_providers().items()
                      ],
                      required=False,
@@ -114,4 +122,9 @@ class InvoiceExporter(BaseExporter):
 
 @receiver(register_data_exporters, dispatch_uid="exporter_invoices")
 def register_invoice_export(sender, **kwargs):
+    return InvoiceExporter
+
+
+@receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_invoices")
+def register_multievent_invoice_export(sender, **kwargs):
     return InvoiceExporter

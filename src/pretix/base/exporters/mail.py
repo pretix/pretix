@@ -8,7 +8,9 @@ from pretix.base.models import OrderPosition
 
 from ..exporter import BaseExporter
 from ..models import Order
-from ..signals import register_data_exporters
+from ..signals import (
+    register_data_exporters, register_multievent_data_exporters,
+)
 
 
 class MailExporter(BaseExporter):
@@ -16,14 +18,18 @@ class MailExporter(BaseExporter):
     verbose_name = _('Email addresses (text file)')
 
     def render(self, form_data: dict):
-        qs = self.event.orders.filter(status__in=form_data['status'])
+        qs = Order.objects.filter(event__in=self.events, status__in=form_data['status'])
         addrs = qs.values('email')
         pos = OrderPosition.objects.filter(
-            order__event=self.event, order__status__in=form_data['status']
+            order__event__in=self.events, order__status__in=form_data['status']
         ).values('attendee_email')
         data = "\r\n".join(set(a['email'] for a in addrs if a['email'])
                            | set(a['attendee_email'] for a in pos if a['attendee_email']))
-        return '{}_pretixemails.txt'.format(self.event.slug), 'text/plain', data.encode("utf-8")
+
+        if self.is_multievent:
+            return '{}_pretixemails.txt'.format(self.events.first().organizer.slug), 'text/plain', data.encode("utf-8")
+        else:
+            return '{}_pretixemails.txt'.format(self.event.slug), 'text/plain', data.encode("utf-8")
 
     @property
     def export_form_fields(self):
@@ -43,4 +49,9 @@ class MailExporter(BaseExporter):
 
 @receiver(register_data_exporters, dispatch_uid="exporter_mail")
 def register_mail_export(sender, **kwargs):
+    return MailExporter
+
+
+@receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_mail")
+def register_multievent_mail_export(sender, **kwargs):
     return MailExporter
