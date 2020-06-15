@@ -99,10 +99,21 @@ class Paypal(BasePaymentProvider):
                  )),
             ]
 
+        extra_fields = [
+            ('prefix',
+             forms.CharField(
+                 label=_('Reference prefix'),
+                 help_text=_('Any value entered here will be added in front of the regular booking reference '
+                             'containing the order number.'),
+                 required=False,
+             ))
+        ]
+
         d = OrderedDict(
-            fields + list(super().settings_form_fields.items())
+            fields + extra_fields + list(super().settings_form_fields.items())
         )
 
+        d.move_to_end('prefix')
         d.move_to_end('_enabled', False)
         return d
 
@@ -242,7 +253,8 @@ class Paypal(BasePaymentProvider):
                         "item_list": {
                             "items": [
                                 {
-                                    "name": __('Order for %s') % str(request.event),
+                                    "name": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
+                                    __('Order for %s') % str(request.event),
                                     "quantity": 1,
                                     "price": self.format_price(cart['total']),
                                     "currency": request.event.currency
@@ -351,8 +363,10 @@ class Paypal(BasePaymentProvider):
                     "value": {
                         "items": [
                             {
-                                "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(),
-                                                                         code=payment_obj.order.code),
+                                "name": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
+                                __('Order {slug}-{code}').format(
+                                    slug=self.event.slug.upper(), code=payment_obj.order.code
+                                ),
                                 "quantity": 1,
                                 "price": self.format_price(payment_obj.amount),
                                 "currency": payment_obj.order.event.currency
@@ -363,7 +377,8 @@ class Paypal(BasePaymentProvider):
                 {
                     "op": "replace",
                     "path": "/transactions/0/description",
-                    "value": __('Order {order} for {event}').format(
+                    "value": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
+                    __('Order {order} for {event}').format(
                         event=request.event.name,
                         order=payment_obj.order.code
                     )
@@ -552,8 +567,11 @@ class Paypal(BasePaymentProvider):
                         "item_list": {
                             "items": [
                                 {
-                                    "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(),
-                                                                             code=payment_obj.order.code),
+                                    "name": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
+                                    __('Order {slug}-{code}').format(
+                                        slug=self.event.slug.upper(),
+                                        code=payment_obj.order.code
+                                    ),
                                     "quantity": 1,
                                     "price": self.format_price(payment_obj.amount),
                                     "currency": payment_obj.order.event.currency
@@ -564,7 +582,8 @@ class Paypal(BasePaymentProvider):
                             "currency": request.event.currency,
                             "total": self.format_price(payment_obj.amount)
                         },
-                        "description": __('Order {order} for {event}').format(
+                        "description": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
+                        __('Order {order} for {event}').format(
                             event=request.event.name,
                             order=payment_obj.order.code
                         ),
