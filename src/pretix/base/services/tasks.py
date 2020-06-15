@@ -95,23 +95,9 @@ class OrganizerUserTask(app.Task):
             organizer = Organizer.objects.get(pk=organizer_id)
         kwargs['organizer'] = organizer
 
-        if 'user_id' in kwargs:
-            user_id = kwargs.get('user_id')
-            with scopes_disabled():
-                user = User.objects.get(pk=user_id)
-            del kwargs['user_id']
-            kwargs['user'] = user
-        elif 'user' in kwargs:
-            user_id = kwargs.get('user')
-            with scopes_disabled():
-                user = User.objects.get(pk=user_id)
-            kwargs['user'] = user
-        else:
-            args = list(args)
-            user_id = args[1]
-            with scopes_disabled():
-                user = User.objects.get(pk=user_id)
-            args[1] = user
+        user_id = kwargs['user']
+        user = User.objects.get(pk=user_id)
+        kwargs['user'] = user
 
         with scope(organizer=organizer):
             ret = super().__call__(*args, **kwargs)
