@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-15 06:00+0000\n"
+"PO-Revision-Date: 2020-06-15 13:12+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -1212,7 +1212,7 @@ msgstr "Cancellazione"
 #: pretix/control/templates/pretixcontrol/order/index.html:209
 #: pretix/presale/templates/pretixpresale/event/order.html:219
 msgid "Invoice"
-msgstr ""
+msgstr "Fattura"
 
 #: pretix/base/exporters/orderlist.py:652
 #, fuzzy
@@ -1222,15 +1222,15 @@ msgstr "Numeri fattura"
 
 #: pretix/base/exporters/orderlist.py:654 pretix/control/forms/orders.py:240
 msgid "Gross price"
-msgstr ""
+msgstr "Presso lordo"
 
 #: pretix/base/exporters/orderlist.py:655
 msgid "Net price"
-msgstr ""
+msgstr "Prezzo netto"
 
 #: pretix/base/exporters/orderlist.py:658
 msgid "Tax name"
-msgstr ""
+msgstr "Nome tassa"
 
 #: pretix/base/exporters/orderlist.py:659
 msgid "Event start date"
@@ -1846,7 +1846,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:333 pretix/base/models/event.py:1010
 msgid "Location"
-msgstr ""
+msgstr "Luogo"
 
 #: pretix/base/models/event.py:336 pretix/base/models/event.py:1013
 msgid "Latitude"
@@ -7162,7 +7162,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:598 pretix/control/forms/filter.py:600
 #: pretix/control/forms/filter.py:928 pretix/control/forms/filter.py:930
 msgid "Search query"
-msgstr ""
+msgstr "Chiave di ricerca"
 
 #: pretix/control/forms/filter.py:653
 msgid "All events"
@@ -11306,7 +11306,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Count"
-msgstr ""
+msgstr "Conteggio"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Question history"
@@ -17875,24 +17875,24 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:72
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:117
 msgid "Go back"
-msgstr ""
+msgstr "Torna indietro"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:46
 msgid "Checkout"
-msgstr ""
+msgstr "Checkout"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:11
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:33
 #: pretix/presale/templates/pretixpresale/event/index.html:35
 msgid "Your cart"
-msgstr ""
+msgstr "Il tuo carrello"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:18
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
 #: pretix/presale/templates/pretixpresale/event/index.html:42
 msgid "Cart expired"
-msgstr ""
+msgstr "Carrello scaduto"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:30
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:42
@@ -17900,6 +17900,7 @@ msgstr ""
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
+"Gli elementi in tuo carrello saranno riservati per te re %(minutes)s minuti."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:46
@@ -17910,7 +17911,7 @@ msgstr "I prodotti nel tuo carrello non sono più disponibili."
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:43
 #: pretix/presale/templates/pretixpresale/event/index.html:98
 msgid "Add tickets for a different date"
-msgstr ""
+msgstr "Aggiungi biglietti per una data diversa"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
@@ -17923,28 +17924,28 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "Attendi un attimo, stiamo finalizzando il tuo ordine!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 msgid "Add or remove tickets"
-msgstr ""
+msgstr "Aggiungi o rimuovi biglietti"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:61
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:129
 msgid "Modify"
-msgstr ""
+msgstr "Modifica"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:133
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:274
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:33
 msgid "Contact information"
-msgstr ""
+msgstr "Informazioni di contatto"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:157
 msgid "Confirmations"
-msgstr ""
+msgstr "Conferme"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:175
 msgid ""
@@ -18055,7 +18056,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:100
 #: pretix/presale/views/widget.py:316
 msgid "Reserved"
-msgstr ""
+msgstr "Riservati"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:22
 msgid "All remaining products are reserved but might become available again."
@@ -18939,7 +18940,7 @@ msgstr "Ora il tuo carrello è vuoto."
 
 #: pretix/presale/views/cart.py:402
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Il prodotto è stato aggiunto al tuo carrello."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
