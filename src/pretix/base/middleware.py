@@ -212,8 +212,9 @@ class SecurityMiddleware(MiddlewareMixin):
             # single-sign-on this can be nearly anything so we cannot really restrict
             # this. However, we'll restrict it to HTTPS.
             'form-action': ["{dynamic}", "https:"] + (['http:'] if settings.SITE_URL.startswith('http://') else []),
-            'report-uri': ["/csp_report/"],
         }
+        if settings.LOG_CSP:
+            h['report-uri'] = ["/csp_report/"]
         if 'Content-Security-Policy' in resp:
             _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
 
