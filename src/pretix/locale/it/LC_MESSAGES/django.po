@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-15 13:12+0000\n"
+"PO-Revision-Date: 2020-06-15 16:23+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -4278,7 +4278,7 @@ msgstr ""
 #: pretix/base/services/cart.py:64
 #, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
-msgstr ""
+msgstr "Devi scegliere almeno %(min)s biglietti di %(product)s"
 
 #: pretix/base/services/cart.py:65
 #, python-format
