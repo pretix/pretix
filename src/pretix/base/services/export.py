@@ -45,14 +45,10 @@ def multiexport(organizer: Organizer, user: User, fileid: str, provider: str, fo
     file = CachedFile.objects.get(id=fileid)
     with language(user.locale), override(user.timezone):
         allowed_events = user.get_events_with_permission('can_view_orders')
-        events = []
-        for event in form_data.get('events'):
-            if allowed_events.filter(pk=event).exists():
-                events.append(event)
 
-        events = allowed_events.filter(pk__in=events)
+        events = allowed_events.filter(pk__in=form_data.get('events'))
         responses = register_multievent_data_exporters.send(organizer)
-        print(events)
+
         for receiver, response in responses:
             ex = response(events)
             if ex.identifier == provider:

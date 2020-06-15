@@ -11,7 +11,7 @@ from PyPDF2.merger import PdfFileMerger
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Event, Order, OrderPosition
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from .ticketoutput import PdfTicketOutput
@@ -24,7 +24,7 @@ class AllTicketsPDF(BaseExporter):
 
     @property
     def export_form_fields(self):
-        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.multievent else None
+        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
         d = OrderedDict(
             [
                 ('include_pending',
@@ -41,7 +41,7 @@ class AllTicketsPDF(BaseExporter):
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
+                     ] if settings.JSON_FIELD_AVAILABLE and name_scheme and len(name_scheme['fields']) > 1 else []),
                  )),
             ]
         )
@@ -74,11 +74,13 @@ class AllTicketsPDF(BaseExporter):
                 'resolved_name_part'
             )
 
+        o = PdfTicketOutput(Event.objects.none())
         for op in qs:
             if not op.generate_ticket:
                 continue
 
-            o = PdfTicketOutput(op.event)
+            if op.order.event != o.event:
+                o = PdfTicketOutput(op.event)
 
             with language(op.order.locale):
                 layout = o.layout_map.get(
@@ -96,7 +98,7 @@ class AllTicketsPDF(BaseExporter):
         merger.close()
         outbuffer.seek(0)
 
-        if self.multievent:
-            return '{}_tickets.pdf'.format(self.event.first().organizer.slug), 'application/pdf', outbuffer.read()
+        if self.is_multievent:
+            return '{}_tickets.pdf'.format(self.events.first().organizer.slug), 'application/pdf', outbuffer.read()
         else:
             return '{}_tickets.pdf'.format(self.event.slug), 'application/pdf', outbuffer.read()

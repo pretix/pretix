@@ -22,11 +22,12 @@ class BaseExporter:
 
     def __init__(self, event):
         self.event = event
-        self.multievent = isinstance(event, QuerySet)
-        if not isinstance(event, QuerySet):
-            self.events = Event.objects.filter(pk=event.pk)
-        else:
+        self.is_multievent = isinstance(event, QuerySet)
+        if isinstance(event, QuerySet):
             self.events = event
+            self.event = None
+        else:
+            self.events = Event.objects.filter(pk=event.pk)
 
     def __str__(self):
         return self.identifier
