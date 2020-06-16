@@ -1141,7 +1141,9 @@ class ExportMixin:
     @cached_property
     def exporters(self):
         exporters = []
-        events = self.request.user.get_events_with_permission('can_view_orders')
+        events = self.request.user.get_events_with_permission('can_view_orders', request=self.request).filter(
+            organizer=self.request.organizer
+        )
         responses = register_multievent_data_exporters.send(self.request.organizer)
         for ex in sorted([response(events) for r, response in responses], key=lambda ex: str(ex.verbose_name)):
             if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
