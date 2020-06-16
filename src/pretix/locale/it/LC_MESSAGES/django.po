@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-15 16:23+0000\n"
+"PO-Revision-Date: 2020-06-16 08:35+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -2710,6 +2710,8 @@ msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
 msgstr ""
+"Il pagamento non può essere accettato perchè l'ultima data configurata è "
+"scaduta."
 
 #: pretix/base/models/orders.py:685
 msgid ""
@@ -2746,7 +2748,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:44
 #, python-format
 msgid "Your order: %(code)s"
-msgstr ""
+msgstr "Il tuo ordine: %(code)s"
 
 #: pretix/base/models/orders.py:943
 msgid "<file>"
@@ -2774,7 +2776,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1232
 msgctxt "payment_state"
 msgid "pending"
-msgstr ""
+msgstr "in attesa"
 
 #: pretix/base/models/orders.py:1233
 msgctxt "payment_state"
@@ -2809,7 +2811,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1475
 #, python-format
 msgid "Payment received for your order: %(code)s"
-msgstr ""
+msgstr "Pagamento ricevuto per il tuo ordine: %(code)s"
 
 #: pretix/base/models/orders.py:1581
 msgctxt "refund_state"
@@ -3763,6 +3765,8 @@ msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
 msgstr ""
+"Il pagamento non è richiesto per questo ordine perchè include solo prodotti "
+"gratuiti."
 
 #: pretix/base/payment.py:796
 msgid "Free of charge"
@@ -4699,7 +4703,7 @@ msgstr ""
 #: pretix/base/services/orders.py:1011
 #, python-format
 msgid "Your order is pending payment: %(code)s"
-msgstr ""
+msgstr "Il tuo ordine è in attesa di pagamento: %(code)s"
 
 #: pretix/base/services/orders.py:1082
 #, python-format
@@ -5138,7 +5142,7 @@ msgstr ""
 
 #: pretix/base/settings.py:408
 msgid "Last date of payments"
-msgstr ""
+msgstr "Ultima data per i pagamenti"
 
 #: pretix/base/settings.py:409
 msgid ""
@@ -5650,6 +5654,16 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"ricevi questo messaggio perchè hai richiesto di inviarti il link del tuo "
+"oridne per {event}.\n"
+"\n"
+"Puoi cambiare i dettagli del tuo ordine e vedere lo stato qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+" {event}"
 
 #: pretix/base/settings.py:1148
 #, python-brace-format
@@ -5664,6 +5678,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"è stata richiesta la lista dei tuoi ordine per l'evento {event}.\n"
+"Ecco la lista:\n"
+"\n"
+"{orders}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1160
 #, python-brace-format
@@ -5693,6 +5716,16 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"il tuo ordine per {event} è stato accettato. Il pagamento non è richiesto "
+"perchè hai ordinato solo prodotti gratuiti.\n"
+"\n"
+"Puoi cambiare i dettagli dell'ordine e vedere lo stato qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event} "
 
 #: pretix/base/settings.py:1189
 #, python-brace-format
@@ -5727,6 +5760,19 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"abbimao ricevuto il tuo ordine per {event}\n"
+"con un valore totale di {total_with_currency}.\n"
+"Effettua il pagamento entro il {expire_date}.\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Puoi modificare i dettagli dell'ordine e vedere lo stato qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1222
 #, python-brace-format
@@ -5771,6 +5817,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"abbiamo ricevuto il tuo pagamento per {event}. Grazie!\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Puoi cambiare i dettagli del tuo ordine e vedere lo stato qui:\n"
+"{url}\n"
+"\n"
+"UN saluto,\n"
+" {event} "
 
 #: pretix/base/settings.py:1264
 #, python-brace-format
@@ -12007,7 +12064,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:283
 #: pretix/presale/templates/pretixpresale/event/order.html:177
 msgid "Ordered items"
-msgstr ""
+msgstr "Prodotti ordinati"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:302
 #, python-format
@@ -16042,6 +16099,8 @@ msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
 msgstr ""
+"Dopo aver effettuato il bonifico puoi chiudere questa pagina. Ti ivieremo "
+"una email appena lo riceveremo."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:59
 msgid "Open banking app"
@@ -16350,7 +16409,7 @@ msgstr ""
 
 #: pretix/plugins/paypal/signals.py:35
 msgid "Payment pending."
-msgstr ""
+msgstr "Pagamento in attesa."
 
 #: pretix/plugins/paypal/signals.py:44
 msgid "PayPal reported an event: {}"
@@ -18391,11 +18450,11 @@ msgstr "Invia nuovamente links dell'ordine"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:13
 msgid "Thank you!"
-msgstr ""
+msgstr "Grazie!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
+msgstr "Il tuo ordine è stato effettuato correttamente. Qui sotto i dettagli."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:19
 msgid ""
@@ -18406,6 +18465,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:23
 msgid "Please note that we still await your payment to complete the process."
 msgstr ""
+"Dobbiamo aspettare di ricevere il pagamento prima di considerare l'ordine "
+"completo."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid "Your order has been processed successfully! See below for details."
@@ -18421,6 +18482,8 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Salva questa pagina nei preferiti se vuoi accedervi in seguito. Ti abbiamo "
+"anche inviato una email contenente il link a questa pagina."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
@@ -18445,7 +18508,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:78
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "Rieffettua il pagamento o scegli un altro metodo di pagamento"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:86
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
