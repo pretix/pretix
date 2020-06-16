@@ -1,0 +1,37 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load order_overview %}
+{% block title %}{% trans "Data export" %}{% endblock %}
+{% block content %}
+	<h1>
+        {% trans "Data export" %}
+        {% if "identifier" in request.GET %}
+            <a href="?" class="btn btn-default">{% trans "Show all" %}</a>
+        {% endif %}
+    </h1>
+    {% for e in exporters %}
+        <details class="panel panel-default" {% if "identifier" in request.GET %}open{% endif %}>
+            <summary class="panel-heading">
+                <h3 class="panel-title">
+                    {{ e.verbose_name }}
+                    <i class="fa fa-angle-down collapse-indicator"></i>
+                </h3>
+            </summary>
+            <div id="{{ e.identifier }}">
+                <div class="panel-body">
+                    <form action="{% url "control:organizer.export.do" organizer=request.organizer.slug %}"
+                            method="post" class="form-horizontal" data-asynctask data-asynctask-download
+                            data-asynctask-long>
+                        {% csrf_token %}
+                        <input type="hidden" name="exporter" value="{{ e.identifier }}" />
+                        {% bootstrap_form e.form layout='control' %}
+                        <button class="btn btn-primary pull-right flip" type="submit">
+                            <span class="icon icon-upload"></span> {% trans "Start export" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </details>
+    {% endfor %}
+{% endblock %}

@@ -6,10 +6,13 @@ from typing import Tuple
 
 from defusedcsv import csv
 from django import forms
+from django.db.models import QuerySet
 from django.utils.formats import localize
 from django.utils.translation import gettext, gettext_lazy as _
 from openpyxl import Workbook
 from openpyxl.cell.cell import KNOWN_TYPES
+
+from pretix.base.models import Event
 
 
 class BaseExporter:
@@ -19,6 +22,12 @@ class BaseExporter:
 
     def __init__(self, event):
         self.event = event
+        self.is_multievent = isinstance(event, QuerySet)
+        if isinstance(event, QuerySet):
+            self.events = event
+            self.event = None
+        else:
+            self.events = Event.objects.filter(pk=event.pk)
 
     def __str__(self):
         return self.identifier

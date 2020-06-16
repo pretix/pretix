@@ -19,7 +19,7 @@ from django_scopes import scope, scopes_disabled
 from pretix.base.metrics import (
     pretix_task_duration_seconds, pretix_task_runs_total,
 )
-from pretix.base.models import Event
+from pretix.base.models import Event, Organizer, User
 from pretix.celery_app import app
 
 
@@ -88,7 +88,27 @@ class EventTask(app.Task):
         return ret
 
 
+class OrganizerUserTask(app.Task):
+    def __call__(self, *args, **kwargs):
+        organizer_id = kwargs['organizer']
+        with scopes_disabled():
+            organizer = Organizer.objects.get(pk=organizer_id)
+        kwargs['organizer'] = organizer
+
+        user_id = kwargs['user']
+        user = User.objects.get(pk=user_id)
+        kwargs['user'] = user
+
+        with scope(organizer=organizer):
+            ret = super().__call__(*args, **kwargs)
+        return ret
+
+
 class ProfiledEventTask(ProfiledTask, EventTask):
+    pass
+
+
+class ProfiledOrganizerUserTask(ProfiledTask, OrganizerUserTask):
     pass
 
 

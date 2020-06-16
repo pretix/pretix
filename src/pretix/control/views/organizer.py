@@ -1,4 +1,5 @@
 import json
+from datetime import timedelta
 from decimal import Decimal
 
 from django import forms
@@ -14,25 +15,32 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import (
-    CreateView, DeleteView, DetailView, FormView, ListView, UpdateView,
+    CreateView, DeleteView, DetailView, FormView, ListView, TemplateView,
+    UpdateView,
 )
 
 from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
-    Device, GiftCard, OrderPayment, Organizer, Team, TeamInvite, User,
+    CachedFile, Device, GiftCard, OrderPayment, Organizer, Team, TeamInvite,
+    User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import gen_giftcard_secret
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.payment import PaymentException
+from pretix.base.services.export import multiexport
 from pretix.base.services.mail import SendMailException, mail
+from pretix.base.signals import register_multievent_data_exporters
+from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import (
     EventFilterForm, GiftCardFilterForm, OrganizerFilterForm,
 )
+from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
     DeviceForm, EventMetaPropertyForm, GiftCardCreateForm, GiftCardUpdateForm,
     OrganizerDeleteForm, OrganizerForm, OrganizerSettingsForm,
@@ -1127,3 +1135,97 @@ class GiftCardUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                 'giftcard': self.object.pk
             }
         ))
+
+
+class ExportMixin:
+    @cached_property
+    def exporters(self):
+        exporters = []
+        events = self.request.user.get_events_with_permission('can_view_orders')
+        responses = register_multievent_data_exporters.send(self.request.organizer)
+        for ex in sorted([response(events) for r, response in responses], key=lambda ex: str(ex.verbose_name)):
+            if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
+                continue
+
+            # Use form parse cycle to generate useful defaults
+            test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
+            test_form.fields = ex.export_form_fields
+            test_form.is_valid()
+            initial = {
+                k: v for k, v in test_form.cleaned_data.items() if ex.identifier + "-" + k in self.request.GET
+            }
+
+            ex.form = ExporterForm(
+                data=(self.request.POST if self.request.method == 'POST' else None),
+                prefix=ex.identifier,
+                initial=initial
+            )
+            ex.form.fields = ex.export_form_fields
+            ex.form.fields.update([
+                ('events',
+                 forms.ModelMultipleChoiceField(
+                     queryset=events,
+                     initial=events,
+                     widget=forms.CheckboxSelectMultiple(
+                         attrs={'class': 'scrolling-multiple-choice'}
+                     ),
+                     label=_('Events'),
+                     required=True
+                 )),
+            ])
+            exporters.append(ex)
+        return exporters
+
+
+class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, View):
+    known_errortypes = ['ExportError']
+    task = multiexport
+
+    def get_success_message(self, value):
+        return None
+
+    def get_success_url(self, value):
+        return reverse('cachedfile.download', kwargs={'id': str(value)})
+
+    def get_error_url(self):
+        return reverse('control:organizer.export', kwargs={
+            'organizer': self.request.organizer.slug
+        })
+
+    @cached_property
+    def exporter(self):
+        for ex in self.exporters:
+            if ex.identifier == self.request.POST.get("exporter"):
+                return ex
+
+    def post(self, request, *args, **kwargs):
+        if not self.exporter:
+            messages.error(self.request, _('The selected exporter was not found.'))
+            return redirect('control:organizer.export', kwargs={
+                'organizer': self.request.organizer.slug
+            })
+
+        if not self.exporter.form.is_valid():
+            messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
+            return self.get(request, *args, **kwargs)
+
+        cf = CachedFile()
+        cf.date = now()
+        cf.expires = now() + timedelta(days=3)
+        cf.save()
+        return self.do(
+            organizer=self.request.organizer.id,
+            user=self.request.user.id,
+            fileid=str(cf.id),
+            provider=self.exporter.identifier,
+            form_data=self.exporter.form.cleaned_data
+        )
+
+
+class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, TemplateView):
+    template_name = 'pretixcontrol/organizers/export.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['exporters'] = self.exporters
+        return ctx

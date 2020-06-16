@@ -11,7 +11,7 @@ from PyPDF2.merger import PdfFileMerger
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Event, Order, OrderPosition
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from .ticketoutput import PdfTicketOutput
@@ -24,7 +24,7 @@ class AllTicketsPDF(BaseExporter):
 
     @property
     def export_form_fields(self):
-        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
         d = OrderedDict(
             [
                 ('include_pending',
@@ -41,7 +41,7 @@ class AllTicketsPDF(BaseExporter):
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
+                     ] if settings.JSON_FIELD_AVAILABLE and name_scheme and len(name_scheme['fields']) > 1 else []),
                  )),
             ]
         )
@@ -49,10 +49,8 @@ class AllTicketsPDF(BaseExporter):
 
     def render(self, form_data):
         merger = PdfFileMerger()
-
-        o = PdfTicketOutput(self.event)
         qs = OrderPosition.objects.filter(
-            order__event=self.event
+            order__event__in=self.events
         ).prefetch_related(
             'answers', 'answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to')
@@ -76,9 +74,13 @@ class AllTicketsPDF(BaseExporter):
                 'resolved_name_part'
             )
 
+        o = PdfTicketOutput(Event.objects.none())
         for op in qs:
             if not op.generate_ticket:
                 continue
+
+            if op.order.event != o.event:
+                o = PdfTicketOutput(op.event)
 
             with language(op.order.locale):
                 layout = o.layout_map.get(
@@ -95,4 +97,8 @@ class AllTicketsPDF(BaseExporter):
         merger.write(outbuffer)
         merger.close()
         outbuffer.seek(0)
-        return '{}_tickets.pdf'.format(self.event.slug), 'application/pdf', outbuffer.read()
+
+        if self.is_multievent:
+            return '{}_tickets.pdf'.format(self.events.first().organizer.slug), 'application/pdf', outbuffer.read()
+        else:
+            return '{}_tickets.pdf'.format(self.event.slug), 'application/pdf', outbuffer.read()
