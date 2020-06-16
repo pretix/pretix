@@ -163,10 +163,20 @@ def get_tickets_for_order(order, base_position=None):
                     if ct.type == 'text/uri-list':
                         continue
 
+                    if pos.subevent:
+                        # Subevent date in filename improves accessibility e.g. for screen reader users
+                        fname = "{}-{}-{}-{}-{}{}".format(
+                            order.event.slug.upper(), order.code, pos.positionid,
+                            pos.subevent.date_from.strftime('%Y_%m_%d'),
+                            ct.provider, ct.extension
+                        )
+                    else:
+                        fname = "{}-{}-{}-{}{}".format(
+                            order.event.slug.upper(), order.code, pos.positionid,
+                            ct.provider, ct.extension
+                        )
                     tickets.append((
-                        "{}-{}-{}-{}{}".format(
-                            order.event.slug.upper(), order.code, pos.positionid, ct.provider, ct.extension,
-                        ),
+                        fname,
                         ct
                     ))
                 except:
