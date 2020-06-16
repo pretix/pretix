@@ -18,7 +18,7 @@ class MailExporter(BaseExporter):
     verbose_name = _('Email addresses (text file)')
 
     def render(self, form_data: dict):
-        qs = Order.objects.filter(event__in=self.events, status__in=form_data['status'])
+        qs = Order.objects.filter(event__in=self.events, status__in=form_data['status']).prefetch_related('event')
         addrs = qs.values('email')
         pos = OrderPosition.objects.filter(
             order__event__in=self.events, order__status__in=form_data['status']

@@ -30,7 +30,7 @@ that we'll provide in this plugin::
         return MyExporter
 
 Some exporters might also prove to be useful, when provided on an organizer-level. In order to declare your
-exporter as capable of providing a exports spanning multiple events, your plugin should listen for this signal
+exporter as capable of providing exports spanning multiple events, your plugin should listen for this signal
 and return the subclass of ``pretix.base.exporter.BaseExporter`` that we'll provide in this plugin::
 
     from django.dispatch import receiver
@@ -43,7 +43,7 @@ and return the subclass of ``pretix.base.exporter.BaseExporter`` that we'll prov
         from .exporter import MyExporter
         return MyExporter
 
-If your exporter supports both event-level and multi-level exports, you will need to listen for both
+If your exporter supports both event-level and multi-event level exports, you will need to listen for both
 signals.
 
 The exporter class

@@ -91,13 +91,13 @@ class OrderListExporter(MultiSheetListExporter):
         qs = Order.objects.filter(event__in=self.events).annotate(
             payment_date=Subquery(p_date, output_field=DateTimeField()),
             pcnt=Subquery(s, output_field=IntegerField())
-        ).select_related('invoice_address').prefetch_related('invoices')
+        ).select_related('invoice_address').prefetch_related('invoices').prefetch_related('event')
         if form_data['paid_only']:
             qs = qs.filter(status=Order.STATUS_PAID)
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
-            _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
+            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
             _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
@@ -145,7 +145,8 @@ class OrderListExporter(MultiSheetListExporter):
             tz = pytz.timezone(order.event.settings.timezone)
 
             row = [
-                order.full_code if self.is_multievent else order.code,
+                order.event.slug,
+                order.code,
                 order.total,
                 order.get_status_display(),
                 order.email,
@@ -208,6 +209,7 @@ class OrderListExporter(MultiSheetListExporter):
             qs = qs.filter(order__status=Order.STATUS_PAID)
 
         headers = [
+            _('Event slug'),
             _('Order code'),
             _('Status'),
             _('Email'),
@@ -235,7 +237,8 @@ class OrderListExporter(MultiSheetListExporter):
             order = op.order
             tz = pytz.timezone(order.event.settings.timezone)
             row = [
-                order.full_code if self.is_multievent else order.code,
+                order.event.slug,
+                order.code,
                 order.get_status_display(),
                 order.email,
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
@@ -282,13 +285,14 @@ class OrderListExporter(MultiSheetListExporter):
             qs = qs.filter(order__status=Order.STATUS_PAID)
 
         headers = [
+            _('Event slug'),
             _('Order code'),
             _('Position ID'),
             _('Status'),
             _('Email'),
             _('Order date'),
         ]
-        if bool(self.events.filter(has_subevents=True)):
+        if self.events.filter(has_subevents=True).exists():
             headers.append(pgettext('subevent', 'Date'))
             headers.append(_('Start date'))
             headers.append(_('End date'))
@@ -347,7 +351,8 @@ class OrderListExporter(MultiSheetListExporter):
             order = op.order
             tz = pytz.timezone(order.event.settings.timezone)
             row = [
-                order.full_code if self.is_multievent else order.code,
+                order.event.slug,
+                order.code,
                 op.positionid,
                 order.get_status_display(),
                 order.email,
@@ -479,7 +484,7 @@ class PaymentListExporter(ListExporter):
         objs = sorted(list(payments) + list(refunds), key=lambda o: o.created)
 
         headers = [
-            _('Order'), _('Payment ID'), _('Creation date'), _('Completion date'), _('Status'),
+            _('Event slug'), _('Order'), _('Payment ID'), _('Creation date'), _('Completion date'), _('Status'),
             _('Status code'), _('Amount'), _('Payment method')
         ]
         yield headers
@@ -493,7 +498,8 @@ class PaymentListExporter(ListExporter):
             else:
                 d2 = ''
             row = [
-                obj.order.full_code if self.is_multievent else obj.order.code,
+                obj.order.event.slug,
+                obj.order.code,
                 obj.full_id,
                 obj.created.astimezone(tz).date().strftime('%Y-%m-%d'),
                 d2,
@@ -751,7 +757,7 @@ class GiftcardRedemptionListExporter(ListExporter):
         objs = sorted(list(payments) + list(refunds), key=lambda o: (o.order.code, o.created))
 
         headers = [
-            _('Order'), _('Payment ID'), _('Date'), _('Gift card code'), _('Amount'), _('Issuer')
+            _('Event slug'), _('Order'), _('Payment ID'), _('Date'), _('Gift card code'), _('Amount'), _('Issuer')
         ]
         yield headers
 
@@ -759,7 +765,8 @@ class GiftcardRedemptionListExporter(ListExporter):
             tz = pytz.timezone(obj.order.event.settings.timezone)
             gc = GiftCard.objects.get(pk=obj.info_data.get('gift_card'))
             row = [
-                obj.order.full_code if self.is_multievent else obj.order.code,
+                obj.order.event.slug,
+                obj.order.code,
                 obj.full_id,
                 obj.created.astimezone(tz).date().strftime('%Y-%m-%d'),
                 gc.secret,
