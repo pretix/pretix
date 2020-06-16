@@ -38,5 +38,18 @@
             <dt>{% trans "Server Transaction Code" %}</dt>
             <dd>{{ payment_info.payment_data.server_transactionId }}</dd>
         {% endif %}
+    {% elif payment_info.payment_type == "izettle" %}
+        <dt>{% trans "Payment provider" %}</dt>
+        <dd>iZettle</dd>
+        <dt>{% trans "Payment Application" %}</dt>
+        <dd>{{ payment_info.payment_data.applicationName }}</dd>
+        <dt>{% trans "Card Entry Mode" %}</dt>
+        <dd>{{ payment_info.payment_data.cardPaymentEntryMode }}</dd>
+        <dt>{% trans "Card number" %}</dt>
+        <dd>
+            <i class="fa fa-cc-{{ payment_info.payment_data.applicationName|lower }}"></i> {{ payment_info.payment_data.maskedPan }}
+        </dd>
+        <dt>{% trans "Authorization Code" %}</dt>
+        <dd>{{ payment_info.payment_data.authorizationCode }}</dd>
     {% endif %}
 </dl>
