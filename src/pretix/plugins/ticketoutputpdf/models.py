@@ -104,8 +104,8 @@ class TicketLayout(LoggedModel):
         "bold":false,
         "italic":false,
         "width":"110.00",
-        "content":"event_date_range",
-        "text":"May 31st – June 4th, 2017",
+        "content":"event_begin",
+        "text":"2016-05-31 20:00",
         "align":"left"
     },
     {
