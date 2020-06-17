@@ -375,6 +375,7 @@ class Event(EventMixin, LoggedModel):
         self.settings.invoice_include_expire_date = True
         self.settings.ticketoutput_pdf__enabled = True
         self.settings.ticketoutput_passbook__enabled = True
+        self.settings.event_list_type = 'calendar'
 
     @property
     def social_image(self):
