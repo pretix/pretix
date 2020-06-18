@@ -944,9 +944,67 @@ Vue.component('pretix-widget-event-calendar-event', {
     }
 });
 
+Vue.component('pretix-widget-event-week-cell', {
+    template: ('<div :class="classObject" @click.prevent="selectDay">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
+        + '{{ dayhead }}'
+        + '</div>'
+        + '<div class="pretix-widget-event-calendar-events" v-if="day">'
+        + '<pretix-widget-event-calendar-event v-for="e in day.events" :event="e"></pretix-widget-event-calendar-event>'
+        + '</div>'
+        + '</div>'),
+    props: {
+        day: Object,
+    },
+    methods: {
+        selectDay: function () {
+            if (!this.day || !this.day.events.length || !this.$parent.$parent.$parent.mobile) {
+                return;
+            }
+            if (this.day.events.length === 1) {
+                var ev = this.day.events[0];
+                this.$root.parent_stack.push(this.$root.target_url);
+                this.$root.target_url = ev.event_url;
+                this.$root.error = null;
+                this.$root.subevent = ev.subevent;
+                this.$root.loading++;
+                this.$root.reload();
+            } else {
+                this.$root.events = this.day.events;
+                this.$root.view = "events";
+            }
+        }
+    },
+    computed: {
+        dayhead: function () {
+            if (!this.day) {
+                return;
+            }
+            return this.day.day_formatted;
+        },
+        classObject: function () {
+            var o = {};
+            if (this.day && this.day.events.length > 0) {
+                o['pretix-widget-has-events'] = true;
+                var best = 'red';
+                for (var i = 0; i < this.day.events.length; i++) {
+                    var ev = this.day.events[i];
+                    if (ev.availability.color === 'green') {
+                        best = 'green';
+                    } else if (ev.availability.color === 'orange' && best !== 'green') {
+                        best = 'orange'
+                    }
+                }
+                o['pretix-widget-day-availability-' + best] = true;
+            }
+            return o
+        }
+    }
+});
+
 Vue.component('pretix-widget-event-calendar-cell', {
     template: ('<td :class="classObject" @click.prevent="selectDay">'
-        + '<div class="pretix-widget-event-calendar-day" v-if="day && show_day">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
         + '{{ daynum }}'
         + '</div>'
         + '<div class="pretix-widget-event-calendar-events" v-if="day">'
@@ -955,7 +1013,6 @@ Vue.component('pretix-widget-event-calendar-cell', {
         + '</td>'),
     props: {
         day: Object,
-        show_day: Boolean
     },
     methods: {
         selectDay: function () {
@@ -1005,7 +1062,7 @@ Vue.component('pretix-widget-event-calendar-cell', {
 
 Vue.component('pretix-widget-event-calendar-row', {
     template: ('<tr>'
-        + '<pretix-widget-event-calendar-cell v-for="d in week" :day="d" :show_day="true"></pretix-widget-event-calendar-cell>'
+        + '<pretix-widget-event-calendar-cell v-for="d in week" :day="d"></pretix-widget-event-calendar-cell>'
         + '</tr>'),
     props: {
         week: Array
@@ -1098,19 +1155,13 @@ Vue.component('pretix-widget-event-week-calendar', {
         + strings['next_week']
         + ' &raquo;</a>'
         + '</div>'
-        + '<table class="pretix-widget-event-calendar-table">'
-        + '<thead>'
-        + '<tr>'
-        + '<th v-for="d in $root.days">{{ d.day_formatted }}</th>'
-        + '</tr>'
-        + '</thead>'
-        + '<tbody>'
-        + '<tr>'
-        + '<pretix-widget-event-calendar-cell v-for="d in $root.days" :day="d" :show_day="false">'
-        + '</pretix-widget-event-calendar-cell>'
-        + '</tr>'
-        + '</tbody>'
-        + '</table>'
+        + '<div class="pretix-widget-event-week-table">'
+        + '<div class="pretix-widget-event-week-col" v-for="d in $root.days">'
+        + '<pretix-widget-event-week-cell :day="d">'
+        + '</pretix-widget-event-week-cell>'
+        + '</div>'
+        + '</div>'
+        + '</div>'
         + '</div>'),
     computed: {
         weekname: function () {

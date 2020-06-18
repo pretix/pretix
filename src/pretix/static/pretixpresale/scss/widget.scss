@@ -452,6 +452,24 @@
 
   .pretix-widget-event-calendar {
     padding-top: 10px;
+    word-break: break-word;
+
+    .pretix-widget-event-week-table {
+      display: flex;
+      flex-direction: row;
+
+      .pretix-widget-event-week-col {
+        flex: 1;
+        margin: 0 5px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
 
     .pretix-widget-event-calendar-head {
       display: flex;
@@ -487,6 +505,7 @@
 
     .pretix-widget-event-calendar-table {
       width: 100%;
+
       th, td {
         width: 14.285714285714286%;
         vertical-align: top;
@@ -666,6 +685,15 @@
 }
 
 .pretix-widget.pretix-widget-mobile {
+  .pretix-widget-event-week-table {
+    display: block;
+
+    .pretix-widget-event-week-col {
+      flex: 1;
+      margin: 10px 0;
+    }
+  }
+
   .pretix-widget-item-info-col {
     width: 100%;
     float: none;
@@ -706,6 +734,11 @@
   .pretix-widget-event-calendar {
     .pretix-widget-event-calendar-events {
       display: none;
+    }
+    .pretix-widget-event-week-table {
+      .pretix-widget-event-calendar-events {
+        display: block;
+      }
     }
     td.pretix-widget-has-events {
       background: $brand-primary;
