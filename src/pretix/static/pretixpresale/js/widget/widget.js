@@ -225,10 +225,10 @@ Vue.component('availbox', {
     },
     computed: {
         amount_selected: {
-            get() {
+            get: function () {
                 return this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
             },
-            set(value) {
+            set: function (value) {
                 // Unary operator to force boolean to integer conversion, as the HTML form submission
                 // needs the value to be integer for all products.
                 value = (+value);
