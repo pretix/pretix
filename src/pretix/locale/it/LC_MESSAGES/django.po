@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-16 19:00+0000\n"
+"PO-Revision-Date: 2020-06-18 10:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -1314,7 +1314,7 @@ msgstr "Il tuo numero di partita iva non corrisponde al tuo stato."
 
 #: pretix/base/forms/questions.py:699
 msgid "This VAT ID is not valid. Please re-check your input."
-msgstr ""
+msgstr "Il numero di partita iva non è valido, controlla."
 
 #: pretix/base/forms/questions.py:704
 msgid ""
@@ -1323,6 +1323,10 @@ msgid ""
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
+"Non è possibile verificare il tuo numero di partita iva perchè il sistema di "
+"verifica del tuo stato non è attualmente disponibile. Dobbiamo quindi "
+"includere l'iva nella tua fattura. Puoi richiedere indietro l'iva tramite la "
+"procedura di rimborso."
 
 #: pretix/base/forms/questions.py:712
 msgid ""
@@ -1330,6 +1334,10 @@ msgid ""
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
+"Non è possibile verificare il tuo numero di partita iva perchè il sistema di "
+"verifica del tuo stato ha risposto con un valore non corretto. Dobbiamo "
+"quindi includere l'iva nella tua fattura. Contatta il supporto per chiedere "
+"di risolvere il problema."
 
 #: pretix/base/forms/user.py:16 pretix/control/forms/users.py:22
 msgid ""
@@ -1381,22 +1389,24 @@ msgstr "Tipo del dispositivo"
 
 #: pretix/base/forms/user.py:122
 msgid "Smartphone with the Authenticator application"
-msgstr ""
+msgstr "Smatphone con applicazione di autenticazione"
 
 #: pretix/base/forms/user.py:123
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr ""
+msgstr "Token hardware WebAuthn-compatibile (e.g. Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
 msgstr ""
+"Sintassi del placeholder non valida: Hai usato un numero diverso da \"{\" "
+"than of \"}\"."
 
 #: pretix/base/forms/validators.py:39
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr ""
+msgstr "Placeholder(s) non valido: %(value)s"
 
 #: pretix/base/forms/widgets.py:138 pretix/base/forms/widgets.py:143
 #: pretix/base/models/orders.py:2136
@@ -1416,7 +1426,7 @@ msgstr "Pagina %d di %d"
 #: pretix/base/invoice.py:246
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr ""
+msgstr "Rendered classico (pretix 1.0)"
 
 #: pretix/base/invoice.py:288
 msgctxt "invoice"
@@ -1491,29 +1501,29 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 msgid "TEST MODE"
-msgstr ""
+msgstr "MODALITA' TEST"
 
 #: pretix/base/invoice.py:431 pretix/base/services/mail.py:340
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
-msgstr ""
+msgstr "Fattura {num}"
 
 #: pretix/base/invoice.py:471
 #, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr ""
+msgstr "Referenza cliente: {reference}"
 
 #: pretix/base/invoice.py:477
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr ""
+msgstr "Partita IVA cliente"
 
 #: pretix/base/invoice.py:484
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Beneficiario"
 
 #: pretix/base/invoice.py:502
 msgctxt "invoice"
@@ -1523,49 +1533,49 @@ msgstr "Fattura fiscale"
 #: pretix/base/invoice.py:503
 msgctxt "invoice"
 msgid "Invoice"
-msgstr ""
+msgstr "Fattura"
 
 #: pretix/base/invoice.py:504
 #: pretix/control/templates/pretixcontrol/order/index.html:209
 #: pretix/presale/templates/pretixpresale/event/order.html:219
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr ""
+msgstr "Cancellazione"
 
 #: pretix/base/invoice.py:525 pretix/base/invoice.py:533
 msgctxt "invoice"
 msgid "Description"
-msgstr ""
+msgstr "Descrizione"
 
 #: pretix/base/invoice.py:526 pretix/base/invoice.py:534
 msgctxt "invoice"
 msgid "Qty"
-msgstr ""
+msgstr "Quantità"
 
 #: pretix/base/invoice.py:527 pretix/base/invoice.py:604
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr ""
+msgstr "Imposte"
 
 #: pretix/base/invoice.py:528
 msgctxt "invoice"
 msgid "Net"
-msgstr ""
+msgstr "Netto"
 
 #: pretix/base/invoice.py:529
 msgctxt "invoice"
 msgid "Gross"
-msgstr ""
+msgstr "Lordo"
 
 #: pretix/base/invoice.py:535
 msgctxt "invoice"
 msgid "Amount"
-msgstr ""
+msgstr "Totale"
 
 #: pretix/base/invoice.py:560 pretix/base/invoice.py:565
 msgctxt "invoice"
 msgid "Invoice total"
-msgstr ""
+msgstr "Totale fattura"
 
 #: pretix/base/invoice.py:573
 msgctxt "invoice"
@@ -1575,27 +1585,27 @@ msgstr "Pagamenti ricevuti"
 #: pretix/base/invoice.py:576
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr ""
+msgstr "Pagamenti in ritardo"
 
 #: pretix/base/invoice.py:605
 msgctxt "invoice"
 msgid "Net value"
-msgstr ""
+msgstr "Valore netto"
 
 #: pretix/base/invoice.py:606
 msgctxt "invoice"
 msgid "Gross value"
-msgstr ""
+msgstr "Valore lordo"
 
 #: pretix/base/invoice.py:607
 msgctxt "invoice"
 msgid "Tax"
-msgstr ""
+msgstr "Tasse"
 
 #: pretix/base/invoice.py:637
 msgctxt "invoice"
 msgid "Included taxes"
-msgstr ""
+msgstr "Tasse incluse"
 
 #: pretix/base/invoice.py:665
 #, python-brace-format
@@ -1630,23 +1640,23 @@ msgstr ""
 
 #: pretix/base/models/auth.py:94
 msgid "Is active"
-msgstr ""
+msgstr "é attivo"
 
 #: pretix/base/models/auth.py:96
 msgid "Is site admin"
-msgstr ""
+msgstr "E' admin del sito"
 
 #: pretix/base/models/auth.py:98
 msgid "Date joined"
-msgstr ""
+msgstr "Data di iscrizione"
 
 #: pretix/base/models/auth.py:105
 msgid "Timezone"
-msgstr ""
+msgstr "Zona"
 
 #: pretix/base/models/auth.py:108
 msgid "Two-factor authentication is required to log in"
-msgstr ""
+msgstr "Per il login è richiesta l'autenticazione a due fattori"
 
 #: pretix/base/models/auth.py:112
 msgid "Receive notifications according to my settings below"
@@ -1654,7 +1664,7 @@ msgstr ""
 
 #: pretix/base/models/auth.py:113
 msgid "If turned off, you will not get any notifications."
-msgstr ""
+msgstr "Se impostato su off non riceverei nessuna notifica."
 
 #: pretix/base/models/auth.py:126
 #: pretix/control/templates/pretixcontrol/order/index.html:180
@@ -1667,22 +1677,22 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:130
 #: pretix/control/views/organizer.py:76 tests/base/test_mail.py:88
 msgid "User"
-msgstr ""
+msgstr "utente"
 
 #: pretix/base/models/auth.py:127 pretix/control/navigation.py:358
 #: pretix/control/templates/pretixcontrol/users/index.html:5
 #: pretix/control/templates/pretixcontrol/users/index.html:7
 msgid "Users"
-msgstr ""
+msgstr "Utenti"
 
 #: pretix/base/models/auth.py:184
 msgid "Account information changed"
-msgstr ""
+msgstr "Informazioni account modificate"
 
 #: pretix/base/models/auth.py:202
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
 msgid "Password recovery"
-msgstr ""
+msgstr "Recupero password"
 
 #: pretix/base/models/checkin.py:15
 msgid "All products (including newly created ones)"
@@ -1690,12 +1700,12 @@ msgstr "Tutti i prodotti (incluso i nuovi)"
 
 #: pretix/base/models/checkin.py:16 pretix/plugins/badges/exporters.py:212
 msgid "Limit to products"
-msgstr ""
+msgstr "Limita ai prodotti"
 
 #: pretix/base/models/checkin.py:19
 msgctxt "checkin"
 msgid "Include pending orders"
-msgstr ""
+msgstr "Includi ordini in attesa"
 
 #: pretix/base/models/checkin.py:21
 msgid ""
@@ -8874,47 +8884,47 @@ msgstr "Il posto selezionato {seat} non è disponibile."
 #: pretix/control/logdisplay.py:337
 msgctxt "subevent"
 msgid "The event date has been changed."
-msgstr ""
+msgstr "La data dell'evento è stata modificata."
 
 #: pretix/control/logdisplay.py:338
 msgctxt "subevent"
 msgid "The event date has been created."
-msgstr ""
+msgstr "La data dell'evento ès tata creata."
 
 #: pretix/control/logdisplay.py:339
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
-msgstr ""
+msgstr "Una quota è stata aggiunta alla data dall'evento."
 
 #: pretix/control/logdisplay.py:340
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
-msgstr ""
+msgstr "Una quota è stata modificata alla data dell'evento."
 
 #: pretix/control/logdisplay.py:341
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
-msgstr ""
+msgstr "Una quota è stata rimossa dalla data dell'evento."
 
 #: pretix/control/logdisplay.py:342
 msgid "The device has been created."
-msgstr ""
+msgstr "Il dispositivo è statao creato."
 
 #: pretix/control/logdisplay.py:343
 msgid "The device has been changed."
-msgstr ""
+msgstr "Il dispositivo è stato modificato."
 
 #: pretix/control/logdisplay.py:344
 msgid "Access of the device has been revoked."
-msgstr ""
+msgstr "L'accesso al dispositivo è stato revocato."
 
 #: pretix/control/logdisplay.py:345
 msgid "The device has been initialized."
-msgstr ""
+msgstr "Il dispositivo è stato inizializzato."
 
 #: pretix/control/logdisplay.py:346
 msgid "The access token of the device has been regenerated."
-msgstr ""
+msgstr "Il token di accesso del dispositivo è stato rigenerato."
 
 #: pretix/control/logdisplay.py:347
 msgid "The device has notified the server of an hardware or software update."
