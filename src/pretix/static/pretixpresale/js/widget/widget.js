@@ -820,9 +820,9 @@ Vue.component('pretix-widget-event-form', {
             this.$root.error = null;
             this.$root.subevent = null;
             this.$root.trigger_load_callback();
-            if (this.$root.events !== undefined) {
+            if (this.$root.events !== undefined && this.$root.events !== null) {
                 this.$root.view = "events";
-            } else if (this.$root.days !== undefined) {
+            } else if (this.$root.days !== undefined && this.$root.days !== null) {
                 this.$root.view = "days";
             } else {
                 this.$root.view = "weeks";
