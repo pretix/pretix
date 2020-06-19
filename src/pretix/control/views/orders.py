@@ -1476,6 +1476,9 @@ class OrderChange(OrderView):
                 if f.form.cleaned_data['value'] != f.value:
                     ocm.change_fee(f, f.form.cleaned_data['value'])
 
+                if f.form.cleaned_data['tax_rule'] != f.tax_rule:
+                    ocm.change_tax_rule(f, f.form.cleaned_data['tax_rule'])
+
             except OrderError as e:
                 f.custom_error = str(e)
                 return False
@@ -1522,6 +1525,9 @@ class OrderChange(OrderView):
 
                 if p.form.cleaned_data['price'] != p.price:
                     ocm.change_price(p, p.form.cleaned_data['price'])
+
+                if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:
+                    ocm.change_tax_rule(p, p.form.cleaned_data['tax_rule'])
 
                 if p.form.cleaned_data['operation_split']:
                     ocm.split(p)

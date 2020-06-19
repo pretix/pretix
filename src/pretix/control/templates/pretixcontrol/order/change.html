@@ -157,6 +157,7 @@
                             <div class="col-sm-4 field-container">
                                 {% bootstrap_field position.form.price addon_after=request.event.currency layout='inline' %}
                                 <small><strong>{% trans "including all taxes" %}</strong></small>
+                                {% bootstrap_field position.form.tax_rule layout='inline' %}
                             </div>
                         </div>
 
@@ -307,6 +308,7 @@
                             <div class="col-sm-4 field-container">
                                 {% bootstrap_field fee.form.value addon_after=request.event.currency layout='inline' %}
                                 <small><strong>{% trans "including all taxes" %}</strong></small>
+                                {% bootstrap_field fee.form.tax_rule layout='inline' %}
                             </div>
                         </div>
 
