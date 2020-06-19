@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-19 11:07+0000\n"
+"PO-Revision-Date: 2020-06-19 20:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -6452,7 +6452,7 @@ msgstr ""
 #: pretix/base/timeline.py:103
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
-msgstr "I biglietti possono essere scaricati."
+msgstr "I biglietti possono essere scaricati"
 
 #: pretix/base/timeline.py:115
 msgctxt "timeline"
@@ -18867,10 +18867,12 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"Se hai perso il link del tuo ordine, inserisci l'email che hai usato. Ti "
+"invieremo nuovamente una email con il link all'ordine."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
-msgstr ""
+msgstr "Invia links"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
