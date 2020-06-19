@@ -67,12 +67,20 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
     elif logentry.action_type == 'pretix.event.order.changed.tax_rule':
-        return text + ' ' + _('Tax rule of position #{posid} changed from {old_rule} '
-                              'to {new_rule}.').format(
-            posid=data.get('positionid', '?'),
-            old_rule=TaxRule.objects.get(pk=data['old_taxrule']),
-            new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
-        )
+        if 'positionid' in data:
+            return text + ' ' + _('Tax rule of position #{posid} changed from {old_rule} '
+                                  'to {new_rule}.').format(
+                posid=data.get('positionid', '?'),
+                old_rule=TaxRule.objects.get(pk=data['old_taxrule']),
+                new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
+            )
+        elif 'fee' in data:
+            return text + ' ' + _('Tax rule of fee #{fee} changed from {old_rule} '
+                                  'to {new_rule}.').format(
+                fee=data.get('fee', '?'),
+                old_rule=TaxRule.objects.get(pk=data['old_taxrule']),
+                new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
+            )
     elif logentry.action_type == 'pretix.event.order.changed.addfee':
         return text + ' ' + str(_('A fee has been added'))
     elif logentry.action_type == 'pretix.event.order.changed.feevalue':

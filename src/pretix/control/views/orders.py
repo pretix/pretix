@@ -1476,7 +1476,7 @@ class OrderChange(OrderView):
                 if f.form.cleaned_data['value'] != f.value:
                     ocm.change_fee(f, f.form.cleaned_data['value'])
 
-                if f.form.cleaned_data['tax_rule'] != f.tax_rule:
+                if f.form.cleaned_data['tax_rule'] and f.form.cleaned_data['tax_rule'] != f.tax_rule:
                     ocm.change_tax_rule(f, f.form.cleaned_data['tax_rule'])
 
             except OrderError as e:

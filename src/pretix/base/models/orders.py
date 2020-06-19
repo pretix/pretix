@@ -1801,11 +1801,9 @@ class OrderFee(models.Model):
         )
 
     def _calculate_tax(self, tax_rule=None):
-        print(self.tax_rule)
         if tax_rule:
             self.tax_rule = tax_rule
 
-        print(self.tax_rule)
         try:
             ia = self.order.invoice_address
         except InvoiceAddress.DoesNotExist:
