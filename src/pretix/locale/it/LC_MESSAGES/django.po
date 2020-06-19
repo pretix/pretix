@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-18 23:00+0000\n"
+"PO-Revision-Date: 2020-06-19 11:07+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -2656,7 +2656,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:121
 msgid "paid"
-msgstr ""
+msgstr "pagato"
 
 #: pretix/base/models/orders.py:122
 msgid "expired"
@@ -3427,7 +3427,7 @@ msgstr ""
 #: pretix/base/notifications.py:218
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr ""
+msgstr "L'ordine {order.code} è stato segnato come pagato."
 
 #: pretix/base/notifications.py:224
 #, python-brace-format
@@ -4226,12 +4226,15 @@ msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
 msgstr ""
+"Alcuni dei prodotti scelti non sono più disponbili. Vedi sotto i dettagli."
 
 #: pretix/base/services/cart.py:60
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Alcuni dei prodotti scelti non sono più disponbili nella quantità "
+"selezionata. Vedi sotto i dettagli."
 
 #: pretix/base/services/cart.py:62
 #, python-format
@@ -4411,7 +4414,7 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:191
 msgid "This order is not marked as paid."
-msgstr ""
+msgstr "Questo ordine non è segnato come pagato."
 
 #: pretix/base/services/checkin.py:196
 msgid "You need to answer questions to complete this check-in."
@@ -4520,12 +4523,15 @@ msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
 msgstr ""
+"Alcuni dei prodotti scelti non sono più disponbili. Vedi sotto i dettagli."
 
 #: pretix/base/services/orders.py:60
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Alcuni dei prodotti scelti non sono più disponbili nella quantità "
+"selezionata. Vedi sotto i dettagli."
 
 #: pretix/base/services/orders.py:62
 msgid ""
@@ -4672,7 +4678,7 @@ msgstr "Il tuo ordine è in attesa di pagamento: %(code)s"
 #: pretix/base/services/orders.py:1082
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
-msgstr ""
+msgstr "Il tuo biglietto è pronto per il download: %(code)s"
 
 #: pretix/base/services/orders.py:1120
 #, python-format
@@ -5619,7 +5625,7 @@ msgstr ""
 "Ciao,\n"
 "\n"
 "ricevi questo messaggio perchè hai richiesto di inviarti il link del tuo "
-"oridne per {event}.\n"
+"ordineper {event}.\n"
 "\n"
 "Puoi cambiare i dettagli del tuo ordine e vedere lo stato qui:\n"
 "{url}\n"
@@ -5712,6 +5718,19 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"abbiamo ricevuto il tuo ordine per {event}. Dal momento che hai ordinato un "
+"evento\n"
+"per il quale è richiesta l'approvazione dell'organizzatore, ti chiediamo di "
+"avere pazienza e \n"
+"aspettare un'ulteriore email di conferma.\n"
+"\n"
+"Puoi modificare i dettagli del tuo ordine e vedere lo stato qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1203
 #, python-brace-format
@@ -5732,9 +5751,9 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"abbimao ricevuto il tuo ordine per {event}\n"
-"con un valore totale di {total_with_currency}.\n"
-"Effettua il pagamento entro il {expire_date}.\n"
+"abbiamo ricevuto il tuo ordine per {event}\n"
+"per un valore totale di {total_with_currency}.\n"
+"Ti preghiamo di effettuare il pagamento entro il {expire_date}.\n"
 "\n"
 "{payment_info}\n"
 "\n"
@@ -5796,7 +5815,7 @@ msgstr ""
 "Puoi cambiare i dettagli del tuo ordine e vedere lo stato qui:\n"
 "{url}\n"
 "\n"
-"UN saluto,\n"
+"Un saluto,\n"
 " {event} "
 
 #: pretix/base/settings.py:1264
@@ -5812,6 +5831,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao {attendee_name},\n"
+"\n"
+"un biglietto ordinato per {event} è stato pagato.\n"
+"\n"
+"Puoi vedere i dettagli e lo stato del tuo biglietto qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1280
 #, python-brace-format
@@ -5937,6 +5965,13 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"Puoi modificare i dettagli del tuo ordine e vedere lo stato qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1378
 #, python-brace-format
@@ -5951,6 +5986,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao{attendee_name},\n"
+"\n"
+"sei stato registrato all'evento {event}.\n"
+"\n"
+"Se non l'hai ancora fatto, puoi scaricare il biglietto qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1390
 #, python-brace-format
@@ -5965,6 +6009,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"hai comprato un biglietto per {event}.\n"
+"\n"
+"Se non l'hai ancora fatto, puois caricare il biglietto qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1512
 msgid "Banner text (top)"
@@ -6357,7 +6410,7 @@ msgstr "Abilita formato biglietti"
 
 #: pretix/base/ticketoutput.py:163
 msgid "Download ticket"
-msgstr ""
+msgstr "Scarica biglietto"
 
 #: pretix/base/timeline.py:37
 #, fuzzy
@@ -6397,11 +6450,9 @@ msgid "No more payments can be completed"
 msgstr ""
 
 #: pretix/base/timeline.py:103
-#, fuzzy
-#| msgid "Ticket checked in"
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
-msgstr "Check-in del biglietto effettuato"
+msgstr "I biglietti possono essere scaricati."
 
 #: pretix/base/timeline.py:115
 msgctxt "timeline"
@@ -6971,7 +7022,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1187
 msgid "Ticket downloads"
-msgstr ""
+msgstr "Scaricamento biglietti"
 
 #: pretix/control/forms/event.py:1188
 msgid "Your customers will be able to download their tickets in PDF format."
@@ -7034,7 +7085,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:107
 msgid "Paid (or canceled with paid fee)"
-msgstr ""
+msgstr "Pagato (o cancellato con commissioni sul pagamento)"
 
 #: pretix/control/forms/filter.py:108
 #: pretix/control/templates/pretixcontrol/items/question.html:21
@@ -7052,7 +7103,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:110
 #: pretix/control/templates/pretixcontrol/items/question.html:22
 msgid "Pending or paid"
-msgstr ""
+msgstr "In attesa o pagati"
 
 #: pretix/control/forms/filter.py:111 pretix/control/forms/filter.py:593
 #: pretix/control/forms/filter.py:998
@@ -8321,7 +8372,7 @@ msgstr "Ordine modificato"
 
 #: pretix/control/logdisplay.py:198
 msgid "The order details have been changed."
-msgstr ""
+msgstr "I dettagli del tuo ordine sono stati modificati."
 
 #: pretix/control/logdisplay.py:199
 msgid "The order has been marked as unpaid."
@@ -9922,10 +9973,8 @@ msgid "Cancellation settings"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:11
-#, fuzzy
-#| msgid "Only paid orders"
 msgid "Unpaid or free orders"
-msgstr "Solo ordini pagati"
+msgstr "Non pagati o ordini gratuiti"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:30
 msgid ""
@@ -11340,7 +11389,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:226
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:17
 msgid "Paid"
-msgstr ""
+msgstr "Pagato"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:44
 msgid "No matching answers found."
@@ -15138,7 +15187,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1548
 msgid "An error occurred. Please see the details below."
-msgstr ""
+msgstr "Si è verificato un errore. Vedi i dettagli sotto."
 
 #: pretix/control/views/orders.py:1556
 msgid "The order has been changed and the user has been notified."
@@ -15161,7 +15210,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1735 pretix/plugins/sendmail/views.py:74
 msgid "We could not send the email. See below for details."
-msgstr ""
+msgstr "Non abbiamo potuto inviare l'email. Vedi i dettagli sotto."
 
 #: pretix/control/views/orders.py:1750 pretix/plugins/sendmail/views.py:133
 #, python-brace-format
@@ -15192,7 +15241,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1955
 msgid "There was a problem processing your input. See below for error details."
-msgstr ""
+msgstr "C'è stato un errore nel processare i tuoi dati. Vedi i dettagli sotto."
 
 #: pretix/control/views/orders.py:2042
 msgid "All orders have been canceled."
@@ -15912,7 +15961,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/tasks.py:31
 #, python-format
 msgid "Your order received an incomplete payment: %(code)s"
-msgstr ""
+msgstr "Il tuo ordine ha ricevuto un pagamento incompleto: %(code)s"
 
 #: pretix/plugins/banktransfer/tasks.py:99
 msgid "The order has already been canceled."
@@ -16354,6 +16403,8 @@ msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
+"Non abbiamo potuto processare il tuo pagamento. Leggi sotto i dettagli su "
+"come procedere."
 
 #: pretix/plugins/paypal/payment.py:381 pretix/plugins/paypal/payment.py:390
 msgid ""
@@ -17704,11 +17755,11 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:31
 msgid "Download tickets (PDF)"
-msgstr ""
+msgstr "Scarica biglietti (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:32
 msgid "Download ticket (PDF)"
-msgstr ""
+msgstr "Scarica biglietto (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:36
 msgid "Default ticket layout"
@@ -18178,28 +18229,28 @@ msgstr "Ordine confermato"
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:47
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
+msgstr "Porta con te il biglietto quando ti presenti all'evento."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:9
 msgid "Download your tickets here:"
-msgstr ""
+msgstr "Scarica il tuo biglietto qui:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Download all tickets at once:"
-msgstr ""
+msgstr "Scarica tutti i biglietti in una volta:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:31
 msgid "Download your ticket here:"
-msgstr ""
+msgstr "Scarica il tuo biglietto qui:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:50
 msgid "Download your tickets using the buttons below."
-msgstr ""
+msgstr "Scarica i tuoi biglietti cliccando sul bottone sottostante."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:58
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
-msgstr ""
+msgstr "Puoi scaricare i tuoi biglietti qui a partire da: %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 #, fuzzy
@@ -18474,11 +18525,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "Il tuo ordine è stato eseguito correttamente. Vedi i dettagli sotto."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Abbiamo ricevuto il tuo pagamento. Vedi i dettagli sotto."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid ""
@@ -18561,7 +18612,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:172
 #: pretix/presale/templates/pretixpresale/event/order.html:266
 msgid "Change details"
-msgstr ""
+msgstr "Modifica dettagli"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:185
 #, fuzzy
@@ -19070,7 +19121,7 @@ msgstr "Ordine modificato"
 
 #: pretix/presale/views/order.py:860
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr ""
+msgstr "Il download dei biglietti non è ancora disponibile per questo ordine."
 
 #: pretix/presale/views/user.py:27
 msgid "We had difficulties processing your input."
