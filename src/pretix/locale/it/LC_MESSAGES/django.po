@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-19 20:00+0000\n"
+"PO-Revision-Date: 2020-06-20 17:11+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -18126,7 +18126,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:78
 msgid "Selected add-ons"
-msgstr ""
+msgstr "Tipologia biglietto"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
