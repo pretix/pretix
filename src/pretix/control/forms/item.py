@@ -340,7 +340,8 @@ class ItemCreateForm(I18nModelForm):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
                 for variation in self.cleaned_data['copy_from'].variations.all():
                     ItemVariation.objects.create(item=instance, value=variation.value, active=variation.active,
-                                                 position=variation.position, default_price=variation.default_price)
+                                                 position=variation.position, default_price=variation.default_price,
+                                                 description=variation.description, original_price=variation.original_price)
             else:
                 ItemVariation.objects.create(
                     item=instance, value=__('Standard')
