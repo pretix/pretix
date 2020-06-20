@@ -99,7 +99,7 @@ class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
 
     class Meta:
         model = SubEventItem
-        fields = ['price']
+        fields = ['price', 'disabled']
         widgets = {
             'price': forms.TextInput
         }
@@ -113,7 +113,7 @@ class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelFor
 
     class Meta:
         model = SubEventItem
-        fields = ['price']
+        fields = ['price', 'disabled']
         widgets = {
             'price': forms.TextInput
         }

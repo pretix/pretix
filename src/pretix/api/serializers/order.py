@@ -911,6 +911,19 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         if pos_data['voucher'].allow_ignore_quota or pos_data['voucher'].block_quota:
                             continue
 
+                    if pos_data.get('subevent'):
+                        if pos_data.get('item').pk in pos_data['subevent'].item_overrides and pos_data['subevent'].item_overrides[pos_data['item'].pk].disabled:
+                            errs[i]['item'] = [gettext_lazy('The product "{}" is not available on this date.').format(
+                                str(pos_data.get('item'))
+                            )]
+                        if (
+                                pos_data.get('variation') and pos_data['variation'].pk in pos_data['subevent'].var_overrides and
+                                pos_data['subevent'].var_overrides[pos_data['variation'].pk].disabled
+                        ):
+                            errs[i]['item'] = [gettext_lazy('The product "{}" is not available on this date.').format(
+                                str(pos_data.get('item'))
+                            )]
+
                     new_quotas = (pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
                                   if pos_data.get('variation')
                                   else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))

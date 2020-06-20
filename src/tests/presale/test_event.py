@@ -255,6 +255,24 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
         self.assertNotIn("Early-bird", resp.rendered_content)
 
+    def test_subevent_disabled(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+            q.items.add(item)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
+            q.items.add(item)
+            SubEventItem.objects.create(subevent=se1, item=item, price=12, disabled=True)
+
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
+        self.assertNotIn("Early-bird", resp.rendered_content)
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
+        self.assertIn("Early-bird", resp.rendered_content)
+
     def test_subevent_prices(self):
         self.event.has_subevents = True
         self.event.save()
@@ -299,6 +317,27 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertIn("12.61", resp.rendered_content)
         self.assertNotIn("12.00", resp.rendered_content)
         self.assertNotIn("15.00", resp.rendered_content)
+
+    def test_variations_subevent_disabled(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15)
+            v = ItemVariation.objects.create(item=item, value='Blue')
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+            q.items.add(item)
+            q.variations.add(v)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
+            q.items.add(item)
+            q.variations.add(v)
+            SubEventItemVariation.objects.create(subevent=se1, variation=v, disabled=True)
+
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
+        self.assertNotIn("Early-bird", resp.rendered_content)
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
+        self.assertIn("Early-bird", resp.rendered_content)
 
     def test_no_variations_in_quota(self):
         with scopes_disabled():

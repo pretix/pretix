@@ -1061,21 +1061,35 @@ class SubEvent(EventMixin, LoggedModel):
         return self.event.settings
 
     @cached_property
-    def item_price_overrides(self):
+    def item_overrides(self):
         from .items import SubEventItem
 
         return {
-            si.item_id: si.price
-            for si in SubEventItem.objects.filter(subevent=self, price__isnull=False)
+            si.item_id: si
+            for si in SubEventItem.objects.filter(subevent=self)
         }
 
     @cached_property
-    def var_price_overrides(self):
+    def var_overrides(self):
         from .items import SubEventItemVariation
 
         return {
+            si.variation_id: si
+            for si in SubEventItemVariation.objects.filter(subevent=self)
+        }
+
+    @property
+    def item_price_overrides(self):
+        return {
+            si.item_id: si.price
+            for si in self.item_overrides.values() if si.price is not None
+        }
+
+    @property
+    def var_price_overrides(self):
+        return {
             si.variation_id: si.price
-            for si in SubEventItemVariation.objects.filter(subevent=self, price__isnull=False)
+            for si in self.var_overrides.values() if si.price is not None
         }
 
     @property

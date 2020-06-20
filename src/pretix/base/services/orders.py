@@ -641,6 +641,16 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             delete(cp)
             continue
 
+        if cp.subevent and cp.item.pk in cp.subevent.item_overrides and cp.subevent.item_overrides[cp.item.pk].disabled:
+            err = err or error_messages['unavailable']
+            delete(cp)
+            continue
+
+        if cp.subevent and cp.variation and cp.variation.pk in cp.subevent.var_overrides and cp.subevent.var_overrides[cp.variation.pk].disabled:
+            err = err or error_messages['unavailable']
+            delete(cp)
+            continue
+
         if cp.voucher:
             if cp.voucher.valid_until and cp.voucher.valid_until < now_dt:
                 err = err or error_messages['voucher_expired']

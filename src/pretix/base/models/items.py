@@ -118,6 +118,7 @@ class SubEventItem(models.Model):
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     item = models.ForeignKey('Item', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    disabled = models.BooleanField(default=False)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -145,6 +146,7 @@ class SubEventItemVariation(models.Model):
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     variation = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    disabled = models.BooleanField(default=False)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

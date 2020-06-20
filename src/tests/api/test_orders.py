@@ -2277,6 +2277,64 @@ def test_order_create_item_validation(token_client, organizer, event, item, item
 
 
 @pytest.mark.django_db
+def test_order_create_subevent_disabled(token_client, organizer, event, item, subevent, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['subevent'] = subevent.pk
+    s = item.subeventitem_set.create(subevent=subevent, disabled=True)
+    quota.subevent = subevent
+    quota.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'item': ['The product "Budget Ticket" is not available on this date.']}]}
+
+    s.delete()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_order_create_subevent_variation_disabled(token_client, organizer, event, item, subevent, quota, question):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        var = item2.variations.create(default_price=12, value="XS")
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item2.pk
+    res['positions'][0]['variation'] = var.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['subevent'] = subevent.pk
+    s = var.subeventitemvariation_set.create(subevent=subevent, disabled=True)
+    quota.subevent = subevent
+    quota.items.add(item2)
+    quota.variations.add(var)
+    quota.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'item': ['The product "Budget Ticket" is not available on this date.']}]}
+
+    s.delete()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+
+
+@pytest.mark.django_db
 def test_order_create_positionids_addons(token_client, organizer, event, item, quota):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'] = [

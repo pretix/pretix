@@ -338,11 +338,11 @@ class SubEventEditorMixin(MetaDataEditorMixin):
 
         if self.copy_from:
             se_item_instances = {
-                sei.item_id: SubEventItem(item=sei.item, price=sei.price)
+                sei.item_id: SubEventItem(item=sei.item, price=sei.price, disabled=sei.disabled)
                 for sei in SubEventItem.objects.filter(subevent=self.copy_from).select_related('item')
             }
             se_var_instances = {
-                sei.variation_id: SubEventItemVariation(variation=sei.variation, price=sei.price)
+                sei.variation_id: SubEventItemVariation(variation=sei.variation, price=sei.price, disabled=sei.disabled)
                 for sei in SubEventItemVariation.objects.filter(subevent=self.copy_from).select_related('variation')
             }
 

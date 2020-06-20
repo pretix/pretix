@@ -23,7 +23,9 @@ from django.views.generic import TemplateView
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import ItemVariation, Quota, SeatCategoryMapping
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemBundle
+from pretix.base.models.items import (
+    ItemBundle, SubEventItem, SubEventItemVariation,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
@@ -83,7 +85,17 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                               )),
                  )),
         Prefetch('variations', to_attr='available_variations',
-                 queryset=ItemVariation.objects.using(settings.DATABASE_REPLICA).filter(active=True, quotas__isnull=False).prefetch_related(
+                 queryset=ItemVariation.objects.using(settings.DATABASE_REPLICA).annotate(
+                     subevent_disabled=Exists(
+                         SubEventItemVariation.objects.filter(
+                             variation_id=OuterRef('pk'),
+                             subevent=subevent,
+                             disabled=True,
+                         )
+                     ),
+                 ).filter(
+                     active=True, quotas__isnull=False, subevent_disabled=False
+                 ).prefetch_related(
                      Prefetch('quotas',
                               to_attr='_subevent_quotas',
                               queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent))
@@ -91,14 +103,21 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     ).annotate(
         quotac=Count('quotas'),
         has_variations=Count('variations'),
+        subevent_disabled=Exists(
+            SubEventItem.objects.filter(
+                item_id=OuterRef('pk'),
+                subevent=subevent,
+                disabled=True,
+            )
+        ),
         requires_seat=Exists(
             SeatCategoryMapping.objects.filter(
                 product_id=OuterRef('pk'),
                 subevent=subevent
             )
-        )
+        ),
     ).filter(
-        quotac__gt=0,
+        quotac__gt=0, subevent_disabled=False,
     ).order_by('category__position', 'category_id', 'position', 'name')
     if require_seat:
         items = items.filter(requires_seat__gt=0)

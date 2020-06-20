@@ -22,7 +22,7 @@ from pretix.base.models import (
     SeatingPlan, Voucher,
 )
 from pretix.base.models.items import (
-    ItemAddOn, ItemBundle, ItemVariation, SubEventItem,
+    ItemAddOn, ItemBundle, ItemVariation, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.orders import OrderError, _perform_order
 from pretix.testutils.scope import classscope
@@ -1464,6 +1464,43 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.get(id=cr1.id)
             self.assertEqual(cr1.price, 24)
+
+    def test_subevent_disabled(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se = self.event.subevents.create(name='Foo', date_from=now())
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.items.add(self.ticket)
+            SubEventItem.objects.create(subevent=se, item=self.ticket, price=24, disabled=True)
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10), subevent=se
+            )
+        self._set_session('payment', 'banktransfer')
+
+        self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        with scopes_disabled():
+            assert not CartPosition.objects.filter(id=cr1.id).exists()
+
+    def test_subevent_variation_disabled(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se = self.event.subevents.create(name='Foo', date_from=now())
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.items.add(self.workshop2)
+            q.variations.add(self.workshop2b)
+            SubEventItemVariation.objects.create(subevent=se, variation=self.workshop2b, price=24, disabled=True)
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2b,
+                price=23, expires=now() - timedelta(minutes=10), subevent=se
+            )
+        self._set_session('payment', 'banktransfer')
+
+        self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        with scopes_disabled():
+            assert not CartPosition.objects.filter(id=cr1.id).exists()
 
     def test_addon_price_included(self):
         with scopes_disabled():
