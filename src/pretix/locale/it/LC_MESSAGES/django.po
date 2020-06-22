@@ -9970,7 +9970,7 @@ msgstr ""
 "\n"
 "%(url)s\n"
 "\n"
-"Un saluto"
+"Un saluto\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
