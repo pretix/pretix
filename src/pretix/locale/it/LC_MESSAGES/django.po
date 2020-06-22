@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-22 07:42+0000\n"
+"PO-Revision-Date: 2020-06-22 14:10+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -3107,7 +3107,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:316
 #: pretix/presale/templates/pretixpresale/event/index.html:278
 msgid "Voucher code"
-msgstr ""
+msgstr "Codice voucher"
 
 #: pretix/base/models/vouchers.py:110 pretix/control/views/vouchers.py:70
 msgid "Maximum usages"
@@ -18155,7 +18155,7 @@ msgstr "Conferma l'ordine"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
 msgid "Submit registration"
-msgstr ""
+msgstr "Invia ordine"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
@@ -18290,7 +18290,7 @@ msgstr[1] "%(num)s prodotti"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:309
 #: pretix/presale/templates/pretixpresale/event/index.html:266
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Utilizza un voucher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:312
 msgid "We're applying this voucher to your cart..."
@@ -18555,7 +18555,7 @@ msgstr "Aggiungi al carrello"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:284
 msgid "Redeem voucher"
-msgstr ""
+msgstr "Utilizza un voucher"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:295
 msgid "If you already ordered a ticket"
