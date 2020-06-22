@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-19 11:07+0000\n"
+"PO-Revision-Date: 2020-06-22 07:42+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -3412,7 +3412,7 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:40
 #: pretix/base/templates/pretixbase/email/simple_logo.html:243
 msgid "View order details"
-msgstr ""
+msgstr "Vedi i dettagli dell'ordine"
 
 #: pretix/base/notifications.py:206
 #, python-brace-format
@@ -3881,11 +3881,8 @@ msgid "This gift card is not accepted by this event organizer."
 msgstr ""
 
 #: pretix/base/payment.py:1202
-#, fuzzy
-#| msgid "There was an error sending the mail. Please try again later."
 msgid "This gift card was used in the meantime. Please try again"
-msgstr ""
-"Si è verificato un errore durante l'invio della mail. Riprova più tardi."
+msgstr "Questa Gift Card è stata già usata. Prova di nuovo"
 
 #: pretix/base/pdf.py:49
 msgid "Ticket code (barcode content)"
@@ -4058,10 +4055,8 @@ msgid "Invoice address company"
 msgstr ""
 
 #: pretix/base/pdf.py:221
-#, fuzzy
-#| msgid "Invoice address name"
 msgid "Invoice address city"
-msgstr "Indirizzo di fatturazione"
+msgstr "Città dell'indirizzo di fatturazione"
 
 #: pretix/base/pdf.py:222 pretix/base/services/invoices.py:340
 msgid "Sample city"
@@ -4096,10 +4091,8 @@ msgid "Event organizer info text"
 msgstr ""
 
 #: pretix/base/pdf.py:248
-#, fuzzy
-#| msgid "Start date"
 msgid "Printing date"
-msgstr "Data di Inizio"
+msgstr "Data di stampa"
 
 #: pretix/base/pdf.py:256
 msgid "Printing date and time"
@@ -4385,10 +4378,8 @@ msgid "Please select a valid seat."
 msgstr ""
 
 #: pretix/base/services/cart.py:103
-#, fuzzy
-#| msgid "One or more items do not belong to this event."
 msgid "You can not select a seat for this position."
-msgstr "Uno o più articoli non appartengono a questo evento."
+msgstr "Non puoi scegliere questo posto."
 
 #: pretix/base/services/cart.py:105
 msgid "You can not select the same seat multiple times."
@@ -4493,6 +4484,8 @@ msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
+"Hai ricevuto questa email perchè qualcuno ha effettuao un ordine per te per "
+"{event}"
 
 #: pretix/base/services/mail.py:172 pretix/base/services/mail.py:188
 #, python-brace-format
@@ -4500,11 +4493,13 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"Puoi vedere i dettagli del tuo ordine a questo link:\n"
+"{orderurl}."
 
 #: pretix/base/services/mail.py:184
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr ""
+msgstr "Hai ricevuto questa email perchè hai effettuato un ordine per {event}."
 
 #: pretix/base/services/orderimport.py:85
 #, python-brace-format
@@ -5624,8 +5619,7 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"ricevi questo messaggio perchè hai richiesto di inviarti il link del tuo "
-"ordineper {event}.\n"
+"hai richiesto di inviarti il link del tuo ordine per {event}.\n"
 "\n"
 "Puoi cambiare i dettagli del tuo ordine e vedere lo stato qui:\n"
 "{url}\n"
@@ -5648,7 +5642,7 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"è stata richiesta la lista dei tuoi ordine per l'evento {event}.\n"
+"è stata richiesta la lista dei tuoi ordini per l'evento {event}.\n"
 "Ecco la lista:\n"
 "\n"
 "{orders}\n"
@@ -5776,6 +5770,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao {attendee_name},\n"
+"\n"
+"è stato ordinato un biglietto per te per l'evento {event}.\n"
+"\n"
+"Puoi vedere i dettagli e lo stato del tuo biglietto qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1234
 #, python-brace-format
@@ -5790,6 +5793,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"il tuo ordine per {event} è stato modificato.\n"
+"\n"
+"Puoi vedere lo stato del tuo ordine qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1246
 #, python-brace-format
@@ -5906,6 +5918,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"il tuo ordine {code} per {event} è stato cancellato.\n"
+"\n"
+"Puoi vedere i dettagli del tuo ordine qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1329
 #, python-brace-format
@@ -5929,7 +5950,7 @@ msgstr ""
 "abbiamo approvato il tuo ordine per l'evento {event} e saremo felici di "
 "accoglierti.\n"
 "\n"
-"Ti preghiamo di effettuar eil pagamento entro il {expire_date}.\n"
+"Ti preghiamo di effettuare il pagamento entro il {expire_date}.\n"
 "\n"
 "Puoi scegliere un metodo di pagamento qui:\n"
 "{url}\n"
@@ -5953,6 +5974,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"siamo spiacenti ma il tuo ordine per {event} non è stato accettato.\n"
+"\n"
+"{comment}\n"
+"\n"
+"Puoi vedere i dettagli qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/base/settings.py:1360
 #, python-brace-format
@@ -5986,7 +6018,7 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
-"Ciao{attendee_name},\n"
+"Ciao {attendee_name},\n"
 "\n"
 "sei stato registrato all'evento {event}.\n"
 "\n"
@@ -6374,14 +6406,14 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/simple_logo.html:232
 #: pretix/base/templates/pretixbase/email/simple_logo.html:240
 msgid "Order code:"
-msgstr ""
+msgstr "Codice ordine:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:30
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:38
 #: pretix/base/templates/pretixbase/email/simple_logo.html:233
 #: pretix/base/templates/pretixbase/email/simple_logo.html:241
 msgid "Order date:"
-msgstr ""
+msgstr "Data ordine:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:32
 #: pretix/base/templates/pretixbase/email/simple_logo.html:235
@@ -6393,7 +6425,7 @@ msgstr ""
 msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
-msgstr ""
+msgstr "Hai ricevuto questa email perchè hai effettuato un ordine per:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
@@ -6452,7 +6484,7 @@ msgstr ""
 #: pretix/base/timeline.py:103
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
-msgstr "I biglietti possono essere scaricati."
+msgstr "I biglietti possono essere scaricati"
 
 #: pretix/base/timeline.py:115
 msgctxt "timeline"
@@ -7895,6 +7927,18 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"siamo spiacenti di informarti che l'evento {event} è stato annullato.\n"
+"\n"
+"Procederemo al rimborso di {refund_amount} con il metodo di pagamento da te "
+"utilizzato.\n"
+"\n"
+"Puoi vedere lo stato del tuo ordine qui:\n"
+"{url}\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/control/forms/orders.py:684
 #, python-brace-format
@@ -7909,6 +7953,14 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"siamo spiacenti di informati che l'evento {event} è stato annullato.\n"
+"\n"
+"Non riceverai nessun biglietto dalla lista d'attesa a cui sei sicritto.\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/control/forms/orders.py:715
 msgid "Please confirm that you want to cancel ALL dates in this event series."
@@ -8036,7 +8088,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:120
 msgctxt "form"
 msgid "Optional"
-msgstr ""
+msgstr "Facoltativo"
 
 #: pretix/control/forms/subevents.py:209
 msgid "Exclude these dates instead of adding them."
@@ -9911,6 +9963,14 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Ciao,\n"
+"\n"
+"hai richiesto una nuova password. Clicca su questo link per resettare la "
+"password:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Un saluto"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -10636,7 +10696,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:350
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:33
 msgid "Optional"
-msgstr ""
+msgstr "Facoltativo"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:39
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:54
@@ -11931,7 +11991,7 @@ msgstr "Informazioni fattura"
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:36
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
-msgstr ""
+msgstr "(facoltativo)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
@@ -15022,6 +15082,13 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"Sfortunatamente non siamo in grado di soddisfare la tua richiesta e abbiamo "
+"annullato il tuo rodine.\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/control/views/orders.py:681
 msgid ""
@@ -15086,6 +15153,15 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Ciao,\n"
+"\n"
+"abbiamo rimborsato {amount} per il tuo ordine.\n"
+"\n"
+"Puoi utilizzare la Gift Card {giftcard} per pagare altri biglietti futuri "
+"nel nostro shop.\n"
+"\n"
+"Un saluto,\n"
+"{event}"
 
 #: pretix/control/views/orders.py:920
 msgid "The refunds you selected do not match the selected total refund amount."
@@ -18126,7 +18202,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:78
 msgid "Selected add-ons"
-msgstr ""
+msgstr "Tipologia biglietto"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
@@ -18867,10 +18943,12 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"Se hai perso il link del tuo ordine, inserisci l'email che hai usato. Ti "
+"invieremo nuovamente una email con il link all'ordine."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
-msgstr ""
+msgstr "Invia links"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
@@ -18922,7 +19000,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Ciao!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
