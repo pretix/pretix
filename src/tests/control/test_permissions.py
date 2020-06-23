@@ -260,8 +260,6 @@ event_permission_urls = [
     # ("can_change_items", "questions/", 200),
     ("can_change_items", "questions/2/", 404),
     ("can_change_items", "questions/2/delete", 404),
-    ("can_change_items", "questions/2/up", 404),
-    ("can_change_items", "questions/2/down", 404),
     ("can_change_items", "questions/reorder", 400),
     ("can_change_items", "questions/add", 200),
     # ("can_change_items", "quotas/", 200),

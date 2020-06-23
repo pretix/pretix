@@ -244,8 +244,10 @@ class BaseQuestionsForm(forms.Form):
 
         super().__init__(*args, **kwargs)
 
+        add_fields = {}
+
         if item.admission and event.settings.attendee_names_asked:
-            self.fields['attendee_name_parts'] = NamePartsFormField(
+            add_fields['attendee_name_parts'] = NamePartsFormField(
                 max_length=255,
                 required=event.settings.attendee_names_required and not self.all_optional,
                 scheme=event.settings.name_scheme,
@@ -254,7 +256,7 @@ class BaseQuestionsForm(forms.Form):
                 initial=(cartpos.attendee_name_parts if cartpos else orderpos.attendee_name_parts),
             )
         if item.admission and event.settings.attendee_emails_asked:
-            self.fields['attendee_email'] = forms.EmailField(
+            add_fields['attendee_email'] = forms.EmailField(
                 required=event.settings.attendee_emails_required and not self.all_optional,
                 label=_('Attendee email'),
                 initial=(cartpos.attendee_email if cartpos else orderpos.attendee_email),
@@ -265,14 +267,14 @@ class BaseQuestionsForm(forms.Form):
                 )
             )
         if item.admission and event.settings.attendee_company_asked:
-            self.fields['company'] = forms.CharField(
+            add_fields['company'] = forms.CharField(
                 required=event.settings.attendee_company_required and not self.all_optional,
                 label=_('Company'),
                 initial=(cartpos.company if cartpos else orderpos.company),
             )
 
         if item.admission and event.settings.attendee_addresses_asked:
-            self.fields['street'] = forms.CharField(
+            add_fields['street'] = forms.CharField(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
                 label=_('Address'),
                 widget=forms.Textarea(attrs={
@@ -282,7 +284,7 @@ class BaseQuestionsForm(forms.Form):
                 }),
                 initial=(cartpos.street if cartpos else orderpos.street),
             )
-            self.fields['zipcode'] = forms.CharField(
+            add_fields['zipcode'] = forms.CharField(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
                 label=_('ZIP code'),
                 initial=(cartpos.zipcode if cartpos else orderpos.zipcode),
@@ -290,7 +292,7 @@ class BaseQuestionsForm(forms.Form):
                     'autocomplete': 'postal-code',
                 }),
             )
-            self.fields['city'] = forms.CharField(
+            add_fields['city'] = forms.CharField(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
                 label=_('City'),
                 initial=(cartpos.city if cartpos else orderpos.city),
@@ -299,7 +301,7 @@ class BaseQuestionsForm(forms.Form):
                 }),
             )
             country = (cartpos.country if cartpos else orderpos.country) or guess_country(event)
-            self.fields['country'] = CountryField(
+            add_fields['country'] = CountryField(
                 countries=CachedCountries
             ).formfield(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
@@ -324,7 +326,7 @@ class BaseQuestionsForm(forms.Form):
                 self.data = self.data.copy()
                 del self.data[fprefix + 'state']
 
-            self.fields['state'] = forms.ChoiceField(
+            add_fields['state'] = forms.ChoiceField(
                 label=pgettext_lazy('address', 'State'),
                 required=False,
                 choices=c,
@@ -332,7 +334,14 @@ class BaseQuestionsForm(forms.Form):
                     'autocomplete': 'address-level1',
                 }),
             )
-            self.fields['state'].widget.is_required = True
+            add_fields['state'].widget.is_required = True
+
+        field_positions = list(
+            [
+                (n, event.settings.system_question_order.get(n if n != 'state' else 'country', 0))
+                for n in add_fields.keys()
+            ]
+        )
 
         for q in questions:
             # Do we already have an answer? Provide it as the initial value
@@ -485,7 +494,12 @@ class BaseQuestionsForm(forms.Form):
                     field._required = q.required and not self.all_optional
                 field.required = False
 
-            self.fields['question_%s' % q.id] = field
+            add_fields['question_%s' % q.id] = field
+            field_positions.append(('question_%s' % q.id, q.position))
+
+        field_positions.sort(key=lambda e: e[1])
+        for fname, p in field_positions:
+            self.fields[fname] = add_fields[fname]
 
         responses = question_form_fields.send(sender=event, position=pos)
         data = pos.meta_info_data

@@ -56,6 +56,10 @@ DEFAULTS = {
 
         )
     },
+    'system_question_order': {
+        'default': {},
+        'type': dict,
+    },
     'attendee_names_asked': {
         'default': 'True',
         'type': bool,

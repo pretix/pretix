@@ -1,12 +1,12 @@
 import json
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 from json.decoder import JSONDecodeError
 
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, Exists, F, Max, OuterRef, Prefetch, Q
+from django.db.models import Count, Exists, F, OuterRef, Prefetch, Q
 from django.forms.models import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
@@ -279,7 +279,12 @@ def category_move_down(request, organizer, event, category):
                     event=request.event.slug)
 
 
-class QuestionList(PaginationMixin, ListView):
+FakeQuestion = namedtuple(
+    'FakeQuestion', 'id question position required'
+)
+
+
+class QuestionList(ListView):
     model = Question
     context_object_name = 'questions'
     template_name = 'pretixcontrol/items/questions.html'
@@ -287,96 +292,123 @@ class QuestionList(PaginationMixin, ListView):
     def get_queryset(self):
         return self.request.event.questions.prefetch_related('items')
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['questions'] = list(ctx['questions'])
+
+        if self.request.event.settings.attendee_names_asked:
+            ctx['questions'].append(
+                FakeQuestion(
+                    id='attendee_name_parts',
+                    question=_('Attendee name'),
+                    position=self.request.event.settings.system_question_order.get(
+                        'attendee_name_parts', 0
+                    ),
+                    required=self.request.event.settings.attendee_names_required,
+                )
+            )
+
+        if self.request.event.settings.attendee_emails_asked:
+            ctx['questions'].append(
+                FakeQuestion(
+                    id='attendee_email',
+                    question=_('Attendee email'),
+                    position=self.request.event.settings.system_question_order.get(
+                        'attendee_email', 0
+                    ),
+                    required=self.request.event.settings.attendee_emails_required,
+                )
+            )
+
+        if self.request.event.settings.attendee_emails_asked:
+            ctx['questions'].append(
+                FakeQuestion(
+                    id='company',
+                    question=_('Company'),
+                    position=self.request.event.settings.system_question_order.get(
+                        'company', 0
+                    ),
+                    required=self.request.event.settings.attendee_company_required,
+                )
+            )
+
+        if self.request.event.settings.attendee_addresses_asked:
+            ctx['questions'].append(
+                FakeQuestion(
+                    id='street',
+                    question=_('Street'),
+                    position=self.request.event.settings.system_question_order.get(
+                        'street', 0
+                    ),
+                    required=self.request.event.settings.attendee_addresses_required,
+                )
+            )
+            ctx['questions'].append(
+                FakeQuestion(
+                    id='zipcode',
+                    question=_('ZIP code'),
+                    position=self.request.event.settings.system_question_order.get(
+                        'zipcode', 0
+                    ),
+                    required=self.request.event.settings.attendee_addresses_required,
+                )
+            )
+            ctx['questions'].append(
+                FakeQuestion(
+                    id='city',
+                    question=_('City'),
+                    position=self.request.event.settings.system_question_order.get(
+                        'city', 0
+                    ),
+                    required=self.request.event.settings.attendee_addresses_required,
+                )
+            )
+            ctx['questions'].append(
+                FakeQuestion(
+                    id='country',
+                    question=_('Country'),
+                    position=self.request.event.settings.system_question_order.get(
+                        'country', 0
+                    ),
+                    required=self.request.event.settings.attendee_addresses_required,
+                )
+            )
+
+        ctx['questions'].sort(key=lambda q: q.position)
+        return ctx
+
 
 @transaction.atomic
 @event_permission_required("can_change_items")
 def reorder_questions(request, organizer, event):
     try:
-        ids = [int(id) for id in json.loads(request.body.decode('utf-8'))['ids']]
+        ids = json.loads(request.body.decode('utf-8'))['ids']
     except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
-    input_questions = request.event.questions.filter(id__in=ids)
+    input_questions = request.event.questions.filter(id__in=[i for i in ids if i.isdigit()])
 
-    if input_questions.count() != len(ids):
+    if input_questions.count() != len([i for i in ids if i.isdigit()]):
         raise Http404(_("Some of the provided question ids are invalid."))
 
-    first = input_questions.first()
-    last = input_questions.last()
-    original_lowest_score = (first.position, first.id)
-    original_highest_score = (last.position, last.id)
+    if input_questions.count() != request.event.questions.count():
+        raise Http404(_("Not all questions have been selected."))
 
-    if request.event.questions.filter(
-            Q(Q(position__gt=original_lowest_score[0])
-              | Q(Q(position=original_lowest_score[0]) & Q(pk__gt=original_lowest_score[1])))
-            &
-            Q(Q(position__lt=original_highest_score[0])
-              | Q(Q(position=original_highest_score[0]) & Q(pk__lt=original_highest_score[1])))
-    ).exclude(id__in=ids).exists():
-        return HttpResponseBadRequest("ids need to be from a consecutive range of questions")
-
-    highest_position_on_previous_page = request.event.questions.filter(
-        Q(position__lt=original_lowest_score[0])
-        | Q(Q(position=original_lowest_score[0]) & Q(pk__lt=original_lowest_score[1]))
-    ).aggregate(m=Max('position'))['m'] or 0
-
-    questions_on_later_pages = request.event.questions.filter(
-        Q(position__gt=original_highest_score[0])
-        | Q(Q(position=original_highest_score[0]) & Q(pk__gt=original_highest_score[1]))
-    )
-
-    ordered_questions = sorted(input_questions, key=lambda k: ids.index(k.pk))
-
-    for i, q in enumerate(ordered_questions + list(questions_on_later_pages)):
-        pos = highest_position_on_previous_page + 1 + i
+    for q in input_questions:
+        pos = ids.index(str(q.pk))
         if pos != q.position:  # Save unneccessary UPDATE queries
             q.position = pos
             q.save(update_fields=['position'])
 
+    system_question_order = {}
+    for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
+        if s in ids:
+            system_question_order[s] = ids.index(s)
+        else:
+            system_question_order[s] = -1
+    request.event.settings.system_question_order = system_question_order
+
     return HttpResponse()
-
-
-def question_move(request, question, up=True):
-    """
-    This is a helper function to avoid duplicating code in question_move_up and
-    question_move_down. It takes a question and a direction and then tries to bring
-    all items for this question in a new order.
-    """
-    try:
-        question = request.event.questions.get(
-            id=question
-        )
-    except Question.DoesNotExist:
-        raise Http404(_("The selected question does not exist."))
-    questions = list(request.event.questions.order_by("position"))
-
-    index = questions.index(question)
-    if index != 0 and up:
-        questions[index - 1], questions[index] = questions[index], questions[index - 1]
-    elif index != len(questions) - 1 and not up:
-        questions[index + 1], questions[index] = questions[index], questions[index + 1]
-
-    for i, qt in enumerate(questions):
-        if qt.position != i:
-            qt.position = i
-            qt.save()
-    messages.success(request, _('The order of questions has been updated.'))
-
-
-@event_permission_required("can_change_items")
-def question_move_up(request, organizer, event, question):
-    question_move(request, question, up=True)
-    return redirect('control:event.items.questions',
-                    organizer=request.event.organizer.slug,
-                    event=request.event.slug)
-
-
-@event_permission_required("can_change_items")
-def question_move_down(request, organizer, event, question):
-    question_move(request, question, up=False)
-    return redirect('control:event.items.questions',
-                    organizer=request.event.organizer.slug,
-                    event=request.event.slug)
 
 
 class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
