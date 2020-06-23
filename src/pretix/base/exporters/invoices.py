@@ -74,7 +74,7 @@ class InvoiceExporter(BaseExporter):
             if self.is_multievent:
                 filename = '{}_invoices.zip'.format(self.events.first().organizer.slug)
             else:
-                filename = '{}_invoices'.format(self.event.slug)
+                filename = '{}_invoices.zip'.format(self.event.slug)
 
             if output_file:
                 return filename, 'application/zip', None
@@ -108,6 +108,8 @@ class InvoiceExporter(BaseExporter):
                      choices=[
                          ('', _('All payment providers')),
                      ] + get_all_payment_providers() if self.is_multievent else [
+                         ('', _('All payment providers')),
+                     ] + [
                          (k, v.verbose_name) for k, v in self.event.get_payment_providers().items()
                      ],
                      required=False,
