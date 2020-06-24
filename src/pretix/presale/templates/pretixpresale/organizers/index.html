@@ -8,18 +8,18 @@
 {% block title %}{% trans "Event list" %}{% endblock %}
 {% block custom_header %}
     {{ block.super }}
-    <meta property="og:title" content="{{ organizer.name }}" />
+    <meta property="og:title" content="{{ organizer.name }}"/>
     {% if organizer_logo %}
-        <meta property="og:image" content="{{ organizer_logo|thumb:'5000x120' }}" />
+        <meta property="og:image" content="{{ organizer_logo|thumb:'5000x120' }}"/>
     {% endif %}
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="{% abseventurl organizer "presale:organizer.index" %}" />
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{% abseventurl organizer "presale:organizer.index" %}"/>
 {% endblock %}
 {% block content %}
     <div>
-	{% if organizer_homepage_text %}
-                {{ organizer_homepage_text | rich_text }}
-	{% endif %}
+        {% if organizer_homepage_text %}
+            {{ organizer_homepage_text | rich_text }}
+        {% endif %}
     </div>
     {% if "old" in request.GET %}
         <h3>{% trans "Past events" %}</h3>
@@ -55,94 +55,97 @@
             <a href="?{% url_replace request "old" "1" %}" class="btn btn-link">{% trans "Show past events" %}</a>
         {% endif %}
     </div>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>{% trans "Name" %}</th>
-                <th>{% trans "Date" %}</th>
-                <th>{% trans "Status" %}</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for e in events %}{% eventurl e "presale:event.index" as url %}
-                <tr>
-                    <td>
-                        <a href="{{ url }}">{{ e.name }}</a>
-                    </td>
+    <div class="event-list">
+        <div class="row hidden-xs hidden-sm">
+            <div class="col-md-5">
+                <strong>{% trans "Name" %}</strong>
+            </div>
+            <div class="col-md-3">
+                <strong>{% trans "Date" %}</strong>
+            </div>
+            <div class="col-md-2">
+                <strong>{% trans "Status" %}</strong>
+            </div>
+            <div class="col-md-2">
+            </div>
+        </div>
+        {% for e in events %}{% eventurl e "presale:event.index" as url %}
+            <div class="row">
+                <div class="col-md-5 col-xs-12">
+                    <a href="{{ url }}">
+                        <strong>
+                            {{ e.name }}
+                        </strong>
+                    </a>
+                </div>
+                <div class="col-md-3 col-xs-12">
+
                     {% if e.settings.show_dates_on_frontpage %}
-                        <td>
-                            {{ e.daterange|default:e.get_date_range_display }}
-                            {% if e.settings.show_times and not e.has_subevents %}
-                                {% timezone e.tzname %}
-                                    <br><small class="text-muted">
-                                        {{ e.date_from|date:"TIME_FORMAT" }}
-                                        {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
-                                            – {{ e.date_to|date:"TIME_FORMAT" }}
-                                        {% endif %}
-                                    </small>
-                                {% endtimezone %}
-                            {% endif %}
-                        </td>
+                        {{ e.daterange|default:e.get_date_range_display }}
+                        {% if e.settings.show_times and not e.has_subevents %}
+                            {% timezone e.tzname %}
+                                <br><small class="text-muted">
+                                {{ e.date_from|date:"TIME_FORMAT" }}
+                                {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
+                                    – {{ e.date_to|date:"TIME_FORMAT" }}
+                                {% endif %}
+                            </small>
+                            {% endtimezone %}
+                        {% endif %}
                     {% else %}
-                        <td>&nbsp;</td>
+                        &nbsp;
                     {% endif %}
                     <td>
-                        {% if e.has_subevents %}
-                            <span class="label label-default">{% trans "Event series" %}</span>
-                        {% elif e.presale_is_running and request.organizer.settings.event_list_availability %}
-                            {% if e.best_availability_state == 100 %}
-                                <span class="label label-success">{% trans "Book now" %}</span>
-                            {% elif e.settings.waiting_list_enabled and e.best_availability_state >= 0 %}
-                                <span class="label label-warning">{% trans "Waiting list" %}</span>
-                            {% elif e.best_availability_state == 20 %}
-                                <span class="label label-warning">{% trans "Reserved" %}</span>
-                            {% elif e.best_availability_state < 20 %}
-                                <span class="label label-danger">{% trans "Sold out" %}</span>
-                            {% endif %}
-                        {% elif e.presale_is_running %}
+                </div>
+                <div class="col-md-2 col-xs-6">
+                    {% if e.has_subevents %}
+                        <span class="label label-default">{% trans "Event series" %}</span>
+                    {% elif e.presale_is_running and request.organizer.settings.event_list_availability %}
+                        {% if e.best_availability_state == 100 %}
                             <span class="label label-success">{% trans "Book now" %}</span>
-                        {% elif e.presale_has_ended %}
-                            <span class="label label-danger">{% trans "Sale over" %}</span>
-                            {% elif e.settings.presale_start_show_date %}
-                            <span class="label label-warning">
+                        {% elif e.settings.waiting_list_enabled and e.best_availability_state >= 0 %}
+                            <span class="label label-warning">{% trans "Waiting list" %}</span>
+                        {% elif e.best_availability_state == 20 %}
+                            <span class="label label-warning">{% trans "Reserved" %}</span>
+                        {% elif e.best_availability_state < 20 %}
+                            <span class="label label-danger">{% trans "Sold out" %}</span>
+                        {% endif %}
+                    {% elif e.presale_is_running %}
+                        <span class="label label-success">{% trans "Book now" %}</span>
+                    {% elif e.presale_has_ended %}
+                        <span class="label label-danger">{% trans "Sale over" %}</span>
+                    {% elif e.settings.presale_start_show_date %}
+                        <span class="label label-warning">
                                 {% blocktrans trimmed with date=e.presale_start|date:"SHORT_DATE_FORMAT" %}
                                     Sale starts {{ date }}
                                 {% endblocktrans %}
                             </span>
+                    {% else %}
+                        <span class="label label-warning">{% trans "Not yet on sale" %}</span>
+                    {% endif %}
+                </div>
+                <div class="col-md-2 col-xs-6 text-right flip">
+                    <a class="btn btn-primary btn-block" href="{{ url }}">
+                        {% if e.has_subevents %}<span class="fa fa-ticket"></span> {% trans "Tickets" %}
+                        {% elif e.presale_is_running and e.best_availability_state == 100 %}
+                            <span class="fa fa-ticket"></span> {% trans "Tickets" %}
                         {% else %}
-                            <span class="label label-warning">{% trans "Not yet on sale" %}</span>
+                            <span class="fa fa-info"></span> {% trans "More info" %}
                         {% endif %}
-                    </td>
-                    <td class="text-right flip">
-                        <a class="btn btn-primary" href="{{ url }}">
-                            {% if e.has_subevents %}<span class="fa fa-ticket"></span> {% trans "Tickets" %}
-                            {% elif e.presale_is_running and e.best_availability_state == 100 %}
-                                <span class="fa fa-ticket"></span> {% trans "Tickets" %}
-                            {% else %}
-                                <span class="fa fa-info"></span> {% trans "More info" %}
-                            {% endif %}
-                        </a>
-                    </td>
-                </tr>
-            {% empty %}
-                {% if "old" in request.GET %}
-                    <tr>
-                        <td colspan="3">
-                            <em>{% trans "No archived events found." %}</em>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3">
-                            <em>{% trans "No public upcoming events found." %}</em>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            </tbody>
-        </table>
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            {% if "old" in request.GET %}
+                <div class="col-md-12">
+                    <em>{% trans "No archived events found." %}</em>
+                </div>
+            {% else %}
+                <div class="col-md-12">
+                    <em>{% trans "No public upcoming events found." %}</em>
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
     {% include "pretixpresale/pagination.html" %}
 {% endblock %}
