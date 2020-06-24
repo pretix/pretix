@@ -812,7 +812,7 @@ DEFAULTS = {
         'form_class': forms.IntegerField,
         'form_kwargs': dict(
             label=_("Waiting list response time"),
-            min_value=6,
+            min_value=1,
             help_text=_("If a ticket voucher is sent to a person on the waiting list, it has to be redeemed within this "
                         "number of hours until it expires and can be re-assigned to the next person on the list."),
             widget=forms.NumberInput(),
