@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-22 14:10+0000\n"
+"PO-Revision-Date: 2020-06-24 11:26+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -9170,7 +9170,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:66
 #: pretix/presale/templates/pretixpresale/event/order.html:62
 msgid "Payment"
-msgstr ""
+msgstr "Pagamento"
 
 #: pretix/control/navigation.py:52 pretix/control/views/event.py:1320
 #: pretix/control/views/event.py:1322 pretix/control/views/event.py:1353
@@ -10464,7 +10464,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:266
 msgid "Payment providers"
-msgstr ""
+msgstr "Sistemi di pagamento"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:22
 #: pretix/control/templates/pretixcontrol/user/settings.html:48
@@ -12097,10 +12097,8 @@ msgid "The customer asked you to cancel the order with the following settings:"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:130
-#, fuzzy
-#| msgid "Payment method"
 msgid "Original payment method"
-msgstr "Metodo di pagamento"
+msgstr "Metodo di pagamento originale"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:139
 msgid "Delete request"
@@ -12269,7 +12267,7 @@ msgstr "Totale"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:565
 msgid "Payments"
-msgstr ""
+msgstr "Pagamenti"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:575
 msgid "Confirmation date"
@@ -12289,7 +12287,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:8
 msgid "Cancel payment"
-msgstr ""
+msgstr "Annulla pagamento"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:606
 msgid "Confirm as paid"
@@ -12381,11 +12379,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:10
 msgid ""
 "Do you really want to cancel this payment? You cannot revert this action."
-msgstr ""
+msgstr "Vuoi veramente annullare il pagamento? L'operazione non è reversibile."
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:25
 msgid "Yes, cancel payment"
-msgstr ""
+msgstr "Si, annulla il pagamento"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:5
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:9
@@ -16487,6 +16485,8 @@ msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"PayPal non ha ancora approvato il pagamento. Ti informeremo non appena il "
+"pagamento verrà completato."
 
 #: pretix/plugins/paypal/payment.py:415 pretix/plugins/stripe/payment.py:435
 #: pretix/plugins/stripe/payment.py:787
@@ -16513,15 +16513,15 @@ msgstr ""
 
 #: pretix/plugins/paypal/signals.py:31
 msgid "Payment completed."
-msgstr ""
+msgstr "Pagamento completato."
 
 #: pretix/plugins/paypal/signals.py:32
 msgid "Payment denied."
-msgstr ""
+msgstr "Pagamento rifiutato."
 
 #: pretix/plugins/paypal/signals.py:33
 msgid "Payment refunded."
-msgstr ""
+msgstr "Pagamento rimborsato."
 
 #: pretix/plugins/paypal/signals.py:34
 msgid "Payment reversed."
@@ -16580,6 +16580,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Il totale verrà addebitato dal tuo account PayPal dopo la conferma "
+"dell'acquisto."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -16608,22 +16610,27 @@ msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Il tuo tentativo di pagamento tramite PayPal è fallito. Prova di nuovo o "
+"contattaci."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"Siano in attesa di risposta da parte di Paypal riguardo il tuo pagamento, "
+"contattaci se dovessero passare diversi giorni senza risposta."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "Il processo di pagamento è stato inziato in una nuova finestra."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
+"La finestra di inserimento dati di PayPal non è stata aperta o si è chiusa?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:24
@@ -16646,7 +16653,7 @@ msgstr ""
 
 #: pretix/plugins/paypal/views.py:120
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "Sembra che tu abbia annullato il pagamento con PayPal"
 
 #: pretix/plugins/paypal/views.py:250
 msgid "Your PayPal account has been disconnected."
@@ -17207,6 +17214,9 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
+"Per accettare pagamenti con Stripe, hai bisogno di un account Stripe. "
+"Cliccando sul bottone, potrai creare un nuovo conto Stripe o connetterne uno "
+"esistente."
 
 #: pretix/plugins/stripe/payment.py:79
 msgid "Connect with Stripe"
@@ -17284,7 +17294,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:183
 msgid "Credit card payments"
-msgstr ""
+msgstr "Pagamenti con carta di credito"
 
 #: pretix/plugins/stripe/payment.py:188 pretix/plugins/stripe/payment.py:857
 msgid "giropay"
@@ -17365,6 +17375,8 @@ msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"Il tuo pagamento è in attesa per il completamento. Ti informeremo non appena "
+"sarà stato completato."
 
 #: pretix/plugins/stripe/payment.py:447 pretix/plugins/stripe/payment.py:804
 #, python-format
@@ -17373,7 +17385,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:503
 msgid "No payment information found."
-msgstr ""
+msgstr "Informazioni sul pagamento non trovate."
 
 #: pretix/plugins/stripe/payment.py:524
 msgid ""
@@ -17399,7 +17411,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:798
 msgid "Your payment failed. Please try again."
-msgstr ""
+msgstr "Pagamento non riuscito. Prova di nuovo."
 
 #: pretix/plugins/stripe/payment.py:856
 msgid "giropay via Stripe"
@@ -17484,15 +17496,15 @@ msgstr ""
 
 #: pretix/plugins/stripe/signals.py:68
 msgid "Payment authorized."
-msgstr ""
+msgstr "Pagamento autorizzato."
 
 #: pretix/plugins/stripe/signals.py:69
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "Autorizzazione pagamento annullata."
 
 #: pretix/plugins/stripe/signals.py:70
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "Autorizzazione pagamento fallita."
 
 #: pretix/plugins/stripe/signals.py:76
 msgid "Charge failed. Reason: {}"
@@ -17597,13 +17609,15 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:16
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr ""
+msgstr "Per il pagamento con carta ti preghiamo di attivare JavaScript."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:22
 msgid ""
 "You already entered a card number that we will use to charge the payment "
 "amount."
 msgstr ""
+"Hai già inserito un numero di carta che verrà usato per processare il "
+"pagamento."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:33
 msgid "Use a different card"
@@ -17618,6 +17632,8 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"Il tuo pagamento verrà processato da Stripe, Inc. I dati della tua carta "
+"verranno trasmessi direttamente a Stripe e non passeranno dai nostri servers."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
 msgid "Charge ID"
@@ -17643,18 +17659,20 @@ msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
+"Siamo in attesa di risposta dal provider riguardo il tuo pagamento. "
+"Contattaci se dovessero passare alcuni giorni senza risposta."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
+"Devi confermare il tuo pagamento. Clicca il link sottostante o effettua un "
+"nuovo pagamento."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:15
-#, fuzzy
-#| msgid "Comment:"
 msgid "Confirm payment"
-msgstr "Commento:"
+msgstr "Conferma pagamento"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:21
 msgid ""
@@ -17665,7 +17683,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:29
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr ""
+msgstr "Il pagamento non può essere completato per i seguenti motivi:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:36
 msgid "Unknown reason"
@@ -17681,11 +17699,11 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
 #, python-format
 msgid "Confirm payment: %(code)s"
-msgstr ""
+msgstr "Conferma pagamento: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:18
 msgid "Confirming your payment…"
-msgstr ""
+msgstr "Stiamo confermando il tuo pagamento..."
 
 #: pretix/plugins/stripe/views.py:61 pretix/plugins/stripe/views.py:67
 #: pretix/plugins/stripe/views.py:94 pretix/plugins/stripe/views.py:106
@@ -17712,16 +17730,20 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Spiacenti, c'è stato un problema durante il pagamento. Segui il link "
+"nell'email per continuare."
 
 #: pretix/plugins/stripe/views.py:501
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
 msgstr ""
+"C'è stato un problema durante l'autorizzazione della tua carta. Prova di "
+"nuovo e nel caso il problema persista, contattaci."
 
 #: pretix/plugins/stripe/views.py:528 pretix/plugins/stripe/views.py:531
 msgid "Sorry, there was an error in the payment process."
-msgstr ""
+msgstr "Spiacenti, c'è stato un problema durante il pagamento."
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:10
 #: pretix/plugins/ticketoutputpdf/__init__.py:13
@@ -18337,7 +18359,7 @@ msgstr "Commento:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:9
 msgid "Payment pending"
-msgstr ""
+msgstr "Pagamento in attesa"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:15
 #, fuzzy
@@ -18630,12 +18652,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "Il pagamento di %(total)s è ancora in attesa per questo ordine."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:69
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr ""
+msgstr "Effettua il pagamento entro il %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:78
 msgid "Re-try payment or choose another payment method"
@@ -18684,6 +18706,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
+"Il rimborso di %(amount)s è stato inviato. In base al metodo di pagamento "
+"utilizzato ci possono volere fino a 14 giorni."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:172
 #: pretix/presale/templates/pretixpresale/event/order.html:266
@@ -18761,11 +18785,13 @@ msgstr ""
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
+"Il rimborso può essere effettuato al metodo di pagamento utlizzato o come "
+"Gift Card."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:356
 #: pretix/presale/templates/pretixpresale/event/order.html:377
 msgid "The refund will be issued to your original payment method."
-msgstr ""
+msgstr "Il rimborso verrà inviato nel metodo di pagamento da te utilizzato."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:363
 msgid ""
@@ -18839,6 +18865,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 msgid "I want the refund to be sent to my original payment method"
 msgstr ""
+"Voglio che il rimborso venga inviato nel metodo di pagamento da me utilizzato"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:116
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:136
@@ -18847,6 +18874,9 @@ msgid ""
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
+"Il rimborso verrà inviato automaticamente nel metodo di pagamento che hai "
+"utilizzato. In base al metod di pagamento utilizzato, ci potrebbero volere "
+"fino a 2 settimane."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:124
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:145
@@ -18884,30 +18914,32 @@ msgstr "Salva modifiche"
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr ""
+msgstr "Paga ordine: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
-msgstr ""
+msgstr "Cambia metodo di pagamento"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:8
 #, python-format
 msgid "Choose payment method: %(code)s"
-msgstr ""
+msgstr "Scegli un metodo di pagamento: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:13
 msgid ""
 "Please note: If you change your payment method, your order total will change "
 "by the amount displayed to the right of each method."
 msgstr ""
+"Nota bene: se cambi il metodo di pagamento, il totale cambierà in base alla "
+"cifra mostrata per ogni pagamento."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:46
 msgid "There are no alternative payment providers available for this order."
-msgstr ""
+msgstr "Non ci sono metodi di pagamento alternativi per questo ordine."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
-msgstr ""
+msgstr "Conferma i dettagli di pagamento."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
@@ -19168,12 +19200,12 @@ msgstr ""
 #: pretix/presale/views/order.py:305 pretix/presale/views/order.py:370
 #: pretix/presale/views/order.py:427
 msgid "The payment for this order cannot be continued."
-msgstr ""
+msgstr "Il pagamento per questo ordine non può essere processato."
 
 #: pretix/presale/views/order.py:310 pretix/presale/views/order.py:379
 #: pretix/presale/views/order.py:436 pretix/presale/views/order.py:475
 msgid "The payment is too late to be accepted."
-msgstr ""
+msgstr "Il pagamento è troppo in ritardo per essere accettato."
 
 #: pretix/presale/views/order.py:470
 msgid "The payment method for this order cannot be changed."
@@ -19181,7 +19213,7 @@ msgstr ""
 
 #: pretix/presale/views/order.py:481
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "Il pagamento è in attesa per questo ordine."
 
 #: pretix/presale/views/order.py:713
 msgid "You cannot modify this order"
