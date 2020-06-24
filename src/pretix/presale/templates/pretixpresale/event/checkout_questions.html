@@ -93,7 +93,11 @@
                                     </label>
                                     <div class="col-md-9 form-control-text">
                                         <ul class="addon-list">
-                                           {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display }}
+                                            {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display }}
+                                            {% if pos.event.settings.show_times %}
+                                                <span class="fa fa-clock-o"></span>
+                                                {{ pos.subevent.date_from|date:"TIME_FORMAT" }}
+                                            {% endif %}
                                         </ul>
                                     </div>
                                 </div>

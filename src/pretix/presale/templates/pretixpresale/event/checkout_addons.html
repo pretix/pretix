@@ -26,6 +26,10 @@
                                 <p>
                                     <span class="fa fa-calendar"></span>
                                     {{ form.cartpos.subevent.name }} &middot; {{ form.cartpos.subevent.get_date_range_display }}
+                                    {% if form.cartpos.event.settings.show_times %}
+                                        <span class="fa fa-clock-o"></span>
+                                        {{ form.cartpos.subevent.date_from|date:"TIME_FORMAT" }}
+                                    {% endif %}
                                 </p>
                             {% endif %}
                             {% for c in form.categories %}
