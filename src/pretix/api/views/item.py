@@ -542,6 +542,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
         data = {
             'paid_orders': qa.count_paid_orders[quota],
             'pending_orders': qa.count_pending_orders[quota],
+            'exited_orders': qa.count_exited_orders[quota],
             'blocking_vouchers': qa.count_vouchers[quota],
             'cart_positions': qa.count_cart[quota],
             'waiting_list': qa.count_pending_orders[quota],

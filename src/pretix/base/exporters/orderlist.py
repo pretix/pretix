@@ -524,7 +524,7 @@ class QuotaListExporter(ListExporter):
     def iterate_list(self, form_data):
         headers = [
             _('Quota name'), _('Total quota'), _('Paid orders'), _('Pending orders'), _('Blocking vouchers'),
-            _('Current user\'s carts'), _('Waiting list'), _('Current availability')
+            _('Current user\'s carts'), _('Waiting list'), _('Exited orders'), _('Current availability')
         ]
         yield headers
 
@@ -543,6 +543,7 @@ class QuotaListExporter(ListExporter):
                 qa.count_vouchers[quota],
                 qa.count_cart[quota],
                 qa.count_waitinglist[quota],
+                qa.count_exited_orders[quota],
                 _('Infinite') if avail[1] is None else avail[1]
             ]
             yield row

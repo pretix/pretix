@@ -781,6 +781,15 @@ class QuotaView(ChartContainingView, DetailView):
                 'value': qa.count_pending_orders[self.object],
                 'sum': True,
             },
+        ]
+        if self.object.release_after_exit:
+            data.append({
+                'label': gettext('Exit scans'),
+                'value': -1 * qa.count_exited_orders[self.object],
+                'sum': True,
+            })
+
+        data += [
             {
                 'label': gettext('Vouchers and waiting list reservations'),
                 'value': qa.count_vouchers[self.object],
@@ -816,7 +825,10 @@ class QuotaView(ChartContainingView, DetailView):
                 'strong': True
             })
 
-        ctx['quota_chart_data'] = json.dumps([r for r in data if r.get('sum')])
+        for d in data:
+            if d.get('value', 0) < 0:
+                d['value_abs'] = abs(d['value'])
+        ctx['quota_chart_data'] = json.dumps([r for r in data if r.get('sum') and r['value'] >= 0])
         ctx['quota_table_rows'] = list(data)
         ctx['quota_overbooked'] = sum_values - self.object.size if self.object.size is not None else 0
 

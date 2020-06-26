@@ -216,6 +216,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                 {
                     'size': q.size,
                     'name': q.name,
+                    'release_after_exit': q.release_after_exit,
                     'itemvars': [str(i.pk) for i in q.items.all()] + [
                         '{}-{}'.format(v.item_id, v.pk) for v in q.variations.all()
                     ]

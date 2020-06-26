@@ -1335,6 +1335,16 @@ class Quota(LoggedModel):
     )
     closed = models.BooleanField(default=False)
 
+    release_after_exit = models.BooleanField(
+        verbose_name=_('Allow to sell more tickets once people have checked out'),
+        help_text=_('With this option, quota will be released as soon as people are scanned at an exit of your event. '
+                    'This will only happen if they have been scanned both at an entry and at an exit and the exit '
+                    'is the more recent scan. It does not matter which check-in list either of the scans was on, '
+                    'but check-in lists are ignored if they are set to "Allow re-entering after an exit scan" to '
+                    'prevent accidental overbooking.'),
+        default=False,
+    )
+
     objects = ScopedManager(organizer='event__organizer')
 
     class Meta:

@@ -283,6 +283,7 @@ Endpoints
         "total_size": 1000,
         "pending_orders": 25,
         "paid_orders": 423,
+        "exited_orders": 0,
         "cart_positions": 7,
         "blocking_vouchers": 126,
         "waiting_list": 0
