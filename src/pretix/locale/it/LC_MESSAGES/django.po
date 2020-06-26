@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 12:57+0000\n"
-"PO-Revision-Date: 2020-06-24 11:26+0000\n"
+"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"PO-Revision-Date: 2020-06-26 18:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -954,7 +954,7 @@ msgstr "Email partecipante"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:137
 msgid "Voucher"
-msgstr "Buono"
+msgstr "Voucher"
 
 #: pretix/base/exporters/orderlist.py:321
 msgid "Pseudonymization ID"
@@ -3209,7 +3209,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:151
 msgid "Voucher value"
-msgstr ""
+msgstr "Valore Voucher"
 
 #: pretix/base/models/vouchers.py:160 pretix/control/forms/vouchers.py:31
 msgid "This product is added to the user's cart if the voucher is redeemed."
@@ -4325,7 +4325,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:74
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "Questo Voucher è inesistente."
 
 #: pretix/base/services/cart.py:75
 msgid ""
@@ -4354,15 +4354,15 @@ msgstr ""
 
 #: pretix/base/services/cart.py:83
 msgid "This voucher is expired."
-msgstr ""
+msgstr "Questo Voucher è scaduto."
 
 #: pretix/base/services/cart.py:84
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "Questo Voucher non è valido per questo prodotto."
 
 #: pretix/base/services/cart.py:85
 msgid "This voucher is not valid for this seat."
-msgstr ""
+msgstr "Questo Voucher non è valido per questo posto."
 
 #: pretix/base/services/cart.py:86
 msgid ""
@@ -4370,6 +4370,8 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"Questo Voucher non è applicabile ai prodotti da te aggiunti al carrello, "
+"probabilmente è valido per altre date."
 
 #: pretix/base/services/cart.py:90
 msgid "Your voucher is valid for a product that is currently not for sale."
@@ -4378,11 +4380,11 @@ msgstr ""
 #: pretix/base/services/cart.py:91
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "Questo Voucher non è valido per questa data."
 
 #: pretix/base/services/cart.py:92
 msgid "You need a valid voucher code to order this product."
-msgstr ""
+msgstr "E' necessario un Voucher valido per ordinare questo prodotto."
 
 #: pretix/base/services/cart.py:93
 msgctxt "subevent"
@@ -6093,7 +6095,7 @@ msgstr ""
 "\n"
 "hai comprato un biglietto per {event}.\n"
 "\n"
-"Se non l'hai ancora fatto, puois caricare il biglietto qui:\n"
+"Se non l'hai ancora fatto, puoi scaricare il biglietto qui:\n"
 "{url}\n"
 "\n"
 "Un saluto,\n"
@@ -6447,7 +6449,7 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/simple_logo.html:231
 #: pretix/base/templates/pretixbase/email/simple_logo.html:239
 msgid "Event:"
-msgstr ""
+msgstr "Evento:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:29
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:37
@@ -8230,7 +8232,7 @@ msgstr "Invia voucher via email"
 #: pretix/control/forms/vouchers.py:225
 #, python-brace-format
 msgid "Your voucher for {event}"
-msgstr "Il tuo voucher per {event}"
+msgstr "Il tuo Voucher per {event}"
 
 #: pretix/control/forms/vouchers.py:231
 #, python-brace-format
@@ -19101,7 +19103,7 @@ msgstr "Invia links"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
 msgid "Voucher redemption"
-msgstr ""
+msgstr "Questo Voucher è valido per questi eventi"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:58
 msgid ""
