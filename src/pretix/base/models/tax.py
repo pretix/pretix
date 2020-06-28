@@ -164,16 +164,32 @@ class TaxRule(LoggedModel):
     def has_custom_rules(self):
         return self.custom_rules and self.custom_rules != '[]'
 
-    def tax(self, base_price, base_price_is='auto', currency=None):
+    def tax_rate_for(self, invoice_address):
+        if not self._tax_applicable(invoice_address):
+            return Decimal('0.00')
+        if self.has_custom_rules:
+            rule = self.get_matching_rule(invoice_address)
+            if rule.get('action', 'vat') == 'vat' and rule.get('rate') is not None:
+                return Decimal(rule.get('rate'))
+        return self.rate
+
+    def tax(self, base_price, base_price_is='auto', currency=None, override_tax_rate=None, invoice_address=None):
         from .event import Event
         try:
             currency = currency or self.event.currency
         except Event.DoesNotExist:
             pass
-        if self.rate == Decimal('0.00'):
+
+        rate = self.rate
+        if override_tax_rate is not None:
+            rate = override_tax_rate
+        elif invoice_address:
+            rate = self.tax_rate_for(invoice_address)
+
+        if rate == Decimal('0.00'):
             return TaxedPrice(
                 net=base_price, gross=base_price, tax=Decimal('0.00'),
-                rate=self.rate, name=self.name
+                rate=rate, name=self.name
             )
 
         if base_price_is == 'auto':
@@ -184,18 +200,18 @@ class TaxRule(LoggedModel):
 
         if base_price_is == 'gross':
             gross = base_price
-            net = round_decimal(gross - (base_price * (1 - 100 / (100 + self.rate))),
+            net = round_decimal(gross - (base_price * (1 - 100 / (100 + rate))),
                                 currency)
         elif base_price_is == 'net':
             net = base_price
-            gross = round_decimal((net * (1 + self.rate / 100)),
+            gross = round_decimal((net * (1 + rate / 100)),
                                   currency)
         else:
             raise ValueError('Unknown base price type: {}'.format(base_price_is))
 
         return TaxedPrice(
             net=net, gross=gross, tax=gross - net,
-            rate=self.rate, name=self.name
+            rate=rate, name=self.name
         )
 
     @property
@@ -243,7 +259,7 @@ class TaxRule(LoggedModel):
 
         return False
 
-    def tax_applicable(self, invoice_address):
+    def _tax_applicable(self, invoice_address):
         if self._custom_rules:
             rule = self.get_matching_rule(invoice_address)
             return rule.get('action', 'vat') == 'vat'

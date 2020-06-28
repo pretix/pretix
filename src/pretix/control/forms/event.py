@@ -1086,6 +1086,11 @@ class TaxRuleLineForm(forms.Form):
             ('no', _('No VAT')),
         ],
     )
+    rate = forms.DecimalField(
+        label=_('Deviating tax rate'),
+        max_digits=10, decimal_places=2,
+        required=False
+    )
 
 
 TaxRuleLineFormSet = formset_factory(

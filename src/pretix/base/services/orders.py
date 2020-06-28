@@ -1287,6 +1287,7 @@ class OrderChangeManager:
                 continue
 
             charge_tax = pos.item.tax_rule.tax_applicable(ia)
+            # TODO
             if pos.tax_value and not charge_tax:
                 net_price = pos.price - pos.tax_value
                 price = TaxedPrice(gross=net_price, net=net_price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
@@ -1343,10 +1344,7 @@ class OrderChangeManager:
         if price is None:
             price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
         else:
-            if item.tax_rule and item.tax_rule.tax_applicable(self._invoice_address):
-                price = item.tax(price, base_price_is='gross')
-            else:
-                price = TaxedPrice(gross=price, net=price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
+            price = item.tax(price, base_price_is='gross', invoice_address=self._invoice_address)
 
         if price is None:
             raise OrderError(self.error_messages['product_invalid'])
