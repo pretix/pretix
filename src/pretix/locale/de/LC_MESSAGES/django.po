@@ -4,9 +4,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 12:57+0000\n"
-"PO-Revision-Date: 2020-06-10 16:13+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"PO-Revision-Date: 2020-06-30 01:00+0000\n"
+"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -3934,7 +3934,7 @@ msgstr "Fester Betrag"
 
 #: pretix/base/payment.py:273
 msgid "Percentage of the order total."
-msgstr "Prozentsatz der Bestellsumme"
+msgstr "Prozentsatz der Bestellsumme."
 
 #: pretix/base/payment.py:279
 msgid "Calculate the fee from the total value including the fee."
@@ -3980,7 +3980,7 @@ msgstr "Auf bestimmte Verkaufskanäle einschränken"
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
 msgstr ""
-"Schränkt die Auswahl dieser Zahlungsmethode auf die angegebenen "
+"Schränkt die Auswahl dieser Zahlungsmethode auf die ausgewählten "
 "Verkaufskanäle ein."
 
 #: pretix/base/payment.py:313
@@ -5743,7 +5743,7 @@ msgstr "z.B. Steuernummer in Deutschland, ABN in Australien, …"
 
 #: pretix/base/settings.py:597
 msgid "EU VAT ID"
-msgstr "USt-ID-Nr."
+msgstr "USt-ID"
 
 #: pretix/base/settings.py:610
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -10093,7 +10093,7 @@ msgstr "Übersicht"
 #: pretix/control/templates/pretixcontrol/item/index.html:12
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:27
 msgid "General"
-msgstr "Allgemeines"
+msgstr "Allgemein"
 
 #: pretix/control/navigation.py:36
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:151
@@ -12104,7 +12104,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/create.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:27
 msgid "Create a new organizer"
-msgstr "Neuen Veranstalter erstellen"
+msgstr "Neuen Veranstalter anlegen"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:7
 #: pretix/control/templates/pretixcontrol/item/create.html:11
@@ -13591,7 +13591,7 @@ msgstr "inkl. %(rate)s%% %(taxname)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:530
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:273
 msgid "Net total"
-msgstr "Gesamt (netto)"
+msgstr "Summe (netto)"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:539
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:282
@@ -13961,7 +13961,7 @@ msgstr "E-Mail-Vorschau"
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:37
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:53
 msgid "Send"
-msgstr "Senden"
+msgstr "Absenden"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:9
 msgid ""
@@ -15409,7 +15409,8 @@ msgstr "Pflicht zur Zwei-Faktor-Authentifizierung"
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:21
 msgid "This system enforces the usage of two-factor authentication!"
 msgstr ""
-"Dieses System erfordert, dass Sie Zwei-Faktor-Authentifizierung verwenden."
+"Dieses System erfordert, dass Sie die Zwei-Faktor-Authentifizierung "
+"verwenden."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:24
 msgid "Please set up at least one device below."
@@ -16235,7 +16236,7 @@ msgstr "Anwesend – {list}"
 
 #: pretix/control/views/dashboards.py:290
 msgid "Welcome to pretix!"
-msgstr "Willkommen zu pretix!"
+msgstr "Willkommen bei pretix!"
 
 #: pretix/control/views/dashboards.py:296
 msgid "Get started with our setup tool"
@@ -17203,7 +17204,7 @@ msgstr "{} neue Termine wurden erstellt."
 
 #: pretix/control/views/typeahead.py:55
 msgid "Series:"
-msgstr "Reihe:"
+msgstr "Veranstaltungsreihe:"
 
 #: pretix/control/views/typeahead.py:78
 msgid "Order {}"
@@ -17606,10 +17607,8 @@ msgid "Bank transfer"
 msgstr "Banküberweisung"
 
 #: pretix/plugins/banktransfer/__init__.py:17
-#, fuzzy
-#| msgid "This plugin allows you to receive payments via bank transfer "
 msgid "This plugin allows you to receive payments via bank transfer."
-msgstr "Dieses Plugin erlaubt, Zahlungen per Banküberweisung anzunehmen"
+msgstr "Dieses Plugin erlaubt, Zahlungen per Banküberweisung anzunehmen."
 
 #: pretix/plugins/banktransfer/__init__.py:31
 msgid ""
