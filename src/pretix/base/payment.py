@@ -306,7 +306,7 @@ class BasePaymentProvider:
                  initial=['web'],
                  widget=forms.CheckboxSelectMultiple,
                  help_text=_(
-                     'Only allow the usage of this payment provider in the following sales channels'),
+                     'Only allow the usage of this payment provider in the selected sales channels.'),
              )),
             ('_hidden',
              forms.BooleanField(
@@ -902,7 +902,7 @@ class ManualPayment(BasePaymentProvider):
                     label=_('Payment process description in order confirmation emails'),
                     help_text=_('This text will be included for the {payment_info} placeholder in order confirmation '
                                 'mails. It should instruct the user on how to proceed with the payment. You can use '
-                                'the placeholders {order}, {total}, {currency} and {total_with_currency}'),
+                                'the placeholders {order}, {total}, {currency} and {total_with_currency}.'),
                     widget=I18nTextarea,
                     validators=[PlaceholderValidator(['{order}', '{total}', '{currency}', '{total_with_currency}'])],
                 )),
@@ -910,7 +910,7 @@ class ManualPayment(BasePaymentProvider):
                     label=_('Payment process description for pending orders'),
                     help_text=_('This text will be shown on the order confirmation page for pending orders. '
                                 'It should instruct the user on how to proceed with the payment. You can use '
-                                'the placeholders {order}, {total}, {currency} and {total_with_currency}'),
+                                'the placeholders {order}, {total}, {currency} and {total_with_currency}.'),
                     widget=I18nTextarea,
                     validators=[PlaceholderValidator(['{order}', '{total}', '{currency}', '{total_with_currency}'])],
                 )),
@@ -1199,7 +1199,7 @@ class GiftCardPayment(BasePaymentProvider):
             if not gc.accepted_by(self.event.organizer):  # noqa - just a safeguard
                 raise PaymentException(_("This gift card is not accepted by this event organizer."))
             if payment.amount > gc.value:  # noqa - just a safeguard
-                raise PaymentException(_("This gift card was used in the meantime. Please try again"))
+                raise PaymentException(_("This gift card was used in the meantime. Please try again."))
             if gc.expires and gc.expires < now():  # noqa - just a safeguard
                 messages.error(request, _("This gift card is no longer valid."))
                 return

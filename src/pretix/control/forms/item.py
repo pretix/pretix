@@ -704,7 +704,7 @@ class ItemBundleFormSet(I18nFormSet):
 
             if 'itemvar' in form.cleaned_data:
                 if form.cleaned_data['itemvar'] in ivs:
-                    raise ValidationError(_('You added the same bundled product twice'))
+                    raise ValidationError(_('You added the same bundled product twice.'))
 
                 ivs.add(form.cleaned_data['itemvar'])
 
