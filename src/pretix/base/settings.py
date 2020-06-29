@@ -52,7 +52,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
             help_text=_("Independent of your choice, the cart will show gross prices as this is the price that needs to be "
-                        "paid"),
+                        "paid."),
 
         )
     },
