@@ -2262,6 +2262,30 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.total == Decimal('46.00')
 
+    @classscope(attr='o')
+    def test_change_taxrate(self):
+        self.ocm.change_tax_rule(self.op1, self.tr19)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        nop = self.order.positions.first()
+        assert nop.price == Decimal('23.00')
+        assert nop.tax_rule != self.ticket.tax_rule
+        assert nop.tax_rate == self.tr19.rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.tr19.rate))) == nop.tax_value
+
+    @classscope(attr='o')
+    def test_change_taxrate_and_product(self):
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.change_tax_rule(self.op1, self.tr7)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        nop = self.order.positions.first()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('23.00')
+        assert nop.tax_rule != self.shirt.tax_rule
+        assert nop.tax_rate == self.tr7.rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.tr7.rate))) == nop.tax_value
+
 
 @pytest.mark.django_db
 def test_autocheckin(clist_autocheckin, event):
