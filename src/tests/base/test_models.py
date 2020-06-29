@@ -12,7 +12,7 @@ from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
-from django_scopes import scope
+from django_scopes import scope, scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -522,6 +522,64 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.size = 100
         self.quota.save()
         assert self.quota.availability() == (Quota.AVAILABILITY_ORDERED, 0)
+
+
+class CheckinQuotaTestCase(BaseQuotaTestCase):
+
+    @scopes_disabled()
+    def setUp(self):
+        super().setUp()
+        self.quota.size = 5
+        self.quota.release_after_exit = True
+        self.quota.save()
+        self.quota.items.add(self.item1)
+        self.cl = self.event.checkin_lists.create(name="Test", allow_entry_after_exit=False)
+        order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
+                                     expires=now() + timedelta(days=3),
+                                     total=4)
+        self.op = OrderPosition.objects.create(order=order, item=self.item1, price=2)
+
+    @classscope(attr='o')
+    def test_not_checked_in(self):
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 4))
+
+    @classscope(attr='o')
+    def test_checked_in(self):
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_ENTRY, datetime=now() - timedelta(minutes=5))
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 4))
+
+    @classscope(attr='o')
+    def test_checked_in_and_out(self):
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_ENTRY, datetime=now() - timedelta(minutes=5))
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_EXIT, datetime=now() - timedelta(minutes=2))
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 5))
+
+    @classscope(attr='o')
+    def test_wrong_order(self):
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_ENTRY, datetime=now() - timedelta(minutes=2))
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_EXIT, datetime=now() - timedelta(minutes=5))
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 4))
+
+    @classscope(attr='o')
+    def test_allows_reentry(self):
+        self.cl.allow_entry_after_exit = True
+        self.cl.save()
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_ENTRY, datetime=now() - timedelta(minutes=5))
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_EXIT, datetime=now() - timedelta(minutes=2))
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 4))
+
+    @classscope(attr='o')
+    def test_feature_disabled(self):
+        self.quota.release_after_exit = False
+        self.quota.save()
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_ENTRY, datetime=now() - timedelta(minutes=5))
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_EXIT, datetime=now() - timedelta(minutes=2))
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 4))
+
+    @classscope(attr='o')
+    def test_checked_out(self):
+        self.op.checkins.create(list=self.cl, type=Checkin.TYPE_EXIT, datetime=now() - timedelta(minutes=5))
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 4))
 
 
 class BundleQuotaTestCase(BaseQuotaTestCase):

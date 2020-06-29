@@ -1765,6 +1765,7 @@ def test_quota_availability(token_client, organizer, event, quota, item):
     assert {'blocking_vouchers': 0,
             'available_number': 200,
             'pending_orders': 0,
+            'exited_orders': 0,
             'cart_positions': 0,
             'available': True,
             'total_size': 200,

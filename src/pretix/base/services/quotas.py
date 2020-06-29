@@ -3,14 +3,17 @@ from collections import Counter, defaultdict
 from datetime import timedelta
 
 from django.conf import settings
-from django.db.models import Count, F, Func, Max, Q, Sum
+from django.db import models
+from django.db.models import (
+    Case, Count, F, Func, Max, OuterRef, Q, Subquery, Sum, Value, When,
+)
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    CartPosition, Event, LogEntry, Order, OrderPosition, Quota, Voucher,
-    WaitingListEntry,
+    CartPosition, Checkin, Event, LogEntry, Order, OrderPosition, Quota,
+    Voucher, WaitingListEntry,
 )
 from pretix.celery_app import app
 
@@ -74,6 +77,7 @@ class QuotaAvailability:
         self.results = {}
         self.count_paid_orders = defaultdict(int)
         self.count_pending_orders = defaultdict(int)
+        self.count_exited_orders = defaultdict(int)
         self.count_vouchers = defaultdict(int)
         self.count_waitinglist = defaultdict(int)
         self.count_cart = defaultdict(int)
@@ -214,25 +218,63 @@ class QuotaAvailability:
                 Q(item_id__in={i['item_id'] for i in q_items if self._quota_objects[i['quota_id']] in quotas})
             ) | Q(
                 variation_id__in={i['itemvariation_id'] for i in q_vars if self._quota_objects[i['quota_id']] in quotas})
-        ).order_by().values('order__status', 'item_id', 'subevent_id', 'variation_id').annotate(c=Count('*'))
-        for line in sorted(op_lookup, key=lambda li: li['order__status'], reverse=True):  # p before n
+        ).order_by()
+        if any(q.release_after_exit for q in quotas):
+            op_lookup = op_lookup.annotate(
+                last_entry=Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        list__allow_entry_after_exit=False,
+                        type=Checkin.TYPE_ENTRY,
+                    ).order_by().values('position_id').annotate(
+                        m=Max('datetime')
+                    ).values('m')
+                ),
+                last_exit=Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        list__allow_entry_after_exit=False,
+                        type=Checkin.TYPE_EXIT,
+                    ).order_by().values('position_id').annotate(
+                        m=Max('datetime')
+                    ).values('m')
+                ),
+            ).annotate(
+                is_exited=Case(
+                    When(
+                        Q(last_entry__isnull=False) & Q(last_exit__isnull=False) & Q(last_exit__gt=F('last_entry')),
+                        then=Value(1, output_field=models.IntegerField()),
+                    ),
+                    default=Value(0, output_field=models.IntegerField()),
+                    output_field=models.IntegerField(),
+                ),
+            )
+        else:
+            op_lookup = op_lookup.annotate(
+                is_exited=Value(0, output_field=models.IntegerField())
+            )
+        op_lookup = op_lookup.values('order__status', 'item_id', 'subevent_id', 'variation_id', 'is_exited').annotate(c=Count('*'))
+        for line in sorted(op_lookup, key=lambda li: (int(li['is_exited']), li['order__status']), reverse=True):  # p before n, exited before non-exited
             if line['variation_id']:
                 qs = self._var_to_quotas[line['variation_id']]
             else:
                 qs = self._item_to_quotas[line['item_id']]
             for q in qs:
                 if q.subevent_id == line['subevent_id']:
-                    size_left[q] -= line['c']
-                    if line['order__status'] == Order.STATUS_PAID:
-                        self.count_paid_orders[q] += line['c']
-                        q.cached_availability_paid_orders = line['c']
-                    elif line['order__status'] == Order.STATUS_PENDING:
-                        self.count_pending_orders[q] += line['c']
-                    if size_left[q] <= 0 and q not in self.results:
+                    if q.release_after_exit and line['is_exited']:
+                        self.count_exited_orders[q] += line['c']
+                    else:
+                        size_left[q] -= line['c']
                         if line['order__status'] == Order.STATUS_PAID:
-                            self.results[q] = Quota.AVAILABILITY_GONE, 0
-                        else:
-                            self.results[q] = Quota.AVAILABILITY_ORDERED, 0
+                            self.count_paid_orders[q] += line['c']
+                            q.cached_availability_paid_orders = self.count_paid_orders[q]
+                        elif line['order__status'] == Order.STATUS_PENDING:
+                            self.count_pending_orders[q] += line['c']
+                        if size_left[q] <= 0 and q not in self.results:
+                            if line['order__status'] == Order.STATUS_PAID:
+                                self.results[q] = Quota.AVAILABILITY_GONE, 0
+                            else:
+                                self.results[q] = Quota.AVAILABILITY_ORDERED, 0
 
     def _compute_vouchers(self, quotas, q_items, q_vars, size_left, now_dt):
         events = {q.event_id for q in quotas}

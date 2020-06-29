@@ -9,7 +9,7 @@
         {% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}
         {% if 'can_change_items' in request.eventpermset %}
             <a href="{% url "control:event.items.quotas.edit" event=request.event.slug organizer=request.event.organizer.slug quota=quota.pk %}"
-                    class="btn btn-default">
+               class="btn btn-default">
                 <span class="fa fa-edit"></span>
                 {% trans "Edit quota" %}
             </a>
@@ -34,7 +34,8 @@
                 </div>
             {% else %}
                 <div class="alert alert-warning">
-                    <button type="submit" class="btn btn-primary pull-right flip" name="reopen" value="true">{% trans "Open quota" %}</button>
+                    <button type="submit" class="btn btn-primary pull-right flip" name="reopen"
+                            value="true">{% trans "Open quota" %}</button>
                     {% trans "This quota is closed since it has been sold out before. Tickets are theoretically available, but will not be sold unless you manually re-open the quota." %}
                     <div class="clearfix"></div>
                 </div>
@@ -65,9 +66,11 @@
                         {% if row.strong %}</strong>{% endif %}
                     </div>
                     <div class="col-xs-3 flip text-right">
-                        {% if row.strong %}<strong>{% endif %}
-                        {% if not row.strong %}–{% endif %} {{ row.value }}
-                        {% if row.strong %}</strong>{% endif %}
+                        {% if row.strong %}
+                            <strong>{{ row.value }}</strong>
+                            {% else %}
+                            {% if row.value >= 0 %}– {{ row.value }}{% else %}+ {{ row.value_abs }}{% endif %}
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

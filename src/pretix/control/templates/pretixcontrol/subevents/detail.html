@@ -106,6 +106,7 @@
                                         {% bootstrap_form_errors form %}
                                         {% bootstrap_field form.size layout="control" %}
                                         {% bootstrap_field form.itemvars layout="control" %}
+                                        {% bootstrap_field form.release_after_exit layout="control" %}
                                     </div>
                                 </div>
                             {% endfor %}
@@ -133,6 +134,7 @@
                                     <div class="panel-body form-horizontal">
                                         {% bootstrap_field formset.empty_form.size layout="control" %}
                                         {% bootstrap_field formset.empty_form.itemvars layout="control" %}
+                                        {% bootstrap_field formset.empty_form.release_after_exit layout="control" %}
                                     </div>
                                 </div>
                             {% endescapescript %}
