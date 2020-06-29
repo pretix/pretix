@@ -488,7 +488,7 @@ msgstr "Schließen"
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Continue"
-msgstr "Weiter"
+msgstr "Fortfahren"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
