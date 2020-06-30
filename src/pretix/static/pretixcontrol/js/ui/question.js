@@ -45,9 +45,9 @@ $(function () {
     if (data_type === 'B') {
         var colors;
         if (data[0].answer_bool) {
-            colors = ['#41A351', '#BD362F'];
+            colors = ['#50A167', '#D36060'];
         } else {
-            colors = ['#BD362F', '#41A351'];
+            colors = ['#D36060', '#50A167'];
         }
         new Morris.Donut({
             element: 'question_chart',
@@ -59,7 +59,18 @@ $(function () {
         new Morris.Donut({
             element: 'question_chart',
             data: data,
-            resize: true
+            resize: true,
+            colors: [
+                '#7F4A91',
+                '#50A167',
+                '#FFB419',
+                '#5F9CD4',
+                '#D36060',
+                '#83FFFA',
+                '#FF6C38',
+                '#1f5b8e',
+                '#2d683c',
+            ]
         });
     } else {  // M, N, S, T
         new Morris.Bar({
