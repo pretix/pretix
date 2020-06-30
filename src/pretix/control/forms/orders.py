@@ -366,6 +366,10 @@ class OrderPositionChangeForm(forms.Form):
         label=_('Split into new order')
     )
 
+    @staticmethod
+    def taxrule_label_from_instance(obj):
+        return f"{obj.name} ({obj.rate} %)"
+
     def __init__(self, *args, **kwargs):
         instance = kwargs.pop('instance')
         items = kwargs.pop('items')
@@ -392,6 +396,7 @@ class OrderPositionChangeForm(forms.Form):
             del self.fields['subevent']
 
         self.fields['tax_rule'].queryset = instance.event.tax_rules.all()
+        self.fields['tax_rule'].label_from_instance = self.taxrule_label_from_instance
 
         if not instance.seat:
             del self.fields['seat']

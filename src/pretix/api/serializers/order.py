@@ -428,12 +428,14 @@ class PriceCalcSerializer(serializers.Serializer):
     item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
     subevent = serializers.PrimaryKeyRelatedField(queryset=SubEvent.objects.none(), required=False, allow_null=True)
+    tax_rule = serializers.PrimaryKeyRelatedField(queryset=TaxRule.objects.none(), required=False, allow_null=True)
     locale = serializers.CharField(allow_null=True, required=False)
 
     def __init__(self, *args, **kwargs):
         event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['item'].queryset = event.items.all()
+        self.fields['tax_rule'].queryset = event.tax_rules.all()
         self.fields['variation'].queryset = ItemVariation.objects.filter(item__event=event)
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()

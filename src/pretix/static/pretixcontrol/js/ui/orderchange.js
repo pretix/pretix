@@ -8,6 +8,7 @@ $(function () {
         var url = $(this).attr("data-pricecalc-endpoint");
         var $itemvar = $(this).find("[name*=itemvar]");
         var $subevent = $(this).find("[name*=subevent]");
+        var $tax_rule = $(this).find("[name*=tax_rule]");
         var $price = $(this).find("[name*=price]");
         var update_price = function () {
             console.log(url);
@@ -31,11 +32,14 @@ $(function () {
                         'item': item,
                         'variation': variation,
                         'subevent': $subevent.val(),
+                        'tax_rule': $tax_rule.val(),
                         'locale': $("body").attr("data-pretixlocale"),
                     }),
                     'contentType': "application/json",
                     'success': function (data) {
                         $price.val(data.gross_formatted);
+                        $tax_rule.val(data.tax_rule);
+                        $tax_rule.prop("required", true);
                         $price.closest(".field-container").find(".loading-indicator").remove();
                     },
                     // 'error': …
@@ -45,7 +49,8 @@ $(function () {
                 }
             );
         };
-        $itemvar.on("change", update_price);
+        $itemvar.on("change", function () { $tax_rule.val(null); update_price() });
+        $tax_rule.on("change", update_price);
         $subevent.on("change", update_price).on("change", function () {
             var seat = $(this).closest(".form-order-change").find("[id$=seat]");
             if (seat.length) {
