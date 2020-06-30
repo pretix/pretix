@@ -39,7 +39,6 @@ $(function () {
                     'success': function (data) {
                         $price.val(data.gross_formatted);
                         $tax_rule.val(data.tax_rule);
-                        $tax_rule.prop("required", true);
                         $price.closest(".field-container").find(".loading-indicator").remove();
                     },
                     // 'error': …
