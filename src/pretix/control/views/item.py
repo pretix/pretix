@@ -826,7 +826,7 @@ class QuotaView(ChartContainingView, DetailView):
             })
 
         for d in data:
-            if d.get('value', 0) < 0:
+            if isinstance(d.get('value', 0), int) and d.get('value', 0) < 0:
                 d['value_abs'] = abs(d['value'])
         ctx['quota_chart_data'] = json.dumps([r for r in data if r.get('sum') and r['value'] >= 0])
         ctx['quota_table_rows'] = list(data)
