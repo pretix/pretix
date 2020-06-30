@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-30 01:00+0000\n"
-"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
+"PO-Revision-Date: 2020-06-30 21:04+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -12739,7 +12739,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:24
 msgid "General "
-msgstr "Allgemeines "
+msgstr "Allgemein "
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:30
 msgid ""
@@ -13591,7 +13591,7 @@ msgstr "inkl. %(rate)s%% %(taxname)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:530
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:273
 msgid "Net total"
-msgstr "Summe (netto)"
+msgstr "Gesamt (netto)"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:539
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:282
@@ -17204,7 +17204,7 @@ msgstr "{} neue Termine wurden erstellt."
 
 #: pretix/control/views/typeahead.py:55
 msgid "Series:"
-msgstr "Veranstaltungsreihe:"
+msgstr "Reihe:"
 
 #: pretix/control/views/typeahead.py:78
 msgid "Order {}"
