@@ -563,7 +563,11 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
                     a['alink'] = a['answer']
                     a['answer'] = Country(a['answer']).name or a['answer']
 
-        return list(qs)
+        r = list(qs)
+        total = sum(a['count'] for a in r)
+        for a in r:
+            a['percentage'] = a['count'] / total * 100.
+        return r
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
