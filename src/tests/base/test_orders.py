@@ -2262,6 +2262,72 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.total == Decimal('46.00')
 
+    @classscope(attr='o')
+    def test_change_taxrate(self):
+        self.ocm.change_tax_rule(self.op1, self.tr19)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        nop = self.order.positions.first()
+        assert nop.price == Decimal('23.00')
+        assert nop.tax_rule != self.ticket.tax_rule
+        assert nop.tax_rate == self.tr19.rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.tr19.rate))) == nop.tax_value
+
+    @classscope(attr='o')
+    def test_change_taxrate_and_product(self):
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.change_tax_rule(self.op1, self.tr7)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        nop = self.order.positions.first()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('23.00')
+        assert nop.tax_rule != self.shirt.tax_rule
+        assert nop.tax_rate == self.tr7.rate
+        assert round_decimal(nop.price * (1 - 100 / (100 + self.tr7.rate))) == nop.tax_value
+
+    @classscope(attr='o')
+    def test_change_taxrate_to_reverse_charge(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        InvoiceAddress.objects.create(
+            order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+
+        self.ocm.change_tax_rule(self.op1, self.tr19)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        nop = self.order.positions.first()
+        assert nop.price == Decimal('23.00')
+        assert nop.tax_rule == self.tr19
+        assert nop.tax_rate == Decimal('0.00')
+        assert nop.tax_value == Decimal('0.00')
+
+    @classscope(attr='o')
+    def test_change_taxrate_from_reverse_charge(self):
+        self.tr7.eu_reverse_charge = True
+        self.tr7.home_country = Country('DE')
+        self.tr7.save()
+        nop = self.order.positions.first()
+        nop.tax_value = Decimal('0.00')
+        nop.tax_rate = Decimal('0.00')
+        nop.save()
+        InvoiceAddress.objects.create(
+            order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+
+        self.ocm.change_tax_rule(self.op1, self.tr19)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        nop = self.order.positions.first()
+        assert nop.price == Decimal('23.00')
+        assert nop.tax_rule == self.tr19
+        assert nop.tax_rate == Decimal('19.00')
+        assert nop.tax_value == Decimal('3.67')
+
 
 @pytest.mark.django_db
 def test_autocheckin(clist_autocheckin, event):

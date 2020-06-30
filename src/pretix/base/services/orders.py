@@ -1160,6 +1160,7 @@ class OrderChangeManager:
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
     SeatOperation = namedtuple('SubeventOperation', ('position', 'seat'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
+    TaxRuleOperation = namedtuple('TaxRuleOperation', ('position', 'tax_rule'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
@@ -1271,6 +1272,10 @@ class OrderChangeManager:
             self._invoice_dirty = True
 
         self._operations.append(self.PriceOperation(position, price))
+
+    def change_tax_rule(self, position_or_fee, tax_rule: TaxRule):
+        self._operations.append(self.TaxRuleOperation(position_or_fee, tax_rule))
+        self._invoice_dirty = True
 
     def recalculate_taxes(self):
         positions = self.order.positions.select_related('item', 'item__tax_rule')
@@ -1593,6 +1598,24 @@ class OrderChangeManager:
                 })
                 op.position.price = op.price.gross
                 op.position._calculate_tax()
+                op.position.save()
+            elif isinstance(op, self.TaxRuleOperation):
+                if isinstance(op.position, OrderPosition):
+                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
+                        'position': op.position.pk,
+                        'positionid': op.position.positionid,
+                        'addon_to': op.position.addon_to_id,
+                        'old_taxrule': op.position.tax_rule.pk,
+                        'new_taxrule': op.tax_rule.pk
+                    })
+                elif isinstance(op.position, OrderFee):
+                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
+                        'fee': op.position.pk,
+                        'fee_type': op.position.fee_type,
+                        'old_taxrule': op.position.tax_rule.pk,
+                        'new_taxrule': op.tax_rule.pk
+                    })
+                op.position._calculate_tax(op.tax_rule)
                 op.position.save()
             elif isinstance(op, self.CancelFeeOperation):
                 self.order.log_action('pretix.event.order.changed.cancelfee', user=self.user, auth=self.auth, data={

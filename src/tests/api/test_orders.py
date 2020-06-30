@@ -4224,6 +4224,7 @@ def test_orderposition_price_calculation(token_client, organizer, event, order, 
         'name': '',
         'net': Decimal('23.00'),
         'rate': Decimal('0.00'),
+        'tax_rule': None,
         'tax': Decimal('0.00')
     }
 
@@ -4246,6 +4247,7 @@ def test_orderposition_price_calculation_item_with_tax(token_client, organizer, 
         'name': '',
         'net': Decimal('19.33'),
         'rate': Decimal('19.00'),
+        'tax_rule': taxrule.pk,
         'tax': Decimal('3.67')
     }
 
@@ -4270,6 +4272,7 @@ def test_orderposition_price_calculation_item_with_variation(token_client, organ
         'name': '',
         'net': Decimal('12.00'),
         'rate': Decimal('0.00'),
+        'tax_rule': None,
         'tax': Decimal('0.00')
     }
 
@@ -4295,6 +4298,7 @@ def test_orderposition_price_calculation_subevent(token_client, organizer, event
         'name': '',
         'net': Decimal('23.00'),
         'rate': Decimal('0.00'),
+        'tax_rule': None,
         'tax': Decimal('0.00')
     }
 
@@ -4322,6 +4326,7 @@ def test_orderposition_price_calculation_subevent_with_override(token_client, or
         'name': '',
         'net': Decimal('12.00'),
         'rate': Decimal('0.00'),
+        'tax_rule': None,
         'tax': Decimal('0.00')
     }
 
@@ -4350,6 +4355,7 @@ def test_orderposition_price_calculation_voucher_matching(token_client, organize
         'name': '',
         'net': Decimal('15.00'),
         'rate': Decimal('0.00'),
+        'tax_rule': None,
         'tax': Decimal('0.00')
     }
 
@@ -4377,6 +4383,7 @@ def test_orderposition_price_calculation_voucher_not_matching(token_client, orga
         'name': '',
         'net': Decimal('23.00'),
         'rate': Decimal('0.00'),
+        'tax_rule': None,
         'tax': Decimal('0.00')
     }
 
@@ -4401,6 +4408,7 @@ def test_orderposition_price_calculation_net_price(token_client, organizer, even
         'name': '',
         'net': Decimal('10.00'),
         'rate': Decimal('19.00'),
+        'tax_rule': taxrule.pk,
         'tax': Decimal('1.90')
     }
 
@@ -4432,5 +4440,6 @@ def test_orderposition_price_calculation_reverse_charge(token_client, organizer,
         'name': '',
         'net': Decimal('10.00'),
         'rate': Decimal('0.00'),
+        'tax_rule': taxrule.pk,
         'tax': Decimal('0.00')
     }

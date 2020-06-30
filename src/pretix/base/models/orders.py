@@ -1800,7 +1800,10 @@ class OrderFee(models.Model):
             self.fee_type, self.value
         )
 
-    def _calculate_tax(self):
+    def _calculate_tax(self, tax_rule=None):
+        if tax_rule:
+            self.tax_rule = tax_rule
+
         try:
             ia = self.order.invoice_address
         except InvoiceAddress.DoesNotExist:
@@ -1956,8 +1959,8 @@ class OrderPosition(AbstractPosition):
             self.item.id, self.variation.id if self.variation else 0, self.order_id
         )
 
-    def _calculate_tax(self):
-        self.tax_rule = self.item.tax_rule
+    def _calculate_tax(self, tax_rule=None):
+        self.tax_rule = tax_rule or self.item.tax_rule
         try:
             ia = self.order.invoice_address
         except InvoiceAddress.DoesNotExist:

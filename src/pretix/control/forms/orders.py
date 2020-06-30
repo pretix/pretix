@@ -20,7 +20,7 @@ from pretix.base.forms.widgets import (
     DatePickerWidget, SplitDateTimePickerWidget,
 )
 from pretix.base.models import (
-    InvoiceAddress, ItemAddOn, Order, OrderFee, OrderPosition,
+    InvoiceAddress, ItemAddOn, Order, OrderFee, OrderPosition, TaxRule,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
@@ -348,6 +348,11 @@ class OrderPositionChangeForm(forms.Form):
         localize=True,
         label=_('New price (gross)')
     )
+    tax_rule = forms.ModelChoiceField(
+        TaxRule.objects.none(),
+        required=False,
+        empty_label=_('(Unchanged)')
+    )
     operation_secret = forms.BooleanField(
         required=False,
         label=_('Generate a new secret')
@@ -360,6 +365,10 @@ class OrderPositionChangeForm(forms.Form):
         required=False,
         label=_('Split into new order')
     )
+
+    @staticmethod
+    def taxrule_label_from_instance(obj):
+        return f"{obj.name} ({obj.rate} %)"
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.pop('instance')
@@ -385,6 +394,9 @@ class OrderPositionChangeForm(forms.Form):
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         else:
             del self.fields['subevent']
+
+        self.fields['tax_rule'].queryset = instance.event.tax_rules.all()
+        self.fields['tax_rule'].label_from_instance = self.taxrule_label_from_instance
 
         if not instance.seat:
             del self.fields['seat']
@@ -415,6 +427,11 @@ class OrderFeeChangeForm(forms.Form):
         localize=True,
         label=_('New price (gross)')
     )
+    tax_rule = forms.ModelChoiceField(
+        TaxRule.objects.none(),
+        required=False,
+        empty_label=_('(Unchanged)')
+    )
     operation_cancel = forms.BooleanField(
         required=False,
         label=_('Remove this fee')
@@ -427,6 +444,7 @@ class OrderFeeChangeForm(forms.Form):
         initial['value'] = instance.value
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
+        self.fields['tax_rule'].queryset = instance.order.event.tax_rules.all()
         change_decimal_field(self.fields['value'], instance.order.event.currency)
 
 

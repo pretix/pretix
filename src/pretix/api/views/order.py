@@ -783,7 +783,8 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
         {
             "item": 2,
             "variation": null,
-            "subevent": 3
+            "subevent": 3,
+            "tax_rule": 4,
         }
 
         Sample output:
@@ -837,7 +838,11 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
         if data.get('subevent'):
             kwargs['subevent'] = data.get('subevent')
 
+        if data.get('tax_rule'):
+            kwargs['tax_rule'] = data.get('tax_rule')
+
         price = get_price(**kwargs)
+        tr = kwargs.get('tax_rule', kwargs.get('item').tax_rule)
         with language(data.get('locale') or self.request.event.settings.locale):
             return Response({
                 'gross': price.gross,
@@ -846,6 +851,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
                 'rate': price.rate,
                 'name': str(price.name),
                 'tax': price.tax,
+                'tax_rule': tr.pk if tr else None,
             })
 
     @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
