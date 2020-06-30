@@ -65,6 +65,8 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
         super().__init__(*args, **kwargs)
         for fname in self.auto_fields:
             kwargs = DEFAULTS[fname].get('form_kwargs', {})
+            if callable(kwargs):
+                kwargs = kwargs()
             kwargs.setdefault('required', False)
             field = DEFAULTS[fname]['form_class'](
                 **kwargs

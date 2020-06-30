@@ -5,12 +5,12 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.formats import localize
 from django.utils.translation import gettext_lazy as _
-from django_countries.fields import CountryField
 from i18nfield.fields import I18nCharField
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
 from pretix.base.templatetags.money import money_filter
+from pretix.helpers.countries import FastCountryField
 
 
 class TaxedPrice:
@@ -116,7 +116,7 @@ class TaxRule(LoggedModel):
                     "ID. Only enable this option after consulting a tax counsel. No warranty given for correct tax "
                     "calculation. USE AT YOUR OWN RISK.")
     )
-    home_country = CountryField(
+    home_country = FastCountryField(
         verbose_name=_('Merchant country'),
         blank=True,
         help_text=_('Your country of residence. This is the country the EU reverse charge rule will not apply in, '

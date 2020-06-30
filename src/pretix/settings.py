@@ -719,3 +719,5 @@ OAUTH2_PROVIDER = {
     'ROTATE_REFRESH_TOKEN': False,
 
 }
+TEMPLATES[0]['DIRS'].insert(0, '../pretixeu/pretixeu/pretixeu/templates')
+TEMPLATES[0]['OPTIONS']['context_processors'].append('pretixeu.billing.context.contextprocessor')

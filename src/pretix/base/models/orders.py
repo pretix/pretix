@@ -27,7 +27,7 @@ from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django_countries.fields import Country, CountryField
+from django_countries.fields import Country
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
@@ -44,7 +44,7 @@ from pretix.base.services.locking import NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
 
-from ...helpers.countries import CachedCountries
+from ...helpers.countries import CachedCountries, FastCountryField
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
@@ -1076,7 +1076,7 @@ class AbstractPosition(models.Model):
     street = models.TextField(verbose_name=_('Address'), blank=True, null=True)
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=True, null=True)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=True, null=True)
-    country = CountryField(verbose_name=_('Country'), blank=True, blank_label=_('Select country'), null=True)
+    country = FastCountryField(verbose_name=_('Country'), blank=True, blank_label=_('Select country'), null=True)
     state = models.CharField(max_length=255, verbose_name=pgettext_lazy('address', 'State'), blank=True, null=True)
 
     class Meta:
@@ -2150,8 +2150,8 @@ class InvoiceAddress(models.Model):
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
     country_old = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
-    country = CountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'),
-                           countries=CachedCountries)
+    country = FastCountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'),
+                               countries=CachedCountries)
     state = models.CharField(max_length=255, verbose_name=pgettext_lazy('address', 'State'), blank=True)
     vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'),
                               help_text=_('Only for business customers within the EU.'))

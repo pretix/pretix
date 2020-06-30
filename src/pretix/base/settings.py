@@ -13,7 +13,6 @@ from django.db.models import Model
 from django.utils.translation import (
     gettext_lazy as _, gettext_noop, pgettext, pgettext_lazy,
 )
-from django_countries import countries
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
@@ -27,9 +26,15 @@ from pretix.base.reldate import (
     SerializerRelativeDateField, SerializerRelativeDateTimeField,
 )
 from pretix.control.forms import MultipleLanguagesWidget, SingleLanguageWidget
+from pretix.helpers.countries import CachedCountries
 
-allcountries = list(countries)
-allcountries.insert(0, ('', _('Select country')))
+
+def country_choice_kwargs():
+    allcountries = list(CachedCountries())
+    allcountries.insert(0, ('', _('Select country')))
+    return {
+        'choices': allcountries
+    }
 
 
 DEFAULTS = {
@@ -570,13 +575,8 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
-        'serializer_kwargs': dict(
-            choices=allcountries,
-        ),
-        'form_kwargs': dict(
-            choices=allcountries,
-            label=_("Country"),
-        )
+        'serializer_kwargs': country_choice_kwargs,
+        'form_kwargs': country_choice_kwargs,
     },
     'invoice_address_from_tax_id': {
         'default': '',

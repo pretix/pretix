@@ -9,10 +9,10 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import pgettext
-from django_countries.fields import CountryField
 from django_scopes import ScopedManager
 
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+from pretix.helpers.countries import FastCountryField
 
 
 def invoice_filename(instance, filename: str) -> str:
@@ -84,7 +84,7 @@ class Invoice(models.Model):
     invoice_from_name = models.CharField(max_length=190, null=True)
     invoice_from_zipcode = models.CharField(max_length=190, null=True)
     invoice_from_city = models.CharField(max_length=190, null=True)
-    invoice_from_country = CountryField(null=True)
+    invoice_from_country = FastCountryField(null=True)
     invoice_from_tax_id = models.CharField(max_length=190, null=True)
     invoice_from_vat_id = models.CharField(max_length=190, null=True)
     invoice_to = models.TextField()
@@ -94,7 +94,7 @@ class Invoice(models.Model):
     invoice_to_zipcode = models.CharField(max_length=190, null=True)
     invoice_to_city = models.TextField(null=True)
     invoice_to_state = models.CharField(max_length=190, null=True)
-    invoice_to_country = CountryField(null=True)
+    invoice_to_country = FastCountryField(null=True)
     invoice_to_vat_id = models.TextField(null=True)
     invoice_to_beneficiary = models.TextField(null=True)
     date = models.DateField(default=today)

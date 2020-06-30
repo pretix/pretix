@@ -629,9 +629,13 @@ class EventSettingsSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
         for fname in self.default_fields:
             kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
+            if callable(kwargs):
+                kwargs = kwargs()
             kwargs.setdefault('required', False)
             kwargs.setdefault('allow_null', True)
             form_kwargs = DEFAULTS[fname].get('form_kwargs', {})
+            if callable(form_kwargs):
+                form_kwargs = form_kwargs()
             if 'serializer_class' not in DEFAULTS[fname]:
                 raise ValidationError('{} has no serializer class'.format(fname))
             f = DEFAULTS[fname]['serializer_class'](
