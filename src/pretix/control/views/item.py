@@ -556,8 +556,8 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             if self.object.type == Question.TYPE_BOOLEAN:
                 for a in qs:
                     a['alink'] = a['answer']
-                    a['answer'] = gettext('Yes') if a['answer'] == 'True' else gettext('No')
                     a['answer_bool'] = a['answer'] == 'True'
+                    a['answer'] = gettext('Yes') if a['answer'] == 'True' else gettext('No')
             elif self.object.type == Question.TYPE_COUNTRYCODE:
                 for a in qs:
                     a['alink'] = a['answer']
