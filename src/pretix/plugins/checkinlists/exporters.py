@@ -319,7 +319,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
             if self.event.has_subevents and not cl.subevent:
                 item += '<br/>{} ({})'.format(
                     op.subevent.name,
-                    date_format(op.subevent.date_from, 'SHORT_DATETIME_FORMAT')
+                    date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
                 )
             if op.seat:
                 item += '<br/>' + str(op.seat)
