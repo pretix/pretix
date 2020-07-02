@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 12:57+0000\n"
-"PO-Revision-Date: 2020-01-08 03:00+0000\n"
+"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"PO-Revision-Date: 2020-07-02 17:25+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -193,10 +193,8 @@ msgid "Circular dependency between questions detected."
 msgstr "Se ha detectado una dependencia circular entre las preguntas."
 
 #: pretix/api/serializers/item.py:321 pretix/control/forms/item.py:87
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "This type of question cannot be asked during check-in."
-msgstr "Esta pregunta se hará durante el registro."
+msgstr "Este tipo de pregunta no se puede hacer durante el registro."
 
 #: pretix/api/serializers/order.py:918 pretix/api/serializers/order.py:925
 #, fuzzy
@@ -271,10 +269,8 @@ msgid "Order canceled"
 msgstr "Orden cancelada"
 
 #: pretix/api/webhooks.py:130 pretix/base/notifications.py:229
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order reactivated"
-msgstr "Orden denegada"
+msgstr "Orden reactivada"
 
 #: pretix/api/webhooks.py:134 pretix/base/notifications.py:235
 msgid "Order expired"
@@ -347,7 +343,7 @@ msgstr "Predeterminado"
 
 #: pretix/base/email.py:146
 msgid "Simple with logo"
-msgstr ""
+msgstr "Simple con logo"
 
 #: pretix/base/email.py:349 pretix/base/email.py:412 pretix/base/email.py:428
 #: pretix/base/email.py:437 pretix/base/pdf.py:109 pretix/base/pdf.py:212
@@ -364,8 +360,6 @@ msgid "Sample Admission Ticket"
 msgstr "Ejemplo de Ticket de Admisión"
 
 #: pretix/base/email.py:416
-#, fuzzy
-#| msgid "An individial text with a reason can be inserted here."
 msgid "An individual text with a reason can be inserted here."
 msgstr "Un texto individual con una razón puede ser insertado aquí."
 
@@ -1281,7 +1275,7 @@ msgstr "Fecha de inicio del evento"
 #, fuzzy
 #| msgid "Redemptions"
 msgid "Gift card redemptions"
-msgstr "Amortizaciones"
+msgstr "Amortizaciones de tarjetas de regalo"
 
 #: pretix/base/exporters/orderlist.py:761 pretix/base/models/giftcards.py:54
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:10
@@ -1295,10 +1289,8 @@ msgstr "Código de la tarjeta de regalo"
 
 #: pretix/base/exporters/orderlist.py:761
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
-#, fuzzy
-#| msgid "Voucher details"
 msgid "Issuer"
-msgstr "Detalles del recibo"
+msgstr "Emisor"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:99
 msgid "Keep me logged in"
@@ -1582,11 +1574,9 @@ msgid "Beneficiary"
 msgstr "Beneficiario"
 
 #: pretix/base/invoice.py:502
-#, fuzzy
-#| msgid "Invoice"
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "Factura"
+msgstr "Impuesto de la factura"
 
 #: pretix/base/invoice.py:503
 msgctxt "invoice"
@@ -1636,11 +1626,9 @@ msgid "Invoice total"
 msgstr "Total de la factura"
 
 #: pretix/base/invoice.py:573
-#, fuzzy
-#| msgid "Ignored payments"
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Pagos ignorados"
+msgstr "Pagos recibidos"
 
 #: pretix/base/invoice.py:576
 #, fuzzy
@@ -1822,7 +1810,7 @@ msgstr "País"
 
 #: pretix/base/models/checkin.py:138
 msgid "Exit"
-msgstr ""
+msgstr "Salida"
 
 #: pretix/base/models/devices.py:55
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -2098,7 +2086,7 @@ msgstr "Fecha de caducidad"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Términos y condiciones especiales"
 
 #: pretix/base/models/invoices.py:129
 #, python-format
@@ -3770,7 +3758,7 @@ msgstr "Has sido requerido para emitir un reembolso para {order.code}."
 
 #: pretix/base/orderimport.py:63
 msgid "Keep empty"
-msgstr ""
+msgstr "Mantener vacío"
 
 #: pretix/base/orderimport.py:90
 #, python-brace-format
@@ -4381,6 +4369,11 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"Juan Pérez\n"
+"Compañia de ejemplo\n"
+"Calle nombre número\n"
+"12335 ciudad\n"
+"Atlantis"
 
 #: pretix/base/pdf.py:123
 #, fuzzy
