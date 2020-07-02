@@ -1605,14 +1605,14 @@ class OrderChangeManager:
                         'position': op.position.pk,
                         'positionid': op.position.positionid,
                         'addon_to': op.position.addon_to_id,
-                        'old_taxrule': op.position.tax_rule.pk,
+                        'old_taxrule': op.position.tax_rule.pk if op.position.tax_rate else None,
                         'new_taxrule': op.tax_rule.pk
                     })
                 elif isinstance(op.position, OrderFee):
                     self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
                         'fee': op.position.pk,
                         'fee_type': op.position.fee_type,
-                        'old_taxrule': op.position.tax_rule.pk,
+                        'old_taxrule': op.position.tax_rule.pk if op.position.tax_rate else None,
                         'new_taxrule': op.tax_rule.pk
                     })
                 op.position._calculate_tax(op.tax_rule)

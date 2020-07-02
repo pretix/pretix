@@ -71,14 +71,14 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             return text + ' ' + _('Tax rule of position #{posid} changed from {old_rule} '
                                   'to {new_rule}.').format(
                 posid=data.get('positionid', '?'),
-                old_rule=TaxRule.objects.get(pk=data['old_taxrule']),
+                old_rule=TaxRule.objects.get(pk=data['old_taxrule']) if data['old_taxrule'] else '–',
                 new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
             )
         elif 'fee' in data:
             return text + ' ' + _('Tax rule of fee #{fee} changed from {old_rule} '
                                   'to {new_rule}.').format(
                 fee=data.get('fee', '?'),
-                old_rule=TaxRule.objects.get(pk=data['old_taxrule']),
+                old_rule=TaxRule.objects.get(pk=data['old_taxrule']) if data['old_taxrule'] else '–',
                 new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
             )
     elif logentry.action_type == 'pretix.event.order.changed.addfee':
