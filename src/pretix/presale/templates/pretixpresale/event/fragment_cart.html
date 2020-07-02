@@ -303,6 +303,14 @@
     <div class="col-md-3 col-xs-6 col-md-offset-3 price">
         <strong>{{ cart.total|money:event.currency }}</strong>
 
+        {% if not event.settings.display_net_prices and cart.tax_total and not editable %}
+            <small class="text-muted">
+                {% blocktrans trimmed with tax_sum=cart.tax_total|money:event.currency %}
+                    incl. {{ tax_sum }} taxes
+                {% endblocktrans %}
+            </small>
+        {% endif %}
+
         {% if editable and vouchers_exist and not cart.all_with_voucher %}
             <br>
             <a class="js-only apply-voucher-toggle" href="#">
