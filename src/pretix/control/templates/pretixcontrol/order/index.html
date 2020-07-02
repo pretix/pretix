@@ -525,26 +525,24 @@
                             <div class="clearfix"></div>
                         </div>
                     {% endfor %}
-                    {% if event.settings.display_net_prices and items.net_total %}
-                        <div class="row-fluid product-row total">
-                            <div class="col-md-4 col-xs-6">
-                                <strong>{% trans "Net total" %}</strong>
-                            </div>
-                            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                                {{ items.net_total|money:event.currency }}
-                            </div>
-                            <div class="clearfix"></div>
+                    <div class="row-fluid product-row total">
+                        <div class="col-md-4 col-xs-6">
+                            <strong>{% trans "Net total" %}</strong>
                         </div>
-                        <div class="row-fluid product-row">
-                            <div class="col-md-4 col-xs-6">
-                                <strong>{% trans "Taxes" %}</strong>
-                            </div>
-                            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                                {{ items.tax_total|money:event.currency }}
-                            </div>
-                            <div class="clearfix"></div>
+                        <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                            {{ items.net_total|money:event.currency }}
                         </div>
-                    {% endif %}
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="row-fluid product-row">
+                        <div class="col-md-4 col-xs-6">
+                            <strong>{% trans "Taxes" %}</strong>
+                        </div>
+                        <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                            {{ items.tax_total|money:event.currency }}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
                     <div class="row-fluid product-row total">
                         <div class="col-md-4 col-xs-6">
                             <strong>{% trans "Total" %}</strong>
