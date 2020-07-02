@@ -580,7 +580,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 'data-display-dependency': '#id_is_business_1',
                 'autocomplete': 'organization',
             }),
-            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
+            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1', 'data-countries-in-eu': ','.join(EU_COUNTRIES)}),
             'internal_reference': forms.TextInput,
         }
         labels = {
@@ -630,6 +630,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         )
         self.fields['state'].widget.is_required = True
 
+        # Without JavaScript the VAT ID field is not hidden, so we empty the field if a country outside the EU is selected.
+        if cc and cc not in EU_COUNTRIES and fprefix + 'vat_id' in self.data:
+            self.data = self.data.copy()
+            del self.data[fprefix + 'vat_id']
+
         if not event.settings.invoice_address_required or self.all_optional:
             for k, f in self.fields.items():
                 f.required = False
@@ -644,8 +649,6 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             self.fields['company'].widget.is_required = True
             self.fields['company'].widget.attrs['required'] = 'required'
             del self.fields['company'].widget.attrs['data-display-dependency']
-            if 'vat_id' in self.fields:
-                del self.fields['vat_id'].widget.attrs['data-display-dependency']
 
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,
@@ -677,6 +680,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         data = self.cleaned_data
         if not data.get('is_business'):
             data['company'] = ''
+            data['vat_id'] = ''
+        if data.get('is_business') and not data.get('country') in EU_COUNTRIES:
+            data['vat_id'] = ''
         if self.event.settings.invoice_address_required:
             if data.get('is_business') and not data.get('company'):
                 raise ValidationError(_('You need to provide a company name.'))
@@ -697,7 +703,6 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         ) and len(data.get('name_parts', {})) == 1:
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
-
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass
         elif self.validate_vat_id and data.get('is_business') and data.get('country') in EU_COUNTRIES and data.get('vat_id'):
