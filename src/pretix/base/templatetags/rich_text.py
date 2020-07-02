@@ -109,15 +109,25 @@ def markdown_compile_email(source):
     ))
 
 
+class SnippetExtension(markdown.extensions.Extension):
+    def extendMarkdown(self, md, *args, **kwargs):
+        del md.parser.blockprocessors['olist']
+        del md.parser.blockprocessors['ulist']
+        del md.parser.blockprocessors['quote']
+
+
 def markdown_compile(source, snippet=False):
     tags = ALLOWED_TAGS_SNIPPET if snippet else ALLOWED_TAGS
+    exts = [
+        'markdown.extensions.sane_lists',
+        'markdown.extensions.nl2br'
+    ]
+    if snippet:
+        exts.append(SnippetExtension())
     return bleach.clean(
         markdown.markdown(
             source,
-            extensions=[
-                'markdown.extensions.sane_lists',
-                'markdown.extensions.nl2br'
-            ]
+            extensions=exts
         ),
         strip=snippet,
         tags=tags,
