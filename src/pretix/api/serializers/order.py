@@ -68,7 +68,7 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
             data['name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
 
         if data.get('country'):
-            if not pycountry.countries.get(alpha_2=data.get('country')):
+            if not pycountry.countries.get(alpha_2=data.get('country').code):
                 raise ValidationError(
                     {'country': ['Invalid country code.']}
                 )
@@ -600,7 +600,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             data['attendee_name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
 
         if data.get('country'):
-            if not pycountry.countries.get(alpha_2=data.get('country')):
+            if not pycountry.countries.get(alpha_2=data.get('country').code):
                 raise ValidationError(
                     {'country': ['Invalid country code.']}
                 )
