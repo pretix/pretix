@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"POT-Creation-Date: 2020-07-03 12:58+0000\n"
 "PO-Revision-Date: 2019-12-25 01:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -299,7 +299,7 @@ msgstr "انقر لقريب"
 msgid "You have unsaved changes!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
 msgstr "حساب السعر الافتراضي ..."
 
@@ -307,15 +307,15 @@ msgstr "حساب السعر الافتراضي ..."
 msgid "Others"
 msgstr "الآخرين"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:71
+#: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
 msgstr "عد"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:120
+#: pretix/static/pretixcontrol/js/ui/question.js:131
 msgid "Yes"
 msgstr "نعم"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:121
+#: pretix/static/pretixcontrol/js/ui/question.js:132
 msgid "No"
 msgstr "لا"
 

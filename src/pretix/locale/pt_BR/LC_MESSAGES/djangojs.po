@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"POT-Creation-Date: 2020-07-03 12:58+0000\n"
 "PO-Revision-Date: 2019-03-19 09:00+0000\n"
 "Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -316,7 +316,7 @@ msgstr "Clique para fechar"
 msgid "You have unsaved changes!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 #, fuzzy
 #| msgid "Contacting Stripe …"
 msgid "Calculating default price…"
@@ -326,15 +326,15 @@ msgstr "Contatando Stripe…"
 msgid "Others"
 msgstr "Outros"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:71
+#: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
 msgstr "Contagem"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:120
+#: pretix/static/pretixcontrol/js/ui/question.js:131
 msgid "Yes"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/question.js:121
+#: pretix/static/pretixcontrol/js/ui/question.js:132
 #, fuzzy
 #| msgid "None"
 msgid "No"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"POT-Creation-Date: 2020-07-03 12:58+0000\n"
 "PO-Revision-Date: 2019-09-24 19:00+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -309,7 +309,7 @@ msgstr "Zamknij"
 msgid "You have unsaved changes!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
 msgstr "Liczenie domyślnej ceny…"
 
@@ -317,15 +317,15 @@ msgstr "Liczenie domyślnej ceny…"
 msgid "Others"
 msgstr "Inne"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:71
+#: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
 msgstr "Ilość"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:120
+#: pretix/static/pretixcontrol/js/ui/question.js:131
 msgid "Yes"
 msgstr "Tak"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:121
+#: pretix/static/pretixcontrol/js/ui/question.js:132
 msgid "No"
 msgstr "Nie"
 

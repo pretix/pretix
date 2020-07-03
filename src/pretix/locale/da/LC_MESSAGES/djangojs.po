@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"POT-Creation-Date: 2020-07-03 12:58+0000\n"
 "PO-Revision-Date: 2020-05-19 09:19+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -303,7 +303,7 @@ msgstr ""
 msgid "You have unsaved changes!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 #, fuzzy
 #| msgid "Contacting Stripe …"
 msgid "Calculating default price…"
@@ -313,15 +313,15 @@ msgstr "Kontakter Stripe …"
 msgid "Others"
 msgstr "Andre"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:71
+#: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
 msgstr "Antal"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:120
+#: pretix/static/pretixcontrol/js/ui/question.js:131
 msgid "Yes"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/question.js:121
+#: pretix/static/pretixcontrol/js/ui/question.js:132
 #, fuzzy
 #| msgid "None"
 msgid "No"

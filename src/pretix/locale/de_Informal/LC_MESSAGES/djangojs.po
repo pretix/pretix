@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"POT-Creation-Date: 2020-07-03 12:58+0000\n"
 "PO-Revision-Date: 2020-05-14 07:31+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -305,7 +305,7 @@ msgstr "Klicken zum Schließen"
 msgid "You have unsaved changes!"
 msgstr "Du hast ungespeicherte Änderungen!"
 
-#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
 msgstr "Berechne Standardpreis…"
 
@@ -313,15 +313,15 @@ msgstr "Berechne Standardpreis…"
 msgid "Others"
 msgstr "Sonstige"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:71
+#: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
 msgstr "Anzahl"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:120
+#: pretix/static/pretixcontrol/js/ui/question.js:131
 msgid "Yes"
 msgstr "Ja"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:121
+#: pretix/static/pretixcontrol/js/ui/question.js:132
 msgid "No"
 msgstr "Nein"
 
