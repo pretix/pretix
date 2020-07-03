@@ -723,10 +723,12 @@ class EventFilterForm(FilterForm):
         elif fdata.get('status') == 'running':
             qs = qs.filter(
                 live=True
+            ).annotate(
+                p_end=Coalesce(F('presale_end'), F('date_to'), F('date_from'))
             ).filter(
                 Q(presale_start__isnull=True) | Q(presale_start__lte=now())
             ).filter(
-                Q(presale_end__isnull=True) | Q(presale_end__gte=now())
+                Q(p_end__gte=now())
             )
         elif fdata.get('status') == 'notlive':
             qs = qs.filter(live=False)
