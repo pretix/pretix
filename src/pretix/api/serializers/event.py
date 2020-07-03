@@ -611,6 +611,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'invoice_introductory_text',
         'invoice_additional_text',
         'invoice_footer_text',
+        'invoice_eu_currencies',
         'cancel_allow_user',
         'cancel_allow_user_until',
         'cancel_allow_user_paid',

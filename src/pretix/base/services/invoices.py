@@ -105,7 +105,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
 
             cc = str(ia.country)
 
-            if cc in EU_CURRENCIES and EU_CURRENCIES[cc] != invoice.event.currency:
+            if cc in EU_CURRENCIES and EU_CURRENCIES[cc] != invoice.event.currency and invoice.event.settings.invoice_eu_currencies:
                 invoice.foreign_currency_display = EU_CURRENCIES[cc]
 
                 if settings.FETCH_ECB_RATES:

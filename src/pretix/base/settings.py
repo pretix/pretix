@@ -198,6 +198,16 @@ DEFAULTS = {
             label=_("Show attendee names on invoices"),
         )
     },
+    'invoice_eu_currencies': {
+        'default': 'True',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("On invoices from one EU country into another EU country with a different currency, print the "
+                    "tax amounts in both currencies if possible"),
+        )
+    },
     'invoice_address_required': {
         'default': 'False',
         'form_class': forms.BooleanField,

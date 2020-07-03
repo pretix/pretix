@@ -228,6 +228,32 @@ def test_reverse_charge_foreign_currency_data_too_old(env):
 
 
 @pytest.mark.django_db
+def test_reverse_charge_foreign_currency_disabvled(env):
+    event, order = env
+    event.settings.invoice_eu_currencies = False
+
+    tr = event.tax_rules.first()
+    tr.eu_reverse_charge = True
+    tr.home_country = Country('DE')
+    tr.save()
+
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street', zipcode='12345', city='Warsaw',
+                                  country=Country('PL'), vat_id='PL123456780', vat_id_validated=True, order=order,
+                                  is_business=True)
+
+    ocm = OrderChangeManager(order, None)
+    ocm.recalculate_taxes()
+    ocm.commit()
+    assert not order.positions.filter(tax_value__gt=0).exists()
+
+    inv = generate_invoice(order)
+    assert "reverse charge" in inv.additional_text.lower()
+    assert inv.foreign_currency_rate is None
+    assert inv.foreign_currency_rate_date is None
+
+
+@pytest.mark.django_db
 def test_positions(env):
     event, order = env
     inv = generate_invoice(order)
