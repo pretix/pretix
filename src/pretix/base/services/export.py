@@ -50,6 +50,8 @@ def multiexport(organizer: Organizer, user: User, fileid: str, provider: str, fo
         responses = register_multievent_data_exporters.send(organizer)
 
         for receiver, response in responses:
+            if not response:
+                continue
             ex = response(events)
             if ex.identifier == provider:
                 d = ex.render(form_data)
