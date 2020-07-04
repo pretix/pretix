@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-07-04 19:45+0000\n"
+"PO-Revision-Date: 2020-07-04 20:45+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -12122,22 +12122,29 @@ msgid ""
 "An event with individual configuration. If you create more events later, you "
 "can copy the event to save yourself some work."
 msgstr ""
+"Een evenement met eigen instellingen. Als je later meer evenementen aanmaakt "
+"kan je de instellingen van dit evenement kopiëren."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:21
 msgid ""
 "Examples: Conferences, workshops, trade fairs, one-off concerts, sale of "
 "digital content, multi-day events with combination tickets."
 msgstr ""
+"Voorbeelden: Conferenties, workshops, beurzen, eenmalige concerten, verkoop "
+"van digitale inhoud, meerdaagse evenementen met kaartjes geldig voor "
+"meerdere dagen."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:32
 msgid "Event series or time slot booking"
-msgstr ""
+msgstr "Evenementenreeks of tijdsslotreservering"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:34
 msgid ""
 "A series of events that share the same configuration. They can still be "
 "different in their dates, locations, prices, and capacities."
 msgstr ""
+"Een reeks evenementen die dezelfde instellingen delen. De evenementen in de "
+"reeks kunnen verschillen in hun datums, prijzen en capaciteiten."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:40
 msgid ""
@@ -12145,6 +12152,10 @@ msgid ""
 "locations, museums, libraries, or swimming pools, events that need to be "
 "booked together in one cart."
 msgstr ""
+"Voorbeelden: Meerdere uitvoeringen van dezelfde show, hetzelfde concert op "
+"verschillende locaties, museums, bibliotheken, zwembaden of andere "
+"evenementen die tegelijkertijd (in dezelfde winkelwagen) moeten worden "
+"geboekt."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:53
 msgid ""
@@ -18007,11 +18018,11 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:50
 msgid "Only include tickets for dates on or after this date."
-msgstr ""
+msgstr "Alleen kaartjes voor subevenementen op of na deze datum."
 
 #: pretix/plugins/checkinlists/exporters.py:57
 msgid "Only include tickets for dates on or before this date."
-msgstr ""
+msgstr "Alleen kaartjes voor subevenementen op of voor deze datum."
 
 #: pretix/plugins/checkinlists/exporters.py:61
 msgid "Include QR-code secret"
@@ -20279,7 +20290,7 @@ msgstr "Ga"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:21
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:48
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
