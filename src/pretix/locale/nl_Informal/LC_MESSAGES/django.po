@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 12:57+0000\n"
-"PO-Revision-Date: 2020-06-02 04:00+0000\n"
+"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"PO-Revision-Date: 2020-07-04 19:45+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -4246,10 +4246,8 @@ msgid "Sample company"
 msgstr "Voorbeeldbedrijf"
 
 #: pretix/base/pdf.py:118
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Full attendee address"
-msgstr "Adres van gast"
+msgstr "Volledig adres van gast"
 
 #: pretix/base/pdf.py:119
 msgid ""
@@ -4259,6 +4257,11 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"Piet Janssen\n"
+"Voorbeeld bedrijf\n"
+"Sesamstraat 42\n"
+"1234AB Amsterdam\n"
+"Nederland"
 
 #: pretix/base/pdf.py:123
 msgid "Attendee country"
@@ -7224,10 +7227,9 @@ msgid "The task has been completed."
 msgstr "De taak is voltooid."
 
 #: pretix/control/forms/__init__.py:115
-#, fuzzy, python-brace-format
-#| msgid "Please do not upload files larger than 10 MB."
+#, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr "Upload geen bestanden groter dan 10MB."
+msgstr "Upload geen bestanden groter dan {size}!"
 
 #: pretix/control/forms/__init__.py:136
 msgid "Filetype not allowed!"
@@ -12113,7 +12115,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
-msgstr ""
+msgstr "Enkel evenement of winkel die niet voor een evenement is"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:15
 msgid ""
