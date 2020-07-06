@@ -8,8 +8,7 @@
         {% csrf_token %}
         <p>{% blocktrans %}Are you sure you want to delete the layout <strong>{{ layout }}</strong>?{% endblocktrans %}</p>
         <div class="form-group submit-group">
-            <a href="{% url "plugins:badges:index" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn
-btn-default btn-cancel">
+            <a href="{% url "plugins:ticketoutputpdf:index" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save">
