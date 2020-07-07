@@ -4,10 +4,12 @@ from decimal import Decimal
 import pytz
 from django import forms
 from django.db.models import (
-    Count, DateTimeField, F, IntegerField, Max, OuterRef, Subquery, Sum,
+    CharField, Count, DateTimeField, F, IntegerField, Max, OuterRef, Subquery,
+    Sum,
 )
 from django.dispatch import receiver
 from django.utils.formats import date_format
+from django.utils.functional import cached_property
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
 
 from pretix.base.models import (
@@ -19,6 +21,7 @@ from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from ...control.forms.filter import get_all_payment_providers
+from ...helpers import GroupConcat
 from ..exporter import ListExporter, MultiSheetListExporter
 from ..signals import (
     register_data_exporters, register_multievent_data_exporters,
@@ -28,6 +31,10 @@ from ..signals import (
 class OrderListExporter(MultiSheetListExporter):
     identifier = 'orderlist'
     verbose_name = gettext_lazy('Order data')
+
+    @cached_property
+    def providers(self):
+        return dict(get_all_payment_providers())
 
     @property
     def sheets(self):
@@ -84,12 +91,22 @@ class OrderListExporter(MultiSheetListExporter):
         ).values(
             'm'
         ).order_by()
+        p_providers = OrderPayment.objects.filter(
+            order=OuterRef('pk'),
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
+                       OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
+        ).values('order').annotate(
+            m=GroupConcat('provider', delimiter=',')
+        ).values(
+            'm'
+        ).order_by()
 
         s = OrderPosition.objects.filter(
             order=OuterRef('pk')
         ).order_by().values('order').annotate(k=Count('id')).values('k')
         qs = Order.objects.filter(event__in=self.events).annotate(
             payment_date=Subquery(p_date, output_field=DateTimeField()),
+            payment_providers=Subquery(p_providers, output_field=CharField()),
             pcnt=Subquery(s, output_field=IntegerField())
         ).select_related('invoice_address').prefetch_related('invoices').prefetch_related('event')
         if form_data['paid_only']:
@@ -121,6 +138,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Requires special attention'))
         headers.append(_('Comment'))
         headers.append(_('Positions'))
+        headers.append(_('Payment providers'))
 
         yield headers
 
@@ -199,11 +217,26 @@ class OrderListExporter(MultiSheetListExporter):
             row.append(_('Yes') if order.checkin_attention else _('No'))
             row.append(order.comment or "")
             row.append(order.pcnt)
+            row.append(', '.join([
+                str(self.providers.get(p, p)) for p in sorted(set((order.payment_providers or '').split(',')))
+                if p and p != 'free'
+            ]))
             yield row
 
     def iterate_fees(self, form_data: dict):
+        p_providers = OrderPayment.objects.filter(
+            order=OuterRef('order'),
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
+                       OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
+        ).values('order').annotate(
+            m=GroupConcat('provider', delimiter=',')
+        ).values(
+            'm'
+        ).order_by()
         qs = OrderFee.objects.filter(
             order__event__in=self.events,
+        ).annotate(
+            payment_providers=Subquery(p_providers, output_field=CharField()),
         ).select_related('order', 'order__invoice_address', 'tax_rule')
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID)
@@ -231,6 +264,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Address'), _('ZIP code'), _('City'), _('Country'), pgettext('address', 'State'), _('VAT ID'),
         ]
 
+        headers.append(_('Payment providers'))
         yield headers
 
         for op in qs.order_by('order__datetime'):
@@ -270,11 +304,26 @@ class OrderListExporter(MultiSheetListExporter):
                 ]
             except InvoiceAddress.DoesNotExist:
                 row += [''] * (8 + (len(name_scheme['fields']) if name_scheme and len(name_scheme['fields']) > 1 else 0))
+            row.append(', '.join([
+                str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
+                if p and p != 'free'
+            ]))
             yield row
 
     def iterate_positions(self, form_data: dict):
+        p_providers = OrderPayment.objects.filter(
+            order=OuterRef('order'),
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
+                       OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
+        ).values('order').annotate(
+            m=GroupConcat('provider', delimiter=',')
+        ).values(
+            'm'
+        ).order_by()
         qs = OrderPosition.objects.filter(
             order__event__in=self.events,
+        ).annotate(
+            payment_providers=Subquery(p_providers, output_field=CharField()),
         ).select_related(
             'order', 'order__invoice_address', 'item', 'variation',
             'voucher', 'tax_rule'
@@ -343,6 +392,7 @@ class OrderListExporter(MultiSheetListExporter):
         ]
         headers += [
             _('Sales channel'), _('Order locale'),
+            _('Payment providers'),
         ]
 
         yield headers
@@ -432,6 +482,10 @@ class OrderListExporter(MultiSheetListExporter):
                 order.sales_channel,
                 order.locale
             ]
+            row.append(', '.join([
+                str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
+                if p and p != 'free'
+            ]))
             yield row
 
     def get_filename(self):
@@ -596,10 +650,21 @@ class InvoiceDataExporter(MultiSheetListExporter):
                 _('Total value (with taxes)'),
                 _('Total value (without taxes)'),
                 _('Payment matching IDs'),
+                _('Payment providers'),
             ]
+            p_providers = OrderPayment.objects.filter(
+                order=OuterRef('order'),
+                state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
+                           OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
+            ).values('order').annotate(
+                m=GroupConcat('provider', delimiter=',')
+            ).values(
+                'm'
+            ).order_by()
             qs = Invoice.objects.filter(event__in=self.events).order_by('full_invoice_no').select_related(
                 'order', 'refers'
             ).prefetch_related('order__payments').annotate(
+                payment_providers=Subquery(p_providers, output_field=CharField()),
                 total_gross=Subquery(
                     InvoiceLine.objects.filter(
                         invoice=OuterRef('pk')
@@ -656,7 +721,11 @@ class InvoiceDataExporter(MultiSheetListExporter):
                     i.foreign_currency_rate,
                     i.total_gross if i.total_gross else Decimal('0.00'),
                     Decimal(i.total_net if i.total_net else '0.00').quantize(Decimal('0.01')),
-                    pmi
+                    pmi,
+                    ', '.join([
+                        str(self.providers.get(p, p)) for p in sorted(set((i.payment_providers or '').split(',')))
+                        if p and p != 'free'
+                    ])
                 ]
         elif sheet == 'lines':
             yield [
@@ -692,8 +761,20 @@ class InvoiceDataExporter(MultiSheetListExporter):
                 _('Invoice recipient:') + ' ' + _('VAT ID'),
                 _('Invoice recipient:') + ' ' + _('Beneficiary'),
                 _('Invoice recipient:') + ' ' + _('Internal reference'),
+                _('Payment providers'),
             ]
-            qs = InvoiceLine.objects.filter(
+            p_providers = OrderPayment.objects.filter(
+                order=OuterRef('invoice__order'),
+                state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
+                           OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
+            ).values('order').annotate(
+                m=GroupConcat('provider', delimiter=',')
+            ).values(
+                'm'
+            ).order_by()
+            qs = InvoiceLine.objects.annotate(
+                payment_providers=Subquery(p_providers, output_field=CharField()),
+            ).filter(
                 invoice__event__in=self.events
             ).order_by('invoice__full_invoice_no', 'position').select_related(
                 'invoice', 'invoice__order', 'invoice__refers'
@@ -732,7 +813,15 @@ class InvoiceDataExporter(MultiSheetListExporter):
                     i.invoice_to_vat_id,
                     i.invoice_to_beneficiary,
                     i.internal_reference,
+                    ', '.join([
+                        str(self.providers.get(p, p)) for p in sorted(set((l.payment_providers or '').split(',')))
+                        if p and p != 'free'
+                    ])
                 ]
+
+    @cached_property
+    def providers(self):
+        return dict(get_all_payment_providers())
 
     def get_filename(self):
         if self.is_multievent:
