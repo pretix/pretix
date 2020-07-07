@@ -1235,6 +1235,7 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.SubeventOperation(position, subevent))
+        self._invoice_dirty = True
 
     def change_item_and_subevent(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation],
                                  subevent: SubEvent):
@@ -1256,6 +1257,7 @@ class OrderChangeManager:
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.ItemOperation(position, item, variation))
         self._operations.append(self.SubeventOperation(position, subevent))
+        self._invoice_dirty = True
 
     def regenerate_secret(self, position: OrderPosition):
         self._operations.append(self.RegenerateSecretOperation(position))
