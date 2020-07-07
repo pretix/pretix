@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0154_auto_20200620_1633'),
+        ('pretixbase', '0155_quota_release_after_exit'),
     ]
 
     operations = [

@@ -183,14 +183,15 @@ class CommentForm(I18nModelForm):
 
 
 class OtherOperationsForm(forms.Form):
-    recalculate_taxes = forms.BooleanField(
+    recalculate_taxes = forms.ChoiceField(
         label=_('Re-calculate taxes'),
         required=False,
-        help_text=_(
-            'This operation re-checks if taxes should be paid to the items due to e.g. configured reverse charge rules '
-            'and changes the prices and tax values accordingly. This is useful e.g. after an invoice address change. '
-            'Use with care and only if you need to. Note that rounding differences might occur in this procedure.'
-        )
+        choices=(
+            ('', _('Do not re-calculate taxes')),
+            ('gross', _('Re-calculate taxes based on address and product settings, keep gross amount the same.')),
+            ('net', _('Re-calculate taxes based on address and product settings, keep net amount the same.')),
+        ),
+        widget=forms.RadioSelect
     )
     reissue_invoice = forms.BooleanField(
         label=_('Issue a new invoice if required'),

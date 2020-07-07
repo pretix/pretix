@@ -463,17 +463,14 @@ class Item(LoggedModel):
                 if b.designated_price and b.bundled_item.tax_rule_id != self.tax_rule_id:
                     if b.bundled_variation:
                         bprice = b.bundled_variation.tax(b.designated_price * b.count, base_price_is='gross',
-                                                         override_tax_rate=override_tax_rate,
                                                          invoice_address=invoice_address,
                                                          currency=currency)
                     else:
                         bprice = b.bundled_item.tax(b.designated_price * b.count,
-                                                    override_tax_rate=override_tax_rate,
                                                     invoice_address=invoice_address,
                                                     base_price_is='gross',
                                                     currency=currency)
                     compare_price = self.tax_rule.tax(b.designated_price * b.count,
-                                                      base_price_is='gross',
                                                       override_tax_rate=override_tax_rate,
                                                       invoice_address=invoice_address,
                                                       currency=currency)
@@ -684,23 +681,31 @@ class ItemVariation(models.Model):
     def price(self):
         return self.default_price if self.default_price is not None else self.item.default_price
 
-    def tax(self, price=None, base_price_is='auto', currency=None, include_bundled=False):
+    def tax(self, price=None, base_price_is='auto', currency=None, include_bundled=False, override_tax_rate=None,
+            invoice_address=None):
         price = price if price is not None else self.price
 
         if not self.item.tax_rule:
             t = TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
                            rate=Decimal('0.00'), name='')
         else:
-            t = self.item.tax_rule.tax(price, base_price_is=base_price_is, currency=currency)
+            t = self.item.tax_rule.tax(price, base_price_is=base_price_is, currency=currency,
+                                       override_tax_rate=override_tax_rate,
+                                       invoice_address=invoice_address)
 
         if include_bundled:
             for b in self.item.bundles.all():
                 if b.designated_price and b.bundled_item.tax_rule_id != self.item.tax_rule_id:
                     if b.bundled_variation:
-                        bprice = b.bundled_variation.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
+                        bprice = b.bundled_variation.tax(b.designated_price * b.count, base_price_is='gross',
+                                                         currency=currency,
+                                                         invoice_address=invoice_address)
                     else:
-                        bprice = b.bundled_item.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
-                    compare_price = self.item.tax_rule.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
+                        bprice = b.bundled_item.tax(b.designated_price * b.count, base_price_is='gross',
+                                                    currency=currency,
+                                                    invoice_address=invoice_address)
+                    compare_price = self.item.tax_rule.tax(b.designated_price * b.count, base_price_is='gross',
+                                                           currency=currency, invoice_address=invoice_address)
                     t.net += bprice.net - compare_price.net
                     t.tax += bprice.tax - compare_price.tax
                     t.name = "MIXED!"

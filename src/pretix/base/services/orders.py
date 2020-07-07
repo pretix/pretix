@@ -34,7 +34,7 @@ from pretix.base.models.orders import (
     generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
-from pretix.base.models.tax import TaxedPrice, TaxRule
+from pretix.base.models.tax import TaxRule
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services import tickets
@@ -1277,28 +1277,24 @@ class OrderChangeManager:
         self._operations.append(self.TaxRuleOperation(position_or_fee, tax_rule))
         self._invoice_dirty = True
 
-    def recalculate_taxes(self):
+    def recalculate_taxes(self, keep='net'):
         positions = self.order.positions.select_related('item', 'item__tax_rule')
         ia = self._invoice_address
         for pos in positions:
-            if not pos.item.tax_rule:
+            if not pos.tax_rule:
                 continue
             if not pos.price:
                 continue
 
-            charge_tax = pos.item.tax_rule.tax_applicable(ia)
-            # TODO
-            if pos.tax_value and not charge_tax:
-                net_price = pos.price - pos.tax_value
-                price = TaxedPrice(gross=net_price, net=net_price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
-                if price.gross != pos.price:
-                    self._totaldiff += price.gross - pos.price
-                    self._operations.append(self.PriceOperation(pos, price))
-            elif charge_tax and not pos.tax_value:
-                price = pos.item.tax(pos.price, base_price_is='net')
-                if price.gross != pos.price:
-                    self._totaldiff += price.gross - pos.price
-                    self._operations.append(self.PriceOperation(pos, price))
+            if keep == 'net':
+                new_tax = pos.tax_rule.tax(pos.price - pos.tax_value, base_price_is='net', currency=None,
+                                           invoice_address=ia)
+            else:
+                new_tax = pos.tax_rule.tax(pos.price, base_price_is='gross', currency=None,
+                                           invoice_address=ia)
+            if new_tax.tax != pos.tax_value:
+                self._totaldiff += new_tax.gross - pos.price
+                self._operations.append(self.PriceOperation(pos, new_tax))
 
     def cancel_fee(self, fee: OrderFee):
         self._totaldiff -= fee.value
