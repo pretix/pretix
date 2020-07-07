@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 12:57+0000\n"
-"PO-Revision-Date: 2020-06-10 16:13+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"PO-Revision-Date: 2020-07-07 12:45+0000\n"
+"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -2198,9 +2198,7 @@ msgstr "Berechtigt zum Eintritt"
 
 #: pretix/base/models/items.py:306
 msgid "Whether or not buying this product allows a person to enter your event"
-msgstr ""
-"Aktivieren, wenn dieses Produkt den Käufer zum Eintritt auf der "
-"Veranstaltung berechtigt."
+msgstr "Aktivieren, wenn dieses Produkt den Käufer zum Eintritt berechtigt."
 
 #: pretix/base/models/items.py:312
 msgid "Generate tickets"
@@ -2878,7 +2876,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:186 pretix/base/models/orders.py:1068
 msgid "Meta information"
-msgstr "Meta-Informationen."
+msgstr "Meta-Informationen"
 
 #: pretix/base/models/orders.py:198
 msgid "E-mail address verified"
@@ -3931,7 +3929,7 @@ msgstr "Fester Betrag"
 
 #: pretix/base/payment.py:273
 msgid "Percentage of the order total."
-msgstr "Prozentsatz der Bestellsumme"
+msgstr "Prozentsatz der Bestellsumme."
 
 #: pretix/base/payment.py:279
 msgid "Calculate the fee from the total value including the fee."
