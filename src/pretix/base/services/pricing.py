@@ -47,9 +47,7 @@ def get_price(item: Item, variation: ItemVariation = None,
             eu_reverse_charge=False,
         )
 
-    print("pricing for", item, "bundled_sum", bundled_sum)
     price = tax_rule.tax(price, invoice_address=invoice_address, subtract_from_gross=bundled_sum)
-    print("result", price)
 
     if force_custom_price and custom_price is not None and custom_price != "":
         if custom_price_is_net:

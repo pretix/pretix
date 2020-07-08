@@ -1515,7 +1515,7 @@ class OrderChange(OrderView):
                 if p.seat and p.form.cleaned_data['seat'] and p.form.cleaned_data['seat'] != p.seat.seat_guid:
                     ocm.change_seat(p, p.form.cleaned_data['seat'])
 
-                if p.form.cleaned_data['price'] != p.price:
+                if p.form.cleaned_data['price'] is not None and p.form.cleaned_data['price'] != p.price:
                     ocm.change_price(p, p.form.cleaned_data['price'])
 
                 if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:

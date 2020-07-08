@@ -1261,7 +1261,8 @@ class OrderChangeManager:
         self._operations.append(self.RegenerateSecretOperation(position))
 
     def change_price(self, position: OrderPosition, price: Decimal):
-        price = position.item.tax(price, base_price_is='gross')
+        tax_rule = self._current_tax_rules().get(position.pk, position.tax_rule)
+        price = tax_rule.tax(price, base_price_is='gross')
 
         if position.issued_gift_cards.exists():
             raise OrderError(self.error_messages['gift_card_change'])
@@ -1277,22 +1278,36 @@ class OrderChangeManager:
         self._operations.append(self.TaxRuleOperation(position_or_fee, tax_rule))
         self._invoice_dirty = True
 
+    def _current_tax_rules(self):
+        tax_rules = {}
+        for p in self._operations:
+            if isinstance(p, self.TaxRuleOperation):
+                tax_rules[p.position.pk] = p.tax_rule
+            elif isinstance(p, self.ItemOperation):
+                tax_rules[p.position.pk] = p.item.tax_rule
+        return tax_rules
+
     def recalculate_taxes(self, keep='net'):
         positions = self.order.positions.select_related('item', 'item__tax_rule')
         ia = self._invoice_address
+        tax_rules = self._current_tax_rules()
+
         for pos in positions:
-            if not pos.tax_rule:
+            tax_rule = tax_rules.get(pos.pk, pos.tax_rule)
+            if not tax_rule:
                 continue
             if not pos.price:
                 continue
 
-            if keep == 'net':
-                new_tax = pos.tax_rule.tax(pos.price - pos.tax_value, base_price_is='net', currency=None,
-                                           invoice_address=ia)
-            else:
-                new_tax = pos.tax_rule.tax(pos.price, base_price_is='gross', currency=None,
-                                           invoice_address=ia)
-            if new_tax.tax != pos.tax_value:
+            new_rate = tax_rule.tax_rate_for(ia)
+            # We use override_tax_rate to make sure .tax() doesn't get clever and re-adjusts the pricing itself
+            if new_rate != pos.tax_rate:
+                if keep == 'net':
+                    new_tax = tax_rule.tax(pos.price - pos.tax_value, base_price_is='net', currency=self.event.currency,
+                                           override_tax_rate=new_rate)
+                else:
+                    new_tax = tax_rule.tax(pos.price, base_price_is='gross', currency=self.event.currency,
+                                           override_tax_rate=new_rate)
                 self._totaldiff += new_tax.gross - pos.price
                 self._operations.append(self.PriceOperation(pos, new_tax))
 
@@ -1591,7 +1606,8 @@ class OrderChangeManager:
                     'new_price': op.price.gross
                 })
                 op.position.price = op.price.gross
-                op.position._calculate_tax()
+                op.position.tax_rate = op.price.rate
+                op.position.tax_value = op.price.tax
                 op.position.save()
             elif isinstance(op, self.TaxRuleOperation):
                 if isinstance(op.position, OrderPosition):

@@ -907,6 +907,7 @@ class CartManager:
                             price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
                             voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
                             subevent=op.subevent, includes_tax=op.includes_tax, seat=op.seat,
+                            override_tax_rate=op.price.rate,
                             price_before_voucher=op.price_before_voucher.gross if op.price_before_voucher is not None else None
                         )
                         if self.event.settings.attendee_names_asked:
@@ -940,7 +941,7 @@ class CartManager:
                                     new_cart_positions.append(CartPosition(
                                         event=self.event, item=b.item, variation=b.variation,
                                         price=b.price.gross, expires=self._expiry, cart_id=self.cart_id,
-                                        voucher=None, addon_to=cp,
+                                        voucher=None, addon_to=cp, override_tax_rate=b.price.rate,
                                         subevent=b.subevent, includes_tax=b.includes_tax, is_bundled=True
                                     ))
 

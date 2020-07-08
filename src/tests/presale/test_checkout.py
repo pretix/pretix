@@ -87,6 +87,19 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self._set_session('invoice_address', ia.pk)
         return ia
 
+    def _enable_country_specific_taxing(self):
+        self.tr19.custom_rules = json.dumps([
+            {'country': 'EU', 'address_type': 'individual', 'action': 'vat', 'rate': '20.00'},
+            {'country': 'US', 'address_type': 'individual', 'action': 'vat', 'rate': '10.00'},
+        ])
+        self.tr19.save()
+        with scopes_disabled():
+            ia = InvoiceAddress.objects.create(
+                country=Country('AT'),
+            )
+        self._set_session('invoice_address', ia.pk)
+        return ia
+
     def test_empty_cart(self):
         response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
@@ -363,6 +376,50 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.00')
+
+    def test_country_taxing(self):
+        self._enable_country_specific_taxing()
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'individual',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.20')
+
+    def test_country_taxing_switch(self):
+        self.test_country_taxing()
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'individual',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'US',
+                'state': 'CA',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        with scopes_disabled():
+            cr = CartPosition.objects.get(cart_id=self.session_key)
+            assert cr.price == Decimal('21.26')
 
     def test_question_file_upload(self):
         with scopes_disabled():
