@@ -1370,7 +1370,7 @@ class OrderChangeTests(SoupTest):
             'add-INITIAL_FORMS': '0',
             'add-MIN_NUM_FORMS': '0',
             'add-MAX_NUM_FORMS': '100',
-            'other-recalculate_taxes': 'on',
+            'other-recalculate_taxes': 'net',
             'op-{}-operation'.format(self.op1.pk): '',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
@@ -1383,6 +1383,42 @@ class OrderChangeTests(SoupTest):
             ops = list(self.order.positions.all())
         for op in ops:
             assert op.price == Decimal('21.50')
+            assert op.tax_value == Decimal('0.00')
+            assert op.tax_rate == Decimal('0.00')
+
+    def test_recalculate_reverse_charge_keep_gross(self):
+        self.tr7.eu_reverse_charge = True
+        self.tr7.home_country = Country('DE')
+        self.tr7.save()
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        with scopes_disabled():
+            InvoiceAddress.objects.create(
+                order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+                country=Country('AT')
+            )
+
+        self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'add-TOTAL_FORMS': '0',
+            'add-INITIAL_FORMS': '0',
+            'add-MIN_NUM_FORMS': '0',
+            'add-MAX_NUM_FORMS': '100',
+            'other-recalculate_taxes': 'gross',
+            'op-{}-operation'.format(self.op1.pk): '',
+            'op-{}-operation'.format(self.op2.pk): '',
+            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op2.pk): str(self.op2.price),
+            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op1.pk): str(self.op1.price),
+        })
+
+        with scopes_disabled():
+            ops = list(self.order.positions.all())
+        for op in ops:
+            assert op.price == Decimal('23.00')
             assert op.tax_value == Decimal('0.00')
             assert op.tax_rate == Decimal('0.00')
 

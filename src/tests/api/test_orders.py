@@ -3395,6 +3395,38 @@ def test_order_create_auto_pricing_reverse_charge(token_client, organizer, event
 
 
 @pytest.mark.django_db
+def test_order_create_auto_pricing_country_rate(token_client, organizer, event, item, quota, question, taxrule):
+    taxrule.eu_reverse_charge = True
+    taxrule.custom_rules = json.dumps([
+        {'country': 'FR', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+    ])
+    taxrule.save()
+    item.tax_rule = taxrule
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['invoice_address']['country'] = 'FR'
+    res['invoice_address']['is_business'] = True
+    res['invoice_address']['vat_id'] = 'FR12345'
+    res['invoice_address']['vat_id_validated'] = True
+    del res['positions'][0]['price']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.price == Decimal('38.66')
+    assert p.tax_rate == Decimal('100.00')
+    assert p.tax_value == Decimal('19.33')
+    assert o.total == Decimal('38.91')
+
+
+@pytest.mark.django_db
 def test_order_create_auto_pricing_reverse_charge_require_valid_vatid(token_client, organizer, event, item, quota,
                                                                       question, taxrule):
     taxrule.eu_reverse_charge = True

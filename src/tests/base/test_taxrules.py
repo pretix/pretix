@@ -53,7 +53,7 @@ def test_reverse_charge_no_address(event):
         rate=Decimal('10.00'), price_includes_tax=False
     )
     assert not tr.is_reverse_charge(None)
-    assert tr.tax_applicable(None)
+    assert tr._tax_applicable(None)
 
 
 @pytest.mark.django_db
@@ -65,7 +65,8 @@ def test_reverse_charge_no_country(event):
     ia = InvoiceAddress(
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -79,7 +80,8 @@ def test_reverse_charge_individual_same_country(event):
         country=Country('DE')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -93,7 +95,8 @@ def test_reverse_charge_individual_eu(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -107,7 +110,8 @@ def test_reverse_charge_individual_3rdc(event):
         country=Country('US')
     )
     assert not tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
 
 
 @pytest.mark.django_db
@@ -121,7 +125,8 @@ def test_reverse_charge_business_same_country(event):
         country=Country('DE')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -135,7 +140,8 @@ def test_reverse_charge_business_eu(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -149,7 +155,8 @@ def test_reverse_charge_business_3rdc(event):
         country=Country('US')
     )
     assert not tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
 
 
 @pytest.mark.django_db
@@ -165,7 +172,8 @@ def test_reverse_charge_valid_vat_id_business_same_country(event):
         vat_id_validated=True
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -181,7 +189,8 @@ def test_reverse_charge_valid_vat_id_business_eu(event):
         country=Country('AT')
     )
     assert tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
 
 
 @pytest.mark.django_db
@@ -197,7 +206,8 @@ def test_reverse_charge_valid_vat_id_business_3rdc(event):
         vat_id_validated=True
     )
     assert not tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
 
 
 @pytest.mark.django_db
@@ -213,7 +223,8 @@ def test_reverse_charge_disabled(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -232,7 +243,8 @@ def test_custom_rules_override(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -252,7 +264,8 @@ def test_custom_rules_in_order(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -269,7 +282,8 @@ def test_custom_rules_any_country(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
 
 
 @pytest.mark.django_db
@@ -286,13 +300,14 @@ def test_custom_rules_eu_country(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
     ia = InvoiceAddress(
         is_business=True,
         country=Country('US')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
 
 
 @pytest.mark.django_db
@@ -309,13 +324,15 @@ def test_custom_rules_specific_country(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
     ia = InvoiceAddress(
         is_business=True,
         country=Country('DE')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -332,13 +349,15 @@ def test_custom_rules_individual(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
     ia = InvoiceAddress(
         is_business=True,
         country=Country('DE')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -355,13 +374,15 @@ def test_custom_rules_business(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
     ia = InvoiceAddress(
         is_business=False,
         country=Country('DE')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
 
 
 @pytest.mark.django_db
@@ -378,7 +399,8 @@ def test_custom_rules_vat_id(event):
         country=Country('AT')
     )
     assert not tr.is_reverse_charge(ia)
-    assert tr.tax_applicable(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
     ia = InvoiceAddress(
         is_business=True,
         country=Country('DE'),
@@ -386,4 +408,32 @@ def test_custom_rules_vat_id(event):
         vat_id_validated=True
     )
     assert tr.is_reverse_charge(ia)
-    assert not tr.tax_applicable(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
+
+
+@pytest.mark.django_db
+def test_custom_rules_country_rate(event):
+    tr = TaxRule(
+        event=event,
+        rate=Decimal('10.00'), price_includes_tax=False,
+        custom_rules=json.dumps([
+            {'country': 'EU', 'address_type': 'business_vat_id', 'action': 'vat', 'rate': '100.00'},
+        ])
+    )
+    ia = InvoiceAddress(
+        is_business=True,
+        country=Country('DE')
+    )
+    assert not tr.is_reverse_charge(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
+    ia = InvoiceAddress(
+        is_business=True,
+        country=Country('DE'),
+        vat_id='DE1234',
+        vat_id_validated=True
+    )
+    assert tr.tax_rate_for(ia) == Decimal('100.00')
+    assert not tr.is_reverse_charge(ia)
+    assert tr._tax_applicable(ia)

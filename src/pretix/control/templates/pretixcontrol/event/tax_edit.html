@@ -59,7 +59,7 @@
                                     {{ form.id }}
                                     {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     {% bootstrap_field form.country layout='inline' form_group_class="" %}
                                 </div>
                                 <div class="col-sm-3">
@@ -68,8 +68,11 @@
                                 <div class="col-sm-3">
                                     {% bootstrap_field form.action layout='inline' form_group_class="" %}
                                 </div>
-                                <div class="col-sm-2 text-right flip">
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                <div class="col-sm-2">
+                                    {% bootstrap_field form.rate layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-sm-1 text-right flip">
+                                    <button type="button" class="btn btn-block btn-danger" data-formset-delete-button>
                                         <i class="fa fa-trash"></i></button>
                                 </div>
                             </div>
@@ -82,7 +85,7 @@
                                     {{ form.id }}
                                     {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     {% bootstrap_field formset.empty_form.country layout='inline' form_group_class="" %}
                                 </div>
                                 <div class="col-sm-3">
@@ -91,8 +94,11 @@
                                 <div class="col-sm-3">
                                     {% bootstrap_field formset.empty_form.action layout='inline' form_group_class="" %}
                                 </div>
-                                <div class="col-sm-2 text-right flip">
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                <div class="col-sm-2">
+                                    {% bootstrap_field formset.empty_form.rate layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-sm-1 text-right flip">
+                                    <button type="button" class="btn btn-block btn-danger" data-formset-delete-button>
                                         <i class="fa fa-trash"></i></button>
                                 </div>
                             </div>

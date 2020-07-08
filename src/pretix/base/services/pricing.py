@@ -46,33 +46,27 @@ def get_price(item: Item, variation: ItemVariation = None,
             price_includes_tax=True,
             eu_reverse_charge=False,
         )
-    price = tax_rule.tax(price)
+
+    price = tax_rule.tax(price, invoice_address=invoice_address, subtract_from_gross=bundled_sum)
 
     if force_custom_price and custom_price is not None and custom_price != "":
         if custom_price_is_net:
-            price = tax_rule.tax(custom_price, base_price_is='net')
+            price = tax_rule.tax(custom_price, base_price_is='net', invoice_address=invoice_address,
+                                 subtract_from_gross=bundled_sum)
         else:
-            price = tax_rule.tax(custom_price, base_price_is='gross')
+            price = tax_rule.tax(custom_price, base_price_is='gross', invoice_address=invoice_address,
+                                 subtract_from_gross=bundled_sum)
     if item.free_price and custom_price is not None and custom_price != "":
         if not isinstance(custom_price, Decimal):
             custom_price = Decimal(str(custom_price).replace(",", "."))
         if custom_price > 100000000:
             raise ValueError('price_too_high')
         if custom_price_is_net:
-            price = tax_rule.tax(max(custom_price, price.net), base_price_is='net')
+            price = tax_rule.tax(max(custom_price, price.net), base_price_is='net',
+                                 invoice_address=invoice_address, subtract_from_gross=bundled_sum)
         else:
-            price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross')
-
-    if bundled_sum:
-        price = price - TaxedPrice(net=bundled_sum, gross=bundled_sum, rate=0, tax=0, name='')
-        if price.gross < Decimal('0.00'):
-            return TAXED_ZERO
-
-    if invoice_address and not tax_rule.tax_applicable(invoice_address):
-        price.tax = Decimal('0.00')
-        price.rate = Decimal('0.00')
-        price.gross = price.net
-        price.name = ''
+            price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross',
+                                 invoice_address=invoice_address, subtract_from_gross=bundled_sum)
 
     price.gross = round_decimal(price.gross, item.event.currency)
     price.net = round_decimal(price.net, item.event.currency)

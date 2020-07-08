@@ -907,6 +907,7 @@ class CartManager:
                             price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
                             voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
                             subevent=op.subevent, includes_tax=op.includes_tax, seat=op.seat,
+                            override_tax_rate=op.price.rate,
                             price_before_voucher=op.price_before_voucher.gross if op.price_before_voucher is not None else None
                         )
                         if self.event.settings.attendee_names_asked:
@@ -940,7 +941,7 @@ class CartManager:
                                     new_cart_positions.append(CartPosition(
                                         event=self.event, item=b.item, variation=b.variation,
                                         price=b.price.gross, expires=self._expiry, cart_id=self.cart_id,
-                                        voucher=None, addon_to=cp,
+                                        voucher=None, addon_to=cp, override_tax_rate=b.price.rate,
                                         subevent=b.subevent, includes_tax=b.includes_tax, is_bundled=True
                                     ))
 
@@ -1032,19 +1033,15 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
     for pos in positions:
         if not pos.item.tax_rule:
             continue
-        charge_tax = pos.item.tax_rule.tax_applicable(invoice_address)
-        if pos.includes_tax and not charge_tax:
-            price = pos.item.tax(pos.price, base_price_is='gross').net
-            totaldiff += price - pos.price
-            pos.price = price
-            pos.includes_tax = False
-            pos.save(update_fields=['price', 'includes_tax'])
-        elif charge_tax and not pos.includes_tax:
-            price = pos.item.tax(pos.price, base_price_is='net').gross
-            totaldiff += price - pos.price
-            pos.price = price
-            pos.includes_tax = True
-            pos.save(update_fields=['price', 'includes_tax'])
+        rate = pos.item.tax_rule.tax_rate_for(invoice_address)
+
+        if pos.tax_rate != rate:
+            current_net = pos.price - pos.tax_value
+            new_gross = pos.item.tax(current_net, base_price_is='net', invoice_address=invoice_address).gross
+            pos.price = new_gross
+            pos.includes_tax = rate != Decimal('0.00')
+            pos.override_tax_rate = rate
+            pos.save(update_fields=['price', 'includes_tax', 'override_tax_rate'])
 
     return totaldiff
 
@@ -1092,23 +1089,14 @@ def get_fees(event, request, total, invoice_address, provider, positions):
 
             if payment_fee:
                 payment_fee_tax_rule = event.settings.tax_rate_default or TaxRule.zero()
-                if payment_fee_tax_rule.tax_applicable(invoice_address):
-                    payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross')
-                    fees.append(OrderFee(
-                        fee_type=OrderFee.FEE_TYPE_PAYMENT,
-                        value=payment_fee,
-                        tax_rate=payment_fee_tax.rate,
-                        tax_value=payment_fee_tax.tax,
-                        tax_rule=payment_fee_tax_rule
-                    ))
-                else:
-                    fees.append(OrderFee(
-                        fee_type=OrderFee.FEE_TYPE_PAYMENT,
-                        value=payment_fee,
-                        tax_rate=Decimal('0.00'),
-                        tax_value=Decimal('0.00'),
-                        tax_rule=payment_fee_tax_rule
-                    ))
+                payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross', invoice_address=invoice_address)
+                fees.append(OrderFee(
+                    fee_type=OrderFee.FEE_TYPE_PAYMENT,
+                    value=payment_fee,
+                    tax_rate=payment_fee_tax.rate,
+                    tax_value=payment_fee_tax.tax,
+                    tax_rule=payment_fee_tax_rule
+                ))
 
     return fees
 

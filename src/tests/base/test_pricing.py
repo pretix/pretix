@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 
 import pytest
@@ -325,3 +326,35 @@ def test_tax_reverse_charge_invalid_vat_id(item):
     )
     assert not item.tax_rule.is_reverse_charge(ia)
     assert get_price(item, invoice_address=ia).gross == Decimal('119.00')
+
+
+@pytest.mark.django_db
+def test_country_specific_rule_net_based(item):
+    item.default_price = Decimal('100.00')
+    item.tax_rule = item.event.tax_rules.create(
+        rate=Decimal('19.00'), price_includes_tax=False,
+        custom_rules=json.dumps([
+            {'country': 'BE', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+    )
+    ia = InvoiceAddress(
+        is_business=True, vat_id="EU1234", vat_id_validated=True,
+        country=Country('BE')
+    )
+    assert get_price(item, invoice_address=ia).gross == Decimal('200.00')
+
+
+@pytest.mark.django_db
+def test_country_specific_rule_gross_based(item):
+    item.default_price = Decimal('100.00')
+    item.tax_rule = item.event.tax_rules.create(
+        rate=Decimal('19.00'), price_includes_tax=True,
+        custom_rules=json.dumps([
+            {'country': 'BE', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+    )
+    ia = InvoiceAddress(
+        is_business=True, vat_id="EU1234", vat_id_validated=True,
+        country=Country('BE')
+    )
+    assert get_price(item, invoice_address=ia).gross == Decimal('168.06')

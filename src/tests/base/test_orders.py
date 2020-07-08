@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 from decimal import Decimal
 
@@ -1443,6 +1444,68 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.invoices.count() == 1
 
     @classscope(attr='o')
+    def test_recalculate_country_rate(self):
+        self.event.settings.set('tax_rate_default', self.tr19.pk)
+        prov = self.ocm._get_payment_provider()
+        prov.settings.set('_fee_abs', Decimal('0.30'))
+        self.ocm._recalculate_total_and_payment_fee()
+
+        assert self.order.total == Decimal('46.30')
+        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+        assert fee.value == prov.calculate_fee(self.order.total)
+        assert fee.tax_rate == Decimal('19.00')
+        assert fee.tax_value == Decimal('0.05')
+
+        self.ocm = OrderChangeManager(self.order, None)
+
+        self._enable_reverse_charge()
+        self.tr7.custom_rules = json.dumps([
+            {'country': 'AT', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+        self.tr7.save()
+
+        self.ocm.recalculate_taxes(keep='net')
+        self.ocm.commit()
+        ops = list(self.order.positions.all())
+        for op in ops:
+            assert op.price == Decimal('43.00')
+            assert op.tax_value == Decimal('21.50')
+            assert op.tax_rate == Decimal('100.00')
+
+        assert self.order.total == Decimal('86.00') + fee.value
+
+    @classscope(attr='o')
+    def test_recalculate_country_rate_keep_gross(self):
+        self.event.settings.set('tax_rate_default', self.tr19.pk)
+        prov = self.ocm._get_payment_provider()
+        prov.settings.set('_fee_abs', Decimal('0.30'))
+        self.ocm._recalculate_total_and_payment_fee()
+
+        assert self.order.total == Decimal('46.30')
+        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+        assert fee.value == prov.calculate_fee(self.order.total)
+        assert fee.tax_rate == Decimal('19.00')
+        assert fee.tax_value == Decimal('0.05')
+
+        self.ocm = OrderChangeManager(self.order, None)
+
+        self._enable_reverse_charge()
+        self.tr7.custom_rules = json.dumps([
+            {'country': 'AT', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+        self.tr7.save()
+
+        self.ocm.recalculate_taxes(keep='gross')
+        self.ocm.commit()
+        ops = list(self.order.positions.all())
+        for op in ops:
+            assert op.price == Decimal('23.00')
+            assert op.tax_value == Decimal('11.50')
+            assert op.tax_rate == Decimal('100.00')
+
+        assert self.order.total == Decimal('46.00') + fee.value
+
+    @classscope(attr='o')
     def test_recalculate_reverse_charge(self):
         self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
@@ -2304,6 +2367,27 @@ class OrderChangeManagerTests(TestCase):
         assert nop.tax_rule == self.tr19
         assert nop.tax_rate == Decimal('0.00')
         assert nop.tax_value == Decimal('0.00')
+
+    @classscope(attr='o')
+    def test_change_taxrate_to_country_specific(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.custom_rules = json.dumps([
+            {'country': 'AT', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+        self.tr19.save()
+        InvoiceAddress.objects.create(
+            order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+
+        self.ocm.change_tax_rule(self.op1, self.tr19)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        nop = self.order.positions.first()
+        assert nop.price == Decimal('23.00')
+        assert nop.tax_rule == self.tr19
+        assert nop.tax_rate == Decimal('100.00')
+        assert nop.tax_value == Decimal('19.33')
 
     @classscope(attr='o')
     def test_change_taxrate_from_reverse_charge(self):

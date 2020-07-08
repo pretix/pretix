@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.db.models import ProtectedError
 from django.forms import inlineformset_factory
@@ -1135,7 +1136,7 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
         messages.success(self.request, _('Your changes have been saved.'))
         form.instance.custom_rules = json.dumps([
             f.cleaned_data for f in self.formset if f not in self.formset.deleted_forms
-        ])
+        ], cls=DjangoJSONEncoder)
         if form.has_changed():
             self.object.log_action(
                 'pretix.event.taxrule.changed', user=self.request.user, data={

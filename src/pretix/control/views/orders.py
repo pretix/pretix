@@ -1397,11 +1397,6 @@ class OrderChange(OrderView):
         for f in fees:
             f.form = OrderFeeChangeForm(prefix='of-{}'.format(f.pk), instance=f,
                                         data=self.request.POST if self.request.method == "POST" else None)
-            try:
-                ia = self.order.invoice_address
-            except InvoiceAddress.DoesNotExist:
-                ia = None
-            f.apply_tax = self.request.event.settings.tax_rate_default and self.request.event.settings.tax_rate_default.tax_applicable(invoice_address=ia)
         return fees
 
     @cached_property
@@ -1411,11 +1406,6 @@ class OrderChange(OrderView):
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p, items=self.items,
                                              initial={'seat': p.seat.seat_guid if p.seat else None},
                                              data=self.request.POST if self.request.method == "POST" else None)
-            try:
-                ia = self.order.invoice_address
-            except InvoiceAddress.DoesNotExist:
-                ia = None
-            p.apply_tax = p.item.tax_rule and p.item.tax_rule.tax_applicable(invoice_address=ia)
         return positions
 
     def get_context_data(self, **kwargs):
@@ -1431,7 +1421,9 @@ class OrderChange(OrderView):
             return False
         else:
             if self.other_form.cleaned_data['recalculate_taxes']:
-                ocm.recalculate_taxes()
+                ocm.recalculate_taxes(
+                    keep=self.other_form.cleaned_data['recalculate_taxes']
+                )
             return True
 
     def _process_add(self, ocm):
@@ -1523,7 +1515,7 @@ class OrderChange(OrderView):
                 if p.seat and p.form.cleaned_data['seat'] and p.form.cleaned_data['seat'] != p.seat.seat_guid:
                     ocm.change_seat(p, p.form.cleaned_data['seat'])
 
-                if p.form.cleaned_data['price'] != p.price:
+                if p.form.cleaned_data['price'] is not None and p.form.cleaned_data['price'] != p.price:
                     ocm.change_price(p, p.form.cleaned_data['price'])
 
                 if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:
