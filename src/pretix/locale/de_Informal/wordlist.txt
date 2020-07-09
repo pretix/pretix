@@ -10,12 +10,14 @@ App
 Apps
 auschecken
 Ausgangsscan
+Ausgangsscans
 ausgeklappt
 ausgecheckt
 auswahl
 Authentication
 Authenticator
 Authentifizierungsmechanismus
+Authorisierungscode
 Backend
 Badge
 Badges
