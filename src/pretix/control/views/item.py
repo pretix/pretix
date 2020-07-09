@@ -566,7 +566,7 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
         r = list(qs)
         total = sum(a['count'] for a in r)
         for a in r:
-            a['percentage'] = a['count'] / total * 100.
+            a['percentage'] = (a['count'] / total * 100.) if total else 0
         return r
 
     def get_context_data(self, **kwargs):
