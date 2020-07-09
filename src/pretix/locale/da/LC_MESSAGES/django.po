@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 08:31+0000\n"
+"POT-Creation-Date: 2020-07-09 12:51+0000\n"
 "PO-Revision-Date: 2020-05-30 15:00+0000\n"
 "Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
@@ -3418,7 +3418,7 @@ msgstr "Nedsæt produktpris med (%)"
 #: pretix/control/views/vouchers.py:69 pretix/control/views/waitinglist.py:199
 #: pretix/plugins/checkinlists/exporters.py:418
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:324
-#: pretix/presale/templates/pretixpresale/event/index.html:278
+#: pretix/presale/templates/pretixpresale/event/index.html:286
 msgid "Voucher code"
 msgstr "Voucherkode"
 
@@ -20278,7 +20278,7 @@ msgid "We're trying to reserve another one for you!"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:168
-#: pretix/presale/templates/pretixpresale/event/index.html:228
+#: pretix/presale/templates/pretixpresale/event/index.html:236
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:24
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
 #, python-format
@@ -20309,7 +20309,7 @@ msgid "incl. %(tax_sum)s taxes"
 msgstr "inkl. %(rate)s%% %(taxname)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:317
-#: pretix/presale/templates/pretixpresale/event/index.html:266
+#: pretix/presale/templates/pretixpresale/event/index.html:274
 msgid "Redeem a voucher"
 msgstr "Brug en rabatkode"
 
@@ -20514,7 +20514,7 @@ msgid "Empty cart"
 msgstr "Tøm kurv"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:75
-#: pretix/presale/templates/pretixpresale/event/index.html:250
+#: pretix/presale/templates/pretixpresale/event/index.html:258
 #: pretix/presale/templates/pretixpresale/event/voucher.html:345
 msgid "Proceed with checkout"
 msgstr "Gå til kassen"
@@ -20550,42 +20550,42 @@ msgstr "Forsalget for dette arrangement starter %(date)s, kl.%(time)s."
 msgid "The presale for this event has not yet started."
 msgstr "Forsalget til dette arrangement er ikke startet endnu."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:186
+#: pretix/presale/templates/pretixpresale/event/index.html:187
 #: pretix/presale/templates/pretixpresale/event/voucher.html:22
 #, python-format
 msgid "Begin: %(time)s"
 msgstr "Start: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:191
+#: pretix/presale/templates/pretixpresale/event/index.html:194
 #: pretix/presale/templates/pretixpresale/event/voucher.html:27
 #, python-format
 msgid "End: %(time)s"
 msgstr "Slut: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:199
+#: pretix/presale/templates/pretixpresale/event/index.html:204
 #: pretix/presale/templates/pretixpresale/event/voucher.html:35
 #, python-format
 msgid "Admission: %(time)s"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:203
+#: pretix/presale/templates/pretixpresale/event/index.html:210
 #: pretix/presale/templates/pretixpresale/event/voucher.html:39
 #, python-format
 msgid "Admission: %(datetime)s"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:214
+#: pretix/presale/templates/pretixpresale/event/index.html:222
 #: pretix/presale/templates/pretixpresale/event/voucher.html:50
 msgid "Add to Calendar"
 msgstr "Tilføj til kalender"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:227
+#: pretix/presale/templates/pretixpresale/event/index.html:235
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:66
 msgid "We're now trying to reserve this for you!"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:248
+#: pretix/presale/templates/pretixpresale/event/index.html:256
 #: pretix/presale/templates/pretixpresale/event/voucher.html:343
 #, fuzzy
 #| msgid "Register"
@@ -20593,20 +20593,20 @@ msgctxt "free_tickets"
 msgid "Register"
 msgstr "Registrer"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:253
+#: pretix/presale/templates/pretixpresale/event/index.html:261
 #: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
 msgstr "Læg i kurv"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:284
+#: pretix/presale/templates/pretixpresale/event/index.html:292
 msgid "Redeem voucher"
 msgstr "Brug rabatkode"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:295
+#: pretix/presale/templates/pretixpresale/event/index.html:303
 msgid "If you already ordered a ticket"
 msgstr "Hvis du allerede har bestilt en billet"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:299
+#: pretix/presale/templates/pretixpresale/event/index.html:307
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -20617,7 +20617,7 @@ msgstr ""
 "ændre i din bestilling. Hvis du ikke kan finde linket, så klik på knappen "
 "for at få gensendt din bestillingsmail."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:308
+#: pretix/presale/templates/pretixpresale/event/index.html:316
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"

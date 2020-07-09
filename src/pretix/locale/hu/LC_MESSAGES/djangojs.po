@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 08:32+0000\n"
+"POT-Creation-Date: 2020-07-09 12:51+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -365,6 +365,15 @@ msgstr "%(currency) %(price)-tól"
 
 #: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter the amount the organizer can keep."
+msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:378
+#: pretix/static/pretixpresale/js/ui/main.js:391
+msgid "Time zone:"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:383
+msgid "Your local time:"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
