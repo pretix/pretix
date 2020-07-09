@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 12:57+0000\n"
-"PO-Revision-Date: 2020-06-24 15:06+0000\n"
+"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"PO-Revision-Date: 2020-07-04 19:45+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
 ">\n"
@@ -12124,7 +12124,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
-msgstr "Enkel evenement- of winkel die niet voor een evenement is"
+msgstr "Enkel evenement of winkel die niet voor een evenement is"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:15
 msgid ""
