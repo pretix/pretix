@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 08:31+0000\n"
-"PO-Revision-Date: 2020-07-09 08:11+0000\n"
+"POT-Creation-Date: 2020-06-10 16:02+0000\n"
+"PO-Revision-Date: 2020-07-09 08:31+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -5764,7 +5764,7 @@ msgstr "z.B. Steuernummer in Deutschland, ABN in Australien, …"
 
 #: pretix/base/settings.py:607
 msgid "EU VAT ID"
-msgstr "USt-ID"
+msgstr "USt-ID-Nr."
 
 #: pretix/base/settings.py:620
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
