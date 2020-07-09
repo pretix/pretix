@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-06-30 21:04+0000\n"
+"PO-Revision-Date: 2020-07-09 08:11+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -735,7 +735,7 @@ msgstr "Bundesstaat"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:109
 #: pretix/presale/templates/pretixpresale/event/order.html:298
 msgid "VAT ID"
-msgstr "USt-ID"
+msgstr "USt-ID-Nr."
 
 #: pretix/base/exporters/orderlist.py:109
 msgid "Date of last payment"
