@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-10 16:02+0000\n"
-"PO-Revision-Date: 2020-07-07 12:45+0000\n"
-"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
+"PO-Revision-Date: 2020-07-09 08:11+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -10074,7 +10074,7 @@ msgstr "Übersicht"
 #: pretix/control/templates/pretixcontrol/item/index.html:12
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:27
 msgid "General"
-msgstr "Allgemeines"
+msgstr "Allgemein"
 
 #: pretix/control/navigation.py:36
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:151
@@ -12081,7 +12081,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/create.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:27
 msgid "Create a new organizer"
-msgstr "Neuen Veranstalter erstellen"
+msgstr "Neuen Veranstalter anlegen"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:7
 #: pretix/control/templates/pretixcontrol/item/create.html:11
@@ -13936,7 +13936,7 @@ msgstr "E-Mail-Vorschau"
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:37
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:53
 msgid "Send"
-msgstr "Senden"
+msgstr "Absenden"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:9
 msgid ""
@@ -16203,7 +16203,7 @@ msgstr "Anwesend – {list}"
 
 #: pretix/control/views/dashboards.py:290
 msgid "Welcome to pretix!"
-msgstr "Willkommen zu pretix!"
+msgstr "Willkommen bei pretix!"
 
 #: pretix/control/views/dashboards.py:296
 msgid "Get started with our setup tool"
