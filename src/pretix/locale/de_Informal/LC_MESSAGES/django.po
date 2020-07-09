@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-09 08:31+0000\n"
-"PO-Revision-Date: 2020-07-09 08:11+0000\n"
+"PO-Revision-Date: 2020-07-09 08:51+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -195,10 +195,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Diese Art von Frage kann nicht beim Check-In gestellt werden."
 
 #: pretix/api/serializers/order.py:918 pretix/api/serializers/order.py:925
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "Das Produkt \"{}\" ist keinem Kontingent zugeordnet."
+msgstr "Das Produkt \"{}\" ist an diesem Termin nicht verfügbar."
 
 #: pretix/api/serializers/organizer.py:52 pretix/control/forms/organizer.py:404
 msgid ""
@@ -1081,10 +1079,8 @@ msgid "Waiting list"
 msgstr "Warteliste"
 
 #: pretix/base/exporters/orderlist.py:581
-#, fuzzy
-#| msgid "Expire order"
 msgid "Exited orders"
-msgstr "Als abgelaufen markieren"
+msgstr "Erfasste Ausgänge"
 
 #: pretix/base/exporters/orderlist.py:581
 msgid "Current availability"
@@ -2751,7 +2747,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1355
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "Mehr Tickets verkaufen sobald Kunden die Veranstaltung verlassen haben"
 
 #: pretix/base/models/items.py:1356
 msgid ""
@@ -2762,6 +2758,13 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
+"Mit dieser Option wird Platz im Kontingent freigegeben, sobald Tickets am "
+"Ausgang der Veranstaltung gescannt wurden. Dies passiert nur wenn das Ticket "
+"sowohl am Eingang als auch am Ausgang gescannt wurde, und der Ausgang der "
+"spätere Scan ist. Es spielt keine Rolle, auf welcher Check-in-Liste gescannt "
+"wurde, aber um Überbuchungen zu vermeiden, werden Check-in-Listen ignoriert, "
+"bei denen die Option \"Erneuten Eintritt erlauben, wenn Ausgang gescannt "
+"wurde\" gesetzt ist."
 
 #: pretix/base/models/items.py:1367 pretix/base/models/vouchers.py:177
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
@@ -3978,14 +3981,10 @@ msgid "Restrict to specific sales channels"
 msgstr "Auf bestimmte Verkaufskanäle einschränken"
 
 #: pretix/base/payment.py:309
-#, fuzzy
-#| msgid ""
-#| "Only allow the usage of this payment provider in the following sales "
-#| "channels"
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
 msgstr ""
-"Schränkt die Auswahl dieser Zahlungsmethode auf die angegebenen "
+"Schränkt die Auswahl dieser Zahlungsmethode auf die ausgewählten "
 "Verkaufskanäle ein."
 
 #: pretix/base/payment.py:313
@@ -4071,12 +4070,7 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschreibung des Zahlungsvorgangs in Bestellbestätigungs-E-Mails"
 
 #: pretix/base/payment.py:903
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
@@ -4085,20 +4079,15 @@ msgid ""
 msgstr ""
 "Dieser Text wird statt des {payment_info}-Platzhalters in "
 "Bestellbestätigungen verwendet. Er sollte den Kunden darüber informieren, "
-"wie die Zahlung vervollständigt werden kann. Die Platzhalter {order}, "
-"{total}, {currency} und {total_with_currency} können verwendet werden."
+"wie die Zahlung vervollständigt werden kann. Die Platzhalter {order}, {total}"
+", {currency} und {total_with_currency} können verwendet werden."
 
 #: pretix/base/payment.py:910
 msgid "Payment process description for pending orders"
 msgstr "Beschreibung des Zahlungsvorgangs für ausstehende Bestellungen"
 
 #: pretix/base/payment.py:911
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
@@ -4200,8 +4189,6 @@ msgstr ""
 "Dieser Geschenkgutschein wird von diesem Veranstalter nicht akzeptiert."
 
 #: pretix/base/payment.py:1202
-#, fuzzy
-#| msgid "This gift card was used in the meantime. Please try again"
 msgid "This gift card was used in the meantime. Please try again."
 msgstr ""
 "Dieser Geschenkgutschein wurde zwischenzeitlich verwendet. Bitte erneut "
@@ -4829,7 +4816,7 @@ msgstr "Die Steuerschuldnerschaft liegt beim Leistungsempfänger."
 #: pretix/base/services/invoices.py:193
 msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
-msgstr ""
+msgstr "Die Steuerschuldnerschaft liegt beim Leistungsempfänger."
 
 #: pretix/base/services/invoices.py:337
 msgid "A payment provider specific text might appear here."
@@ -5311,10 +5298,6 @@ msgstr ""
 "Zeige Netto- statt Bruttopreisen in den Produktlisten (nicht empfohlen)"
 
 #: pretix/base/settings.py:59
-#, fuzzy
-#| msgid ""
-#| "Independent of your choice, the cart will show gross prices as this is "
-#| "the price that needs to be paid"
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
@@ -5424,6 +5407,8 @@ msgid ""
 "On invoices from one EU country into another EU country with a different "
 "currency, print the tax amounts in both currencies if possible"
 msgstr ""
+"Auf Rechnungen von einem EU-Land in ein anderes EU-Land mit anderer Währung "
+"soll der Steuerbetrag wenn möglich in beiden Währungen aufgedruckt werden"
 
 #: pretix/base/settings.py:217
 msgid "Require invoice address"
@@ -6882,12 +6867,9 @@ msgstr ""
 "Das letzte Zahlungsdatum kann nicht vor dem Ende des Vorverkaufs liegen."
 
 #: pretix/base/shredder.py:38 pretix/base/shredder.py:41
-#, fuzzy
-#| msgid ""
-#| "Your event needs to be over for at least 60 days to use this feature."
 msgid "Your event needs to be over for at least 30 days to use this feature."
 msgstr ""
-"Die Veranstaltung muss mindestens 60 Tage vorüber sein, damit diese Funktion "
+"Die Veranstaltung muss mindestens 30 Tage vorüber sein, damit diese Funktion "
 "bereitsteht."
 
 #: pretix/base/shredder.py:43
@@ -7790,10 +7772,8 @@ msgid "No VAT"
 msgstr "Keine MwSt."
 
 #: pretix/control/forms/event.py:1090
-#, fuzzy
-#| msgid "Sales tax rate"
 msgid "Deviating tax rate"
-msgstr "Umsatzsteuersatz"
+msgstr "Abweichender Satz"
 
 #: pretix/control/forms/event.py:1120
 msgid "Pre-selected voucher"
@@ -8424,8 +8404,6 @@ msgid "Bundled products"
 msgstr "Enthaltene Produkte"
 
 #: pretix/control/forms/item.py:707
-#, fuzzy
-#| msgid "You added the same bundled product twice"
 msgid "You added the same bundled product twice."
 msgstr "Du hast das selbe enthaltene Produkt zweimal hinzugefügt."
 
@@ -8540,22 +8518,24 @@ msgid "Re-calculate taxes"
 msgstr "Steuern neu berechnen"
 
 #: pretix/control/forms/orders.py:190
-#, fuzzy
-#| msgid "Re-calculate taxes"
 msgid "Do not re-calculate taxes"
-msgstr "Steuern neu berechnen"
+msgstr "Steuern nicht neu berechnen"
 
 #: pretix/control/forms/orders.py:191
 msgid ""
 "Re-calculate taxes based on address and product settings, keep gross amount "
 "the same."
 msgstr ""
+"Steuern basierend auf Produkten und Adresse neu berechnen, Bruttobetrag "
+"beibehalten."
 
 #: pretix/control/forms/orders.py:192
 msgid ""
 "Re-calculate taxes based on address and product settings, keep net amount "
 "the same."
 msgstr ""
+"Steuern basierend auf Produkten und Adresse neu berechnen, Nettobetrag "
+"beibehalten."
 
 #: pretix/control/forms/orders.py:197
 msgid "Issue a new invoice if required"
@@ -9216,16 +9196,16 @@ msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "Preis von Position #{posid} von  {old_price} auf {new_price} geändert."
 
 #: pretix/control/logdisplay.py:71
-#, fuzzy, python-brace-format
-#| msgid "Price of position #{posid} changed from {old_price} to {new_price}."
+#, python-brace-format
 msgid "Tax rule of position #{posid} changed from {old_rule} to {new_rule}."
-msgstr "Preis von Position #{posid} von  {old_price} auf {new_price} geändert."
+msgstr ""
+"Steuer-Regel von Position #{posid} von {old_rule} auf {new_rule} geändert."
 
 #: pretix/control/logdisplay.py:78
-#, fuzzy, python-brace-format
-#| msgid "A fee was changed from {old_price} to {new_price}."
+#, python-brace-format
 msgid "Tax rule of fee #{fee} changed from {old_rule} to {new_rule}."
-msgstr "Eine Gebühr wurde von {old_price} auf {new_price} geändert."
+msgstr ""
+"Steuer-Regel von Gebühr #{fee} wurde von {old_rule} auf {new_rule} geändert."
 
 #: pretix/control/logdisplay.py:85
 msgid "A fee has been added"
@@ -10623,16 +10603,12 @@ msgid "Server Transaction Code"
 msgstr "Server-Transaktionscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:44
-#, fuzzy
-#| msgid "Payment information"
 msgid "Payment Application"
-msgstr "Zahlungsinformationen"
+msgstr "Zahlungsanwendung"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:52
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Authorization Code"
-msgstr "Transaktionscode"
+msgstr "Authorisierungscode"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -12785,20 +12761,16 @@ msgid "Create a new question"
 msgstr "Neue Frage erstellen"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:49
-#, fuzzy
-#| msgid "Delete question"
 msgid "System question"
-msgstr "Frage löschen"
+msgstr "Systemfrage"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:59
 msgid "Ask during check-in"
 msgstr "Beim Check-in fragen"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:78
-#, fuzzy
-#| msgid "All products"
 msgid "All admission products"
-msgstr "Alle Produkte"
+msgstr "Alle Produkte die Eintritt erlauben"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:6
 #: pretix/control/templates/pretixcontrol/items/quota.html:9
@@ -16473,8 +16445,6 @@ msgid "The order of categories has been updated."
 msgstr "Die Reihenfolge der Kategorien wurde gespeichert."
 
 #: pretix/control/views/item.py:339
-#, fuzzy
-#| msgid "Street address"
 msgid "Street"
 msgstr "Straße"
 
@@ -16483,10 +16453,8 @@ msgid "Some of the provided question ids are invalid."
 msgstr "Einige der angegebenen Fragen-IDs sind ungültig."
 
 #: pretix/control/views/item.py:395
-#, fuzzy
-#| msgid "The question has been deleted."
 msgid "Not all questions have been selected."
-msgstr "Die Frage wurde gelöscht."
+msgstr "Es wurden nicht alle Fragen ausgewählt."
 
 #: pretix/control/views/item.py:426 pretix/control/views/item.py:586
 #: pretix/control/views/item.py:608
@@ -16510,10 +16478,8 @@ msgid "The new quota has been created."
 msgstr "Ein neues Kontingent wurde erstellt."
 
 #: pretix/control/views/item.py:791
-#, fuzzy
-#| msgid "Exit scan: %(date)s"
 msgid "Exit scans"
-msgstr "Ausgangsscan: %(date)s"
+msgstr "Ausgangsscans"
 
 #: pretix/control/views/item.py:798
 msgid "Vouchers and waiting list reservations"
@@ -17589,10 +17555,8 @@ msgid "Bank transfer"
 msgstr "Banküberweisung"
 
 #: pretix/plugins/banktransfer/__init__.py:17
-#, fuzzy
-#| msgid "This plugin allows you to receive payments via bank transfer "
 msgid "This plugin allows you to receive payments via bank transfer."
-msgstr "Dieses Plugin erlaubt, Zahlungen per Banküberweisung anzunehmen"
+msgstr "Dieses Plugin erlaubt, Zahlungen per Banküberweisung anzunehmen."
 
 #: pretix/plugins/banktransfer/__init__.py:31
 msgid ""
@@ -18147,16 +18111,16 @@ msgid "Endpoint"
 msgstr "Endpunkt"
 
 #: pretix/plugins/paypal/payment.py:105
-#, fuzzy
-#| msgid "Reference code"
 msgid "Reference prefix"
-msgstr "Verwendungszweck"
+msgstr "Verwendungszweck-Präfix"
 
 #: pretix/plugins/paypal/payment.py:106
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
 msgstr ""
+"Der hier eingetragene Wert wird vor dem üblichen Verwendungszweck "
+"eingetragen, der die Bestellnummer enthält."
 
 #: pretix/plugins/paypal/payment.py:135
 msgid ""
@@ -20174,10 +20138,9 @@ msgstr[0] "Ein Produkt"
 msgstr[1] "%(num)s Produkte"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:308
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% taxes"
+#, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr "inkl. %(rate)s%% MwSt."
+msgstr "inkl. %(tax_sum)s Steuern"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:317
 #: pretix/presale/templates/pretixpresale/event/index.html:266
