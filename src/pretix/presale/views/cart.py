@@ -434,7 +434,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return JsonResponse({
                     'redirect': self.get_error_url(),
                     'success': False,
-                    'message': str(error_messages['empty'])
+                    'message': _(error_messages['empty'])
                 })
             else:
                 return redirect(self.get_error_url())
