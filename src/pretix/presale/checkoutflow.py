@@ -336,7 +336,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     'cat': str(category['category'].name),
                 }
             )
-        elif any(v > 1 for v in selected.values()) and not category['multi_allowed']:
+        elif any(sum(v for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
             raise ValidationError(
                 _(error_messages['addon_no_multi']),
                 'addon_no_multi',

@@ -654,6 +654,9 @@ class CartManager:
             if not quotas:
                 raise CartError(error_messages['unavailable'])
 
+            if (a['item'], a['variation']) in input_addons[cp.id]:
+                raise CartError(error_messages['addon_duplicate_item'])
+
             input_addons[cp.id][a['item'], a['variation']] = a.get('count', 1)
             selected_addons[cp.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)
 
@@ -681,6 +684,9 @@ class CartManager:
             item = cp.item
             for iao in item.addons.all():
                 selected = selected_addons[cp.id, iao.addon_category_id]
+                n_per_i = Counter()
+                for (i, v), c in selected.items():
+                    n_per_i[i] += c
                 if sum(selected.values()) > iao.max_count:
                     # TODO: Proper i18n
                     # TODO: Proper pluralization
@@ -703,7 +709,7 @@ class CartManager:
                             'cat': str(iao.addon_category.name),
                         }
                     )
-                elif any(v > 1 for v in selected.values()) and not iao.multi_allowed:
+                elif any(v > 1 for v in n_per_i.values()) and not iao.multi_allowed:
                     raise CartError(
                         error_messages['addon_no_multi'],
                         {

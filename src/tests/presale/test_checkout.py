@@ -2226,8 +2226,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             )
 
         response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
-            '{}_{}-item_{}'.format(cp1.pk, self.workshopcat.pk, self.workshop1.pk): 'on',
-            '{}_{}-item_{}'.format(cp2.pk, self.workshopcat.pk, self.workshop2.pk): self.workshop2a.pk,
+            'cp_{}_item_{}'.format(cp1.pk, self.workshop1.pk): '1',
+            'cp_{}_variation_{}_{}'.format(cp2.pk, self.workshop2.pk, self.workshop2a.pk): '1',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -2332,7 +2332,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ €42.00)' in response.rendered_content
+        assert '42.00' in response.rendered_content
 
     def test_set_addons_subevent_net_prices(self):
         with scopes_disabled():
@@ -2358,8 +2358,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ €35.29 plus 19.00% VAT)' in response.rendered_content
-        assert 'A (+ €10.08 plus 19.00% VAT)' in response.rendered_content
+        assert '35.29' in response.rendered_content
+        assert '10.08' in response.rendered_content
 
     def test_confirm_subevent_presale_not_yet(self):
         with scopes_disabled():
