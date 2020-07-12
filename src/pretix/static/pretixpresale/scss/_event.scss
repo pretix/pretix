@@ -1,5 +1,11 @@
 .product-row {
     border-top: 1px solid $table-border-color;
+    .addons &:first-child {
+        border-top: 2px solid $table-border-color;
+    }
+    .addons &:last-child {
+        border-bottom: 2px solid $table-border-color;
+    }
 
     &:last-child {
     }

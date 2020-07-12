@@ -114,6 +114,15 @@ var form_handlers = function (el) {
         );
     });
 
+    el.find("input[data-exclusive-prefix]").each(function () {
+        var $others = $("input[name^=" + $(this).attr("data-exclusive-prefix") + "]:not([name=" + $(this).attr("name") + "])");
+        $(this).on('click change', function () {
+            if ($(this).prop('checked')) {
+                $others.prop('checked', false);
+            }
+        });
+    });
+
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
 };

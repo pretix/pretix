@@ -840,6 +840,10 @@ class ItemAddOn(models.Model):
         help_text=_('If selected, adding add-ons to this ticket is free, even if the add-ons would normally cost '
                     'money individually.')
     )
+    multi_allowed = models.BooleanField(
+        default=False,
+        verbose_name=_('Allow the same product to be selected multiple times'),
+    )
     position = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Position")
