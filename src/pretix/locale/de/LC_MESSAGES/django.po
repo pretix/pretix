@@ -6177,7 +6177,7 @@ msgstr ""
 "Dieser Text muss vom Benutzer bestätigt werden, bevor ein Kauf möglich ist. "
 "Sie könnten hier z.B. auf Ihre Teilnahmebedingungen verlinken. Wenn Sie die "
 "\"Seiten\"-Funktion nutzen, um Ihre Bedingungen zu veröffentlichen, brauchen "
-"Sie diese Einstellung nicht sondern können ähnliches im Seiten-Modul selbst "
+"Sie diese Einstellung nicht, sondern können ähnliches im Seiten-Modul selbst "
 "einstellen."
 
 #: pretix/base/settings.py:1103
