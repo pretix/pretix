@@ -1085,7 +1085,7 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
         form.instance.event = self.request.event
         form.instance.custom_rules = json.dumps([
             f.cleaned_data for f in self.formset if f not in self.formset.deleted_forms
-        ])
+        ], cls=DjangoJSONEncoder)
         messages.success(self.request, _('The new tax rule has been created.'))
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.taxrule.added', user=self.request.user, data=dict(form.cleaned_data))
