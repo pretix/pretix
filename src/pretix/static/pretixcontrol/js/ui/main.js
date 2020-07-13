@@ -314,7 +314,7 @@ var form_handlers = function (el) {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-    $("input[name$=vat_id]").each(function () {
+    $("input[name$=vat_id][data-countries-in-eu]").each(function () {
         var dependent = $(this),
             dependency_country = $(this).closest(".panel-body, form").find('select[name$=country]'),
             dependency_id_is_business_1 = $(this).closest(".panel-body, form").find('input[id$=id_is_business_1]'),
