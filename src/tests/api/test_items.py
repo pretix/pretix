@@ -352,7 +352,8 @@ def test_item_detail_addons(token_client, organizer, event, team, item, category
         "min_count": 0,
         "max_count": 1,
         "position": 0,
-        "price_included": False
+        "multi_allowed": False,
+        "price_included": False,
     }]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
@@ -575,6 +576,7 @@ def test_item_create_with_addon(token_client, organizer, event, item, category, 
                     "min_count": 0,
                     "max_count": 10,
                     "position": 0,
+                    "multi_allowed": False,
                     "price_included": True
                 }
             ]
@@ -620,6 +622,7 @@ def test_item_create_with_addon(token_client, organizer, event, item, category, 
                     "min_count": 0,
                     "max_count": 10,
                     "position": 0,
+                    "multi_allowed": False,
                     "price_included": True
                 }
             ]
@@ -663,6 +666,7 @@ def test_item_create_with_addon(token_client, organizer, event, item, category, 
                     "min_count": 110,
                     "max_count": 10,
                     "position": 0,
+                    "multi_allowed": False,
                     "price_included": True
                 }
             ]
@@ -706,6 +710,7 @@ def test_item_create_with_addon(token_client, organizer, event, item, category, 
                     "min_count": -1,
                     "max_count": 10,
                     "position": 0,
+                    "multi_allowed": False,
                     "price_included": True
                 }
             ]
@@ -920,6 +925,7 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
                     "min_count": 0,
                     "max_count": 10,
                     "position": 0,
+                    "multi_allowed": False,
                     "price_included": True
                 }
             ]
@@ -1011,6 +1017,7 @@ def test_item_update_with_addon(token_client, organizer, event, item, category):
                     "min_count": 0,
                     "max_count": 10,
                     "position": 0,
+                    "multi_allowed": False,
                     "price_included": True
                 }
             ]
@@ -1372,6 +1379,7 @@ TEST_ADDONS_RES = {
     "min_count": 0,
     "max_count": 10,
     "position": 1,
+    "multi_allowed": False,
     "price_included": False
 }
 
@@ -1410,6 +1418,7 @@ def test_addons_create(token_client, organizer, event, item, category, category2
             "min_count": 0,
             "max_count": 10,
             "position": 1,
+            "multi_allowed": False,
             "price_included": False
         },
         format='json'
@@ -1427,6 +1436,7 @@ def test_addons_create(token_client, organizer, event, item, category, category2
             "min_count": 10,
             "max_count": 20,
             "position": 2,
+            "multi_allowed": False,
             "price_included": False
         },
         format='json'
@@ -1441,6 +1451,7 @@ def test_addons_create(token_client, organizer, event, item, category, category2
             "min_count": 10,
             "max_count": 20,
             "position": 2,
+            "multi_allowed": False,
             "price_included": False
         },
         format='json'

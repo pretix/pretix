@@ -2236,6 +2236,45 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert cp2.addons.first().item == self.workshop2
             assert cp2.addons.first().variation == self.workshop2a
 
+    def test_set_addon_multi(self):
+        with scopes_disabled():
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, multi_allowed=True, max_count=2)
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10)
+            )
+
+        response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
+            'cp_{}_item_{}'.format(cp1.pk, self.workshop1.pk): '2',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            assert cp1.addons.count() == 2
+            assert cp1.addons.first().item == self.workshop1
+            assert cp1.addons.last().item == self.workshop1
+
+    def test_set_addon_free_price(self):
+        with scopes_disabled():
+            self.workshop1.free_price = True
+            self.workshop1.save()
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat)
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10)
+            )
+
+        response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
+            'cp_{}_item_{}'.format(cp1.pk, self.workshop1.pk): '1',
+            'cp_{}_item_{}_price'.format(cp1.pk, self.workshop1.pk): '999,99',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            assert cp1.addons.count() == 1
+            assert cp1.addons.first().item == self.workshop1
+            assert cp1.addons.first().price == Decimal('999.99')
+
     def test_set_addons_required(self):
         with scopes_disabled():
             ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)

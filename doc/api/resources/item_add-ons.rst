@@ -24,6 +24,7 @@ addon_category                        integer                    Internal ID of 
 min_count                             integer                    The minimal number of add-ons that need to be chosen.
 max_count                             integer                    The maximal number of add-ons that can be chosen.
 position                              integer                    An integer, used for sorting
+multi_allowed                         boolean                    Adding the same item multiple times is allowed
 price_included                        boolean                    Adding this add-on to the item is free
 ===================================== ========================== =======================================================
 
@@ -65,6 +66,7 @@ Endpoints
             "min_count": 0,
             "max_count": 10,
             "position": 0,
+            "multi_allowed": false,
             "price_included": true
           },
           {
@@ -73,6 +75,7 @@ Endpoints
             "min_count": 0,
             "max_count": 10,
             "position": 1,
+            "multi_allowed": false,
             "price_included": true
           }
         ]
@@ -112,6 +115,7 @@ Endpoints
         "min_count": 0,
         "max_count": 10,
         "position": 1,
+        "multi_allowed": false,
         "price_included": true
       }
 
@@ -141,6 +145,7 @@ Endpoints
         "min_count": 0,
         "max_count": 10,
         "position": 1,
+        "multi_allowed": false,
         "price_included": true
       }
 
@@ -158,6 +163,7 @@ Endpoints
         "min_count": 0,
         "max_count": 10,
         "position": 1,
+        "multi_allowed": false,
         "price_included": true
       }
 
@@ -206,6 +212,7 @@ Endpoints
         "min_count": 0,
         "max_count": 10,
         "position": 1,
+        "multi_allowed": false,
         "price_included": true
       }
 
