@@ -795,7 +795,7 @@ class Order(LockModel, LoggedModel):
                          only be attached for this position and child positions, the link will only point to the
                          position and the attendee email will be used if available.
         """
-        from pretix.base.services.mail import SendMailException, mail, render_mail
+        from pretix.base.services.mail import SendMailException, mail, render_mail, TolerantDict
 
         if not self.email:
             return
@@ -810,6 +810,7 @@ class Order(LockModel, LoggedModel):
 
             try:
                 email_content = render_mail(template, context)
+                subject = subject.format_map(TolerantDict(context))
                 mail(
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers=headers, sender=sender,

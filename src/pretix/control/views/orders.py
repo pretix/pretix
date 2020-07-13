@@ -55,7 +55,9 @@ from pretix.base.services.invoices import (
     invoice_qualified, regenerate_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException, render_mail
+from pretix.base.services.mail import (
+    SendMailException, TolerantDict, render_mail,
+)
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
@@ -1742,10 +1744,11 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         with language(order.locale):
             email_context = get_email_context(event=order.event, order=order)
         email_template = LazyI18nString(form.cleaned_data['message'])
+        email_subject = str(form.cleaned_data['subject']).format_map(TolerantDict(email_context))
         email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
             self.preview_output = {
-                'subject': _('Subject: {subject}').format(subject=form.cleaned_data['subject']),
+                'subject': _('Subject: {subject}').format(subject=email_subject),
                 'html': markdown_compile_email(email_content)
             }
             return self.get(self.request, *self.args, **self.kwargs)
