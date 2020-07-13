@@ -1,5 +1,5 @@
 import inspect
-from collections import Counter
+from collections import defaultdict
 from decimal import Decimal
 
 from django.conf import settings
@@ -18,6 +18,7 @@ from django_scopes import scopes_disabled
 
 from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
+from pretix.base.models.tax import TaxedPrice
 from pretix.base.services.cart import (
     CartError, error_messages, get_fees, set_cart_addons, update_tax_rates,
 )
@@ -235,10 +236,10 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             }
             formset.append(formsetentry)
 
-            current_addon_products = Counter()
+            current_addon_products = defaultdict(list)
             for a in cartpos.addons.all():
                 if not a.is_bundled:
-                    current_addon_products[a.item_id, a.variation_id] += 1
+                    current_addon_products[a.item_id, a.variation_id].append(a)
 
             for iao in cartpos.item.addons.all():
                 ckey = '{}-{}'.format(cartpos.subevent.pk if cartpos.subevent else 0, iao.addon_category.pk)
@@ -263,10 +264,32 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
                     if i.has_variations:
                         for v in i.available_variations:
-                            v.initial = current_addon_products[i.pk, v.pk]
+                            v.initial = len(current_addon_products[i.pk, v.pk])
+                            if v.initial and i.free_price:
+                                a = current_addon_products[i.pk, v.pk][0]
+                                v.initial_price = TaxedPrice(
+                                    net=a.price - a.tax_value,
+                                    gross=a.price,
+                                    tax=a.tax_value,
+                                    name=a.item.tax_rule.name,
+                                    rate=a.tax_rate,
+                                )
+                            else:
+                                v.initial_price = v.display_price
                         i.expand = any(v.initial for v in i.available_variations)
                     else:
-                        i.initial = current_addon_products[i.pk, None]
+                        i.initial = len(current_addon_products[i.pk, None])
+                        if i.initial and i.free_price:
+                            a = current_addon_products[i.pk, None][0]
+                            i.initial_price = TaxedPrice(
+                                net=a.price - a.tax_value,
+                                gross=a.price,
+                                tax=a.tax_value,
+                                name=a.item.tax_rule.name,
+                                rate=a.tax_rate,
+                            )
+                        else:
+                            i.initial_price = i.display_price
 
                 if items:
                     formsetentry['categories'].append({
@@ -307,14 +330,16 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             if i.has_variations:
                 for v in i.available_variations:
                     val = int(self.request.POST.get(f'cp_{form["cartpos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    price = self.request.POST.get(f'cp_{form["cartpos"].pk}_variation_{i.pk}_{v.pk}_price') or '0'
                     if val:
-                        selected[i, v] = val
+                        selected[i, v] = val, price
             else:
                 val = int(self.request.POST.get(f'cp_{form["cartpos"].pk}_item_{i.pk}') or '0')
+                price = self.request.POST.get(f'cp_{form["cartpos"].pk}_item_{i.pk}_price') or '0'
                 if val:
-                    selected[i, None] = val
+                    selected[i, None] = val, price
 
-        if sum(selected.values()) > category['max_count']:
+        if sum(a[0] for a in selected.values()) > category['max_count']:
             # TODO: Proper pluralization
             raise ValidationError(
                 _(error_messages['addon_max_count']),
@@ -325,7 +350,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     'cat': str(category['category'].name),
                 }
             )
-        elif sum(selected.values()) < category['min_count']:
+        elif sum(a[0] for a in selected.values()) < category['min_count']:
             # TODO: Proper pluralization
             raise ValidationError(
                 _(error_messages['addon_min_count']),
@@ -336,7 +361,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     'cat': str(category['category'].name),
                 }
             )
-        elif any(sum(v for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
+        elif any(sum(v[0] for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
             raise ValidationError(
                 _(error_messages['addon_no_multi']),
                 'addon_no_multi',
@@ -346,8 +371,12 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 }
             )
         try:
-            validate_cart_addons.send(sender=self.event, addons=selected, base_position=form["cartpos"],
-                                      iao=category['iao'])
+            validate_cart_addons.send(
+                sender=self.event,
+                addons={k: v[0] for k, v in selected.items()},
+                base_position=form["cartpos"],
+                iao=category['iao']
+            )
         except CartError as e:
             raise ValidationError(str(e))
 
@@ -364,12 +393,13 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     messages.error(request, e.message % e.params if e.params else e.message)
                     return self.get(request, *args, **kwargs)
 
-                for (i, v), c in selected.items():
+                for (i, v), (c, price) in selected.items():
                     data.append({
                         'addon_to': f['cartpos'].pk,
                         'item': i.pk,
                         'variation': v.pk if v else None,
                         'count': c,
+                        'price': price,
                     })
 
         return self.do(self.request.event.id, data, get_or_create_cart_id(self.request),

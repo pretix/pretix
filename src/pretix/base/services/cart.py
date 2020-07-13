@@ -660,15 +660,21 @@ class CartManager:
             input_addons[cp.id][a['item'], a['variation']] = a.get('count', 1)
             selected_addons[cp.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)
 
+            if price_included[cp.pk].get(item.category_id):
+                price = TAXED_ZERO
+            else:
+                price = self._get_price(item, variation, None, a.get('price'), cp.subevent)
+
+            # Fix positions with wrong price (TODO: happens out-of-cartmanager-transaction and therefore a little hacky)
+            for ca in current_addons[cp][a['item'], a['variation']]:
+                if ca.price != price.gross:
+                    ca.price = price.gross
+                    ca.save(update_fields=['price'])
+
             if a.get('count', 1) > len(current_addons[cp][a['item'], a['variation']]):
                 # This add-on is new, add it to the cart
                 for quota in quotas:
                     quota_diff[quota] += a.get('count', 1) - len(current_addons[cp][a['item'], a['variation']])
-
-                if price_included[cp.pk].get(item.category_id):
-                    price = TAXED_ZERO
-                else:
-                    price = self._get_price(item, variation, None, None, cp.subevent)
 
                 op = self.AddOperation(
                     count=a.get('count', 1) - len(current_addons[cp][a['item'], a['variation']]),
