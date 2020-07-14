@@ -270,6 +270,7 @@ class BaseQuestionsForm(forms.Form):
             add_fields['company'] = forms.CharField(
                 required=event.settings.attendee_company_required and not self.all_optional,
                 label=_('Company'),
+                max_length=255,
                 initial=(cartpos.company if cartpos else orderpos.company),
             )
 
@@ -286,6 +287,7 @@ class BaseQuestionsForm(forms.Form):
             )
             add_fields['zipcode'] = forms.CharField(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
+                max_length=30,
                 label=_('ZIP code'),
                 initial=(cartpos.zipcode if cartpos else orderpos.zipcode),
                 widget=forms.TextInput(attrs={
@@ -295,6 +297,7 @@ class BaseQuestionsForm(forms.Form):
             add_fields['city'] = forms.CharField(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
                 label=_('City'),
+                max_length=255,
                 initial=(cartpos.city if cartpos else orderpos.city),
                 widget=forms.TextInput(attrs={
                     'autocomplete': 'address-level2',
