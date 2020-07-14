@@ -203,7 +203,7 @@ Vue.component('availbox', {
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!item.require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
-        + '<input type="checkbox" :value="amount_selected" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name">'
+        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name">'
         + '</label>'
         + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name"'
