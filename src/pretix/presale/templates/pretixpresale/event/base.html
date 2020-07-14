@@ -6,7 +6,7 @@
 {% load safelink %}
 {% load rich_text %}
 {% block thetitle %}
-    {% block title %}{% endblock %}{% if url_name != "event.index" %} :: {% endif %}{{ event.name }}
+    {% block title %}{% endblock %}{% if request.resolver_match.url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
 {% block custom_header %}
     {% if event.settings.meta_noindex %}
