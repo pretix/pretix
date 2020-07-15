@@ -1263,7 +1263,7 @@ class OrderChangeManager:
         self._operations.append(self.RegenerateSecretOperation(position))
 
     def change_price(self, position: OrderPosition, price: Decimal):
-        tax_rule = self._current_tax_rules().get(position.pk, position.tax_rule)
+        tax_rule = self._current_tax_rules().get(position.pk, position.tax_rule) or TaxRule.zero()
         price = tax_rule.tax(price, base_price_is='gross')
 
         if position.issued_gift_cards.exists():
