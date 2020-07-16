@@ -307,6 +307,8 @@ except ImportError:
 
 PLUGINS = []
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
+    if entry_point.module_name in PRETIX_PLUGINS_EXCLUDE:
+        continue
     PLUGINS.append(entry_point.module_name)
     INSTALLED_APPS.append(entry_point.module_name)
 
