@@ -435,6 +435,19 @@ class Order(LockModel, LoggedModel):
         )
 
     @cached_property
+    def user_change_deadline(self):
+        until = self.event.settings.get('change_allow_user_until', as_type=RelativeDateWrapper)
+        if until:
+            if self.event.has_subevents:
+                terms = [
+                    until.datetime(se)
+                    for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
+                ]
+                return min(terms) if terms else None
+            else:
+                return until.datetime(self.event)
+
+    @cached_property
     def user_cancel_deadline(self):
         if self.status == Order.STATUS_PAID and self.total != Decimal('0.00'):
             until = self.event.settings.get('cancel_allow_user_paid_until', as_type=RelativeDateWrapper)
@@ -468,13 +481,40 @@ class Order(LockModel, LoggedModel):
 
     @property
     @scopes_disabled()
-    def user_cancel_allowed(self) -> bool:
+    def user_change_allowed(self) -> bool:
         """
         Returns whether or not this order can be canceled by the user.
         """
         from .checkin import Checkin
 
         if self.cancellation_requests.exists():
+            return False
+        positions = list(
+            self.positions.all().annotate(
+                has_variations=Exists(ItemVariation.objects.filter(item_id=OuterRef('item_id'))),
+                has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
+            ).select_related('item').prefetch_related('issued_gift_cards')
+        )
+        cancelable = all([op.item.allow_cancel and not op.has_checkin for op in positions])
+        if not cancelable or not positions:
+            return False
+        for op in positions:
+            if op.issued_gift_cards.all():
+                return False
+        if self.user_change_deadline and now() > self.user_change_deadline:
+            return False
+
+        return self.event.settings.change_allow_user_variation and any([op.has_variations for op in positions])
+
+    @property
+    @scopes_disabled()
+    def user_cancel_allowed(self) -> bool:
+        """
+        Returns whether or not this order can be canceled by the user.
+        """
+        from .checkin import Checkin
+
+        if self.cancellation_requests.exists() or not self.cancel_allowed():
             return False
         positions = list(
             self.positions.all().annotate(

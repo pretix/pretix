@@ -925,6 +925,46 @@ DEFAULTS = {
                         "multiple event dates, the earliest date will be used."),
         )
     },
+    'change_allow_user_variation': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Customers can change the variation of the products they purchased"),
+        )
+    },
+    'change_allow_user_price': {
+        'default': 'gt',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('gt', _('Only allow changes if the resulting price is higher or equal than the previous price.')),
+                ('eq', _('Only allow changes if the resulting price is equal to the previous price.')),
+                ('any', _('Allow changes regardless of price, even if this results in a refund.')),
+            )
+        ),
+        'form_kwargs': dict(
+            label=_("Requirement for changed prices"),
+            choices=(
+                ('gt', _('Only allow changes if the resulting price is higher or equal than the previous price.')),
+                ('eq', _('Only allow changes if the resulting price is equal to the previous price.')),
+                ('any', _('Allow changes regardless of price, even if this results in a refund.')),
+            ),
+            widget=forms.RadioSelect,
+        ),
+    },
+    'change_allow_user_until': {
+        'default': None,
+        'type': RelativeDateWrapper,
+        'form_class': RelativeDateTimeField,
+        'serializer_class': SerializerRelativeDateTimeField,
+        'form_kwargs': dict(
+            label=_("Do not allow changes after"),
+        )
+    },
     'cancel_allow_user': {
         'default': 'True',
         'type': bool,

@@ -35,7 +35,7 @@ from pretix.base.services.invoices import (
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
     OrderError, cancel_order, change_payment_provider,
-)
+    OrderChangeManager)
 from pretix.base.services.tickets import generate, invalidate_cache
 from pretix.base.signals import (
     allow_ticket_download, order_modified, register_ticket_outputs,
@@ -1006,3 +1006,112 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
         resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(invoice.number)
         resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
         return resp
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
+    template_name = "pretixpresale/event/order_change.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if not self.order.user_change_allowed:
+            messages.error(request, _('You cannot change this order.'))
+            return redirect(self.get_order_url())
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+        ctx['positions'] = self.positions
+        return ctx
+
+    @cached_property
+    def positions(self):
+        positions = list(self.order.positions.select_related('item', 'item__tax_rule'))
+        for p in positions:
+            p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
+                                             initial={'seat': p.seat.seat_guid if p.seat else None},
+                                             data=self.request.POST if self.request.method == "POST" else None)
+        return positions
+
+    def _process_change(self, ocm):
+        for p in self.positions:
+            if not p.form.is_valid():
+                return False
+
+            try:
+                if p.form.cleaned_data['operation_cancel']:
+                    ocm.cancel(p)
+                    continue
+
+                change_item = None
+                if p.form.cleaned_data['itemvar']:
+                    if '-' in p.form.cleaned_data['itemvar']:
+                        itemid, varid = p.form.cleaned_data['itemvar'].split('-')
+                    else:
+                        itemid, varid = p.form.cleaned_data['itemvar'], None
+
+                    item = Item.objects.get(pk=itemid, event=self.request.event)
+                    if varid:
+                        variation = ItemVariation.objects.get(pk=varid, item=item)
+                    else:
+                        variation = None
+                    if item != p.item or variation != p.variation:
+                        change_item = (item, variation)
+
+                change_subevent = None
+                if self.request.event.has_subevents and p.form.cleaned_data['subevent'] and p.form.cleaned_data['subevent'] != p.subevent:
+                    change_subevent = (p.form.cleaned_data['subevent'],)
+
+                if change_item is not None and change_subevent is not None:
+                    ocm.change_item_and_subevent(p, *change_item, *change_subevent)
+                elif change_item is not None:
+                    ocm.change_item(p, *change_item)
+                elif change_subevent is not None:
+                    ocm.change_subevent(p, *change_subevent)
+
+                if p.seat and p.form.cleaned_data['seat'] and p.form.cleaned_data['seat'] != p.seat.seat_guid:
+                    ocm.change_seat(p, p.form.cleaned_data['seat'])
+
+                if p.form.cleaned_data['price'] is not None and p.form.cleaned_data['price'] != p.price:
+                    ocm.change_price(p, p.form.cleaned_data['price'])
+
+                if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:
+                    ocm.change_tax_rule(p, p.form.cleaned_data['tax_rule'])
+
+                if p.form.cleaned_data['operation_split']:
+                    ocm.split(p)
+
+                if p.form.cleaned_data['operation_secret']:
+                    ocm.regenerate_secret(p)
+
+            except OrderError as e:
+                p.custom_error = str(e)
+                return False
+        return True
+
+    def post(self, *args, **kwargs):
+        notify = self.other_form.cleaned_data['notify'] if self.other_form.is_valid() else True
+        ocm = OrderChangeManager(
+            self.order,
+            user=self.request.user,
+            notify=True,
+            reissue_invoice=True
+        )
+        form_valid = self._process_change(ocm)
+
+        if not form_valid:
+            messages.error(self.request, _('An error occurred. Please see the details below.'))
+        else:
+            try:
+                ocm.commit(check_quotas=True)
+            except OrderError as e:
+                messages.error(self.request, str(e))
+            else:
+                messages.success(self.request, _('The order has been changed.'))
+                return self._redirect_back()
+
+        return self.get(*args, **kwargs)

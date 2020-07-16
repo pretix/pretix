@@ -1131,7 +1131,7 @@ def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
         try:
             order.send_mail(
                 email_subject, email_template, email_context,
-                'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices,
+                'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices, attach_tickets=True
             )
         except SendMailException:
             logger.exception('Order changed email could not be sent')
@@ -1869,9 +1869,10 @@ class OrderChangeManager:
 
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
-        if self.reissue_invoice and i and self._invoice_dirty:
-            self._invoices.append(generate_cancellation(i))
-            if invoice_qualified(self.order):
+        if self.reissue_invoice and self._invoice_dirty:
+            if i:
+                self._invoices.append(generate_cancellation(i))
+            if (i or self.event.settings.invoice_generate == 'True') and invoice_qualified(self.order):
                 self._invoices.append(generate_invoice(self.order))
 
     def _check_complete_cancel(self):
