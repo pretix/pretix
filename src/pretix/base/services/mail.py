@@ -283,50 +283,51 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 except Order.DoesNotExist:
                     order = None
                 else:
-                    if position:
-                        try:
-                            position = order.positions.get(pk=position)
-                        except OrderPosition.DoesNotExist:
-                            attach_tickets = False
-                    if attach_tickets:
-                        args = []
-                        attach_size = 0
-                        for name, ct in get_tickets_for_order(order, base_position=position):
-                            content = ct.file.read()
-                            args.append((name, content, ct.type))
-                            attach_size += len(content)
+                    with language(order.locale):
+                        if position:
+                            try:
+                                position = order.positions.get(pk=position)
+                            except OrderPosition.DoesNotExist:
+                                attach_tickets = False
+                        if attach_tickets:
+                            args = []
+                            attach_size = 0
+                            for name, ct in get_tickets_for_order(order, base_position=position):
+                                content = ct.file.read()
+                                args.append((name, content, ct.type))
+                                attach_size += len(content)
 
-                        if attach_size < 4 * 1024 * 1024:
-                            # Do not attach more than 4MB, it will bounce way to often.
-                            for a in args:
-                                try:
-                                    email.attach(*a)
-                                except:
-                                    pass
-                        else:
-                            order.log_action(
-                                'pretix.event.order.email.attachments.skipped',
-                                data={
-                                    'subject': 'Attachments skipped',
-                                    'message': 'Attachment have not been send because {} bytes are likely too large to arrive.'.format(attach_size),
-                                    'recipient': '',
-                                    'invoices': [],
-                                }
-                            )
-                    if attach_ical:
-                        ical_events = set()
-                        if event.has_subevents:
-                            if position:
-                                ical_events.add(position.subevent)
+                            if attach_size < 4 * 1024 * 1024:
+                                # Do not attach more than 4MB, it will bounce way to often.
+                                for a in args:
+                                    try:
+                                        email.attach(*a)
+                                    except:
+                                        pass
                             else:
-                                for p in order.positions.all():
-                                    ical_events.add(p.subevent)
-                        else:
-                            ical_events.add(order.event)
+                                order.log_action(
+                                    'pretix.event.order.email.attachments.skipped',
+                                    data={
+                                        'subject': 'Attachments skipped',
+                                        'message': 'Attachment have not been send because {} bytes are likely too large to arrive.'.format(attach_size),
+                                        'recipient': '',
+                                        'invoices': [],
+                                    }
+                                )
+                        if attach_ical:
+                            ical_events = set()
+                            if event.has_subevents:
+                                if position:
+                                    ical_events.add(position.subevent)
+                                else:
+                                    for p in order.positions.all():
+                                        ical_events.add(p.subevent)
+                            else:
+                                ical_events.add(order.event)
 
-                        for i, e in enumerate(ical_events):
-                            cal = get_ical([e])
-                            email.attach('event-{}.ics'.format(i), cal.serialize(), 'text/calendar')
+                            for i, e in enumerate(ical_events):
+                                cal = get_ical([e])
+                                email.attach('event-{}.ics'.format(i), cal.serialize(), 'text/calendar')
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
 
