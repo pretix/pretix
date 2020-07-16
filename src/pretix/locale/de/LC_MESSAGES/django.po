@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-09 12:51+0000\n"
-"PO-Revision-Date: 2020-07-09 08:51+0000\n"
+"PO-Revision-Date: 2020-07-16 07:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -952,7 +952,7 @@ msgstr "Name des Teilnehmenden"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:58
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:61
 msgid "Attendee email"
-msgstr "Teilnehmer*innen-E-Mail"
+msgstr "E-Mail des Teilnehmenden"
 
 #: pretix/base/exporters/orderlist.py:369 pretix/base/models/vouchers.py:209
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
