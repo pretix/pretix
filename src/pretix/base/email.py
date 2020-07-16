@@ -316,6 +316,51 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'url_info_change', ['order', 'event'], lambda order, event: build_absolute_uri(
+                event,
+                'presale:event.order.modify', kwargs={
+                    'order': order.code,
+                    'secret': order.secret,
+                }
+            ), lambda event: build_absolute_uri(
+                event,
+                'presale:event.order.modify', kwargs={
+                    'order': 'F8VVL',
+                    'secret': '6zzjnumtsx136ddy',
+                }
+            ),
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'url_products_change', ['order', 'event'], lambda order, event: build_absolute_uri(
+                event,
+                'presale:event.order.change', kwargs={
+                    'order': order.code,
+                    'secret': order.secret,
+                }
+            ), lambda event: build_absolute_uri(
+                event,
+                'presale:event.order.change', kwargs={
+                    'order': 'F8VVL',
+                    'secret': '6zzjnumtsx136ddy',
+                }
+            ),
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'url_cancel', ['order', 'event'], lambda order, event: build_absolute_uri(
+                event,
+                'presale:event.order.cancel', kwargs={
+                    'order': order.code,
+                    'secret': order.secret,
+                }
+            ), lambda event: build_absolute_uri(
+                event,
+                'presale:event.order.cancel', kwargs={
+                    'order': 'F8VVL',
+                    'secret': '6zzjnumtsx136ddy',
+                }
+            ),
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'url', ['event', 'position'], lambda event, position: build_absolute_uri(
                 event,
                 'presale:event.order.position',

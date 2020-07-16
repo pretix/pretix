@@ -89,7 +89,7 @@ class QuotaAvailability:
 
     def compute(self, now_dt=None):
         now_dt = now_dt or now()
-        quotas = list(self._queue)
+        quotas = list(set(self._queue))
         quotas_original = list(self._queue)
         self._queue.clear()
         if not quotas:
