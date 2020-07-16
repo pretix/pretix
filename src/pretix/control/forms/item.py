@@ -295,20 +295,31 @@ class ItemCreateForm(I18nModelForm):
 
     def save(self, *args, **kwargs):
         if self.cleaned_data.get('copy_from'):
-            self.instance.description = self.cleaned_data['copy_from'].description
-            self.instance.active = self.cleaned_data['copy_from'].active
-            self.instance.available_from = self.cleaned_data['copy_from'].available_from
-            self.instance.available_until = self.cleaned_data['copy_from'].available_until
-            self.instance.require_voucher = self.cleaned_data['copy_from'].require_voucher
-            self.instance.hide_without_voucher = self.cleaned_data['copy_from'].hide_without_voucher
-            self.instance.allow_cancel = self.cleaned_data['copy_from'].allow_cancel
-            self.instance.min_per_order = self.cleaned_data['copy_from'].min_per_order
-            self.instance.max_per_order = self.cleaned_data['copy_from'].max_per_order
-            self.instance.generate_tickets = self.cleaned_data['copy_from'].generate_tickets
-            self.instance.checkin_attention = self.cleaned_data['copy_from'].checkin_attention
-            self.instance.free_price = self.cleaned_data['copy_from'].free_price
-            self.instance.original_price = self.cleaned_data['copy_from'].original_price
-            self.instance.sales_channels = self.cleaned_data['copy_from'].sales_channels
+            fields = (
+                'description',
+                'active',
+                'available_from',
+                'available_until',
+                'require_voucher',
+                'hide_without_voucher',
+                'allow_cancel',
+                'min_per_order',
+                'max_per_order',
+                'generate_tickets',
+                'checkin_attention',
+                'free_price',
+                'original_price',
+                'sales_channels',
+                'issue_giftcard',
+                'require_approval',
+                'allow_waitinglist',
+                'show_quota_left',
+                'hidden_if_available',
+                'require_bundling',
+                'checkin_attention',
+            )
+            for f in fields:
+                setattr(self.instance, f, getattr(self.cleaned_data['copy_from'], f))
         else:
             # Add to all sales channels by default
             self.instance.sales_channels = [k for k in get_all_sales_channels().keys()]

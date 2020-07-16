@@ -1064,11 +1064,27 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             'item': self.object.id,
         })
 
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.items.get(pk=self.request.GET.get("copy_from"))
+            except Item.DoesNotExist:
+                pass
+
     def get_initial(self):
         initial = super().get_initial()
         trs = list(self.request.event.tax_rules.all())
         if len(trs) == 1:
             initial['tax_rule'] = trs[0]
+
+        if self.copy_from:
+            fields = ('name', 'internal_name', 'category', 'admission', 'default_price', 'tax_rule')
+            for f in fields:
+                initial[f] = getattr(self.copy_from, f)
+            initial['copy_from'] = self.copy_from
+            initial['has_variations'] = self.copy_from.variations.exists()
+
         return initial
 
     @transaction.atomic
