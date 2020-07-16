@@ -414,7 +414,7 @@ def replace_images_with_cid_paths(body_html):
 
             image['src'] = "cid:%s" % cid_id
 
-        return email.prettify(), cid_images
+        return str(email), cid_images
     else:
         return body_html, []
 
