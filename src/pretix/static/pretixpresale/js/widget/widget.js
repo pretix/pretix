@@ -580,7 +580,7 @@ var shared_methods = {
         } else {
             return;
         }
-        var redirect_url = this.$root.voucherFormTarget + '&voucher=' + this.voucher + '&subevent=' + this.$root.subevent;
+        var redirect_url = this.$root.voucherFormTarget + '&voucher=' + escape(this.voucher) + '&subevent=' + this.$root.subevent;
         if (this.$root.widget_data) {
             redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
         }
@@ -590,7 +590,7 @@ var shared_methods = {
     },
     voucher_open: function (voucher) {
         var redirect_url;
-        redirect_url = this.$root.voucherFormTarget + '&voucher=' + voucher;
+        redirect_url = this.$root.voucherFormTarget + '&voucher=' + escape(voucher);
         if (this.$root.widget_data) {
             redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
         }
