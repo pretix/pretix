@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 12:51+0000\n"
+"POT-Creation-Date: 2020-07-17 07:50+0000\n"
 "PO-Revision-Date: 2020-06-12 20:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -283,23 +283,23 @@ msgid ""
 msgstr ""
 "Il colore scelto non ha un buon contrasto, per favore scegline uno più scuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:358
+#: pretix/static/pretixcontrol/js/ui/main.js:376
 msgid "All"
 msgstr "Tutto"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:359
+#: pretix/static/pretixcontrol/js/ui/main.js:377
 msgid "None"
 msgstr "Nessuno"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:680
+#: pretix/static/pretixcontrol/js/ui/main.js:698
 msgid "Use a different name internally"
 msgstr "Utilizza un nome diverso internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:737
+#: pretix/static/pretixcontrol/js/ui/main.js:755
 msgid "Click to close"
 msgstr "Clicca per chiudere"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:752
+#: pretix/static/pretixcontrol/js/ui/main.js:770
 msgid "You have unsaved changes!"
 msgstr "Hai cambiamenti non salvati!"
 
@@ -347,24 +347,24 @@ msgstr[1] "Gli elementi nel tuo carrello sono riservati per {num} minuti."
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Inserisci la quantità per una tipologia di biglietto."
 
-#: pretix/static/pretixpresale/js/ui/main.js:340
+#: pretix/static/pretixpresale/js/ui/main.js:358
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "L'organizzatore trattiene %(currency)s %(amount)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:348
+#: pretix/static/pretixpresale/js/ui/main.js:366
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Ricevi indietro %(currency)s %(amount)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:364
+#: pretix/static/pretixpresale/js/ui/main.js:382
 msgid "Please enter the amount the organizer can keep."
 msgstr "Inserisci l'importo che l'organizzatore può trattenere."
 
-#: pretix/static/pretixpresale/js/ui/main.js:378
-#: pretix/static/pretixpresale/js/ui/main.js:391
+#: pretix/static/pretixpresale/js/ui/main.js:396
+#: pretix/static/pretixpresale/js/ui/main.js:409
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:383
+#: pretix/static/pretixpresale/js/ui/main.js:401
 msgid "Your local time:"
 msgstr ""
 

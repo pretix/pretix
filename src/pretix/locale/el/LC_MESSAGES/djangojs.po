@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 12:51+0000\n"
+"POT-Creation-Date: 2020-07-17 07:50+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -296,23 +296,23 @@ msgstr ""
 "Το χρώμα σας έχει κακή αντίθεση για κείμενο σε λευκό φόντο, επιλέξτε μια πιο "
 "σκούρα σκιά."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:358
+#: pretix/static/pretixcontrol/js/ui/main.js:376
 msgid "All"
 msgstr "Όλα"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:359
+#: pretix/static/pretixcontrol/js/ui/main.js:377
 msgid "None"
 msgstr "Κανένας"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:680
+#: pretix/static/pretixcontrol/js/ui/main.js:698
 msgid "Use a different name internally"
 msgstr "Χρησιμοποιήστε διαφορετικό όνομα εσωτερικά"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:737
+#: pretix/static/pretixcontrol/js/ui/main.js:755
 msgid "Click to close"
 msgstr "Κάντε κλικ για να κλείσετε"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:752
+#: pretix/static/pretixcontrol/js/ui/main.js:770
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -360,30 +360,30 @@ msgstr[1] "Τα είδη στο καλάθι θα παραμείνουν δεσ�
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Εισαγάγετε μια ποσότητα για έναν από τους τύπους εισιτηρίων."
 
-#: pretix/static/pretixpresale/js/ui/main.js:340
+#: pretix/static/pretixpresale/js/ui/main.js:358
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "απο %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:348
+#: pretix/static/pretixpresale/js/ui/main.js:366
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "απο %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:364
+#: pretix/static/pretixpresale/js/ui/main.js:382
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:378
-#: pretix/static/pretixpresale/js/ui/main.js:391
+#: pretix/static/pretixpresale/js/ui/main.js:396
+#: pretix/static/pretixpresale/js/ui/main.js:409
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:383
+#: pretix/static/pretixpresale/js/ui/main.js:401
 msgid "Your local time:"
 msgstr ""
 
