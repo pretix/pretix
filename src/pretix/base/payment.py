@@ -1062,7 +1062,10 @@ class GiftCardPayment(BasePaymentProvider):
 
     def api_payment_details(self, payment: OrderPayment):
         from .models import GiftCard
-        gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
+        try:
+            gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
+        except GiftCard.DoesNotExist:
+            return {}
         return {
             'gift_card': {
                 'id': gc.pk,
