@@ -26,6 +26,8 @@ close_when_sold_out                   boolean                    If ``true``, th
                                                                  again.
 closed                                boolean                    Whether the quota is currently closed (see above
                                                                  field).
+release_after_exit                    boolean                    Whether the quota regains capacity as soon as some tickets
+                                                                 have been scanned at an exit.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.10
@@ -35,6 +37,10 @@ closed                                boolean                    Whether the quo
 .. versionchanged:: 3.0
 
    The attributes ``close_when_sold_out`` and ``closed`` have been added.
+
+.. versionchanged:: 3.10
+
+   The attribute ``release_after_exit`` has been added.
 
 
 Endpoints

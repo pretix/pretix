@@ -39,10 +39,12 @@ geo_lon                               float                      Longitude of th
 item_price_overrides                  list of objects            List of items for which this sub-event overrides the
                                                                  default price
 ├ item                                integer                    The internal item ID
+├ disabled                            boolean                    If ``true``, item should not be available for this sub-event
 └ price                               money (string)             The price or ``null`` for the default price
 variation_price_overrides             list of objects            List of variations for which this sub-event overrides
                                                                  the default price
 ├ variation                           integer                    The internal variation ID
+├ disabled                            boolean                    If ``true``, variation should not be available for this sub-event
 └ price                               money (string)             The price or ``null`` for the default price
 meta_data                             object                     Values set for organizer-specific meta data parameters.
 seating_plan                          integer                    If reserved seating is in use, the ID of a seating
@@ -73,6 +75,10 @@ seat_category_mapping                 object                     An object mappi
 .. versionchanged:: 3.3
 
    The attributes ``geo_lat`` and ``geo_lon`` have been added.
+
+.. versionchanged:: 3.10
+
+   The ``disabled`` attribute has been added to ``item_price_overrides`` and ``variation_price_overrides``.
 
 Endpoints
 ---------
@@ -125,6 +131,7 @@ Endpoints
             "item_price_overrides": [
               {
                 "item": 2,
+                "disabled": false,
                 "price": "12.00"
               }
             ],
@@ -182,6 +189,7 @@ Endpoints
         "item_price_overrides": [
           {
             "item": 2,
+            "disabled": false,
             "price": "12.00"
           }
         ],
@@ -216,6 +224,7 @@ Endpoints
         "item_price_overrides": [
           {
             "item": 2,
+            "disabled": false,
             "price": "12.00"
           }
         ],
@@ -271,6 +280,7 @@ Endpoints
         "item_price_overrides": [
           {
             "item": 2,
+            "disabled": false,
             "price": "12.00"
           }
         ],
@@ -307,6 +317,7 @@ Endpoints
         "item_price_overrides": [
           {
             "item": 2,
+            "disabled": false,
             "price": "23.42"
           }
         ],
@@ -339,6 +350,7 @@ Endpoints
         "item_price_overrides": [
           {
             "item": 2,
+            "disabled": false,
             "price": "23.42"
           }
         ],
@@ -427,6 +439,7 @@ Endpoints
             "item_price_overrides": [
               {
                 "item": 2,
+                "disabled": false,
                 "price": "12.00"
               }
             ],

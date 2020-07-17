@@ -1502,6 +1502,7 @@ TEST_QUOTA_RES = {
     "variations": [],
     "subevent": None,
     "close_when_sold_out": False,
+    "release_after_exit": False,
     "closed": False
 }
 
