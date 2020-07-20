@@ -115,15 +115,23 @@ class CheckInListMixin(BaseExporter):
     def _get_queryset(self, cl, form_data):
         cqs = Checkin.objects.filter(
             position_id=OuterRef('pk'),
-            list_id=cl.pk
+            list_id=cl.pk,
         ).order_by().values('position_id').annotate(
             m=Max('datetime')
         ).values('m')
 
+        cqsin = cqs.filter(
+            type=Checkin.TYPE_ENTRY
+        )
+        cqsout = cqs.filter(
+            type=Checkin.TYPE_EXIT
+        )
+
         qs = OrderPosition.objects.filter(
             order__event=self.event,
         ).annotate(
-            last_checked_in=Subquery(cqs),
+            last_checked_in=Subquery(cqsin),
+            last_checked_out=Subquery(cqsout),
             auto_checked_in=Exists(
                 Checkin.objects.filter(position_id=OuterRef('pk'), list_id=cl.pk, auto_checked_in=True)
             )
@@ -393,7 +401,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             for k, label, w in name_scheme['fields']:
                 headers.append(_('Attendee name: {part}').format(part=label))
         headers += [
-            _('Product'), _('Price'), _('Checked in'), _('Automatically checked in')
+            _('Product'), _('Price'), _('Checked in'), _('Checked out'), _('Automatically checked in')
         ]
         if not cl.include_pending:
             qs = qs.filter(order__status=Order.STATUS_PAID)
@@ -434,6 +442,15 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 last_checked_in = op.last_checked_in
             if last_checked_in and not is_aware(last_checked_in):
                 last_checked_in = make_aware(last_checked_in, UTC)
+
+            last_checked_out = None
+            if isinstance(op.last_checked_out, str):  # SQLite
+                last_checked_out = dateutil.parser.parse(op.last_checked_out)
+            elif op.last_checked_out:
+                last_checked_out = op.last_checked_out
+            if last_checked_out and not is_aware(last_checked_out):
+                last_checked_out = make_aware(last_checked_out, UTC)
+
             row = [
                 op.order.code,
                 op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '') or ia.name,
@@ -452,6 +469,8 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 op.price,
                 date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
                 if last_checked_in else '',
+                date_format(last_checked_out.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                if last_checked_out else '',
                 _('Yes') if op.auto_checked_in else _('No'),
             ]
             if cl.include_pending:

@@ -837,6 +837,7 @@ class CheckInFilterForm(FilterForm):
         label=_('Check-in status'),
         choices=(
             ('', _('All attendees')),
+            ('3', pgettext_lazy('checkin state', 'Absent')),
             ('2', pgettext_lazy('checkin state', 'Present')),
             ('1', _('Checked in')),
             ('0', _('Not checked in')),
@@ -882,6 +883,10 @@ class CheckInFilterForm(FilterForm):
             elif s == '2':
                 qs = qs.filter(last_entry__isnull=False).filter(
                     Q(last_exit__isnull=True) | Q(last_exit__lt=F('last_entry'))
+                )
+            elif s == '3':
+                qs = qs.filter(last_entry__isnull=False).filter(
+                    Q(last_exit__isnull=False) | Q(last_exit__lt=F('last_entry'))
                 )
             elif s == '0':
                 qs = qs.filter(last_entry__isnull=True)
