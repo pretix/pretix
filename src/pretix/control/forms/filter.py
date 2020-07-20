@@ -886,7 +886,7 @@ class CheckInFilterForm(FilterForm):
                 )
             elif s == '3':
                 qs = qs.filter(last_entry__isnull=False).filter(
-                    Q(last_exit__isnull=False) | Q(last_exit__gt=F('last_entry'))
+                    Q(last_exit__isnull=False) & Q(last_exit__gte=F('last_entry'))
                 )
             elif s == '0':
                 qs = qs.filter(last_entry__isnull=True)

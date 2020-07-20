@@ -115,7 +115,7 @@ class CheckInListMixin(BaseExporter):
     def _get_queryset(self, cl, form_data):
         cqs = Checkin.objects.filter(
             position_id=OuterRef('pk'),
-            list_id=cl.pk,
+            list_id=cl.pk
         ).order_by().values('position_id').annotate(
             m=Max('datetime')
         ).values('m')
