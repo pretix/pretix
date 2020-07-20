@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-20 14:42+0000\n"
-"PO-Revision-Date: 2020-04-20 10:58+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"POT-Creation-Date: 2020-07-17 07:50+0000\n"
+"PO-Revision-Date: 2020-07-20 14:42+0000\n"
+"Last-Translator: TimPrd <timothe.pardieu@outlook.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -169,10 +169,9 @@ msgid "Gift card products should not be admission products at the same time."
 msgstr "Cartes cadeaux ne peuvent pas être des billets d'entrée."
 
 #: pretix/api/serializers/item.py:182
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "La propriété de métadonnées'{name}1' n'existe pas."
+msgstr "La propriété de métadonnées '{name}1' n'existe pas."
 
 #: pretix/api/serializers/item.py:297
 msgid ""
@@ -197,10 +196,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Ce genre de questions ne peut pas être posé lors de l'enregistrement."
 
 #: pretix/api/serializers/order.py:918 pretix/api/serializers/order.py:925
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "Le produit \"{}\" n'est pas assigné à un quota."
+msgstr "Le produit \"{}\" n'est pas disponible à cette date."
 
 #: pretix/api/serializers/organizer.py:52 pretix/control/forms/organizer.py:404
 msgid ""
@@ -267,10 +264,8 @@ msgid "Order canceled"
 msgstr "Commande annulée"
 
 #: pretix/api/webhooks.py:130 pretix/base/notifications.py:229
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order reactivated"
-msgstr "Commande rejeté"
+msgstr "Commande réactivée"
 
 #: pretix/api/webhooks.py:134 pretix/base/notifications.py:235
 msgid "Order expired"
@@ -1288,10 +1283,8 @@ msgid "Event start date"
 msgstr "date de début d'événement"
 
 #: pretix/base/exporters/orderlist.py:835
-#, fuzzy
-#| msgid "Redemptions"
 msgid "Gift card redemptions"
-msgstr "Remboursements"
+msgstr "Remises par cartes-cadeaux"
 
 #: pretix/base/exporters/orderlist.py:850 pretix/base/models/giftcards.py:54
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:10
@@ -1300,10 +1293,8 @@ msgstr "Remboursements"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:28
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:51
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:39
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card code"
-msgstr "Carte-cadeau"
+msgstr "Code carte-cadeau"
 
 #: pretix/base/exporters/orderlist.py:850
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
@@ -1317,10 +1308,8 @@ msgid "Keep me logged in"
 msgstr "Rester connecté"
 
 #: pretix/base/forms/auth.py:20 pretix/base/forms/auth.py:190
-#, fuzzy
-#| msgid "This voucher code is not known in our database."
 msgid "This combination of credentials is not known to our system."
-msgstr "Ce code promotionnel n'est pas connu dans notre base de données."
+msgstr "Cette combinaison d'identifiants n'est pas connue dans notre système."
 
 #: pretix/base/forms/auth.py:21 pretix/base/forms/auth.py:191
 msgid "This account is inactive."
@@ -1585,19 +1574,17 @@ msgid "Invoice {num}"
 msgstr "Facture {num}"
 
 #: pretix/base/invoice.py:471
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Your reference: {reference}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "Votre référence: {reference}"
+msgstr "Référence client : {reference}"
 
 #: pretix/base/invoice.py:477
 #, fuzzy
 #| msgid "Any customer"
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Tout client"
+msgstr "Identifiant de commerçant"
 
 #: pretix/base/invoice.py:484
 msgctxt "invoice"
@@ -1659,11 +1646,9 @@ msgid "Invoice total"
 msgstr "Total de la facture"
 
 #: pretix/base/invoice.py:573
-#, fuzzy
-#| msgid "Ignored payments"
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Paiements ignorés"
+msgstr "Paiements reçus"
 
 #: pretix/base/invoice.py:576
 #, fuzzy

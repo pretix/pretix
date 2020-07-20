@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-20 14:42+0000\n"
-"PO-Revision-Date: 2020-07-16 22:00+0000\n"
-"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
+"PO-Revision-Date: 2020-07-20 15:24+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -2333,26 +2333,19 @@ msgstr ""
 "sondern nur für feste Produktpakete!"
 
 #: pretix/base/models/items.py:381
-#, fuzzy
-#| msgid "Allow product to be canceled"
 msgid "Allow product to be canceled or changed"
-msgstr "Erlaube Stornierungen"
+msgstr "Erlaube Stornierungen oder Umbuchungen"
 
 #: pretix/base/models/items.py:383
-#, fuzzy
-#| msgid ""
-#| "If this is checked, the usual cancellation settings of this event apply. "
-#| "If this is unchecked, orders containing this product can not be canceled "
-#| "by users but only by you."
 msgid ""
 "If this is checked, the usual cancellation and order change settings of this "
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
 msgstr ""
-"Wenn diese Option aktiviert ist, greifen die üblichen Stornobedingungen der "
-"Veranstaltungen. Wenn sie deaktiviert ist, können Bestellungen mit diesem "
-"Produkt niemals von Kunden selbst storniert werden, unabhängig von der "
-"veranstaltungsweiten Einstellung."
+"Wenn diese Option aktiviert ist, greifen die üblichen Storno- und "
+"Umbuchungsbedingungen der Veranstaltung. Wenn sie deaktiviert ist, können "
+"Bestellungen mit diesem Produkt niemals von Kunden selbst storniert werden, "
+"unabhängig von der veranstaltungsweiten Einstellung."
 
 #: pretix/base/models/items.py:387
 msgid "Minimum amount per order"
@@ -2502,10 +2495,8 @@ msgstr ""
 "hinzugefügt werden, selbst wenn sie eigentlich Geld kosten würden."
 
 #: pretix/base/models/items.py:845
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "Allow the same product to be selected multiple times"
-msgstr "Du kannst den gleichen Sitzplatz nicht mehrfach auswählen."
+msgstr "Erlaube, das gleiche Produkt mehrfach auszuwählen"
 
 #: pretix/base/models/items.py:864
 msgid "The add-on's category must belong to the same event as the item."
@@ -4724,16 +4715,13 @@ msgstr ""
 "Produkt %(base)s auswählen."
 
 #: pretix/base/services/cart.py:99
-#, fuzzy, python-format
-#| msgid ""
-#| "You can select at most %(max)s add-ons from the category %(cat)s for the "
-#| "product %(base)s."
+#, python-format
 msgid ""
 "You can select every add-ons from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
-"Du kannst maximal %(max)s Zusatzprodukte aus der Kategorie %(cat)s für das "
-"Produkt %(base)s auswählen."
+"Sie können jedes Zusatzprodukte aus der Kategorie %(cat)s für das Produkt "
+"%(base)s höchstens ein mal auswählen."
 
 #: pretix/base/services/cart.py:100
 msgid ""
@@ -6063,37 +6051,35 @@ msgstr ""
 "einen der Termine verstrichen ist."
 
 #: pretix/base/settings.py:934
-#, fuzzy
-#| msgid "Customers can cancel their paid orders"
 msgid "Customers can change the variation of the products they purchased"
-msgstr "Kunden können bezahlte Bestellungen stornieren"
+msgstr "Kunden können die Variante eines gekauften Produktes wechseln"
 
 #: pretix/base/settings.py:944 pretix/base/settings.py:952
 msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
 msgstr ""
+"Änderungen nur erlauben wenn der neue Preis gleich oder höher ist als der "
+"vorherige."
 
 #: pretix/base/settings.py:945 pretix/base/settings.py:953
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
-msgstr ""
+msgstr "Änderungen nur erlauben wenn der Preis gleich bleibt."
 
 #: pretix/base/settings.py:946 pretix/base/settings.py:954
 msgid "Allow changes regardless of price, even if this results in a refund."
 msgstr ""
+"Änderungen unabhängig vom Preis erlauben, selbst wenn eine Erstattung nötig "
+"wird."
 
 #: pretix/base/settings.py:950
-#, fuzzy
-#| msgid "Require company per ticket"
 msgid "Requirement for changed prices"
-msgstr "Firmenname pro Ticket erfordern"
+msgstr "Anforderungen an Preisänderungen"
 
 #: pretix/base/settings.py:965
-#, fuzzy
-#| msgid "Do not allow cancellations after"
 msgid "Do not allow changes after"
-msgstr "Stornierungen nur erlauben bis"
+msgstr "Umbuchungen nur erlauben bis"
 
 #: pretix/base/settings.py:974
 msgid "Customers can cancel their unpaid orders"
@@ -8155,8 +8141,6 @@ msgid "All attendees"
 msgstr "Alle Teilnehmer*innen"
 
 #: pretix/control/forms/filter.py:840
-#, fuzzy
-#| msgid "Checked in but left"
 msgctxt "checkin state"
 msgid "Checked in but left"
 msgstr "Betreten und verlassen"
@@ -11141,10 +11125,8 @@ msgid "Change notification settings"
 msgstr "Benachrichtigungs-Einstellungen ändern"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:42
-#, fuzzy
-#| msgid "Order changed"
 msgid "Order changes"
-msgstr "Bestellung geändert"
+msgstr "Umbuchungen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:44
 msgid ""
@@ -11152,6 +11134,10 @@ msgid ""
 "Therefore, currently only specific changes (such as changing the variation "
 "of a product) are possible. More options might be added later."
 msgstr ""
+"Nutzern eine Umbuchung ihrer Bestellung zu erlauben ist eine Funktion, die "
+"sich noch im Entwicklungsstadium befindet. Daher sind derzeit nur sehr "
+"spezifische Umbuchungen wie z.B. die Änderung der Variante eines Produktes "
+"möglich. Mehr Optionen werden ggf. später hinzugefügt."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:119
@@ -18146,10 +18132,8 @@ msgid "paid"
 msgstr "bezahlt"
 
 #: pretix/plugins/checkinlists/exporters.py:404
-#, fuzzy
-#| msgid "Checkout"
 msgid "Checked out"
-msgstr "Bestellung fortsetzen"
+msgstr "Ausgetreten"
 
 #: pretix/plugins/checkinlists/exporters.py:404
 msgid "Automatically checked in"
@@ -19862,20 +19846,12 @@ msgid "plus taxes"
 msgstr "zzgl. Steuern"
 
 #: pretix/presale/forms/order.py:90
-#, fuzzy
-#| msgid ""
-#| "You cannot add yourself to the waiting list as this product is currently "
-#| "available."
 msgid "No other variation of this product is currently available for you."
-msgstr ""
-"Du kannst dich nicht zur Liste hinzufügen, da das Produkt gerade verfügbar "
-"ist."
+msgstr "Keine andere Variante des Produktes ist momentan verfügbar."
 
 #: pretix/presale/forms/order.py:94
-#, fuzzy
-#| msgid "The variation of the product selected above."
 msgid "No other variations of this product exist."
-msgstr "Die zugehörige Produktvariante."
+msgstr "Keine anderen Varianten dieses Produktes existieren."
 
 #: pretix/presale/ical.py:52
 #, python-brace-format
@@ -19957,14 +19933,9 @@ msgstr[1] ""
 "Du musst genau %(min_count)s Optionen aus dieser Kategorie auswählen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:53
-#, fuzzy, python-format
-#| msgid ""
-#| "You can choose between %(min_count)s and %(max_count)s options from this "
-#| "category."
+#, python-format
 msgid "You can choose up to %(max_count)s options from this category."
-msgstr ""
-"Du kannst zwischen %(min_count)s und %(max_count)s Optionen aus dieser "
-"Kategorie auswählen."
+msgstr "Du kannst bis zu %(max_count)s Optionen aus dieser Kategorie auswählen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:57
 #, python-format
@@ -20691,23 +20662,21 @@ msgid "Internal Reference"
 msgstr "Interne Referenz"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:319
-#, fuzzy
-#| msgid "Change for all organizers"
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Für alle Veranstalter ändern"
+msgstr "Bestellung stornieren oder umbuchen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
 msgstr ""
+"Wenn du Änderungen an den bestellten Produkten vornehmen willst, klicke den "
+"Button um deine Bestellung umzubuchen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:333
-#, fuzzy
-#| msgid "Changed order"
 msgid "Change order"
-msgstr "Bestellung verändert"
+msgstr "Bestellung umbuchen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:343
 msgid ""
@@ -21255,22 +21224,17 @@ msgstr ""
 "Der Ticket-Download ist für diese Bestellung (noch) nicht freigeschaltet."
 
 #: pretix/presale/views/order.py:1026
-#, fuzzy
-#| msgid "You cannot cancel this order."
 msgid "You cannot change this order."
-msgstr "Du kannst diese Bestellung nicht stornieren."
+msgstr "Du kannst diese Bestellung nicht umbuchen."
 
 #: pretix/presale/views/order.py:1129
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The order has been canceled. You can now select how you want to transfer "
-#| "the money back to the user."
+#, python-brace-format
 msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
-"Die Bestellung wurde als erstattet markiert. Du kannst nun auswählen, wie du "
-"das Geld zurückerstatten möchtest."
+"Die Bestellung wurde geändert. Du kannst nun den offenen Betrag von {amount} "
+"bezahlen."
 
 #: pretix/presale/views/user.py:27
 msgid "We had difficulties processing your input."
