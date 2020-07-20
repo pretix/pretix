@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -34,6 +36,7 @@ class OrderPositionChangeForm(forms.Form):
         variations = list(i.variations.all())
 
         if variations:
+            current_quotas = instance.variation.quotas.all() if instance.variation else instance.item.quotas.all()
             qa = QuotaAvailability()
             for v in variations:
                 qa.queue(*v.quotas.all())
@@ -49,7 +52,8 @@ class OrderPositionChangeForm(forms.Form):
                 if not v.active:
                     continue
 
-                if not v.quotas.all() or any(qa.results[q][0] != Quota.AVAILABILITY_OK for q in v.quotas.all()):
+                q_res = [qa.results[q][0] != Quota.AVAILABILITY_OK for q in v.quotas.all() if q not in current_quotas]
+                if not v.quotas.all() or (q_res and any(q_res)):
                     continue
 
                 new_price = get_price(i, v, voucher=instance.voucher, subevent=instance.subevent,
@@ -68,9 +72,16 @@ class OrderPositionChangeForm(forms.Form):
                         label += ' (- {})'.format(money_filter(current_price.gross - new_price.gross, event.currency))
                 elif current_price.gross < new_price.gross:
                     if event.settings.display_net_prices:
-                        label += ' (+ {} {})'.format(money_filter(new_price.gross - current_price.gross, event.currency), _('plus taxes'))
+                        label += ' ({}{} {})'.format(
+                            '+ ' if current_price.gross != Decimal('0.00') else '',
+                            money_filter(new_price.gross - current_price.gross, event.currency),
+                            _('plus taxes')
+                        )
                     else:
-                        label += ' (+ {})'.format(money_filter(new_price.gross - current_price.gross, event.currency))
+                        label += ' ({}{})'.format(
+                            '+ ' if current_price.gross != Decimal('0.00') else '',
+                            money_filter(new_price.gross - current_price.gross, event.currency)
+                        )
 
                 choices.append((f'{i.pk}-{v.pk}', label))
         else:

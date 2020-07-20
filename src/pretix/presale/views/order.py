@@ -42,6 +42,7 @@ from pretix.base.services.tickets import generate, invalidate_cache
 from pretix.base.signals import (
     allow_ticket_download, order_modified, register_ticket_outputs,
 )
+from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.safedownload import check_token
@@ -1033,7 +1034,11 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
 
     @cached_property
     def positions(self):
-        positions = list(self.order.positions.select_related('item', 'item__tax_rule').prefetch_related('item__variations', 'item__variations__quotas'))
+        positions = list(
+            self.order.positions.select_related('item', 'item__tax_rule').prefetch_related(
+                'item__quotas', 'item__variations', 'item__variations__quotas'
+            )
+        )
         try:
             ia = self.order.invoice_address
         except InvoiceAddress.DoesNotExist:
@@ -1086,6 +1091,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
         return True
 
     def post(self, *args, **kwargs):
+        was_paid = self.order.status == Order.STATUS_PAID
         ocm = OrderChangeManager(
             self.order,
             user=self.request.user,
@@ -1102,7 +1108,18 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             except OrderError as e:
                 messages.error(self.request, str(e))
             else:
-                messages.success(self.request, _('The order has been changed.'))
+
+                if self.order.status != Order.STATUS_PAID and was_paid:
+                    messages.success(self.request, _('The order has been changed. You can now proceed by paying the open amount of {amount}.').format(
+                        amount=money_filter(self.order.pending_sum, self.request.event.currency)
+                    ))
+                    return redirect(eventreverse(self.request.event, 'presale:event.order.pay.change', kwargs={
+                        'order': self.order.code,
+                        'secret': self.order.secret
+                    }))
+                else:
+                    messages.success(self.request, _('The order has been changed.'))
+
                 return redirect(self.get_order_url())
 
         return self.get(*args, **kwargs)

@@ -487,6 +487,9 @@ class Order(LockModel, LoggedModel):
         """
         from .checkin import Checkin
 
+        if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID) or not self.count_positions:
+            return False
+
         if self.cancellation_requests.exists():
             return False
         positions = list(
