@@ -237,6 +237,7 @@ unterzahlt
 UNTERZAHLT
 unzugeordnete
 unzugeordneten
+umzubuchen
 URIs
 Ursprüngl
 USt
