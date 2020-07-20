@@ -1131,7 +1131,7 @@ def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
         try:
             order.send_mail(
                 email_subject, email_template, email_context,
-                'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices, attach_tickets=True
+                'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices, attach_tickets=True,
             )
         except SendMailException:
             logger.exception('Order changed email could not be sent')

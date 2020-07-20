@@ -1090,7 +1090,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             self.order,
             user=self.request.user,
             notify=True,
-            reissue_invoice=True
+            reissue_invoice=True,
         )
         form_valid = self._process_change(ocm)
 
