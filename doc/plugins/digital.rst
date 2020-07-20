@@ -1,11 +1,85 @@
 Digital content
 ===============
 
+URL interpolation and JWT authentication
+----------------------------------------
+
+In the simplest case, you can use the digital content module to point users to a specific piece of content on some
+platform after their ticket purchase, or show them an embedded video or live stream. However, the full power of the
+module can be utilized by passing additional information to the target system to automatically authenticate the user
+or pre-fill some fields with their data. For example, you could use an URL like this::
+
+    https://webinars.example.com/join?as={attendee_name}&userid={order_code}-{positionid}
+
+While this is already useful, it does not provide much security – anyone could guess a valid combination for that URL.
+Therefore, the module allows you to pass information as a `JSON Web Token`_, which isn't encrypted, but signed with a
+shared secret such that nobody can create their own tokens or modify the contents. To use a token, set up a URL like this::
+
+    https://webinars.example.com/join?with_token={token}
+
+Additionally, you will need to set a JWT secret and a token template, either through the pretix interface or through the
+API (see below). pretix currently only supports tokens signed with ``HMAC-SHA256`` (``HS256``). Your token template can contain
+whatever JSON you'd like to pass on based on the same variables, for example::
+
+    {
+        "iss": "pretix.eu",
+        "aud": "webinars.example.com",
+        "user": {
+            "id": "{order_code}-{positionid}",
+            "product": "{product_id}",
+            "variation": "{variation_id}",
+            "name": "{attendee_name}"
+        }
+    }
+
+Variables can only be used in strings inside the JSON structure.
+pretix will automatically add an ``iat`` claim with the current timestamp and an ``exp`` claim with an expiration timestamp
+based on your configuration.
+
+
+List of variables
+"""""""""""""""""
+
+The following variables are currently supported:
+
+.. rst-class:: rest-resource-table
+
+=================================== ====================================================================
+Variable                            Description
+=================================== ====================================================================
+``order_code``                      Order code (alphanumerical, unique per order, not per ticket)
+``positionid``                      ID of the ticket within the order (integer, starting at 1)
+``order_email``                     E-mail address of the ticket purchaser
+``product_id``                      Internal ID of the purchased product
+``product_variation``               Internal ID of the purchased product variation (or empty)
+``attendee_name``                   Full name of the ticket holder (or empty)
+``attendee_name_*``                 Name parts of the ticket holder, depending on configuration, e.g. ``attendee_name_given_name`` or ``attendee_name_family_name``
+``attendee_email``                  E-mail address of the ticket holder (or empty)
+``attendee_company``                Company of the ticket holder (or empty)
+``attendee_street``                 Street of the ticket holder's address (or empty)
+``attendee_zipcode``                ZIP code of the ticket holder's address (or empty)
+``attendee_city``                   City of the ticket holder's address (or empty)
+``attendee_country``                Country code of the ticket holder's address (or empty)
+``attendee_state``                  State of the ticket holder's address (or empty)
+``answer[XYZ]``                     Answer to the custom question with identifier ``XYZ``
+``invoice_name``                    Full name of the invoice address (or empty)
+``invoice_name_*``                  Name parts of the invoice address, depending on configuration, e.g. ``invoice_name_given_name`` or ``invoice_name_family_name``
+``invoice_company``                 Company of the invoice address (or empty)
+``invoice_street``                  Street of the invoice address (or empty)
+``invoice_zipcode``                 ZIP code of the invoice address (or empty)
+``invoice_city``                    City of the invoice address (or empty)
+``invoice_country``                 Country code of the invoice address (or empty)
+``invoice_state``                   State of the invoice address (or empty)
+``meta_XYZ``                        Value of the event's ``XYZ`` meta property
+``token``                           Signed JWT (only to be used in URLs, not in tokens)
+=================================== ====================================================================
+
+
+API Resource description
+-------------------------
+
 The digital content plugin provides a HTTP API that allows you to create new digital content for your ticket holders,
 such as live streams, videos, or material downloads.
-
-Resource description
---------------------
 
 The digital content resource contains the following public fields:
 
@@ -28,10 +102,13 @@ all_products                          boolean                    If ``true``, th
 limit_products                        list of integers           List of product/item IDs. This content is only shown to buyers of these ticket types.
 position                              integer                    An integer, used for sorting
 subevent                              integer                    Date in an event series this content should be shown for. Should be ``null`` if this is not an event series or if this should be shown to all customers.
+jwt_template                          string                     Template for JWT token generation
+jwt_secret                            string                     Secret for JWT token generation
+jwt_validity                          integer                    JWT validity in days
 ===================================== ========================== =======================================================
 
-Endpoints
----------
+API Endpoints
+-------------
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/digitalcontents/
 
@@ -275,3 +352,5 @@ Endpoints
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event/content does not exist **or** you have no permission to change it
+
+.. _JSON Web Token: https://en.wikipedia.org/wiki/JSON_Web_Token

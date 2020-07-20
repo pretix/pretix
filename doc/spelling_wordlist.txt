@@ -54,6 +54,8 @@ inofficial
 invalidations
 iterable
 Jimdo
+jwt
+JWT
 libpretixprint
 libsass
 linters
