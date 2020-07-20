@@ -378,9 +378,9 @@ class Item(LoggedModel):
                     'but only for fixed bundles!')
     )
     allow_cancel = models.BooleanField(
-        verbose_name=_('Allow product to be canceled'),
+        verbose_name=_('Allow product to be canceled or changed'),
         default=True,
-        help_text=_('If this is checked, the usual cancellation settings of this event apply. If this is unchecked, '
+        help_text=_('If this is checked, the usual cancellation and order change settings of this event apply. If this is unchecked, '
                     'orders containing this product can not be canceled by users but only by you.')
     )
     min_per_order = models.IntegerField(

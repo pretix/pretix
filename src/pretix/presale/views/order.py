@@ -2,6 +2,7 @@ import inspect
 import mimetypes
 import os
 import re
+from collections import OrderedDict
 from decimal import Decimal
 
 from django import forms
@@ -25,7 +26,8 @@ from pretix.base.models import (
     CachedTicket, GiftCard, Invoice, Order, OrderPosition, Quota,
 )
 from pretix.base.models.orders import (
-    CachedCombinedTicket, OrderFee, OrderPayment, OrderRefund, QuestionAnswer,
+    CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
+    QuestionAnswer,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
@@ -34,17 +36,20 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
-    OrderError, cancel_order, change_payment_provider,
+    OrderChangeManager, OrderError, cancel_order, change_payment_provider,
 )
+from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
 from pretix.base.signals import (
     allow_ticket_download, order_modified, register_ticket_outputs,
 )
+from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
+from pretix.presale.forms.order import OrderPositionChangeForm
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
@@ -1006,3 +1011,131 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
         resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(invoice.number)
         resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
         return resp
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
+    template_name = "pretixpresale/event/order_change.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if not self.order.user_change_allowed:
+            messages.error(request, _('You cannot change this order.'))
+            return redirect(self.get_order_url())
+        return super().dispatch(request, *args, **kwargs)
+
+    @cached_property
+    def formdict(self):
+        storage = OrderedDict()
+        for pos in self.positions:
+            if pos.addon_to_id:
+                if pos.addon_to not in storage:
+                    storage[pos.addon_to] = []
+                storage[pos.addon_to].append(pos)
+            else:
+                if pos not in storage:
+                    storage[pos] = []
+                storage[pos].append(pos)
+        return storage
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+        ctx['positions'] = self.positions
+        ctx['formgroups'] = self.formdict
+        return ctx
+
+    @cached_property
+    def positions(self):
+        positions = list(
+            self.order.positions.select_related('item', 'item__tax_rule').prefetch_related(
+                'item__quotas', 'item__variations', 'item__variations__quotas'
+            )
+        )
+        try:
+            ia = self.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = None
+        for p in positions:
+            p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
+                                             invoice_address=ia, event=self.request.event,
+                                             data=self.request.POST if self.request.method == "POST" else None)
+        return positions
+
+    def _process_change(self, ocm):
+        try:
+            ia = self.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = None
+        for p in self.positions:
+            if not p.form.is_valid():
+                return False
+
+            try:
+                change_item = None
+                if p.form.cleaned_data['itemvar']:
+                    if '-' in p.form.cleaned_data['itemvar']:
+                        itemid, varid = p.form.cleaned_data['itemvar'].split('-')
+                    else:
+                        itemid, varid = p.form.cleaned_data['itemvar'], None
+
+                    item = self.request.event.items.get(pk=itemid)
+                    if varid:
+                        variation = item.variations.get(pk=varid)
+                    else:
+                        variation = None
+                    if item != p.item or variation != p.variation:
+                        change_item = (item, variation)
+
+                if change_item is not None:
+                    ocm.change_item(p, *change_item)
+                    new_price = get_price(change_item[0], change_item[1], voucher=p.voucher, subevent=p.subevent,
+                                          invoice_address=ia)
+
+                    if new_price.gross != p.price or new_price.rate != p.tax_rate:
+                        ocm.change_price(p, new_price.gross)
+
+                    if change_item[0].tax_rule != p.tax_rule or new_price.rate != p.tax_rate:
+                        ocm.change_tax_rule(p, change_item[0].tax_rule)
+
+            except OrderError as e:
+                p.custom_error = str(e)
+                return False
+        return True
+
+    def post(self, *args, **kwargs):
+        was_paid = self.order.status == Order.STATUS_PAID
+        ocm = OrderChangeManager(
+            self.order,
+            user=self.request.user,
+            notify=True,
+            reissue_invoice=True,
+        )
+        form_valid = self._process_change(ocm)
+
+        if not form_valid:
+            messages.error(self.request, _('An error occurred. Please see the details below.'))
+        else:
+            try:
+                ocm.commit(check_quotas=True)
+            except OrderError as e:
+                messages.error(self.request, str(e))
+            else:
+
+                if self.order.status != Order.STATUS_PAID and was_paid:
+                    messages.success(self.request, _('The order has been changed. You can now proceed by paying the open amount of {amount}.').format(
+                        amount=money_filter(self.order.pending_sum, self.request.event.currency)
+                    ))
+                    return redirect(eventreverse(self.request.event, 'presale:event.order.pay.change', kwargs={
+                        'order': self.order.code,
+                        'secret': self.order.secret
+                    }))
+                else:
+                    messages.success(self.request, _('The order has been changed.'))
+
+                return redirect(self.get_order_url())
+
+        return self.get(*args, **kwargs)

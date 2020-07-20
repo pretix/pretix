@@ -37,7 +37,7 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
                 arg,
                 floatformat(value, 2)
             )
-        return format_currency(value, arg, locale=translation.get_language())
+        return format_currency(value, arg, locale=translation.get_language()[:2])
     except:
         return '{} {}'.format(
             arg,
