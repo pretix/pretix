@@ -11,7 +11,7 @@
     </h2>
     <form method="post" href="">
         {% csrf_token %}
-        {% for position in positions %}
+        {% for position, positions in formgroups.items %}
             <div class="panel panel-default items">
                 <div class="panel-heading">
                     <h3 class="panel-title">
@@ -23,16 +23,6 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-order-change form-horizontal">
-                        {% if position.attendee_name %}
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    {% trans "Attendee name" %}
-                                </label>
-                                <div class="col-md-9 form-control-text">
-                                    {{ position.attendee_name }}
-                                </div>
-                            </div>
-                        {% endif %}
                         {% if position.subevent %}
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
@@ -49,8 +39,24 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% bootstrap_form_errors position.form %}
-                        {% bootstrap_field position.form.itemvar layout='horizontal' %}
+
+                        {% for p in positions %}
+                            {% if p.pk != position.pk %}
+                                {# Add-Ons #}
+                                <legend>+ {{ p.item.name }}{% if p.variation %} – {{ p.variation.value }}{% endif %}</legend>
+                            {% endif %}
+                            {% if p.attendee_name %}
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        {% trans "Attendee name" %}
+                                    </label>
+                                    <div class="col-md-9 form-control-text">
+                                        {{ p.attendee_name }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% bootstrap_form p.form layout="checkout" %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>

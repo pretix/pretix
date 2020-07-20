@@ -84,6 +84,13 @@ class OrderPositionChangeForm(forms.Form):
                         )
 
                 choices.append((f'{i.pk}-{v.pk}', label))
+
+            if not choices:
+                self.fields['itemvar'].widget.attrs['disabled'] = True
+                self.fields['itemvar'].help_text = _('No other variation of this product is currently available for you.')
         else:
             choices.append((str(i.pk), '%s' % pname))
+            self.fields['itemvar'].widget.attrs['disabled'] = True
+            self.fields['itemvar'].help_text = _('No other variations of this product exist.')
+
         self.fields['itemvar'].choices = choices

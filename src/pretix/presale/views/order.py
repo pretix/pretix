@@ -2,6 +2,7 @@ import inspect
 import mimetypes
 import os
 import re
+from collections import OrderedDict
 from decimal import Decimal
 
 from django import forms
@@ -1026,10 +1027,25 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
+    @cached_property
+    def formdict(self):
+        storage = OrderedDict()
+        for pos in self.positions:
+            if pos.addon_to_id:
+                if pos.addon_to not in storage:
+                    storage[pos.addon_to] = []
+                storage[pos.addon_to].append(pos)
+            else:
+                if pos not in storage:
+                    storage[pos] = []
+                storage[pos].append(pos)
+        return storage
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
         ctx['positions'] = self.positions
+        ctx['formgroups'] = self.formdict
         return ctx
 
     @cached_property
