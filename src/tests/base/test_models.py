@@ -1620,14 +1620,14 @@ class OrderTestCase(BaseQuotaTestCase):
     @classscope(attr='o')
     def test_require_any_variation(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
-                                    admission=True, allow_cancel=False)
+                                    admission=True, allow_cancel=True)
         OrderPosition.objects.create(order=self.order, item=item1,
                                      variation=None, price=23)
         self.event.settings.change_allow_user_variation = True
         assert self.order.user_change_allowed is False
         item2 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                     admission=True, allow_cancel=True)
-        v2 = item1.variations.create(value="V")
+        v2 = item2.variations.create(value="V")
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=v2, price=23)
         assert self.order.user_change_allowed is True
