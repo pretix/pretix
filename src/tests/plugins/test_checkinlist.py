@@ -92,7 +92,7 @@ def test_csv_order_by_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Checked out""Automatically checked in","Secret","E-mail","Company","Voucher code","Order date","Requires special
+"Checked in","Checked out","Automatically checked in","Secret","E-mail","Company","Voucher code","Order date","Requires special
  attention","Comment"
 "FOO","Mrs Andrea J Zulu","Mrs","Andrea","J","Zulu","Ticket","13.00","","","No","ggsngqtnmhx74jswjngw3fk8pfwz2a7k",
 "dummy@dummy.test","","","2019-02-22","No",""
@@ -181,7 +181,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Checked in","Automatically checked in","Secret","E-mail","Company","Voucher code","Order date","Requires special
+"Checked in","Checked out","Automatically checked in","Secret","E-mail","Company","Voucher code","Order date","Requires special
  attention","Comment"
 "BAR","Mr Albert J Zulu","Mr","Albert","J","Zulu","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytyy",
 "dummy@dummy.test","BARCORP","","2019-02-22","No",""
