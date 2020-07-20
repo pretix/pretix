@@ -261,15 +261,15 @@ class QuotaAvailability:
                 qs = self._item_to_quotas[line['item_id']]
             for q in qs:
                 if q.subevent_id == line['subevent_id']:
+                    if line['order__status'] == Order.STATUS_PAID:
+                        self.count_paid_orders[q] += line['c']
+                        q.cached_availability_paid_orders = self.count_paid_orders[q]
+                    elif line['order__status'] == Order.STATUS_PENDING:
+                        self.count_pending_orders[q] += line['c']
                     if q.release_after_exit and line['is_exited']:
                         self.count_exited_orders[q] += line['c']
                     else:
                         size_left[q] -= line['c']
-                        if line['order__status'] == Order.STATUS_PAID:
-                            self.count_paid_orders[q] += line['c']
-                            q.cached_availability_paid_orders = self.count_paid_orders[q]
-                        elif line['order__status'] == Order.STATUS_PENDING:
-                            self.count_pending_orders[q] += line['c']
                         if size_left[q] <= 0 and q not in self.results:
                             if line['order__status'] == Order.STATUS_PAID:
                                 self.results[q] = Quota.AVAILABILITY_GONE, 0
