@@ -1,4 +1,5 @@
 import inspect
+from collections import defaultdict
 from decimal import Decimal
 
 from django.conf import settings
@@ -17,15 +18,17 @@ from django_scopes import scopes_disabled
 
 from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
+from pretix.base.models.tax import TaxedPrice
 from pretix.base.services.cart import (
-    get_fees, set_cart_addons, update_tax_rates,
+    CartError, error_messages, get_fees, set_cart_addons, update_tax_rates,
 )
 from pretix.base.services.orders import perform_order
+from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
-    AddOnsForm, ContactForm, InvoiceAddressForm, InvoiceNameForm,
+    ContactForm, InvoiceAddressForm, InvoiceNameForm,
 )
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
@@ -37,6 +40,7 @@ from pretix.presale.views import (
 from pretix.presale.views.cart import (
     cart_session, create_empty_cart_id, get_or_create_cart_id,
 )
+from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.questions import QuestionsViewMixin
 
 
@@ -224,39 +228,79 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         for cartpos in get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
         ).order_by('pk'):
-            current_addon_products = {
-                a.item_id: a.variation_id for a in cartpos.addons.all() if not a.is_bundled
-            }
             formsetentry = {
                 'cartpos': cartpos,
                 'item': cartpos.item,
                 'variation': cartpos.variation,
                 'categories': []
             }
-            for iao in cartpos.item.addons.all():
-                category = {
-                    'category': iao.addon_category,
-                    'min_count': iao.min_count,
-                    'max_count': iao.max_count,
-                    'form': AddOnsForm(
-                        event=self.request.event,
-                        prefix='{}_{}'.format(cartpos.pk, iao.addon_category.pk),
-                        base_position=cartpos,
-                        iao=iao,
-                        price_included=iao.price_included,
-                        initial=current_addon_products,
-                        data=(self.request.POST if self.request.method == 'POST' else None),
-                        quota_cache=quota_cache,
-                        item_cache=item_cache,
-                        subevent=cartpos.subevent,
-                        sales_channel=self.request.sales_channel.identifier
-                    )
-                }
-
-                if len(category['form'].fields) > 0:
-                    formsetentry['categories'].append(category)
-
             formset.append(formsetentry)
+
+            current_addon_products = defaultdict(list)
+            for a in cartpos.addons.all():
+                if not a.is_bundled:
+                    current_addon_products[a.item_id, a.variation_id].append(a)
+
+            for iao in cartpos.item.addons.all():
+                ckey = '{}-{}'.format(cartpos.subevent.pk if cartpos.subevent else 0, iao.addon_category.pk)
+
+                if ckey not in item_cache:
+                    # Get all items to possibly show
+                    items, _btn = get_grouped_items(
+                        self.request.event,
+                        subevent=cartpos.subevent,
+                        voucher=None,
+                        channel=self.request.sales_channel.identifier,
+                        base_qs=iao.addon_category.items,
+                        allow_addons=True,
+                        quota_cache=quota_cache
+                    )
+                    item_cache[ckey] = items
+                else:
+                    items = item_cache[ckey]
+
+                for i in items:
+                    i.allow_waitinglist = False
+
+                    if i.has_variations:
+                        for v in i.available_variations:
+                            v.initial = len(current_addon_products[i.pk, v.pk])
+                            if v.initial and i.free_price:
+                                a = current_addon_products[i.pk, v.pk][0]
+                                v.initial_price = TaxedPrice(
+                                    net=a.price - a.tax_value,
+                                    gross=a.price,
+                                    tax=a.tax_value,
+                                    name=a.item.tax_rule.name,
+                                    rate=a.tax_rate,
+                                )
+                            else:
+                                v.initial_price = v.display_price
+                        i.expand = any(v.initial for v in i.available_variations)
+                    else:
+                        i.initial = len(current_addon_products[i.pk, None])
+                        if i.initial and i.free_price:
+                            a = current_addon_products[i.pk, None][0]
+                            i.initial_price = TaxedPrice(
+                                net=a.price - a.tax_value,
+                                gross=a.price,
+                                tax=a.tax_value,
+                                name=a.item.tax_rule.name,
+                                rate=a.tax_rate,
+                            )
+                        else:
+                            i.initial_price = i.display_price
+
+                if items:
+                    formsetentry['categories'].append({
+                        'category': iao.addon_category,
+                        'price_included': iao.price_included,
+                        'multi_allowed': iao.multi_allowed,
+                        'min_count': iao.min_count,
+                        'max_count': iao.max_count,
+                        'iao': iao,
+                        'items': items
+                    })
         return formset
 
     def get_context_data(self, **kwargs):
@@ -274,37 +318,89 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     def get_error_url(self):
         return self.get_step_url(self.request)
 
-    def get(self, request):
+    def get(self, request, **kwargs):
         self.request = request
         if 'async_id' in request.GET and settings.HAS_CELERY:
             return self.get_result(request)
         return TemplateFlowStep.get(self, request)
 
+    def _clean_category(self, form, category):
+        selected = {}
+        for i in category['items']:
+            if i.has_variations:
+                for v in i.available_variations:
+                    val = int(self.request.POST.get(f'cp_{form["cartpos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    price = self.request.POST.get(f'cp_{form["cartpos"].pk}_variation_{i.pk}_{v.pk}_price') or '0'
+                    if val:
+                        selected[i, v] = val, price
+            else:
+                val = int(self.request.POST.get(f'cp_{form["cartpos"].pk}_item_{i.pk}') or '0')
+                price = self.request.POST.get(f'cp_{form["cartpos"].pk}_item_{i.pk}_price') or '0'
+                if val:
+                    selected[i, None] = val, price
+
+        if sum(a[0] for a in selected.values()) > category['max_count']:
+            # TODO: Proper pluralization
+            raise ValidationError(
+                _(error_messages['addon_max_count']),
+                'addon_max_count',
+                {
+                    'base': str(form['item'].name),
+                    'max': category['max_count'],
+                    'cat': str(category['category'].name),
+                }
+            )
+        elif sum(a[0] for a in selected.values()) < category['min_count']:
+            # TODO: Proper pluralization
+            raise ValidationError(
+                _(error_messages['addon_min_count']),
+                'addon_min_count',
+                {
+                    'base': str(form['item'].name),
+                    'min': category['min_count'],
+                    'cat': str(category['category'].name),
+                }
+            )
+        elif any(sum(v[0] for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
+            raise ValidationError(
+                _(error_messages['addon_no_multi']),
+                'addon_no_multi',
+                {
+                    'base': str(form['item'].name),
+                    'cat': str(category['category'].name),
+                }
+            )
+        try:
+            validate_cart_addons.send(
+                sender=self.event,
+                addons={k: v[0] for k, v in selected.items()},
+                base_position=form["cartpos"],
+                iao=category['iao']
+            )
+        except CartError as e:
+            raise ValidationError(str(e))
+
+        return selected
+
     def post(self, request, *args, **kwargs):
         self.request = request
-        is_valid = True
         data = []
         for f in self.forms:
             for c in f['categories']:
-                is_valid = is_valid and c['form'].is_valid()
-                if c['form'].is_valid():
-                    for k, v in c['form'].cleaned_data.items():
-                        itemid = int(k[5:])
-                        if v is True:
-                            data.append({
-                                'addon_to': f['cartpos'].pk,
-                                'item': itemid,
-                                'variation': None
-                            })
-                        elif v:
-                            data.append({
-                                'addon_to': f['cartpos'].pk,
-                                'item': itemid,
-                                'variation': int(v)
-                            })
+                try:
+                    selected = self._clean_category(f, c)
+                except ValidationError as e:
+                    messages.error(request, e.message % e.params if e.params else e.message)
+                    return self.get(request, *args, **kwargs)
 
-        if not is_valid:
-            return self.get(request, *args, **kwargs)
+                for (i, v), (c, price) in selected.items():
+                    data.append({
+                        'addon_to': f['cartpos'].pk,
+                        'item': i.pk,
+                        'variation': v.pk if v else None,
+                        'count': c,
+                        'price': price,
+                    })
 
         return self.do(self.request.event.id, data, get_or_create_cart_id(self.request),
                        invoice_address=self.invoice_address.pk, locale=get_language(),

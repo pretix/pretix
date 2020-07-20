@@ -2223,6 +2223,158 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.cm.commit()
 
     @classscope(attr='orga')
+    def test_multi_allowed(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.addon1.max_count = 2
+        self.addon1.multi_allowed = True
+        self.addon1.save()
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop3.pk,
+                'variation': self.workshop3a.pk
+            },
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop3.pk,
+                'variation': self.workshop3b.pk
+            }
+        ])
+        self.cm.commit()
+        assert cp1.addons.count() == 2
+
+    @classscope(attr='orga')
+    def test_number_exceeds_max(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.addon1.max_count = 2
+        self.addon1.multi_allowed = True
+        self.addon1.save()
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop3.pk,
+                    'variation': self.workshop3a.pk,
+                    'count': 3,
+                },
+            ])
+            self.cm.commit()
+        assert cp1.addons.count() == 0
+
+    @classscope(attr='orga')
+    def test_number_exceeds_quota(self):
+        self.workshopquota.size = 1
+        self.workshopquota.save()
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.addon1.max_count = 2
+        self.addon1.multi_allowed = True
+        self.addon1.save()
+        with self.assertRaises(CartError):
+            self.cm.set_addons([
+                {
+                    'addon_to': cp1.pk,
+                    'item': self.workshop3.pk,
+                    'variation': self.workshop3a.pk,
+                    'count': 2,
+                },
+            ])
+            self.cm.commit()
+        assert cp1.addons.count() == 1
+
+    @classscope(attr='orga')
+    def test_free_price(self):
+        self.workshop3.free_price = True
+        self.workshop3.save()
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.addon1.max_count = 5
+        self.addon1.multi_allowed = True
+        self.addon1.save()
+
+        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop3.pk,
+                'variation': self.workshop3a.pk,
+                'count': 3,
+                'price': '24.00'
+            },
+        ])
+        self.cm.commit()
+        assert cp1.addons.count() == 3
+        assert all(a.price == Decimal('24.00') for a in cp1.addons.all())
+
+        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop3.pk,
+                'variation': self.workshop3a.pk,
+                'count': 3,
+                'price': '5.00'
+            },
+        ])
+        self.cm.commit()
+        assert cp1.addons.count() == 3
+        assert all(a.price == Decimal('12.00') for a in cp1.addons.all())
+
+    @classscope(attr='orga')
+    def test_change_number(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.addon1.max_count = 5
+        self.addon1.multi_allowed = True
+        self.addon1.save()
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop3.pk,
+                'variation': self.workshop3a.pk,
+                'count': 3,
+            },
+        ])
+        self.cm.commit()
+        assert cp1.addons.count() == 3
+
+        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop3.pk,
+                'variation': self.workshop3a.pk,
+                'count': 4,
+            },
+        ])
+        self.cm.commit()
+        assert cp1.addons.count() == 4
+
+        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop3.pk,
+                'variation': self.workshop3a.pk,
+                'count': 2,
+            },
+        ])
+        self.cm.commit()
+        assert cp1.addons.count() == 2
+
+    @classscope(attr='orga')
     def test_no_duplicate_items_for_same_cp(self):
         cp1 = CartPosition.objects.create(
             expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),

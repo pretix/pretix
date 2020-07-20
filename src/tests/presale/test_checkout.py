@@ -2226,8 +2226,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             )
 
         response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
-            '{}_{}-item_{}'.format(cp1.pk, self.workshopcat.pk, self.workshop1.pk): 'on',
-            '{}_{}-item_{}'.format(cp2.pk, self.workshopcat.pk, self.workshop2.pk): self.workshop2a.pk,
+            'cp_{}_item_{}'.format(cp1.pk, self.workshop1.pk): '1',
+            'cp_{}_variation_{}_{}'.format(cp2.pk, self.workshop2.pk, self.workshop2a.pk): '1',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -2235,6 +2235,45 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert cp1.addons.first().item == self.workshop1
             assert cp2.addons.first().item == self.workshop2
             assert cp2.addons.first().variation == self.workshop2a
+
+    def test_set_addon_multi(self):
+        with scopes_disabled():
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, multi_allowed=True, max_count=2)
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10)
+            )
+
+        response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
+            'cp_{}_item_{}'.format(cp1.pk, self.workshop1.pk): '2',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            assert cp1.addons.count() == 2
+            assert cp1.addons.first().item == self.workshop1
+            assert cp1.addons.last().item == self.workshop1
+
+    def test_set_addon_free_price(self):
+        with scopes_disabled():
+            self.workshop1.free_price = True
+            self.workshop1.save()
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat)
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10)
+            )
+
+        response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
+            'cp_{}_item_{}'.format(cp1.pk, self.workshop1.pk): '1',
+            'cp_{}_item_{}_price'.format(cp1.pk, self.workshop1.pk): '999,99',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            assert cp1.addons.count() == 1
+            assert cp1.addons.first().item == self.workshop1
+            assert cp1.addons.first().price == Decimal('999.99')
 
     def test_set_addons_required(self):
         with scopes_disabled():
@@ -2332,7 +2371,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ €42.00)' in response.rendered_content
+        assert '42.00' in response.rendered_content
 
     def test_set_addons_subevent_net_prices(self):
         with scopes_disabled():
@@ -2358,8 +2397,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ €35.29 plus 19.00% VAT)' in response.rendered_content
-        assert 'A (+ €10.08 plus 19.00% VAT)' in response.rendered_content
+        assert '35.29' in response.rendered_content
+        assert '10.08' in response.rendered_content
 
     def test_confirm_subevent_presale_not_yet(self):
         with scopes_disabled():

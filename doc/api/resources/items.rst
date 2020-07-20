@@ -104,6 +104,7 @@ addons                                list of objects            Definition of a
 ├ min_count                           integer                    The minimal number of add-ons that need to be chosen.
 ├ max_count                           integer                    The maximal number of add-ons that can be chosen.
 ├ position                            integer                    An integer, used for sorting
+├ multi_allowed                       boolean                    Adding the same item multiple times is allowed
 └ price_included                      boolean                    Adding this add-on to the item is free
 bundles                               list of objects            Definition of bundles that are included in this item.
                                                                  Only writable during creation,
@@ -158,6 +159,10 @@ meta_data                             object                     Values set for 
 .. versionchanged:: 3.7
 
    The attribute ``meta_data`` has been added.
+
+.. versionchanged:: 3.10
+
+   The attribute ``multi_allowed`` has been added to ``addons``.
 
 Notes
 -----

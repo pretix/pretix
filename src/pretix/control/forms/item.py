@@ -661,7 +661,8 @@ class ItemAddOnForm(I18nModelForm):
             'addon_category',
             'min_count',
             'max_count',
-            'price_included'
+            'price_included',
+            'multi_allowed',
         ]
         help_texts = {
             'min_count': _('Be aware that setting a minimal number makes it impossible to buy this product if all '

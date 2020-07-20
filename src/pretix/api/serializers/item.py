@@ -45,7 +45,7 @@ class InlineItemAddOnSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemAddOn
         fields = ('addon_category', 'min_count', 'max_count',
-                  'position', 'price_included')
+                  'position', 'price_included', 'multi_allowed')
 
 
 class ItemBundleSerializer(serializers.ModelSerializer):
@@ -77,7 +77,7 @@ class ItemAddOnSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemAddOn
         fields = ('id', 'addon_category', 'min_count', 'max_count',
-                  'position', 'price_included')
+                  'position', 'price_included', 'multi_allowed')
 
     def validate(self, data):
         data = super().validate(data)
