@@ -424,5 +424,7 @@ def refresh_quota_caches():
             Q(subevent__date_to__isnull=False, subevent__date_to__gte=now() - timedelta(days=14)) |
             Q(subevent__date_from__gte=now() - timedelta(days=14))
         )
+        qa = QuotaAvailability(early_out=False)
         for q in quotas:
-            q.availability()
+            qa.queue(q)
+        qa.compute()
