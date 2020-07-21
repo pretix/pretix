@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 {% block inside %}
     <h1>{% trans "Payment settings" %}</h1>
-    <form action="" method="post" class="form-horizontal form-plugins">
+    <form action="" method="post" class="form-horizontal form-plugins" enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset>
             <legend>

@@ -355,6 +355,7 @@ class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMix
             obj=self.request.event,
             settingspref=self.provider.settings.get_prefix(),
             data=(self.request.POST if self.request.method == 'POST' else None),
+            files=(self.request.FILES if self.request.method == 'POST' else None),
             provider=self.provider
         )
         form.fields = OrderedDict(
