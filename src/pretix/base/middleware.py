@@ -199,9 +199,7 @@ class SecurityMiddleware(MiddlewareMixin):
             'default-src': ["{static}"],
             'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'object-src': ["'none'"],
-            # frame-src is deprecated but kept for compatibility with CSP 1.0 browsers, e.g. Safari 9
             'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
-            'child-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'style-src': ["{static}", "{media}"],
             'connect-src': ["{dynamic}", "{media}", "https://checkout.stripe.com"],
             'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"] + img_src,
