@@ -74,7 +74,10 @@ class CartMixin:
             cartpos = self.positions
 
         lcp = list(cartpos)
-        has_addons = {cp.addon_to_id for cp in lcp if cp.addon_to_id}
+        has_addons = defaultdict(list)
+        for cp in lcp:
+            if cp.addon_to_id:
+                has_addons[cp.addon_to_id].append(cp)
 
         pos_additional_fields = defaultdict(list)
         for cp in lcp:
@@ -129,6 +132,10 @@ class CartMixin:
             group.net_total = group.count * group.net_price
             group.has_questions = answers and k[0] != ""
             group.tax_rule = group.item.tax_rule
+
+            group.bundle_sum = group.price + sum(a.price for a in has_addons[group.pk])
+            group.bundle_sum_net = group.net_price + sum(a.net_price for a in has_addons[group.pk])
+
             if answers:
                 group.cache_answers(all=False)
                 group.additional_answers = pos_additional_fields.get(group.pk)
