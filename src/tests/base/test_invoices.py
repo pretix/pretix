@@ -369,6 +369,12 @@ def test_invoice_numbers(env):
     inv8 = generate_invoice(order)
     inv23 = generate_invoice(order2)
 
+    event.settings.set('invoice_numbers_counter_length', 6)
+    inv24 = generate_invoice(order)
+    event.settings.set('invoice_numbers_counter_length', 1)
+    inv25 = generate_invoice(order)
+    inv26 = generate_invoice(order)
+
     # expected behaviour for switching between numbering formats or dealing with gaps
     assert inv1.invoice_no == '00001'
     assert inv2.invoice_no == '00002'
@@ -384,6 +390,9 @@ def test_invoice_numbers(env):
     assert inv22.invoice_no == '{}-2'.format(order2.code)
     # but consecutively in this mode
     assert inv23.invoice_no == '00007'
+    assert inv24.invoice_no == '000008'
+    assert inv25.invoice_no == '9'
+    assert inv26.invoice_no == '10'
 
     # test Invoice.number, too
     assert inv1.number == '{}-00001'.format(event.slug.upper())
@@ -441,13 +450,14 @@ def test_invoice_number_prefixes(env):
     event2.settings.set('invoice_numbers_prefix', 'inv_')
     event2.settings.set('invoice_numbers_prefix_cancellations', 'crd_')
     event2.settings.set('invoice_numbers_consecutive', True)
+    event2.settings.set('invoice_numbers_counter_length', 4)
     i = generate_invoice(order2)
-    assert i.number == 'inv_00001'
-    assert generate_cancellation(i).number == 'crd_00001'
+    assert i.number == 'inv_0001'
+    assert generate_cancellation(i).number == 'crd_0001'
 
     event2.settings.set('invoice_numbers_prefix', 'inv_%Y%m%d_')
     i = generate_invoice(order2)
-    assert i.number == 'inv_%s_00001' % now().date().strftime('%Y%m%d')
+    assert i.number == 'inv_%s_0001' % now().date().strftime('%Y%m%d')
 
     # Test database uniqueness check
     with pytest.raises(DatabaseError):

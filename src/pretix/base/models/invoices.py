@@ -116,8 +116,8 @@ class Invoice(models.Model):
     objects = ScopedManager(organizer='event__organizer')
 
     @staticmethod
-    def _to_numeric_invoice_number(number):
-        return '{:05d}'.format(int(number))
+    def _to_numeric_invoice_number(number, places):
+        return ('{:0%dd}' % places).format(int(number))
 
     @property
     def full_invoice_from(self):
@@ -173,7 +173,7 @@ class Invoice(models.Model):
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])
 
-    def _get_numeric_invoice_number(self):
+    def _get_numeric_invoice_number(self, c_length):
         numeric_invoices = Invoice.objects.filter(
             event__organizer=self.event.organizer,
             prefix=self.prefix,
@@ -182,7 +182,7 @@ class Invoice(models.Model):
         ).aggregate(
             max=Max('numeric_number')
         )['max'] or 0
-        return self._to_numeric_invoice_number(numeric_invoices + 1)
+        return self._to_numeric_invoice_number(numeric_invoices + 1, c_length)
 
     def _get_invoice_number_from_order(self):
         return '{order}-{count}'.format(
@@ -209,7 +209,7 @@ class Invoice(models.Model):
                 self.prefix += 'TEST-'
             for i in range(10):
                 if self.event.settings.get('invoice_numbers_consecutive'):
-                    self.invoice_no = self._get_numeric_invoice_number()
+                    self.invoice_no = self._get_numeric_invoice_number(self.event.settings.invoice_numbers_counter_length)
                 else:
                     self.invoice_no = self._get_invoice_number_from_order()
                 try:

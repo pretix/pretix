@@ -597,6 +597,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'invoice_numbers_consecutive',
         'invoice_numbers_prefix',
         'invoice_numbers_prefix_cancellations',
+        'invoice_numbers_counter_length',
         'invoice_attendee_name',
         'invoice_include_expire_date',
         'invoice_address_explanation_text',

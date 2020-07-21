@@ -309,6 +309,16 @@ DEFAULTS = {
             help_text=_("The expiration date will not be shown if the invoice is generated after the order is paid."),
         )
     },
+    'invoice_numbers_counter_length': {
+        'default': '5',
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_("Minimum length of invoice number after prefix"),
+            help_text=_("The part of your invoice number after your prefix will be filled up with leading zeros up to this length, e.g. INV-001 or INV-00001."),
+        )
+    },
     'invoice_numbers_consecutive': {
         'default': 'True',
         'type': bool,
