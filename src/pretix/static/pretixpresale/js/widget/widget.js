@@ -254,7 +254,7 @@ Vue.component('availbox', {
             return this.item.has_variations ? this.variation.avail : this.item.avail;
         },
         waiting_list_show: function () {
-            return this.avail[0] < 100 && this.$root.waiting_list_enabled;
+            return this.avail[0] < 100 && this.$root.waiting_list_enabled && this.item.allow_waitinglist;
         },
         waiting_list_url: function () {
             if (this.item.has_variations) {

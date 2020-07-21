@@ -215,6 +215,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'price': price_dict(item, item.display_price) if not item.has_variations else None,
                         'min_price': item.min_price if item.has_variations else None,
                         'max_price': item.max_price if item.has_variations else None,
+                        'allow_waitinglist': item.allow_waitinglist,
                         'free_price': item.free_price,
                         'avail': [
                             item.cached_availability[0],
