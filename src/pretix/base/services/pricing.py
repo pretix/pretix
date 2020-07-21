@@ -47,8 +47,6 @@ def get_price(item: Item, variation: ItemVariation = None,
             eu_reverse_charge=False,
         )
 
-    price = tax_rule.tax(price, invoice_address=invoice_address, subtract_from_gross=bundled_sum)
-
     if force_custom_price and custom_price is not None and custom_price != "":
         if custom_price_is_net:
             price = tax_rule.tax(custom_price, base_price_is='net', invoice_address=invoice_address,
@@ -56,17 +54,22 @@ def get_price(item: Item, variation: ItemVariation = None,
         else:
             price = tax_rule.tax(custom_price, base_price_is='gross', invoice_address=invoice_address,
                                  subtract_from_gross=bundled_sum)
-    if item.free_price and custom_price is not None and custom_price != "":
+    elif item.free_price and custom_price is not None and custom_price != "":
         if not isinstance(custom_price, Decimal):
             custom_price = Decimal(str(custom_price).replace(",", "."))
         if custom_price > 100000000:
             raise ValueError('price_too_high')
+
+        price = tax_rule.tax(price, invoice_address=invoice_address)
+
         if custom_price_is_net:
             price = tax_rule.tax(max(custom_price, price.net), base_price_is='net',
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
         else:
             price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross',
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
+    else:
+        price = tax_rule.tax(price, invoice_address=invoice_address, subtract_from_gross=bundled_sum)
 
     price.gross = round_decimal(price.gross, item.event.currency)
     price.net = round_decimal(price.net, item.event.currency)

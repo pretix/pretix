@@ -2723,6 +2723,27 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert a.price == 1.5
 
     @classscope(attr='orga')
+    def test_simple_bundle_main_enforce_free_price_minimum(self):
+        self.ticket.free_price = True
+        self.ticket.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'price': '21.50',
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5
+        assert cp.addons.count() == 1
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    @classscope(attr='orga')
     def test_voucher_on_base_product(self):
         v = self.event.vouchers.create(code="foo", item=self.ticket)
         self.cm.add_new_items([
