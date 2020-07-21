@@ -97,7 +97,7 @@ setup(
         'django-bootstrap3==12.0.*',
         'django-formset-js-improved==0.5.0.2',
         'django-compressor==2.4.*',
-        'django-hierarkey==1.0.*,>=1.0.2',
+        'django-hierarkey==1.0.*,>=1.0.4',
         'django-filter==2.2.*',
         'django-scopes==1.2.*',
         'reportlab>=3.5.18',
