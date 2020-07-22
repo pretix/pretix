@@ -758,6 +758,26 @@ class MailSettingsForm(SettingsForm):
         'mail_attach_ical',
     ]
 
+    mail_sales_channel_placed_paid = forms.MultipleChoiceField(
+        choices=[(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
+        label=_('Sales Channels for Checkout Emails'),
+        help_text=_('Restrict Order placed and paid emails to orders from certain sales channels.'),
+        widget=forms.CheckboxSelectMultiple(
+            attrs={'class': 'scrolling-multiple-choice'}
+        ),
+        required=False,
+    )
+
+    mail_sales_channel_ticket_reminder = forms.MultipleChoiceField(
+        choices=[(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
+        label=_('Sales Channels for Ticket Emails'),
+        help_text=_('Restrict ticket reminder emails to orders from certain sales channels.'),
+        widget=forms.CheckboxSelectMultiple(
+            attrs={'class': 'scrolling-multiple-choice'}
+        ),
+        required=False,
+    )
+
     mail_bcc = forms.CharField(
         label=_("Bcc address"),
         help_text=_("All emails will be sent to this address as a Bcc copy"),

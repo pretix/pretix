@@ -1491,7 +1491,7 @@ class OrderPayment(models.Model):
                     trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
                 )
 
-        if send_mail:
+        if send_mail and self.order.sales_channel in self.order.event.settings.mail_sales_channel_paid_placed:
             self._send_paid_mail(invoice, user, mail_text)
             if self.order.event.settings.mail_send_order_paid_attendee:
                 for p in self.order.positions.all():

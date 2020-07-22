@@ -960,11 +960,12 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
             email_attendees = event.settings.mail_send_order_placed_attendee
             email_attendees_template = event.settings.mail_text_order_placed_attendee
 
-        _order_placed_email(event, order, pprov, email_template, log_entry, invoice, payment)
-        if email_attendees:
-            for p in order.positions.all():
-                if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                    _order_placed_email_attendee(event, order, p, email_attendees_template, log_entry)
+        if sales_channel in event.settings.mail_sales_channel_placed_paid:
+            _order_placed_email(event, order, pprov, email_template, log_entry, invoice, payment)
+            if email_attendees:
+                for p in order.positions.all():
+                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
+                        _order_placed_email_attendee(event, order, p, email_attendees_template, log_entry)
 
     return order.id
 
@@ -1054,6 +1055,9 @@ def send_download_reminders(sender, **kwargs):
             event_id = o.event_id
 
         if days is None:
+            continue
+
+        if o.sales_channel not in event.settings.mail_sales_channel_placed_paid:
             continue
 
         reminder_date = (o.first_date - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
