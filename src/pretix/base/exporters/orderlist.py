@@ -1,21 +1,18 @@
 from collections import OrderedDict
 from decimal import Decimal
 
-import dateutil.parser
 import pytz
 from django import forms
 from django.db.models import (
-    CharField, Count, DateTimeField, F, IntegerField, Max, OuterRef, Subquery,
+    CharField, Count, DateTimeField, IntegerField, Max, OuterRef, Subquery,
     Sum,
 )
 from django.dispatch import receiver
-from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
 
 from pretix.base.models import (
-    GiftCard, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
-    Question,
+    GiftCard, InvoiceAddress, Order, OrderPosition, Question,
 )
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.services.quotas import QuotaAvailability
@@ -672,7 +669,6 @@ def register_multievent_paymentlist_exporter(sender, **kwargs):
 @receiver(register_data_exporters, dispatch_uid="exporter_quotalist")
 def register_quotalist_exporter(sender, **kwargs):
     return QuotaListExporter
-
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_giftcardredemptionlist")
