@@ -49,6 +49,7 @@ class PaymentProviderForm(Form):
             val = cleaned_data.get(k)
             if v._required and not val:
                 self.add_error(k, _('This field is required.'))
+        return cleaned_data
 
 
 class BasePaymentProvider:
@@ -374,6 +375,8 @@ class BasePaymentProvider:
         """
         return {}
 
+    payment_form_class = PaymentProviderForm
+
     def payment_form(self, request: HttpRequest) -> Form:
         """
         This is called by the default implementation of :py:meth:`payment_form_render`
@@ -386,7 +389,7 @@ class BasePaymentProvider:
         ``PaymentProviderForm`` (from this module) that handles some nasty issues about
         required fields for you.
         """
-        form = PaymentProviderForm(
+        form = self.payment_form_class(
             data=(request.POST if request.method == 'POST' and request.POST.get("payment") == self.identifier else None),
             prefix='payment_%s' % self.identifier,
             initial={
