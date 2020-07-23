@@ -146,15 +146,17 @@ class ListExporter(BaseExporter):
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
     def _render_xlsx(self, form_data, output_file=None):
-        wb = Workbook()
-        ws = wb.active
+        wb = Workbook(write_only=True)
+        ws = wb.create_sheet()
         try:
             ws.title = str(self.verbose_name)
         except:
             pass
         for i, line in enumerate(self.iterate_list(form_data)):
-            for j, val in enumerate(line):
-                ws.cell(row=i + 1, column=j + 1).value = str(val) if not isinstance(val, KNOWN_TYPES) else val
+            ws.append([
+                str(val) if not isinstance(val, KNOWN_TYPES) else val
+                for val in line
+            ])
 
         if output_file:
             wb.save(output_file)
@@ -233,14 +235,14 @@ class MultiSheetListExporter(ListExporter):
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
     def _render_xlsx(self, form_data, output_file=None):
-        wb = Workbook()
-        ws = wb.active
-        wb.remove(ws)
+        wb = Workbook(write_only=True)
         for s, l in self.sheets:
             ws = wb.create_sheet(str(l))
             for i, line in enumerate(self.iterate_sheet(form_data, sheet=s)):
-                for j, val in enumerate(line):
-                    ws.cell(row=i + 1, column=j + 1).value = str(val) if not isinstance(val, KNOWN_TYPES) else val
+                ws.append([
+                    str(val) if not isinstance(val, KNOWN_TYPES) else val
+                    for val in line
+                ])
 
         if output_file:
             wb.save(output_file)
