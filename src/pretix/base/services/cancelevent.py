@@ -81,8 +81,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
                     logger.exception('Order canceled email could not be sent to attendee')
 
 
-@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,),
-          acks_late=True)
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_fixed: str,
                  keep_fee_percentage: str, keep_fees: list=None, manual_refund: bool=False,
                  send: bool=False, send_subject: dict=None, send_message: dict=None,
@@ -146,8 +145,17 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
                 'pretix.event.item.changed', user=user, data={'active': False, '_source': 'cancel_event'}
             )
     failed = 0
+    total = orders_to_cancel.count() + orders_to_change.count()
+    qs_wl = event.waitinglistentries.filter(subevent=subevent, voucher__isnull=True)
+    if send_waitinglist:
+        total += qs_wl.count()
+    counter = 0
+    self.update_state(
+        state='PROGRESS',
+        meta={'value': 0}
+    )
 
-    for o in orders_to_cancel.only('id', 'total'):
+    for o in orders_to_cancel.only('id', 'total').iterator():
         try:
             fee = Decimal('0.00')
             fee_sum = Decimal('0.00')
@@ -175,6 +183,13 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             finally:
                 if send:
                     _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all())
+
+            counter += 1
+            if not self.request.called_directly and counter % max(10, total // 100) == 0:
+                self.update_state(
+                    state='PROGRESS',
+                    meta={'value': round(counter / total * 100, 2)}
+                )
         except LockTimeoutException:
             logger.exception("Could not cancel order")
             failed += 1
@@ -182,7 +197,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             logger.exception("Could not cancel order")
             failed += 1
 
-    for o in orders_to_change.values_list('id', flat=True):
+    for o in orders_to_change.values_list('id', flat=True).iterator():
         with transaction.atomic():
             o = event.orders.select_for_update().get(pk=o)
             total = Decimal('0.00')
@@ -222,8 +237,21 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             if send:
                 _send_mail(o, send_subject, send_message, subevent, refund_amount, user, positions)
 
+            counter += 1
+            if not self.request.called_directly and counter % max(10, total // 100) == 0:
+                self.update_state(
+                    state='PROGRESS',
+                    meta={'value': round(counter / total * 100, 2)}
+                )
+
     if send_waitinglist:
-        for wle in event.waitinglistentries.filter(subevent=subevent, voucher__isnull=True):
+        for wle in qs_wl:
             _send_wle_mail(wle, send_waitinglist_subject, send_waitinglist_message, subevent)
 
+            counter += 1
+            if not self.request.called_directly and counter % max(10, total // 100) == 0:
+                self.update_state(
+                    state='PROGRESS',
+                    meta={'value': round(counter / total * 100, 2)}
+                )
     return failed

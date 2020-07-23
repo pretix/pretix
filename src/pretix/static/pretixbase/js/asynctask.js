@@ -31,7 +31,7 @@ function async_task_check_callback(data, jqXHR, status) {
         }
         location.href = data.redirect;
         return;
-    } else if (!!data.percentage) {
+    } else if (typeof data.percentage === "number") {
         $("#loadingmodal .progress").show();
         $("#loadingmodal .progress .progress-bar").css("width", data.percentage + "%");
     }
