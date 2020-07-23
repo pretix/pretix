@@ -93,7 +93,7 @@ class CheckinList(LoggedModel):
         return self.event.cache.get_or_set(
             'checkin_list_{}_checkin_count'.format(self.pk),
             lambda: self.positions.annotate(
-                checkedin=Exists(Checkin.objects.filter(list_id=self.pk, position=OuterRef('pk')))
+                checkedin=Exists(Checkin.objects.filter(list_id=self.pk, position=OuterRef('pk'), type=Checkin.TYPE_ENTRY,))
             ).filter(
                 checkedin=True
             ).count(),
