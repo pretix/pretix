@@ -427,6 +427,11 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers.append(_('Order date'))
         headers.append(_('Requires special attention'))
         headers.append(_('Comment'))
+        headers.append(_('Seat ID'))
+        headers.append(_('Seat name'))
+        headers.append(_('Seat zone'))
+        headers.append(_('Seat row'))
+        headers.append(_('Seat number'))
         yield headers
 
         for op in qs:
@@ -511,6 +516,18 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             row.append(op.order.datetime.astimezone(self.event.timezone).strftime('%Y-%m-%d'))
             row.append(_('Yes') if op.order.checkin_attention or op.item.checkin_attention else _('No'))
             row.append(op.order.comment or "")
+
+            if op.seat:
+                row += [
+                    op.seat.seat_guid,
+                    str(op.seat),
+                    op.seat.zone_name,
+                    op.seat.row_name,
+                    op.seat.seat_number,
+                ]
+            else:
+                row += ['', '', '', '', '']
+
             yield row
 
     def get_filename(self):
