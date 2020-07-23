@@ -240,6 +240,14 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.date = timezone.now().date()
     cancellation.payment_provider_text = ''
     cancellation.file = None
+    with language(invoice.locale):
+        cancellation.invoice_from = invoice.event.settings.get('invoice_address_from')
+        cancellation.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
+        cancellation.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
+        cancellation.invoice_from_city = invoice.event.settings.get('invoice_address_from_city')
+        cancellation.invoice_from_country = invoice.event.settings.get('invoice_address_from_country')
+        cancellation.invoice_from_tax_id = invoice.event.settings.get('invoice_address_from_tax_id')
+        cancellation.invoice_from_vat_id = invoice.event.settings.get('invoice_address_from_vat_id')
     cancellation.save()
 
     cancellation = build_cancellation(cancellation)
