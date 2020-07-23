@@ -16,6 +16,7 @@ from pretix.base.models import Invoice, InvoiceLine, OrderPayment
 
 from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
+from ...helpers.iter import chunked_iterable
 from ..exporter import BaseExporter, MultiSheetListExporter
 from ..services.invoices import invoice_pdf_task
 from ..signals import (
@@ -100,7 +101,7 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
         with tempfile.TemporaryDirectory() as d:
             any = False
             with ZipFile(output_file or os.path.join(d, 'tmp.zip'), 'w') as zipf:
-                for i in qs:
+                for i in qs.iterator():
                     try:
                         if not i.file:
                             invoice_pdf_task.apply(args=(i.pk,))
@@ -198,7 +199,9 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                 'm'
             ).order_by()
 
-            qs = self.invoices_queryset(form_data).order_by('full_invoice_no').select_related(
+            base_qs = self.invoices_queryset(form_data)\
+
+            qs = base_qs.select_related(
                 'order', 'refers'
             ).prefetch_related('order__payments').annotate(
                 payment_providers=Subquery(p_providers, output_field=CharField()),
@@ -218,53 +221,57 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                 )
             )
 
-            for i in qs:
-                pmis = []
-                for p in i.order.payments.all():
-                    if p.state in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_CREATED,
-                                   OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_REFUNDED):
-                        pprov = p.payment_provider
-                        if pprov:
-                            mid = pprov.matching_id(p)
-                            if mid:
-                                pmis.append(mid)
-                pmi = '\n'.join(pmis)
-                yield [
-                    i.full_invoice_no,
-                    date_format(i.date, "SHORT_DATE_FORMAT"),
-                    i.order.code,
-                    i.order.email,
-                    _('Cancellation') if i.is_cancellation else _('Invoice'),
-                    i.refers.full_invoice_no if i.refers else '',
-                    i.locale,
-                    i.invoice_from_name,
-                    i.invoice_from,
-                    i.invoice_from_zipcode,
-                    i.invoice_from_city,
-                    i.invoice_from_country,
-                    i.invoice_from_tax_id,
-                    i.invoice_from_vat_id,
-                    i.invoice_to_company,
-                    i.invoice_to_name,
-                    i.invoice_to_street or i.invoice_to,
-                    i.invoice_to_zipcode,
-                    i.invoice_to_city,
-                    i.invoice_to_country,
-                    i.invoice_to_state,
-                    i.invoice_to_vat_id,
-                    i.invoice_to_beneficiary,
-                    i.internal_reference,
-                    _('Yes') if i.reverse_charge else _('No'),
-                    i.foreign_currency_display,
-                    i.foreign_currency_rate,
-                    i.total_gross if i.total_gross else Decimal('0.00'),
-                    Decimal(i.total_net if i.total_net else '0.00').quantize(Decimal('0.01')),
-                    pmi,
-                    ', '.join([
-                        str(self.providers.get(p, p)) for p in sorted(set((i.payment_providers or '').split(',')))
-                        if p and p != 'free'
-                    ])
-                ]
+            all_ids = base_qs.order_by('full_invoice_no').values_list('pk', flat=True)
+            for ids in chunked_iterable(all_ids, 1000):
+                invs = sorted(qs.filter(id__in=ids), key=lambda k: ids.index(k.pk))
+
+                for i in invs:
+                    pmis = []
+                    for p in i.order.payments.all():
+                        if p.state in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_CREATED,
+                                       OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_REFUNDED):
+                            pprov = p.payment_provider
+                            if pprov:
+                                mid = pprov.matching_id(p)
+                                if mid:
+                                    pmis.append(mid)
+                    pmi = '\n'.join(pmis)
+                    yield [
+                        i.full_invoice_no,
+                        date_format(i.date, "SHORT_DATE_FORMAT"),
+                        i.order.code,
+                        i.order.email,
+                        _('Cancellation') if i.is_cancellation else _('Invoice'),
+                        i.refers.full_invoice_no if i.refers else '',
+                        i.locale,
+                        i.invoice_from_name,
+                        i.invoice_from,
+                        i.invoice_from_zipcode,
+                        i.invoice_from_city,
+                        i.invoice_from_country,
+                        i.invoice_from_tax_id,
+                        i.invoice_from_vat_id,
+                        i.invoice_to_company,
+                        i.invoice_to_name,
+                        i.invoice_to_street or i.invoice_to,
+                        i.invoice_to_zipcode,
+                        i.invoice_to_city,
+                        i.invoice_to_country,
+                        i.invoice_to_state,
+                        i.invoice_to_vat_id,
+                        i.invoice_to_beneficiary,
+                        i.internal_reference,
+                        _('Yes') if i.reverse_charge else _('No'),
+                        i.foreign_currency_display,
+                        i.foreign_currency_rate,
+                        i.total_gross if i.total_gross else Decimal('0.00'),
+                        Decimal(i.total_net if i.total_net else '0.00').quantize(Decimal('0.01')),
+                        pmi,
+                        ', '.join([
+                            str(self.providers.get(p, p)) for p in sorted(set((i.payment_providers or '').split(',')))
+                            if p and p != 'free'
+                        ])
+                    ]
         elif sheet == 'lines':
             yield [
                 _('Invoice number'),
@@ -320,7 +327,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                 'invoice', 'invoice__order', 'invoice__refers'
             )
 
-            for l in qs:
+            for l in qs.iterator():
                 i = l.invoice
                 yield [
                     i.full_invoice_no,
