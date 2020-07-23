@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.db.models import Exists, F, Max, OuterRef, Q, Subquery
 from django.utils.timezone import now
@@ -92,7 +93,7 @@ class CheckinList(LoggedModel):
     def checkin_count(self):
         return self.event.cache.get_or_set(
             'checkin_list_{}_checkin_count'.format(self.pk),
-            lambda: self.positions.annotate(
+            lambda: self.positions.using(settings.DATABASE_REPLICA).annotate(
                 checkedin=Exists(Checkin.objects.filter(list_id=self.pk, position=OuterRef('pk'), type=Checkin.TYPE_ENTRY,))
             ).filter(
                 checkedin=True
