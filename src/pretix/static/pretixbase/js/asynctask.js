@@ -38,11 +38,17 @@ function async_task_check_callback(data, jqXHR, status) {
     async_task_timeout = window.setTimeout(async_task_check, 250);
 
     if (async_task_is_long) {
-        $("#loadingmodal p.status").text(gettext(
-            'Your request has been queued on the server and will now be ' +
-            'processed. Depending on the size of your event, this might take up to a ' +
-            'few minutes.'
-        ));
+        if (data.started) {
+            $("#loadingmodal p.status").text(gettext(
+                'Your request is currently being processed. Depending on the size of your event, this might take up to ' +
+                'a few minutes.'
+            ));
+        } else {
+            $("#loadingmodal p.status").text(gettext(
+                'Your request has been queued on the server and will soon be ' +
+                'processed.'
+            ));
+        }
     } else {
         $("#loadingmodal p.status").text(gettext(
             'Your request arrived on the server but we still wait for it to be ' +
@@ -105,11 +111,17 @@ function async_task_callback(data, jqXHR, status) {
     async_task_timeout = window.setTimeout(async_task_check, 100);
 
     if (async_task_is_long) {
-        $("#loadingmodal p.status").text(gettext(
-            'Your request has been queued on the server and will now be ' +
-            'processed. Depending on the size of your event, this might take up to a ' +
-            'few minutes.'
-        ));
+        if (data.started) {
+            $("#loadingmodal p.status").text(gettext(
+                'Your request is currently being processed. Depending on the size of your event, this might take up to ' +
+                'a few minutes.'
+            ));
+        } else {
+            $("#loadingmodal p.status").text(gettext(
+                'Your request has been queued on the server and will soon be ' +
+                'processed.'
+            ));
+        }
     } else {
         $("#loadingmodal p.status").text(gettext(
             'Your request arrived on the server but we still wait for it to be ' +

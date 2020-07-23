@@ -77,7 +77,8 @@ class AsyncAction:
         data = self._ajax_response_data()
         data.update({
             'async_id': res.id,
-            'ready': ready
+            'ready': ready,
+            'started': False,
         })
         if ready:
             if res.successful() and not isinstance(res.info, Exception):
@@ -102,7 +103,12 @@ class AsyncAction:
                 })
         elif res.state == 'PROGRESS':
             data.update({
+                'started': True,
                 'percentage': res.result.get('value', 0)
+            })
+        elif res.state == 'STARTED':
+            data.update({
+                'started': True,
             })
         return data
 
