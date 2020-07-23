@@ -100,6 +100,10 @@ class AsyncAction:
                     'success': False,
                     'message': str(self.get_error_message(res.info))
                 })
+        elif res.state == 'PROGRESS':
+            data.update({
+                'percentage': res.result.get('value', 0)
+            })
         return data
 
     def get_result(self, request):

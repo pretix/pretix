@@ -31,6 +31,9 @@ function async_task_check_callback(data, jqXHR, status) {
         }
         location.href = data.redirect;
         return;
+    } else if (!!data.percentage) {
+        $("#loadingmodal .progress").show();
+        $("#loadingmodal .progress .progress-bar").css("width", data.percentage + "%");
     }
     async_task_timeout = window.setTimeout(async_task_check, 250);
 
@@ -203,6 +206,7 @@ var waitingDialog = {
     show: function (message) {
         "use strict";
         $("#loadingmodal").find("h3").html(message);
+        $("#loadingmodal .progress").hide();
         $("body").addClass("loading");
     },
     hide: function () {

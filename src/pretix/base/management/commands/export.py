@@ -4,6 +4,7 @@ import sys
 from django.core.management.base import BaseCommand
 from django.utils.timezone import override
 from django_scopes import scope
+from tqdm import tqdm
 
 from pretix.base.i18n import language
 from pretix.base.models import Event, Organizer
@@ -34,10 +35,15 @@ class Command(BaseCommand):
                 self.stderr.write(self.style.ERROR('Event not found.'))
                 sys.exit(1)
 
+            pbar = tqdm(total=100)
+
+            def report_status(val):
+                pbar.update(round(val, 2) - pbar.n)
+
             with language(e.settings.locale), override(e.settings.timezone):
                 responses = register_data_exporters.send(e)
                 for receiver, response in responses:
-                    ex = response(e)
+                    ex = response(e, report_status)
                     if ex.identifier == options['export_provider'][0]:
                         params = json.loads(options.get('parameters') or '{}')
                         with open(options['output_file'][0], 'wb') as f:
@@ -53,6 +59,7 @@ class Command(BaseCommand):
                                 f.write(d[2])
 
                             sys.exit(0)
+            pbar.close()
 
             self.stderr.write(self.style.ERROR('Export provider not found.'))
             sys.exit(1)

@@ -170,6 +170,7 @@ class OrderListExporter(MultiSheetListExporter):
             )
         }
 
+        yield self.ProgressSetTotal(total=qs.count())
         for order in qs.order_by('datetime').iterator():
             tz = pytz.timezone(self.event_object_cache[order.event_id].settings.timezone)
 
@@ -278,6 +279,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Payment providers'))
         yield headers
 
+        yield self.ProgressSetTotal(total=qs.count())
         for op in qs.order_by('order__datetime').iterator():
             order = op.order
             tz = pytz.timezone(order.event.settings.timezone)
@@ -411,7 +413,8 @@ class OrderListExporter(MultiSheetListExporter):
 
         yield headers
 
-        all_ids = base_qs.order_by('order__datetime', 'positionid').values_list('pk', flat=True)
+        all_ids = list(base_qs.order_by('order__datetime', 'positionid').values_list('pk', flat=True))
+        yield self.ProgressSetTotal(total=len(all_ids))
         for ids in chunked_iterable(all_ids, 1000):
             ops = sorted(qs.filter(id__in=ids), key=lambda k: ids.index(k.pk))
 
@@ -561,6 +564,7 @@ class PaymentListExporter(ListExporter):
         ]
         yield headers
 
+        yield self.ProgressSetTotal(total=len(objs))
         for obj in objs:
             tz = pytz.timezone(obj.order.event.settings.timezone)
             if isinstance(obj, OrderPayment) and obj.payment_date:

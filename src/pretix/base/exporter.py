@@ -1,6 +1,6 @@
 import io
 import tempfile
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 from decimal import Decimal
 from typing import Tuple
 
@@ -20,8 +20,9 @@ class BaseExporter:
     This is the base class for all data exporters
     """
 
-    def __init__(self, event):
+    def __init__(self, event, progress_callback=lambda v: None):
         self.event = event
+        self.progress_callback = progress_callback
         self.is_multievent = isinstance(event, QuerySet)
         if isinstance(event, QuerySet):
             self.events = event
@@ -94,6 +95,7 @@ class BaseExporter:
 
 
 class ListExporter(BaseExporter):
+    ProgressSetTotal = namedtuple('ProgressSetTotal', 'total')
 
     @property
     def export_form_fields(self) -> dict:
@@ -127,21 +129,39 @@ class ListExporter(BaseExporter):
     def _render_csv(self, form_data, output_file=None, **kwargs):
         if output_file:
             writer = csv.writer(output_file, **kwargs)
+            total = 0
+            counter = 0
             for line in self.iterate_list(form_data):
+                if isinstance(line, self.ProgressSetTotal):
+                    total = line.total
+                    continue
                 line = [
                     localize(f) if isinstance(f, Decimal) else f
                     for f in line
                 ]
+                if total:
+                    counter += 1
+                    if counter % max(10, total // 100) == 0:
+                        self.progress_callback(counter / total * 100)
                 writer.writerow(line)
             return self.get_filename() + '.csv', 'text/csv', None
         else:
             output = io.StringIO()
             writer = csv.writer(output, **kwargs)
+            total = 0
+            counter = 0
             for line in self.iterate_list(form_data):
+                if isinstance(line, self.ProgressSetTotal):
+                    total = line.total
+                    continue
                 line = [
                     localize(f) if isinstance(f, Decimal) else f
                     for f in line
                 ]
+                if total:
+                    counter += 1
+                    if counter % max(10, total // 100) == 0:
+                        self.progress_callback(counter / total * 100)
                 writer.writerow(line)
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
@@ -152,11 +172,20 @@ class ListExporter(BaseExporter):
             ws.title = str(self.verbose_name)
         except:
             pass
+        total = 0
+        counter = 0
         for i, line in enumerate(self.iterate_list(form_data)):
+            if isinstance(line, self.ProgressSetTotal):
+                total = line.total
+                continue
             ws.append([
                 str(val) if not isinstance(val, KNOWN_TYPES) else val
                 for val in line
             ])
+            if total:
+                counter += 1
+                if counter % max(10, total // 100) == 0:
+                    self.progress_callback(counter / total * 100)
 
         if output_file:
             wb.save(output_file)
@@ -214,35 +243,61 @@ class MultiSheetListExporter(ListExporter):
         raise NotImplementedError()  # noqa
 
     def _render_sheet_csv(self, form_data, sheet, output_file=None, **kwargs):
+        total = 0
+        counter = 0
         if output_file:
             writer = csv.writer(output_file, **kwargs)
             for line in self.iterate_sheet(form_data, sheet):
+                if isinstance(line, self.ProgressSetTotal):
+                    total = line.total
+                    continue
                 line = [
                     localize(f) if isinstance(f, Decimal) else f
                     for f in line
                 ]
                 writer.writerow(line)
+                if total:
+                    counter += 1
+                    if counter % max(10, total // 100) == 0:
+                        self.progress_callback(counter / total * 100)
             return self.get_filename() + '.csv', 'text/csv', None
         else:
             output = io.StringIO()
             writer = csv.writer(output, **kwargs)
             for line in self.iterate_sheet(form_data, sheet):
+                if isinstance(line, self.ProgressSetTotal):
+                    total = line.total
+                    continue
                 line = [
                     localize(f) if isinstance(f, Decimal) else f
                     for f in line
                 ]
                 writer.writerow(line)
+                if total:
+                    counter += 1
+                    if counter % max(10, total // 100) == 0:
+                        self.progress_callback(counter / total * 100)
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
     def _render_xlsx(self, form_data, output_file=None):
         wb = Workbook(write_only=True)
-        for s, l in self.sheets:
+        n_sheets = len(self.sheets)
+        for i_sheet, (s, l) in enumerate(self.sheets):
             ws = wb.create_sheet(str(l))
+            total = 0
+            counter = 0
             for i, line in enumerate(self.iterate_sheet(form_data, sheet=s)):
+                if isinstance(line, self.ProgressSetTotal):
+                    total = line.total
+                    continue
                 ws.append([
                     str(val) if not isinstance(val, KNOWN_TYPES) else val
                     for val in line
                 ])
+                if total:
+                    counter += 1
+                    if counter % max(10, total // 100) == 0:
+                        self.progress_callback(counter / total * 100 / n_sheets + 100 / n_sheets * i_sheet)
 
         if output_file:
             wb.save(output_file)

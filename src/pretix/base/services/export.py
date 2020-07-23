@@ -21,13 +21,20 @@ class ExportError(LazyLocaleException):
     pass
 
 
-@app.task(base=ProfiledEventTask, throws=(ExportError,))
-def export(event: Event, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
+@app.task(base=ProfiledEventTask, throws=(ExportError,), bind=True)
+def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
+    def set_progress(val):
+        if not self.request.called_directly:
+            self.update_state(
+                state='PROGRESS',
+                meta={'value': val}
+            )
+
     file = CachedFile.objects.get(id=fileid)
     with language(event.settings.locale), override(event.settings.timezone):
         responses = register_data_exporters.send(event)
         for receiver, response in responses:
-            ex = response(event)
+            ex = response(event, set_progress)
             if ex.identifier == provider:
                 d = ex.render(form_data)
                 if d is None:
@@ -40,8 +47,15 @@ def export(event: Event, fileid: str, provider: str, form_data: Dict[str, Any]) 
     return file.pk
 
 
-@app.task(base=ProfiledOrganizerUserTask, throws=(ExportError,))
-def multiexport(organizer: Organizer, user: User, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
+@app.task(base=ProfiledOrganizerUserTask, throws=(ExportError,), bind=True)
+def multiexport(self, organizer: Organizer, user: User, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
+    def set_progress(val):
+        if not self.request.called_directly:
+            self.update_state(
+                state='PROGRESS',
+                meta={'value': val}
+            )
+
     file = CachedFile.objects.get(id=fileid)
     with language(user.locale), override(user.timezone):
         allowed_events = user.get_events_with_permission('can_view_orders')
@@ -52,7 +66,7 @@ def multiexport(organizer: Organizer, user: User, fileid: str, provider: str, fo
         for receiver, response in responses:
             if not response:
                 continue
-            ex = response(events)
+            ex = response(events, set_progress)
             if ex.identifier == provider:
                 d = ex.render(form_data)
                 if d is None:

@@ -99,7 +99,12 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
         qs = self.invoices_queryset(form_data).filter(shredded=False)
 
         with tempfile.TemporaryDirectory() as d:
-            any = False
+            total = qs.count()
+
+            if not total:
+                return None
+
+            counter = 0
             with ZipFile(output_file or os.path.join(d, 'tmp.zip'), 'w') as zipf:
                 for i in qs.iterator():
                     try:
@@ -108,18 +113,16 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
                             i.refresh_from_db()
                         i.file.open('rb')
                         zipf.writestr('{}.pdf'.format(i.number), i.file.read())
-                        any = True
                         i.file.close()
                     except FileNotFoundError:
                         invoice_pdf_task.apply(args=(i.pk,))
                         i.refresh_from_db()
                         i.file.open('rb')
                         zipf.writestr('{}.pdf'.format(i.number), i.file.read())
-                        any = True
                         i.file.close()
-
-            if not any:
-                return None
+                    counter += 1
+                    if total and counter % max(10, total // 100) == 0:
+                        self.progress_callback(counter / total * 100)
 
             if self.is_multievent:
                 filename = '{}_invoices.zip'.format(self.events.first().organizer.slug)
@@ -222,6 +225,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
             )
 
             all_ids = base_qs.order_by('full_invoice_no').values_list('pk', flat=True)
+            yield self.ProgressSetTotal(total=len(all_ids))
             for ids in chunked_iterable(all_ids, 1000):
                 invs = sorted(qs.filter(id__in=ids), key=lambda k: ids.index(k.pk))
 
@@ -326,6 +330,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
             ).order_by('invoice__full_invoice_no', 'position').select_related(
                 'invoice', 'invoice__order', 'invoice__refers'
             )
+            yield self.ProgressSetTotal(total=qs.count())
 
             for l in qs.iterator():
                 i = l.invoice
