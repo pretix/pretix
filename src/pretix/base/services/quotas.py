@@ -3,7 +3,7 @@ from collections import Counter, defaultdict
 from datetime import timedelta
 
 from django.conf import settings
-from django.db import models
+from django.db import OperationalError, models
 from django.db.models import (
     Case, Count, F, Func, Max, OuterRef, Q, Subquery, Sum, Value, When,
 )
@@ -103,7 +103,12 @@ class QuotaAvailability:
                 self.results[q] = resp
 
         self._close(quotas)
-        self._write_cache(quotas, now_dt)
+        try:
+            self._write_cache(quotas, now_dt)
+        except OperationalError as e:
+            # Ignore deadlocks when multiple threads try to write to the cache
+            if 'deadlock' not in str(e).lower():
+                raise e
 
     def _write_cache(self, quotas, now_dt):
         events = {q.event for q in quotas}
