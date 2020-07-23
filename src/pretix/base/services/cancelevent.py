@@ -222,7 +222,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             if send:
                 _send_mail(o, send_subject, send_message, subevent, refund_amount, user, positions)
 
-    for wle in event.waitinglistentries.filter(subevent=subevent, voucher__isnull=True):
-        _send_wle_mail(wle, send_waitinglist_subject, send_waitinglist_message, subevent)
+    if send_waitinglist:
+        for wle in event.waitinglistentries.filter(subevent=subevent, voucher__isnull=True):
+            _send_wle_mail(wle, send_waitinglist_subject, send_waitinglist_message, subevent)
 
     return failed
