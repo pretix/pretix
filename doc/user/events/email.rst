@@ -26,12 +26,24 @@ Sender address
     we strongly recommend to use the SMTP settings below as well, otherwise your e-mails might be detected as spam
     due to the `Sender Policy Framework`_ and similar mechanisms.
 
+Sender name
+    This is the name associated with the sender address. By default, this is your event name.
+
 Signature
     This text will be appended to all e-mails in form of a signature. This might be useful e.g. to add your contact
     details or any legal information that needs to be included with the e-mails.
 
 Bcc address
     This email address will receive a copy of every event-related email.
+
+Attach calender files
+    With this option, every order confirmation mail will include an ics file with name, date and location of
+    your event. It can be imported into many digital calendars.
+
+Sales Channels for Checkout Emails
+    When you are using multiple sales channel, you may want to decide that mails for order and payment confirmation
+    are only to be sent for some sales channels. For orders created through the default online shop, these emails
+    must always be send. A similar option is available for ticket download reminders.
 
 E-mail design
 -------------
