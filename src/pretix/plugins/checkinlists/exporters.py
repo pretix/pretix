@@ -434,6 +434,8 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers.append(_('Seat number'))
         yield headers
 
+        yield self.ProgressSetTotal(total=qs.count())
+
         for op in qs:
             try:
                 ia = op.order.invoice_address
