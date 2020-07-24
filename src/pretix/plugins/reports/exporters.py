@@ -146,8 +146,8 @@ class Report(ReportlabExportMixin, BaseExporter):
     def identifier(self) -> str:
         raise NotImplementedError()
 
-    def __init__(self, event):
-        super().__init__(event)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class OverviewReport(Report):
