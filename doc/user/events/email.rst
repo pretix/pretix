@@ -36,7 +36,7 @@ Signature
 Bcc address
     This email address will receive a copy of every event-related email.
 
-Attach calender files
+Attach calendar files
     With this option, every order confirmation mail will include an ics file with name, date and location of
     your event. It can be imported into many digital calendars.
 
