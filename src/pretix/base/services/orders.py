@@ -1057,7 +1057,7 @@ def send_download_reminders(sender, **kwargs):
         if days is None:
             continue
 
-        if o.sales_channel not in event.settings.mail_sales_channel_placed_paid:
+        if o.sales_channel not in event.settings.mail_sales_channel_ticket_reminder:
             continue
 
         reminder_date = (o.first_date - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
