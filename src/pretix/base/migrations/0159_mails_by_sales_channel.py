@@ -22,7 +22,7 @@ def set_sales_channels(apps, schema_editor):
     Event_SettingsStore.objects.bulk_create([
         Event_SettingsStore(
             object=event,
-            key="mail_sales_channel_ticket_reminder",
+            key="mail_sales_channel_download_reminder",
             value=all_sales_channels)
         for event in Event.objects.all()
     ], batch_size=batch_size)
