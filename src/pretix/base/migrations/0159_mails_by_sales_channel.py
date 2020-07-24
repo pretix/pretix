@@ -31,7 +31,7 @@ def set_sales_channels(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0157_auto_20200712_0932'),
+        ('pretixbase', '0158_auto_20200724_0754'),
     ]
 
     operations = [
