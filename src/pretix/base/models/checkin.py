@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Exists, F, Max, OuterRef, Q, Subquery
+from django.db.models import Count, Exists, F, Max, OuterRef, Q, Subquery
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
@@ -91,13 +91,24 @@ class CheckinList(LoggedModel):
 
     @property
     def checkin_count(self):
-        return self.event.cache.get_or_set(
-            'checkin_list_{}_checkin_count'.format(self.pk),
-            lambda: self.positions.using(settings.DATABASE_REPLICA).annotate(
+        def _get_count():
+            qs = self.positions.using(settings.DATABASE_REPLICA).annotate(
                 checkedin=Exists(Checkin.objects.filter(list_id=self.pk, position=OuterRef('pk'), type=Checkin.TYPE_ENTRY,))
             ).filter(
                 checkedin=True
-            ).count(),
+            )
+            # A simple .count() call causes Django's SQL generator to generate a query of the form
+            # ``SELECT COUNT(*) FROM (SELECT foo, bar, EXISTS(…) FROM pretixbase_orderposition …) subquery``, which has been
+            # observed to trick PostgreSQL's query planner into really bad decisions in some cases. We therefore trick Django
+            # into always generating a ``SELECT COUNT(*), 1 FROM pretixbase_orderposition WHERE …`` query.
+            res = list(qs.order_by().annotate(v=models.Value('1', output_field=models.IntegerField())).values('v').annotate(c=Count('*')))
+            if not res:
+                return 0
+            return res[0]['c']
+
+        return self.event.cache.get_or_set(
+            'checkin_list_{}_checkin_count'.format(self.pk),
+            _get_count,
             60
         )
 
