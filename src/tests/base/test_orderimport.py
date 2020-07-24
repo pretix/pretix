@@ -1,5 +1,5 @@
 import csv
-from _decimal import Decimal
+from decimal import Decimal
 from io import StringIO
 
 import pytest
