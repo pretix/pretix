@@ -430,11 +430,16 @@ class OrderListExporter(MultiSheetListExporter):
                     order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
                 ]
                 if has_subevents:
-                    row.append(op.subevent.name)
-                    row.append(op.subevent.date_from.astimezone(self.event_object_cache[order.event_id].timezone).strftime('%Y-%m-%d %H:%M:%S'))
-                    if op.subevent.date_to:
-                        row.append(op.subevent.date_to.astimezone(self.event_object_cache[order.event_id].timezone).strftime('%Y-%m-%d %H:%M:%S'))
+                    if op.subevent:
+                        row.append(op.subevent.name)
+                        row.append(op.subevent.date_from.astimezone(self.event_object_cache[order.event_id].timezone).strftime('%Y-%m-%d %H:%M:%S'))
+                        if op.subevent.date_to:
+                            row.append(op.subevent.date_to.astimezone(self.event_object_cache[order.event_id].timezone).strftime('%Y-%m-%d %H:%M:%S'))
+                        else:
+                            row.append('')
                     else:
+                        row.append('')
+                        row.append('')
                         row.append('')
                 row += [
                     str(op.item),
