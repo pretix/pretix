@@ -8,6 +8,7 @@ from unittest import mock
 
 from bs4 import BeautifulSoup
 from django.conf import settings
+from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.crypto import get_random_string
@@ -28,7 +29,6 @@ from pretix.base.services.orders import OrderError, _perform_order
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
 
-from django.core import mail as djmail
 
 class BaseCheckoutTestCase:
     @scopes_disabled()
@@ -2537,8 +2537,6 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             o = Order.objects.get(pk=oid)
             o.payments.first().confirm()
             assert len(djmail.outbox) == 0
-
-
 
 
 class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
