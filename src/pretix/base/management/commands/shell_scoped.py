@@ -18,6 +18,7 @@ class Command(BaseCommand):
             cmd = 'shell_plus'
         except ImportError:
             cmd = 'shell'
+            del options['skip_checks']
 
         parser = self.create_parser(sys.argv[0], sys.argv[1])
         flags = parser.parse_known_args(sys.argv[2:])[1]
