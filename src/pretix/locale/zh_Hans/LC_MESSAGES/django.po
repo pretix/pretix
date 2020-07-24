@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-20 14:42+0000\n"
-"PO-Revision-Date: 2019-10-23 14:41+0000\n"
-"Last-Translator: yichengsd <sunzl@jxepub.com>\n"
+"PO-Revision-Date: 2020-07-23 18:40+0000\n"
+"Last-Translator: Andreas Teuber <an.teuber@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -20044,27 +20044,24 @@ msgstr "版本说明"
 msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
-msgstr ""
+msgstr "我们已将您的退款%(amount)s转为礼物卡。在下次购买时，您可以在付款时使用以下礼品卡代码:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:135
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "您礼物卡金额 %(value)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:142
-#, fuzzy, python-format
-#| msgid "This gift card is not known."
+#, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr "该礼品卡未知。"
+msgstr "礼品卡将在%(expiry)s. 失效"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:153
 #, python-format
 msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
-msgstr ""
-"退款%(amount)s已经发送给您。根据付款方式，请在最多14天内提供，直至其显示在您"
-"的帐单上。"
+msgstr "退款%(amount)s已经发送给您。根据付款方式，请允许需要大约14天处理时间才会显示在您的帐上。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:172
 #: pretix/presale/templates/pretixpresale/event/order.html:266
@@ -20072,21 +20069,17 @@ msgid "Change details"
 msgstr "更改细节"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:185
-#, fuzzy
-#| msgid "Only successful payments"
 msgid "Successful payments"
-msgstr "仅成功支付的订单"
+msgstr "成功支付订单"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:194
-#, fuzzy
-#| msgid "Pending amount"
 msgid "Pending total"
-msgstr "冻结金额"
+msgstr "尚未付款总额"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:238
 msgid ""
 "You need to select a payment method above before you can request an invoice."
-msgstr ""
+msgstr "请在生成收据前确认付款方式"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 #: pretix/presale/templates/pretixpresale/event/order.html:250
@@ -20099,17 +20092,15 @@ msgid "Internal Reference"
 msgstr "内部参考"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:319
-#, fuzzy
-#| msgid "Change for all events"
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "更改所有活动"
+msgstr "更改或取消订单"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
-msgstr ""
+msgstr "若您需要更改已购买订单，请点击以下按钮更改您的订单。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:333
 #, fuzzy
@@ -20118,17 +20109,13 @@ msgid "Change order"
 msgstr "取消订单"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:343
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
-msgstr "您可以使用以下按钮取消此订单。"
+msgstr "您可以要求取消此订单，但您不会收到退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:347
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr "您可以使用以下按钮取消此订单。"
+msgstr "您可已取消此订单，但您不会收到退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:351
 #: pretix/presale/templates/pretixpresale/event/order.html:374
@@ -20140,31 +20127,19 @@ msgid "This will invalidate all tickets in this order."
 msgstr "这将使您的所有门票无效。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:356
-#, fuzzy, python-format
-#| msgid ""
-#| "You can cancel this order. In this case, a cancellation fee of <strong>"
-#| "%(fee)s</strong> will be kept and you will receive a refund of the "
-#| "remainder to your original payment method."
+#, python-format
 msgid ""
 "You can request to cancel this order. If your request is approved, a "
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
-msgstr ""
-"您可以取消此订单。 在这种情况下，将保留<strong>%(fee)s</strong>的取消费用，您"
-"将收到剩余的退款到您的原始付款方式。"
+msgstr "您可以要求消此订单。 如果订单被许可，将扣除<strong>%(fee)s</strong>的取消费用，您将收到剩余的退款到您的原始付款方式。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:362
-#, fuzzy, python-format
-#| msgid ""
-#| "You can cancel this order. In this case, a cancellation fee of <strong>"
-#| "%(fee)s</strong> will be kept and you will receive a refund of the "
-#| "remainder to your original payment method."
+#, python-format
 msgid ""
 "You can cancel this order. In this case, a cancellation fee of <strong>"
 "%(fee)s</strong> will be kept and you will receive a refund of the remainder."
-msgstr ""
-"您可以取消此订单。 在这种情况下，将保留<strong>%(fee)s</strong>的取消费用，您"
-"将收到剩余的退款到您的原始付款方式。"
+msgstr "您可以取消此订单。 如果订单被许可，将扣除<strong>%(fee)s</strong>的取消费用，您将收到剩余的退款到您的原始付款方式。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:368
 #: pretix/presale/templates/pretixpresale/event/order.html:389
@@ -20172,46 +20147,37 @@ msgstr ""
 msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
-msgstr ""
+msgstr "退款将以礼品卡的形式发放，您可以將其用於進一步的購買。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:370
 #: pretix/presale/templates/pretixpresale/event/order.html:391
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
-msgstr ""
+msgstr "退款可以按原来付款方式退款或发放礼品卡"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:372
 #: pretix/presale/templates/pretixpresale/event/order.html:393
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "The refund will be issued to your original payment method."
-msgstr "您可以取消此订单并获得原始付款方式的全额退款。"
+msgstr "您可以取消此订单并获得原始付款金额的全额退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:379
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
-msgstr ""
+msgstr "您可取消此订单。若您的成功取消订单，您可获得全额退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:384
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "You can cancel this order and receive a full refund."
-msgstr "您可以取消此订单并获得原始付款方式的全额退款。"
+msgstr "您可以取消此订单并获得原始付款方。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:405
 msgid "You can cancel this order using the following button."
 msgstr "您可以使用以下按钮取消此订单。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
-#, fuzzy, python-format
-#| msgid "Order canceled: %(code)s"
+#, python-format
 msgid "Request cancellation: %(code)s"
-msgstr "订单已取消：%(code)s"
+msgstr "请求取消订单：%(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
@@ -20223,49 +20189,42 @@ msgid ""
 "You can request the cancellation of your order on this page. The event "
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
-msgstr ""
+msgstr "您可以要求取消您的订单。活动筹办者需确认您的请求。经许可后您的订单将会被取消，全部门票将失效。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:33
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
-msgstr ""
+msgstr "如果取消此訂單，所有票證將失效，您將無法再使用它們。您無法還原此操作。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:43
 #, python-format
 msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
-msgstr ""
+msgstr "如果需要，您可以要求退款全额并减去退款手续费%(fee)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:48
-#, fuzzy
-#| msgid "If you want to, you can publish your ticket shop now."
 msgid "If you want, you can request a full refund."
-msgstr "如果您愿意，可以立即发布您的售票处。"
+msgstr "如果您愿意，可以要求退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:71
-#, fuzzy
-#| msgid "Internal comment"
 msgid "Enter custom amount"
-msgstr "内部评论"
+msgstr "输入购买金额"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:75
-#, fuzzy
-#| msgid "Refund only"
 msgid "Refund amount:"
-msgstr "仅退款"
+msgstr "退款金额:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:86
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:107
-#, fuzzy, python-format
-#| msgid "Your gift card has been applied."
+#, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr "您的礼品卡已被应用。"
+msgstr "您的礼品卡将在 %(expiry_date)s 失效。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:95
 msgid "I want the refund as a gift card for later purchases"
-msgstr ""
+msgstr "我希望将退款转为礼品卡供以后购买。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 #, fuzzy
@@ -20277,41 +20236,26 @@ msgstr "您可以取消此订单并获得原始付款方式的全额退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:116
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:136
-#, fuzzy
-#| msgid ""
-#| "The refund amount of %(amount)s will automatically be sent back to your "
-#| "original payment method. Depending on the payment method, please allow "
-#| "for up to two weeks before this appears on your statement."
 msgid ""
 "The refund amount will automatically be sent back to your original payment "
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
-msgstr ""
-"退款金额%(amount)s将自动退回原始付款方式。 根据付款方式，请在您的帐单上显示最"
-"多两周的时间。"
+msgstr "退款金额%(amount)s将自动退回原始付款方式。 根据付款方式，在手续处理时间最多两周的时间。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:124
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:145
-#, fuzzy
-#| msgid ""
-#| "With to the payment method you used, the refund amount of %(amount)s "
-#| "<strong>can not be sent back to you automatically</strong>. Instead, the "
-#| "event organizer will need to initiate the transfer manually. Please be "
-#| "patient as this might take a bit longer."
 msgid ""
 "With the payment method you used, the refund amount <strong>can not be sent "
 "back to you automatically</strong>. Instead, the event organizer will need "
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
-"根据您使用的付款方式，退款金额%(amount)s<strong>不能自动发回给您</strong>。相"
-"反，活动组织者需要手动启动传输。请耐心等待，因为这可能需要很长时间。"
+"根据您使用的付款方式，退款金额%(amount)s<strong>不能自动发回给您</strong>。然而，活动组织者会手动退款给您。请耐心等待，因为这可"
+"能需要一些时间。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:167
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Yes, request cancellation"
-msgstr "生成取消"
+msgstr "确定，取消订单"
 
 #: pretix/presale/templates/pretixpresale/event/order_change.html:5
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
@@ -20407,9 +20351,7 @@ msgid ""
 "If you lost the link to your order or orders, please enter the email address "
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
-msgstr ""
-"如果您丢失了订单或订单的链接，请输入您用于订单的电子邮件地址。 我们会向您发送"
-"一封电子邮件，其中包含您使用此电子邮件地址下的所有订单的链接。"
+msgstr "如果您丢失了订单或订单的链接，请输入您用于订单的电子邮件地址。 我们会向您发送一封电子邮件，其中链接包含您使用此电子邮件地址所下的所有订单。"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
