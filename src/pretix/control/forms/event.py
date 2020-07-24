@@ -750,6 +750,10 @@ def multimail_validate(val):
     return s
 
 
+def contains_web_channel_validate(val):
+    if "web" not in val:
+        raise ValidationError(_("The web channel must be selected to receive these emails."))
+
 class MailSettingsForm(SettingsForm):
     auto_fields = [
         'mail_prefix',
@@ -759,23 +763,23 @@ class MailSettingsForm(SettingsForm):
     ]
 
     mail_sales_channel_placed_paid = forms.MultipleChoiceField(
-        choices=[(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
+        choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
         label=_('Sales Channels for Checkout Emails'),
-        help_text=_('Restrict Order placed and paid emails to orders from certain sales channels.'),
+        help_text=_('The order placed and paid emails will only be send to orders from these sales channels. The online shop must be enabled.'),
         widget=forms.CheckboxSelectMultiple(
             attrs={'class': 'scrolling-multiple-choice'}
         ),
-        required=False,
+        validators=[contains_web_channel_validate],
     )
 
     mail_sales_channel_ticket_reminder = forms.MultipleChoiceField(
-        choices=[(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
-        label=_('Sales Channels for Ticket Emails'),
-        help_text=_('Restrict ticket reminder emails to orders from certain sales channels.'),
+        choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
+        label=_('Sales Channels'),
+        help_text=_('This email will only be send to orders from these sales channels. The online shop must be enabled.'),
         widget=forms.CheckboxSelectMultiple(
             attrs={'class': 'scrolling-multiple-choice'}
         ),
-        required=False,
+        validators=[contains_web_channel_validate],
     )
 
     mail_bcc = forms.CharField(
