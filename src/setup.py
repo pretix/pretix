@@ -134,6 +134,7 @@ setup(
         'django-i18nfield>=1.7.0',
         'django-jsonfallback>=2.1.2',
         'psycopg2-binary',
+        'tqdm==4.*',
         'vobject==0.9.*',
         'pycountry',
         'django-countries>=6.0',
