@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-20 14:42+0000\n"
+"POT-Creation-Date: 2020-07-24 08:44+0000\n"
 "PO-Revision-Date: 2018-09-03 06:36+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -62,17 +62,32 @@ msgstr ""
 msgid "Contacting your bank …"
 msgstr "İletişim Hattı …"
 
-#: pretix/static/pretixbase/js/asynctask.js:39
-#: pretix/static/pretixbase/js/asynctask.js:106
+#: pretix/static/pretixbase/js/asynctask.js:43
+#: pretix/static/pretixbase/js/asynctask.js:116
+#, fuzzy
+#| msgid ""
+#| "Your request has been queued on the server and will now be processed. "
+#| "Depending on the size of your event, this might take up to a few minutes."
 msgid ""
-"Your request has been queued on the server and will now be processed. "
-"Depending on the size of your event, this might take up to a few minutes."
+"Your request is currently being processed. Depending on the size of your "
+"event, this might take up to a few minutes."
 msgstr ""
 "İsteğiniz sunucuda sıraya alındı ve şimdi işlenecek. Etkinliğinizin boyutuna "
 "bağlı olarak, bu birkaç dakika sürebilir."
 
-#: pretix/static/pretixbase/js/asynctask.js:45
-#: pretix/static/pretixbase/js/asynctask.js:112
+#: pretix/static/pretixbase/js/asynctask.js:48
+#: pretix/static/pretixbase/js/asynctask.js:121
+#, fuzzy
+#| msgid ""
+#| "Your request has been queued on the server and will now be processed. "
+#| "Depending on the size of your event, this might take up to a few minutes."
+msgid "Your request has been queued on the server and will soon be processed."
+msgstr ""
+"İsteğiniz sunucuda sıraya alındı ve şimdi işlenecek. Etkinliğinizin boyutuna "
+"bağlı olarak, bu birkaç dakika sürebilir."
+
+#: pretix/static/pretixbase/js/asynctask.js:54
+#: pretix/static/pretixbase/js/asynctask.js:127
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. If "
@@ -87,14 +102,14 @@ msgstr ""
 "uzun sürerse lütfen bizimle iletişime geçin veya tarayıcınıza geri dönün ve "
 "tekrar deneyin."
 
-#: pretix/static/pretixbase/js/asynctask.js:77
-#: pretix/static/pretixbase/js/asynctask.js:144
-#: pretix/static/pretixbase/js/asynctask.js:149
+#: pretix/static/pretixbase/js/asynctask.js:86
+#: pretix/static/pretixbase/js/asynctask.js:159
+#: pretix/static/pretixbase/js/asynctask.js:164
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "{Code} türünde bir hata oluştu."
 
-#: pretix/static/pretixbase/js/asynctask.js:80
+#: pretix/static/pretixbase/js/asynctask.js:89
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -102,25 +117,25 @@ msgstr ""
 "Şu anda sunucuya ulaşamıyoruz, ancak denemeye devam ediyoruz. Son hata kodu: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:126
+#: pretix/static/pretixbase/js/asynctask.js:141
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 #, fuzzy
 #| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "İstek uzun sürdü. Lütfen tekrar deneyin."
 
-#: pretix/static/pretixbase/js/asynctask.js:152
+#: pretix/static/pretixbase/js/asynctask.js:167
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Şu anda sunucuya ulaşamıyoruz. Lütfen tekrar deneyin. Hata kodu: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:174
+#: pretix/static/pretixbase/js/asynctask.js:189
 msgid "We are processing your request …"
 msgstr "İsteğinizi işliyoruz…"
 
-#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:197
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -130,7 +145,7 @@ msgstr ""
 "sürerse, lütfen İnternet bağlantınızı kontrol edin ve ardından bu sayfayı "
 "tekrar yükleyin ve tekrar deneyin."
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:235
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Mesajı kapat"

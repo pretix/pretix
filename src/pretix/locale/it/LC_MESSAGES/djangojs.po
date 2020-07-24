@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-20 14:42+0000\n"
+"POT-Creation-Date: 2020-07-24 08:44+0000\n"
 "PO-Revision-Date: 2020-06-12 20:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -60,18 +60,34 @@ msgstr "Stiamo processando il tuo pagamento..."
 msgid "Contacting your bank …"
 msgstr "Sto contattando la tua banca …"
 
-#: pretix/static/pretixbase/js/asynctask.js:39
-#: pretix/static/pretixbase/js/asynctask.js:106
+#: pretix/static/pretixbase/js/asynctask.js:43
+#: pretix/static/pretixbase/js/asynctask.js:116
+#, fuzzy
+#| msgid ""
+#| "Your request has been queued on the server and will now be processed. "
+#| "Depending on the size of your event, this might take up to a few minutes."
 msgid ""
-"Your request has been queued on the server and will now be processed. "
-"Depending on the size of your event, this might take up to a few minutes."
+"Your request is currently being processed. Depending on the size of your "
+"event, this might take up to a few minutes."
 msgstr ""
 "La tua richiesta è stata inviata al server e verrà ora elaborata. A seconda "
 "della dimensione del tuo evento questo passaggio può durare fino ad alcuni "
 "minuti."
 
-#: pretix/static/pretixbase/js/asynctask.js:45
-#: pretix/static/pretixbase/js/asynctask.js:112
+#: pretix/static/pretixbase/js/asynctask.js:48
+#: pretix/static/pretixbase/js/asynctask.js:121
+#, fuzzy
+#| msgid ""
+#| "Your request has been queued on the server and will now be processed. "
+#| "Depending on the size of your event, this might take up to a few minutes."
+msgid "Your request has been queued on the server and will soon be processed."
+msgstr ""
+"La tua richiesta è stata inviata al server e verrà ora elaborata. A seconda "
+"della dimensione del tuo evento questo passaggio può durare fino ad alcuni "
+"minuti."
+
+#: pretix/static/pretixbase/js/asynctask.js:54
+#: pretix/static/pretixbase/js/asynctask.js:127
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -81,14 +97,14 @@ msgstr ""
 "elaborazione. Se l'attesa dura più a lungo di due minuti di ti invitiamo a "
 "contattarci o di tornare al browser e riprovare."
 
-#: pretix/static/pretixbase/js/asynctask.js:77
-#: pretix/static/pretixbase/js/asynctask.js:144
-#: pretix/static/pretixbase/js/asynctask.js:149
+#: pretix/static/pretixbase/js/asynctask.js:86
+#: pretix/static/pretixbase/js/asynctask.js:159
+#: pretix/static/pretixbase/js/asynctask.js:164
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Si è verificato un errore {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:80
+#: pretix/static/pretixbase/js/asynctask.js:89
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -96,12 +112,12 @@ msgstr ""
 "Al momento il server non è raggiungibile, ma continueremo a provare. Codice "
 "dell'ultimo errore: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:126
+#: pretix/static/pretixbase/js/asynctask.js:141
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "La richiesta ha impiegato troppo tempo. Si prega di riprovare."
 
-#: pretix/static/pretixbase/js/asynctask.js:152
+#: pretix/static/pretixbase/js/asynctask.js:167
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -109,11 +125,11 @@ msgstr ""
 "Al momento il server non è raggiungibile. Si prega di riprovare. Codice "
 "dell'errore: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:174
+#: pretix/static/pretixbase/js/asynctask.js:189
 msgid "We are processing your request …"
 msgstr "Stiamo elaborando la tua richiesta …"
 
-#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:197
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -123,7 +139,7 @@ msgstr ""
 "più di un minuto si prega di verificare la connessione internet e ricaricare "
 "la pagina per riprovare l'invio."
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:235
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Messaggio di chiusura"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-20 14:42+0000\n"
+"POT-Creation-Date: 2020-07-24 08:44+0000\n"
 "PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
@@ -335,7 +335,7 @@ msgid "E-mail"
 msgstr "Ηλεκτρονικό ταχυδρομείο"
 
 #: pretix/base/auth.py:112 pretix/base/forms/auth.py:86
-#: pretix/base/forms/auth.py:138 pretix/control/forms/event.py:939
+#: pretix/base/forms/auth.py:138 pretix/control/forms/event.py:940
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
@@ -359,7 +359,7 @@ msgstr ""
 
 #: pretix/base/email.py:394 pretix/base/email.py:457 pretix/base/email.py:473
 #: pretix/base/email.py:482 pretix/base/pdf.py:109 pretix/base/pdf.py:212
-#: pretix/base/services/invoices.py:343 pretix/control/views/event.py:673
+#: pretix/base/services/invoices.py:351 pretix/control/views/event.py:674
 msgid "John Doe"
 msgstr "John Doe"
 
@@ -388,27 +388,27 @@ msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr ""
 "Μεταφέρετε χρήματα σε αυτόν τον τραπεζικό λογαριασμό: 9999-9999-9999-9999"
 
-#: pretix/base/exporter.py:104 pretix/base/exporter.py:200
+#: pretix/base/exporter.py:106 pretix/base/exporter.py:231
 msgid "Export format"
 msgstr "Εξαγωγή μορφής"
 
-#: pretix/base/exporter.py:106
+#: pretix/base/exporter.py:108
 msgid "Excel (.xlsx)"
 msgstr "Excel (.xlsx)"
 
-#: pretix/base/exporter.py:107 pretix/base/exporter.py:192
+#: pretix/base/exporter.py:109 pretix/base/exporter.py:223
 msgid "CSV (with commas)"
 msgstr "CSV (με κόμματα)"
 
-#: pretix/base/exporter.py:108 pretix/base/exporter.py:193
+#: pretix/base/exporter.py:110 pretix/base/exporter.py:224
 msgid "CSV (Excel-style)"
 msgstr "CSV (στυλ Excel)"
 
-#: pretix/base/exporter.py:109 pretix/base/exporter.py:194
+#: pretix/base/exporter.py:111 pretix/base/exporter.py:225
 msgid "CSV (with semicolons)"
 msgstr "CSV (με ερωτηματικά)"
 
-#: pretix/base/exporter.py:188
+#: pretix/base/exporter.py:219
 msgid "Combined Excel (.xlsx)"
 msgstr "Συνδυασμένο Excel (.xlsx)"
 
@@ -428,8 +428,8 @@ msgstr "Ερωτήσεις"
 msgid "Event ticket {event}-{code}"
 msgstr "Εισιτήριο συμβάντος {event} - {code}"
 
-#: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:91
-#: pretix/base/exporters/orderlist.py:346 pretix/control/forms/subevents.py:226
+#: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:35
+#: pretix/base/exporters/orderlist.py:362 pretix/control/forms/subevents.py:226
 #: pretix/control/templates/pretixcontrol/events/index.html:74
 #: pretix/control/templates/pretixcontrol/order/index.html:572
 #: pretix/control/templates/pretixcontrol/order/index.html:666
@@ -442,7 +442,7 @@ msgstr "Εισιτήριο συμβάντος {event} - {code}"
 msgid "Start date"
 msgstr "Ημερομηνία έναρξης"
 
-#: pretix/base/exporters/dekodi.py:205 pretix/base/exporters/invoices.py:94
+#: pretix/base/exporters/dekodi.py:205 pretix/base/exporters/invoices.py:38
 msgid ""
 "Only include invoices issued on or after this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
@@ -451,8 +451,8 @@ msgstr ""
 "αυτή. Λάβετε υπόψη ότι η ημερομηνία τιμολόγησης δεν αντιστοιχεί πάντα στην "
 "ημερομηνία παραγγελίας ή πληρωμής."
 
-#: pretix/base/exporters/dekodi.py:210 pretix/base/exporters/invoices.py:99
-#: pretix/base/exporters/orderlist.py:347
+#: pretix/base/exporters/dekodi.py:210 pretix/base/exporters/invoices.py:43
+#: pretix/base/exporters/orderlist.py:363
 #: pretix/control/templates/pretixcontrol/events/index.html:78
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:56
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:21
@@ -462,7 +462,7 @@ msgstr ""
 msgid "End date"
 msgstr "Ημερομηνία λήξης"
 
-#: pretix/base/exporters/dekodi.py:213 pretix/base/exporters/invoices.py:102
+#: pretix/base/exporters/dekodi.py:213 pretix/base/exporters/invoices.py:46
 msgid ""
 "Only include invoices issued on or before this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
@@ -471,11 +471,7 @@ msgstr ""
 "αυτή. Λάβετε υπόψη ότι η ημερομηνία τιμολόγησης δεν αντιστοιχεί πάντα στην "
 "ημερομηνία παραγγελίας ή πληρωμής."
 
-#: pretix/base/exporters/invoices.py:24
-msgid "All invoices"
-msgstr "Όλα τα τιμολόγια"
-
-#: pretix/base/exporters/invoices.py:107 pretix/base/models/orders.py:1311
+#: pretix/base/exporters/invoices.py:51 pretix/base/models/orders.py:1311
 #: pretix/base/models/orders.py:1682 pretix/control/forms/filter.py:97
 #: pretix/control/forms/filter.py:1184
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:9
@@ -486,12 +482,12 @@ msgstr "Όλα τα τιμολόγια"
 msgid "Payment provider"
 msgstr "Πάροχος πληρωμής"
 
-#: pretix/base/exporters/invoices.py:109 pretix/base/exporters/invoices.py:111
+#: pretix/base/exporters/invoices.py:53 pretix/base/exporters/invoices.py:55
 #: pretix/control/forms/filter.py:99 pretix/control/forms/filter.py:1186
 msgid "All payment providers"
 msgstr "Όλοι οι πάροχοι πληρωμών"
 
-#: pretix/base/exporters/invoices.py:116
+#: pretix/base/exporters/invoices.py:60
 msgid ""
 "Only include invoices for orders that have at least one payment attempt with "
 "this payment provider. Note that this might include some invoices of orders "
@@ -502,53 +498,45 @@ msgstr ""
 "να περιλαμβάνει ορισμένα τιμολόγια παραγγελιών τα οποία στο τέλος έχουν "
 "πληρωθεί πλήρως ή μερικώς με διαφορετικό πάροχο."
 
-#: pretix/base/exporters/mail.py:18
-msgid "Email addresses (text file)"
-msgstr "Διευθύνσεις ηλεκτρονικού ταχυδρομείου (αρχείο κειμένου)"
+#: pretix/base/exporters/invoices.py:96
+msgid "All invoices"
+msgstr "Όλα τα τιμολόγια"
 
-#: pretix/base/exporters/mail.py:40 pretix/plugins/reports/exporters.py:310
-#: pretix/plugins/reports/exporters.py:482
-msgid "Filter by status"
-msgstr "Φιλτράρετε κατά κατάσταση"
+#: pretix/base/exporters/invoices.py:145
+msgid "Invoice data"
+msgstr "Δεδομένα τιμολογίου"
 
-#: pretix/base/exporters/orderlist.py:33
-msgid "Order data"
-msgstr "Στοιχεία παραγγελίας"
+#: pretix/base/exporters/invoices.py:154 pretix/base/shredder.py:308
+#: pretix/control/templates/pretixcontrol/order/index.html:205
+#: pretix/control/templates/pretixcontrol/order/index.html:254
+#: pretix/presale/templates/pretixpresale/event/order.html:211
+#: pretix/presale/templates/pretixpresale/event/order.html:232
+msgid "Invoices"
+msgstr "Τιμολόγια"
 
-#: pretix/base/exporters/orderlist.py:42 pretix/base/models/orders.py:205
-#: pretix/control/navigation.py:224
-#: pretix/control/templates/pretixcontrol/orders/index.html:7
-#: pretix/control/templates/pretixcontrol/orders/index.html:9
-msgid "Orders"
-msgstr "Παραγγελίες"
+#: pretix/base/exporters/invoices.py:155
+msgid "Invoice lines"
+msgstr "Γραμμές τιμολογίων"
 
-#: pretix/base/exporters/orderlist.py:43 pretix/base/models/orders.py:1938
-#: pretix/base/notifications.py:190
-msgid "Order positions"
-msgstr "Παραγγείλετε θέσεις"
+#: pretix/base/exporters/invoices.py:162 pretix/base/exporters/invoices.py:281
+msgid "Invoice number"
+msgstr "Αριθμός τιμολογίου"
 
-#: pretix/base/exporters/orderlist.py:44
-msgid "Order fees"
-msgstr "Τέλη παραγγελίας"
+#: pretix/base/exporters/invoices.py:163 pretix/base/exporters/invoices.py:291
+#: pretix/base/exporters/orderlist.py:653 pretix/base/models/items.py:1021
+#: pretix/base/models/orders.py:154 pretix/base/models/orders.py:2140
+#: pretix/control/forms/filter.py:443
+#: pretix/control/templates/pretixcontrol/organizers/giftcard.html:63
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:17
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:11
+#: pretix/presale/templates/pretixpresale/organizers/index.html:64
+msgid "Date"
+msgstr "Ημερομηνία"
 
-#: pretix/base/exporters/orderlist.py:53
-msgid "Only paid orders"
-msgstr "Μόνο πληρωμένες παραγγελίες"
-
-#: pretix/base/exporters/orderlist.py:117
-#: pretix/base/exporters/orderlist.py:245
-#: pretix/base/exporters/orderlist.py:337
-#: pretix/base/exporters/orderlist.py:541
-#: pretix/base/exporters/orderlist.py:850 pretix/control/forms/event.py:1164
-#: pretix/control/forms/organizer.py:52
-msgid "Event slug"
-msgstr "Slug εκδηλώσεων"
-
-#: pretix/base/exporters/orderlist.py:117
-#: pretix/base/exporters/orderlist.py:246
-#: pretix/base/exporters/orderlist.py:338
-#: pretix/base/exporters/orderlist.py:625
-#: pretix/base/exporters/orderlist.py:743 pretix/base/models/orders.py:128
+#: pretix/base/exporters/invoices.py:164 pretix/base/exporters/invoices.py:292
+#: pretix/base/exporters/orderlist.py:128
+#: pretix/base/exporters/orderlist.py:258
+#: pretix/base/exporters/orderlist.py:354 pretix/base/models/orders.py:128
 #: pretix/base/notifications.py:185 pretix/base/pdf.py:54
 #: pretix/control/templates/pretixcontrol/checkin/index.html:65
 #: pretix/control/templates/pretixcontrol/order/index.html:157
@@ -566,88 +554,45 @@ msgstr "Slug εκδηλώσεων"
 msgid "Order code"
 msgstr "Κωδικός παραγγελίας"
 
-#: pretix/base/exporters/orderlist.py:117 pretix/base/notifications.py:186
-#: pretix/control/templates/pretixcontrol/orders/index.html:101
-#: pretix/control/templates/pretixcontrol/search/orders.html:53
-#: pretix/plugins/reports/exporters.py:384
-#: pretix/plugins/reports/exporters.py:523
-msgid "Order total"
-msgstr "Σύνολο παραγγελίας"
-
-#: pretix/base/exporters/orderlist.py:117
-#: pretix/base/exporters/orderlist.py:247
-#: pretix/base/exporters/orderlist.py:340
-#: pretix/base/exporters/orderlist.py:541 pretix/base/models/orders.py:134
-#: pretix/control/forms/filter.py:431 pretix/control/forms/filter.py:651
-#: pretix/control/forms/filter.py:917 pretix/control/forms/filter.py:998
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
-#: pretix/control/templates/pretixcontrol/checkin/index.html:78
-#: pretix/control/templates/pretixcontrol/events/index.html:88
-#: pretix/control/templates/pretixcontrol/order/index.html:575
-#: pretix/control/templates/pretixcontrol/order/index.html:671
-#: pretix/control/templates/pretixcontrol/orders/index.html:105
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:45
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:58
-#: pretix/control/templates/pretixcontrol/search/orders.html:56
-#: pretix/control/templates/pretixcontrol/subevents/index.html:79
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:136
+#: pretix/base/exporters/invoices.py:165 pretix/base/exporters/invoices.py:293
+#: pretix/base/models/waitinglist.py:41 pretix/base/orderimport.py:123
+#: pretix/control/templates/pretixcontrol/users/index.html:37
 #: pretix/control/views/waitinglist.py:199
-#: pretix/plugins/reports/exporters.py:384
-#: pretix/plugins/reports/exporters.py:523
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:61
-#: pretix/presale/templates/pretixpresale/organizers/index.html:67
-msgid "Status"
-msgstr "Κατάσταση"
+msgid "E-mail address"
+msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομείου"
 
-#: pretix/base/exporters/orderlist.py:117
-#: pretix/base/exporters/orderlist.py:248
-#: pretix/base/exporters/orderlist.py:341
-#: pretix/control/templates/pretixcontrol/checkin/index.html:73
-msgid "Email"
-msgstr "Email"
+#: pretix/base/exporters/invoices.py:166 pretix/base/exporters/invoices.py:294
+msgid "Invoice type"
+msgstr "Τύπος τιμολογίου"
 
-#: pretix/base/exporters/orderlist.py:117
-#: pretix/base/exporters/orderlist.py:249
-#: pretix/base/exporters/orderlist.py:342 pretix/base/notifications.py:188
-#: pretix/control/forms/filter.py:1233
-#: pretix/control/templates/pretixcontrol/order/index.html:159
-#: pretix/control/templates/pretixcontrol/orders/index.html:97
-#: pretix/control/templates/pretixcontrol/search/orders.html:50
-#: pretix/plugins/checkinlists/exporters.py:427
-#: pretix/plugins/reports/exporters.py:321
-#: pretix/plugins/reports/exporters.py:384
-#: pretix/plugins/reports/exporters.py:493
-#: pretix/plugins/reports/exporters.py:521
-msgid "Order date"
-msgstr "Ημερομηνία παραγγελίας"
+#: pretix/base/exporters/invoices.py:167 pretix/base/exporters/invoices.py:295
+msgid "Cancellation of"
+msgstr "Ακύρωση"
 
-#: pretix/base/exporters/orderlist.py:118
-#: pretix/base/exporters/orderlist.py:256
-#: pretix/base/exporters/orderlist.py:363
-#: pretix/base/exporters/orderlist.py:384
-#: pretix/base/exporters/orderlist.py:637
-#: pretix/base/exporters/orderlist.py:754 pretix/base/forms/questions.py:272
-#: pretix/base/orderimport.py:241 pretix/base/orderimport.py:406
-#: pretix/control/templates/pretixcontrol/order/index.html:780
-#: pretix/control/views/item.py:327
-#: pretix/plugins/checkinlists/exporters.py:425
-#: pretix/plugins/reports/exporters.py:522
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:93
-#: pretix/presale/templates/pretixpresale/event/order.html:281
-msgid "Company"
-msgstr "Εταιρεία"
+#: pretix/base/exporters/invoices.py:168 pretix/base/models/auth.py:102
+#: pretix/control/forms/event.py:1119 pretix/control/views/waitinglist.py:200
+msgid "Language"
+msgstr "Γλώσσα"
 
-#: pretix/base/exporters/orderlist.py:118
-#: pretix/base/exporters/orderlist.py:630
-#: pretix/base/exporters/orderlist.py:638
-#: pretix/base/exporters/orderlist.py:747
-#: pretix/base/exporters/orderlist.py:755 pretix/base/forms/questions.py:661
+#: pretix/base/exporters/invoices.py:169 pretix/base/exporters/invoices.py:170
+#: pretix/base/exporters/invoices.py:171 pretix/base/exporters/invoices.py:172
+#: pretix/base/exporters/invoices.py:173 pretix/base/exporters/invoices.py:174
+#: pretix/base/exporters/invoices.py:175 pretix/base/exporters/invoices.py:296
+#: pretix/base/exporters/invoices.py:297 pretix/base/exporters/invoices.py:298
+#: pretix/base/exporters/invoices.py:299 pretix/base/exporters/invoices.py:300
+#: pretix/base/exporters/invoices.py:301 pretix/base/exporters/invoices.py:302
+msgid "Invoice sender:"
+msgstr "Αποστολέας τιμολογίου:"
+
+#: pretix/base/exporters/invoices.py:169 pretix/base/exporters/invoices.py:177
+#: pretix/base/exporters/invoices.py:296 pretix/base/exporters/invoices.py:304
+#: pretix/base/exporters/orderlist.py:129 pretix/base/forms/questions.py:661
 #: pretix/base/models/devices.py:51 pretix/base/models/event.py:990
 #: pretix/base/models/event.py:1222 pretix/base/models/items.py:1325
 #: pretix/base/models/items.py:1494 pretix/base/models/organizer.py:34
 #: pretix/base/models/seating.py:40 pretix/base/models/tax.py:97
-#: pretix/base/settings.py:1681 pretix/base/settings.py:1691
-#: pretix/base/settings.py:1860 pretix/control/forms/item.py:282
+#: pretix/base/settings.py:1691 pretix/base/settings.py:1701
+#: pretix/base/settings.py:1870 pretix/control/forms/item.py:282
 #: pretix/control/templates/pretixcontrol/checkin/index.html:75
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:26
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:12
@@ -669,12 +614,11 @@ msgstr "Εταιρεία"
 msgid "Name"
 msgstr "Όνομα"
 
-#: pretix/base/exporters/orderlist.py:125
-#: pretix/base/exporters/orderlist.py:264
-#: pretix/base/exporters/orderlist.py:364
-#: pretix/base/exporters/orderlist.py:391
-#: pretix/base/exporters/orderlist.py:631
-#: pretix/base/exporters/orderlist.py:748 pretix/base/forms/questions.py:280
+#: pretix/base/exporters/invoices.py:170 pretix/base/exporters/invoices.py:297
+#: pretix/base/exporters/orderlist.py:136
+#: pretix/base/exporters/orderlist.py:276
+#: pretix/base/exporters/orderlist.py:380
+#: pretix/base/exporters/orderlist.py:407 pretix/base/forms/questions.py:280
 #: pretix/base/models/orders.py:1120 pretix/base/models/orders.py:2191
 #: pretix/base/orderimport.py:271 pretix/base/orderimport.py:417
 #: pretix/control/templates/pretixcontrol/order/index.html:784
@@ -683,42 +627,36 @@ msgstr "Όνομα"
 msgid "Address"
 msgstr "Διεύθυνση έδρας"
 
-#: pretix/base/exporters/orderlist.py:125
-#: pretix/base/exporters/orderlist.py:264
-#: pretix/base/exporters/orderlist.py:365
-#: pretix/base/exporters/orderlist.py:391
-#: pretix/base/exporters/orderlist.py:632
-#: pretix/base/exporters/orderlist.py:640
-#: pretix/base/exporters/orderlist.py:749
-#: pretix/base/exporters/orderlist.py:757 pretix/base/forms/questions.py:291
+#: pretix/base/exporters/invoices.py:171 pretix/base/exporters/invoices.py:179
+#: pretix/base/exporters/invoices.py:298 pretix/base/exporters/invoices.py:306
+#: pretix/base/exporters/orderlist.py:136
+#: pretix/base/exporters/orderlist.py:276
+#: pretix/base/exporters/orderlist.py:381
+#: pretix/base/exporters/orderlist.py:407 pretix/base/forms/questions.py:291
 #: pretix/base/models/orders.py:1121 pretix/base/models/orders.py:2192
 #: pretix/base/orderimport.py:282 pretix/base/orderimport.py:428
-#: pretix/base/settings.py:568 pretix/control/views/item.py:349
+#: pretix/base/settings.py:578 pretix/control/views/item.py:349
 msgid "ZIP code"
 msgstr "Ταχυδρομικός Κώδικας"
 
-#: pretix/base/exporters/orderlist.py:125
-#: pretix/base/exporters/orderlist.py:264
-#: pretix/base/exporters/orderlist.py:366
-#: pretix/base/exporters/orderlist.py:391
-#: pretix/base/exporters/orderlist.py:633
-#: pretix/base/exporters/orderlist.py:641
-#: pretix/base/exporters/orderlist.py:750
-#: pretix/base/exporters/orderlist.py:758 pretix/base/forms/questions.py:299
+#: pretix/base/exporters/invoices.py:172 pretix/base/exporters/invoices.py:180
+#: pretix/base/exporters/invoices.py:299 pretix/base/exporters/invoices.py:307
+#: pretix/base/exporters/orderlist.py:136
+#: pretix/base/exporters/orderlist.py:276
+#: pretix/base/exporters/orderlist.py:382
+#: pretix/base/exporters/orderlist.py:407 pretix/base/forms/questions.py:299
 #: pretix/base/models/orders.py:1122 pretix/base/models/orders.py:2193
 #: pretix/base/orderimport.py:293 pretix/base/orderimport.py:439
-#: pretix/base/settings.py:580 pretix/control/views/item.py:359
+#: pretix/base/settings.py:590 pretix/control/views/item.py:359
 msgid "City"
 msgstr "Πόλη"
 
-#: pretix/base/exporters/orderlist.py:125
-#: pretix/base/exporters/orderlist.py:264
-#: pretix/base/exporters/orderlist.py:367
-#: pretix/base/exporters/orderlist.py:391
-#: pretix/base/exporters/orderlist.py:634
-#: pretix/base/exporters/orderlist.py:642
-#: pretix/base/exporters/orderlist.py:751
-#: pretix/base/exporters/orderlist.py:759 pretix/base/forms/questions.py:311
+#: pretix/base/exporters/invoices.py:173 pretix/base/exporters/invoices.py:181
+#: pretix/base/exporters/invoices.py:300 pretix/base/exporters/invoices.py:308
+#: pretix/base/exporters/orderlist.py:136
+#: pretix/base/exporters/orderlist.py:276
+#: pretix/base/exporters/orderlist.py:383
+#: pretix/base/exporters/orderlist.py:407 pretix/base/forms/questions.py:311
 #: pretix/base/models/orders.py:1123 pretix/base/models/orders.py:2194
 #: pretix/base/models/orders.py:2195 pretix/base/orderimport.py:309
 #: pretix/base/orderimport.py:455
@@ -729,12 +667,60 @@ msgstr "Πόλη"
 msgid "Country"
 msgstr "Χώρα"
 
-#: pretix/base/exporters/orderlist.py:125
-#: pretix/base/exporters/orderlist.py:264
-#: pretix/base/exporters/orderlist.py:368
-#: pretix/base/exporters/orderlist.py:391
-#: pretix/base/exporters/orderlist.py:643
-#: pretix/base/exporters/orderlist.py:760 pretix/base/forms/questions.py:333
+#: pretix/base/exporters/invoices.py:174 pretix/base/exporters/invoices.py:301
+msgid "Tax ID"
+msgstr "Αριθμός φορολογικού μητρώου"
+
+#: pretix/base/exporters/invoices.py:175 pretix/base/exporters/invoices.py:183
+#: pretix/base/exporters/invoices.py:302 pretix/base/exporters/invoices.py:310
+#: pretix/base/exporters/orderlist.py:136
+#: pretix/base/exporters/orderlist.py:276
+#: pretix/base/exporters/orderlist.py:407 pretix/base/models/orders.py:2198
+#: pretix/base/orderimport.py:353
+#: pretix/control/templates/pretixcontrol/order/index.html:795
+#: pretix/plugins/reports/exporters.py:523
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:109
+#: pretix/presale/templates/pretixpresale/event/order.html:298
+msgid "VAT ID"
+msgstr "Αριθμός Φορολογικού Μητρώου"
+
+#: pretix/base/exporters/invoices.py:176 pretix/base/exporters/invoices.py:177
+#: pretix/base/exporters/invoices.py:178 pretix/base/exporters/invoices.py:179
+#: pretix/base/exporters/invoices.py:180 pretix/base/exporters/invoices.py:181
+#: pretix/base/exporters/invoices.py:182 pretix/base/exporters/invoices.py:183
+#: pretix/base/exporters/invoices.py:184 pretix/base/exporters/invoices.py:185
+#: pretix/base/exporters/invoices.py:303 pretix/base/exporters/invoices.py:304
+#: pretix/base/exporters/invoices.py:305 pretix/base/exporters/invoices.py:306
+#: pretix/base/exporters/invoices.py:307 pretix/base/exporters/invoices.py:308
+#: pretix/base/exporters/invoices.py:309 pretix/base/exporters/invoices.py:310
+#: pretix/base/exporters/invoices.py:311 pretix/base/exporters/invoices.py:312
+msgid "Invoice recipient:"
+msgstr "Αποδέκτης τιμολογίου:"
+
+#: pretix/base/exporters/invoices.py:176 pretix/base/exporters/invoices.py:303
+#: pretix/base/exporters/orderlist.py:129
+#: pretix/base/exporters/orderlist.py:268
+#: pretix/base/exporters/orderlist.py:379
+#: pretix/base/exporters/orderlist.py:400 pretix/base/forms/questions.py:272
+#: pretix/base/orderimport.py:241 pretix/base/orderimport.py:406
+#: pretix/control/templates/pretixcontrol/order/index.html:780
+#: pretix/control/views/item.py:327
+#: pretix/plugins/checkinlists/exporters.py:425
+#: pretix/plugins/reports/exporters.py:522
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:93
+#: pretix/presale/templates/pretixpresale/event/order.html:281
+msgid "Company"
+msgstr "Εταιρεία"
+
+#: pretix/base/exporters/invoices.py:178 pretix/base/exporters/invoices.py:305
+msgid "Street address"
+msgstr "Διεύθυνση"
+
+#: pretix/base/exporters/invoices.py:182 pretix/base/exporters/invoices.py:309
+#: pretix/base/exporters/orderlist.py:136
+#: pretix/base/exporters/orderlist.py:276
+#: pretix/base/exporters/orderlist.py:384
+#: pretix/base/exporters/orderlist.py:407 pretix/base/forms/questions.py:333
 #: pretix/base/forms/questions.py:627 pretix/base/models/orders.py:1124
 #: pretix/base/models/orders.py:2197 pretix/base/orderimport.py:328
 #: pretix/control/templates/pretixcontrol/order/index.html:791
@@ -746,129 +732,288 @@ msgctxt "address"
 msgid "State"
 msgstr "Κατάσταση"
 
-#: pretix/base/exporters/orderlist.py:125
-#: pretix/base/exporters/orderlist.py:264
-#: pretix/base/exporters/orderlist.py:391
-#: pretix/base/exporters/orderlist.py:636
-#: pretix/base/exporters/orderlist.py:644
-#: pretix/base/exporters/orderlist.py:753
-#: pretix/base/exporters/orderlist.py:761 pretix/base/models/orders.py:2198
-#: pretix/base/orderimport.py:353
-#: pretix/control/templates/pretixcontrol/order/index.html:795
-#: pretix/plugins/reports/exporters.py:523
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:109
-#: pretix/presale/templates/pretixpresale/event/order.html:298
-msgid "VAT ID"
-msgstr "Αριθμός Φορολογικού Μητρώου"
+#: pretix/base/exporters/invoices.py:184 pretix/base/exporters/invoices.py:311
+#: pretix/base/models/orders.py:2208
+msgid "Beneficiary"
+msgstr "Δικαιούχος"
 
-#: pretix/base/exporters/orderlist.py:126
-msgid "Date of last payment"
-msgstr "Ημερομηνία τελευταίας πληρωμής"
+#: pretix/base/exporters/invoices.py:185 pretix/base/exporters/invoices.py:312
+#: pretix/base/models/orders.py:2203 pretix/base/orderimport.py:364
+#: pretix/control/templates/pretixcontrol/order/index.html:815
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:116
+msgid "Internal reference"
+msgstr "Σχετικό παραστατικό"
 
-#: pretix/base/exporters/orderlist.py:126 pretix/base/services/stats.py:193
-msgid "Fees"
-msgstr "Αμοιβές"
+#: pretix/base/exporters/invoices.py:186 pretix/control/forms/event.py:1089
+msgid "Reverse charge"
+msgstr "Αντίστροφη φόρτιση"
 
-#: pretix/base/exporters/orderlist.py:126
-#: pretix/base/exporters/orderlist.py:394 pretix/base/orderimport.py:545
-#: pretix/control/templates/pretixcontrol/order/index.html:169
-#: pretix/control/templates/pretixcontrol/pdf/index.html:212
-msgid "Order locale"
-msgstr "Παραγγελία τοπικών ρυθμίσεων (order locale)"
+#: pretix/base/exporters/invoices.py:187
+msgid "Shown foreign currency"
+msgstr "Εμφανίστηκε ξένο νόμισμα"
 
-#: pretix/base/exporters/orderlist.py:131
-#, python-brace-format
-msgid "Gross at {rate} % tax"
-msgstr "Μεικτό στο {rate} % φόρου"
+#: pretix/base/exporters/invoices.py:188
+msgid "Foreign currency rate"
+msgstr "Συνάλλαγμα"
 
-#: pretix/base/exporters/orderlist.py:132
-#, python-brace-format
-msgid "Net at {rate} % tax"
-msgstr "Καθαρό στο {rate}% φόρο"
+#: pretix/base/exporters/invoices.py:189
+msgid "Total value (with taxes)"
+msgstr "Συνολική αξία (με φόρους)"
 
-#: pretix/base/exporters/orderlist.py:133
-#, python-brace-format
-msgid "Tax value at {rate} % tax"
-msgstr "Φορολογική αξία σε {rate}% φόρου"
+#: pretix/base/exporters/invoices.py:190
+msgid "Total value (without taxes)"
+msgstr "Συνολική αξία (χωρίς φόρους)"
 
-#: pretix/base/exporters/orderlist.py:136
-msgid "Invoice numbers"
-msgstr "Αριθμοί τιμολογίων"
+#: pretix/base/exporters/invoices.py:191
+#, fuzzy
+#| msgid "Payment settings"
+msgid "Payment matching IDs"
+msgstr "Ρυθμίσεις πληρωμής"
 
-#: pretix/base/exporters/orderlist.py:137
-#: pretix/base/exporters/orderlist.py:394 pretix/base/orderimport.py:571
-#: pretix/control/templates/pretixcontrol/order/index.html:166
-msgid "Sales channel"
-msgstr "Kανάλι πωλήσεων"
-
-#: pretix/base/exporters/orderlist.py:138 pretix/base/models/items.py:400
-#: pretix/base/models/orders.py:172
-#: pretix/plugins/checkinlists/exporters.py:428
-msgid "Requires special attention"
-msgstr "Απαιτείται ιδιαίτερη προσοχή"
-
-#: pretix/base/exporters/orderlist.py:139 pretix/base/models/orders.py:167
-#: pretix/base/models/vouchers.py:197 pretix/base/orderimport.py:620
-#: pretix/control/templates/pretixcontrol/user/staff_session_list.html:21
-#: pretix/plugins/checkinlists/exporters.py:429
-msgid "Comment"
-msgstr "Σχόλιο"
-
-#: pretix/base/exporters/orderlist.py:140
-#: pretix/control/templates/pretixcontrol/orders/index.html:104
-msgid "Positions"
-msgstr "Θέσεις"
-
-#: pretix/base/exporters/orderlist.py:141
-#: pretix/base/exporters/orderlist.py:267
-#: pretix/base/exporters/orderlist.py:395
-#: pretix/base/exporters/orderlist.py:653
-#: pretix/base/exporters/orderlist.py:764
+#: pretix/base/exporters/invoices.py:192 pretix/base/exporters/invoices.py:313
+#: pretix/base/exporters/orderlist.py:152
+#: pretix/base/exporters/orderlist.py:279
+#: pretix/base/exporters/orderlist.py:411
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:267
 msgid "Payment providers"
 msgstr "Πάροχοι πληρωμών"
 
-#: pretix/base/exporters/orderlist.py:217
-#: pretix/base/exporters/orderlist.py:456
-#: pretix/base/exporters/orderlist.py:719 pretix/base/models/orders.py:989
+#: pretix/base/exporters/invoices.py:248 pretix/base/exporters/invoices.py:350
+msgid "Cancellation"
+msgstr "Ακύρωση"
+
+#: pretix/base/exporters/invoices.py:248 pretix/base/exporters/invoices.py:350
+#: pretix/control/templates/pretixcontrol/order/index.html:209
+#: pretix/presale/templates/pretixpresale/event/order.html:219
+msgid "Invoice"
+msgstr "Τιμολόγιο"
+
+#: pretix/base/exporters/invoices.py:268 pretix/base/exporters/orderlist.py:229
+#: pretix/base/exporters/orderlist.py:482 pretix/base/models/orders.py:989
 #: pretix/control/forms/item.py:410 pretix/control/views/item.py:560
 #: pretix/control/views/vouchers.py:88 pretix/control/views/vouchers.py:89
-#: pretix/plugins/checkinlists/exporters.py:474
-#: pretix/plugins/checkinlists/exporters.py:477
-#: pretix/plugins/checkinlists/exporters.py:512
+#: pretix/plugins/checkinlists/exporters.py:479
+#: pretix/plugins/checkinlists/exporters.py:482
+#: pretix/plugins/checkinlists/exporters.py:517
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:110
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:111
 #: pretix/presale/checkoutflow.py:771
 msgid "Yes"
 msgstr "Ναι"
 
-#: pretix/base/exporters/orderlist.py:217
-#: pretix/base/exporters/orderlist.py:456
-#: pretix/base/exporters/orderlist.py:719 pretix/base/models/orders.py:991
+#: pretix/base/exporters/invoices.py:268 pretix/base/exporters/orderlist.py:229
+#: pretix/base/exporters/orderlist.py:482 pretix/base/models/orders.py:991
 #: pretix/control/forms/item.py:411 pretix/control/views/item.py:560
 #: pretix/control/views/vouchers.py:88 pretix/control/views/vouchers.py:89
-#: pretix/plugins/checkinlists/exporters.py:474
-#: pretix/plugins/checkinlists/exporters.py:477
-#: pretix/plugins/checkinlists/exporters.py:512
+#: pretix/plugins/checkinlists/exporters.py:479
+#: pretix/plugins/checkinlists/exporters.py:482
+#: pretix/plugins/checkinlists/exporters.py:517
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:110
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:111
 #: pretix/presale/checkoutflow.py:773
 msgid "No"
 msgstr "Όχι"
 
-#: pretix/base/exporters/orderlist.py:250
-msgid "Fee type"
-msgstr "Τύπος τέλους (fee type)"
+#: pretix/base/exporters/invoices.py:282
+msgid "Line number"
+msgstr "Αριθμός σειράς"
 
-#: pretix/base/exporters/orderlist.py:251
-#: pretix/base/exporters/orderlist.py:734 pretix/base/models/items.py:278
-#: pretix/base/models/items.py:642 pretix/base/models/items.py:649
+#: pretix/base/exporters/invoices.py:283 pretix/base/exporters/orderlist.py:263
+#: pretix/base/models/items.py:278 pretix/base/models/items.py:642
+#: pretix/base/models/items.py:649
 msgid "Description"
 msgstr "Περιγραφή"
 
-#: pretix/base/exporters/orderlist.py:252
-#: pretix/base/exporters/orderlist.py:351 pretix/base/models/orders.py:1089
+#: pretix/base/exporters/invoices.py:284 pretix/control/forms/orders.py:241
+msgid "Gross price"
+msgstr "Μικτή τιμή"
+
+#: pretix/base/exporters/invoices.py:285
+msgid "Net price"
+msgstr "Καθαρή τιμή"
+
+#: pretix/base/exporters/invoices.py:286 pretix/base/exporters/orderlist.py:267
+#: pretix/base/exporters/orderlist.py:370 pretix/base/models/orders.py:1825
+#: pretix/base/models/orders.py:1922
+msgid "Tax value"
+msgstr "Φορολογική αξία"
+
+#: pretix/base/exporters/invoices.py:287 pretix/base/exporters/orderlist.py:265
+#: pretix/base/exporters/orderlist.py:368 pretix/base/models/orders.py:1816
+#: pretix/base/models/orders.py:1913 pretix/base/models/tax.py:104
+msgid "Tax rate"
+msgstr "Φορολογικός συντελεστής"
+
+#: pretix/base/exporters/invoices.py:288
+msgid "Tax name"
+msgstr "Φορολογικό όνομα"
+
+#: pretix/base/exporters/invoices.py:289
+msgid "Event start date"
+msgstr "Ημερομηνία έναρξης του γεγονότος"
+
+#: pretix/base/exporters/mail.py:18
+msgid "Email addresses (text file)"
+msgstr "Διευθύνσεις ηλεκτρονικού ταχυδρομείου (αρχείο κειμένου)"
+
+#: pretix/base/exporters/mail.py:40 pretix/plugins/reports/exporters.py:310
+#: pretix/plugins/reports/exporters.py:482
+msgid "Filter by status"
+msgstr "Φιλτράρετε κατά κατάσταση"
+
+#: pretix/base/exporters/orderlist.py:32
+msgid "Order data"
+msgstr "Στοιχεία παραγγελίας"
+
+#: pretix/base/exporters/orderlist.py:41 pretix/base/models/orders.py:205
+#: pretix/control/navigation.py:224
+#: pretix/control/templates/pretixcontrol/orders/index.html:7
+#: pretix/control/templates/pretixcontrol/orders/index.html:9
+msgid "Orders"
+msgstr "Παραγγελίες"
+
+#: pretix/base/exporters/orderlist.py:42 pretix/base/models/orders.py:1938
+#: pretix/base/notifications.py:190
+msgid "Order positions"
+msgstr "Παραγγείλετε θέσεις"
+
+#: pretix/base/exporters/orderlist.py:43
+msgid "Order fees"
+msgstr "Τέλη παραγγελίας"
+
+#: pretix/base/exporters/orderlist.py:52
+msgid "Only paid orders"
+msgstr "Μόνο πληρωμένες παραγγελίες"
+
+#: pretix/base/exporters/orderlist.py:128
+#: pretix/base/exporters/orderlist.py:257
+#: pretix/base/exporters/orderlist.py:353
+#: pretix/base/exporters/orderlist.py:567
+#: pretix/base/exporters/orderlist.py:653 pretix/control/forms/event.py:1165
+#: pretix/control/forms/organizer.py:52
+msgid "Event slug"
+msgstr "Slug εκδηλώσεων"
+
+#: pretix/base/exporters/orderlist.py:128 pretix/base/notifications.py:186
+#: pretix/control/templates/pretixcontrol/orders/index.html:101
+#: pretix/control/templates/pretixcontrol/search/orders.html:53
+#: pretix/plugins/reports/exporters.py:384
+#: pretix/plugins/reports/exporters.py:523
+msgid "Order total"
+msgstr "Σύνολο παραγγελίας"
+
+#: pretix/base/exporters/orderlist.py:128
+#: pretix/base/exporters/orderlist.py:259
+#: pretix/base/exporters/orderlist.py:356
+#: pretix/base/exporters/orderlist.py:567 pretix/base/models/orders.py:134
+#: pretix/control/forms/filter.py:431 pretix/control/forms/filter.py:651
+#: pretix/control/forms/filter.py:917 pretix/control/forms/filter.py:998
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
+#: pretix/control/templates/pretixcontrol/checkin/index.html:78
+#: pretix/control/templates/pretixcontrol/events/index.html:88
+#: pretix/control/templates/pretixcontrol/order/index.html:575
+#: pretix/control/templates/pretixcontrol/order/index.html:671
+#: pretix/control/templates/pretixcontrol/orders/index.html:105
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:45
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:58
+#: pretix/control/templates/pretixcontrol/search/orders.html:56
+#: pretix/control/templates/pretixcontrol/subevents/index.html:79
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:136
+#: pretix/control/views/waitinglist.py:199
+#: pretix/plugins/reports/exporters.py:384
+#: pretix/plugins/reports/exporters.py:523
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:61
+#: pretix/presale/templates/pretixpresale/organizers/index.html:67
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: pretix/base/exporters/orderlist.py:128
+#: pretix/base/exporters/orderlist.py:260
+#: pretix/base/exporters/orderlist.py:357
+#: pretix/control/templates/pretixcontrol/checkin/index.html:73
+msgid "Email"
+msgstr "Email"
+
+#: pretix/base/exporters/orderlist.py:128
+#: pretix/base/exporters/orderlist.py:261
+#: pretix/base/exporters/orderlist.py:358 pretix/base/notifications.py:188
+#: pretix/control/forms/filter.py:1233
+#: pretix/control/templates/pretixcontrol/order/index.html:159
+#: pretix/control/templates/pretixcontrol/orders/index.html:97
+#: pretix/control/templates/pretixcontrol/search/orders.html:50
+#: pretix/plugins/checkinlists/exporters.py:427
+#: pretix/plugins/reports/exporters.py:321
+#: pretix/plugins/reports/exporters.py:384
+#: pretix/plugins/reports/exporters.py:493
+#: pretix/plugins/reports/exporters.py:521
+msgid "Order date"
+msgstr "Ημερομηνία παραγγελίας"
+
+#: pretix/base/exporters/orderlist.py:137
+msgid "Date of last payment"
+msgstr "Ημερομηνία τελευταίας πληρωμής"
+
+#: pretix/base/exporters/orderlist.py:137 pretix/base/services/stats.py:193
+msgid "Fees"
+msgstr "Αμοιβές"
+
+#: pretix/base/exporters/orderlist.py:137
+#: pretix/base/exporters/orderlist.py:410 pretix/base/orderimport.py:545
+#: pretix/control/templates/pretixcontrol/order/index.html:169
+#: pretix/control/templates/pretixcontrol/pdf/index.html:212
+msgid "Order locale"
+msgstr "Παραγγελία τοπικών ρυθμίσεων (order locale)"
+
+#: pretix/base/exporters/orderlist.py:142
+#, python-brace-format
+msgid "Gross at {rate} % tax"
+msgstr "Μεικτό στο {rate} % φόρου"
+
+#: pretix/base/exporters/orderlist.py:143
+#, python-brace-format
+msgid "Net at {rate} % tax"
+msgstr "Καθαρό στο {rate}% φόρο"
+
+#: pretix/base/exporters/orderlist.py:144
+#, python-brace-format
+msgid "Tax value at {rate} % tax"
+msgstr "Φορολογική αξία σε {rate}% φόρου"
+
+#: pretix/base/exporters/orderlist.py:147
+msgid "Invoice numbers"
+msgstr "Αριθμοί τιμολογίων"
+
+#: pretix/base/exporters/orderlist.py:148
+#: pretix/base/exporters/orderlist.py:410 pretix/base/orderimport.py:571
+#: pretix/control/templates/pretixcontrol/order/index.html:166
+msgid "Sales channel"
+msgstr "Kανάλι πωλήσεων"
+
+#: pretix/base/exporters/orderlist.py:149 pretix/base/models/items.py:400
+#: pretix/base/models/orders.py:172
+#: pretix/plugins/checkinlists/exporters.py:428
+msgid "Requires special attention"
+msgstr "Απαιτείται ιδιαίτερη προσοχή"
+
+#: pretix/base/exporters/orderlist.py:150 pretix/base/models/orders.py:167
+#: pretix/base/models/vouchers.py:197 pretix/base/orderimport.py:620
+#: pretix/control/templates/pretixcontrol/user/staff_session_list.html:21
+#: pretix/plugins/checkinlists/exporters.py:429
+msgid "Comment"
+msgstr "Σχόλιο"
+
+#: pretix/base/exporters/orderlist.py:151
+#: pretix/control/templates/pretixcontrol/orders/index.html:104
+msgid "Positions"
+msgstr "Θέσεις"
+
+#: pretix/base/exporters/orderlist.py:262
+msgid "Fee type"
+msgstr "Τύπος τέλους (fee type)"
+
+#: pretix/base/exporters/orderlist.py:264
+#: pretix/base/exporters/orderlist.py:367 pretix/base/models/orders.py:1089
 #: pretix/base/orderimport.py:496 pretix/base/pdf.py:94
 #: pretix/control/templates/pretixcontrol/item/index.html:45
 #: pretix/control/templates/pretixcontrol/order/change.html:157
@@ -878,43 +1023,29 @@ msgstr "Περιγραφή"
 msgid "Price"
 msgstr "Τιμή"
 
-#: pretix/base/exporters/orderlist.py:253
-#: pretix/base/exporters/orderlist.py:352
-#: pretix/base/exporters/orderlist.py:738 pretix/base/models/orders.py:1816
-#: pretix/base/models/orders.py:1913 pretix/base/models/tax.py:104
-msgid "Tax rate"
-msgstr "Φορολογικός συντελεστής"
-
-#: pretix/base/exporters/orderlist.py:254
-#: pretix/base/exporters/orderlist.py:353
+#: pretix/base/exporters/orderlist.py:266
+#: pretix/base/exporters/orderlist.py:369
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:9
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:16
 #: pretix/control/templates/pretixcontrol/order/change.html:145
 msgid "Tax rule"
 msgstr "Φορολογική ρύθμιση"
 
-#: pretix/base/exporters/orderlist.py:255
-#: pretix/base/exporters/orderlist.py:354
-#: pretix/base/exporters/orderlist.py:737 pretix/base/models/orders.py:1825
-#: pretix/base/models/orders.py:1922
-msgid "Tax value"
-msgstr "Φορολογική αξία"
-
-#: pretix/base/exporters/orderlist.py:257
-#: pretix/base/exporters/orderlist.py:262
-#: pretix/base/exporters/orderlist.py:385
-#: pretix/base/exporters/orderlist.py:389 pretix/base/pdf.py:211
+#: pretix/base/exporters/orderlist.py:269
+#: pretix/base/exporters/orderlist.py:274
+#: pretix/base/exporters/orderlist.py:401
+#: pretix/base/exporters/orderlist.py:405 pretix/base/pdf.py:211
 msgid "Invoice address name"
 msgstr "Διεύθυνση τιμολογίου"
 
-#: pretix/base/exporters/orderlist.py:339
+#: pretix/base/exporters/orderlist.py:355
 msgid "Position ID"
 msgstr "Position ID"
 
-#: pretix/base/exporters/orderlist.py:345 pretix/base/models/checkin.py:18
+#: pretix/base/exporters/orderlist.py:361 pretix/base/models/checkin.py:19
 #: pretix/base/models/items.py:1321 pretix/base/models/orders.py:1071
 #: pretix/base/models/vouchers.py:101 pretix/base/models/waitinglist.py:34
-#: pretix/control/forms/event.py:1113 pretix/control/forms/filter.py:241
+#: pretix/control/forms/event.py:1114 pretix/control/forms/filter.py:241
 #: pretix/control/forms/filter.py:1035 pretix/control/forms/filter.py:1147
 #: pretix/control/forms/filter.py:1224 pretix/control/forms/item.py:174
 #: pretix/control/forms/orders.py:246 pretix/control/forms/orders.py:298
@@ -936,7 +1067,7 @@ msgctxt "subevent"
 msgid "Date"
 msgstr "Ημερομηνία"
 
-#: pretix/base/exporters/orderlist.py:349 pretix/base/models/items.py:427
+#: pretix/base/exporters/orderlist.py:365 pretix/base/models/items.py:427
 #: pretix/base/models/vouchers.py:156 pretix/base/models/waitinglist.py:52
 #: pretix/base/orderimport.py:174 pretix/control/forms/filter.py:1041
 #: pretix/control/forms/orders.py:225 pretix/control/forms/vouchers.py:29
@@ -955,12 +1086,12 @@ msgstr "Ημερομηνία"
 msgid "Product"
 msgstr "Προϊόν"
 
-#: pretix/base/exporters/orderlist.py:350 pretix/base/models/orders.py:1081
+#: pretix/base/exporters/orderlist.py:366 pretix/base/models/orders.py:1081
 msgid "Variation"
 msgstr "Παραλλαγή"
 
-#: pretix/base/exporters/orderlist.py:355
-#: pretix/base/exporters/orderlist.py:360 pretix/base/forms/questions.py:255
+#: pretix/base/exporters/orderlist.py:371
+#: pretix/base/exporters/orderlist.py:376 pretix/base/forms/questions.py:255
 #: pretix/base/models/orders.py:1093 pretix/base/orderimport.py:378
 #: pretix/base/pdf.py:108
 #: pretix/control/templates/pretixcontrol/order/index.html:376
@@ -974,7 +1105,7 @@ msgstr "Παραλλαγή"
 msgid "Attendee name"
 msgstr "Όνομα συμμετεχόντος"
 
-#: pretix/base/exporters/orderlist.py:362 pretix/base/forms/questions.py:261
+#: pretix/base/exporters/orderlist.py:378 pretix/base/forms/questions.py:261
 #: pretix/base/models/orders.py:1101
 #: pretix/control/templates/pretixcontrol/order/index.html:381
 #: pretix/control/views/item.py:315
@@ -983,7 +1114,7 @@ msgstr "Όνομα συμμετεχόντος"
 msgid "Attendee email"
 msgstr "Email συμμετεχόντος"
 
-#: pretix/base/exporters/orderlist.py:369 pretix/base/models/vouchers.py:209
+#: pretix/base/exporters/orderlist.py:385 pretix/base/models/vouchers.py:209
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
@@ -991,28 +1122,28 @@ msgstr "Email συμμετεχόντος"
 msgid "Voucher"
 msgstr "Voucher"
 
-#: pretix/base/exporters/orderlist.py:370
+#: pretix/base/exporters/orderlist.py:386
 msgid "Pseudonymization ID"
 msgstr "ID Ψευδονοποίησης"
 
-#: pretix/base/exporters/orderlist.py:500
+#: pretix/base/exporters/orderlist.py:526
 msgid "Order payments and refunds"
 msgstr "Πληρωμές παραγγελειών και επιστροφές χρημάτων"
 
-#: pretix/base/exporters/orderlist.py:508
+#: pretix/base/exporters/orderlist.py:534
 #, fuzzy
 #| msgid "Payment date"
 msgid "Payment states"
 msgstr "Ημερομηνία πληρωμής"
 
-#: pretix/base/exporters/orderlist.py:516
+#: pretix/base/exporters/orderlist.py:542
 #, fuzzy
 #| msgid "Refund status"
 msgid "Refund states"
 msgstr "Κατάσταση επιστροφής χρημάτων"
 
-#: pretix/base/exporters/orderlist.py:541
-#: pretix/base/exporters/orderlist.py:850 pretix/base/models/orders.py:204
+#: pretix/base/exporters/orderlist.py:567
+#: pretix/base/exporters/orderlist.py:653 pretix/base/models/orders.py:204
 #: pretix/base/models/orders.py:1298 pretix/base/models/orders.py:1663
 #: pretix/base/models/orders.py:1805 pretix/base/models/orders.py:1907
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:64
@@ -1021,29 +1152,29 @@ msgstr "Κατάσταση επιστροφής χρημάτων"
 msgid "Order"
 msgstr "Σειρά"
 
-#: pretix/base/exporters/orderlist.py:541
-#: pretix/base/exporters/orderlist.py:850
+#: pretix/base/exporters/orderlist.py:567
+#: pretix/base/exporters/orderlist.py:653
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 msgid "Payment ID"
 msgstr "ID πληρωμής"
 
-#: pretix/base/exporters/orderlist.py:541
+#: pretix/base/exporters/orderlist.py:567
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:54
 msgid "Creation date"
 msgstr "Ημερομηνία δημιουργίας"
 
-#: pretix/base/exporters/orderlist.py:541
+#: pretix/base/exporters/orderlist.py:567
 #: pretix/control/templates/pretixcontrol/order/index.html:667
 msgid "Completion date"
 msgstr "Ημερομηνία ολοκλήρωσης"
 
-#: pretix/base/exporters/orderlist.py:542
+#: pretix/base/exporters/orderlist.py:568
 msgid "Status code"
 msgstr "Κωδικός κατάστασης (status code)"
 
-#: pretix/base/exporters/orderlist.py:542
-#: pretix/base/exporters/orderlist.py:850 pretix/base/models/orders.py:1294
+#: pretix/base/exporters/orderlist.py:568
+#: pretix/base/exporters/orderlist.py:653 pretix/base/models/orders.py:1294
 #: pretix/base/models/orders.py:1659
 #: pretix/control/templates/pretixcontrol/order/index.html:576
 #: pretix/control/templates/pretixcontrol/order/index.html:672
@@ -1053,7 +1184,7 @@ msgstr "Κωδικός κατάστασης (status code)"
 msgid "Amount"
 msgstr "Ποσό"
 
-#: pretix/base/exporters/orderlist.py:542
+#: pretix/base/exporters/orderlist.py:568
 #: pretix/control/templates/pretixcontrol/order/index.html:574
 #: pretix/control/templates/pretixcontrol/order/index.html:669
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:29
@@ -1061,40 +1192,40 @@ msgstr "Ποσό"
 msgid "Payment method"
 msgstr "Μέθοδος πληρωμής"
 
-#: pretix/base/exporters/orderlist.py:576
+#: pretix/base/exporters/orderlist.py:603
 msgid "Quota availabilities"
 msgstr "Διαθεσιμότητα quota"
 
-#: pretix/base/exporters/orderlist.py:580
+#: pretix/base/exporters/orderlist.py:607
 #: pretix/control/templates/pretixcontrol/items/quotas.html:44
 msgid "Quota name"
 msgstr "Όνομα quota"
 
-#: pretix/base/exporters/orderlist.py:580
+#: pretix/base/exporters/orderlist.py:607
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
 msgid "Total quota"
 msgstr "Συνολικό quota"
 
-#: pretix/base/exporters/orderlist.py:580
+#: pretix/base/exporters/orderlist.py:607
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:779
 msgid "Paid orders"
 msgstr "Πληρωμένες παραγγελίες"
 
-#: pretix/base/exporters/orderlist.py:580 pretix/control/views/item.py:784
+#: pretix/base/exporters/orderlist.py:607 pretix/control/views/item.py:784
 msgid "Pending orders"
 msgstr "Εκκρεμείς παραγγελίες"
 
-#: pretix/base/exporters/orderlist.py:580
+#: pretix/base/exporters/orderlist.py:607
 msgid "Blocking vouchers"
 msgstr "Αποκλεισμός κουπονιών"
 
-#: pretix/base/exporters/orderlist.py:581 pretix/control/views/item.py:803
+#: pretix/base/exporters/orderlist.py:608 pretix/control/views/item.py:803
 msgid "Current user's carts"
 msgstr "Το καλάθι του τρέχοντος χρήστη"
 
-#: pretix/base/exporters/orderlist.py:581 pretix/base/shredder.py:170
-#: pretix/control/forms/event.py:1188 pretix/control/navigation.py:206
+#: pretix/base/exporters/orderlist.py:608 pretix/base/shredder.py:170
+#: pretix/control/forms/event.py:1189 pretix/control/navigation.py:206
 #: pretix/control/templates/pretixcontrol/event/settings.html:155
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:59
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:6
@@ -1106,211 +1237,34 @@ msgstr "Το καλάθι του τρέχοντος χρήστη"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:73
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:57
 #: pretix/presale/templates/pretixpresale/organizers/index.html:107
-#: pretix/presale/views/widget.py:313
+#: pretix/presale/views/widget.py:314
 msgid "Waiting list"
 msgstr "Λίστα αναμονής"
 
-#: pretix/base/exporters/orderlist.py:581
+#: pretix/base/exporters/orderlist.py:608
 #, fuzzy
 #| msgid "Expire order"
 msgid "Exited orders"
 msgstr "Λήξη παραγγελίας"
 
-#: pretix/base/exporters/orderlist.py:581
+#: pretix/base/exporters/orderlist.py:608
 msgid "Current availability"
 msgstr "Τρέχουσα διαθεσιμότητα"
 
-#: pretix/base/exporters/orderlist.py:594
-#: pretix/base/exporters/orderlist.py:601
+#: pretix/base/exporters/orderlist.py:621
+#: pretix/base/exporters/orderlist.py:628
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
 #: pretix/control/views/item.py:810
 msgid "Infinite"
 msgstr "Άπειρος"
 
-#: pretix/base/exporters/orderlist.py:611
-msgid "Invoice data"
-msgstr "Δεδομένα τιμολογίου"
-
-#: pretix/base/exporters/orderlist.py:616 pretix/base/shredder.py:308
-#: pretix/control/templates/pretixcontrol/order/index.html:205
-#: pretix/control/templates/pretixcontrol/order/index.html:254
-#: pretix/presale/templates/pretixpresale/event/order.html:211
-#: pretix/presale/templates/pretixpresale/event/order.html:232
-msgid "Invoices"
-msgstr "Τιμολόγια"
-
-#: pretix/base/exporters/orderlist.py:617
-msgid "Invoice lines"
-msgstr "Γραμμές τιμολογίων"
-
-#: pretix/base/exporters/orderlist.py:623
-#: pretix/base/exporters/orderlist.py:732
-msgid "Invoice number"
-msgstr "Αριθμός τιμολογίου"
-
-#: pretix/base/exporters/orderlist.py:624
-#: pretix/base/exporters/orderlist.py:742
-#: pretix/base/exporters/orderlist.py:850 pretix/base/models/items.py:1021
-#: pretix/base/models/orders.py:154 pretix/base/models/orders.py:2140
-#: pretix/control/forms/filter.py:443
-#: pretix/control/templates/pretixcontrol/organizers/giftcard.html:63
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:17
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:11
-#: pretix/presale/templates/pretixpresale/organizers/index.html:64
-msgid "Date"
-msgstr "Ημερομηνία"
-
-#: pretix/base/exporters/orderlist.py:626
-#: pretix/base/exporters/orderlist.py:744 pretix/base/models/waitinglist.py:41
-#: pretix/base/orderimport.py:123
-#: pretix/control/templates/pretixcontrol/users/index.html:37
-#: pretix/control/views/waitinglist.py:199
-msgid "E-mail address"
-msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομείου"
-
-#: pretix/base/exporters/orderlist.py:627
-#: pretix/base/exporters/orderlist.py:745
-msgid "Invoice type"
-msgstr "Τύπος τιμολογίου"
-
-#: pretix/base/exporters/orderlist.py:628
-#: pretix/base/exporters/orderlist.py:746
-msgid "Cancellation of"
-msgstr "Ακύρωση"
-
-#: pretix/base/exporters/orderlist.py:629 pretix/base/models/auth.py:102
-#: pretix/control/forms/event.py:1118 pretix/control/views/waitinglist.py:200
-msgid "Language"
-msgstr "Γλώσσα"
-
-#: pretix/base/exporters/orderlist.py:630
-#: pretix/base/exporters/orderlist.py:631
-#: pretix/base/exporters/orderlist.py:632
-#: pretix/base/exporters/orderlist.py:633
-#: pretix/base/exporters/orderlist.py:634
-#: pretix/base/exporters/orderlist.py:635
-#: pretix/base/exporters/orderlist.py:636
-#: pretix/base/exporters/orderlist.py:747
-#: pretix/base/exporters/orderlist.py:748
-#: pretix/base/exporters/orderlist.py:749
-#: pretix/base/exporters/orderlist.py:750
-#: pretix/base/exporters/orderlist.py:751
-#: pretix/base/exporters/orderlist.py:752
-#: pretix/base/exporters/orderlist.py:753
-msgid "Invoice sender:"
-msgstr "Αποστολέας τιμολογίου:"
-
-#: pretix/base/exporters/orderlist.py:635
-#: pretix/base/exporters/orderlist.py:752
-msgid "Tax ID"
-msgstr "Αριθμός φορολογικού μητρώου"
-
-#: pretix/base/exporters/orderlist.py:637
 #: pretix/base/exporters/orderlist.py:638
-#: pretix/base/exporters/orderlist.py:639
-#: pretix/base/exporters/orderlist.py:640
-#: pretix/base/exporters/orderlist.py:641
-#: pretix/base/exporters/orderlist.py:642
-#: pretix/base/exporters/orderlist.py:643
-#: pretix/base/exporters/orderlist.py:644
-#: pretix/base/exporters/orderlist.py:645
-#: pretix/base/exporters/orderlist.py:646
-#: pretix/base/exporters/orderlist.py:754
-#: pretix/base/exporters/orderlist.py:755
-#: pretix/base/exporters/orderlist.py:756
-#: pretix/base/exporters/orderlist.py:757
-#: pretix/base/exporters/orderlist.py:758
-#: pretix/base/exporters/orderlist.py:759
-#: pretix/base/exporters/orderlist.py:760
-#: pretix/base/exporters/orderlist.py:761
-#: pretix/base/exporters/orderlist.py:762
-#: pretix/base/exporters/orderlist.py:763
-msgid "Invoice recipient:"
-msgstr "Αποδέκτης τιμολογίου:"
-
-#: pretix/base/exporters/orderlist.py:639
-#: pretix/base/exporters/orderlist.py:756
-msgid "Street address"
-msgstr "Διεύθυνση"
-
-#: pretix/base/exporters/orderlist.py:645
-#: pretix/base/exporters/orderlist.py:762 pretix/base/models/orders.py:2208
-msgid "Beneficiary"
-msgstr "Δικαιούχος"
-
-#: pretix/base/exporters/orderlist.py:646
-#: pretix/base/exporters/orderlist.py:763 pretix/base/models/orders.py:2203
-#: pretix/base/orderimport.py:364
-#: pretix/control/templates/pretixcontrol/order/index.html:815
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:116
-msgid "Internal reference"
-msgstr "Σχετικό παραστατικό"
-
-#: pretix/base/exporters/orderlist.py:647 pretix/control/forms/event.py:1088
-msgid "Reverse charge"
-msgstr "Αντίστροφη φόρτιση"
-
-#: pretix/base/exporters/orderlist.py:648
-msgid "Shown foreign currency"
-msgstr "Εμφανίστηκε ξένο νόμισμα"
-
-#: pretix/base/exporters/orderlist.py:649
-msgid "Foreign currency rate"
-msgstr "Συνάλλαγμα"
-
-#: pretix/base/exporters/orderlist.py:650
-msgid "Total value (with taxes)"
-msgstr "Συνολική αξία (με φόρους)"
-
-#: pretix/base/exporters/orderlist.py:651
-msgid "Total value (without taxes)"
-msgstr "Συνολική αξία (χωρίς φόρους)"
-
-#: pretix/base/exporters/orderlist.py:652
-#, fuzzy
-#| msgid "Payment settings"
-msgid "Payment matching IDs"
-msgstr "Ρυθμίσεις πληρωμής"
-
-#: pretix/base/exporters/orderlist.py:699
-#: pretix/base/exporters/orderlist.py:797
-msgid "Cancellation"
-msgstr "Ακύρωση"
-
-#: pretix/base/exporters/orderlist.py:699
-#: pretix/base/exporters/orderlist.py:797
-#: pretix/control/templates/pretixcontrol/order/index.html:209
-#: pretix/presale/templates/pretixpresale/event/order.html:219
-msgid "Invoice"
-msgstr "Τιμολόγιο"
-
-#: pretix/base/exporters/orderlist.py:733
-msgid "Line number"
-msgstr "Αριθμός σειράς"
-
-#: pretix/base/exporters/orderlist.py:735 pretix/control/forms/orders.py:241
-msgid "Gross price"
-msgstr "Μικτή τιμή"
-
-#: pretix/base/exporters/orderlist.py:736
-msgid "Net price"
-msgstr "Καθαρή τιμή"
-
-#: pretix/base/exporters/orderlist.py:739
-msgid "Tax name"
-msgstr "Φορολογικό όνομα"
-
-#: pretix/base/exporters/orderlist.py:740
-msgid "Event start date"
-msgstr "Ημερομηνία έναρξης του γεγονότος"
-
-#: pretix/base/exporters/orderlist.py:835
 #, fuzzy
 #| msgid "Redemptions"
 msgid "Gift card redemptions"
 msgstr "Εξαγορές"
 
-#: pretix/base/exporters/orderlist.py:850 pretix/base/models/giftcards.py:54
+#: pretix/base/exporters/orderlist.py:653 pretix/base/models/giftcards.py:54
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:10
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:4
 #: pretix/control/templates/pretixcontrol/order/index.html:368
@@ -1322,7 +1276,7 @@ msgstr "Εξαγορές"
 msgid "Gift card code"
 msgstr "Δωροκάρτα"
 
-#: pretix/base/exporters/orderlist.py:850
+#: pretix/base/exporters/orderlist.py:653
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
 #, fuzzy
 #| msgid "Voucher details"
@@ -1376,7 +1330,7 @@ msgstr "Η προεργασία δεν ξεκίνησε"
 
 #: pretix/base/forms/questions.py:524 pretix/base/forms/questions.py:700
 #: pretix/base/payment.py:51 pretix/control/forms/event.py:654
-#: pretix/control/forms/event.py:1048
+#: pretix/control/forms/event.py:1049
 msgid "This field is required."
 msgstr "Αυτό το πεδίο είναι απαραίτητο."
 
@@ -1735,7 +1689,7 @@ msgid "Default list"
 msgstr "Προεπιλεγμένη λίστα"
 
 #: pretix/base/models/auth.py:92 pretix/base/models/orders.py:2189
-#: pretix/base/settings.py:1871 pretix/base/settings.py:1882
+#: pretix/base/settings.py:1881 pretix/base/settings.py:1892
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 msgid "Full name"
 msgstr "Πλήρες όνομα"
@@ -1796,20 +1750,20 @@ msgstr "Οι πληροφορίες λογαριασμού άλλαξαν"
 msgid "Password recovery"
 msgstr "Ανάκτηση κωδικού"
 
-#: pretix/base/models/checkin.py:15
+#: pretix/base/models/checkin.py:16
 msgid "All products (including newly created ones)"
 msgstr "Όλα τα προϊόντα (συμπεριλαμβανομένων των πρόσφατα δημιουργημένων)"
 
-#: pretix/base/models/checkin.py:16 pretix/plugins/badges/exporters.py:212
+#: pretix/base/models/checkin.py:17 pretix/plugins/badges/exporters.py:212
 msgid "Limit to products"
 msgstr "Περιορίστε τα προϊόντα"
 
-#: pretix/base/models/checkin.py:19
+#: pretix/base/models/checkin.py:20
 msgctxt "checkin"
 msgid "Include pending orders"
 msgstr "Συμπεριλάβετε εκκρεμείς παραγγελίες"
 
-#: pretix/base/models/checkin.py:21
+#: pretix/base/models/checkin.py:22
 #, fuzzy
 #| msgid ""
 #| "With this option, people will be able to check in even if the order have "
@@ -1823,26 +1777,26 @@ msgstr ""
 "η παραγγελία δεν έχει πληρωθεί. Αυτό λειτουργεί μόνο με pretixdesk 0.3.0 ή "
 "νεότερη ή pretixdroid 1.9 ή νεότερη."
 
-#: pretix/base/models/checkin.py:24
+#: pretix/base/models/checkin.py:25
 msgid "Allow re-entering after an exit scan"
 msgstr ""
 
-#: pretix/base/models/checkin.py:28
+#: pretix/base/models/checkin.py:29
 #, fuzzy
 #| msgid "Ask for email addresses per ticket"
 msgid "Allow multiple entries per ticket"
 msgstr "Ζητήστε διευθύνσεις ηλεκτρονικού ταχυδρομείου ανά εισιτήριο"
 
-#: pretix/base/models/checkin.py:29
+#: pretix/base/models/checkin.py:30
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
 msgstr ""
 
-#: pretix/base/models/checkin.py:36
+#: pretix/base/models/checkin.py:37
 msgid "Sales channels to automatically check in"
 msgstr ""
 
-#: pretix/base/models/checkin.py:37
+#: pretix/base/models/checkin.py:38
 msgid ""
 "All items on this check-in list will be automatically marked as checked-in "
 "when purchased through any of the selected sales channels. This option can "
@@ -1850,13 +1804,13 @@ msgid ""
 "entry and should be considered validated directly upon purchase."
 msgstr ""
 
-#: pretix/base/models/checkin.py:137
+#: pretix/base/models/checkin.py:138
 #, fuzzy
 #| msgid "Country"
 msgid "Entry"
 msgstr "Χώρα"
 
-#: pretix/base/models/checkin.py:138
+#: pretix/base/models/checkin.py:139
 msgid "Exit"
 msgstr ""
 
@@ -1922,7 +1876,7 @@ msgid "Event currency"
 msgstr "Νόμισμα εκδήλωσης"
 
 #: pretix/base/models/event.py:311 pretix/base/models/event.py:992
-#: pretix/base/settings.py:1679 pretix/base/settings.py:1689
+#: pretix/base/settings.py:1689 pretix/base/settings.py:1699
 #: pretix/control/forms/subevents.py:370
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
@@ -2004,7 +1958,7 @@ msgstr "Εσωτερικό σχόλιο"
 #: pretix/control/templates/pretixcontrol/event/index.html:12
 #: pretix/control/views/dashboards.py:490
 #: pretix/presale/templates/pretixpresale/organizers/index.html:102
-#: pretix/presale/views/widget.py:494
+#: pretix/presale/views/widget.py:495
 msgid "Event series"
 msgstr "Σειρά εκδηλώσεων"
 
@@ -2087,7 +2041,7 @@ msgstr ""
 "Αν επιλεγεί, αυτή η εκδήλωση θα εμφανιστεί δημόσια στη λίστα ημερομηνιών για "
 "το συμβάν σας."
 
-#: pretix/base/models/event.py:1023 pretix/base/settings.py:1556
+#: pretix/base/models/event.py:1023 pretix/base/settings.py:1566
 msgid "Frontpage text"
 msgstr "Frontpage κείμενο"
 
@@ -2288,8 +2242,8 @@ msgstr "Στη λίστα αναμονής από τότε"
 msgid "This will only work of waiting lists are enabled for this event."
 msgstr "Οι λίστες αναμονής είναι απενεργοποιημένες για αυτή την εκδήλωση."
 
-#: pretix/base/models/items.py:321 pretix/base/settings.py:770
-#: pretix/control/forms/event.py:1183
+#: pretix/base/models/items.py:321 pretix/base/settings.py:780
+#: pretix/control/forms/event.py:1184
 msgid "Show number of tickets left"
 msgstr "Εμφάνιση του αριθμού των εισιτηρίων που απομένουν"
 
@@ -2313,7 +2267,7 @@ msgstr "Διαθέσιμο από"
 msgid "This product will not be sold before the given date."
 msgstr "Το προϊόν αυτό δεν θα πωλείται πριν από την καθορισμένη ημερομηνία."
 
-#: pretix/base/models/items.py:339 pretix/base/payment.py:225
+#: pretix/base/models/items.py:339 pretix/base/payment.py:226
 msgid "Available until"
 msgstr "Διαθέσιμο μέχρι"
 
@@ -2796,7 +2750,7 @@ msgstr "Επιλογή ερώτησης"
 msgid "Question options"
 msgstr "Επιλογές ερωτήσεων"
 
-#: pretix/base/models/items.py:1328 pretix/control/forms/event.py:1217
+#: pretix/base/models/items.py:1328 pretix/control/forms/event.py:1218
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 msgid "Total capacity"
 msgstr "Συνολική χωρητικότητα"
@@ -3015,7 +2969,7 @@ msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgstr "Το κουπόνι έχει δημιουργηθεί."
 
 #: pretix/base/models/orders.py:885 pretix/base/services/orders.py:841
-#: pretix/control/views/event.py:678
+#: pretix/control/views/event.py:679
 #: pretix/presale/templates/pretixpresale/event/order.html:44
 #, python-format
 msgid "Your order: %(code)s"
@@ -3030,7 +2984,7 @@ msgid "Empty, if this product is not an admission ticket"
 msgstr "Άδειo, εάν αυτό το προϊόν δεν είναι εισιτήριο εισόδου"
 
 #: pretix/base/models/orders.py:1119 pretix/base/models/orders.py:2188
-#: pretix/base/settings.py:556
+#: pretix/base/settings.py:566
 msgid "Company name"
 msgstr "Επωνυμία εταιρείας"
 
@@ -3150,7 +3104,7 @@ msgstr "Έξοδα ακύρωσης"
 msgid "Other fees"
 msgstr "Άλλα έξοδα"
 
-#: pretix/base/models/orders.py:1796 pretix/base/payment.py:1005
+#: pretix/base/models/orders.py:1796 pretix/base/payment.py:1008
 #: pretix/control/templates/pretixcontrol/order/index.html:128
 msgid "Gift card"
 msgstr "Δωροκάρτα"
@@ -3999,7 +3953,7 @@ msgstr "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση
 msgid "Please enter a valid sales channel."
 msgstr "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου."
 
-#: pretix/base/orderimport.py:591
+#: pretix/base/orderimport.py:591 pretix/plugins/checkinlists/exporters.py:430
 #, fuzzy
 #| msgid "Client ID"
 msgid "Seat ID"
@@ -4025,22 +3979,22 @@ msgstr "Αυτό το slug είναι ήδη σε χρήση. Επιλέξτε �
 msgid "You need to select a specific seat."
 msgstr "Πρέπει να επιλέξετε μια ημερομηνία."
 
-#: pretix/base/payment.py:220
+#: pretix/base/payment.py:221
 msgid "Enable payment method"
 msgstr "Ενεργοποιήστε τη μέθοδο πληρωμής"
 
-#: pretix/base/payment.py:226
+#: pretix/base/payment.py:227
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
 "Οι χρήστες δεν θα μπορούν να επιλέξουν αυτόν τον πάροχο πληρωμών μετά την "
 "καθορισμένη ημερομηνία."
 
-#: pretix/base/payment.py:231
+#: pretix/base/payment.py:232
 msgid "Text on invoices"
 msgstr "Κείμενο σχετικά με τα τιμολόγια"
 
-#: pretix/base/payment.py:232
+#: pretix/base/payment.py:233
 msgid ""
 "Will be printed just below the payment figures and above the closing text on "
 "invoices. This will only be used if the invoice is generated before the "
@@ -4052,11 +4006,11 @@ msgstr ""
 "δημιουργηθεί πριν πληρωθεί η παραγγελία. Αν το τιμολόγιο δημιουργηθεί "
 "αργότερα, θα εμφανιστεί ένα κείμενο που δηλώνει ότι έχει ήδη πληρωθεί."
 
-#: pretix/base/payment.py:241
+#: pretix/base/payment.py:242
 msgid "Minimum order total"
 msgstr "Ελάχιστο συνολικό ποσό παραγγελίας"
 
-#: pretix/base/payment.py:242
+#: pretix/base/payment.py:243
 msgid ""
 "This payment will be available only if the order total is equal to or "
 "exceeds the given value. The order total for this purpose may be computed "
@@ -4067,11 +4021,11 @@ msgstr ""
 "αυτό μπορεί να υπολογιστεί χωρίς να ληφθούν υπόψη τα τέλη που επιβάλλονται "
 "από αυτή τη μέθοδο πληρωμής."
 
-#: pretix/base/payment.py:252
+#: pretix/base/payment.py:253
 msgid "Maximum order total"
 msgstr "Μέγιστο συνολικό ποσό παραγγελίας"
 
-#: pretix/base/payment.py:253
+#: pretix/base/payment.py:254
 msgid ""
 "This payment will be available only if the order total is equal to or below "
 "the given value. The order total for this purpose may be computed without "
@@ -4082,25 +4036,25 @@ msgstr ""
 "σκοπό αυτό μπορεί να υπολογιστεί χωρίς να ληφθούν υπόψη τα τέλη που "
 "επιβάλλονται από αυτή τη μέθοδο πληρωμής."
 
-#: pretix/base/payment.py:263 pretix/base/payment.py:272
+#: pretix/base/payment.py:264 pretix/base/payment.py:273
 msgid "Additional fee"
 msgstr "Επιπλέον χρέωση"
 
-#: pretix/base/payment.py:264
+#: pretix/base/payment.py:265
 msgid "Absolute value"
 msgstr "Απόλυτη τιμή"
 
-#: pretix/base/payment.py:273
+#: pretix/base/payment.py:274
 msgid "Percentage of the order total."
 msgstr ""
 
-#: pretix/base/payment.py:279
+#: pretix/base/payment.py:280
 msgid "Calculate the fee from the total value including the fee."
 msgstr ""
 "Υπολογίστε το τέλος(fee) από τη συνολική αξία συμπεριλαμβανομένου του "
 "τέλους(fee)."
 
-#: pretix/base/payment.py:280
+#: pretix/base/payment.py:281
 #, python-brace-format
 msgid ""
 "We recommend to enable this if you want your users to pay the payment fees "
@@ -4114,11 +4068,11 @@ msgstr ""
 "σχετικά με το τι κάνει αυτό.</a> Μην ξεχάσετε να ορίσετε τις σωστές "
 "χρεώσεις(fees) παραπάνω!"
 
-#: pretix/base/payment.py:288
+#: pretix/base/payment.py:289
 msgid "Restrict to countries"
 msgstr "Περιορίστε σε χώρες"
 
-#: pretix/base/payment.py:290
+#: pretix/base/payment.py:291
 msgid ""
 "Only allow choosing this payment provider for invoice addresses in the "
 "selected countries. If you don't select any country, all countries are "
@@ -4128,50 +4082,50 @@ msgstr ""
 "τιμολογίου στις επιλεγμένες χώρες. Αν δεν επιλέξετε χώρα, επιτρέπονται όλες "
 "οι χώρες. Αυτό ενεργοποιείται μόνο αν απαιτείται η διεύθυνση του τιμολογίου."
 
-#: pretix/base/payment.py:301
+#: pretix/base/payment.py:302
 msgid "Restrict to specific sales channels"
 msgstr ""
 
-#: pretix/base/payment.py:309
+#: pretix/base/payment.py:310
 #, fuzzy
 #| msgid "The settings of a payment provider have been changed."
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
 msgstr "Οι ρυθμίσεις ενός παρόχου πληρωμών έχουν αλλάξει."
 
-#: pretix/base/payment.py:313
+#: pretix/base/payment.py:314
 #, fuzzy
 #| msgid "Enable payment method"
 msgid "Hide payment method"
 msgstr "Ενεργοποιήστε τη μέθοδο πληρωμής"
 
-#: pretix/base/payment.py:316
+#: pretix/base/payment.py:317
 msgid ""
 "The payment method will not be shown by default but only to people who enter "
 "the shop through a special link."
 msgstr ""
 
-#: pretix/base/payment.py:322
+#: pretix/base/payment.py:323
 #, fuzzy
 #| msgid "Enable payment method"
 msgid "Link to enable payment method"
 msgstr "Ενεργοποιήστε τη μέθοδο πληρωμής"
 
-#: pretix/base/payment.py:331
+#: pretix/base/payment.py:332
 msgid "Share this link with customers who should use this payment method."
 msgstr ""
 
-#: pretix/base/payment.py:364
+#: pretix/base/payment.py:365
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
 msgstr "Η πληρωμή για αυτό το τιμολόγιο έχει ήδη παραληφθεί."
 
-#: pretix/base/payment.py:744
+#: pretix/base/payment.py:747
 msgid "Automatic refunds are not supported by this payment provider."
 msgstr ""
 "Οι αυτόματες επιστροφές δεν υποστηρίζονται από αυτόν τον πάροχο πληρωμών."
 
-#: pretix/base/payment.py:789
+#: pretix/base/payment.py:792
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
@@ -4179,20 +4133,20 @@ msgstr ""
 "Δεν απαιτείται πληρωμή, καθώς αυτή η παραγγελία περιλαμβάνει μόνο προϊόντα "
 "που είναι δωρεάν."
 
-#: pretix/base/payment.py:796
+#: pretix/base/payment.py:799
 msgid "Free of charge"
 msgstr "Δωρεάν"
 
-#: pretix/base/payment.py:824
+#: pretix/base/payment.py:827
 msgid "Box office"
 msgstr "Εκδοτήριο"
 
-#: pretix/base/payment.py:867 pretix/plugins/manualpayment/__init__.py:9
+#: pretix/base/payment.py:870 pretix/plugins/manualpayment/__init__.py:9
 #: pretix/plugins/manualpayment/__init__.py:12
 msgid "Manual payment"
 msgstr "Μη αυτόματη πληρωμή"
 
-#: pretix/base/payment.py:871 pretix/plugins/banktransfer/payment.py:119
+#: pretix/base/payment.py:874 pretix/plugins/banktransfer/payment.py:119
 msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
@@ -4200,15 +4154,15 @@ msgstr ""
 "Στη δοκιμαστική λειτουργία, μπορείτε απλώς να επισημάνετε με μη αυτόματο "
 "τρόπο αυτή την παραγγελία ως πληρωμένη στο backend μετά τη δημιουργία της."
 
-#: pretix/base/payment.py:892 pretix/plugins/banktransfer/payment.py:102
+#: pretix/base/payment.py:895 pretix/plugins/banktransfer/payment.py:102
 msgid "Payment method name"
 msgstr "Όνομα μεθόδου πληρωμής"
 
-#: pretix/base/payment.py:896
+#: pretix/base/payment.py:899
 msgid "Payment process description during checkout"
 msgstr "Περιγραφή διαδικασίας πληρωμής κατά την ολοκλήρωση του ελέγχου"
 
-#: pretix/base/payment.py:897
+#: pretix/base/payment.py:900
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
@@ -4217,11 +4171,11 @@ msgstr ""
 "επιλέξει αυτή τη μέθοδο πληρωμής. Πρέπει να δώσει μια σύντομη εξήγηση "
 "σχετικά με αυτήν τη μέθοδο πληρωμής."
 
-#: pretix/base/payment.py:902
+#: pretix/base/payment.py:905
 msgid "Payment process description in order confirmation emails"
 msgstr "Περιγραφή διαδικασίας πληρωμής για emails επιβεβαίωσης παραγγελίας"
 
-#: pretix/base/payment.py:903
+#: pretix/base/payment.py:906
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "This text will be included for the {payment_info} placeholder in order "
@@ -4239,11 +4193,11 @@ msgstr ""
 "τρόπο με τον οποίο θα γίνει η πληρωμή. Μπορείτε να χρησιμοποιήσετε τα "
 "placeholders {order}, {total}, {currency} και {total_with_currency}"
 
-#: pretix/base/payment.py:910
+#: pretix/base/payment.py:913
 msgid "Payment process description for pending orders"
 msgstr "Περιγραφή διαδικασίας πληρωμής για εκκρεμείς παραγγελίες"
 
-#: pretix/base/payment.py:911
+#: pretix/base/payment.py:914
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "This text will be shown on the order confirmation page for pending "
@@ -4260,36 +4214,36 @@ msgstr ""
 "τρόπο με τον οποίο θα γίνει η πληρωμή. Μπορείτε να χρησιμοποιήσετε τα "
 "placeholders {order}, {total}, {currency} και {total_with_currency}"
 
-#: pretix/base/payment.py:957
+#: pretix/base/payment.py:960
 msgid "Offsetting"
 msgstr "Offsetting"
 
-#: pretix/base/payment.py:971 pretix/control/views/orders.py:807
+#: pretix/base/payment.py:974 pretix/control/views/orders.py:807
 msgid "You entered an order that could not be found."
 msgstr "Εισαγάγατε μια παραγγελία που δεν βρέθηκε."
 
-#: pretix/base/payment.py:1000
+#: pretix/base/payment.py:1003
 #, python-format
 msgid "Balanced against orders: %s"
 msgstr "Ισορροπία κατά παραγγελίες: %s"
 
-#: pretix/base/payment.py:1021
+#: pretix/base/payment.py:1024
 msgid "In test mode, only test cards will work."
 msgstr ""
 
-#: pretix/base/payment.py:1086 pretix/base/payment.py:1149
-#: pretix/base/payment.py:1193 pretix/base/services/orders.py:753
+#: pretix/base/payment.py:1089 pretix/base/payment.py:1152
+#: pretix/base/payment.py:1196 pretix/base/services/orders.py:753
 msgid "You cannot pay with gift cards when buying a gift card."
 msgstr ""
 
-#: pretix/base/payment.py:1095 pretix/base/payment.py:1157
-#: pretix/base/payment.py:1201 pretix/base/services/orders.py:744
+#: pretix/base/payment.py:1098 pretix/base/payment.py:1160
+#: pretix/base/payment.py:1204 pretix/base/services/orders.py:744
 #, fuzzy
 #| msgid "This payment method does not support automatic refunds."
 msgid "This gift card does not support this currency."
 msgstr "Αυτός ο τρόπος πληρωμής δεν υποστηρίζει αυτόματες επιστροφές χρημάτων."
 
-#: pretix/base/payment.py:1098 pretix/base/payment.py:1160
+#: pretix/base/payment.py:1101 pretix/base/payment.py:1163
 #: pretix/base/services/orders.py:746
 #, fuzzy
 #| msgid "This refund can not be processed at the moment."
@@ -4298,7 +4252,7 @@ msgstr ""
 "Δεν είναι δυνατή η επεξεργασία γι' αυτήν την επιστροφή χρημάτων αυτή τη "
 "στιγμή."
 
-#: pretix/base/payment.py:1101 pretix/base/payment.py:1163
+#: pretix/base/payment.py:1104 pretix/base/payment.py:1166
 #: pretix/base/services/orders.py:748
 #, fuzzy
 #| msgid "Permanently delete all orders created in test mode"
@@ -4307,63 +4261,63 @@ msgstr ""
 "Διαγράψτε μόνιμα όλες τις παραγγελίες που δημιουργούνται στη λειτουργία "
 "δοκιμής"
 
-#: pretix/base/payment.py:1104 pretix/base/payment.py:1166
-#: pretix/base/payment.py:1207
+#: pretix/base/payment.py:1107 pretix/base/payment.py:1169
+#: pretix/base/payment.py:1210
 #, fuzzy
 #| msgid "This feature is not enabled."
 msgid "This gift card is no longer valid."
 msgstr "Αυτή η λειτουργία δεν είναι ενεργοποιημένη."
 
-#: pretix/base/payment.py:1107 pretix/base/payment.py:1169
+#: pretix/base/payment.py:1110 pretix/base/payment.py:1172
 #, fuzzy
 #| msgid "Access for this device has been revoked."
 msgid "All credit on this gift card has been used."
 msgstr "Η πρόσβαση αυτής της συσκευής έχει ανακληθεί."
 
-#: pretix/base/payment.py:1112
+#: pretix/base/payment.py:1115
 #, fuzzy
 #| msgid "This identifier is already used for a different question."
 msgid "This gift card is already used for your payment."
 msgstr "Αυτό το αναγνωριστικό χρησιμοποιείται ήδη για μια διαφορετική ερώτηση."
 
-#: pretix/base/payment.py:1127
+#: pretix/base/payment.py:1130
 msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
 msgstr ""
 
-#: pretix/base/payment.py:1131
+#: pretix/base/payment.py:1134
 #, fuzzy
 #| msgid "Your cart has been updated."
 msgid "Your gift card has been applied."
 msgstr "Το καλάθι σας έχει ενημερωθεί."
 
-#: pretix/base/payment.py:1139 pretix/base/payment.py:1181
+#: pretix/base/payment.py:1142 pretix/base/payment.py:1184
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
 
-#: pretix/base/payment.py:1142 pretix/base/payment.py:1184
+#: pretix/base/payment.py:1145 pretix/base/payment.py:1187
 #, fuzzy
 #| msgid "This feature is not enabled."
 msgid "This gift card is not known."
 msgstr "Αυτή η λειτουργία δεν είναι ενεργοποιημένη."
 
-#: pretix/base/payment.py:1144 pretix/base/payment.py:1186
+#: pretix/base/payment.py:1147 pretix/base/payment.py:1189
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
 
-#: pretix/base/payment.py:1203 pretix/base/services/orders.py:750
+#: pretix/base/payment.py:1206 pretix/base/services/orders.py:750
 #, fuzzy
 #| msgid "This order is not yet approved by the event organizer."
 msgid "This gift card is not accepted by this event organizer."
 msgstr ""
 "Αυτή η παραγγελία δεν έχει εγκριθεί ακόμη από τον διοργανωτή της εκδήλωσης."
 
-#: pretix/base/payment.py:1205
+#: pretix/base/payment.py:1208
 #, fuzzy
 #| msgid "There was an error sending the mail. Please try again later."
 msgid "This gift card was used in the meantime. Please try again."
@@ -4381,13 +4335,13 @@ msgstr "Κωδικός εισιτηρίου (περιεχόμενο barcode)"
 msgid "Order position number"
 msgstr "Θέση παραγγελείας"
 
-#: pretix/base/pdf.py:64 pretix/control/forms/event.py:1270
+#: pretix/base/pdf.py:64 pretix/control/forms/event.py:1271
 #: pretix/control/templates/pretixcontrol/items/index.html:33
 msgid "Product name"
 msgstr "Όνομα προϊόντος"
 
 #: pretix/base/pdf.py:65 pretix/base/services/tickets.py:79
-#: pretix/control/views/event.py:671 pretix/control/views/pdf.py:64
+#: pretix/control/views/event.py:672 pretix/control/views/pdf.py:64
 msgid "Sample product"
 msgstr "Δείγμα προϊόντος"
 
@@ -4404,7 +4358,7 @@ msgid "Product description"
 msgstr "Περιγραφή προϊόντος"
 
 #: pretix/base/pdf.py:75 pretix/base/services/tickets.py:80
-#: pretix/control/views/event.py:672 pretix/control/views/pdf.py:65
+#: pretix/control/views/event.py:673 pretix/control/views/pdf.py:65
 msgid "Sample product description"
 msgstr "Δείγμα περιγραφής προϊόντος"
 
@@ -4539,7 +4493,7 @@ msgstr "19:00"
 msgid "Event location"
 msgstr "Τοποθεσία εκδήλωσης"
 
-#: pretix/base/pdf.py:207 pretix/base/settings.py:578
+#: pretix/base/pdf.py:207 pretix/base/settings.py:588
 msgid "Random City"
 msgstr "Τυχαία Πόλη"
 
@@ -4553,7 +4507,7 @@ msgstr "Διεύθυνση Εταιρείας τιμολογίου"
 msgid "Invoice address city"
 msgstr "Διεύθυνση Εταιρείας τιμολογίου"
 
-#: pretix/base/pdf.py:222 pretix/base/services/invoices.py:346
+#: pretix/base/pdf.py:222 pretix/base/services/invoices.py:354
 msgid "Sample city"
 msgstr "Δείγμα πόλη"
 
@@ -4984,7 +4938,7 @@ msgstr ""
 msgid "This ticket has already been redeemed."
 msgstr "Αυτό το εισιτήριο έχει ήδη εξαργυρωθεί."
 
-#: pretix/base/services/export.py:35 pretix/base/services/export.py:60
+#: pretix/base/services/export.py:42 pretix/base/services/export.py:74
 #, fuzzy
 #| msgid "Your search did not match any quotas."
 msgid "Your export did not contain any data."
@@ -5045,23 +4999,23 @@ msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
 msgstr ""
 
-#: pretix/base/services/invoices.py:337
+#: pretix/base/services/invoices.py:345
 msgid "A payment provider specific text might appear here."
 msgstr "Ένα ειδικό κείμενο του παρόχου πληρωμής ενδέχεται να εμφανιστεί εδώ."
 
-#: pretix/base/services/invoices.py:344
+#: pretix/base/services/invoices.py:352
 msgid "214th Example Street"
 msgstr "214th Example Street"
 
-#: pretix/base/services/invoices.py:345
+#: pretix/base/services/invoices.py:353
 msgid "012345"
 msgstr "012345"
 
-#: pretix/base/services/invoices.py:361
+#: pretix/base/services/invoices.py:369
 msgid "Sample product {}"
 msgstr "Δείγμα προϊόντος {}"
 
-#: pretix/base/services/invoices.py:367
+#: pretix/base/services/invoices.py:375
 msgid "Sample product A"
 msgstr "Δείγμα προϊόντος Α"
 
@@ -5748,20 +5702,32 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:318
+#, fuzzy
+#| msgid "Invoice number prefix"
+msgid "Minimum length of invoice number after prefix"
+msgstr "Πρόθεμα αριθμού τιμολογίου"
+
+#: pretix/base/settings.py:319
+msgid ""
+"The part of your invoice number after your prefix will be filled up with "
+"leading zeros up to this length, e.g. INV-001 or INV-00001."
+msgstr ""
+
+#: pretix/base/settings.py:328
 msgid "Generate invoices with consecutive numbers"
 msgstr "Δημιουργήστε τιμολόγια με διαδοχικούς αριθμούς"
 
-#: pretix/base/settings.py:319
+#: pretix/base/settings.py:329
 msgid "If deactivated, the order code will be used in the invoice number."
 msgstr ""
 "Εάν απενεργοποιηθεί, ο κωδικός παραγγελίας θα χρησιμοποιηθεί στον αριθμό "
 "τιμολογίου."
 
-#: pretix/base/settings.py:328
+#: pretix/base/settings.py:338
 msgid "Invoice number prefix"
 msgstr "Πρόθεμα αριθμού τιμολογίου"
 
-#: pretix/base/settings.py:329
+#: pretix/base/settings.py:339
 #, fuzzy
 #| msgid ""
 #| "This will be prepended to invoice numbers. If you leave this field empty, "
@@ -5786,42 +5752,42 @@ msgstr ""
 "αριθμός θα χρησιμοποιηθεί το πολύ μία φορά σε όλα τα συμβάντα σας. Αυτή η "
 "ρύθμιση επηρεάζει μόνο μελλοντικά τιμολόγια."
 
-#: pretix/base/settings.py:343
+#: pretix/base/settings.py:353
 #, fuzzy
 #| msgid "Invoice number prefix"
 msgid "Invoice number prefix for cancellations"
 msgstr "Πρόθεμα αριθμού τιμολογίου"
 
-#: pretix/base/settings.py:344
+#: pretix/base/settings.py:354
 msgid ""
 "This will be prepended to invoice numbers of cancellations. If you leave "
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
 msgstr ""
 
-#: pretix/base/settings.py:359
+#: pretix/base/settings.py:369
 msgid "Reservation period"
 msgstr "Περίοδος κράτησης"
 
-#: pretix/base/settings.py:360
+#: pretix/base/settings.py:370
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
 msgstr ""
 "Ο αριθμός των λεπτών όπου τα στοιχεία του καλαθιού ενός χρήστη προορίζονται "
 "για αυτόν τον χρήστη."
 
-#: pretix/base/settings.py:369
+#: pretix/base/settings.py:379
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
 "Άμεση ανακατεύθυνση στο check-out μετά την προσθήκη ενός προϊόντος στο "
 "καλάθι."
 
-#: pretix/base/settings.py:378
+#: pretix/base/settings.py:388
 msgid "End of presale text"
 msgstr "Τέλος κειμένου προπώλησης"
 
-#: pretix/base/settings.py:381
+#: pretix/base/settings.py:391
 msgid ""
 "This text will be shown above the ticket shop once the designated sales "
 "timeframe for this event is over. You can use it to describe other options "
@@ -5832,11 +5798,11 @@ msgstr ""
 "Μπορείτε να το χρησιμοποιήσετε για να περιγράψετε άλλες επιλογές για να "
 "λάβετε ένα εισιτήριο, όπως ένα ταμείο θεάτρου."
 
-#: pretix/base/settings.py:396
+#: pretix/base/settings.py:406
 msgid "Guidance text"
 msgstr "Κείμενο καθοδήγησης"
 
-#: pretix/base/settings.py:397
+#: pretix/base/settings.py:407
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
@@ -5844,11 +5810,11 @@ msgstr ""
 "Αυτό το κείμενο θα εμφανιστεί πάνω από τις επιλογές πληρωμής. Μπορείτε να "
 "εξηγήσετε τις επιλογές στον χρήστη εδώ, αν θέλετε."
 
-#: pretix/base/settings.py:407
+#: pretix/base/settings.py:417
 msgid "Payment term in days"
 msgstr "Διάρκεια πληρωμής σε ημέρες"
 
-#: pretix/base/settings.py:408
+#: pretix/base/settings.py:418
 msgid ""
 "The number of days after placing an order the user has to pay to preserve "
 "their reservation. If you use slow payment methods like bank transfer, we "
@@ -5862,11 +5828,11 @@ msgstr ""
 "ορίσετε ακόμα δύο ή τρεις ημέρες για να επιτρέψετε σε άτομα να επαναλάβουν "
 "τις αποτυχημένες πληρωμές."
 
-#: pretix/base/settings.py:427
+#: pretix/base/settings.py:437
 msgid "Last date of payments"
 msgstr "Τελευταία ημερομηνία πληρωμών"
 
-#: pretix/base/settings.py:428
+#: pretix/base/settings.py:438
 msgid ""
 "The last date any payments are accepted. This has precedence over the number "
 "of days configured above. If you use the event series feature and an order "
@@ -5877,11 +5843,11 @@ msgstr ""
 "χρησιμοποιείτε τη λειτουργία σειράς συμβάντων και μια παραγγελία περιέχει "
 "εισιτήρια για πολλαπλές ημερομηνίες, θα χρησιμοποιηθεί η νωρίτερη ημερομηνία."
 
-#: pretix/base/settings.py:439
+#: pretix/base/settings.py:449
 msgid "Only end payment terms on weekdays"
 msgstr "Μόνο οι όροι πληρωμής κατά τις εργάσιμες ημέρες"
 
-#: pretix/base/settings.py:440
+#: pretix/base/settings.py:450
 msgid ""
 "If this is activated and the payment term of any order ends on a Saturday or "
 "Sunday, it will be moved to the next Monday instead. This is required in "
@@ -5893,11 +5859,11 @@ msgstr ""
 "ορισμένες χώρες από το αστικό δίκαιο. Αυτό δεν θα επηρεάσει την τελευταία "
 "ημερομηνία πληρωμών που διαμορφώθηκε παραπάνω."
 
-#: pretix/base/settings.py:451
+#: pretix/base/settings.py:461
 msgid "Automatically expire unpaid orders"
 msgstr "Αυτόματη εκπνοή των απλήρωτων παραγγελιών"
 
-#: pretix/base/settings.py:452
+#: pretix/base/settings.py:462
 msgid ""
 "If checked, all unpaid orders will automatically go from 'pending' to "
 "'expired' after the end of their payment deadline. This means that those "
@@ -5908,11 +5874,11 @@ msgstr ""
 "Αυτό σημαίνει ότι αυτά τα εισιτήρια επιστρέφουν στην πισίνα και μπορούν να "
 "παραγγελθούν από άλλους."
 
-#: pretix/base/settings.py:471
+#: pretix/base/settings.py:481
 msgid "Accept late payments"
 msgstr "Αποδοχή καθυστερημένων πληρωμών"
 
-#: pretix/base/settings.py:472
+#: pretix/base/settings.py:482
 msgid ""
 "Accept payments for orders even when they are in 'expired' state as long as "
 "enough capacity is available. No payments will ever be accepted after the "
@@ -5923,87 +5889,87 @@ msgstr ""
 "ποτέ αποδεκτή μετά την \"τελευταία ημερομηνία πληρωμών\" που έχει "
 "διαμορφωθεί παραπάνω."
 
-#: pretix/base/settings.py:483
+#: pretix/base/settings.py:493
 msgid "Show start date"
 msgstr "Εμφάνιση ημερομηνίας έναρξης"
 
-#: pretix/base/settings.py:484
+#: pretix/base/settings.py:494
 msgid "Show the presale start date before presale has started."
 msgstr "Εμφάνιση της ημερομηνίας έναρξης πριν από την εκκίνηση."
 
-#: pretix/base/settings.py:499 pretix/base/settings.py:510
+#: pretix/base/settings.py:509 pretix/base/settings.py:520
 msgid "Do not generate invoices"
 msgstr "Μη δημιουργείτε τιμολόγια"
 
-#: pretix/base/settings.py:500 pretix/base/settings.py:511
+#: pretix/base/settings.py:510 pretix/base/settings.py:521
 msgid "Only manually in admin panel"
 msgstr "Μόνο με μη αυτόματο τρόπο στον πίνακα διαχείρισης"
 
-#: pretix/base/settings.py:501 pretix/base/settings.py:512
+#: pretix/base/settings.py:511 pretix/base/settings.py:522
 msgid "Automatically on user request"
 msgstr "Αυτόματα κατόπιν αιτήματος του χρήστη"
 
-#: pretix/base/settings.py:502 pretix/base/settings.py:513
+#: pretix/base/settings.py:512 pretix/base/settings.py:523
 msgid "Automatically for all created orders"
 msgstr "Αυτόματα για όλες τις δημιουργηθείσες παραγγελίες"
 
-#: pretix/base/settings.py:503 pretix/base/settings.py:514
+#: pretix/base/settings.py:513 pretix/base/settings.py:524
 msgid "Automatically on payment"
 msgstr "Αυτόματα με πληρωμή"
 
-#: pretix/base/settings.py:507
+#: pretix/base/settings.py:517
 msgid "Generate invoices"
 msgstr "Δημιουργία τιμολογίων"
 
-#: pretix/base/settings.py:516
+#: pretix/base/settings.py:526
 msgid "Invoices will never be automatically generated for free orders."
 msgstr "Τα τιμολόγια δεν θα δημιουργηθούν αυτόματα για τις δωρεάν παραγγελίες."
 
-#: pretix/base/settings.py:525
+#: pretix/base/settings.py:535
 msgid "Automatically cancel and reissue invoice on address changes"
 msgstr ""
 
-#: pretix/base/settings.py:526
+#: pretix/base/settings.py:536
 msgid ""
 "If customers change their invoice address on an existing order, the invoice "
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
 msgstr ""
 
-#: pretix/base/settings.py:541
+#: pretix/base/settings.py:551
 msgid "Address line"
 msgstr "Γραμμή διεύθυνσης"
 
-#: pretix/base/settings.py:545
+#: pretix/base/settings.py:555
 msgid "Albert Einstein Road 52"
 msgstr "Οδός Albert Einstein 52"
 
-#: pretix/base/settings.py:597
+#: pretix/base/settings.py:607
 msgid "Domestic tax ID"
 msgstr "Αναγνωριστικό εσωτερικού φόρου(Domestic tax ID)"
 
-#: pretix/base/settings.py:598
+#: pretix/base/settings.py:608
 msgid "e.g. tax number in Germany, ABN in Australia, …"
 msgstr ""
 
-#: pretix/base/settings.py:607
+#: pretix/base/settings.py:617
 msgid "EU VAT ID"
 msgstr "Κωδικός ΦΠΑ της ΕΕ"
 
-#: pretix/base/settings.py:620
+#: pretix/base/settings.py:630
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
 msgstr ""
 "π.χ. Με αυτό το έγγραφο, σας στείλαμε το τιμολόγιο για την παραγγελία σας."
 
-#: pretix/base/settings.py:623
+#: pretix/base/settings.py:633
 msgid "Introductory text"
 msgstr "Εισαγωγικό κείμενο"
 
-#: pretix/base/settings.py:624
+#: pretix/base/settings.py:634
 msgid "Will be printed on every invoice above the invoice rows."
 msgstr "Θα εκτυπώνεται σε κάθε τιμολόγιο πάνω από τις σειρές τιμολογίων."
 
-#: pretix/base/settings.py:637
+#: pretix/base/settings.py:647
 msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
@@ -6011,15 +5977,15 @@ msgstr ""
 "π.χ. Σας ευχαριστούμε για την αγορά σας! Μπορείτε να βρείτε περισσότερες "
 "πληροφορίες σχετικά με την εκδήλωση στο ..."
 
-#: pretix/base/settings.py:640
+#: pretix/base/settings.py:650
 msgid "Additional text"
 msgstr "Πρόσθετο κείμενο"
 
-#: pretix/base/settings.py:641
+#: pretix/base/settings.py:651
 msgid "Will be printed on every invoice below the invoice total."
 msgstr "Θα εκτυπώνεται σε κάθε τιμολόγιο κάτω από το συνολικό τιμολόγιο."
 
-#: pretix/base/settings.py:654
+#: pretix/base/settings.py:664
 msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
@@ -6027,11 +5993,11 @@ msgstr ""
 "π.χ. τα τραπεζικά σας στοιχεία, νομικά στοιχεία όπως το αναγνωριστικό σας "
 "ΦΠΑ, αριθμούς εγγραφής κ.λπ."
 
-#: pretix/base/settings.py:657
+#: pretix/base/settings.py:667
 msgid "Footer"
 msgstr "Υποσέλιδο"
 
-#: pretix/base/settings.py:658
+#: pretix/base/settings.py:668
 msgid ""
 "Will be printed centered and in a smaller font at the end of every invoice "
 "page."
@@ -6039,11 +6005,11 @@ msgstr ""
 "Θα εκτυπωθεί κεντρικά και σε μικρότερη γραμματοσειρά στο τέλος κάθε σελίδας "
 "τιμολογίου."
 
-#: pretix/base/settings.py:671
+#: pretix/base/settings.py:681
 msgid "Attach invoices to emails"
 msgstr "Επισυνάψτε τα τιμολόγια στα ηλεκτρονικά ταχυδρομεία"
 
-#: pretix/base/settings.py:672
+#: pretix/base/settings.py:682
 msgid ""
 "If invoices are automatically generated for all orders, they will be "
 "attached to the order confirmation mail. If they are automatically generated "
@@ -6056,53 +6022,53 @@ msgstr ""
 "επιβεβαίωσης πληρωμής. Εάν δεν δημιουργούνται αυτόματα, δεν θα "
 "επισυνάπτονται στα μηνύματα ηλεκτρονικού ταχυδρομείου."
 
-#: pretix/base/settings.py:684
+#: pretix/base/settings.py:694
 msgid "Show items outside presale period"
 msgstr "Εμφάνιση αντικειμένων εκτός περιόδου προπώλησης"
 
-#: pretix/base/settings.py:685
+#: pretix/base/settings.py:695
 msgid ""
 "Show item details before presale has started and after presale has ended"
 msgstr ""
 "Παρουσιάστε της λεπτομέρειες του στοιχείου πριν ξεκινήσει η εκκίνηση και "
 "μετά την ολοκλήρωση της προπώλησης"
 
-#: pretix/base/settings.py:705
+#: pretix/base/settings.py:715
 msgid "Available languages"
 msgstr "Διαθέσιμες γλώσσες"
 
-#: pretix/base/settings.py:721 pretix/control/forms/event.py:91
+#: pretix/base/settings.py:731 pretix/control/forms/event.py:91
 msgid "Default language"
 msgstr "Προεπιλεγμένη γλώσσα"
 
-#: pretix/base/settings.py:730
+#: pretix/base/settings.py:740
 #, fuzzy
 #| msgid "Ask search engines not to index the ticket shop"
 msgid "Show event times and dates on the ticket shop"
 msgstr ""
 "Ζητήστε από τις μηχανές αναζήτησης να μην αναγράφουν το κατάστημα εισιτηρίων"
 
-#: pretix/base/settings.py:731
+#: pretix/base/settings.py:741
 msgid ""
 "If disabled, no date or time will be shown on the ticket shop's front page. "
 "This settings does however not affect the display in other locations."
 msgstr ""
 
-#: pretix/base/settings.py:741
+#: pretix/base/settings.py:751
 msgid "Show event end date"
 msgstr "Εμφάνιση ημερομηνίας λήξης συμβάντος"
 
-#: pretix/base/settings.py:742
+#: pretix/base/settings.py:752
 msgid "If disabled, only event's start date will be displayed to the public."
 msgstr ""
 "Εάν απενεργοποιηθεί, μόνο η ημερομηνία έναρξης του συμβάντος θα εμφανιστεί "
 "στο κοινό."
 
-#: pretix/base/settings.py:751
+#: pretix/base/settings.py:761
 msgid "Show dates with time"
 msgstr "Εμφάνιση ημερομηνιών με ώρα"
 
-#: pretix/base/settings.py:752
+#: pretix/base/settings.py:762
 msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
@@ -6110,29 +6076,29 @@ msgstr ""
 "Εάν απενεργοποιηθεί, η ημερομηνία έναρξης και λήξης του συμβάντος θα "
 "εμφανιστεί χωρίς την ώρα της ημέρας."
 
-#: pretix/base/settings.py:761
+#: pretix/base/settings.py:771
 msgid "Hide all products that are sold out"
 msgstr ""
 
-#: pretix/base/settings.py:771 pretix/control/forms/event.py:1184
+#: pretix/base/settings.py:781 pretix/control/forms/event.py:1185
 msgid "Publicly show how many tickets of a certain type are still available."
 msgstr ""
 "Δηλώστε δημόσια πόσα εισιτήρια συγκεκριμένου τύπου είναι ακόμα διαθέσιμα."
 
-#: pretix/base/settings.py:780
+#: pretix/base/settings.py:790
 msgid "Ask search engines not to index the ticket shop"
 msgstr ""
 "Ζητήστε από τις μηχανές αναζήτησης να μην αναγράφουν το κατάστημα εισιτηρίων"
 
-#: pretix/base/settings.py:789
+#: pretix/base/settings.py:799
 msgid "Show variations of a product expanded by default"
 msgstr "Εμφάνιση παραλλαγών ενός προϊόντος που έχει επεκταθεί από προεπιλογή"
 
-#: pretix/base/settings.py:798
+#: pretix/base/settings.py:808
 msgid "Enable waiting list"
 msgstr "Ενεργοποίηση λίστας αναμονής"
 
-#: pretix/base/settings.py:799 pretix/control/forms/event.py:1189
+#: pretix/base/settings.py:809 pretix/control/forms/event.py:1190
 msgid ""
 "Once a ticket is sold out, people can add themselves to a waiting list. As "
 "soon as a ticket becomes available again, it will be reserved for the first "
@@ -6145,11 +6111,11 @@ msgstr ""
 "ειδοποίηση μέσω ηλεκτρονικού ταχυδρομείου με ένα κουπόνι που μπορεί να "
 "χρησιμοποιηθεί για να αγοράσει ένα εισιτήριο."
 
-#: pretix/base/settings.py:810
+#: pretix/base/settings.py:820
 msgid "Automatic waiting list assignments"
 msgstr "Αυτόματες αναθέσεις της λίστας αναμονής"
 
-#: pretix/base/settings.py:811
+#: pretix/base/settings.py:821
 msgid ""
 "If ticket capacity becomes free, automatically create a voucher and send it "
 "to the first person on the waiting list for that product. If this is not "
@@ -6164,11 +6130,11 @@ msgstr ""
 "ελέγχου. Αν απενεργοποιήσετε τη λίστα αναμονής, αλλά διατηρείτε αυτήν την "
 "επιλογή ενεργοποιημένη, τα εισιτήρια θα σταλούν ακόμα."
 
-#: pretix/base/settings.py:824
+#: pretix/base/settings.py:834
 msgid "Waiting list response time"
 msgstr "Χρόνος απόκρισης λίστας αναμονής"
 
-#: pretix/base/settings.py:826
+#: pretix/base/settings.py:836
 msgid ""
 "If a ticket voucher is sent to a person on the waiting list, it has to be "
 "redeemed within this number of hours until it expires and can be re-assigned "
@@ -6178,21 +6144,21 @@ msgstr ""
 "πρέπει να εξαργυρωθεί μέσα σε αυτόν τον αριθμό ωρών μέχρι να λήξει και "
 "μπορεί να ανατεθεί στο επόμενο άτομο που βρίσκεται στη λίστα."
 
-#: pretix/base/settings.py:837
+#: pretix/base/settings.py:847
 #, fuzzy
 #| msgid "Reminder to download tickets"
 msgid "Allow users to download tickets"
 msgstr "Υπενθύμιση για λήψη των εισιτηρίων"
 
-#: pretix/base/settings.py:838
+#: pretix/base/settings.py:848
 msgid "If this is off, nobody can download a ticket."
 msgstr ""
 
-#: pretix/base/settings.py:847
+#: pretix/base/settings.py:857
 msgid "Download date"
 msgstr "Ημερομηνία λήψης"
 
-#: pretix/base/settings.py:848
+#: pretix/base/settings.py:858
 msgid ""
 "Ticket download will be offered after this date. If you use the event series "
 "feature and an order contains tickets for multiple event dates, download of "
@@ -6204,45 +6170,45 @@ msgstr ""
 "είναι διαθέσιμη εάν το επιτρέπει τουλάχιστον μία από τις ημερομηνίες του "
 "γεγονότος."
 
-#: pretix/base/settings.py:859
+#: pretix/base/settings.py:869
 #, fuzzy
 #| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for add-on products"
 msgstr "Δημιουργήστε εισιτήρια για προϊόντα που δεν εισάγονται"
 
-#: pretix/base/settings.py:860
+#: pretix/base/settings.py:870
 msgid ""
 "By default, tickets are only issued for products selected individually, not "
 "for add-on products. With this option, a separate ticket is issued for every "
 "add-on product as well."
 msgstr ""
 
-#: pretix/base/settings.py:872
+#: pretix/base/settings.py:882
 #, fuzzy
 #| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for all products"
 msgstr "Δημιουργήστε εισιτήρια για προϊόντα που δεν εισάγονται"
 
-#: pretix/base/settings.py:873
+#: pretix/base/settings.py:883
 msgid ""
 "If turned off, tickets are only issued for products that are marked as an "
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
 
-#: pretix/base/settings.py:885
+#: pretix/base/settings.py:895
 #, fuzzy
 #| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for pending orders"
 msgstr "Δημιουργήστε εισιτήρια για προϊόντα που δεν εισάγονται"
 
-#: pretix/base/settings.py:886
+#: pretix/base/settings.py:896
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
 
-#: pretix/base/settings.py:902 pretix/base/settings.py:910
+#: pretix/base/settings.py:912 pretix/base/settings.py:920
 #: pretix/control/forms/organizer.py:293
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:25
@@ -6250,29 +6216,29 @@ msgstr ""
 msgid "List"
 msgstr "Λίστα"
 
-#: pretix/base/settings.py:903 pretix/base/settings.py:911
+#: pretix/base/settings.py:913 pretix/base/settings.py:921
 #: pretix/control/forms/organizer.py:294
 #, fuzzy
 #| msgid "Calendar"
 msgid "Week calendar"
 msgstr "Ημερολόγιο"
 
-#: pretix/base/settings.py:904 pretix/base/settings.py:912
+#: pretix/base/settings.py:914 pretix/base/settings.py:922
 #: pretix/control/forms/organizer.py:295
 #, fuzzy
 #| msgid "Calendar"
 msgid "Month calendar"
 msgstr "Ημερολόγιο"
 
-#: pretix/base/settings.py:908 pretix/control/forms/organizer.py:291
+#: pretix/base/settings.py:918 pretix/control/forms/organizer.py:291
 msgid "Default overview style"
 msgstr "Στυλ προκαθορισμένης επισκόπησης"
 
-#: pretix/base/settings.py:922
+#: pretix/base/settings.py:932
 msgid "Last date of modifications"
 msgstr "Τελευταία ημερομηνία τροποποιήσεων"
 
-#: pretix/base/settings.py:923
+#: pretix/base/settings.py:933
 msgid ""
 "The last date users can modify details of their orders, such as attendee "
 "names or answers to questions. If you use the event series feature and an "
@@ -6285,52 +6251,52 @@ msgstr ""
 "παραγγελία περιέχει εισιτήρια για πολλαπλές ημερομηνίες γεγονότων, θα "
 "χρησιμοποιηθεί η νωρίτερη ημερομηνία."
 
-#: pretix/base/settings.py:934
+#: pretix/base/settings.py:944
 #, fuzzy
 #| msgid "Customers can cancel their paid orders"
 msgid "Customers can change the variation of the products they purchased"
 msgstr "Οι πελάτες μπορούν να ακυρώσουν τις πληρωμένες παραγγελίες τους"
 
-#: pretix/base/settings.py:944 pretix/base/settings.py:952
+#: pretix/base/settings.py:954 pretix/base/settings.py:962
 msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
 msgstr ""
 
-#: pretix/base/settings.py:945 pretix/base/settings.py:953
+#: pretix/base/settings.py:955 pretix/base/settings.py:963
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
 msgstr ""
 
-#: pretix/base/settings.py:946 pretix/base/settings.py:954
+#: pretix/base/settings.py:956 pretix/base/settings.py:964
 msgid "Allow changes regardless of price, even if this results in a refund."
 msgstr ""
 
-#: pretix/base/settings.py:950
+#: pretix/base/settings.py:960
 #, fuzzy
 #| msgid "Require email addresses per ticket"
 msgid "Requirement for changed prices"
 msgstr "Απαιτήστε διευθύνσεις ηλεκτρονικού ταχυδρομείου ανά εισιτήριο"
 
-#: pretix/base/settings.py:965
+#: pretix/base/settings.py:975
 #, fuzzy
 #| msgid "Do not allow cancellations after"
 msgid "Do not allow changes after"
 msgstr "Μην επιτρέπετε ακυρώσεις μετά"
 
-#: pretix/base/settings.py:974
+#: pretix/base/settings.py:984
 msgid "Customers can cancel their unpaid orders"
 msgstr "Οι πελάτες μπορούν να ακυρώσουν τις απλήρωτες παραγγελίες τους"
 
-#: pretix/base/settings.py:983 pretix/base/settings.py:1096
+#: pretix/base/settings.py:993 pretix/base/settings.py:1106
 msgid "Do not allow cancellations after"
 msgstr "Μην επιτρέπετε ακυρώσεις μετά"
 
-#: pretix/base/settings.py:992
+#: pretix/base/settings.py:1002
 msgid "Customers can cancel their paid orders"
 msgstr "Οι πελάτες μπορούν να ακυρώσουν τις πληρωμένες παραγγελίες τους"
 
-#: pretix/base/settings.py:993
+#: pretix/base/settings.py:1003
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
@@ -6339,41 +6305,41 @@ msgstr ""
 "πληρωμής. Διαφορετικά, θα δημιουργηθεί μη αυτόματη επιστροφή χρημάτων για να "
 "επεξεργαστείτε με μη αυτόματο τρόπο."
 
-#: pretix/base/settings.py:1006 pretix/control/forms/orders.py:609
+#: pretix/base/settings.py:1016 pretix/control/forms/orders.py:609
 msgid "Keep a fixed cancellation fee"
 msgstr "Διατηρήστε ένα σταθερό τέλος ακύρωσης"
 
-#: pretix/base/settings.py:1015
+#: pretix/base/settings.py:1025
 msgid "Keep payment, shipping and service fees"
 msgstr "Διατηρείτε τα τέλη πληρωμής, αποστολής και παροχής υπηρεσιών"
 
-#: pretix/base/settings.py:1027 pretix/control/forms/orders.py:614
+#: pretix/base/settings.py:1037 pretix/control/forms/orders.py:614
 msgid "Keep a percentual cancellation fee"
 msgstr "Διατηρήστε μια ποσοστιαία αμοιβή ακύρωσης"
 
-#: pretix/base/settings.py:1036
+#: pretix/base/settings.py:1046
 msgid "Allow customers to voluntarily choose a lower refund"
 msgstr ""
 
-#: pretix/base/settings.py:1037
+#: pretix/base/settings.py:1047
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
 msgstr ""
 
-#: pretix/base/settings.py:1042
+#: pretix/base/settings.py:1052
 msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
 
-#: pretix/base/settings.py:1049
+#: pretix/base/settings.py:1059
 #, fuzzy
 #| msgid "Voucher explanation"
 msgid "Voluntary lower refund explanation"
 msgstr "Εξήγηση κουπονιού"
 
-#: pretix/base/settings.py:1052
+#: pretix/base/settings.py:1062
 msgid ""
 "This text will be shown in between the explanation of how the refunds work "
 "and the slider which your customers can use to choose the amount they would "
@@ -6381,49 +6347,49 @@ msgid ""
 "help your organization."
 msgstr ""
 
-#: pretix/base/settings.py:1063
+#: pretix/base/settings.py:1073
 msgid ""
 "Customers can only request a cancellation that needs to be approved by the "
 "event organizer before the order is canceled and a refund is issued."
 msgstr ""
 
-#: pretix/base/settings.py:1073 pretix/base/settings.py:1082
+#: pretix/base/settings.py:1083 pretix/base/settings.py:1092
 msgid "All refunds are issued to the original payment method"
 msgstr ""
 
-#: pretix/base/settings.py:1074 pretix/base/settings.py:1083
+#: pretix/base/settings.py:1084 pretix/base/settings.py:1093
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
 msgstr ""
 
-#: pretix/base/settings.py:1075 pretix/base/settings.py:1084
+#: pretix/base/settings.py:1085 pretix/base/settings.py:1094
 #, fuzzy
 #| msgid "Credit card"
 msgid "All refunds are issued as gift cards"
 msgstr "Πιστωτική κάρτα"
 
-#: pretix/base/settings.py:1080
+#: pretix/base/settings.py:1090
 #: pretix/control/templates/pretixcontrol/order/index.html:125
 #, fuzzy
 #| msgid "Refund order"
 msgid "Refund method"
 msgstr "Επιστροφή χρημάτων παραγγελίας"
 
-#: pretix/base/settings.py:1105 pretix/control/forms/event.py:1212
+#: pretix/base/settings.py:1115 pretix/control/forms/event.py:1213
 msgid "Contact address"
 msgstr "Διεύθυνση Επικοινωνίας"
 
-#: pretix/base/settings.py:1106 pretix/control/forms/event.py:1214
+#: pretix/base/settings.py:1116 pretix/control/forms/event.py:1215
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr ""
 "Θα το δείξουμε δημοσίως για να επιτρέψουμε στους συμμετέχοντες να "
 "επικοινωνήσουν μαζί σας."
 
-#: pretix/base/settings.py:1114 pretix/control/forms/event.py:1206
+#: pretix/base/settings.py:1124 pretix/control/forms/event.py:1207
 msgid "Imprint URL"
 msgstr "Διεύθυνση URL αποτύπωσης"
 
-#: pretix/base/settings.py:1115 pretix/control/forms/event.py:1207
+#: pretix/base/settings.py:1125 pretix/control/forms/event.py:1208
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
@@ -6431,11 +6397,11 @@ msgstr ""
 "Αυτό πρέπει να δείχνει π.χ. σε ένα μέρος του ιστότοπού σας που έχει τα "
 "στοιχεία επικοινωνίας σας και νομικές πληροφορίες."
 
-#: pretix/base/settings.py:1126
+#: pretix/base/settings.py:1136
 msgid "Confirmation text"
 msgstr "Κείμενο επιβεβαίωσης"
 
-#: pretix/base/settings.py:1127
+#: pretix/base/settings.py:1137
 msgid ""
 "This text needs to be confirmed by the user before a purchase is possible. "
 "You could for example link your terms of service here. If you use the Pages "
@@ -6448,23 +6414,23 @@ msgstr ""
 "παροχής υπηρεσιών, δεν χρειάζεστε αυτήν τη ρύθμιση, αφού μπορείτε να τις "
 "ρυθμίσετε εκεί."
 
-#: pretix/base/settings.py:1143
+#: pretix/base/settings.py:1153
 #, fuzzy
 #| msgid "Cached ticket files"
 msgid "Attach calendar files"
 msgstr "Αποθηκευμένα(cached) αρχεία εισιτηρίων"
 
-#: pretix/base/settings.py:1144
+#: pretix/base/settings.py:1154
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
 
-#: pretix/base/settings.py:1153
+#: pretix/base/settings.py:1163
 msgid "Subject prefix"
 msgstr "Πρόθεμα θέματος"
 
-#: pretix/base/settings.py:1154
+#: pretix/base/settings.py:1164
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
@@ -6473,19 +6439,19 @@ msgstr ""
 "ταχυδρομείου, μορφοποιημένα ως [prefix]. Επιλέξτε, για παράδειγμα, μια "
 "σύντομη μορφή του ονόματος του συμβάντος σας."
 
-#: pretix/base/settings.py:1168
+#: pretix/base/settings.py:1178
 msgid "Sender address"
 msgstr "Διεύθυνση αποστολέα"
 
-#: pretix/base/settings.py:1169
+#: pretix/base/settings.py:1179
 msgid "Sender address for outgoing emails"
 msgstr "Διεύθυνση αποστολέα για εξερχόμενα μηνύματα ηλεκτρονικού ταχυδρομείου"
 
-#: pretix/base/settings.py:1178
+#: pretix/base/settings.py:1188
 msgid "Sender name"
 msgstr "Ονομα αποστολέα"
 
-#: pretix/base/settings.py:1179
+#: pretix/base/settings.py:1189
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
@@ -6494,7 +6460,7 @@ msgstr ""
 "για εξερχόμενα μηνύματα ηλεκτρονικού ταχυδρομείου. Προεπιλογή στο όνομα του "
 "συμβάντος σας."
 
-#: pretix/base/settings.py:1189
+#: pretix/base/settings.py:1199
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6520,7 +6486,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1202
+#: pretix/base/settings.py:1212
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6543,7 +6509,7 @@ msgstr ""
 "Τις καλύτερες ευχές, \n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1214
+#: pretix/base/settings.py:1224
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -6566,7 +6532,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1226
+#: pretix/base/settings.py:1236
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6593,7 +6559,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του{event}"
 
-#: pretix/base/settings.py:1243
+#: pretix/base/settings.py:1253
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6621,7 +6587,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1257
+#: pretix/base/settings.py:1267
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6653,7 +6619,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1276
+#: pretix/base/settings.py:1286
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -6676,7 +6642,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1288
+#: pretix/base/settings.py:1298
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6699,7 +6665,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1300
+#: pretix/base/settings.py:1310
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6727,7 +6693,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1318
+#: pretix/base/settings.py:1328
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -6750,7 +6716,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1334
+#: pretix/base/settings.py:1344
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6778,7 +6744,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1348
+#: pretix/base/settings.py:1358
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6826,7 +6792,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1371
+#: pretix/base/settings.py:1381
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6849,7 +6815,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1383
+#: pretix/base/settings.py:1393
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "Hello,\n"
@@ -6896,7 +6862,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1399
+#: pretix/base/settings.py:1409
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6925,7 +6891,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1414
+#: pretix/base/settings.py:1424
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6945,7 +6911,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1432
+#: pretix/base/settings.py:1442
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -6968,7 +6934,7 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1444
+#: pretix/base/settings.py:1454
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -6991,11 +6957,11 @@ msgstr ""
 "Τις καλύτερες ευχές,\n"
 "Η ομάδα του {event}"
 
-#: pretix/base/settings.py:1566
+#: pretix/base/settings.py:1576
 msgid "Banner text (top)"
 msgstr ""
 
-#: pretix/base/settings.py:1569
+#: pretix/base/settings.py:1579
 #, fuzzy
 #| msgid ""
 #| "This text will be shown above the payment options. You can explain the "
@@ -7007,21 +6973,21 @@ msgstr ""
 "Αυτό το κείμενο θα εμφανιστεί πάνω από τις επιλογές πληρωμής. Μπορείτε να "
 "εξηγήσετε τις επιλογές στον χρήστη εδώ, αν θέλετε."
 
-#: pretix/base/settings.py:1579
+#: pretix/base/settings.py:1589
 msgid "Banner text (bottom)"
 msgstr ""
 
-#: pretix/base/settings.py:1582
+#: pretix/base/settings.py:1592
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
 
-#: pretix/base/settings.py:1592
+#: pretix/base/settings.py:1602
 msgid "Voucher explanation"
 msgstr "Εξήγηση κουπονιού"
 
-#: pretix/base/settings.py:1595
+#: pretix/base/settings.py:1605
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
@@ -7030,7 +6996,7 @@ msgstr ""
 "Μπορείτε να το χρησιμοποιήσετε π.χ. για να εξηγήσετε τον τρόπο απόκτησης "
 "ενός κωδικού κουπονιού."
 
-#: pretix/base/settings.py:1601
+#: pretix/base/settings.py:1611
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
@@ -7040,113 +7006,113 @@ msgstr ""
 "περιλαμβάνει έναν σύνδεσμο που θα σας χρειαστεί για να αποκτήσετε πρόσβαση "
 "στην παραγγελία σας αργότερα."
 
-#: pretix/base/settings.py:1608
+#: pretix/base/settings.py:1618
 msgid "Help text of the email field"
 msgstr ""
 
-#: pretix/base/settings.py:1680 pretix/base/settings.py:1690
+#: pretix/base/settings.py:1690 pretix/base/settings.py:1700
 msgid "Event start time (descending)"
 msgstr "Ώρα έναρξης εκδήλωσης (φθίνουσα)"
 
-#: pretix/base/settings.py:1682 pretix/base/settings.py:1692
+#: pretix/base/settings.py:1692 pretix/base/settings.py:1702
 msgid "Name (descending)"
 msgstr "Όνομα (φθίνουσα)"
 
-#: pretix/base/settings.py:1687
+#: pretix/base/settings.py:1697
 msgctxt "subevent"
 msgid "Date ordering"
 msgstr "Ημερομηνία παραγγελίας"
 
-#: pretix/base/settings.py:1719
+#: pretix/base/settings.py:1729
 msgid "Most common English titles"
 msgstr ""
 
-#: pretix/base/settings.py:1729
+#: pretix/base/settings.py:1739
 msgid "Most common German titles"
 msgstr ""
 
-#: pretix/base/settings.py:1738 pretix/base/settings.py:1751
-#: pretix/base/settings.py:1767 pretix/base/settings.py:1817
-#: pretix/base/settings.py:1830 pretix/base/settings.py:1844
+#: pretix/base/settings.py:1748 pretix/base/settings.py:1761
+#: pretix/base/settings.py:1777 pretix/base/settings.py:1827
+#: pretix/base/settings.py:1840 pretix/base/settings.py:1854
 msgid "Given name"
 msgstr "'Ονομα"
 
-#: pretix/base/settings.py:1739 pretix/base/settings.py:1752
-#: pretix/base/settings.py:1768 pretix/base/settings.py:1784
-#: pretix/base/settings.py:1801 pretix/base/settings.py:1816
-#: pretix/base/settings.py:1831 pretix/base/settings.py:1845
+#: pretix/base/settings.py:1749 pretix/base/settings.py:1762
+#: pretix/base/settings.py:1778 pretix/base/settings.py:1794
+#: pretix/base/settings.py:1811 pretix/base/settings.py:1826
+#: pretix/base/settings.py:1841 pretix/base/settings.py:1855
 msgid "Family name"
 msgstr "Επώνυμο"
 
-#: pretix/base/settings.py:1743 pretix/base/settings.py:1759
-#: pretix/base/settings.py:1775 pretix/base/settings.py:1790
-#: pretix/base/settings.py:1808 pretix/base/settings.py:1823
-#: pretix/base/settings.py:1853 pretix/base/settings.py:1876
+#: pretix/base/settings.py:1753 pretix/base/settings.py:1769
+#: pretix/base/settings.py:1785 pretix/base/settings.py:1800
+#: pretix/base/settings.py:1818 pretix/base/settings.py:1833
+#: pretix/base/settings.py:1863 pretix/base/settings.py:1886
 msgctxt "person_name_sample"
 msgid "John"
 msgstr "Γιάννης"
 
-#: pretix/base/settings.py:1744 pretix/base/settings.py:1760
-#: pretix/base/settings.py:1776 pretix/base/settings.py:1792
-#: pretix/base/settings.py:1810 pretix/base/settings.py:1824
-#: pretix/base/settings.py:1854
+#: pretix/base/settings.py:1754 pretix/base/settings.py:1770
+#: pretix/base/settings.py:1786 pretix/base/settings.py:1802
+#: pretix/base/settings.py:1820 pretix/base/settings.py:1834
+#: pretix/base/settings.py:1864
 msgctxt "person_name_sample"
 msgid "Doe"
 msgstr "Ντόης"
 
-#: pretix/base/settings.py:1750 pretix/base/settings.py:1766
-#: pretix/base/settings.py:1798
+#: pretix/base/settings.py:1760 pretix/base/settings.py:1776
+#: pretix/base/settings.py:1808
 msgctxt "person_name"
 msgid "Title"
 msgstr "Τίτλος"
 
-#: pretix/base/settings.py:1758 pretix/base/settings.py:1774
-#: pretix/base/settings.py:1807
+#: pretix/base/settings.py:1768 pretix/base/settings.py:1784
+#: pretix/base/settings.py:1817
 msgctxt "person_name_sample"
 msgid "Dr"
 msgstr "Dr"
 
-#: pretix/base/settings.py:1782 pretix/base/settings.py:1799
+#: pretix/base/settings.py:1792 pretix/base/settings.py:1809
 msgid "First name"
 msgstr "Όνομα"
 
-#: pretix/base/settings.py:1783 pretix/base/settings.py:1800
+#: pretix/base/settings.py:1793 pretix/base/settings.py:1810
 msgid "Middle name"
 msgstr "Μεσαίο όνομα"
 
-#: pretix/base/settings.py:1864 pretix/base/settings.py:1875
+#: pretix/base/settings.py:1874 pretix/base/settings.py:1885
 msgctxt "person_name_sample"
 msgid "John Doe"
 msgstr "John Doe"
 
-#: pretix/base/settings.py:1870
+#: pretix/base/settings.py:1880
 msgid "Calling name"
 msgstr "Υποκοριστικό"
 
-#: pretix/base/settings.py:1883
+#: pretix/base/settings.py:1893
 msgid "Latin transcription"
 msgstr "Μεταγραφή με λατινικούς χαρακτήρες"
 
-#: pretix/base/settings.py:1986 pretix/control/forms/event.py:172
+#: pretix/base/settings.py:1996 pretix/control/forms/event.py:172
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
 "Η προεπιλεγμένη σας τοπική ρύθμιση πρέπει επίσης να είναι ενεργοποιημένη για "
 "την εκδήλωσή σας (δείτε το πλαίσιο παραπάνω)."
 
-#: pretix/base/settings.py:1990
+#: pretix/base/settings.py:2000
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
 "Δεν μπορείτε να απαιτήσετε να διευκρινίσετε τα ονόματα των συμμετεχόντων εάν "
 "δεν τα ζητήσετε."
 
-#: pretix/base/settings.py:1994
+#: pretix/base/settings.py:2004
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr ""
 "Πρέπει να ζητήσετε emails για τους συμμετέχοντες, αν θέλετε να τα απαιτήσετε."
 
-#: pretix/base/settings.py:1998
+#: pretix/base/settings.py:2008
 #, fuzzy
 #| msgid ""
 #| "You have to ask for attendee emails if you want to make them required."
@@ -7155,13 +7121,13 @@ msgid ""
 msgstr ""
 "Πρέπει να ζητήσετε emails για τους συμμετέχοντες, αν θέλετε να τα απαιτήσετε."
 
-#: pretix/base/settings.py:2002
+#: pretix/base/settings.py:2012
 #, fuzzy
 #| msgid "This will require users to enter a company name."
 msgid "You have to require invoice addresses to require for company names."
 msgstr "Αυτό θα απαιτήσει από τους χρήστες να εισάγουν ένα όνομα εταιρείας."
 
-#: pretix/base/settings.py:2009
+#: pretix/base/settings.py:2019
 msgid "The last payment date cannot be before the end of presale."
 msgstr ""
 "Η τελευταία ημερομηνία πληρωμής δεν μπορεί να είναι πριν από το τέλος της "
@@ -7579,11 +7545,11 @@ msgstr ""
 "cookies, ενεργοποιήστε τα ξανά, τουλάχιστον για αυτόν τον ιστότοπο ή για "
 "αιτήματα ίδιας προέλευσης."
 
-#: pretix/base/views/tasks.py:148
+#: pretix/base/views/tasks.py:158
 msgid "An unexpected error has occurred, please try again later."
 msgstr "Παρουσιάστηκε μη αναμενόμενο σφάλμα, δοκιμάστε ξανά αργότερα."
 
-#: pretix/base/views/tasks.py:151
+#: pretix/base/views/tasks.py:161
 msgid "The task has been completed."
 msgstr "Η εργασία έχει ολοκληρωθεί."
 
@@ -7869,11 +7835,11 @@ msgstr ""
 "φορολογικού συντελεστή και οι κανόνες αντιστροφής της επιβάρυνσης, "
 "αγνοούνται άλλες ρυθμίσεις του φορολογικού κανόνα."
 
-#: pretix/control/forms/event.py:696
+#: pretix/control/forms/event.py:697
 msgid "Generate invoices for Sales channels"
 msgstr "Δημιουργήστε τιμολόγια για τα κανάλια πωλήσεων"
 
-#: pretix/control/forms/event.py:699
+#: pretix/control/forms/event.py:700
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
@@ -7881,67 +7847,67 @@ msgstr ""
 "Εάν έχετε ενεργοποιήσει τη δημιουργία τιμολογίων στην προηγούμενη ρύθμιση, "
 "μπορείτε να την περιορίσετε εδώ σε συγκεκριμένα κανάλια πωλήσεων."
 
-#: pretix/control/forms/event.py:703
+#: pretix/control/forms/event.py:704
 msgid "Invoice style"
 msgstr "Στυλ τιμολογίου"
 
-#: pretix/control/forms/event.py:709
+#: pretix/control/forms/event.py:710
 msgid "Invoice language"
 msgstr "Γλώσσα τιμολογίου"
 
-#: pretix/control/forms/event.py:710 pretix/control/forms/event.py:732
+#: pretix/control/forms/event.py:711 pretix/control/forms/event.py:733
 msgid "The user's language"
 msgstr "Η γλώσσα του χρήστη"
 
-#: pretix/control/forms/event.py:713
+#: pretix/control/forms/event.py:714
 msgid "Logo image"
 msgstr "Εικόνα λογοτύπου"
 
-#: pretix/control/forms/event.py:717
+#: pretix/control/forms/event.py:718
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
 msgstr "Θα δείξουμε το λογότυπό σας με μέγιστο ύψος και πλάτος 2,5 cm."
 
-#: pretix/control/forms/event.py:761
+#: pretix/control/forms/event.py:762
 msgid "Bcc address"
 msgstr "Διεύθυνση Bcc"
 
-#: pretix/control/forms/event.py:762
+#: pretix/control/forms/event.py:763
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr ""
 "Όλα τα μηνύματα ηλεκτρονικού ταχυδρομείου θα σταλούν σε αυτήν τη διεύθυνση "
 "ως αντίγραφο Bcc"
 
-#: pretix/control/forms/event.py:768
+#: pretix/control/forms/event.py:769
 msgid "Signature"
 msgstr "Υπογραφή"
 
-#: pretix/control/forms/event.py:771
+#: pretix/control/forms/event.py:772
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr ""
 "Αυτό θα επισυνάπτεται σε κάθε μήνυμα ηλεκτρονικού ταχυδρομείου. Διαθέσιμες "
 "επιλογές κράτησης θέσης: {event}"
 
-#: pretix/control/forms/event.py:776
+#: pretix/control/forms/event.py:777
 msgid "e.g. your contact details"
 msgstr "π.χ. τα στοιχεία επικοινωνίας σας"
 
-#: pretix/control/forms/event.py:781
+#: pretix/control/forms/event.py:782
 msgid "HTML mail renderer"
 msgstr "Εκδότης αλληλογραφίας HTML (HTML mail renderer)"
 
-#: pretix/control/forms/event.py:786 pretix/control/forms/event.py:803
-#: pretix/control/forms/event.py:820 pretix/control/forms/event.py:879
+#: pretix/control/forms/event.py:787 pretix/control/forms/event.py:804
+#: pretix/control/forms/event.py:821 pretix/control/forms/event.py:880
 msgid "Text sent to order contact address"
 msgstr "Το κείμενο στέλνεται στη διεύθυνση επικοινωνίας παραγγελίας"
 
-#: pretix/control/forms/event.py:791 pretix/control/forms/event.py:808
-#: pretix/control/forms/event.py:825 pretix/control/forms/event.py:884
+#: pretix/control/forms/event.py:792 pretix/control/forms/event.py:809
+#: pretix/control/forms/event.py:826 pretix/control/forms/event.py:885
 msgid "Send an email to attendees"
 msgstr "Στείλτε ένα μήνυμα ηλεκτρονικού ταχυδρομείου στους συμμετέχοντες"
 
-#: pretix/control/forms/event.py:792 pretix/control/forms/event.py:809
-#: pretix/control/forms/event.py:826 pretix/control/forms/event.py:885
+#: pretix/control/forms/event.py:793 pretix/control/forms/event.py:810
+#: pretix/control/forms/event.py:827 pretix/control/forms/event.py:886
 msgid ""
 "If the order contains attendees with email addresses different from the "
 "person who orders the tickets, the following email will be sent out to the "
@@ -7951,32 +7917,32 @@ msgstr ""
 "ταχυδρομείου διαφορετικές από εκείνες που παραγγέλλουν τα εισιτήρια, θα "
 "αποσταλεί το ακόλουθο μήνυμα ηλεκτρονικού ταχυδρομείου στους συμμετέχοντες."
 
-#: pretix/control/forms/event.py:797 pretix/control/forms/event.py:814
-#: pretix/control/forms/event.py:831 pretix/control/forms/event.py:890
+#: pretix/control/forms/event.py:798 pretix/control/forms/event.py:815
+#: pretix/control/forms/event.py:832 pretix/control/forms/event.py:891
 msgid "Text sent to attendees"
 msgstr "Το κείμενο αποστέλλεται στους συμμετέχοντες"
 
-#: pretix/control/forms/event.py:837 pretix/control/forms/event.py:859
-#: pretix/control/forms/event.py:864 pretix/control/forms/event.py:869
-#: pretix/control/forms/event.py:874
+#: pretix/control/forms/event.py:838 pretix/control/forms/event.py:860
+#: pretix/control/forms/event.py:865 pretix/control/forms/event.py:870
+#: pretix/control/forms/event.py:875
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:99
 #: pretix/control/templates/pretixcontrol/pdf/index.html:367
 msgid "Text"
 msgstr "Κείμενο"
 
-#: pretix/control/forms/event.py:842
+#: pretix/control/forms/event.py:843
 msgid "Text (sent by admin)"
 msgstr "Κείμενο (αποστέλλεται από τον admin)"
 
-#: pretix/control/forms/event.py:847
+#: pretix/control/forms/event.py:848
 msgid "Text (requested by user)"
 msgstr "Κείμενο (ζητείται από το χρήστη)"
 
-#: pretix/control/forms/event.py:852 pretix/control/forms/event.py:895
+#: pretix/control/forms/event.py:853 pretix/control/forms/event.py:896
 msgid "Number of days"
 msgstr "Αριθμός ημερών"
 
-#: pretix/control/forms/event.py:855
+#: pretix/control/forms/event.py:856
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
@@ -7984,7 +7950,7 @@ msgstr ""
 "Αυτό το μήνυμα ηλεκτρονικού ταχυδρομείου θα αποσταλεί πολλές ημέρες πριν τη "
 "λήξη της παραγγελίας. Εάν η τιμή είναι 0, το μήνυμα δεν θα αποσταλεί ποτέ."
 
-#: pretix/control/forms/event.py:898
+#: pretix/control/forms/event.py:899
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
@@ -7993,15 +7959,15 @@ msgstr ""
 "από την εκκίνηση του συμβάντος παραγγελίας. Αν το πεδίο είναι κενό, το "
 "μήνυμα δεν θα αποσταλεί ποτέ."
 
-#: pretix/control/forms/event.py:902
+#: pretix/control/forms/event.py:903
 msgid "Received order"
 msgstr "Παραλαβή παραγγελίας"
 
-#: pretix/control/forms/event.py:907
+#: pretix/control/forms/event.py:908
 msgid "Approved order"
 msgstr "Εγκεκριμένη παραγγελία"
 
-#: pretix/control/forms/event.py:910
+#: pretix/control/forms/event.py:911
 #, fuzzy
 #| msgid ""
 #| "This will only be sent out for non-free orders. Free orders will receive "
@@ -8018,15 +7984,15 @@ msgstr ""
 "{total}, {currency}, {date}, {payment_info}, {url}, {invoice_name}, "
 "{invoice_company}"
 
-#: pretix/control/forms/event.py:914
+#: pretix/control/forms/event.py:915
 msgid "Denied order"
 msgstr "Η παραγγελία απορρίφθηκε"
 
-#: pretix/control/forms/event.py:919
+#: pretix/control/forms/event.py:920
 msgid "Use custom SMTP server"
 msgstr "Χρησιμοποιήστε προσαρμοσμένο διακομιστή SMTP(custom SMTP server)"
 
-#: pretix/control/forms/event.py:920
+#: pretix/control/forms/event.py:921
 msgid ""
 "All mail related to your event will be sent over the smtp server specified "
 "by you."
@@ -8034,35 +8000,35 @@ msgstr ""
 "Όλα τα μηνύματα που σχετίζονται με το συμβάν σας θα αποστέλλονται μέσω του "
 "διακομιστή smtp που έχετε ορίσει."
 
-#: pretix/control/forms/event.py:924
+#: pretix/control/forms/event.py:925
 msgid "Hostname"
 msgstr "Hostname"
 
-#: pretix/control/forms/event.py:929
+#: pretix/control/forms/event.py:930
 msgid "Port"
 msgstr "Θύρα"
 
-#: pretix/control/forms/event.py:934
+#: pretix/control/forms/event.py:935
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
-#: pretix/control/forms/event.py:946
+#: pretix/control/forms/event.py:947
 msgid "Use STARTTLS"
 msgstr "Χρήση του STARTTLS"
 
-#: pretix/control/forms/event.py:947
+#: pretix/control/forms/event.py:948
 msgid "Commonly enabled on port 587."
 msgstr "Συνήθως ενεργοποιημένο στη θύρα 587."
 
-#: pretix/control/forms/event.py:951
+#: pretix/control/forms/event.py:952
 msgid "Use SSL"
 msgstr "Χρήση SSL"
 
-#: pretix/control/forms/event.py:952
+#: pretix/control/forms/event.py:953
 msgid "Commonly enabled on port 465."
 msgstr "Συνήθως ενεργοποιημένο στη θύρα 465."
 
-#: pretix/control/forms/event.py:981 pretix/control/forms/orders.py:488
+#: pretix/control/forms/event.py:982 pretix/control/forms/orders.py:488
 #: pretix/control/forms/orders.py:645 pretix/control/forms/vouchers.py:255
 #: pretix/plugins/sendmail/forms.py:49
 #, fuzzy, python-brace-format
@@ -8070,7 +8036,7 @@ msgstr "Συνήθως ενεργοποιημένο στη θύρα 465."
 msgid "Available placeholders: {list}"
 msgstr "Διαθέσιμες διατάξεις κράτησης θέσης(placeholders): {event}, {url}"
 
-#: pretix/control/forms/event.py:1016
+#: pretix/control/forms/event.py:1017
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
@@ -8078,49 +8044,49 @@ msgstr ""
 "Μπορείτε να ενεργοποιήσετε την ασφάλεια SSL ή STARTTLS, αλλά όχι και τα δύο "
 "ταυτόχρονα."
 
-#: pretix/control/forms/event.py:1065
+#: pretix/control/forms/event.py:1066
 msgid "Any country"
 msgstr "Οποιαδήποτε χώρα"
 
-#: pretix/control/forms/event.py:1066
+#: pretix/control/forms/event.py:1067
 msgid "European Union"
 msgstr "Ευρωπαϊκή Ένωση"
 
-#: pretix/control/forms/event.py:1078
+#: pretix/control/forms/event.py:1079
 msgid "Any customer"
 msgstr "Κάθε πελάτης"
 
-#: pretix/control/forms/event.py:1079
+#: pretix/control/forms/event.py:1080
 msgid "Individual"
 msgstr "Άτομο"
 
-#: pretix/control/forms/event.py:1080
+#: pretix/control/forms/event.py:1081
 msgid "Business"
 msgstr "Επιχείρηση"
 
-#: pretix/control/forms/event.py:1081
+#: pretix/control/forms/event.py:1082
 msgid "Business with valid VAT ID"
 msgstr "Επιχειρήσεις με έγκυρο αναγνωριστικό ΦΠΑ"
 
-#: pretix/control/forms/event.py:1087
+#: pretix/control/forms/event.py:1088
 msgid "Charge VAT"
 msgstr "Χρέωση Φ.Π.Α"
 
-#: pretix/control/forms/event.py:1089
+#: pretix/control/forms/event.py:1090
 msgid "No VAT"
 msgstr "Όχι Φ.Π.Α"
 
-#: pretix/control/forms/event.py:1093
+#: pretix/control/forms/event.py:1094
 #, fuzzy
 #| msgid "Sales tax rate"
 msgid "Deviating tax rate"
 msgstr "Ποσοστό φόρου επί των πωλήσεων"
 
-#: pretix/control/forms/event.py:1123
+#: pretix/control/forms/event.py:1124
 msgid "Pre-selected voucher"
 msgstr "Προεπιλεγμένο κουπόνι"
 
-#: pretix/control/forms/event.py:1125
+#: pretix/control/forms/event.py:1126
 msgid ""
 "If set, the widget will show products as if this voucher has been entered "
 "and when a product is bought via the widget, this voucher will be used. This "
@@ -8132,11 +8098,11 @@ msgstr ""
 "χρησιμοποιηθεί αυτό το κουπόνι. Αυτό μπορεί για παράδειγμα να χρησιμοποιηθεί "
 "για την παροχή widgets που δίνουν εκπτώσεις ή ξεκλειδώνουν μυστικά προϊόντα."
 
-#: pretix/control/forms/event.py:1130
+#: pretix/control/forms/event.py:1131
 msgid "Compatibility mode"
 msgstr "Λειτουργία συμβατότητας"
 
-#: pretix/control/forms/event.py:1132
+#: pretix/control/forms/event.py:1133
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
@@ -8145,29 +8111,29 @@ msgstr ""
 "αντιμετωπίζετε πρόβλημα, δοκιμάστε να χρησιμοποιήσετε αυτήν τη λειτουργία "
 "συμβατότητας."
 
-#: pretix/control/forms/event.py:1153
+#: pretix/control/forms/event.py:1154
 msgid "The given voucher code does not exist."
 msgstr "Ο συγκεκριμένος κωδικός κουπονιού δεν υπάρχει."
 
-#: pretix/control/forms/event.py:1160 pretix/control/forms/organizer.py:48
+#: pretix/control/forms/event.py:1161 pretix/control/forms/organizer.py:48
 #: pretix/control/views/shredder.py:108
 msgid "The slug you entered was not correct."
 msgstr "Το slug που εισάγατε δεν ήταν σωστό."
 
-#: pretix/control/forms/event.py:1195
+#: pretix/control/forms/event.py:1196
 msgid "Ticket downloads"
 msgstr "Λήψη εισιτηρίων"
 
-#: pretix/control/forms/event.py:1196
+#: pretix/control/forms/event.py:1197
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr ""
 "Οι πελάτες σας θα μπορούν να κάνουν λήψη των εισιτηρίων τους σε μορφή PDF."
 
-#: pretix/control/forms/event.py:1200
+#: pretix/control/forms/event.py:1201
 msgid "Require all attendees to fill in their names"
 msgstr "Απαιτήστε από όλους τους συμμετέχοντες να συμπληρώσουν τα ονόματά τους"
 
-#: pretix/control/forms/event.py:1201
+#: pretix/control/forms/event.py:1202
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
@@ -8175,11 +8141,11 @@ msgstr ""
 "Από προεπιλογή, θα ζητήσουμε ονόματα αλλά δεν θα τα απαιτήσουμε. Μπορείτε να "
 "το απενεργοποιήσετε τελείως στις ρυθμίσεις."
 
-#: pretix/control/forms/event.py:1227
+#: pretix/control/forms/event.py:1228
 msgid "Payment via Stripe"
 msgstr "Πληρωμή μέσω Stripe"
 
-#: pretix/control/forms/event.py:1228
+#: pretix/control/forms/event.py:1229
 msgid ""
 "Stripe is an online payments processor supporting credit cards and lots of "
 "other payment options. To accept payments via Stripe, you will need to set "
@@ -8192,11 +8158,11 @@ msgstr ""
 "τους, ο οποίος διαρκεί λιγότερο από πέντε λεπτά χρησιμοποιώντας την απλή "
 "διεπαφή τους."
 
-#: pretix/control/forms/event.py:1234
+#: pretix/control/forms/event.py:1235
 msgid "Payment by bank transfer"
 msgstr "Πληρωμή με τραπεζικό έμβασμα"
 
-#: pretix/control/forms/event.py:1235
+#: pretix/control/forms/event.py:1236
 msgid ""
 "Your customers will be instructed to wire the money to your account. You can "
 "then import your bank statements to process the payments within pretix, or "
@@ -8207,16 +8173,16 @@ msgstr ""
 "διεκπεραιώσετε τις πληρωμές εντός του προνομίου ή να τις επισημάνετε ως "
 "πληρωμένες με μη αυτόματο τρόπο."
 
-#: pretix/control/forms/event.py:1274
+#: pretix/control/forms/event.py:1275
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
 msgstr "Τιμή (προαιρετικά)"
 
-#: pretix/control/forms/event.py:1279
+#: pretix/control/forms/event.py:1280
 msgid "Free"
 msgstr "Δωρεάν"
 
-#: pretix/control/forms/event.py:1284
+#: pretix/control/forms/event.py:1285
 msgid "Quantity available"
 msgstr "Διαθέσιμη ποσότητα"
 
@@ -8318,7 +8284,7 @@ msgid "All products"
 msgstr "Ολα τα προϊόντα"
 
 #: pretix/control/forms/filter.py:282 pretix/control/forms/filter.py:1069
-#: pretix/control/forms/vouchers.py:100 pretix/control/views/typeahead.py:514
+#: pretix/control/forms/vouchers.py:100 pretix/control/views/typeahead.py:518
 #, python-brace-format
 msgid "{product} – Any variation"
 msgstr "{product} - Οποιαδήποτε παραλλαγή"
@@ -8517,7 +8483,7 @@ msgid "Search voucher"
 msgstr "Αναζήτηση κουπονιού"
 
 #: pretix/control/forms/filter.py:1075 pretix/control/forms/vouchers.py:91
-#: pretix/control/views/typeahead.py:522 pretix/control/views/typeahead.py:526
+#: pretix/control/views/typeahead.py:526 pretix/control/views/typeahead.py:530
 #: pretix/control/views/vouchers.py:81
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
@@ -10570,9 +10536,9 @@ msgstr "Γενικά"
 msgid "Payment"
 msgstr "Πληρωμή"
 
-#: pretix/control/navigation.py:52 pretix/control/views/event.py:1321
-#: pretix/control/views/event.py:1323 pretix/control/views/event.py:1354
-#: pretix/control/views/event.py:1359
+#: pretix/control/navigation.py:52 pretix/control/views/event.py:1322
+#: pretix/control/views/event.py:1324 pretix/control/views/event.py:1355
+#: pretix/control/views/event.py:1360
 #: pretix/presale/templates/pretixpresale/organizers/index.html:129
 #: pretix/presale/templates/pretixpresale/organizers/index.html:131
 msgid "Tickets"
@@ -10869,7 +10835,7 @@ msgstr "Ορίστε νέο κωδικό πρόσβασης"
 #: pretix/control/templates/pretixcontrol/auth/recover.html:15
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:74
 #: pretix/control/templates/pretixcontrol/event/cancel.html:55
-#: pretix/control/templates/pretixcontrol/event/invoicing.html:62
+#: pretix/control/templates/pretixcontrol/event/invoicing.html:63
 #: pretix/control/templates/pretixcontrol/event/mail.html:92
 #: pretix/control/templates/pretixcontrol/event/payment.html:77
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:36
@@ -11840,23 +11806,23 @@ msgstr "Ρυθμίσεις τιμολογίου"
 msgid "Invoice generation"
 msgstr "Πληροφορίες τιμολογίου"
 
-#: pretix/control/templates/pretixcontrol/event/invoicing.html:24
+#: pretix/control/templates/pretixcontrol/event/invoicing.html:25
 #, fuzzy
 #| msgid "Address"
 msgid "Address form"
 msgstr "Διεύθυνση έδρας"
 
-#: pretix/control/templates/pretixcontrol/event/invoicing.html:35
+#: pretix/control/templates/pretixcontrol/event/invoicing.html:36
 #, fuzzy
 #| msgid "Voucher details"
 msgid "Issuer details"
 msgstr "Λεπτομέρειες κουπονιών"
 
-#: pretix/control/templates/pretixcontrol/event/invoicing.html:45
+#: pretix/control/templates/pretixcontrol/event/invoicing.html:46
 msgid "Invoice customization"
 msgstr "Προσαρμογή τιμολογίου"
 
-#: pretix/control/templates/pretixcontrol/event/invoicing.html:59
+#: pretix/control/templates/pretixcontrol/event/invoicing.html:60
 msgid "Save and show preview"
 msgstr "Αποθηκεύστε και προβάλλετε προεπισκόπηση"
 
@@ -12129,9 +12095,9 @@ msgstr "Εγκατεστημένα plugin"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:10
 #: pretix/control/views/checkin.py:264 pretix/control/views/event.py:178
-#: pretix/control/views/event.py:318 pretix/control/views/event.py:397
-#: pretix/control/views/event.py:437 pretix/control/views/event.py:595
-#: pretix/control/views/event.py:786 pretix/control/views/event.py:1136
+#: pretix/control/views/event.py:318 pretix/control/views/event.py:398
+#: pretix/control/views/event.py:438 pretix/control/views/event.py:596
+#: pretix/control/views/event.py:787 pretix/control/views/event.py:1137
 #: pretix/control/views/global_settings.py:25
 #: pretix/control/views/global_settings.py:48 pretix/control/views/item.py:165
 #: pretix/control/views/item.py:622 pretix/control/views/item.py:930
@@ -13151,7 +13117,7 @@ msgstr "Πλήρως κρατημένο"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:77
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:61
 #: pretix/presale/templates/pretixpresale/organizers/index.html:111
-#: pretix/presale/views/widget.py:319
+#: pretix/presale/views/widget.py:320
 msgid "Sold out"
 msgstr "Εξαντλημένα"
 
@@ -16782,10 +16748,10 @@ msgid "The new check-in list has been created."
 msgstr "Η νέα λίστα ελέγχου έχει δημιουργηθεί."
 
 #: pretix/control/views/checkin.py:238 pretix/control/views/checkin.py:281
-#: pretix/control/views/event.py:207 pretix/control/views/event.py:400
-#: pretix/control/views/event.py:440 pretix/control/views/event.py:598
-#: pretix/control/views/event.py:755 pretix/control/views/event.py:1095
-#: pretix/control/views/event.py:1155 pretix/control/views/event.py:1262
+#: pretix/control/views/event.py:207 pretix/control/views/event.py:401
+#: pretix/control/views/event.py:441 pretix/control/views/event.py:599
+#: pretix/control/views/event.py:756 pretix/control/views/event.py:1096
+#: pretix/control/views/event.py:1156 pretix/control/views/event.py:1263
 #: pretix/control/views/item.py:181 pretix/control/views/item.py:226
 #: pretix/control/views/item.py:632 pretix/control/views/item.py:658
 #: pretix/control/views/item.py:760 pretix/control/views/item.py:964
@@ -16901,7 +16867,7 @@ msgstr "Απαιτείται δράση"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:82
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:66
 #: pretix/presale/templates/pretixpresale/organizers/index.html:116
-#: pretix/presale/views/widget.py:325
+#: pretix/presale/views/widget.py:326
 msgid "Sale over"
 msgstr "Μη διαθέσιμα"
 
@@ -16954,19 +16920,19 @@ msgstr "Χαρακτηριστικά"
 msgid "Other"
 msgstr "Άλλα"
 
-#: pretix/control/views/event.py:371
+#: pretix/control/views/event.py:372
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
 msgstr ""
 "Αυτός ο παροχέας πληρωμής δεν υπάρχει ή η αντίστοιχη προσθήκη είναι "
 "απενεργοποιημένη."
 
-#: pretix/control/views/event.py:585
+#: pretix/control/views/event.py:586
 #, python-format
 msgid "An error occurred while contacting the SMTP server: %s"
 msgstr "Παρουσιάστηκε σφάλμα κατά την επικοινωνία με τον διακομιστή SMTP: %s"
 
-#: pretix/control/views/event.py:588
+#: pretix/control/views/event.py:589
 msgid ""
 "Your changes have been saved and the connection attempt to your SMTP server "
 "was successful."
@@ -16974,7 +16940,7 @@ msgstr ""
 "Οι αλλαγές σας έχουν αποθηκευτεί και η προσπάθεια σύνδεσης με το διακομιστή "
 "SMTP ήταν επιτυχής."
 
-#: pretix/control/views/event.py:591
+#: pretix/control/views/event.py:592
 msgid ""
 "We've been able to contact the SMTP server you configured. Remember to check "
 "the \"use custom SMTP server\" checkbox, otherwise your SMTP server will not "
@@ -16984,37 +16950,37 @@ msgstr ""
 "να ενεργοποιήσετε το πλαίσιο ελέγχου \"Χρήση προσαρμοσμένου διακομιστή SMTP"
 "\", διαφορετικά ο διακομιστής SMTP δεν θα χρησιμοποιηθεί."
 
-#: pretix/control/views/event.py:628 pretix/plugins/sendmail/views.py:123
+#: pretix/control/views/event.py:629 pretix/plugins/sendmail/views.py:123
 msgid "This value will be replaced based on dynamic parameters."
 msgstr ""
 
-#: pretix/control/views/event.py:636
+#: pretix/control/views/event.py:637
 msgid "invalid item"
 msgstr "μη έγκυρο στοιχείο"
 
-#: pretix/control/views/event.py:686
+#: pretix/control/views/event.py:687
 msgid "Unknown e-mail renderer."
 msgstr "Άγνωστος επεξεργαστής ηλεκτρονικού ταχυδρομείου."
 
-#: pretix/control/views/event.py:702 pretix/control/views/orders.py:334
+#: pretix/control/views/event.py:703 pretix/control/views/orders.py:334
 #: pretix/presale/views/order.py:854 pretix/presale/views/order.py:861
 msgid "You requested an invalid ticket output type."
 msgstr "Ζητήσατε άκυρο τύπο εξόδου εισιτηρίου."
 
-#: pretix/control/views/event.py:847
+#: pretix/control/views/event.py:848
 msgid "Your shop is live now!"
 msgstr "Το κατάστημά σας είναι τώρα ζωντανό!"
 
-#: pretix/control/views/event.py:855
+#: pretix/control/views/event.py:856
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
 msgstr ""
 "Πήραμε το κατάστημά σας κάτω. Μπορείτε να το επανενεργοποιήσετε όποτε θέλετε!"
 
-#: pretix/control/views/event.py:863
+#: pretix/control/views/event.py:864
 msgid "Your shop is now in test mode!"
 msgstr "Το κατάστημά σας βρίσκεται τώρα σε δοκιμαστική λειτουργία!"
 
-#: pretix/control/views/event.py:880
+#: pretix/control/views/event.py:881
 msgid ""
 "An order could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
@@ -17022,21 +16988,21 @@ msgstr ""
 "Δεν ήταν δυνατή η διαγραφή μιας παραγγελίας, καθώς ορισμένοι περιορισμοί (π."
 "χ. δεδομένα που δημιουργήθηκαν από πρόσθετα) δεν το επιτρέπουν."
 
-#: pretix/control/views/event.py:886
+#: pretix/control/views/event.py:887
 msgid "We've disabled test mode for you. Let's sell some real tickets!"
 msgstr ""
 "Έχουμε απενεργοποιήσει τη λειτουργία δοκιμής για εσάς. Ας πουλήσουμε μερικά "
 "εισιτήρια!"
 
-#: pretix/control/views/event.py:903
+#: pretix/control/views/event.py:904
 msgid "This event can not be deleted."
 msgstr "Αυτή η εκδήλωση δεν μπορεί να διαγραφεί."
 
-#: pretix/control/views/event.py:925
+#: pretix/control/views/event.py:926
 msgid "The event has been deleted."
 msgstr "Η εκδήλωση διαγράφηκε."
 
-#: pretix/control/views/event.py:928
+#: pretix/control/views/event.py:929
 msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
@@ -17044,44 +17010,44 @@ msgstr ""
 "Η εκδήλωση δεν ήταν δυνατό να διαγραφεί, καθώς ορισμένοι περιορισμοί (π.χ. "
 "δεδομένα που δημιουργήθηκαν από plug-ins) δεν το επιτρέπουν."
 
-#: pretix/control/views/event.py:1001
+#: pretix/control/views/event.py:1002
 msgid "The issue has been marked as resolved!"
 msgstr "Το ζήτημα έχει επισημανθεί ως επιλυμένο!"
 
-#: pretix/control/views/event.py:1022 pretix/control/views/orders.py:410
+#: pretix/control/views/event.py:1023 pretix/control/views/orders.py:410
 msgid "The comment has been updated."
 msgstr "Το σχόλιο ενημερώθηκε."
 
-#: pretix/control/views/event.py:1024 pretix/control/views/orders.py:412
+#: pretix/control/views/event.py:1025 pretix/control/views/orders.py:412
 msgid "Could not update the comment."
 msgstr "Δεν ήταν δυνατή η ενημέρωση του σχολίου."
 
-#: pretix/control/views/event.py:1062 pretix/control/views/main.py:276
+#: pretix/control/views/event.py:1063 pretix/control/views/main.py:276
 msgid "VAT"
 msgstr "ΦΠΑ"
 
-#: pretix/control/views/event.py:1089
+#: pretix/control/views/event.py:1090
 msgid "The new tax rule has been created."
 msgstr "Ο νέος φορολογικός κανόνας έχει δημιουργηθεί."
 
-#: pretix/control/views/event.py:1112 pretix/control/views/event.py:1171
+#: pretix/control/views/event.py:1113 pretix/control/views/event.py:1172
 msgid "The requested tax rule does not exist."
 msgstr "Ο απαιτούμενος φορολογικός κανόνας δεν υπάρχει."
 
-#: pretix/control/views/event.py:1180
+#: pretix/control/views/event.py:1181
 msgid "The selected tax rule has been deleted."
 msgstr "Ο επιλεγμένος κανόνας φόρου έχει διαγραφεί."
 
-#: pretix/control/views/event.py:1182
+#: pretix/control/views/event.py:1183
 msgid "The selected tax rule can not be deleted."
 msgstr "Ο επιλεγμένος κανόνας φορολογίας δεν μπορεί να διαγραφεί."
 
-#: pretix/control/views/event.py:1232
+#: pretix/control/views/event.py:1233
 msgid "Your event is not empty, you need to set it up manually."
 msgstr ""
 "Η εκδήλωση σας δεν είναι κενή, πρέπει να το ορίσετε με μη αυτόματο τρόπο."
 
-#: pretix/control/views/event.py:1366
+#: pretix/control/views/event.py:1367
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
@@ -17090,11 +17056,11 @@ msgstr ""
 "των λεπτομερειών ή να πάρετε την εκδήλωσή σας ζωντανά για να αρχίσετε να την "
 "πουλάτε!"
 
-#: pretix/control/views/event.py:1385
+#: pretix/control/views/event.py:1386
 msgid "Regular ticket"
 msgstr "Γενική είσοδος"
 
-#: pretix/control/views/event.py:1390
+#: pretix/control/views/event.py:1391
 msgid "Reduced ticket"
 msgstr "Μειωμένο εισιτήριο"
 
@@ -18860,6 +18826,30 @@ msgstr "Αυτόματη επιστροφή χρημάτων"
 #: pretix/plugins/paypal/payment.py:87
 msgid "Secret"
 msgstr "Mυστικό (secret)"
+
+#: pretix/plugins/checkinlists/exporters.py:431
+#, fuzzy
+#| msgid "Team name"
+msgid "Seat name"
+msgstr "Όνομα ομάδας"
+
+#: pretix/plugins/checkinlists/exporters.py:432
+#, fuzzy
+#| msgid "Team name"
+msgid "Seat zone"
+msgstr "Όνομα ομάδας"
+
+#: pretix/plugins/checkinlists/exporters.py:433
+#, fuzzy
+#| msgid "Client ID"
+msgid "Seat row"
+msgstr "ταυτότητα πελάτη"
+
+#: pretix/plugins/checkinlists/exporters.py:434
+#, fuzzy
+#| msgid "Team name"
+msgid "Seat number"
+msgstr "Όνομα ομάδας"
 
 #: pretix/plugins/manualpayment/__init__.py:16
 msgid "This plugin adds a customizable payment method for manual processing."
@@ -21020,7 +21010,7 @@ msgstr "ΕΞΑΝΤΛΗΜΕΝΑ"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:75
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:59
 #: pretix/presale/templates/pretixpresale/organizers/index.html:109
-#: pretix/presale/views/widget.py:316
+#: pretix/presale/views/widget.py:317
 msgid "Reserved"
 msgstr "Κατοχυρωμένα"
 
@@ -21187,7 +21177,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:64
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
 #: pretix/presale/templates/pretixpresale/organizers/index.html:114
-#: pretix/presale/views/widget.py:310 pretix/presale/views/widget.py:322
+#: pretix/presale/views/widget.py:311 pretix/presale/views/widget.py:323
 msgid "Book now"
 msgstr ""
 
@@ -21229,19 +21219,19 @@ msgid "Other dates"
 msgstr "Αλλα χαρακτηριστικά"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:153
-#: pretix/presale/views/widget.py:555
+#: pretix/presale/views/widget.py:556
 msgid "The presale period for this event is over."
 msgstr "Η περίοδος προπώλησης γι' αυτήν την εκδήλωση τελείωσε."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:158
-#: pretix/presale/views/widget.py:557
+#: pretix/presale/views/widget.py:558
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
 msgstr ""
 "Η προπώληση γι' αυτήν την εκδήλωση θα ξεκινήσεις στις %(date)s στις %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:162
-#: pretix/presale/views/widget.py:562
+#: pretix/presale/views/widget.py:563
 msgid "The presale for this event has not yet started."
 msgstr "Η προπώληση γι' αυτήν την εκδήλωση δεν έχει ξεκινήσει ακόμα."
 
@@ -22180,33 +22170,33 @@ msgstr ""
 "Σας έχουμε προσθέσει στη λίστα αναμονής. Θα λάβετε ένα email μόλις τα "
 "εισιτήρια θα είναι διαθέσιμα ξανά."
 
-#: pretix/presale/views/widget.py:263
+#: pretix/presale/views/widget.py:264
 #, fuzzy
 #| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
 msgctxt "widget"
 msgid "event ticketing powered by pretix"
 msgstr "<a %(a_attr)s>εισιτήρια εκδηλώσεων powered by pretix</a>"
 
-#: pretix/presale/views/widget.py:278
+#: pretix/presale/views/widget.py:279
 msgid "This ticket shop is currently disabled."
 msgstr "Αυτό το κατάστημα εισιτηρίων είναι απενεργοποιημένο αυτήν τη στιγμή."
 
-#: pretix/presale/views/widget.py:287
+#: pretix/presale/views/widget.py:288
 msgid "The selected date does not exist in this event series."
 msgstr ""
 "Η επιλεγμένη ημερομηνία δεν υπάρχει σε αυτή τη σειρά εκδηλώσεων (event "
 "series)."
 
-#: pretix/presale/views/widget.py:294
+#: pretix/presale/views/widget.py:295
 msgid "This is not an event series."
 msgstr "Αυτή δεν είναι μια σειρά συμβάντων (event series)."
 
-#: pretix/presale/views/widget.py:328
+#: pretix/presale/views/widget.py:329
 #, python-format
 msgid "from %(start_date)s"
 msgstr "από %(start_date)s"
 
-#: pretix/presale/views/widget.py:331
+#: pretix/presale/views/widget.py:332
 #, fuzzy
 #| msgid "Sale Soon"
 msgid "Sale soon"
