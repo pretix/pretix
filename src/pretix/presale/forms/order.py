@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import Quota
 from pretix.base.models.tax import TaxedPrice
