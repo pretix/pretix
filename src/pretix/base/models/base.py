@@ -27,7 +27,7 @@ class CachedFile(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     filename = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
-    file = models.FileField(null=True, blank=True, upload_to=cachedfile_name)
+    file = models.FileField(null=True, blank=True, upload_to=cachedfile_name, max_length=255)
 
 
 @receiver(post_delete, sender=CachedFile)
