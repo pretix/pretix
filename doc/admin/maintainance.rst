@@ -92,7 +92,8 @@ pretix_task_duration_seconds
 
 pretix_model_instances
     Gauge. Measures number of instances of a certain model within the database, labeled with
-    the ``model`` name.
+    the ``model`` name. Starting with pretix 3.11, these numbers might only be approximate for
+    most tables when running on PostgreSQL to mitigate performance impact.
 
 .. _metric types: https://prometheus.io/docs/concepts/metric_types/
 .. _Prometheus: https://prometheus.io/

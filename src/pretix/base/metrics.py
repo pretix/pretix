@@ -3,6 +3,9 @@ from collections import defaultdict
 
 from django.apps import apps
 from django.conf import settings
+from django.db import connection
+
+from pretix.base.models import Event, Invoice, Order, OrderPosition, Organizer
 
 if settings.HAS_REDIS:
     import django_redis
@@ -201,6 +204,19 @@ class Histogram(Metric):
         self._execute_redis_pipeline(pipe)
 
 
+def estimate_count_fast(type):
+    """
+    See https://wiki.postgresql.org/wiki/Count_estimate
+    """
+    if 'postgres' in settings.DATABASES['default']['ENGINE']:
+        cursor = connection.cursor()
+        cursor.execute("select reltuples from pg_class where relname='%s';" % type._meta.db_table)
+        row = cursor.fetchone()
+        return int(row[0])
+    else:
+        return type.objects.count()
+
+
 def metric_values():
     """
     Produces the the values to be presented to the monitoring system
@@ -223,8 +239,14 @@ def metric_values():
         metrics[a] = metrics[atarget]
 
     # Throwaway metrics
+    exact_tables = [
+        Order, OrderPosition, Invoice, Event, Organizer
+    ]
     for m in apps.get_models():  # Count all models
-        metrics['pretix_model_instances']['{model="%s"}' % m._meta] = m.objects.count()
+        if any(issubclass(m, p) for p in exact_tables):
+            metrics['pretix_model_instances']['{model="%s"}' % m._meta] = m.objects.count()
+        else:
+            metrics['pretix_model_instances']['{model="%s"}' % m._meta] = estimate_count_fast(m)
 
     return metrics
 
