@@ -35,3 +35,10 @@ html.rtl {
     }
   }
 }
+@media (max-width: 700px) {
+  html.rtl {
+    #loadingmodal .modal-card .modal-card-content, #ajaxerr .modal-card .modal-card-content {
+      margin-right: 0;
+    }
+  }
+}
