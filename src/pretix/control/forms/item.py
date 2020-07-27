@@ -437,6 +437,7 @@ class ItemUpdateForm(I18nModelForm):
         self.fields['description'].widget.attrs['rows'] = '4'
         self.fields['sales_channels'] = forms.MultipleChoiceField(
             label=_('Sales channels'),
+            required=False,
             choices=(
                 (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
             ),

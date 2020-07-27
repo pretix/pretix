@@ -412,7 +412,8 @@ class Item(LoggedModel):
     )
     sales_channels = fields.MultiStringField(
         verbose_name=_('Sales channels'),
-        default=['web']
+        default=['web'],
+        blank=True,
     )
     issue_giftcard = models.BooleanField(
         verbose_name=_('This product is a gift card'),
