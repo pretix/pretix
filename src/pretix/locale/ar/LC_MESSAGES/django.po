@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-24 08:44+0000\n"
-"PO-Revision-Date: 2019-12-25 01:00+0000\n"
+"PO-Revision-Date: 2020-07-27 14:25+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -4859,9 +4859,7 @@ msgstr "انتهت الفترة [خبر]."
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
-msgstr ""
-"رمز قسيمة تستخدم لأحد بنود في عربة التسوق لا يعرف في قاعدة البيانات الخاصة "
-"بنا."
+msgstr "رمز قسيمة تستخدم لأحد التذاكر في عربة التسوق غير معروف."
 
 #: pretix/base/services/orders.py:73
 msgid ""
@@ -4869,8 +4867,8 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"وقد تم بالفعل استخدام رمز قسيمة تستخدم لأحد العناصر الموجودة في سلة التسوق "
-"الخاصة بك الحد الأقصى لعدد مرات المسموح بها. أزلنا هذا البند من عربة التسوق."
+"تم استخدام الحد الأقصى لعدد مرات المسموح بها لقسيمة التخفيض . أزلنا التذكرة "
+"من عربة التسوق."
 
 #: pretix/base/services/orders.py:75
 #, fuzzy
@@ -6149,8 +6147,8 @@ msgstr ""
 "يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق {event}"
 
 #: pretix/base/settings.py:1212
 #, python-brace-format
@@ -6239,15 +6237,15 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"تلقينا طلبك بنجاح ل{event}. منذ كنت قد طلبت\n"
-"المنتج الذي يتطلب موافقة من قبل منظم الحدث، نطلب منك\n"
-"التحلي بالصبر والانتظار لدينا البريد الإلكتروني التالي.\n"
+"تلقينا طلبك بنجاح ل{event}. \n"
+"المنتج الذي طلبتها بانتظام الموافقة من قبل منظم الحدث، \n"
+" نرجوا منك الانتظار، سيأتيك الرد على الإيميل قريبا.\n"
 "\n"
-"يمكنك تغيير تفاصيل طلبك وعرض حالة طلبك في\n"
+"كما يمكنك تغيير تفاصيل طلبك وعرض حالته من خلال:\n"
 "{url}\n"
 "\n"
-"تحياتي الحارة،\n"
-"لديك {event} فريق"
+"تحياتنا،\n"
+"فريق {event}"
 
 #: pretix/base/settings.py:1267
 #, python-brace-format
@@ -6994,7 +6992,7 @@ msgstr "تلقيت هذا البريد لأنك قمت بالحجز في:"
 #: pretix/base/templates/pretixbase/email/simple_logo.html:231
 #: pretix/base/templates/pretixbase/email/simple_logo.html:239
 msgid "Event:"
-msgstr "هدف:"
+msgstr "الفعالية:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:29
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:37
@@ -10829,8 +10827,8 @@ msgstr ""
 "\n"
 "%(url)s\n"
 "\n"
-"تحياتي الحارة،\n"
-"فريق pretix الخاص بك\n"
+"تحياتنا.\n"
+"فريق بريتكس\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -20008,14 +20006,8 @@ msgstr "تم تاكيد الطلب"
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:47
-#, fuzzy
-#| msgid ""
-#| "You can download your tickets using the buttons below. Please have your "
-#| "ticket ready when entering the event."
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
-"يمكنك تحميل التذاكر الخاصة بك باستخدام الأزرار أدناه. يرجى أن يكون التذكرة "
-"جاهزة عند الدخول."
+msgstr "يرجى أن تكون التذكرة جاهزة عند الدخول."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:9
 #, fuzzy
@@ -20371,11 +20363,9 @@ msgid "Internal Reference"
 msgstr "المرجع الداخلي"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:319
-#, fuzzy
-#| msgid "Change for all organizers"
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "تغيير لجميع المنظمين"
+msgstr "تعديل أو إلغاء الطلب"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid ""
@@ -20802,7 +20792,7 @@ msgstr "الشهور)"
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:42
 #: pretix/presale/templates/pretixpresale/organizers/index.html:50
 msgid "iCal"
-msgstr "كال"
+msgstr "تقويم"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:76
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:83
