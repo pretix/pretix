@@ -397,13 +397,14 @@ class BaseQuestionsForm(forms.Form):
                 )
             elif q.type == Question.TYPE_COUNTRYCODE:
                 field = CountryField(
-                    countries=CachedCountries
+                    countries=CachedCountries,
+                    blank=True, null=True, blank_label=' ',
                 ).formfield(
                     label=label, required=required,
                     help_text=help_text,
                     widget=forms.Select,
-                    empty_label='',
-                    initial=initial.answer if initial else guess_country(event),
+                    empty_label=' ',
+                    initial=initial.answer if initial else (guess_country(event) if required else None),
                 )
             elif q.type == Question.TYPE_CHOICE:
                 field = forms.ModelChoiceField(
