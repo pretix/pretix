@@ -550,7 +550,8 @@ class BaseQuestionsForm(forms.Form):
 
         if not self.all_optional:
             for q in question_cache.values():
-                if question_is_required(q) and not d.get('question_%d' % q.pk):
+                answer = d.get('question_%d' % q.pk)
+                if question_is_required(q) and not answer and answer != 0:
                     raise ValidationError({'question_%d' % q.pk: [_('This field is required')]})
 
         return d
