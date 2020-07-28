@@ -10,7 +10,7 @@ The indexes aren't automatically created by pretix since Django does not allow u
 (and they won't work on other databases). Also, they're really not necessary if you're not having tens of
 thousands of records in your database.
 
-However, this also means they won't automatically adapt if some of the refered fields change in future updates of pretix
+However, this also means they won't automatically adapt if some of the referred fields change in future updates of pretix
 and you might need to re-check this page and change them manually.
 
 Here is the currently recommended set of commands::
