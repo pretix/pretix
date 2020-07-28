@@ -8,6 +8,7 @@ from unittest import mock
 
 from bs4 import BeautifulSoup
 from django.conf import settings
+from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.crypto import get_random_string
@@ -2509,6 +2510,33 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             assert not Order.objects.last().testmode
             assert "0" not in Order.objects.last().code
+
+    def test_receive_order_confirmation_and_paid_mail(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            djmail.outbox = []
+            oid = _perform_order(self.event, 'manual', [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            assert len(djmail.outbox) == 1
+            o = Order.objects.get(pk=oid)
+            o.payments.first().confirm()
+            assert len(djmail.outbox) == 2
+
+    def test_order_confirmation_and_paid_mail_not_send_on_disabled_sales_channel(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            djmail.outbox = []
+            self.event.settings.mail_sales_channel_placed_paid = []
+            oid = _perform_order(self.event, 'manual', [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            assert len(djmail.outbox) == 0
+            o = Order.objects.get(pk=oid)
+            o.payments.first().confirm()
+            assert len(djmail.outbox) == 0
 
 
 class QuestionsTestCase(BaseCheckoutTestCase, TestCase):

@@ -928,7 +928,8 @@ Creating orders
         during order generation and is not respected automatically when the order changes later.)
 
    * ``force`` (optional). If set to ``true``, quotas will be ignored.
-   * ``send_mail`` (optional). If set to ``true``, the same emails will be sent as for a regular order. Defaults to
+   * ``send_mail`` (optional). If set to ``true``, the same emails will be sent as for a regular order, regardless of
+     whether these emails are enabled for certain sales channels. Defaults to
      ``false``.
 
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually

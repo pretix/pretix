@@ -47,6 +47,7 @@ gunicorn
 guid
 hardcoded
 hostname
+ics
 idempotency
 iframe
 incrementing

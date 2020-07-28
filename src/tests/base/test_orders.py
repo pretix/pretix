@@ -543,6 +543,13 @@ class DownloadReminderTests(TestCase):
         send_download_reminders(sender=self.event)
         assert len(djmail.outbox) == 0
 
+    @classscope(attr='o')
+    def test_not_sent_for_disabled_sales_channel(self):
+        self.event.settings.mail_days_download_reminder = 2
+        self.event.settings.mail_sales_channel_download_reminder = []
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
+
 
 class OrderCancelTests(TestCase):
     def setUp(self):

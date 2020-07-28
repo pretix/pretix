@@ -1190,6 +1190,14 @@ DEFAULTS = {
                         "Defaults to your event name."),
         )
     },
+    'mail_sales_channel_placed_paid': {
+        'default': ['web'],
+        'type': list,
+    },
+    'mail_sales_channel_download_reminder': {
+        'default': ['web'],
+        'type': list,
+    },
     'mail_text_signature': {
         'type': LazyI18nString,
         'default': ""
