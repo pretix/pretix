@@ -570,7 +570,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 )
 
             for q in cp.item.questions_to_ask:
-                if question_is_required(q) and not answ.get(q.id):
+                if question_is_required(q) and q.id not in answ:
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))
                     return False

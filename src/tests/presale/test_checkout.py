@@ -2660,7 +2660,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-question_%s' % (cr1.id, q1.id): '42',
-            '%s-question_%s' % (cr2.id, q1.id): '23',
+            '%s-question_%s' % (cr2.id, q1.id): '0',
             '%s-question_%s' % (cr1.id, q2.id): 'Internet',
             '%s-question_%s' % (cr2.id, q2.id): '',
             'email': 'admin@localhost'
@@ -2750,6 +2750,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             event=self.event, question='Why not?', type=Question.TYPE_TEXT,
             required=True, dependency_question=self.q3, dependency_values=['False']
         )
+
         self.ticket.questions.add(self.q1)
         self.ticket.questions.add(self.q2a)
         self.ticket.questions.add(self.q2b)
