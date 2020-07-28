@@ -764,7 +764,7 @@ class MailSettingsForm(SettingsForm):
 
     mail_sales_channel_placed_paid = forms.MultipleChoiceField(
         choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
-        label=_('Sales Channels for Checkout Emails'),
+        label=_('Sales channels for checkout emails'),
         help_text=_('The order placed and paid emails will only be send to orders from these sales channels. '
                     'The online shop must be enabled.'),
         widget=forms.CheckboxSelectMultiple(
