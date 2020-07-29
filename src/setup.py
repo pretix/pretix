@@ -92,7 +92,7 @@ setup(
         'djangorestframework==3.11.*',
         'python-dateutil==2.8.*',
         'isoweek',
-        'requests==2.22.*',
+        'requests==2.24.*',
         'pytz',
         'django-bootstrap3==12.0.*',
         'django-formset-js-improved==0.5.0.2',
