@@ -21,6 +21,11 @@ class BankTransfer(BasePaymentProvider):
     verbose_name = _('Bank transfer')
     abort_pending_allowed = True
 
+    def create_invoice_immediately(self, order):
+        if super().create_invoice_immediately(order):
+            return True
+        return self.event.settings.get('invoice_generate') == 'paid' and self.settings.get("invoice_immediately", False)
+
     @staticmethod
     def form_fields():
         return OrderedDict([
@@ -98,6 +103,12 @@ class BankTransfer(BasePaymentProvider):
                 }},
                 required=False
             )),
+            ('invoice_immediately',
+             forms.BooleanField(
+                 label=_('Create an invoice for orders using bank transfer immediately if the event is otherwise'
+                         'configured to create invoices after payment is completed.'),
+                 required=False,
+             )),
             ('public_name', I18nFormField(
                 label=_('Payment method name'),
                 widget=I18nTextInput,
