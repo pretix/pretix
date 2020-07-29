@@ -12,7 +12,10 @@ from pretix.helpers.i18n import (
     get_javascript_format_without_seconds, get_moment_locale,
 )
 
-from .signals import footer_link, html_footer, html_head, html_page_header
+from .signals import (
+    footer_link, global_html_footer, global_html_head, global_html_page_header,
+    html_footer, html_head, html_page_header,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -56,11 +59,17 @@ def _default_context(request):
             ctx['footer_text'] = str(text)
 
     if hasattr(request, 'event') and get_scope():
+        for receiver, response in global_html_head.send(None, request=request):
+            _html_head.append(response)
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
+        for receiver, response in global_html_page_header.send(None, request=request):
+            _html_page_header.append(response)
         for receiver, response in html_page_header.send(request.event, request=request):
             _html_page_header.append(response)
         for receiver, response in html_footer.send(request.event, request=request):
+            _html_foot.append(response)
+        for receiver, response in global_html_footer.send(None, request=request):
             _html_foot.append(response)
         for receiver, response in footer_link.send(request.event, request=request):
             if isinstance(response, list):

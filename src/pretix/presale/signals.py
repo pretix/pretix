@@ -1,4 +1,39 @@
+from django.dispatch import Signal
+
 from pretix.base.signals import EventPluginSignal
+
+global_html_head = Signal(
+    providing_args=["request"]
+)
+"""
+This signal allows you to put code inside the HTML ``<head>`` tag
+of every page in the frontend. You will get the request as the keyword argument
+``request`` and are expected to return plain HTML.
+
+This signal is called regardless of whether your plugin is active for all pages of the system.
+"""
+
+global_html_page_header = Signal(
+    providing_args=["request"]
+)
+"""
+This signal allows you to put code right in the beginning of the HTML ``<body>`` tag
+of every page in the frontend. You will get the request as the keyword argument
+``request`` and are expected to return plain HTML.
+
+This signal is called regardless of whether your plugin is active for all pages of the system.
+"""
+
+global_html_footer = Signal(
+    providing_args=["request"]
+)
+"""
+This signal allows you to put code before the end of the HTML ``<body>`` tag
+of every page in the frontend. You will get the request as the keyword argument
+``request`` and are expected to return plain HTML.
+
+This signal is called regardless of whether your plugin is active for all pages of the system.
+"""
 
 html_head = EventPluginSignal(
     providing_args=["request"]
