@@ -175,6 +175,15 @@ class BasePaymentProvider:
         """
         return False
 
+    def create_invoice_immediately(self, order):
+        """
+        Whether or not to create an invoice right after this payment method has been chosen for ``order``.
+        Invoices send on succeeded payment are dealt with separately.
+        By default, this is True only if the event is configured to generate invoices for all orders immediately,
+        but it might be overwritten for e.g. bank transfer.
+        """
+        return self.event.settings.get('invoice_generate') == 'True'
+
     @property
     def settings_form_fields(self) -> dict:
         """
@@ -770,7 +779,7 @@ class BasePaymentProvider:
 
     def matching_id(self, payment: OrderPayment):
         """
-        Will be called to get an ID for a matching this payment when comparing pretix records with records of an external
+        Will be called to get an ID for matching this payment when comparing pretix records with records of an external
         source. This should return the main transaction ID for your API.
 
         :param payment: The payment in question.

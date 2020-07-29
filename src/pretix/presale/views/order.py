@@ -189,7 +189,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
         ctx['invoices'] = list(self.order.invoices.all())
-        ctx['can_generate_invoice'] = can_generate_invoice(self.request.event, self.order, True)
+        ctx['can_generate_invoice'] = can_generate_invoice(self.request.event, self.order, ignore_payments=True)
         if ctx['can_generate_invoice']:
             if not self.order.payments.exclude(
                     state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
@@ -602,6 +602,9 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
 
 def can_generate_invoice(event, order, ignore_payments=False):
+    open_payment = order.payments.last()
+    if open_payment and open_payment.state in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
+        open_payment = None
     v = (
         order.sales_channel in event.settings.get('invoice_generate_sales_channels')
         and (
@@ -609,6 +612,8 @@ def can_generate_invoice(event, order, ignore_payments=False):
             or (
                 event.settings.get('invoice_generate') == 'paid'
                 and order.status == Order.STATUS_PAID
+            ) or (
+                open_payment is not None and open_payment.payment_provider.create_invoice_immediately(order)
             )
         ) and (
             invoice_qualified(order)
