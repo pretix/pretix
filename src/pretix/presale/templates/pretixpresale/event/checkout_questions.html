@@ -105,9 +105,18 @@
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
                                     {# Add-Ons #}
-                                    <legend>+ {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}</legend>
+                                    <legend> {# FIXME: I wanted to put it to the right side. For that legend should be d-flex and justify-content-between, but that's Bootstrap 4... #}
+                                        + {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}
+                                        {% if form %}
+                                            <span class="text-right flip">
+                                                <input type="button" data-id="{{ forloop.parentloop.counter0 }}" data-addonid="{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}" name="copy" class="js-copy-answers-addon btn btn-default btn-xs" value='{% trans "Copy answers" %}'>
+                                            </span>
+                                        {% endif %}
+                                    </legend>
                                 {% endif %}
-                                {% bootstrap_form form layout="checkout" %}
+                                <div data-addonidx="{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                                    {% bootstrap_form form layout="checkout" %}
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
