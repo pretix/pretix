@@ -34,7 +34,7 @@ $state-info-text: $brand-info;
 $state-warning-text: $brand-warning;
 $state-danger-text: $brand-danger;
 
-$navbar-inverse-bg: #3b1c4a;
+$navbar-inverse-bg: #3b1c4a !default;
 $navbar-inverse-link-color: white;
 $navbar-inverse-link-hover-color: $gray-lighter;
 $navbar-inverse-brand-hover-color: $gray-lighter;
