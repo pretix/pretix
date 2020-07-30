@@ -1127,18 +1127,10 @@ DEFAULTS = {
         ),
         'serializer_class': serializers.URLField,
     },
-    'confirm_text': {
-        'default': None,
-        'type': LazyI18nString,
-        'form_class': I18nFormField,
+    'confirm_texts': {
+        'default': [],
+        'type': list,
         'serializer_class': I18nField,
-        'form_kwargs': dict(
-            label=_('Confirmation text'),
-            help_text=_('This text needs to be confirmed by the user before a purchase is possible. You could for example '
-                        'link your terms of service here. If you use the Pages feature to publish your terms of service, '
-                        'you don\'t need this setting since you can configure it there.'),
-            widget=I18nTextarea,
-        )
     },
     'mail_html_renderer': {
         'default': 'classic',

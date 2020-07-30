@@ -12,6 +12,8 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext as _, pgettext_lazy
 from django_scopes import scopes_disabled
 
+from i18nfield.strings import LazyI18nString
+
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -1242,7 +1244,5 @@ def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, l
 def confirm_messages(sender, *args, **kwargs):
     if not sender.settings.confirm_text:
         return {}
-
-    return {
-        'confirm_text': rich_text(str(sender.settings.confirm_text))
-    }
+    confirm_texts = (LazyI18nString(data) for data in sender.settings.get("confirm_texts", [], as_type=list))
+    return {'confirm_text_%i' % index: rich_text(str(text)) for index, text in enumerate(confirm_texts)}
