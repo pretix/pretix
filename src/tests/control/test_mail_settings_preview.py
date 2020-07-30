@@ -7,10 +7,10 @@ from tests.base import SoupTest
 
 from pretix.base.models import Event, Organizer, Team, User
 
-
 class MailSettingPreviewTest(SoupTest):
     @scopes_disabled()
     def setUp(self):
+        super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
         self.orga2 = Organizer.objects.create(name='MRM', slug='mrm')

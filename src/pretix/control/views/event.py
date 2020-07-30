@@ -154,10 +154,11 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         self.save_confirm_texts_formset(self.object)
         change_css = False
 
-        if self.sform.has_changed():
-            self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
-                k: self.request.event.settings.get(k) for k in self.sform.changed_data
-            })
+        if self.sform.has_changed() or self.confirm_texts_formset.has_changed():
+            data = {k: self.request.event.settings.get(k) for k in self.sform.changed_data}
+            if self.confirm_texts_formset.has_changed():
+                data.update(confirm_texts=self.confirm_texts_formset.cleaned_data)
+            self.request.event.log_action('pretix.event.settings', user=self.request.user, data=data)
             display_properties = (
                 'primary_color', 'theme_color_success', 'theme_color_danger', 'primary_font',
                 'theme_color_background', 'theme_round_borders',
@@ -171,8 +172,6 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                     else form.cleaned_data.get(k))
                 for k in form.changed_data
             })
-
-        # TODO log confirm text change action
 
         if change_css:
             regenerate_css.apply_async(args=(self.request.event.pk,))
@@ -245,9 +244,10 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
 
     @cached_property
     def confirm_texts_formset(self):
-        confirm_texts = (LazyI18nString(data) for data in self.object.settings.get("confirm_texts", [], as_type=list))
+        initial = [{"text": text, "ORDER": order} for order, text in enumerate(
+            LazyI18nString(data) for data in self.object.settings.get("confirm_texts", [], as_type=list))]
         return ConfirmTextFormset(self.request.POST if self.request.method == "POST" else None, event=self.object,
-                                  prefix="confirm-texts", initial=[{"text": text} for text in confirm_texts])
+                                  prefix="confirm-texts", initial=initial)
 
     def save_confirm_texts_formset(self, obj):
         obj.settings.confirm_texts = [

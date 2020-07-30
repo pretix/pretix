@@ -10,7 +10,7 @@ from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
-    Event, Order, OrderPosition, Organizer, SubEvent, Team, User,
+    Event, Order, OrderPosition, Organizer, SubEvent, Team, User, LogEntry
 )
 from pretix.base.models.items import SubEventItem
 from pretix.testutils.mock import mocker_context
@@ -222,6 +222,12 @@ class EventsTest(SoupTest):
         assert doc.select("[name=date_to_0]")[0]['value'] == "2013-12-30"
         assert doc.select("[name=date_to_1]")[0]['value'] == "17:00:00"
         assert doc.select("[name=settings-max_items_per_order]")[0]['value'] == "12"
+
+    def test_unchanged_settings_do_not_create_logentry(self):
+        doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
+        self.post_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert not LogEntry.objects.exists()
 
     def test_settings_timezone(self):
         doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
