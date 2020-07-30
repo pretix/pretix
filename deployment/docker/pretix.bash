@@ -19,7 +19,7 @@ fi
 python3 -m pretix migrate --noinput
 
 if [ "$1" == "all" ]; then
-    exec sudo /usr/bin/supervisord -n -c /etc/supervisord.conf
+    exec sudo -E /usr/bin/supervisord -n -c /etc/supervisord.conf
 fi
 
 if [ "$1" == "webworker" ]; then
