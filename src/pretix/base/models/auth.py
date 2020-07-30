@@ -173,7 +173,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             return self.email
 
     def send_security_notice(self, messages, email=None):
-        from pretix.base.services.mail import mail, SendMailException
+        from pretix.base.services.mail import SendMailException, mail
 
         try:
             with language(self.locale):

@@ -21,8 +21,9 @@ from pretix.presale.signals import html_head
 @receiver(register_payment_providers, dispatch_uid="payment_stripe")
 def register_payment_provider(sender, **kwargs):
     from .payment import (
-        StripeSettingsHolder, StripeCC, StripeGiropay, StripeIdeal, StripeAlipay, StripeBancontact,
-        StripeSofort, StripeEPS, StripeMultibanco, StripePrzelewy24, StripeWeChatPay
+        StripeAlipay, StripeBancontact, StripeCC, StripeEPS, StripeGiropay,
+        StripeIdeal, StripeMultibanco, StripePrzelewy24, StripeSettingsHolder,
+        StripeSofort, StripeWeChatPay,
     )
 
     return [

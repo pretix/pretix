@@ -5,7 +5,6 @@ import mt940
 
 from pretix.base.decimal import round_decimal
 
-
 """
 The parse_transaction_details and join_reference functions are
 Copyright (c) 2017 Nicole Klünder

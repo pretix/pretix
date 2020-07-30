@@ -91,7 +91,9 @@ def eventreverse(obj, name, kwargs=None):
         needed.
     :returns: An absolute URL (including scheme and host) as a string
     """
-    from pretix.multidomain import event_domain_urlconf, organizer_domain_urlconf, maindomain_urlconf
+    from pretix.multidomain import (
+        event_domain_urlconf, maindomain_urlconf, organizer_domain_urlconf,
+    )
 
     c = None
     if not kwargs:

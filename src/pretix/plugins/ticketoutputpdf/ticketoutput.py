@@ -116,8 +116,8 @@ class PdfTicketOutput(BaseTicketOutput):
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
 
     def _create_canvas(self, buffer):
-        from reportlab.pdfgen import canvas
         from reportlab.lib import pagesizes
+        from reportlab.pdfgen import canvas
 
         # Doesn't matter as we'll overpaint it over a background later
         pagesize = pagesizes.A4

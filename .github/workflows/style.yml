@@ -31,7 +31,7 @@ jobs:
       - name: Install Dependencies
         run: pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
       - name: Run isort
-        run: isort -c -rc -df .
+        run: isort -c .
         working-directory: ./src
   flake:
     name: flake8

@@ -48,7 +48,7 @@ class CheckinList(LoggedModel):
 
     @property
     def positions(self):
-        from . import OrderPosition, Order
+        from . import Order, OrderPosition
 
         qs = OrderPosition.objects.filter(
             order__event=self.event,

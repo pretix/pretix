@@ -1,3 +1,5 @@
+from urllib.parse import urlencode, urlparse
+
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -15,7 +17,6 @@ from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
 )
 from pytz import common_timezones, timezone
-from urllib.parse import urlencode, urlparse
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders

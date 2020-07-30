@@ -7,7 +7,7 @@ Coding style and quality
   for more information. Use four spaces for indentation.
 
 * We sort our imports by a certain schema, but you don't have to do this by hand. Again, ``setup.cfg`` contains
-  some definitions that allow the command ``isort -rc <directory>`` to automatically sort the imports in your source
+  some definitions that allow the command ``isort <directory>`` to automatically sort the imports in your source
   files.
 
 * For templates and models, please take a look at the `Django Coding Style`_. We like Django's `class-based views`_ and

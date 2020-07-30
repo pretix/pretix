@@ -113,7 +113,7 @@ class Organizer(LoggedModel):
             ), tz)
 
     def allow_delete(self):
-        from . import Order, Invoice
+        from . import Invoice, Order
         return (
             not Order.objects.filter(event__organizer=self).exists() and
             not Invoice.objects.filter(event__organizer=self).exists() and

@@ -209,7 +209,7 @@ class Order(LockModel, LoggedModel):
         return self.full_code
 
     def gracefully_delete(self, user=None, auth=None):
-        from . import Voucher, GiftCard, GiftCardTransaction
+        from . import GiftCard, GiftCardTransaction, Voucher
 
         if not self.testmode:
             raise TypeError("Only test mode orders can be deleted.")
@@ -838,7 +838,9 @@ class Order(LockModel, LoggedModel):
                          only be attached for this position and child positions, the link will only point to the
                          position and the attendee email will be used if available.
         """
-        from pretix.base.services.mail import SendMailException, mail, render_mail, TolerantDict
+        from pretix.base.services.mail import (
+            SendMailException, TolerantDict, mail, render_mail,
+        )
 
         if not self.email:
             return
@@ -1421,7 +1423,9 @@ class OrderPayment(models.Model):
         :type mail_text: str
         :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
         """
-        from pretix.base.services.invoices import generate_invoice, invoice_qualified
+        from pretix.base.services.invoices import (
+            generate_invoice, invoice_qualified,
+        )
 
         with transaction.atomic():
             locked_instance = OrderPayment.objects.select_for_update().get(pk=self.pk)
@@ -2066,7 +2070,9 @@ class OrderPosition(AbstractPosition):
         :param sender: Custom email sender.
         :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
         """
-        from pretix.base.services.mail import SendMailException, mail, render_mail
+        from pretix.base.services.mail import (
+            SendMailException, mail, render_mail,
+        )
 
         if not self.attendee_email:
             return

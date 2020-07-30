@@ -544,7 +544,7 @@ class Renderer:
                 with open(os.path.join(d, 'out.pdf'), 'rb') as f:
                     return BytesIO(f.read())
         else:
-            from PyPDF2 import PdfFileWriter, PdfFileReader
+            from PyPDF2 import PdfFileReader, PdfFileWriter
             buffer.seek(0)
             new_pdf = PdfFileReader(buffer)
             output = PdfFileWriter()

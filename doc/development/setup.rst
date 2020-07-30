@@ -98,7 +98,7 @@ pull request nevertheless and ask us for help, we are happy to assist you.
 Execute the following commands to check for code style errors::
 
     flake8 .
-    isort -c -rc .
+    isort -c .
     python manage.py check
 
 Execute the following command to run pretix' test suite (might take a couple of minutes)::
@@ -121,7 +121,7 @@ for example, to check for any errors in any staged files when committing::
     do
       echo $file
       git show ":$file" | flake8 - --stdin-display-name="$file" || exit 1 # we only want to lint the staged changes, not any un-staged changes
-      git show ":$file" | isort -df --check-only - | grep ERROR && exit 1 || true
+      git show ":$file" | isort -c - | grep ERROR && exit 1 || true
     done
 
 
