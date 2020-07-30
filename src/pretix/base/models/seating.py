@@ -163,7 +163,7 @@ class Seat(models.Model):
     @classmethod
     def annotated(cls, qs, event_id, subevent, ignore_voucher_id=None, minimal_distance=0,
                   ignore_order_id=None, ignore_cart_id=None, distance_only_within_row=False):
-        from . import Order, OrderPosition, Voucher, CartPosition
+        from . import CartPosition, Order, OrderPosition, Voucher
 
         vqs = Voucher.objects.filter(
             event_id=event_id,

@@ -43,8 +43,8 @@ class ReportlabExportMixin:
 
     @staticmethod
     def register_fonts():
-        from reportlab.pdfbase.ttfonts import TTFont
         from reportlab.pdfbase import pdfmetrics
+        from reportlab.pdfbase.ttfonts import TTFont
 
         pdfmetrics.registerFont(TTFont('OpenSans', finders.find('fonts/OpenSans-Regular.ttf')))
         pdfmetrics.registerFont(TTFont('OpenSansIt', finders.find('fonts/OpenSans-Italic.ttf')))
@@ -56,8 +56,8 @@ class ReportlabExportMixin:
         return BaseDocTemplate
 
     def create(self, form_data):
-        from reportlab.platypus import PageTemplate
         from reportlab.lib.units import mm
+        from reportlab.platypus import PageTemplate
 
         with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
             Report.register_fonts()
@@ -162,8 +162,8 @@ class OverviewReport(Report):
         return pagesizes.landscape(pagesizes.A4)
 
     def get_story(self, doc, form_data):
-        from reportlab.platypus import Paragraph, Spacer, TableStyle, Table
         from reportlab.lib.units import mm
+        from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
         if form_data.get('date_from'):
             form_data['date_from'] = parse(form_data['date_from'])
@@ -334,8 +334,8 @@ class OrderTaxListReportPDF(Report):
         return pagesizes.landscape(pagesizes.A4)
 
     def get_story(self, doc, form_data):
-        from reportlab.platypus import Paragraph, Spacer, TableStyle, Table
         from reportlab.lib.units import mm
+        from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
         headlinestyle = self.get_style()
         headlinestyle.fontSize = 15

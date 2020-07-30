@@ -75,7 +75,10 @@ class LogEntry(models.Model):
 
     @cached_property
     def display_object(self):
-        from . import Order, Voucher, Quota, Item, ItemCategory, Question, Event, TaxRule, SubEvent
+        from . import (
+            Event, Item, ItemCategory, Order, Question, Quota, SubEvent,
+            TaxRule, Voucher,
+        )
 
         try:
             if self.content_type.model_class() is Event:

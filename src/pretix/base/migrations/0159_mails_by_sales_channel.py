@@ -4,6 +4,7 @@ from django.db import migrations
 
 from pretix.base.channels import get_all_sales_channels
 
+
 def set_sales_channels(apps, schema_editor):
     # We now allow restricting some mails to certain sales channels
     # The default is changing from all channels to "web" only

@@ -415,7 +415,7 @@ class Event(EventMixin, LoggedModel):
             return super().presale_has_ended
 
     def delete_all_orders(self, really=False):
-        from .orders import OrderRefund, OrderPayment, OrderPosition, OrderFee
+        from .orders import OrderFee, OrderPayment, OrderPosition, OrderRefund
 
         if not really:
             raise TypeError("Pass really=True as a parameter.")
@@ -502,8 +502,10 @@ class Event(EventMixin, LoggedModel):
         ), tz)
 
     def copy_data_from(self, other):
-        from . import ItemAddOn, ItemCategory, Item, Question, Quota, ItemMetaValue
         from ..signals import event_copy_data
+        from . import (
+            Item, ItemAddOn, ItemCategory, ItemMetaValue, Question, Quota,
+        )
 
         self.plugins = other.plugins
         self.is_public = other.is_public
@@ -1183,8 +1185,8 @@ class RequiredAction(models.Model):
         created = not self.pk
         super().save(*args, **kwargs)
         if created:
-            from .log import LogEntry
             from ..services.notifications import notify
+            from .log import LogEntry
 
             logentry = LogEntry.objects.create(
                 content_object=self,
