@@ -55,7 +55,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system dependencies
-        run: sudo apt install gettext mysql-client
+        run: sudo apt update && sudo apt install gettext mysql-client
       - name: Install Python dependencies
         run: pip3 install -r src/requirements.txt --no-use-pep517 -Ur src/requirements/dev.txt mysqlclient psycopg2-binary
       - name: Run checks
