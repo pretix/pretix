@@ -1240,7 +1240,7 @@ def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, l
 
 @receiver(checkout_confirm_messages, dispatch_uid="cart_confirm_messages")
 def confirm_messages(sender, *args, **kwargs):
-    if not sender.settings.confirm_text:
+    if not sender.settings.confirm_texts:
         return {}
     confirm_texts = sender.settings.get("confirm_texts", as_type=LazyI18nStringList)
     return {'confirm_text_%i' % index: rich_text(str(text)) for index, text in enumerate(confirm_texts)}
