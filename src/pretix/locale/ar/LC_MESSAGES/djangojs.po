@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-24 08:44+0000\n"
-"PO-Revision-Date: 2019-12-25 01:00+0000\n"
+"PO-Revision-Date: 2020-07-30 19:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -38,7 +38,7 @@ msgstr "الطلبات"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "أوامر دفع"
+msgstr "طلبات مدفوعة."
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -122,7 +122,7 @@ msgstr "لم نستطع معالجة طلبك، ولكننا نواصل المح
 
 #: pretix/static/pretixbase/js/asynctask.js:189
 msgid "We are processing your request …"
-msgstr "نقوم بمعالجة طلبك …"
+msgstr "جاري معالجة طلبك …"
 
 #: pretix/static/pretixbase/js/asynctask.js:197
 msgid ""
@@ -346,25 +346,25 @@ msgstr[5] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr "العناصر الموجودة في سلة التسوق الخاصة بك لم تعد حكرا على لك."
+msgstr "التذاكر في عربتك لم تعد محجوزة لك."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr "انتهت العربة"
+msgstr "انتهت صلاحية عربة التسوق"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "سيتم إلغاء الحجز تلقائيا بعد دقيقة."
+msgstr[1] "سيتم إلغاء الحجز تلقائيا بعد {num} دقيقة."
+msgstr[2] "سيتم إلغاء الحجز تلقائيا بعد {num} دقيقة."
+msgstr[3] "سيتم إلغاء الحجز تلقائيا بعد {num} دقيقة."
+msgstr[4] "سيتم إلغاء الحجز تلقائيا بعد {num} دقيقة."
+msgstr[5] "سيتم إلغاء الحجز تلقائيا بعد {num} دقيقة."
 
 #: pretix/static/pretixpresale/js/ui/main.js:240
 msgid "Please enter a quantity for one of the ticket types."
-msgstr "الرجاء إدخال كمية لأحد أنواع التذاكر."
+msgstr "الرجاء إدخال كمية التذاكر لأحد أنواع التذاكر."
 
 #: pretix/static/pretixpresale/js/ui/main.js:367
 #, fuzzy

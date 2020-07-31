@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-24 08:44+0000\n"
-"PO-Revision-Date: 2020-07-27 14:25+0000\n"
+"PO-Revision-Date: 2020-07-30 19:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -1180,7 +1180,7 @@ msgstr "الحصة الإجمالية"
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:779
 msgid "Paid orders"
-msgstr "أوامر دفع"
+msgstr "طلبات مدفوعة."
 
 #: pretix/base/exporters/orderlist.py:607 pretix/control/views/item.py:784
 msgid "Pending orders"
@@ -19762,7 +19762,7 @@ msgstr "عربتك"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
 #: pretix/presale/templates/pretixpresale/event/index.html:41
 msgid "Cart expired"
-msgstr "انتهت العربة"
+msgstr "انتهت صلاحية عربة التسوق"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:30
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:42
@@ -19775,7 +19775,7 @@ msgstr "سيتم الغاء الحجز تلقائيا بعد %(minutes)s دقا�
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:46
 #: pretix/presale/templates/pretixpresale/event/index.html:57
 msgid "The items in your cart are no longer reserved for you."
-msgstr "العناصر الموجودة في سلة التسوق الخاصة بك لم تعد حكرا على لك."
+msgstr "التذاكر في عربتك لم تعد محجوزة لك."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:43
 #: pretix/presale/templates/pretixpresale/event/index.html:97
@@ -20374,10 +20374,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:333
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Change order"
-msgstr "الغاء الطلب"
+msgstr "تعديل الطلب"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:343
 #, fuzzy
@@ -20775,18 +20773,14 @@ msgstr "نظرة عامة الحدث"
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:30
 #: pretix/presale/templates/pretixpresale/organizers/index.html:39
-#, fuzzy
-#| msgid "Weekday"
 msgid "Week"
-msgstr "يوم من أيام الأسبوع"
+msgstr "أسبوع"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:36
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:36
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
-#, fuzzy
-#| msgid "month(s)"
 msgid "Month"
-msgstr "الشهور)"
+msgstr "شهر"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:42
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:42
@@ -20797,7 +20791,7 @@ msgstr "تقويم"
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:76
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:83
 msgid "Note that the events in this view are in different timezones."
-msgstr "لاحظ أن الأحداث التي وقعت في هذا الرأي هي في المناطق الزمنية المختلفة."
+msgstr "يرجى ملاحظة أن الفعاليات في منطقة زمنية مختلفة."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
@@ -20813,11 +20807,11 @@ msgstr "الأحداث القادمة"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:53
 msgid "Show upcoming"
-msgstr "تظهر القادمة"
+msgstr "إظهار الفعاليات القادمة"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:55
 msgid "Show past events"
-msgstr "عرض الأحداث الماضية"
+msgstr "عرض الفعاليات السابقة"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 msgid "More info"
@@ -20838,7 +20832,7 @@ msgstr "الصفحة%(page)s من %(of)s"
 
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "نقوم بمعالجة طلبك …"
+msgstr "جاري معالجة طلبك …"
 
 #: pretix/presale/utils.py:43 pretix/presale/utils.py:158
 #: pretix/presale/utils.py:159
