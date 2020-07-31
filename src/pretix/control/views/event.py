@@ -57,6 +57,7 @@ from pretix.presale.style import regenerate_css
 from ...base.models.items import ItemMetaProperty
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
+from ...base.settings import LazyI18nStringList
 
 
 class EventSettingsViewMixin:
@@ -244,17 +245,17 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
 
     @cached_property
     def confirm_texts_formset(self):
-        initial = [{"text": text, "ORDER": order} for order, text in enumerate(
-            LazyI18nString(data) for data in self.object.settings.get("confirm_texts", [], as_type=list))]
+        initial = [{"text": text, "ORDER": order} for order, text in
+                   enumerate(self.object.settings.get("confirm_texts", as_type=LazyI18nStringList))]
         return ConfirmTextFormset(self.request.POST if self.request.method == "POST" else None, event=self.object,
                                   prefix="confirm-texts", initial=initial)
 
     def save_confirm_texts_formset(self, obj):
-        obj.settings.confirm_texts = [
+        obj.settings.confirm_texts = LazyI18nStringList(
             form_data['text'].data
             for form_data in sorted(self.confirm_texts_formset.cleaned_data, key=operator.itemgetter("ORDER"))
             if not form_data.get("DELETE", False)
-        ]
+        )
 
 
 class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
