@@ -7,6 +7,7 @@ from tests.base import SoupTest
 
 from pretix.base.models import Event, Organizer, Team, User
 
+
 class MailSettingPreviewTest(SoupTest):
     @scopes_disabled()
     def setUp(self):

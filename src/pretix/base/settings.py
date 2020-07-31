@@ -1,8 +1,8 @@
 import json
+import operator
 from collections import OrderedDict, UserList
 from datetime import datetime
 from decimal import Decimal
-import operator
 from typing import Any
 
 from django import forms

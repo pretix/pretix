@@ -1337,19 +1337,21 @@ class ItemMetaPropertyForm(forms.ModelForm):
             'default': forms.TextInput()
         }
 
+
 class ConfirmTextForm(I18nForm):
     text = I18nFormField(
         widget=I18nTextarea,
         widget_kwargs={'attrs': {'rows': '2'}},
     )
 
-class BaseConfirmTextFormSet(I18nFormSetMixin, forms.BaseFormSet):
 
+class BaseConfirmTextFormSet(I18nFormSetMixin, forms.BaseFormSet):
     def __init__(self, *args, **kwargs):
         event = kwargs.pop('event', None)
         if event:
             kwargs['locales'] = event.settings.get('locales')
         super().__init__(*args, **kwargs)
+
 
 ConfirmTextFormset = formset_factory(
     ConfirmTextForm,

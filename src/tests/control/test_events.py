@@ -10,7 +10,7 @@ from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
-    Event, Order, OrderPosition, Organizer, SubEvent, Team, User
+    Event, Order, OrderPosition, Organizer, SubEvent, Team, User,
 )
 from pretix.base.models.items import SubEventItem
 from pretix.testutils.mock import mocker_context

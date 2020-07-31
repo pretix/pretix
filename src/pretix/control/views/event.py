@@ -13,7 +13,7 @@ from django.core.files import File
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.db.models import ProtectedError
-from django.forms import formset_factory, inlineformset_factory
+from django.forms import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
     JsonResponse,
@@ -41,10 +41,11 @@ from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import register_ticket_outputs
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.forms.event import (
-    CancelSettingsForm, CommentForm, ConfirmTextFormset, EventDeleteForm, EventMetaValueForm,
-    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm,
-    ItemMetaPropertyForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
-    QuickSetupForm, QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
+    CancelSettingsForm, CommentForm, ConfirmTextFormset, EventDeleteForm,
+    EventMetaValueForm, EventSettingsForm, EventUpdateForm,
+    InvoiceSettingsForm, ItemMetaPropertyForm, MailSettingsForm,
+    PaymentSettingsForm, ProviderForm, QuickSetupForm,
+    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -55,9 +56,9 @@ from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
 from ...base.models.items import ItemMetaProperty
+from ...base.settings import LazyI18nStringList
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
-from ...base.settings import LazyI18nStringList
 
 
 class EventSettingsViewMixin:
