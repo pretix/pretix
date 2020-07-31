@@ -273,6 +273,11 @@ class RelativeDateTimeField(forms.MultiValueField):
                 minutes_before=None
             ))
 
+    def has_changed(self, initial, data):
+        if initial is None:
+            initial = self.widget.decompress(initial)
+        return super().has_changed(initial, data)
+
     def clean(self, value):
         if value[0] == 'absolute' and not value[1]:
             raise ValidationError(self.error_messages['incomplete'])
