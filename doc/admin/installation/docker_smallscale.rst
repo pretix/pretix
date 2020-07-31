@@ -26,7 +26,7 @@ installation guides):
 * `Docker`_
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
-* A `PostgreSQL`_, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
+* A `PostgreSQL`_ 9.5+, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
 * A `redis`_ server
 
 We also recommend that you use a firewall, although this is not a pretix-specific recommendation. If you're new to
@@ -290,7 +290,7 @@ to re-build your custom image after you pulled ``pretix/standalone`` if you want
 .. _Let's Encrypt: https://letsencrypt.org/
 .. _pretix.eu: https://pretix.eu/
 .. _MySQL: https://dev.mysql.com/doc/refman/5.7/en/linux-installation-apt-repo.html
-.. _PostgreSQL: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-9-4-on-debian-8
+.. _PostgreSQL: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04
 .. _redis: https://blog.programster.org/debian-8-install-redis-server/
 .. _ufw: https://en.wikipedia.org/wiki/Uncomplicated_Firewall
 .. _redis website: https://redis.io/topics/security
