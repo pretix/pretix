@@ -492,7 +492,10 @@ class Renderer:
             'support_ligatures': False,
         }
         reshaper = ArabicReshaper(configuration=configuration)
-        text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
+        try:
+            text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
+        except:
+            logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
 
         p = Paragraph(text, style=style)
         w, h = p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
