@@ -112,16 +112,28 @@ class CartMixin:
                 or self.request.event.settings.attendee_emails_asked
                 or pos_additional_fields.get(pos.pk)
             )
-            addon_penalty = 1 if pos.addon_to_id else 0
-            if downloads or pos.pk in has_addons or pos.addon_to_id:
-                return i, addon_penalty, pos.pk, 0, 0, 0, 0, (pos.subevent_id or 0), (pos.seat_id or 0)
-            if answers and (has_attendee_data or pos.item.questions.all()):
-                return i, addon_penalty, pos.pk, 0, 0, 0, 0, (pos.subevent_id or 0), (pos.seat_id or 0)
 
+            addon_penalty = 1 if pos.addon_to_id else 0
+
+            if downloads \
+                    or pos.pk in has_addons \
+                    or pos.addon_to_id \
+                    or pos.item.issue_giftcard \
+                    or answers and (has_attendee_data or pos.item.questions.exists()):
+                return (
+                    # standalone positions are grouped by main product position id, addons below them also sorted by position id
+                    i, addon_penalty, pos.pk,
+                    # all other places are only used for positions that can be grouped. We just put zeros.
+                ) + (0, ) * 10
+
+            # positions are sorted and grouped by various attributes
+            category_key = (pos.item.category.position, pos.item.category.id) if pos.item.category is not None else (0, 0)
+            item_key = pos.item.position, pos.item_id
+            variation_key = (pos.variation.position, pos.variation.id) if pos.variation is not None else (0, 0)
             return (
-                0, addon_penalty, 0, pos.item_id, (pos.variation_id or 0), pos.price, (pos.voucher_id or 0),
-                (pos.subevent_id or 0), (pos.seat_id or 0)
-            )
+                # These are grouped by attributes so we don't put any position ids
+                0, 0, 0,
+            ) + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.subevent_id or 0), (pos.seat_id or 0))
 
         positions = []
         for k, g in groupby(sorted(lcp, key=keyfunc), key=keyfunc):
