@@ -2,18 +2,18 @@ import configparser
 import logging
 import os
 import sys
-
 from urllib.parse import urlparse
 
+import django.conf.locale
+from django.utils.crypto import get_random_string
 from kombu import Queue
+from pkg_resources import iter_entry_points
 from pycountry import currencies
 
-import django.conf.locale
-from django.contrib.messages import constants as messages  # NOQA
-from django.utils.crypto import get_random_string
-from django.utils.translation import gettext_lazy as _  # NOQA
-from pkg_resources import iter_entry_points
 from . import __version__
+
+from django.contrib.messages import constants as messages  # NOQA
+from django.utils.translation import gettext_lazy as _  # NOQA
 
 config = configparser.RawConfigParser()
 if 'PRETIX_CONFIG_FILE' in os.environ:
@@ -637,7 +637,10 @@ SENTRY_ENABLED = False
 if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell', 'shell_scoped', 'shell_plus')):
     import sentry_sdk
     from sentry_sdk.integrations.celery import CeleryIntegration
-    from sentry_sdk.integrations.logging import LoggingIntegration, ignore_logger
+    from sentry_sdk.integrations.logging import (
+        LoggingIntegration, ignore_logger,
+    )
+
     from .sentry import PretixSentryIntegration, setup_custom_filters
 
     SENTRY_ENABLED = True

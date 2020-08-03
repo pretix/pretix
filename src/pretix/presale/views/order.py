@@ -135,14 +135,14 @@ class TicketPageMixin:
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
         ctx['can_download'] = (
-                can_download and self.order.ticket_download_available and
-                list(self.order.positions_with_tickets)
+            can_download and self.order.ticket_download_available and
+            list(self.order.positions_with_tickets)
         )
         ctx['download_buttons'] = self.download_buttons
 
         ctx['backend_user'] = (
-                self.request.user.is_authenticated
-                and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
+            self.request.user.is_authenticated
+            and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
         )
         return ctx
 
@@ -186,13 +186,13 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         )
         ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
-                [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
+            [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
         ctx['invoices'] = list(self.order.invoices.all())
         ctx['can_generate_invoice'] = can_generate_invoice(self.request.event, self.order, ignore_payments=True)
         if ctx['can_generate_invoice']:
             if not self.order.payments.exclude(
-                    state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
+                state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
             ).exists() and self.order.status == Order.STATUS_PENDING:
                 ctx['generate_invoice_requires'] = 'payment'
         ctx['url'] = build_absolute_uri(
@@ -202,7 +202,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             }
         )
         ctx['invoice_address_asked'] = self.request.event.settings.invoice_address_asked and (
-                self.order.total != Decimal('0.00') or not self.request.event.settings.invoice_address_not_asked_free
+            self.order.total != Decimal('0.00') or not self.request.event.settings.invoice_address_not_asked_free
         )
 
         if self.order.status == Order.STATUS_PENDING:
@@ -611,22 +611,22 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
 def can_generate_invoice(event, order, ignore_payments=False):
     v = (
-            order.sales_channel in event.settings.get('invoice_generate_sales_channels')
-            and (
-                    event.settings.get('invoice_generate') in ('user', 'True')
-                    or (
-                            event.settings.get('invoice_generate') == 'paid'
-                            and order.status == Order.STATUS_PAID
-                    )
-            ) and (
-                invoice_qualified(order)
+        order.sales_channel in event.settings.get('invoice_generate_sales_channels')
+        and (
+            event.settings.get('invoice_generate') in ('user', 'True')
+            or (
+                event.settings.get('invoice_generate') == 'paid'
+                and order.status == Order.STATUS_PAID
             )
+        ) and (
+            invoice_qualified(order)
+        )
     )
     if not ignore_payments:
         v = v and not (
-                not order.payments.exclude(
-                    state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
-                ).exists() and order.status == Order.STATUS_PENDING
+            not order.payments.exclude(
+                state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
+            ).exists() and order.status == Order.STATUS_PENDING
         )
     return v
 
@@ -794,10 +794,10 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
                 messages.error(request, _('You chose an invalid cancellation fee.'))
                 return redirect(self.get_order_url())
         giftcard = (
-                self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard == 'force' or (
+            self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard == 'force' or (
                 self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard == 'option' and
                 self.request.POST.get('giftcard') == 'true'
-        )
+            )
         )
         if self.request.event.settings.cancel_allow_user_paid_require_approval:
             self.order.cancellation_requests.create(
