@@ -62,7 +62,7 @@
                             {% endif %}
                             {% if forloop.counter > 1 %}
                                 <span class="text-right flip">
-                                    <input type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-default btn-xs" value='{% trans "Copy answers from above" %}'>
+                                    <button type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-default btn-xs">{% trans "Copy answers from above" %}</button>
                                     <i class="fa fa-angle-down collapse-indicator"></i>
                                 </span>
                             {% else %}
@@ -71,7 +71,7 @@
                         </h4>
                     </summary>
                     <div>
-                        <div class="panel-body questions-form" data-idx="{{ forloop.counter0 }}">
+                        <div class="panel-body questions-form">
                             {% if pos.addons.all %}
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">
@@ -105,9 +105,18 @@
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
                                     {# Add-Ons #}
-                                    <legend>+ {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}</legend>
+                                    <legend>
+                                        {% if form.show_copy_answers_to_addon_button  %}
+                                            <span class="pull-right flip">
+                                                <button type="button" data-id="{{ forloop.parentloop.counter0 }}" data-addonid="{{ forloop.counter0 }}" name="copy" class="js-copy-answers-addon btn btn-default btn-xs">{% trans "Copy answers" %}</button>
+                                            </span>
+                                        {% endif %}
+                                        + {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}
+                                    </legend>
                                 {% endif %}
-                                {% bootstrap_form form layout="checkout" %}
+                                <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}">
+                                    {% bootstrap_form form layout="checkout" %}
+                                </div>
                             {% endfor %}
                         </div>
                     </div>

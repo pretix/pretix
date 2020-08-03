@@ -171,8 +171,28 @@ $(function () {
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        var idx = $(this).data('id');
-        copy_answers(idx);
+        let idx = $(this).data('id');
+        const addonDivs = $('div[data-idx="' + idx +'"]')
+        addonDivs.each(function (index) {
+            const elements = $(this).find('input, select, textarea');
+
+            const addonIdx = $(this).attr("data-addonidx");
+            const answersDiv = $('div[data-idx="0"][data-addonidx="' + addonIdx + '"]');
+            const answers = answersDiv.find('input, select, textarea');
+
+            copy_answers(elements, answers);
+        })
+        return false;
+    });
+    $(".js-copy-answers-addon").click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = $(this).data('id');
+        const addonId = $(this).data('addonid');
+        const addonDiv = $('div[data-idx="' + id +'"][data-addonidx="' + addonId + '"]');
+        const elements = addonDiv.find('input, select, textarea');
+        const answers = $('*[data-idx="' + id + '"] input, *[data-idx="' + id + '"] select, *[data-idx="' + id + '"] textarea');
+        copy_answers(elements, answers);
         return false;
     });
     var copy_to_first_ticket = true;
@@ -424,45 +444,41 @@ $(function () {
     lightbox.init();
 });
 
-function copy_answers(idx) {
-    var elements = $('*[data-idx="' + idx + '"] input, *[data-idx="' + idx + '"] select, *[data-idx="' + idx + '"] textarea');
-    var firstAnswers = $('*[data-idx="0"] input, *[data-idx="0"] select, *[data-idx="0"] textarea');
-    elements.each(function (index) {
+function copy_answers(elements, answers) {
+   elements.each(function (index) {
         var input = $(this),
             tagName = input.prop('tagName').toLowerCase(),
             attributeType = input.attr('type'),
             suffix = input.attr('name').split('-')[1];
 
-
         switch (tagName) {
             case "textarea":
-                input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
+                input.val(answers.filter("[name$=" + suffix + "]").val());
                 break;
             case "select":
-                input.val(firstAnswers.filter("[name$=" + suffix + "]").find(":selected").val()).change();
+                input.val(answers.filter("[name$=" + suffix + "]").find(":selected").val()).change();
                 break;
             case "input":
                 switch (attributeType) {
                     case "text":
                     case "number":
-                        input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
+                        input.val(answers.filter("[name$=" + suffix + "]").val());
                         break;
                     case "checkbox":
                     case "radio":
                         if (input.attr('value')) {
-                            input.prop("checked", firstAnswers.filter("[name$=" + suffix + "][value=" + input.attr('value') + "]").prop("checked"));
+                            input.prop("checked", answers.filter("[name$=" + suffix + "][value=" + input.attr('value') + "]").prop("checked"));
                         } else {
-                            input.prop("checked", firstAnswers.filter("[name$=" + suffix + "]").prop("checked"));
+                            input.prop("checked", answers.filter("[name$=" + suffix + "]").prop("checked"));
                         }
                         break;
                     default:
-                        input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
+                        input.val(answers.filter("[name$=" + suffix + "]").val());
                 }
                 break;
             default:
-                input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
+                input.val(answers.filter("[name$=" + suffix + "]").val());
         }
     });
     questions_toggle_dependent(true);
 }
-
