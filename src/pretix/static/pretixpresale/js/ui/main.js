@@ -171,19 +171,27 @@ $(function () {
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        var idx = $(this).data('id');
-        const elements = $('*[data-idx="' + idx + '"] input, *[data-idx="' + idx + '"] select, *[data-idx="' + idx + '"] textarea');
-        const answers = $('*[data-idx="0"] input, *[data-idx="0"] select, *[data-idx="0"] textarea');
-        copy_answers(elements, answers);
+        let idx = $(this).data('id');
+        const addonDivs = $('div[data-idx="' + idx +'"]')
+        addonDivs.each(function (index) {
+            const elements = $(this).find('input, select, textarea');
+
+            const addonIdx = $(this).attr("data-addonidx");
+            const answersDiv = $('div[data-idx="0"][data-addonidx="' + addonIdx + '"]');
+            const answers = answersDiv.find('input, select, textarea');
+
+            copy_answers(elements, answers);
+        })
         return false;
     });
     $(".js-copy-answers-addon").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        const elementsId = $(this).data('addonid');
-        const answersId = $(this).data('id');
-        const elements = $('*[data-addonidx="' + elementsId + '"] input, *[data-addonidx="' + elementsId + '"] select, *[data-addonidx="' + elementsId + '"] textarea');
-        const answers = $('*[data-idx="' + answersId + '"] input, *[data-idx="' + answersId + '"] select, *[data-idx="' + answersId + '"] textarea');
+        const id = $(this).data('id');
+        const addonId = $(this).data('addonid');
+        const addonDiv = $('div[data-idx="' + id +'"][data-addonidx="' + addonId + '"]');
+        const elements = addonDiv.find('input, select, textarea');
+        const answers = $('*[data-idx="' + id + '"] input, *[data-idx="' + id + '"] select, *[data-idx="' + id + '"] textarea');
         copy_answers(elements, answers);
         return false;
     });

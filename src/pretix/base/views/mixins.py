@@ -53,6 +53,7 @@ class BaseQuestionsViewMixin:
                                    data=(self.request.POST if self.request.method == 'POST' else None),
                                    files=(self.request.FILES if self.request.method == 'POST' else None))
             form.pos = cartpos or orderpos
+            form.show_copy_answers_to_addon_button = form.pos.addon_to and set(form.pos.addon_to.item.questions.all()) & set(form.pos.item.questions.all())
             if len(form.fields) > 0:
                 formlist.append(form)
         return formlist
@@ -61,7 +62,7 @@ class BaseQuestionsViewMixin:
     def formdict(self):
         storage = OrderedDict()
         for f in self.forms:
-            pos = f.cartpos or f.orderpos
+            pos = f.pos
             if pos.addon_to_id:
                 if pos.addon_to not in storage:
                     storage[pos.addon_to] = []
