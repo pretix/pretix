@@ -20,11 +20,7 @@ class BankTransfer(BasePaymentProvider):
     identifier = 'banktransfer'
     verbose_name = _('Bank transfer')
     abort_pending_allowed = True
-
-    def create_invoice_immediately(self, order):
-        if super().create_invoice_immediately(order):
-            return True
-        return self.event.settings.get('invoice_generate') == 'paid' and self.settings.get("invoice_immediately", False)
+    requires_invoice_immediately = True
 
     @staticmethod
     def form_fields():

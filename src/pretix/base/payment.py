@@ -168,21 +168,21 @@ class BasePaymentProvider:
     @property
     def abort_pending_allowed(self) -> bool:
         """
-        Whether or not a user can abort a payment in pending start to switch to another
+        Whether or not a user can abort a payment in pending state to switch to another
         payment method. This returns ``False`` by default which is no guarantee that
         aborting a pending payment can never happen, it just hides the frontend button
         to avoid users accidentally committing double payments.
         """
         return False
 
-    def create_invoice_immediately(self, order):
+    @property
+    def requires_invoice_immediately(self):
         """
-        Whether or not to create an invoice right after this payment method has been chosen for ``order``.
-        Invoices sent on succeeded payment are dealt with separately.
-        By default, this is True only if the event is configured to generate invoices for all orders immediately,
-        but it might be overwritten for e.g. bank transfer.
+        Return whether this payment method requires an invoice to exist for an order, even though the event
+        is configured to only create invoices for paid orders.
+        By default this is False, but it might be overwritten for e.g. bank transfer.
         """
-        return self.event.settings.get('invoice_generate') == 'True'
+        return False
 
     @property
     def settings_form_fields(self) -> dict:
