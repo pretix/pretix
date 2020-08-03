@@ -178,7 +178,7 @@ class BasePaymentProvider:
     def create_invoice_immediately(self, order):
         """
         Whether or not to create an invoice right after this payment method has been chosen for ``order``.
-        Invoices send on succeeded payment are dealt with separately.
+        Invoices sent on succeeded payment are dealt with separately.
         By default, this is True only if the event is configured to generate invoices for all orders immediately,
         but it might be overwritten for e.g. bank transfer.
         """
