@@ -58,18 +58,19 @@ def _default_context(request):
         else:
             ctx['footer_text'] = str(text)
 
+    for receiver, response in global_html_page_header.send(None, request=request):
+        _html_page_header.append(response)
+    for receiver, response in global_html_head.send(None, request=request):
+        _html_head.append(response)
+    for receiver, response in global_html_footer.send(None, request=request):
+        _html_foot.append(response)
+
     if hasattr(request, 'event') and get_scope():
-        for receiver, response in global_html_head.send(None, request=request):
-            _html_head.append(response)
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
-        for receiver, response in global_html_page_header.send(None, request=request):
-            _html_page_header.append(response)
         for receiver, response in html_page_header.send(request.event, request=request):
             _html_page_header.append(response)
         for receiver, response in html_footer.send(request.event, request=request):
-            _html_foot.append(response)
-        for receiver, response in global_html_footer.send(None, request=request):
             _html_foot.append(response)
         for receiver, response in footer_link.send(request.event, request=request):
             if isinstance(response, list):
