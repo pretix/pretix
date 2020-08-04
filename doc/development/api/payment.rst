@@ -126,6 +126,8 @@ The provider class
 
    .. autoattribute:: test_mode_message
 
+   .. autoattribute:: requires_invoice_immediately
+
 
 Additional views
 ----------------

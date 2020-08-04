@@ -181,6 +181,7 @@ class BasePaymentProvider:
         Return whether this payment method requires an invoice to exist for an order, even though the event
         is configured to only create invoices for paid orders.
         By default this is False, but it might be overwritten for e.g. bank transfer.
+        `execute_payment` is called after the invoice is created.
         """
         return False
 
