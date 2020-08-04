@@ -54,6 +54,10 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   margin: 0;
 }
 
+.formset-row {
+  margin-bottom: 10px;
+}
+
 .submit-group {
   margin: 15px 0 0 0 !important;
   padding: 15px;

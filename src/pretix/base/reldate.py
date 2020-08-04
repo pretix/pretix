@@ -35,7 +35,7 @@ class RelativeDateWrapper:
     def __init__(self, data: Union[datetime.datetime, RelativeDate]):
         self.data = data
 
-    def date(self, event) -> datetime.datetime:
+    def date(self, event) -> datetime.date:
         from .models import SubEvent
 
         if isinstance(self.data, datetime.date):
@@ -81,8 +81,8 @@ class RelativeDateWrapper:
                     second=self.data.time.second
                 )
             new_date = new_date.astimezone(tz)
-            newoffset = new_date.utcoffset()
-            new_date += oldoffset - newoffset
+            new_offset = new_date.utcoffset()
+            new_date += oldoffset - new_offset
             return new_date
 
     def to_string(self) -> str:

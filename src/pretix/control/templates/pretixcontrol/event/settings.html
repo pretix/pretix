@@ -26,7 +26,11 @@
                 {% bootstrap_field form.date_to layout="control" %}
                 <div class="geodata-section">
                     {% bootstrap_field form.location layout="control" %}
-                    <div class="form-group geodata-group" data-tiles="{{ global_settings.leaflet_tiles|default_if_none:"" }}" data-attrib="{{ global_settings.leaflet_tiles_attribution }}" data-icon="{% static "leaflet/images/marker-icon.png" %}" data-shadow="{% static "leaflet/images/marker-shadow.png" %}">
+                    <div class="form-group geodata-group"
+                         data-tiles="{{ global_settings.leaflet_tiles|default_if_none:"" }}"
+                         data-attrib="{{ global_settings.leaflet_tiles_attribution }}"
+                         data-icon="{% static "leaflet/images/marker-icon.png" %}"
+                         data-shadow="{% static "leaflet/images/marker-shadow.png" %}">
                         <label class="col-md-3 control-label">
                             {% trans "Geo coordinates" %}<br>
                             <span class="optional">{% trans "Optional" %}</span>
@@ -99,7 +103,77 @@
                 {% bootstrap_field sform.frontpage_text layout="control" %}
                 {% bootstrap_field sform.presale_has_ended_text layout="control" %}
                 {% bootstrap_field sform.voucher_explanation_text layout="control" %}
-                {% bootstrap_field sform.confirm_text layout="control" %}
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label">
+                        {% trans "Confirmation text" %}<br>
+                        <span class="optional">{% trans "Optional" %}</span>
+                    </label>
+                    <div class="col-md-9">
+                        <div class="help-block">
+                            {% blocktrans trimmed %}
+                                These texts need to be confirmed by the user before a purchase is possible. You could
+                                for example link your terms of service here. If you use the Pages feature to publish
+                                your terms of service, you don't need this setting since you can configure it there.
+                            {% endblocktrans %}
+                        </div>
+                        <div class="formset" data-formset data-formset-prefix="{{ confirm_texts_formset.prefix }}">
+                            {{ confirm_texts_formset.management_form }}
+                            {% bootstrap_formset_errors confirm_texts_formset %}
+                            <div data-formset-body>
+                                {% for form in confirm_texts_formset %}
+                                    <div class="row formset-row" data-formset-form>
+                                        <div class="sr-only">
+                                            {{ form.id }}
+                                            {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                            {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
+                                        </div>
+                                        <div class="col-md-10">
+                                            {% bootstrap_form_errors form %}
+                                            {% bootstrap_field form.text layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-md-2 text-right flip">
+                                            <button type="button" class="btn" data-formset-move-up-button>
+                                                <i class="fa fa-arrow-up"></i></button>
+                                            <button type="button" class="btn" data-formset-move-down-button>
+                                                <i class="fa fa-arrow-down"></i></button>
+                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <script type="form-template" data-formset-empty-form>
+                                {% escapescript %}
+                                    <div class="row formset-row" data-formset-form>
+                                        <div class="sr-only">
+                                            {{ confirm_texts_formset.empty_form.id }}
+                                            {% bootstrap_field confirm_texts_formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                            {% bootstrap_field confirm_texts_formset.empty_form.ORDER form_group_class="" layout="inline" %}
+                                        </div>
+                                        <div class="col-md-10">
+                                            {% bootstrap_field confirm_texts_formset.empty_form.text layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-md-2 text-right flip">
+
+                                            <button type="button" class="btn" data-formset-move-up-button>
+                                                <i class="fa fa-arrow-up"></i></button>
+                                            <button type="button" class="btn" data-formset-move-down-button>
+                                                <i class="fa fa-arrow-down"></i></button>
+                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                {% endescapescript %}
+                            </script>
+                            <p>
+                                <button type="button" class="btn btn-default" data-formset-add>
+                                    <i class="fa fa-plus"></i> {% trans "Add confirmation text" %}</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 {% bootstrap_field sform.checkout_email_helptext layout="control" %}
                 {% bootstrap_field sform.banner_text layout="control" %}
                 {% bootstrap_field sform.banner_text_bottom layout="control" %}
@@ -161,17 +235,18 @@
                 <legend>{% trans "Item metadata" %}</legend>
                 <p>
                     {% blocktrans trimmed %}
-                        You can here define a set of metadata properties (i.e. variables) that you can later set for your
-                        items and re-use in places like ticket layouts. This is an useful timesaver if you create lots and
-                        lots of items.
+                        You can here define a set of metadata properties (i.e. variables) that you can later set for
+                        your items and re-use in places like ticket layouts. This is an useful timesaver if you create
+                        lots and lots of items.
                     {% endblocktrans %}
                 </p>
-                <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
-                    {{ formset.management_form }}
-                    {% bootstrap_formset_errors formset %}
+                <div class="formset" data-formset
+                     data-formset-prefix="{{ item_meta_property_formset.prefix }}">
+                    {{ item_meta_property_formset.management_form }}
+                    {% bootstrap_formset_errors item_meta_property_formset %}
                     <div data-formset-body>
-                        {% for form in formset %}
-                            <div class="row" data-formset-form>
+                        {% for form in item_meta_property_formset %}
+                            <div class="row formset-row" data-formset-form>
                                 <div class="sr-only">
                                     {{ form.id }}
                                     {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
@@ -192,16 +267,16 @@
                     </div>
                     <script type="form-template" data-formset-empty-form>
                         {% escapescript %}
-                            <div class="row" data-formset-form>
+                            <div class="row formset-row" data-formset-form>
                                 <div class="sr-only">
-                                    {{ formset.empty_form.id }}
-                                    {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                    {{ item_meta_property_formset.empty_form.id }}
+                                    {% bootstrap_field item_meta_property_formset.empty_form.DELETE form_group_class="" layout="inline" %}
                                 </div>
                                 <div class="col-md-5">
-                                    {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
+                                    {% bootstrap_field item_meta_property_formset.empty_form.name layout='inline' form_group_class="" %}
                                 </div>
                                 <div class="col-md-5 col-lg-6">
-                                    {% bootstrap_field formset.empty_form.default layout='inline' form_group_class="" %}
+                                    {% bootstrap_field item_meta_property_formset.empty_form.default layout='inline' form_group_class="" %}
                                 </div>
                                 <div class="col-md-2 col-lg-1 text-right flip">
                                     <button type="button" class="btn btn-danger" data-formset-delete-button>
@@ -223,12 +298,12 @@
             </button>
             <div class="pull-left">
                 <a href="{% url "control:event.dangerzone" organizer=request.organizer.slug event=request.event.slug %}"
-                        class="btn btn-danger btn-lg">
+                   class="btn btn-danger btn-lg">
                     <span class="fa fa-trash"></span>
                     {% trans "Cancel or delete event" %}
                 </a>
                 <a href="{% url "control:events.add" %}?clone={{ request.event.pk }}"
-                        class="btn btn-default btn-lg">
+                   class="btn btn-default btn-lg">
                     <span class="fa fa-copy"></span>
                     {% trans "Clone event" %}
                 </a>

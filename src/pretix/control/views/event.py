@@ -1,4 +1,5 @@
 import json
+import operator
 import re
 from collections import OrderedDict
 from decimal import Decimal
@@ -40,10 +41,11 @@ from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import register_ticket_outputs
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.forms.event import (
-    CancelSettingsForm, CommentForm, EventDeleteForm, EventMetaValueForm,
-    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm,
-    ItemMetaPropertyForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
-    QuickSetupForm, QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
+    CancelSettingsForm, CommentForm, ConfirmTextFormset, EventDeleteForm,
+    EventMetaValueForm, EventSettingsForm, EventUpdateForm,
+    InvoiceSettingsForm, ItemMetaPropertyForm, MailSettingsForm,
+    PaymentSettingsForm, ProviderForm, QuickSetupForm,
+    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -54,6 +56,7 @@ from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
 from ...base.models.items import ItemMetaProperty
+from ...base.settings import LazyI18nStringList
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -140,7 +143,8 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         context = super().get_context_data(*args, **kwargs)
         context['sform'] = self.sform
         context['meta_forms'] = self.meta_forms
-        context['formset'] = self.formset
+        context['item_meta_property_formset'] = self.item_meta_property_formset
+        context['confirm_texts_formset'] = self.confirm_texts_formset
         return context
 
     @transaction.atomic
@@ -148,13 +152,15 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         self._save_decoupled(self.sform)
         self.sform.save()
         self.save_meta()
-        self.save_formset(self.object)
+        self.save_item_meta_property_formset(self.object)
+        self.save_confirm_texts_formset(self.object)
         change_css = False
 
-        if self.sform.has_changed():
-            self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
-                k: self.request.event.settings.get(k) for k in self.sform.changed_data
-            })
+        if self.sform.has_changed() or self.confirm_texts_formset.has_changed():
+            data = {k: self.request.event.settings.get(k) for k in self.sform.changed_data}
+            if self.confirm_texts_formset.has_changed():
+                data.update(confirm_texts=self.confirm_texts_formset.cleaned_data)
+            self.request.event.log_action('pretix.event.settings', user=self.request.user, data=data)
             display_properties = (
                 'primary_color', 'theme_color_success', 'theme_color_danger', 'primary_font',
                 'theme_color_background', 'theme_round_borders',
@@ -194,7 +200,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid() and self.sform.is_valid() and all([f.is_valid() for f in self.meta_forms]) and \
-                self.formset.is_valid():
+                self.item_meta_property_formset.is_valid() and self.confirm_texts_formset.is_valid():
             # reset timezone
             zone = timezone(self.sform.cleaned_data['timezone'])
             event = form.instance
@@ -212,17 +218,17 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
 
     @cached_property
-    def formset(self):
+    def item_meta_property_formset(self):
         formsetclass = inlineformset_factory(
             Event, ItemMetaProperty,
             form=ItemMetaPropertyForm, can_order=False, can_delete=True, extra=0
         )
-        return formsetclass(self.request.POST if self.request.method == "POST" else None,
+        return formsetclass(self.request.POST if self.request.method == "POST" else None, prefix="item-meta-property",
                             instance=self.object, queryset=self.object.item_meta_properties.all())
 
-    def save_formset(self, obj):
-        for form in self.formset.initial_forms:
-            if form in self.formset.deleted_forms:
+    def save_item_meta_property_formset(self, obj):
+        for form in self.item_meta_property_formset.initial_forms:
+            if form in self.item_meta_property_formset.deleted_forms:
                 if not form.instance.pk:
                     continue
                 form.instance.delete()
@@ -230,13 +236,27 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             elif form.has_changed():
                 form.save()
 
-        for form in self.formset.extra_forms:
+        for form in self.item_meta_property_formset.extra_forms:
             if not form.has_changed():
                 continue
-            if self.formset._should_delete_form(form):
+            if self.item_meta_property_formset._should_delete_form(form):
                 continue
             form.instance.event = obj
             form.save()
+
+    @cached_property
+    def confirm_texts_formset(self):
+        initial = [{"text": text, "ORDER": order} for order, text in
+                   enumerate(self.object.settings.get("confirm_texts", as_type=LazyI18nStringList))]
+        return ConfirmTextFormset(self.request.POST if self.request.method == "POST" else None, event=self.object,
+                                  prefix="confirm-texts", initial=initial)
+
+    def save_confirm_texts_formset(self, obj):
+        obj.settings.confirm_texts = LazyI18nStringList(
+            form_data['text'].data
+            for form_data in sorted(self.confirm_texts_formset.cleaned_data, key=operator.itemgetter("ORDER"))
+            if not form_data.get("DELETE", False)
+        )
 
 
 class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):

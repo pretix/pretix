@@ -27,7 +27,7 @@ from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.pricing import get_price
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask
-from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.settings import PERSON_NAME_SCHEMES, LazyI18nStringList
 from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.celery_app import app
@@ -1240,9 +1240,7 @@ def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, l
 
 @receiver(checkout_confirm_messages, dispatch_uid="cart_confirm_messages")
 def confirm_messages(sender, *args, **kwargs):
-    if not sender.settings.confirm_text:
+    if not sender.settings.confirm_texts:
         return {}
-
-    return {
-        'confirm_text': rich_text(str(sender.settings.confirm_text))
-    }
+    confirm_texts = sender.settings.get("confirm_texts", as_type=LazyI18nStringList)
+    return {'confirm_text_%i' % index: rich_text(str(text)) for index, text in enumerate(confirm_texts)}

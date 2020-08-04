@@ -1,5 +1,6 @@
 import json
-from collections import OrderedDict
+import operator
+from collections import OrderedDict, UserList
 from datetime import datetime
 from decimal import Decimal
 from typing import Any
@@ -35,6 +36,20 @@ def country_choice_kwargs():
     return {
         'choices': allcountries
     }
+
+
+class LazyI18nStringList(UserList):
+    def __init__(self, init_list=None):
+        super().__init__()
+        if init_list is not None:
+            self.data = [v if isinstance(v, LazyI18nString) else LazyI18nString(v) for v in init_list]
+
+    def serialize(self):
+        return json.dumps([s.data for s in self.data])
+
+    @classmethod
+    def unserialize(cls, s):
+        return cls(json.loads(s))
 
 
 DEFAULTS = {
@@ -1127,18 +1142,11 @@ DEFAULTS = {
         ),
         'serializer_class': serializers.URLField,
     },
-    'confirm_text': {
-        'default': None,
-        'type': LazyI18nString,
-        'form_class': I18nFormField,
-        'serializer_class': I18nField,
-        'form_kwargs': dict(
-            label=_('Confirmation text'),
-            help_text=_('This text needs to be confirmed by the user before a purchase is possible. You could for example '
-                        'link your terms of service here. If you use the Pages feature to publish your terms of service, '
-                        'you don\'t need this setting since you can configure it there.'),
-            widget=I18nTextarea,
-        )
+    'confirm_texts': {
+        'default': LazyI18nStringList(),
+        'type': LazyI18nStringList,
+        'serializer_class': serializers.ListField,
+        'serializer_kwargs': lambda: dict(child=I18nField()),
     },
     'mail_html_renderer': {
         'default': 'classic',
@@ -1939,6 +1947,9 @@ def i18n_uns(v):
 settings_hierarkey.add_type(LazyI18nString,
                             serialize=lambda s: json.dumps(s.data),
                             unserialize=i18n_uns)
+settings_hierarkey.add_type(LazyI18nStringList,
+                            serialize=operator.methodcaller("serialize"),
+                            unserialize=LazyI18nStringList.unserialize)
 settings_hierarkey.add_type(RelativeDateWrapper,
                             serialize=lambda rdw: rdw.to_string(),
                             unserialize=lambda s: RelativeDateWrapper.from_string(s))

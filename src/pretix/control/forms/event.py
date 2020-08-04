@@ -518,7 +518,6 @@ class EventSettingsForm(SettingsForm):
         'attendee_company_required',
         'attendee_addresses_asked',
         'attendee_addresses_required',
-        'confirm_text',
         'banner_text',
         'banner_text_bottom',
         'order_email_asked_twice',
@@ -535,11 +534,6 @@ class EventSettingsForm(SettingsForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs['obj']
         super().__init__(*args, **kwargs)
-        self.fields['confirm_text'].widget.attrs['rows'] = '3'
-        self.fields['confirm_text'].widget.attrs['placeholder'] = _(
-            'e.g. I hereby confirm that I have read and agree with the event organizer\'s terms of service '
-            'and agree with them.'
-        )
         self.fields['name_scheme'].choices = (
             (k, _('Ask for {fields}, display like {example}').format(
                 fields=' + '.join(str(vv[1]) for vv in v['fields']),
@@ -1342,3 +1336,25 @@ class ItemMetaPropertyForm(forms.ModelForm):
         widgets = {
             'default': forms.TextInput()
         }
+
+
+class ConfirmTextForm(I18nForm):
+    text = I18nFormField(
+        widget=I18nTextarea,
+        widget_kwargs={'attrs': {'rows': '2'}},
+    )
+
+
+class BaseConfirmTextFormSet(I18nFormSetMixin, forms.BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        event = kwargs.pop('event', None)
+        if event:
+            kwargs['locales'] = event.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+
+ConfirmTextFormset = formset_factory(
+    ConfirmTextForm,
+    formset=BaseConfirmTextFormSet,
+    can_order=True, can_delete=True, extra=0
+)
