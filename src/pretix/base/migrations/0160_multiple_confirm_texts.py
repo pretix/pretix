@@ -10,10 +10,11 @@ def migrate_confirm_text(apps, schema_editor):
     # from `confirm_text` to `confirm_texts`
     Event_SettingsStore = apps.get_model('pretixbase', 'Event_SettingsStore')
     for store in Event_SettingsStore.objects.filter(key="confirm_text"):
-        values = json.dumps([json.loads(store.value)])  # convert single value to one-element list
-        store.key = "confirm_texts"
-        store.value = values
-        store.save()
+        if store.value:
+            values = json.dumps([json.loads(store.value)])  # convert single value to one-element list
+            store.key = "confirm_texts"
+            store.value = values
+            store.save()
 
 
 class Migration(migrations.Migration):
