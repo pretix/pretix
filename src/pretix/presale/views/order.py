@@ -189,10 +189,10 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
         ctx['invoices'] = list(self.order.invoices.all())
-        ctx['can_generate_invoice'] = can_generate_invoice(self.request.event, self.order, True)
+        ctx['can_generate_invoice'] = can_generate_invoice(self.request.event, self.order, ignore_payments=True)
         if ctx['can_generate_invoice']:
             if not self.order.payments.exclude(
-                    state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
+                state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
             ).exists() and self.order.status == Order.STATUS_PENDING:
                 ctx['generate_invoice_requires'] = 'payment'
         ctx['url'] = build_absolute_uri(
@@ -388,6 +388,14 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
+            if not self.order.invoices.exists() and invoice_qualified(self.order):
+                if self.request.event.settings.get('invoice_generate') == 'True' or (
+                        self.request.event.settings.get('invoice_generate') == 'paid' and self.payment.payment_provider.requires_invoice_immediately):
+                    i = generate_invoice(self.order)
+                    self.order.log_action('pretix.event.order.invoice.generated', data={
+                        'invoice': i.pk
+                    })
+                    messages.success(self.request, _('An invoice has been generated.'))
             resp = self.payment.payment_provider.execute_payment(request, self.payment)
         except PaymentException as e:
             messages.error(request, str(e))

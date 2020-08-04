@@ -525,7 +525,7 @@ DEFAULTS = {
                 ('admin', _('Only manually in admin panel')),
                 ('user', _('Automatically on user request')),
                 ('True', _('Automatically for all created orders')),
-                ('paid', _('Automatically on payment')),
+                ('paid', _('Automatically on payment or when required by payment method')),
             ),
         ),
         'form_kwargs': dict(
@@ -536,7 +536,7 @@ DEFAULTS = {
                 ('admin', _('Only manually in admin panel')),
                 ('user', _('Automatically on user request')),
                 ('True', _('Automatically for all created orders')),
-                ('paid', _('Automatically on payment')),
+                ('paid', _('Automatically on payment or when required by payment method')),
             ),
             help_text=_("Invoices will never be automatically generated for free orders.")
         )

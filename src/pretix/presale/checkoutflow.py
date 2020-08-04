@@ -141,7 +141,7 @@ def get_checkout_flow(event):
     # Sort by priority
     flow.sort(key=lambda p: p.priority)
 
-    # Create a double-linked-list for esasy forwards/backwards traversal
+    # Create a double-linked-list for easy forwards/backwards traversal
     last = None
     for step in flow:
         step._previous = last

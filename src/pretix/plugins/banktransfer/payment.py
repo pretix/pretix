@@ -98,6 +98,12 @@ class BankTransfer(BasePaymentProvider):
                 }},
                 required=False
             )),
+            ('invoice_immediately',
+             forms.BooleanField(
+                 label=_('Create an invoice for orders using bank transfer immediately if the event is otherwise '
+                         'configured to create invoices after payment is completed.'),
+                 required=False,
+             )),
             ('public_name', I18nFormField(
                 label=_('Payment method name'),
                 widget=I18nTextInput,
@@ -118,6 +124,10 @@ class BankTransfer(BasePaymentProvider):
     def test_mode_message(self):
         return _('In test mode, you can just manually mark this order as paid in the backend after it has been '
                  'created.')
+
+    @property
+    def requires_invoice_immediately(self):
+        return self.settings.get('invoice_immediately', False, as_type=bool)
 
     @property
     def settings_form_fields(self):

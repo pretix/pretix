@@ -168,10 +168,20 @@ class BasePaymentProvider:
     @property
     def abort_pending_allowed(self) -> bool:
         """
-        Whether or not a user can abort a payment in pending start to switch to another
+        Whether or not a user can abort a payment in pending state to switch to another
         payment method. This returns ``False`` by default which is no guarantee that
         aborting a pending payment can never happen, it just hides the frontend button
         to avoid users accidentally committing double payments.
+        """
+        return False
+
+    @property
+    def requires_invoice_immediately(self):
+        """
+        Return whether this payment method requires an invoice to exist for an order, even though the event
+        is configured to only create invoices for paid orders.
+        By default this is False, but it might be overwritten for e.g. bank transfer.
+        `execute_payment` is called after the invoice is created.
         """
         return False
 
@@ -770,7 +780,7 @@ class BasePaymentProvider:
 
     def matching_id(self, payment: OrderPayment):
         """
-        Will be called to get an ID for a matching this payment when comparing pretix records with records of an external
+        Will be called to get an ID for matching this payment when comparing pretix records with records of an external
         source. This should return the main transaction ID for your API.
 
         :param payment: The payment in question.
