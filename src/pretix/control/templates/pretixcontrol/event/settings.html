@@ -103,10 +103,7 @@
                 {% bootstrap_field sform.frontpage_text layout="control" %}
                 {% bootstrap_field sform.presale_has_ended_text layout="control" %}
                 {% bootstrap_field sform.voucher_explanation_text layout="control" %}
-                {% bootstrap_field sform.checkout_email_helptext layout="control" %}
-                {% bootstrap_field sform.banner_text layout="control" %}
-                {% bootstrap_field sform.banner_text_bottom layout="control" %}
-            
+
                 <div class="form-group">
                     <label class="col-md-3 control-label">
                         {% trans "Confirmation text" %}<br>
@@ -177,6 +174,9 @@
                     </div>
                 </div>
 
+                {% bootstrap_field sform.checkout_email_helptext layout="control" %}
+                {% bootstrap_field sform.banner_text layout="control" %}
+                {% bootstrap_field sform.banner_text_bottom layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Shop design" %}</legend>
