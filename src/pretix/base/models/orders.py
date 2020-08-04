@@ -1869,6 +1869,9 @@ class OrderFee(models.Model):
             self.tax_rate = Decimal('0.00')
 
     def save(self, *args, **kwargs):
+        if self.tax_rule and not self.tax_rule.rate and not self.tax_rule.pk:
+            self.tax_rule = None
+
         if self.tax_rate is None:
             self._calculate_tax()
         self.order.touch()
