@@ -119,7 +119,7 @@ class CartMixin:
                     or pos.pk in has_addons \
                     or pos.addon_to_id \
                     or pos.item.issue_giftcard \
-                    or answers and (has_attendee_data or pos.item.questions.exists()):
+                    or (answers and (has_attendee_data or pos.item.questions.exists())):
                 return (
                     # standalone positions are grouped by main product position id, addons below them also sorted by position id
                     i, addon_penalty, pos.pk,
