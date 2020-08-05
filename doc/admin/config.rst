@@ -339,6 +339,15 @@ application. If you want to use sentry, you need to set a DSN in the configurati
     You will be given this value by your sentry installation.
 
 
+Caching
+-------
+
+You can adjust some caching settings to control how much storage pretix uses::
+
+    [cache]
+    tickets=48  ; Number of hours tickets (PDF, passbook, …) are cached
+
+
 Secret length
 -------------
 

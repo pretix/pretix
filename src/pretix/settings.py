@@ -241,6 +241,8 @@ else:
 
 SESSION_COOKIE_DOMAIN = config.get('pretix', 'cookie_domain', fallback=None)
 
+CACHE_TICKETS_HOURS = config.getint('cache', 'tickets', fallback=24 * 3)
+
 ENTROPY = {
     'order_code': config.getint('entropy', 'order_code', fallback=5),
     'ticket_secret': config.getint('entropy', 'ticket_secret', fallback=32),
