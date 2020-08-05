@@ -29,8 +29,8 @@ class MetaDataField(Field):
         }
 
     def to_internal_value(self, data):
-        if not isinstance(data, dict) or not all(isinstance(k, str) for k in data.keys()) or not all(isinstance(k, str) for k in data.values()):
-            return ValidationError('meta_data needs to be an object (str -> str).')
+        if not isinstance(data, dict) or not all(isinstance(k, str) for k in data.keys()):
+            raise ValidationError('meta_data needs to be an object (str -> str).')
 
         return {
             'meta_data': data
@@ -46,7 +46,7 @@ class MetaPropertyField(Field):
 
     def to_internal_value(self, data):
         if not isinstance(data, dict) or not all(isinstance(k, str) for k in data.keys()) or not all(isinstance(k, str) for k in data.values()):
-            return ValidationError('item_meta_properties needs to be an object (str -> str).')
+            raise ValidationError('item_meta_properties needs to be an object (str -> str).')
         return {
             'item_meta_properties': data
         }
@@ -64,7 +64,7 @@ class SeatCategoryMappingField(Field):
 
     def to_internal_value(self, data):
         if not isinstance(data, dict) or not all(isinstance(k, str) for k in data.keys()) or not all(isinstance(k, int) for k in data.values()):
-            return ValidationError('seat_category_mapping needs to be an object (str -> int).')
+            raise ValidationError('seat_category_mapping needs to be an object (str -> int).')
         return {
             'seat_category_mapping': data or {}
         }
