@@ -444,7 +444,6 @@ class EventSettingsFormView(EventPermissionRequiredMixin, DecoupleMixin, FormVie
         if form.is_valid():
             form.save()
             self._save_decoupled(form)
-            self.form_success()
             if form.has_changed():
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={
