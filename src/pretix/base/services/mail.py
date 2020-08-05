@@ -128,7 +128,10 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         subject = str(subject).format_map(TolerantDict(context))
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM) or settings.MAIL_FROM
         if event:
-            sender_name = event.settings.mail_from_name or str(event.name)
+            sender_name = str(event.name)
+            if len(sender_name) > 75:
+                sender_name = sender_name[:75] + "..."
+            sender_name = event.settings.mail_from_name or sender_name
             sender = formataddr((sender_name, sender))
         else:
             sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
