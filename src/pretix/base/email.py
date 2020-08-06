@@ -272,11 +272,12 @@ def get_best_name(position_or_address, parts=False):
     if isinstance(position_or_address, OrderPosition):
         if position_or_address.attendee_name:
             return position_or_address.attendee_name_parts if parts else position_or_address.attendee_name
-        else:
+        elif position_or_address.order:
             try:
                 return position_or_address.order.invoice_address.name_parts if parts else position_or_address.order.invoice_address.name
             except InvoiceAddress.DoesNotExist:
                 return {} if parts else ""
+    return {} if parts else ""
 
 
 @receiver(register_mail_placeholders, dispatch_uid="pretixbase_register_mail_placeholders")

@@ -45,7 +45,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
         try:
             ia = order.invoice_address
         except InvoiceAddress.DoesNotExist:
-            ia = InvoiceAddress()
+            ia = InvoiceAddress(order=order)
 
         email_context = get_email_context(event_or_subevent=subevent or order.event, refund_amount=refund_amount,
                                           order=order, position_or_address=ia, event=order.event)
