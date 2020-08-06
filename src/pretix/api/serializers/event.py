@@ -459,8 +459,8 @@ class SubEventSerializer(I18nAwareModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        item_price_overrides_data = validated_data.pop('subeventitem_set')
-        variation_price_overrides_data = validated_data.pop('subeventitemvariation_set')
+        item_price_overrides_data = validated_data.pop('subeventitem_set', None)
+        variation_price_overrides_data = validated_data.pop('subeventitemvariation_set', None)
         meta_data = validated_data.pop('meta_data', None)
         seat_category_mapping = validated_data.pop('seat_category_mapping', None)
         subevent = super().update(instance, validated_data)
