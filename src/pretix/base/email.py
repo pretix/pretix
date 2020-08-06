@@ -258,9 +258,29 @@ def _placeholder_payment(order, payment):
         return str(payment.payment_provider.order_pending_mail_render(order))
 
 
+def get_best_name(position_or_address, parts=False):
+    """
+    Return the best name we got for either an invoice address or an order position, falling back to the respective other
+    """
+    from pretix.base.models import InvoiceAddress, OrderPosition
+    if isinstance(position_or_address, InvoiceAddress):
+        if position_or_address.name:
+            return position_or_address.name_parts if parts else position_or_address.name
+
+        position_or_address = position_or_address.order.positions.exclude(attendee_name="").exclude(attendee_name__isnull=True).first()
+
+    if isinstance(position_or_address, OrderPosition):
+        if position_or_address.attendee_name:
+            return position_or_address.attendee_name_parts if parts else position_or_address.attendee_name
+        else:
+            try:
+                return position_or_address.order.invoice_address.name_parts if parts else position_or_address.order.invoice_address.name
+            except InvoiceAddress.DoesNotExist:
+                return {} if parts else ""
+
+
 @receiver(register_mail_placeholders, dispatch_uid="pretixbase_register_mail_placeholders")
 def base_placeholders(sender, **kwargs):
-    from pretix.base.models import InvoiceAddress
     from pretix.multidomain.urlreverse import build_absolute_uri
 
     ph = [
@@ -474,11 +494,7 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleFunctionalMailTextPlaceholder(
             'name', ['position_or_address'],
-            lambda position_or_address: (
-                position_or_address.name
-                if isinstance(position_or_address, InvoiceAddress)
-                else position_or_address.attendee_name
-            ),
+            lambda position_or_address: get_best_name(position_or_address),
             _('John Doe'),
         ),
     ]
@@ -493,11 +509,7 @@ def base_placeholders(sender, **kwargs):
         ))
         ph.append(SimpleFunctionalMailTextPlaceholder(
             'name_%s' % f, ['position_or_address'],
-            lambda position_or_address, f=f: (
-                position_or_address.name_parts.get(f, '')
-                if isinstance(position_or_address, InvoiceAddress)
-                else position_or_address.attendee_name_parts.get(f, '')
-            ),
+            lambda position_or_address, f=f: get_best_name(position_or_address, parts=True).get(f, ''),
             name_scheme['sample'][f]
         ))
 
