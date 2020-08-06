@@ -563,6 +563,37 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
 
 
 @pytest.mark.django_db
+def test_subevent_update_keep_subeventitems(token_client, organizer, event, subevent, item, item2):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "item_price_overrides": [
+                {
+                    "item": item.pk,
+                    "price": "88.88",
+                    "disabled": True
+                }
+            ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert event.subevents.get(id=subevent.id).item_overrides[item.pk].disabled
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "date_from": "2017-12-27T10:00:00Z",
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert event.subevents.get(id=subevent.id).item_overrides[item.pk].disabled
+
+
+@pytest.mark.django_db
 def test_subevent_detail(token_client, organizer, event, subevent):
     res = dict(TEST_SUBEVENT_RES)
     res["id"] = subevent.pk
