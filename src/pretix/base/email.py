@@ -495,7 +495,7 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleFunctionalMailTextPlaceholder(
             'name', ['position_or_address'],
-            lambda position_or_address: get_best_name(position_or_address),
+            get_best_name,
             _('John Doe'),
         ),
     ]
