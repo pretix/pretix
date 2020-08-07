@@ -1374,6 +1374,86 @@ class OrdersTest(BaseOrdersTest):
         assert self.order.status == Order.STATUS_PENDING
         assert self.order.total == Decimal('37.00')
 
+        shirt_pos.variation = self.shirt_blue
+        shirt_pos.price = Decimal('14.00')
+        shirt_pos.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'op-{shirt_pos.pk}-itemvar': f'{self.shirt.pk}-{self.shirt_red.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            },
+            follow=True
+        )
+        shirt_pos.refresh_from_db()
+        assert 'alert-danger' in response.rendered_content
+        assert shirt_pos.variation == self.shirt_blue
+        assert shirt_pos.price == Decimal('14.00')
+
+    def test_change_variation_require_higher_equal_price(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'gte'
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_red,
+                price=Decimal("14"),
+            )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                f'op-{shirt_pos.pk}-itemvar': f'{self.shirt.pk}-{self.shirt_blue.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            }, follow=True)
+        assert response.status_code == 200
+        assert 'alert-danger' in response.rendered_content
+
+        shirt_pos.variation = self.shirt_blue
+        shirt_pos.price = Decimal('12.00')
+        shirt_pos.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'op-{shirt_pos.pk}-itemvar': f'{self.shirt.pk}-{self.shirt_red.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            },
+            follow=True
+        )
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        shirt_pos.refresh_from_db()
+        assert shirt_pos.variation == self.shirt_red
+        assert shirt_pos.price == Decimal('14.00')
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+        assert self.order.total == Decimal('37.00')
+
+        shirt_pos.variation = self.shirt_blue
+        shirt_pos.price = Decimal('14.00')
+        shirt_pos.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'op-{shirt_pos.pk}-itemvar': f'{self.shirt.pk}-{self.shirt_red.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            },
+            follow=True
+        )
+        shirt_pos.refresh_from_db()
+        assert 'alert-success' in response.rendered_content
+        assert shirt_pos.variation == self.shirt_red
+        assert shirt_pos.price == Decimal('14.00')
+
     def test_change_variation_require_equal_price(self):
         self.event.settings.change_allow_user_variation = True
         self.event.settings.change_allow_user_price = 'eq'

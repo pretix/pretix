@@ -1565,6 +1565,12 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.settings.change_allow_user_variation = True
         assert self.order.user_change_allowed
 
+        self.event.settings.change_allow_user_variation = False
+        self.order.require_approval = True
+        assert not self.order.user_change_allowed
+        self.event.settings.change_allow_user_variation = True
+        assert not self.order.user_change_allowed
+
     @classscope(attr='o')
     def test_can_change_order_with_giftcard(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,

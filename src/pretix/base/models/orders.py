@@ -492,6 +492,10 @@ class Order(LockModel, LoggedModel):
 
         if self.cancellation_requests.exists():
             return False
+
+        if self.require_approval:
+            return False
+
         positions = list(
             self.positions.all().annotate(
                 has_variations=Exists(ItemVariation.objects.filter(item_id=OuterRef('item_id'))),
