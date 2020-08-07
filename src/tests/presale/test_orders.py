@@ -1391,7 +1391,6 @@ class OrdersTest(BaseOrdersTest):
         assert shirt_pos.variation == self.shirt_blue
         assert shirt_pos.price == Decimal('14.00')
 
-
     def test_change_variation_require_higher_equal_price(self):
         self.event.settings.change_allow_user_variation = True
         self.event.settings.change_allow_user_price = 'gte'
