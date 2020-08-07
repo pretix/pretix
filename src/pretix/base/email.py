@@ -266,8 +266,7 @@ def get_best_name(position_or_address, parts=False):
     if isinstance(position_or_address, InvoiceAddress):
         if position_or_address.name:
             return position_or_address.name_parts if parts else position_or_address.name
-
-        position_or_address = position_or_address.order.positions.exclude(attendee_name="").exclude(attendee_name__isnull=True).first()
+        position_or_address = position_or_address.order.positions.exclude(attendee_name_cached="").exclude(attendee_name_cached__isnull=True).first()
 
     if isinstance(position_or_address, OrderPosition):
         if position_or_address.attendee_name:
@@ -276,7 +275,8 @@ def get_best_name(position_or_address, parts=False):
             try:
                 return position_or_address.order.invoice_address.name_parts if parts else position_or_address.order.invoice_address.name
             except InvoiceAddress.DoesNotExist:
-                return {} if parts else ""
+                pass
+
     return {} if parts else ""
 
 
