@@ -258,9 +258,9 @@ Vue.component('availbox', {
         },
         waiting_list_url: function () {
             if (this.item.has_variations) {
-                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + escape(this.$root.widget_data_json);
+                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
             } else {
-                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + escape(this.$root.widget_data_json);
+                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
             }
         }
     }
@@ -580,9 +580,9 @@ var shared_methods = {
         } else {
             return;
         }
-        var redirect_url = this.$root.voucherFormTarget + '&voucher=' + escape(this.voucher) + '&subevent=' + this.$root.subevent;
+        var redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(this.voucher) + '&subevent=' + this.$root.subevent;
         if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
+            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
         }
         var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
         this.$root.overlay.frame_loading = true;
@@ -590,9 +590,9 @@ var shared_methods = {
     },
     voucher_open: function (voucher) {
         var redirect_url;
-        redirect_url = this.$root.voucherFormTarget + '&voucher=' + escape(voucher);
+        redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(voucher);
         if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
+            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
         }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
@@ -609,7 +609,7 @@ var shared_methods = {
             redirect_url += '&take_cart_id=' + this.$root.cart_id;
         }
         if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
+            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
         }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
@@ -1295,14 +1295,14 @@ var shared_root_methods = {
             url += '&' + this.$root.filter;
         }
         if (this.$root.item_filter) {
-            url += '&items=' + escape(this.$root.item_filter);
+            url += '&items=' + encodeURIComponent(this.$root.item_filter);
         }
         if (this.$root.category_filter) {
-            url += '&categories=' + escape(this.$root.category_filter);
+            url += '&categories=' + encodeURIComponent(this.$root.category_filter);
         }
         var cart_id = getCookie(this.cookieName);
         if (this.$root.voucher_code) {
-            url += '&voucher=' + escape(this.$root.voucher_code);
+            url += '&voucher=' + encodeURIComponent(this.$root.voucher_code);
         }
         if (cart_id) {
             url += "&cart_id=" + cart_id;
@@ -1390,7 +1390,7 @@ var shared_root_methods = {
             redirect_url += '&take_cart_id=' + this.$root.cart_id;
         }
         if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
+            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
         }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
