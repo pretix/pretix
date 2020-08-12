@@ -17,10 +17,9 @@
     </div>
 {% elif avail < 100 %}
     <div class="col-md-2 col-xs-6 availability-box unavailable">
-        <strong>{% trans "Reserved" %}
-            <span class="fa fa-info-circle" data-toggle="tooltip"
-                  title="{% trans "All remaining products are reserved but might become available again." %}"></span>
-        </strong>
+        <strong>{% trans "Reserved" %}</strong>
+        <br/>
+        {% trans "All remaining products are reserved but might become available again." %}
         {% if event.settings.waiting_list_enabled and item.allow_waitinglist %}
             <br/>
             <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
