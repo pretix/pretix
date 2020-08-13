@@ -219,7 +219,7 @@ Vue.component('availbox', {
             this.$set(this.variation, 'amount_selected', 0);
         } else {
             // Automatically set the only available item to be selected.
-            this.$set(this.item, 'amount_selected', this.$root.itemnum === 1 ? 1 : 0);
+            this.$set(this.item, 'amount_selected', this.$root.itemnum === 1 && !this.$root.has_seating_plan ? 1 : 0);
         }
         this.$root.$emit('amounts_changed')
     },
