@@ -477,6 +477,7 @@ class ImportView(ListView):
             ).order_by('created').last()
             ctx['runningimport'] = BankImportJob.objects.filter(
                 state__in=[BankImportJob.STATE_PENDING, BankImportJob.STATE_RUNNING],
+                organizer=self.request.organizer,
                 event=self.request.event
             ).order_by('created').last()
         else:
@@ -487,6 +488,7 @@ class ImportView(ListView):
             ).order_by('created').last()
             ctx['runningimport'] = BankImportJob.objects.filter(
                 state__in=[BankImportJob.STATE_PENDING, BankImportJob.STATE_RUNNING],
+                organizer=self.request.organizer,
                 event__isnull=True
             ).order_by('created').last()
             ctx['basetpl'] = 'pretixplugins/banktransfer/import_base_organizer.html'
