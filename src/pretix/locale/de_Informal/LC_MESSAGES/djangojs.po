@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-24 08:44+0000\n"
+"POT-Creation-Date: 2020-08-13 12:29+0000\n"
 "PO-Revision-Date: 2020-07-09 15:18+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -361,28 +361,28 @@ msgstr[0] ""
 msgstr[1] ""
 "Die Produkte in deinem Warenkorb sind noch {num} Minuten für dich reserviert."
 
-#: pretix/static/pretixpresale/js/ui/main.js:240
+#: pretix/static/pretixpresale/js/ui/main.js:260
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Bitte trage eine Menge für eines der Produkte ein."
 
-#: pretix/static/pretixpresale/js/ui/main.js:367
+#: pretix/static/pretixpresale/js/ui/main.js:387
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Der Veranstalter behält %(currency)s %(amount)s ein"
 
-#: pretix/static/pretixpresale/js/ui/main.js:375
+#: pretix/static/pretixpresale/js/ui/main.js:395
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Du erhältst %(currency)s %(amount)s zurück"
 
-#: pretix/static/pretixpresale/js/ui/main.js:391
+#: pretix/static/pretixpresale/js/ui/main.js:411
 msgid "Please enter the amount the organizer can keep."
 msgstr "Bitte gib den Betrag ein, den der Veranstalter einbehalten darf."
 
-#: pretix/static/pretixpresale/js/ui/main.js:405
-#: pretix/static/pretixpresale/js/ui/main.js:418
+#: pretix/static/pretixpresale/js/ui/main.js:425
+#: pretix/static/pretixpresale/js/ui/main.js:438
 msgid "Time zone:"
 msgstr "Zeitzone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:410
+#: pretix/static/pretixpresale/js/ui/main.js:430
 msgid "Your local time:"
 msgstr "Deine lokale Zeit:"
 
