@@ -929,6 +929,13 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
         help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
+                    "template from below instead."),
+    )
+    mail_text_order_approved_free = I18nFormField(
+        label=_("Approved free order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "
                     "template from above instead."),
     )
     mail_text_order_denied = I18nFormField(
@@ -978,6 +985,7 @@ class MailSettingsForm(SettingsForm):
         'mail_text_order_placed_attendee': ['event', 'order', 'position'],
         'mail_text_order_placed_require_approval': ['event', 'order'],
         'mail_text_order_approved': ['event', 'order'],
+        'mail_text_order_approved_free': ['event', 'order'],
         'mail_text_order_denied': ['event', 'order', 'comment'],
         'mail_text_order_paid': ['event', 'order', 'payment_info'],
         'mail_text_order_paid_attendee': ['event', 'order', 'position'],

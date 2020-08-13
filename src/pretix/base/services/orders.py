@@ -258,7 +258,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
     if send_mail:
         with language(order.locale):
             if order.total == Decimal('0.00'):
-                email_template = order.event.settings.mail_text_order_free
+                email_template = order.event.settings.mail_text_order_approved_free
                 email_subject = _('Order approved and confirmed: %(code)s') % {'code': order.code}
             else:
                 email_template = order.event.settings.mail_text_order_approved

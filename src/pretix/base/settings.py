@@ -1422,6 +1422,19 @@ You can select a payment method and perform the payment here:
 Best regards,
 Your {event} team"""))
     },
+    'mail_text_order_approved_free': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+we approved your order for {event} and will be happy to welcome you
+at our event. As you only ordered free products, no payment is required.
+
+You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'mail_text_order_denied': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
