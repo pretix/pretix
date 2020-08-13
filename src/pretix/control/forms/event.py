@@ -935,7 +935,7 @@ class MailSettingsForm(SettingsForm):
         label=_("Approved free order"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("This will only be sent out for free orders. Non-free orders will receive the free order "
+        help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "
                     "template from above instead."),
     )
     mail_text_order_denied = I18nFormField(
