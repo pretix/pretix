@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-13 12:29+0000\n"
-"PO-Revision-Date: 2020-08-09 00:00+0000\n"
+"PO-Revision-Date: 2020-08-17 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -165,10 +165,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Deze soort vraag kan niet bij het inchecken worden gesteld."
 
 #: pretix/api/serializers/order.py:918 pretix/api/serializers/order.py:925
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "Het product \"{}\" is niet toegewezen aan een quotum."
+msgstr "Het product \"{}\" is niet beschikbaar op deze datum."
 
 #: pretix/api/serializers/organizer.py:52 pretix/control/forms/organizer.py:404
 msgid ""
@@ -1182,10 +1180,8 @@ msgid "Waiting list"
 msgstr "Wachtlijst"
 
 #: pretix/base/exporters/orderlist.py:608
-#, fuzzy
-#| msgid "Expire order"
 msgid "Exited orders"
-msgstr "Markeer bestelling als verlopen"
+msgstr "Geregistreerde vertrekken"
 
 #: pretix/base/exporters/orderlist.py:608
 msgid "Current availability"
@@ -2258,26 +2254,19 @@ msgstr ""
 "een add-on wilt gebruiken, maar alleen voor vaste bundels!"
 
 #: pretix/base/models/items.py:381
-#, fuzzy
-#| msgid "Allow product to be canceled"
 msgid "Allow product to be canceled or changed"
-msgstr "Product mag geannuleerd worden"
+msgstr "Product mag geannuleerd of veranderd worden"
 
 #: pretix/base/models/items.py:383
-#, fuzzy
-#| msgid ""
-#| "If this is checked, the usual cancellation settings of this event apply. "
-#| "If this is unchecked, orders containing this product can not be canceled "
-#| "by users but only by you."
 msgid ""
 "If this is checked, the usual cancellation and order change settings of this "
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
 msgstr ""
-"Als dit is ingeschakeld zijn de normale annuleringsinstellingen van dit "
-"evenement van toepassing. Als dit is uitgeschakeld kunnen bestellingen die "
-"dit product bevatten niet door gebruikers worden geannuleerd, maar alleen "
-"door jou."
+"Als dit is ingeschakeld zijn de normale annulerings- en "
+"aanpassingsinstellingen van dit evenement van toepassing. Als dit is "
+"uitgeschakeld kunnen bestellingen die dit product bevatten niet door "
+"gebruikers worden geannuleerd of gewijzigd, maar alleen door jou."
 
 #: pretix/base/models/items.py:387
 msgid "Minimum amount per order"
@@ -2428,10 +2417,8 @@ msgstr ""
 "ook als de add-ons los wel geld kosten."
 
 #: pretix/base/models/items.py:846
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "Allow the same product to be selected multiple times"
-msgstr "Je kan dezelfde stoel niet meerdere keren kiezen."
+msgstr "Sta toe hetzelfde product meerdere keren te selecteren"
 
 #: pretix/base/models/items.py:865
 msgid "The add-on's category must belong to the same event as the item."
@@ -2685,6 +2672,8 @@ msgstr ""
 #: pretix/base/models/items.py:1360
 msgid "Allow to sell more tickets once people have checked out"
 msgstr ""
+"Sta toe om meer kaartjes te verkopen wanneer mensen het evenement verlaten "
+"hebben"
 
 #: pretix/base/models/items.py:1361
 msgid ""
@@ -2695,6 +2684,14 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
+"Met deze optie zal er opnieuw ruimte worden gemaakt in het quotum wanneer "
+"klanten bij de uitgang van je evenement worden gescand. Dit zal alleen "
+"gebeuren wanneer de klanten zowel bij de ingang als de uitgang van je "
+"evenement worden gescand en de scan bij de uitgang later is dan de scan bij "
+"de ingang. Het maakt niet uit welke inchecklijst wordt gebruikt voor de "
+"scans, tenzij voor de inchecklijst de optie \"Sta opnieuw binnenkomen na een "
+"uitgangsscan toe\" is ingeschakeld. Als dit het geval is zal het quotum niet "
+"worden aangepast om te voorkomen dat je evenement onbedoeld overvol raakt."
 
 #: pretix/base/models/items.py:1372 pretix/base/models/vouchers.py:177
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
@@ -3902,15 +3899,11 @@ msgid "Restrict to specific sales channels"
 msgstr "Beperken tot specifieke verkoopkanalen"
 
 #: pretix/base/payment.py:320
-#, fuzzy
-#| msgid ""
-#| "Only allow the usage of this payment provider in the following sales "
-#| "channels"
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
 msgstr ""
-"Sta het gebruik van deze betalingsprovider alleen toe voor de volgende "
-"verkoopkanalen"
+"Sta het gebruik van deze betalingsprovider alleen toe voor de geselecteerde "
+"verkoopkanalen."
 
 #: pretix/base/payment.py:324
 msgid "Hide payment method"
@@ -3995,12 +3988,7 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschrijving van betalingsproces in bevestigingsmails"
 
 #: pretix/base/payment.py:916
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
@@ -4018,12 +4006,7 @@ msgid "Payment process description for pending orders"
 msgstr "Beschrijving van betalingsproces voor openstaande bestellingen"
 
 #: pretix/base/payment.py:924
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
@@ -4123,8 +4106,6 @@ msgstr ""
 "Deze cadeaubon wordt niet geaccepteerd door de organisator van dit evenement."
 
 #: pretix/base/payment.py:1218
-#, fuzzy
-#| msgid "This gift card was used in the meantime. Please try again"
 msgid "This gift card was used in the meantime. Please try again."
 msgstr "Deze cadeaubon is in de tussentijd gebruikt. Probeer het opnieuw."
 
@@ -4637,16 +4618,13 @@ msgstr ""
 "het product %(base)s."
 
 #: pretix/base/services/cart.py:99
-#, fuzzy, python-format
-#| msgid ""
-#| "You can select at most %(max)s add-ons from the category %(cat)s for the "
-#| "product %(base)s."
+#, python-format
 msgid ""
 "You can select every add-ons from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
-"Je kan maximaal %(max)s add-ons van de categorie %(cat)s selecteren voor het "
-"product %(base)s."
+"Je kan iedere add-on uit de categorie %(cat)s voor het product %(base)s "
+"maximaal één keer kiezen."
 
 #: pretix/base/services/cart.py:100
 msgid ""
@@ -4760,7 +4738,7 @@ msgstr ""
 #: pretix/base/services/invoices.py:193
 msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
-msgstr ""
+msgstr "De ontvanger van deze dienst is btw-plichtig."
 
 #: pretix/base/services/invoices.py:345
 msgid "A payment provider specific text might appear here."
@@ -5242,16 +5220,12 @@ msgstr ""
 "aanbevolen!)"
 
 #: pretix/base/settings.py:74
-#, fuzzy
-#| msgid ""
-#| "Independent of your choice, the cart will show gross prices as this is "
-#| "the price that needs to be paid"
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
 "De winkelwagen zal, onafhankelijk van deze keuze, altijd de brutoprijs "
-"tonen, omdat dit de te betalen prijs is"
+"tonen, omdat dit de te betalen prijs is."
 
 #: pretix/base/settings.py:89
 msgid "Ask for attendee names"
@@ -5357,6 +5331,9 @@ msgid ""
 "On invoices from one EU country into another EU country with a different "
 "currency, print the tax amounts in both currencies if possible"
 msgstr ""
+"Op facturen van één EU-land naar een ander land binnen de EU met een andere "
+"munteenheid moet het belastingbedrag in beide munteenheden worden afgedrukt, "
+"indien mogelijk"
 
 #: pretix/base/settings.py:232
 msgid "Require invoice address"
@@ -5450,16 +5427,16 @@ msgstr ""
 "de factuur is betaald."
 
 #: pretix/base/settings.py:333
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Minimum length of invoice number after prefix"
-msgstr "Factuurnummer-prefix"
+msgstr "Minimumlengte van factuurnummer na prefix"
 
 #: pretix/base/settings.py:334
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
+"Het deel van uw factuurnummer na je prefix zal worden opgevuld met "
+"voorloopnullen tot deze lengte, bijv. INV-001 of INV-00001."
 
 #: pretix/base/settings.py:343
 msgid "Generate invoices with consecutive numbers"
