@@ -19,9 +19,8 @@ Reinventing ticket presales, one ticket at a time.
 Project status & release cycle
 ------------------------------
 
-While there is always a lot to do and improve on, pretix by now has been in use for more than a dozen
-conferences that sold over ten thousand tickets combined without major problems. We therefore think of
-pretix as being stable and ready to use.
+While there is always a lot to do and improve on, pretix by now has been in use for thousands of events
+conferences that sold millions of tickets combined. We therefore think of pretix as being stable and ready to use.
 
 If you want to use or extend pretix, we strongly recommend to follow our `blog`_. We will announce all
 releases there. You can always find the latest stable version on PyPI or in the ``release/X.Y`` branch of
@@ -30,9 +29,13 @@ the sense that it does not break your data,  but its APIs might change without p
 
 To get started using pretix on your own server, look at the `installation guide`_ in our documentation.
 
-This project is 100 percent free and open source software. If you are interested in commercial support,
-hosting services or supporting this project financially, please go to `pretix.eu`_ or contact us at
-support@pretix.eu.
+Support
+-------
+
+This project is 100 percent free and open source software. You are welcome to ask questions in the GitHub
+repository. Private support via email or phone is only offered to customers of our pretix Hosted or pretix
+Enterprise offerings. If you are interested in commercial support, hosting services or supporting this project
+financially, please go to `pretix.eu`_ or contact us at support@pretix.eu.
 
 Contributing
 ------------
@@ -52,8 +55,8 @@ License
 The code in this repository is published under the terms of the Apache License. 
 See the LICENSE file for the complete license text.
 
-This project is maintained by Raphael Michel <mail@raphaelmichel.de>. See the
-AUTHORS file for a list of all the awesome folks who contributed to this project.
+This project is maintained by Raphael Michel. See the AUTHORS file for a list of all
+the awesome folks who contributed to this project.
 
 .. _installation guide: https://docs.pretix.eu/en/latest/admin/installation/index.html
 .. _developer documentation: https://docs.pretix.eu/en/latest/development/index.html
