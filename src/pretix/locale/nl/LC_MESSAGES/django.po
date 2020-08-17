@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-13 12:29+0000\n"
-"PO-Revision-Date: 2020-08-17 02:00+0000\n"
+"PO-Revision-Date: 2020-08-18 03:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -5970,7 +5970,7 @@ msgstr ""
 #: pretix/base/settings.py:959
 msgid "Customers can change the variation of the products they purchased"
 msgstr ""
-"Klanten kunnen de variant de producten die ze hebben gekozen veranderen"
+"Klanten kunnen de variant van de producten die ze hebben gekozen veranderen"
 
 #: pretix/base/settings.py:969 pretix/base/settings.py:978
 msgid ""
@@ -9225,7 +9225,8 @@ msgstr "Prijs van plaats #{posid} veranderd van {old_price} naar {new_price}."
 #, python-brace-format
 msgid "Tax rule of position #{posid} changed from {old_rule} to {new_rule}."
 msgstr ""
-"Belastingregel van plaats #{posid} veranderd van {old_rule} naar {new_rule}."
+"Belastingregel van plaats #{posid} is veranderd van {old_rule} naar "
+"{new_rule}."
 
 #: pretix/control/logdisplay.py:78
 #, python-brace-format
@@ -20691,7 +20692,7 @@ msgstr "Intern kenmerk"
 #: pretix/presale/templates/pretixpresale/event/order.html:319
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Verander of annuleer uw bestelling"
+msgstr "Bestelling veranderen of annuleren"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid ""
