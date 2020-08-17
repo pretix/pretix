@@ -2129,6 +2129,30 @@ def test_order_create_fee_with_auto_tax(token_client, organizer, event, item, qu
 
 
 @pytest.mark.django_db
+def test_order_create_negative_fee_with_auto_tax(token_client, organizer, event, item, quota, question, taxrule):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['_split_taxes_like_products'] = True
+    res['fees'][0]['value'] = '-10.00'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    item.tax_rule = taxrule
+    item.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fee = o.fees.first()
+        assert fee.value == Decimal('-10.00')
+        assert fee.tax_value == Decimal('-1.60')
+        assert fee.tax_rate == Decimal('19.00')
+        assert o.total == Decimal('13.00')
+
+
+@pytest.mark.django_db
 def test_order_create_tax_rule_wrong_event(token_client, organizer, event, item, quota, question, taxrule2):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['fees'][0]['tax_rule'] = taxrule2.pk

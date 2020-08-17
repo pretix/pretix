@@ -206,7 +206,12 @@ class TaxRule(LoggedModel):
                 base_price_is = 'net'
 
         if base_price_is == 'gross':
-            gross = max(Decimal('0.00'), base_price - subtract_from_gross)
+            if base_price >= Decimal('0.00'):
+                # For positive prices, make sure they don't go negative because of bundles
+                gross = max(Decimal('0.00'), base_price - subtract_from_gross)
+            else:
+                # If the price is already negative, we don't really care any more
+                gross = base_price - subtract_from_gross
             net = round_decimal(gross - (gross * (1 - 100 / (100 + rate))),
                                 currency)
         elif base_price_is == 'net':
