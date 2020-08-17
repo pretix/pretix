@@ -285,7 +285,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                                 net=a.price - a.tax_value,
                                 gross=a.price,
                                 tax=a.tax_value,
-                                name=a.item.tax_rule.name,
+                                name=a.item.tax_rule.name if a.item.tax_rule else "",
                                 rate=a.tax_rate,
                             )
                         else:
