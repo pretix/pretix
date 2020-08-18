@@ -1,6 +1,7 @@
 import sys
 from collections import Counter, defaultdict
 from datetime import timedelta
+from itertools import zip_longest
 
 from django.conf import settings
 from django.db import OperationalError, models
@@ -406,6 +407,13 @@ def build_all_quota_caches(sender, **kwargs):
     refresh_quota_caches.apply_async()
 
 
+def grouper(iterable, n, fillvalue=None):
+    """Collect data into fixed-length chunks or blocks"""
+    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+    args = [iter(iterable)] * n
+    return zip_longest(fillvalue=fillvalue, *args)
+
+
 @app.task
 @scopes_disabled()
 def refresh_quota_caches():
@@ -429,7 +437,9 @@ def refresh_quota_caches():
             Q(subevent__date_to__isnull=False, subevent__date_to__gte=now() - timedelta(days=14)) |
             Q(subevent__date_from__gte=now() - timedelta(days=14))
         )
-        qa = QuotaAvailability(early_out=False)
-        for q in quotas:
-            qa.queue(q)
-        qa.compute()
+
+        for qs in grouper(quotas, 100, None):
+            qa = QuotaAvailability(early_out=False)
+            for q in qs:
+                qa.queue([q for q in qs if q is not None])
+            qa.compute()
