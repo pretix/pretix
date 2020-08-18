@@ -440,6 +440,5 @@ def refresh_quota_caches():
 
         for qs in grouper(quotas, 100, None):
             qa = QuotaAvailability(early_out=False)
-            for q in qs:
-                qa.queue([q for q in qs if q is not None])
+            qa.queue(*[q for q in qs if q is not None])
             qa.compute()
