@@ -391,7 +391,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 p_size = p.wrap(self.event_width, self.event_height)
             return txt
 
-        if not self.invoice.event.has_subevents or not self.invoice.event.settings.show_dates_on_frontpage:
+        if not self.invoice.event.has_subevents and self.invoice.event.settings.show_dates_on_frontpage:
             if self.invoice.event.settings.show_date_to and self.invoice.event.date_to:
                 p_str = (
                     shorten(self.invoice.event.name) + '\n' +
