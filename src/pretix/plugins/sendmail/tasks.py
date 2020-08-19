@@ -23,7 +23,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
         try:
             ia = o.invoice_address
         except InvoiceAddress.DoesNotExist:
-            ia = InvoiceAddress()
+            ia = InvoiceAddress(order=o)
 
         if recipients in ('both', 'attendees'):
             for p in o.positions.prefetch_related('addons'):
