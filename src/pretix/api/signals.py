@@ -6,6 +6,7 @@ from django_scopes import scopes_disabled
 
 from pretix.api.models import ApiCall, WebHookCall
 from pretix.base.signals import periodic_task
+from pretix.helpers.periodic import minimum_interval
 
 register_webhook_events = Signal(
     providing_args=[]
@@ -19,11 +20,13 @@ instances.
 
 @receiver(periodic_task)
 @scopes_disabled()
+@minimum_interval(minutes_after_success=12 * 60)
 def cleanup_webhook_logs(sender, **kwargs):
     WebHookCall.objects.filter(datetime__lte=now() - timedelta(days=30)).delete()
 
 
 @receiver(periodic_task)
 @scopes_disabled()
+@minimum_interval(minutes_after_success=12 * 60)
 def cleanup_api_logs(sender, **kwargs):
     ApiCall.objects.filter(created__lte=now() - timedelta(hours=24)).delete()

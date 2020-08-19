@@ -53,6 +53,7 @@ from pretix.base.signals import (
 )
 from pretix.celery_app import app
 from pretix.helpers.models import modelcopy
+from pretix.helpers.periodic import minimum_interval
 
 error_messages = {
     'unavailable': _('Some of the products you selected were no longer available. '
@@ -988,6 +989,7 @@ def expire_orders(sender, **kwargs):
 
 @receiver(signal=periodic_task)
 @scopes_disabled()
+@minimum_interval(minutes_after_success=60)
 def send_expiry_warnings(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0)
     days = None

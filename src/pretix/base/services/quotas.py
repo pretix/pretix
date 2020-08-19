@@ -18,6 +18,7 @@ from pretix.base.models import (
 )
 from pretix.celery_app import app
 
+from ...helpers.periodic import minimum_interval
 from ..signals import periodic_task, quota_availability
 
 
@@ -403,6 +404,7 @@ class QuotaAvailability:
 
 
 @receiver(signal=periodic_task)
+@minimum_interval(minutes_after_success=60)
 def build_all_quota_caches(sender, **kwargs):
     refresh_quota_caches.apply_async()
 
