@@ -37,7 +37,7 @@ class FastCountryField(CountryField):
 
     def check(self, **kwargs):
         # Disable _check_choices since it would require sorting all country names at every import of this field,
-        # which taskes 1-2 seconds
+        # which takes 1-2 seconds
         return [
             *self._check_field_name(),
             # *self._check_choices(),
