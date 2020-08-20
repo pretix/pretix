@@ -83,7 +83,7 @@ def test_availability_date_relative(event):
     event.save()
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days_before=2, time=None, base_date_name='date_from')
+        RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
     ))
 
     utc = pytz.timezone('UTC')
@@ -126,12 +126,12 @@ def test_availability_date_cart_relative_subevents(event):
 
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days_before=3, time=None, base_date_name='date_from')
+        RelativeDate(days_before=3, time=None, base_date_name='date_from', minutes_before=None)
     ))
     assert prov._is_still_available(cart_id="123")
 
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days_before=4, time=None, base_date_name='date_from')
+        RelativeDate(days_before=4, time=None, base_date_name='date_from', minutes_before=None)
     ))
     assert not prov._is_still_available(cart_id="123")
 
@@ -165,11 +165,11 @@ def test_availability_date_order_relative_subevents(event):
 
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days_before=3, time=None, base_date_name='date_from')
+        RelativeDate(days_before=3, time=None, base_date_name='date_from', minutes_before=None)
     ))
     assert prov._is_still_available(order=order)
 
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days_before=4, time=None, base_date_name='date_from')
+        RelativeDate(days_before=4, time=None, base_date_name='date_from', minutes_before=None)
     ))
     assert not prov._is_still_available(order=order)

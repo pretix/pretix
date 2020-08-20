@@ -745,7 +745,7 @@ class OrdersTest(BaseOrdersTest):
         self.event.date_from = now() + datetime.timedelta(days=3)
         self.event.save()
         self.event.settings.set('ticket_download_date', RelativeDateWrapper(RelativeDate(
-            base_date_name='date_from', days_before=2, time=None
+            base_date_name='date_from', days_before=2, time=None, minutes_before=None
         )))
         response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,

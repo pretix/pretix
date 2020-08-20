@@ -660,12 +660,14 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
             initial['rel_presale_start'] = RelativeDateWrapper(RelativeDate(
                 days_before=(i.date_from.astimezone(tz).date() - i.presale_start.astimezone(tz).date()).days,
                 base_date_name='date_from',
-                time=i.presale_start.astimezone(tz).time()
+                time=i.presale_start.astimezone(tz).time(),
+                minutes_before=None
             )) if i.presale_start else None
             initial['rel_presale_end'] = RelativeDateWrapper(RelativeDate(
                 days_before=(i.date_from.astimezone(tz).date() - i.presale_end.astimezone(tz).date()).days,
                 base_date_name='date_from',
-                time=i.presale_end.astimezone(tz).time()
+                time=i.presale_end.astimezone(tz).time(),
+                minutes_before=None
             )) if i.presale_end else None
         else:
             kwargs['instance'] = SubEvent(event=self.request.event)
