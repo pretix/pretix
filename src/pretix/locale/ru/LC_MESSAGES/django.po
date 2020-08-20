@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-13 12:29+0000\n"
-"PO-Revision-Date: 2020-08-18 16:21+0000\n"
+"PO-Revision-Date: 2020-08-19 09:30+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -548,7 +548,7 @@ msgstr "Отправитель счёта:"
 #: pretix/presale/templates/pretixpresale/event/order.html:284
 #: pretix/presale/templates/pretixpresale/organizers/index.html:61
 msgid "Name"
-msgstr "Имя/наименование"
+msgstr "Имя"
 
 #: pretix/base/exporters/invoices.py:170 pretix/base/exporters/invoices.py:297
 #: pretix/base/exporters/orderlist.py:136
@@ -1663,7 +1663,7 @@ msgstr "Информация об учётной записи изменена"
 #: pretix/base/models/auth.py:202
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
 msgid "Password recovery"
-msgstr ""
+msgstr "Восстановление пароля"
 
 #: pretix/base/models/checkin.py:16
 msgid "All products (including newly created ones)"
@@ -5260,7 +5260,7 @@ msgstr ""
 
 #: pretix/base/settings.py:63
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "Максимальное количество продуктов на один заказ"
 
 #: pretix/base/settings.py:64
 msgid "Add-on products will not be counted."
@@ -5499,7 +5499,7 @@ msgstr ""
 #: pretix/base/settings.py:385
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
-msgstr ""
+msgstr "На сколько минут зарезервирован в корзине заказ для покупателя."
 
 #: pretix/base/settings.py:394
 msgid ""
@@ -7697,10 +7697,8 @@ msgid "Live"
 msgstr "Действующий"
 
 #: pretix/control/forms/filter.py:594 pretix/control/forms/filter.py:597
-#, fuzzy
-#| msgid "Empty cart"
 msgid "Empty"
-msgstr "Пустая корзина"
+msgstr "Очистить корзину"
 
 #: pretix/control/forms/filter.py:598
 msgid "Valid and with value"
@@ -9773,7 +9771,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr ""
+msgstr "Продолжить"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 msgid "Log in"
@@ -12099,7 +12097,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:29
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:80
 msgid "Items"
-msgstr ""
+msgstr "Позиции"
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:31
 msgid ""
@@ -12192,7 +12190,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:6
 msgid "Register a new application"
-msgstr ""
+msgstr "Зарегистрировать еще"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:6
@@ -18780,13 +18778,13 @@ msgstr "Срок действия корзины истёк"
 #: pretix/presale/templates/pretixpresale/event/index.html:53
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr "Продукты в вашей корзине зарезервированы для вас на %(minutes)s минут."
+msgstr "Позиции в вашей корзине зарезервированы для вас на %(minutes)s минут."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:46
 #: pretix/presale/templates/pretixpresale/event/index.html:57
 msgid "The items in your cart are no longer reserved for you."
-msgstr "Продукты в вашей корзине больше не зарезервированы для вас."
+msgstr "Позиции в вашей корзине больше не зарезервированы для вас."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:43
 #: pretix/presale/templates/pretixpresale/event/index.html:97
@@ -18851,7 +18849,7 @@ msgstr "Создать заказ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
 msgid "Submit registration"
-msgstr "Отправить регистрацию"
+msgstr "Отправить"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
@@ -18994,7 +18992,7 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
-"Как только продукты будут в вашей корзине, у вас будет %(time)s минут для "
+"Как только позиции будут в вашей корзине, у вас будет %(time)s минут для "
 "завершения вашей покупки."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:183
@@ -19002,14 +19000,12 @@ msgid "Add one more"
 msgstr "Добавить ещё один"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:294
-#, fuzzy, python-format
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Дополнительные продукты"
+msgstr[0] "Один продукт"
 msgstr[1] "Дополнительные продукты"
-msgstr[2] "Дополнительные продукты"
+msgstr[2] "Много продуктов"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:308
 #, fuzzy, python-format
@@ -19692,7 +19688,7 @@ msgstr "Ваша регистрация"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:29
 msgid "Your items"
-msgstr "Ваши продукты"
+msgstr "Ваши позиции"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:39
 msgid "Additional information"
