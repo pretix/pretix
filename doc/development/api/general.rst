@@ -66,13 +66,7 @@ Vouchers
 """"""""
 
 .. automodule:: pretix.control.signals
-   :members: item_forms
-
-Vouchers
-""""""""
-
-.. automodule:: pretix.control.signals
-   :members: voucher_form_class, voucher_form_html, voucher_form_validation
+   :members: item_forms, voucher_form_class, voucher_form_html, voucher_form_validation
 
 Dashboards
 """"""""""
