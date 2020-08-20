@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-13 12:29+0000\n"
+"POT-Creation-Date: 2020-08-20 11:52+0000\n"
 "PO-Revision-Date: 2020-08-11 15:55+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
@@ -16,6 +16,37 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.10.3\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:963
+#: pretix/control/templates/pretixcontrol/events/index.html:144
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:98
+#: pretix/control/views/dashboards.py:479
+msgid "Shop disabled"
+msgstr "Shop deaktiviert"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:965
+#: pretix/control/forms/filter.py:445 pretix/control/forms/filter.py:665
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:100
+#: pretix/control/templates/pretixcontrol/subevents/index.html:115
+msgid "Presale over"
+msgstr "Verkauf vorüber"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:967
+#: pretix/control/forms/filter.py:444 pretix/control/forms/filter.py:664
+#: pretix/control/templates/pretixcontrol/events/index.html:148
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:102
+#: pretix/control/templates/pretixcontrol/subevents/index.html:117
+msgid "Presale not started"
+msgstr "noch nicht gestartet"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:969
+#: pretix/control/templates/pretixcontrol/events/index.html:150
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
+#: pretix/control/templates/pretixcontrol/subevents/index.html:119
+#: pretix/control/views/dashboards.py:485
+msgid "On sale"
+msgstr "Aktiv"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -67,7 +98,7 @@ msgstr ""
 "Das Kontingent \"{name}\" hat nicht genug freie Kapazität für diese Änderung."
 
 #: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:905
-#: pretix/base/services/orders.py:1158
+#: pretix/base/services/orders.py:1160
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
 msgstr "Der ausgewählte Sitzplatz \"{seat}\" ist nicht verfügbar."
@@ -308,29 +339,29 @@ msgstr "Standard"
 msgid "Simple with logo"
 msgstr "einfach mit Logo"
 
-#: pretix/base/email.py:394 pretix/base/email.py:457 pretix/base/email.py:473
-#: pretix/base/email.py:482 pretix/base/pdf.py:109 pretix/base/pdf.py:212
+#: pretix/base/email.py:415 pretix/base/email.py:478 pretix/base/email.py:494
+#: pretix/base/email.py:499 pretix/base/pdf.py:109 pretix/base/pdf.py:212
 #: pretix/base/services/invoices.py:351 pretix/control/views/event.py:693
 msgid "John Doe"
 msgstr "Max Mustermann"
 
-#: pretix/base/email.py:398
+#: pretix/base/email.py:419
 msgid "Sample Corporation"
 msgstr "Musterfirma"
 
-#: pretix/base/email.py:436
+#: pretix/base/email.py:457
 msgid "Sample Admission Ticket"
 msgstr "Beispiel-Ticket"
 
-#: pretix/base/email.py:461
+#: pretix/base/email.py:482
 msgid "An individual text with a reason can be inserted here."
 msgstr "Hier kann ein Grund für den Nutzer angegeben werden."
 
-#: pretix/base/email.py:465
+#: pretix/base/email.py:486
 msgid "The amount has been charged to your card."
 msgstr "Der Betrag wurde von Ihrer Karte abgebucht."
 
-#: pretix/base/email.py:469
+#: pretix/base/email.py:490
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr ""
 "Bitte überweisen Sie den vollen Betrag auf das Bankkonto 9999-9999-9999-"
@@ -2516,7 +2547,7 @@ msgstr "Mehrfachauswahl aus einer Liste"
 msgid "File upload"
 msgstr "Datei-Upload"
 
-#: pretix/base/models/items.py:1023 pretix/base/reldate.py:141
+#: pretix/base/models/items.py:1023 pretix/base/reldate.py:162
 msgid "Time"
 msgstr "Zeit"
 
@@ -2869,7 +2900,7 @@ msgstr "Der Gutschein \"{voucher}\" hat nicht mehr ausreichend Budget übrig."
 msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgstr "Der Gutschein \"{voucher}\" wurde zwischenzeitlich verwendet."
 
-#: pretix/base/models/orders.py:891 pretix/base/services/orders.py:841
+#: pretix/base/models/orders.py:891 pretix/base/services/orders.py:842
 #: pretix/control/views/event.py:698
 #: pretix/presale/templates/pretixpresale/event/order.html:44
 #, python-format
@@ -3021,7 +3052,7 @@ msgstr "Wert"
 msgid "Order position"
 msgstr "Bestelltes Produkt"
 
-#: pretix/base/models/orders.py:2121 pretix/base/services/orders.py:856
+#: pretix/base/models/orders.py:2121 pretix/base/services/orders.py:857
 #, python-format
 msgid "Your event registration: %(code)s"
 msgstr "Ihre Registrierung: %(code)s"
@@ -4053,24 +4084,24 @@ msgid "In test mode, only test cards will work."
 msgstr "Im Testmodus funktionieren nur Testgutscheine."
 
 #: pretix/base/payment.py:1099 pretix/base/payment.py:1162
-#: pretix/base/payment.py:1206 pretix/base/services/orders.py:753
+#: pretix/base/payment.py:1206 pretix/base/services/orders.py:754
 msgid "You cannot pay with gift cards when buying a gift card."
 msgstr ""
 "Geschenkgutscheine können nicht benutzt werden um Geschenkgutscheine zu "
 "erwerben."
 
 #: pretix/base/payment.py:1108 pretix/base/payment.py:1170
-#: pretix/base/payment.py:1214 pretix/base/services/orders.py:744
+#: pretix/base/payment.py:1214 pretix/base/services/orders.py:745
 msgid "This gift card does not support this currency."
 msgstr "Dieser Geschenkgutschein unterstützt diese Währung nicht."
 
 #: pretix/base/payment.py:1111 pretix/base/payment.py:1173
-#: pretix/base/services/orders.py:746
+#: pretix/base/services/orders.py:747
 msgid "This gift card can only be used in test mode."
 msgstr "Dieser Geschenkgutschein kann nur im Testmodus verwendet werden."
 
 #: pretix/base/payment.py:1114 pretix/base/payment.py:1176
-#: pretix/base/services/orders.py:748
+#: pretix/base/services/orders.py:749
 msgid "Only test gift cards can be used in test mode."
 msgstr "Im Testmodus können nur Testgutscheine verwendet werden."
 
@@ -4120,7 +4151,7 @@ msgstr ""
 "Dieser Geschenkgutschein kann nicht eingelöst werden, da der Code mehrfach "
 "existiert. Bitte kontaktieren Sie den Veranstalter für Unterstützung."
 
-#: pretix/base/payment.py:1216 pretix/base/services/orders.py:750
+#: pretix/base/payment.py:1216 pretix/base/services/orders.py:751
 msgid "This gift card is not accepted by this event organizer."
 msgstr ""
 "Dieser Geschenkgutschein wird von diesem Veranstalter nicht akzeptiert."
@@ -4431,19 +4462,25 @@ msgstr "Start des Vorverkaufs"
 msgid "Presale end"
 msgstr "Ende des Vorverkaufs"
 
-#: pretix/base/reldate.py:163 pretix/base/reldate.py:257
+#: pretix/base/reldate.py:187 pretix/base/reldate.py:295
 msgid "Fixed date:"
 msgstr "Fester Zeitpunkt:"
 
-#: pretix/base/reldate.py:164 pretix/base/reldate.py:258
+#: pretix/base/reldate.py:188 pretix/base/reldate.py:296
 msgid "Relative date:"
 msgstr "Relativ:"
 
-#: pretix/base/reldate.py:172 pretix/base/reldate.py:261
+#: pretix/base/reldate.py:189
+#, fuzzy
+#| msgid "Relative date:"
+msgid "Relative time:"
+msgstr "Relativ:"
+
+#: pretix/base/reldate.py:197 pretix/base/reldate.py:299
 msgid "Not set"
 msgstr "Nicht gesetzt"
 
-#: pretix/base/services/cart.py:52 pretix/base/services/orders.py:68
+#: pretix/base/services/cart.py:52 pretix/base/services/orders.py:69
 msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
@@ -4510,7 +4547,7 @@ msgstr ""
 "Wir haben das Produkt %(product)s aus Ihrem Warenkorb entfernt, da es nicht "
 "weniger als %(min)s mal gekauft werden kann."
 
-#: pretix/base/services/cart.py:67 pretix/base/services/orders.py:70
+#: pretix/base/services/cart.py:67 pretix/base/services/orders.py:71
 msgid "The presale period for this event has not yet started."
 msgstr "Der Vorverkauf für diese Veranstaltung hat noch nicht begonnen."
 
@@ -4526,7 +4563,7 @@ msgstr ""
 "Der Vorverkauf für diese Veranstaltung hat noch nicht begonnen. Die "
 "betroffenen Positionen wurden aus dem Warenkorb entfernt."
 
-#: pretix/base/services/cart.py:71 pretix/base/services/orders.py:85
+#: pretix/base/services/cart.py:71 pretix/base/services/orders.py:86
 msgid ""
 "The presale period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
@@ -4825,7 +4862,7 @@ msgstr ""
 msgid "Invalid data in row {row}: {message}"
 msgstr "Ungültige Daten in Zeile {row}: {message}"
 
-#: pretix/base/services/orders.py:58
+#: pretix/base/services/orders.py:59
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
@@ -4833,7 +4870,7 @@ msgstr ""
 "Einige der ausgewählten Produkte sind zwischenzeitlich nicht mehr verfügbar, "
 "bitte überprüfen Sie Ihren Warenkorb."
 
-#: pretix/base/services/orders.py:60
+#: pretix/base/services/orders.py:61
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
@@ -4841,7 +4878,7 @@ msgstr ""
 "Einige der ausgewählten Produkte sind zwischenzeitlich nicht mehr in der "
 "gewünschten Anzahl verfügbar, bitte überprüfen Sie Ihren Warenkorb."
 
-#: pretix/base/services/orders.py:62
+#: pretix/base/services/orders.py:63
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
@@ -4849,15 +4886,15 @@ msgstr ""
 "Der Preis einiger Produkte in Ihrem Warenkorb hat sich zwischenzeitlich "
 "geändert."
 
-#: pretix/base/services/orders.py:64
+#: pretix/base/services/orders.py:65
 msgid "An internal error occurred, please try again."
 msgstr "Ein interner Fehler ist aufgetreten, bitte erneut versuchen."
 
-#: pretix/base/services/orders.py:65
+#: pretix/base/services/orders.py:66
 msgid "Your cart is empty."
 msgstr "Ihr Warenkorb ist leer."
 
-#: pretix/base/services/orders.py:66
+#: pretix/base/services/orders.py:67
 #, python-format
 msgid ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
@@ -4867,11 +4904,11 @@ msgstr ""
 "auswählen. Wir haben die überschüssigen Produkte aus Ihrem Warenkorb "
 "entfernt."
 
-#: pretix/base/services/orders.py:71
+#: pretix/base/services/orders.py:72
 msgid "The presale period has ended."
 msgstr "Der Vorverkaufszeitraum ist vorüber."
 
-#: pretix/base/services/orders.py:72
+#: pretix/base/services/orders.py:73
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
@@ -4879,7 +4916,7 @@ msgstr ""
 "Der Gutscheincode, der für eins der Produkte in Ihrem Warenkorb benutzt "
 "wurde, wurde nicht gefunden."
 
-#: pretix/base/services/orders.py:73
+#: pretix/base/services/orders.py:74
 msgid ""
 "The voucher code used for one of the items in your cart has already been "
 "used the maximum number of times allowed. We removed this item from your "
@@ -4889,7 +4926,7 @@ msgstr ""
 "wurde, wurde bereits zu oft verwendet. Wir haben das entsprechende Produkt "
 "aus dem Warenkorb entfernt."
 
-#: pretix/base/services/orders.py:75
+#: pretix/base/services/orders.py:76
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
@@ -4898,7 +4935,7 @@ msgstr ""
 "wurde, wurde bereits zu oft verwendet. Wir haben den Preis für das "
 "entsprechende Produkt in Ihrem Warenkorb aktualisiert."
 
-#: pretix/base/services/orders.py:77
+#: pretix/base/services/orders.py:78
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
@@ -4907,7 +4944,7 @@ msgstr ""
 "wurde, ist abgelaufen. Wir haben das entsprechende Produkt aus dem Warenkorb "
 "entfernt."
 
-#: pretix/base/services/orders.py:79
+#: pretix/base/services/orders.py:80
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
@@ -4916,7 +4953,7 @@ msgstr ""
 "wurde, ist nicht für dieses Produkt gültig. Wir haben das entsprechende "
 "Produkt aus dem Warenkorb entfernt."
 
-#: pretix/base/services/orders.py:81
+#: pretix/base/services/orders.py:82
 msgid ""
 "You need a valid voucher code to order one of the products in your cart. We "
 "removed this item from your cart."
@@ -4925,7 +4962,7 @@ msgstr ""
 "gekauft werden zu können. Wir haben das entsprechende Produkt aus dem "
 "Warenkorb entfernt."
 
-#: pretix/base/services/orders.py:83
+#: pretix/base/services/orders.py:84
 msgid ""
 "The presale period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
@@ -4934,7 +4971,7 @@ msgstr ""
 "wurde, ist nicht für dieses Produkt gültig. Wir haben die betroffenen "
 "Produkte aus dem Warenkorb entfernt."
 
-#: pretix/base/services/orders.py:87
+#: pretix/base/services/orders.py:88
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
@@ -4942,7 +4979,7 @@ msgstr ""
 "Einer der ausgewählten Sitzplätze war ungültig und wurde aus dem Warenkorb "
 "entfernt."
 
-#: pretix/base/services/orders.py:88
+#: pretix/base/services/orders.py:89
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
@@ -4950,35 +4987,35 @@ msgstr ""
 "Einer der ausgewählten Sitzplätze wurde zwischenzeitlich verkauft und wurde "
 "aus Ihrem Warenkorb entfernt."
 
-#: pretix/base/services/orders.py:153 pretix/control/forms/orders.py:69
+#: pretix/base/services/orders.py:154 pretix/control/forms/orders.py:69
 msgid "The new expiry date needs to be in the future."
 msgstr "Die neue Frist muss in der Zukunft liegen."
 
-#: pretix/base/services/orders.py:228 pretix/base/services/orders.py:288
+#: pretix/base/services/orders.py:229 pretix/base/services/orders.py:289
 msgid "This order is not pending approval."
 msgstr "Diese Bestellung wartet nicht auf Freigabe."
 
-#: pretix/base/services/orders.py:262
+#: pretix/base/services/orders.py:263
 #, python-format
 msgid "Order approved and confirmed: %(code)s"
 msgstr "Bestellung bestätigt: %(code)s"
 
-#: pretix/base/services/orders.py:265
+#: pretix/base/services/orders.py:266
 #, python-format
 msgid "Order approved and awaiting payment: %(code)s"
 msgstr "Bestellung freigegeben und wartet auf Bezahlung: %(code)s"
 
-#: pretix/base/services/orders.py:311
+#: pretix/base/services/orders.py:312
 #, python-format
 msgid "Order denied: %(code)s"
 msgstr "Bestellung abgelehnt: %(code)s"
 
-#: pretix/base/services/orders.py:346 pretix/presale/views/order.py:741
+#: pretix/base/services/orders.py:347 pretix/presale/views/order.py:741
 #: pretix/presale/views/order.py:775
 msgid "You cannot cancel this order."
 msgstr "Sie können diese Bestellung nicht stornieren."
 
-#: pretix/base/services/orders.py:357
+#: pretix/base/services/orders.py:358
 #, python-brace-format
 msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
@@ -4987,19 +5024,19 @@ msgstr ""
 "Diese Bestellung kann nicht storniert werden, da der hier erworbene "
 "Geschenkgutschein {card} bereits eingelöst wurde."
 
-#: pretix/base/services/orders.py:391 pretix/control/forms/orders.py:136
+#: pretix/base/services/orders.py:392 pretix/control/forms/orders.py:136
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
 msgstr ""
 "Die Stornogebühr darf nicht größer sein als der Betrag, der für diese "
 "Bestellung bereits bezahlt wurde."
 
-#: pretix/base/services/orders.py:417
+#: pretix/base/services/orders.py:418
 #, python-format
 msgid "Order canceled: %(code)s"
 msgstr "Bestellung storniert: %(code)s"
 
-#: pretix/base/services/orders.py:813
+#: pretix/base/services/orders.py:814
 msgid ""
 "While trying to place your order, we noticed that the order total has "
 "changed. Either one of the prices changed just now, or a gift card you used "
@@ -5011,46 +5048,46 @@ msgstr ""
 "verwendet. Bitte prüfen Sie die unten angezeigten Preise genau und versuchen "
 "Sie es erneut."
 
-#: pretix/base/services/orders.py:1021
+#: pretix/base/services/orders.py:1023
 #, python-format
 msgid "Your order is about to expire: %(code)s"
 msgstr "Ihre Bestellung läuft bald ab: %(code)s"
 
-#: pretix/base/services/orders.py:1023
+#: pretix/base/services/orders.py:1025
 #, python-format
 msgid "Your order is pending payment: %(code)s"
 msgstr "Ihre Bestellung wurde noch nicht bezahlt: %(code)s"
 
-#: pretix/base/services/orders.py:1097
+#: pretix/base/services/orders.py:1099
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
 msgstr "Ihr Ticket ist zum Download verfügbar: %(code)s"
 
-#: pretix/base/services/orders.py:1135
+#: pretix/base/services/orders.py:1137
 #, python-format
 msgid "Your order has been changed: %(code)s"
 msgstr "Ihre Bestellung wurde geändert: %(code)s"
 
-#: pretix/base/services/orders.py:1147
+#: pretix/base/services/orders.py:1149
 msgid "You need to select a variation of the product."
 msgstr "Sie müssen eine Produktvariante auswählen."
 
-#: pretix/base/services/orders.py:1148
+#: pretix/base/services/orders.py:1150
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
 msgstr ""
 "Das Kontingent {name} hat nicht genug freie Kapazität für diese Änderung."
 
-#: pretix/base/services/orders.py:1149
+#: pretix/base/services/orders.py:1151
 msgid "There is no quota defined that allows this operation."
 msgstr "Es ist kein Kontingent definiert, das diese Operation erlaubt."
 
-#: pretix/base/services/orders.py:1150
+#: pretix/base/services/orders.py:1152
 msgid "The selected product is not active or has no price set."
 msgstr "Das ausgewählte Produkt ist nicht aktiv oder hat keinen Preis."
 
-#: pretix/base/services/orders.py:1151
+#: pretix/base/services/orders.py:1153
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
@@ -5058,11 +5095,11 @@ msgstr ""
 "Diese Änderung würde die Bestellung leer hinterlassen. Bitte stornieren Sie "
 "die Bestellung stattdessen."
 
-#: pretix/base/services/orders.py:1152
+#: pretix/base/services/orders.py:1154
 msgid "Only pending or paid orders can be changed."
 msgstr "Nur ausstehende oder bezahlte Bestellungen können verändert werden."
 
-#: pretix/base/services/orders.py:1153
+#: pretix/base/services/orders.py:1155
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
@@ -5070,7 +5107,7 @@ msgstr ""
 "Diese Änderung würde die Bestellung kostenlos machen und damit sofort als "
 "bezahlt markieren, es ist jedoch kein Kontingent verfügbar."
 
-#: pretix/base/services/orders.py:1155
+#: pretix/base/services/orders.py:1157
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
@@ -5078,18 +5115,18 @@ msgstr ""
 "Dieses Produkt ist nur als Zusatzprodukt verfügbar, bitte wählen Sie die "
 "Basisposition zu der es hinzugefügt werden soll."
 
-#: pretix/base/services/orders.py:1156
+#: pretix/base/services/orders.py:1158
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
 msgstr ""
 "Dieses Zusatzprodukt kann nicht zu diesem Basisprodukt hinzugefügt werden."
 
-#: pretix/base/services/orders.py:1157
+#: pretix/base/services/orders.py:1159
 msgid "You need to choose a subevent for the new position."
 msgstr "Sie müssen einen Termin auswählen."
 
-#: pretix/base/services/orders.py:1159
+#: pretix/base/services/orders.py:1161
 #, python-brace-format
 msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
@@ -5098,15 +5135,15 @@ msgstr ""
 "Der ausgewählte Sitzplatz \"{seat}\" passt nicht zum ausgewählten Termin, "
 "bitte wählen Sie den Sitzplatz neu aus."
 
-#: pretix/base/services/orders.py:1160
+#: pretix/base/services/orders.py:1162
 msgid "The selected product requires you to select a seat."
 msgstr "Das ausgewählte Produkt erfordert die Wahl eines Sitzplatzes."
 
-#: pretix/base/services/orders.py:1161
+#: pretix/base/services/orders.py:1163
 msgid "The selected product does not allow to select a seat."
 msgstr "Das ausgewählte Produkt erlaubt keine Sitzplatzwahl."
 
-#: pretix/base/services/orders.py:1162
+#: pretix/base/services/orders.py:1164
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
@@ -5114,7 +5151,7 @@ msgstr ""
 "Sie können den Preis einer Position, aus der ein Geschenkgutschein erstellt "
 "wurde, nicht ändern."
 
-#: pretix/base/services/orders.py:1650
+#: pretix/base/services/orders.py:1652
 #, python-brace-format
 msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
@@ -5123,7 +5160,7 @@ msgstr ""
 "Eine Position kann nicht storniert werden, da der Geschenkgutschein {card} "
 "bereits verwendet wurde."
 
-#: pretix/base/services/orders.py:2086
+#: pretix/base/services/orders.py:2088
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
@@ -7151,11 +7188,17 @@ msgstr ""
 "Veranstaltung getätigt haben:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
-#: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
+#: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
 msgid "days before"
 msgstr "Tage bevor"
 
-#: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:17
+#: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
+#, fuzzy
+#| msgid "days before"
+msgid "minutes before"
+msgstr "Tage bevor"
+
+#: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:21
 msgid "at"
 msgstr "um"
 
@@ -8068,20 +8111,6 @@ msgstr "Shop live und Vorverkauf läuft"
 #: pretix/control/forms/filter.py:443 pretix/control/forms/filter.py:928
 msgid "Inactive"
 msgstr "inaktiv"
-
-#: pretix/control/forms/filter.py:444 pretix/control/forms/filter.py:664
-#: pretix/control/templates/pretixcontrol/events/index.html:148
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:102
-#: pretix/control/templates/pretixcontrol/subevents/index.html:117
-msgid "Presale not started"
-msgstr "noch nicht gestartet"
-
-#: pretix/control/forms/filter.py:445 pretix/control/forms/filter.py:665
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:100
-#: pretix/control/templates/pretixcontrol/subevents/index.html:115
-msgid "Presale over"
-msgstr "Verkauf vorüber"
 
 #: pretix/control/forms/filter.py:455 pretix/control/forms/subevents.py:287
 #: pretix/control/forms/subevents.py:326
@@ -12367,19 +12396,6 @@ msgstr "Reihe"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:105
 msgid "More quotas"
 msgstr "Mehr Kontingente"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:144
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:98
-#: pretix/control/views/dashboards.py:479
-msgid "Shop disabled"
-msgstr "Shop deaktiviert"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:150
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
-#: pretix/control/templates/pretixcontrol/subevents/index.html:119
-#: pretix/control/views/dashboards.py:485
-msgid "On sale"
-msgstr "Aktiv"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:155
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:109
@@ -17324,7 +17340,7 @@ msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
 msgstr "Die ausgewählten Termine wurden gelöscht oder deaktiviert."
 
-#: pretix/control/views/subevents.py:862
+#: pretix/control/views/subevents.py:864
 msgctxt "subevent"
 msgid "{} new dates have been created."
 msgstr "{} neue Termine wurden erstellt."
