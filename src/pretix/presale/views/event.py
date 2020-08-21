@@ -59,7 +59,7 @@ def item_group_by_category(items):
 
 
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
-                      quota_cache=None):
+                      quota_cache=None, filter_items=None, filter_categories=None):
     base_qs = base_qs if base_qs is not None else event.items
     items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher, allow_addons=allow_addons).select_related(
         'category', 'tax_rule',  # for re-grouping
@@ -124,6 +124,12 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         items = items.filter(requires_seat__gt=0)
     else:
         items = items.filter(requires_seat=0)
+
+    if filter_items:
+        items = items.filter(pk__in=[a for a in filter_items if a.isdigit()])
+    if filter_categories:
+        items = items.filter(category_id__in=[a for a in filter_categories if a.isdigit()])
+
     display_add_to_cart = False
     external_quota_cache = quota_cache or event.cache.get('item_quota_cache')
     quota_cache = external_quota_cache or {}
@@ -359,8 +365,12 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
-            items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
-                                                           channel=self.request.sales_channel.identifier)
+            items, display_add_to_cart = get_grouped_items(
+                self.request.event, self.subevent,
+                filter_items=self.request.GET.getlist('item'),
+                filter_categories=self.request.GET.getlist('category'),
+                channel=self.request.sales_channel.identifier
+            )
             context['itemnum'] = len(items)
             context['allfree'] = all(
                 item.display_price.gross == Decimal('0.00') for item in items if not item.has_variations

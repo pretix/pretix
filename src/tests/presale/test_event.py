@@ -93,6 +93,16 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("Early-bird", html)
         self.assertNotIn("btn-add-to-cart", html)
 
+    def test_filter_by_url(self):
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
+            q.items.add(item)
+        doc = self.get_doc('/%s/%s/?item=%d' % (self.orga.slug, self.event.slug, item.pk))
+        self.assertIn("Early-bird", doc.select("section .product-row")[0].text)
+        doc = self.get_doc('/%s/%s/?item=%d' % (self.orga.slug, self.event.slug, item.pk + 1))
+        assert not doc.select("section .product-row")
+
     def test_without_category(self):
         with scopes_disabled():
             q = Quota.objects.create(event=self.event, name='Quota', size=2)
