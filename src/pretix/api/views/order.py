@@ -121,16 +121,19 @@ class OrderViewSet(viewsets.ModelViewSet):
         return ctx
 
     def get_queryset(self):
-        if self.request.query_params.get('include_canceled_fees', 'false') == 'true':
-            fqs = OrderFee.all
-        else:
-            fqs = OrderFee.objects
-        qs = self.request.event.orders.prefetch_related(
-            Prefetch('fees', queryset=fqs.all()),
-            'payments', 'refunds', 'refunds__payment'
-        ).select_related(
-            'invoice_address'
-        )
+        qs = self.request.event.orders
+        if 'fees' not in self.request.GET.getlist('exclude'):
+            if self.request.query_params.get('include_canceled_fees', 'false') == 'true':
+                fqs = OrderFee.all
+            else:
+                fqs = OrderFee.objects
+            qs = qs.prefetch_related(Prefetch('fees', queryset=fqs.all()))
+        if 'payments' not in self.request.GET.getlist('exclude'):
+            qs = qs.prefetch_related('payments')
+        if 'refunds' not in self.request.GET.getlist('exclude'):
+            qs = qs.prefetch_related('refunds', 'refunds__payment')
+        if 'invoice_address' not in self.request.GET.getlist('exclude'):
+            qs = qs.select_related('invoice_address')
 
         if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
             opq = OrderPosition.all

@@ -376,6 +376,14 @@ class OrderSerializer(I18nAwareModelSerializer):
         if not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
             self.fields['positions'].child.fields.pop('pdf_data')
 
+        for exclude_field in self.context['request'].query_params.getlist('exclude'):
+            p = exclude_field.split('.')
+            if p[0] in self.fields:
+                if len(p) == 1:
+                    del self.fields[p[0]]
+                elif len(p) == 2:
+                    self.fields[p[0]].child.fields.pop(p[1])
+
     def validate_locale(self, l):
         if l not in set(k for k in self.instance.event.settings.locales):
             raise ValidationError('"{}" is not a supported locale for this event.'.format(l))
