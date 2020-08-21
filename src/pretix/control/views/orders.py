@@ -565,7 +565,7 @@ class OrderRefundProcess(OrderView):
         if self.refund.state == OrderRefund.REFUND_STATE_EXTERNAL:
             self.refund.done(user=self.request.user)
 
-            if self.request.POST.get("action") == "r" and self.order.status != Order.STATUS_CANCELED:
+            if self.request.POST.get("action") == "r" and (self.order.status != Order.STATUS_CANCELED and self.order.positions.exists()):
                 mark_order_refunded(self.order, user=self.request.user)
             elif not (self.order.status == Order.STATUS_PAID and self.order.pending_sum <= 0):
                 self.order.status = Order.STATUS_PENDING
