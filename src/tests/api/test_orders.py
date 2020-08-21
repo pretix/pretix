@@ -256,6 +256,34 @@ TEST_ORDER_RES = {
 
 
 @pytest.mark.django_db
+def test_order_list_filter_subevent_date(token_client, organizer, event, order, item, taxrule, subevent, question):
+    res = dict(TEST_ORDER_RES)
+    with scopes_disabled():
+        res["positions"][0]["id"] = order.positions.first().pk
+        p = order.positions.first()
+        p.subevent = subevent
+        p.save()
+    res["positions"][0]["item"] = item.pk
+    res["positions"][0]["subevent"] = subevent.pk
+    res["positions"][0]["answers"][0]["question"] = question.pk
+    res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
+    res["fees"][0]["tax_rule"] = taxrule.pk
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?subevent_after={}'.format(
+        organizer.slug, event.slug,
+        (subevent.date_from + datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?subevent_after={}'.format(
+        organizer.slug, event.slug,
+        (subevent.date_from - datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
 def test_order_list(token_client, organizer, event, order, item, taxrule, question):
     res = dict(TEST_ORDER_RES)
     with scopes_disabled():

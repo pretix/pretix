@@ -4,8 +4,8 @@ from decimal import Decimal
 import django_filters
 import pytz
 from django.db import transaction
-from django.db.models import Exists, F, OuterRef, Prefetch, Q
-from django.db.models.functions import Coalesce, Concat
+from django.db.models import Exists, F, OuterRef, Prefetch, Q, Max
+from django.db.models.functions import Coalesce, Concat, Greatest
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware, now
@@ -61,11 +61,23 @@ with scopes_disabled():
         status = django_filters.CharFilter(field_name='status', lookup_expr='iexact')
         modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
         created_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
+        subevent_after = django_filters.IsoDateTimeFilter(method='subevent_after_qs')
         search = django_filters.CharFilter(method='search_qs')
 
         class Meta:
             model = Order
             fields = ['code', 'status', 'email', 'locale', 'testmode', 'require_approval']
+
+        def subevent_after_qs(self, qs, name, value):
+            qs = qs.annotate(
+                max_se_date=Greatest(
+                    Coalesce(Max('all_positions__subevent__date_to'), Max('all_positions__subevent__date_from')),
+                    Max('all_positions__subevent__date_from')
+                )
+            ).filter(
+                Q(max_se_date__isnull=True) | Q(max_se_date__gte=value)
+            )
+            return qs
 
         def search_qs(self, qs, name, value):
             u = value

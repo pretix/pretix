@@ -161,7 +161,7 @@ last_modified                         datetime                   Last modificati
 
 .. versionchanged:: 3.11
 
-   The ``exclude`` query parameter has been added.
+   The ``exclude`` and ``subevent_after`` query parameter has been added.
 
 
 .. _order-position-resource:
@@ -489,6 +489,7 @@ List of all orders
        recommend using this in combination with ``testmode=false``, since test mode orders can vanish at any time and
        you will not notice it using this method.
    :query datetime created_since: Only return orders that have been created since the given date.
+   :query datetime subevent_after: Only return orders that contain a ticket for a subevent taking place after the given date.
    :query string exclude: Exclude a field from the output, e.g. ``fees`` or ``positions.downloads``. Can be used as a performance optimization. Can be passed multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
