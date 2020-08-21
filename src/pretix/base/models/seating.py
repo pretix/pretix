@@ -253,15 +253,18 @@ class Seat(models.Model):
                                           ignore_order_id=ignore_orderpos.order_id if ignore_orderpos else None,
                                           ignore_cart_id=(
                                               distance_ignore_cart_id or
-                                              (ignore_cart.cart_id if ignore_cart else None)
+                                              (ignore_cart.cart_id if ignore_cart and ignore_cart is not True else None)
                                           ))
+            q = Q(has_order=True) | Q(has_voucher=True)
+            if ignore_cart is not True:
+                q |= Q(has_cart=True)
             qs_closeby_taken = qs_annotated.annotate(
                 distance=(
                     Power(F('x') - Value(self.x), Value(2), output_field=models.FloatField()) +
                     Power(F('y') - Value(self.y), Value(2), output_field=models.FloatField())
                 )
             ).exclude(pk=self.pk).filter(
-                Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True),
+                q,
                 distance__lt=self.event.settings.seating_minimal_distance ** 2
             )
             if self.event.settings.seating_distance_within_row:
