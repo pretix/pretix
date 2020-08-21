@@ -56,6 +56,10 @@ rules                                 object                     Custom check-in
     The ``subevent`` attribute may now be ``null`` inside event series. The ``allow_multiple_entries``,
     ``allow_entry_after_exit``, and ``rules`` attributes have been added.
 
+.. versionchanged:: 3.11
+
+    The ``subevent_match`` filter has been added.
+
 Endpoints
 ---------
 
@@ -109,6 +113,7 @@ Endpoints
 
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query integer subevent: Only return check-in lists of the sub-event with the given ID
+   :query integer subevent_match: Only return check-in lists that are valid for the sub-event with the given ID (i.e. also lists valid for all subevents)
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error

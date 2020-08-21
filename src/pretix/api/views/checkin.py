@@ -1,3 +1,4 @@
+import django_filters
 from django.core.exceptions import ValidationError
 from django.db.models import Count, F, Max, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce
@@ -27,9 +28,16 @@ from pretix.helpers.database import FixedOrderBy
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
+        subevent_match = django_filters.NumberFilter(method='subevent_match_qs')
+
         class Meta:
             model = CheckinList
             fields = ['subevent']
+
+        def subevent_match_qs(self, qs, name, value):
+            return qs.filter(
+                Q(subevent_id=value) | Q(subevent_id__isnull=True)
+            )
 
 
 class CheckinListViewSet(viewsets.ModelViewSet):
