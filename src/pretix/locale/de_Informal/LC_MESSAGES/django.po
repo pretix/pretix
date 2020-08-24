@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-25 09:54+0000\n"
-"PO-Revision-Date: 2020-07-20 15:24+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"POT-Creation-Date: 2020-08-20 11:52+0000\n"
+"PO-Revision-Date: 2020-08-25 02:00+0000\n"
+"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -2283,8 +2283,8 @@ msgid ""
 msgstr ""
 "Wenn diese Option gesetzt ist, wird das Produkt nur als Teil von Paketen "
 "verkauft. Diese Option darf <strong>nicht</strong> gesetzt werden, wenn "
-"dieses Produkt als <strong>Zusatzprodukt</strong> verwendet werden soll, "
-"sondern nur für feste Produktpakete!"
+"dieses Produkt als Zusatzproduktverwendet werden soll, sondern nur für feste "
+"Produktpakete!"
 
 #: pretix/base/models/items.py:381
 msgid "Allow product to be canceled or changed"
@@ -4221,7 +4221,7 @@ msgstr "Teilnehmer-Firma"
 #: pretix/base/pdf.py:114 pretix/base/pdf.py:217
 #: pretix/base/services/tickets.py:96 pretix/control/views/pdf.py:80
 msgid "Sample company"
-msgstr "Musterfirma GmbH"
+msgstr "Musterfirma"
 
 #: pretix/base/pdf.py:118
 msgid "Full attendee address"
@@ -4465,8 +4465,6 @@ msgid "Relative date:"
 msgstr "Relativ:"
 
 #: pretix/base/reldate.py:189
-#, fuzzy
-#| msgid "Relative date:"
 msgid "Relative time:"
 msgstr "Relativ:"
 
@@ -5478,16 +5476,16 @@ msgstr ""
 "Zahlungseingang generiert wird."
 
 #: pretix/base/settings.py:333
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Minimum length of invoice number after prefix"
-msgstr "Rechnungsnummern-Präfix"
+msgstr "Minimale Länge der Rechnungsnummer nach dem Präfix."
 
 #: pretix/base/settings.py:334
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
+"Der Bereich der Rechnungsnummer nach dem Präfix wird mit führenden Nullen "
+"bis zu dieser Länge aufgefüllt, z.B. INV-001 oder INV-00001."
 
 #: pretix/base/settings.py:343
 msgid "Generate invoices with consecutive numbers"
@@ -5497,7 +5495,7 @@ msgstr "Rechnungen mit aufsteigender Nummerierung erzeugen"
 msgid "If deactivated, the order code will be used in the invoice number."
 msgstr ""
 "Wenn diese Option deaktiviert wird, wird die Bestellnummer in der "
-"Rechnungsnummer verwendet"
+"Rechnungsnummer verwendet."
 
 #: pretix/base/settings.py:353
 msgid "Invoice number prefix"
@@ -5684,10 +5682,8 @@ msgid "Automatically for all created orders"
 msgstr "Automatisch für alle neuen Bestellungen"
 
 #: pretix/base/settings.py:528 pretix/base/settings.py:539
-#, fuzzy
-#| msgid "Re-try payment or choose another payment method"
 msgid "Automatically on payment or when required by payment method"
-msgstr "Erneut versuchen oder andere Zahlungsmethode wählen"
+msgstr "Automatisch bei Zahlung oder wenn die Zahlungsmethode es erfordert"
 
 #: pretix/base/settings.py:532
 msgid "Generate invoices"
@@ -5851,7 +5847,7 @@ msgid ""
 "time of day."
 msgstr ""
 "Wenn diese Einstellung deaktiviert ist, werden Veranstaltungsbeginn und -"
-"ende ohne Uhrzeit angezeigt"
+"ende ohne Uhrzeit angezeigt."
 
 #: pretix/base/settings.py:786
 msgid "Hide all products that are sold out"
@@ -6038,15 +6034,10 @@ msgstr ""
 "vorherige."
 
 #: pretix/base/settings.py:970 pretix/base/settings.py:979
-#, fuzzy
-#| msgid ""
-#| "Only allow changes if the resulting price is higher or equal than the "
-#| "previous price."
 msgid ""
 "Only allow changes if the resulting price is higher than the previous price."
 msgstr ""
-"Änderungen nur erlauben wenn der neue Preis gleich oder höher ist als der "
-"vorherige."
+"Änderungen nur erlauben wenn der neue Preis höher ist als der vorherige."
 
 #: pretix/base/settings.py:971 pretix/base/settings.py:980
 msgid ""
@@ -6621,19 +6612,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:1427
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order for {event} was successful. As you only ordered free "
-#| "products,\n"
-#| "no payment is required.\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6648,8 +6627,8 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"wir haben deine Bestellung für {event} erfolgreich abgeschlossen. Vielen "
-"Dank! Da keine\n"
+"wir bestätigen deine Bestellung für {event} und freuen uns, dich begrüßen zu "
+"dürfen. Vielen Dank! Da keine\n"
 "kostenpflichtigen Artikel bestellt wurden, ist keine Zahlung erforderlich.\n"
 "\n"
 "Du kannst deine Bestellung unter folgender Adresse ändern und einsehen:\n"
@@ -7060,7 +7039,7 @@ msgstr "Interner Serverfehler"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr "Wir waren nicht in der Lage, deine Eingaben zu verarbeiten."
+msgstr "Wir hatten Schwierigkeiten, die Anfrage zu verarbeiten."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
@@ -7068,7 +7047,7 @@ msgstr "Kontaktiere uns bitte, wenn das Problem fortbesteht."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr "Wenn du uns kontaktierst, teile uns bitte folgenden Code mit:"
+msgstr "Wenn du uns kontaktierst, nenne bitte den folgenden Code:"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
@@ -7181,10 +7160,8 @@ msgid "days before"
 msgstr "Tage bevor"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
-#, fuzzy
-#| msgid "days before"
 msgid "minutes before"
-msgstr "Tage bevor"
+msgstr "Minuten bevor"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:21
 msgid "at"
@@ -7633,25 +7610,28 @@ msgstr "Wir zeigen das Logo mit einer maximalen Seitenlänge von 2.5cm an."
 
 #: pretix/control/forms/event.py:749
 msgid "The online shop must be selected to receive these emails."
-msgstr ""
+msgstr "Der Online-Shop muss ausgewählt werden um diese E-Mails zu erhalten."
 
 #: pretix/control/forms/event.py:762
-#, fuzzy
-#| msgid "Sales channels to automatically check in"
 msgid "Sales channels for checkout emails"
-msgstr "Automatischer Check-in auf bestimmten Verkaufskanälen"
+msgstr "Verkaufskanäle für Bestellbestätigungen via E-Mail"
 
 #: pretix/control/forms/event.py:763
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
 msgstr ""
+"Die E-Mails für getätigte und bezahlte Bestellungen werden nur an die "
+"ausgewählten Verkaufskanäle versendet. Der Online-Shop muss ausgewählt "
+"werden."
 
 #: pretix/control/forms/event.py:774
 msgid ""
 "This email will only be send to orders from these sales channels. The online "
 "shop must be enabled."
 msgstr ""
+"Diese E-Mails werden nur an die ausgewählten Verkaufskanäle versendet. Der "
+"Online-Shop muss ausgewählt werden."
 
 #: pretix/control/forms/event.py:782
 msgid "Bcc address"
@@ -7749,34 +7729,25 @@ msgid "Approved order"
 msgstr "Bestätigte Bestellung"
 
 #: pretix/control/forms/event.py:931
-#, fuzzy
-#| msgid ""
-#| "This will only be sent out for non-free orders. Free orders will receive "
-#| "the free order template from above instead."
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
 msgstr ""
 "Wird nur für kostenpflichtige Bestellungen verschickt. Für kostenlose "
-"Bestellung wird die E-Mail-Vorlage für den Bestelleingang verwendet."
+"Bestellung wird die E-Mail-Vorlage \"Bestätigte kostenlose Bestellung\" "
+"verwendet."
 
 #: pretix/control/forms/event.py:935
-#, fuzzy
-#| msgid "Approved order"
 msgid "Approved free order"
-msgstr "Bestätigte Bestellung"
+msgstr "Bestätigte kostenlose Bestellung"
 
 #: pretix/control/forms/event.py:938
-#, fuzzy
-#| msgid ""
-#| "This will only be sent out for non-free orders. Free orders will receive "
-#| "the free order template from above instead."
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
 msgstr ""
-"Wird nur für kostenpflichtige Bestellungen verschickt. Für kostenlose "
-"Bestellung wird die E-Mail-Vorlage für den Bestelleingang verwendet."
+"Wird nur für kostenlose Bestellungen verschickt. Für kostenpflichtige "
+"Bestellungen wird die E-Mail-Vorlage \"Bestätigte Bestellung\" verwendet."
 
 #: pretix/control/forms/event.py:942
 msgid "Denied order"
@@ -9353,7 +9324,7 @@ msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
 "Position #{posid} ({old_item}, {old_price}) in neue Bestellung abgespalten: "
-"{order}."
+"{order}"
 
 #: pretix/control/logdisplay.py:142
 #, python-brace-format
@@ -11953,29 +11924,21 @@ msgid "Confirmation text"
 msgstr "Bestätigungs-Text"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:114
-#, fuzzy
-#| msgid ""
-#| "This text needs to be confirmed by the user before a purchase is "
-#| "possible. You could for example link your terms of service here. If you "
-#| "use the Pages feature to publish your terms of service, you don't need "
-#| "this setting since you can configure it there."
 msgid ""
 "These texts need to be confirmed by the user before a purchase is possible. "
 "You could for example link your terms of service here. If you use the Pages "
 "feature to publish your terms of service, you don't need this setting since "
 "you can configure it there."
 msgstr ""
-"Dieser Text muss vom Benutzer bestätigt werden, bevor ein Kauf möglich ist. "
-"Du könntest hier z.B. auf deine Teilnahmebedingungen verlinken. Wenn du die "
-"\"Seiten\"-Funktion nutzt, um die Bedingungen zu veröffentlichen, brauchst "
-"du diese Einstellung nicht, sondern kannst ähnliches im Seiten-Modul selbst "
-"einstellen."
+"Diese Texte müssen vom Benutzer bestätigt werden, bevor ein Kauf möglich "
+"ist. Du könntest hier z.B. auf deine Teilnahmebedingungen verlinken. Wenn du "
+"die \"Seiten\"-Funktion nutzt, um die Bedingungen zu veröffentlichen, "
+"brauchst du diese Einstellung nicht, sondern kannst ähnliches im Seiten-"
+"Modul selbst einstellen."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:171
-#, fuzzy
-#| msgid "Confirmation text"
 msgid "Add confirmation text"
-msgstr "Bestätigungs-Text"
+msgstr "Bestätigungs-Text hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:182
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:50
@@ -12352,7 +12315,7 @@ msgid ""
 msgstr ""
 "Die untenstehende Liste zeigt alle Veranstaltungen, auf die du "
 "administrativen Zugriff hast. Klicke auf einen Veranstaltungstitel, um "
-"Details aufzurufen"
+"Details aufzurufen."
 
 #: pretix/control/templates/pretixcontrol/events/index.html:12
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:18
@@ -12603,18 +12566,6 @@ msgid "Deactivate"
 msgstr "Deaktivieren"
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:5
-#, fuzzy
-#| msgid ""
-#| "With add-ons, you can specify products that can be bought as an addition "
-#| "to this product. For example, if you host a conference with a base "
-#| "conference ticket and a number of workshops, you could define the "
-#| "workshops as add-ons to the conference ticket. With this configuration, "
-#| "the workshops cannot be bought on their own but only in combination with "
-#| "a conference ticket. You can here specify categories of products that can "
-#| "be used as add-ons to this product. You can also specify the minimum and "
-#| "maximum number of add-ons of the given category that can or need to be "
-#| "chosen. The user can buy every add-on from the category at most once. If "
-#| "an add-on product has multiple variations, only one of them can be bought."
 msgid ""
 "With add-ons, you can specify products that can be bought as an addition to "
 "this product. For example, if you host a conference with a base conference "
@@ -12634,9 +12585,7 @@ msgstr ""
 "werden. Du kannst hier einstellen, welche Produkte als Zusatzprodukte zu "
 "diesem Produkt gekauft werden können. Du kannst ebenfalls eine maximale und "
 "minimale Anzahl von Produkten auswählen, die aus den entsprechenden "
-"Kategorien gewählt werden können. Jedes Zusatzprodukt kann maximal einmal "
-"pro Basisprodukt gewählt werden. Wenn ein Zusatzprodukt Varianten hat, muss "
-"sich der Käufer für eine davon entscheiden."
+"Kategorien gewählt werden können."
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:28
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:62
@@ -15657,7 +15606,7 @@ msgstr "Aus"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:75
 msgid "You have no permission to receive this notification"
-msgstr "Du hast keine Berechtigung, diese Benachrichtigung zu erhalten."
+msgstr "Du hast keine Berechtigung diese Benachrichtigung zu erhalten."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:12
 #, python-format
@@ -16946,7 +16895,7 @@ msgstr "Es wurde keine USt-ID-Nr. angegeben."
 
 #: pretix/control/views/orders.py:1129
 msgid "No country specified."
-msgstr "Es wurde kein Land angegeben,"
+msgstr "Es wurde kein Land angegeben."
 
 #: pretix/control/views/orders.py:1133
 msgid "VAT ID could not be checked since a non-EU country has been specified."
@@ -17800,6 +17749,9 @@ msgid ""
 "Create an invoice for orders using bank transfer immediately if the event is "
 "otherwise configured to create invoices after payment is completed."
 msgstr ""
+"Generiere Rechnungen für Bestellungen die Bankeinzug als Zahlungsmethode "
+"nutzen sofort, auch wenn die Veranstaltung konfiguriert ist Rechnungen erst "
+"nach Zahlungseingang zu generieren."
 
 #: pretix/plugins/banktransfer/payment.py:113
 msgid "Do not include a hyphen in the payment reference."
@@ -18241,28 +18193,20 @@ msgid "Secret"
 msgstr "Secret"
 
 #: pretix/plugins/checkinlists/exporters.py:431
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat name"
-msgstr "Teamname"
+msgstr "Sitzbezeichnung"
 
 #: pretix/plugins/checkinlists/exporters.py:432
-#, fuzzy
-#| msgid "Seat: zone"
 msgid "Seat zone"
-msgstr "Sitz: Bereich"
+msgstr "Sitzbereich"
 
 #: pretix/plugins/checkinlists/exporters.py:433
-#, fuzzy
-#| msgid "Seat: row"
 msgid "Seat row"
-msgstr "Sitz: Reihe"
+msgstr "Sitzreihe"
 
 #: pretix/plugins/checkinlists/exporters.py:434
-#, fuzzy
-#| msgid "Seat {number}"
 msgid "Seat number"
-msgstr "Platz {number}"
+msgstr "Sitzplatz"
 
 #: pretix/plugins/manualpayment/__init__.py:16
 msgid "This plugin adds a customizable payment method for manual processing."
@@ -18667,7 +18611,7 @@ msgstr "Verfügbar auf Android, iOS, Windows und Linux."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:25
 msgid "Configuration is available in your organizer account's device list."
-msgstr "Konfiguration über die Geräte-Liste deines Veranstalterkontos"
+msgstr "Konfiguration über die Geräte-Liste deines Veranstalterkontos."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:28
 msgid "Switch to my device list"
@@ -20304,10 +20248,8 @@ msgid "Selected add-ons"
 msgstr "Gewählte Zusatzprodukte"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:125
-#, fuzzy
-#| msgid "Change answers"
 msgid "Copy answers"
-msgstr "Details bearbeiten"
+msgstr "Antworten kopieren"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
@@ -21125,8 +21067,8 @@ msgid ""
 "                                                    "
 msgstr ""
 "\n"
-"                                    ab %(start_date)s\n"
-"                                "
+"                                                        ab %(start_date)s\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:69
 #, python-format
@@ -21326,10 +21268,8 @@ msgid "The payment is too late to be accepted."
 msgstr "Die Zahlung kommt zu spät, um akzeptiert werden zu können."
 
 #: pretix/presale/views/order.py:398
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "An invoice has been generated."
-msgstr "Die Rechnung wurde erstellt."
+msgstr "Eine Rechnung wurde erstellt."
 
 #: pretix/presale/views/order.py:483
 msgid "The payment method for this order cannot be changed."
