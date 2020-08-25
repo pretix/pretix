@@ -19,6 +19,7 @@ from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import CheckInFilterForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
+from pretix.helpers.models import modelcopy
 
 
 class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
@@ -220,6 +221,25 @@ class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
         r = super().dispatch(request, *args, **kwargs)
         r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
         return r
+
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.checkin_lists.get(pk=self.request.GET.get("copy_from"))
+            except CheckinList.DoesNotExist:
+                pass
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+        else:
+            kwargs['instance'] = CheckinList(event=self.request.event)
+        return kwargs
 
     def get_success_url(self) -> str:
         return reverse('control:event.orders.checkinlists', kwargs={

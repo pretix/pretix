@@ -127,6 +127,10 @@
                         <td class="text-right flip">
                             <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
                             {% if "can_change_event_settings" in request.eventpermset %}
+                                <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ cl.id }}"
+                                        class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
+                                    <span class="fa fa-copy"></span>
+                                </a>
                                 <a href="{% url "control:event.orders.checkinlists.edit" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-wrench"></i></a>
                                 <a href="{% url "control:event.orders.checkinlists.delete" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             {% endif %}
