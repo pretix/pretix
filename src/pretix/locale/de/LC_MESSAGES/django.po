@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-20 11:52+0000\n"
-"PO-Revision-Date: 2020-08-25 02:00+0000\n"
+"PO-Revision-Date: 2020-08-25 10:15+0000\n"
 "Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -5484,7 +5484,7 @@ msgstr ""
 
 #: pretix/base/settings.py:333
 msgid "Minimum length of invoice number after prefix"
-msgstr "Minimale Länge der Rechnungsnummer nach dem Präfix."
+msgstr "Minimale Länge der Rechnungsnummer nach dem Präfix"
 
 #: pretix/base/settings.py:334
 msgid ""
