@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-20 11:52+0000\n"
+"POT-Creation-Date: 2020-08-25 09:54+0000\n"
 "PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
@@ -19,14 +19,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.5.1\n"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:963
+#: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:98
 #: pretix/control/views/dashboards.py:479
 msgid "Shop disabled"
 msgstr "Κατάστημα ανενεργό"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:965
+#: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:445 pretix/control/forms/filter.py:665
 #: pretix/control/templates/pretixcontrol/events/index.html:146
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:100
@@ -34,7 +34,7 @@ msgstr "Κατάστημα ανενεργό"
 msgid "Presale over"
 msgstr "Η προπώληση τελείωσε"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:967
+#: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:444 pretix/control/forms/filter.py:664
 #: pretix/control/templates/pretixcontrol/events/index.html:148
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:102
@@ -42,7 +42,7 @@ msgstr "Η προπώληση τελείωσε"
 msgid "Presale not started"
 msgstr "Η προεργασία δεν ξεκίνησε"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:969
+#: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:150
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:104
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
@@ -89,18 +89,18 @@ msgstr "Όλα τα γεγονότα (συμπεριλαμβανομένων τ�
 msgid "Limit to events"
 msgstr "Περιορίστε τα συμβάντα"
 
-#: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:933
+#: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:941
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "Το προϊόν \"{}\" δεν έχει αντιστοιχηθεί σε μια ποσόστωση."
 
-#: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:945
+#: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:953
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
 "Δεν υπάρχει επαρκής ποσόστωση για την ποσόστωση \"{}\" για την εκτέλεση της "
 "λειτουργίας."
 
-#: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:905
+#: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:913
 #: pretix/base/services/orders.py:1160
 #, fuzzy, python-brace-format
 #| msgctxt "subevent"
@@ -206,7 +206,7 @@ msgstr "Κυκλική εξάρτηση μεταξύ των ερωτήσεων �
 msgid "This type of question cannot be asked during check-in."
 msgstr "Αυτή η ερώτηση θα ζητηθεί κατά το check-in."
 
-#: pretix/api/serializers/order.py:918 pretix/api/serializers/order.py:925
+#: pretix/api/serializers/order.py:926 pretix/api/serializers/order.py:933
 #, fuzzy
 #| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
@@ -242,17 +242,17 @@ msgstr ""
 "Η εφαρμογή \"{application_name}\" έχει εξουσιοδοτηθεί για πρόσβαση στον "
 "λογαριασμό σας."
 
-#: pretix/api/views/order.py:423 pretix/control/views/orders.py:1099
+#: pretix/api/views/order.py:438 pretix/control/views/orders.py:1099
 #: pretix/presale/views/order.py:645 pretix/presale/views/order.py:689
 msgid "You cannot generate an invoice for this order."
 msgstr "Δεν μπορείτε να δημιουργήσετε τιμολόγιο για αυτήν την παραγγελία."
 
-#: pretix/api/views/order.py:428 pretix/control/views/orders.py:1101
+#: pretix/api/views/order.py:443 pretix/control/views/orders.py:1101
 #: pretix/presale/views/order.py:647 pretix/presale/views/order.py:691
 msgid "An invoice for this order already exists."
 msgstr "Ένα τιμολόγιο για αυτήν την παραγγελία υπάρχει ήδη."
 
-#: pretix/api/views/order.py:454 pretix/control/views/orders.py:1227
+#: pretix/api/views/order.py:469 pretix/control/views/orders.py:1227
 #: pretix/control/views/users.py:97
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
@@ -3263,13 +3263,13 @@ msgstr ""
 msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgstr ""
 
-#: pretix/base/models/seating.py:152
+#: pretix/base/models/seating.py:154
 #, fuzzy, python-brace-format
 #| msgid "Invoice number"
 msgid "Row {number}"
 msgstr "Αριθμός τιμολογίου"
 
-#: pretix/base/models/seating.py:157
+#: pretix/base/models/seating.py:159
 #, fuzzy, python-brace-format
 #| msgid "Team name"
 msgid "Seat {number}"
@@ -5373,14 +5373,14 @@ msgstr ""
 "εσάς. Επικοινωνήστε με τον διοργανωτή εκδηλώσεων για περισσότερες "
 "πληροφορίες."
 
-#: pretix/base/services/seating.py:35 pretix/base/services/seating.py:94
+#: pretix/base/services/seating.py:35 pretix/base/services/seating.py:92
 #, python-format
 msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
 
-#: pretix/base/services/seating.py:97
+#: pretix/base/services/seating.py:95
 #, python-format
 msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
@@ -12174,7 +12174,7 @@ msgid "Installed plugins"
 msgstr "Εγκατεστημένα plugin"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:10
-#: pretix/control/views/checkin.py:264 pretix/control/views/event.py:184
+#: pretix/control/views/checkin.py:266 pretix/control/views/event.py:184
 #: pretix/control/views/event.py:338 pretix/control/views/event.py:418
 #: pretix/control/views/event.py:457 pretix/control/views/event.py:615
 #: pretix/control/views/event.py:806 pretix/control/views/event.py:1156
@@ -16859,15 +16859,15 @@ msgstr "Δεν έχετε άδεια να εκτελέσετε αυτήν την
 msgid "The selected check-ins have been reverted."
 msgstr "Τα επιλεγμένα check-ins έχουν επιστραφεί."
 
-#: pretix/control/views/checkin.py:167
+#: pretix/control/views/checkin.py:169
 msgid "The selected tickets have been marked as checked in."
 msgstr "Τα επιλεγμένα εισιτήρια έχουν επισημανθεί ως καταχωρημένα."
 
-#: pretix/control/views/checkin.py:231
+#: pretix/control/views/checkin.py:233
 msgid "The new check-in list has been created."
 msgstr "Η νέα λίστα ελέγχου έχει δημιουργηθεί."
 
-#: pretix/control/views/checkin.py:238 pretix/control/views/checkin.py:281
+#: pretix/control/views/checkin.py:240 pretix/control/views/checkin.py:283
 #: pretix/control/views/event.py:213 pretix/control/views/event.py:421
 #: pretix/control/views/event.py:460 pretix/control/views/event.py:618
 #: pretix/control/views/event.py:775 pretix/control/views/event.py:1115
@@ -16884,11 +16884,11 @@ msgstr ""
 "Δεν ήταν δυνατή η αποθήκευση των αλλαγών σας. Δείτε παρακάτω για "
 "λεπτομέρειες."
 
-#: pretix/control/views/checkin.py:260 pretix/control/views/checkin.py:297
+#: pretix/control/views/checkin.py:262 pretix/control/views/checkin.py:299
 msgid "The requested list does not exist."
 msgstr "Η ζητούμενη λίστα δεν υπάρχει."
 
-#: pretix/control/views/checkin.py:306
+#: pretix/control/views/checkin.py:308
 msgid "The selected list has been deleted."
 msgstr "Η επιλεγμένη λίστα έχει διαγραφεί."
 
@@ -18660,7 +18660,7 @@ msgstr ""
 "code> και αρχεία στη μορφή MT940."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:28
-#: pretix/plugins/banktransfer/views.py:445
+#: pretix/plugins/banktransfer/views.py:446
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
 msgstr ""
@@ -18844,11 +18844,11 @@ msgstr "Άγνωστος κωδικός παραγγελίας"
 msgid "All unresolved transactions have been discarded."
 msgstr "Όλες οι ανεπίλυτες συναλλαγές έχουν απορριφθεί."
 
-#: pretix/plugins/banktransfer/views.py:327
+#: pretix/plugins/banktransfer/views.py:328
 msgid "You must choose a file to import."
 msgstr "Πρέπει να επιλέξετε ένα αρχείο για εισαγωγή."
 
-#: pretix/plugins/banktransfer/views.py:331
+#: pretix/plugins/banktransfer/views.py:332
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
@@ -18856,12 +18856,12 @@ msgstr ""
 "Δεν ήταν δυνατή η ανίχνευση του τύπου αρχείου αυτής της εισαγωγής. "
 "Επικοινωνήστε με την υποστήριξη για βοήθεια."
 
-#: pretix/plugins/banktransfer/views.py:344
-#: pretix/plugins/banktransfer/views.py:388
+#: pretix/plugins/banktransfer/views.py:345
+#: pretix/plugins/banktransfer/views.py:389
 msgid "We were unable to process your input."
 msgstr "Δεν ήταν δυνατή η επεξεργασία της εισόδου σας."
 
-#: pretix/plugins/banktransfer/views.py:353
+#: pretix/plugins/banktransfer/views.py:354
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
@@ -18869,7 +18869,7 @@ msgstr ""
 "Λυπούμαστε, αλλά δεν ήταν δυνατή η εισαγωγή αυτού του αρχείου CSV. "
 "Επικοινωνήστε με την υποστήριξη για βοήθεια."
 
-#: pretix/plugins/banktransfer/views.py:358
+#: pretix/plugins/banktransfer/views.py:359
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
@@ -18877,15 +18877,15 @@ msgstr ""
 "Λυπούμαστε, αλλά εντοπίσαμε αυτό το αρχείο ως κενό. Επικοινωνήστε με την "
 "υποστήριξη για βοήθεια."
 
-#: pretix/plugins/banktransfer/views.py:378
+#: pretix/plugins/banktransfer/views.py:379
 msgid "Invalid input data."
 msgstr "Μη έγκυρα δεδομένα εισόδου."
 
-#: pretix/plugins/banktransfer/views.py:382
+#: pretix/plugins/banktransfer/views.py:383
 msgid "You need to select the column containing the payment reference."
 msgstr "Πρέπει να επιλέξετε τη στήλη που περιέχει την αναφορά πληρωμής."
 
-#: pretix/plugins/banktransfer/views.py:502
+#: pretix/plugins/banktransfer/views.py:503
 msgid ""
 "Please perform per-event bank imports as this organizer has events with "
 "multiple currencies."
@@ -22166,24 +22166,24 @@ msgid "The presale for this event is over or has not yet started."
 msgstr ""
 "Η προπώληση για αυτή την εκδήλωση έχει λήξει ή δεν έχει ξεκινήσει ακόμα."
 
-#: pretix/presale/views/event.py:528
+#: pretix/presale/views/event.py:538
 msgid "Unknown event code or not authorized to access this event."
 msgstr ""
 "Άγνωστος κωδικός εκδήλωσης ή μη εξουσιοδοτημένος για πρόσβαση σε αυτή την "
 "εκδήλωση."
 
-#: pretix/presale/views/event.py:535
+#: pretix/presale/views/event.py:545
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "Δεν έχει επιλεγεί ημερομηνία."
 
-#: pretix/presale/views/event.py:538
+#: pretix/presale/views/event.py:548
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "Άγνωστη ημερομηνία επιλεγμένη."
 
-#: pretix/presale/views/event.py:561 pretix/presale/views/event.py:569
-#: pretix/presale/views/event.py:572
+#: pretix/presale/views/event.py:571 pretix/presale/views/event.py:579
+#: pretix/presale/views/event.py:582
 msgid "Please go back and try again."
 msgstr "Επιστρέψτε και δοκιμάστε ξανά."
 
