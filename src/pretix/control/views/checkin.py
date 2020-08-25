@@ -293,7 +293,7 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        return reverse('control:event.orders.checkinlists.show', kwargs={
+        return reverse('control:event.orders.checkinlists.edit', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
             'list': self.object.pk
