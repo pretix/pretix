@@ -31,7 +31,7 @@ from pretix.api.serializers.order import (
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Device, Event, Invoice, InvoiceAddress,
-    Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota,
+    Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota, SubEvent,
     TeamAPIToken, generate_position_secret, generate_secret,
 )
 from pretix.base.payment import PaymentException
@@ -72,7 +72,9 @@ with scopes_disabled():
             qs = qs.annotate(
                 has_se_after=Exists(
                     OrderPosition.all.filter(
-                        Q(subevent__date_to__gt=value) | Q(subevent__date_from__gt=value, subevent__date_to__isnull=True),
+                        subevent_id__in=SubEvent.objects.filter(
+                            Q(date_to__gt=value) | Q(date_from__gt=value, date_to__isnull=True), event=OuterRef(OuterRef('event_id'))
+                        ).values_list('id'),
                         order_id=OuterRef('pk'),
                     )
                 )
@@ -182,6 +184,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 return prov
         raise NotFound('Unknown output provider.')
 
+    @scopes_disabled()  # we are sure enough that get_queryset() is correct, so we save some perforamnce
     def list(self, request, **kwargs):
         date = serializers.DateTimeField().to_representation(now())
         queryset = self.filter_queryset(self.get_queryset())
