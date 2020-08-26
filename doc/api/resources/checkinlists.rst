@@ -58,7 +58,7 @@ rules                                 object                     Custom check-in
 
 .. versionchanged:: 3.11
 
-    The ``subevent_match`` filter has been added.
+    The ``subevent_match`` and ``exclude`` query parameters have been added.
 
 Endpoints
 ---------
@@ -114,6 +114,7 @@ Endpoints
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query integer subevent: Only return check-in lists of the sub-event with the given ID
    :query integer subevent_match: Only return check-in lists that are valid for the sub-event with the given ID (i.e. also lists valid for all subevents)
+   :query string exclude: Exclude a field from the output, e.g. ``checkin_count``. Can be used as a performance optimization. Can be passed multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
