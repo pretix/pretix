@@ -4,8 +4,8 @@ from decimal import Decimal
 import django_filters
 import pytz
 from django.db import transaction
-from django.db.models import Exists, F, Max, OuterRef, Prefetch, Q
-from django.db.models.functions import Coalesce, Concat, Greatest
+from django.db.models import Exists, F, OuterRef, Prefetch, Q
+from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware, now
@@ -70,13 +70,13 @@ with scopes_disabled():
 
         def subevent_after_qs(self, qs, name, value):
             qs = qs.annotate(
-                max_se_date=Greatest(
-                    Coalesce(Max('all_positions__subevent__date_to'), Max('all_positions__subevent__date_from')),
-                    Max('all_positions__subevent__date_from')
+                has_se_after=Exists(
+                    OrderPosition.all.filter(
+                        Q(subevent__date_to__gt=value) | Q(subevent__date_from__gt=value, subevent__date_to__isnull=True),
+                        order_id=OuterRef('pk'),
+                    )
                 )
-            ).filter(
-                Q(max_se_date__isnull=True) | Q(max_se_date__gte=value)
-            )
+            ).filter(has_se_after=True)
             return qs
 
         def search_qs(self, qs, name, value):
