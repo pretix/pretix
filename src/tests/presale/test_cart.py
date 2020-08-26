@@ -3587,9 +3587,9 @@ class CartSeatingTest(CartTestMixin, TestCase):
         self.event.seat_category_mappings.create(
             layout_category='Stalls', product=self.ticket
         )
-        self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, seat_guid="A1")
-        self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, seat_guid="A2")
-        self.seat_a3 = self.event.seats.create(name="A3", product=self.ticket, seat_guid="A3")
+        self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.ticket, seat_guid="A1")
+        self.seat_a2 = self.event.seats.create(seat_number="A2", product=self.ticket, seat_guid="A2")
+        self.seat_a3 = self.event.seats.create(seat_number="A3", product=self.ticket, seat_guid="A3")
         self.cm = CartManager(event=self.event, cart_id=self.session_key)
 
     def test_add_with_seat_without_variation(self):
@@ -3649,7 +3649,7 @@ class CartSeatingTest(CartTestMixin, TestCase):
         with scopes_disabled():
             v = self.event.vouchers.create(item=self.ticket, seat=self.seat_a1)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'seat_%d' % self.ticket.id: self.seat_a1,
+            'seat_%d' % self.ticket.id: self.seat_a1.seat_guid,
             '_voucher_code': v.code,
         }, follow=True)
         with scopes_disabled():
@@ -3662,7 +3662,7 @@ class CartSeatingTest(CartTestMixin, TestCase):
         with scopes_disabled():
             v = self.event.vouchers.create(item=self.ticket, seat=self.seat_a1)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'seat_%d' % self.ticket.id: self.seat_a2,
+            'seat_%d' % self.ticket.id: self.seat_a2.seat_guid,
             '_voucher_code': v.code,
         }, follow=True)
         with scopes_disabled():

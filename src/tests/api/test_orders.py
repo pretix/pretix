@@ -257,7 +257,7 @@ TEST_ORDER_RES = {
 
 @pytest.mark.django_db
 def test_order_list_filter_subevent_date(token_client, organizer, event, order, item, taxrule, subevent, question):
-    res = dict(TEST_ORDER_RES)
+    res = copy.deepcopy(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
         p = order.positions.first()
@@ -368,7 +368,7 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
                                                                                 order.code))
     assert resp.status_code == 200
-    assert res == resp.data
+    assert json.loads(json.dumps(res)) == json.loads(json.dumps(resp.data))
 
     order.status = 'p'
     order.save()
@@ -716,7 +716,7 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
     with scopes_disabled():
         var = item.variations.create(value="Children")
         var2 = item.variations.create(value="Children")
-        res = dict(TEST_ORDERPOSITION_RES)
+        res = copy.copy(TEST_ORDERPOSITION_RES)
         op = order.positions.first()
     op.variation = var
     op.save()
@@ -3089,7 +3089,7 @@ def seat(event, organizer, item):
     event.seat_category_mappings.create(
         layout_category='Stalls', product=item
     )
-    return event.seats.create(name="A1", product=item, seat_guid="A1")
+    return event.seats.create(seat_number="A1", product=item, seat_guid="A1")
 
 
 @pytest.mark.django_db
@@ -3144,7 +3144,7 @@ def test_order_create_with_blocked_seat(token_client, organizer, event, item, qu
     assert resp.status_code == 400
     assert resp.data == {
         'positions': [
-            {'seat': ['The selected seat "A1" is not available.']},
+            {'seat': ['The selected seat "Seat A1" is not available.']},
         ]
     }
 
@@ -3167,7 +3167,7 @@ def test_order_create_with_used_seat(token_client, organizer, event, item, quota
     assert resp.status_code == 400
     assert resp.data == {
         'positions': [
-            {'seat': ['The selected seat "A1" is not available.']},
+            {'seat': ['The selected seat "Seat A1" is not available.']},
         ]
     }
 
@@ -3269,7 +3269,7 @@ def test_order_create_with_duplicate_seat(token_client, organizer, event, item, 
     assert resp.data == {
         'positions': [
             {},
-            {'seat': ['The selected seat "A1" is not available.']},
+            {'seat': ['The selected seat "Seat A1" is not available.']},
         ]
     }
 
@@ -3660,8 +3660,8 @@ def test_order_create_voucher_redeemed_partially(token_client, organizer, event,
     with scopes_disabled():
         voucher = event.vouchers.create(price_mode="set", value=15, item=item, redeemed=1, max_usages=2)
     res['positions'][0]['voucher'] = voucher.code
-    res['positions'].append(copy.copy(res['positions'][0]))
-    res['positions'].append(copy.copy(res['positions'][0]))
+    res['positions'].append(copy.deepcopy(res['positions'][0]))
+    res['positions'].append(copy.deepcopy(res['positions'][0]))
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug

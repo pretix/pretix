@@ -1068,7 +1068,7 @@ def seatingplan(organizer, event):
 
 @pytest.fixture
 def seat1(item, event):
-    return event.seats.create(name="A1", product=item, seat_guid="A1")
+    return event.seats.create(seat_number="A1", product=item, seat_guid="A1")
 
 
 @pytest.mark.django_db
@@ -1220,8 +1220,8 @@ def test_set_seat_subevent(token_client, organizer, event, seatingplan, seat1, i
         event.save()
         se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
         se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
-        seat1 = event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se1)
-        event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se2)
+        seat1 = event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se1)
+        event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se2)
         v = event.vouchers.create(item=item)
     change_voucher(
         token_client, organizer, event, v,
@@ -1243,8 +1243,8 @@ def test_set_seat_subevent_required(token_client, organizer, event, seatingplan,
         event.save()
         se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
         se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
-        seat1 = event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se1)
-        event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se2)
+        seat1 = event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se1)
+        event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se2)
         event.vouchers.create(item=item, seat=seat1)
         v = event.vouchers.create(item=item)
     change_voucher(
@@ -1263,8 +1263,8 @@ def test_set_seat_subevent_invalid(token_client, organizer, event, seatingplan, 
         event.save()
         se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
         se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
-        seat1 = event.seats.create(name="A1", product=item, seat_guid="A1", subevent=se1)
-        event.seats.create(name="B1", product=item, seat_guid="B1", subevent=se2)
+        seat1 = event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se1)
+        event.seats.create(seat_number="B1", product=item, seat_guid="B1", subevent=se2)
         event.vouchers.create(item=item, seat=seat1, subevent=se2)
         v = event.vouchers.create(item=item)
     change_voucher(

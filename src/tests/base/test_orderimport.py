@@ -551,7 +551,7 @@ def test_import_seat_blocked(user, event, item):
     event.seat_category_mappings.create(
         layout_category='Stalls', product=item
     )
-    event.seats.create(name="Test", product=item, seat_guid="Test", blocked=True)
+    event.seats.create(seat_number="Test", product=item, seat_guid="Test", blocked=True)
     with pytest.raises(DataImportError) as excinfo:
         import_orders.apply(
             args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
@@ -570,7 +570,7 @@ def test_import_seat_dbl(user, event, item):
     event.seat_category_mappings.create(
         layout_category='Stalls', product=item
     )
-    event.seats.create(name="Test", product=item, seat_guid="Test")
+    event.seats.create(seat_number="Test", product=item, seat_guid="Test")
     with pytest.raises(DataImportError) as excinfo:
         import_orders.apply(
             args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
@@ -589,9 +589,9 @@ def test_import_seat(user, event, item):
     event.seat_category_mappings.create(
         layout_category='Stalls', product=item
     )
-    s1 = event.seats.create(name="Foo", product=item, seat_guid="Foo")
-    s2 = event.seats.create(name="Bar", product=item, seat_guid="Bar")
-    s3 = event.seats.create(name="Baz", product=item, seat_guid="Baz")
+    s1 = event.seats.create(seat_number="Foo", product=item, seat_guid="Foo")
+    s2 = event.seats.create(seat_number="Bar", product=item, seat_guid="Bar")
+    s3 = event.seats.create(seat_number="Baz", product=item, seat_guid="Baz")
     import_orders.apply(
         args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
     ).get()

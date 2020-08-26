@@ -2285,8 +2285,8 @@ class SeatingTestCase(TestCase):
             self.event.seat_category_mappings.create(
                 layout_category='Stalls', product=self.ticket
             )
-            self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, blocked=False, x=0, y=0)
-            self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, blocked=False, x=1, y=1)
+            self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.ticket, blocked=False, x=0, y=0)
+            self.seat_a2 = self.event.seats.create(seat_number="A2", product=self.ticket, blocked=False, x=1, y=1)
 
     @classscope(attr='organizer')
     def test_free(self):

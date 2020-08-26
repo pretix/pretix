@@ -633,7 +633,7 @@ def seat(event, organizer, item):
     event.seat_category_mappings.create(
         layout_category='Stalls', product=item
     )
-    return event.seats.create(name="A1", product=item, seat_guid="A1")
+    return event.seats.create(seat_number="A1", product=item, seat_guid="A1")
 
 
 @pytest.mark.django_db
@@ -665,7 +665,7 @@ def test_cartpos_create_with_blocked_seat(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The selected seat "A1" is not available.']
+    assert resp.data == ['The selected seat "Seat A1" is not available.']
 
 
 @pytest.mark.django_db
@@ -700,7 +700,7 @@ def test_cartpos_create_with_used_seat(token_client, organizer, event, item, quo
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The selected seat "A1" is not available.']
+    assert resp.data == ['The selected seat "Seat A1" is not available.']
 
 
 @pytest.mark.django_db
