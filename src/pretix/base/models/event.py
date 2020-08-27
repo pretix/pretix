@@ -885,6 +885,7 @@ class Event(EventMixin, LoggedModel):
     def delete_sub_objects(self):
         self.cartposition_set.filter(addon_to__isnull=False).delete()
         self.cartposition_set.all().delete()
+        self.vouchers.all().delete()
         self.items.all().delete()
         self.subevents.all().delete()
 
