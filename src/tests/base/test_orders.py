@@ -91,7 +91,6 @@ def test_expiry_minutes(event):
     assert (order.expires - today).seconds == 30 * 60
 
 
-
 @pytest.mark.django_db
 def test_expiry_last(event):
     today = now()

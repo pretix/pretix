@@ -434,7 +434,7 @@ class Order(LockModel, LoggedModel):
 
     def cancel_allowed(self):
         return (
-                self.status in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED) and self.count_positions
+            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED) and self.count_positions
         )
 
     @cached_property
@@ -570,18 +570,15 @@ class Order(LockModel, LoggedModel):
         while to_refund and unused_payments:
             bigger = sorted([
                 p for p in unused_payments
-                if p.available_amount > to_refund
-                   and p.partial_refund_possible
+                if p.available_amount > to_refund and p.partial_refund_possible
             ], key=lambda p: p.available_amount)
             same = [
                 p for p in unused_payments
-                if p.available_amount == to_refund
-                   and (p.full_refund_possible or p.partial_refund_possible)
+                if p.available_amount == to_refund and (p.full_refund_possible or p.partial_refund_possible)
             ]
             smaller = sorted([
                 p for p in unused_payments
-                if p.available_amount < to_refund
-                   and (p.full_refund_possible or p.partial_refund_possible)
+                if p.available_amount < to_refund and (p.full_refund_possible or p.partial_refund_possible)
             ], key=lambda p: p.available_amount, reverse=True)
             if same:
                 payment = same[0]
@@ -676,8 +673,8 @@ class Order(LockModel, LoggedModel):
     @property
     def is_expired_by_time(self):
         return (
-                self.status == Order.STATUS_PENDING and self.expires < now()
-                and not self.event.settings.get('payment_term_expire_automatically')
+            self.status == Order.STATUS_PENDING and self.expires < now()
+            and not self.event.settings.get('payment_term_expire_automatically')
         )
 
     @property
@@ -701,16 +698,16 @@ class Order(LockModel, LoggedModel):
     @property
     def ticket_download_available(self):
         return self.event.settings.ticket_download and (
-                self.event.settings.ticket_download_date is None
-                or now() > self.ticket_download_date
+            self.event.settings.ticket_download_date is None
+            or now() > self.ticket_download_date
         ) and (
-                       self.status == Order.STATUS_PAID
-                       or (
-                               (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
-                               self.status == Order.STATUS_PENDING and
-                               not self.require_approval
-                       )
-               )
+            self.status == Order.STATUS_PAID
+            or (
+                (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
+                self.status == Order.STATUS_PENDING and
+                not self.require_approval
+            )
+        )
 
     @property
     def payment_term_last(self):
@@ -1181,9 +1178,9 @@ class AbstractPosition(models.Model):
             if parentid not in self.answ:
                 return False
             return (
-                    ('True' in qvals and self.answ[parentid].answer == 'True')
-                    or ('False' in qvals and self.answ[parentid].answer == 'False')
-                    or (any(qval in [o.identifier for o in self.answ[parentid].options.all()] for qval in qvals))
+                ('True' in qvals and self.answ[parentid].answer == 'True')
+                or ('False' in qvals and self.answ[parentid].answer == 'False')
+                or (any(qval in [o.identifier for o in self.answ[parentid].options.all()] for qval in qvals))
             )
 
         self.questions = []
@@ -1493,8 +1490,8 @@ class OrderPayment(models.Model):
             invoices = self.order.invoices.filter(is_cancellation=False).count()
             cancellations = self.order.invoices.filter(is_cancellation=True).count()
             gen_invoice = (
-                    (invoices == 0 and self.order.event.settings.get('invoice_generate') in ('True', 'paid')) or
-                    0 < invoices <= cancellations
+                (invoices == 0 and self.order.event.settings.get('invoice_generate') in ('True', 'paid')) or
+                0 < invoices <= cancellations
             )
             if gen_invoice:
                 invoice = generate_invoice(
@@ -1961,8 +1958,8 @@ class OrderPosition(AbstractPosition):
         if self.item.generate_tickets is not None:
             return self.item.generate_tickets
         return (
-                (self.order.event.settings.ticket_download_addons or not self.addon_to_id) and
-                (self.event.settings.ticket_download_nonadm or self.item.admission)
+            (self.order.event.settings.ticket_download_addons or not self.addon_to_id) and
+            (self.event.settings.ticket_download_nonadm or self.item.admission)
         )
 
     @classmethod
@@ -2241,8 +2238,8 @@ class InvoiceAddress(models.Model):
     @property
     def is_empty(self):
         return (
-                not self.name_cached and not self.company and not self.street and not self.zipcode and not self.city
-                and not self.internal_reference and not self.beneficiary
+            not self.name_cached and not self.company and not self.street and not self.zipcode and not self.city
+            and not self.internal_reference and not self.beneficiary
         )
 
     @property

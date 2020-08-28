@@ -1904,9 +1904,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('family_name', _('Family name'), 1),
         ),
         'concatenation': lambda d: (
-                str(d.get('family_name', '')) +
-                str((', ' if d.get('family_name') and d.get('given_name') else '')) +
-                str(d.get('given_name', ''))
+            str(d.get('family_name', '')) +
+            str((', ' if d.get('family_name') and d.get('given_name') else '')) +
+            str(d.get('given_name', ''))
         ),
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
