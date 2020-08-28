@@ -2,7 +2,7 @@ from contextlib import contextmanager
 
 from django.conf import settings
 from django.utils import translation
-from django.utils.formats import date_format, number_format
+from django.utils.formats import date_format, number_format, time_format
 from django.utils.translation import gettext
 
 from pretix.base.templatetags.money import money_filter
@@ -25,6 +25,17 @@ class LazyDate:
 
     def __str__(self):
         return date_format(self.value, "SHORT_DATE_FORMAT")
+
+
+class LazyTime:
+    def __init__(self, value):
+        self.value = value
+
+    def __format__(self, format_spec):
+        return self.__str__()
+
+    def __str__(self):
+        return time_format(self.value)
 
 
 class LazyCurrencyNumber:

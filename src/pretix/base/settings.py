@@ -454,11 +454,11 @@ DEFAULTS = {
                         "payment methods. This has precedence over the number of days configured above. "),
             required=False,
             validators=[MinValueValidator(0),
-                        MaxValueValidator(1000000)]
+                        MaxValueValidator(1440)]
         ),
         'serializer_kwargs': dict(
             validators=[MinValueValidator(0),
-                        MaxValueValidator(10000)]
+                        MaxValueValidator(1440)]
         )
     },
     'payment_term_last': {
