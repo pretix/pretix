@@ -585,6 +585,7 @@ class CancelSettingsForm(SettingsForm):
 class PaymentSettingsForm(SettingsForm):
     auto_fields = [
         'payment_term_days',
+        'payment_term_minutes',
         'payment_term_last',
         'payment_term_weekdays',
         'payment_term_expire_automatically',

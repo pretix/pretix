@@ -443,6 +443,24 @@ DEFAULTS = {
                         MaxValueValidator(1000000)]
         )
     },
+    'payment_term_minutes': {
+        'default': None,
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_('Payment term in minutes'),
+            help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. Only use this for real-time "
+                        "payment methods."),
+            required=False,
+            validators=[MinValueValidator(0),
+                        MaxValueValidator(1000000)]
+        ),
+        'serializer_kwargs': dict(
+            validators=[MinValueValidator(0),
+                        MaxValueValidator(10000)]
+        )
+    },
     'payment_term_last': {
         'default': None,
         'type': RelativeDateWrapper,
@@ -1886,9 +1904,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('family_name', _('Family name'), 1),
         ),
         'concatenation': lambda d: (
-            str(d.get('family_name', '')) +
-            str((', ' if d.get('family_name') and d.get('given_name') else '')) +
-            str(d.get('given_name', ''))
+                str(d.get('family_name', '')) +
+                str((', ' if d.get('family_name') and d.get('given_name') else '')) +
+                str(d.get('given_name', ''))
         ),
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
@@ -1944,7 +1962,6 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     'MX': (['State', 'Federal District'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
 }
-
 
 settings_hierarkey = Hierarkey(attribute_name='settings')
 
@@ -2015,7 +2032,7 @@ class SettingsSandbox:
     def __delattr__(self, key: str) -> None:
         del self._event.settings[self._convert_key(key)]
 
-    def get(self, key: str, default: Any=None, as_type: type=str):
+    def get(self, key: str, default: Any = None, as_type: type = str):
         return self._event.settings.get(self._convert_key(key), default=default, as_type=as_type)
 
     def set(self, key: str, value: Any):

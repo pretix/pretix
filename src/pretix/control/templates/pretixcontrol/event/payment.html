@@ -36,7 +36,7 @@
                             </td>
                             <td class="text-right flip">
                                 <a href="{% url 'control:event.settings.payment.provider' event=request.event.slug organizer=request.organizer.slug provider=provider.identifier %}"
-                                        class="btn btn-default">
+                                   class="btn btn-default">
                                     <span class="fa fa-cog"></span>
                                     {% trans "Settings" %}
                                 </a>
@@ -48,7 +48,8 @@
                                 {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
                                 {% blocktrans trimmed with plugin_settings_href='href="'|add:plugin_settings_url|add:'"'|safe %}
                                     There are no payment providers available. Please go to the
-                                    <a {{ plugin_settings_href }}>plugin settings</a> and activate one or more payment plugins.
+                                    <a {{ plugin_settings_href }}>plugin settings</a> and activate one or more payment
+                                    plugins.
                                 {% endblocktrans %}
                             </td>
                         </tr>
@@ -60,6 +61,7 @@
                 <legend>{% trans "Deadlines" %}</legend>
                 {% bootstrap_form_errors form layout="control" %}
                 {% bootstrap_field form.payment_term_days layout="control" %}
+                {% bootstrap_field form.payment_term_minutes layout="control" %}
                 {% bootstrap_field form.payment_term_last layout="control" %}
                 {% bootstrap_field form.payment_term_weekdays layout="control" %}
                 {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
