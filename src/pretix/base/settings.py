@@ -451,7 +451,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_('Payment term in minutes'),
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. Only use this for real-time "
-                        "payment methods."),
+                        "payment methods. This has precedence over the number of days configured above. "),
             required=False,
             validators=[MinValueValidator(0),
                         MaxValueValidator(1000000)]
@@ -468,8 +468,8 @@ DEFAULTS = {
         'serializer_class': SerializerRelativeDateField,
         'form_kwargs': dict(
             label=_('Last date of payments'),
-            help_text=_("The last date any payments are accepted. This has precedence over the number of "
-                        "days configured above. If you use the event series feature and an order contains tickets for "
+            help_text=_("The last date any payments are accepted. This has precedence over the terms "
+                        "configured above. If you use the event series feature and an order contains tickets for "
                         "multiple dates, the earliest date will be used."),
         )
     },
@@ -482,7 +482,7 @@ DEFAULTS = {
             label=_('Only end payment terms on weekdays'),
             help_text=_("If this is activated and the payment term of any order ends on a Saturday or Sunday, it will be "
                         "moved to the next Monday instead. This is required in some countries by civil law. This will "
-                        "not effect the last date of payments configured above."),
+                        "not effect the last date of payments or a term by minutes configured above."),
         )
     },
     'payment_term_expire_automatically': {

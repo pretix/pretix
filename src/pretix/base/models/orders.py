@@ -392,13 +392,16 @@ class Order(LockModel, LoggedModel):
     def set_expires(self, now_dt=None, subevents=None):
         now_dt = now_dt or now()
         tz = pytz.timezone(self.event.settings.timezone)
-        exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
-        exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
-        if self.event.settings.get('payment_term_weekdays'):
-            if exp_by_date.weekday() == 5:
-                exp_by_date += timedelta(days=2)
-            elif exp_by_date.weekday() == 6:
-                exp_by_date += timedelta(days=1)
+        if self.event.settings.get('payment_term_minutes', as_type=int) is None:
+            exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
+            exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
+            if self.event.settings.get('payment_term_weekdays'):
+                if exp_by_date.weekday() == 5:
+                    exp_by_date += timedelta(days=2)
+                elif exp_by_date.weekday() == 6:
+                    exp_by_date += timedelta(days=1)
+        else:
+            exp_by_date = now_dt.astimezone(tz) + timedelta(minutes=self.event.settings.get('payment_term_minutes', as_type=int))
 
         self.expires = exp_by_date
 
@@ -431,7 +434,7 @@ class Order(LockModel, LoggedModel):
 
     def cancel_allowed(self):
         return (
-            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED) and self.count_positions
+                self.status in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED) and self.count_positions
         )
 
     @cached_property
@@ -545,7 +548,7 @@ class Order(LockModel, LoggedModel):
             return self.event.settings.cancel_allow_user_paid
         return False
 
-    def propose_auto_refunds(self, amount: Decimal, payments: list=None):
+    def propose_auto_refunds(self, amount: Decimal, payments: list = None):
         # Algorithm to choose which payments are to be refunded to create the least hassle
         payments = payments or self.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED)
         for p in payments:
@@ -568,17 +571,17 @@ class Order(LockModel, LoggedModel):
             bigger = sorted([
                 p for p in unused_payments
                 if p.available_amount > to_refund
-                and p.partial_refund_possible
+                   and p.partial_refund_possible
             ], key=lambda p: p.available_amount)
             same = [
                 p for p in unused_payments
                 if p.available_amount == to_refund
-                and (p.full_refund_possible or p.partial_refund_possible)
+                   and (p.full_refund_possible or p.partial_refund_possible)
             ]
             smaller = sorted([
                 p for p in unused_payments
                 if p.available_amount < to_refund
-                and (p.full_refund_possible or p.partial_refund_possible)
+                   and (p.full_refund_possible or p.partial_refund_possible)
             ], key=lambda p: p.available_amount, reverse=True)
             if same:
                 payment = same[0]
@@ -673,8 +676,8 @@ class Order(LockModel, LoggedModel):
     @property
     def is_expired_by_time(self):
         return (
-            self.status == Order.STATUS_PENDING and self.expires < now()
-            and not self.event.settings.get('payment_term_expire_automatically')
+                self.status == Order.STATUS_PENDING and self.expires < now()
+                and not self.event.settings.get('payment_term_expire_automatically')
         )
 
     @property
@@ -698,16 +701,16 @@ class Order(LockModel, LoggedModel):
     @property
     def ticket_download_available(self):
         return self.event.settings.ticket_download and (
-            self.event.settings.ticket_download_date is None
-            or now() > self.ticket_download_date
+                self.event.settings.ticket_download_date is None
+                or now() > self.ticket_download_date
         ) and (
-            self.status == Order.STATUS_PAID
-            or (
-                (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
-                self.status == Order.STATUS_PENDING and
-                not self.require_approval
-            )
-        )
+                       self.status == Order.STATUS_PAID
+                       or (
+                               (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
+                               self.status == Order.STATUS_PENDING and
+                               not self.require_approval
+                       )
+               )
 
     @property
     def payment_term_last(self):
@@ -754,7 +757,7 @@ class Order(LockModel, LoggedModel):
 
         return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
 
-    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False,
+    def _is_still_available(self, now_dt: datetime = None, count_waitinglist=True, force=False,
                             check_voucher_usage=False) -> Union[bool, str]:
         error_messages = {
             'unavailable': _('The ordered product "{item}" is no longer available.'),
@@ -817,9 +820,9 @@ class Order(LockModel, LoggedModel):
         return True
 
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
-                  context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
-                  user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
-                  auth=None, attach_tickets=False, position: 'OrderPosition'=None, auto_email=True,
+                  context: Dict[str, Any] = None, log_entry_type: str = 'pretix.event.order.email.sent',
+                  user: User = None, headers: dict = None, sender: str = None, invoices: list = None,
+                  auth=None, attach_tickets=False, position: 'OrderPosition' = None, auto_email=True,
                   attach_ical=False):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
@@ -1178,9 +1181,9 @@ class AbstractPosition(models.Model):
             if parentid not in self.answ:
                 return False
             return (
-                ('True' in qvals and self.answ[parentid].answer == 'True')
-                or ('False' in qvals and self.answ[parentid].answer == 'False')
-                or (any(qval in [o.identifier for o in self.answ[parentid].options.all()] for qval in qvals))
+                    ('True' in qvals and self.answ[parentid].answer == 'True')
+                    or ('False' in qvals and self.answ[parentid].answer == 'False')
+                    or (any(qval in [o.identifier for o in self.answ[parentid].options.all()] for qval in qvals))
             )
 
         self.questions = []
@@ -1490,8 +1493,8 @@ class OrderPayment(models.Model):
             invoices = self.order.invoices.filter(is_cancellation=False).count()
             cancellations = self.order.invoices.filter(is_cancellation=True).count()
             gen_invoice = (
-                (invoices == 0 and self.order.event.settings.get('invoice_generate') in ('True', 'paid')) or
-                0 < invoices <= cancellations
+                    (invoices == 0 and self.order.event.settings.get('invoice_generate') in ('True', 'paid')) or
+                    0 < invoices <= cancellations
             )
             if gen_invoice:
                 invoice = generate_invoice(
@@ -1958,8 +1961,8 @@ class OrderPosition(AbstractPosition):
         if self.item.generate_tickets is not None:
             return self.item.generate_tickets
         return (
-            (self.order.event.settings.ticket_download_addons or not self.addon_to_id) and
-            (self.event.settings.ticket_download_nonadm or self.item.admission)
+                (self.order.event.settings.ticket_download_addons or not self.addon_to_id) and
+                (self.event.settings.ticket_download_nonadm or self.item.admission)
         )
 
     @classmethod
@@ -2057,8 +2060,8 @@ class OrderPosition(AbstractPosition):
         return self.order.event
 
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
-                  context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
-                  user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
+                  context: Dict[str, Any] = None, log_entry_type: str = 'pretix.event.order.email.sent',
+                  user: User = None, headers: dict = None, sender: str = None, invoices: list = None,
                   auth=None, attach_tickets=False):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
@@ -2238,8 +2241,8 @@ class InvoiceAddress(models.Model):
     @property
     def is_empty(self):
         return (
-            not self.name_cached and not self.company and not self.street and not self.zipcode and not self.city
-            and not self.internal_reference and not self.beneficiary
+                not self.name_cached and not self.company and not self.street and not self.zipcode and not self.city
+                and not self.internal_reference and not self.beneficiary
         )
 
     @property
