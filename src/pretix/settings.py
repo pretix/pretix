@@ -726,3 +726,7 @@ OAUTH2_PROVIDER = {
     'ROTATE_REFRESH_TOKEN': False,
 
 }
+
+COUNTRIES_OVERRIDE = {
+    'XK': _('Kosovo'),
+}
