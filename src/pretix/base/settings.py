@@ -453,6 +453,12 @@ DEFAULTS = {
         'serializer_class': serializers.IntegerField,
         'form_kwargs': dict(
             label=_('Payment term in days'),
+            widget=forms.NumberInput(
+                attrs={
+                    'data-display-dependency': '#id_payment_term_mode_0',
+                    'data-required-if': '#id_payment_term_mode_0'
+                },
+            ),
             help_text=_("The number of days after placing an order the user has to pay to preserve their reservation. If "
                         "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
                         "payment methods, we recommend still setting two or three days to allow people to retry failed "
@@ -465,6 +471,24 @@ DEFAULTS = {
                         MaxValueValidator(1000000)]
         )
     },
+    'payment_term_weekdays': {
+        'default': 'True',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Only end payment terms on weekdays'),
+            help_text=_("If this is activated and the payment term of any order ends on a Saturday or Sunday, it will be "
+                        "moved to the next Monday instead. This is required in some countries by civil law. This will "
+                        "not effect the last date of payments or a term by minutes configured above."),
+            widget=forms.CheckboxInput(
+                attrs={
+                    'data-display-dependency': '#id_payment_term_mode_0',
+                    'data-required-if': '#id_payment_term_mode_0'
+                },
+            ),
+        )
+    },
     'payment_term_minutes': {
         'default': '30',
         'type': int,
@@ -475,7 +499,13 @@ DEFAULTS = {
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. Only use this for real-time "
                         "payment methods."),
             validators=[MinValueValidator(0),
-                        MaxValueValidator(1440)]
+                        MaxValueValidator(1440)],
+            widget=forms.NumberInput(
+                attrs={
+                    'data-display-dependency': '#id_payment_term_mode_1',
+                    'data-required-if': '#id_payment_term_mode_1'
+                },
+            ),
         ),
         'serializer_kwargs': dict(
             validators=[MinValueValidator(0),
@@ -492,18 +522,6 @@ DEFAULTS = {
             help_text=_("The last date any payments are accepted. This has precedence over the terms "
                         "configured above. If you use the event series feature and an order contains tickets for "
                         "multiple dates, the earliest date will be used."),
-        )
-    },
-    'payment_term_weekdays': {
-        'default': 'True',
-        'type': bool,
-        'form_class': forms.BooleanField,
-        'serializer_class': serializers.BooleanField,
-        'form_kwargs': dict(
-            label=_('Only end payment terms on weekdays'),
-            help_text=_("If this is activated and the payment term of any order ends on a Saturday or Sunday, it will be "
-                        "moved to the next Monday instead. This is required in some countries by civil law. This will "
-                        "not effect the last date of payments or a term by minutes configured above."),
         )
     },
     'payment_term_expire_automatically': {

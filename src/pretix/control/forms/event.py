@@ -603,13 +603,13 @@ class PaymentSettingsForm(SettingsForm):
 
     def clean_payment_term_days(self):
         value = self.cleaned_data.get('payment_term_days')
-        if self.cleaned_data.get('payment_term_mode') == 'days' and not value:
+        if self.cleaned_data.get('payment_term_mode') == 'days' and value is None:
             raise ValidationError(_("This field is required."))
         return value
 
     def clean_payment_term_minutes(self):
         value = self.cleaned_data.get('payment_term_minutes')
-        if self.cleaned_data.get('payment_term_mode') == 'minutes' and not value:
+        if self.cleaned_data.get('payment_term_mode') == 'minutes' and value is None:
             raise ValidationError(_("This field is required."))
         return value
 

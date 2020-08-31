@@ -61,13 +61,9 @@
                 <legend>{% trans "Deadlines" %}</legend>
                 {% bootstrap_form_errors form layout="control" %}
                 {% bootstrap_field form.payment_term_mode layout="control" %}
-                <div data-display-dependency="#{{ form.payment_term_mode.0.id_for_label }}">
-                    {% bootstrap_field form.payment_term_days layout="horizontal" %}
-                    {% bootstrap_field form.payment_term_weekdays layout="control" %}
-                </div>
-                <div data-display-dependency="#{{ form.payment_term_mode.1.id_for_label }}">
-                    {% bootstrap_field form.payment_term_minutes layout="horizontal" %}
-                </div>
+                {% bootstrap_field form.payment_term_days layout="control" %}
+                {% bootstrap_field form.payment_term_weekdays layout="control" %}
+                {% bootstrap_field form.payment_term_minutes layout="control" %}
                 {% bootstrap_field form.payment_term_last layout="control" %}
                 {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
                 {% bootstrap_field form.payment_term_accept_late layout="control" %}
