@@ -457,7 +457,6 @@ DEFAULTS = {
                         "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
                         "payment methods, we recommend still setting two or three days to allow people to retry failed "
                         "payments."),
-            required=True,
             validators=[MinValueValidator(0),
                         MaxValueValidator(1000000)]
         ),
@@ -475,7 +474,6 @@ DEFAULTS = {
             label=_('Payment term in minutes'),
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. Only use this for real-time "
                         "payment methods."),
-            required=True,
             validators=[MinValueValidator(0),
                         MaxValueValidator(1440)]
         ),

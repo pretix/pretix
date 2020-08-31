@@ -601,6 +601,18 @@ class PaymentSettingsForm(SettingsForm):
                     "will set the tax rate and reverse charge rules, other settings of the tax rule are ignored.")
     )
 
+    def clean_payment_term_days(self):
+        value = self.cleaned_data.get('payment_term_days')
+        if self.cleaned_data.get('payment_term_mode') == 'days' and not value:
+            raise ValidationError(_("This field is required."))
+        return value
+
+    def clean_payment_term_minutes(self):
+        value = self.cleaned_data.get('payment_term_minutes')
+        if self.cleaned_data.get('payment_term_mode') == 'minutes' and not value:
+            raise ValidationError(_("This field is required."))
+        return value
+
     def clean(self):
         data = super().clean()
         settings_dict = self.obj.settings.freeze()
