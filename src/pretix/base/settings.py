@@ -423,6 +423,29 @@ DEFAULTS = {
                         "if you want.")
         )
     },
+    'payment_term_mode': {
+        'default': 'days',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('days', _("after days")),
+                ('minutes', _("after minutes"))
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Expire orders"),
+            widget=forms.RadioSelect,
+            required=True,
+            choices=(
+                ('days', _("after days")),
+                ('minutes', _("after minutes"))
+            ),
+            help_text=_("If using days, the order will expire at the end of the last day. "
+                        "Using minutes is more exact, but should only be used for real-time payment methods.")
+        )
+    },
     'payment_term_days': {
         'default': '14',
         'type': int,
@@ -444,7 +467,7 @@ DEFAULTS = {
         )
     },
     'payment_term_minutes': {
-        'default': None,
+        'default': 30,
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
@@ -452,7 +475,7 @@ DEFAULTS = {
             label=_('Payment term in minutes'),
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. Only use this for real-time "
                         "payment methods. This has precedence over the number of days configured above. "),
-            required=False,
+            required=True,
             validators=[MinValueValidator(0),
                         MaxValueValidator(1440)]
         ),
