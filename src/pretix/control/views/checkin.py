@@ -19,6 +19,7 @@ from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import CheckInFilterForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
+from pretix.helpers.models import modelcopy
 
 
 class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
@@ -141,7 +142,9 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
             for op in positions:
                 if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
                     t = Checkin.TYPE_EXIT if request.POST.get('checkout') == 'true' else Checkin.TYPE_ENTRY
-                    if self.list.allow_multiple_entries or t != Checkin.TYPE_ENTRY:
+
+                    lci = op.checkins.filter(list=self.list).first()
+                    if self.list.allow_multiple_entries or t != Checkin.TYPE_ENTRY or (lci and lci.type != Checkin.TYPE_ENTRY):
                         ci = Checkin.objects.create(position=op, list=self.list, datetime=now(), type=t)
                         created = True
                     else:
@@ -219,6 +222,25 @@ class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
         r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
         return r
 
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return self.request.event.checkin_lists.get(pk=self.request.GET.get("copy_from"))
+            except CheckinList.DoesNotExist:
+                pass
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+        else:
+            kwargs['instance'] = CheckinList(event=self.request.event)
+        return kwargs
+
     def get_success_url(self) -> str:
         return reverse('control:event.orders.checkinlists', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -271,7 +293,7 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        return reverse('control:event.orders.checkinlists.show', kwargs={
+        return reverse('control:event.orders.checkinlists.edit', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
             'list': self.object.pk

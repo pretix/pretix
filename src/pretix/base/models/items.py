@@ -118,7 +118,7 @@ class SubEventItem(models.Model):
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     item = models.ForeignKey('Item', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
-    disabled = models.BooleanField(default=False)
+    disabled = models.BooleanField(default=False, verbose_name=_('Disable product for this date'))
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

@@ -1,5 +1,6 @@
 import datetime
 import sys
+import time
 from datetime import date, timedelta
 from decimal import Decimal
 
@@ -2284,8 +2285,8 @@ class SeatingTestCase(TestCase):
             self.event.seat_category_mappings.create(
                 layout_category='Stalls', product=self.ticket
             )
-            self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, blocked=False, x=0, y=0)
-            self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, blocked=False, x=1, y=1)
+            self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.ticket, blocked=False, x=0, y=0)
+            self.seat_a2 = self.event.seats.create(seat_number="A2", product=self.ticket, blocked=False, x=1, y=1)
 
     @classscope(attr='organizer')
     def test_free(self):
@@ -2566,3 +2567,38 @@ def test_question_answer_validation_multiple_choice():
             assert q.clean_answer([o1.pk, o3.pk + 1000]) == [o1]
         with pytest.raises(ValidationError):
             assert q.clean_answer([o1.pk, 'FOO']) == [o1]
+
+
+@pytest.mark.django_db
+def test_subevent_date_updates_order_date():
+    # When the date of a subevent changes, all orders need to get a bumped modification date to hold
+    # a required invariant of the libpretixsync synchronization approach.
+    organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+    with scope(organizer=organizer):
+        event = Event.objects.create(
+            organizer=organizer, name='Dummy', slug='dummy',
+            date_from=now(), date_to=now() - timedelta(hours=1), has_subevents=True
+        )
+        item1 = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True)
+        se1 = event.subevents.create(date_from=now(), name="SE 1")
+        se2 = event.subevents.create(date_from=now(), name="SE 2")
+
+        order1 = Order.objects.create(event=event, status=Order.STATUS_PAID, expires=now() + timedelta(days=3), total=6)
+        OrderPosition.objects.create(order=order1, item=item1, subevent=se1, price=2)
+        order2 = Order.objects.create(event=event, status=Order.STATUS_PAID, expires=now() + timedelta(days=3), total=6)
+        OrderPosition.objects.create(order=order2, item=item1, subevent=se2, price=2)
+
+        o1lm = order1.last_modified
+        o2lm = order2.last_modified
+
+        time.sleep(1)
+        se1.date_from += timedelta(days=2)
+        se1.save()
+        se2.name = "foo"
+        se2.save()
+
+        order1.refresh_from_db()
+        order2.refresh_from_db()
+
+        assert order1.last_modified > o1lm
+        assert order2.last_modified == o2lm

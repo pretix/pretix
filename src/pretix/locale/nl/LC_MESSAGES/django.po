@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-20 11:52+0000\n"
+"POT-Creation-Date: 2020-08-25 09:54+0000\n"
 "PO-Revision-Date: 2020-08-18 03:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
@@ -18,14 +18,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.10.3\n"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:963
+#: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:98
 #: pretix/control/views/dashboards.py:479
 msgid "Shop disabled"
 msgstr "Winkel uitgeschakeld"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:965
+#: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:445 pretix/control/forms/filter.py:665
 #: pretix/control/templates/pretixcontrol/events/index.html:146
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:100
@@ -33,7 +33,7 @@ msgstr "Winkel uitgeschakeld"
 msgid "Presale over"
 msgstr "Voorverkoop afgelopen"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:967
+#: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:444 pretix/control/forms/filter.py:664
 #: pretix/control/templates/pretixcontrol/events/index.html:148
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:102
@@ -41,7 +41,7 @@ msgstr "Voorverkoop afgelopen"
 msgid "Presale not started"
 msgstr "Voorverkoop nog niet begonnen"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:969
+#: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:150
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:104
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
@@ -88,18 +88,18 @@ msgstr "Alle evenementen (inclusief nieuw gemaakte)"
 msgid "Limit to events"
 msgstr "Beperk tot evenementen"
 
-#: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:933
+#: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:941
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "Het product \"{}\" is niet toegewezen aan een quotum."
 
-#: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:945
+#: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:953
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
 "Er is niet genoeg capaciteit beschikbaar op quotum \"{}\" om deze opdracht "
 "uit te voeren."
 
-#: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:905
+#: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:913
 #: pretix/base/services/orders.py:1160
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
@@ -194,7 +194,7 @@ msgstr "Circulaire afhankelijkheid tussen vragen gedetecteerd."
 msgid "This type of question cannot be asked during check-in."
 msgstr "Deze soort vraag kan niet bij het inchecken worden gesteld."
 
-#: pretix/api/serializers/order.py:918 pretix/api/serializers/order.py:925
+#: pretix/api/serializers/order.py:926 pretix/api/serializers/order.py:933
 msgid "The product \"{}\" is not available on this date."
 msgstr "Het product \"{}\" is niet beschikbaar op deze datum."
 
@@ -229,17 +229,17 @@ msgid ""
 msgstr ""
 "De applicatie \"{application_name}\" is toegang gegeven tot uw account."
 
-#: pretix/api/views/order.py:423 pretix/control/views/orders.py:1099
+#: pretix/api/views/order.py:438 pretix/control/views/orders.py:1099
 #: pretix/presale/views/order.py:645 pretix/presale/views/order.py:689
 msgid "You cannot generate an invoice for this order."
 msgstr "U kunt geen factuur genereren voor deze bestelling."
 
-#: pretix/api/views/order.py:428 pretix/control/views/orders.py:1101
+#: pretix/api/views/order.py:443 pretix/control/views/orders.py:1101
 #: pretix/presale/views/order.py:647 pretix/presale/views/order.py:691
 msgid "An invoice for this order already exists."
 msgstr "Er bestaat al een factuur voor deze bestelling."
 
-#: pretix/api/views/order.py:454 pretix/control/views/orders.py:1227
+#: pretix/api/views/order.py:469 pretix/control/views/orders.py:1227
 #: pretix/control/views/users.py:97
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
@@ -3182,12 +3182,12 @@ msgstr "Uw lay-outbestand is geen geldig JSON-bestand."
 msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgstr "Uw lay-outbestand is geen geldige stoelplattegrond. Foutmelding: {}"
 
-#: pretix/base/models/seating.py:152
+#: pretix/base/models/seating.py:154
 #, python-brace-format
 msgid "Row {number}"
 msgstr "Rij {number}"
 
-#: pretix/base/models/seating.py:157
+#: pretix/base/models/seating.py:159
 #, python-brace-format
 msgid "Seat {number}"
 msgstr "Stoel {number}"
@@ -5143,7 +5143,7 @@ msgstr ""
 "Er is iets misgegaan toen we het geld naar u over probeerden te maken. Neem "
 "contact op met de organisator van het evenement voor meer informatie."
 
-#: pretix/base/services/seating.py:35 pretix/base/services/seating.py:94
+#: pretix/base/services/seating.py:35 pretix/base/services/seating.py:92
 #, python-format
 msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
@@ -5152,7 +5152,7 @@ msgstr ""
 "U kunt de plattegrond niet veranderen, omdat stoel \"%s\" niet aanwezig is "
 "in de nieuwe plattegrond, en deze stoel al is verkocht."
 
-#: pretix/base/services/seating.py:97
+#: pretix/base/services/seating.py:95
 #, python-format
 msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
@@ -11674,7 +11674,7 @@ msgid "Installed plugins"
 msgstr "Geïnstalleerde plugins"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:10
-#: pretix/control/views/checkin.py:264 pretix/control/views/event.py:184
+#: pretix/control/views/checkin.py:266 pretix/control/views/event.py:184
 #: pretix/control/views/event.py:338 pretix/control/views/event.py:418
 #: pretix/control/views/event.py:457 pretix/control/views/event.py:615
 #: pretix/control/views/event.py:806 pretix/control/views/event.py:1156
@@ -16188,15 +16188,15 @@ msgstr "U heeft geen toestemming om deze actie uit te voeren."
 msgid "The selected check-ins have been reverted."
 msgstr "De gekozen check-ins zijn teruggedraaid."
 
-#: pretix/control/views/checkin.py:167
+#: pretix/control/views/checkin.py:169
 msgid "The selected tickets have been marked as checked in."
 msgstr "De geselecteerde tickets zijn aangemerkt als ingecheckt."
 
-#: pretix/control/views/checkin.py:231
+#: pretix/control/views/checkin.py:233
 msgid "The new check-in list has been created."
 msgstr "De nieuwe inchecklijst is aangemaakt."
 
-#: pretix/control/views/checkin.py:238 pretix/control/views/checkin.py:281
+#: pretix/control/views/checkin.py:240 pretix/control/views/checkin.py:283
 #: pretix/control/views/event.py:213 pretix/control/views/event.py:421
 #: pretix/control/views/event.py:460 pretix/control/views/event.py:618
 #: pretix/control/views/event.py:775 pretix/control/views/event.py:1115
@@ -16211,11 +16211,11 @@ msgstr "De nieuwe inchecklijst is aangemaakt."
 msgid "We could not save your changes. See below for details."
 msgstr "We konden uw wijzigingen niet opslaan. Zie hieronder voor details."
 
-#: pretix/control/views/checkin.py:260 pretix/control/views/checkin.py:297
+#: pretix/control/views/checkin.py:262 pretix/control/views/checkin.py:299
 msgid "The requested list does not exist."
 msgstr "De gevraagde lijst bestaat niet."
 
-#: pretix/control/views/checkin.py:306
+#: pretix/control/views/checkin.py:308
 msgid "The selected list has been deleted."
 msgstr "De gekozen lijst is verwijderd."
 
@@ -17891,7 +17891,7 @@ msgstr ""
 "in het MT940-formaat."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:28
-#: pretix/plugins/banktransfer/views.py:445
+#: pretix/plugins/banktransfer/views.py:446
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
 msgstr ""
@@ -18074,11 +18074,11 @@ msgstr "Onbekende bestelcode"
 msgid "All unresolved transactions have been discarded."
 msgstr "Alle niet-verwerkte transacties zijn verwijderd."
 
-#: pretix/plugins/banktransfer/views.py:327
+#: pretix/plugins/banktransfer/views.py:328
 msgid "You must choose a file to import."
 msgstr "U moet een bestand kiezen om te importeren."
 
-#: pretix/plugins/banktransfer/views.py:331
+#: pretix/plugins/banktransfer/views.py:332
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
@@ -18086,12 +18086,12 @@ msgstr ""
 "We konden het type bestand van deze import niet bepalen. Neem contact op met "
 "ondersteuning voor hulp."
 
-#: pretix/plugins/banktransfer/views.py:344
-#: pretix/plugins/banktransfer/views.py:388
+#: pretix/plugins/banktransfer/views.py:345
+#: pretix/plugins/banktransfer/views.py:389
 msgid "We were unable to process your input."
 msgstr "We konden uw invoer niet verwerken."
 
-#: pretix/plugins/banktransfer/views.py:353
+#: pretix/plugins/banktransfer/views.py:354
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
@@ -18099,7 +18099,7 @@ msgstr ""
 "We konden uw invoer helaas niet verwerken. Neem contact op met ondersteuning "
 "voor hulp."
 
-#: pretix/plugins/banktransfer/views.py:358
+#: pretix/plugins/banktransfer/views.py:359
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
@@ -18107,15 +18107,15 @@ msgstr ""
 "Er konden geen transacties worden gevonden in dit bestand. Neem contact op "
 "met ondersteuning voor hulp."
 
-#: pretix/plugins/banktransfer/views.py:378
+#: pretix/plugins/banktransfer/views.py:379
 msgid "Invalid input data."
 msgstr "Ongeldige invoergegevens."
 
-#: pretix/plugins/banktransfer/views.py:382
+#: pretix/plugins/banktransfer/views.py:383
 msgid "You need to select the column containing the payment reference."
 msgstr "U moet de kolom selecteren die het betalingskenmerk bevat."
 
-#: pretix/plugins/banktransfer/views.py:502
+#: pretix/plugins/banktransfer/views.py:503
 msgid ""
 "Please perform per-event bank imports as this organizer has events with "
 "multiple currencies."
@@ -21215,22 +21215,22 @@ msgid "The presale for this event is over or has not yet started."
 msgstr ""
 "De voorverkoop voor dit evenement is afgelopen of is nog niet begonnen."
 
-#: pretix/presale/views/event.py:528
+#: pretix/presale/views/event.py:538
 msgid "Unknown event code or not authorized to access this event."
 msgstr "Onbekende evenementcode of niet bevoegd om dit evenement te bekijken."
 
-#: pretix/presale/views/event.py:535
+#: pretix/presale/views/event.py:545
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "Geen datum geselecteerd."
 
-#: pretix/presale/views/event.py:538
+#: pretix/presale/views/event.py:548
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "Onbekende datum geselecteerd."
 
-#: pretix/presale/views/event.py:561 pretix/presale/views/event.py:569
-#: pretix/presale/views/event.py:572
+#: pretix/presale/views/event.py:571 pretix/presale/views/event.py:579
+#: pretix/presale/views/event.py:582
 msgid "Please go back and try again."
 msgstr "Ga terug en probeer het opnieuw."
 

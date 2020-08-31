@@ -758,7 +758,7 @@ def test_order_extend_expired_seat_free(client, env):
         o.status = Order.STATUS_EXPIRED
         o.save()
         generate_cancellation(generate_invoice(o))
-        seat_a1 = env[0].seats.create(name="A1", product=env[3], seat_guid="A1")
+        seat_a1 = env[0].seats.create(seat_number="A1", product=env[3], seat_guid="A1")
         p = o.positions.first()
         p.seat = seat_a1
         p.save()
@@ -786,7 +786,7 @@ def test_order_extend_expired_seat_blocked(client, env):
         o.status = Order.STATUS_EXPIRED
         olddate = o.expires
         o.save()
-        seat_a1 = env[0].seats.create(name="A1", product=env[3], seat_guid="A1", blocked=True)
+        seat_a1 = env[0].seats.create(seat_number="A1", product=env[3], seat_guid="A1", blocked=True)
         p = o.positions.first()
         p.seat = seat_a1
         p.save()
@@ -813,7 +813,7 @@ def test_order_extend_expired_seat_taken(client, env):
         o.status = Order.STATUS_EXPIRED
         olddate = o.expires
         o.save()
-        seat_a1 = env[0].seats.create(name="A1", product=env[3], seat_guid="A1")
+        seat_a1 = env[0].seats.create(seat_number="A1", product=env[3], seat_guid="A1")
         p = o.positions.first()
         p.seat = seat_a1
         p.save()
@@ -1043,7 +1043,7 @@ def test_order_mark_paid_expired_seat_taken(client, env):
         o.status = Order.STATUS_EXPIRED
         olddate = o.expires
         o.save()
-        seat_a1 = env[0].seats.create(name="A1", product=env[3], seat_guid="A1")
+        seat_a1 = env[0].seats.create(seat_number="A1", product=env[3], seat_guid="A1")
         p = o.positions.first()
         p.seat = seat_a1
         p.save()

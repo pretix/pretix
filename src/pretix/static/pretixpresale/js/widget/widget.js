@@ -186,22 +186,22 @@ var widget_id = makeid(16);
 /* Vue Components */
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
-        + '<div class="pretix-widget-availability-unavailable" v-if="item.require_voucher">'
+        + '<div class="pretix-widget-availability-unavailable" v-if="require_voucher">'
         + '<small>' + strings.voucher_required + '</small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
-        + '       v-if="!item.require_voucher && avail[0] < 100 && avail[0] > 10">'
+        + '       v-if="!require_voucher && avail[0] < 100 && avail[0] > 10">'
         + strings.reserved
         + '</div>'
         + '<div class="pretix-widget-availability-gone" '
-        + '       v-if="!item.require_voucher && avail[0] <= 10">'
+        + '       v-if="!require_voucher && avail[0] <= 10">'
         + strings.sold_out
         + '</div>'
         + '<div class="pretix-widget-waiting-list-link"'
         + '     v-if="waiting_list_show">'
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
-        + '<div class="pretix-widget-availability-available" v-if="!item.require_voucher && avail[0] === 100">'
+        + '<div class="pretix-widget-availability-available" v-if="!require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
         + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name">'
         + '</label>'
@@ -224,6 +224,9 @@ Vue.component('availbox', {
         this.$root.$emit('amounts_changed')
     },
     computed: {
+        require_voucher: function () {
+            return this.item.require_voucher && !this.$root.voucher_code
+        },
         amount_selected: {
             get: function () {
                 return this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected

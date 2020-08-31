@@ -3220,9 +3220,9 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         self.event.seat_category_mappings.create(
             layout_category='Stalls', product=self.ticket
         )
-        self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, seat_guid="A1")
-        self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, seat_guid="A2")
-        self.seat_a3 = self.event.seats.create(name="A3", product=self.ticket, seat_guid="A3")
+        self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.ticket, seat_guid="A1")
+        self.seat_a2 = self.event.seats.create(seat_number="A2", product=self.ticket, seat_guid="A2")
+        self.seat_a3 = self.event.seats.create(seat_number="A3", product=self.ticket, seat_guid="A3")
         self.cp1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1

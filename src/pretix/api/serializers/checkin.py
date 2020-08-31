@@ -17,6 +17,17 @@ class CheckinListSerializer(I18nAwareModelSerializer):
                   'include_pending', 'auto_checkin_sales_channels', 'allow_multiple_entries', 'allow_entry_after_exit',
                   'rules')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for exclude_field in self.context['request'].query_params.getlist('exclude'):
+            p = exclude_field.split('.')
+            if p[0] in self.fields:
+                if len(p) == 1:
+                    del self.fields[p[0]]
+                elif len(p) == 2:
+                    self.fields[p[0]].child.fields.pop(p[1])
+
     def validate(self, data):
         data = super().validate(data)
         event = self.context['event']

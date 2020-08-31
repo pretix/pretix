@@ -796,9 +796,9 @@ class OrderChangeManagerTests(TestCase):
                 layout_category='Stalls', product=self.stalls
             )
             self.quota.items.add(self.stalls)
-            self.seat_a1 = self.event.seats.create(name="A1", product=self.stalls, seat_guid="A1")
-            self.seat_a2 = self.event.seats.create(name="A2", product=self.stalls, seat_guid="A2")
-            self.seat_a3 = self.event.seats.create(name="A3", product=self.stalls, seat_guid="A3")
+            self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.stalls, seat_guid="A1")
+            self.seat_a2 = self.event.seats.create(seat_number="A2", product=self.stalls, seat_guid="A2")
+            self.seat_a3 = self.event.seats.create(seat_number="A3", product=self.stalls, seat_guid="A3")
 
     def _enable_reverse_charge(self):
         self.tr7.eu_reverse_charge = True
@@ -2697,7 +2697,7 @@ class OrderReactivateTest(TestCase):
             self.quota = self.event.quotas.create(name='Test', size=None)
             self.quota.items.add(self.stalls)
             self.quota.items.add(self.ticket)
-            self.seat_a1 = self.event.seats.create(name="A1", product=self.stalls, seat_guid="A1")
+            self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.stalls, seat_guid="A1")
             generate_invoice(self.order)
             djmail.outbox = []
 

@@ -885,6 +885,7 @@ class Event(EventMixin, LoggedModel):
     def delete_sub_objects(self):
         self.cartposition_set.filter(addon_to__isnull=False).delete()
         self.cartposition_set.all().delete()
+        self.vouchers.all().delete()
         self.items.all().delete()
         self.subevents.all().delete()
 
@@ -1113,11 +1114,27 @@ class SubEvent(EventMixin, LoggedModel):
         if self.event and clear_cache:
             self.event.cache.clear()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_dates = (self.date_from, self.date_to)
+
     def save(self, *args, **kwargs):
+        from .orders import Order
+
         clear_cache = kwargs.pop('clear_cache', False)
         super().save(*args, **kwargs)
         if self.event and clear_cache:
             self.event.cache.clear()
+
+        if (self.date_from, self.date_to) != self.__original_dates:
+            """
+            This is required to guarantee a synchronization invariant of our scanning apps.
+            Our syncing apps throw away order records of subevents more than X days ago, since
+            they are not interesting for ticket scanning and pose a performance hazard. However,
+            the app needs to know when a subevent is moved to a date in the future, since that
+            might require it to re-download and re-store the orders.
+            """
+            Order.objects.filter(all_positions__subevent=self).update(last_modified=now())
 
     @staticmethod
     def clean_items(event, items):

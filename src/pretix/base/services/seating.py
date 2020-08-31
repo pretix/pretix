@@ -60,7 +60,6 @@ def generate_seats(event, subevent, plan, mapping):
                 seat = current_seats.pop(ss.guid)
                 updated = any([
                     update(seat, 'product', p),
-                    update(seat, 'name', ss.name),
                     update(seat, 'row_name', ss.row),
                     update(seat, 'seat_number', ss.number),
                     update(seat, 'zone_name', ss.zone),
@@ -77,7 +76,6 @@ def generate_seats(event, subevent, plan, mapping):
                     event=event,
                     subevent=subevent,
                     seat_guid=ss.guid,
-                    name=ss.name,
                     row_name=ss.row,
                     seat_number=ss.number,
                     zone_name=ss.zone,

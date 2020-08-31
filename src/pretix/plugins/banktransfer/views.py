@@ -320,6 +320,7 @@ class ImportView(ListView):
         elif 'file' in self.request.FILES and (
             '.txt' in self.request.FILES.get('file').name.lower()
             or '.sta' in self.request.FILES.get('file').name.lower()
+            or '.swi' in self.request.FILES.get('file').name.lower()  # Rabobank's MT940 Structured
         ):
             return self.process_mt940()
 

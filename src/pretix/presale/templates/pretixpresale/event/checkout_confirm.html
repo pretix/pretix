@@ -109,6 +109,10 @@
                                     <dt>{% trans "VAT ID" %}</dt>
                                     <dd>{{ addr.vat_id }}</dd>
                                 {% endif %}
+                                {% if addr.beneficiary %}
+                                    <dt>{% trans "Beneficiary" %}</dt>
+                                    <dd>{{ addr.beneficiary|linebreaksbr }}</dd>
+                                {% endif %}
                                 {% if request.event.settings.invoice_address_custom_field and addr.custom_field %}
                                     <dt>{{ request.event.settings.invoice_address_custom_field }}</dt>
                                     <dd>{{ addr.custom_field }}</dd>

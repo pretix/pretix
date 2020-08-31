@@ -42,7 +42,7 @@ class SeatingPlan(LoggedModel):
     layout = models.TextField(validators=[SeatingPlanLayoutValidator()])
 
     Category = namedtuple('Categrory', 'name')
-    RawSeat = namedtuple('Seat', 'name guid number row category zone sorting_rank row_label seat_label x y')
+    RawSeat = namedtuple('Seat', 'guid number row category zone sorting_rank row_label seat_label x y')
 
     def __str__(self):
         return self.name
@@ -95,7 +95,6 @@ class SeatingPlan(LoggedModel):
                     yield self.RawSeat(
                         number=s['seat_number'],
                         guid=s['seat_guid'],
-                        name='{} {}'.format(r['row_number'], s['seat_number']),  # TODO: Zone? Variable scheme?
                         row=r['row_number'],
                         row_label=row_label,
                         seat_label=seat_label,
@@ -125,7 +124,6 @@ class Seat(models.Model):
     """
     event = models.ForeignKey(Event, related_name='seats', on_delete=models.CASCADE)
     subevent = models.ForeignKey(SubEvent, null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
-    name = models.CharField(max_length=190)
     zone_name = models.CharField(max_length=190, blank=True, default="")
     row_name = models.CharField(max_length=190, blank=True, default="")
     row_label = models.CharField(max_length=190, null=True)
@@ -140,6 +138,10 @@ class Seat(models.Model):
 
     class Meta:
         ordering = ['sorting_rank', 'seat_guid']
+
+    @property
+    def name(self):
+        return str(self)
 
     def __str__(self):
         parts = []
