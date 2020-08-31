@@ -392,7 +392,8 @@ class Order(LockModel, LoggedModel):
     def set_expires(self, now_dt=None, subevents=None):
         now_dt = now_dt or now()
         tz = pytz.timezone(self.event.settings.timezone)
-        if self.event.settings.get('payment_term_minutes', as_type=int) is None:
+        mode = self.event.settings.get('payment_term_mode')
+        if mode == 'days':
             exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
             exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
             if self.event.settings.get('payment_term_weekdays'):
@@ -400,8 +401,10 @@ class Order(LockModel, LoggedModel):
                     exp_by_date += timedelta(days=2)
                 elif exp_by_date.weekday() == 6:
                     exp_by_date += timedelta(days=1)
-        else:
+        elif mode == 'minutes':
             exp_by_date = now_dt.astimezone(tz) + timedelta(minutes=self.event.settings.get('payment_term_minutes', as_type=int))
+        else:
+            raise ValueError("'payment_term_mode' has an invalid value '{}'.".format(mode))
 
         self.expires = exp_by_date
 
@@ -701,13 +704,13 @@ class Order(LockModel, LoggedModel):
             self.event.settings.ticket_download_date is None
             or now() > self.ticket_download_date
         ) and (
-            self.status == Order.STATUS_PAID
-            or (
-                (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
-                self.status == Order.STATUS_PENDING and
-                not self.require_approval
-            )
-        )
+                   self.status == Order.STATUS_PAID
+                   or (
+                       (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
+                       self.status == Order.STATUS_PENDING and
+                       not self.require_approval
+                   )
+               )
 
     @property
     def payment_term_last(self):

@@ -82,6 +82,7 @@ def test_expiry_weekdays(event):
 def test_expiry_minutes(event):
     today = now()
     event.settings.set('payment_term_days', 5)
+    event.settings.set('payment_term_mode', 'minutes')
     event.settings.set('payment_term_minutes', 30)
     event.settings.set('payment_term_weekdays', False)
     order = _create_order(event, email='dummy@example.org', positions=[],

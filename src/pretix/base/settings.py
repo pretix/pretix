@@ -467,7 +467,7 @@ DEFAULTS = {
         )
     },
     'payment_term_minutes': {
-        'default': 30,
+        'default': '30',
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,

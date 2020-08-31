@@ -69,7 +69,7 @@
                     A payment of {{ total }} is still pending for this order.
                 {% endblocktrans %}</strong>
                 <strong>
-                    {% if event.settings.payment_term_minutes is None %}
+                    {% if event.settings.payment_term_mode == "minutes" %}
                         {% blocktrans trimmed with date=order.expires|date:"SHORT_DATE_FORMAT" %}
                             Please complete your payment before {{ date }}.
                         {% endblocktrans %}
