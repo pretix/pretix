@@ -4,7 +4,13 @@
 {% load static %}
 <div class="table-responsive">
     {% csrf_token %}
-    <table class="table table-condensed transaction-list" data-url="{% if request.event %}{% url "plugins:banktransfer:import.action" event=request.event.slug organizer=request.organizer.slug %}{% else %}{% url "plugins:banktransfer:import.action" organizer=request.organizer.slug %}{% endif %}">
+    <table class="table table-condensed transaction-list" data-url="
+
+
+
+
+
+            {% if request.event %}{% url "plugins:banktransfer:import.action" event=request.event.slug organizer=request.organizer.slug %}{% else %}{% url "plugins:banktransfer:import.action" organizer=request.organizer.slug %}{% endif %}">
         <thead>
         <tr>
             <th></th>
@@ -22,11 +28,11 @@
                     {% if trans.order and trans.state == 'invalid' %}
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="accept"
-                                data-toggle="tooltip" title="{% trans "Accept anyway" %}" data-placement="right">
+                                    data-toggle="tooltip" title="{% trans "Accept anyway" %}" data-placement="right">
                                 <span class="fa fa-check"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                    data-toggle="tooltip" title="{% trans "Discard" %}">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
@@ -34,22 +40,23 @@
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <div class="btn-group" role="group">
                             <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
-                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}" data-placement="right">
+                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}"
+                                    data-placement="right">
                                 <span class="fa fa-check"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                    data-toggle="tooltip" title="{% trans "Discard" %}">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
                     {% elif trans.state == 'error' %}
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
-                                data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
+                                    data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
                                 <span class="fa fa-refresh"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                    data-toggle="tooltip" title="{% trans "Discard" %}">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
@@ -57,15 +64,16 @@
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <div class="btn-group" role="group">
                             <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
-                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}" data-placement="right">
+                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}"
+                                    data-placement="right">
                                 <span class="fa fa-check"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
-                                data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
+                                    data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
                                 <span class="fa fa-refresh"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                    data-toggle="tooltip" title="{% trans "Discard" %}">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
@@ -73,7 +81,21 @@
                 </td>
                 <td>{{ trans.date }}</td>
                 <td>
-                    {{ trans.payer }}<br/>
+                    <div class="clearfix">
+                        {% if trans.payer %}
+                            {{ trans.payer }}
+                            <br>
+                        {% endif %}
+                        {% if trans.iban or trans.bic %}
+                            {% if trans.iban %}
+                                <i>{{ trans.iban }}</i>
+                            {% endif %}
+                            {% if trans.bic %}
+                                <i>{{ trans.bic }}</i>
+                            {% endif %}
+                            <br>
+                        {% endif %}
+                    </div>
                     {{ trans.reference }}
                     <div class="comment-box" data-plain="{{ trans.comment }}">
                         <strong>{% trans "Comment:" %}</strong>
@@ -102,7 +124,7 @@
                 <td>
                     {% if trans.order %}
                         <a href="{% url "control:event.order" event=trans.order.event.slug organizer=request.organizer.slug code=trans.order.code %}"
-                            data-toggle="tooltip" title="{{ trans.order.total|money:trans.order.event.currency }}">
+                           data-toggle="tooltip" title="{{ trans.order.total|money:trans.order.event.currency }}">
                             {% if not request.event %}
                                 {{ trans.order.event.slug|upper }}-{{ trans.order.code }}
                             {% else %}

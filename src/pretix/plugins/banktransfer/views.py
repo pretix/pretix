@@ -296,7 +296,7 @@ class ImportView(ListView):
         if 'search' in self.request.GET:
             q = self.request.GET.get('search')
             qs = qs.filter(
-                Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q)
+                Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q)| Q(iban__icontains=q)| Q(bic__icontains=q)
             ).order_by(
                 '-import_job__created'
             )

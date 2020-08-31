@@ -13,62 +13,78 @@
         <div class="flipped-scroll-wrapper clearfix">
             <table class="table table-condensed flipped-scroll-inner">
                 <thead>
-                    <tr>
-                        <th>{% trans "Date" %}</th>
-                        {% for col in rows.0 %}
-                            <th>
-                                <input type="radio" name="date" value="{{ forloop.counter0 }}" />
-                            </th>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <th>{% trans "Amount" %}</th>
-                        {% for col in rows.0 %}
-                            <th>
-                                <input type="radio" name="amount" value="{{ forloop.counter0 }}" required="required" />
-                            </th>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <th>{% trans "Reference" %}</th>
-                        {% for col in rows.0 %}
-                            <th>
-                                <input type="checkbox" name="reference" value="{{ forloop.counter0 }}" />
-                            </th>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <th>{% trans "Payer" %}</th>
-                        {% for col in rows.0 %}
-                            <th>
-                                <input type="checkbox" name="payer" value="{{ forloop.counter0 }}" />
-                            </th>
-                        {% endfor %}
-                    </tr>
+                <tr>
+                    <th>{% trans "Date" %}</th>
+                    {% for col in rows.0 %}
+                        <th>
+                            <input type="radio" name="date" value="{{ forloop.counter0 }}"/>
+                        </th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>{% trans "Amount" %}</th>
+                    {% for col in rows.0 %}
+                        <th>
+                            <input type="radio" name="amount" value="{{ forloop.counter0 }}" required="required"/>
+                        </th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>{% trans "Reference" %}</th>
+                    {% for col in rows.0 %}
+                        <th>
+                            <input type="checkbox" name="reference" value="{{ forloop.counter0 }}"/>
+                        </th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>{% trans "Payer" %}</th>
+                    {% for col in rows.0 %}
+                        <th>
+                            <input type="checkbox" name="payer" value="{{ forloop.counter0 }}"/>
+                        </th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>IBAN</th>
+                    {% for col in rows.0 %}
+                        <th>
+                            <input type="radio" name="iban" value="{{ forloop.counter0 }}"/>
+                        </th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>BIC</th>
+                    {% for col in rows.0 %}
+                        <th>
+                            <input type="radio" name="bic" value="{{ forloop.counter0 }}"/>
+                        </th>
+                    {% endfor %}
+                </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows|slice:":100" %}
-                        {% with forloop.counter0 as rowid %}
-                            <tr>
-                                <td></td>
-                                {% for col in row %}
-                                    <td>{{ col }}</td>
-                                {% endfor %}
-                            </tr>
-                        {% endwith %}
-                    {% endfor %}
-                    {% if rows|length > 100 %}
+                {% for row in rows|slice:":100" %}
+                    {% with forloop.counter0 as rowid %}
                         <tr>
-                            <td colspan="{{ rows.0|length|add:1 }}" class="text-center">
-                                <em>{% trans "More data was uploaded but is not shown here. It will still be processed" %}</em>
-                            </td>
+                            <td></td>
+                            {% for col in row %}
+                                <td>{{ col }}</td>
+                            {% endfor %}
                         </tr>
-                    {% endif %}
+                    {% endwith %}
+                {% endfor %}
+                {% if rows|length > 100 %}
+                    <tr>
+                        <td colspan="{{ rows.0|length|add:1 }}" class="text-center">
+                            <em>{% trans "More data was uploaded but is not shown here. It will still be processed" %}</em>
+                        </td>
+                    </tr>
+                {% endif %}
                 </tbody>
             </table>
         </div>
-        <input type="hidden" name="cols" value="{{ rows.0|length }}" />
-        <input type="hidden" name="rows" value="{{ rows|length }}" />
+        <input type="hidden" name="cols" value="{{ rows.0|length }}"/>
+        <input type="hidden" name="rows" value="{{ rows|length }}"/>
         <textarea class="helper-display-none" name="data">
             {{ json|escape }}
         </textarea>

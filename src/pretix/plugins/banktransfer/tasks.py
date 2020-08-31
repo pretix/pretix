@@ -41,9 +41,9 @@ def notify_incomplete_payment(o: Order):
 
 def cancel_old_payments(order):
     for p in order.payments.filter(
-            state__in=(OrderPayment.PAYMENT_STATE_PENDING,
-                       OrderPayment.PAYMENT_STATE_CREATED),
-            provider='banktransfer',
+        state__in=(OrderPayment.PAYMENT_STATE_PENDING,
+                   OrderPayment.PAYMENT_STATE_CREATED),
+        provider='banktransfer',
     ):
         try:
             with transaction.atomic():
@@ -64,8 +64,8 @@ def cancel_old_payments(order):
 
 
 @transaction.atomic
-def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, organizer: Organizer=None,
-                        slug: str=None):
+def _handle_transaction(trans: BankTransaction, code: str, event: Event = None, organizer: Organizer = None,
+                        slug: str = None):
     if event:
         try:
             trans.order = event.orders.get(code=code)
@@ -150,7 +150,7 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
     trans.save()
 
 
-def _get_unknown_transactions(job: BankImportJob, data: list, event: Event=None, organizer: Organizer=None):
+def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = None, organizer: Organizer = None):
     amount_pattern = re.compile("[^0-9.-]")
     known_checksums = set(t['checksum'] for t in BankTransaction.objects.filter(
         Q(event=event) if event else Q(organizer=organizer)
@@ -176,8 +176,8 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event=None,
         trans = BankTransaction(event=event, organizer=organizer, import_job=job,
                                 payer=row.get('payer', ''),
                                 reference=row['reference'],
-                                amount=amount,
-                                date=row['date'])
+                                amount=amount, date=row['date'],
+                                iban=row['iban'], bic=row['bic'])
         trans.checksum = trans.calculate_checksum()
         if trans.checksum not in known_checksums:
             trans.state = BankTransaction.STATE_UNCHECKED
