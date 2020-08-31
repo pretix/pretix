@@ -430,17 +430,17 @@ DEFAULTS = {
         'serializer_class': serializers.ChoiceField,
         'serializer_kwargs': dict(
             choices=(
-                ('days', _("after days")),
-                ('minutes', _("after minutes"))
+                ('days', _("in days")),
+                ('minutes', _("in minutes"))
             ),
         ),
         'form_kwargs': dict(
-            label=_("Expire orders"),
+            label=_("Set payment term"),
             widget=forms.RadioSelect,
             required=True,
             choices=(
-                ('days', _("after days")),
-                ('minutes', _("after minutes"))
+                ('days', _("in days")),
+                ('minutes', _("in minutes"))
             ),
             help_text=_("If using days, the order will expire at the end of the last day. "
                         "Using minutes is more exact, but should only be used for real-time payment methods.")
@@ -474,7 +474,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_('Payment term in minutes'),
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. Only use this for real-time "
-                        "payment methods. This has precedence over the number of days configured above. "),
+                        "payment methods."),
             required=True,
             validators=[MinValueValidator(0),
                         MaxValueValidator(1440)]
