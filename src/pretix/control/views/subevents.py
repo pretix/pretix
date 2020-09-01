@@ -387,6 +387,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
         if self.is_valid(form):
             r = self.form_valid(form)
             return r
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
         return self.form_invalid(form)
 
     def get_object(self, queryset=None) -> SubEvent:
@@ -800,7 +801,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
         to_save_items = []
         to_save_variations = []
         for f in self.formset.forms:
-            if self.formset._should_delete_form(f):
+            if self.formset._should_delete_form(f) or not f.has_changed():
                 continue
 
             change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
@@ -834,7 +835,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
         to_save_products = []
         for f in self.cl_formset.forms:
-            if self.cl_formset._should_delete_form(f):
+            if self.cl_formset._should_delete_form(f) or not f.has_changed():
                 continue
             change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
             for se in subevents:
@@ -862,7 +863,6 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
         self.request.event.cache.clear()
         messages.success(self.request, pgettext_lazy('subevent', '{} new dates have been created.').format(len(subevents)))
-        return self.get(self.request, *self.args, **self.kwargs)
         return redirect(reverse('control:event.subevents', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -875,4 +875,5 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
         if self.is_valid(form):
             return self.form_valid(form)
 
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
         return self.form_invalid(form)
