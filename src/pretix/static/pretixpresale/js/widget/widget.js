@@ -509,7 +509,7 @@ var shared_methods = {
                 this.resume();
             }
         } else {
-            var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
+            var url = this.$root.formAction + "&locale=" + lang + "&ajax=1";
             this.$root.overlay.frame_loading = true;
 
             this.async_task_interval = 100;
@@ -734,7 +734,7 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-event-details" v-if="($root.events || $root.weeks || $root.days) && $root.date_range">'
         + '{{ $root.date_range }}'
         + '</div>'
-        + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
+        + '<form method="post" :action="$root.formAction" ref="form" :target="$root.formTarget">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
@@ -1241,7 +1241,7 @@ Vue.component('pretix-widget', {
 Vue.component('pretix-button', {
     template: ('<div class="pretix-widget-wrapper">'
         + '<div class="pretix-widget-button-container">'
-        + '<form :method="$root.formMethod" :action="$root.formTarget" ref="form" target="_blank">'
+        + '<form :method="$root.formMethod" :action="$root.formAction" ref="form" :target="$root.formTarget">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="voucher" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
@@ -1416,6 +1416,19 @@ var shared_root_computed = {
     cookieName: function () {
         return "pretix_widget_" + this.target_url.replace(/[^a-zA-Z0-9]+/g, "_");
     },
+    formTarget: function () {
+        var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+        var is_android = true || navigator.platform.toLowerCase().indexOf("android") > -1;
+        if (is_android && is_firefox) {
+            // Opening a POST form in a new browser fails in Firefox. This is supposed to be fixed since FF 76
+            // but for some reason, it is still the case in FF for Android.
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=1629441
+            // https://github.com/pretix/pretix/issues/1040
+            return "_top";
+        } else {
+            return "_blank";
+        }
+    },
     voucherFormTarget: function () {
         var form_target = this.target_url + 'w/' + widget_id + '/redeem?iframe=1&locale=' + lang;
         var cookie = getCookie(this.cookieName);
@@ -1433,7 +1446,7 @@ var shared_root_computed = {
         }
         return 'post';
     },
-    formTarget: function () {
+    formAction: function () {
         if (!this.useIframe && this.is_button && this.items.length === 0) {
             var target = this.target_url;
             if (this.voucher_code) {
