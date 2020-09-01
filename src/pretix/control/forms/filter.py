@@ -143,6 +143,7 @@ class OrderFilterForm(FilterForm):
                 Q(
                     Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
                     | Q(secret__istartswith=u)
+                    | Q(pseudonymization_id__istartswith=u)
                 )
             ).values_list('order_id', flat=True)
             matching_invoice_addresses = InvoiceAddress.objects.filter(
@@ -875,6 +876,7 @@ class CheckInFilterForm(FilterForm):
             qs = qs.filter(
                 Q(order__code__istartswith=u)
                 | Q(secret__istartswith=u)
+                | Q(pseudonymization_id__istartswith=u)
                 | Q(order__email__icontains=u)
                 | Q(attendee_name_cached__icontains=u)
                 | Q(attendee_email__icontains=u)
