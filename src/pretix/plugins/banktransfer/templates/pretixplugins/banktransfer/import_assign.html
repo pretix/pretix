@@ -46,7 +46,15 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    <th>IBAN</th>
+                    <th>
+                        {% trans "IBAN/account number" %}
+                        <label for="id_iban_clear">
+                            <span class="btn btn-default btn-sm fa fa-close"></span>
+                        </label>
+                        <span class="sr-only">
+                            <input id="id_iban_clear" type="radio" name="iban">
+                        </span>
+                    </th>
                     {% for col in rows.0 %}
                         <th>
                             <input type="radio" name="iban" value="{{ forloop.counter0 }}"/>
@@ -54,7 +62,15 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    <th>BIC</th>
+                    <th>
+                        {% trans "BIC/bank sort code" %}
+                        <label for="id_bic_clear">
+                            <span class="btn btn-default btn-sm fa fa-close"></span>
+                        </label>
+                        <span class="sr-only">
+                            <input id="id_bic_clear" type="radio" name="bic">
+                        </span>
+                    </th>
                     {% for col in rows.0 %}
                         <th>
                             <input type="radio" name="bic" value="{{ forloop.counter0 }}"/>

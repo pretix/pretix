@@ -4,6 +4,7 @@ import logging
 from datetime import timedelta
 from decimal import Decimal
 
+from django import forms
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.db.models.functions import Concat
@@ -15,6 +16,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView, ListView, View
 
+from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
@@ -70,6 +72,8 @@ class ActionView(View):
                         'reference': trans.reference,
                         'date': trans.date,
                         'payer': trans.payer,
+                        'iban': trans.iban,
+                        'bic': trans.bic,
                         'trans_id': trans.pk
                     })
                 )
@@ -96,6 +100,8 @@ class ActionView(View):
             'reference': trans.reference,
             'date': trans.date,
             'payer': trans.payer,
+            'iban': trans.iban,
+            'bic': trans.bic,
             'trans_id': trans.pk
         }
         try:
@@ -274,6 +280,33 @@ class JobDetailView(DetailView):
         return ctx
 
 
+class BankTransactionFilterForm(forms.Form):
+    search_text = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': "form-control", "placeholder": _("Search text")}))
+    amount_min = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={'class': "form-control", "placeholder": _("min"), "size": 8}))
+    amount_max = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={'class': "form-control", "placeholder": _("max"), "size": 8}))
+    date_min = forms.DateField(required=False, widget=DatePickerWidget(attrs={"size": 8}))
+    date_max = forms.DateField(required=False, widget=DatePickerWidget(attrs={"size": 8}))
+
+    def is_valid(self):
+        return super().is_valid() and any(value for value in self.cleaned_data.values())
+
+    def filter(self, qs):
+        if not self.is_valid():
+            raise ValueError(_("Filter form is not valid."))
+        if self.cleaned_data.get('search_text'):
+            q = self.cleaned_data['search_text']
+            qs = qs.filter(Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q) | Q(iban__icontains=q) | Q(bic__icontains=q))
+        if self.cleaned_data.get('amount_min') is not None:
+            qs = qs.filter(amount__gte=self.cleaned_data['amount_min'])
+        if self.cleaned_data.get("amount_max") is not None:
+            qs = qs.filter(amount__lte=self.cleaned_data['amount_max'])
+        if self.cleaned_data.get('date_min') is not None:
+            qs = qs.filter(ate_parsed__gte=self.cleaned_data['date_min'])
+        if self.cleaned_data.get('date_max') is not None:
+            qs = qs.filter(date_parsed__lte=self.cleaned_data['date_max'])
+        return qs
+
+
 class ImportView(ListView):
     template_name = 'pretixplugins/banktransfer/import_form.html'
     permission = 'can_change_orders'
@@ -293,15 +326,12 @@ class ImportView(ListView):
             BankTransaction.STATE_INVALID, BankTransaction.STATE_ERROR,
             BankTransaction.STATE_DUPLICATE, BankTransaction.STATE_NOMATCH
         ])
-        if 'search' in self.request.GET:
-            q = self.request.GET.get('search')
-            qs = qs.filter(
-                Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q)| Q(iban__icontains=q)| Q(bic__icontains=q)
-            ).order_by(
-                '-import_job__created'
-            )
 
-        return qs
+        filter_form = BankTransactionFilterForm(self.request.GET or None)
+        if filter_form.is_valid():
+            qs = filter_form.filter(qs)
+
+        return qs.order_by('-import_job__created')
 
     def discard_all(self):
         self.get_queryset().update(payer='', reference='', state=BankTransaction.STATE_DISCARDED)
@@ -465,6 +495,7 @@ class ImportView(ListView):
         ctx = super().get_context_data()
         ctx['job_running'] = self.job_running
         ctx['no_more_payments'] = False
+        ctx['filter_form'] = BankTransactionFilterForm(self.request.GET or None)
 
         if 'event' in self.kwargs:
             ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'

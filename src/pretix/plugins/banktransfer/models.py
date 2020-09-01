@@ -61,8 +61,9 @@ class BankTransaction(models.Model):
     reference = models.TextField(blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.CharField(max_length=50)
-    iban = models.CharField(max_length=50, blank=True)
-    bic = models.CharField(max_length=50, blank=True)
+    date_parsed = models.DateField(null=True)
+    iban = models.CharField(max_length=250, blank=True)
+    bic = models.CharField(max_length=250, blank=True)
     order = models.ForeignKey('pretixbase.Order', null=True, blank=True, on_delete=models.CASCADE)
     comment = models.TextField(blank=True)
 

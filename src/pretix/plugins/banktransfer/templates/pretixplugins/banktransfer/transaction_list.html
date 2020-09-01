@@ -10,6 +10,7 @@
 
 
 
+
             {% if request.event %}{% url "plugins:banktransfer:import.action" event=request.event.slug organizer=request.organizer.slug %}{% else %}{% url "plugins:banktransfer:import.action" organizer=request.organizer.slug %}{% endif %}">
         <thead>
         <tr>
@@ -79,7 +80,13 @@
                         </div>
                     {% endif %}
                 </td>
-                <td>{{ trans.date }}</td>
+                <td>
+                    {% if trans.date_parsed is not None %}
+                        {{ trans.date_parsed|date:"SHORT_DATE_FORMAT" }}
+                    {% else %}
+                        {{ trans.date }}
+                    {% endif %}
+                </td>
                 <td>
                     <div class="clearfix">
                         {% if trans.payer %}

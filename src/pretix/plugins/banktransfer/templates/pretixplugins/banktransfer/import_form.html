@@ -23,7 +23,8 @@
                     Currently, this feature supports <code>.csv</code> files and files in the MT940 format.
                 {% endblocktrans %}</p>
                 {% if job_running %}
-                    <div class="alert alert-info" data-job-waiting data-job-waiting-url="{% url "plugins:banktransfer:import.job" event=request.event.slug organizer=request.event.organizer.slug job=job_running.pk %}?ajax=1">
+                    <div class="alert alert-info" data-job-waiting
+                         data-job-waiting-url="{% url "plugins:banktransfer:import.job" event=request.event.slug organizer=request.event.organizer.slug job=job_running.pk %}?ajax=1">
                         <span class="fa fa-cog fa-spin"></span>
                         {% trans "An import is currently being processed, please try again in a few minutes." %}
                     </div>
@@ -31,7 +32,8 @@
                     <form action="" method="post" enctype="multipart/form-data" class="form-inline">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file" name="file"/>
+                            <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file"
+                                                                                         name="file"/>
                         </div>
                         <div class="clearfix"></div>
                         <button class="btn btn-primary pull-right flip" type="submit">
@@ -42,7 +44,7 @@
             </div>
         </div>
     {% endif %}
-    {% if transactions_unhandled|length > 0 or request.GET.search %}
+    {% if transactions_unhandled|length > 0 or filter_form.is_valid %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">{% trans "Unresolved transactions" %}</h3>
@@ -55,25 +57,42 @@
                             unmatched transactions imported directly for this event.
                         {% endblocktrans %}
                         <a href="{% url "plugins:banktransfer:import" organizer=request.organizer.slug %}"
-                                class="btn btn-default btn-xs">{% trans "Go to organizer-level import" %}</a>
+                           class="btn btn-default btn-xs">{% trans "Go to organizer-level import" %}</a>
                     </p>
                 {% endif %}
-                <p>
-                <form class="form-inline helper-display-inline" action="" method="get">
-                    <input type="text" name="search" class="form-control" placeholder="{% trans "Search" %}"
-                           value="{{ request.GET.search }}">
-                    <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-                </form>
-                {% if not request.GET.search %}
-                    <form action="" method="post" class="helper-display-inline pull-right flip">
-                        {% csrf_token %}
-                        <button class="btn btn-danger" type="submit" name="discard" value="all">
-                            <span class="fa fa-trash"></span>
-                            {% trans "Discard all" %}
-                        </button>
+
+                <div class="row">
+                    <form class="form-inline helper-display-inline" action="" method="get">
+                        <div class="col-md-3">
+                            {% trans "Amount from" %}
+                            {{ filter_form.amount_min }}
+                            {% trans "up to" %}
+                            {{ filter_form.amount_max }}
+                        </div>
+                        <div class="col-md-3">
+                            {% trans "Date from" %}
+                            {{ filter_form.date_min }}
+                            {% trans "up to" %}
+                            {{ filter_form.date_max }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ filter_form.search_text }}
+                            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+                            <a class="btn btn-default" href="{{ request.path }}">{% trans "Clear" %}</a>
+                        </div>
                     </form>
-                {% endif %}
-                </p>
+                    <div class="col-md-2">
+                        {% if not filter_form.is_valid %}
+                            <form action="" method="post" class="helper-display-inline pull-right flip">
+                                {% csrf_token %}
+                                <button class="btn btn-danger" type="submit" name="discard" value="all">
+                                    <span class="fa fa-trash"></span>
+                                    {% trans "Discard all" %}
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
 
                 {% if transactions_unhandled|length > 0 %}
                     {% include "pretixcontrol/pagination.html" %}

@@ -2,6 +2,7 @@ import logging
 import re
 from decimal import Decimal
 
+import dateutil.parser
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
@@ -117,8 +118,10 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event = None, 
 
         p.info_data = {
             'reference': trans.reference,
-            'date': trans.date,
+            'date': trans.date_parsed or trans.date,
             'payer': trans.payer,
+            'iban': trans.iban,
+            'bic': trans.bic,
             'trans_id': trans.pk
         }
 
@@ -150,6 +153,17 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event = None, 
     trans.save()
 
 
+def parse_date(date_str):
+    try:
+        return dateutil.parser.parse(
+            date_str,
+            dayfirst="." in date_str,
+        ).date()
+    except (ValueError, OverflowError):
+        pass
+    return None
+
+
 def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = None, organizer: Organizer = None):
     amount_pattern = re.compile("[^0-9.-]")
     known_checksums = set(t['checksum'] for t in BankTransaction.objects.filter(
@@ -177,7 +191,10 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = Non
                                 payer=row.get('payer', ''),
                                 reference=row['reference'],
                                 amount=amount, date=row['date'],
-                                iban=row['iban'], bic=row['bic'])
+                                iban=row.get('iban', ''), bic=row.get('bic', ''))
+
+        trans.date_parsed = parse_date(trans.date)
+
         trans.checksum = trans.calculate_checksum()
         if trans.checksum not in known_checksums:
             trans.state = BankTransaction.STATE_UNCHECKED
