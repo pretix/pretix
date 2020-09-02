@@ -1,6 +1,8 @@
 from itertools import chain
 
+import dns
 from django import forms
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -18,12 +20,41 @@ from pretix.base.validators import EmailBanlistValidator
 from pretix.presale.signals import contact_form_fields
 
 
+class EmailDNSValidator():
+    def __call__(self, value):
+        domain = value.split('@')[-1]
+        works = cache.get(f"mail_domain_exists_{domain}")
+        if works:
+            return value
+
+        resolver = dns.resolver.Resolver()
+        resolver.lifetime = 0.5
+        resolver.timeout = 0.5
+        record_types = ('MX', 'AAAA', 'A')
+        for record_type in record_types:
+            try:
+                if len(resolver.query(domain, record_type)):
+                    cache.set(f"mail_domain_exists_{domain}", "true", 3600 * 24 * 7)
+                    return value
+            except:
+                continue
+        raise ValidationError(
+            _('Please check your email domain, it does not look like "%(value)s" is able to receive emails.'),
+            code='dns',
+            params={'value': domain},
+        )
+
+
 class ContactForm(forms.Form):
     required_css_class = 'required'
-    email = forms.EmailField(label=_('E-mail'),
-                             validators=[EmailBanlistValidator()],
-                             widget=forms.EmailInput(attrs={'autocomplete': 'section-contact email'})
-                             )
+    email = forms.EmailField(
+        label=_('E-mail'),
+        validators=[
+            EmailBanlistValidator(),
+            EmailDNSValidator(),
+        ],
+        widget=forms.EmailInput(attrs={'autocomplete': 'section-contact email'})
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
