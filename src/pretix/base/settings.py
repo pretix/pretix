@@ -935,7 +935,8 @@ DEFAULTS = {
                 ('list', _('List')),
                 ('week', _('Week calendar')),
                 ('calendar', _('Month calendar')),
-            )
+            ),
+            help_text=_('If your event series has more than 100 dates, only the month or week calendar can be used.')
         ),
     },
     'last_order_modification_date': {
