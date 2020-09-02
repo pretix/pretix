@@ -118,7 +118,7 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event = None, 
 
         p.info_data = {
             'reference': trans.reference,
-            'date': trans.date_parsed or trans.date,
+            'date': trans.date_parsed.isoformat() if trans.date_parsed else trans.date,
             'payer': trans.payer,
             'iban': trans.iban,
             'bic': trans.bic,
