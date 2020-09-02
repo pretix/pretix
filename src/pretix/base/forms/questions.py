@@ -184,6 +184,10 @@ class NamePartsFormField(forms.MultiValueField):
                     raise forms.ValidationError(self.error_messages['required'], code='required')
         if self.require_all_fields and not all(v for v in value):
             raise forms.ValidationError(self.error_messages['incomplete'], code='required')
+
+        if sum(len(v) for v in value if v) > 250:
+            raise forms.ValidationError(_('Please enter a shorter name.'), code='max_length')
+
         return value
 
 
