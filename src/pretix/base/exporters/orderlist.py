@@ -126,7 +126,7 @@ class OrderListExporter(MultiSheetListExporter):
 
         headers = [
             _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
-            _('Company'), _('Name'),
+            _('Order time'), _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
         if name_scheme and len(name_scheme['fields']) > 1:
@@ -181,6 +181,7 @@ class OrderListExporter(MultiSheetListExporter):
                 order.get_status_display(),
                 order.email,
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
+                order.datetime.astimezone(tz).strftime('%H:%M:%S'),
             ]
             try:
                 row += [
@@ -259,6 +260,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Status'),
             _('Email'),
             _('Order date'),
+            _('Order time'),
             _('Fee type'),
             _('Description'),
             _('Price'),
@@ -289,6 +291,7 @@ class OrderListExporter(MultiSheetListExporter):
                 order.get_status_display(),
                 order.email,
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
+                order.datetime.astimezone(tz).strftime('%H:%M:%S'),
                 op.get_fee_type_display(),
                 op.description,
                 op.value,
@@ -356,6 +359,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Status'),
             _('Email'),
             _('Order date'),
+            _('Order time'),
         ]
         if has_subevents:
             headers.append(pgettext('subevent', 'Date'))
@@ -428,6 +432,7 @@ class OrderListExporter(MultiSheetListExporter):
                     order.get_status_display(),
                     order.email,
                     order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
+                    order.datetime.astimezone(tz).strftime('%H:%M:%S'),
                 ]
                 if has_subevents:
                     if op.subevent:
