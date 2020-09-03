@@ -747,6 +747,20 @@ def test_forced_multiple(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_require_product(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        clist.limit_products.clear()
+        p = order.positions.first()
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'product'
+
+
+@pytest.mark.django_db
 def test_require_paid(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()

@@ -162,6 +162,49 @@ def _display_checkin(event, logentry):
     else:
         checkin_list = _("(unknown)")
 
+    if logentry.action_type == 'pretix.event.checkin.unknown':
+        if show_dt:
+            return _(
+                'Unknown scan of code "{barcode}" at {datetime} for list "{list}", type "{type}".'
+            ).format(
+                posid=data.get('positionid'),
+                type=data.get('type'),
+                barcode=data.get('barcode'),
+                datetime=dt_formatted,
+                list=checkin_list
+            )
+        else:
+            return _(
+                'Unknown scan of code "{barcode}" for list "{list}", type "{type}".'
+            ).format(
+                posid=data.get('positionid'),
+                type=data.get('type'),
+                barcode=data.get('barcode'),
+                list=checkin_list
+            )
+
+    if logentry.action_type == 'pretix.event.checkin.denied':
+        if show_dt:
+            return _(
+                'Denied scan of position #{posid} at {datetime} for list "{list}", type "{type}", '
+                'error code "{errorcode}".'
+            ).format(
+                posid=data.get('positionid'),
+                type=data.get('type'),
+                errorcode=data.get('errorcode'),
+                datetime=dt_formatted,
+                list=checkin_list
+            )
+        else:
+            return _(
+                'Denied scan of position #{posid} for list "{list}", type "{type}", error code "{errorcode}".'
+            ).format(
+                posid=data.get('positionid'),
+                type=data.get('type'),
+                errorcode=data.get('errorcode'),
+                list=checkin_list
+            )
+
     if data.get('type') == Checkin.TYPE_EXIT:
         if show_dt:
             return _('Position #{posid} has been checked out at {datetime} for list "{list}".').format(
@@ -397,7 +440,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             bleach.clean(logentry.parsed_data.get('msg'), tags=[], strip=True)
         )
 
-    if logentry.action_type == 'pretix.event.checkin':
+    if logentry.action_type.startswith('pretix.event.checkin'):
         return _display_checkin(sender, logentry)
 
     if logentry.action_type == 'pretix.control.views.checkin':

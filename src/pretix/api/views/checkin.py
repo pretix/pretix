@@ -200,7 +200,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         except ValueError:
             raise Http404()
 
-    def get_queryset(self, ignore_status=False):
+    def get_queryset(self, ignore_status=False, ignore_products=False):
         cqs = Checkin.objects.filter(
             position_id=OuterRef('pk'),
             list_id=self.checkinlist.pk
@@ -255,12 +255,12 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
             ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat')
 
-        if not self.checkinlist.all_products:
+        if not self.checkinlist.all_products and not ignore_products:
             qs = qs.filter(item__in=self.checkinlist.limit_products.values_list('id', flat=True))
 
         return qs
 
-    @action(detail=True, methods=['POST'])
+    @action(detail=False, methods=['POST'], url_name='redeem', url_path='(?P<pk>[^/]+)/redeem')
     def redeem(self, *args, **kwargs):
         force = bool(self.request.data.get('force', False))
         type = self.request.data.get('type', None) or Checkin.TYPE_ENTRY
@@ -268,12 +268,26 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             raise ValidationError("Invalid check-in type.")
         ignore_unpaid = bool(self.request.data.get('ignore_unpaid', False))
         nonce = self.request.data.get('nonce')
-        op = self.get_object(ignore_status=True)
 
         if 'datetime' in self.request.data:
             dt = DateTimeField().to_internal_value(self.request.data.get('datetime'))
         else:
             dt = now()
+
+        try:
+            queryset = self.get_queryset(ignore_status=True, ignore_products=True)
+            if self.kwargs['pk'].isnumeric():
+                op = queryset.get(Q(pk=self.kwargs['pk']) | Q(secret=self.kwargs['pk']))
+            else:
+                op = queryset.get(secret=self.kwargs['pk'])
+        except OrderPosition.DoesNotExist:
+            self.request.event.log_action('pretix.event.checkin.unknown', data={
+                'datetime': dt,
+                'type': type,
+                'list': self.checkinlist.pk,
+                'barcode': self.kwargs['pk']
+            }, user=self.request.user, auth=self.request.auth)
+            raise Http404()
 
         given_answers = {}
         if 'answers' in self.request.data:
@@ -310,6 +324,14 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 ]
             }, status=400)
         except CheckInError as e:
+            op.order.log_action('pretix.event.checkin.denied', data={
+                'position': op.id,
+                'positionid': op.positionid,
+                'errorcode': e.code,
+                'datetime': dt,
+                'type': type,
+                'list': self.checkinlist.pk
+            }, user=self.request.user, auth=self.request.auth)
             return Response({
                 'status': 'error',
                 'reason': e.code,
@@ -322,11 +344,3 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
             }, status=201)
-
-    def get_object(self, ignore_status=False):
-        queryset = self.filter_queryset(self.get_queryset(ignore_status=ignore_status))
-        if self.kwargs['pk'].isnumeric():
-            obj = get_object_or_404(queryset, Q(pk=self.kwargs['pk']) | Q(secret=self.kwargs['pk']))
-        else:
-            obj = get_object_or_404(queryset, secret=self.kwargs['pk'])
-        return obj
