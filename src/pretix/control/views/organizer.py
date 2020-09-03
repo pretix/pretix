@@ -27,7 +27,7 @@ from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
     CachedFile, Device, GiftCard, OrderPayment, Organizer, Team, TeamInvite,
-    User,
+    User, LogEntry,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import gen_giftcard_secret
@@ -729,6 +729,31 @@ class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     def form_invalid(self, form):
         messages.error(self.request, _('Your changes could not be saved.'))
         return super().form_invalid(form)
+
+
+class DeviceLogView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    template_name = 'pretixcontrol/organizers/device_logs.html'
+    permission = 'can_change_organizer_settings'
+    model = LogEntry
+    context_object_name = 'logs'
+    paginate_by = 20
+
+    @cached_property
+    def device(self):
+        return get_object_or_404(Device, organizer=self.request.organizer, pk=self.kwargs.get('device'))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['device'] = self.device
+        return ctx
+
+    def get_queryset(self):
+        qs = LogEntry.objects.filter(
+            device_id=self.device
+        ).select_related(
+            'user', 'content_type', 'api_token', 'oauth_application', 'device', 'event'
+        ).order_by('-datetime')
+        return qs
 
 
 class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):

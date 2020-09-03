@@ -92,6 +92,11 @@
                                         class="btn btn-default btn-sm">
                                     {% trans "Revoke access" %}</a>
                             {% endif %}
+                            <a href="{% url "control:organizer.device.logs" organizer=request.organizer.slug device=d.id %}"
+                               class="btn btn-default btn-sm">
+                                <span class="fa fa-list-alt"></span>
+                                {% trans "Logs" %}
+                            </a>
                             <a href="{% url "control:organizer.device.edit" organizer=request.organizer.slug device=d.id %}"
                                     class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                         </td>

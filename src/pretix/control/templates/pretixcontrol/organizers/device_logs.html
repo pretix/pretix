@@ -1,0 +1,55 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Device logs" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Device logs" %}</h1>
+    <h2>
+        <span class="fa fa-mobile fa-fw"></span> {{ device }}
+    </h2>
+    <ul class="list-group">
+        {% for log in logs %}
+            <li class="list-group-item logentry">
+                <div class="row">
+                    <div class="col-lg-2 col-sm-6 col-xs-12">
+                        <span class="fa fa-clock-o"></span>
+                        {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        {% if log.shredded %}
+                            <span class="fa fa-eraser fa-danger fa-fw"
+                                  data-toggle="tooltip"
+                                  title="{% trans "Personal data was cleared from this log entry." %}">
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-sm-6 col-xs-12">
+                        {% if log.event %}
+                            <span class="fa fa-calendar fa-fw"></span>
+                            <a href="{% url "control:event.index" organizer=request.organizer.slug event=log.event.slug %}">
+                                {{ log.event.name }}
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-sm-12 col-xs-12">
+                        {% if log.display_object %}
+                            <span class="fa fa-flag"></span> {{ log.display_object|safe }}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                        {{ log.display }}
+                        {% if staff_session %}
+                            <a href="" class="btn btn-default btn-xs" data-expandlogs data-id="{{ log.pk }}">
+                                <span class="fa-eye fa fa-fw"></span>
+                                {% trans "Inspect" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <div class="list-group-item">
+                <em>{% trans "No results" %}</em>
+            </div>
+        {% endfor %}
+    </ul>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

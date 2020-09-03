@@ -97,6 +97,8 @@ urlpatterns = [
         name='organizer.device.connect'),
     url(r'^organizer/(?P<organizer>[^/]+)/device/(?P<device>[^/]+)/revoke$', organizer.DeviceRevokeView.as_view(),
         name='organizer.device.revoke'),
+    url(r'^organizer/(?P<organizer>[^/]+)/device/(?P<device>[^/]+)/logs$', organizer.DeviceLogView.as_view(),
+        name='organizer.device.logs'),
     url(r'^organizer/(?P<organizer>[^/]+)/teams$', organizer.TeamListView.as_view(), name='organizer.teams'),
     url(r'^organizer/(?P<organizer>[^/]+)/team/add$', organizer.TeamCreateView.as_view(), name='organizer.team.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/team/(?P<team>[^/]+)/$', organizer.TeamMemberView.as_view(),
