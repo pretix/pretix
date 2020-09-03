@@ -975,6 +975,8 @@ class EventLog(EventPermissionRequiredMixin, ListView):
             qs = qs.filter(user__isnull=False)
         elif self.request.GET.get('user') == 'no':
             qs = qs.filter(user__isnull=True)
+        elif self.request.GET.get('user', '').startswith('d-'):
+            qs = qs.filter(device_id=self.request.GET.get('user')[2:])
         elif self.request.GET.get('user'):
             qs = qs.filter(user_id=self.request.GET.get('user'))
 
@@ -989,6 +991,7 @@ class EventLog(EventPermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['userlist'] = self.request.event.logentry_set.order_by().distinct().values('user__id', 'user__email')
+        ctx['devicelist'] = self.request.event.logentry_set.order_by('device__name').distinct().values('device__id', 'device__name')
         return ctx
 
 

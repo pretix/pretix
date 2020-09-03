@@ -24,6 +24,14 @@
                         </option>
                     {% endif %}
                 {% endfor %}
+                {% for d in devicelist %}
+                    {% if d.device__id %}
+                        <option value="d-{{ d.device__id }}"
+                                {% if "d-" in request.GET.user and request.GET.user|slice:"2:" == d.device__id|slugify %}selected="selected"{% endif %}>
+                            {{ d.device__name }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
             </select>
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         </p>
