@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-25 09:54+0000\n"
-"PO-Revision-Date: 2020-08-18 03:00+0000\n"
+"PO-Revision-Date: 2020-08-31 01:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -4449,10 +4449,8 @@ msgid "Relative date:"
 msgstr "Relatieve datum:"
 
 #: pretix/base/reldate.py:189
-#, fuzzy
-#| msgid "Relative date:"
 msgid "Relative time:"
-msgstr "Relatieve datum:"
+msgstr "Relatieve tijd:"
 
 #: pretix/base/reldate.py:197 pretix/base/reldate.py:299
 msgid "Not set"
@@ -7135,10 +7133,8 @@ msgid "days before"
 msgstr "dagen voor"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
-#, fuzzy
-#| msgid "days before"
 msgid "minutes before"
-msgstr "dagen voor"
+msgstr "minuten voor"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:21
 msgid "at"
