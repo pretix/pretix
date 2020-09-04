@@ -5,7 +5,7 @@
 {% load money %}
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 {% for line in cart.positions %}
-    <div class="row cart-row {% if download %}has-downloads{% endif %}">
+    <div class="row cart-row {% if download %}has-downloads{% endif %}{% if editable %}editable{% endif %}">
         <div class="product">
             {% if line.addon_to %}
                 <span class="addon-signifier">+</span>
@@ -217,22 +217,6 @@
                 {% endif %}
             {% endif %}
         </div>
-        {% if download %}
-            <div class="download-mobile">
-                {% if line.generate_ticket %}
-                {% for b in download_buttons %}
-                    <form action="{% if position_page and line.addon_to %}{% eventurl event "presale:event.order.position.download" secret=line.addon_to.web_secret order=order.code output=b.identifier pid=line.pk position=line.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=line.web_secret order=order.code output=b.identifier pid=line.pk position=line.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.pk %}{% endif %}"
-                        method="post" data-asynctask data-asynctask-download class="download-btn-form">
-                        {% csrf_token %}
-                        <button type="submit"
-                           class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                        </button>
-                    </form>
-                {% endfor %}
-                {% endif %}
-            </div>
-        {% endif %}
         <div class="clearfix"></div>
     </div>
 {% endfor %}

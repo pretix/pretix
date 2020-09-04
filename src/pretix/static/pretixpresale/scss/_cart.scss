@@ -37,11 +37,6 @@
         padding-right: floor(($grid-gutter-width / 2));
         float: left;
     }
-    .download-mobile {
-        display: none;
-        width: 100%;
-        clear: both;
-    }
     .download-desktop {
         display: block;
         width: percentage((4 / $grid-columns));
@@ -80,18 +75,60 @@
 }
 
 @media(max-width: $screen-sm-max) {
-    .cart-row {
-        .download-mobile {
+    .cart .panel-body {
+        padding: 5px;
+        .checkout-button-row {
+            padding: 0 10px;
+        }
+        #cart-deadline {
             display: block;
+            padding: 0 10px 5px;
         }
+    }
+    .cart-row {
         .download-desktop {
-            display: none;
+            clear: both;
+            display: block;
+            width: 50%;
+            text-align: left;
+            a.btn, button.btn {
+                word-break: break-all;
+                display: block;
+                width: 100%;
+                margin-bottom: 5px;
+            }
         }
-        &.has-downloads .product, .product, .count, .singleprice, .totalprice {
+
+        .totalprice {
             width: 50%;
         }
-        .singleprice {
+        .product, &.has-downloads .product {
+            width: 100%;
+        }
+        &.total .product {
+            width: 50%;
+        }
+        .count {
             clear: both;
+            width: 25%;
+            text-align: left;
+        }
+        .singleprice {
+            width: 25%;
+        }
+
+        &.editable {
+            .count {
+                width: 50%;
+                text-align: right;
+            }
+            .singleprice {
+                clear: both;
+                width: 50%;
+            }
+            .totalprice {
+                width: 50%;
+            }
         }
     }
 }
