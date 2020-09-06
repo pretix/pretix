@@ -3245,6 +3245,13 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
+    def test_seat_not_required_if_no_choice(self):
+        self.cp1.seat = None
+        self.cp1.save()
+        self.event.settings.seating_choice = False
+        _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+
+    @scopes_disabled()
     def test_seat_not_allowed(self):
         self.cp1.item = self.workshop1
         self.cp1.save()

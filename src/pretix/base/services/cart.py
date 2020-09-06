@@ -6,7 +6,7 @@ from typing import List, Optional
 from celery.exceptions import MaxRetriesExceededError
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
-from django.db.models import Count, Exists, OuterRef, Q
+from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext as _, pgettext_lazy
@@ -147,6 +147,8 @@ class CartManager:
         ).select_related('item', 'subevent')
 
     def _is_seated(self, item, subevent):
+        if not self.event.settings.seating_choice:
+            return False
         if (item, subevent) not in self._seated_cache:
             self._seated_cache[item, subevent] = item.seat_category_mappings.filter(subevent=subevent).exists()
         return self._seated_cache[item, subevent]
@@ -328,15 +330,18 @@ class CartManager:
                 raise e
 
     def extend_expired_positions(self):
+        requires_seat = Exists(
+            SeatCategoryMapping.objects.filter(
+                Q(product=OuterRef('item'))
+                & (Q(subevent=OuterRef('subevent')) if self.event.has_subevents else Q(subevent__isnull=True))
+            )
+        )
+        if not self.event.settings.seating_choice:
+            requires_seat = Value(0, output_field=IntegerField())
         expired = self.positions.filter(expires__lte=self.now_dt).select_related(
             'item', 'variation', 'voucher', 'addon_to', 'addon_to__item'
         ).annotate(
-            requires_seat=Exists(
-                SeatCategoryMapping.objects.filter(
-                    Q(product=OuterRef('item'))
-                    & (Q(subevent=OuterRef('subevent')) if self.event.has_subevents else Q(subevent__isnull=True))
-                )
-            )
+            requires_seat=requires_seat
         ).prefetch_related(
             'item__quotas',
             'variation__quotas',
@@ -349,7 +354,7 @@ class CartManager:
             if cp.pk in removed_positions or (cp.addon_to_id and cp.addon_to_id in removed_positions):
                 continue
 
-            cp.item.requires_seat = cp.requires_seat
+            cp.item.requires_seat = self.event.settings.seating_choice and cp.requires_seat
 
             if cp.is_bundled:
                 bundle = cp.addon_to.item.bundles.filter(bundled_item=cp.item, bundled_variation=cp.variation).first()

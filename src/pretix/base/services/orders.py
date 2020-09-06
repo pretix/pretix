@@ -9,7 +9,9 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Exists, F, Max, Min, OuterRef, Q, Sum
+from django.db.models import (
+    Exists, F, IntegerField, Max, Min, OuterRef, Q, Sum, Value,
+)
 from django.db.models.functions import Coalesce, Greatest
 from django.db.transaction import get_connection
 from django.dispatch import receiver
@@ -890,13 +892,16 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         except InvoiceAddress.DoesNotExist:
             pass
 
-    positions = CartPosition.objects.annotate(
-        requires_seat=Exists(
-            SeatCategoryMapping.objects.filter(
-                Q(product=OuterRef('item'))
-                & (Q(subevent=OuterRef('subevent')) if event.has_subevents else Q(subevent__isnull=True))
-            )
+    requires_seat = Exists(
+        SeatCategoryMapping.objects.filter(
+            Q(product=OuterRef('item'))
+            & (Q(subevent=OuterRef('subevent')) if event.has_subevents else Q(subevent__isnull=True))
         )
+    )
+    if not event.settings.seating_choice:
+        requires_seat = Value(0, output_field=IntegerField())
+    positions = CartPosition.objects.annotate(
+        requires_seat=requires_seat
     ).filter(
         id__in=position_ids, event=event
     )
@@ -1377,7 +1382,7 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['subevent_required'])
 
         seated = item.seat_category_mappings.filter(subevent=subevent).exists()
-        if seated and not seat:
+        if seated and not seat and self.event.settings.seating_choice:
             raise OrderError(self.error_messages['seat_required'])
         elif not seated and seat:
             raise OrderError(self.error_messages['seat_forbidden'])

@@ -9,7 +9,9 @@ import isoweek
 import pytz
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Exists, OuterRef, Prefetch
+from django.db.models import (
+    Count, Exists, IntegerField, OuterRef, Prefetch, Value,
+)
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -61,6 +63,16 @@ def item_group_by_category(items):
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
                       quota_cache=None, filter_items=None, filter_categories=None):
     base_qs = base_qs if base_qs is not None else event.items
+
+    requires_seat = Exists(
+        SeatCategoryMapping.objects.filter(
+            product_id=OuterRef('pk'),
+            subevent=subevent
+        )
+    )
+    if not event.settings.seating_choice:
+        requires_seat = Value(0, output_field=IntegerField())
+
     items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher, allow_addons=allow_addons).select_related(
         'category', 'tax_rule',  # for re-grouping
         'hidden_if_available',
@@ -111,12 +123,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 disabled=True,
             )
         ),
-        requires_seat=Exists(
-            SeatCategoryMapping.objects.filter(
-                product_id=OuterRef('pk'),
-                subevent=subevent
-            )
-        ),
+        requires_seat=requires_seat,
     ).filter(
         quotac__gt=0, subevent_disabled=False,
     ).order_by('category__position', 'category_id', 'position', 'name')

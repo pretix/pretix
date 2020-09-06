@@ -237,7 +237,7 @@
                     action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}">
                 {% csrf_token %}
                 <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
-                {% if ev.seating_plan_id %}
+                {% if ev.seating_plan_id and event.settings.seating_choice %}
                     {% if event.has_subevents %}
                         {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request subevent=subevent %}
                     {% else %}

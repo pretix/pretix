@@ -1744,6 +1744,18 @@ Your {event} team"""))
         'default': settings.ENTROPY['giftcard_secret'],
         'type': int
     },
+    'seating_choice': {
+        'default': 'True',
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Customers can choose their own seats"),
+            help_text=_("If disabled, you will need to manually assign seats in the backend. Note that this can mean "
+                        "people will not know their seat after their purchase and it might not be written on their "
+                        "ticket."),
+        ),
+        'type': bool,
+    },
     'seating_minimal_distance': {
         'default': '0',
         'type': float
