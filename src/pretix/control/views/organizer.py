@@ -26,8 +26,8 @@ from django.views.generic import (
 from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
-    CachedFile, Device, GiftCard, OrderPayment, Organizer, Team, TeamInvite,
-    User, LogEntry,
+    CachedFile, Device, GiftCard, LogEntry, OrderPayment, Organizer, Team,
+    TeamInvite, User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import gen_giftcard_secret

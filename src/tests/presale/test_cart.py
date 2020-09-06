@@ -3685,6 +3685,25 @@ class CartSeatingTest(CartTestMixin, TestCase):
             objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
             self.assertEqual(len(objs), 0)
 
+    def test_add_seat_not_required_if_no_choice(self):
+        self.event.settings.seating_choice = False
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 1)
+            assert objs[0].seat is None
+
+    def test_seat_not_allowed_if_no_choice(self):
+        self.event.settings.seating_choice = False
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'seat_%d' % self.ticket.id: self.seat_a2.seat_guid,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
+
     def test_add_with_seat_with_variation(self):
         with scopes_disabled():
             v1 = self.ticket.variations.create(value='Regular', active=True)

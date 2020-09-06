@@ -92,6 +92,17 @@ This is no ``EventPluginSignal``, so you do not get the event in the ``sender`` 
 and you may get the signal regardless of whether your plugin is active.
 """
 
+event_dashboard_top = EventPluginSignal(
+    providing_args=['request']
+)
+"""
+This signal is sent out to include custom HTML in the top part of the the event dashboard.
+Receivers should return HTML.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+An additional keyword argument ``subevent`` *can* contain a sub-event.
+"""
+
 event_dashboard_widgets = EventPluginSignal(
     providing_args=[]
 )

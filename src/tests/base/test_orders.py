@@ -2098,7 +2098,12 @@ class OrderChangeManagerTests(TestCase):
             self.ocm.commit()
 
     @classscope(attr='o')
-    def test_add_with_seat_required(self):
+    def test_add_with_seat_not_required_if_no_choice(self):
+        self.event.settings.seating_choice = False
+        self.ocm.add_position(self.stalls, None, price=Decimal('13.00'))
+
+    @classscope(attr='o')
+    def test_add_with_seat_not_required(self):
         with self.assertRaises(OrderError):
             self.ocm.add_position(self.stalls, None, price=Decimal('13.00'))
 
