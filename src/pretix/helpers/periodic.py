@@ -6,6 +6,8 @@ from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
+SKIPPED = object()
+
 
 def minimum_interval(minutes_after_success, minutes_after_error=0, minutes_running_timeout=30):
     """
@@ -26,12 +28,12 @@ def minimum_interval(minutes_after_success, minutes_after_error=0, minutes_runni
             running_val = cache.get(key_running)
             if running_val:
                 # Currently running
-                return
+                return SKIPPED
 
             result_val = cache.get(key_result)
             if result_val:
                 # Has run recently
-                return
+                return SKIPPED
 
             uniqid = str(uuid.uuid4())
             cache.set(key_running, uniqid, timeout=minutes_running_timeout * 60)

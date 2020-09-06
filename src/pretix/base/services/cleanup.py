@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.conf import settings
+from django.core.management import call_command
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
@@ -40,3 +41,9 @@ def clean_cached_tickets(sender, **kwargs):
         cf.delete()
     for cf in CachedCombinedTicket.objects.filter(created__lte=now() - timedelta(minutes=30), file__isnull=True):
         cf.delete()
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+def clearsessions(sender, **kwargs):
+    call_command('clearsessions')
