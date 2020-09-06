@@ -3,6 +3,7 @@
 {% load eventurl %}
 {% load bootstrap3 %}
 {% load static %}
+{% load eventsignal %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
     <h1>
@@ -63,6 +64,7 @@
                     class="btn btn-primary">{% trans "Show affected orders" %}</a>
         </div>
     {% endif %}
+    {% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
     {% if actions|length > 0 %}
         <div class="panel panel-danger">
             <div class="panel-heading">
