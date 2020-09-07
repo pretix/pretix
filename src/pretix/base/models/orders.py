@@ -551,7 +551,7 @@ class Order(LockModel, LoggedModel):
             return self.event.settings.cancel_allow_user_paid
         return False
 
-    def propose_auto_refunds(self, amount: Decimal, payments: list = None):
+    def propose_auto_refunds(self, amount: Decimal, payments: list=None):
         # Algorithm to choose which payments are to be refunded to create the least hassle
         payments = payments or self.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED)
         for p in payments:
@@ -573,15 +573,18 @@ class Order(LockModel, LoggedModel):
         while to_refund and unused_payments:
             bigger = sorted([
                 p for p in unused_payments
-                if p.available_amount > to_refund and p.partial_refund_possible
+                if p.available_amount > to_refund
+                and p.partial_refund_possible
             ], key=lambda p: p.available_amount)
             same = [
                 p for p in unused_payments
-                if p.available_amount == to_refund and (p.full_refund_possible or p.partial_refund_possible)
+                if p.available_amount == to_refund
+                and (p.full_refund_possible or p.partial_refund_possible)
             ]
             smaller = sorted([
                 p for p in unused_payments
-                if p.available_amount < to_refund and (p.full_refund_possible or p.partial_refund_possible)
+                if p.available_amount < to_refund
+                and (p.full_refund_possible or p.partial_refund_possible)
             ], key=lambda p: p.available_amount, reverse=True)
             if same:
                 payment = same[0]
@@ -757,7 +760,7 @@ class Order(LockModel, LoggedModel):
 
         return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
 
-    def _is_still_available(self, now_dt: datetime = None, count_waitinglist=True, force=False,
+    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False,
                             check_voucher_usage=False) -> Union[bool, str]:
         error_messages = {
             'unavailable': _('The ordered product "{item}" is no longer available.'),
@@ -820,9 +823,9 @@ class Order(LockModel, LoggedModel):
         return True
 
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
-                  context: Dict[str, Any] = None, log_entry_type: str = 'pretix.event.order.email.sent',
-                  user: User = None, headers: dict = None, sender: str = None, invoices: list = None,
-                  auth=None, attach_tickets=False, position: 'OrderPosition' = None, auto_email=True,
+                  context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
+                  user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
+                  auth=None, attach_tickets=False, position: 'OrderPosition'=None, auto_email=True,
                   attach_ical=False):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
@@ -2060,8 +2063,8 @@ class OrderPosition(AbstractPosition):
         return self.order.event
 
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
-                  context: Dict[str, Any] = None, log_entry_type: str = 'pretix.event.order.email.sent',
-                  user: User = None, headers: dict = None, sender: str = None, invoices: list = None,
+                  context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
+                  user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
                   auth=None, attach_tickets=False):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:

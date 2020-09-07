@@ -30,8 +30,7 @@
                 <p>{% trans "We successfully received your payment. See below for details." %}</p>
             {% endif %}
             <p class="iframe-hidden">{% blocktrans trimmed %}
-                Please bookmark or save the link to this exact page if you want to access your order later. We also sent
-                you an email containing the link to the address you specified.
+                Please bookmark or save the link to this exact page if you want to access your order later. We also sent you an email containing the link to the address you specified.
             {% endblocktrans %}</p>
             <p class="iframe-only">{% blocktrans trimmed %}
                 Please save the following link if you want to access your order later. We
@@ -49,8 +48,7 @@
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
         {% if backend_user %}
-            <a href="{% url "control:event.order" event=request.event.slug organizer=request.organizer.slug code=order.code %}"
-               class="btn btn-default">
+            <a href="{% url "control:event.order" event=request.event.slug organizer=request.organizer.slug code=order.code %}" class="btn btn-default">
                 {% trans "View in backend" %}
             </a>
         {% endif %}
@@ -84,7 +82,7 @@
                     {% if can_pay %}
                         <div class="text-right flip">
                             <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}"
-                               class="btn btn-default">
+                                    class="btn btn-default">
                                 {% trans "Re-try payment or choose another payment method" %}
                             </a>
                         </div>
@@ -93,7 +91,7 @@
                     {% if can_pay %}
                         <div class="text-right flip">
                             <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}"
-                               class="btn btn-primary btn-lg">{% trans "Pay now" %}</a>
+                                    class="btn btn-primary btn-lg">{% trans "Pay now" %}</a>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -122,52 +120,51 @@
                 <ul class="list-group">
                     {% for r in refunds %}
                         <li class="list-group-item">
-                        {% if r.state == "created" or r.state == "transit" %}
-                            {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
-                                A refund of {{ amount }} will be sent out to you soon, please be patient.
-                            {% endblocktrans %}
-                        {% elif r.state == "done" %}
-                            {% if r.provider == "giftcard" %}
-                                <a href="#" class="print-this-page btn btn-default btn-sm pull-right hidden-print">
-                                    <span class="fa fa-print"></span>
-                                    {% trans "Print" %}
-                                </a>
+                            {% if r.state == "created" or r.state == "transit" %}
                                 {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
-                                    We've issued your refund of {{ amount }} as a gift card. On your next purchase with
-                                    us, you can use the following gift card code during payment:
+                                    A refund of {{ amount }} will be sent out to you soon, please be patient.
                                 {% endblocktrans %}
-                                <div class="text-center refund-gift-card-code">
-                                    <span class="fa fa-credit-card"></span>
-                                    {{ r.giftcard.secret }}
-                                </div>
-                                {% if r.giftcard.value != r.amount %}
-                                    <small>
-                                        {% blocktrans trimmed with value=r.giftcard.value|money:request.event.currency %}
-                                            The current value of your gift card is {{ value }}.
-                                        {% endblocktrans %}
-                                    </small>
+                            {% elif r.state == "done" %}
+                                {% if r.provider == "giftcard" %}
+                                    <a href="#" class="print-this-page btn btn-default btn-sm pull-right hidden-print">
+                                        <span class="fa fa-print"></span>
+                                        {% trans "Print" %}
+                                    </a>
+                                    {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
+                                        We've issued your refund of {{ amount }} as a gift card. On your next purchase with
+                                        us, you can use the following gift card code during payment:
+                                    {% endblocktrans %}
+                                    <div class="text-center refund-gift-card-code">
+                                        <span class="fa fa-credit-card"></span>
+                                        {{ r.giftcard.secret }}
+                                    </div>
+                                    {% if r.giftcard.value != r.amount %}
+                                        <small>
+                                            {% blocktrans trimmed with value=r.giftcard.value|money:request.event.currency %}
+                                                The current value of your gift card is {{ value }}.
+                                            {% endblocktrans %}
+                                        </small>
+                                    {% endif %}
+                                    {% if r.giftcard.expires %}
+                                        <small>
+                                            {% blocktrans trimmed with expiry=r.giftcard.expires|date:"SHORT_DATE_FORMAT" %}
+                                                This gift card is valid until {{ expiry }}.
+                                            {% endblocktrans %}
+                                        </small>
+                                    {% endif %}
+                                    {% if r.giftcard.conditions %}
+                                        <small>
+                                            {{ r.giftcard.conditions }}
+                                        </small>
+                                    {% endif %}
+                                {% else %}
+                                    {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
+                                        A refund of {{ amount }} has been sent to you. Depending on the payment method, please allow for up to 14 days until it shows up
+                                        on your statement.
+                                    {% endblocktrans %}
                                 {% endif %}
-                                {% if r.giftcard.expires %}
-                                    <small>
-                                        {% blocktrans trimmed with expiry=r.giftcard.expires|date:"SHORT_DATE_FORMAT" %}
-                                            This gift card is valid until {{ expiry }}.
-                                        {% endblocktrans %}
-                                    </small>
-                                {% endif %}
-                                {% if r.giftcard.conditions %}
-                                    <small>
-                                        {{ r.giftcard.conditions }}
-                                    </small>
-                                {% endif %}
-                            {% else %}
-                                {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
-                                    A refund of {{ amount }} has been sent to you. Depending on the payment method,
-                                    please allow for up to 14 days until it shows up
-                                    on your statement.
-                                {% endblocktrans %}
                             {% endif %}
-                        {% endif %}
-                    {% endfor %}
+                        {% endfor %}
                     </li>
                 </ul>
             </div>
@@ -227,8 +224,7 @@
                             {% for i in invoices %}
                                 <li>
                                     <a href="{% eventurl event "presale:event.invoice.download" invoice=i.pk secret=order.secret order=order.code %}">
-                                        {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}
-                                            {% trans "Invoice" %}{% endif %}
+                                        {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}{% trans "Invoice" %}{% endif %}
                                         {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
                                 </li>
                             {% endfor %}
@@ -251,12 +247,12 @@
                             </div>
                         {% elif invoice_address_asked and order.invoice_address.is_empty %}
                             <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}?generate_invoice=true"
-                               class="btn btn-default">
+                                class="btn btn-default">
                                 {% trans "Request invoice" %}
                             </a>
                         {% else %}
                             <form class="form-inline helper-display-inline" method="post"
-                                  action="{% eventurl event "presale:event.order.geninvoice" order=order.code secret=order.secret %}">
+                                    action="{% eventurl event "presale:event.order.geninvoice" order=order.code secret=order.secret %}">
                                 {% csrf_token %}
                                 <button class="btn btn-default">
                                     {% trans "Request invoice" %}
@@ -336,12 +332,11 @@
                     <li class="list-group-item">
                         <p>
                             {% blocktrans trimmed %}
-                                If you want to make changes to the products you bought, you can click on the button to
-                                change your order.
+                                If you want to make changes to the products you bought, you can click on the button to change your order.
                             {% endblocktrans %}
                         </p>
                         <a href="{% eventurl event 'presale:event.order.change' secret=order.secret order=order.code %}"
-                           class="btn btn-default">
+                                class="btn btn-default">
                             <span class="fa fa-edit"></span>
                             {% trans "Change order" %}
                         </a>
@@ -367,16 +362,13 @@
                                 <p>
                                     {% if request.event.settings.cancel_allow_user_paid_require_approval %}
                                         {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
-                                            You can request to cancel this order. If your request is approved, a
-                                            cancellation
-                                            fee of <strong>{{ fee }}</strong> will be kept and you will receive a refund
-                                            of
+                                            You can request to cancel this order. If your request is approved, a cancellation
+                                            fee of <strong>{{ fee }}</strong> will be kept and you will receive a refund of
                                             the remainder.
                                         {% endblocktrans %}
                                     {% else %}
                                         {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
-                                            You can cancel this order. In this case, a cancellation fee of
-                                            <strong>{{ fee }}</strong>
+                                            You can cancel this order. In this case, a cancellation fee of <strong>{{ fee }}</strong>
                                             will be kept and you will receive a refund of the remainder.
                                         {% endblocktrans %}
                                     {% endif %}
@@ -393,8 +385,7 @@
                                 <p>
                                     {% if request.event.settings.cancel_allow_user_paid_require_approval %}
                                         {% blocktrans trimmed %}
-                                            You can request to cancel this order. If your request is approved, you get a
-                                            full
+                                            You can request to cancel this order. If your request is approved, you get a full
                                             refund.
                                         {% endblocktrans %}
                                     {% else %}
@@ -413,7 +404,7 @@
                                 </p>
                             {% endif %}
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
-                               class="btn btn-danger">
+                                    class="btn btn-danger">
                                 <span class="fa fa-remove"></span>
                                 {% trans "Cancel order" %}
                             </a>
@@ -425,7 +416,7 @@
                                 {% trans "This will invalidate all tickets in this order." %}
                             </p>
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
-                               class="btn btn-danger">
+                                    class="btn btn-danger">
                                 <span class="fa fa-remove"></span>
                                 {% trans "Cancel order" %}
                             </a>

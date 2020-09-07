@@ -2002,6 +2002,7 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     'US': (['State', 'Outlying area', 'District'], 'short'),
 }
 
+
 settings_hierarkey = Hierarkey(attribute_name='settings')
 
 for k, v in DEFAULTS.items():
@@ -2071,7 +2072,7 @@ class SettingsSandbox:
     def __delattr__(self, key: str) -> None:
         del self._event.settings[self._convert_key(key)]
 
-    def get(self, key: str, default: Any = None, as_type: type = str):
+    def get(self, key: str, default: Any=None, as_type: type=str):
         return self._event.settings.get(self._convert_key(key), default=default, as_type=as_type)
 
     def set(self, key: str, value: Any):
