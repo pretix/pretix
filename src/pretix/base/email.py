@@ -12,7 +12,9 @@ from django.utils.timezone import now
 from django.utils.translation import get_language, gettext_lazy as _
 from inlinestyler.utils import inline_css
 
-from pretix.base.i18n import LazyCurrencyNumber, LazyDate, LazyNumber, LazyTime
+from pretix.base.i18n import (
+    LazyCurrencyNumber, LazyDate, LazyExpiresDate, LazyNumber,
+)
 from pretix.base.models import Event
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import (
@@ -315,13 +317,8 @@ def base_placeholders(sender, **kwargs):
             lambda event: LazyCurrencyNumber(Decimal('42.23'), event.currency)
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'expire_date', ['event', 'order'], lambda event, order: LazyDate(order.expires.astimezone(event.timezone)),
+            'expire_date', ['event', 'order'], lambda event, order: LazyExpiresDate(order.expires.astimezone(event.timezone)),
             lambda event: LazyDate(now() + timedelta(days=15))
-            # TODO: This used to be "date" in some placeholders, add a migration!
-        ),
-        SimpleFunctionalMailTextPlaceholder(
-            'expire_time', ['event', 'order'], lambda event, order: LazyTime(order.expires.astimezone(event.timezone)),
-            lambda event: LazyTime(now() + timedelta(minutes=30))
         ),
         SimpleFunctionalMailTextPlaceholder(
             'url', ['order', 'event'], lambda order, event: build_absolute_uri(

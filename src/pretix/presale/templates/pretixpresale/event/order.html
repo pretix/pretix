@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load eventsignal %}
 {% load money %}
+{% load expiresformat %}
 {% load eventurl %}
 {% block title %}{% trans "Order details" %}{% endblock %}
 {% block content %}
@@ -66,17 +67,9 @@
                 <strong>{% blocktrans trimmed with total=pending_sum|money:request.event.currency %}
                     A payment of {{ total }} is still pending for this order.
                 {% endblocktrans %}</strong>
-                <strong>
-                    {% if event.settings.payment_term_mode == "minutes" %}
-                        {% blocktrans trimmed with date=order.expires|date:"SHORT_DATE_FORMAT" %}
-                            Please complete your payment before {{ date }}.
-                        {% endblocktrans %}
-                    {% else %}
-                        {% blocktrans trimmed with date=order.expires|date:"SHORT_DATETIME_FORMAT" %}
-                            Please complete your payment before {{ date }}.
-                        {% endblocktrans %}
-                    {% endif %}
-                </strong>
+                <strong>{% blocktrans trimmed with date=order|format_expires %}
+                    Please complete your payment before {{ date }}
+                {% endblocktrans %}</strong>
                 {% if last_payment %}
                     {{ last_payment_info }}
                     {% if can_pay %}
