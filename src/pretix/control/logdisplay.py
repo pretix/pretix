@@ -440,7 +440,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             bleach.clean(logentry.parsed_data.get('msg'), tags=[], strip=True)
         )
 
-    if logentry.action_type.startswith('pretix.event.checkin'):
+    if sender and logentry.action_type.startswith('pretix.event.checkin'):
         return _display_checkin(sender, logentry)
 
     if logentry.action_type == 'pretix.control.views.checkin':

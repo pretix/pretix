@@ -751,7 +751,9 @@ class DeviceLogView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, 
         qs = LogEntry.objects.filter(
             device_id=self.device
         ).select_related(
-            'user', 'content_type', 'api_token', 'oauth_application', 'device', 'event'
+            'user', 'content_type', 'api_token', 'oauth_application',
+        ).prefetch_related(
+            'device', 'event'
         ).order_by('-datetime')
         return qs
 
