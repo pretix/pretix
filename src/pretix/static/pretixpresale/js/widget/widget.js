@@ -1418,7 +1418,7 @@ var shared_root_computed = {
     },
     formTarget: function () {
         var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-        var is_android = navigator.platform.toLowerCase().indexOf("android") > -1;
+        var is_android = navigator.userAgent.toLowerCase().indexOf("android") > -1;
         if (is_android && is_firefox) {
             // Opening a POST form in a new browser fails in Firefox. This is supposed to be fixed since FF 76
             // but for some reason, it is still the case in FF for Android.
