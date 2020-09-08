@@ -12,7 +12,7 @@ from i18nfield.forms import I18nTextInput
 from i18nfield.strings import LazyI18nString
 from localflavor.generic.forms import BICFormField, IBANFormField
 
-from pretix.base.models import OrderPayment
+from pretix.base.models import OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 
 
@@ -145,8 +145,8 @@ class BankTransfer(BasePaymentProvider):
     def settings_form_clean(self, cleaned_data):
         if cleaned_data.get('payment_banktransfer_bank_details_type') == 'sepa':
             for f in (
-                    'bank_details_sepa_name', 'bank_details_sepa_bank', 'bank_details_sepa_bic',
-                    'bank_details_sepa_iban'):
+                'bank_details_sepa_name', 'bank_details_sepa_bank', 'bank_details_sepa_bic',
+                'bank_details_sepa_iban'):
                 if not cleaned_data.get('payment_banktransfer_%s' % f):
                     raise ValidationError(
                         {'payment_banktransfer_%s' % f: _('Please fill out your bank account details.')})
@@ -213,10 +213,13 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
+        return self._render_control_info(request, payment.order, payment.info_data)
+
+    def _render_control_info(self, request, order, info_data):
         template = get_template('pretixplugins/banktransfer/control.html')
         ctx = {'request': request, 'event': self.event,
-               'code': self._code(payment.order),
-               'payment_info': payment.info_data, 'order': payment.order}
+               'code': self._code(order),
+               'payment_info': info_data, 'order': order}
         return template.render(ctx)
 
     def _code(self, order):
@@ -234,3 +237,21 @@ class BankTransfer(BasePaymentProvider):
         d['_shredded'] = True
         obj.info = json.dumps(d)
         obj.save(update_fields=['info'])
+
+    def payment_refund_supported(self, payment: OrderPayment) -> bool:
+        return all(payment.info_data.get(key) for key in ("payer", "iban", "bic"))
+
+    def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
+        return self.payment_refund_supported(payment)
+
+    def execute_refund(self, refund: OrderRefund):
+        """
+        We just keep a created refund object. It will be marked as done using the control view
+        for bank transfer refunds.
+        """
+        if refund.payment:
+            refund.info_data = {key: value for key, value in refund.payment.info_data.items() if key in {"payer", "iban", "bic"}}
+            refund.save(update_fields=["info"])
+
+    def refund_control_render(self, request: HttpRequest, refund: OrderRefund) -> str:
+        return self._render_control_info(request, refund.order, refund.info_data)
