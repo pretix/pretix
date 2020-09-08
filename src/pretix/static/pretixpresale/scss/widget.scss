@@ -548,7 +548,7 @@
   z-index: 16777271;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.5s, visibility 0.5s;
+  transition: opacity 0.5s;  /* do not animate visibility or we'll have a flashing thing on load */
 
   &.pretix-widget-alert-shown {
     visibility: visible;
