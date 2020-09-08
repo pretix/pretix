@@ -608,6 +608,7 @@ Order position endpoints
    :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
    :<json boolean force: Specifies that the check-in should succeed regardless of previous check-ins or required
                          questions that have not been filled. Defaults to ``false``.
+   :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
    :<json boolean ignore_unpaid: Specifies that the check-in should succeed even if the order is in pending state.
                                  Defaults to ``false`` and only works when ``include_pending`` is set on the check-in
                                  list.
