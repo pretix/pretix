@@ -26,6 +26,8 @@ class Command(BaseCommand):
             try:
                 r = receiver(signal=periodic_task, sender=self)
             except Exception as err:
+                if isinstance(Exception, KeyboardInterrupt):
+                    raise err
                 if settings.SENTRY_ENABLED:
                     from sentry_sdk import capture_exception
                     capture_exception(err)
