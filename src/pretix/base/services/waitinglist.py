@@ -82,7 +82,7 @@ def process_waitinglist(sender, **kwargs):
         live=True
     ).exclude(
         Q(date_to__isnull=True) | Q(date_to__lt=now() - timedelta(days=14)),
-        Q(presale_end_to__isnull=True) | Q(presale_end__lt=now() - timedelta(days=14)),
+        Q(presale_end__isnull=True) | Q(presale_end__lt=now() - timedelta(days=14)),
         has_subevents=False,
         date_from__lt=now() - timedelta(days=14),
     ).prefetch_related('_settings_objects', 'organizer___settings_objects').select_related('organizer')
