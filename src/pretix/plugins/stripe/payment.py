@@ -1135,7 +1135,7 @@ class StripeSEPADirectDebit(StripeMethod):
             payment.save()
 
             self._handle_payment_intent(request, payment)
-       except stripe.error.InvalidRequestError as e:
+        except stripe.error.InvalidRequestError as e:
             if e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
