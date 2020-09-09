@@ -1,6 +1,9 @@
 import sys
+from datetime import timedelta
 
+from django.db.models import Q
 from django.dispatch import receiver
+from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, User, WaitingListEntry
@@ -77,6 +80,11 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 def process_waitinglist(sender, **kwargs):
     qs = Event.objects.filter(
         live=True
+    ).exclude(
+        Q(date_to__isnull=True) | Q(date_to__lt=now() - timedelta(days=14)),
+        Q(presale_end_to__isnull=True) | Q(presale_end__lt=now() - timedelta(days=14)),
+        has_subevents=False,
+        date_from__lt=now() - timedelta(days=14),
     ).prefetch_related('_settings_objects', 'organizer___settings_objects').select_related('organizer')
     for e in qs:
         if e.settings.waiting_list_auto and (e.presale_is_running or e.has_subevents):
