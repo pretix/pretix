@@ -43,7 +43,7 @@ def register_payment_provider(sender, **kwargs):
     from .payment import (
         StripeAlipay, StripeBancontact, StripeCC, StripeEPS, StripeGiropay,
         StripeIdeal, StripeMultibanco, StripePrzelewy24, StripeSettingsHolder,
-        StripeSofort, StripeWeChatPay, StripeSEPADirectDebit,
+        StripeSEPADirectDebit, StripeSofort, StripeWeChatPay,
     )
 
     return [
