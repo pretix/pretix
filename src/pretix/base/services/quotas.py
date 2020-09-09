@@ -406,7 +406,7 @@ class QuotaAvailability:
 @receiver(signal=periodic_task)
 @minimum_interval(minutes_after_success=60)
 def build_all_quota_caches(sender, **kwargs):
-    refresh_quota_caches.apply_async()
+    refresh_quota_caches.apply()
 
 
 def grouper(iterable, n, fillvalue=None):
