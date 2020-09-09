@@ -635,7 +635,9 @@ class RefundExportListView(ListView):
         for refund in self.get_unexported().select_related('order', 'order__event'):
             if not refund.info_data:
                 # Should not happen
-                # TODO: Notify user
+                messages.warning(request,
+                                 _("We could not find bank account information for the refund {}. It was marked as failed.")
+                                 .format(refund.full_id))
                 refund.state = OrderRefund.REFUND_STATE_FAILED
                 refund.save()
                 continue
@@ -715,7 +717,9 @@ class DownloadView(DetailView):
     model = RefundExport
 
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        self.object: RefundExport = self.get_object()
+        self.object.downloaded = True
+        self.object.save(update_fields=["downloaded"])
         filename, content_type, data = get_refund_export(self.object)
         return FileResponse(data, as_attachment=True, filename=filename, content_type=content_type)
 

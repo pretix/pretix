@@ -93,6 +93,7 @@ class RefundExport(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     testmode = models.BooleanField(default=False)
     rows = models.TextField(default="[]")
+    downloaded = models.BooleanField(default=False)
 
     @property
     def rows_data(self):

@@ -31,11 +31,20 @@
             <button class="btn btn-primary">
                 {% trans "Create new export file" %}
             </button>
-            <br>
-            <label for="id_unite_transactions">
-                <input type="checkbox" name="unite_transactions" id="id_unite_transactions" checked>
-                {% trans "Aggregate transactions to the same bank account" %}
-            </label>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label for="id_unite_transactions">
+                        <input type="checkbox" name="unite_transactions" id="id_unite_transactions" checked>
+                        {% trans "Aggregate transactions to the same bank account" %}
+                    </label>
+                </div>
+            </div>
+            <p>
+                {% blocktrans %}
+                    Beware that refunds will be marked as done once an export is created.
+                    Make sure to download the export and execute the refunds.
+                {% endblocktrans %}
+            </p>
         </form>
     {% endif %}
     <h2>{% trans "Exported files" %}</h2>
@@ -67,12 +76,17 @@
                         {% endif %}
                     </td>
                     <td class="text-right">
+                        {% if not export.downloaded %}
+                            <span class="label label-warning">{% trans "not downloaded" %}</span>
+                        {% endif %}
                         {% if export.event %}
-                            <a class="btn btn-primary" href="{% url "plugins:banktransfer:refunds.download" organizer=request.organizer.slug event=export.event.slug id=export.id %}">
+                            <a class="btn btn-primary"
+                               href="{% url "plugins:banktransfer:refunds.download" organizer=request.organizer.slug event=export.event.slug id=export.id %}">
                                 <span class="fa fa-download"></span> {% trans "Download CSV" %}
                             </a>
                         {% else %}
-                            <a class="btn btn-primary" href="{% url "plugins:banktransfer:refunds.download" organizer=export.organizer.slug %}">
+                            <a class="btn btn-primary"
+                               href="{% url "plugins:banktransfer:refunds.download" organizer=export.organizer.slug %}">
                                 <span class="fa fa-download"></span> {% trans "Download CSV" %}
                             </a>                        {% endif %}
                     </td>
