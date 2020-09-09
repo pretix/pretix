@@ -66,6 +66,6 @@ def test_unite_transaction_rows():
             'payer': 'Another Last, First Last',
             'iban': 'DE111111111111111111111',
             'bic': 'ikswez2020',
-            'id': 'PARTY-R-2, PARTY-R-1',
+            'id': 'PARTY-R-1, PARTY-R-2',
             'amount': Decimal('20.00'),
         }], key=_row_key_func)

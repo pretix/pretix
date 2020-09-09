@@ -1,5 +1,7 @@
 import hashlib
+import json
 import re
+from decimal import Decimal
 
 from django.db import models
 
@@ -85,6 +87,8 @@ class BankTransaction(models.Model):
         ordering = ('date', 'id')
 
 
+
+
 class RefundExport(models.Model):
     event = models.ForeignKey('pretixbase.Event', related_name='banktransfer_refund_exports', on_delete=models.CASCADE, null=True, blank=True)
     organizer = models.ForeignKey('pretixbase.Organizer', related_name='banktransfer_refund_exports', on_delete=models.PROTECT, null=True, blank=True)
@@ -92,9 +96,14 @@ class RefundExport(models.Model):
     testmode = models.BooleanField(default=False)
     rows = models.TextField(default="[]")
 
+    @property
+    def rows_data(self):
+        return json.loads(self.rows)
 
-class BankTransferRefund(models.Model):
-    export = models.ForeignKey(RefundExport, on_delete=models.CASCADE)
-    order = models.ForeignKey('pretixbase.Order', on_delete=models.CASCADE)
-    refund = models.ForeignKey('pretixbase.OrderRefund', on_delete=models.CASCADE, null=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    @property
+    def sum(self):
+        return sum(Decimal(row["amount"]) for row in self.rows_data)
+
+    @property
+    def cnt(self):
+        return len(self.rows_data)

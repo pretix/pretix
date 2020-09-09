@@ -28,8 +28,9 @@ from pretix.control.permissions import (
     EventPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
 )
 from pretix.control.views.organizer import OrganizerDetailViewMixin
+from pretix.helpers.json import CustomJSONEncoder
 from pretix.plugins.banktransfer import csvimport, mt940import
-from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction, RefundExport, BankTransferRefund
+from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction, RefundExport
 from pretix.plugins.banktransfer.tasks import process_banktransfers
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
@@ -589,8 +590,8 @@ def _unite_transaction_rows(transaction_rows):
         united_transactions_rows.append({
             "iban": iban,
             "bic": bic,
-            "id": ", ".join(set(r['id'] for r in rows)),
-            "payer": ", ".join(set(r['payer'] for r in rows)),
+            "id": ", ".join(sorted(set(r['id'] for r in rows))),
+            "payer": ", ".join(sorted(set(r['payer'] for r in rows))),
             "amount": sum(r['amount'] for r in rows),
         })
     return united_transactions_rows
@@ -645,15 +646,11 @@ class RefundExportListView(ListView):
             if unite_transactions:
                 transaction_rows = _unite_transaction_rows(transaction_rows)
 
+            rows_data = json.dumps(transaction_rows, cls=CustomJSONEncoder)
             if hasattr(request, 'event'):
-                export = RefundExport.objects.create(event=self.request.event, testmode=self.request.event.testmode, rows=json.dumps(transaction_rows))
+                RefundExport.objects.create(event=self.request.event, testmode=self.request.event.testmode, rows=rows_data)
             else:
-                export = RefundExport.objects.create(event=self.request.organizer, testmode=False, rows=json.dumps(transaction_rows))
-
-            BankTransferRefund.objects.bulk_create([
-                BankTransferRefund(export=export, order=refund.order, refund=refund, amount=refund.amount)
-                for refund in valid_refunds
-            ])
+                RefundExport.objects.create(event=self.request.organizer, testmode=False, rows=rows_data)
 
         else:
             messages.warning(request, _('No valid orders have been found.'))
@@ -672,9 +669,6 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
     def get_queryset(self):
         return RefundExport.objects.filter(
             event=self.request.event
-        ).annotate(
-            cnt=Count('banktransferrefund'),
-            sum=Sum('banktransferrefund__amount'),
         ).order_by('-datetime')
 
     def get_unexported(self):
@@ -683,7 +677,6 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
             provider='banktransfer',
             state=OrderRefund.REFUND_STATE_CREATED,
             order__testmode=self.request.event.testmode,
-            banktransferrefund__isnull=True
         )
 
 
@@ -696,9 +689,6 @@ class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExpo
     def get_queryset(self):
         return RefundExport.objects.filter(
             Q(organizer=self.request.organizer) | Q(event__organizer=self.request.organizer)
-        ).annotate(
-            cnt=Count('banktransferrefund'),
-            sum=Sum('banktransferrefund__amount'),
         ).order_by('-datetime')
 
     def get_unexported(self):
@@ -707,5 +697,4 @@ class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExpo
             provider='banktransfer',
             state=OrderRefund.REFUND_STATE_CREATED,
             order__testmode=False,
-            banktransferrefund__isnull=True
         )
