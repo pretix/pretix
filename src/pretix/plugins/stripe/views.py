@@ -244,6 +244,7 @@ SOURCE_TYPES = {
     'sofort': 'stripe_sofort',
     'three_d_secure': 'stripe',
     'card': 'stripe',
+    'sepa_debit': 'stripe_sepa_debit',
     'giropay': 'stripe_giropay',
     'ideal': 'stripe_ideal',
     'alipay': 'stripe_alipay',

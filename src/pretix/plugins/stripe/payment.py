@@ -218,6 +218,13 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Credit card payments'),
                      required=False,
                  )),
+                ('method_sepa_debit',
+                 forms.BooleanField(
+                     label=_('SEPA Direct Debit'),
+                     disabled=self.event.currency != 'EUR',
+                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     required=False,
+                )),
                 ('method_giropay',
                  forms.BooleanField(
                      label=_('giropay'),
@@ -948,6 +955,223 @@ class StripeCC(StripeMethod):
                f'{card.get("brand", "").title()} ' \
                f'************{card.get("last4", "****")}, ' \
                f'{_("expires {month}/{year}").format(month=card.get("exp_month"), year=card.get("exp_year"))}'
+
+
+class StripeSEPADirectDebit(StripeMethod):
+    identifier = 'stripe_sepa_debit'
+    verbose_name = _('SEPA Debit via Stripe')
+    public_name = _('SEPA Debit')
+    method = 'sepa_debit'
+
+    def payment_form_render(self, request) -> str:
+        template = get_template('pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'form': self.payment_form(request),
+        }
+        return template.render(ctx)
+
+    @property
+    def payment_form_fields(self):
+        return OrderedDict([
+            ('iban', forms.CharField(label=_('IBAN'))),
+            ('accountname', forms.CharField(label=_('Account Holder Name'))),
+            ('accountemail', forms.CharField(label=_('Account Holder Email'))),
+        ])
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        return self._handle_payment_intent(request, payment)
+
+    def _handle_payment_intent(self, request, payment, intent=None):
+        self._init_api()
+
+        try:
+            if self.payment_is_valid_session(request):
+                pmi_params = {}
+                pmi_params.update(self.api_kwargs)
+
+                payment_method_id = stripe.PaymentMethod.create(
+                    type="sepa_debit",
+                    sepa_debit={
+                        'iban': request.session.get('payment_stripe_sepa_debit_iban'),
+                    },
+                    billing_details={
+                        'name': request.session.get('payment_stripe_sepa_debit_accountname'),
+                        'email': request.session.get('payment_stripe_sepa_debit_accountemail'),
+                    },
+                    **pmi_params
+                )
+
+                params = {}
+                params.update(self._connect_kwargs(payment))
+                params.update(self.api_kwargs)
+
+                intent = stripe.PaymentIntent.create(
+                    amount=self._get_amount(payment),
+                    currency=self.event.currency.lower(),
+                    payment_method_types=["sepa_debit"],
+                    payment_method=payment_method_id,
+                    confirm=True,
+                    description='{event}-{code}'.format(
+                        event=self.event.slug.upper(),
+                        code=payment.order.code
+                    ),
+                    statement_descriptor=self.statement_descriptor(payment),
+                    metadata={
+                        'order': str(payment.order.id),
+                        'event': self.event.id,
+                        'code': payment.order.code,
+                        'integration_check': 'sepa_debit_accept_a_payment',
+                    },
+                    mandate_data={
+                        'customer_acceptance': {
+                            'type': 'online',
+                            'online': {
+                                'ip_address': request.META['REMOTE_ADDR'],
+                                'user_agent': request.META['HTTP_USER_AGENT'],
+                            }
+                        },
+                    },
+                    return_url=build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
+                        'order': payment.order.code,
+                        'payment': payment.pk,
+                        'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                    }),
+                    **params
+                )
+
+            else:
+                payment_info = json.loads(payment.info)
+
+                if 'id' in payment_info:
+                    if not intent:
+                        intent = stripe.PaymentIntent.retrieve(
+                            payment_info['id'],
+                            **self.api_kwargs
+                        )
+                else:
+                payment_info = json.loads(payment.info)
+
+                if 'id' in payment_info:
+                    if not intent:
+                        intent = stripe.PaymentIntent.retrieve(
+                            payment_info['id'],
+                            **self.api_kwargs
+                        )
+                else:
+                    return
+
+        except stripe.error.StripeError as e:
+            if e.json_body and 'error' in e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                err = {'message': str(e)}
+                logger.exception('Stripe error: %s' % str(e))
+            payment.fail(info={
+                'error': True,
+                'message': err['message'],
+            })
+            raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
+                                     'with us if this problem persists.'))
+        else:
+            ReferencedStripeObject.objects.get_or_create(
+                reference=intent.id,
+                defaults={'order': payment.order, 'payment': payment}
+            )
+            if intent.status == 'requires_action':
+                payment.info = str(intent)
+                payment.state = OrderPayment.PAYMENT_STATE_CREATED
+                payment.save()
+                return build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
+                    'order': payment.order.code,
+                    'payment': payment.pk,
+                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                })
+
+            if intent.status == 'requires_confirmation':
+                payment.info = str(intent)
+                payment.state = OrderPayment.PAYMENT_STATE_CREATED
+                payment.save()
+                self._confirm_payment_intent(request, payment)
+
+            elif intent.status == 'succeeded' and intent.charges.data[-1].paid:
+                try:
+                    payment.info = str(intent)
+                    payment.confirm()
+                except Quota.QuotaExceededException as e:
+                    raise PaymentException(str(e))
+
+                except SendMailException:
+                    raise PaymentException(_('There was an error sending the confirmation mail.'))
+            elif intent.status == 'processing':
+                if request:
+                    messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
+                                                'payment completed.'))
+                payment.info = str(intent)
+                payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                payment.save()
+                return
+            elif intent.status == 'requires_payment_method':
+                if request:
+                    messages.warning(request, _('Your payment failed. Please try again.'))
+                payment.fail(info=str(intent))
+                return
+            else:
+                logger.info('Charge failed: %s' % str(intent))
+                payment.fail(info=str(intent))
+                raise PaymentException(_('Stripe reported an error: %s') % intent.last_payment_error.message)
+
+
+    def _confirm_payment_intent(self, request, payment):
+        self._init_api()
+
+        try:
+            payment_info = json.loads(payment.info)
+
+            intent = stripe.PaymentIntent.confirm(
+                payment_info['id'],
+                return_url=build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
+                    'order': payment.order.code,
+                    'payment': payment.pk,
+                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                }),
+                **self.api_kwargs
+            )
+
+            payment.info = str(intent)
+            payment.save()
+
+            self._handle_payment_intent(request, payment)
+       except stripe.error.InvalidRequestError as e:
+            if e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                err = {'message': str(e)}
+                logger.exception('Stripe error: %s' % str(e))
+            payment.fail(info={
+                'error': True,
+                'message': err['message'],
+            })
+            raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
+                                     'with us if this problem persists.'))
+
+    def payment_is_valid_session(self, request):
+        return (
+            request.session.get('payment_stripe_sepa_debit_iban', '') != '',
+        )
+
+    def checkout_prepare(self, request, cart):
+        form = self.payment_form(request)
+        if form.is_valid():
+            request.session['payment_stripe_sepa_debit_iban'] = form.cleaned_data['iban']
+            request.session['payment_stripe_sepa_debit_accountname'] = form.cleaned_data['accountname']
+            request.session['payment_stripe_sepa_debit_accountemail'] = form.cleaned_data['accountemail']
+            return True
+        return False
 
 
 class StripeGiropay(StripeMethod):
