@@ -50,6 +50,8 @@
                             {% if d.revoked %}<del>{% endif %}
                             {{ d.name }}
                             {% if d.revoked %}</del>{% endif %}
+                            <br>
+                            <small>{{ d.unique_serial }}</small>
                         </td>
                         <td>
                             {{ d.hardware_brand|default_if_none:"" }} {{ d.hardware_model|default_if_none:"" }}
