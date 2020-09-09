@@ -87,8 +87,6 @@ class BankTransaction(models.Model):
         ordering = ('date', 'id')
 
 
-
-
 class RefundExport(models.Model):
     event = models.ForeignKey('pretixbase.Event', related_name='banktransfer_refund_exports', on_delete=models.CASCADE, null=True, blank=True)
     organizer = models.ForeignKey('pretixbase.Organizer', related_name='banktransfer_refund_exports', on_delete=models.PROTECT, null=True, blank=True)

@@ -9,15 +9,15 @@ from typing import Set
 from django import forms
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Count, Q, Sum, QuerySet
+from django.db.models import Count, Q, QuerySet
 from django.db.models.functions import Concat
-from django.http import JsonResponse
+from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
-from django.views.generic import DetailView, ListView, View, TemplateView
+from django.views.generic import DetailView, ListView, View
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
@@ -30,7 +30,10 @@ from pretix.control.permissions import (
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.helpers.json import CustomJSONEncoder
 from pretix.plugins.banktransfer import csvimport, mt940import
-from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction, RefundExport
+from pretix.plugins.banktransfer.models import (
+    BankImportJob, BankTransaction, RefundExport,
+)
+from pretix.plugins.banktransfer.refund_export import get_refund_export
 from pretix.plugins.banktransfer.tasks import process_banktransfers
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
@@ -346,8 +349,7 @@ class ImportView(ListView):
             self.discard_all()
             return self.redirect_back()
 
-        elif ('file' in self.request.FILES and '.csv' in self.request.FILES.get('file').name.lower()) \
-            or 'amount' in self.request.POST:
+        elif ('file' in self.request.FILES and '.csv' in self.request.FILES.get('file').name.lower()) or 'amount' in self.request.POST:
             # Process CSV
             return self.process_csv()
 
@@ -579,8 +581,10 @@ class OrganizerActionView(OrganizerBanktransferView, OrganizerPermissionRequired
                 ).values_list('limit_events__id', flat=True)
             )
 
+
 def _row_key_func(row):
     return row['iban'], row['bic']
+
 
 def _unite_transaction_rows(transaction_rows):
     united_transactions_rows = []
@@ -608,6 +612,13 @@ class RefundExportListView(ListView):
 
     def get_unexported(self) -> QuerySet:
         raise NotImplementedError()
+
+    def dispatch(self, request, *args, **kwargs):
+        if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
+            messages.error(request, _('Please perform per-event refund exports as this organizer has events with '
+                                      'multiple currencies.'))
+            return redirect('control:organizer', organizer=request.organizer.slug)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
@@ -697,4 +708,33 @@ class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExpo
             provider='banktransfer',
             state=OrderRefund.REFUND_STATE_CREATED,
             order__testmode=False,
+        )
+
+
+class DownloadView(DetailView):
+    model = RefundExport
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        filename, content_type, data = get_refund_export(self.object)
+        return FileResponse(data, as_attachment=True, filename=filename, content_type=content_type)
+
+
+class EventDownloadView(EventPermissionRequiredMixin, DownloadView):
+    permission = 'can_change_orders'
+
+    def get_object(self, *args, **kwargs):
+        return RefundExport.objects.get(
+            event=self.request.event,
+            pk=self.kwargs.get('id')
+        )
+
+
+class OrganizerDownloadView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, DownloadView):
+    permission = 'can_change_organizer_settings'
+
+    def get_object(self, *args, **kwargs):
+        return RefundExport.objects.get(
+            organizer=self.request.organizer,
+            pk=self.kwargs.get('id')
         )

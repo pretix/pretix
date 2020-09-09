@@ -68,10 +68,13 @@
                     </td>
                     <td class="text-right">
                         {% if export.event %}
-                            Download for event
+                            <a class="btn btn-primary" href="{% url "plugins:banktransfer:refunds.download" organizer=request.organizer.slug event=export.event.slug id=export.id %}">
+                                <span class="fa fa-download"></span> {% trans "Download CSV" %}
+                            </a>
                         {% else %}
-                            Download for organizer
-                        {% endif %}
+                            <a class="btn btn-primary" href="{% url "plugins:banktransfer:refunds.download" organizer=export.organizer.slug %}">
+                                <span class="fa fa-download"></span> {% trans "Download CSV" %}
+                            </a>                        {% endif %}
                     </td>
                 </tr>
             {% empty %}
