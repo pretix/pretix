@@ -13,6 +13,8 @@ urlpatterns = [
         views.OrganizerJobDetailView.as_view(), name='import.job'),
     url(r'^control/organizer/(?P<organizer>[^/]+)/banktransfer/action/',
         views.OrganizerActionView.as_view(), name='import.action'),
+    url(r'^control/organizer/(?P<organizer>[^/]+)/banktransfer/refunds/',
+        views.OrganizerRefundExportListView.as_view(), name='refunds.list'),
 
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/banktransfer/import/',
         views.EventImportView.as_view(),
@@ -21,6 +23,9 @@ urlpatterns = [
         views.EventJobDetailView.as_view(), name='import.job'),
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/banktransfer/action/',
         views.EventActionView.as_view(), name='import.action'),
+    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/banktransfer/refunds/',
+        views.EventRefundExportListView.as_view(),
+        name='refunds.list'),
 ]
 
 orga_router.register('bankimportjobs', BankImportJobViewSet)

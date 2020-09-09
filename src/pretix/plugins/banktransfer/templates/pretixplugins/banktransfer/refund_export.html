@@ -1,0 +1,87 @@
+{% extends basetpl %}
+{% load i18n %}
+{% load money %}
+{% load static %}
+{% block title %}{% trans "Export bank transfer refunds" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Export bank transfer refunds" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            <strong>{{ num_new }}</strong> Bank transfer refunds have been placed and are not yet part of an export.
+        {% endblocktrans %}
+    </p>
+    {% if request.event.testmode %}
+        <div class="alert alert-warning">
+            {% trans "In test mode, your exports will only contain test mode orders." %}
+        </div>
+    {% elif request.event %}
+        <div class="alert alert-info">
+            {% trans "If you want, you can now also create these exports for multiple events combined." %}
+            <strong>
+                <a href="{% url "plugins:banktransfer:refunds.list" organizer=request.organizer.slug %}">
+                    {% trans "Go to organizer-level exports" %}
+                </a>
+            </strong>
+        </div>
+    {% endif %}
+
+    {% if num_new > 0 %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <button class="btn btn-primary">
+                {% trans "Create new export file" %}
+            </button>
+            <br>
+            <label for="id_unite_transactions">
+                <input type="checkbox" name="unite_transactions" id="id_unite_transactions" checked>
+                {% trans "Aggregate transactions to the same bank account" %}
+            </label>
+        </form>
+    {% endif %}
+    <h2>{% trans "Exported files" %}</h2>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Export date" %}</th>
+                <th>{% trans "Number of orders" %}</th>
+                <th>{% trans "Total amount" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for export in exports %}
+                <tr>
+                    <td>
+                        {{ export.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        {% if export.testmode %}
+                            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ export.cnt }}</td>
+                    <td>
+                        {% if export.currency %}
+                            {{ export.sum|default_if_none:0|money:export.currency }}
+                        {% else %}
+                            {{ export.sum|default_if_none:0|money:export.event.currency }}
+                        {% endif %}
+                    </td>
+                    <td class="text-right">
+                        {% if export.event %}
+                            Download for event
+                        {% else %}
+                            Download for organizer
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">
+                        {% trans "No exports have been created yet." %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

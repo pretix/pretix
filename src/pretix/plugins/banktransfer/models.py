@@ -83,3 +83,18 @@ class BankTransaction(models.Model):
     class Meta:
         unique_together = ('event', 'organizer', 'checksum')
         ordering = ('date', 'id')
+
+
+class RefundExport(models.Model):
+    event = models.ForeignKey('pretixbase.Event', related_name='banktransfer_refund_exports', on_delete=models.CASCADE, null=True, blank=True)
+    organizer = models.ForeignKey('pretixbase.Organizer', related_name='banktransfer_refund_exports', on_delete=models.PROTECT, null=True, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    testmode = models.BooleanField(default=False)
+    rows = models.TextField(default="[]")
+
+
+class BankTransferRefund(models.Model):
+    export = models.ForeignKey(RefundExport, on_delete=models.CASCADE)
+    order = models.ForeignKey('pretixbase.Order', on_delete=models.CASCADE)
+    refund = models.ForeignKey('pretixbase.OrderRefund', on_delete=models.CASCADE, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
