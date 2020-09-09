@@ -31,6 +31,7 @@ class Command(BaseCommand):
                 if settings.SENTRY_ENABLED:
                     from sentry_sdk import capture_exception
                     capture_exception(err)
+                    self.stdout.write(self.style.ERROR(f'FAIL: {str(err)}\n'))
                 else:
                     self.stdout.write(self.style.ERROR(f'FAIL: {str(err)}\n'))
                     traceback.print_exc()
