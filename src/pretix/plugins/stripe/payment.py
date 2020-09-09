@@ -224,7 +224,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Needs to be enabled in your Stripe account first.'),
                      required=False,
-                )),
+                 )),
                 ('method_giropay',
                  forms.BooleanField(
                      label=_('giropay'),
@@ -1052,15 +1052,6 @@ class StripeSEPADirectDebit(StripeMethod):
                             **self.api_kwargs
                         )
                 else:
-                payment_info = json.loads(payment.info)
-
-                if 'id' in payment_info:
-                    if not intent:
-                        intent = stripe.PaymentIntent.retrieve(
-                            payment_info['id'],
-                            **self.api_kwargs
-                        )
-                else:
                     return
 
         except stripe.error.StripeError as e:
@@ -1123,7 +1114,6 @@ class StripeSEPADirectDebit(StripeMethod):
                 logger.info('Charge failed: %s' % str(intent))
                 payment.fail(info=str(intent))
                 raise PaymentException(_('Stripe reported an error: %s') % intent.last_payment_error.message)
-
 
     def _confirm_payment_intent(self, request, payment):
         self._init_api()
