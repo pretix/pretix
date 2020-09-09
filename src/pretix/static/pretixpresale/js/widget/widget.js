@@ -1225,7 +1225,7 @@ Vue.component('pretix-widget', {
     data: shared_widget_data,
     methods: shared_methods,
     mounted: function () {
-        this.mobile = this.$refs.wrapper.clientWidth <= 800;
+        this.mobile = this.$refs.wrapper.clientWidth <= 600;
     },
     computed: {
         classObject: function () {
