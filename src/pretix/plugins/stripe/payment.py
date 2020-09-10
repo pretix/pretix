@@ -234,6 +234,13 @@ class StripeSettingsHolder(BasePaymentProvider):
                      ),
                      required=False,
                  )),
+                ('sepa_creditor_name',
+                 forms.CharField(
+                     label=_('SEPA Creditor Mandate Name'),
+                     disabled=self.event.currency != 'EUR',
+                     help_text=_('Please enter the Stripe SEPA Creditor Mandate Name here'),
+                     required=False,
+                 )),
                 ('method_giropay',
                  forms.BooleanField(
                      label=_('giropay'),
