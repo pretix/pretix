@@ -1029,7 +1029,7 @@ class StripeSEPADirectDebit(StripeMethod):
                         'customer_acceptance': {
                             'type': 'online',
                             'online': {
-                                'ip_address': request.META['REMOTE_ADDR'],
+                                'ip_address': pretix.helpers.http.get_client_ip,
                                 'user_agent': request.META['HTTP_USER_AGENT'],
                             }
                         },
