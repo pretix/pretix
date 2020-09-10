@@ -42,6 +42,7 @@ from decimal import Decimal
 
 import stripe
 from django import forms
+from localflavor.generic import forms as localforms
 from django.conf import settings
 from django.contrib import messages
 from django.core import signing
@@ -976,7 +977,7 @@ class StripeSEPADirectDebit(StripeMethod):
     @property
     def payment_form_fields(self):
         return OrderedDict([
-            ('iban', forms.CharField(label=_('IBAN'))),
+            ('iban', localforms.IBANFormField(label=_('IBAN'))),
             ('accountname', forms.CharField(label=_('Account Holder Name'))),
             ('accountemail', forms.CharField(label=_('Account Holder Email'))),
         ])
