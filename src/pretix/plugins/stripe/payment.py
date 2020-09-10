@@ -64,6 +64,7 @@ from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
+from pretix.helpers.http import get_client_ip as get_client_ip
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.plugins.stripe.forms import StripeKeyValidator
@@ -226,10 +227,10 @@ class StripeSettingsHolder(BasePaymentProvider):
                      help_text=(
                          _('Needs to be enabled in your Stripe account first.') +
                          '<div class=alert alert-warning>%s</div>' % _(
-                            'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
-                            'instantly but might take up to <strong>14 days</strong> to be confimed in some cases. '
-                            'Please only activate this payment method if your payment term allows for this lag. '
-                            'Remember to activate the webhook in your Stripe account. '
+                             'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
+                             'instantly but might take up to <strong>14 days</strong> to be confimed in some cases. '
+                             'Please only activate this payment method if your payment term allows for this lag. '
+                             'Remember to activate the webhook in your Stripe account. '
                          )
                      ),
                      required=False,
@@ -1047,7 +1048,7 @@ class StripeSEPADirectDebit(StripeMethod):
                         'customer_acceptance': {
                             'type': 'online',
                             'online': {
-                                'ip_address': pretix.helpers.http.get_client_ip,
+                                'ip_address': get_client_ip(request),
                                 'user_agent': request.META['HTTP_USER_AGENT'],
                             }
                         },
