@@ -21382,7 +21382,7 @@ msgstr "Dies ist keine Veranstaltungsreihe."
 #: pretix/presale/views/widget.py:329
 #, python-format
 msgid "from %(start_date)s"
-msgstr "von %(start_date)s"
+msgstr "ab %(start_date)s"
 
 #: pretix/presale/views/widget.py:332
 msgid "Sale soon"
