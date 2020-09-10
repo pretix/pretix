@@ -42,7 +42,6 @@ from decimal import Decimal
 
 import stripe
 from django import forms
-from localflavor.generic import forms as localforms
 from django.conf import settings
 from django.contrib import messages
 from django.core import signing
@@ -55,6 +54,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext
 from django_countries import countries
+from localflavor.generic import forms as localforms
 
 from pretix import __version__
 from pretix.base.decimal import round_decimal
