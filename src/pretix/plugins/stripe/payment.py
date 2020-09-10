@@ -987,7 +987,6 @@ class StripeSEPADirectDebit(StripeMethod):
         return OrderedDict([
             ('iban', localforms.IBANFormField(label=_('IBAN'))),
             ('accountname', forms.CharField(label=_('Account Holder Name'))),
-            ('accountemail', forms.CharField(label=_('Account Holder Email'))),
         ])
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
@@ -1011,7 +1010,7 @@ class StripeSEPADirectDebit(StripeMethod):
                     },
                     billing_details={
                         'name': request.session.get('payment_stripe_sepa_debit_accountname'),
-                        'email': request.session.get('payment_stripe_sepa_debit_accountemail'),
+                        'email': payment.order.email,
                     },
                     **pmi_params
                 )
@@ -1171,7 +1170,6 @@ class StripeSEPADirectDebit(StripeMethod):
         if form.is_valid():
             request.session['payment_stripe_sepa_debit_iban'] = form.cleaned_data['iban']
             request.session['payment_stripe_sepa_debit_accountname'] = form.cleaned_data['accountname']
-            request.session['payment_stripe_sepa_debit_accountemail'] = form.cleaned_data['accountemail']
             return True
         return False
 
