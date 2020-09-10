@@ -983,7 +983,10 @@ class StripeSEPADirectDebit(StripeMethod):
         ])
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
-        return self._handle_payment_intent(request, payment)
+        try:
+            return self._handle_payment_intent(request, payment)
+        finally:
+            del request.session['payment_stripe_payment_method_id']
 
     def _handle_payment_intent(self, request, payment, intent=None):
         self._init_api()
