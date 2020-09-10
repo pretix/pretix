@@ -26,7 +26,7 @@ def control_nav_import(sender, request=None, **kwargs):
                 'event': request.event.slug,
                 'organizer': request.event.organizer.slug,
             }),
-            'icon': 'university fa-spin',
+            'icon': 'university',
             'children': [
                 {
                     'label': _('Import bank data'),
