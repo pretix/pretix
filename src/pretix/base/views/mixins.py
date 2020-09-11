@@ -1,3 +1,4 @@
+import itertools
 import json
 from collections import OrderedDict
 from decimal import Decimal
@@ -53,7 +54,31 @@ class BaseQuestionsViewMixin:
                                    data=(self.request.POST if self.request.method == 'POST' else None),
                                    files=(self.request.FILES if self.request.method == 'POST' else None))
             form.pos = cartpos or orderpos
-            form.show_copy_answers_to_addon_button = form.pos.addon_to and set(form.pos.addon_to.item.questions.all()) & set(form.pos.item.questions.all())
+
+            if form.pos.addon_to_id is not None:
+                form.copy_answer_from = None
+                # addons typically do not have the same item as the main position, so we look for overlapping questions
+                form.show_copy_answers_to_addon_button = bool(
+                    set(form.pos.addon_to.item.questions.values_list("id", flat=True)) &
+                    set(form.pos.item.questions.values_list("id", flat=True)))
+            else:
+                form.show_copy_answers_to_addon_button = False
+                # look for a position we can best copy answers from
+                form.copy_answer_from = next(
+                    itertools.chain(
+                        (   # match a position with the same item
+                            other_form.pos.id for other_form in formlist
+                            if other_form.pos.addon_to_id is None and form.pos.item.id == other_form.pos.item.id
+                        ),
+                        (   # match a position with questions in common
+                            other_form.pos.id for other_form in formlist
+                            if other_form.pos.addon_to_id is None
+                            and set(form.pos.item.questions.values_list("id", flat=True)) & set(other_form.pos.item.questions.values_list("id", flat=True))
+                        )
+                    ),
+                    None  # didn't find a position to copy answers from
+                )
+
             if len(form.fields) > 0:
                 formlist.append(form)
         return formlist
@@ -105,8 +130,7 @@ class BaseQuestionsViewMixin:
                         if hasattr(field, 'answer'):
                             # We already have a cached answer object, so we don't
                             # have to create a new one
-                            if v == '' or v is None or (isinstance(field, forms.FileField) and v is False) \
-                                    or (isinstance(v, QuerySet) and not v.exists()):
+                            if v == '' or v is None or (isinstance(field, forms.FileField) and v is False) or (isinstance(v, QuerySet) and not v.exists()):
                                 if field.answer.file:
                                     field.answer.file.delete()
                                 field.answer.delete()

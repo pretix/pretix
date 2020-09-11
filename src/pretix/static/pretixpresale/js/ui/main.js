@@ -16,9 +16,13 @@ function ngettext(singular, plural, count) {
 
 function interpolate(fmt, object, named) {
     if (named) {
-        return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+        return fmt.replace(/%\(\w+\)s/g, function (match) {
+            return String(obj[match.slice(2, -2)])
+        });
     } else {
-        return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+        return fmt.replace(/%s/g, function (match) {
+            return String(obj.shift())
+        });
     }
 }
 
@@ -171,13 +175,13 @@ $(function () {
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        let idx = $(this).data('id');
-        const addonDivs = $('div[data-idx="' + idx +'"]')
+        const idx = $(this).data('id');
+        const copyFromIdx = $(this).data('copy-from')
+        const addonDivs = $('div[data-idx="' + idx + '"]')
         addonDivs.each(function (index) {
             const elements = $(this).find('input, select, textarea');
-
-            const addonIdx = $(this).attr("data-addonidx");
-            const answersDiv = $('div[data-idx="0"][data-addonidx="' + addonIdx + '"]');
+            const addonIdx = $(this).data("addonidx");
+            const answersDiv = $('div[data-idx="' + copyFromIdx + '"][data-addonidx="' + addonIdx + '"]');
             const answers = answersDiv.find('input, select, textarea');
 
             copy_answers(elements, answers);
@@ -189,7 +193,7 @@ $(function () {
         e.stopPropagation();
         const id = $(this).data('id');
         const addonId = $(this).data('addonid');
-        const addonDiv = $('div[data-idx="' + id +'"][data-addonidx="' + addonId + '"]');
+        const addonDiv = $('div[data-idx="' + id + '"][data-addonidx="' + addonId + '"]');
         const elements = addonDiv.find('input, select, textarea');
         const answers = $('*[data-idx="' + id + '"] input, *[data-idx="' + id + '"] select, *[data-idx="' + id + '"] textarea');
         copy_answers(elements, answers);
@@ -249,7 +253,7 @@ $(function () {
                     is_enabled = true;
                 }
             });
-            $(".input-seat-selection option").each(function() {
+            $(".input-seat-selection option").each(function () {
                 if ($(this).val() && $(this).val() !== "" && $(this).prop('selected')) {
                     is_enabled = true;
                 }
@@ -257,7 +261,9 @@ $(function () {
         }
         if (!is_enabled && !$(".has-seating").length) {
             $("#btn-add-to-cart").prop("disabled", !is_enabled).popover({
-                'content': function () { return gettext("Please enter a quantity for one of the ticket types.") },
+                'content': function () {
+                    return gettext("Please enter a quantity for one of the ticket types.")
+                },
                 'placement': 'top',
                 'trigger': 'hover focus'
             });
@@ -353,7 +359,9 @@ $(function () {
                     if (counter > curCounter) {
                         return;  // Lost race
                     }
-                    dependent.find("option").filter(function (t) {return !!$(this).attr("value")}).remove();
+                    dependent.find("option").filter(function (t) {
+                        return !!$(this).attr("value")
+                    }).remove();
                     if (data.data.length > 0) {
                         $.each(data.data, function (k, s) {
                             dependent.append($("<option>").attr("value", s.code).text(s.name));
@@ -400,8 +408,7 @@ $(function () {
             true
         ));
     }
-    var cancel_fee_slider = $('#cancel-fee-slider').slider({
-    }).on('slide', function () {
+    var cancel_fee_slider = $('#cancel-fee-slider').slider({}).on('slide', function () {
         cancel_fee_slider_update();
     }).data('slider');
     if (cancel_fee_slider) {
@@ -417,7 +424,7 @@ $(function () {
     }
 
     var local_tz = moment.tz.guess()
-    $("span[data-timezone]").each(function() {
+    $("span[data-timezone]").each(function () {
         var t = moment.tz($(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
 
@@ -445,39 +452,47 @@ $(function () {
 });
 
 function copy_answers(elements, answers) {
-   elements.each(function (index) {
+    elements.each(function (index) {
         var input = $(this),
             tagName = input.prop('tagName').toLowerCase(),
             attributeType = input.attr('type'),
             suffix = input.attr('name').split('-')[1];
 
+        let a = false;
         switch (tagName) {
             case "textarea":
-                input.val(answers.filter("[name$=" + suffix + "]").val());
+                a = answers.filter("[name$=" + suffix + "]");
+                if (a.length) input.val(a.val());
                 break;
             case "select":
-                input.val(answers.filter("[name$=" + suffix + "]").find(":selected").val()).change();
+                a = answers.filter("[name$=" + suffix + "]").find(":selected");
+                if (a.length) input.val(a.val()).change();
                 break;
             case "input":
                 switch (attributeType) {
                     case "text":
                     case "number":
-                        input.val(answers.filter("[name$=" + suffix + "]").val());
+                        a = answers.filter("[name$=" + suffix + "]")
+                        if (a.length) input.val(a.val());
                         break;
                     case "checkbox":
                     case "radio":
                         if (input.attr('value')) {
-                            input.prop("checked", answers.filter("[name$=" + suffix + "][value=" + input.attr('value') + "]").prop("checked"));
+                            a = answers.filter("[name$=" + suffix + "][value=" + input.attr('value') + "]")
+                            if (a.length) input.prop("checked", a.prop("checked"));
                         } else {
-                            input.prop("checked", answers.filter("[name$=" + suffix + "]").prop("checked"));
+                            a = answers.filter("[name$=" + suffix + "]")
+                            if (a.length) input.prop("checked", a.prop("checked"));
                         }
                         break;
                     default:
-                        input.val(answers.filter("[name$=" + suffix + "]").val());
+                        a = answers.filter("[name$=" + suffix + "]")
+                        if (a.length) input.val(a.val());
                 }
                 break;
             default:
-                input.val(answers.filter("[name$=" + suffix + "]").val());
+                a = answers.filter("[name$=" + suffix + "]")
+                if (a.length) input.val(a.val());
         }
     });
     questions_toggle_dependent(true);
