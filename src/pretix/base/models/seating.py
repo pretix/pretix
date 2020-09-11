@@ -159,7 +159,7 @@ class Seat(models.Model):
             parts.append(gettext('Seat {number}').format(number=self.seat_number))
 
         if not parts:
-            return self.name
+            return self.seat_guid
         return ', '.join(parts)
 
     @classmethod
