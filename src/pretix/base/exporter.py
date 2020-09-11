@@ -128,6 +128,8 @@ class ListExporter(BaseExporter):
 
     def _render_csv(self, form_data, output_file=None, **kwargs):
         if output_file:
+            if 'b' in output_file.mode:
+                output_file = io.TextIOWrapper(output_file, encoding='utf-8', newline='')
             writer = csv.writer(output_file, **kwargs)
             total = 0
             counter = 0
@@ -246,6 +248,8 @@ class MultiSheetListExporter(ListExporter):
         total = 0
         counter = 0
         if output_file:
+            if 'b' in output_file.mode:
+                output_file = io.TextIOWrapper(output_file, encoding='utf-8', newline='')
             writer = csv.writer(output_file, **kwargs)
             for line in self.iterate_sheet(form_data, sheet):
                 if isinstance(line, self.ProgressSetTotal):
