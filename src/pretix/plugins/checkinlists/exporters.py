@@ -606,7 +606,6 @@ class CheckinLogList(ListExporter):
                      widget=forms.RadioSelect(
                          attrs={'class': 'scrolling-choice'}
                      ),
-                     initial=self.event.checkin_lists.first()
                  )),
                 ('items',
                  forms.ModelMultipleChoiceField(
