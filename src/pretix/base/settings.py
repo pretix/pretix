@@ -497,7 +497,8 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_('Payment term in minutes'),
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. "
-                        "Only use this if you exclusively offer real-time payment methods."),
+                        "Only use this if you exclusively offer real-time payment methods. Please note that for technical resons, 
+                        "the actual time frame might be a few minutes longer before the order is marked as expired."),
             validators=[MinValueValidator(0),
                         MaxValueValidator(1440)],
             widget=forms.NumberInput(
