@@ -534,3 +534,104 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
 
     def get_filename(self):
         return '{}_checkin'.format(self.event.slug)
+
+
+class CheckinLogList(ListExporter):
+    name = "checkinlog"
+    identifier = 'checkinlog'
+    verbose_name = gettext_lazy('Check-in log (all successful scans)')
+
+    @property
+    def additional_form_fields(self):
+        return self._fields
+
+    def iterate_list(self, form_data):
+        yield [
+            _('Date'),
+            _('Time'),
+            _('Check-in list'),
+            _('Scan type'),
+            _('Order code'),
+            _('Position ID'),
+            _('Secret'),
+            _('Product'),
+            _('Name'),
+            _('Device'),
+            _('Offline override'),
+            _('Automatically checked in'),
+        ]
+
+        qs = Checkin.objects.filter(
+            position__order__event=self.event,
+        )
+        if form_data.get('list'):
+            qs = qs.filter(list_id=form_data.get('list'))
+        if form_data.get('items'):
+            qs = qs.filter(position__item_id__in=form_data['items'])
+
+        yield self.ProgressSetTotal(total=qs.count())
+
+        for ci in qs.select_related('position__item', 'position__order', 'position__order__invoice_address', 'position', 'list', 'device').iterator():
+            try:
+                ia = ci.position.order.invoice_address
+            except InvoiceAddress.DoesNotExist:
+                ia = InvoiceAddress()
+
+            yield [
+                date_format(ci.datetime, 'SHORT_DATE_FORMAT'),
+                date_format(ci.datetime, 'TIME_FORMAT'),
+                str(ci.list),
+                ci.get_type_display(),
+                ci.position.order.code,
+                ci.position.positionid,
+                ci.position.secret,
+                str(ci.position.item),
+                ci.position.attendee_name or ia.name,
+                str(ci.device),
+                _('Yes') if ci.forced else _('No'),
+                _('Yes') if ci.auto_checked_in else _('No'),
+            ]
+
+    def get_filename(self):
+        return '{}_checkinlog'.format(self.event.slug)
+
+    @property
+    def _fields(self):
+        d = OrderedDict(
+            [
+                ('list',
+                 forms.ModelChoiceField(
+                     queryset=self.event.checkin_lists.all(),
+                     label=_('Check-in list'),
+                     widget=forms.RadioSelect(
+                         attrs={'class': 'scrolling-choice'}
+                     ),
+                     initial=self.event.checkin_lists.first()
+                 )),
+                ('items',
+                 forms.ModelMultipleChoiceField(
+                     queryset=self.event.items.all(),
+                     label=_('Limit to products'),
+                     widget=forms.CheckboxSelectMultiple(
+                         attrs={'class': 'scrolling-multiple-choice'}
+                     ),
+                     initial=self.event.items.all()
+                 )),
+            ]
+        )
+
+        d['list'].queryset = self.event.checkin_lists.all()
+        d['list'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.orders.checkinlists.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('All check-in lists')
+            }
+        )
+        d['list'].widget.choices = d['list'].choices
+        d['list'].required = False
+
+        return d

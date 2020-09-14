@@ -13,3 +13,9 @@ def register_csv(sender, **kwargs):
 def register_pdf(sender, **kwargs):
     from .exporters import PDFCheckinList
     return PDFCheckinList
+
+
+@receiver(register_data_exporters, dispatch_uid="export_checkin_list")
+def register_log(sender, **kwargs):
+    from .exporters import CheckinLogList
+    return CheckinLogList
