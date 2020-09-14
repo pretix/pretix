@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 11:59+0000\n"
-"PO-Revision-Date: 2020-08-31 01:00+0000\n"
+"PO-Revision-Date: 2020-09-15 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -933,10 +933,8 @@ msgstr "Besteldatum"
 #: pretix/base/exporters/orderlist.py:129
 #: pretix/base/exporters/orderlist.py:263
 #: pretix/base/exporters/orderlist.py:362
-#, fuzzy
-#| msgid "Order date"
 msgid "Order time"
-msgstr "Besteldatum"
+msgstr "Besteltijd"
 
 #: pretix/base/exporters/orderlist.py:137
 msgid "Date of last payment"
@@ -1295,10 +1293,8 @@ msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
 #: pretix/base/forms/questions.py:189
-#, fuzzy
-#| msgid "Please enter your name."
 msgid "Please enter a shorter name."
-msgstr "Vul alstublieft uw naam in."
+msgstr "Vul alstublieft een kortere naam in."
 
 #: pretix/base/forms/questions.py:287 pretix/base/forms/questions.py:575
 msgid "Street and Number"
@@ -2124,10 +2120,8 @@ msgid "{category} (Add-On products)"
 msgstr "{category} (add-on producten)"
 
 #: pretix/base/models/items.py:121
-#, fuzzy
-#| msgid "Optional. No products will be sold before this date."
 msgid "Disable product for this date"
-msgstr "Optioneel. Er worden geen producten verkocht vóór deze datum."
+msgstr "Product voor deze datum uitschakelen"
 
 #: pretix/base/models/items.py:261 pretix/base/models/items.py:827
 #: pretix/control/templates/pretixcontrol/items/index.html:38
@@ -5599,20 +5593,16 @@ msgstr ""
 "hier de opties aan de gebruiker uitleggen."
 
 #: pretix/base/settings.py:433 pretix/base/settings.py:442
-#, fuzzy
-#| msgid "All days"
 msgid "in days"
-msgstr "Alle dagen"
+msgstr "in dagen"
 
 #: pretix/base/settings.py:434 pretix/base/settings.py:443
 msgid "in minutes"
-msgstr ""
+msgstr "in minuten"
 
 #: pretix/base/settings.py:438
-#, fuzzy
-#| msgid "Extend payment term"
 msgid "Set payment term"
-msgstr "Betalingstermijn verlengen"
+msgstr "Betalingstermijn instellen"
 
 #: pretix/base/settings.py:445
 msgid ""
