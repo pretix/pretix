@@ -121,6 +121,7 @@ Key
 Kombitickets
 Kompatibilitätsmodus
 Konfigurations
+Kosovo
 landesspezifische
 Lead
 Leaflet
@@ -185,6 +186,7 @@ SCA
 Scan
 Scanergebnis
 Scanning
+Scans
 schiefgeht
 sechsstelligen
 Secret

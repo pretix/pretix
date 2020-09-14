@@ -121,6 +121,7 @@ Key
 Kombitickets
 Kompatibilitätsmodus
 Konfigurations
+Kosovo
 landesspezifische
 Lead
 Leaflet
@@ -183,6 +184,7 @@ Saalplan
 SAQ
 SCA
 Scan
+Scans
 Scanergebnis
 Scanning
 schiefgeht
