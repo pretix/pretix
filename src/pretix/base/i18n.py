@@ -27,6 +27,21 @@ class LazyDate:
         return date_format(self.value, "SHORT_DATE_FORMAT")
 
 
+class LazyExpiresDate:
+    def __init__(self, expires):
+        self.value = expires
+
+    def __format__(self, format_spec):
+        return self.__str__()
+
+    def __str__(self):
+        at_end_of_day = self.value.hour == 23 and self.value.minute == 59 and self.value.second >= 59
+        if at_end_of_day:
+            return date_format(self.value, "SHORT_DATE_FORMAT")
+        else:
+            return date_format(self.value, "SHORT_DATETIME_FORMAT")
+
+
 class LazyCurrencyNumber:
     def __init__(self, value, currency):
         self.value = value

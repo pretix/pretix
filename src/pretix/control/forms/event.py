@@ -584,9 +584,11 @@ class CancelSettingsForm(SettingsForm):
 
 class PaymentSettingsForm(SettingsForm):
     auto_fields = [
+        'payment_term_mode',
         'payment_term_days',
-        'payment_term_last',
         'payment_term_weekdays',
+        'payment_term_minutes',
+        'payment_term_last',
         'payment_term_expire_automatically',
         'payment_term_accept_late',
         'payment_explanation',
@@ -598,6 +600,18 @@ class PaymentSettingsForm(SettingsForm):
         help_text=_("The tax rule that applies for additional fees you configured for single payment methods. This "
                     "will set the tax rate and reverse charge rules, other settings of the tax rule are ignored.")
     )
+
+    def clean_payment_term_days(self):
+        value = self.cleaned_data.get('payment_term_days')
+        if self.cleaned_data.get('payment_term_mode') == 'days' and value is None:
+            raise ValidationError(_("This field is required."))
+        return value
+
+    def clean_payment_term_minutes(self):
+        value = self.cleaned_data.get('payment_term_minutes')
+        if self.cleaned_data.get('payment_term_mode') == 'minutes' and value is None:
+            raise ValidationError(_("This field is required."))
+        return value
 
     def clean(self):
         data = super().clean()

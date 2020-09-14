@@ -50,9 +50,9 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         f = self.request.FILES.get('background')
         error = False
         if f.size > self.maxfilesize:
-            error = _('The uploaded PDF file is to large.')
+            error = _('The uploaded PDF file is too large.')
         if f.size < self.minfilesize:
-            error = _('The uploaded PDF file is to small.')
+            error = _('The uploaded PDF file is too small.')
         if mimetypes.guess_type(f.name)[0] not in self.accepted_formats:
             error = _('Please only upload PDF files.')
         # if there was an error, add error message to response_data and return

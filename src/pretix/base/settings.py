@@ -423,6 +423,29 @@ DEFAULTS = {
                         "if you want.")
         )
     },
+    'payment_term_mode': {
+        'default': 'days',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('days', _("in days")),
+                ('minutes', _("in minutes"))
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Set payment term"),
+            widget=forms.RadioSelect,
+            required=True,
+            choices=(
+                ('days', _("in days")),
+                ('minutes', _("in minutes"))
+            ),
+            help_text=_("If using days, the order will expire at the end of the last day. "
+                        "Using minutes is more exact, but should only be used for real-time payment methods.")
+        )
+    },
     'payment_term_days': {
         'default': '14',
         'type': int,
@@ -430,29 +453,22 @@ DEFAULTS = {
         'serializer_class': serializers.IntegerField,
         'form_kwargs': dict(
             label=_('Payment term in days'),
+            widget=forms.NumberInput(
+                attrs={
+                    'data-display-dependency': '#id_payment_term_mode_0',
+                    'data-required-if': '#id_payment_term_mode_0'
+                },
+            ),
             help_text=_("The number of days after placing an order the user has to pay to preserve their reservation. If "
                         "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
                         "payment methods, we recommend still setting two or three days to allow people to retry failed "
                         "payments."),
-            required=True,
             validators=[MinValueValidator(0),
                         MaxValueValidator(1000000)]
         ),
         'serializer_kwargs': dict(
             validators=[MinValueValidator(0),
                         MaxValueValidator(1000000)]
-        )
-    },
-    'payment_term_last': {
-        'default': None,
-        'type': RelativeDateWrapper,
-        'form_class': RelativeDateField,
-        'serializer_class': SerializerRelativeDateField,
-        'form_kwargs': dict(
-            label=_('Last date of payments'),
-            help_text=_("The last date any payments are accepted. This has precedence over the number of "
-                        "days configured above. If you use the event series feature and an order contains tickets for "
-                        "multiple dates, the earliest date will be used."),
         )
     },
     'payment_term_weekdays': {
@@ -464,7 +480,49 @@ DEFAULTS = {
             label=_('Only end payment terms on weekdays'),
             help_text=_("If this is activated and the payment term of any order ends on a Saturday or Sunday, it will be "
                         "moved to the next Monday instead. This is required in some countries by civil law. This will "
-                        "not effect the last date of payments configured above."),
+                        "not effect the last date of payments configured below."),
+            widget=forms.CheckboxInput(
+                attrs={
+                    'data-display-dependency': '#id_payment_term_mode_0',
+                    'data-required-if': '#id_payment_term_mode_0'
+                },
+            ),
+        )
+    },
+    'payment_term_minutes': {
+        'default': '30',
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_('Payment term in minutes'),
+            help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. "
+                        "Only use this if you exclusively offer real-time payment methods. Please note that for technical resons, "
+                        "the actual time frame might be a few minutes longer before the order is marked as expired."),
+            validators=[MinValueValidator(0),
+                        MaxValueValidator(1440)],
+            widget=forms.NumberInput(
+                attrs={
+                    'data-display-dependency': '#id_payment_term_mode_1',
+                    'data-required-if': '#id_payment_term_mode_1'
+                },
+            ),
+        ),
+        'serializer_kwargs': dict(
+            validators=[MinValueValidator(0),
+                        MaxValueValidator(1440)]
+        )
+    },
+    'payment_term_last': {
+        'default': None,
+        'type': RelativeDateWrapper,
+        'form_class': RelativeDateField,
+        'serializer_class': SerializerRelativeDateField,
+        'form_kwargs': dict(
+            label=_('Last date of payments'),
+            help_text=_("The last date any payments are accepted. This has precedence over the terms "
+                        "configured above. If you use the event series feature and an order contains tickets for "
+                        "multiple dates, the earliest date will be used."),
         )
     },
     'payment_term_expire_automatically': {

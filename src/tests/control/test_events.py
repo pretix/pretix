@@ -375,6 +375,8 @@ class EventsTest(SoupTest):
         self.get_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug))
         self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
             'payment_term_days': '2',
+            'payment_term_minutes': '30',
+            'payment_term_mode': 'days',
             'tax_rate_default': tr19.pk,
         })
         self.event1.settings.flush()

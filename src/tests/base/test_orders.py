@@ -79,6 +79,20 @@ def test_expiry_weekdays(event):
 
 
 @pytest.mark.django_db
+def test_expiry_minutes(event):
+    today = now()
+    event.settings.set('payment_term_days', 5)
+    event.settings.set('payment_term_mode', 'minutes')
+    event.settings.set('payment_term_minutes', 30)
+    event.settings.set('payment_term_weekdays', False)
+    order = _create_order(event, email='dummy@example.org', positions=[],
+                          now_dt=today, payment_provider=FreeOrderProvider(event),
+                          locale='de')[0]
+    assert (order.expires - today).days == 0
+    assert (order.expires - today).seconds == 30 * 60
+
+
+@pytest.mark.django_db
 def test_expiry_last(event):
     today = now()
     event.settings.set('payment_term_days', 5)
