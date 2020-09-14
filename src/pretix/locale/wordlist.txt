@@ -44,6 +44,7 @@ iDEAL
 integrations
 iOS
 JSON
+Kosovo
 Lead
 Leaflet
 LLC
