@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 11:21+0000\n"
-"PO-Revision-Date: 2020-08-25 10:15+0000\n"
-"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
+"PO-Revision-Date: 2020-09-14 11:43+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -934,10 +934,8 @@ msgstr "Bestelldatum"
 #: pretix/base/exporters/orderlist.py:129
 #: pretix/base/exporters/orderlist.py:263
 #: pretix/base/exporters/orderlist.py:362
-#, fuzzy
-#| msgid "Order date"
 msgid "Order time"
-msgstr "Bestelldatum"
+msgstr "Bestelluhrzeit"
 
 #: pretix/base/exporters/orderlist.py:137
 msgid "Date of last payment"
@@ -1295,10 +1293,8 @@ msgid "Repeat password"
 msgstr "Passwort wiederholen"
 
 #: pretix/base/forms/questions.py:189
-#, fuzzy
-#| msgid "Please enter your name."
 msgid "Please enter a shorter name."
-msgstr "Bitte gib deinen Namen ein."
+msgstr "Bitte gib einen kürzeren Namen ein."
 
 #: pretix/base/forms/questions.py:287 pretix/base/forms/questions.py:575
 msgid "Street and Number"
@@ -2124,10 +2120,8 @@ msgid "{category} (Add-On products)"
 msgstr "{category} (Zusatzprodukte)"
 
 #: pretix/base/models/items.py:121
-#, fuzzy
-#| msgid "Optional. No products will be sold before this date."
 msgid "Disable product for this date"
-msgstr "Optional. Es werden vor diesem Termin keine Produkte verkauft."
+msgstr "Produkt für diesen Termin deaktivieren"
 
 #: pretix/base/models/items.py:261 pretix/base/models/items.py:827
 #: pretix/control/templates/pretixcontrol/items/index.html:38
@@ -6041,6 +6035,8 @@ msgid ""
 "If your event series has more than 100 dates, only the month or week "
 "calendar can be used."
 msgstr ""
+"Wenn deine Veranstaltungsreihe mehr als 100 Termine hat, kann nur der Monats-"
+" oder Wochenkalender verwendet werden."
 
 #: pretix/base/settings.py:948
 msgid "Last date of modifications"
@@ -6831,10 +6827,8 @@ msgid "Date ordering"
 msgstr "Sortierung der Termine"
 
 #: pretix/base/settings.py:1752
-#, fuzzy
-#| msgid "Customers can cancel their unpaid orders"
 msgid "Customers can choose their own seats"
-msgstr "Kunden können unbezahlte Bestellungen stornieren"
+msgstr "Kunden können ihre Sitzplätze selbst auswählen"
 
 #: pretix/base/settings.py:1753
 msgid ""
@@ -6842,6 +6836,9 @@ msgid ""
 "that this can mean people will not know their seat after their purchase and "
 "it might not be written on their ticket."
 msgstr ""
+"Wenn diese Option deaktiviert ist, musst du die Sitze im Backend manuell "
+"zuweisen. Das bedeutet, dass Ticketkäufer ihren Platz zum Kaufzeitpunkt "
+"nicht kennen und der Platz ggf. nicht auf dem Ticket abgedruckt ist."
 
 #: pretix/base/settings.py:1773
 msgid "Most common English titles"
@@ -9394,34 +9391,34 @@ msgid ""
 "Unknown scan of code \"{barcode}\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
+"Unbekannter Scan von Code \"{barcode}\" um {datetime} für die Liste \"{list}"
+"\" (Typ \"{type}\")."
 
 #: pretix/control/logdisplay.py:178
 #, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}\" for list \"{list}\", type \"{type}\"."
 msgstr ""
+"Unbekannter Scan von Code \"{barcode}\" für die Liste \"{list}\" (Typ \""
+"{type}\")."
 
 #: pretix/control/logdisplay.py:189
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
-#| "uploaded even though it has been scanned already."
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
-"Ein Scan für Ticket #{posid} am {datetime} für die Liste \"{list}\" wurde "
-"hochgeladen, obwohl es bereits gescannt wurde."
+"Ein Scan für Ticket #{posid} am {datetime} für die Liste \"{list}\" (Typ: \""
+"{type}\") wurde abgelehnt. Fehlercode: \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:200
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The check-in of position #{posid} on list \"{list}\" has been reverted."
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
 msgstr ""
-"Der Check-in von Position #{posid} auf Liste \"{list}\" wurde gelöscht."
+"Ein Scan für Ticket #{posid} für die Liste \"{list}\" (Typ: \"{type}\") "
+"wurde abgelehnt. Fehlercode: \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:210
 #, python-brace-format
@@ -14490,10 +14487,8 @@ msgstr "Geräte-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:6
-#, fuzzy
-#| msgid "Devices"
 msgid "Device logs"
-msgstr "Geräte"
+msgstr "Geräteprotokoll"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
 msgid "Revoke device access:"
@@ -18313,31 +18308,23 @@ msgstr "Sitzplatz"
 
 #: pretix/plugins/checkinlists/exporters.py:542
 msgid "Check-in log (all successful scans)"
-msgstr ""
+msgstr "Check-in-Protokoll (alle erfolgreichen Scans)"
 
 #: pretix/plugins/checkinlists/exporters.py:553
-#, fuzzy
-#| msgid "Card type"
 msgid "Scan type"
-msgstr "Kartentyp"
+msgstr "Scan-Typ"
 
 #: pretix/plugins/checkinlists/exporters.py:559
-#, fuzzy
-#| msgid "Devices"
 msgid "Device"
-msgstr "Geräte"
+msgstr "Gerät"
 
 #: pretix/plugins/checkinlists/exporters.py:560
-#, fuzzy
-#| msgid "Order overview"
 msgid "Offline override"
-msgstr "Bestellübersicht"
+msgstr "Ggf. inkorrekte Offline-Entscheidung"
 
 #: pretix/plugins/checkinlists/exporters.py:631
-#, fuzzy
-#| msgid "Check-in lists"
 msgid "All check-in lists"
-msgstr "Check-in-Listen"
+msgstr "Alle Check-in-Listen"
 
 #: pretix/plugins/manualpayment/__init__.py:16
 msgid "This plugin adds a customizable payment method for manual processing."
@@ -21597,7 +21584,7 @@ msgstr "Schreibzugriff"
 
 #: pretix/settings.py:731
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #~ msgid "Automatically on payment"
 #~ msgstr "Automatisch bei Zahlungseingang"
