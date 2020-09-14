@@ -571,7 +571,12 @@ class CheckinLogList(ListExporter):
 
         yield self.ProgressSetTotal(total=qs.count())
 
-        for ci in qs.select_related('position__item', 'position__order', 'position__order__invoice_address', 'position', 'list', 'device').iterator():
+        qs = qs.select_related(
+            'position__item', 'position__order', 'position__order__invoice_address', 'position', 'list', 'device'
+        ).order_by(
+            'datetime'
+        )
+        for ci in qs.iterator():
             try:
                 ia = ci.position.order.invoice_address
             except InvoiceAddress.DoesNotExist:
