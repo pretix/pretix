@@ -292,6 +292,8 @@ Flexible group sizes
 
 If you want to give out discounted tickets to groups starting at a given size, but still billed per person, you can do so by creating a special **Group ticket** at the per-person price and set the **Minimum amount per order** option of the ticket to the minimal group size.
 
+For more complex use cases, you can also use add-on products that can be chosen multiple times.
+
 This way, your ticket can be bought an arbitrary number of times – but no less than the given minimal amount per order.
 
 Fixed group sizes
