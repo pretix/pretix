@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 12:00+0000\n"
-"PO-Revision-Date: 2020-05-19 09:19+0000\n"
+"PO-Revision-Date: 2020-09-15 02:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "da/>\n"
@@ -312,11 +312,11 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:755
 msgid "Click to close"
-msgstr ""
+msgstr "Klik for at lukke"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:770
 msgid "You have unsaved changes!"
-msgstr ""
+msgstr "Du har ændringer, der ikke er gemt!"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 #, fuzzy
@@ -334,7 +334,7 @@ msgstr "Antal"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:131
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:132
 #, fuzzy
@@ -387,11 +387,11 @@ msgstr ""
 #: pretix/static/pretixpresale/js/ui/main.js:425
 #: pretix/static/pretixpresale/js/ui/main.js:438
 msgid "Time zone:"
-msgstr ""
+msgstr "Tidszone:"
 
 #: pretix/static/pretixpresale/js/ui/main.js:430
 msgid "Your local time:"
-msgstr ""
+msgstr "Din lokaltid:"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
@@ -452,7 +452,7 @@ msgstr "tilgængelig: %s"
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr "Kun tilgængelig med en voucher"
+msgstr "Kun tilgængelig med en rabatkode"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 #, javascript-format
@@ -497,7 +497,7 @@ msgstr "Fortsæt booking"
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr "Indløs voucher"
+msgstr "Indløs rabatkode"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
@@ -507,7 +507,7 @@ msgstr "Indløs"
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Voucher code"
-msgstr "Voucherkode"
+msgstr "Rabatkode"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
@@ -552,7 +552,7 @@ msgstr "Forrige måned"
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Next week"
-msgstr ""
+msgstr "Næste uge"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 #, fuzzy
@@ -565,7 +565,7 @@ msgstr "Forrige måned"
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Åbn sædevalg"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Mo"

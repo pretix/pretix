@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 11:59+0000\n"
-"PO-Revision-Date: 2020-05-30 15:00+0000\n"
-"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
+"PO-Revision-Date: 2020-09-15 02:00+0000\n"
+"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -20764,36 +20764,24 @@ msgstr "Bestilling bekræftet"
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:47
-#, fuzzy
-#| msgid ""
-#| "You can download your tickets using the buttons below. Please have your "
-#| "ticket ready when entering the event."
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
-"Du kan downloade dine billetter på knapperne nedenfor. Dine billetter bør "
-"være udskrevet til fremvisning i indgangen."
+msgstr "Hav venligst billetten klar, når du ankommer til arrangementet."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:9
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets here:"
-msgstr "Hent alle billetter:"
+msgstr "Hent dine billetter her:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Download all tickets at once:"
-msgstr "Hent alle billetter:"
+msgstr "Hent alle billetter på én gang:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:31
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download your ticket here:"
-msgstr "Hent billet"
+msgstr "Hent din billet her:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:50
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets using the buttons below."
-msgstr "Hent alle billetter:"
+msgstr "Hent dine billetter ved at anvende knapperne nedenfor."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:58
 #, python-format
@@ -20801,15 +20789,13 @@ msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
-#, fuzzy
-#| msgid "Confirmation text"
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr "Bekræftelsestekst"
+msgstr "Bekræftelse afventer"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:9
 msgid "Payment pending"
-msgstr "Afventer betaling"
+msgstr "Betaling afventer"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:15
 #, fuzzy
@@ -20996,7 +20982,7 @@ msgstr "Tak!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:17
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
+msgstr "Din ordre er gennemført med succes. Se detaljerne nedenfor."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:20
 msgid ""
@@ -21007,6 +20993,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:24
 msgid "Please note that we still await your payment to complete the process."
 msgstr ""
+"Bemærk venligst, at vi afventer din betaling for at kunne færdiggøre "
+"bestillingen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Your order has been processed successfully! See below for details."
@@ -21014,7 +21002,7 @@ msgstr "Din bestilling er gennemført! Se detaljerne nedenfor."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:31
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Vi har modtaget din betaling. Se detaljerne nedenfor."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:33
 msgid ""
@@ -21037,12 +21025,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:53
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
-msgstr ""
+msgstr "Se i administrationen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:67
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "En betaling på %(total)s afventer stadig for denne ordre."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:70
 #, python-format
@@ -21051,7 +21039,7 @@ msgstr "Gennemfør venligst betaling inden %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:79
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "Prøv at betale igen - eller vælg en anden betalingsmetode"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:87
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
@@ -21063,15 +21051,19 @@ msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
+"Vi har modtaget din anmodning om at annullere denne ordre. Vær tålmodig, "
+"mens arrangementets arrangør træffer afgørelse om anmodningen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:117
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
+"En tilbagebetaling på %(amount)s  vil snart blive overført til dig - vær "
+"venligst tålmodig."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:124
 msgid "Print"
-msgstr ""
+msgstr "Print"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:126
 #, python-format
