@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 11:59+0000\n"
-"PO-Revision-Date: 2020-09-16 02:42+0000\n"
+"PO-Revision-Date: 2020-09-16 08:57+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -3836,7 +3836,7 @@ msgstr "Vul een geldig verkoopkanaal in."
 
 #: pretix/base/orderimport.py:591 pretix/plugins/checkinlists/exporters.py:430
 msgid "Seat ID"
-msgstr "Stoelnummer"
+msgstr "Zitplaatsnummer"
 
 #: pretix/base/orderimport.py:605
 msgid "No matching seat was found."
@@ -6850,10 +6850,8 @@ msgid "Date ordering"
 msgstr "Sorteren op datum"
 
 #: pretix/base/settings.py:1810
-#, fuzzy
-#| msgid "Customers can cancel their unpaid orders"
 msgid "Customers can choose their own seats"
-msgstr "Klanten kunnen hun onbetaalde bestellingen annuleren"
+msgstr "Klanten kunnen hun eigen zitplaatsen kiezen"
 
 #: pretix/base/settings.py:1811
 msgid ""
@@ -6861,6 +6859,10 @@ msgid ""
 "that this can mean people will not know their seat after their purchase and "
 "it might not be written on their ticket."
 msgstr ""
+"Als dit is uitgeschakeld moet u handmatig zitplaatsen toewijzen in de "
+"backend. Merk op dat dit ervoor kan zorgen dat klanten hun zitplaats niet "
+"weten nadat ze een aankoop hebben gedaan en dat de zitplaats mogelijk niet "
+"op hun ticket wordt getoond."
 
 #: pretix/base/settings.py:1831
 msgid "Most common English titles"
@@ -8492,7 +8494,7 @@ msgstr "Kies een quotum."
 #: pretix/control/forms/item.py:409 pretix/plugins/badges/forms.py:54
 #: pretix/plugins/ticketoutputpdf/forms.py:31
 msgid "(Event default)"
-msgstr "(Standaardlay-out van evenement)"
+msgstr "(Standaard van evenement)"
 
 #: pretix/control/forms/item.py:419
 msgid "Choose automatically depending on event settings"
@@ -9411,33 +9413,33 @@ msgid ""
 "Unknown scan of code \"{barcode}\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
+"Onbekende scan van code \"{barcode}\" om {datetime} voor lijst \"{list}\", "
+"type \"{type}\"."
 
 #: pretix/control/logdisplay.py:178
 #, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}\" for list \"{list}\", type \"{type}\"."
 msgstr ""
+"Onbekende scan van code \"{barcode}\" voor lijst \"{list}\", type \"{type}\"."
 
 #: pretix/control/logdisplay.py:189
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
-#| "uploaded even though it has been scanned already."
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
-"Een scan voor plaats #{posid} om {datetime} voor lijst \"{list}\" is "
-"geüpload, terwijl het ticket al is gescand."
+"Een scan voor plaats #{posid} is geweigerd om {datetime} voor lijst \"{list}"
+"\", type \"{type}\". Foutcode: \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:200
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The check-in of position #{posid} on list \"{list}\" has been reverted."
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
-msgstr "De check-in van plaats #{posid} op lijst \"{list}\" is teruggedraaid."
+msgstr ""
+"Een scan voor plaats #{posid} is geweigerd voor de lijst \"{list}\", type \""
+"{type}\". Foutcode: \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:210
 #, python-brace-format
@@ -14506,10 +14508,8 @@ msgstr "Apparaatgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:6
-#, fuzzy
-#| msgid "Devices"
 msgid "Device logs"
-msgstr "Apparaten"
+msgstr "Apparaatlogs"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
 msgid "Revoke device access:"
@@ -17320,14 +17320,10 @@ msgid "The gift card has been created and can now be used."
 msgstr "De cadeaubon is aangemaakt en kan nu worden gebruikt."
 
 #: pretix/control/views/pdf.py:53
-#, fuzzy
-#| msgid "The uploaded PDF file is to large."
 msgid "The uploaded PDF file is too large."
 msgstr "Het geüploade PDF-bestand is te groot."
 
 #: pretix/control/views/pdf.py:55
-#, fuzzy
-#| msgid "The uploaded PDF file is to small."
 msgid "The uploaded PDF file is too small."
 msgstr "Het geüploade PDF-bestand is te klein."
 
@@ -18332,31 +18328,23 @@ msgstr "Zitplaatsnummer"
 
 #: pretix/plugins/checkinlists/exporters.py:542
 msgid "Check-in log (all successful scans)"
-msgstr ""
+msgstr "Incheckgeschiedenis (alle geslaagde scans)"
 
 #: pretix/plugins/checkinlists/exporters.py:553
-#, fuzzy
-#| msgid "Card type"
 msgid "Scan type"
-msgstr "Kaarttype"
+msgstr "Scantype"
 
 #: pretix/plugins/checkinlists/exporters.py:559
-#, fuzzy
-#| msgid "Devices"
 msgid "Device"
-msgstr "Apparaten"
+msgstr "Apparaat"
 
 #: pretix/plugins/checkinlists/exporters.py:560
-#, fuzzy
-#| msgid "Order overview"
 msgid "Offline override"
-msgstr "Bestellingsoverzicht"
+msgstr "Offline scan"
 
 #: pretix/plugins/checkinlists/exporters.py:631
-#, fuzzy
-#| msgid "Check-in lists"
 msgid "All check-in lists"
-msgstr "Inchecklijsten"
+msgstr "Alle inchecklijsten"
 
 #: pretix/plugins/manualpayment/__init__.py:16
 msgid "This plugin adds a customizable payment method for manual processing."
@@ -21610,7 +21598,7 @@ msgstr "Schrijftoegang"
 
 #: pretix/settings.py:731
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #~ msgid "Automatically on payment"
 #~ msgstr "Automatisch na betaling"
