@@ -29,6 +29,7 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Organizer.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'organizer'
+    lookup_value_regex = '[^/]+'
     filter_backends = (filters.OrderingFilter,)
     ordering = ('slug',)
     ordering_fields = ('name', 'slug')

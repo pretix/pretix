@@ -73,6 +73,7 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
+    lookup_value_regex = '[^/]+'
     permission_classes = (EventCRUDPermission,)
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     ordering = ('slug',)
