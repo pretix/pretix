@@ -360,7 +360,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         email.attach(
                             cf.filename,
                             cf.file.file.read(),
-                            mimetype=None  # TODO: can we get that from cachedfile?
+                            cf.type,
                         )
                     except:
                         logger.exception('Could not attach file to email')
