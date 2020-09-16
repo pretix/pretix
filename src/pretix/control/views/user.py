@@ -114,6 +114,9 @@ class ReauthView(TemplateView):
         u = backend.request_authenticate(request)
         if u and u == request.user:
             next_url = backend.get_next_url(request)
+            t = int(time.time())
+            request.session['pretix_auth_login_time'] = t
+            request.session['pretix_auth_last_used'] = t
             if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
                 return redirect(next_url)
             return redirect(reverse('control:index'))
