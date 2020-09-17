@@ -1580,7 +1580,7 @@ Your {event} team"""))
         'type': bool
     },
     'primary_color': {
-        'default': '#8E44B3',
+        'default': settings.PRETIX_PRIMARY_COLOR,
         'type': str,
     },
     'theme_color_success': {

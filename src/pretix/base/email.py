@@ -114,7 +114,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
             'site_url': settings.SITE_URL,
             'body': body_md,
             'subject': str(subject),
-            'color': '#8E44B3',
+            'color': settings.PRETIX_PRIMARY_COLOR,
             'rtl': get_language() in settings.LANGUAGES_RTL
         }
         if self.event:

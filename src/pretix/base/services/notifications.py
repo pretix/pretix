@@ -91,7 +91,7 @@ def send_notification_mail(notification: Notification, user: User):
     ctx = {
         'site': settings.PRETIX_INSTANCE_NAME,
         'site_url': settings.SITE_URL,
-        'color': '#8E44B3',
+        'color': settings.PRETIX_PRIMARY_COLOR,
         'notification': notification,
         'settings_url': build_absolute_uri(
             'control:user.settings.notifications',
