@@ -390,6 +390,11 @@ class OrderListExporter(MultiSheetListExporter):
             _('Pseudonymization ID'),
         ]
 
+        if self.event.seating_plan_id is not None:
+            headers += [
+                _('Seat')
+            ]
+
         questions = list(Question.objects.filter(event__in=self.events))
         options = {}
         for q in questions:
@@ -471,6 +476,12 @@ class OrderListExporter(MultiSheetListExporter):
                     op.voucher.code if op.voucher else '',
                     op.pseudonymization_id,
                 ]
+
+                if self.event.seating_plan_id is not None:
+                    row += [
+                        str(op.seat) if op.seat else ""
+                    ]
+
                 acache = {}
                 for a in op.answers.all():
                     # We do not want to localize Date, Time and Datetime question answers, as those can lead
