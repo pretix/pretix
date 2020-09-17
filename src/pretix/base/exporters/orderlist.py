@@ -388,6 +388,11 @@ class OrderListExporter(MultiSheetListExporter):
             pgettext('address', 'State'),
             _('Voucher'),
             _('Pseudonymization ID'),
+            _('Seat ID'),
+            _('Seat name'),
+            _('Seat zone'),
+            _('Seat row'),
+            _('Seat number'),
         ]
 
         if self.event.seating_plan_id is not None:
@@ -477,10 +482,16 @@ class OrderListExporter(MultiSheetListExporter):
                     op.pseudonymization_id,
                 ]
 
-                if self.event.seating_plan_id is not None:
+                if op.seat:
                     row += [
-                        str(op.seat) if op.seat else ""
+                        op.seat.seat_guid,
+                        str(op.seat),
+                        op.seat.zone_name,
+                        op.seat.row_name,
+                        op.seat.seat_number,
                     ]
+                else:
+                    row += ['', '', '', '', '']
 
                 acache = {}
                 for a in op.answers.all():
