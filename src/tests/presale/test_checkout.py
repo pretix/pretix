@@ -1009,6 +1009,46 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert '-€20.00' in response.rendered_content
         assert '3.00' in response.rendered_content
 
+    def test_giftcard_full_with_multiple(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        gc2 = self.orga.issued_gift_cards.create(currency="EUR")
+        gc2.transactions.create(value=20)
+        self.event.settings.set('payment_stripe__enabled', True)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 3)
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert '-€20.00' in response.rendered_content
+        assert '3.00' in response.rendered_content
+        assert 'alert-success' in response.rendered_content
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc2.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            assert o.payments.get(provider='giftcard', amount=Decimal('20.00'))
+            assert o.payments.get(provider='giftcard', amount=Decimal('20.00'))
+
     def test_giftcard_full(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
         gc.transactions.create(value=30)

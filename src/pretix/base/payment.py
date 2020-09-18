@@ -1134,7 +1134,7 @@ class GiftCardPayment(BasePaymentProvider):
                 cart['raw']
             )
             total += sum([f.value for f in fees])
-            remainder = total - gc.value
+            remainder = total
             if remainder > Decimal('0.00'):
                 del cs['payment']
                 messages.success(request, _("Your gift card has been applied, but {} still need to be paid. Please select a payment method.").format(

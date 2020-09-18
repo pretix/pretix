@@ -1085,16 +1085,14 @@ def get_fees(event, request, total, invoice_address, provider, positions):
     if cs.get('gift_cards'):
         gcs = cs['gift_cards']
         gc_qs = event.organizer.accepted_gift_cards.filter(pk__in=cs.get('gift_cards'), currency=event.currency)
-        summed = 0
         for gc in gc_qs:
             if gc.testmode != event.testmode:
                 gcs.remove(gc.pk)
                 continue
             fval = Decimal(gc.value)  # TODO: don't require an extra query
-            fval = min(fval, total - summed)
+            fval = min(fval, total)
             if fval > 0:
                 total -= fval
-                summed += fval
                 fees.append(OrderFee(
                     fee_type=OrderFee.FEE_TYPE_GIFTCARD,
                     internal_type='giftcard',
