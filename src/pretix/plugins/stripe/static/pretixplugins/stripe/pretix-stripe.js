@@ -42,10 +42,13 @@ var pretixstripe = {
                 success: function () {
                     if ($.trim($("#stripe_connectedAccountId").html())) {
                         pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()), {
-                            stripeAccount: $.trim($("#stripe_connectedAccountId").html())
+                            stripeAccount: $.trim($("#stripe_connectedAccountId").html()),
+                            locale: $.trim($("body").attr("data-locale"))
                         });
                     } else {
-                        pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
+                        pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()), {
+                            locale: $.trim($("body").attr("data-locale"))
+                        });
                     }
                     pretixstripe.elements = pretixstripe.stripe.elements();
                     if ($.trim($("#stripe_merchantcountry").html()) !== "") {
@@ -135,10 +138,13 @@ var pretixstripe = {
             success: function () {
                 if ($.trim($("#stripe_connectedAccountId").html())) {
                     pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()), {
-                        stripeAccount: $.trim($("#stripe_connectedAccountId").html())
+                        stripeAccount: $.trim($("#stripe_connectedAccountId").html()),
+                        locale: $.trim($("body").attr("data-locale"))
                     });
                 } else {
-                    pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
+                    pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()), {
+                        locale: $.trim($("body").attr("data-locale"))
+                    });
                 }
                 pretixstripe.stripe.handleCardAction(
                     payment_intent_client_secret
