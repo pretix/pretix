@@ -71,7 +71,9 @@
                             </ul>
                         </td>
                         {% if request.event.has_subevents %}
-                            <td>{{ q.subevent.name }} – {{ q.subevent.get_date_range_display }}</td>
+                            <td>
+                                {{ q.subevent.name }} – {{ q.subevent.get_date_range_display }} {{ q.subevent.date_from|date:"TIME_FORMAT" }}
+                            </td>
                         {% endif %}
                         <td>{% if q.size == None %}Unlimited{% else %}{{ q.size }}{% endif %}</td>
                         <td>{% include "pretixcontrol/items/fragment_quota_availability.html" with availability=q.cached_avail closed=q.closed %}</td>

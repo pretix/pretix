@@ -98,7 +98,9 @@
                         </td>
                         {% if request.event.has_subevents %}
                             {% if cl.subevent %}
-                                <td>{{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }}</td>
+                                <td>
+                                    {{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }} {{ cl.subevent.date_from|date:"TIME_FORMAT" }}
+                                </td>
                             {% else %}
                                 <td>
                                     <em>{% trans "All" %}</em>
