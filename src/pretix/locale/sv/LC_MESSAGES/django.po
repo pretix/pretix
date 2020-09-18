@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 11:59+0000\n"
-"PO-Revision-Date: 2020-09-18 14:16+0000\n"
+"PO-Revision-Date: 2020-09-18 14:26+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -32,7 +32,7 @@ msgstr "Butiken är inaktiverad"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:100
 #: pretix/control/templates/pretixcontrol/subevents/index.html:115
 msgid "Presale over"
-msgstr "Förköp avslutad"
+msgstr "Försäljning avslutad"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:445 pretix/control/forms/filter.py:665
@@ -40,7 +40,7 @@ msgstr "Förköp avslutad"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:102
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 msgid "Presale not started"
-msgstr "Förköp har inte startat"
+msgstr "Försäljningen har inte påbörjats"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:150
@@ -48,7 +48,7 @@ msgstr "Förköp har inte startat"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
 #: pretix/control/views/dashboards.py:485
 msgid "On sale"
-msgstr "Till extrapris"
+msgstr "Försäljning pågår"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -1188,7 +1188,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:779
 msgid "Paid orders"
-msgstr "Betalade ordrar"
+msgstr "Betalade beställningar"
 
 #: pretix/base/exporters/orderlist.py:612 pretix/control/views/item.py:784
 msgid "Pending orders"
@@ -1414,7 +1414,7 @@ msgstr ""
 
 #: pretix/base/forms/widgets.py:142
 msgid "Individual customer"
-msgstr ""
+msgstr "Privatperson"
 
 #: pretix/base/invoice.py:59
 #, python-format
