@@ -201,6 +201,7 @@ addon_to                              integer                    Internal ID of 
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
 pseudonymization_id                   string                     A random ID, e.g. for use in lead scanning apps
 checkins                              list of objects            List of check-ins with this ticket
+├ id                                  integer                    Internal ID of the check-in event
 ├ list                                integer                    Internal ID of the check-in list
 ├ datetime                            datetime                   Time of check-in
 ├ type                                string                     Type of scan (defaults to ``entry``)

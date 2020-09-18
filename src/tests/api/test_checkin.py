@@ -402,6 +402,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         c = order.positions.first().checkins.create(list=clist_all)
     p1['checkins'] = [
         {
+            'id': c.pk,
             'list': clist_all.pk,
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
             'auto_checked_in': False,
@@ -441,6 +442,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         c = order.positions.last().checkins.create(list=clist_all)
     p2['checkins'] = [
         {
+            'id': c.pk,
             'list': clist_all.pk,
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
             'auto_checked_in': False,
