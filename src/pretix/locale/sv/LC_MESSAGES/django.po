@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 11:59+0000\n"
-"PO-Revision-Date: 2020-09-18 14:26+0000\n"
+"PO-Revision-Date: 2020-09-18 14:28+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -1410,7 +1410,7 @@ msgstr ""
 #: pretix/base/forms/widgets.py:138 pretix/base/forms/widgets.py:143
 #: pretix/base/models/orders.py:2206
 msgid "Business customer"
-msgstr ""
+msgstr "Företag"
 
 #: pretix/base/forms/widgets.py:142
 msgid "Individual customer"
@@ -1420,7 +1420,7 @@ msgstr "Privatperson"
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr ""
+msgstr "Sida %d av %d"
 
 #: pretix/base/invoice.py:246
 msgctxt "invoice"
@@ -1430,17 +1430,17 @@ msgstr ""
 #: pretix/base/invoice.py:288
 msgctxt "invoice"
 msgid "Invoice from"
-msgstr ""
+msgstr "Faktura från"
 
 #: pretix/base/invoice.py:294
 msgctxt "invoice"
 msgid "Invoice to"
-msgstr ""
+msgstr "Faktura till"
 
 #: pretix/base/invoice.py:322 pretix/base/invoice.py:753
 msgctxt "invoice"
 msgid "Order code"
-msgstr ""
+msgstr "Beställningsnummer"
 
 #: pretix/base/invoice.py:331 pretix/base/invoice.py:762
 msgctxt "invoice"
