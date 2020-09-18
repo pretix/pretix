@@ -103,7 +103,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                     order._address.name_parts = {'_scheme': event.settings.name_scheme}
                     orders.append(order)
 
-                position = OrderPosition()
+                position = OrderPosition(positionid=len(order._positions) + 1)
                 position.attendee_name_parts = {'_scheme': event.settings.name_scheme}
                 position.meta_info = {}
                 order._positions.append(position)

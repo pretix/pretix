@@ -130,6 +130,7 @@ def test_import_as_one_order(user, event, item):
     assert event.orders.count() == 1
     o = event.orders.get()
     assert o.positions.count() == 3
+    assert set(pos.positionid for pos in o.positions.all()) == {1, 2, 3}
 
 
 @pytest.mark.django_db
