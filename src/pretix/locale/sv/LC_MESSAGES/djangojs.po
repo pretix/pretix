@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 12:00+0000\n"
-"PO-Revision-Date: 2019-08-11 00:00+0000\n"
-"Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
-"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/sv/>\n"
+"PO-Revision-Date: 2020-09-18 14:16+0000\n"
+"Last-Translator: Pernilla Näsfors Östmar <pernilla@openhearted.se>\n"
+"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -188,7 +188,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:74
 msgid "Number of days with a previous entry"
-msgstr ""
+msgstr "Antal dagar med en tidigare postning"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:214
 msgid "All of the conditions below (AND)"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:215
 msgid "At least one of the conditions below (OR)"
-msgstr ""
+msgstr "Minst ett av villkoren nedan (OR)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:223
 msgid "Event start"
