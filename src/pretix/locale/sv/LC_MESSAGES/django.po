@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 11:59+0000\n"
-"PO-Revision-Date: 2019-10-17 09:50+0000\n"
+"PO-Revision-Date: 2020-09-18 14:16+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -2326,7 +2326,7 @@ msgstr ""
 #: pretix/base/models/items.py:674 pretix/base/models/vouchers.py:168
 #: pretix/base/models/waitinglist.py:60 pretix/base/orderimport.py:204
 msgid "Product variation"
-msgstr ""
+msgstr "Produktvarianter"
 
 #: pretix/base/models/items.py:675
 msgid "Product variations"
@@ -4221,15 +4221,15 @@ msgstr ""
 
 #: pretix/base/reldate.py:14
 msgid "Event start"
-msgstr ""
+msgstr "Evenemanget börjar"
 
 #: pretix/base/reldate.py:15
 msgid "Event end"
-msgstr ""
+msgstr "Evenemanget slutar"
 
 #: pretix/base/reldate.py:16
 msgid "Event admission"
-msgstr ""
+msgstr "Tillträde till evenemang"
 
 #: pretix/base/reldate.py:17
 msgid "Presale start"
