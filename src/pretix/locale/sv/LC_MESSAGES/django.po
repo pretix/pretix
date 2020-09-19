@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 11:59+0000\n"
-"PO-Revision-Date: 2020-09-18 16:20+0000\n"
+"PO-Revision-Date: 2020-09-19 18:00+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -515,7 +515,7 @@ msgstr "Datum"
 #: pretix/plugins/reports/exporters.py:521
 #: pretix/plugins/ticketoutputpdf/exporters.py:40
 msgid "Order code"
-msgstr ""
+msgstr "Beställningsnummer"
 
 #: pretix/base/exporters/invoices.py:165 pretix/base/exporters/invoices.py:293
 #: pretix/base/models/waitinglist.py:41 pretix/base/orderimport.py:123
@@ -8520,7 +8520,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:265 pretix/control/views/orders.py:1068
 #: pretix/presale/views/order.py:821
 msgid "The order has been canceled."
-msgstr "Denna beställning har avbrutits"
+msgstr "Denna beställning har avbrutits."
 
 #: pretix/control/logdisplay.py:266 pretix/control/views/orders.py:1337
 #, fuzzy
@@ -12291,7 +12291,7 @@ msgstr "Slut: %(time)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:321
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:26
 msgid "Voucher code used:"
-msgstr "Använd rabattkod"
+msgstr "Använd rabattkod:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:323
 #, python-format
@@ -14863,7 +14863,7 @@ msgstr ""
 #: pretix/control/views/event.py:722 pretix/control/views/orders.py:334
 #: pretix/presale/views/order.py:862 pretix/presale/views/order.py:869
 msgid "You requested an invalid ticket output type."
-msgstr "Du har valt en ogiltig biljetttyp"
+msgstr "Du har valt en ogiltig biljetttyp."
 
 #: pretix/control/views/event.py:867
 msgid "Your shop is live now!"
@@ -17807,7 +17807,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:15
 msgid "Confirm payment"
-msgstr "Kommentar:"
+msgstr "Bekräfta betalning"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:21
 msgid ""
@@ -18056,12 +18056,12 @@ msgstr "Betalning"
 
 #: pretix/presale/checkoutflow.py:667 pretix/presale/views/order.py:594
 msgid "Please select a payment method."
-msgstr "Välj ett betalsätt"
+msgstr "Välj ett betalsätt."
 
 #: pretix/presale/checkoutflow.py:691 pretix/presale/checkoutflow.py:697
 #: pretix/presale/views/order.py:379 pretix/presale/views/order.py:444
 msgid "The payment information you entered was incomplete."
-msgstr "Uppgifterna för betalning är inte kompletta"
+msgstr "Uppgifterna för betalning är inte kompletta."
 
 #: pretix/presale/checkoutflow.py:728
 msgctxt "checkoutflow"
@@ -18168,7 +18168,7 @@ msgstr "Kontakta arrangör"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:149
 msgid "Imprint"
-msgstr "Imprint"
+msgstr "URL till kontaktuppgifter och juridisk information"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:10
 msgid ""
@@ -18460,7 +18460,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:24
 msgid "Continue in new tab"
-msgstr "Fortsätt in en ny flik."
+msgstr "Fortsätt i en ny flik"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:31
 msgid "Cookies not supported"
