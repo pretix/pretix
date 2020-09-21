@@ -1051,7 +1051,7 @@ def send_download_reminders(sender, **kwargs):
         download_reminder_sent=False,
         datetime__lte=now() - timedelta(hours=2),
         first_date__gte=today,
-    ).only('pk', 'event_id').order_by('event_id')
+    ).only('pk', 'event_id', 'sales_channel').order_by('event_id')
     event_id = None
     days = None
     event = None
