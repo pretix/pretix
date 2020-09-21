@@ -7,7 +7,7 @@ import ssl
 import warnings
 from email.mime.image import MIMEImage
 from email.utils import formataddr
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Sequence, Union
 from urllib.parse import urljoin, urlparse
 
 import cssutils
@@ -27,7 +27,7 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, Invoice, InvoiceAddress, Order, OrderPosition, User,
+    CachedFile, Event, Invoice, InvoiceAddress, Order, OrderPosition, User,
 )
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.services.tasks import TransactionAwareTask
@@ -52,10 +52,11 @@ class SendMailException(Exception):
     pass
 
 
-def mail(email: str, subject: str, template: Union[str, LazyI18nString],
-         context: Dict[str, Any]=None, event: Event=None, locale: str=None,
-         order: Order=None, position: OrderPosition=None, headers: dict=None, sender: str=None,
-         invoices: list=None, attach_tickets=False, auto_email=True, user=None, attach_ical=False):
+def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, LazyI18nString],
+         context: Dict[str, Any] = None, event: Event = None, locale: str = None,
+         order: Order = None, position: OrderPosition = None, headers: dict = None, sender: str = None,
+         invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None, attach_ical=False,
+         attach_cached_files: Sequence = None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -95,6 +96,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
     :param auto_email: Whether this email is auto-generated
 
     :param user: The user this email is sent to
+
+    :param attach_cached_files: A list of cached file to attach to this email.
 
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
@@ -214,7 +217,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             body_html = None
 
         send_task = mail_send_task.si(
-            to=[email],
+            to=[email] if isinstance(email, str) else list(email),
             bcc=bcc,
             subject=subject,
             body=body_plain,
@@ -227,7 +230,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             position=position.pk if position else None,
             attach_tickets=attach_tickets,
             attach_ical=attach_ical,
-            user=user.pk if user else None
+            user=user.pk if user else None,
+            attach_cached_files=[cf.id for cf in attach_cached_files] if attach_cached_files else [],
         )
 
         if invoices:
@@ -255,9 +259,9 @@ class CustomEmail(EmailMultiAlternatives):
 
 @app.task(base=TransactionAwareTask, bind=True, acks_late=True)
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
-                   event: int=None, position: int=None, headers: dict=None, bcc: List[str]=None,
-                   invoices: List[int]=None, order: int=None, attach_tickets=False, user=None,
-                   attach_ical=False) -> bool:
+                   event: int = None, position: int = None, headers: dict = None, bcc: List[str] = None,
+                   invoices: List[int] = None, order: int = None, attach_tickets=False, user=None,
+                   attach_ical=False, attach_cached_files: List[int] = None) -> bool:
     email = CustomEmail(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         html_message = SafeMIMEMultipart(_subtype='related', encoding=settings.DEFAULT_CHARSET)
@@ -347,6 +351,19 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                             )
                     except:
                         logger.exception('Could not attach invoice to email')
+                        pass
+
+        if attach_cached_files:
+            for cf in CachedFile.objects.filter(id__in=attach_cached_files):
+                if cf.file:
+                    try:
+                        email.attach(
+                            cf.filename,
+                            cf.file.file.read(),
+                            cf.type,
+                        )
+                    except:
+                        logger.exception('Could not attach file to email')
                         pass
 
         email = global_email_filter.send_chained(event, 'message', message=email, user=user, order=order)
