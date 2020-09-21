@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-14 12:00+0000\n"
-"PO-Revision-Date: 2020-02-26 03:00+0000\n"
-"Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
+"PO-Revision-Date: 2020-09-15 17:00+0000\n"
+"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -164,7 +164,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
 msgid "Product"
-msgstr ""
+msgstr "Produit"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
 #, fuzzy
