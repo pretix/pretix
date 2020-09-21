@@ -85,6 +85,8 @@ class ParametrizedOrderWebhookEvent(WebhookEvent):
 
     def build_payload(self, logentry: LogEntry):
         order = logentry.content_object
+        if not order:
+            return None
 
         return {
             'notification_id': logentry.pk,
@@ -99,6 +101,8 @@ class ParametrizedOrderPositionWebhookEvent(ParametrizedOrderWebhookEvent):
 
     def build_payload(self, logentry: LogEntry):
         d = super().build_payload(logentry)
+        if d is None:
+            return None
         d['orderposition_id'] = logentry.parsed_data.get('position')
         d['orderposition_positionid'] = logentry.parsed_data.get('positionid')
         d['checkin_list'] = logentry.parsed_data.get('list')
@@ -218,6 +222,10 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
             return  # Ignore, e.g. plugin not installed
 
         payload = event_type.build_payload(logentry)
+        if payload is None:
+            # Content object deleted?
+            return
+
         t = time.time()
 
         try:
