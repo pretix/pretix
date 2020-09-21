@@ -395,11 +395,6 @@ class OrderListExporter(MultiSheetListExporter):
             _('Seat number'),
         ]
 
-        if self.event.seating_plan_id is not None:
-            headers += [
-                _('Seat')
-            ]
-
         questions = list(Question.objects.filter(event__in=self.events))
         options = {}
         for q in questions:
