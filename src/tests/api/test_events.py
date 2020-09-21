@@ -610,7 +610,6 @@ def test_event_update_plugins(token_client, organizer, event, free_item, free_qu
         {
             "plugins": [
                 "pretix.plugins.ticketoutputpdf",
-                "pretix.plugins.pretixdroid"
             ]
         },
         format='json'
@@ -618,7 +617,6 @@ def test_event_update_plugins(token_client, organizer, event, free_item, free_qu
     assert resp.status_code == 200
     assert set(resp.data.get('plugins')) == {
         "pretix.plugins.ticketoutputpdf",
-        "pretix.plugins.pretixdroid"
     }
 
     resp = token_client.patch(
