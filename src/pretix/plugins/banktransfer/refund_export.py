@@ -1,4 +1,5 @@
 import codecs
+import datetime
 import io
 from decimal import Decimal
 
@@ -35,31 +36,30 @@ def get_refund_export_csv(refund_export: RefundExport):
     return filename, 'text/csv', byte_data
 
 
-
 from sepaxml import SepaTransfer
-import datetime, uuid
+
 
 def build_sepa_xml(refund_export: RefundExport, account_holder, iban, bic):
     if refund_export.currency != "EUR":
         raise ValueError("Cannot create SEPA export for currency other than EUR.")
 
     config = {
-     "name": account_holder,
-     "IBAN": iban,
-     "BIC": bic,
-     "batch": True,
-     "currency": refund_export.currency,
+        "name": account_holder,
+        "IBAN": iban,
+        "BIC": bic,
+        "batch": True,
+        "currency": refund_export.currency,
     }
     sepa = SepaTransfer(config, clean=True)
 
     for row in refund_export.rows_data:
         payment = {
-         "name": row['payer'],
-         "IBAN": row["iban"],
-         "BIC": row["bic"],
-         "amount": int(Decimal(row['amount']) * 100),  # in euro-cents
-         "execution_date": datetime.date.today(),
-         "description": f"{_('Refund')} {refund_export.entity_slug} {row['id']}",
+            "name": row['payer'],
+            "IBAN": row["iban"],
+            "BIC": row["bic"],
+            "amount": int(Decimal(row['amount']) * 100),  # in euro-cents
+            "execution_date": datetime.date.today(),
+            "description": f"{_('Refund')} {refund_export.entity_slug} {row['id']}",
         }
         sepa.add_payment(payment)
 

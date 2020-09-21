@@ -17,9 +17,9 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
-from django.views.generic import DetailView, ListView, View, FormView
+from django.views.generic import DetailView, FormView, ListView, View
 from django.views.generic.detail import SingleObjectMixin
-from localflavor.generic.forms import IBANFormField, BICFormField
+from localflavor.generic.forms import BICFormField, IBANFormField
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
@@ -35,7 +35,9 @@ from pretix.plugins.banktransfer import csvimport, mt940import
 from pretix.plugins.banktransfer.models import (
     BankImportJob, BankTransaction, RefundExport,
 )
-from pretix.plugins.banktransfer.refund_export import get_refund_export_csv, build_sepa_xml
+from pretix.plugins.banktransfer.refund_export import (
+    build_sepa_xml, get_refund_export_csv,
+)
 from pretix.plugins.banktransfer.tasks import process_banktransfers
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
