@@ -561,7 +561,7 @@ MESSAGE_TAGS = {
 }
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-loglevel = 'DEBUG' if DEBUG else 'INFO'
+loglevel = 'DEBUG' if DEBUG else config.get('pretix', 'loglevel', fallback='INFO')
 
 LOGGING = {
     'version': 1,
