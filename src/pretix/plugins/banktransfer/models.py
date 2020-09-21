@@ -4,6 +4,7 @@ import re
 from decimal import Decimal
 
 from django.db import models
+from django.utils.functional import cached_property
 
 
 class BankImportJob(models.Model):
@@ -95,14 +96,27 @@ class RefundExport(models.Model):
     rows = models.TextField(default="[]")
     downloaded = models.BooleanField(default=False)
 
-    @property
+    @cached_property
+    def entity_slug(self):
+        if self.organizer:
+            return self.organizer.slug
+        else:
+            return self.event.slug
+
+    @cached_property
+    def currency(self):
+        if self.event:
+            return self.event.currency
+        return self.organizer.events.first().currency
+
+    @cached_property
     def rows_data(self):
         return json.loads(self.rows)
 
-    @property
+    @cached_property
     def sum(self):
         return sum(Decimal(row["amount"]) for row in self.rows_data)
 
-    @property
+    @cached_property
     def cnt(self):
         return len(self.rows_data)

@@ -69,11 +69,7 @@
                     </td>
                     <td>{{ export.cnt }}</td>
                     <td>
-                        {% if export.currency %}
-                            {{ export.sum|default_if_none:0|money:export.currency }}
-                        {% else %}
-                            {{ export.sum|default_if_none:0|money:export.event.currency }}
-                        {% endif %}
+                        {{ export.sum|default_if_none:0|money:export.currency }}
                     </td>
                     <td class="text-right">
                         {% if not export.downloaded %}
@@ -84,11 +80,24 @@
                                href="{% url "plugins:banktransfer:refunds.download" organizer=request.organizer.slug event=export.event.slug id=export.id %}">
                                 <span class="fa fa-download"></span> {% trans "Download CSV" %}
                             </a>
+                            {% if export.currency == "EUR" %}
+                                <a class="btn btn-secondary"
+                                   href="{% url "plugins:banktransfer:refunds.sepa" organizer=request.organizer.slug event=export.event.slug id=export.id %}">
+                                    {% trans "SEPA xml" %}
+                                </a>
+                            {% endif %}
                         {% else %}
                             <a class="btn btn-primary"
-                               href="{% url "plugins:banktransfer:refunds.download" organizer=export.organizer.slug %}">
+                               href="{% url "plugins:banktransfer:refunds.download" organizer=export.organizer.slug id=export.id %}">
                                 <span class="fa fa-download"></span> {% trans "Download CSV" %}
-                            </a>                        {% endif %}
+                            </a>
+                            {% if export.currency == "EUR" %}
+                                <a class="btn btn-secondary"
+                                   href="{% url "plugins:banktransfer:refunds.sepa" organizer=export.organizer.slug id=export.id %}">
+                                    {% trans "SEPA xml" %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
                     </td>
                 </tr>
             {% empty %}

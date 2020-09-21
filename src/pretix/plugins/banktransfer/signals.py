@@ -42,7 +42,7 @@ def control_nav_import(sender, request=None, **kwargs):
                         'event': request.event.slug,
                         'organizer': request.event.organizer.slug,
                     }),
-                    'active': (url.namespace == 'plugins:banktransfer' and url.url_name == 'refunds'),
+                    'active': (url.namespace == 'plugins:banktransfer' and url.url_name.startswith("refunds")),
                 },
             ]
         },
@@ -58,12 +58,28 @@ def control_nav_orga_import(sender, request=None, **kwargs):
         return []
     return [
         {
-            'label': _('Import bank data'),
+            'label': _("Bank transfer"),
             'url': reverse('plugins:banktransfer:import', kwargs={
                 'organizer': request.organizer.slug,
             }),
-            'active': (url.namespace == 'plugins:banktransfer' and url.url_name == 'import'),
-            'icon': 'upload',
+            'icon': 'university',
+            'children': [
+                {
+                    'label': _('Import bank data'),
+                    'url': reverse('plugins:banktransfer:import', kwargs={
+                        'organizer': request.organizer.slug,
+                    }),
+                    'active': (url.namespace == 'plugins:banktransfer' and url.url_name == 'import'),
+                    'icon': 'upload',
+                },
+                {
+                    'label': _('Export refunds'),
+                    'url': reverse('plugins:banktransfer:refunds.list', kwargs={
+                        'organizer': request.organizer.slug,
+                    }),
+                    'active': (url.namespace == 'plugins:banktransfer' and url.url_name.startswith("refunds")),
+                },
+            ]
         }
     ]
 

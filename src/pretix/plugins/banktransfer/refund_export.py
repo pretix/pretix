@@ -9,14 +9,11 @@ from django.utils.translation import gettext_lazy as _
 from pretix.plugins.banktransfer.models import RefundExport
 
 
-def get_refund_export(refund_export: RefundExport):
-    if refund_export.organizer:
-        currency = refund_export.organizer.events.first().currency
-        slug = refund_export.organizer.slug
-    else:
-        currency = refund_export.event.currency
-        slug = refund_export.event.slug
+def _get_filename(refund_export):
+    return 'bank_transfer_refunds-{}_{}-{}'.format(refund_export.entity_slug, refund_export.datetime.strftime("%Y-%m-%d"), refund_export.id)
 
+
+def get_refund_export_csv(refund_export: RefundExport):
     byte_data = io.BytesIO()
     StreamWriter = codecs.getwriter('utf-8')
     output = StreamWriter(byte_data)
@@ -29,10 +26,43 @@ def get_refund_export(refund_export: RefundExport):
             row['iban'],
             row['bic'],
             localize(Decimal(row['amount'])),
-            currency,
+            refund_export.currency,
             row['id'],
         ])
 
-    filename = 'bank_transfer_refunds-{}_{}-{}.csv'.format(slug, refund_export.datetime.strftime("%Y-%m-%d"), refund_export.id)
+    filename = _get_filename(refund_export) + ".csv"
     byte_data.seek(0)
     return filename, 'text/csv', byte_data
+
+
+
+from sepaxml import SepaTransfer
+import datetime, uuid
+
+def build_sepa_xml(refund_export: RefundExport, account_holder, iban, bic):
+    if refund_export.currency != "EUR":
+        raise ValueError("Cannot create SEPA export for currency other than EUR.")
+
+    config = {
+     "name": account_holder,
+     "IBAN": iban,
+     "BIC": bic,
+     "batch": True,
+     "currency": refund_export.currency,
+    }
+    sepa = SepaTransfer(config, clean=True)
+
+    for row in refund_export.rows_data:
+        payment = {
+         "name": row['payer'],
+         "IBAN": row["iban"],
+         "BIC": row["bic"],
+         "amount": int(Decimal(row['amount']) * 100),  # in euro-cents
+         "execution_date": datetime.date.today(),
+         "description": f"{_('Refund')} {refund_export.entity_slug} {row['id']}",
+        }
+        sepa.add_payment(payment)
+
+    data = sepa.export(validate=True)
+    filename = _get_filename(refund_export) + ".xml"
+    return filename, 'application/xml', io.BytesIO(data)

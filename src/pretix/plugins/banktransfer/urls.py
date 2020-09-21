@@ -16,8 +16,11 @@ urlpatterns = [
     url(r'^control/organizer/(?P<organizer>[^/]+)/banktransfer/refunds/',
         views.OrganizerRefundExportListView.as_view(), name='refunds.list'),
     url(r'^control/organizer/(?P<organizer>[^/]+)/banktransfer/export/(?P<id>\d+)/$',
-        views.OrganizerDownloadView.as_view(),
+        views.OrganizerDownloadRefundExportView.as_view(),
         name='refunds.download'),
+    url(r'^control/organizer/(?P<organizer>[^/]+)/banktransfer/sepa-export/(?P<id>\d+)/$',
+        views.OrganizerSepaXMLExportView.as_view(),
+        name='refunds.sepa'),
 
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/banktransfer/import/',
         views.EventImportView.as_view(),
@@ -30,9 +33,11 @@ urlpatterns = [
         views.EventRefundExportListView.as_view(),
         name='refunds.list'),
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/banktransfer/export/(?P<id>\d+)/$',
-        views.EventDownloadView.as_view(),
+        views.EventDownloadRefundExportView.as_view(),
         name='refunds.download'),
-
+    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/banktransfer/sepa-export/(?P<id>\d+)/$',
+        views.EventSepaXMLExportView.as_view(),
+        name='refunds.sepa'),
 ]
 
 orga_router.register('bankimportjobs', BankImportJobViewSet)

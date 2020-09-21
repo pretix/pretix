@@ -17,7 +17,9 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
-from django.views.generic import DetailView, ListView, View
+from django.views.generic import DetailView, ListView, View, FormView
+from django.views.generic.detail import SingleObjectMixin
+from localflavor.generic.forms import IBANFormField, BICFormField
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
@@ -33,7 +35,7 @@ from pretix.plugins.banktransfer import csvimport, mt940import
 from pretix.plugins.banktransfer.models import (
     BankImportJob, BankTransaction, RefundExport,
 )
-from pretix.plugins.banktransfer.refund_export import get_refund_export
+from pretix.plugins.banktransfer.refund_export import get_refund_export_csv, build_sepa_xml
 from pretix.plugins.banktransfer.tasks import process_banktransfers
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
@@ -663,7 +665,7 @@ class RefundExportListView(ListView):
             if hasattr(request, 'event'):
                 RefundExport.objects.create(event=self.request.event, testmode=self.request.event.testmode, rows=rows_data)
             else:
-                RefundExport.objects.create(event=self.request.organizer, testmode=False, rows=rows_data)
+                RefundExport.objects.create(organizer=self.request.organizer, testmode=False, rows=rows_data)
 
         else:
             messages.warning(request, _('No valid orders have been found.'))
@@ -713,18 +715,18 @@ class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExpo
         )
 
 
-class DownloadView(DetailView):
+class DownloadRefundExportView(DetailView):
     model = RefundExport
 
     def get(self, request, *args, **kwargs):
         self.object: RefundExport = self.get_object()
         self.object.downloaded = True
         self.object.save(update_fields=["downloaded"])
-        filename, content_type, data = get_refund_export(self.object)
+        filename, content_type, data = get_refund_export_csv(self.object)
         return FileResponse(data, as_attachment=True, filename=filename, content_type=content_type)
 
 
-class EventDownloadView(EventPermissionRequiredMixin, DownloadView):
+class EventDownloadRefundExportView(EventPermissionRequiredMixin, DownloadRefundExportView):
     permission = 'can_change_orders'
 
     def get_object(self, *args, **kwargs):
@@ -734,7 +736,65 @@ class EventDownloadView(EventPermissionRequiredMixin, DownloadView):
         )
 
 
-class OrganizerDownloadView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, DownloadView):
+class OrganizerDownloadRefundExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, DownloadRefundExportView):
+    permission = 'can_change_organizer_settings'
+
+    def get_object(self, *args, **kwargs):
+        return RefundExport.objects.get(
+            organizer=self.request.organizer,
+            pk=self.kwargs.get('id')
+        )
+
+
+class SepaXMLExportForm(forms.Form):
+    account_holder = forms.CharField(label=_("Account holder"))
+    iban = IBANFormField(label="IBAN")
+    bic = BICFormField(label="BIC")
+
+    def set_initial_from_event(self, event):
+        ...
+
+
+class SepaXMLExportView(SingleObjectMixin, FormView):
+    form_class = SepaXMLExportForm
+    model = RefundExport
+    template_name = 'pretixplugins/banktransfer/sepa_export.html'
+    context_object_name = "export"
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.object: RefundExport = self.get_object()
+
+    def form_valid(self, form):
+        self.object.downloaded = True
+        self.object.save(update_fields=["downloaded"])
+        filename, content_type, data = build_sepa_xml(self.object, **form.cleaned_data)
+        return FileResponse(data, as_attachment=True, filename=filename, content_type=content_type)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['basetpl'] = "pretixcontrol/event/base.html"
+        if not hasattr(self.request, 'event'):
+            ctx['basetpl'] = "pretixcontrol/organizers/base.html"
+        return ctx
+
+
+class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
+    permission = 'can_change_orders'
+
+    def get_object(self, *args, **kwargs):
+        return RefundExport.objects.get(
+            event=self.request.event,
+            pk=self.kwargs.get('id')
+        )
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.set_initial_from_event(self.object.event)
+        return form
+
+
+class OrganizerSepaXMLExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, SepaXMLExportView):
     permission = 'can_change_organizer_settings'
 
     def get_object(self, *args, **kwargs):
