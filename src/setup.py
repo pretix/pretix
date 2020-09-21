@@ -142,7 +142,6 @@ setup(
         'defusedcsv>=1.1.0',
         'vat_moss_forked==2020.3.20.0.11.0',
         'django-localflavor>=2.2',
-        'django-localflavor',
         'jsonschema',
         'django-hijack>=2.1.10,<2.2.0',
         'openpyxl==3.0.*',
