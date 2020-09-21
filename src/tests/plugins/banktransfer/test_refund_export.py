@@ -36,11 +36,30 @@ def env():
         state=OrderRefund.REFUND_STATE_CREATED,
         info=json.dumps({
             'payer': "Abc Def",
-            'iban': "DE129837128491424",
-            'bic': "MRMCD1234",
+            'iban': "DE27520521540534534466",
+            'bic': "HELADEF1MEG",
         })
     )
     return event, user, refund
+
+
+@pytest.mark.django_db
+def test_export_refunds_as_sepa_xml(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.get('/control/event/dummy/dummy/banktransfer/refunds/')
+    assert r.status_code == 200
+    r = client.post('/control/event/dummy/dummy/banktransfer/refunds/', {"unite_transactions": True}, follow=True)
+    assert r.status_code == 200
+    assert RefundExport.objects.exists()
+    assert b"SEPA" in r.content
+    r = client.get('/control/event/dummy/dummy/banktransfer/sepa-export/1/')
+    assert r.status_code == 200
+    r = client.post('/control/event/dummy/dummy/banktransfer/sepa-export/1/', {
+        "account_holder": "Fission Festival",
+        "iban": "DE71720690050653667120",
+        "bic": "GENODEF1AIL",
+    })
+    assert "DE27520521540534534466" in "".join(str(part) for part in r.streaming_content)
 
 
 @pytest.mark.django_db
@@ -54,7 +73,7 @@ def test_export_refunds(client, env):
     assert b"Download CSV" in r.content
     r = client.get('/control/event/dummy/dummy/banktransfer/export/1/')
     assert r.status_code == 200
-    assert "DE129837128491424" in "".join(str(part) for part in r.streaming_content)
+    assert "DE27520521540534534466" in "".join(str(part) for part in r.streaming_content)
 
 
 def test_unite_transaction_rows():
