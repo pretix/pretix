@@ -49,7 +49,7 @@ from pretix.presale.signals import question_form_fields
 logger = logging.getLogger(__name__)
 
 
-REQUIRED_NAME_PARTS = ['given_name', 'family_name', 'full_name']
+REQUIRED_NAME_PARTS = ['salutation', 'given_name', 'family_name', 'full_name']
 
 
 class NamePartsWidget(forms.MultiWidget):
