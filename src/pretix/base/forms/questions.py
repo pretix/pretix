@@ -37,7 +37,7 @@ from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SCHEMES,
-    PERSON_NAME_TITLE_GROUPS,
+    PERSON_NAME_TITLE_GROUPS, PERSON_NAME_SALUTATIONS,
 )
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import ExtFileField, SplitDateTimeField
@@ -73,6 +73,8 @@ class NamePartsWidget(forms.MultiWidget):
             a['data-fname'] = fname
             if fname == 'title' and self.titles:
                 widgets.append(Select(attrs=a, choices=[('', '')] + [(d, d) for d in self.titles[1]]))
+            elif fname == 'salutation':
+                widgets.append(Select(attrs=a, choices=[(s, s) for s in PERSON_NAME_SALUTATIONS]))
             else:
                 widgets.append(self.widget(attrs=a))
         super().__init__(widgets, attrs)
@@ -162,12 +164,18 @@ class NamePartsFormField(forms.MultiValueField):
                     **d,
                     choices=[('', '')] + [(d, d) for d in self.scheme_titles[1]]
                 )
-                field.part_name = fname
-                fields.append(field)
+
+            elif fname == 'salutation':
+                d = dict(defaults)
+                d.pop('max_length', None)
+                field = forms.ChoiceField(
+                    **d,
+                    choices=[(s, s) for s in PERSON_NAME_SALUTATIONS]
+                )
             else:
                 field = forms.CharField(**defaults)
-                field.part_name = fname
-                fields.append(field)
+            field.part_name = fname
+            fields.append(field)
         super().__init__(
             fields=fields, require_all_fields=False, *args, **kwargs
         )
