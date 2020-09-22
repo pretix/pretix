@@ -607,7 +607,6 @@ def _unite_transaction_rows(transaction_rows):
 
 
 class RefundExportListView(ListView):
-    permission = 'can_change_orders'
     template_name = 'pretixplugins/banktransfer/refund_export.html'
     model = RefundExport
     context_object_name = 'exports'
@@ -677,6 +676,7 @@ class RefundExportListView(ListView):
 
 
 class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListView):
+    permission = 'can_change_orders'
 
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={
@@ -699,6 +699,8 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
 
 
 class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExportListView):
+    permission = 'can_change_orders'
+
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={
             'organizer': self.request.organizer.slug,
@@ -733,17 +735,19 @@ class EventDownloadRefundExportView(EventPermissionRequiredMixin, DownloadRefund
     permission = 'can_change_orders'
 
     def get_object(self, *args, **kwargs):
-        return RefundExport.objects.get(
+        return get_object_or_404(
+            RefundExport,
             event=self.request.event,
             pk=self.kwargs.get('id')
         )
 
 
 class OrganizerDownloadRefundExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, DownloadRefundExportView):
-    permission = 'can_change_organizer_settings'
+    permission = 'can_change_orders'
 
     def get_object(self, *args, **kwargs):
-        return RefundExport.objects.get(
+        return get_object_or_404(
+            RefundExport,
             organizer=self.request.organizer,
             pk=self.kwargs.get('id')
         )
@@ -789,7 +793,8 @@ class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
     permission = 'can_change_orders'
 
     def get_object(self, *args, **kwargs):
-        return RefundExport.objects.get(
+        return get_object_or_404(
+            RefundExport,
             event=self.request.event,
             pk=self.kwargs.get('id')
         )
@@ -801,10 +806,11 @@ class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
 
 
 class OrganizerSepaXMLExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, SepaXMLExportView):
-    permission = 'can_change_organizer_settings'
+    permission = 'can_change_orders'
 
     def get_object(self, *args, **kwargs):
-        return RefundExport.objects.get(
+        return get_object_or_404(
+            RefundExport,
             organizer=self.request.organizer,
             pk=self.kwargs.get('id')
         )
