@@ -247,9 +247,11 @@ class BankTransfer(BasePaymentProvider):
         We just keep a created refund object. It will be marked as done using the control view
         for bank transfer refunds.
         """
-        if refund.payment:
-            refund.info_data = {key: value for key, value in refund.payment.info_data.items() if key in {"payer", "iban", "bic"}}
-            refund.save(update_fields=["info"])
+        if refund.payment is None:
+            raise ValueError(_("Can only create a bank transfer refund from an existing payment."))
+
+        refund.info_data = {key: value for key, value in refund.payment.info_data.items() if key in {"payer", "iban", "bic"}}
+        refund.save(update_fields=["info"])
 
     def refund_control_render(self, request: HttpRequest, refund: OrderRefund) -> str:
         return self._render_control_info(request, refund.order, refund.info_data)
