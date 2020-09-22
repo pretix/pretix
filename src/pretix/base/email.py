@@ -222,6 +222,7 @@ class SimpleFunctionalMailTextPlaceholder(BaseMailTextPlaceholder):
 def get_available_placeholders(event, base_parameters):
     if 'order' in base_parameters:
         base_parameters.append('invoice_address')
+        base_parameters.append('position_or_address')
     params = {}
     for r, val in register_mail_placeholders.send(sender=event):
         if not isinstance(val, (list, tuple)):
@@ -241,6 +242,8 @@ def get_email_context(**kwargs):
             kwargs['invoice_address'] = kwargs['order'].invoice_address
         except InvoiceAddress.DoesNotExist:
             kwargs['invoice_address'] = InvoiceAddress()
+        finally:
+            kwargs.setdefault("position_or_address", kwargs['invoice_address'])
     ctx = {}
     for r, val in register_mail_placeholders.send(sender=event):
         if not isinstance(val, (list, tuple)):
