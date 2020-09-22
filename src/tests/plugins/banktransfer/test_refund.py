@@ -9,10 +9,6 @@ from django_scopes import scope
 from pretix.base.models import (
     Event, Order, OrderPayment, OrderRefund, Organizer, Team, User,
 )
-from pretix.plugins.banktransfer.models import RefundExport
-from pretix.plugins.banktransfer.views import (
-    _row_key_func, _unite_transaction_rows,
-)
 
 
 @pytest.fixture
