@@ -1825,6 +1825,15 @@ Your {event} team"""))
     'seating_distance_within_row': {
         'default': 'False',
         'type': bool
+    },
+    'checkout_show_copy_answers_button': {
+        'default': 'True',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show button to copy user input from other products"),
+        ),
     }
 }
 PERSON_NAME_TITLE_GROUPS = OrderedDict([
