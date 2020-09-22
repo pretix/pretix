@@ -109,14 +109,14 @@ class RefundExport(models.Model):
             return self.event.currency
         return self.organizer.events.first().currency
 
-    @cached_property
+    @property
     def rows_data(self):
         return json.loads(self.rows)
 
-    @cached_property
+    @property
     def sum(self):
         return sum(Decimal(row["amount"]) for row in self.rows_data)
 
-    @cached_property
+    @property
     def cnt(self):
         return len(self.rows_data)

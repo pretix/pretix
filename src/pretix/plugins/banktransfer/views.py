@@ -22,7 +22,7 @@ from django.views.generic.detail import SingleObjectMixin
 from localflavor.generic.forms import BICFormField, IBANFormField
 
 from pretix.base.forms.widgets import DatePickerWidget
-from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
+from pretix.base.models import Order, OrderPayment, OrderRefund, Quota, Event
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter
@@ -35,6 +35,7 @@ from pretix.plugins.banktransfer import csvimport, mt940import
 from pretix.plugins.banktransfer.models import (
     BankImportJob, BankTransaction, RefundExport,
 )
+from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.plugins.banktransfer.refund_export import (
     build_sepa_xml, get_refund_export_csv,
 )
@@ -293,8 +294,8 @@ class JobDetailView(DetailView):
 
 class BankTransactionFilterForm(forms.Form):
     search_text = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': "form-control", "placeholder": _("Search text")}))
-    amount_min = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={'class': "form-control", "placeholder": _("min"), "size": 8}))
-    amount_max = forms.DecimalField(required=False, widget=forms.NumberInput(attrs={'class': "form-control", "placeholder": _("max"), "size": 8}))
+    amount_min = forms.DecimalField(required=False, localize=True, widget=forms.TextInput(attrs={'class': "form-control", "placeholder": _("min"), "size": 8}))
+    amount_max = forms.DecimalField(required=False, localize=True, widget=forms.TextInput(attrs={'class': "form-control", "placeholder": _("max"), "size": 8}))
     date_min = forms.DateField(required=False, widget=DatePickerWidget(attrs={"size": 8}))
     date_max = forms.DateField(required=False, widget=DatePickerWidget(attrs={"size": 8}))
 
@@ -640,8 +641,8 @@ class RefundExportListView(ListView):
             if not refund.info_data:
                 # Should not happen
                 messages.warning(request,
-                                 _("We could not find bank account information for the refund {}. It was marked as failed.")
-                                 .format(refund.full_id))
+                                 _("We could not find bank account information for the refund {refund_id}. It was marked as failed.")
+                                 .format(refund_id=refund.full_id))
                 refund.state = OrderRefund.REFUND_STATE_FAILED
                 refund.save()
                 continue
@@ -753,8 +754,11 @@ class SepaXMLExportForm(forms.Form):
     iban = IBANFormField(label="IBAN")
     bic = BICFormField(label="BIC")
 
-    def set_initial_from_event(self, event):
-        ...
+    def set_initial_from_event(self, event: Event):
+        banktransfer = event.get_payment_providers(cached=True)[BankTransfer.identifier]
+        self.initial["account_holder"] = banktransfer.settings.get("bank_details_sepa_name")
+        self.initial["iban"] = banktransfer.settings.get("bank_details_sepa_iban")
+        self.initial["bic"] = banktransfer.settings.get("bank_details_sepa_bic")
 
 
 class SepaXMLExportView(SingleObjectMixin, FormView):
