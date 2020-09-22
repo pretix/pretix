@@ -522,6 +522,7 @@ class EventSettingsForm(SettingsForm):
         'banner_text_bottom',
         'order_email_asked_twice',
         'last_order_modification_date',
+        'checkout_show_copy_answers_button',
     ]
 
     def clean(self):
