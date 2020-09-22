@@ -4,14 +4,7 @@
 {% load static %}
 <div class="table-responsive">
     {% csrf_token %}
-    <table class="table table-condensed transaction-list" data-url="
-
-
-
-
-
-
-            {% if request.event %}{% url "plugins:banktransfer:import.action" event=request.event.slug organizer=request.organizer.slug %}{% else %}{% url "plugins:banktransfer:import.action" organizer=request.organizer.slug %}{% endif %}">
+    <table class="table table-condensed transaction-list" data-url="{% if request.event %}{% url "plugins:banktransfer:import.action" event=request.event.slug organizer=request.organizer.slug %}{% else %}{% url "plugins:banktransfer:import.action" organizer=request.organizer.slug %}{% endif %}">
         <thead>
         <tr>
             <th></th>
