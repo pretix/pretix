@@ -22,7 +22,7 @@ from django.views.generic.detail import SingleObjectMixin
 from localflavor.generic.forms import BICFormField, IBANFormField
 
 from pretix.base.forms.widgets import DatePickerWidget
-from pretix.base.models import Order, OrderPayment, OrderRefund, Quota, Event
+from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter

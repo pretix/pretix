@@ -6,7 +6,13 @@
         <dd>{{ payment_info.payer }}</dd>
         {% if payment_info.iban %}
             <dt>{% trans "Account" %}
-            <dd>{{ payment_info.iban }} {{ payment_info.bic }}</dd>
+            <dd>
+                {{ payment_info.iban }} {{ payment_info.bic }}
+                {% if warning %}
+                    <span class="fa fa-exclamation-triangle text-danger" data-toggle="tooltip" title=""
+                          data-original-title="{{ warning }}"></span>
+                {% endif %}
+            </dd>
         {% endif %}
         {% if payment_info.date %}
             <dt>{% trans "Payment date" %}</dt>
