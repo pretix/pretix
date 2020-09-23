@@ -54,7 +54,7 @@ def export(event: Event, shredders: List[str]) -> None:
         cf = CachedFile()
         cf.date = now()
         cf.filename = event.slug + '.zip'
-        cf.type = 'application/pdf'
+        cf.type = 'application/zip'
         cf.expires = now() + timedelta(hours=1)
         cf.save()
         cf.file.save(cachedfile_name(cf, cf.filename), rawfile)
