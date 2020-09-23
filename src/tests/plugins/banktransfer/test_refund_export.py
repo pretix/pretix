@@ -55,9 +55,9 @@ def test_export_refunds_as_sepa_xml(client, env, url_prefix):
     client.login(email='dummy@dummy.dummy', password='dummy')
     r = client.post(f'{url_prefix}banktransfer/refunds/', {"unite_transactions": True}, follow=True)
     assert b"SEPA" in r.content
-    r = client.get(f'{url_prefix}banktransfer/sepa-export/1/')
+    r = client.get(f'{url_prefix}banktransfer/sepa-export/{RefundExport.objects.last().id}/')
     assert r.status_code == 200
-    r = client.post(f'{url_prefix}banktransfer/sepa-export/1/', {
+    r = client.post(f'{url_prefix}banktransfer/sepa-export/{RefundExport.objects.last().id}/', {
         "account_holder": "Fission Festival",
         "iban": "DE71720690050653667120",
         "bic": "GENODEF1AIL",
@@ -73,9 +73,10 @@ def test_export_refunds(client, env, url_prefix):
     assert r.status_code == 200
     r = client.post(f'{url_prefix}banktransfer/refunds/', {"unite_transactions": True}, follow=True)
     assert r.status_code == 200
-    assert RefundExport.objects.exists()
+    refund = RefundExport.objects.last()
+    assert refund is not None
     assert b"Download CSV" in r.content
-    r = client.get(f'{url_prefix}banktransfer/export/1/')
+    r = client.get(f'{url_prefix}banktransfer/export/{refund.id}/')
     assert r.status_code == 200
     assert "DE27520521540534534466" in "".join(str(part) for part in r.streaming_content)
 
