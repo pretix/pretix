@@ -1853,7 +1853,7 @@ PERSON_NAME_SALUTATIONS = [
 PERSON_NAME_SCHEMES = OrderedDict([
     ('given_family', {
         'fields': (
-            # field_name, label, width-weight
+            # field_name, label, weight for widget width
             ('given_name', _('Given name'), 1),
             ('family_name', _('Family name'), 1),
         ),
@@ -2008,7 +2008,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             '_scheme': 'full_transcription',
         },
     }),
-    ('title_salutation_given_family', {
+    ('salutation_title_given_family', {
         'fields': (
             ('salutation', pgettext_lazy('person_name', 'Salutation'), 1),
             ('title', pgettext_lazy('person_name', 'Title'), 1),

@@ -604,7 +604,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
     def test_attendee_name_scheme(self):
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', True)
-        self.event.settings.set('name_scheme', 'title_given_middle_family')
+        self.event.settings.set('name_scheme', 'salutation_title_given_family')
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -612,17 +612,16 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('select[name="%s-attendee_name_parts_0"]' % cr1.id)), 1)
         self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_1"]' % cr1.id)), 1)
         self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_2"]' % cr1.id)), 1)
         self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_3"]' % cr1.id)), 1)
-
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_name_parts_0' % cr1.id: 'Mr',
-            '%s-attendee_name_parts_1' % cr1.id: 'John',
-            '%s-attendee_name_parts_2' % cr1.id: 'F',
-            '%s-attendee_name_parts_3' % cr1.id: 'Kennedy',
+            '%s-attendee_name_parts_1' % cr1.id: '',
+            '%s-attendee_name_parts_2' % cr1.id: 'John',
+            '%s-attendee_name_parts_3' % cr1.id: 'Doe',
             'email': 'admin@localhost'
         })
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
@@ -630,13 +629,13 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         with scopes_disabled():
             cr1 = CartPosition.objects.get(id=cr1.id)
-        self.assertEqual(cr1.attendee_name, 'Mr John F Kennedy')
+        self.assertEqual(cr1.attendee_name, 'Mr John Doe')
         self.assertEqual(cr1.attendee_name_parts, {
+            'salutation': 'Mr',
+            'title': '',
             'given_name': 'John',
-            'title': 'Mr',
-            'middle_name': 'F',
-            'family_name': 'Kennedy',
-            "_scheme": "title_given_middle_family"
+            'family_name': 'Doe',
+            "_scheme": "salutation_title_given_family"
         })
 
     def test_attendee_name_optional(self):
