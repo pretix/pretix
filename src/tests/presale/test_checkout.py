@@ -629,7 +629,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         with scopes_disabled():
             cr1 = CartPosition.objects.get(id=cr1.id)
-        self.assertEqual(cr1.attendee_name, 'Mr John Doe')
+        self.assertEqual(cr1.attendee_name, 'John Doe')
         self.assertEqual(cr1.attendee_name_parts, {
             'salutation': 'Mr',
             'title': '',

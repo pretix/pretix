@@ -2016,7 +2016,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('family_name', _('Family name'), 2),
         ),
         'concatenation': lambda d: ' '.join(
-            str(p) for p in (d.get(key, '') for key in ["salutation", "title", "given_name", "family_name"]) if p
+            str(p) for p in (d.get(key, '') for key in ["title", "given_name", "family_name"]) if p
         ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
