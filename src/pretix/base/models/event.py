@@ -189,7 +189,9 @@ class EventMixin:
         ).order_by().values_list('quotas__pk').annotate(
             items=GroupConcat('pk', delimiter=',')
         ).values('items')
-        return qs.prefetch_related(
+        return qs.annotate(
+            has_paid_item=Exists(Item.objects.filter(event_id=OuterRef(cls._event_id), default_price__gt=0))
+        ).prefetch_related(
             Prefetch(
                 'quotas',
                 to_attr='active_quotas',
@@ -280,6 +282,7 @@ class Event(EventMixin, LoggedModel):
     """
 
     settings_namespace = 'event'
+    _event_id = 'pk'
     CURRENCY_CHOICES = [(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES]
     organizer = models.ForeignKey(Organizer, related_name="events", on_delete=models.PROTECT)
     testmode = models.BooleanField(default=False)
@@ -786,7 +789,9 @@ class Event(EventMixin, LoggedModel):
             'name_ascending': ('name', 'date_from'),
             'name_descending': ('-name', 'date_from'),
         }[ordering]
-        subevs = queryset.filter(
+        subevs = queryset.annotate(
+            has_paid_item=self.cache.get_or_set('has_paid_item', lambda: self.items.filter(default_price__gt=0).exists(), 3600)
+        ).filter(
             Q(active=True) & Q(is_public=True) & (
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now() - timedelta(hours=24)))
                 | Q(date_to__gte=now() - timedelta(hours=24))
@@ -980,6 +985,7 @@ class SubEvent(EventMixin, LoggedModel):
     :type location: str
     """
 
+    _event_id = 'event_id'
     event = models.ForeignKey(Event, related_name="subevents", on_delete=models.PROTECT)
     active = models.BooleanField(default=False, verbose_name=_("Active"),
                                  help_text=_("Only with this checkbox enabled, this date is visible in the "

@@ -58,7 +58,11 @@
                                     {% elif event.event.best_availability_state == 20 %}
                                         <span class="fa fa-ticket"></span> {% trans "Reserved" %}
                                     {% elif event.event.best_availability_state < 20 %}
-                                        <span class="fa fa-ticket"></span> {% trans "Sold out" %}
+                                        {% if event.event.has_paid_item %}
+                                            <span class="fa fa-ticket"></span> {% trans "Sold out" %}
+                                        {% else %}
+                                            <span class="fa fa-ticket"></span> {% trans "Fully booked" %}
+                                        {% endif %}
                                     {% endif %}
                                 {% elif event.event.presale_is_running %}
                                     <span class="fa fa-ticket"></span> {% trans "Book now" %}

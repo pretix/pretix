@@ -108,7 +108,11 @@
                         {% elif e.best_availability_state == 20 %}
                             <span class="label label-warning">{% trans "Reserved" %}</span>
                         {% elif e.best_availability_state < 20 %}
-                            <span class="label label-danger">{% trans "Sold out" %}</span>
+                            {% if e.has_paid_item %}
+                                <span class="fa fa-ticket"></span> {% trans "Sold out" %}
+                            {% else %}
+                                <span class="fa fa-ticket"></span> {% trans "Fully booked" %}
+                            {% endif %}
                         {% endif %}
                     {% elif e.presale_is_running %}
                         <span class="label label-success">{% trans "Book now" %}</span>
