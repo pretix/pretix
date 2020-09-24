@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-14 12:00+0000\n"
+"POT-Creation-Date: 2020-09-24 08:59+0000\n"
 "PO-Revision-Date: 2020-09-15 02:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -46,16 +46,16 @@ msgstr "Omsætning i alt"
 msgid "Contacting Stripe …"
 msgstr "Kontakter Stripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:57
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
 msgstr "Total"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
 msgstr "Bekræfter din betaling …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
 msgstr "Kontakter din bank …"
 

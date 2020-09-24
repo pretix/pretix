@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-14 11:59+0000\n"
+"POT-Creation-Date: 2020-09-24 08:58+0000\n"
 "PO-Revision-Date: 2020-07-30 19:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -105,7 +105,7 @@ msgstr "ليس هناك حصص كافية متوفرة على الكوتا \"{}\
 msgid "The selected seat \"{seat}\" is not available."
 msgstr "المقعد المحدد \"{seat}\" غير متوفر."
 
-#: pretix/api/serializers/checkin.py:40 pretix/base/models/event.py:1143
+#: pretix/api/serializers/checkin.py:40 pretix/base/models/event.py:1149
 #: pretix/base/models/items.py:1212 pretix/base/models/items.py:1454
 msgid "One or more items do not belong to this event."
 msgstr "واحد أو أكثر من عناصر لا تنتمي إلى هذا الحدث."
@@ -241,63 +241,63 @@ msgstr "فاتورة لهذا النظام موجود بالفعل."
 msgid "There was an error sending the mail. Please try again later."
 msgstr "كان هناك خطأ أثناء إرسال البريد. الرجاء معاودة المحاولة في وقت لاحق."
 
-#: pretix/api/webhooks.py:114 pretix/base/notifications.py:205
+#: pretix/api/webhooks.py:118 pretix/base/notifications.py:205
 msgid "New order placed"
 msgstr "النظام الجديد وضعت"
 
-#: pretix/api/webhooks.py:118 pretix/base/notifications.py:211
+#: pretix/api/webhooks.py:122 pretix/base/notifications.py:211
 msgid "New order requires approval"
 msgstr "نظام جديد يتطلب موافقة"
 
-#: pretix/api/webhooks.py:122 pretix/base/notifications.py:217
+#: pretix/api/webhooks.py:126 pretix/base/notifications.py:217
 msgid "Order marked as paid"
 msgstr "أجل وضع علامة على دفع"
 
-#: pretix/api/webhooks.py:126 pretix/base/notifications.py:223
+#: pretix/api/webhooks.py:130 pretix/base/notifications.py:223
 #: pretix/control/templates/pretixcontrol/event/mail.html:67
 msgid "Order canceled"
 msgstr "تم إلغاء الطلب"
 
-#: pretix/api/webhooks.py:130 pretix/base/notifications.py:229
+#: pretix/api/webhooks.py:134 pretix/base/notifications.py:229
 #, fuzzy
 #| msgid "Order denied"
 msgid "Order reactivated"
 msgstr "نفى أجل"
 
-#: pretix/api/webhooks.py:134 pretix/base/notifications.py:235
+#: pretix/api/webhooks.py:138 pretix/base/notifications.py:235
 msgid "Order expired"
 msgstr "انتهت ترتيب"
 
-#: pretix/api/webhooks.py:138 pretix/base/notifications.py:241
+#: pretix/api/webhooks.py:142 pretix/base/notifications.py:241
 msgid "Order information changed"
 msgstr "تغيرت معلومات النظام"
 
-#: pretix/api/webhooks.py:142 pretix/base/notifications.py:247
+#: pretix/api/webhooks.py:146 pretix/base/notifications.py:247
 msgid "Order contact address changed"
 msgstr "عنوان النظام اتصال تغيرت"
 
-#: pretix/api/webhooks.py:146 pretix/base/notifications.py:253
+#: pretix/api/webhooks.py:150 pretix/base/notifications.py:253
 #: pretix/control/templates/pretixcontrol/event/mail.html:58
 msgid "Order changed"
 msgstr "تغير ترتيب"
 
-#: pretix/api/webhooks.py:150 pretix/base/notifications.py:265
+#: pretix/api/webhooks.py:154 pretix/base/notifications.py:265
 msgid "External refund of payment"
 msgstr "رد الخارجي للدفع"
 
-#: pretix/api/webhooks.py:154
+#: pretix/api/webhooks.py:158
 msgid "Order approved"
 msgstr "أجل الموافقة"
 
-#: pretix/api/webhooks.py:158
+#: pretix/api/webhooks.py:162
 msgid "Order denied"
 msgstr "نفى أجل"
 
-#: pretix/api/webhooks.py:162
+#: pretix/api/webhooks.py:166
 msgid "Ticket checked in"
 msgstr "فحص التذاكر في"
 
-#: pretix/api/webhooks.py:166
+#: pretix/api/webhooks.py:170
 msgid "Ticket check-in reverted"
 msgstr "الاختيار في تذكرة محولة"
 
@@ -315,7 +315,7 @@ msgid "E-mail"
 msgstr "البريد الإلكتروني"
 
 #: pretix/base/auth.py:112 pretix/base/forms/auth.py:86
-#: pretix/base/forms/auth.py:138 pretix/control/forms/event.py:981
+#: pretix/base/forms/auth.py:138 pretix/control/forms/event.py:982
 msgid "Password"
 msgstr "كلمه السر"
 
@@ -495,7 +495,7 @@ msgid "Invoice number"
 msgstr "رقم الفاتورة"
 
 #: pretix/base/exporters/invoices.py:163 pretix/base/exporters/invoices.py:291
-#: pretix/base/exporters/orderlist.py:658 pretix/base/models/items.py:1022
+#: pretix/base/exporters/orderlist.py:675 pretix/base/models/items.py:1022
 #: pretix/base/models/orders.py:154 pretix/base/models/orders.py:2159
 #: pretix/control/forms/filter.py:451
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:63
@@ -544,7 +544,7 @@ msgid "Cancellation of"
 msgstr "إلغاء"
 
 #: pretix/base/exporters/invoices.py:168 pretix/base/models/auth.py:102
-#: pretix/control/forms/event.py:1161 pretix/control/views/waitinglist.py:200
+#: pretix/control/forms/event.py:1162 pretix/control/views/waitinglist.py:200
 msgid "Language"
 msgstr "لغة"
 
@@ -561,12 +561,12 @@ msgstr "مرسل الفاتورة:"
 #: pretix/base/exporters/invoices.py:169 pretix/base/exporters/invoices.py:177
 #: pretix/base/exporters/invoices.py:296 pretix/base/exporters/invoices.py:304
 #: pretix/base/exporters/orderlist.py:129 pretix/base/forms/questions.py:667
-#: pretix/base/models/devices.py:51 pretix/base/models/event.py:993
-#: pretix/base/models/event.py:1241 pretix/base/models/items.py:1326
+#: pretix/base/models/devices.py:51 pretix/base/models/event.py:999
+#: pretix/base/models/event.py:1247 pretix/base/models/items.py:1326
 #: pretix/base/models/items.py:1495 pretix/base/models/organizer.py:34
 #: pretix/base/models/seating.py:40 pretix/base/models/tax.py:97
 #: pretix/base/settings.py:1781 pretix/base/settings.py:1791
-#: pretix/base/settings.py:1972 pretix/control/forms/item.py:282
+#: pretix/base/settings.py:1981 pretix/control/forms/item.py:282
 #: pretix/control/templates/pretixcontrol/checkin/index.html:75
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:26
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:12
@@ -593,7 +593,7 @@ msgstr "الاسم"
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:384
-#: pretix/base/exporters/orderlist.py:411 pretix/base/forms/questions.py:284
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:284
 #: pretix/base/models/orders.py:1132 pretix/base/models/orders.py:2210
 #: pretix/base/orderimport.py:271 pretix/base/orderimport.py:417
 #: pretix/control/templates/pretixcontrol/order/index.html:784
@@ -607,7 +607,7 @@ msgstr "عنوان"
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:385
-#: pretix/base/exporters/orderlist.py:411 pretix/base/forms/questions.py:295
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:295
 #: pretix/base/models/orders.py:1133 pretix/base/models/orders.py:2211
 #: pretix/base/orderimport.py:282 pretix/base/orderimport.py:428
 #: pretix/base/settings.py:651 pretix/control/views/item.py:349
@@ -619,7 +619,7 @@ msgstr "الرمز البريدي"
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:386
-#: pretix/base/exporters/orderlist.py:411 pretix/base/forms/questions.py:303
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:303
 #: pretix/base/models/orders.py:1134 pretix/base/models/orders.py:2212
 #: pretix/base/orderimport.py:293 pretix/base/orderimport.py:439
 #: pretix/base/settings.py:663 pretix/control/views/item.py:359
@@ -631,7 +631,7 @@ msgstr "مدينة"
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:387
-#: pretix/base/exporters/orderlist.py:411 pretix/base/forms/questions.py:315
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:315
 #: pretix/base/models/orders.py:1135 pretix/base/models/orders.py:2213
 #: pretix/base/models/orders.py:2214 pretix/base/orderimport.py:309
 #: pretix/base/orderimport.py:455
@@ -650,7 +650,7 @@ msgstr "الرقم الضريبي"
 #: pretix/base/exporters/invoices.py:302 pretix/base/exporters/invoices.py:310
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
-#: pretix/base/exporters/orderlist.py:411 pretix/base/models/orders.py:2217
+#: pretix/base/exporters/orderlist.py:416 pretix/base/models/orders.py:2217
 #: pretix/base/orderimport.py:353
 #: pretix/control/templates/pretixcontrol/order/index.html:795
 #: pretix/plugins/reports/exporters.py:523
@@ -676,7 +676,7 @@ msgstr "مستلم الفاتورة:"
 #: pretix/base/exporters/orderlist.py:129
 #: pretix/base/exporters/orderlist.py:270
 #: pretix/base/exporters/orderlist.py:383
-#: pretix/base/exporters/orderlist.py:404 pretix/base/forms/questions.py:276
+#: pretix/base/exporters/orderlist.py:409 pretix/base/forms/questions.py:276
 #: pretix/base/orderimport.py:241 pretix/base/orderimport.py:406
 #: pretix/control/templates/pretixcontrol/order/index.html:780
 #: pretix/control/views/item.py:327
@@ -695,7 +695,7 @@ msgstr "عنوان الشارع"
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:388
-#: pretix/base/exporters/orderlist.py:411 pretix/base/forms/questions.py:337
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:337
 #: pretix/base/forms/questions.py:633 pretix/base/models/orders.py:1136
 #: pretix/base/models/orders.py:2216 pretix/base/orderimport.py:328
 #: pretix/control/templates/pretixcontrol/order/index.html:791
@@ -718,7 +718,7 @@ msgstr "المستفيد"
 msgid "Internal reference"
 msgstr "المرجع الداخلي"
 
-#: pretix/base/exporters/invoices.py:186 pretix/control/forms/event.py:1131
+#: pretix/base/exporters/invoices.py:186 pretix/control/forms/event.py:1132
 msgid "Reverse charge"
 msgstr "تهمة العكسي"
 
@@ -747,7 +747,7 @@ msgstr "إعدادات الدفع"
 #: pretix/base/exporters/invoices.py:192 pretix/base/exporters/invoices.py:313
 #: pretix/base/exporters/orderlist.py:152
 #: pretix/base/exporters/orderlist.py:281
-#: pretix/base/exporters/orderlist.py:415
+#: pretix/base/exporters/orderlist.py:420
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:287
 msgid "Payment providers"
@@ -764,14 +764,14 @@ msgid "Invoice"
 msgstr "فاتورة"
 
 #: pretix/base/exporters/invoices.py:268 pretix/base/exporters/orderlist.py:230
-#: pretix/base/exporters/orderlist.py:487 pretix/base/models/orders.py:1001
+#: pretix/base/exporters/orderlist.py:504 pretix/base/models/orders.py:1001
 #: pretix/control/forms/item.py:410 pretix/control/views/item.py:560
 #: pretix/control/views/vouchers.py:88 pretix/control/views/vouchers.py:89
 #: pretix/plugins/checkinlists/exporters.py:481
 #: pretix/plugins/checkinlists/exporters.py:484
 #: pretix/plugins/checkinlists/exporters.py:519
-#: pretix/plugins/checkinlists/exporters.py:591
-#: pretix/plugins/checkinlists/exporters.py:592
+#: pretix/plugins/checkinlists/exporters.py:596
+#: pretix/plugins/checkinlists/exporters.py:597
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:110
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:111
 #: pretix/presale/checkoutflow.py:771
@@ -779,14 +779,14 @@ msgid "Yes"
 msgstr "نعم فعلا"
 
 #: pretix/base/exporters/invoices.py:268 pretix/base/exporters/orderlist.py:230
-#: pretix/base/exporters/orderlist.py:487 pretix/base/models/orders.py:1003
+#: pretix/base/exporters/orderlist.py:504 pretix/base/models/orders.py:1003
 #: pretix/control/forms/item.py:411 pretix/control/views/item.py:560
 #: pretix/control/views/vouchers.py:88 pretix/control/views/vouchers.py:89
 #: pretix/plugins/checkinlists/exporters.py:481
 #: pretix/plugins/checkinlists/exporters.py:484
 #: pretix/plugins/checkinlists/exporters.py:519
-#: pretix/plugins/checkinlists/exporters.py:591
-#: pretix/plugins/checkinlists/exporters.py:592
+#: pretix/plugins/checkinlists/exporters.py:596
+#: pretix/plugins/checkinlists/exporters.py:597
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:110
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:111
 #: pretix/presale/checkoutflow.py:773
@@ -867,8 +867,8 @@ msgstr "الطلبات المدفوعة"
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:258
 #: pretix/base/exporters/orderlist.py:356
-#: pretix/base/exporters/orderlist.py:572
-#: pretix/base/exporters/orderlist.py:658 pretix/control/forms/event.py:1207
+#: pretix/base/exporters/orderlist.py:589
+#: pretix/base/exporters/orderlist.py:675 pretix/control/forms/event.py:1208
 #: pretix/control/forms/organizer.py:52
 msgid "Event slug"
 msgstr "سبيكة الحدث"
@@ -884,7 +884,7 @@ msgstr "المجموع"
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:260
 #: pretix/base/exporters/orderlist.py:359
-#: pretix/base/exporters/orderlist.py:572 pretix/base/models/orders.py:134
+#: pretix/base/exporters/orderlist.py:589 pretix/base/models/orders.py:134
 #: pretix/control/forms/filter.py:439 pretix/control/forms/filter.py:659
 #: pretix/control/forms/filter.py:926 pretix/control/forms/filter.py:1007
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
@@ -945,7 +945,7 @@ msgid "Fees"
 msgstr "رسوم"
 
 #: pretix/base/exporters/orderlist.py:137
-#: pretix/base/exporters/orderlist.py:414 pretix/base/orderimport.py:545
+#: pretix/base/exporters/orderlist.py:419 pretix/base/orderimport.py:545
 #: pretix/control/templates/pretixcontrol/order/index.html:169
 #: pretix/control/templates/pretixcontrol/pdf/index.html:212
 msgid "Order locale"
@@ -971,7 +971,7 @@ msgid "Invoice numbers"
 msgstr "أرقام الفواتير"
 
 #: pretix/base/exporters/orderlist.py:148
-#: pretix/base/exporters/orderlist.py:414 pretix/base/orderimport.py:571
+#: pretix/base/exporters/orderlist.py:419 pretix/base/orderimport.py:571
 #: pretix/control/templates/pretixcontrol/order/index.html:166
 msgid "Sales channel"
 msgstr "قناة المبيعات"
@@ -1019,8 +1019,8 @@ msgstr "حكم الضرائب"
 
 #: pretix/base/exporters/orderlist.py:271
 #: pretix/base/exporters/orderlist.py:276
-#: pretix/base/exporters/orderlist.py:405
-#: pretix/base/exporters/orderlist.py:409 pretix/base/pdf.py:211
+#: pretix/base/exporters/orderlist.py:410
+#: pretix/base/exporters/orderlist.py:414 pretix/base/pdf.py:211
 msgid "Invoice address name"
 msgstr "اسم عنوان الفاتورة"
 
@@ -1032,7 +1032,7 @@ msgstr "ID موقف"
 #: pretix/base/exporters/orderlist.py:365 pretix/base/models/checkin.py:19
 #: pretix/base/models/items.py:1322 pretix/base/models/orders.py:1083
 #: pretix/base/models/vouchers.py:101 pretix/base/models/waitinglist.py:34
-#: pretix/control/forms/event.py:1156 pretix/control/forms/filter.py:249
+#: pretix/control/forms/event.py:1157 pretix/control/forms/filter.py:249
 #: pretix/control/forms/filter.py:1044 pretix/control/forms/filter.py:1156
 #: pretix/control/forms/filter.py:1233 pretix/control/forms/item.py:174
 #: pretix/control/forms/orders.py:246 pretix/control/forms/orders.py:298
@@ -1048,7 +1048,7 @@ msgstr "ID موقف"
 #: pretix/control/views/waitinglist.py:203
 #: pretix/plugins/checkinlists/exporters.py:418
 #: pretix/plugins/sendmail/forms.py:129
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:106
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:109
 #: pretix/presale/templates/pretixpresale/event/order_change.html:29
 msgctxt "subevent"
 msgid "Date"
@@ -1114,24 +1114,59 @@ msgstr "إيصال"
 msgid "Pseudonymization ID"
 msgstr "Pseudonymization ID"
 
-#: pretix/base/exporters/orderlist.py:531
+#: pretix/base/exporters/orderlist.py:391 pretix/base/orderimport.py:591
+#: pretix/plugins/checkinlists/exporters.py:430
+#, fuzzy
+#| msgid "Seat"
+msgid "Seat ID"
+msgstr "مقعد"
+
+#: pretix/base/exporters/orderlist.py:392
+#: pretix/plugins/checkinlists/exporters.py:431
+#, fuzzy
+#| msgid "Team name"
+msgid "Seat name"
+msgstr "اسم الفريق"
+
+#: pretix/base/exporters/orderlist.py:393
+#: pretix/plugins/checkinlists/exporters.py:432
+#, fuzzy
+#| msgid "Seat: zone"
+msgid "Seat zone"
+msgstr "مقعد: المنطقة"
+
+#: pretix/base/exporters/orderlist.py:394
+#: pretix/plugins/checkinlists/exporters.py:433
+#, fuzzy
+#| msgid "Seat: row"
+msgid "Seat row"
+msgstr "مقعد: صف واحد"
+
+#: pretix/base/exporters/orderlist.py:395
+#: pretix/plugins/checkinlists/exporters.py:434
+#, fuzzy
+#| msgid "Seat {number}"
+msgid "Seat number"
+msgstr "مقعد {number}"
+
+#: pretix/base/exporters/orderlist.py:548
 msgid "Order payments and refunds"
 msgstr "المدفوعات النظام واسترداد"
 
-#: pretix/base/exporters/orderlist.py:539
+#: pretix/base/exporters/orderlist.py:556
 #, fuzzy
 #| msgid "Payment date"
 msgid "Payment states"
 msgstr "يوم الدفع او الاستحقاق"
 
-#: pretix/base/exporters/orderlist.py:547
+#: pretix/base/exporters/orderlist.py:564
 #, fuzzy
 #| msgid "Refund status"
 msgid "Refund states"
 msgstr "حالة إعادة الأموال"
 
-#: pretix/base/exporters/orderlist.py:572
-#: pretix/base/exporters/orderlist.py:658 pretix/base/models/orders.py:204
+#: pretix/base/exporters/orderlist.py:589
+#: pretix/base/exporters/orderlist.py:675 pretix/base/models/orders.py:204
 #: pretix/base/models/orders.py:1310 pretix/base/models/orders.py:1677
 #: pretix/base/models/orders.py:1819 pretix/base/models/orders.py:1924
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:64
@@ -1140,29 +1175,29 @@ msgstr "حالة إعادة الأموال"
 msgid "Order"
 msgstr "طلب"
 
-#: pretix/base/exporters/orderlist.py:572
-#: pretix/base/exporters/orderlist.py:658
+#: pretix/base/exporters/orderlist.py:589
+#: pretix/base/exporters/orderlist.py:675
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 msgid "Payment ID"
 msgstr "معرف الدفع"
 
-#: pretix/base/exporters/orderlist.py:572
+#: pretix/base/exporters/orderlist.py:589
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:54
 msgid "Creation date"
 msgstr "تاريخ الإنشاء"
 
-#: pretix/base/exporters/orderlist.py:572
+#: pretix/base/exporters/orderlist.py:589
 #: pretix/control/templates/pretixcontrol/order/index.html:667
 msgid "Completion date"
 msgstr "موعد الإكمال"
 
-#: pretix/base/exporters/orderlist.py:573
+#: pretix/base/exporters/orderlist.py:590
 msgid "Status code"
 msgstr "رمز الحالة"
 
-#: pretix/base/exporters/orderlist.py:573
-#: pretix/base/exporters/orderlist.py:658 pretix/base/models/orders.py:1306
+#: pretix/base/exporters/orderlist.py:590
+#: pretix/base/exporters/orderlist.py:675 pretix/base/models/orders.py:1306
 #: pretix/base/models/orders.py:1673
 #: pretix/control/templates/pretixcontrol/order/index.html:576
 #: pretix/control/templates/pretixcontrol/order/index.html:672
@@ -1172,7 +1207,7 @@ msgstr "رمز الحالة"
 msgid "Amount"
 msgstr "كمية"
 
-#: pretix/base/exporters/orderlist.py:573
+#: pretix/base/exporters/orderlist.py:590
 #: pretix/control/templates/pretixcontrol/order/index.html:574
 #: pretix/control/templates/pretixcontrol/order/index.html:669
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:29
@@ -1180,41 +1215,41 @@ msgstr "كمية"
 msgid "Payment method"
 msgstr "طريقة الدفع او السداد"
 
-#: pretix/base/exporters/orderlist.py:608
+#: pretix/base/exporters/orderlist.py:625
 msgid "Quota availabilities"
 msgstr "التوفر الحصص"
 
-#: pretix/base/exporters/orderlist.py:612
+#: pretix/base/exporters/orderlist.py:629
 #: pretix/control/templates/pretixcontrol/items/quotas.html:44
 msgid "Quota name"
 msgstr "اسم الحصص"
 
-#: pretix/base/exporters/orderlist.py:612
+#: pretix/base/exporters/orderlist.py:629
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
 msgid "Total quota"
 msgstr "الحصة الإجمالية"
 
-#: pretix/base/exporters/orderlist.py:612
+#: pretix/base/exporters/orderlist.py:629
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:779
 msgid "Paid orders"
 msgstr "طلبات مدفوعة."
 
-#: pretix/base/exporters/orderlist.py:612 pretix/control/views/item.py:784
+#: pretix/base/exporters/orderlist.py:629 pretix/control/views/item.py:784
 msgid "Pending orders"
 msgstr "في انتظار أوامر"
 
-#: pretix/base/exporters/orderlist.py:612
+#: pretix/base/exporters/orderlist.py:629
 msgid "Blocking vouchers"
 msgstr "منع قسائم"
 
-#: pretix/base/exporters/orderlist.py:613 pretix/control/views/item.py:803
+#: pretix/base/exporters/orderlist.py:630 pretix/control/views/item.py:803
 msgid "Current user's carts"
 msgstr "عربات المستخدم الحالي"
 
-#: pretix/base/exporters/orderlist.py:613 pretix/base/shredder.py:170
-#: pretix/control/forms/event.py:1231 pretix/control/navigation.py:206
-#: pretix/control/templates/pretixcontrol/event/settings.html:229
+#: pretix/base/exporters/orderlist.py:630 pretix/base/shredder.py:170
+#: pretix/control/forms/event.py:1232 pretix/control/navigation.py:206
+#: pretix/control/templates/pretixcontrol/event/settings.html:230
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:59
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:6
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:8
@@ -1222,37 +1257,37 @@ msgstr "عربات المستخدم الحالي"
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:27
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:23
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:3
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:73
-#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:57
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:78
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:60
 #: pretix/presale/templates/pretixpresale/organizers/index.html:107
 #: pretix/presale/views/widget.py:314
 msgid "Waiting list"
 msgstr "قائمة الانتظار"
 
-#: pretix/base/exporters/orderlist.py:613
+#: pretix/base/exporters/orderlist.py:630
 #, fuzzy
 #| msgid "Expire order"
 msgid "Exited orders"
 msgstr "تنتهي ترتيب"
 
-#: pretix/base/exporters/orderlist.py:613
+#: pretix/base/exporters/orderlist.py:630
 msgid "Current availability"
 msgstr "من توفر الغرف"
 
-#: pretix/base/exporters/orderlist.py:626
-#: pretix/base/exporters/orderlist.py:633
+#: pretix/base/exporters/orderlist.py:643
+#: pretix/base/exporters/orderlist.py:650
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
 #: pretix/control/views/item.py:810
 msgid "Infinite"
 msgstr "غير محدود"
 
-#: pretix/base/exporters/orderlist.py:643
+#: pretix/base/exporters/orderlist.py:660
 #, fuzzy
 #| msgid "Redemptions"
 msgid "Gift card redemptions"
 msgstr "الاسترداد"
 
-#: pretix/base/exporters/orderlist.py:658 pretix/base/models/giftcards.py:54
+#: pretix/base/exporters/orderlist.py:675 pretix/base/models/giftcards.py:54
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:10
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:4
 #: pretix/control/templates/pretixcontrol/order/index.html:368
@@ -1262,7 +1297,7 @@ msgstr "الاسترداد"
 msgid "Gift card code"
 msgstr "رمز بطاقة هدية"
 
-#: pretix/base/exporters/orderlist.py:658
+#: pretix/base/exporters/orderlist.py:675
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
 msgid "Issuer"
 msgstr "المصدر"
@@ -1314,9 +1349,9 @@ msgid "Select state"
 msgstr "اختر ولايه"
 
 #: pretix/base/forms/questions.py:529 pretix/base/forms/questions.py:706
-#: pretix/base/payment.py:51 pretix/control/forms/event.py:607
-#: pretix/control/forms/event.py:613 pretix/control/forms/event.py:662
-#: pretix/control/forms/event.py:1091
+#: pretix/base/payment.py:51 pretix/control/forms/event.py:608
+#: pretix/control/forms/event.py:614 pretix/control/forms/event.py:663
+#: pretix/control/forms/event.py:1092
 msgid "This field is required."
 msgstr "هذه الخانة مطلوبه."
 
@@ -1529,7 +1564,7 @@ msgstr ""
 msgid "TEST MODE"
 msgstr "وضع الاختبار"
 
-#: pretix/base/invoice.py:431 pretix/base/services/mail.py:344
+#: pretix/base/invoice.py:431 pretix/base/services/mail.py:348
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
@@ -1669,7 +1704,7 @@ msgid "Default list"
 msgstr "قائمة افتراضي"
 
 #: pretix/base/models/auth.py:92 pretix/base/models/orders.py:2208
-#: pretix/base/settings.py:1983 pretix/base/settings.py:1994
+#: pretix/base/settings.py:1992 pretix/base/settings.py:2003
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 msgid "Full name"
 msgstr "الاسم بالكامل"
@@ -1735,7 +1770,7 @@ msgid "All products (including newly created ones)"
 msgstr "جميع المنتجات (بما في ذلك تلك التي تم إنشاؤها حديثا)"
 
 #: pretix/base/models/checkin.py:17 pretix/plugins/badges/exporters.py:212
-#: pretix/plugins/checkinlists/exporters.py:614
+#: pretix/plugins/checkinlists/exporters.py:618
 msgid "Limit to products"
 msgstr "الحد الى المنتجات"
 
@@ -1809,7 +1844,7 @@ msgstr "نهاية الفترة [خبر] يجب أن تكون في وقت لاح
 msgid "The end of the event has to be later than its start."
 msgstr "نهاية الحدث يجب أن تكون في وقت لاحق من بدايته."
 
-#: pretix/base/models/event.py:288 pretix/base/pdf.py:130
+#: pretix/base/models/event.py:291 pretix/base/pdf.py:130
 #: pretix/control/forms/filter.py:470 pretix/control/forms/filter.py:472
 #: pretix/control/forms/filter.py:687 pretix/control/forms/filter.py:689
 #: pretix/control/templates/pretixcontrol/events/index.html:64
@@ -1817,7 +1852,7 @@ msgstr "نهاية الحدث يجب أن تكون في وقت لاحق من ب�
 msgid "Event name"
 msgstr "اسم الحدث"
 
-#: pretix/base/models/event.py:293
+#: pretix/base/models/event.py:296
 msgid ""
 "Should be short, only contain lowercase letters, numbers, dots, and dashes, "
 "and must be unique among your events. We recommend some kind of abbreviation "
@@ -1831,58 +1866,58 @@ msgstr ""
 "عشوائية. هذا وسوف تستخدم في عناوين المواقع، ورموز النظام، أرقام الفواتير، "
 "والمراجع التحويل المصرفي."
 
-#: pretix/base/models/event.py:300 pretix/base/models/organizer.py:43
+#: pretix/base/models/event.py:303 pretix/base/models/organizer.py:43
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr "قد تحتوي على سبيكة فقط الحروف والأرقام، أو النقاط وشرطات."
 
-#: pretix/base/models/event.py:304 pretix/base/models/organizer.py:47
+#: pretix/base/models/event.py:307 pretix/base/models/organizer.py:47
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
 msgid "Short form"
 msgstr "نموذج قصير"
 
-#: pretix/base/models/event.py:306
+#: pretix/base/models/event.py:309
 msgid "Shop is live"
 msgstr "متجر هو العيش"
 
-#: pretix/base/models/event.py:308
+#: pretix/base/models/event.py:311
 msgid "Event currency"
 msgstr "العملة الحدث"
 
-#: pretix/base/models/event.py:311 pretix/base/models/event.py:995
+#: pretix/base/models/event.py:314 pretix/base/models/event.py:1001
 #: pretix/base/settings.py:1779 pretix/base/settings.py:1789
 #: pretix/control/forms/subevents.py:370
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr "حدث وقت البدء"
 
-#: pretix/base/models/event.py:313 pretix/base/models/event.py:997
+#: pretix/base/models/event.py:316 pretix/base/models/event.py:1003
 #: pretix/base/pdf.py:182 pretix/control/forms/subevents.py:375
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
 msgstr "وقت نهاية الحدث"
 
-#: pretix/base/models/event.py:315 pretix/base/models/event.py:999
+#: pretix/base/models/event.py:318 pretix/base/models/event.py:1005
 #: pretix/control/forms/subevents.py:380
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
 msgstr "وقت تسجيل الدخول"
 
-#: pretix/base/models/event.py:317 pretix/base/models/event.py:988
+#: pretix/base/models/event.py:320 pretix/base/models/event.py:994
 msgid "Show in lists"
 msgstr "تظهر في القوائم"
 
-#: pretix/base/models/event.py:318
+#: pretix/base/models/event.py:321
 msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr "إذا المحدد، سوف تظهر هذا الحدث للجمهور في قائمة الأحداث لحساب المنظم."
 
-#: pretix/base/models/event.py:321 pretix/base/models/event.py:1002
+#: pretix/base/models/event.py:324 pretix/base/models/event.py:1008
 #: pretix/control/forms/subevents.py:70
 msgid "End of presale"
 msgstr "نهاية [خبر]"
 
-#: pretix/base/models/event.py:322 pretix/base/models/event.py:1003
+#: pretix/base/models/event.py:325 pretix/base/models/event.py:1009
 #: pretix/control/forms/subevents.py:71
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
@@ -1891,48 +1926,48 @@ msgstr ""
 "اختياري. وسيتم بيع أي منتجات بعد هذا التاريخ. إذا لم يكن لتعيين هذه القيمة، "
 "ستنتهي [خبر] بعد تاريخ انتهاء الحدث."
 
-#: pretix/base/models/event.py:327 pretix/base/models/event.py:1008
+#: pretix/base/models/event.py:330 pretix/base/models/event.py:1014
 #: pretix/control/forms/subevents.py:64
 msgid "Start of presale"
 msgstr "بدء من [خبر]"
 
-#: pretix/base/models/event.py:328 pretix/base/models/event.py:1009
+#: pretix/base/models/event.py:331 pretix/base/models/event.py:1015
 #: pretix/control/forms/subevents.py:65
 msgid "Optional. No products will be sold before this date."
 msgstr "اختياري. وسيتم بيع أي منتجات قبل هذا التاريخ."
 
-#: pretix/base/models/event.py:333 pretix/base/models/event.py:1014
+#: pretix/base/models/event.py:336 pretix/base/models/event.py:1020
 msgid "Location"
 msgstr "موقعك"
 
-#: pretix/base/models/event.py:336 pretix/base/models/event.py:1017
+#: pretix/base/models/event.py:339 pretix/base/models/event.py:1023
 msgid "Latitude"
 msgstr "خطوط الطول"
 
-#: pretix/base/models/event.py:340 pretix/base/models/event.py:1021
+#: pretix/base/models/event.py:343 pretix/base/models/event.py:1027
 msgid "Longitude"
 msgstr "خطوط العرض"
 
-#: pretix/base/models/event.py:345 pretix/control/navigation.py:44
+#: pretix/base/models/event.py:348 pretix/control/navigation.py:44
 msgid "Plugins"
 msgstr "الإضافات"
 
-#: pretix/base/models/event.py:348
+#: pretix/base/models/event.py:351
 #: pretix/control/templates/pretixcontrol/event/index.html:143
 #: pretix/control/templates/pretixcontrol/order/index.html:826
 msgid "Internal comment"
 msgstr "تعليق الداخلي"
 
-#: pretix/base/models/event.py:352 pretix/control/forms/event.py:212
+#: pretix/base/models/event.py:355 pretix/control/forms/event.py:212
 #: pretix/control/forms/filter.py:669
 #: pretix/control/templates/pretixcontrol/event/index.html:13
 #: pretix/control/views/dashboards.py:490
 #: pretix/presale/templates/pretixpresale/organizers/index.html:102
-#: pretix/presale/views/widget.py:495
+#: pretix/presale/views/widget.py:500
 msgid "Event series"
 msgstr "سلسلة الحدث"
 
-#: pretix/base/models/event.py:361 pretix/base/models/items.py:254
+#: pretix/base/models/event.py:364 pretix/base/models/items.py:254
 #: pretix/base/models/items.py:1315 pretix/base/models/orders.py:140
 #: pretix/base/models/orders.py:2151 pretix/base/models/vouchers.py:95
 #: pretix/base/models/waitinglist.py:28 pretix/base/notifications.py:177
@@ -1941,7 +1976,7 @@ msgstr "سلسلة الحدث"
 msgid "Event"
 msgstr "الفعالية"
 
-#: pretix/base/models/event.py:362 pretix/control/navigation.py:305
+#: pretix/base/models/event.py:365 pretix/control/navigation.py:305
 #: pretix/control/navigation.py:407
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 #: pretix/control/templates/pretixcontrol/events/index.html:7
@@ -1952,46 +1987,46 @@ msgstr "الفعالية"
 msgid "Events"
 msgstr "أحداث"
 
-#: pretix/base/models/event.py:834
+#: pretix/base/models/event.py:839
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
 "لقد قمت بتكوين ما لا يقل عن منتج واحد يدفع ولكن لم يتم تمكين أي وسائل الدفع."
 
-#: pretix/base/models/event.py:837
+#: pretix/base/models/event.py:842
 msgid "You need to configure at least one quota to sell anything."
 msgstr "تحتاج إلى تكوين حصة واحدة على الأقل لبيع أي شيء."
 
-#: pretix/base/models/event.py:935
+#: pretix/base/models/event.py:940
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr "وبمجرد إنشاء لا يمكن تغيير حدث بين سلسلة وحدث واحد."
 
-#: pretix/base/models/event.py:941
+#: pretix/base/models/event.py:946
 msgid "The event slug cannot be changed."
 msgstr "لا يمكن تغيير سبيكة الحدث."
 
-#: pretix/base/models/event.py:944
+#: pretix/base/models/event.py:949
 msgid "This slug has already been used for a different event."
 msgstr "وقد تم بالفعل استخدام هذا سبيكة لحدث آخر."
 
-#: pretix/base/models/event.py:950
+#: pretix/base/models/event.py:955
 msgid "The event cannot end before it starts."
 msgstr "لا يمكن أن ينتهي الحدث قبل أن تبدأ."
 
-#: pretix/base/models/event.py:956
+#: pretix/base/models/event.py:961
 msgid "The event's presale cannot end before it starts."
 msgstr "لا يمكن أن تنتهي [خبر] الحدث قبل أن تبدأ."
 
-#: pretix/base/models/event.py:984 pretix/base/models/items.py:275
+#: pretix/base/models/event.py:990 pretix/base/models/items.py:275
 #: pretix/base/models/items.py:647 pretix/control/forms/filter.py:442
 #: pretix/control/forms/filter.py:929
 #: pretix/control/templates/pretixcontrol/users/index.html:46
 msgid "Active"
 msgstr "نشيط"
 
-#: pretix/base/models/event.py:985
+#: pretix/base/models/event.py:991
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
@@ -1999,34 +2034,34 @@ msgstr ""
 "فقط مع تمكين خانة الاختيار هذه، هذا التاريخ مرئيا في الواجهة الأمامية "
 "للمستخدمين."
 
-#: pretix/base/models/event.py:989
+#: pretix/base/models/event.py:995
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr ""
 "إذا المحدد، سوف تظهر هذا الحدث للجمهور في قائمة مواعيد لهذا الحدث الخاص بك."
 
-#: pretix/base/models/event.py:1026 pretix/base/settings.py:1656
+#: pretix/base/models/event.py:1032 pretix/base/settings.py:1656
 msgid "Frontpage text"
 msgstr "النص صفحتها الاولى"
 
-#: pretix/base/models/event.py:1037
+#: pretix/base/models/event.py:1043
 msgid "Date in event series"
 msgstr "التاريخ في سلسلة الحدث"
 
-#: pretix/base/models/event.py:1038
+#: pretix/base/models/event.py:1044
 msgid "Dates in event series"
 msgstr "التمور في سلسلة الحدث"
 
-#: pretix/base/models/event.py:1149
+#: pretix/base/models/event.py:1155
 msgid "One or more variations do not belong to this event."
 msgstr "واحد أو أكثر من الاختلافات لا تنتمي إلى هذا الحدث."
 
-#: pretix/base/models/event.py:1233 pretix/base/models/items.py:1487
+#: pretix/base/models/event.py:1239 pretix/base/models/items.py:1487
 msgid "Can not contain spaces or special characters except underscores"
 msgstr "لا يمكن أن تحتوي على مسافات أو أحرف خاصة باستثناء أحرف (_)"
 
-#: pretix/base/models/event.py:1238 pretix/base/models/items.py:1492
+#: pretix/base/models/event.py:1244 pretix/base/models/items.py:1492
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr "قد تحتوي على اسم الخاصية فقط الحروف والأرقام وسفلية."
 
@@ -2200,7 +2235,7 @@ msgid "This will only work of waiting lists are enabled for this event."
 msgstr "يتم تمكين هذا العمل لن يؤدي إلا من قوائم الانتظار لهذا الحدث."
 
 #: pretix/base/models/items.py:321 pretix/base/settings.py:853
-#: pretix/control/forms/event.py:1226
+#: pretix/control/forms/event.py:1227
 msgid "Show number of tickets left"
 msgstr "مشاهدة عدد التذاكر يقم"
 
@@ -2376,7 +2411,7 @@ msgstr ""
 "إذا مجموعة، سيتم عرض هذا إلى جانب السعر الحالي لإظهار أن السعر الحالي هو "
 "واحد مخفضة. هذا هو مجرد وضع مستحضرات التجميل ولن تؤثر في الواقع التسعير."
 
-#: pretix/base/models/items.py:414 pretix/control/forms/event.py:787
+#: pretix/base/models/items.py:414 pretix/control/forms/event.py:788
 #: pretix/control/forms/item.py:439
 msgid "Sales channels"
 msgstr "قنوات المبيعات"
@@ -2680,7 +2715,7 @@ msgstr "خيار سؤال"
 msgid "Question options"
 msgstr "خيارات السؤال"
 
-#: pretix/base/models/items.py:1329 pretix/control/forms/event.py:1260
+#: pretix/base/models/items.py:1329 pretix/control/forms/event.py:1261
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 msgid "Total capacity"
 msgstr "السعة الاجمالية"
@@ -3824,12 +3859,6 @@ msgstr "لو سمحت أدخل بريد إليكتروني صالح."
 msgid "Please enter a valid sales channel."
 msgstr "لو سمحت أدخل بريد إليكتروني صالح."
 
-#: pretix/base/orderimport.py:591 pretix/plugins/checkinlists/exporters.py:430
-#, fuzzy
-#| msgid "Seat"
-msgid "Seat ID"
-msgstr "مقعد"
-
 #: pretix/base/orderimport.py:605
 #, fuzzy
 #| msgid "No matching answers found."
@@ -4170,7 +4199,7 @@ msgstr "تذكرة التعليمات البرمجية (محتوى البارك�
 msgid "Order position number"
 msgstr "رقم موقع الطلب"
 
-#: pretix/base/pdf.py:64 pretix/control/forms/event.py:1313
+#: pretix/base/pdf.py:64 pretix/control/forms/event.py:1314
 #: pretix/control/templates/pretixcontrol/items/index.html:33
 msgid "Product name"
 msgstr "اسم المنتج"
@@ -4818,14 +4847,14 @@ msgstr "المنتج عينة {}"
 msgid "Sample product A"
 msgstr "عينة المنتج A"
 
-#: pretix/base/services/mail.py:171
+#: pretix/base/services/mail.py:174
 #, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr "لقد استلمت هذا البريد لأن الحجز مسجل بايميلك ل {event}."
 
-#: pretix/base/services/mail.py:175 pretix/base/services/mail.py:191
+#: pretix/base/services/mail.py:178 pretix/base/services/mail.py:194
 #, python-brace-format
 msgid ""
 "You can view your order details at the following URL:\n"
@@ -4834,7 +4863,7 @@ msgstr ""
 "يمكنك مشاهدة تفاصيل طلبك في الرابط التالي:\n"
 "{orderurl}."
 
-#: pretix/base/services/mail.py:187
+#: pretix/base/services/mail.py:190
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
 msgstr "تلقيت هذا البريد لأنك قمت بالحجز في{event}."
@@ -5864,7 +5893,7 @@ msgstr "إذا المعوقين، سيتم عرض بداية الحدث وتار
 msgid "Hide all products that are sold out"
 msgstr "إخفاء جميع المنتجات التي تباع بها"
 
-#: pretix/base/settings.py:854 pretix/control/forms/event.py:1227
+#: pretix/base/settings.py:854 pretix/control/forms/event.py:1228
 msgid "Publicly show how many tickets of a certain type are still available."
 msgstr "تظهر علنا ​​كيف العديد من تذاكر من نوع معين لا تزال متاحة."
 
@@ -5880,7 +5909,7 @@ msgstr "مشاهدة أشكال مختلفة من المنتج توسعت بشك
 msgid "Enable waiting list"
 msgstr "تمكين قائمة الانتظار"
 
-#: pretix/base/settings.py:882 pretix/control/forms/event.py:1232
+#: pretix/base/settings.py:882 pretix/control/forms/event.py:1233
 msgid ""
 "Once a ticket is sold out, people can add themselves to a waiting list. As "
 "soon as a ticket becomes available again, it will be reserved for the first "
@@ -6160,19 +6189,19 @@ msgstr "يدويا إصدار بطاقة هدية"
 msgid "Refund method"
 msgstr "أجل استرداد"
 
-#: pretix/base/settings.py:1191 pretix/control/forms/event.py:1255
+#: pretix/base/settings.py:1191 pretix/control/forms/event.py:1256
 msgid "Contact address"
 msgstr "عنوان الإتصال"
 
-#: pretix/base/settings.py:1192 pretix/control/forms/event.py:1257
+#: pretix/base/settings.py:1192 pretix/control/forms/event.py:1258
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "سنعرض هذا علنا ​​للسماح الحضور للاتصال بك."
 
-#: pretix/base/settings.py:1200 pretix/control/forms/event.py:1249
+#: pretix/base/settings.py:1200 pretix/control/forms/event.py:1250
 msgid "Imprint URL"
 msgstr "مقدم الخدمة URL"
 
-#: pretix/base/settings.py:1201 pretix/control/forms/event.py:1250
+#: pretix/base/settings.py:1201 pretix/control/forms/event.py:1251
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
@@ -6803,95 +6832,99 @@ msgid ""
 "it might not be written on their ticket."
 msgstr ""
 
-#: pretix/base/settings.py:1831
+#: pretix/base/settings.py:1835
+msgid "Show button to copy user input from other products"
+msgstr ""
+
+#: pretix/base/settings.py:1840
 msgid "Most common English titles"
 msgstr "معظم الألقاب الإنجليزية المشتركة"
 
-#: pretix/base/settings.py:1841
+#: pretix/base/settings.py:1850
 msgid "Most common German titles"
 msgstr "معظم الألقاب الألمانية المشتركة"
 
-#: pretix/base/settings.py:1850 pretix/base/settings.py:1863
-#: pretix/base/settings.py:1879 pretix/base/settings.py:1929
-#: pretix/base/settings.py:1942 pretix/base/settings.py:1956
+#: pretix/base/settings.py:1859 pretix/base/settings.py:1872
+#: pretix/base/settings.py:1888 pretix/base/settings.py:1938
+#: pretix/base/settings.py:1951 pretix/base/settings.py:1965
 msgid "Given name"
 msgstr "الاسم المعطى"
 
-#: pretix/base/settings.py:1851 pretix/base/settings.py:1864
-#: pretix/base/settings.py:1880 pretix/base/settings.py:1896
-#: pretix/base/settings.py:1913 pretix/base/settings.py:1928
-#: pretix/base/settings.py:1943 pretix/base/settings.py:1957
+#: pretix/base/settings.py:1860 pretix/base/settings.py:1873
+#: pretix/base/settings.py:1889 pretix/base/settings.py:1905
+#: pretix/base/settings.py:1922 pretix/base/settings.py:1937
+#: pretix/base/settings.py:1952 pretix/base/settings.py:1966
 msgid "Family name"
 msgstr "اسم العائلة"
 
-#: pretix/base/settings.py:1855 pretix/base/settings.py:1871
-#: pretix/base/settings.py:1887 pretix/base/settings.py:1902
-#: pretix/base/settings.py:1920 pretix/base/settings.py:1935
-#: pretix/base/settings.py:1965 pretix/base/settings.py:1988
+#: pretix/base/settings.py:1864 pretix/base/settings.py:1880
+#: pretix/base/settings.py:1896 pretix/base/settings.py:1911
+#: pretix/base/settings.py:1929 pretix/base/settings.py:1944
+#: pretix/base/settings.py:1974 pretix/base/settings.py:1997
 msgctxt "person_name_sample"
 msgid "John"
 msgstr "يوحنا"
 
-#: pretix/base/settings.py:1856 pretix/base/settings.py:1872
-#: pretix/base/settings.py:1888 pretix/base/settings.py:1904
-#: pretix/base/settings.py:1922 pretix/base/settings.py:1936
-#: pretix/base/settings.py:1966
+#: pretix/base/settings.py:1865 pretix/base/settings.py:1881
+#: pretix/base/settings.py:1897 pretix/base/settings.py:1913
+#: pretix/base/settings.py:1931 pretix/base/settings.py:1945
+#: pretix/base/settings.py:1975
 msgctxt "person_name_sample"
 msgid "Doe"
 msgstr "أنثى ظبية"
 
-#: pretix/base/settings.py:1862 pretix/base/settings.py:1878
-#: pretix/base/settings.py:1910
+#: pretix/base/settings.py:1871 pretix/base/settings.py:1887
+#: pretix/base/settings.py:1919
 msgctxt "person_name"
 msgid "Title"
 msgstr "عنوان"
 
-#: pretix/base/settings.py:1870 pretix/base/settings.py:1886
-#: pretix/base/settings.py:1919
+#: pretix/base/settings.py:1879 pretix/base/settings.py:1895
+#: pretix/base/settings.py:1928
 msgctxt "person_name_sample"
 msgid "Dr"
 msgstr "الدكتور"
 
-#: pretix/base/settings.py:1894 pretix/base/settings.py:1911
+#: pretix/base/settings.py:1903 pretix/base/settings.py:1920
 msgid "First name"
 msgstr "الاسم الاول"
 
-#: pretix/base/settings.py:1895 pretix/base/settings.py:1912
+#: pretix/base/settings.py:1904 pretix/base/settings.py:1921
 msgid "Middle name"
 msgstr "الاسم الأوسط"
 
-#: pretix/base/settings.py:1976 pretix/base/settings.py:1987
+#: pretix/base/settings.py:1985 pretix/base/settings.py:1996
 msgctxt "person_name_sample"
 msgid "John Doe"
 msgstr "فلان الفلاني"
 
-#: pretix/base/settings.py:1982
+#: pretix/base/settings.py:1991
 msgid "Calling name"
 msgstr "الشتائم"
 
-#: pretix/base/settings.py:1995
+#: pretix/base/settings.py:2004
 msgid "Latin transcription"
 msgstr "النسخ اللاتينية"
 
-#: pretix/base/settings.py:2101 pretix/control/forms/event.py:172
+#: pretix/base/settings.py:2110 pretix/control/forms/event.py:172
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
 "ولا بد أيضا من تمكين اللغة الافتراضية لهذا الحدث الخاص بك (انظر المربع "
 "أعلاه)."
 
-#: pretix/base/settings.py:2105
+#: pretix/base/settings.py:2114
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr "لا يمكنك تتطلب تحديد أسماء الحضور إذا كنت لا أطلب منهم."
 
-#: pretix/base/settings.py:2109
+#: pretix/base/settings.py:2118
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr ""
 "عليك أن تسأل لرسائل البريد الإلكتروني الحضور إذا كنت تريد أن تجعل منهم "
 "المطلوبة."
 
-#: pretix/base/settings.py:2113
+#: pretix/base/settings.py:2122
 #, fuzzy
 #| msgid ""
 #| "You have to ask for attendee emails if you want to make them required."
@@ -6901,13 +6934,13 @@ msgstr ""
 "عليك أن تسأل لرسائل البريد الإلكتروني الحضور إذا كنت تريد أن تجعل منهم "
 "المطلوبة."
 
-#: pretix/base/settings.py:2117
+#: pretix/base/settings.py:2126
 #, fuzzy
 #| msgid "This will require users to enter a company name."
 msgid "You have to require invoice addresses to require for company names."
 msgstr "وهذا يتطلب من المستخدمين إدخال اسم الشركة."
 
-#: pretix/base/settings.py:2124
+#: pretix/base/settings.py:2133
 msgid "The last payment date cannot be before the end of presale."
 msgstr "تاريخ الدفعة الأخيرة لا يمكن أن يكون قبل نهاية [خبر]."
 
@@ -7551,26 +7584,26 @@ msgstr "الخط"
 msgid "Only respected by modern browsers."
 msgstr "تحترم إلا من خلال المتصفحات الحديثة."
 
-#: pretix/control/forms/event.py:538
+#: pretix/control/forms/event.py:539
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
 msgstr "طلب {fields}، العرض مثل {example}"
 
-#: pretix/control/forms/event.py:544
+#: pretix/control/forms/event.py:545
 msgid "Free text input"
 msgstr "إدخال النص الحر"
 
-#: pretix/control/forms/event.py:581
+#: pretix/control/forms/event.py:582
 msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
 msgstr ""
 
-#: pretix/control/forms/event.py:598
+#: pretix/control/forms/event.py:599
 msgid "Tax rule for payment fees"
 msgstr "حكم الضرائب لدفع الرسوم"
 
-#: pretix/control/forms/event.py:600
+#: pretix/control/forms/event.py:601
 msgid ""
 "The tax rule that applies for additional fees you configured for single "
 "payment methods. This will set the tax rate and reverse charge rules, other "
@@ -7580,11 +7613,11 @@ msgstr ""
 "هذا وسوف يحدد معدل الضريبة وقواعد المحاسبة العكسية، يتم تجاهل إعدادات أخرى "
 "للحكم الضرائب."
 
-#: pretix/control/forms/event.py:705
+#: pretix/control/forms/event.py:706
 msgid "Generate invoices for Sales channels"
 msgstr "توليد الفواتير للقنوات المبيعات"
 
-#: pretix/control/forms/event.py:708
+#: pretix/control/forms/event.py:709
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
@@ -7592,85 +7625,85 @@ msgstr ""
 "إذا قمت بتمكين الجيل الفاتورة في الإعداد السابق، يمكنك تحديد هنا لقنوات "
 "البيع المحددة."
 
-#: pretix/control/forms/event.py:712
+#: pretix/control/forms/event.py:713
 msgid "Invoice style"
 msgstr "النمط فاتورة"
 
-#: pretix/control/forms/event.py:718
+#: pretix/control/forms/event.py:719
 msgid "Invoice language"
 msgstr "اللغة فاتورة"
 
-#: pretix/control/forms/event.py:719 pretix/control/forms/event.py:741
+#: pretix/control/forms/event.py:720 pretix/control/forms/event.py:742
 msgid "The user's language"
 msgstr "لغة المستخدم"
 
-#: pretix/control/forms/event.py:722
+#: pretix/control/forms/event.py:723
 msgid "Logo image"
 msgstr "صورة الشعار"
 
-#: pretix/control/forms/event.py:726
+#: pretix/control/forms/event.py:727
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
 msgstr "وسوف نعرض شعارك مع ارتفاع القصوى وعرض 2.5 سم."
 
-#: pretix/control/forms/event.py:763
+#: pretix/control/forms/event.py:764
 msgid "The online shop must be selected to receive these emails."
 msgstr ""
 
-#: pretix/control/forms/event.py:776
+#: pretix/control/forms/event.py:777
 #, fuzzy
 #| msgid "Sales channels to automatically check in"
 msgid "Sales channels for checkout emails"
 msgstr "قنوات المبيعات إلى الاختيار تلقائيا في"
 
-#: pretix/control/forms/event.py:777
+#: pretix/control/forms/event.py:778
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
 msgstr ""
 
-#: pretix/control/forms/event.py:788
+#: pretix/control/forms/event.py:789
 msgid ""
 "This email will only be send to orders from these sales channels. The online "
 "shop must be enabled."
 msgstr ""
 
-#: pretix/control/forms/event.py:796
+#: pretix/control/forms/event.py:797
 msgid "Bcc address"
 msgstr "عنوان مخفية"
 
-#: pretix/control/forms/event.py:797
+#: pretix/control/forms/event.py:798
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "سيتم إرسال جميع رسائل البريد الإلكتروني إلى هذا العنوان كنسخة مخفية"
 
-#: pretix/control/forms/event.py:803
+#: pretix/control/forms/event.py:804
 msgid "Signature"
 msgstr "التوقيع"
 
-#: pretix/control/forms/event.py:806
+#: pretix/control/forms/event.py:807
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr "وسيلحق هذا على كل البريد الإلكتروني. النائبة المتاحة: {event}"
 
-#: pretix/control/forms/event.py:811
+#: pretix/control/forms/event.py:812
 msgid "e.g. your contact details"
 msgstr "مثلا تفاصيل الاتصال الخاصة بك"
 
-#: pretix/control/forms/event.py:816
+#: pretix/control/forms/event.py:817
 msgid "HTML mail renderer"
 msgstr "HTML العارض الإلكتروني"
 
-#: pretix/control/forms/event.py:821 pretix/control/forms/event.py:838
-#: pretix/control/forms/event.py:855 pretix/control/forms/event.py:914
+#: pretix/control/forms/event.py:822 pretix/control/forms/event.py:839
+#: pretix/control/forms/event.py:856 pretix/control/forms/event.py:915
 msgid "Text sent to order contact address"
 msgstr "إرسالها إلى عنوان النص أمر الاتصال"
 
-#: pretix/control/forms/event.py:826 pretix/control/forms/event.py:843
-#: pretix/control/forms/event.py:860 pretix/control/forms/event.py:919
+#: pretix/control/forms/event.py:827 pretix/control/forms/event.py:844
+#: pretix/control/forms/event.py:861 pretix/control/forms/event.py:920
 msgid "Send an email to attendees"
 msgstr "إرسال بريد إلكتروني إلى الحضور"
 
-#: pretix/control/forms/event.py:827 pretix/control/forms/event.py:844
-#: pretix/control/forms/event.py:861 pretix/control/forms/event.py:920
+#: pretix/control/forms/event.py:828 pretix/control/forms/event.py:845
+#: pretix/control/forms/event.py:862 pretix/control/forms/event.py:921
 msgid ""
 "If the order contains attendees with email addresses different from the "
 "person who orders the tickets, the following email will be sent out to the "
@@ -7679,32 +7712,32 @@ msgstr ""
 "إذا كان النظام يحتوي على الحضور مع عناوين البريد الإلكتروني المختلفة من "
 "الشخص الذي يأمر التذاكر، سيتم إرسال البريد الإلكتروني التالي إلى الحضور."
 
-#: pretix/control/forms/event.py:832 pretix/control/forms/event.py:849
-#: pretix/control/forms/event.py:866 pretix/control/forms/event.py:925
+#: pretix/control/forms/event.py:833 pretix/control/forms/event.py:850
+#: pretix/control/forms/event.py:867 pretix/control/forms/event.py:926
 msgid "Text sent to attendees"
 msgstr "إرسالها النص إلى الحضور"
 
-#: pretix/control/forms/event.py:872 pretix/control/forms/event.py:894
-#: pretix/control/forms/event.py:899 pretix/control/forms/event.py:904
-#: pretix/control/forms/event.py:909
+#: pretix/control/forms/event.py:873 pretix/control/forms/event.py:895
+#: pretix/control/forms/event.py:900 pretix/control/forms/event.py:905
+#: pretix/control/forms/event.py:910
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:99
 #: pretix/control/templates/pretixcontrol/pdf/index.html:367
 msgid "Text"
 msgstr "نص"
 
-#: pretix/control/forms/event.py:877
+#: pretix/control/forms/event.py:878
 msgid "Text (sent by admin)"
 msgstr "النص (أرسلت بواسطة admin)"
 
-#: pretix/control/forms/event.py:882
+#: pretix/control/forms/event.py:883
 msgid "Text (requested by user)"
 msgstr "النص (عن طريق المستخدم المطلوب)"
 
-#: pretix/control/forms/event.py:887 pretix/control/forms/event.py:930
+#: pretix/control/forms/event.py:888 pretix/control/forms/event.py:931
 msgid "Number of days"
 msgstr "عدد الأيام"
 
-#: pretix/control/forms/event.py:890
+#: pretix/control/forms/event.py:891
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
@@ -7712,7 +7745,7 @@ msgstr ""
 "سيتم إرسال هذا البريد الإلكتروني من هذا عدة أيام قبل انتهاء صلاحية النظام. "
 "إذا كانت القيمة 0، لن يتم إرسال البريد."
 
-#: pretix/control/forms/event.py:933
+#: pretix/control/forms/event.py:934
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
@@ -7720,15 +7753,15 @@ msgstr ""
 "سيتم إرسال هذا البريد الإلكتروني من هذا عدة أيام قبل أن يبدأ الحدث النظام. "
 "إذا كان الحقل فارغا، لن يتم إرسال البريد."
 
-#: pretix/control/forms/event.py:937
+#: pretix/control/forms/event.py:938
 msgid "Received order"
 msgstr "النظام وردت"
 
-#: pretix/control/forms/event.py:942
+#: pretix/control/forms/event.py:943
 msgid "Approved order"
 msgstr "أجل المعتمد"
 
-#: pretix/control/forms/event.py:945
+#: pretix/control/forms/event.py:946
 #, fuzzy
 #| msgid ""
 #| "This will only be sent out for non-free orders. Free orders will receive "
@@ -7740,13 +7773,13 @@ msgstr ""
 "لن يتم إرسال هذه خارج لأوامر غير حرة. وسوف تتلقى أوامر الحرة قالب النظام "
 "الحر من فوق بدلا من ذلك."
 
-#: pretix/control/forms/event.py:949
+#: pretix/control/forms/event.py:950
 #, fuzzy
 #| msgid "Approved order"
 msgid "Approved free order"
 msgstr "أجل المعتمد"
 
-#: pretix/control/forms/event.py:952
+#: pretix/control/forms/event.py:953
 #, fuzzy
 #| msgid ""
 #| "This will only be sent out for non-free orders. Free orders will receive "
@@ -7758,105 +7791,105 @@ msgstr ""
 "لن يتم إرسال هذه خارج لأوامر غير حرة. وسوف تتلقى أوامر الحرة قالب النظام "
 "الحر من فوق بدلا من ذلك."
 
-#: pretix/control/forms/event.py:956
+#: pretix/control/forms/event.py:957
 msgid "Denied order"
 msgstr "أمر مرفوض"
 
-#: pretix/control/forms/event.py:961
+#: pretix/control/forms/event.py:962
 msgid "Use custom SMTP server"
 msgstr "استخدام خادم SMTP مخصص"
 
-#: pretix/control/forms/event.py:962
+#: pretix/control/forms/event.py:963
 msgid ""
 "All mail related to your event will be sent over the smtp server specified "
 "by you."
 msgstr ""
 "سيتم إرسال جميع الرسائل المتعلقة الحدث الخاص بك على خادم SMTP التي يحددها لك."
 
-#: pretix/control/forms/event.py:966
+#: pretix/control/forms/event.py:967
 msgid "Hostname"
 msgstr "اسم المضيف"
 
-#: pretix/control/forms/event.py:971
+#: pretix/control/forms/event.py:972
 msgid "Port"
 msgstr "ميناء"
 
-#: pretix/control/forms/event.py:976
+#: pretix/control/forms/event.py:977
 msgid "Username"
 msgstr "اسم المستخدم"
 
-#: pretix/control/forms/event.py:988
+#: pretix/control/forms/event.py:989
 msgid "Use STARTTLS"
 msgstr "استخدام STARTTLS"
 
-#: pretix/control/forms/event.py:989
+#: pretix/control/forms/event.py:990
 msgid "Commonly enabled on port 587."
 msgstr "تمكين عادة على المنفذ 587."
 
-#: pretix/control/forms/event.py:993
+#: pretix/control/forms/event.py:994
 msgid "Use SSL"
 msgstr "استخدام SSL"
 
-#: pretix/control/forms/event.py:994
+#: pretix/control/forms/event.py:995
 msgid "Commonly enabled on port 465."
 msgstr "تمكين عادة على المنفذ 465."
 
-#: pretix/control/forms/event.py:1024 pretix/control/forms/orders.py:491
+#: pretix/control/forms/event.py:1025 pretix/control/forms/orders.py:491
 #: pretix/control/forms/orders.py:648 pretix/control/forms/vouchers.py:255
 #: pretix/plugins/sendmail/forms.py:49
 #, python-brace-format
 msgid "Available placeholders: {list}"
 msgstr "النائبة المتاحة: {list}"
 
-#: pretix/control/forms/event.py:1059
+#: pretix/control/forms/event.py:1060
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
 msgstr "يمكنك تنشيط إما SSL أو الأمن STARTTLS، ولكن ليس كلاهما في نفس الوقت."
 
-#: pretix/control/forms/event.py:1108
+#: pretix/control/forms/event.py:1109
 msgid "Any country"
 msgstr "أي بلد"
 
-#: pretix/control/forms/event.py:1109
+#: pretix/control/forms/event.py:1110
 msgid "European Union"
 msgstr "الإتحاد الأوربي"
 
-#: pretix/control/forms/event.py:1121
+#: pretix/control/forms/event.py:1122
 msgid "Any customer"
 msgstr "أي زبون"
 
-#: pretix/control/forms/event.py:1122
+#: pretix/control/forms/event.py:1123
 msgid "Individual"
 msgstr "فرد"
 
-#: pretix/control/forms/event.py:1123
+#: pretix/control/forms/event.py:1124
 msgid "Business"
 msgstr "اعمال"
 
-#: pretix/control/forms/event.py:1124
+#: pretix/control/forms/event.py:1125
 msgid "Business with valid VAT ID"
 msgstr "العمل مع معرف الضريبة على القيمة المضافة"
 
-#: pretix/control/forms/event.py:1130
+#: pretix/control/forms/event.py:1131
 msgid "Charge VAT"
 msgstr "تكلفة ضريبة القيمة المضافة"
 
-#: pretix/control/forms/event.py:1132
+#: pretix/control/forms/event.py:1133
 msgid "No VAT"
 msgstr "لا ضريبه للقيمه المضافه"
 
-#: pretix/control/forms/event.py:1136
+#: pretix/control/forms/event.py:1137
 #, fuzzy
 #| msgid "Sales tax rate"
 msgid "Deviating tax rate"
 msgstr "معدل ضريبة المبيعات"
 
-#: pretix/control/forms/event.py:1166
+#: pretix/control/forms/event.py:1167
 msgid "Pre-selected voucher"
 msgstr "قسيمة المختارة مسبقا"
 
-#: pretix/control/forms/event.py:1168
+#: pretix/control/forms/event.py:1169
 msgid ""
 "If set, the widget will show products as if this voucher has been entered "
 "and when a product is bought via the widget, this voucher will be used. This "
@@ -7867,11 +7900,11 @@ msgstr ""
 "شراء المنتج عن طريق القطعة، سيتم استخدام هذه القسائم. يمكن استخدام هذا يمكن "
 "على سبيل المثال لتوفير الحاجيات التي تعطي تخفيض أو إلغاء المنتجات سرية."
 
-#: pretix/control/forms/event.py:1173
+#: pretix/control/forms/event.py:1174
 msgid "Compatibility mode"
 msgstr "وضع التوافق"
 
-#: pretix/control/forms/event.py:1175
+#: pretix/control/forms/event.py:1176
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
@@ -7879,28 +7912,28 @@ msgstr ""
 "لا تعمل لدينا القطعة العادية في جميع بناة الموقع. إذا واجهت مشكلة، حاول "
 "استخدام هذا الوضع التوافق."
 
-#: pretix/control/forms/event.py:1196
+#: pretix/control/forms/event.py:1197
 msgid "The given voucher code does not exist."
 msgstr "لا وجود رمز قسيمة معين."
 
-#: pretix/control/forms/event.py:1203 pretix/control/forms/organizer.py:48
+#: pretix/control/forms/event.py:1204 pretix/control/forms/organizer.py:48
 #: pretix/control/views/shredder.py:108
 msgid "The slug you entered was not correct."
 msgstr "وكانت سبيكة التي أدخلتها غير صحيحة."
 
-#: pretix/control/forms/event.py:1238
+#: pretix/control/forms/event.py:1239
 msgid "Ticket downloads"
 msgstr "التنزيلات تذكرة"
 
-#: pretix/control/forms/event.py:1239
+#: pretix/control/forms/event.py:1240
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr "زبائنك سوف تكون قادرة على تحميل تذاكرهم في شكل PDF."
 
-#: pretix/control/forms/event.py:1243
+#: pretix/control/forms/event.py:1244
 msgid "Require all attendees to fill in their names"
 msgstr "يتطلب من جميع الحضور لملء في أسمائها"
 
-#: pretix/control/forms/event.py:1244
+#: pretix/control/forms/event.py:1245
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
@@ -7908,11 +7941,11 @@ msgstr ""
 "افتراضيا، ونحن سوف تسأل عن الأسماء ولكن لا تتطلب منهم. يمكنك إيقاف هذا تماما "
 "في الإعدادات."
 
-#: pretix/control/forms/event.py:1270
+#: pretix/control/forms/event.py:1271
 msgid "Payment via Stripe"
 msgstr "الدفع عن طريق الشريط"
 
-#: pretix/control/forms/event.py:1271
+#: pretix/control/forms/event.py:1272
 msgid ""
 "Stripe is an online payments processor supporting credit cards and lots of "
 "other payment options. To accept payments via Stripe, you will need to set "
@@ -7923,11 +7956,11 @@ msgstr ""
 "خيارات الدفع الأخرى. لقبول الدفع عن طريق الشريط، وسوف تحتاج إلى إعداد حساب "
 "معهم، والتي تأخذ أقل من خمس دقائق باستخدام واجهة بسيطة بهم."
 
-#: pretix/control/forms/event.py:1277
+#: pretix/control/forms/event.py:1278
 msgid "Payment by bank transfer"
 msgstr "الدفع عن طريق التحويل المصرفي"
 
-#: pretix/control/forms/event.py:1278
+#: pretix/control/forms/event.py:1279
 msgid ""
 "Your customers will be instructed to wire the money to your account. You can "
 "then import your bank statements to process the payments within pretix, or "
@@ -7937,16 +7970,16 @@ msgstr ""
 "المصرفية الخاصة بك لمعالجة المدفوعات في غضون pretix، أو وضع علامة عليها كما "
 "تدفع يدويا."
 
-#: pretix/control/forms/event.py:1317
+#: pretix/control/forms/event.py:1318
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
 msgstr "السعر (اختياري)"
 
-#: pretix/control/forms/event.py:1322
+#: pretix/control/forms/event.py:1323
 msgid "Free"
 msgstr "حر"
 
-#: pretix/control/forms/event.py:1327
+#: pretix/control/forms/event.py:1328
 msgid "Quantity available"
 msgstr "الكمية متاحة"
 
@@ -8062,8 +8095,8 @@ msgstr "جميع المنظمين"
 #: pretix/control/forms/filter.py:597 pretix/control/forms/filter.py:928
 #: pretix/control/forms/filter.py:937 pretix/control/forms/filter.py:1009
 #: pretix/control/forms/filter.py:1022
-#: pretix/control/templates/pretixcontrol/checkin/lists.html:104
-#: pretix/control/templates/pretixcontrol/checkin/lists.html:116
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:106
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:118
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:74
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:40
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
@@ -8658,7 +8691,7 @@ msgstr "إضافة إلى"
 #: pretix/control/templates/pretixcontrol/checkin/index.html:70
 #: pretix/control/templates/pretixcontrol/order/change.html:118
 #: pretix/control/views/vouchers.py:70
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:78
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:81
 msgid "Seat"
 msgstr "مقعد"
 
@@ -9101,7 +9134,7 @@ msgstr "يوم"
 msgid "Weekend day"
 msgstr "يوم عطلة نهاية الأسبوع"
 
-#: pretix/control/forms/users.py:100 pretix/control/views/user.py:174
+#: pretix/control/forms/users.py:100 pretix/control/views/user.py:177
 msgid "Your changes could not be saved. See below for details."
 msgstr "لا يمكن حفظ التغييرات. انظر أدناه للحصول على التفاصيل."
 
@@ -9687,17 +9720,17 @@ msgstr "فشل استرداد {local_id}."
 msgid "The user has been created."
 msgstr "تم إنشاء المستخدم."
 
-#: pretix/control/logdisplay.py:319 pretix/control/views/user.py:436
-#: pretix/control/views/user.py:496 pretix/control/views/user.py:533
+#: pretix/control/logdisplay.py:319 pretix/control/views/user.py:439
+#: pretix/control/views/user.py:499 pretix/control/views/user.py:536
 msgid "Two-factor authentication has been enabled."
 msgstr "تم تمكين مصادقة اثنين عامل."
 
-#: pretix/control/logdisplay.py:320 pretix/control/views/user.py:323
-#: pretix/control/views/user.py:549
+#: pretix/control/logdisplay.py:320 pretix/control/views/user.py:326
+#: pretix/control/views/user.py:552
 msgid "Two-factor authentication has been disabled."
 msgstr "تم تعطيل المصادقة اثنين عامل."
 
-#: pretix/control/logdisplay.py:321 pretix/control/views/user.py:566
+#: pretix/control/logdisplay.py:321 pretix/control/views/user.py:569
 msgid "Your two-factor emergency codes have been regenerated."
 msgstr "وقد جددت بك رموز الطوارئ اثنين عامل."
 
@@ -10133,12 +10166,12 @@ msgstr "ورمزي \"{name}\" تم إبطال."
 msgid "Your account settings have been changed."
 msgstr "تم تغيير إعدادات حسابك."
 
-#: pretix/control/logdisplay.py:514 pretix/control/views/user.py:194
+#: pretix/control/logdisplay.py:514 pretix/control/views/user.py:197
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "تم تغيير عنوان البريد الإلكتروني الخاص بك إلى {email}."
 
-#: pretix/control/logdisplay.py:516 pretix/control/views/user.py:191
+#: pretix/control/logdisplay.py:516 pretix/control/views/user.py:194
 msgid "Your password has been changed."
 msgstr "تم تغيير كلمة السر الخاصة بك."
 
@@ -10198,8 +10231,8 @@ msgstr "دفع"
 #: pretix/control/navigation.py:52 pretix/control/views/event.py:1344
 #: pretix/control/views/event.py:1346 pretix/control/views/event.py:1377
 #: pretix/control/views/event.py:1382
-#: pretix/presale/templates/pretixpresale/organizers/index.html:129
-#: pretix/presale/templates/pretixpresale/organizers/index.html:131
+#: pretix/presale/templates/pretixpresale/organizers/index.html:133
+#: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "Tickets"
 msgstr "تذاكر"
 
@@ -10431,7 +10464,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:36
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:342
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:77
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:149
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:152
 #: pretix/presale/templates/pretixpresale/event/index.html:72
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
@@ -10484,7 +10517,7 @@ msgstr "كلمة المرور الجديدة تعيين"
 #: pretix/control/templates/pretixcontrol/event/payment.html:79
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:36
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:201
-#: pretix/control/templates/pretixcontrol/event/settings.html:297
+#: pretix/control/templates/pretixcontrol/event/settings.html:298
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:116
 #: pretix/control/templates/pretixcontrol/event/tickets.html:67
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
@@ -10890,7 +10923,7 @@ msgstr "حذف"
 #: pretix/plugins/checkinlists/exporters.py:107
 #: pretix/plugins/checkinlists/exporters.py:382
 #: pretix/plugins/checkinlists/exporters.py:552
-#: pretix/plugins/checkinlists/exporters.py:605
+#: pretix/plugins/checkinlists/exporters.py:610
 #: pretix/plugins/pretixdroid/forms.py:39
 #: pretix/plugins/pretixdroid/models.py:24
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:79
@@ -10992,10 +11025,10 @@ msgstr "الأجهزة المتصلة"
 msgid "Automated check-in"
 msgstr "آلية الاختيار في"
 
-#: pretix/control/templates/pretixcontrol/checkin/lists.html:131
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:133
 #: pretix/control/templates/pretixcontrol/items/categories.html:49
 #: pretix/control/templates/pretixcontrol/items/index.html:98
-#: pretix/control/templates/pretixcontrol/items/quotas.html:81
+#: pretix/control/templates/pretixcontrol/items/quotas.html:83
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:72
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:69
 msgid "Clone"
@@ -11191,7 +11224,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:119
-#: pretix/control/templates/pretixcontrol/event/settings.html:303
+#: pretix/control/templates/pretixcontrol/event/settings.html:304
 #, fuzzy
 #| msgid "Can create events"
 msgid "Cancel or delete event"
@@ -11715,7 +11748,7 @@ msgstr "الإضافات المثبتة"
 #: pretix/control/views/organizer.py:184 pretix/control/views/organizer.py:305
 #: pretix/control/views/organizer.py:463 pretix/control/views/organizer.py:787
 #: pretix/control/views/organizer.py:933 pretix/control/views/subevents.py:411
-#: pretix/control/views/user.py:178 pretix/control/views/users.py:66
+#: pretix/control/views/user.py:181 pretix/control/views/users.py:66
 #: pretix/control/views/vouchers.py:210 pretix/plugins/badges/views.py:110
 #: pretix/plugins/stripe/views.py:598
 #: pretix/plugins/ticketoutputpdf/views.py:146
@@ -11895,7 +11928,7 @@ msgid "Geo coordinates"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:36
-#: pretix/control/templates/pretixcontrol/event/settings.html:110
+#: pretix/control/templates/pretixcontrol/event/settings.html:111
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:47
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:271
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
@@ -11929,15 +11962,15 @@ msgstr "الموقع"
 msgid "Attendee data"
 msgstr "بيانات الحضور"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:102
+#: pretix/control/templates/pretixcontrol/event/settings.html:103
 msgid "Texts"
 msgstr "النصوص"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:109
+#: pretix/control/templates/pretixcontrol/event/settings.html:110
 msgid "Confirmation text"
 msgstr "نص تأكيد"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:114
+#: pretix/control/templates/pretixcontrol/event/settings.html:115
 #, fuzzy
 #| msgid ""
 #| "This text needs to be confirmed by the user before a purchase is "
@@ -11954,39 +11987,39 @@ msgstr ""
 "المثال ربط شروطكم الخدمة هنا. إذا كنت تستخدم ميزة الصفحات لنشر شروطكم "
 "الخدمة، لا تحتاج هذا الإعداد حيث يمكنك تكوين هناك."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:171
+#: pretix/control/templates/pretixcontrol/event/settings.html:172
 #, fuzzy
 #| msgid "Confirmation text"
 msgid "Add confirmation text"
 msgstr "نص تأكيد"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:182
+#: pretix/control/templates/pretixcontrol/event/settings.html:183
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:50
 msgid "Shop design"
 msgstr "تصميم متجر"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:198
+#: pretix/control/templates/pretixcontrol/event/settings.html:199
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:76
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:392
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:76
 msgid "Timeline"
 msgstr "الجدول الزمني"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:206
+#: pretix/control/templates/pretixcontrol/event/settings.html:207
 msgid "Display"
 msgstr "عرض"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:223
+#: pretix/control/templates/pretixcontrol/event/settings.html:224
 msgid "Cart"
 msgstr "عربة التسوق"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:235
+#: pretix/control/templates/pretixcontrol/event/settings.html:236
 #, fuzzy
 #| msgid "Event metadata"
 msgid "Item metadata"
 msgstr "الفوقية الحدث"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:237
+#: pretix/control/templates/pretixcontrol/event/settings.html:238
 #, fuzzy
 #| msgid ""
 #| "You can here define a set of metadata properties (i.e. variables) that "
@@ -12002,12 +12035,12 @@ msgstr ""
 "في وقت لاحق للأحداث وإعادة استخدامها في أماكن مثل تخطيطات التذاكر. هذا هو "
 "مرة المنقذ مفيدا إذا قمت بإنشاء الكثير والكثير من الأحداث."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:290
+#: pretix/control/templates/pretixcontrol/event/settings.html:291
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:125
 msgid "Add property"
 msgstr "إضافة خاصية"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:308
+#: pretix/control/templates/pretixcontrol/event/settings.html:309
 #: pretix/control/templates/pretixcontrol/events/index.html:160
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:115
 msgid "Clone event"
@@ -12703,11 +12736,11 @@ msgid "Fully reserved"
 msgstr "محفوظة بالكامل"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:16
-#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:27
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:77
-#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:61
-#: pretix/presale/templates/pretixpresale/organizers/index.html:111
-#: pretix/presale/views/widget.py:320
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:28
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:83
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:65
+#: pretix/presale/templates/pretixpresale/organizers/index.html:112
+#: pretix/presale/views/widget.py:321
 msgid "Sold out"
 msgstr "بيعت كلها"
 
@@ -16175,7 +16208,7 @@ msgstr "تم إنشاء الاختيار في قائمة جديدة."
 #: pretix/control/views/item.py:760 pretix/control/views/item.py:964
 #: pretix/control/views/item.py:1113 pretix/control/views/item.py:1264
 #: pretix/control/views/organizer.py:187 pretix/control/views/subevents.py:390
-#: pretix/control/views/subevents.py:878 pretix/control/views/user.py:288
+#: pretix/control/views/subevents.py:878 pretix/control/views/user.py:291
 #: pretix/plugins/badges/views.py:70 pretix/plugins/stripe/views.py:601
 #: pretix/plugins/ticketoutputpdf/views.py:106
 msgid "We could not save your changes. See below for details."
@@ -16279,17 +16312,18 @@ msgid "Action required"
 msgstr "الإجراء مطلوب"
 
 #: pretix/control/views/dashboards.py:481
-#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:32
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:82
-#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:66
-#: pretix/presale/templates/pretixpresale/organizers/index.html:116
-#: pretix/presale/views/widget.py:326
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:36
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:91
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:73
+#: pretix/presale/templates/pretixpresale/organizers/index.html:120
+#: pretix/presale/views/widget.py:329
 msgid "Sale over"
 msgstr "بيع أكثر"
 
 #: pretix/control/views/dashboards.py:483
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:89
-#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:73
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:98
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:80
+#: pretix/presale/views/widget.py:335
 msgid "Soon"
 msgstr "هكذا"
 
@@ -17247,27 +17281,27 @@ msgstr "إيصال {}"
 msgid "The password you entered was invalid, please try again."
 msgstr "وكانت كلمة المرور التي أدخلتها غير صالحة، يرجى المحاولة مرة أخرى."
 
-#: pretix/control/views/user.py:280
+#: pretix/control/views/user.py:283
 msgid "Security devices are only available if pretix is served via HTTPS."
 msgstr "تتوفر فقط إذا يتم تقديم pretix عبر HTTPS الأجهزة الأمنية."
 
-#: pretix/control/views/user.py:317
+#: pretix/control/views/user.py:320
 msgid "A two-factor authentication device has been removed from your account."
 msgstr "تمت إزالة جهاز المصادقة اثنين عامل من حسابك."
 
-#: pretix/control/views/user.py:328
+#: pretix/control/views/user.py:331
 msgid "The device has been removed."
 msgstr "تمت إزالة الجهاز."
 
-#: pretix/control/views/user.py:406
+#: pretix/control/views/user.py:409
 msgid "This security device is already registered."
 msgstr "مسجلة بالفعل هذا الجهاز الأمني."
 
-#: pretix/control/views/user.py:428 pretix/control/views/user.py:489
+#: pretix/control/views/user.py:431 pretix/control/views/user.py:492
 msgid "A new two-factor authentication device has been added to your account."
 msgstr "تمت إضافة جهاز جديد اثنين عامل التوثيق إلى حسابك."
 
-#: pretix/control/views/user.py:444 pretix/control/views/user.py:504
+#: pretix/control/views/user.py:447 pretix/control/views/user.py:507
 msgid ""
 "Please note that you still need to enable two-factor authentication for your "
 "account using the buttons below to make a second factor required for logging "
@@ -17276,15 +17310,15 @@ msgstr ""
 "يرجى الملاحظة التي لا تزال بحاجة لتمكين مصادقة اثنين عامل لحسابك باستخدام "
 "الأزرار أدناه لجعل العامل الثاني المطلوبة لتسجيل الدخول إلى حسابك."
 
-#: pretix/control/views/user.py:447 pretix/control/views/user.py:507
+#: pretix/control/views/user.py:450 pretix/control/views/user.py:510
 msgid "The device has been verified and can now be used."
 msgstr "تم التحقق من الجهاز ويمكن الآن أن تستخدم."
 
-#: pretix/control/views/user.py:450
+#: pretix/control/views/user.py:453
 msgid "The registration could not be completed. Please try again."
 msgstr "تعذر إكمال التسجيل. حاول مرة اخرى."
 
-#: pretix/control/views/user.py:510
+#: pretix/control/views/user.py:513
 msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
@@ -17292,21 +17326,21 @@ msgstr ""
 "كان الرمز الذي أدخلته غير صالح. إذا كانت هذه المشكلة قائمة، فيرجى التأكد من "
 "أن يتم تكوين التاريخ والوقت من الهاتف الخاص بك بشكل صحيح."
 
-#: pretix/control/views/user.py:522
+#: pretix/control/views/user.py:525
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
 msgstr "يرجى تكوين جهاز واحد على الأقل قبل تمكين مصادقة اثنين عامل."
 
-#: pretix/control/views/user.py:531
+#: pretix/control/views/user.py:534
 msgid "Two-factor authentication is now enabled for your account."
 msgstr "يتم تمكين مصادقة اثنين عامل الآن لحسابك."
 
-#: pretix/control/views/user.py:547
+#: pretix/control/views/user.py:550
 msgid "Two-factor authentication is now disabled for your account."
 msgstr "يتم تعطيل المصادقة اثنين عامل الآن لحسابك."
 
-#: pretix/control/views/user.py:570
+#: pretix/control/views/user.py:573
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices."
@@ -17314,15 +17348,15 @@ msgstr ""
 "تم إنشاء حديثا رموز الطوارئ الخاصة بك. تذكر لتخزينها في مكان آمن في حالة "
 "فقدان الوصول إلى الأجهزة الخاصة بك."
 
-#: pretix/control/views/user.py:580
+#: pretix/control/views/user.py:583
 msgid "Your notifications have been disabled."
 msgstr "تم تعطيل الإشعارات."
 
-#: pretix/control/views/user.py:629 pretix/control/views/user.py:669
+#: pretix/control/views/user.py:632 pretix/control/views/user.py:672
 msgid "Your notification settings have been saved."
 msgstr "تم حفظ إعدادات الإشعار."
 
-#: pretix/control/views/user.py:747
+#: pretix/control/views/user.py:750
 msgid "Your comment has been saved."
 msgstr "تم حفظ تعليقك."
 
@@ -18140,30 +18174,6 @@ msgstr "التحقق تلقائيا في"
 msgid "Secret"
 msgstr "سر"
 
-#: pretix/plugins/checkinlists/exporters.py:431
-#, fuzzy
-#| msgid "Team name"
-msgid "Seat name"
-msgstr "اسم الفريق"
-
-#: pretix/plugins/checkinlists/exporters.py:432
-#, fuzzy
-#| msgid "Seat: zone"
-msgid "Seat zone"
-msgstr "مقعد: المنطقة"
-
-#: pretix/plugins/checkinlists/exporters.py:433
-#, fuzzy
-#| msgid "Seat: row"
-msgid "Seat row"
-msgstr "مقعد: صف واحد"
-
-#: pretix/plugins/checkinlists/exporters.py:434
-#, fuzzy
-#| msgid "Seat {number}"
-msgid "Seat number"
-msgstr "مقعد {number}"
-
 #: pretix/plugins/checkinlists/exporters.py:542
 msgid "Check-in log (all successful scans)"
 msgstr ""
@@ -18186,7 +18196,7 @@ msgstr "الأجهزة"
 msgid "Offline override"
 msgstr "نظرة عامة ترتيب"
 
-#: pretix/plugins/checkinlists/exporters.py:631
+#: pretix/plugins/checkinlists/exporters.py:635
 #, fuzzy
 #| msgid "Check-in lists"
 msgid "All check-in lists"
@@ -18485,10 +18495,12 @@ msgstr "تم فصل حساب PayPal الخاص بك."
 
 #: pretix/plugins/pretixdroid/__init__.py:9
 #: pretix/plugins/pretixdroid/__init__.py:12
-msgid "Check-in device API"
+#, fuzzy
+#| msgid "Check-in device API"
+msgid "Old check-in device API"
 msgstr "تحقق في API جهاز"
 
-#: pretix/plugins/pretixdroid/__init__.py:17
+#: pretix/plugins/pretixdroid/__init__.py:18
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
@@ -20060,7 +20072,7 @@ msgstr "لا توجد إضافات المتاحة لهذا المنتج."
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:337
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:191
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:72
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:144
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:147
 msgid "Go back"
 msgstr "عد"
 
@@ -20196,15 +20208,15 @@ msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr "يجب تعبئة الخانات التي تحتوي على رمز <span>*</span> للمتابعة."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:65
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:67
 msgid "Copy answers from above"
 msgstr "نسخ الإجابات من فوق"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:92
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:95
 msgid "Selected add-ons"
 msgstr "اختيار إضافات"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:125
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:128
 #, fuzzy
 #| msgid "Change answers"
 msgid "Copy answers"
@@ -20257,8 +20269,8 @@ msgstr "بيعت كلها"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:20
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:75
-#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:59
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:80
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:62
 #: pretix/presale/templates/pretixpresale/organizers/index.html:109
 #: pretix/presale/views/widget.py:317
 msgid "Reserved"
@@ -20411,25 +20423,35 @@ msgid "W"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
-#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:71
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:80
-#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:55
-#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:64
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:34
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:76
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:89
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:58
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:71
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
-#: pretix/presale/templates/pretixpresale/organizers/index.html:114
-#: pretix/presale/views/widget.py:311 pretix/presale/views/widget.py:323
+#: pretix/presale/templates/pretixpresale/organizers/index.html:118
+#: pretix/presale/views/widget.py:311 pretix/presale/views/widget.py:326
 msgid "Book now"
 msgstr "إحجز الآن"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:35
-#: pretix/presale/templates/pretixpresale/organizers/index.html:119
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:85
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:67
+#: pretix/presale/templates/pretixpresale/organizers/index.html:114
+#: pretix/presale/views/widget.py:323
+#, fuzzy
+#| msgid "Fully redeemed"
+msgid "Fully booked"
+msgstr "افتدى بالكامل"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:39
+#: pretix/presale/templates/pretixpresale/organizers/index.html:123
 #, python-format
 msgid "Sale starts %(date)s"
 msgstr "بيع يبدأ %(date)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:40
-#: pretix/presale/templates/pretixpresale/organizers/index.html:124
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:44
+#: pretix/presale/templates/pretixpresale/organizers/index.html:128
 msgid "Not yet on sale"
 msgstr "ليس بعد على بيع"
 
@@ -20458,18 +20480,18 @@ msgid "Other dates"
 msgstr "تواريخ أخرى"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:153
-#: pretix/presale/views/widget.py:556
+#: pretix/presale/views/widget.py:561
 msgid "The presale period for this event is over."
 msgstr "انتهت فترة بيع التذاكر."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:158
-#: pretix/presale/views/widget.py:558
+#: pretix/presale/views/widget.py:563
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
 msgstr "من [خبر] لهذا الحدث سيبدأ على%(date)s في %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:162
-#: pretix/presale/views/widget.py:563
+#: pretix/presale/views/widget.py:568
 msgid "The presale for this event has not yet started."
 msgstr "لم يبدأ [خبر] لهذا الحدث حتى الان."
 
@@ -21028,7 +21050,7 @@ msgstr ""
 msgid "Add me to the list"
 msgstr "أضفني إلى القائمة"
 
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:85
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:94
 #, python-format
 msgid ""
 "\n"
@@ -21039,7 +21061,7 @@ msgstr ""
 "                                                        من %(start_date)s\n"
 "                                                    "
 
-#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:69
+#: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:76
 #, fuzzy, python-format
 #| msgid ""
 #| "\n"
@@ -21136,15 +21158,15 @@ msgstr "إظهار الفعاليات القادمة"
 msgid "Show past events"
 msgstr "عرض الفعاليات السابقة"
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:133
+#: pretix/presale/templates/pretixpresale/organizers/index.html:137
 msgid "More info"
 msgstr "مزيد من المعلومات"
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:141
+#: pretix/presale/templates/pretixpresale/organizers/index.html:145
 msgid "No archived events found."
 msgstr "لم يتم العثور على الأحداث في الأرشيف."
 
-#: pretix/presale/templates/pretixpresale/organizers/index.html:145
+#: pretix/presale/templates/pretixpresale/organizers/index.html:149
 msgid "No public upcoming events found."
 msgstr "لا توجد أحداث قادمة العامة."
 
@@ -21356,94 +21378,93 @@ msgstr "عدم وجود التاريخ المحدد في هذه السلسلة �
 msgid "This is not an event series."
 msgstr "هذه ليست سلسلة الحدث."
 
-#: pretix/presale/views/widget.py:329
+#: pretix/presale/views/widget.py:332
 #, python-format
 msgid "from %(start_date)s"
 msgstr "من %(start_date)s"
 
-#: pretix/presale/views/widget.py:332
-msgid "Sale soon"
-msgstr "البيع قريبا"
-
-#: pretix/settings.py:409
+#: pretix/settings.py:410
 msgid "English"
 msgstr "الإنجليزية"
 
-#: pretix/settings.py:410
+#: pretix/settings.py:411
 msgid "German"
 msgstr "ألمانية"
 
-#: pretix/settings.py:411
+#: pretix/settings.py:412
 msgid "German (informal)"
 msgstr "الألمانية (رسمي)"
 
-#: pretix/settings.py:412
+#: pretix/settings.py:413
 msgid "Arabic"
 msgstr ""
 
-#: pretix/settings.py:413
+#: pretix/settings.py:414
 msgid "Chinese (simplified)"
 msgstr "الصينية المبسطة)"
 
-#: pretix/settings.py:414
+#: pretix/settings.py:415
 msgid "Danish"
 msgstr "دانماركي"
 
-#: pretix/settings.py:415
+#: pretix/settings.py:416
 msgid "Dutch"
 msgstr "هولندي"
 
-#: pretix/settings.py:416
+#: pretix/settings.py:417
 msgid "Dutch (informal)"
 msgstr "الهولندية (غير رسمية)"
 
-#: pretix/settings.py:417
+#: pretix/settings.py:418
 msgid "French"
 msgstr "الفرنسية"
 
-#: pretix/settings.py:418
+#: pretix/settings.py:419
 msgid "Greek"
 msgstr "الإغريقي"
 
-#: pretix/settings.py:419
+#: pretix/settings.py:420
 msgid "Italian"
 msgstr "الإيطالي"
 
-#: pretix/settings.py:420
+#: pretix/settings.py:421
 msgid "Latvian"
 msgstr "لاتفيفي"
 
-#: pretix/settings.py:421
+#: pretix/settings.py:422
 msgid "Polish"
 msgstr "البولندي"
 
-#: pretix/settings.py:422
+#: pretix/settings.py:423
 msgid "Portuguese (Brazil)"
 msgstr "البرتغالية (البرازيل)."
 
-#: pretix/settings.py:423
+#: pretix/settings.py:424
 msgid "Russian"
 msgstr "روسي"
 
-#: pretix/settings.py:424
+#: pretix/settings.py:425
 msgid "Spanish"
 msgstr "الأسبانية"
 
-#: pretix/settings.py:425
+#: pretix/settings.py:426
 msgid "Turkish"
 msgstr "اللغة التركية"
 
-#: pretix/settings.py:720
+#: pretix/settings.py:721
 msgid "Read access"
 msgstr "حق الوصول للقراءة"
 
-#: pretix/settings.py:721
+#: pretix/settings.py:722
 msgid "Write access"
 msgstr "وصول الكتابة"
 
-#: pretix/settings.py:731
+#: pretix/settings.py:732
 msgid "Kosovo"
 msgstr ""
+
+#~ msgid "Sale soon"
+#~ msgstr "البيع قريبا"
 
 #~ msgid "Automatically on payment"
 #~ msgstr "تلقائيا على دفع"

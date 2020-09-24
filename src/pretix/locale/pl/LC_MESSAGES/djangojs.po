@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-14 12:00+0000\n"
+"POT-Creation-Date: 2020-09-24 08:59+0000\n"
 "PO-Revision-Date: 2019-09-24 19:00+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -48,16 +48,16 @@ msgstr "Całkowity dochód"
 msgid "Contacting Stripe …"
 msgstr "Kontaktowanie Stripe…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:57
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
 msgstr "Razem"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
 msgstr "Potwierdzanie płatności…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
 msgstr "Łączenie z bankiem…"
 

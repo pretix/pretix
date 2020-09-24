@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-14 12:00+0000\n"
+"POT-Creation-Date: 2020-09-24 08:59+0000\n"
 "PO-Revision-Date: 2020-09-15 17:00+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -46,16 +46,16 @@ msgstr "chiffre d'affaires total"
 msgid "Contacting Stripe …"
 msgstr "Contacter Stripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:57
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
 msgstr "Total"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:146
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:177
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
 msgstr "Confirmation de votre paiment…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:153
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
 msgstr "Communication avec votre banque …"
 
