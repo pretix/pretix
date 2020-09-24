@@ -12,7 +12,7 @@ from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery
+from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery, Value
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.formats import date_format
@@ -790,7 +790,10 @@ class Event(EventMixin, LoggedModel):
             'name_descending': ('-name', 'date_from'),
         }[ordering]
         subevs = queryset.annotate(
-            has_paid_item=self.cache.get_or_set('has_paid_item', lambda: self.items.filter(default_price__gt=0).exists(), 3600)
+            has_paid_item=Value(
+                self.cache.get_or_set('has_paid_item', lambda: self.items.filter(default_price__gt=0).exists(), 3600),
+                output_field=models.BooleanField()
+            )
         ).filter(
             Q(active=True) & Q(is_public=True) & (
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now() - timedelta(hours=24)))

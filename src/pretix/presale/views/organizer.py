@@ -17,7 +17,9 @@ from django.views.generic import ListView, TemplateView
 from pytz import UTC
 
 from pretix.base.i18n import language
-from pretix.base.models import Event, EventMetaValue, SubEvent, SubEventMetaValue
+from pretix.base.models import (
+    Event, EventMetaValue, SubEvent, SubEventMetaValue,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.daterange import daterange
 from pretix.helpers.formats.de.formats import WEEK_FORMAT
