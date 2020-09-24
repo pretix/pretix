@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-24 08:58+0000\n"
-"PO-Revision-Date: 2020-09-14 11:57+0000\n"
+"PO-Revision-Date: 2020-09-24 09:56+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6902,10 +6902,8 @@ msgstr ""
 "nicht kennen und der Platz ggf. nicht auf dem Ticket abgedruckt ist."
 
 #: pretix/base/settings.py:1835
-#, fuzzy
-#| msgid "Shown independently of other products"
 msgid "Show button to copy user input from other products"
-msgstr "Unabhängig von anderen Produkten angezeigt"
+msgstr "Zeige bei mehreren Tickets einen Button um Eingaben zu kopieren"
 
 #: pretix/base/settings.py:1840
 msgid "Most common English titles"
@@ -18687,10 +18685,8 @@ msgstr "Das PayPal-Konto wurde getrennt."
 
 #: pretix/plugins/pretixdroid/__init__.py:9
 #: pretix/plugins/pretixdroid/__init__.py:12
-#, fuzzy
-#| msgid "Check-in device API"
 msgid "Old check-in device API"
-msgstr "Check-in-Geräte-API"
+msgstr "Alte Check-in-Geräte-API"
 
 #: pretix/plugins/pretixdroid/__init__.py:18
 msgid ""
@@ -20628,10 +20624,8 @@ msgstr "Jetzt buchen"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:67
 #: pretix/presale/templates/pretixpresale/organizers/index.html:114
 #: pretix/presale/views/widget.py:323
-#, fuzzy
-#| msgid "Fully redeemed"
 msgid "Fully booked"
-msgstr "Voll eingelöst"
+msgstr "ausgebucht"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:39
 #: pretix/presale/templates/pretixpresale/organizers/index.html:123
