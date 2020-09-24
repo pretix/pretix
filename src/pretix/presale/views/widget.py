@@ -335,6 +335,15 @@ class WidgetAPIProductList(EventListMixin, View):
             availability['text'] = gettext('Soon')
         return availability
 
+    def _get_date_range(self, ev, event, tz=None):
+        tz = tz or event.timezone
+        dr = ev.get_date_range_display(tz)
+        if event.settings.show_times:
+            dr += " " + date_format(ev.date_from.astimezone(tz), "TIME_FORMAT")
+            if event.settings.show_date_to and ev.date_to and ev.date_from.astimezone(tz).date() == ev.date_to.astimezone(tz).date():
+                dr += " – " + date_format(ev.date_to.astimezone(tz), "TIME_FORMAT")
+        return dr
+
     def _serialize_events(self, ebd):
         events = []
         for e in ebd:
@@ -352,9 +361,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 'time': time,
                 'continued': e['continued'],
                 'location': str(ev.location),
-                'date_range': ev.get_date_range_display() + (
-                    " " + date_format(ev.date_from.astimezone(tz), "TIME_FORMAT") if event.settings.show_times else ""
-                ),
+                'date_range': self._get_date_range(ev, event),
                 'availability': self._get_availability(ev, event),
                 'event_url': build_absolute_uri(event, 'presale:event.index'),
                 'subevent': ev.pk if isinstance(ev, SubEvent) else None,
@@ -479,9 +486,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     {
                         'name': str(ev.name),
                         'location': str(ev.location),
-                        'date_range': ev.get_date_range_display(tz) + (
-                            (" " + ev.get_time_from_display(tz)) if ev.event.settings.show_times else ""
-                        ),
+                        'date_range': self._get_date_range(ev, ev.event, tz),
                         'availability': self._get_availability(ev, ev.event),
                         'event_url': build_absolute_uri(ev.event, 'presale:event.index'),
                         'subevent': ev.pk,
@@ -499,9 +504,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         )
                         avail = {'color': 'none', 'text': gettext('Event series')}
                     else:
-                        dr = event.get_date_range_display(tz) + (
-                            " " + event.get_time_from_display(tz) if event.settings.show_times else ""
-                        )
+                        dr = self._get_date_range(event, event, tz),
                         avail = self._get_availability(event, event)
                     data['events'].append({
                         'name': str(event.name),
@@ -546,11 +549,7 @@ class WidgetAPIProductList(EventListMixin, View):
 
         ev = self.subevent or request.event
         data['name'] = str(ev.name)
-        data['date_range'] = ev.get_date_range_display() + (
-            " " + date_format(
-                ev.date_from.astimezone(request.event.timezone), "TIME_FORMAT"
-            ) if request.event.settings.show_times else ""
-        )
+        data['date_range'] = self._get_date_range(ev, request.event)
         fail = False
 
         if not ev.presale_is_running:
