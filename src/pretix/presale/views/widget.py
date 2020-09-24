@@ -332,7 +332,7 @@ class WidgetAPIProductList(EventListMixin, View):
             availability['text'] = gettext('from %(start_date)s') % {'start_date': date_format(ev.presale_start, "SHORT_DATE_FORMAT")}
         else:
             availability['color'] = 'orange'
-            availability['text'] = gettext('Sale soon')
+            availability['text'] = gettext('Soon')
         return availability
 
     def _serialize_events(self, ebd):
