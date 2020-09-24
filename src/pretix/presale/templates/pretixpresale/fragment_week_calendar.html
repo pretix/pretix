@@ -41,6 +41,9 @@
                                         <strong>
                                     {% endif %}
                                     {{ event.time|date:"TIME_FORMAT" }}
+                                    {% if event.time_end %}
+                                        – {{ event.time_end|date:"TIME_FORMAT" }}
+                                    {% endif %}
                                     {% if not show_names|default_if_none:True %}
                                         </strong>
                                     {% endif %}

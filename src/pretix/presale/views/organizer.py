@@ -313,6 +313,7 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
         datetime_from = event.date_from.astimezone(tz)
         date_from = datetime_from.date()
         if event.settings.show_date_to and event.date_to:
+            datetime_to = event.date_to.astimezone(tz)
             date_to = event.date_to.astimezone(tz).date()
             d = max(date_from, before.date())
             while d <= date_to and d <= after.date():
@@ -321,6 +322,7 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
                     'event': event,
                     'continued': not first,
                     'time': datetime_from.time().replace(tzinfo=None) if first and event.settings.show_times else None,
+                    'time_end': datetime_to.time().replace(tzinfo=None) if date_to == date_from and event.settings.show_times else None,
                     'url': eventreverse(event, 'presale:event.index'),
                     'timezone': event.settings.timezone,
                 })
@@ -374,6 +376,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
         elif str(se.name) != name:
             ebd['_subevents_different_names'] = True
         if se.event.settings.show_date_to and se.date_to:
+            datetime_to = se.date_to.astimezone(tz)
             date_to = se.date_to.astimezone(tz).date()
             d = max(date_from, before.date())
             while d <= date_to and d <= after.date():
@@ -382,6 +385,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                     'continued': not first,
                     'timezone': settings.timezone,
                     'time': datetime_from.time().replace(tzinfo=None) if first and settings.show_times else None,
+                    'time_end': datetime_to.time().replace(tzinfo=None) if date_to == date_from and settings.show_times else None,
                     'event': se,
                     'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs)
                 })

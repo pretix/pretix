@@ -344,10 +344,12 @@ class WidgetAPIProductList(EventListMixin, View):
             else:
                 event = ev
             tz = pytz.timezone(e['timezone'])
+            time = date_format(ev.date_from.astimezone(tz), 'TIME_FORMAT') if e.get('time') and event.settings.show_times else None
+            if time and ev.date_to and ev.date_from.astimezone(tz).date() == ev.date_to.astimezone(tz).date() and event.settings.show_date_to:
+                time += ' – ' + date_format(ev.date_to.astimezone(tz), 'TIME_FORMAT')
             events.append({
                 'name': str(ev.name),
-                'time': date_format(ev.date_from.astimezone(tz), 'TIME_FORMAT') if e.get('time') and event.settings.show_times else
-                None,
+                'time': time,
                 'continued': e['continued'],
                 'location': str(ev.location),
                 'date_range': ev.get_date_range_display() + (
