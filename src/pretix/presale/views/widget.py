@@ -504,7 +504,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         )
                         avail = {'color': 'none', 'text': gettext('Event series')}
                     else:
-                        dr = self._get_date_range(event, event, tz),
+                        dr = self._get_date_range(event, event, tz)
                         avail = self._get_availability(event, event)
                     data['events'].append({
                         'name': str(event.name),
