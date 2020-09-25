@@ -9,7 +9,8 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
-    GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
+    Device, GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
+    User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
@@ -66,9 +67,6 @@ class EventSlugField(serializers.SlugRelatedField):
 class TeamSerializer(serializers.ModelSerializer):
     limit_events = EventSlugField(slug_field='slug', many=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     class Meta:
         model = Team
         fields = (
@@ -84,6 +82,28 @@ class TeamSerializer(serializers.ModelSerializer):
         if full_data.get('limit_events') and full_data.get('all_events'):
             raise ValidationError('Do not set both limit_events and all_events.')
         return data
+
+
+class DeviceSerializer(serializers.ModelSerializer):
+    limit_events = EventSlugField(slug_field='slug', many=True)
+    device_id = serializers.IntegerField(read_only=True)
+    unique_serial = serializers.CharField(read_only=True)
+    hardware_brand = serializers.CharField(read_only=True)
+    hardware_model = serializers.CharField(read_only=True)
+    software_brand = serializers.CharField(read_only=True)
+    software_version = serializers.CharField(read_only=True)
+    created = serializers.DateTimeField(read_only=True)
+    revoked = serializers.BooleanField(read_only=True)
+    initialized = serializers.DateTimeField(read_only=True)
+    initialization_token = serializers.DateTimeField(read_only=True)
+
+    class Meta:
+        model = Device
+        fields = (
+            'device_id', 'unique_serial', 'initialization_token', 'all_events', 'limit_events',
+            'revoked', 'name', 'created', 'initialized', 'hardware_brand', 'hardware_model',
+            'software_brand', 'software_version'
+        )
 
 
 class TeamInviteSerializer(serializers.ModelSerializer):
