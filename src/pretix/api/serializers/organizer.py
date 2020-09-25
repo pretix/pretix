@@ -9,8 +9,9 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
-    GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
-    Device)
+    Device, GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
+    User,
+)
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.urls import build_absolute_uri

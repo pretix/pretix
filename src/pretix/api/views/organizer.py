@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import filters, serializers, status, viewsets, mixins
+from rest_framework import filters, mixins, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
@@ -15,13 +15,14 @@ from rest_framework.viewsets import GenericViewSet
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
-    GiftCardSerializer, OrganizerSerializer, SeatingPlanSerializer,
-    TeamAPITokenSerializer, TeamInviteSerializer, TeamMemberSerializer,
-    TeamSerializer,
-    DeviceSerializer)
+    DeviceSerializer, GiftCardSerializer, OrganizerSerializer,
+    SeatingPlanSerializer, TeamAPITokenSerializer, TeamInviteSerializer,
+    TeamMemberSerializer, TeamSerializer,
+)
 from pretix.base.models import (
-    GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
-    Device)
+    Device, GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
+    User,
+)
 from pretix.helpers.dicts import merge_dicts
 
 
