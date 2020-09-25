@@ -1030,6 +1030,10 @@ Creating orders
 Order state operations
 ----------------------
 
+.. versionchanged:: 3.12
+
+   The ``mark_paid`` operation now takes a ``send_email`` parameter.
+
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_paid/
 
    Marks a pending or expired order as successfully paid.
@@ -1041,6 +1045,11 @@ Order state operations
       POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_paid/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+          "send_email": true
+      }
 
    **Example response**:
 
@@ -1723,6 +1732,10 @@ Order payment endpoints
 
    Payments can now be created through the API.
 
+.. versionchanged:: 3.12
+
+   The ``confirm`` operation now takes a ``send_email`` parameter.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/payments/
 
    Returns a list of all payments for an order.
@@ -1823,7 +1836,10 @@ Order payment endpoints
       Accept: application/json, text/javascript
       Content-Type: application/json
 
-      {"force": false}
+      {
+          "send_email": true,
+          "force": false
+      }
 
    **Example response**:
 

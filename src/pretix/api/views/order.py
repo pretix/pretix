@@ -228,6 +228,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def mark_paid(self, request, **kwargs):
         order = self.get_object()
+        send_mail = request.data.get('send_email', True)
 
         if order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
 
@@ -269,6 +270,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             try:
                 p.confirm(auth=self.request.auth,
                           user=self.request.user if request.user.is_authenticated else None,
+                          send_mail=send_mail,
                           count_waitinglist=False)
             except Quota.QuotaExceededException as e:
                 return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -976,6 +978,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     def confirm(self, request, **kwargs):
         payment = self.get_object()
         force = request.data.get('force', False)
+        send_mail = request.data.get('send_email', True)
 
         if payment.state not in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
             return Response({'detail': 'Invalid state of payment'}, status=status.HTTP_400_BAD_REQUEST)
@@ -984,6 +987,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             payment.confirm(user=self.request.user if self.request.user.is_authenticated else None,
                             auth=self.request.auth,
                             count_waitinglist=False,
+                            send_mail=send_mail,
                             force=force)
         except Quota.QuotaExceededException as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
