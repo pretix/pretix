@@ -698,6 +698,19 @@ class QuotaList(PaginationMixin, ListView):
         if self.request.GET.get("subevent", "") != "":
             s = self.request.GET.get("subevent", "")
             qs = qs.filter(subevent_id=s)
+
+        valid_orders = {
+            '-date': ('-subevent__date_from', 'name'),
+            'date': ('subevent__date_from', '-name'),
+            'size': ('size', 'name'),
+            '-size': ('-size', '-name'),
+            'name': ('name',),
+            '-name': ('-name',),
+        }
+
+        if self.request.GET.get("ordering", "-date") in valid_orders:
+            qs = qs.order_by(*valid_orders[self.request.GET.get("ordering", "-date")])
+
         return qs
 
     def get_context_data(self, **kwargs):

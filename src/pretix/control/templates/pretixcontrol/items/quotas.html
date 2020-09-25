@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
+{% load urlreplace %}
 {% block title %}{% trans "Quotas" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Quotas" %}</h1>
@@ -41,12 +42,21 @@
             <table class="table table-hover table-quotas">
                 <thead>
                 <tr>
-                    <th>{% trans "Quota name" %}</th>
+                    <th>{% trans "Quota name" %}
+                        <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a></th>
+                    </th>
                     <th>{% trans "Products" %}</th>
                     {% if request.event.has_subevents %}
-                        <th>{% trans "Date" context "subevent" %}</th>
+                        <th>{% trans "Date" context "subevent" %}
+                            <a href="?{% url_replace request 'ordering' '-date' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'date' %}"><i class="fa fa-caret-up"></i></a></th>
+                        </th>
                     {% endif %}
-                    <th>{% trans "Total capacity" %}</th>
+                    <th>{% trans "Total capacity" %}
+                        <a href="?{% url_replace request 'ordering' '-size' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'size' %}"><i class="fa fa-caret-up"></i></a></th>
+                    </th>
                     <th>{% trans "Capacity left" %}</th>
                     <th class="action-col-2"></th>
                 </tr>
