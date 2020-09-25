@@ -89,7 +89,7 @@ class EventMixin:
             self.date_from.astimezone(tz), "TIME_FORMAT"
         )
 
-    def get_date_to_display(self, tz=None, short=False) -> str:
+    def get_date_to_display(self, tz=None, show_times=True, short=False) -> str:
         """
         Returns a formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting. Returns an empty string
@@ -100,7 +100,7 @@ class EventMixin:
             return ""
         return _date(
             self.date_to.astimezone(tz),
-            ("SHORT_" if short else "") + ("DATETIME_FORMAT" if self.settings.show_times else "DATE_FORMAT")
+            ("SHORT_" if short else "") + ("DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT")
         )
 
     def get_date_range_display(self, tz=None, force_show_end=False) -> str:

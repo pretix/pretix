@@ -396,13 +396,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 p_str = (
                     shorten(self.invoice.event.name) + '\n' +
                     pgettext('invoice', '{from_date}\nuntil {to_date}').format(
-                        from_date=self.invoice.event.get_date_from_display(),
-                        to_date=self.invoice.event.get_date_to_display()
+                        from_date=self.invoice.event.get_date_from_display(show_times=False),
+                        to_date=self.invoice.event.get_date_to_display(show_times=False)
                     )
                 )
             else:
                 p_str = (
-                    shorten(self.invoice.event.name) + '\n' + self.invoice.event.get_date_from_display()
+                    shorten(self.invoice.event.name) + '\n' + self.invoice.event.get_date_from_display(show_times=False)
                 )
         else:
             p_str = shorten(self.invoice.event.name)
