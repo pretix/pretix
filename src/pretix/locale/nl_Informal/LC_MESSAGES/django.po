@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-24 08:58+0000\n"
-"PO-Revision-Date: 2020-09-17 19:00+0000\n"
+"PO-Revision-Date: 2020-09-28 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -6878,10 +6878,8 @@ msgstr ""
 "op hun kaartje wordt getoond."
 
 #: pretix/base/settings.py:1835
-#, fuzzy
-#| msgid "Shown independently of other products"
 msgid "Show button to copy user input from other products"
-msgstr "Toon onafhankelijk van andere producten"
+msgstr "Toon knop om invoer te kopiëren van andere producten"
 
 #: pretix/base/settings.py:1840
 msgid "Most common English titles"
@@ -18662,10 +18660,8 @@ msgstr "De verbinding met je PayPal-account is verbroken."
 
 #: pretix/plugins/pretixdroid/__init__.py:9
 #: pretix/plugins/pretixdroid/__init__.py:12
-#, fuzzy
-#| msgid "Check-in device API"
 msgid "Old check-in device API"
-msgstr "Incheckapparaat-API"
+msgstr "Oude incheckapparaat-API"
 
 #: pretix/plugins/pretixdroid/__init__.py:18
 msgid ""
@@ -20600,10 +20596,8 @@ msgstr "Nu boeken"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:67
 #: pretix/presale/templates/pretixpresale/organizers/index.html:114
 #: pretix/presale/views/widget.py:323
-#, fuzzy
-#| msgid "Fully redeemed"
 msgid "Fully booked"
-msgstr "Volledig verzilverd"
+msgstr "Volgeboekt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:39
 #: pretix/presale/templates/pretixpresale/organizers/index.html:123
