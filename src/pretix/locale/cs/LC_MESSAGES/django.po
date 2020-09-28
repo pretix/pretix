@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 08:58+0000\n"
+"POT-Creation-Date: 2020-09-28 10:09+0000\n"
 "PO-Revision-Date: 2019-11-22 10:01+0000\n"
 "Last-Translator: Jaroslav Lichtblau <dragonlord@seznam.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
@@ -104,7 +104,7 @@ msgstr ""
 msgid "The selected seat \"{seat}\" is not available."
 msgstr ""
 
-#: pretix/api/serializers/checkin.py:40 pretix/base/models/event.py:1149
+#: pretix/api/serializers/checkin.py:40 pretix/base/models/event.py:1152
 #: pretix/base/models/items.py:1212 pretix/base/models/items.py:1454
 msgid "One or more items do not belong to this event."
 msgstr ""
@@ -186,23 +186,23 @@ msgstr ""
 msgid "The product \"{}\" is not available on this date."
 msgstr ""
 
-#: pretix/api/serializers/organizer.py:52 pretix/control/forms/organizer.py:404
+#: pretix/api/serializers/organizer.py:53 pretix/control/forms/organizer.py:404
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
 
-#: pretix/api/serializers/organizer.py:100
+#: pretix/api/serializers/organizer.py:120
 #: pretix/control/views/organizer.py:538
 msgid "pretix account invitation"
 msgstr ""
 
-#: pretix/api/serializers/organizer.py:122
+#: pretix/api/serializers/organizer.py:142
 #: pretix/control/views/organizer.py:637
 msgid "This user already has been invited for this team."
 msgstr ""
 
-#: pretix/api/serializers/organizer.py:138
+#: pretix/api/serializers/organizer.py:158
 #: pretix/control/views/organizer.py:654
 msgid "This user already has permissions for this team."
 msgstr ""
@@ -214,17 +214,17 @@ msgid ""
 "account."
 msgstr ""
 
-#: pretix/api/views/order.py:441 pretix/control/views/orders.py:1099
+#: pretix/api/views/order.py:443 pretix/control/views/orders.py:1099
 #: pretix/presale/views/order.py:645 pretix/presale/views/order.py:689
 msgid "You cannot generate an invoice for this order."
 msgstr ""
 
-#: pretix/api/views/order.py:446 pretix/control/views/orders.py:1101
+#: pretix/api/views/order.py:448 pretix/control/views/orders.py:1101
 #: pretix/presale/views/order.py:647 pretix/presale/views/order.py:691
 msgid "An invoice for this order already exists."
 msgstr ""
 
-#: pretix/api/views/order.py:472 pretix/control/views/orders.py:1227
+#: pretix/api/views/order.py:474 pretix/control/views/orders.py:1227
 #: pretix/control/views/users.py:97
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
@@ -323,29 +323,29 @@ msgstr ""
 msgid "Simple with logo"
 msgstr ""
 
-#: pretix/base/email.py:416 pretix/base/email.py:479 pretix/base/email.py:495
-#: pretix/base/email.py:500 pretix/base/pdf.py:109 pretix/base/pdf.py:212
+#: pretix/base/email.py:420 pretix/base/email.py:483 pretix/base/email.py:499
+#: pretix/base/email.py:504 pretix/base/pdf.py:109 pretix/base/pdf.py:212
 #: pretix/base/services/invoices.py:351 pretix/control/views/event.py:693
 msgid "John Doe"
 msgstr ""
 
-#: pretix/base/email.py:420
+#: pretix/base/email.py:424
 msgid "Sample Corporation"
 msgstr ""
 
-#: pretix/base/email.py:458
+#: pretix/base/email.py:462
 msgid "Sample Admission Ticket"
 msgstr ""
 
-#: pretix/base/email.py:483
+#: pretix/base/email.py:487
 msgid "An individual text with a reason can be inserted here."
 msgstr ""
 
-#: pretix/base/email.py:487
+#: pretix/base/email.py:491
 msgid "The amount has been charged to your card."
 msgstr ""
 
-#: pretix/base/email.py:491
+#: pretix/base/email.py:495
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr ""
 
@@ -539,13 +539,13 @@ msgstr ""
 
 #: pretix/base/exporters/invoices.py:169 pretix/base/exporters/invoices.py:177
 #: pretix/base/exporters/invoices.py:296 pretix/base/exporters/invoices.py:304
-#: pretix/base/exporters/orderlist.py:129 pretix/base/forms/questions.py:667
-#: pretix/base/models/devices.py:51 pretix/base/models/event.py:999
-#: pretix/base/models/event.py:1247 pretix/base/models/items.py:1326
+#: pretix/base/exporters/orderlist.py:129 pretix/base/forms/questions.py:675
+#: pretix/base/models/devices.py:51 pretix/base/models/event.py:1002
+#: pretix/base/models/event.py:1250 pretix/base/models/items.py:1326
 #: pretix/base/models/items.py:1495 pretix/base/models/organizer.py:34
 #: pretix/base/models/seating.py:40 pretix/base/models/tax.py:97
 #: pretix/base/settings.py:1781 pretix/base/settings.py:1791
-#: pretix/base/settings.py:1981 pretix/control/forms/item.py:282
+#: pretix/base/settings.py:1988 pretix/control/forms/item.py:282
 #: pretix/control/templates/pretixcontrol/checkin/index.html:75
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:26
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:12
@@ -572,7 +572,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:384
-#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:284
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:292
 #: pretix/base/models/orders.py:1132 pretix/base/models/orders.py:2210
 #: pretix/base/orderimport.py:271 pretix/base/orderimport.py:417
 #: pretix/control/templates/pretixcontrol/order/index.html:784
@@ -586,7 +586,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:385
-#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:295
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:303
 #: pretix/base/models/orders.py:1133 pretix/base/models/orders.py:2211
 #: pretix/base/orderimport.py:282 pretix/base/orderimport.py:428
 #: pretix/base/settings.py:651 pretix/control/views/item.py:349
@@ -598,7 +598,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:386
-#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:303
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:311
 #: pretix/base/models/orders.py:1134 pretix/base/models/orders.py:2212
 #: pretix/base/orderimport.py:293 pretix/base/orderimport.py:439
 #: pretix/base/settings.py:663 pretix/control/views/item.py:359
@@ -610,7 +610,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:387
-#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:315
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:323
 #: pretix/base/models/orders.py:1135 pretix/base/models/orders.py:2213
 #: pretix/base/models/orders.py:2214 pretix/base/orderimport.py:309
 #: pretix/base/orderimport.py:455
@@ -655,7 +655,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:129
 #: pretix/base/exporters/orderlist.py:270
 #: pretix/base/exporters/orderlist.py:383
-#: pretix/base/exporters/orderlist.py:409 pretix/base/forms/questions.py:276
+#: pretix/base/exporters/orderlist.py:409 pretix/base/forms/questions.py:284
 #: pretix/base/orderimport.py:241 pretix/base/orderimport.py:406
 #: pretix/control/templates/pretixcontrol/order/index.html:780
 #: pretix/control/views/item.py:327
@@ -674,8 +674,8 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:136
 #: pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:388
-#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:337
-#: pretix/base/forms/questions.py:633 pretix/base/models/orders.py:1136
+#: pretix/base/exporters/orderlist.py:416 pretix/base/forms/questions.py:345
+#: pretix/base/forms/questions.py:641 pretix/base/models/orders.py:1136
 #: pretix/base/models/orders.py:2216 pretix/base/orderimport.py:328
 #: pretix/control/templates/pretixcontrol/order/index.html:791
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:105
@@ -1013,7 +1013,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:246 pretix/control/forms/orders.py:298
 #: pretix/control/forms/orders.py:568 pretix/control/forms/vouchers.py:78
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:75
-#: pretix/control/templates/pretixcontrol/items/quotas.html:47
+#: pretix/control/templates/pretixcontrol/items/quotas.html:51
 #: pretix/control/templates/pretixcontrol/order/change.html:104
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:8
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:7
@@ -1054,7 +1054,7 @@ msgid "Variation"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:375
-#: pretix/base/exporters/orderlist.py:380 pretix/base/forms/questions.py:259
+#: pretix/base/exporters/orderlist.py:380 pretix/base/forms/questions.py:267
 #: pretix/base/models/orders.py:1105 pretix/base/orderimport.py:378
 #: pretix/base/pdf.py:108
 #: pretix/control/templates/pretixcontrol/order/index.html:376
@@ -1068,7 +1068,7 @@ msgstr ""
 msgid "Attendee name"
 msgstr ""
 
-#: pretix/base/exporters/orderlist.py:382 pretix/base/forms/questions.py:265
+#: pretix/base/exporters/orderlist.py:382 pretix/base/forms/questions.py:273
 #: pretix/base/models/orders.py:1113
 #: pretix/control/templates/pretixcontrol/order/index.html:381
 #: pretix/control/views/item.py:315
@@ -1191,7 +1191,7 @@ msgid "Quota availabilities"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:629
-#: pretix/control/templates/pretixcontrol/items/quotas.html:44
+#: pretix/control/templates/pretixcontrol/items/quotas.html:45
 msgid "Quota name"
 msgstr ""
 
@@ -1202,11 +1202,11 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:629
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
-#: pretix/control/views/item.py:779
+#: pretix/control/views/item.py:792
 msgid "Paid orders"
 msgstr ""
 
-#: pretix/base/exporters/orderlist.py:629 pretix/control/views/item.py:784
+#: pretix/base/exporters/orderlist.py:629 pretix/control/views/item.py:797
 msgid "Pending orders"
 msgstr ""
 
@@ -1214,7 +1214,7 @@ msgstr ""
 msgid "Blocking vouchers"
 msgstr ""
 
-#: pretix/base/exporters/orderlist.py:630 pretix/control/views/item.py:803
+#: pretix/base/exporters/orderlist.py:630 pretix/control/views/item.py:816
 msgid "Current user's carts"
 msgstr ""
 
@@ -1246,7 +1246,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:643
 #: pretix/base/exporters/orderlist.py:650
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
-#: pretix/control/views/item.py:810
+#: pretix/control/views/item.py:823
 msgid "Infinite"
 msgstr ""
 
@@ -1299,47 +1299,47 @@ msgstr ""
 msgid "Repeat password"
 msgstr ""
 
-#: pretix/base/forms/questions.py:189
+#: pretix/base/forms/questions.py:197
 msgid "Please enter a shorter name."
 msgstr ""
 
-#: pretix/base/forms/questions.py:287 pretix/base/forms/questions.py:575
+#: pretix/base/forms/questions.py:295 pretix/base/forms/questions.py:583
 msgid "Street and Number"
 msgstr ""
 
-#: pretix/base/forms/questions.py:321 pretix/base/forms/questions.py:615
+#: pretix/base/forms/questions.py:329 pretix/base/forms/questions.py:623
 msgctxt "address"
 msgid "Select state"
 msgstr ""
 
-#: pretix/base/forms/questions.py:529 pretix/base/forms/questions.py:706
+#: pretix/base/forms/questions.py:537 pretix/base/forms/questions.py:714
 #: pretix/base/payment.py:51 pretix/control/forms/event.py:608
 #: pretix/control/forms/event.py:614 pretix/control/forms/event.py:663
 #: pretix/control/forms/event.py:1092
 msgid "This field is required."
 msgstr ""
 
-#: pretix/base/forms/questions.py:559 pretix/control/forms/item.py:94
+#: pretix/base/forms/questions.py:567 pretix/control/forms/item.py:94
 msgid "This field is required"
 msgstr ""
 
-#: pretix/base/forms/questions.py:697
+#: pretix/base/forms/questions.py:705
 msgid "You need to provide a company name."
 msgstr ""
 
-#: pretix/base/forms/questions.py:699
+#: pretix/base/forms/questions.py:707
 msgid "You need to provide your name."
 msgstr ""
 
-#: pretix/base/forms/questions.py:719 pretix/control/views/orders.py:1138
+#: pretix/base/forms/questions.py:727 pretix/control/views/orders.py:1138
 msgid "Your VAT ID does not match the selected country."
 msgstr ""
 
-#: pretix/base/forms/questions.py:727
+#: pretix/base/forms/questions.py:735
 msgid "This VAT ID is not valid. Please re-check your input."
 msgstr ""
 
-#: pretix/base/forms/questions.py:732
+#: pretix/base/forms/questions.py:740
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country is currently not available. We will therefore need to charge VAT on "
@@ -1347,7 +1347,7 @@ msgid ""
 "process."
 msgstr ""
 
-#: pretix/base/forms/questions.py:740
+#: pretix/base/forms/questions.py:748
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country returned an incorrect result. We will therefore need to charge VAT "
@@ -1642,7 +1642,7 @@ msgid "Default list"
 msgstr ""
 
 #: pretix/base/models/auth.py:92 pretix/base/models/orders.py:2208
-#: pretix/base/settings.py:1992 pretix/base/settings.py:2003
+#: pretix/base/settings.py:1999 pretix/base/settings.py:2010
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 msgid "Full name"
 msgstr ""
@@ -1807,26 +1807,26 @@ msgstr ""
 msgid "Event currency"
 msgstr ""
 
-#: pretix/base/models/event.py:314 pretix/base/models/event.py:1001
+#: pretix/base/models/event.py:314 pretix/base/models/event.py:1004
 #: pretix/base/settings.py:1779 pretix/base/settings.py:1789
 #: pretix/control/forms/subevents.py:370
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr ""
 
-#: pretix/base/models/event.py:316 pretix/base/models/event.py:1003
+#: pretix/base/models/event.py:316 pretix/base/models/event.py:1006
 #: pretix/base/pdf.py:182 pretix/control/forms/subevents.py:375
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
 msgstr ""
 
-#: pretix/base/models/event.py:318 pretix/base/models/event.py:1005
+#: pretix/base/models/event.py:318 pretix/base/models/event.py:1008
 #: pretix/control/forms/subevents.py:380
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
 msgstr ""
 
-#: pretix/base/models/event.py:320 pretix/base/models/event.py:994
+#: pretix/base/models/event.py:320 pretix/base/models/event.py:997
 msgid "Show in lists"
 msgstr ""
 
@@ -1836,37 +1836,37 @@ msgid ""
 "organizer account."
 msgstr ""
 
-#: pretix/base/models/event.py:324 pretix/base/models/event.py:1008
+#: pretix/base/models/event.py:324 pretix/base/models/event.py:1011
 #: pretix/control/forms/subevents.py:70
 msgid "End of presale"
 msgstr ""
 
-#: pretix/base/models/event.py:325 pretix/base/models/event.py:1009
+#: pretix/base/models/event.py:325 pretix/base/models/event.py:1012
 #: pretix/control/forms/subevents.py:71
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
 msgstr ""
 
-#: pretix/base/models/event.py:330 pretix/base/models/event.py:1014
+#: pretix/base/models/event.py:330 pretix/base/models/event.py:1017
 #: pretix/control/forms/subevents.py:64
 msgid "Start of presale"
 msgstr ""
 
-#: pretix/base/models/event.py:331 pretix/base/models/event.py:1015
+#: pretix/base/models/event.py:331 pretix/base/models/event.py:1018
 #: pretix/control/forms/subevents.py:65
 msgid "Optional. No products will be sold before this date."
 msgstr ""
 
-#: pretix/base/models/event.py:336 pretix/base/models/event.py:1020
+#: pretix/base/models/event.py:336 pretix/base/models/event.py:1023
 msgid "Location"
 msgstr ""
 
-#: pretix/base/models/event.py:339 pretix/base/models/event.py:1023
+#: pretix/base/models/event.py:339 pretix/base/models/event.py:1026
 msgid "Latitude"
 msgstr ""
 
-#: pretix/base/models/event.py:343 pretix/base/models/event.py:1027
+#: pretix/base/models/event.py:343 pretix/base/models/event.py:1030
 msgid "Longitude"
 msgstr ""
 
@@ -1885,7 +1885,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/index.html:13
 #: pretix/control/views/dashboards.py:490
 #: pretix/presale/templates/pretixpresale/organizers/index.html:102
-#: pretix/presale/views/widget.py:500
+#: pretix/presale/views/widget.py:505
 msgid "Event series"
 msgstr ""
 
@@ -1909,77 +1909,77 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-#: pretix/base/models/event.py:839
+#: pretix/base/models/event.py:842
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
 
-#: pretix/base/models/event.py:842
+#: pretix/base/models/event.py:845
 msgid "You need to configure at least one quota to sell anything."
 msgstr ""
 
-#: pretix/base/models/event.py:940
+#: pretix/base/models/event.py:943
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
 
-#: pretix/base/models/event.py:946
+#: pretix/base/models/event.py:949
 msgid "The event slug cannot be changed."
 msgstr ""
 
-#: pretix/base/models/event.py:949
+#: pretix/base/models/event.py:952
 msgid "This slug has already been used for a different event."
 msgstr ""
 
-#: pretix/base/models/event.py:955
+#: pretix/base/models/event.py:958
 msgid "The event cannot end before it starts."
 msgstr ""
 
-#: pretix/base/models/event.py:961
+#: pretix/base/models/event.py:964
 msgid "The event's presale cannot end before it starts."
 msgstr ""
 
-#: pretix/base/models/event.py:990 pretix/base/models/items.py:275
+#: pretix/base/models/event.py:993 pretix/base/models/items.py:275
 #: pretix/base/models/items.py:647 pretix/control/forms/filter.py:442
 #: pretix/control/forms/filter.py:929
 #: pretix/control/templates/pretixcontrol/users/index.html:46
 msgid "Active"
 msgstr ""
 
-#: pretix/base/models/event.py:991
+#: pretix/base/models/event.py:994
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
 msgstr ""
 
-#: pretix/base/models/event.py:995
+#: pretix/base/models/event.py:998
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr ""
 
-#: pretix/base/models/event.py:1032 pretix/base/settings.py:1656
+#: pretix/base/models/event.py:1035 pretix/base/settings.py:1656
 msgid "Frontpage text"
 msgstr ""
 
-#: pretix/base/models/event.py:1043
+#: pretix/base/models/event.py:1046
 msgid "Date in event series"
 msgstr ""
 
-#: pretix/base/models/event.py:1044
+#: pretix/base/models/event.py:1047
 msgid "Dates in event series"
 msgstr ""
 
-#: pretix/base/models/event.py:1155
+#: pretix/base/models/event.py:1158
 msgid "One or more variations do not belong to this event."
 msgstr ""
 
-#: pretix/base/models/event.py:1239 pretix/base/models/items.py:1487
+#: pretix/base/models/event.py:1242 pretix/base/models/items.py:1487
 msgid "Can not contain spaces or special characters except underscores"
 msgstr ""
 
-#: pretix/base/models/event.py:1244 pretix/base/models/items.py:1492
+#: pretix/base/models/event.py:1247 pretix/base/models/items.py:1492
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
 
@@ -2300,7 +2300,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/index.html:3
 #: pretix/control/templates/pretixcontrol/items/index.html:5
 #: pretix/control/templates/pretixcontrol/items/questions.html:26
-#: pretix/control/templates/pretixcontrol/items/quotas.html:45
+#: pretix/control/templates/pretixcontrol/items/quotas.html:49
 msgid "Products"
 msgstr ""
 
@@ -2570,7 +2570,7 @@ msgid "Question options"
 msgstr ""
 
 #: pretix/base/models/items.py:1329 pretix/control/forms/event.py:1261
-#: pretix/control/templates/pretixcontrol/items/quotas.html:49
+#: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
 msgstr ""
 
@@ -2619,8 +2619,8 @@ msgid "Quota"
 msgstr ""
 
 #: pretix/base/models/items.py:1373 pretix/control/navigation.py:145
-#: pretix/control/templates/pretixcontrol/items/quotas.html:3
-#: pretix/control/templates/pretixcontrol/items/quotas.html:5
+#: pretix/control/templates/pretixcontrol/items/quotas.html:4
+#: pretix/control/templates/pretixcontrol/items/quotas.html:6
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:397
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:81
 msgid "Quotas"
@@ -4773,14 +4773,18 @@ msgid ""
 "card."
 msgstr ""
 
-#: pretix/base/services/orders.py:1657
+#: pretix/base/services/orders.py:1170
+msgid "You cannot cancel a position that has been used to issue a gift card."
+msgstr ""
+
+#: pretix/base/services/orders.py:1661
 #, python-brace-format
 msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
 
-#: pretix/base/services/orders.py:2093
+#: pretix/base/services/orders.py:2097
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
@@ -6068,92 +6072,115 @@ msgstr ""
 msgid "Most common German titles"
 msgstr ""
 
-#: pretix/base/settings.py:1859 pretix/base/settings.py:1872
-#: pretix/base/settings.py:1888 pretix/base/settings.py:1938
-#: pretix/base/settings.py:1951 pretix/base/settings.py:1965
+#: pretix/base/settings.py:1858
+msgctxt "person_name_salutation"
+msgid "Ms"
+msgstr ""
+
+#: pretix/base/settings.py:1859
+msgctxt "person_name_salutation"
+msgid "Mr"
+msgstr ""
+
+#: pretix/base/settings.py:1866 pretix/base/settings.py:1879
+#: pretix/base/settings.py:1895 pretix/base/settings.py:1945
+#: pretix/base/settings.py:1958 pretix/base/settings.py:1972
+#: pretix/base/settings.py:2024
 msgid "Given name"
 msgstr ""
 
-#: pretix/base/settings.py:1860 pretix/base/settings.py:1873
-#: pretix/base/settings.py:1889 pretix/base/settings.py:1905
-#: pretix/base/settings.py:1922 pretix/base/settings.py:1937
-#: pretix/base/settings.py:1952 pretix/base/settings.py:1966
+#: pretix/base/settings.py:1867 pretix/base/settings.py:1880
+#: pretix/base/settings.py:1896 pretix/base/settings.py:1912
+#: pretix/base/settings.py:1929 pretix/base/settings.py:1944
+#: pretix/base/settings.py:1959 pretix/base/settings.py:1973
+#: pretix/base/settings.py:2025
 msgid "Family name"
 msgstr ""
 
-#: pretix/base/settings.py:1864 pretix/base/settings.py:1880
-#: pretix/base/settings.py:1896 pretix/base/settings.py:1911
-#: pretix/base/settings.py:1929 pretix/base/settings.py:1944
-#: pretix/base/settings.py:1974 pretix/base/settings.py:1997
+#: pretix/base/settings.py:1871 pretix/base/settings.py:1887
+#: pretix/base/settings.py:1903 pretix/base/settings.py:1918
+#: pretix/base/settings.py:1936 pretix/base/settings.py:1951
+#: pretix/base/settings.py:1981 pretix/base/settings.py:2004
+#: pretix/base/settings.py:2033
 msgctxt "person_name_sample"
 msgid "John"
 msgstr ""
 
-#: pretix/base/settings.py:1865 pretix/base/settings.py:1881
-#: pretix/base/settings.py:1897 pretix/base/settings.py:1913
-#: pretix/base/settings.py:1931 pretix/base/settings.py:1945
-#: pretix/base/settings.py:1975
+#: pretix/base/settings.py:1872 pretix/base/settings.py:1888
+#: pretix/base/settings.py:1904 pretix/base/settings.py:1920
+#: pretix/base/settings.py:1938 pretix/base/settings.py:1952
+#: pretix/base/settings.py:1982 pretix/base/settings.py:2034
 msgctxt "person_name_sample"
 msgid "Doe"
 msgstr ""
 
-#: pretix/base/settings.py:1871 pretix/base/settings.py:1887
-#: pretix/base/settings.py:1919
+#: pretix/base/settings.py:1878 pretix/base/settings.py:1894
+#: pretix/base/settings.py:1926 pretix/base/settings.py:2023
 msgctxt "person_name"
 msgid "Title"
 msgstr ""
 
-#: pretix/base/settings.py:1879 pretix/base/settings.py:1895
-#: pretix/base/settings.py:1928
+#: pretix/base/settings.py:1886 pretix/base/settings.py:1902
+#: pretix/base/settings.py:1935 pretix/base/settings.py:2032
 msgctxt "person_name_sample"
 msgid "Dr"
 msgstr ""
 
-#: pretix/base/settings.py:1903 pretix/base/settings.py:1920
+#: pretix/base/settings.py:1910 pretix/base/settings.py:1927
 msgid "First name"
 msgstr ""
 
-#: pretix/base/settings.py:1904 pretix/base/settings.py:1921
+#: pretix/base/settings.py:1911 pretix/base/settings.py:1928
 msgid "Middle name"
 msgstr ""
 
-#: pretix/base/settings.py:1985 pretix/base/settings.py:1996
+#: pretix/base/settings.py:1992 pretix/base/settings.py:2003
 msgctxt "person_name_sample"
 msgid "John Doe"
 msgstr ""
 
-#: pretix/base/settings.py:1991
+#: pretix/base/settings.py:1998
 msgid "Calling name"
 msgstr ""
 
-#: pretix/base/settings.py:2004
+#: pretix/base/settings.py:2011
 msgid "Latin transcription"
 msgstr ""
 
-#: pretix/base/settings.py:2110 pretix/control/forms/event.py:172
+#: pretix/base/settings.py:2022
+msgctxt "person_name"
+msgid "Salutation"
+msgstr ""
+
+#: pretix/base/settings.py:2031
+msgctxt "person_name_sample"
+msgid "Mr"
+msgstr ""
+
+#: pretix/base/settings.py:2134 pretix/control/forms/event.py:172
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
 
-#: pretix/base/settings.py:2114
+#: pretix/base/settings.py:2138
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
 
-#: pretix/base/settings.py:2118
+#: pretix/base/settings.py:2142
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr ""
 
-#: pretix/base/settings.py:2122
+#: pretix/base/settings.py:2146
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
 msgstr ""
 
-#: pretix/base/settings.py:2126
+#: pretix/base/settings.py:2150
 msgid "You have to require invoice addresses to require for company names."
 msgstr ""
 
-#: pretix/base/settings.py:2133
+#: pretix/base/settings.py:2157
 msgid "The last payment date cannot be before the end of presale."
 msgstr ""
 
@@ -8792,7 +8819,7 @@ msgstr ""
 msgid "The quota has closed."
 msgstr ""
 
-#: pretix/control/logdisplay.py:357 pretix/control/views/item.py:890
+#: pretix/control/logdisplay.py:357 pretix/control/views/item.py:903
 msgid "The quota has been re-opened."
 msgstr ""
 
@@ -9890,7 +9917,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:133
 #: pretix/control/templates/pretixcontrol/items/categories.html:49
 #: pretix/control/templates/pretixcontrol/items/index.html:98
-#: pretix/control/templates/pretixcontrol/items/quotas.html:83
+#: pretix/control/templates/pretixcontrol/items/quotas.html:93
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:72
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:69
 msgid "Clone"
@@ -10506,8 +10533,8 @@ msgstr ""
 #: pretix/control/views/event.py:806 pretix/control/views/event.py:1159
 #: pretix/control/views/global_settings.py:25
 #: pretix/control/views/global_settings.py:48 pretix/control/views/item.py:165
-#: pretix/control/views/item.py:622 pretix/control/views/item.py:930
-#: pretix/control/views/item.py:1092 pretix/control/views/item.py:1221
+#: pretix/control/views/item.py:622 pretix/control/views/item.py:943
+#: pretix/control/views/item.py:1105 pretix/control/views/item.py:1234
 #: pretix/control/views/organizer.py:184 pretix/control/views/organizer.py:305
 #: pretix/control/views/organizer.py:463 pretix/control/views/organizer.py:787
 #: pretix/control/views/organizer.py:933 pretix/control/views/subevents.py:411
@@ -11621,7 +11648,7 @@ msgstr ""
 msgid "Advanced options"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/items/quotas.html:7
+#: pretix/control/templates/pretixcontrol/items/quotas.html:8
 msgid ""
 "To make your products actually available, you also need quotas. Quotas "
 "define, how many instances of your product pretix will sell. This way, you "
@@ -11632,20 +11659,20 @@ msgid ""
 "same time."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/items/quotas.html:24
+#: pretix/control/templates/pretixcontrol/items/quotas.html:25
 msgid "Your search did not match any quotas."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/items/quotas.html:26
+#: pretix/control/templates/pretixcontrol/items/quotas.html:27
 msgid "You haven't created any quotas yet."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/items/quotas.html:33
-#: pretix/control/templates/pretixcontrol/items/quotas.html:37
+#: pretix/control/templates/pretixcontrol/items/quotas.html:34
+#: pretix/control/templates/pretixcontrol/items/quotas.html:38
 msgid "Create a new quota"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/items/quotas.html:50
+#: pretix/control/templates/pretixcontrol/items/quotas.html:60
 msgid "Capacity left"
 msgstr ""
 
@@ -14532,8 +14559,8 @@ msgstr ""
 #: pretix/control/views/event.py:1178 pretix/control/views/event.py:1285
 #: pretix/control/views/item.py:181 pretix/control/views/item.py:226
 #: pretix/control/views/item.py:632 pretix/control/views/item.py:658
-#: pretix/control/views/item.py:760 pretix/control/views/item.py:964
-#: pretix/control/views/item.py:1113 pretix/control/views/item.py:1264
+#: pretix/control/views/item.py:773 pretix/control/views/item.py:977
+#: pretix/control/views/item.py:1126 pretix/control/views/item.py:1277
 #: pretix/control/views/organizer.py:187 pretix/control/views/subevents.py:390
 #: pretix/control/views/subevents.py:878 pretix/control/views/user.py:291
 #: pretix/plugins/badges/views.py:70 pretix/plugins/stripe/views.py:601
@@ -14816,7 +14843,7 @@ msgstr ""
 msgid "Your changes have not been saved, see below for errors."
 msgstr ""
 
-#: pretix/control/views/item.py:81 pretix/control/views/item.py:1349
+#: pretix/control/views/item.py:81 pretix/control/views/item.py:1362
 msgid "The requested product does not exist."
 msgstr ""
 
@@ -14870,71 +14897,71 @@ msgstr ""
 msgid "The new question has been created."
 msgstr ""
 
-#: pretix/control/views/item.py:731
+#: pretix/control/views/item.py:744
 msgid "The new quota has been created."
 msgstr ""
 
-#: pretix/control/views/item.py:791
+#: pretix/control/views/item.py:804
 msgid "Exit scans"
 msgstr ""
 
-#: pretix/control/views/item.py:798
+#: pretix/control/views/item.py:811
 msgid "Vouchers and waiting list reservations"
 msgstr ""
 
-#: pretix/control/views/item.py:813
+#: pretix/control/views/item.py:826
 msgid "Available quota"
 msgstr ""
 
-#: pretix/control/views/item.py:819
+#: pretix/control/views/item.py:832
 msgid "Waiting list (pending)"
 msgstr ""
 
-#: pretix/control/views/item.py:826
+#: pretix/control/views/item.py:839
 msgid "Currently for sale"
 msgstr ""
 
-#: pretix/control/views/item.py:880 pretix/control/views/item.py:926
-#: pretix/control/views/item.py:980
+#: pretix/control/views/item.py:893 pretix/control/views/item.py:939
+#: pretix/control/views/item.py:993
 msgid "The requested quota does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:901
+#: pretix/control/views/item.py:914
 msgid "The quota has been re-opened and will not close again."
 msgstr ""
 
-#: pretix/control/views/item.py:994
+#: pretix/control/views/item.py:1007
 msgid "The selected quota has been deleted."
 msgstr ""
 
-#: pretix/control/views/item.py:1017
+#: pretix/control/views/item.py:1030
 msgid "The requested item does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:1152
+#: pretix/control/views/item.py:1165
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr ""
 
-#: pretix/control/views/item.py:1162
+#: pretix/control/views/item.py:1175
 msgid ""
 "You cannot add bundles to a product that is only available as an add-on "
 "itself."
 msgstr ""
 
-#: pretix/control/views/item.py:1274
+#: pretix/control/views/item.py:1287
 msgid ""
 "You disabled this item, but it is still part of a product bundle. Your "
 "participants won't be able to buy the bundle unless you remove this item "
 "from it."
 msgstr ""
 
-#: pretix/control/views/item.py:1361
+#: pretix/control/views/item.py:1374
 msgid "The selected product has been deleted."
 msgstr ""
 
-#: pretix/control/views/item.py:1370
+#: pretix/control/views/item.py:1383
 msgid "The selected product has been deactivated."
 msgstr ""
 
@@ -18439,18 +18466,18 @@ msgid "Other dates"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:153
-#: pretix/presale/views/widget.py:561
+#: pretix/presale/views/widget.py:560
 msgid "The presale period for this event is over."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:158
-#: pretix/presale/views/widget.py:563
+#: pretix/presale/views/widget.py:562
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:162
-#: pretix/presale/views/widget.py:568
+#: pretix/presale/views/widget.py:567
 msgid "The presale for this event has not yet started."
 msgstr ""
 

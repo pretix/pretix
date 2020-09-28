@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-24 08:59+0000\n"
+"POT-Creation-Date: 2020-09-28 10:10+0000\n"
 "PO-Revision-Date: 2019-11-13 06:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -374,30 +374,30 @@ msgstr[2] "Preces jūsu grozā ir rezervētas uz {num} minūtēm."
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
 
-#: pretix/static/pretixpresale/js/ui/main.js:387
+#: pretix/static/pretixpresale/js/ui/main.js:386
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "no %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:395
+#: pretix/static/pretixpresale/js/ui/main.js:394
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "no %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:411
+#: pretix/static/pretixpresale/js/ui/main.js:410
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:425
-#: pretix/static/pretixpresale/js/ui/main.js:438
+#: pretix/static/pretixpresale/js/ui/main.js:424
+#: pretix/static/pretixpresale/js/ui/main.js:437
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:430
+#: pretix/static/pretixpresale/js/ui/main.js:429
 msgid "Your local time:"
 msgstr ""
 
