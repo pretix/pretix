@@ -241,7 +241,7 @@ def get_email_context(**kwargs):
         try:
             kwargs['invoice_address'] = kwargs['order'].invoice_address
         except InvoiceAddress.DoesNotExist:
-            kwargs['invoice_address'] = InvoiceAddress()
+            kwargs['invoice_address'] = InvoiceAddress(order=kwargs['order'])
         finally:
             kwargs.setdefault("position_or_address", kwargs['invoice_address'])
     ctx = {}
