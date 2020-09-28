@@ -276,7 +276,7 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
-    el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency]").each(function () {
+    el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency], select[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
             update = function (ev) {
@@ -300,7 +300,7 @@ var form_handlers = function (el) {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-    el.find("input[data-required-if]").each(function () {
+    el.find("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-required-if")),
             update = function (ev) {

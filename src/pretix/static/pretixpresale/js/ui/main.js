@@ -282,8 +282,7 @@ $(function () {
         return true;
     });
 
-    // Invoice address form
-    $("input[data-required-if]").each(function () {
+    $("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-required-if")),
             update = function (ev) {
@@ -298,7 +297,7 @@ $(function () {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-    $("input[data-display-dependency], div[data-display-dependency]").each(function () {
+    $("input[data-display-dependency], div[data-display-dependency], select[data-display-dependency], textarea[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
             update = function (ev) {
