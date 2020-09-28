@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 10:09+0000\n"
-"PO-Revision-Date: 2020-09-24 09:56+0000\n"
+"PO-Revision-Date: 2020-09-28 10:15+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -6936,12 +6936,12 @@ msgstr "Übliche deutsche Titel"
 #: pretix/base/settings.py:1858
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr ""
+msgstr "Frau"
 
 #: pretix/base/settings.py:1859
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr ""
+msgstr "Herr"
 
 #: pretix/base/settings.py:1866 pretix/base/settings.py:1879
 #: pretix/base/settings.py:1895 pretix/base/settings.py:1945
@@ -7009,16 +7009,14 @@ msgid "Latin transcription"
 msgstr "Transkription"
 
 #: pretix/base/settings.py:2022
-#, fuzzy
-#| msgid "Cancellation"
 msgctxt "person_name"
 msgid "Salutation"
-msgstr "Storno"
+msgstr "Anrede"
 
 #: pretix/base/settings.py:2031
 msgctxt "person_name_sample"
 msgid "Mr"
-msgstr ""
+msgstr "Herr"
 
 #: pretix/base/settings.py:2134 pretix/control/forms/event.py:172
 msgid ""
