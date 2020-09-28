@@ -718,6 +718,7 @@ OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'pretixapi.OAuthAccessToken'
 OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'pretixapi.OAuthRefreshToken'
 OAUTH2_PROVIDER = {
     'SCOPES': {
+        'profile': _('User profile only'),
         'read': _('Read access'),
         'write': _('Write access'),
     },
