@@ -574,3 +574,37 @@ def test_user_revoke(client, admin_user, organizer, application: OAuthApplicatio
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
         ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
     assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_allow_profile_only(client, admin_user, organizer, application: OAuthApplication):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code&scope=profile' % (
+        application.client_id, quote(application.redirect_uris)
+    ))
+    assert resp.status_code == 200
+    resp = client.post('/api/v1/oauth/authorize', data={
+        'organizers': [str(organizer.pk)],
+        'redirect_uri': application.redirect_uris,
+        'scope': 'profile',
+        'client_id': application.client_id,
+        'response_type': 'code',
+        'allow': 'Authorize',
+    })
+    assert resp.status_code == 302
+    assert resp['Location'].startswith('https://pretalx.com?code=')
+    code = resp['Location'].split("=")[1]
+    client.logout()
+    resp = client.post('/api/v1/oauth/token', data={
+        'code': code,
+        'redirect_uri': application.redirect_uris,
+        'grant_type': 'authorization_code',
+    }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
+        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+    assert resp.status_code == 200
+    data = json.loads(resp.content.decode())
+    access_token = data['access_token']
+    resp = client.get('/api/v1/organizers/', HTTP_AUTHORIZATION='Bearer %s' % access_token)
+    assert resp.status_code == 403
+    resp = client.get('/api/v1/me', HTTP_AUTHORIZATION='Bearer %s' % access_token)
+    assert resp.status_code == 200

@@ -25,7 +25,7 @@ Obtaining an authorization grant
 --------------------------------
 
 To authorize a new user, link or redirect them to the ``authorize`` endpoint, passing your client ID as a query
-parameter. Additionally, you can pass a scope (currently either ``read``, ``write``, or ``read write``)
+parameter. Additionally, you can pass a scope (currently either ``read``, ``write``, ``read write`` or ``profile``)
 and an URL the user should be redirected to after successful or failed authorization. You also need to pass the
 ``response_type`` parameter with a value of ``code``. Example::
 
@@ -47,11 +47,9 @@ You will need this ``code`` parameter to perform the next step.
 
 On a failed registration, a query string like ``?error=access_denied`` will be appended to the redirection URL.
 
-.. note:: In this step, the user is allowed to restrict your access to certain organizer accounts. If you try to
-          re-authenticate the user later, the user might be instantly redirected back to you if authorization is already
-          given and would therefore be unable to review their organizer restriction settings. You can append the
-          ``approval_prompt=force`` query parameter if you want to make sure the user actively needs to confirm the
-          authorization.
+.. note:: By default, the user is asked to give permission on every call to this URL. If you **only** request the
+          ``profile`` scope, i.e. no access to organizer data, you can pass the ``approval_prompt=auto`` parameter
+          to skip user interaction on subsequen calls.
 
 Getting an access token
 -----------------------
@@ -193,10 +191,11 @@ If you need the user's meta data, you can fetch it here:
       Content-Type: application/json
 
       {
-        email: "admin@localhost",
-        fullname: "John Doe",
-        locale: "de",
-        timezone: "Europe/Berlin"
+        "email": "admin@localhost",
+        "fullname": "John Doe",
+        "locale": "de",
+        "is_staff": false,
+        "timezone": "Europe/Berlin"
       }
 
    :statuscode 200: no error

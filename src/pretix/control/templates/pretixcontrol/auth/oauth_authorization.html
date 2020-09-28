@@ -26,8 +26,10 @@
                 <li>{{ scope }}</li>
             {% endfor %}
         </ul>
-        <p>{% trans "Please select the organizer accounts this application should get access to:" %}</p>
-        {% bootstrap_field form.organizers layout="inline" %}
+        {% if form.organizers %}
+            <p>{% trans "Please select the organizer accounts this application should get access to:" %}</p>
+            {% bootstrap_field form.organizers layout="inline" %}
+        {% endif %}
 
         {% bootstrap_form_errors form layout="control" %}
         <p class="text-danger">

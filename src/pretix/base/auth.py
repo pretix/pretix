@@ -98,7 +98,10 @@ class BaseAuthBackend:
 
 class NativeAuthBackend(BaseAuthBackend):
     identifier = 'native'
-    verbose_name = _('pretix User')
+
+    @property
+    def verbose_name(self):
+        return _('{system} User').format(system=settings.PRETIX_INSTANCE_NAME)
 
     @property
     def login_form_fields(self) -> dict:

@@ -3,8 +3,9 @@ import logging
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext as _
-from oauth2_provider.exceptions import OAuthToolkitError
+from oauth2_provider.exceptions import OAuthToolkitError, FatalClientError
 from oauth2_provider.forms import AllowForm
+from oauth2_provider.settings import oauth2_settings
 from oauth2_provider.views import (
     AuthorizationView as BaseAuthorizationView,
     RevokeTokenView as BaseRevokeTokenView, TokenView as BaseTokenView,
@@ -24,9 +25,12 @@ class OAuthAllowForm(AllowForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
+        scope = kwargs.pop('scope')
         super().__init__(*args, **kwargs)
         self.fields['organizers'].queryset = Organizer.objects.filter(
             pk__in=user.teams.values_list('organizer', flat=True))
+        if scope == 'profile':
+            del self.fields['organizers']
 
 
 class AuthorizationView(BaseAuthorizationView):
@@ -36,6 +40,7 @@ class AuthorizationView(BaseAuthorizationView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
+        kwargs['scope'] = self.request.GET.get('scope')
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -43,8 +48,14 @@ class AuthorizationView(BaseAuthorizationView):
         ctx['settings'] = settings
         return ctx
 
-    def create_authorization_response(self, request, scopes, credentials, allow, organizers):
-        credentials["organizers"] = organizers
+    def validate_authorization_request(self, request):
+        require_approval = request.GET.get("approval_prompt", oauth2_settings.REQUEST_APPROVAL_PROMPT)
+        if require_approval != 'force' and request.GET.get('scope') != 'profile':
+            raise FatalClientError('Combnination of require_approval and scope values not allowed.')
+        return super().validate_authorization_request(request)
+
+    def create_authorization_response(self, request, scopes, credentials, allow, organizers=None):
+        credentials["organizers"] = organizers or []
         return super().create_authorization_response(request, scopes, credentials, allow)
 
     def form_valid(self, form):

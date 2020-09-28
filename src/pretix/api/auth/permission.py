@@ -84,3 +84,15 @@ class EventCRUDPermission(EventPermission):
             return False
 
         return True
+
+
+class ProfilePermission(BasePermission):
+
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+
+        if isinstance(request.auth, OAuthAccessToken):
+            if not (request.auth.allow_scopes(['read']) or request.auth.allow_scopes(['profile'])) and request.method in SAFE_METHODS:
+                return False
+        return True
