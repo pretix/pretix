@@ -1845,7 +1845,7 @@ PERSON_NAME_TITLE_GROUPS = OrderedDict([
         'Mx',
         'Dr',
         'Professor',
-        'Sir'
+        'Sir',
     ))),
     ('german_common', (_('Most common German titles'), (
         'Dr.',
@@ -1853,9 +1853,16 @@ PERSON_NAME_TITLE_GROUPS = OrderedDict([
         'Prof. Dr.',
     )))
 ])
+
+PERSON_NAME_SALUTATIONS = [
+    pgettext_lazy("person_name_salutation", "Ms"),
+    pgettext_lazy("person_name_salutation", "Mr"),
+]
+
 PERSON_NAME_SCHEMES = OrderedDict([
     ('given_family', {
         'fields': (
+            # field_name, label, weight for widget width
             ('given_name', _('Given name'), 1),
             ('family_name', _('Family name'), 1),
         ),
@@ -2010,6 +2017,24 @@ PERSON_NAME_SCHEMES = OrderedDict([
             '_scheme': 'full_transcription',
         },
     }),
+    ('salutation_title_given_family', {
+        'fields': (
+            ('salutation', pgettext_lazy('person_name', 'Salutation'), 1),
+            ('title', pgettext_lazy('person_name', 'Title'), 1),
+            ('given_name', _('Given name'), 2),
+            ('family_name', _('Family name'), 2),
+        ),
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in (d.get(key, '') for key in ["title", "given_name", "family_name"]) if p
+        ),
+        'sample': {
+            'salutation': pgettext_lazy('person_name_sample', 'Mr'),
+            'title': pgettext_lazy('person_name_sample', 'Dr'),
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'title_salutation_given_family',
+        },
+    }),
 ])
 COUNTRIES_WITH_STATE_IN_ADDRESS = {
     # Source: http://www.bitboost.com/ref/international-address-formats.html
@@ -2024,7 +2049,6 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     'MX': (['State', 'Federal District'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
 }
-
 
 settings_hierarkey = Hierarkey(attribute_name='settings')
 
@@ -2095,7 +2119,7 @@ class SettingsSandbox:
     def __delattr__(self, key: str) -> None:
         del self._event.settings[self._convert_key(key)]
 
-    def get(self, key: str, default: Any=None, as_type: type=str):
+    def get(self, key: str, default: Any = None, as_type: type = str):
         return self._event.settings.get(self._convert_key(key), default=default, as_type=as_type)
 
     def set(self, key: str, value: Any):
