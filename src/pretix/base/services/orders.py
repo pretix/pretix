@@ -1167,6 +1167,7 @@ class OrderChangeManager:
         'seat_required': _('The selected product requires you to select a seat.'),
         'seat_forbidden': _('The selected product does not allow to select a seat.'),
         'gift_card_change': _('You cannot change the price of a position that has been used to issue a gift card.'),
+        'gift_card_cancel': _('You cannot cancel a position that has been used to issue a gift card.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
@@ -1342,6 +1343,9 @@ class OrderChangeManager:
         self._operations.append(self.FeeValueOperation(fee, value))
 
     def cancel(self, position: OrderPosition):
+        if position.issued_gift_cards.exists():
+            raise OrderError(self.error_messages['gift_card_cancel'])
+
         self._totaldiff -= position.price
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
