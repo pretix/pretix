@@ -2205,6 +2205,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
 
 @receiver(order_paid, dispatch_uid="pretixbase_order_paid_giftcards")
+@receiver(order_changed, dispatch_uid="pretixbase_order_changed_giftcards")
 @transaction.atomic()
 def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
     any_giftcards = False
