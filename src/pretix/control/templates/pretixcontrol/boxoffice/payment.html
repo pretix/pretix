@@ -10,6 +10,23 @@
         <dd>Stripe Terminal</dd>
         <dt>{% trans "ID" %}</dt>
         <dd>{{ payment_info.payment_data.payment_intent }}</dd>
+    {% elif payment_info.payment_type == "terminal_zvt" %}
+        <dt>{% trans "Payment provider" %}</dt>
+        <dd>{% trans "ZVT Terminal" %}</dd>
+        <dt>{% trans "Trace number" context "terminal_zvt" %}</dt>
+        <dd>{{ payment_info.payment_data.traceNumber }}</dd>
+        <dt>{% trans "Payment type" context "terminal_zvt" %}</dt>
+        <dd>{{ payment_info.payment_data.paymentType }}</dd>
+        <dt>{% trans "Additional text" context "terminal_zvt" %}</dt>
+        <dd>{{ payment_info.payment_data.additionalText }}</dd>
+        <dt>{% trans "Turnover number" context "terminal_zvt" %}</dt>
+        <dd>{{ payment_info.payment_data.turnoverNumber }}</dd>
+        <dt>{% trans "Receipt number" context "terminal_zvt" %}</dt>
+        <dd>{{ payment_info.payment_data.receiptNumber }}</dd>
+        <dt>{% trans "Card type" context "terminal_zvt" %}</dt>
+        <dd>{{ payment_info.payment_data.cardName }}</dd>
+        <dt>{% trans "Card expiration" context "terminal_zvt" %}</dt>
+        <dd>{{ payment_info.payment_data.expiry }}</dd>
     {% elif payment_info.payment_type == "sumup" %}
         <dt>{% trans "Payment provider" %}</dt>
         <dd>SumUp</dd>
