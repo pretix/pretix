@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 10:09+0000\n"
-"PO-Revision-Date: 2020-09-15 08:37+0000\n"
+"PO-Revision-Date: 2020-10-01 08:43+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -8079,6 +8079,7 @@ msgstr ""
 "værdien er 0 vil e-mailen aldrig blive sendt."
 
 #: pretix/control/forms/event.py:934
+#, fuzzy
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
