@@ -2208,6 +2208,8 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 @receiver(order_changed, dispatch_uid="pretixbase_order_changed_giftcards")
 @transaction.atomic()
 def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
+    if order.status != Order.STATUS_PAID:
+        return
     any_giftcards = False
     for p in order.positions.all():
         if p.item.issue_giftcard:
