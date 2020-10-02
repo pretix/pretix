@@ -528,7 +528,7 @@ class Secret(ImportColumn):
         super().__init__(*args)
 
     def clean(self, value, previous_values):
-        if value and (value in self._cached or OrderPosition.all.filter(order__event=self.event, secret=value).exists()):
+        if value and (value in self._cached or OrderPosition.all.filter(order__event__organizer=self.event.organizer, secret=value).exists()):
             raise ValidationError(
                 _('You cannot assign a position secret that already exists.')
             )
