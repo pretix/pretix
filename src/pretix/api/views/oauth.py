@@ -3,7 +3,7 @@ import logging
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext as _
-from oauth2_provider.exceptions import OAuthToolkitError, FatalClientError
+from oauth2_provider.exceptions import FatalClientError, OAuthToolkitError
 from oauth2_provider.forms import AllowForm
 from oauth2_provider.settings import oauth2_settings
 from oauth2_provider.views import (
