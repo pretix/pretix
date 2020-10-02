@@ -14,6 +14,7 @@ from django.utils.formats import date_format, localize
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
 from reportlab.lib import colors
+from reportlab.platypus import PageBreak
 
 from pretix.base.decimal import round_decimal
 from pretix.base.exporter import BaseExporter, ListExporter
@@ -162,13 +163,21 @@ class OverviewReport(Report):
         return pagesizes.landscape(pagesizes.A4)
 
     def get_story(self, doc, form_data):
-        from reportlab.lib.units import mm
-        from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
         if form_data.get('date_from'):
             form_data['date_from'] = parse(form_data['date_from'])
         if form_data.get('date_until'):
             form_data['date_until'] = parse(form_data['date_until'])
+
+        story = self._table_story(doc, form_data)
+        if self.event.tax_rules.exists():
+            story += [PageBreak()]
+            story += self._table_story(doc, form_data, net=True)
+        return story
+
+    def _table_story(self, doc, form_data, net=False):
+        from reportlab.lib.units import mm
+        from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
         headlinestyle = self.get_style()
         headlinestyle.fontSize = 15
@@ -195,9 +204,8 @@ class OverviewReport(Report):
             ('LINEBEFORE', (7, 1), (7, -1), 1, colors.lightgrey),
             ('LINEBEFORE', (9, 1), (9, -1), 1, colors.lightgrey),
         ]
-
         story = [
-            Paragraph(_('Orders by product'), headlinestyle),
+            Paragraph(_('Orders by product') + ' ' + (_('(excl. taxes)') if net else _('(incl. taxes)')), headlinestyle),
             Spacer(1, 5 * mm)
         ]
         if form_data.get('date_axis'):
@@ -260,14 +268,14 @@ class OverviewReport(Report):
                 ])
                 for l, s in states:
                     tdata[-1].append(str(tup[0].num[l][0]))
-                    tdata[-1].append(floatformat(tup[0].num[l][1], places))
+                    tdata[-1].append(floatformat(tup[0].num[l][2 if net else 1], places))
             for item in tup[1]:
                 tdata.append([
                     str(item)
                 ])
                 for l, s in states:
                     tdata[-1].append(str(item.num[l][0]))
-                    tdata[-1].append(floatformat(item.num[l][1], places))
+                    tdata[-1].append(floatformat(item.num[l][2 if net else 1], places))
                 if item.has_variations:
                     for var in item.all_variations:
                         tdata.append([
@@ -275,14 +283,14 @@ class OverviewReport(Report):
                         ])
                         for l, s in states:
                             tdata[-1].append(str(var.num[l][0]))
-                            tdata[-1].append(floatformat(var.num[l][1], places))
+                            tdata[-1].append(floatformat(var.num[l][2 if net else 1], places))
 
         tdata.append([
             _("Total"),
         ])
         for l, s in states:
             tdata[-1].append(str(total['num'][l][0]))
-            tdata[-1].append(floatformat(total['num'][l][1], places))
+            tdata[-1].append(floatformat(total['num'][l][2 if net else 1], places))
 
         table = Table(tdata, colWidths=colwidths, repeatRows=3)
         table.setStyle(TableStyle(tstyledata))
