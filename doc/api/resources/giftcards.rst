@@ -209,14 +209,15 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/giftcards/1/transact/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/giftcards/1/transact/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
-      Content-Length: 94
+      Content-Length: 79
 
       {
-        "value": "2.00"
+        "value": "2.00",
+        "text": "Optional value explaining the transaction"
       }
 
    **Example response**:
