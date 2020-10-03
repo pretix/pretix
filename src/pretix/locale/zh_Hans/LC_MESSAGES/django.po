@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 10:09+0000\n"
-"PO-Revision-Date: 2020-07-24 21:00+0000\n"
-"Last-Translator: Yaling <yaling.hsiao@passiv.de>\n"
+"PO-Revision-Date: 2020-10-03 22:00+0000\n"
+"Last-Translator: ethan.wang <wangkepengwkp@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -329,7 +329,7 @@ msgstr "缺席"
 
 #: pretix/base/email.py:148
 msgid "Simple with logo"
-msgstr ""
+msgstr "简约Logo"
 
 #: pretix/base/email.py:420 pretix/base/email.py:483 pretix/base/email.py:499
 #: pretix/base/email.py:504 pretix/base/pdf.py:109 pretix/base/pdf.py:212
@@ -1767,7 +1767,7 @@ msgstr "使用此选项，即使订单尚未付款，人们也可以办理签到
 
 #: pretix/base/models/checkin.py:25
 msgid "Allow re-entering after an exit scan"
-msgstr ""
+msgstr "允许扫描退出后重新入场"
 
 #: pretix/base/models/checkin.py:29
 #, fuzzy
@@ -1778,7 +1778,7 @@ msgstr "询问每张票的电子邮件地址"
 #: pretix/base/models/checkin.py:30
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
-msgstr ""
+msgstr "当门票重新扫描时，关闭警告。"
 
 #: pretix/base/models/checkin.py:37
 msgid "Sales channels to automatically check in"
@@ -1803,7 +1803,7 @@ msgstr "国家"
 
 #: pretix/base/models/checkin.py:142
 msgid "Exit"
-msgstr ""
+msgstr "退出"
 
 #: pretix/base/models/devices.py:55
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -2061,7 +2061,7 @@ msgstr "到期日"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "特殊条款和条件"
 
 #: pretix/base/models/invoices.py:129
 #, python-format
@@ -2700,7 +2700,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1360
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "一旦用户检票后，允许卖出更多门票"
 
 #: pretix/base/models/items.py:1361
 msgid ""
@@ -2716,7 +2716,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
-msgstr "定额"
+msgstr "配额"
 
 #: pretix/base/models/items.py:1373 pretix/control/navigation.py:145
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -2864,7 +2864,7 @@ msgstr "座位“{seat}”不再可用。"
 #: pretix/base/models/orders.py:768
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "优惠券 \"{voucher}\" 缺少足够预算。"
 
 #: pretix/base/models/orders.py:769
 #, fuzzy, python-brace-format
@@ -3273,7 +3273,7 @@ msgid ""
 "This is the maximum monetary amount that will be discounted using this "
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
-msgstr ""
+msgstr "优惠券最大优惠金额数，超出额度后，剩余部分变为无效。"
 
 #: pretix/base/models/vouchers.py:127 pretix/control/views/vouchers.py:69
 msgid "Valid until"
@@ -3325,7 +3325,7 @@ msgstr "如果启用，优惠券对任何受配额影响的产品有效。"
 
 #: pretix/base/models/vouchers.py:186
 msgid "Specific seat"
-msgstr ""
+msgstr "特殊占位"
 
 #: pretix/base/models/vouchers.py:190
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:115
@@ -3436,7 +3436,7 @@ msgstr "所选日期不属于此活动。"
 msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
-msgstr ""
+msgstr "占位{id}无效（阻止，已售或不同的优惠券）。"
 
 #: pretix/base/models/vouchers.py:381
 #, fuzzy
@@ -3645,12 +3645,12 @@ msgstr "您已被要求为{order.code}退款。"
 
 #: pretix/base/orderimport.py:63
 msgid "Keep empty"
-msgstr ""
+msgstr "保持为空"
 
 #: pretix/base/orderimport.py:90
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr ""
+msgstr "无效列设置{header}。"
 
 #: pretix/base/orderimport.py:136
 #, fuzzy
@@ -3907,7 +3907,7 @@ msgstr ""
 
 #: pretix/base/payment.py:312
 msgid "Restrict to specific sales channels"
-msgstr ""
+msgstr "只限特殊销售渠道"
 
 #: pretix/base/payment.py:320
 #, fuzzy
@@ -3926,7 +3926,7 @@ msgstr "启用付款方式"
 msgid ""
 "The payment method will not be shown by default but only to people who enter "
 "the shop through a special link."
-msgstr ""
+msgstr "只有通过商店特定链接才显示该支付方式。"
 
 #: pretix/base/payment.py:333
 #, fuzzy
@@ -3936,7 +3936,7 @@ msgstr "启用付款方式"
 
 #: pretix/base/payment.py:342
 msgid "Share this link with customers who should use this payment method."
-msgstr ""
+msgstr "对能使用该支付方式的顾客显示进入链接。"
 
 #: pretix/base/payment.py:375
 msgctxt "invoice"
@@ -4781,7 +4781,7 @@ msgstr "您收到此电子邮件是因为您订购了{event}。"
 msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
-msgstr ""
+msgstr "错误，导入值{value}，列{column}，行{line}：{message}"
 
 #: pretix/base/services/orderimport.py:117
 #, fuzzy, python-brace-format
@@ -5340,13 +5340,13 @@ msgstr "此文本将付款流程中显示在发票地址上方。"
 
 #: pretix/base/settings.py:301
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "在部分支付的发票上显示已支付金额"
 
 #: pretix/base/settings.py:302
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
-msgstr ""
+msgstr "在部分支付的发票上显示已支付和待支付金额。"
 
 #: pretix/base/settings.py:312
 msgid "Show free products on invoices"
@@ -5368,7 +5368,7 @@ msgstr "显示超额支付的订单"
 msgid ""
 "The expiration date will not be shown if the invoice is generated after the "
 "order is paid."
-msgstr ""
+msgstr "已支付订单的发票不显示过期日期。"
 
 #: pretix/base/settings.py:333
 #, fuzzy
@@ -5380,7 +5380,7 @@ msgstr "发票号码前缀"
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
-msgstr ""
+msgstr "发票号码除前缀外，如果长度不足，会用数字0填充，比如INV-001或INV-00001。"
 
 #: pretix/base/settings.py:343
 msgid "Generate invoices with consecutive numbers"
@@ -5474,7 +5474,7 @@ msgstr "每天"
 
 #: pretix/base/settings.py:434 pretix/base/settings.py:443
 msgid "in minutes"
-msgstr ""
+msgstr "分钟"
 
 #: pretix/base/settings.py:438
 #, fuzzy
@@ -5486,7 +5486,7 @@ msgstr "延长付款期限"
 msgid ""
 "If using days, the order will expire at the end of the last day. Using "
 "minutes is more exact, but should only be used for real-time payment methods."
-msgstr ""
+msgstr "如果以天计量,订单过期时间即当天0点计算。使用分钟计量会更精确吗，但建议在使用实时支付方式的场景下采用。"
 
 #: pretix/base/settings.py:455
 msgid "Payment term in days"
@@ -5632,14 +5632,14 @@ msgstr "永远不会为免费订单自动生成发票。"
 
 #: pretix/base/settings.py:608
 msgid "Automatically cancel and reissue invoice on address changes"
-msgstr ""
+msgstr "地址变化后自动取消和重新生成发票"
 
 #: pretix/base/settings.py:609
 msgid ""
 "If customers change their invoice address on an existing order, the invoice "
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
-msgstr ""
+msgstr "如果顾客改变订单中的地址,发票会被取消和重新生成。如果订单在后台变更，将不受影响。"
 
 #: pretix/base/settings.py:624
 msgid "Address line"
@@ -5655,7 +5655,7 @@ msgstr "国内税号"
 
 #: pretix/base/settings.py:681
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "比如德国的税号，澳大利亚的ABN，…"
 
 #: pretix/base/settings.py:690
 msgid "EU VAT ID"
@@ -5745,7 +5745,7 @@ msgstr "要求搜索引擎不要为售票处编制索引"
 msgid ""
 "If disabled, no date or time will be shown on the ticket shop's front page. "
 "This settings does however not affect the display in other locations."
-msgstr ""
+msgstr "如果禁用选项，门票商店前台页面将不会显示日期或时间，但其他页面上的显示不受影响。"
 
 #: pretix/base/settings.py:824
 msgid "Show event end date"
@@ -5826,14 +5826,12 @@ msgstr ""
 "新分配给列表中的下一个人。"
 
 #: pretix/base/settings.py:920
-#, fuzzy
-#| msgid "Reminder to download tickets"
 msgid "Allow users to download tickets"
-msgstr "提醒下载门票"
+msgstr "允许用户下载门票"
 
 #: pretix/base/settings.py:921
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "禁用该选项后，将无法下载门票。"
 
 #: pretix/base/settings.py:930
 msgid "Download date"
@@ -5849,10 +5847,8 @@ msgstr ""
 "门票，则如果至少有一个活动日期允许，则可以下载所有门票。"
 
 #: pretix/base/settings.py:942
-#, fuzzy
-#| msgid "Generate tickets for non-admission products"
 msgid "Generate tickets for add-on products"
-msgstr "生成非入场产品的门票"
+msgstr "为关联商品生成门票"
 
 #: pretix/base/settings.py:943
 msgid ""
@@ -20422,7 +20418,7 @@ msgstr "您礼物卡金额 %(value)s."
 #: pretix/presale/templates/pretixpresale/event/order.html:143
 #, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr "礼品卡将在%(expiry)s. 失效"
+msgstr "礼品卡将在%(expiry)s. 失效。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:154
 #, python-format
@@ -20449,7 +20445,7 @@ msgstr "尚未付款总额"
 #: pretix/presale/templates/pretixpresale/event/order.html:239
 msgid ""
 "You need to select a payment method above before you can request an invoice."
-msgstr "请在生成收据前确认付款方式"
+msgstr "请在生成收据前确认付款方式。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:244
 #: pretix/presale/templates/pretixpresale/event/order.html:251
@@ -20525,7 +20521,7 @@ msgstr "退款将以礼品卡的形式发放，您可以將其用於進一步的
 #: pretix/presale/templates/pretixpresale/event/order.html:392
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
-msgstr "退款可以按原来付款方式退款或发放礼品卡"
+msgstr "退款可以按原来付款方式退款或发放礼品卡。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:373
 #: pretix/presale/templates/pretixpresale/event/order.html:394
@@ -20598,7 +20594,7 @@ msgstr "您的礼品卡将在 %(expiry_date)s 失效。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:95
 msgid "I want the refund as a gift card for later purchases"
-msgstr "我希望将退款转为礼品卡供以后购买。"
+msgstr "我希望将退款转为礼品卡供以后购买"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 #, fuzzy
