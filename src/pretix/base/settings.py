@@ -668,8 +668,8 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
-        'serializer_kwargs': country_choice_kwargs,
-        'form_kwargs': country_choice_kwargs,
+        'serializer_kwargs': lambda: dict(**country_choice_kwargs()),
+        'form_kwargs': lambda: dict(label=_('Country'), **country_choice_kwargs()),
     },
     'invoice_address_from_tax_id': {
         'default': '',
