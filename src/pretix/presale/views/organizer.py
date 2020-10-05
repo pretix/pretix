@@ -329,7 +329,7 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
                         if (date_to == date_from or (
                             date_to == date_from + timedelta(days=1) and datetime_to.time() < datetime_from.time()
                         )) and event.settings.show_times
-                        else None,
+                        else None
                     ),
                     'url': eventreverse(event, 'presale:event.index'),
                     'timezone': event.settings.timezone,
@@ -398,7 +398,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                         if (date_to == date_from or (
                             date_to == date_from + timedelta(days=1) and datetime_to.time() < datetime_from.time()
                         )) and settings.show_times
-                        else None,
+                        else None
                     ),
                     'event': se,
                     'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs)
