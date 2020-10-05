@@ -43,9 +43,9 @@
                 </a>
             </div>
             <div class="col-sm-4 col-xs-12 text-center">
-                <select name="week" class="form-control">
+                <select name="week" class="form-control select-calendar-week-short">
                     {% for w in weeks %}
-                        <option value="{{ w }}" {% if w == date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w }}</option>
+                        <option value="{{ w.0.isocalendar.1 }}" {% if w.0.isocalendar.1 == date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }} ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})</option>
                     {% endfor %}
                 </select>
                 <select name="year" class="form-control">

@@ -124,3 +124,8 @@
 #monthselform .row > div {
   margin-bottom: 15px;
 }
+@media(min-width: $screen-md-min) {
+   .select-calendar-week-short {
+     max-width: 50%;
+   }
+}

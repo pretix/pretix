@@ -465,8 +465,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 len(i) for i in ebd.values() if isinstance(i, list)
             ) < 2
             context['days'] = days_for_template(ebd, week)
-            context['weeks'] = [date(self.year, i + 1, 1) for i in range(12)]
-            context['weeks'] = [i + 1 for i in range(53)]
+            context['weeks'] = [
+                (date.fromisocalendar(self.year, i + 1, 1), date.fromisocalendar(self.year, i + 1, 7))
+                for i in range(53)
+            ]
             context['years'] = range(now().year - 2, now().year + 3)
             context['week_format'] = get_format('WEEK_FORMAT')
             if context['week_format'] == 'WEEK_FORMAT':
