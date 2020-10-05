@@ -106,8 +106,8 @@ class EventMixin:
     def get_date_range_display(self, tz=None, force_show_end=False) -> str:
         """
         Returns a formatted string containing the start date and the end date
-        of the event with respect to the current locale and to the ``show_times`` and
-        ``show_date_to`` settings.
+        of the event with respect to the current locale and to the ``show_date_to``
+        setting. Times are not shown.
         """
         tz = tz or self.timezone
         if (not self.settings.show_date_to and not force_show_end) or not self.date_to:
