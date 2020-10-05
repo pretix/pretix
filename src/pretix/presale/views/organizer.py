@@ -397,7 +397,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                         datetime_to.time().replace(tzinfo=None)
                         if (date_to == date_from or (
                             date_to == date_from + timedelta(days=1) and datetime_to.time() < datetime_from.time()
-                        )) and event.settings.show_times
+                        )) and settings.show_times
                         else None,
                     ),
                     'event': se,
