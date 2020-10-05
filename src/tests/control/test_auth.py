@@ -115,7 +115,7 @@ class LoginFormTest(TestCase):
         response = self.client.get('/control/login')
         self.assertEqual(response.status_code, 200)
         assert b'Form' in response.content
-        assert b'pretix User' in response.content
+        assert b'pretix.eu User' in response.content
         assert b'Request' not in response.content
 
     def test_form_backend(self):
