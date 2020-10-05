@@ -1,5 +1,5 @@
 import copy
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
@@ -739,11 +739,15 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 se = copy.copy(form.instance)
 
                 se.date_from = make_aware(datetime.combine(rdate, t['time_from']), tz)
-                se.date_to = (
-                    make_aware(datetime.combine(rdate, t['time_to']), tz)
-                    if t.get('time_to')
-                    else None
-                )
+
+                if t.get('time_to'):
+                    se.date_to = (
+                        make_aware(datetime.combine(rdate, t['time_to']), tz)
+                        if t.get('time_to') > t.get('time_from')
+                        else make_aware(datetime.combine(rdate + timedelta(days=1), t['time_to']), tz)
+                    )
+                else:
+                    se.date_to = None
                 se.date_admission = (
                     make_aware(datetime.combine(rdate, t['time_admission']), tz)
                     if t.get('time_admission')

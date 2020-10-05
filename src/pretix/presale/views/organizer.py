@@ -324,7 +324,13 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
                     'event': event,
                     'continued': not first,
                     'time': datetime_from.time().replace(tzinfo=None) if first and event.settings.show_times else None,
-                    'time_end': datetime_to.time().replace(tzinfo=None) if date_to == date_from and event.settings.show_times else None,
+                    'time_end': (
+                        datetime_to.time().replace(tzinfo=None)
+                        if (date_to == date_from or (
+                            date_to == date_from + timedelta(days=1) and date_to.time() < date_from.time()
+                        )) and event.settings.show_times
+                        else None,
+                    ),
                     'url': eventreverse(event, 'presale:event.index'),
                     'timezone': event.settings.timezone,
                 })
@@ -387,7 +393,13 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                     'continued': not first,
                     'timezone': settings.timezone,
                     'time': datetime_from.time().replace(tzinfo=None) if first and settings.show_times else None,
-                    'time_end': datetime_to.time().replace(tzinfo=None) if date_to == date_from and settings.show_times else None,
+                    'time_end': (
+                        datetime_to.time().replace(tzinfo=None)
+                        if (date_to == date_from or (
+                            date_to == date_from + timedelta(days=1) and date_to.time() < date_from.time()
+                        )) and event.settings.show_times
+                        else None,
+                    ),
                     'event': se,
                     'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs)
                 })

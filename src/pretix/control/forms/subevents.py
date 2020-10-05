@@ -2,7 +2,6 @@ from datetime import timedelta
 from urllib.parse import urlencode
 
 from django import forms
-from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.urls import reverse
 from django.utils.dates import MONTHS, WEEKDAYS
@@ -381,12 +380,6 @@ class TimeForm(forms.Form):
         widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
         required=False
     )
-
-    def clean(self):
-        d = super().clean()
-        if d.get('time_from') and d.get('time_to') and d['time_from'] > d['time_to']:
-            raise ValidationError({'time_to': _('The end of the event has to be later than its start.')})
-        return d
 
 
 TimeFormSet = formset_factory(
