@@ -522,7 +522,10 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ebd = self._events_by_day(before, after)
 
         ctx['days'] = days_for_template(ebd, week)
-        ctx['weeks'] = [(date.fromisocalendar(self.year, i + 1, 1), date.fromisocalendar(self.year, i + 1, 7)) for i in range(53)]
+        ctx['weeks'] = [
+            (date.fromisocalendar(self.year, i + 1, 1), date.fromisocalendar(self.year, i + 1, 7))
+            for i in range(53 if date(self.year, 12, 31)[0] == self.year else 52)
+        ]
         ctx['years'] = range(now().year - 2, now().year + 3)
         ctx['week_format'] = get_format('WEEK_FORMAT')
         if ctx['week_format'] == 'WEEK_FORMAT':
