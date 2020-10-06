@@ -17,8 +17,5 @@ class PretixdroidApp(AppConfig):
         category = 'INTEGRATION'
         description = _("This plugin allows you to use the pretixdroid and pretixdesk apps for your event.")
 
-    def ready(self):
-        from . import signals  # NOQA
-
 
 default_app_config = 'pretix.plugins.pretixdroid.PretixdroidApp'
