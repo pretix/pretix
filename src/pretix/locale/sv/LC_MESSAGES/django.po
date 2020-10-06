@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 10:09+0000\n"
-"PO-Revision-Date: 2020-09-19 18:00+0000\n"
+"PO-Revision-Date: 2020-10-06 07:08+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -119,7 +119,7 @@ msgstr "Delevenemanget tillhör inte detta evenemang."
 
 #: pretix/api/serializers/checkin.py:51
 msgid "Unknown sales channel."
-msgstr ""
+msgstr "Okänd försäljningskanal."
 
 #: pretix/api/serializers/event.py:137
 msgid ""
@@ -141,17 +141,20 @@ msgstr "Okänt plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:68 pretix/control/forms/item.py:781
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "Det medföljande artikeln får inte vara samma som den sammanhållande."
 
 #: pretix/api/serializers/item.py:71 pretix/control/forms/item.py:783
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Det medföljande artikeln får inte ha medföljande artiklar."
 
 #: pretix/api/serializers/item.py:131
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Updatering av tilllägg, medföljande artiklar, eller varianter via PATCH/PUT "
+"är inte supportat. Vänligen använd den speciella endpunkten för kapslade "
+"artiklar."
 
 #: pretix/api/serializers/item.py:140 pretix/control/forms/item.py:480
 msgid ""
@@ -188,10 +191,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr ""
 
 #: pretix/api/serializers/order.py:927 pretix/api/serializers/order.py:934
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "Produkten \"{}\" är inte kopplad till ett antal."
+msgstr "Produkten \"{}\" är inte tillgänglig vid detta datum."
 
 #: pretix/api/serializers/organizer.py:53 pretix/control/forms/organizer.py:404
 msgid ""
@@ -327,21 +328,21 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 #: pretix/base/email.py:148
 msgid "Simple with logo"
-msgstr ""
+msgstr "Enkel med logo"
 
 #: pretix/base/email.py:420 pretix/base/email.py:483 pretix/base/email.py:499
 #: pretix/base/email.py:504 pretix/base/pdf.py:109 pretix/base/pdf.py:212
 #: pretix/base/services/invoices.py:351 pretix/control/views/event.py:693
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/email.py:424
 msgid "Sample Corporation"
-msgstr ""
+msgstr "Exempel Företaget"
 
 #: pretix/base/email.py:462
 msgid "Sample Admission Ticket"
@@ -365,23 +366,23 @@ msgstr ""
 
 #: pretix/base/exporter.py:108
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:109 pretix/base/exporter.py:225
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (med komma)"
 
 #: pretix/base/exporter.py:110 pretix/base/exporter.py:226
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (Excel-style)"
 
 #: pretix/base/exporter.py:111 pretix/base/exporter.py:227
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (med semikolon)"
 
 #: pretix/base/exporter.py:221
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "Kombinerad Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -392,7 +393,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "Frågor"
 
 #: pretix/base/exporters/dekodi.py:82
 #, python-brace-format
@@ -411,7 +412,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:47
 #: pretix/plugins/checkinlists/exporters.py:419
 msgid "Start date"
-msgstr ""
+msgstr "Start datum"
 
 #: pretix/base/exporters/dekodi.py:205 pretix/base/exporters/invoices.py:38
 msgid ""
@@ -428,7 +429,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:54
 #: pretix/plugins/checkinlists/exporters.py:420
 msgid "End date"
-msgstr ""
+msgstr "Slut datum"
 
 #: pretix/base/exporters/dekodi.py:213 pretix/base/exporters/invoices.py:46
 msgid ""
@@ -445,12 +446,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:42
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:42
 msgid "Payment provider"
-msgstr ""
+msgstr "Betalningsleverantör"
 
 #: pretix/base/exporters/invoices.py:53 pretix/base/exporters/invoices.py:55
 #: pretix/control/forms/filter.py:99 pretix/control/forms/filter.py:1195
 msgid "All payment providers"
-msgstr ""
+msgstr "Alla betalningsleverantörer"
 
 #: pretix/base/exporters/invoices.py:60
 msgid ""
@@ -535,7 +536,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:168 pretix/base/models/auth.py:102
 #: pretix/control/forms/event.py:1162 pretix/control/views/waitinglist.py:200
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 #: pretix/base/exporters/invoices.py:169 pretix/base/exporters/invoices.py:170
 #: pretix/base/exporters/invoices.py:171 pretix/base/exporters/invoices.py:172
@@ -601,7 +602,7 @@ msgstr "Adress"
 #: pretix/base/orderimport.py:282 pretix/base/orderimport.py:428
 #: pretix/base/settings.py:651 pretix/control/views/item.py:349
 msgid "ZIP code"
-msgstr ""
+msgstr "Postnummer"
 
 #: pretix/base/exporters/invoices.py:172 pretix/base/exporters/invoices.py:180
 #: pretix/base/exporters/invoices.py:299 pretix/base/exporters/invoices.py:307
@@ -613,7 +614,7 @@ msgstr ""
 #: pretix/base/orderimport.py:293 pretix/base/orderimport.py:439
 #: pretix/base/settings.py:663 pretix/control/views/item.py:359
 msgid "City"
-msgstr ""
+msgstr "Stad"
 
 #: pretix/base/exporters/invoices.py:173 pretix/base/exporters/invoices.py:181
 #: pretix/base/exporters/invoices.py:300 pretix/base/exporters/invoices.py:308
@@ -920,19 +921,16 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:129
 #: pretix/base/exporters/orderlist.py:263
 #: pretix/base/exporters/orderlist.py:362
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgid "Order time"
-msgstr "Beställningen är bekräftad"
+msgstr "Tid för beställning"
 
 #: pretix/base/exporters/orderlist.py:137
 msgid "Date of last payment"
-msgstr ""
+msgstr "Sista betalningsdag"
 
 #: pretix/base/exporters/orderlist.py:137 pretix/base/services/stats.py:193
 msgid "Fees"
-msgstr ""
+msgstr "Avgifter"
 
 #: pretix/base/exporters/orderlist.py:137
 #: pretix/base/exporters/orderlist.py:419 pretix/base/orderimport.py:545
@@ -1106,36 +1104,28 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:391 pretix/base/orderimport.py:591
 #: pretix/plugins/checkinlists/exporters.py:430
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat ID"
-msgstr "Klient-ID"
+msgstr "Stol ID"
 
 #: pretix/base/exporters/orderlist.py:392
 #: pretix/plugins/checkinlists/exporters.py:431
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat name"
-msgstr "Klient-ID"
+msgstr "Stol namn"
 
 #: pretix/base/exporters/orderlist.py:393
 #: pretix/plugins/checkinlists/exporters.py:432
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat zone"
-msgstr "Klient-ID"
+msgstr "Stol zon"
 
 #: pretix/base/exporters/orderlist.py:394
 #: pretix/plugins/checkinlists/exporters.py:433
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat row"
-msgstr "Klient-ID"
+msgstr "Stol rad"
 
 #: pretix/base/exporters/orderlist.py:395
 #: pretix/plugins/checkinlists/exporters.py:434
 msgid "Seat number"
-msgstr ""
+msgstr "Stol nummer"
 
 #: pretix/base/exporters/orderlist.py:548
 msgid "Order payments and refunds"
@@ -5797,6 +5787,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"du får detta meddelande då du bad oss skicka länken till dig\n"
+"om din beställning för {event}.\n"
+"\n"
+"Du kan ändra din beställningsinformation och se status för din beställning "
+"på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1289
 #, python-brace-format
@@ -5811,6 +5812,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"någon begärde ut en lista över dina beställningar för {event}.\n"
+"Listan är som följer:\n"
+"\n"
+"{orders}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1301
 #, python-brace-format
@@ -5825,6 +5835,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej {attendee_name},\n"
+"\n"
+"du har registrerats för {event}.\n"
+"\n"
+"Du kan se detaljer och status för din biljett här:\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1313
 #, python-brace-format
@@ -5840,6 +5859,18 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"din beställning av {event} lyckades. Eftersom du bara beställde "
+"gratisprodukter,\n"
+"så krävs ingen betalning.\n"
+"\n"
+"Du kan ändra din beställningsinformation och se status för din beställning "
+"på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1330
 #, python-brace-format
@@ -5856,6 +5887,18 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"vi fick mottagit din beställning för {event}. Då du beställde\n"
+"en artikel som kräver godkännande av evenemangsarrangören, ber vi dig\n"
+"ha tålamod och vänta på nästa e-postmeddelande.\n"
+"\n"
+"Du kan ändra din beställningsinformation och se status för din beställning "
+"på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1344
 #, python-brace-format
@@ -5874,6 +5917,19 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"vi fick mottagit din beställning för {event} med ett totalt värde\n"
+"av {total_with_currency}. Slutför din betalning före {expire_date}.\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Du kan ändra din beställningsinformation och se status för din beställning "
+"på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1363
 #, python-brace-format
@@ -5888,6 +5944,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej {attendee_name},\n"
+"\n"
+"en biljett till {event} har beställts åt dig.\n"
+"\n"
+"Du kan se detaljer och status för din biljett här:\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1375
 #, python-brace-format
@@ -5902,6 +5967,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"din beställning på {event} har uppdaterats.\n"
+"\n"
+"Du kan se status för din beställning på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1387
 #, python-brace-format
@@ -5918,6 +5992,18 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"vi fick nu mottagit din betalning för {event}. Tack så mycket!\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Du kan ändra din beställningsinformation och se status för din beställning "
+"på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1405
 #, python-brace-format
@@ -5932,6 +6018,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej {attendee_name},\n"
+"\n"
+"en biljett för {event} som har beställts åt dig har nu betalas.\n"
+"\n"
+"Du kan se detaljer och status för din biljett här:\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1421
 #, python-brace-format
@@ -5948,6 +6043,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"vi fick ännu inte hela betalningen för din beställning för {event}.\n"
+"Tänk på att vi bara garanterar din beställning om vi ser att din \n"
+"betalning är gjord före {expire_date}.\n"
+"\n"
+"Du kan se betalningsinformation och status för din beställning på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1435
 #, python-brace-format
@@ -5973,6 +6079,29 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"du har anmält dig till väntelistan för {event},\n"
+"och produkten {product}.\n"
+"\n"
+"Vi har nu en biljett tillgänglig för dig! \n"
+"Du kan lösa in den i vår biljettbutik inom de närmaste {hours} timmarna, \n"
+"genom att ange följande kupongkod:\n"
+"\n"
+"{code}\n"
+"\n"
+"Alternativt kan du bara klicka på följande länk:\n"
+"\n"
+"{url}\n"
+"\n"
+"Observera att den här länken endast är giltig inom de närmaste {hours} "
+"timmarna!\n"
+"Vi skickar biljetten till nästa person på listan om du inte löser in "
+"kupongen \n"
+"inom den tidsramen.\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1458
 #, python-brace-format
@@ -18844,7 +18973,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:31
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Vi har mottagit din betalning. Se nedan för detaljer."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:33
 msgid ""

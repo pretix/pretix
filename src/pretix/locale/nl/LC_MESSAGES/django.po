@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 10:09+0000\n"
-"PO-Revision-Date: 2020-09-28 05:00+0000\n"
+"PO-Revision-Date: 2020-10-04 22:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5173,14 +5173,10 @@ msgstr ""
 "niet wijzigen."
 
 #: pretix/base/services/orders.py:1170
-#, fuzzy
-#| msgid ""
-#| "You cannot change the price of a position that has been used to issue a "
-#| "gift card."
 msgid "You cannot cancel a position that has been used to issue a gift card."
 msgstr ""
-"U kunt de prijs van een plaats die is gebruikt om een cadeaubon uit te geven "
-"niet wijzigen."
+"U kunt een plaats die gebruikt is om een cadeaubon uit te geven niet "
+"annuleren."
 
 #: pretix/base/services/orders.py:1661
 #, python-brace-format
@@ -6910,12 +6906,12 @@ msgstr "Meest voorkomende Duitse titels"
 #: pretix/base/settings.py:1858
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr ""
+msgstr "Mevrouw"
 
 #: pretix/base/settings.py:1859
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr ""
+msgstr "De heer"
 
 #: pretix/base/settings.py:1866 pretix/base/settings.py:1879
 #: pretix/base/settings.py:1895 pretix/base/settings.py:1945
@@ -6983,16 +6979,14 @@ msgid "Latin transcription"
 msgstr "Transcriptie"
 
 #: pretix/base/settings.py:2022
-#, fuzzy
-#| msgid "Cancellation"
 msgctxt "person_name"
 msgid "Salutation"
-msgstr "Annulering"
+msgstr "Aanhef"
 
 #: pretix/base/settings.py:2031
 msgctxt "person_name_sample"
 msgid "Mr"
-msgstr ""
+msgstr "De heer"
 
 #: pretix/base/settings.py:2134 pretix/control/forms/event.py:172
 msgid ""
