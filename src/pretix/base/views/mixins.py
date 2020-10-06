@@ -53,7 +53,15 @@ class BaseQuestionsViewMixin:
                                    data=(self.request.POST if self.request.method == 'POST' else None),
                                    files=(self.request.FILES if self.request.method == 'POST' else None))
             form.pos = cartpos or orderpos
-            form.show_copy_answers_to_addon_button = form.pos.addon_to and set(form.pos.addon_to.item.questions.all()) & set(form.pos.item.questions.all())
+            form.show_copy_answers_to_addon_button = form.pos.addon_to and (
+                set(form.pos.addon_to.item.questions.all()) & set(form.pos.item.questions.all()) or
+                (form.pos.addon_to.item.admission and form.pos.item.admission and (
+                    self.request.event.settings.attendee_names_asked or
+                    self.request.event.settings.attendee_emails_asked or
+                    self.request.event.settings.attendee_company_asked or
+                    self.request.event.settings.attendee_addresses_asked
+                ))
+            )
             if len(form.fields) > 0:
                 formlist.append(form)
         return formlist
