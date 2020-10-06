@@ -128,7 +128,7 @@ class VoucherForm(I18nModelForm):
     def clean(self):
         data = super().clean()
 
-        if not self._errors and self.data.get('itemvar'):
+        if not self._errors:
             try:
                 itemid = quotaid = None
                 iv = self.data.get('itemvar', '')
@@ -136,8 +136,10 @@ class VoucherForm(I18nModelForm):
                     quotaid = iv[2:]
                 elif '-' in iv:
                     itemid, varid = iv.split('-')
-                else:
+                elif iv:
                     itemid, varid = iv, None
+                else:
+                    itemid, varid = None, None
 
                 if itemid:
                     self.instance.item = self.instance.event.items.get(pk=itemid)
@@ -146,11 +148,15 @@ class VoucherForm(I18nModelForm):
                     else:
                         self.instance.variation = None
                     self.instance.quota = None
-
-                else:
+                elif quotaid:
                     self.instance.quota = self.instance.event.quotas.get(pk=quotaid)
                     self.instance.item = None
                     self.instance.variation = None
+                else:
+                    self.instance.quota = None
+                    self.instance.item = None
+                    self.instance.variation = None
+
             except ObjectDoesNotExist:
                 raise ValidationError(_("Invalid product selected."))
 
