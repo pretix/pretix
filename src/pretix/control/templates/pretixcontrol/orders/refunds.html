@@ -62,7 +62,7 @@
                         <td>
                             {{ r.payment_provider.verbose_name }}
                         </td>
-                        <td>{{ o.created|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>{{ r.created|date:"SHORT_DATETIME_FORMAT" }}</td>
                         <td>{{ r.get_source_display }}</td>
                         <td>
                             <span class="label label-{% if r.state == "external" or r.state == "transit" or r.state == "created" %}warning{% elif r.state == "done" %}success{% else %}danger{% endif %}">
