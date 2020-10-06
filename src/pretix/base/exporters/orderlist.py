@@ -662,11 +662,12 @@ class GiftcardRedemptionListExporter(ListExporter):
     def iterate_list(self, form_data):
         payments = OrderPayment.objects.filter(
             order__event__in=self.events,
-            provider='giftcard'
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
         ).order_by('created')
         refunds = OrderRefund.objects.filter(
             order__event__in=self.events,
-            provider='giftcard'
+            provider='giftcard',
+            state=OrderRefund.REFUND_STATE_DONE
         ).order_by('created')
 
         objs = sorted(list(payments) + list(refunds), key=lambda o: (o.order.code, o.created))
