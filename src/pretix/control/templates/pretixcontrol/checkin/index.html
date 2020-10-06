@@ -66,6 +66,10 @@
                       <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
                         <th>{% trans "Item" %} <a href="?{% url_replace request 'ordering' '-item'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'item'%}"><i class="fa fa-caret-up"></i></a></th>
+                        {% if request.event.has_subevents and not checkinlist.subevent %}
+                            <th>{% trans "Date" context "subevents" %} <a href="?{% url_replace request 'ordering' '-date'%}"><i class="fa fa-caret-down"></i></a>
+                                <a href="?{% url_replace request 'ordering' 'date'%}"><i class="fa fa-caret-up"></i></a></th>
+                        {% endif %}
                         {% if seats %}
                             <th>{% trans "Seat" %} <a href="?{% url_replace request 'ordering' '-seat'%}"><i class="fa fa-caret-down"></i></a>
                                 <a href="?{% url_replace request 'ordering' 'seat'%}"><i class="fa fa-caret-up"></i></a></th>
@@ -99,6 +103,11 @@
                                 {% endif %}
                             </td>
                             <td>{{ e.item }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
+                            {% if request.event.has_subevents and not checkinlist.subevent %}
+                                <td>
+                                    {{ e.subevent.name }} – {{ e.subevent.get_date_range_display }} {{ e.subevent.date_from|date:"TIME_FORMAT" }}
+                                </td>
+                            {% endif %}
                             {% if seats %}
                                 <td>{{ e.seat|default_if_none:"" }}</td>
                             {% endif %}
