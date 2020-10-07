@@ -8,7 +8,9 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, Max, Min, Prefetch, ProtectedError, Sum
+from django.db.models import (
+    Count, Max, Min, OuterRef, Prefetch, ProtectedError, Subquery, Sum,
+)
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField, inlineformset_factory
 from django.http import JsonResponse
@@ -30,7 +32,9 @@ from pretix.base.models import (
     TeamInvite, User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
-from pretix.base.models.giftcards import gen_giftcard_secret
+from pretix.base.models.giftcards import (
+    GiftCardTransaction, gen_giftcard_secret,
+)
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import multiexport
@@ -967,8 +971,11 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     context_object_name = 'giftcards'
 
     def get_queryset(self):
+        s = GiftCardTransaction.objects.filter(
+            card=OuterRef('pk')
+        ).order_by().values('card').annotate(s=Sum('value')).values('s')
         qs = self.request.organizer.issued_gift_cards.annotate(
-            cached_value=Coalesce(Sum('transactions__value'), Decimal('0.00'))
+            cached_value=Coalesce(Subquery(s), Decimal('0.00'))
         ).order_by('-issuance')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)

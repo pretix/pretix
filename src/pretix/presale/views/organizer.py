@@ -10,7 +10,7 @@ from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.formats import date_format, get_format
-from django.utils.timezone import now, get_current_timezone
+from django.utils.timezone import get_current_timezone, now
 from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, TemplateView
