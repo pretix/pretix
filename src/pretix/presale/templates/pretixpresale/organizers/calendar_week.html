@@ -77,6 +77,18 @@
         {% endfor %}
     </form>
     {% include "pretixpresale/fragment_week_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
+    <div class="col-sm-4 visible-xs text-center">
+        <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+                class="btn btn-default">
+            <span class="fa fa-arrow-left"></span>
+            {{ before|date:week_format }}
+        </a>
+        <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+                class="btn btn-default">
+            {{ after|date:week_format }}
+            <span class="fa fa-arrow-right"></span>
+        </a>
+    </div>
 
     {% if multiple_timezones %}
         <div class="alert alert-info">

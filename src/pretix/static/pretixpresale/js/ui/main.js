@@ -439,6 +439,14 @@ $(function () {
         }
     });
 
+    // Week calendar
+    // On mobile, auto-collapse all days except today
+    if ($(window).width() < 992) {
+        $(".week-calendar .weekday:not(.today)").each(function () {
+            $(this).prop("open", false);
+        });
+    }
+
     // Lightbox
     lightbox.init();
 });

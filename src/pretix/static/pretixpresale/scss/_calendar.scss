@@ -80,6 +80,16 @@
   h3 {
     margin-bottom: 5px;
     font-weight: bold;
+    cursor: pointer;
+  }
+  h3 .fa::before {
+    content: $fa-var-caret-right;
+  }
+  details[open] h3 .fa::before {
+    content: $fa-var-caret-down;
+  }
+  .events {
+    overflow: hidden;  /* required for smooth toggle animation */
   }
   .no-events {
     display: none;
@@ -89,6 +99,14 @@
   .week-calendar {
     display: flex;
     flex-direction: row;
+
+    details[open] summary {
+      cursor: default;
+      pointer-events: none;
+      h3 .fa {
+        display: none;
+      }
+    }
 
     .weekday {
       flex: 1;

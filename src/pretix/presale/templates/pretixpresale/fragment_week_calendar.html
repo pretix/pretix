@@ -1,9 +1,11 @@
 {% load i18n %}
 <div class="week-calendar">
     {% for day in days %}
-        <div class="weekday {% if day.events %}has-events{% else %}no-events{% endif %}"
-                data-date="{{ day.date|date:"SHORT_DATE_FORMAT" }}">
-            <h3>{{ day.day_formatted }}</h3>
+        <details class="weekday {% if day.events %}has-events{% else %}no-events{% endif %} {% if day.today %}today{% endif %}"
+                data-date="{{ day.date|date:"SHORT_DATE_FORMAT" }}" open>
+            <summary>
+                <h3><span class="fa fa-fw"></span> {{ day.day_formatted }}</h3>
+            </summary>
             <div class="events">
                 {% for event in day.events %}
                     <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
@@ -84,6 +86,6 @@
                     </a>
                 {% endfor %}
             </div>
-        </div>
+        </details>
     {% endfor %}
 </div>

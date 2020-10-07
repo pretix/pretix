@@ -10,7 +10,7 @@ from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.formats import date_format, get_format
-from django.utils.timezone import now
+from django.utils.timezone import now, get_current_timezone
 from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, TemplateView
@@ -427,6 +427,7 @@ def days_for_template(ebd, week):
         {
             'day_formatted': date_format(day, day_format),
             'date': day,
+            'today': day == now().astimezone(get_current_timezone()).date(),
             'events': sorted(ebd.get(day), key=sort_ev) if day in ebd else []
         }
         for day in week.days()
