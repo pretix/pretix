@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 10:09+0000\n"
-"PO-Revision-Date: 2020-10-07 08:04+0000\n"
+"PO-Revision-Date: 2020-10-07 14:06+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -949,17 +949,17 @@ msgstr "Avgifter"
 #: pretix/control/templates/pretixcontrol/order/index.html:169
 #: pretix/control/templates/pretixcontrol/pdf/index.html:212
 msgid "Order locale"
-msgstr ""
+msgstr "Språk på beställningen"
 
 #: pretix/base/exporters/orderlist.py:142
 #, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr ""
+msgstr "Brutto {rate} % skatt"
 
 #: pretix/base/exporters/orderlist.py:143
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr ""
+msgstr "Netto {rate} % skatt"
 
 #: pretix/base/exporters/orderlist.py:144
 #, python-brace-format
@@ -18586,7 +18586,7 @@ msgstr "Ändra pris för %(item)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:179
 #: pretix/presale/templates/pretixpresale/event/voucher.html:285
 msgid "incl. taxes"
-msgstr "inkl. avgifter"
+msgstr "inkl. skatter"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:177
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:286
@@ -18868,19 +18868,16 @@ msgid "Add one more"
 msgstr "Lägg till en till"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:278
-#, fuzzy, python-format
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Extra produkter"
-msgstr[1] "Extra produkter"
+msgstr[0] "En produkt"
+msgstr[1] "%(num)s produkter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(taxname)s"
+#, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr "inkl. %(rate)s%% %(taxname)s"
+msgstr "inkl. %(tax_sum)s skatter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 #: pretix/presale/templates/pretixpresale/event/index.html:273
@@ -19100,7 +19097,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:260
 #: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
-msgstr ""
+msgstr "Lägg i varukorg"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:291
 msgid "Redeem voucher"
@@ -19108,7 +19105,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:302
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Om du redan har beställt en biljett"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:306
 msgid ""
@@ -19117,6 +19114,10 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Om du vill se, ändra status eller uppdatera information för din beställning, "
+"klicka på länken i en av e-postmeddelandena vi skickade till dig under "
+"beställningsprocessen. Om du inte hittar länken, klicka på följande knapp "
+"för att begära att länken för din beställning skickas till dig igen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:315
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
@@ -19699,7 +19700,7 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:402
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Produkterna har lagts till i din varukorg."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
