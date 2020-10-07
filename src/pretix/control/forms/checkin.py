@@ -83,6 +83,7 @@ class SimpleCheckinListForm(forms.ModelForm):
             'all_products',
             'limit_products',
             'include_pending',
+            'allow_entry_after_exit',
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={
