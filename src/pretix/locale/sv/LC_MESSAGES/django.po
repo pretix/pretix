@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 10:09+0000\n"
-"PO-Revision-Date: 2020-10-07 05:00+0000\n"
+"PO-Revision-Date: 2020-10-07 08:04+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -2864,7 +2864,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1539
 #, python-format
 msgid "Payment received for your order: %(code)s"
-msgstr ""
+msgstr "Betalning mottagen för din beställning: %(code)s"
 
 #: pretix/base/models/orders.py:1645
 msgctxt "refund_state"
@@ -6681,21 +6681,21 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/simple_logo.html:231
 #: pretix/base/templates/pretixbase/email/simple_logo.html:239
 msgid "Event:"
-msgstr ""
+msgstr "Evenemang:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:29
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:37
 #: pretix/base/templates/pretixbase/email/simple_logo.html:232
 #: pretix/base/templates/pretixbase/email/simple_logo.html:240
 msgid "Order code:"
-msgstr ""
+msgstr "Beställningskod:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:30
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:38
 #: pretix/base/templates/pretixbase/email/simple_logo.html:233
 #: pretix/base/templates/pretixbase/email/simple_logo.html:241
 msgid "Order date:"
-msgstr ""
+msgstr "Beställningsdatum:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:32
 #: pretix/base/templates/pretixbase/email/simple_logo.html:235
@@ -6708,6 +6708,8 @@ msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
 msgstr ""
+"Du får det här e-postmeddelandet eftersom du gjort en beställning av "
+"följande evenemang:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
