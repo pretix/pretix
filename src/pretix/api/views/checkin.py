@@ -18,6 +18,7 @@ from pretix.api.serializers.item import QuestionSerializer
 from pretix.api.serializers.order import CheckinListOrderPositionSerializer
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
+from pretix.base.i18n import language
 from pretix.base.models import (
     Checkin, CheckinList, Event, Order, OrderPosition,
 )
@@ -87,73 +88,74 @@ class CheckinListViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['GET'])
     def status(self, *args, **kwargs):
-        clist = self.get_object()
-        cqs = Checkin.objects.filter(
-            position__order__event=clist.event,
-            position__order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
-            list=clist
-        )
-        pqs = OrderPosition.objects.filter(
-            order__event=clist.event,
-            order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
-        )
-        if clist.subevent:
-            pqs = pqs.filter(subevent=clist.subevent)
-        if not clist.all_products:
-            pqs = pqs.filter(item__in=clist.limit_products.values_list('id', flat=True))
-            cqs = cqs.filter(position__item__in=clist.limit_products.values_list('id', flat=True))
+        with language(self.request.event.settings.locale):
+            clist = self.get_object()
+            cqs = Checkin.objects.filter(
+                position__order__event=clist.event,
+                position__order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
+                list=clist
+            )
+            pqs = OrderPosition.objects.filter(
+                order__event=clist.event,
+                order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
+            )
+            if clist.subevent:
+                pqs = pqs.filter(subevent=clist.subevent)
+            if not clist.all_products:
+                pqs = pqs.filter(item__in=clist.limit_products.values_list('id', flat=True))
+                cqs = cqs.filter(position__item__in=clist.limit_products.values_list('id', flat=True))
 
-        ev = clist.subevent or clist.event
-        response = {
-            'event': {
-                'name': str(ev.name),
-            },
-            'checkin_count': cqs.count(),
-            'position_count': pqs.count()
-        }
-
-        op_by_item = {
-            p['item']: p['cnt']
-            for p in pqs.order_by().values('item').annotate(cnt=Count('id'))
-        }
-        op_by_variation = {
-            p['variation']: p['cnt']
-            for p in pqs.order_by().values('variation').annotate(cnt=Count('id'))
-        }
-        c_by_item = {
-            p['position__item']: p['cnt']
-            for p in cqs.order_by().values('position__item').annotate(cnt=Count('id'))
-        }
-        c_by_variation = {
-            p['position__variation']: p['cnt']
-            for p in cqs.order_by().values('position__variation').annotate(cnt=Count('id'))
-        }
-
-        if not clist.all_products:
-            items = clist.limit_products
-        else:
-            items = clist.event.items
-
-        response['items'] = []
-        for item in items.order_by('category__position', 'position', 'pk').prefetch_related('variations'):
-            i = {
-                'id': item.pk,
-                'name': str(item),
-                'admission': item.admission,
-                'checkin_count': c_by_item.get(item.pk, 0),
-                'position_count': op_by_item.get(item.pk, 0),
-                'variations': []
+            ev = clist.subevent or clist.event
+            response = {
+                'event': {
+                    'name': str(ev.name),
+                },
+                'checkin_count': cqs.count(),
+                'position_count': pqs.count()
             }
-            for var in item.variations.all():
-                i['variations'].append({
-                    'id': var.pk,
-                    'value': str(var),
-                    'checkin_count': c_by_variation.get(var.pk, 0),
-                    'position_count': op_by_variation.get(var.pk, 0),
-                })
-            response['items'].append(i)
 
-        return Response(response)
+            op_by_item = {
+                p['item']: p['cnt']
+                for p in pqs.order_by().values('item').annotate(cnt=Count('id'))
+            }
+            op_by_variation = {
+                p['variation']: p['cnt']
+                for p in pqs.order_by().values('variation').annotate(cnt=Count('id'))
+            }
+            c_by_item = {
+                p['position__item']: p['cnt']
+                for p in cqs.order_by().values('position__item').annotate(cnt=Count('id'))
+            }
+            c_by_variation = {
+                p['position__variation']: p['cnt']
+                for p in cqs.order_by().values('position__variation').annotate(cnt=Count('id'))
+            }
+
+            if not clist.all_products:
+                items = clist.limit_products
+            else:
+                items = clist.event.items
+
+            response['items'] = []
+            for item in items.order_by('category__position', 'position', 'pk').prefetch_related('variations'):
+                i = {
+                    'id': item.pk,
+                    'name': str(item),
+                    'admission': item.admission,
+                    'checkin_count': c_by_item.get(item.pk, 0),
+                    'position_count': op_by_item.get(item.pk, 0),
+                    'variations': []
+                }
+                for var in item.variations.all():
+                    i['variations'].append({
+                        'id': var.pk,
+                        'value': str(var),
+                        'checkin_count': c_by_variation.get(var.pk, 0),
+                        'position_count': op_by_variation.get(var.pk, 0),
+                    })
+                response['items'].append(i)
+
+            return Response(response)
 
 
 with scopes_disabled():
