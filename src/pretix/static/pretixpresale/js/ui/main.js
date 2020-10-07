@@ -440,8 +440,8 @@ $(function () {
     });
 
     // Week calendar
-    // On mobile, auto-collapse all days except today
-    if ($(window).width() < 992) {
+    // On mobile, auto-collapse all days except today, if we have more than 15 events in total
+    if ($(window).width() < 992 && $(".week-calendar .event").length > 15) {
         $(".week-calendar .weekday:not(.today)").each(function () {
             $(this).prop("open", false);
         });
