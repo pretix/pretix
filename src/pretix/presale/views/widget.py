@@ -309,30 +309,38 @@ class WidgetAPIProductList(EventListMixin, View):
             if ev.best_availability_state == Quota.AVAILABILITY_OK:
                 availability['color'] = 'green'
                 availability['text'] = gettext('Book now')
+                availability['reason'] = 'ok'
             elif event.settings.waiting_list_enabled and ev.best_availability_state >= 0:
                 availability['color'] = 'orange'
                 availability['text'] = gettext('Waiting list')
+                availability['reason'] = 'waitinglist'
             elif ev.best_availability_state == Quota.AVAILABILITY_RESERVED:
                 availability['color'] = 'orange'
                 availability['text'] = gettext('Reserved')
+                availability['reason'] = 'reserved'
             elif ev.best_availability_state < Quota.AVAILABILITY_RESERVED:
                 availability['color'] = 'red'
                 if ev.has_paid_item:
                     availability['text'] = gettext('Sold out')
                 else:
                     availability['text'] = gettext('Fully booked')
+                availability['reason'] = 'full'
         elif ev.presale_is_running:
             availability['color'] = 'green'
             availability['text'] = gettext('Book now')
+            availability['reason'] = 'ok'
         elif ev.presale_has_ended:
             availability['color'] = 'red'
             availability['text'] = gettext('Sale over')
+            availability['reason'] = 'over'
         elif event.settings.presale_start_show_date and ev.presale_start:
             availability['color'] = 'orange'
             availability['text'] = gettext('from %(start_date)s') % {'start_date': date_format(ev.presale_start, "SHORT_DATE_FORMAT")}
+            availability['reason'] = 'soon'
         else:
             availability['color'] = 'orange'
             availability['text'] = gettext('Soon')
+            availability['reason'] = 'soon'
         return availability
 
     def _get_date_range(self, ev, event, tz=None):

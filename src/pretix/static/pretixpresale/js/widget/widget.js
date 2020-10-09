@@ -873,6 +873,9 @@ Vue.component('pretix-widget-event-list-entry', {
                 'pretix-widget-event-list-entry': true
             };
             o['pretix-widget-event-availability-' + this.event.availability.color] = true;
+            if (this.event.availability.reason) {
+                o['pretix-widget-event-availability-' + this.event.availability.reason] = true;
+            }
             return o
         },
         location: function () {
@@ -932,6 +935,9 @@ Vue.component('pretix-widget-event-calendar-event', {
                 'pretix-widget-event-calendar-event': true
             };
             o['pretix-widget-event-availability-' + this.event.availability.color] = true;
+            if (this.event.availability.reason) {
+                o['pretix-widget-event-availability-' + this.event.availability.reason] = true;
+            }
             return o
         }
     },
