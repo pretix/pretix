@@ -311,6 +311,9 @@ input[type=number].short {
   }
 }
 
+label.label-empty {
+  pointer-events: none;
+}
 label .optional {
   color: $text-muted;
   font-weight: normal;

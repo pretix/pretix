@@ -19,6 +19,12 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
         attrs['class'] = label_class
     if label_title:
         attrs['title'] = label_title
+
+    if text_value(content) == '&#160;':
+        # Empty label, e.g. checkbox
+        attrs.setdefault('class', '')
+        attrs['class'] += ' label-empty'
+
     builder = '<{tag}{attrs}>{content}{opt}</{tag}>'
     return format_html(
         builder,
