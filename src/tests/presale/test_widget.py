@@ -479,9 +479,9 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'list_type': 'list',
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'events': [
-                    {'name': 'Present', 'date_range': 'Jan. 1, 2019 11:00', 'availability': {'color': 'green', 'text': 'Book now'},
+                    {'name': 'Present', 'date_range': 'Jan. 1, 2019 11:00', 'availability': {'color': 'green', 'text': 'Book now', 'reason': 'ok'},
                      'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk, 'location': ''},
-                    {'name': 'Future', 'date_range': 'Jan. 4, 2019 11:00', 'availability': {'color': 'green', 'text': 'Book now'},
+                    {'name': 'Future', 'date_range': 'Jan. 4, 2019 11:00', 'availability': {'color': 'green', 'text': 'Book now', 'reason': 'ok'},
                      'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk, 'location': ''}
                 ]
             }
@@ -511,14 +511,14 @@ class WidgetCartTest(CartTestMixin, TestCase):
                         {'day': 1, 'date': '2019-01-01', 'events': [
                             {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 1, 2019 11:00',
                              'location': '',
-                             'availability': {'color': 'green', 'text': 'Book now'},
+                             'availability': {'color': 'green', 'text': 'Book now', 'reason': 'ok'},
                              'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}]},
                         {'day': 2, 'date': '2019-01-02', 'events': []},
                         {'day': 3, 'date': '2019-01-03', 'events': []},
                         {'day': 4, 'date': '2019-01-04', 'events': [
                             {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 4, 2019 11:00',
                              'location': '',
-                             'availability': {'color': 'green', 'text': 'Book now'},
+                             'availability': {'color': 'green', 'text': 'Book now', 'reason': 'ok'},
                              'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}]},
                         {'day': 5, 'date': '2019-01-05', 'events': []},
                         {'day': 6, 'date': '2019-01-06', 'events': []}
@@ -580,21 +580,21 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'week': [2019, 1],
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'days': [
-                    {'day_formatted': 'Mon, Dec 31st', 'date': '2018-12-31', 'events': []},
+                    {'day_formatted': 'Mon, Dec 31st', 'date': '2018-12-31', 'events': [], 'today': False},
                     {'day_formatted': 'Tue, Jan 1st', 'date': '2019-01-01', 'events': [
                         {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 1, 2019 11:00',
                          'location': '',
-                         'availability': {'color': 'green', 'text': 'Book now'},
-                         'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}]},
-                    {'day_formatted': 'Wed, Jan 2nd', 'date': '2019-01-02', 'events': []},
-                    {'day_formatted': 'Thu, Jan 3rd', 'date': '2019-01-03', 'events': []},
+                         'availability': {'color': 'green', 'text': 'Book now', 'reason': 'ok'},
+                         'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}], 'today': True},
+                    {'day_formatted': 'Wed, Jan 2nd', 'date': '2019-01-02', 'events': [], 'today': False},
+                    {'day_formatted': 'Thu, Jan 3rd', 'date': '2019-01-03', 'events': [], 'today': False},
                     {'day_formatted': 'Fri, Jan 4th', 'date': '2019-01-04', 'events': [
                         {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 4, 2019 11:00',
                          'location': '',
-                         'availability': {'color': 'green', 'text': 'Book now'},
-                         'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}]},
-                    {'day_formatted': 'Sat, Jan 5th', 'date': '2019-01-05', 'events': []},
-                    {'day_formatted': 'Sun, Jan 6th', 'date': '2019-01-06', 'events': []}
+                         'availability': {'color': 'green', 'text': 'Book now', 'reason': 'ok'},
+                         'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}], 'today': False},
+                    {'day_formatted': 'Sat, Jan 5th', 'date': '2019-01-05', 'events': [], 'today': False},
+                    {'day_formatted': 'Sun, Jan 6th', 'date': '2019-01-06', 'events': [], 'today': False}
                 ],
             }
 
@@ -626,12 +626,12 @@ class WidgetCartTest(CartTestMixin, TestCase):
                      'event_url': 'http://example.com/ccc/30c3/',
                      'location': '',
                      'name': '30C3'},
-                    {'availability': {'color': 'green', 'text': 'Book now'},
+                    {'availability': {'color': 'green', 'text': 'Book now', 'reason': 'ok'},
                      'date_range': 'Jan. 1, 2019 10:00',
                      'location': '',
                      'event_url': 'http://example.com/ccc/present/',
                      'name': 'Present'},
-                    {'availability': {'color': 'green', 'text': 'Book now'},
+                    {'availability': {'color': 'green', 'text': 'Book now', 'reason': 'ok'},
                      'date_range': 'Jan. 4, 2019 10:00',
                      'location': '',
                      'event_url': 'http://example.com/ccc/future/',
@@ -669,7 +669,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                      {'date': '2019-01-01',
                       'day': 1,
                       'events': [{'availability': {'color': 'green',
-                                                   'text': 'Book now'},
+                                                   'text': 'Book now', 'reason': 'ok'},
                                   'continued': False,
                                   'date_range': 'Jan. 1, 2019 10:00',
                                   'event_url': 'http://example.com/ccc/present/',
@@ -678,7 +678,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                   'subevent': None,
                                   'time': '10:00'},
                                  {'availability': {'color': 'green',
-                                                   'text': 'Book now'},
+                                                   'text': 'Book now', 'reason': 'ok'},
                                   'continued': False,
                                   'date_range': 'Jan. 1, 2019 11:00',
                                   'event_url': 'http://example.com/ccc/30c3/',
@@ -691,7 +691,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                      {'date': '2019-01-04',
                       'day': 4,
                       'events': [{'availability': {'color': 'green',
-                                                   'text': 'Book now'},
+                                                   'text': 'Book now', 'reason': 'ok'},
                                   'continued': False,
                                   'date_range': 'Jan. 4, 2019 10:00',
                                   'event_url': 'http://example.com/ccc/future/',
@@ -700,7 +700,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                   'subevent': None,
                                   'time': '10:00'},
                                  {'availability': {'color': 'green',
-                                                   'text': 'Book now'},
+                                                   'text': 'Book now', 'reason': 'ok'},
                                   'continued': False,
                                   'date_range': 'Jan. 4, 2019 11:00',
                                   'event_url': 'http://example.com/ccc/30c3/',
