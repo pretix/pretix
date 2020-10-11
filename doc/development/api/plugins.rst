@@ -136,7 +136,7 @@ in the ``installed`` method::
             pass  # Your code here
 
 
-Note that ``installed`` will *not* be called if the plugin in indirectly activated for an event
+Note that ``installed`` will *not* be called if the plugin is indirectly activated for an event
 because the event is created with settings copied from another event.
 
 Views
@@ -151,8 +151,8 @@ your Django app label.
    with checking that the calling user is logged in, has appropriate permissions,
    etc. We plan on providing native support for this in a later version.
 
-.. _Django app: https://docs.djangoproject.com/en/1.7/ref/applications/
-.. _signal dispatcher: https://docs.djangoproject.com/en/1.7/topics/signals/
-.. _namespace packages: http://legacy.python.org/dev/peps/pep-0420/
+.. _Django app: https://docs.djangoproject.com/en/3.0/ref/applications/
+.. _signal dispatcher: https://docs.djangoproject.com/en/3.0/topics/signals/
+.. _namespace packages: https://legacy.python.org/dev/peps/pep-0420/
 .. _entry point: https://setuptools.readthedocs.io/en/latest/pkg_resources.html#locating-plugins
 .. _cookiecutter: https://cookiecutter.readthedocs.io/en/latest/
