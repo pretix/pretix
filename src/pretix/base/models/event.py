@@ -754,6 +754,31 @@ class Event(EventMixin, LoggedModel):
                 renderers[pp.identifier] = pp
         return renderers
 
+    @cached_property
+    def ticket_secret_generators(self) -> dict:
+        """
+        Returns a dictionary of cached initialized ticket secret generators mapped by their identifiers.
+        """
+        from ..signals import register_ticket_secret_generators
+
+        responses = register_ticket_secret_generators.send(self)
+        renderers = {}
+        for receiver, response in responses:
+            if not isinstance(response, list):
+                response = [response]
+            for p in response:
+                pp = p(self)
+                renderers[pp.identifier] = pp
+        return renderers
+
+    @property
+    def ticket_secret_generator(self):
+        """
+        Returns the currently configured ticket secret generator.
+        """
+        tsgs = self.ticket_secret_generators
+        return tsgs[self.settings.ticket_secret_generator]
+
     def get_data_shredders(self) -> dict:
         """
         Returns a dictionary of initialized data shredders mapped by their identifiers.

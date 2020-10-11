@@ -32,9 +32,10 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Device, Event, Invoice, InvoiceAddress,
     Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota, SubEvent,
-    TeamAPIToken, generate_position_secret, generate_secret,
+    TeamAPIToken, generate_secret,
 )
 from pretix.base.payment import PaymentException
+from pretix.base.secrets import generate_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -483,7 +484,16 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         order.secret = generate_secret()
         for op in order.all_positions.all():
-            op.secret = generate_position_secret()
+            new_secret = generate_ticket_secret(
+                request.event, item=op.item, variation=op.variation, subevent=op.subevent,
+                attendee_name=op.attendee_name_cached, seat=op.seat, current_secret=op.secret,
+                force_invalidate=True
+            )
+            if op.secret != new_secret:
+                op.blacklisted_secrets.create(
+                    event=request.event, secret=op.secret
+                )
+            op.secret = new_secret
             op.save()
         order.save(update_fields=['secret'])
         CachedTicket.objects.filter(order_position__order=order).delete()
