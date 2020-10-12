@@ -29,6 +29,7 @@ from pretix.base.models.items import (
     ItemBundle, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.helpers.compat import date_fromisocalendar
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.signals import item_description
@@ -466,7 +467,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             ) < 2
             context['days'] = days_for_template(ebd, week)
             context['weeks'] = [
-                (date.fromisocalendar(self.year, i + 1, 1), date.fromisocalendar(self.year, i + 1, 7))
+                (date_fromisocalendar(self.year, i + 1, 1), date_fromisocalendar(self.year, i + 1, 7))
                 for i in range(53 if date(self.year, 12, 31).isocalendar()[1] == 53 else 52)
             ]
             context['years'] = range(now().year - 2, now().year + 3)

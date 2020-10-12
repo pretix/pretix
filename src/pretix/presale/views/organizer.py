@@ -21,6 +21,7 @@ from pretix.base.models import (
     Event, EventMetaValue, SubEvent, SubEventMetaValue,
 )
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.daterange import daterange
 from pretix.helpers.formats.de.formats import WEEK_FORMAT
 from pretix.multidomain.urlreverse import eventreverse
@@ -524,7 +525,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['days'] = days_for_template(ebd, week)
         ctx['weeks'] = [
-            (date.fromisocalendar(self.year, i + 1, 1), date.fromisocalendar(self.year, i + 1, 7))
+            (date_fromisocalendar(self.year, i + 1, 1), date_fromisocalendar(self.year, i + 1, 7))
             for i in range(53 if date(self.year, 12, 31).isocalendar()[1] == 53 else 52)
         ]
         ctx['years'] = range(now().year - 2, now().year + 3)
