@@ -618,8 +618,10 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             except ItemBundle.MultipleObjectsReturned:
                 raise OrderError("Invalid product configuration (duplicate bundle)")
             price = get_price(cp.item, cp.variation, cp.voucher, bprice, cp.subevent, custom_price_is_net=False,
+                              custom_price_is_tax_rate=cp.override_tax_rate,
                               invoice_address=address, force_custom_price=True, max_discount=max_discount)
             pbv = get_price(cp.item, cp.variation, None, bprice, cp.subevent, custom_price_is_net=False,
+                            custom_price_is_tax_rate=cp.override_tax_rate,
                             invoice_address=address, force_custom_price=True, max_discount=max_discount)
             changed_prices[cp.pk] = bprice
         else:
@@ -631,10 +633,10 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
             price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
                               addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
-                              max_discount=max_discount)
+                              max_discount=max_discount, custom_price_is_tax_rate=cp.override_tax_rate)
             pbv = get_price(cp.item, cp.variation, None, cp.price, cp.subevent, custom_price_is_net=False,
                             addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
-                            max_discount=max_discount)
+                            max_discount=max_discount, custom_price_is_tax_rate=cp.override_tax_rate)
 
         if max_discount is not None:
             v_budget[cp.voucher] = v_budget[cp.voucher] + current_discount - (pbv.gross - price.gross)

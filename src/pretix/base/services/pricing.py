@@ -11,6 +11,7 @@ from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 def get_price(item: Item, variation: ItemVariation = None,
               voucher: Voucher = None, custom_price: Decimal = None,
               subevent: SubEvent = None, custom_price_is_net: bool = False,
+              custom_price_is_tax_rate: Decimal=None,
               addon_to: AbstractPosition = None, invoice_address: InvoiceAddress = None,
               force_custom_price: bool = False, bundled_sum: Decimal = Decimal('0.00'),
               max_discount: Decimal = None, tax_rule=None) -> TaxedPrice:
@@ -66,7 +67,7 @@ def get_price(item: Item, variation: ItemVariation = None,
             price = tax_rule.tax(max(custom_price, price.net), base_price_is='net',
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
         else:
-            price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross',
+            price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross', gross_price_is_tax_rate=custom_price_is_tax_rate,
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
     else:
         price = tax_rule.tax(price, invoice_address=invoice_address, subtract_from_gross=bundled_sum)

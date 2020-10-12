@@ -402,6 +402,44 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.20')
 
+    def test_country_taxing_free_price_and_voucher(self):
+        self._enable_country_specific_taxing()
+
+        self.ticket.free_price = True
+        self.ticket.save()
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10),
+                voucher=self.event.vouchers.create()
+            )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'individual',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.20')
+
+        self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer'
+        }, follow=True)
+
+        self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        with scopes_disabled():
+            assert not CartPosition.objects.filter(pk=cr1.pk).exists()
+            o = Order.objects.last()
+            assert o.positions.get().price == Decimal('23.20')
+
     def test_country_taxing_switch(self):
         self.test_country_taxing()
 

@@ -174,7 +174,7 @@ class TaxRule(LoggedModel):
         return Decimal(self.rate)
 
     def tax(self, base_price, base_price_is='auto', currency=None, override_tax_rate=None, invoice_address=None,
-            subtract_from_gross=Decimal('0.00')):
+            subtract_from_gross=Decimal('0.00'), gross_price_is_tax_rate: Decimal = None):
         from .event import Event
         try:
             currency = currency or self.event.currency
@@ -186,7 +186,9 @@ class TaxRule(LoggedModel):
             rate = override_tax_rate
         elif invoice_address:
             adjust_rate = self.tax_rate_for(invoice_address)
-            if adjust_rate != rate:
+            if adjust_rate == gross_price_is_tax_rate and base_price_is == 'gross':
+                rate = adjust_rate
+            elif adjust_rate != rate:
                 normal_price = self.tax(base_price, base_price_is, currency, subtract_from_gross=subtract_from_gross)
                 base_price = normal_price.net
                 base_price_is = 'net'
