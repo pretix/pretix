@@ -70,5 +70,7 @@ RUN chmod +x /usr/local/bin/pretix && \
 USER pretixuser
 VOLUME ["/etc/pretix", "/data"]
 EXPOSE 80
+HEALTHCHECK --interval=1m --timeout=2m \
+  CMD curl -fSs http://localhost/healthcheck/ || exit 1
 ENTRYPOINT ["pretix"]
 CMD ["all"]
