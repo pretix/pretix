@@ -30,6 +30,7 @@ created                               datetime                   Creation time
 initialized                           datetime                   Time of initialization (or ``null``)
 initialization_token                  string                     Token for initialization
 revoked                               boolean                    Whether this device no longer has access
+security_profile                      string                     The name of a supported security profile restricting API access
 ===================================== ========================== =======================================================
 
 Device endpoints
@@ -72,6 +73,7 @@ Device endpoints
             "name": "Scanner",
             "created": "2020-09-18T14:17:40.971519Z",
             "initialized": "2020-09-18T14:17:44.190021Z",
+            "security_profile": "full",
             "hardware_brand": "Zebra",
             "hardware_model": "TC25",
             "software_brand": "pretixSCAN",
@@ -118,6 +120,7 @@ Device endpoints
         "name": "Scanner",
         "created": "2020-09-18T14:17:40.971519Z",
         "initialized": "2020-09-18T14:17:44.190021Z",
+        "security_profile": "full",
         "hardware_brand": "Zebra",
         "hardware_model": "TC25",
         "software_brand": "pretixSCAN",
@@ -166,6 +169,7 @@ Device endpoints
         "revoked": false,
         "name": "Scanner",
         "created": "2020-09-18T14:17:40.971519Z",
+        "security_profile": "full",
         "initialized": null
         "hardware_brand": null,
         "hardware_model": null,

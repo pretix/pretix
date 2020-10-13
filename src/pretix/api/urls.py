@@ -45,7 +45,7 @@ event_router.register(r'checkinlists', checkin.CheckinListViewSet)
 event_router.register(r'cartpositions', cart.CartPositionViewSet)
 
 checkinlist_router = routers.DefaultRouter()
-checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet)
+checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet, basename='checkinlistpos')
 
 question_router = routers.DefaultRouter()
 question_router.register(r'options', item.QuestionOptionViewSet)

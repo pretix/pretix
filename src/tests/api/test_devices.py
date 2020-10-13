@@ -38,7 +38,8 @@ TEST_DEV_RES = {
     "hardware_brand": "Zebra",
     "hardware_model": "TC25",
     "software_brand": "pretixSCAN",
-    "software_version": "1.5.1"
+    "software_version": "1.5.1",
+    "security_profile": "full"
 }
 
 

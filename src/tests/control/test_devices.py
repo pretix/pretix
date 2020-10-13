@@ -50,8 +50,8 @@ def test_create_device(event, admin_user, admin_team, client):
     resp = client.post('/control/organizer/dummy/device/add', {
         'name': 'Foo',
         'limit_events': str(event.pk),
+        'security_profile': 'full',
     }, follow=True)
-    print(resp.status_code, resp.content)
     with scopes_disabled():
         d = Device.objects.last()
         assert d.name == 'Foo'
@@ -66,6 +66,7 @@ def test_update_device(event, admin_user, admin_team, device, client):
     client.post('/control/organizer/dummy/device/{}/edit'.format(device.pk), {
         'name': 'Cashdesk 2',
         'limit_events': str(event.pk),
+        'security_profile': 'full',
     }, follow=True)
     device.refresh_from_db()
     assert device.name == 'Cashdesk 2'

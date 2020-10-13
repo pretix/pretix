@@ -193,7 +193,7 @@ class DeviceForm(forms.ModelForm):
 
     class Meta:
         model = Device
-        fields = ['name', 'all_events', 'limit_events']
+        fields = ['name', 'all_events', 'limit_events', 'security_profile']
         widgets = {
             'limit_events': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_events',
