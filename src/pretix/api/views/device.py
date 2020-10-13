@@ -35,7 +35,7 @@ class DeviceSerializer(serializers.ModelSerializer):
         model = Device
         fields = [
             'organizer', 'device_id', 'unique_serial', 'api_token',
-            'name', 'security_profile'
+            'name',
         ]
 
 

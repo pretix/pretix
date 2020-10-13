@@ -102,7 +102,7 @@ class DeviceSerializer(serializers.ModelSerializer):
         fields = (
             'device_id', 'unique_serial', 'initialization_token', 'all_events', 'limit_events',
             'revoked', 'name', 'created', 'initialized', 'hardware_brand', 'hardware_model',
-            'software_brand', 'software_version'
+            'software_brand', 'software_version', 'security_profile'
         )
 
 
