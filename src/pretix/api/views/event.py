@@ -15,7 +15,7 @@ from pretix.api.serializers.event import (
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    CartPosition, Device, Event, ItemCategory, TaxRule, TeamAPIToken,
+    CartPosition, Device, Event, TaxRule, TeamAPIToken,
 )
 from pretix.base.models.event import SubEvent
 from pretix.helpers.dicts import merge_dicts
@@ -229,7 +229,7 @@ with scopes_disabled():
 
 class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SubEventSerializer
-    queryset = ItemCategory.objects.none()
+    queryset = SubEvent.objects.none()
     write_permission = 'can_change_event_settings'
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = SubEventFilter
