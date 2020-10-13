@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 10:09+0000\n"
-"PO-Revision-Date: 2020-10-06 07:08+0000\n"
+"PO-Revision-Date: 2020-10-07 14:06+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -82,7 +82,7 @@ msgstr "Mål-URL"
 #: pretix/api/models.py:78 pretix/base/models/devices.py:46
 #: pretix/base/models/organizer.py:172
 msgid "All events (including newly created ones)"
-msgstr "Alla event (inkl. nyligen skapade)"
+msgstr "Alla evenemang (inkl. nyligen skapade)"
 
 #: pretix/api/models.py:79 pretix/base/models/devices.py:47
 #: pretix/base/models/organizer.py:173
@@ -161,10 +161,12 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Presentkorts-produkter bör bara kopplas till skattesatser som är noll, "
+"eftersom moms kommer att tillämpas när presentkortet löses in."
 
 #: pretix/api/serializers/item.py:145 pretix/control/forms/item.py:486
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "Presentkorts-produkter bör inte vara entré-produkter samtidigt."
 
 #: pretix/api/serializers/item.py:182
 #, fuzzy, python-brace-format
@@ -180,15 +182,15 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:311 pretix/control/forms/item.py:73
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "Frågor kan inte bero på en fråga som ställs vid incheckningen."
 
 #: pretix/api/serializers/item.py:316 pretix/control/forms/item.py:78
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Cirkulärt beroende mellan frågorna har upptäckts."
 
 #: pretix/api/serializers/item.py:321 pretix/control/forms/item.py:87
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Denna typ av fråga kan inte ställas vid incheckningen."
 
 #: pretix/api/serializers/order.py:927 pretix/api/serializers/order.py:934
 msgid "The product \"{}\" is not available on this date."
@@ -199,21 +201,23 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Ett presentkort med samma hemlighet finns redan i ditt eller ett anslutet "
+"arrangörskonto."
 
 #: pretix/api/serializers/organizer.py:120
 #: pretix/control/views/organizer.py:538
 msgid "pretix account invitation"
-msgstr ""
+msgstr "pretix konto inbjudan"
 
 #: pretix/api/serializers/organizer.py:142
 #: pretix/control/views/organizer.py:637
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Den här användaren har redan bjudits in till detta team."
 
 #: pretix/api/serializers/organizer.py:158
 #: pretix/control/views/organizer.py:654
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Den här användaren har redan behörigheter för detta team."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:330
 #, python-brace-format
@@ -221,6 +225,7 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
+"Applikationen \"{application_name}\" har behörighet att komma åt ditt konto."
 
 #: pretix/api/views/order.py:443 pretix/control/views/orders.py:1099
 #: pretix/presale/views/order.py:645 pretix/presale/views/order.py:689
@@ -236,23 +241,24 @@ msgstr "En faktura för denna beställning finns redan."
 #: pretix/control/views/users.py:97
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
+"Det gick inte att skicka e-postmeddelandet. Vänligen försök igen senare."
 
 #: pretix/api/webhooks.py:118 pretix/base/notifications.py:205
 msgid "New order placed"
-msgstr ""
+msgstr "Ny beställning utförd"
 
 #: pretix/api/webhooks.py:122 pretix/base/notifications.py:211
 msgid "New order requires approval"
-msgstr ""
+msgstr "Ny beställning kräver godkännande"
 
 #: pretix/api/webhooks.py:126 pretix/base/notifications.py:217
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Beställning markerad som betald"
 
 #: pretix/api/webhooks.py:130 pretix/base/notifications.py:223
 #: pretix/control/templates/pretixcontrol/event/mail.html:67
 msgid "Order canceled"
-msgstr ""
+msgstr "Beställning avbruten"
 
 #: pretix/api/webhooks.py:134 pretix/base/notifications.py:229
 #, fuzzy
@@ -263,44 +269,44 @@ msgstr "Beställningen är bekräftad"
 
 #: pretix/api/webhooks.py:138 pretix/base/notifications.py:235
 msgid "Order expired"
-msgstr ""
+msgstr "Beställning har löpt ut"
 
 #: pretix/api/webhooks.py:142 pretix/base/notifications.py:241
 msgid "Order information changed"
-msgstr ""
+msgstr "Beställningsinformationen har uppdaterats"
 
 #: pretix/api/webhooks.py:146 pretix/base/notifications.py:247
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Kontaktadressen för beställningen har uppdaterats"
 
 #: pretix/api/webhooks.py:150 pretix/base/notifications.py:253
 #: pretix/control/templates/pretixcontrol/event/mail.html:58
 msgid "Order changed"
-msgstr ""
+msgstr "Beställningen har uppdaterats"
 
 #: pretix/api/webhooks.py:154 pretix/base/notifications.py:265
 msgid "External refund of payment"
-msgstr ""
+msgstr "Extern återbetalning"
 
 #: pretix/api/webhooks.py:158
 msgid "Order approved"
-msgstr ""
+msgstr "Beställningen har godkänts"
 
 #: pretix/api/webhooks.py:162
 msgid "Order denied"
-msgstr ""
+msgstr "Beställningen har nekats"
 
 #: pretix/api/webhooks.py:166
 msgid "Ticket checked in"
-msgstr ""
+msgstr "Biljetten är incheckad"
 
 #: pretix/api/webhooks.py:170
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "Biljettincheckningen har återställts"
 
 #: pretix/base/auth.py:101
 msgid "pretix User"
-msgstr ""
+msgstr "pretix Användare"
 
 #: pretix/base/auth.py:110 pretix/base/forms/auth.py:175
 #: pretix/base/models/auth.py:90 pretix/base/models/notifications.py:25
@@ -314,11 +320,11 @@ msgstr "Epost"
 #: pretix/base/auth.py:112 pretix/base/forms/auth.py:86
 #: pretix/base/forms/auth.py:138 pretix/control/forms/event.py:982
 msgid "Password"
-msgstr ""
+msgstr "Lösenord"
 
 #: pretix/base/channels.py:84
 msgid "Online shop"
-msgstr ""
+msgstr "Onlinebutik"
 
 #: pretix/base/email.py:141 pretix/control/views/main.py:268
 #: pretix/plugins/badges/__init__.py:24 pretix/plugins/badges/models.py:27
@@ -346,23 +352,23 @@ msgstr "Exempel Företaget"
 
 #: pretix/base/email.py:462
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "Exempel på Entrébiljett"
 
 #: pretix/base/email.py:487
 msgid "An individual text with a reason can be inserted here."
-msgstr ""
+msgstr "En text med en anledning kan läggas in här."
 
 #: pretix/base/email.py:491
 msgid "The amount has been charged to your card."
-msgstr ""
+msgstr "Beloppet har debiterats ditt kort."
 
 #: pretix/base/email.py:495
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "Vänligen för över pengar till detta bankkonto: 9999-9999-9999-9999"
 
 #: pretix/base/exporter.py:106 pretix/base/exporter.py:233
 msgid "Export format"
-msgstr ""
+msgstr "Export format"
 
 #: pretix/base/exporter.py:108
 msgid "Excel (.xlsx)"
@@ -386,7 +392,7 @@ msgstr "Kombinerad Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
-msgstr ""
+msgstr "Svar på frågor om filöverföring"
 
 #: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:1092
 #: pretix/control/navigation.py:161
@@ -398,7 +404,7 @@ msgstr "Frågor"
 #: pretix/base/exporters/dekodi.py:82
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "Evenemangsbiljett {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:35
 #: pretix/base/exporters/orderlist.py:366 pretix/control/forms/subevents.py:226
@@ -419,6 +425,8 @@ msgid ""
 "Only include invoices issued on or after this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Inkludera endast fakturor skapade på eller efter detta datum. Observera att "
+"fakturadatum inte alltid motsvarar beställnings- eller betalningsdatum."
 
 #: pretix/base/exporters/dekodi.py:210 pretix/base/exporters/invoices.py:43
 #: pretix/base/exporters/orderlist.py:367
@@ -436,6 +444,8 @@ msgid ""
 "Only include invoices issued on or before this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Inkludera endast fakturor utfärdade på eller före detta datum. Observera att "
+"fakturadatum inte alltid motsvarar beställnings- eller betalningsdatum."
 
 #: pretix/base/exporters/invoices.py:51 pretix/base/models/orders.py:1323
 #: pretix/base/models/orders.py:1696 pretix/control/forms/filter.py:97
@@ -459,14 +469,18 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
+"Inkludera endast fakturor för beställningar som har minst ett "
+"betalningsförsök hos denna betalningsleverantör. Observera att detta kan "
+"inkludera vissa fakturor för beställningar som slutligen har betalats helt "
+"eller delvis med en annan leverantör."
 
 #: pretix/base/exporters/invoices.py:96
 msgid "All invoices"
-msgstr ""
+msgstr "Alla fakturor"
 
 #: pretix/base/exporters/invoices.py:145
 msgid "Invoice data"
-msgstr ""
+msgstr "Fakturauppgifter"
 
 #: pretix/base/exporters/invoices.py:154 pretix/base/shredder.py:308
 #: pretix/control/templates/pretixcontrol/order/index.html:205
@@ -478,11 +492,11 @@ msgstr "Fakturor"
 
 #: pretix/base/exporters/invoices.py:155
 msgid "Invoice lines"
-msgstr ""
+msgstr "Fakturarader"
 
 #: pretix/base/exporters/invoices.py:162 pretix/base/exporters/invoices.py:281
 msgid "Invoice number"
-msgstr ""
+msgstr "Fakturanummer"
 
 #: pretix/base/exporters/invoices.py:163 pretix/base/exporters/invoices.py:291
 #: pretix/base/exporters/orderlist.py:675 pretix/base/models/items.py:1022
@@ -523,15 +537,15 @@ msgstr "Beställningsnummer"
 #: pretix/control/templates/pretixcontrol/users/index.html:37
 #: pretix/control/views/waitinglist.py:199
 msgid "E-mail address"
-msgstr ""
+msgstr "E-postadress"
 
 #: pretix/base/exporters/invoices.py:166 pretix/base/exporters/invoices.py:294
 msgid "Invoice type"
-msgstr ""
+msgstr "Fakturatyp"
 
 #: pretix/base/exporters/invoices.py:167 pretix/base/exporters/invoices.py:295
 msgid "Cancellation of"
-msgstr ""
+msgstr "Avbokning av"
 
 #: pretix/base/exporters/invoices.py:168 pretix/base/models/auth.py:102
 #: pretix/control/forms/event.py:1162 pretix/control/views/waitinglist.py:200
@@ -546,7 +560,7 @@ msgstr "Språk"
 #: pretix/base/exporters/invoices.py:299 pretix/base/exporters/invoices.py:300
 #: pretix/base/exporters/invoices.py:301 pretix/base/exporters/invoices.py:302
 msgid "Invoice sender:"
-msgstr ""
+msgstr "Fakturasändare:"
 
 #: pretix/base/exporters/invoices.py:169 pretix/base/exporters/invoices.py:177
 #: pretix/base/exporters/invoices.py:296 pretix/base/exporters/invoices.py:304
@@ -634,7 +648,7 @@ msgstr "Land"
 
 #: pretix/base/exporters/invoices.py:174 pretix/base/exporters/invoices.py:301
 msgid "Tax ID"
-msgstr ""
+msgstr "Organisationsnummer"
 
 #: pretix/base/exporters/invoices.py:175 pretix/base/exporters/invoices.py:183
 #: pretix/base/exporters/invoices.py:302 pretix/base/exporters/invoices.py:310
@@ -660,7 +674,7 @@ msgstr "Momsnr"
 #: pretix/base/exporters/invoices.py:309 pretix/base/exporters/invoices.py:310
 #: pretix/base/exporters/invoices.py:311 pretix/base/exporters/invoices.py:312
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "Fakturamottagare:"
 
 #: pretix/base/exporters/invoices.py:176 pretix/base/exporters/invoices.py:303
 #: pretix/base/exporters/orderlist.py:129
@@ -679,7 +693,7 @@ msgstr "Företag"
 
 #: pretix/base/exporters/invoices.py:178 pretix/base/exporters/invoices.py:305
 msgid "Street address"
-msgstr ""
+msgstr "Gatuadress"
 
 #: pretix/base/exporters/invoices.py:182 pretix/base/exporters/invoices.py:309
 #: pretix/base/exporters/orderlist.py:136
@@ -699,7 +713,7 @@ msgstr "Region"
 #: pretix/base/models/orders.py:2227
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:113
 msgid "Beneficiary"
-msgstr ""
+msgstr "Förmånstagare"
 
 #: pretix/base/exporters/invoices.py:185 pretix/base/exporters/invoices.py:312
 #: pretix/base/models/orders.py:2222 pretix/base/orderimport.py:364
@@ -710,29 +724,27 @@ msgstr "Intern referens"
 
 #: pretix/base/exporters/invoices.py:186 pretix/control/forms/event.py:1132
 msgid "Reverse charge"
-msgstr ""
+msgstr "Omvänd skattskyldighet"
 
 #: pretix/base/exporters/invoices.py:187
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "Visad utländsk valuta"
 
 #: pretix/base/exporters/invoices.py:188
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "Valutakurs"
 
 #: pretix/base/exporters/invoices.py:189
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "Totalt värde (med skatter)"
 
 #: pretix/base/exporters/invoices.py:190
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Totalt värde (utan skatter)"
 
 #: pretix/base/exporters/invoices.py:191
-#, fuzzy
-#| msgid "Payment pending"
 msgid "Payment matching IDs"
-msgstr "Inväntar betalning"
+msgstr "ID för betalningsmatchning"
 
 #: pretix/base/exporters/invoices.py:192 pretix/base/exporters/invoices.py:313
 #: pretix/base/exporters/orderlist.py:152
@@ -741,11 +753,11 @@ msgstr "Inväntar betalning"
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:287
 msgid "Payment providers"
-msgstr ""
+msgstr "Betalningsleverantörer"
 
 #: pretix/base/exporters/invoices.py:248 pretix/base/exporters/invoices.py:350
 msgid "Cancellation"
-msgstr ""
+msgstr "Annullering"
 
 #: pretix/base/exporters/invoices.py:248 pretix/base/exporters/invoices.py:350
 #: pretix/control/templates/pretixcontrol/order/index.html:209
@@ -785,74 +797,74 @@ msgstr "Nej"
 
 #: pretix/base/exporters/invoices.py:282
 msgid "Line number"
-msgstr ""
+msgstr "Radnummer"
 
 #: pretix/base/exporters/invoices.py:283 pretix/base/exporters/orderlist.py:265
 #: pretix/base/models/items.py:278 pretix/base/models/items.py:643
 #: pretix/base/models/items.py:650
 msgid "Description"
-msgstr ""
+msgstr "Beskrivning"
 
 #: pretix/base/exporters/invoices.py:284 pretix/control/forms/orders.py:241
 msgid "Gross price"
-msgstr ""
+msgstr "Bruttopris"
 
 #: pretix/base/exporters/invoices.py:285
 msgid "Net price"
-msgstr ""
+msgstr "Nettopris"
 
 #: pretix/base/exporters/invoices.py:286 pretix/base/exporters/orderlist.py:269
 #: pretix/base/exporters/orderlist.py:374 pretix/base/models/orders.py:1839
 #: pretix/base/models/orders.py:1939
 msgid "Tax value"
-msgstr ""
+msgstr "Skattevärde"
 
 #: pretix/base/exporters/invoices.py:287 pretix/base/exporters/orderlist.py:267
 #: pretix/base/exporters/orderlist.py:372 pretix/base/models/orders.py:1830
 #: pretix/base/models/orders.py:1930 pretix/base/models/tax.py:104
 msgid "Tax rate"
-msgstr ""
+msgstr "Skattesats"
 
 #: pretix/base/exporters/invoices.py:288
 msgid "Tax name"
-msgstr ""
+msgstr "Skattnamn"
 
 #: pretix/base/exporters/invoices.py:289
 msgid "Event start date"
-msgstr ""
+msgstr "Startdatum för evenemang"
 
 #: pretix/base/exporters/mail.py:18
 msgid "Email addresses (text file)"
-msgstr ""
+msgstr "E-postadresser (textfil)"
 
 #: pretix/base/exporters/mail.py:40 pretix/plugins/reports/exporters.py:310
 #: pretix/plugins/reports/exporters.py:482
 msgid "Filter by status"
-msgstr ""
+msgstr "Filtrera efter status"
 
 #: pretix/base/exporters/orderlist.py:32
 msgid "Order data"
-msgstr ""
+msgstr "Beställningsdata"
 
 #: pretix/base/exporters/orderlist.py:41 pretix/base/models/orders.py:205
 #: pretix/control/navigation.py:224
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 msgid "Orders"
-msgstr ""
+msgstr "Beställningar"
 
 #: pretix/base/exporters/orderlist.py:42 pretix/base/models/orders.py:1955
 #: pretix/base/notifications.py:190
 msgid "Order positions"
-msgstr ""
+msgstr "Beställningsrad"
 
 #: pretix/base/exporters/orderlist.py:43
 msgid "Order fees"
-msgstr ""
+msgstr "Beställningsavgifter"
 
 #: pretix/base/exporters/orderlist.py:52
 msgid "Only paid orders"
-msgstr ""
+msgstr "Bara betalda beställningar"
 
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:258
@@ -861,7 +873,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:675 pretix/control/forms/event.py:1208
 #: pretix/control/forms/organizer.py:52
 msgid "Event slug"
-msgstr ""
+msgstr "Förkortning för evenemanget"
 
 #: pretix/base/exporters/orderlist.py:128 pretix/base/notifications.py:186
 #: pretix/control/templates/pretixcontrol/orders/index.html:101
@@ -869,7 +881,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:384
 #: pretix/plugins/reports/exporters.py:523
 msgid "Order total"
-msgstr ""
+msgstr "Beställningstotal"
 
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:260
@@ -901,7 +913,7 @@ msgstr "Status"
 #: pretix/base/exporters/orderlist.py:360
 #: pretix/control/templates/pretixcontrol/checkin/index.html:73
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:262
@@ -916,7 +928,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:493
 #: pretix/plugins/reports/exporters.py:521
 msgid "Order date"
-msgstr ""
+msgstr "Beställningsdatum"
 
 #: pretix/base/exporters/orderlist.py:129
 #: pretix/base/exporters/orderlist.py:263
@@ -937,17 +949,17 @@ msgstr "Avgifter"
 #: pretix/control/templates/pretixcontrol/order/index.html:169
 #: pretix/control/templates/pretixcontrol/pdf/index.html:212
 msgid "Order locale"
-msgstr ""
+msgstr "Språk på beställningen"
 
 #: pretix/base/exporters/orderlist.py:142
 #, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr ""
+msgstr "Brutto {rate} % skatt"
 
 #: pretix/base/exporters/orderlist.py:143
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr ""
+msgstr "Netto {rate} % skatt"
 
 #: pretix/base/exporters/orderlist.py:144
 #, python-brace-format
@@ -1321,7 +1333,7 @@ msgstr ""
 #: pretix/base/forms/questions.py:329 pretix/base/forms/questions.py:623
 msgctxt "address"
 msgid "Select state"
-msgstr "Förköp har inte startat"
+msgstr "Välj region"
 
 #: pretix/base/forms/questions.py:537 pretix/base/forms/questions.py:714
 #: pretix/base/payment.py:51 pretix/control/forms/event.py:608
@@ -1523,7 +1535,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:49
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 msgid "TEST MODE"
-msgstr "TEST LÄGE"
+msgstr "TESTLÄGE"
 
 #: pretix/base/invoice.py:431 pretix/base/services/mail.py:348
 #, python-brace-format
@@ -2852,7 +2864,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1539
 #, python-format
 msgid "Payment received for your order: %(code)s"
-msgstr ""
+msgstr "Betalning mottagen för din beställning: %(code)s"
 
 #: pretix/base/models/orders.py:1645
 msgctxt "refund_state"
@@ -3152,7 +3164,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:308
 #: pretix/presale/templates/pretixpresale/event/index.html:285
 msgid "Voucher code"
-msgstr "Rabattkod"
+msgstr "Kupongkod"
 
 #: pretix/base/models/vouchers.py:110 pretix/control/views/vouchers.py:70
 msgid "Maximum usages"
@@ -3626,9 +3638,6 @@ msgid "Attendee address"
 msgstr "Epost till deltagare"
 
 #: pretix/base/orderimport.py:474
-#, fuzzy
-#| msgctxt "address"
-#| msgid "State"
 msgid "State"
 msgstr "Region"
 
@@ -6116,6 +6125,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"din beställning {code} för {event} har annullerats.\n"
+"\n"
+"Du kan se detaljerna för din beställning på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1470
 #, python-brace-format
@@ -6134,6 +6152,19 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"Vi godkände din beställning för {event} och välkomnar dig gärna\n"
+"vid vårt evenemang.\n"
+"\n"
+"Slutför beställningen genom att betala före {expire_date}.\n"
+"\n"
+"Du kan välja en betalningsmetod och utföra betalningen här:\n"
+"\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1486
 #, python-brace-format
@@ -6149,6 +6180,18 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"Vi godkände din beställning för {event} och välkomnar dig gärna\n"
+"vid vårt evenemang. Eftersom du bara beställde gratis produkter behövs ingen "
+"betalning.\n"
+"\n"
+"Du kan ändra din beställningsinformation och se status för din beställning "
+"på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1499
 #, python-brace-format
@@ -6166,6 +6209,18 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"tyvärr har vi avbrutit din beställningsbegäran för {event}.\n"
+"\n"
+"{comment}\n"
+"\n"
+"Du kan se detaljerna för din beställning här:\n"
+"\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1514
 #, python-brace-format
@@ -6178,6 +6233,13 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"Du kan uppdatera din information och se status för din beställning på\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1532
 #, python-brace-format
@@ -6192,6 +6254,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej {attendee_name},\n"
+"\n"
+"du är registrerad för {event}.\n"
+"\n"
+"Om du inte redan har gjort det kan du ladda ner din biljett här:\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1544
 #, python-brace-format
@@ -6206,6 +6277,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"du har köpt en biljett till {event}.\n"
+"\n"
+"Om du inte redan har gjort det kan du ladda ner din biljett här:\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"Ditt {event} team"
 
 #: pretix/base/settings.py:1666
 msgid "Banner text (top)"
@@ -6601,21 +6681,21 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/simple_logo.html:231
 #: pretix/base/templates/pretixbase/email/simple_logo.html:239
 msgid "Event:"
-msgstr ""
+msgstr "Evenemang:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:29
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:37
 #: pretix/base/templates/pretixbase/email/simple_logo.html:232
 #: pretix/base/templates/pretixbase/email/simple_logo.html:240
 msgid "Order code:"
-msgstr ""
+msgstr "Beställningskod:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:30
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:38
 #: pretix/base/templates/pretixbase/email/simple_logo.html:233
 #: pretix/base/templates/pretixbase/email/simple_logo.html:241
 msgid "Order date:"
-msgstr ""
+msgstr "Beställningsdatum:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:32
 #: pretix/base/templates/pretixbase/email/simple_logo.html:235
@@ -6628,6 +6708,8 @@ msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
 msgstr ""
+"Du får det här e-postmeddelandet eftersom du gjort en beställning av "
+"följande evenemang:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
@@ -8167,6 +8249,20 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"med det här e-postmeddelandet måste vi tyvärr meddela dig att {event} har "
+"ställts in.\n"
+"\n"
+"Vi återbetalar dig {refund_amount} till din ursprungliga betalningsmetod.\n"
+"\n"
+"Du kan se den aktuella statusen för din beställning här:\n"
+"\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"\n"
+"Ditt {event} team"
 
 #: pretix/control/forms/orders.py:706
 #, python-brace-format
@@ -8181,6 +8277,16 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"med det här e-postmeddelandet måste vi tyvärr meddela att {event} har "
+"avbrutits.\n"
+"\n"
+"Du kommer därför inte att få en biljett från väntelistan.\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"\n"
+"Ditt {event} team"
 
 #: pretix/control/forms/orders.py:737
 msgid "Please confirm that you want to cancel ALL dates in this event series."
@@ -8428,6 +8534,20 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"med det här e-postmeddelandet skickar vi en eller flera kuponger för {event}:"
+"\n"
+"\n"
+"{voucher_list}\n"
+"\n"
+"Du kan lösa in dem här i vår biljettbutik:\n"
+"\n"
+"{url}\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"\n"
+"Ditt {event} team"
 
 #: pretix/control/forms/vouchers.py:237
 msgid "Recipients"
@@ -10236,6 +10356,15 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Hej,\n"
+"\n"
+"du har begärt ett nytt lösenord. Gå till följande sida för att återställa "
+"ditt lösenord:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Vänliga hälsningar,\n"
+"Ditt pretix-team\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -10257,6 +10386,24 @@ msgid ""
 "\n"
 "Your pretix team\n"
 msgstr ""
+"Hej,\n"
+"\n"
+"du har blivit inbjuden till ett team på pretix, en plattform för att skapa "
+"evenemang\n"
+"och genomföra biljettförsäljning.\n"
+"\n"
+"Arrangör:%(organizer)s\n"
+"Team:%(team)s\n"
+"\n"
+"Om du vill gå med i teamet klickar du bara på följande länk:\n"
+"%(url)s\n"
+"\n"
+"Om du inte vill gå med, kan du ignorera eller ta bort det här "
+"e-postmeddelandet.\n"
+"\n"
+"Vänliga hälsningar,\n"
+"\n"
+"Ditt pretix-team\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
 #, python-format
@@ -10278,6 +10425,22 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Hej,\n"
+"\n"
+"detta email skickas för att informera dig om att kontoinformationen för ditt "
+"prefix-konto har \n"
+"ändrats. I synnerhet har följande ändringar utförts:\n"
+"\n"
+"%(messages)s\n"
+"\n"
+"Om denna ändring inte utfördes av dig, kontakta oss omedelbart.\n"
+"\n"
+"Du kan granska och ändra dina kontoinställningar här:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Vänliga hälsningar,\n"
+"Ditt pretix-team\n"
 
 #: pretix/control/templates/pretixcontrol/event/actions.html:3
 #: pretix/control/templates/pretixcontrol/event/actions.html:5
@@ -13320,10 +13483,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:23
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:86
-#, fuzzy
-#| msgid "Order details"
 msgid "Details"
-msgstr "Beställningsuppgifter"
+msgstr "Detaljer"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:36
 #, fuzzy
@@ -15389,6 +15550,12 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"tyvärr kunde vi inte tillgodose dina önskemål och avbryter därför din "
+"beställning.\n"
+"\n"
+"Ditt {event} team"
 
 #: pretix/control/views/orders.py:683
 msgid ""
@@ -15457,6 +15624,14 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"vi har återbetalat dig {amount} för din beställning.\n"
+"\n"
+"Du kan använda presentkorts-koden {giftcard} för att betala för framtida "
+"biljettköp i vår butik.\n"
+"\n"
+"Ditt {event} team"
 
 #: pretix/control/views/orders.py:922
 msgid "The refunds you selected do not match the selected total refund amount."
@@ -18411,7 +18586,7 @@ msgstr "Ändra pris för %(item)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:179
 #: pretix/presale/templates/pretixpresale/event/voucher.html:285
 msgid "incl. taxes"
-msgstr "inkl. avgifter"
+msgstr "inkl. skatter"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:177
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:286
@@ -18693,19 +18868,16 @@ msgid "Add one more"
 msgstr "Lägg till en till"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:278
-#, fuzzy, python-format
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Extra produkter"
-msgstr[1] "Extra produkter"
+msgstr[0] "En produkt"
+msgstr[1] "%(num)s produkter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(taxname)s"
+#, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr "inkl. %(rate)s%% %(taxname)s"
+msgstr "inkl. %(tax_sum)s skatter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 #: pretix/presale/templates/pretixpresale/event/index.html:273
@@ -18885,13 +19057,13 @@ msgstr "Förköp för detta evenemang har ännu inte påbörjats."
 #: pretix/presale/templates/pretixpresale/event/voucher.html:22
 #, python-format
 msgid "Begin: %(time)s"
-msgstr "Start: %(time)s"
+msgstr "Börjar: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:193
 #: pretix/presale/templates/pretixpresale/event/voucher.html:27
 #, python-format
 msgid "End: %(time)s"
-msgstr "Slut: %(time)s"
+msgstr "Slutar: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:203
 #: pretix/presale/templates/pretixpresale/event/voucher.html:35
@@ -18925,7 +19097,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:260
 #: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
-msgstr ""
+msgstr "Lägg i varukorg"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:291
 msgid "Redeem voucher"
@@ -18933,7 +19105,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:302
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Om du redan har beställt en biljett"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:306
 msgid ""
@@ -18942,6 +19114,10 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Om du vill se, ändra status eller uppdatera information för din beställning, "
+"klicka på länken i en av e-postmeddelandena vi skickade till dig under "
+"beställningsprocessen. Om du inte hittar länken, klicka på följande knapp "
+"för att begära att länken för din beställning skickas till dig igen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:315
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
@@ -19097,10 +19273,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Change order"
-msgstr "Avbryt beställning"
+msgstr "Updatera beställningen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:344
 #, fuzzy
@@ -19391,7 +19565,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Hej!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -19526,7 +19700,7 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:402
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Produkterna har lagts till i din varukorg."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
