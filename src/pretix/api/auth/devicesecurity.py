@@ -58,6 +58,8 @@ class PretixScanNoSyncSecurityProfile(WhiteListSecurityProfile):
         ('GET', 'api-v1:question-list'),
         ('GET', 'api-v1:badgelayout-list'),
         ('GET', 'api-v1:badgeitem-list'),
+        ('GET', 'api-v1:checkinlist-list'),
+        ('GET', 'api-v1:checkinlist-status'),
         ('POST', 'api-v1:checkinlistpos-redeem'),
         ('GET', 'api-v1:event.settings'),
     )
