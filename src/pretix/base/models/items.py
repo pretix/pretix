@@ -1140,6 +1140,8 @@ class Question(LoggedModel):
             return None
 
         if self.type == Question.TYPE_CHOICE:
+            if isinstance(answer, QuestionOption):
+                return answer
             q = Q(identifier=answer)
             if isinstance(answer, int) or answer.isdigit():
                 q |= Q(pk=answer)
@@ -1154,6 +1156,8 @@ class Question(LoggedModel):
                     Q(identifier__in=answer.split(","))
                 ))
                 llen = len(answer.split(','))
+            elif all(isinstance(o, QuestionOption) for o in answer):
+                return o
             else:
                 l_ = list(self.options.filter(
                     Q(pk__in=[a for a in answer if isinstance(a, int) or a.isdigit()]) |

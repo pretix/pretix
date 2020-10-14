@@ -1,4 +1,5 @@
 import re
+from collections import defaultdict
 from decimal import Decimal, DecimalException
 
 import pycountry
@@ -12,12 +13,13 @@ from django.utils.translation import (
 )
 from django_countries import countries
 from django_countries.fields import Country
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import (
     ItemVariation, OrderPosition, QuestionAnswer, QuestionOption, Seat,
-)
+    Question)
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SCHEMES,
@@ -626,6 +628,22 @@ class Comment(ImportColumn):
 class QuestionColumn(ImportColumn):
     def __init__(self, event, q):
         self.q = q
+        self.option_resolve_cache = defaultdict(set)
+
+        for opt in q.options.all():
+            self.option_resolve_cache[str(opt.id)].add(opt)
+            self.option_resolve_cache[opt.identifier].add(opt)
+
+            if isinstance(opt.answer, LazyI18nString):
+
+                if isinstance(opt.answer.data, dict):
+                    for v in opt.answer.data.values():
+                        self.option_resolve_cache[v.strip()].add(opt)
+                else:
+                    self.option_resolve_cache[opt.answer.strip()].add(opt)
+
+            else:
+                self.option_resolve_cache[opt.answer.strip()].add(opt)
         super().__init__(event)
 
     @property
@@ -638,7 +656,23 @@ class QuestionColumn(ImportColumn):
 
     def clean(self, value, previous_values):
         if value:
-            return self.q.clean_answer(value)
+            if self.q.type == Question.TYPE_CHOICE:
+                if value not in self.option_resolve_cache:
+                    raise ValidationError(_('Invalid option selected.'))
+                if len(self.option_resolve_cache[value]) > 1:
+                    raise ValidationError(_('Ambigous option selected.'))
+                return list(self.option_resolve_cache[value])[0]
+
+            elif self.q.type == Question.TYPE_CHOICE_MULTIPLE:
+                values = value.split(',')
+                if any(v.strip() not in self.option_resolve_cache for v in values):
+                    raise ValidationError(_('Invalid option selected.'))
+                if any(len(self.option_resolve_cache[v.strip()]) > 1 for v in values):
+                    raise ValidationError(_('Ambigous option selected.'))
+                return [list(self.option_resolve_cache[v.strip()])[0] for v in values]
+
+            else:
+                return self.q.clean_answer(value)
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         if value:
@@ -702,7 +736,7 @@ def get_all_columns(event):
         SeatColumn(event),
         Comment(event)
     ]
-    for q in event.questions.exclude(type='F'):
+    for q in event.questions.prefetch_related('options').exclude(type=Question.TYPE_FILE):
         default.append(QuestionColumn(event, q))
 
     for recv, resp in order_import_columns.send(sender=event):
