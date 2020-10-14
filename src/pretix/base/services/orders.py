@@ -1884,7 +1884,7 @@ class OrderChangeManager:
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
         if self.reissue_invoice and self._invoice_dirty:
-            if i:
+            if i and not i.refered.exists():
                 self._invoices.append(generate_cancellation(i))
             if invoice_qualified(self.order) and \
                 (i or
