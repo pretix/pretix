@@ -9,18 +9,18 @@ class FullAccessSecurityProfile:
         return True
 
 
-class WhiteListSecurityProfile:
-    whitelist = tuple()
+class AllowListSecurityProfile:
+    allowlist = tuple()
 
     def is_allowed(self, request):
         key = (request.method, f"{request.resolver_match.namespace}:{request.resolver_match.url_name}")
-        return key in self.whitelist
+        return key in self.allowlist
 
 
-class PretixScanSecurityProfile(WhiteListSecurityProfile):
+class PretixScanSecurityProfile(AllowListSecurityProfile):
     identifier = 'pretixscan'
     verbose_name = _('pretixSCAN')
-    whitelist = (
+    allowlist = (
         ('GET', 'api-v1:version'),
         ('GET', 'api-v1:device.update'),
         ('GET', 'api-v1:device.revoke'),
@@ -42,10 +42,10 @@ class PretixScanSecurityProfile(WhiteListSecurityProfile):
     )
 
 
-class PretixScanNoSyncSecurityProfile(WhiteListSecurityProfile):
+class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
     identifier = 'pretixscan_online_kiosk'
     verbose_name = _('pretixSCAN (kiosk mode, online only)')
-    whitelist = (
+    allowlist = (
         ('GET', 'api-v1:version'),
         ('GET', 'api-v1:device.update'),
         ('GET', 'api-v1:device.revoke'),
@@ -65,10 +65,10 @@ class PretixScanNoSyncSecurityProfile(WhiteListSecurityProfile):
     )
 
 
-class PretixPosSecurityProfile(WhiteListSecurityProfile):
+class PretixPosSecurityProfile(AllowListSecurityProfile):
     identifier = 'pretixpos'
     verbose_name = _('pretixPOS')
-    whitelist = (
+    allowlist = (
         ('GET', 'api-v1:version'),
         ('GET', 'api-v1:device.update'),
         ('GET', 'api-v1:device.revoke'),
