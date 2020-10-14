@@ -432,6 +432,14 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers.append(_('Seat zone'))
         headers.append(_('Seat row'))
         headers.append(_('Seat number'))
+        headers += [
+            _('Company'),
+            _('Address'),
+            _('ZIP code'),
+            _('City'),
+            _('Country'),
+            pgettext('address', 'State'),
+        ]
         yield headers
 
         yield self.ProgressSetTotal(total=qs.count())
@@ -529,6 +537,14 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 ]
             else:
                 row += ['', '', '', '', '']
+
+            row += [
+                op.street or '',
+                op.zipcode or '',
+                op.city or '',
+                op.country if op.country else '',
+                op.state or '',
+            ]
 
             yield row
 
