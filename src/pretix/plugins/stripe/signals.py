@@ -38,15 +38,19 @@ def html_head_presale(sender, request=None, **kwargs):
 
     provider = StripeSettingsHolder(sender)
     url = resolve(request.path_info)
+
+    if provider.settings.connect_client_id:
+        pubkey = provider.settings.connect_publishable_key
+        if (provider.settings.get('endpoint', 'live') == 'test' or sender.testmode):
+            pubkey = provider.settings.connect_test_publishable_key
+    else:
+        pubkey = provider.settings.publishable_key
+
     if provider.settings.get('_enabled', as_type=bool) and ("checkout" in url.url_name or "order.pay" in url.url_name):
         template = get_template('pretixplugins/stripe/presale_head.html')
         ctx = {
             'event': sender,
-            'settings': provider.settings,
-            'testmode': (
-                (provider.settings.get('endpoint', 'live') == 'test' or sender.testmode)
-                and provider.settings.publishable_test_key
-            )
+            'pubkey': pubkey,
         }
         return template.render(ctx)
     else:

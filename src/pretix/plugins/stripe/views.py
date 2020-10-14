@@ -2,7 +2,6 @@ import hashlib
 import json
 import logging
 
-import requests
 import stripe
 from django.contrib import messages
 from django.core import signing
@@ -29,6 +28,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.event import DecoupleMixin
 from pretix.control.views.organizer import OrganizerDetailViewMixin
+from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
@@ -57,87 +57,30 @@ def redirect_view(request, *args, **kwargs):
 
 @scopes_disabled()
 def oauth_return(request, *args, **kwargs):
-    if 'payment_stripe_oauth_event' not in request.session:
+    if 'payment_stripe_oauth_event' not in request.session or 'payment_stripe_oauth_account' not in request.session:
         messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
         return redirect(reverse('control:index'))
 
     event = get_object_or_404(Event, pk=request.session['payment_stripe_oauth_event'])
 
-    if request.GET.get('state') != request.session['payment_stripe_oauth_token']:
-        messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
-        return redirect(reverse('control:event.settings.payment.provider', kwargs={
-            'organizer': event.organizer.slug,
-            'event': event.slug,
-            'provider': 'stripe_settings'
-        }))
-
     gs = GlobalSettingsObject()
-    testdata = {}
+    stripe.api_key = gs.settings.payment_stripe_connect_secret_key or gs.settings.payment_stripe_connect_test_secret_key
 
     try:
-        resp = requests.post('https://connect.stripe.com/oauth/token', data={
-            'grant_type': 'authorization_code',
-            'client_secret': (
-                gs.settings.payment_stripe_connect_secret_key or gs.settings.payment_stripe_connect_test_secret_key
-            ),
-            'code': request.GET.get('code')
-        })
-        data = resp.json()
-
-        if 'error' not in data:
-            account = stripe.Account.retrieve(
-                data['stripe_user_id'],
-                api_key=gs.settings.payment_stripe_connect_secret_key or gs.settings.payment_stripe_connect_test_secret_key
-            )
+        account = stripe.Account.retrieve(request.session['payment_stripe_oauth_account'])
     except:
         logger.exception('Failed to obtain OAuth token')
         messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
     else:
-        if 'error' not in data and data['livemode']:
-            try:
-                testresp = requests.post('https://connect.stripe.com/oauth/token', data={
-                    'grant_type': 'refresh_token',
-                    'client_secret': gs.settings.payment_stripe_connect_test_secret_key,
-                    'refresh_token': data['refresh_token']
-                })
-                testdata = testresp.json()
-            except:
-                logger.exception('Failed to obtain OAuth token')
-                messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
-                return redirect(reverse('control:event.settings.payment.provider', kwargs={
-                    'organizer': event.organizer.slug,
-                    'event': event.slug,
-                    'provider': 'stripe_settings'
-                }))
+        event.settings.payment_stripe_connect_user_id = account.id
+        event.settings.payment_stripe_connect_user_name = (
+            account.get('business_profile', {}).get('name') or account.get('email')
+        )
+        if request.session.get('payment_stripe_oauth_enable', False):
+            event.settings.payment_stripe__enabled = True
+            del request.session['payment_stripe_oauth_enable']
 
-        if 'error' in data:
-            messages.error(request, _('Stripe returned an error: {}').format(data['error_description']))
-        elif data['livemode'] and 'error' in testdata:
-            messages.error(request, _('Stripe returned an error: {}').format(testdata['error_description']))
-        else:
-            messages.success(request,
-                             _('Your Stripe account is now connected to pretix. You can change the settings in '
-                               'detail below.'))
-            event.settings.payment_stripe_publishable_key = data['stripe_publishable_key']
-            # event.settings.payment_stripe_connect_access_token = data['access_token'] we don't need it, right?
-            event.settings.payment_stripe_connect_refresh_token = data['refresh_token']
-            event.settings.payment_stripe_connect_user_id = data['stripe_user_id']
-            event.settings.payment_stripe_merchant_country = account.get('country')
-            if account.get('business_name') or account.get('display_name') or account.get('email'):
-                event.settings.payment_stripe_connect_user_name = (
-                    account.get('business_name') or account.get('display_name') or account.get('email')
-                )
-
-            if data['livemode']:
-                event.settings.payment_stripe_publishable_test_key = testdata['stripe_publishable_key']
-            else:
-                event.settings.payment_stripe_publishable_test_key = event.settings.payment_stripe_publishable_key
-
-            if request.session.get('payment_stripe_oauth_enable', False):
-                event.settings.payment_stripe__enabled = True
-                del request.session['payment_stripe_oauth_enable']
-
-            stripe_verify_domain.apply_async(args=(event.pk, get_domain_for_event(event)))
+        stripe_verify_domain.apply_async(args=(event.pk, get_domain_for_event(event)))
 
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': event.organizer.slug,
@@ -407,6 +350,41 @@ def oauth_disconnect(request, **kwargs):
         'event': request.event.slug,
         'provider': 'stripe_settings'
     }))
+
+
+@event_permission_required('can_change_event_settings')
+def oauth_connect(request, **kwargs):
+    gs = GlobalSettingsObject()
+    stripe.api_key = gs.settings.payment_stripe_connect_secret_key or gs.settings.payment_stripe_connect_test_secret_key
+
+    request.session['payment_stripe_oauth_event'] = request.event.pk
+    try:
+        account = stripe.Account.create(
+            type='standard',
+            metadata={
+                'organizer': request.organizer.slug,
+            }
+        )
+        request.session['payment_stripe_oauth_account'] = account.stripe_id
+        account_link = stripe.AccountLink.create(
+            account=account.stripe_id,
+            return_url=build_global_uri('plugins:stripe:oauth.return'),
+            refresh_url=build_global_uri('plugins:stripe:oauth.connect', kwargs={
+                'organizer': request.organizer.slug,
+                'event': request.event.slug,
+            }),
+            type='account_onboarding',
+        )
+    except:
+        logger.exception('Failed to obtain account link')
+        messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
+        return redirect(reverse('control:event.settings.payment.provider', kwargs={
+            'organizer': request.event.organizer.slug,
+            'event': request.event.slug,
+            'provider': 'stripe_settings'
+        }))
+
+    return redirect(account_link.url)
 
 
 @xframe_options_exempt
