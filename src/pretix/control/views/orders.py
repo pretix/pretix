@@ -47,7 +47,7 @@ from pretix.base.models.orders import (
 )
 from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.payment import PaymentException
-from pretix.base.secrets import generate_ticket_secret
+from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.cancelevent import cancel_event
 from pretix.base.services.export import export
@@ -1645,17 +1645,9 @@ class OrderContactChange(OrderView):
                 changed = True
                 self.order.secret = generate_secret()
                 for op in self.order.all_positions.all():
-                    new_secret = generate_ticket_secret(
-                        self.request.event, item=op.item, variation=op.variation, subevent=op.subevent,
-                        attendee_name=op.attendee_name_cached, seat=op.seat, current_secret=op.secret,
-                        force_invalidate=True
+                    assign_ticket_secret(
+                        self.request.event, position=op, force_invalidate=True, save=True
                     )
-                    if op.secret != new_secret:
-                        op.blacklisted_secrets.create(
-                            event=self.request.event, secret=op.secret
-                        )
-                    op.secret = new_secret
-                    op.save()
                 tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
                 self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
 

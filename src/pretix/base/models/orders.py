@@ -2030,7 +2030,7 @@ class OrderPosition(AbstractPosition):
             self.tax_rate = Decimal('0.00')
 
     def save(self, *args, **kwargs):
-        from pretix.base.secrets import generate_ticket_secret
+        from pretix.base.secrets import assign_ticket_secret
 
         if self.tax_rate is None:
             self._calculate_tax()
@@ -2039,10 +2039,8 @@ class OrderPosition(AbstractPosition):
             while not self.secret or OrderPosition.all.filter(
                 secret=self.secret, order__event__organizer_id=self.order.event.organizer_id
             ).exists():
-                self.secret = generate_ticket_secret(
-                    event=self.order.event, item=self.item, variation=self.variation,
-                    subevent=self.subevent, attendee_name=self.attendee_name_cached,
-                    seat=self.seat, current_secret=None, force_invalidate=True
+                assign_ticket_secret(
+                    event=self.order.event, position=self, force_invalidate=True, save=False
                 )
 
         if not self.pseudonymization_id:
@@ -2332,10 +2330,16 @@ class CancellationRequest(models.Model):
     refund_as_giftcard = models.BooleanField(default=False)
 
 
-class TicketSecretBlacklist(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='blacklisted_secrets')
-    position = models.ForeignKey(OrderPosition, on_delete=models.SET_NULL, related_name='blacklisted_secrets')
+class RevokedTicketSecret(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='revoked_secrets')
+    position = models.ForeignKey(
+        OrderPosition,
+        on_delete=models.SET_NULL,
+        related_name='revoked_secrets',
+        null=True,
+    )
     secret = models.TextField(db_index=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(post_delete, sender=CachedTicket)

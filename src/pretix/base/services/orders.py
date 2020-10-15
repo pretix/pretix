@@ -38,7 +38,7 @@ from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxRule
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.secrets import generate_ticket_secret
+from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
@@ -1709,16 +1709,9 @@ class OrderChangeManager:
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
             elif isinstance(op, self.RegenerateSecretOperation):
-                new_secret = generate_ticket_secret(
-                    event=self.event, item=op.position.item, variation=op.position.variation,
-                    subevent=op.position.subevent, attendee_name=op.position.attendee_name_cached,
-                    seat=op.position.seat, current_secret=op.position.secret, force_invalidate=True
+                assign_ticket_secret(
+                    event=self.event, position=op.position, force_invalidate=True, save=True
                 )
-                if op.position.secret != new_secret:
-                    op.position.blacklisted_secrets.create(
-                        event=self.event, secret=op.position.secret
-                    )
-                op.position.save()
                 tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
                                                              'order': self.order.pk})
                 self.order.log_action('pretix.event.order.changed.secret', user=self.user, auth=self.auth, data={
@@ -1751,16 +1744,9 @@ class OrderChangeManager:
                 'new_order': split_order.code,
             })
             op.order = split_order
-            new_secret = generate_ticket_secret(
-                self.event, item=op.item, variation=op.variation, subevent=op.subevent,
-                attendee_name=op.attendee_name_cached, seat=op.seat, current_secret=op.secret,
-                force_invalidate=True
+            assign_ticket_secret(
+                self.event, position=op, force_invalidate=True,
             )
-            if op.secret != new_secret:
-                op.blacklisted_secrets.create(
-                    event=self.event, secret=op.secret
-                )
-            op.secret = new_secret
             op.save()
 
         try:

@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import ItemVariation, Item, SubEvent, Seat
+from pretix.base.models import Item, ItemVariation, Seat, SubEvent
 from pretix.base.signals import register_ticket_secret_generators
 
 
@@ -83,10 +83,19 @@ def recv_classic(sender, **kwargs):
     return [RandomTicketSecretGenerator]
 
 
-def generate_ticket_secret(event, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                           attendee_name: str = None, seat: Seat = None, current_secret: str = None,
-                           force_invalidate=False):
-    return event.ticket_secret_generator.generate_secret(
-        item=item, variation=variation, subevent=subevent, attendee_name=attendee_name, seat=seat,
-        current_secret=current_secret, force_invalidate=force_invalidate
+def assign_ticket_secret(event, position, force_invalidate=False, save=True):
+    gen = event.ticket_secret_generator
+    secret = gen.generate_secret(
+        item=position.item,
+        variation=position.variation,
+        subevent=position.subevent,
+        attendee_name=position.attendee_name,
+        seat=position.seat,
+        current_secret=position.current_secret,
+        force_invalidate=force_invalidate
     )
+    if position.secrete and position.secret != secret and gen.use_revocation_list:
+        position.revoked_secrets.create(event=event, secret=position.secret)
+
+    if save:
+        position.save()
