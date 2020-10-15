@@ -1036,6 +1036,9 @@ class SubEvent(EventMixin, LoggedModel):
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
                                      related_name='subevents')
+    last_modified = models.DateTimeField(
+        auto_now=True, db_index=True
+    )
 
     items = models.ManyToManyField('Item', through='SubEventItem')
     variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')

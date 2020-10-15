@@ -51,6 +51,7 @@ seating_plan                          integer                    If reserved sea
                                                                  plan. Otherwise ``null``.
 seat_category_mapping                 object                     An object mapping categories of the seating plan
                                                                  (strings) to items in the event (integers or ``null``).
+last_modified                         datetime                   Last modification of this object
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.7
@@ -79,6 +80,10 @@ seat_category_mapping                 object                     An object mappi
 .. versionchanged:: 3.10
 
    The ``disabled`` attribute has been added to ``item_price_overrides`` and ``variation_price_overrides``.
+
+.. versionchanged:: 3.12
+
+   The ``last_modified`` attribute has been added.
 
 Endpoints
 ---------
@@ -148,6 +153,8 @@ Endpoints
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
    :param organizer: The ``slug`` field of a valid organizer
    :param event: The ``slug`` field of the main event
+   :query datetime modified_since: Only return objects that have changed since the given date. Be careful: This does not
+       allow you to know if a subevent was deleted.
    :query array attr[meta_data_key]: By providing the key and value of a meta data attribute, the list of sub-events
         will only contain the sub-events matching the set criteria. Providing ``?attr[Format]=Seminar`` would return
         only those sub-events having set their ``Format`` meta data to ``Seminar``, ``?attr[Format]=`` only those, that

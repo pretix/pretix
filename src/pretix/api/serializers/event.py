@@ -369,7 +369,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
         fields = ('id', 'name', 'date_from', 'date_to', 'active', 'date_admission',
                   'presale_start', 'presale_end', 'location', 'geo_lat', 'geo_lon', 'event', 'is_public',
                   'seating_plan', 'item_price_overrides', 'variation_price_overrides', 'meta_data',
-                  'seat_category_mapping')
+                  'seat_category_mapping', 'last_modified')
 
     def validate(self, data):
         data = super().validate(data)

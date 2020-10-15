@@ -4,7 +4,7 @@ from django.db.models import ProtectedError, Q
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import filters, views, viewsets
+from rest_framework import filters, serializers, views, viewsets
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
@@ -194,6 +194,7 @@ with scopes_disabled():
         is_past = django_filters.rest_framework.BooleanFilter(method='is_past_qs')
         is_future = django_filters.rest_framework.BooleanFilter(method='is_future_qs')
         ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
+        modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
 
         class Meta:
             model = SubEvent
@@ -233,6 +234,8 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'can_change_event_settings'
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = SubEventFilter
+    ordering = ('date_from',)
+    ordering_fields = ('id', 'date_from', 'last_modified')
 
     def get_queryset(self):
         if getattr(self.request, 'event', None):
@@ -253,6 +256,20 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
         return qs.prefetch_related(
             'subeventitem_set', 'subeventitemvariation_set', 'seat_category_mappings'
         )
+
+    def list(self, request, **kwargs):
+        date = serializers.DateTimeField().to_representation(now())
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            resp = self.get_paginated_response(serializer.data)
+            resp['X-Page-Generated'] = date
+            return resp
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, headers={'X-Page-Generated': date})
 
     def perform_update(self, serializer):
         original_data = self.get_serializer(instance=serializer.instance).data
