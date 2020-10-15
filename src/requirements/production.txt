@@ -68,3 +68,5 @@ arabic-reshaper==2.0.15  # Support for Aabic in reportlab
 packaging
 tlds>=2020041600
 text-unidecode==1.*
+protobuf
+cryptography

@@ -1564,6 +1564,9 @@ class OrderChangeManager:
                             invoice_address=self._invoice_address
                         ).gross
                     )
+                assign_ticket_secret(
+                    event=self.event, position=op.position, force_invalidate=False, save=False
+                )
                 op.position.save()
             elif isinstance(op, self.SeatOperation):
                 self.order.log_action('pretix.event.order.changed.seat', user=self.user, auth=self.auth, data={
@@ -1575,6 +1578,9 @@ class OrderChangeManager:
                     'new_seat_id': op.seat.pk if op.seat else None,
                 })
                 op.position.seat = op.seat
+                assign_ticket_secret(
+                    event=self.event, position=op.position, force_invalidate=False, save=False
+                )
                 op.position.save()
             elif isinstance(op, self.SubeventOperation):
                 self.order.log_action('pretix.event.order.changed.subevent', user=self.user, auth=self.auth, data={
@@ -1586,7 +1592,9 @@ class OrderChangeManager:
                     'new_price': op.position.price
                 })
                 op.position.subevent = op.subevent
-                op.position.save()
+                assign_ticket_secret(
+                    event=self.event, position=op.position, force_invalidate=False, save=False
+                )
                 if op.position.price_before_voucher is not None and op.position.voucher and not op.position.addon_to_id:
                     op.position.price_before_voucher = max(
                         op.position.price,
@@ -1597,6 +1605,7 @@ class OrderChangeManager:
                             invoice_address=self._invoice_address
                         ).gross
                     )
+                op.position.save()
             elif isinstance(op, self.AddFeeOperation):
                 self.order.log_action('pretix.event.order.changed.addfee', user=self.user, auth=self.auth, data={
                     'fee': op.fee.pk,
@@ -1624,7 +1633,6 @@ class OrderChangeManager:
                 op.position.price = op.price.gross
                 op.position.tax_rate = op.price.rate
                 op.position.tax_value = op.price.tax
-                op.position.save()
             elif isinstance(op, self.TaxRuleOperation):
                 if isinstance(op.position, OrderPosition):
                     self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={

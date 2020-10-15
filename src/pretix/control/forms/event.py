@@ -1073,6 +1073,7 @@ class TicketSettingsForm(SettingsForm):
         label=_("Ticket code generator"),
         help_text=_("For advanced users, usually does not need to be changed."),
         required=True,
+        widget=forms.RadioSelect,
         choices=[]
     )
 

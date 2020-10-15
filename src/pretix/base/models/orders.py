@@ -1937,7 +1937,7 @@ class OrderPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
-    secret = models.CharField(max_length=64, null=False, blank=False, db_index=True)
+    secret = models.CharField(max_length=255, null=False, blank=False, db_index=True)
     web_secret = models.CharField(max_length=32, default=generate_secret, db_index=True)
     pseudonymization_id = models.CharField(
         max_length=16,

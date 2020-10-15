@@ -662,7 +662,14 @@ class Event(EventMixin, LoggedModel):
                 s.product = item_map[s.product_id]
             s.save()
 
+        skip_settings = (
+            'ticket_secrets_pretix_sig1_pubkey',
+            'ticket_secrets_pretix_sig1_privkey',
+        )
         for s in other.settings._objects.all():
+            if s.key in skip_settings:
+                continue
+
             s.object = self
             s.pk = None
             if s.value.startswith('file://'):

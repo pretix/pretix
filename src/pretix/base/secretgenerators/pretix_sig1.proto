@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "eu.pretix.secrets.sig1";
+option java_outer_classname = "TicketProtos";
+
+message Ticket {
+    string seed = 1;
+    int64 item = 2;
+    int64 variation = 3;
+    int64 subevent = 4;
+    string seat = 5;
+}
