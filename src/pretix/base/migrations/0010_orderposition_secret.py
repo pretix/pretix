@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='orderposition',
             name='secret',
-            field=models.CharField(default=pretix.base.models.orders.generate_position_secret, max_length=64),
+            field=models.CharField(default="invalid", max_length=64),
         ),
     ]
