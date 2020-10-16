@@ -661,7 +661,7 @@ class QuestionColumn(ImportColumn):
                 if value not in self.option_resolve_cache:
                     raise ValidationError(_('Invalid option selected.'))
                 if len(self.option_resolve_cache[value]) > 1:
-                    raise ValidationError(_('Ambigous option selected.'))
+                    raise ValidationError(_('Ambiguous option selected.'))
                 return list(self.option_resolve_cache[value])[0]
 
             elif self.q.type == Question.TYPE_CHOICE_MULTIPLE:
