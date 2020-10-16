@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0162_remove_seat_name'),
+        ('pretixbase', '0164_subevent_last_modified'),
     ]
 
     operations = [

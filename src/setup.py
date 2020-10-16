@@ -155,7 +155,7 @@ setup(
         'packaging',
         'tlds>=2020041600',
         'text-unidecode==1.*',
-        'protobuf',
+        'protobuf==3.13.*',
         'cryptography',
     ],
     extras_require={
