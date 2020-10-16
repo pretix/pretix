@@ -2067,7 +2067,7 @@ class OrderPosition(AbstractPosition):
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
                   auth=None, attach_tickets=False):
         """
-        Sends an email to the user that placed this order. Basically, this method does two things:
+        Sends an email to the attendee. Basically, this method does two things:
 
         * Call ``pretix.base.services.mail.mail`` with useful values for the ``event``, ``locale``, ``recipient`` and
           ``order`` parameters.

@@ -1067,6 +1067,7 @@ class TicketSettingsForm(SettingsForm):
         'ticket_download_addons',
         'ticket_download_nonadm',
         'ticket_download_pending',
+        'ticket_download_require_validated_email',
     ]
 
     def prepare_fields(self):

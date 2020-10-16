@@ -971,6 +971,19 @@ DEFAULTS = {
                                               'data-checkbox-dependency-visual': 'on'}),
         )
     },
+    'ticket_download_require_validated_email': {
+        'default': 'False',
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Do not issue ticket before email address is validated"),
+            help_text=_("If turned on, tickets will not be offered for download directly after purchase. They will "
+                        "be attached to the payment confirmation email (if the file size is not too large), and the "
+                        "customer will be able to download them from the page as soon as they clicked a link in "
+                        "the email. Does not affect orders performed through other sales channels."),
+        )
+    },
     'event_list_availability': {
         'default': 'True',
         'type': bool

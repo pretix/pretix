@@ -1,6 +1,33 @@
 {% load i18n %}
 {% load eventurl %}
-{% if can_download and download_buttons and order.count_positions %}
+{% if download_email_required %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Ticket download" %}
+            </h3>
+        </div>
+        <div class="panel-body text-center">
+            <h4>
+                <span class="fa fa-envelope text-muted fa-2x"></span><br><br>
+                {% trans "Please check your email account, we've sent you your tickets." %}
+            </h4>
+            <p class="text-muted">
+                {% if scope == "position" %}
+                    {% blocktrans trimmed %}
+                        You can also download them right here as soon as the person who placed the order clicked the
+                        link in the email they received to confirm the email address is valid.
+                    {% endblocktrans %}
+                {% else %}
+                    {% blocktrans trimmed %}
+                        If the email has no attachment, click the link in our email and you will be able to download
+                        them from here.
+                    {% endblocktrans %}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+{% elif can_download and download_buttons and order.count_positions %}
     <div class="alert alert-info info-download">
         {% if cart.positions|length > 1 and can_download_multi %}
             {% blocktrans trimmed %}
@@ -14,7 +41,7 @@
                 {% for b in download_buttons %}
                     {% if b.multi %}
                         <form action="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
-                                method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                              method="post" data-asynctask data-asynctask-download class="download-btn-form">
                             {% csrf_token %}
                             <button type="submit"
                                     class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
@@ -24,7 +51,7 @@
                     {% endif %}
                 {% endfor %}
             </p>
-        {% elif tickets_with_download|length == 1 %}
+            {% elif tickets_with_download|length == 1 %}
             {% blocktrans trimmed %}
                 Please have your ticket ready when entering the event.
             {% endblocktrans %}
@@ -33,8 +60,11 @@
             {% endblocktrans %}
             <p class="info-download">
                 {% for b in download_buttons %}
-                    <form action="{% if position_page and tickets_with_download.0.addon_to %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.addon_to.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
-                          method="post" data-asynctask data-asynctask-download class="download-btn-form{% if b.javascript_required %} requirejs{% endif %}">
+                    <form action="
+
+                            {% if position_page and tickets_with_download.0.addon_to %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.addon_to.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
+                          method="post" data-asynctask data-asynctask-download
+                          class="download-btn-form{% if b.javascript_required %} requirejs{% endif %}">
                         {% csrf_token %}
                         <button type="submit"
                                 class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
@@ -52,7 +82,7 @@
             {% endblocktrans %}
         {% endif %}
     </div>
-{% elif not download_buttons and ticket_download_date %}
+    {% elif not download_buttons and ticket_download_date %}
     {% if order.status == 'p' %}
         <div class="alert alert-info info-download">
             {% blocktrans trimmed with date=ticket_download_date|date:"SHORT_DATE_FORMAT" %}

@@ -22,7 +22,7 @@
         <div class="clearfix"></div>
     </h2>
     {% eventsignal event "pretix.presale.signals.position_info_top" order=order position=position request=request %}
-    {% include "pretixpresale/event/fragment_downloads.html" %}
+    {% include "pretixpresale/event/fragment_downloads.html" with scope="position" %}
     <div class="panel panel-primary cart">
         <div class="panel-heading">
             <h3 class="panel-title">

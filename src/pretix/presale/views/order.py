@@ -134,10 +134,17 @@ class TicketPageMixin:
         can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
-        ctx['can_download'] = (
+        can_download = (
             can_download and self.order.ticket_download_available and
             list(self.order.positions_with_tickets)
         )
+        ctx['download_email_required'] = can_download and (
+            self.request.event.settings.ticket_download_require_validated_email and
+            self.order.sales_channel == 'web' and
+            not self.order.email_known_to_work
+        )
+        ctx['can_download'] = can_download and not ctx['download_email_required']
+
         ctx['download_buttons'] = self.download_buttons
 
         ctx['backend_user'] = (
@@ -873,6 +880,13 @@ class OrderDownloadMixin:
             return self.error(OrderError(_('Ticket download is not (yet) enabled for this order.')))
         if 'position' in kwargs and not self.order_position.generate_ticket:
             return self.error(OrderError(_('Ticket download is not enabled for this product.')))
+
+        if (
+            self.request.event.settings.ticket_download_require_validated_email and
+            self.order.sales_channel == 'web' and
+            not self.order.email_known_to_work
+        ):
+            return self.error(OrderError(_('Please click the link we sent you via email to download your tickets.')))
 
         ct = self.get_last_ct()
         if ct:
