@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:25+0000\n"
-"PO-Revision-Date: 2020-10-16 20:34+0000\n"
+"PO-Revision-Date: 2020-10-16 20:40+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -10856,56 +10856,42 @@ msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:15
 msgid "ZVT Terminal"
-msgstr ""
+msgstr "ZVT-Terminal"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:16
-#, fuzzy
-#| msgid "Line number"
 msgctxt "terminal_zvt"
 msgid "Trace number"
-msgstr "Zeilennummer"
+msgstr "Trace-Nummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
-#, fuzzy
-#| msgid "Payment type"
 msgctxt "terminal_zvt"
 msgid "Payment type"
 msgstr "Zahlungsart"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
-#, fuzzy
-#| msgid "Additional text"
 msgctxt "terminal_zvt"
 msgid "Additional text"
 msgstr "Zusätzlicher Text"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
-#, fuzzy
-#| msgid "Line number"
 msgctxt "terminal_zvt"
 msgid "Turnover number"
-msgstr "Zeilennummer"
+msgstr "Turnover-Nummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:24
-#, fuzzy
-#| msgid "Seat number"
 msgctxt "terminal_zvt"
 msgid "Receipt number"
-msgstr "Sitzplatz"
+msgstr "Belegnummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:26
-#, fuzzy
-#| msgid "Card type"
 msgctxt "terminal_zvt"
 msgid "Card type"
 msgstr "Kartentyp"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:28
-#, fuzzy
-#| msgid "Cart position"
 msgctxt "terminal_zvt"
 msgid "Card expiration"
-msgstr "Produkt im Warenkorb"
+msgstr "Ablaufdatum"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:33
 msgid "Transaction Code"
@@ -18849,16 +18835,12 @@ msgid "Orders by product"
 msgstr "Bestellungen nach Produkt"
 
 #: pretix/plugins/reports/exporters.py:208
-#, fuzzy
-#| msgid "incl. taxes"
 msgid "(excl. taxes)"
-msgstr "inkl. Steuern"
+msgstr "(zzgl. Steuern)"
 
 #: pretix/plugins/reports/exporters.py:208
-#, fuzzy
-#| msgid "incl. taxes"
 msgid "(incl. taxes)"
-msgstr "inkl. Steuern"
+msgstr "(inkl. Steuern)"
 
 #: pretix/plugins/reports/exporters.py:213
 #, python-brace-format
@@ -20450,7 +20432,7 @@ msgstr "Bestellbestätigung"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Please check your email account, we've sent you your tickets."
-msgstr ""
+msgstr "Bitte prüfe dein E-Mail-Konto, wir haben dir die Tickets zugeschickt."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:17
 msgid ""
@@ -20458,12 +20440,17 @@ msgid ""
 "order clicked the link in the email they received to confirm the email "
 "address is valid."
 msgstr ""
+"Du kannst diese ebenfalls hier herunterladen, sobald die Person, die die "
+"Bestellung aufgegeben hat, einen Link in der an sie geschickten E-Mail "
+"geklickt hat."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:22
 msgid ""
 "If the email has no attachment, click the link in our email and you will be "
 "able to download them from here."
 msgstr ""
+"Wenn die E-Mail keinen Anhang hat, klicke den Link zur Bestellung in der E-"
+"Mail und lade sie danach von hier herunter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:33
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:55
@@ -21406,6 +21393,8 @@ msgstr ""
 #: pretix/presale/views/order.py:889
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
+"Bitte klicke den Link, den wir dir per E-Mail geschickt haben, um deine "
+"Tickets herunterzuladen."
 
 #: pretix/presale/views/order.py:1048
 msgid "You cannot change this order."
@@ -21565,7 +21554,7 @@ msgstr "Türkisch"
 
 #: pretix/settings.py:721
 msgid "User profile only"
-msgstr ""
+msgstr "Nur Benutzerprofil"
 
 #: pretix/settings.py:722
 msgid "Read access"
