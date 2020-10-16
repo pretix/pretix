@@ -3932,7 +3932,7 @@ msgstr "Atlasīta nederīga opcija."
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr "Atlasīta nederīga opcija."
 
 #: pretix/base/payment.py:231

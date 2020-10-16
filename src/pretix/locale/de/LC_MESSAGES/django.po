@@ -3915,14 +3915,8 @@ msgstr ""
 msgid "You need to select a specific seat."
 msgstr "Sie müssen einen Sitzplatz auswählen."
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Ambigous option selected."
-msgid "Ambiguous option selected."
-msgstr "Mehrdeutige Option ausgewählt."
-
 #: pretix/base/orderimport.py:672
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr "Mehrdeutige Option ausgewählt."
 
 #: pretix/base/payment.py:231

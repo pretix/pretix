@@ -4089,7 +4089,7 @@ msgstr "Ugyldig valgmulighed valgt."
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr "Ugyldig valgmulighed valgt."
 
 #: pretix/base/payment.py:231

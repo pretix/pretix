@@ -3912,7 +3912,7 @@ msgstr "تحديد خيار غير صالح."
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr "تحديد خيار غير صالح."
 
 #: pretix/base/payment.py:231

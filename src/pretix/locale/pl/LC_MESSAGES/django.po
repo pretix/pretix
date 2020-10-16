@@ -3953,7 +3953,7 @@ msgstr "Wybrano nieprawidłową opcję."
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr "Wybrano nieprawidłową opcję."
 
 #: pretix/base/payment.py:231

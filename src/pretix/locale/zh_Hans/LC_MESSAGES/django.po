@@ -3853,7 +3853,7 @@ msgstr "选择的选项无效。"
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr "选择的选项无效。"
 
 #: pretix/base/payment.py:231

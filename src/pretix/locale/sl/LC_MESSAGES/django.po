@@ -3927,7 +3927,7 @@ msgstr "Izbrana napačna opcija."
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr "Izbrana napačna opcija."
 
 #: pretix/base/payment.py:231

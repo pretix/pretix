@@ -3687,7 +3687,7 @@ msgstr "Nincs dátum kiválasztva."
 #, fuzzy
 #| msgctxt "subevent"
 #| msgid "No date selected."
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr "Nincs dátum kiválasztva."
 
 #: pretix/base/payment.py:231

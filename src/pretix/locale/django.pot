@@ -3656,7 +3656,7 @@ msgid "Ambiguous option selected."
 msgstr ""
 
 #: pretix/base/orderimport.py:672
-msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
 msgstr ""
 
 #: pretix/base/payment.py:231
