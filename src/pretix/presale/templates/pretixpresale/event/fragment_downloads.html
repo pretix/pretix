@@ -13,7 +13,7 @@
                 {% trans "Please check your email account, we've sent you your tickets." %}
             </h4>
             <p class="text-muted">
-                {% if scope == "position" %}
+                {% if position_page %}
                     {% blocktrans trimmed %}
                         You can also download them right here as soon as the person who placed the order clicked the
                         link in the email they received to confirm the email address is valid.
@@ -29,7 +29,7 @@
     </div>
 {% elif can_download and download_buttons and order.count_positions %}
     <div class="alert alert-info info-download">
-        {% if cart.positions|length > 1 and can_download_multi %}
+        {% if cart.positions|length > 1 and can_download_multi %} {# never True on ticket page #}
             {% blocktrans trimmed %}
                 Please have your ticket ready when entering the event.
             {% endblocktrans %}
@@ -51,7 +51,7 @@
                     {% endif %}
                 {% endfor %}
             </p>
-            {% elif tickets_with_download|length == 1 %}
+        {% elif tickets_with_download|length == 1 %}
             {% blocktrans trimmed %}
                 Please have your ticket ready when entering the event.
             {% endblocktrans %}
@@ -60,9 +60,7 @@
             {% endblocktrans %}
             <p class="info-download">
                 {% for b in download_buttons %}
-                    <form action="
-
-                            {% if position_page and tickets_with_download.0.addon_to %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.addon_to.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
+                    <form action="{% if position_page and tickets_with_download.0.addon_to %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.addon_to.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
                           method="post" data-asynctask data-asynctask-download
                           class="download-btn-form{% if b.javascript_required %} requirejs{% endif %}">
                         {% csrf_token %}

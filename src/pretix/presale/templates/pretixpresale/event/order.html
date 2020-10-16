@@ -163,7 +163,7 @@
             </div>
         {% endif %}
     {% endif %}
-    {% include "pretixpresale/event/fragment_downloads.html" with scope="order" %}
+    {% include "pretixpresale/event/fragment_downloads.html" with position_page=False %}
     <div class="panel panel-primary cart">
         <div class="panel-heading">
             {% if order.can_modify_answers %}
