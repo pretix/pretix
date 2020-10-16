@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-16 20:25+0000\n"
+"POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-16 20:40+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -3910,7 +3910,13 @@ msgstr ""
 msgid "You need to select a specific seat."
 msgstr "Du musst einen Sitzplatz auswählen."
 
-#: pretix/base/orderimport.py:664 pretix/base/orderimport.py:672
+#: pretix/base/orderimport.py:664
+#, fuzzy
+#| msgid "Ambigous option selected."
+msgid "Ambiguous option selected."
+msgstr "Mehrdeutige Option ausgewählt."
+
+#: pretix/base/orderimport.py:672
 msgid "Ambigous option selected."
 msgstr "Mehrdeutige Option ausgewählt."
 

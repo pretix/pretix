@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-16 20:25+0000\n"
+"POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-01 17:00+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
@@ -4080,7 +4080,13 @@ msgstr "Dette korte navn er allerede i brug. Vælg et andet."
 msgid "You need to select a specific seat."
 msgstr "Du skal vælge en produktvariant."
 
-#: pretix/base/orderimport.py:664 pretix/base/orderimport.py:672
+#: pretix/base/orderimport.py:664
+#, fuzzy
+#| msgid "Invalid option selected."
+msgid "Ambiguous option selected."
+msgstr "Ugyldig valgmulighed valgt."
+
+#: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."
 msgid "Ambigous option selected."

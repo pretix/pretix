@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-16 20:25+0000\n"
+"POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-01-26 04:00+0000\n"
 "Last-Translator: András Veres-Szentkirályi <vsza@vsza.hu>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -3676,7 +3676,14 @@ msgstr ""
 msgid "You need to select a specific seat."
 msgstr ""
 
-#: pretix/base/orderimport.py:664 pretix/base/orderimport.py:672
+#: pretix/base/orderimport.py:664
+#, fuzzy
+#| msgctxt "subevent"
+#| msgid "No date selected."
+msgid "Ambiguous option selected."
+msgstr "Nincs dátum kiválasztva."
+
+#: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgctxt "subevent"
 #| msgid "No date selected."
