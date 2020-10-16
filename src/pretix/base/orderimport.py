@@ -641,7 +641,7 @@ class QuestionColumn(ImportColumn):
                     for v in opt.answer.data.values():
                         self.option_resolve_cache[v.strip()].add(opt)
                 else:
-                    self.option_resolve_cache[opt.answer.strip()].add(opt)
+                    self.option_resolve_cache[opt.answer.data.strip()].add(opt)
 
             else:
                 self.option_resolve_cache[opt.answer.strip()].add(opt)
