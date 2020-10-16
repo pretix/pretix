@@ -371,7 +371,10 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     if position.voucher:
                         Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
                     position.canceled = True
-                    position.save(update_fields=['canceled'])
+                    assign_ticket_secret(
+                        event=order.event, position=position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
+                    )
+                    position.save(update_fields=['canceled', 'secret'])
                 new_fee = cancellation_fee
                 for fee in order.fees.all():
                     if keep_fees and fee in keep_fees:
@@ -406,6 +409,9 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 order.save(update_fields=['status', 'cancellation_date'])
 
             for position in order.positions.all():
+                assign_ticket_secret(
+                    event=order.event, position=position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=True
+                )
                 if position.voucher:
                     Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
 
@@ -1683,7 +1689,10 @@ class OrderChangeManager:
                     opa.canceled = True
                     if opa.voucher:
                         Voucher.objects.filter(pk=opa.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
-                    opa.save(update_fields=['canceled'])
+                    assign_ticket_secret(
+                        event=self.event, position=op.position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
+                    )
+                    opa.save(update_fields=['canceled', 'secret'])
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,

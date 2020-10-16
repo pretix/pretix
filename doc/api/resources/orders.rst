@@ -2263,3 +2263,56 @@ Order refund endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order or refund does not exist.
+
+Revoked ticket secrets
+----------------------
+
+With some non-default ticket secret generation methods, a list of revoked ticket secrets is required for proper validation.
+
+.. versionchanged:: 3.12
+
+   Added revocation lists.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/revokedsecrets/
+
+   Returns a list of all revoked secrets within a given event.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/revokedsecrets/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+      X-Page-Generated: 2017-12-01T10:00:00Z
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "secret": "k24fiuwvu8kxz3y1",
+            "created": "2017-12-01T10:00:00Z",
+          }
+        ]
+      }
+
+   :query integer page: The page number in case of a multi-page result set, default is 1
+   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``secret`` and ``created``. Default: ``-created``
+   :query datetime created_since: Only return revocations that have been created since the given date.
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :resheader X-Page-Generated: The server time at the beginning of the operation. If you're using this API to fetch
+                                differences, this is the value you want to use as ``created_since`` in your next call.
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.

@@ -4552,3 +4552,17 @@ def test_orderposition_price_calculation_reverse_charge(token_client, organizer,
         'tax_rule': taxrule.pk,
         'tax': Decimal('0.00')
     }
+
+
+@pytest.mark.django_db
+def test_revoked_secret_list(token_client, organizer, event):
+    r = event.revoked_secrets.create(secret="abcd")
+    res = {
+        "secret": "abcd",
+        "created": r.created.isoformat().replace("+00:00", "Z")
+    }
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/revokedsecrets/'.format(
+        organizer.slug, event.slug,
+    ))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']

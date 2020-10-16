@@ -183,8 +183,10 @@ def recv_classic(sender, **kwargs):
     return [RandomTicketSecretGenerator, Sig1TicketSecretGenerator]
 
 
-def assign_ticket_secret(event, position, force_invalidate=False, save=True):
+def assign_ticket_secret(event, position, force_invalidate_if_revokation_list_used=False, force_invalidate=False, save=True):
     gen = event.ticket_secret_generator
+    if gen.use_revocation_list and force_invalidate_if_revokation_list_used:
+        force_invalidate = True
     secret = gen.generate_secret(
         item=position.item,
         variation=position.variation,
@@ -192,8 +194,9 @@ def assign_ticket_secret(event, position, force_invalidate=False, save=True):
         current_secret=position.secret,
         force_invalidate=force_invalidate
     )
-    if position.secret and position.secret != secret and gen.use_revocation_list:
+    changed = position.secret != secret
+    if position.secret and changed and gen.use_revocation_list:
         position.revoked_secrets.create(event=event, secret=position.secret)
     position.secret = secret
-    if save:
+    if save and changed:
         position.save()
