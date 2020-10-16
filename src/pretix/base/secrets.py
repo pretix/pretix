@@ -146,13 +146,13 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
             payload = rawbytes[5:5 + payload_len]
             signature = rawbytes[5 + payload_len:5 + payload_len + sig_len]
             pubkey = load_pem_public_key(
-                base64.b64decode(self.event.settings.ticket_secrets_pretix_sig1_privkey), Backend()
+                base64.b64decode(self.event.settings.ticket_secrets_pretix_sig1_pubkey), Backend()
             )
             pubkey.verify(signature, payload)
             t = pretix_sig1_pb2.Ticket()
             t.ParseFromString(payload)
             return t
-        except ValueError:
+        except:
             return None
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,

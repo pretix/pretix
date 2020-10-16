@@ -676,6 +676,24 @@ class OrderCancelTests(TestCase):
         assert not self.order.invoices.last().is_cancellation
 
     @classscope(attr='o')
+    def test_cancel_paid_with_fee_change_secret(self):
+        self.event.settings.ticket_secret_generator = "pretix_sig1"
+        s = self.op1.secret
+        self.order.fees.create(fee_type=OrderFee.FEE_TYPE_SHIPPING, value=2.5)
+        self.order.status = Order.STATUS_PAID
+        self.order.total = 48.5
+        self.order.save()
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
+        self.op1.voucher = self.event.vouchers.create(item=self.ticket, redeemed=1)
+        self.op1.save()
+        cancel_order(self.order.pk, cancellation_fee=2.5)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        self.op1.refresh_from_db()
+        assert self.op1.canceled
+        assert self.op1.secret != s
+
+    @classscope(attr='o')
     def test_auto_refund_possible(self):
         p1 = self.order.payments.create(
             amount=Decimal('46.00'),
@@ -857,6 +875,7 @@ class OrderChangeManagerTests(TestCase):
     def test_change_subevent_success(self):
         self.event.has_subevents = True
         self.event.save()
+        s = self.op1.secret
         se1 = self.event.subevents.create(name="Foo", date_from=now())
         se2 = self.event.subevents.create(name="Bar", date_from=now())
         SubEventItem.objects.create(subevent=se2, item=self.ticket, price=12)
@@ -872,6 +891,30 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.subevent == se2
         assert self.op1.price == Decimal('23.00')
         assert self.order.total == self.op1.price + self.op2.price
+        assert self.op1.secret == s
+
+    @classscope(attr='o')
+    def test_change_subevent_success_change_secret(self):
+        self.event.settings.ticket_secret_generator = "pretix_sig1"
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+        SubEventItem.objects.create(subevent=se2, item=self.ticket, price=12)
+        s = self.op1.secret
+        self.op1.subevent = se1
+        self.op1.save()
+        self.quota.subevent = se2
+        self.quota.save()
+
+        self.ocm.change_subevent(self.op1, se2)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.subevent == se2
+        assert self.op1.price == Decimal('23.00')
+        assert self.order.total == self.op1.price + self.op2.price
+        assert self.op1.secret != s
 
     @classscope(attr='o')
     def test_change_subevent_with_price_success(self):
@@ -919,7 +962,9 @@ class OrderChangeManagerTests(TestCase):
             self.ocm.change_item(self.op1, self.shirt, None)
 
     @classscope(attr='o')
-    def test_change_item_keep_price(self):
+    def test_change_new_secret_by_scheme(self):
+        self.event.settings.ticket_secret_generator = "pretix_sig1"
+        s = self.op1.secret
         p = self.op1.price
         self.ocm.change_item(self.op1, self.shirt, None)
         self.ocm.commit()
@@ -929,6 +974,21 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.price == p
         assert self.op1.tax_value == Decimal('3.67')
         assert self.op1.tax_rule == self.shirt.tax_rule
+        assert self.op1.secret != s
+
+    @classscope(attr='o')
+    def test_change_item_keep_price(self):
+        p = self.op1.price
+        s = self.op1.secret
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.shirt
+        assert self.op1.price == p
+        assert self.op1.tax_value == Decimal('3.67')
+        assert self.op1.tax_rule == self.shirt.tax_rule
+        assert self.op1.secret == s
 
     @classscope(attr='o')
     def test_change_item_change_price_before_voucher(self):
@@ -1011,6 +1071,7 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_cancel_success(self):
+        s = self.op1.secret
         self.ocm.cancel(self.op1)
         self.ocm.commit()
         self.order.refresh_from_db()
@@ -1018,6 +1079,20 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == self.op2.price
         self.op1.refresh_from_db()
         assert self.op1.canceled
+        assert self.op1.secret == s
+
+    @classscope(attr='o')
+    def test_cancel_success_changed_secret(self):
+        self.event.settings.ticket_secret_generator = "pretix_sig1"
+        s = self.op1.secret
+        self.ocm.cancel(self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 1
+        assert self.order.total == self.op2.price
+        self.op1.refresh_from_db()
+        assert self.op1.canceled
+        assert self.op1.secret != s
 
     @classscope(attr='o')
     def test_cancel_with_addon(self):
@@ -2278,6 +2353,9 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_clear_out_order(self):
+        self.event.settings.ticket_secret_generator = "pretix_sig1"
+        op = self.order.positions.first()
+        s = op.secret
         self.order.status = Order.STATUS_PAID
         self.order.save()
         self.order.payments.create(amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED,
@@ -2290,6 +2368,27 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.total == Decimal('0.00')
         assert self.order.status == Order.STATUS_CANCELED
+        assert op.secret == s
+
+    @classscope(attr='o')
+    def test_clear_out_order_change_secrets(self):
+        self.event.settings.ticket_secret_generator = "pretix_sig1"
+        op = self.order.positions.first()
+        s = op.secret
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                                   provider='manual')
+        cancel_order(self.order, cancellation_fee=Decimal('5.00'))
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('5.00')
+        self.ocm.cancel_fee(self.order.fees.get())
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('0.00')
+        assert self.order.status == Order.STATUS_CANCELED
+        op.refresh_from_db()
+        assert op.secret != s
 
     @classscope(attr='o')
     def test_auto_change_payment_fee(self):
