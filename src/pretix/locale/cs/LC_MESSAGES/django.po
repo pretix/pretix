@@ -3666,10 +3666,6 @@ msgstr ""
 msgid "Ambiguous option selected."
 msgstr ""
 
-#: pretix/base/orderimport.py:672
-msgid "Ambiguous option selected."
-msgstr ""
-
 #: pretix/base/payment.py:231
 msgid "Enable payment method"
 msgstr ""

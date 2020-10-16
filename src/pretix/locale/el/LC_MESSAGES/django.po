@@ -4069,12 +4069,6 @@ msgstr "Αυτό το slug είναι ήδη σε χρήση. Επιλέξτε �
 msgid "You need to select a specific seat."
 msgstr "Πρέπει να επιλέξετε μια ημερομηνία."
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "Επιλέχθηκε μη έγκυρη επιλογή."
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."

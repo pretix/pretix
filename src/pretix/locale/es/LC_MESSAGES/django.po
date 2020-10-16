@@ -4011,12 +4011,6 @@ msgstr "Esta URL semántica ya está en uso. Por favor, elija una diferente."
 msgid "You need to select a specific seat."
 msgstr "Necesitas seleccionar una fecha."
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "Selección de opción inválida."
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."

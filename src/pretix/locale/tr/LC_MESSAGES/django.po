@@ -4131,12 +4131,6 @@ msgstr "Bu sıra zaten kullanımda. Lütfen farklı bir tane seçin."
 msgid "You need to select a specific seat."
 msgstr "Bir tarih seçmeniz gerekiyor."
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "Geçersiz seçenek seçildi."
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."

@@ -4086,12 +4086,6 @@ msgstr "Du skal vælge en produktvariant."
 msgid "Ambiguous option selected."
 msgstr "Ugyldig valgmulighed valgt."
 
-#: pretix/base/orderimport.py:672
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "Ugyldig valgmulighed valgt."
-
 #: pretix/base/payment.py:231
 msgid "Enable payment method"
 msgstr "Aktiver betalingsmetode"

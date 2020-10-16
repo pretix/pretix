@@ -3676,13 +3676,6 @@ msgstr ""
 msgid "You need to select a specific seat."
 msgstr ""
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
-msgid "Ambiguous option selected."
-msgstr "Nincs dátum kiválasztva."
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgctxt "subevent"

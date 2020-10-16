@@ -3844,12 +3844,6 @@ msgstr "您选择的座位已经被选。请选择其他座位。"
 msgid "You need to select a specific seat."
 msgstr "您需要选择一个特定的座位。"
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "选择的选项无效。"
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."

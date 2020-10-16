@@ -3960,12 +3960,6 @@ msgstr ""
 msgid "You need to select a specific seat."
 msgstr "Вам необходимо выбрать конкретное место."
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "Выбрана неверная опция."
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."

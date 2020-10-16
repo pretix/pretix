@@ -3909,12 +3909,6 @@ msgstr "تحتاج إلى تحديد مقعد محددة."
 msgid "Ambiguous option selected."
 msgstr "تحديد خيار غير صالح."
 
-#: pretix/base/orderimport.py:672
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "تحديد خيار غير صالح."
-
 #: pretix/base/payment.py:231
 msgid "Enable payment method"
 msgstr "تمكين طريقة الدفع"

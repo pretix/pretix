@@ -3944,12 +3944,6 @@ msgstr "Krótka forma eventu już została użyta przez inne wydarzenie."
 msgid "You need to select a specific seat."
 msgstr ""
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "Wybrano nieprawidłową opcję."
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."

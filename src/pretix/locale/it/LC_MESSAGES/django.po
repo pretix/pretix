@@ -3722,10 +3722,6 @@ msgstr ""
 msgid "You need to select a specific seat."
 msgstr ""
 
-#: pretix/base/orderimport.py:664
-msgid "Ambiguous option selected."
-msgstr ""
-
 #: pretix/base/orderimport.py:672
 msgid "Ambiguous option selected."
 msgstr ""

@@ -4106,12 +4106,6 @@ msgstr "Ce slug déjà utilisée. Veuillez en choisir un autre."
 msgid "You need to select a specific seat."
 msgstr "Vous devez sélectionner une date."
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "Option non valide sélectionnée."
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."

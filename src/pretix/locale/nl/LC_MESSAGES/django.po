@@ -3902,12 +3902,6 @@ msgstr ""
 msgid "You need to select a specific seat."
 msgstr "U moet een specifieke stoel kiezen."
 
-#: pretix/base/orderimport.py:664
-#, fuzzy
-#| msgid "Invalid option selected."
-msgid "Ambiguous option selected."
-msgstr "Ongeldige optie geselecteerd."
-
 #: pretix/base/orderimport.py:672
 #, fuzzy
 #| msgid "Invalid option selected."
