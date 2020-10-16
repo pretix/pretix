@@ -222,6 +222,8 @@ Ticketing
 Tokengenerator
 Toolbar
 TOTP
+Trace
+Turnover
 txt
 überbuchen
 überbucht
