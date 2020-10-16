@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:25+0000\n"
-"PO-Revision-Date: 2020-09-28 10:14+0000\n"
+"PO-Revision-Date: 2020-10-16 20:34+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -51,26 +51,20 @@ msgid "On sale"
 msgstr "Aktiv"
 
 #: pretix/api/auth/devicesecurity.py:6
-#, fuzzy
-#| msgid "Full name"
 msgid "Full access"
-msgstr "Voller Name"
+msgstr "Voller Zugriff"
 
 #: pretix/api/auth/devicesecurity.py:22
-#, fuzzy
-#| msgid "Download pretixSCAN"
 msgid "pretixSCAN"
-msgstr "pretixSCAN herunterladen"
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:47
 msgid "pretixSCAN (kiosk mode, online only)"
-msgstr ""
+msgstr "pretixSCAN (Kiosk-Modus / nur online)"
 
 #: pretix/api/auth/devicesecurity.py:70
-#, fuzzy
-#| msgid "pretix User"
 msgid "pretixPOS"
-msgstr "pretix-Nutzer"
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -329,7 +323,7 @@ msgstr "Check-in rückgängig gemacht"
 #: pretix/base/auth.py:104
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system}-Benutzer"
 
 #: pretix/base/auth.py:113 pretix/base/forms/auth.py:175
 #: pretix/base/models/auth.py:90 pretix/base/models/notifications.py:25
@@ -3917,10 +3911,8 @@ msgid "You need to select a specific seat."
 msgstr "Du musst einen Sitzplatz auswählen."
 
 #: pretix/base/orderimport.py:664 pretix/base/orderimport.py:672
-#, fuzzy
-#| msgid "Invalid option selected."
 msgid "Ambigous option selected."
-msgstr "Ungültige Option ausgewählt."
+msgstr "Mehrdeutige Option ausgewählt."
 
 #: pretix/base/payment.py:231
 msgid "Enable payment method"
@@ -4635,6 +4627,8 @@ msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
 msgstr ""
+"Alle Zahlungen für diese Veranstaltung müssen bereits eingegangen sein, "
+"daher können keine neuen Bestellungen getätigt werden."
 
 #: pretix/base/services/cart.py:70
 msgid ""
@@ -6112,7 +6106,7 @@ msgstr ""
 
 #: pretix/base/settings.py:980
 msgid "Do not issue ticket before email address is validated"
-msgstr ""
+msgstr "Keine Tickets ausstellen bevor die E-Mail-Adresse validiert wurde"
 
 #: pretix/base/settings.py:981
 msgid ""
@@ -6122,6 +6116,11 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
+"Tickets werden nicht direkt nach dem Kauf zum Download angeboten. Sie werden "
+"an die E-Mail zur Bestätigung des Zahlungseingangs angehängt (wenn die "
+"Dateien nicht zu groß sind) und der Kunde kann sie von der Website "
+"herunterladen sobald er einen Link aus den E-Mails angeklickt hat. Betrifft "
+"keine Bestellungen, die über andere Kanäle getätigt wurden."
 
 #: pretix/base/settings.py:998 pretix/base/settings.py:1006
 #: pretix/control/forms/organizer.py:293
