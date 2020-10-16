@@ -433,7 +433,6 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers.append(_('Seat row'))
         headers.append(_('Seat number'))
         headers += [
-            _('Company'),
             _('Address'),
             _('ZIP code'),
             _('City'),
