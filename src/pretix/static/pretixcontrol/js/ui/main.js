@@ -732,7 +732,7 @@ $(function () {
 
     $("button[data-toggle=qrcode]").click(function (e) {
         e.preventDefault();
-        var $current = $(".qr-code-overlay[data-qrcode=" + $(this).attr("data-qrcode") + "]");
+        var $current = $(".qr-code-overlay[data-qrcode='" + $(this).attr("data-qrcode") + "']");
         if ($current.length) {
             $(".qr-code-overlay").attr("data-qrcode", "").slideUp(200);
             return false;

@@ -8,5 +8,4 @@ message Ticket {
     int64 item = 2;
     int64 variation = 3;
     int64 subevent = 4;
-    string seat = 5;
 }

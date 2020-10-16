@@ -12,7 +12,7 @@ from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Item, ItemVariation, Seat, SubEvent
+from pretix.base.models import Item, ItemVariation, SubEvent
 from pretix.base.secretgenerators import pretix_sig1_pb2
 from pretix.base.signals import register_ticket_secret_generators
 
@@ -52,11 +52,10 @@ class BaseTicketSecretGenerator:
         return False
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                        attendee_name: str = None, seat: Seat = None, current_secret: str = None,
-                        force_invalidate=False) -> str:
+                        current_secret: str = None, force_invalidate=False) -> str:
         """
         Generate a new secret for a ticket with product ``item``, variation ``variation``, subevent ``subevent``,
-        attendee name ``attendee_name``, seat `´seat`` and the current secret ``current_secret`` (if any).
+        and the current secret ``current_secret`` (if any).
 
         The result must be a string that should only contain the characters ``A-Za-z0-9+/=``.
 
@@ -65,13 +64,12 @@ class BaseTicketSecretGenerator:
         If ``force_invalidate`` is set to ``True``, the method MUST return a different secret than ``current_secret``,
         such that ``current_secret`` can get revoked.
 
-        If ``force_invalidate`` is set to ``False`` and ``item``, ``variation``, ``subevent``, ``attendee_name``,
-        and ``seat`` have the same value as when ``current_secret`` was generated, then this method MUST return
-        ``current_secret`` unchanged.
+        If ``force_invalidate`` is set to ``False`` and ``item``, ``variation`` and ``subevent`` have the same value
+        as when ``current_secret`` was generated, then this method MUST return ``current_secret`` unchanged.
 
-        If ``force_invalidate`` is set to ``False`` and ``item``, ``variation``, ``subevent``, ``attendee_name``,
-        and ``seat`` have a different value as when ``current_secret`` was generated, then this method MAY OR MAY NOT
-        return ``current_secret`` unchanged, depending on the semantics of the method.
+        If ``force_invalidate`` is set to ``False`` and ``item``, ``variation`` and ``subevent`` have a different value
+        as when ``current_secret`` was generated, then this method MAY OR MAY NOT return ``current_secret`` unchanged,
+        depending on the semantics of the method.
         """
         raise NotImplementedError()
 
@@ -82,8 +80,7 @@ class RandomTicketSecretGenerator(BaseTicketSecretGenerator):
     use_revocation_list = False
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                        attendee_name: str = None, seat: Seat = None, current_secret: str = None,
-                        force_invalidate=False):
+                        current_secret: str = None, force_invalidate=False):
         if current_secret and not force_invalidate:
             return current_secret
         return get_random_string(
@@ -104,6 +101,9 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
     - 2 Bytes length of the signature (big-endian) => m
     - n Bytes payload (with protobuf encoding)
     - m Bytes ECDSA signature of Sign(payload)
+
+    The resulting string is REVERSED, to avoid all secrets of same length beginning with the same 10
+    characters, which would make it impossible to search for secrets manually.
     """
     verbose_name = _('pretix signature scheme 1 (for very large events, does not work with pretixSCAN on iOS and '
                      'changes semantics of offline scanning – please refer to documentation or support for details)')
@@ -137,7 +137,7 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
 
     def _parse(self, secret):
         try:
-            rawbytes = base64.b64decode(secret)
+            rawbytes = base64.b64decode(secret[::-1])
             if rawbytes[0] != 1:
                 raise ValueError('Invalid version')
 
@@ -156,16 +156,14 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
             return None
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                        attendee_name: str = None, seat: Seat = None, current_secret: str = None,
-                        force_invalidate=False):
+                        current_secret: str = None, force_invalidate=False):
         if current_secret and not force_invalidate:
             ticket = self._parse(current_secret)
             if ticket:
                 unchanged = (
                     ticket.item == item.pk and
                     ticket.variation == (variation.pk if variation else 0) and
-                    ticket.subevent == (subevent.pk if subevent else 0) and
-                    ticket.seat == (seat.seat_guid if seat else "")
+                    ticket.subevent == (subevent.pk if subevent else 0)
                 )
                 if unchanged:
                     return current_secret
@@ -175,14 +173,8 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
         t.item = item.pk
         t.variation = variation.pk if variation else 0
         t.subevent = subevent.pk if subevent else 0
-        t.seat = seat.seat_guid if seat else ""
         payload = t.SerializeToString()
-        result = base64.b64encode(self._sign_payload(payload)).decode()
-
-        if len(result) > 255 and seat:
-            return self.generate_secret(item, variation, subevent, attendee_name, None, current_secret,
-                                        force_invalidate)
-
+        result = base64.b64encode(self._sign_payload(payload)).decode()[::-1]
         return result
 
 
@@ -197,8 +189,6 @@ def assign_ticket_secret(event, position, force_invalidate=False, save=True):
         item=position.item,
         variation=position.variation,
         subevent=position.subevent,
-        attendee_name=position.attendee_name,
-        seat=position.seat,
         current_secret=position.secret,
         force_invalidate=force_invalidate
     )
