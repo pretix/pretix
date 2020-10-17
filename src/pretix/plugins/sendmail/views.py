@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 import bleach
 from django.contrib import messages
@@ -11,7 +12,7 @@ from django.views.generic import FormView, ListView
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.i18n import LazyI18nString, language
-from pretix.base.models import LogEntry, Order, OrderPosition
+from pretix.base.models import CachedFile, LogEntry, Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.services.mail import TolerantDict
 from pretix.base.templatetags.rich_text import markdown_compile_email
@@ -136,19 +137,33 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
             return self.get(self.request, *self.args, **self.kwargs)
 
+        attachment = None
+        if 'attachment' in self.request.FILES:
+            attachment = self.request.FILES['attachment']
+            cf = CachedFile.objects.create(
+                expires=now() + timedelta(days=1),
+                date=now(),
+                type=attachment.content_type,
+            )
+            cf.file.save(attachment.name, attachment.file)
+            cf.save()
+        kwargs = {
+            'recipients': form.cleaned_data['recipients'],
+            'event': self.request.event.pk,
+            'user': self.request.user.pk,
+            'subject': form.cleaned_data['subject'].data,
+            'message': form.cleaned_data['message'].data,
+            'orders': [o.pk for o in orders],
+            'items': [i.pk for i in form.cleaned_data.get('items')],
+            'not_checked_in': form.cleaned_data.get('not_checked_in'),
+            'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
+            'filter_checkins': form.cleaned_data.get('filter_checkins'),
+        }
+        if attachment is not None:
+            kwargs['attachments'] = [cf.id]
+
         send_mails.apply_async(
-            kwargs={
-                'recipients': form.cleaned_data['recipients'],
-                'event': self.request.event.pk,
-                'user': self.request.user.pk,
-                'subject': form.cleaned_data['subject'].data,
-                'message': form.cleaned_data['message'].data,
-                'orders': [o.pk for o in orders],
-                'items': [i.pk for i in form.cleaned_data.get('items')],
-                'not_checked_in': form.cleaned_data.get('not_checked_in'),
-                'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
-                'filter_checkins': form.cleaned_data.get('filter_checkins'),
-            }
+            kwargs=kwargs
         )
         self.request.event.log_action('pretix.plugins.sendmail.sent',
                                       user=self.request.user,
