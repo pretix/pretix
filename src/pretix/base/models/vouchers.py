@@ -72,6 +72,8 @@ class Voucher(LoggedModel):
     :type quota: Quota
     :param comment: An internal comment that will only be visible to staff, and never displayed to the user
     :type comment: str
+    :param recipient: The email address of the recipient, if this voucher was automatically sent by email
+    :type recipient: str
     :param tag: Use this field to group multiple vouchers together. If you enter the same value for multiple
                 vouchers, you can get statistics on how many of them have been redeemed etc.
     :type tag: str
@@ -192,6 +194,11 @@ class Voucher(LoggedModel):
         db_index=True,
         help_text=_("You can use this field to group multiple vouchers together. If you enter the same value for "
                     "multiple vouchers, you can get statistics on how many of them have been redeemed etc.")
+    )
+    recipient = models.CharField(
+        null=True,
+        max_length=255,
+        verbose_name=_("Recipient")
     )
     comment = models.TextField(
         blank=True, verbose_name=_("Comment"),

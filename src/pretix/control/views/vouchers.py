@@ -21,7 +21,7 @@ from django.views.generic import (
 
 from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher
 from pretix.base.models.vouchers import _generate_random_code
-from pretix.base.services.vouchers import vouchers_send
+from pretix.base.services.vouchers import vouchers_resend, vouchers_send
 from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -285,6 +285,28 @@ class VoucherGo(EventPermissionRequiredMixin, View):
             return redirect('control:event.vouchers', event=request.event.slug, organizer=request.event.organizer.slug)
 
 
+class VoucherResend(EventPermissionRequiredMixin, View):
+    permission = 'can_change_vouchers'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            voucher = self.request.event.vouchers.get(
+                id=self.kwargs['voucher']
+            )
+            if voucher.recipient is not None:
+                vouchers_resend.apply_async(kwargs={
+                    'event': self.request.event.pk,
+                    'vouchers': [voucher.pk],
+                    'user': self.request.user.pk,
+                })
+                messages.success(request, _('The voucher will be resent shortly.'))
+            else:
+                messages.error(request, _('The voucher cannot be resent.'))
+        except Voucher.DoesNotExist:
+            messages.error(request, _('There is no voucher with the given voucher code.'))
+        return redirect('control:event.vouchers', event=request.event.slug, organizer=request.event.organizer.slug)
+
+
 class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/bulk.html'
@@ -421,6 +443,20 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
                     obj.max_usages = min(obj.redeemed, obj.max_usages)
                     obj.save(update_fields=['max_usages'])
             messages.success(request, _('The selected vouchers have been deleted or disabled.'))
+        elif request.POST.get('action') == 'resend':
+            selected_vouchers = self.request.POST.getlist('voucher')
+            vouchers = self.request.event.vouchers.filter(
+                id__in=selected_vouchers,
+                recipient__isnull=False
+            )
+            if len(vouchers) != len(selected_vouchers):
+                messages.warning(request, _('Some selected vouchers have never been sent, so they cannot be resent.'))
+            vouchers_resend.apply_async(kwargs={
+                'event': self.request.event.pk,
+                'vouchers': [v.pk for v in vouchers],
+                'user': self.request.user.pk,
+            })
+            messages.success(request, _('The selected vouchers will be resent shortly.'))
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
