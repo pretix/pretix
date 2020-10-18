@@ -10,6 +10,8 @@ availabilities
 backend
 backends
 banktransfer
+barcode
+barcodes
 Bcc
 boolean
 booleans
@@ -91,6 +93,7 @@ prepending
 preprocessor
 presale
 pretix
+pretixSCAN
 pretixdroid
 pretixpresale
 prometheus

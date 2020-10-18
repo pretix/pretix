@@ -221,7 +221,7 @@ register_ticket_secret_generators = EventPluginSignal(
 )
 """
 This signal is sent out to get all known ticket secret generators. Receivers should return a
-subclass of pretix.base.secrets.BaseTicketSecretGenerator or a list of these
+subclass of ``pretix.base.secrets.BaseTicketSecretGenerator`` or a list of these
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

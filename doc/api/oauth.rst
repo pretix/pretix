@@ -49,7 +49,7 @@ On a failed registration, a query string like ``?error=access_denied`` will be a
 
 .. note:: By default, the user is asked to give permission on every call to this URL. If you **only** request the
           ``profile`` scope, i.e. no access to organizer data, you can pass the ``approval_prompt=auto`` parameter
-          to skip user interaction on subsequen calls.
+          to skip user interaction on subsequent calls.
 
 Getting an access token
 -----------------------

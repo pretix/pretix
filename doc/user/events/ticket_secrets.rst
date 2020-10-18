@@ -66,8 +66,8 @@ a few important drawbacks:
 * Scanning in offline mode is much more limited, since the scanner has no information about previous usages of the
   ticket, attendee names, seating information, etc.
 
-Comparison of scanning behaviour
---------------------------------
+Comparison of scanning behavior
+-------------------------------
 
 =============================================== =================================== =================================== =================================== ================================= =====================================
 Scan mode                                       Online                                                                  Offline
