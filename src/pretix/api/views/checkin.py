@@ -283,13 +283,23 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             else:
                 op = queryset.get(secret=self.kwargs['pk'])
         except OrderPosition.DoesNotExist:
-            self.request.event.log_action('pretix.event.checkin.unknown', data={
+            revoked_matches = list(self.request.event.revoked_secrets.filter(secret=self.kwargs['pk']))
+            if len(revoked_matches) == 0 or not force:
+                self.request.event.log_action('pretix.event.checkin.unknown', data={
+                    'datetime': dt,
+                    'type': type,
+                    'list': self.checkinlist.pk,
+                    'barcode': self.kwargs['pk']
+                }, user=self.request.user, auth=self.request.auth)
+                raise Http404()
+
+            op = revoked_matches[0].position
+            op.order.log_action('pretix.event.checkin.revoked', data={
                 'datetime': dt,
                 'type': type,
                 'list': self.checkinlist.pk,
                 'barcode': self.kwargs['pk']
             }, user=self.request.user, auth=self.request.auth)
-            raise Http404()
 
         given_answers = {}
         if 'answers' in self.request.data:
@@ -330,6 +340,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 'position': op.id,
                 'positionid': op.positionid,
                 'errorcode': e.code,
+                'force': force,
                 'datetime': dt,
                 'type': type,
                 'list': self.checkinlist.pk
