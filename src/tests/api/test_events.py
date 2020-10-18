@@ -1,3 +1,4 @@
+import copy
 from datetime import datetime
 from decimal import Decimal
 from unittest import mock
@@ -153,8 +154,10 @@ def test_event_list_filter(token_client, organizer, event):
 @pytest.mark.django_db
 def test_event_get(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
+    res = copy.copy(TEST_EVENT_RES)
+    res["valid_keys"] = {"pretix_sig1": []}
     assert resp.status_code == 200
-    assert TEST_EVENT_RES == resp.data
+    assert res == resp.data
 
 
 @pytest.mark.django_db
@@ -644,15 +647,6 @@ def test_event_update_plugins(token_client, organizer, event, free_item, free_qu
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"plugins":["Unknown plugin: \'pretix.plugins.test\'."]}'
-
-
-@pytest.mark.django_db
-def test_event_detail(token_client, organizer, event, team):
-    team.all_events = True
-    team.save()
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
-    assert resp.status_code == 200
-    assert TEST_EVENT_RES == resp.data
 
 
 @pytest.mark.django_db
