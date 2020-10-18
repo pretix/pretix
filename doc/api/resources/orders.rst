@@ -2300,6 +2300,7 @@ With some non-default ticket secret generation methods, a list of revoked ticket
         "previous": null,
         "results": [
           {
+            "id": 1234,
             "secret": "k24fiuwvu8kxz3y1",
             "created": "2017-12-01T10:00:00Z",
           }

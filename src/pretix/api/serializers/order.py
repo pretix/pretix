@@ -1215,4 +1215,4 @@ class RevokedTicketSecretSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = RevokedTicketSecret
-        fields = ('secret', 'created')
+        fields = ('id', 'secret', 'created')
