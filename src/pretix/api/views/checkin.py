@@ -262,7 +262,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         return qs
 
-    @action(detail=False, methods=['POST'], url_name='redeem', url_path='(?P<pk>[^/]+)/redeem')
+    @action(detail=False, methods=['POST'], url_name='redeem', url_path='(?P<pk>.*)/redeem')
     def redeem(self, *args, **kwargs):
         force = bool(self.request.data.get('force', False))
         type = self.request.data.get('type', None) or Checkin.TYPE_ENTRY

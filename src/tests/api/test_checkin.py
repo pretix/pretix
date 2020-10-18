@@ -4,6 +4,7 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django.utils.http import urlquote
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
@@ -638,6 +639,19 @@ def test_by_secret(token_client, organizer, clist, event, order):
         p = order.positions.first()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
         organizer.slug, event.slug, clist.pk, p.secret
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_by_secret_special_chars(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    p.secret = "abc+-/=="
+    p.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, urlquote(p.secret, safe='')
     ), {}, format='json')
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
