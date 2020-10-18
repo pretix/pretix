@@ -4558,6 +4558,7 @@ def test_orderposition_price_calculation_reverse_charge(token_client, organizer,
 def test_revoked_secret_list(token_client, organizer, event):
     r = event.revoked_secrets.create(secret="abcd")
     res = {
+        "id": r.id,
         "secret": "abcd",
         "created": r.created.isoformat().replace("+00:00", "Z")
     }
