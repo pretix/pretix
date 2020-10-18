@@ -99,7 +99,7 @@ Example::
     Log violations of the Content Security Policy (CSP). Defaults to ``on``.
     
 ``loglevel``
-    Set console and file loglevel (``DEBUG``, ``INFO``, ``WARNING``, ``ERROR`` or ``CRITICAL``). Defaults to ``INFO``.
+    Set console and file log level (``DEBUG``, ``INFO``, ``WARNING``, ``ERROR`` or ``CRITICAL``). Defaults to ``INFO``.
 
 Locale settings
 ---------------
