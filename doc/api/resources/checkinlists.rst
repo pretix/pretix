@@ -188,6 +188,7 @@ Endpoints
       {
         "checkin_count": 17,
         "position_count": 42,
+        "inside_count": 12,
         "event": {
           "name": "Demo Conference"
         },

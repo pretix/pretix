@@ -565,6 +565,7 @@ def test_status(token_client, organizer, event, clist_all, item, other_item, ord
     assert resp.status_code == 200
     assert resp.data['checkin_count'] == 1
     assert resp.data['position_count'] == 2
+    assert resp.data['inside_count'] == 1
     assert resp.data['items'] == [
         {
             'name': str(item.name),

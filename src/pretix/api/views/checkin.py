@@ -111,7 +111,8 @@ class CheckinListViewSet(viewsets.ModelViewSet):
                     'name': str(ev.name),
                 },
                 'checkin_count': cqs.count(),
-                'position_count': pqs.count()
+                'position_count': pqs.count(),
+                'inside_count': clist.inside_count,
             }
 
             op_by_item = {
