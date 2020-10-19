@@ -1,6 +1,8 @@
 import django_filters
 from django.core.exceptions import ValidationError
-from django.db.models import Count, F, Max, OuterRef, Prefetch, Q, Subquery, Exists
+from django.db.models import (
+    Count, Exists, F, Max, OuterRef, Prefetch, Q, Subquery,
+)
 from django.db.models.functions import Coalesce
 from django.http import Http404
 from django.shortcuts import get_object_or_404

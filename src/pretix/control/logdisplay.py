@@ -165,21 +165,42 @@ def _display_checkin(event, logentry):
     if logentry.action_type == 'pretix.event.checkin.unknown':
         if show_dt:
             return _(
-                'Unknown scan of code "{barcode}" at {datetime} for list "{list}", type "{type}".'
+                'Unknown scan of code "{barcode}…" at {datetime} for list "{list}", type "{type}".'
             ).format(
                 posid=data.get('positionid'),
                 type=data.get('type'),
-                barcode=data.get('barcode'),
+                barcode=data.get('barcode')[:16],
                 datetime=dt_formatted,
                 list=checkin_list
             )
         else:
             return _(
-                'Unknown scan of code "{barcode}" for list "{list}", type "{type}".'
+                'Unknown scan of code "{barcode}…" for list "{list}", type "{type}".'
             ).format(
                 posid=data.get('positionid'),
                 type=data.get('type'),
-                barcode=data.get('barcode'),
+                barcode=data.get('barcode')[:16],
+                list=checkin_list
+            )
+
+    if logentry.action_type == 'pretix.event.checkin.revoked':
+        if show_dt:
+            return _(
+                'Scan scan of revoked code "{barcode}…" at {datetime} for list "{list}", type "{type}", was uploaded.'
+            ).format(
+                posid=data.get('positionid'),
+                type=data.get('type'),
+                barcode=data.get('barcode')[:16],
+                datetime=dt_formatted,
+                list=checkin_list
+            )
+        else:
+            return _(
+                'Scan of revoked code "{barcode}" for list "{list}", type "{type}", was uploaded.'
+            ).format(
+                posid=data.get('positionid'),
+                type=data.get('type'),
+                barcode=data.get('barcode')[:16],
                 list=checkin_list
             )
 
