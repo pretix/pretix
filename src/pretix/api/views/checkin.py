@@ -1,6 +1,6 @@
 import django_filters
 from django.core.exceptions import ValidationError
-from django.db.models import Count, F, Max, OuterRef, Prefetch, Q, Subquery
+from django.db.models import Count, F, Max, OuterRef, Prefetch, Q, Subquery, Exists
 from django.db.models.functions import Coalesce
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -90,20 +90,12 @@ class CheckinListViewSet(viewsets.ModelViewSet):
     def status(self, *args, **kwargs):
         with language(self.request.event.settings.locale):
             clist = self.get_object()
-            cqs = Checkin.objects.filter(
-                position__order__event=clist.event,
-                position__order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
-                list=clist
+            cqs = clist.positions.annotate(
+                checkedin=Exists(Checkin.objects.filter(list_id=clist.pk, position=OuterRef('pk'), type=Checkin.TYPE_ENTRY))
+            ).filter(
+                checkedin=True,
             )
-            pqs = OrderPosition.objects.filter(
-                order__event=clist.event,
-                order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
-            )
-            if clist.subevent:
-                pqs = pqs.filter(subevent=clist.subevent)
-            if not clist.all_products:
-                pqs = pqs.filter(item__in=clist.limit_products.values_list('id', flat=True))
-                cqs = cqs.filter(position__item__in=clist.limit_products.values_list('id', flat=True))
+            pqs = clist.positions
 
             ev = clist.subevent or clist.event
             response = {
@@ -124,12 +116,12 @@ class CheckinListViewSet(viewsets.ModelViewSet):
                 for p in pqs.order_by().values('variation').annotate(cnt=Count('id'))
             }
             c_by_item = {
-                p['position__item']: p['cnt']
-                for p in cqs.order_by().values('position__item').annotate(cnt=Count('id'))
+                p['item']: p['cnt']
+                for p in cqs.order_by().values('item').annotate(cnt=Count('id'))
             }
             c_by_variation = {
-                p['position__variation']: p['cnt']
-                for p in cqs.order_by().values('position__variation').annotate(cnt=Count('id'))
+                p['variation']: p['cnt']
+                for p in cqs.order_by().values('variation').annotate(cnt=Count('id'))
             }
 
             if not clist.all_products:
