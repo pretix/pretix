@@ -95,19 +95,41 @@ class TimeZoneField(ChoiceField):
         )
 
 
+class ValidKeysField(Field):
+    def to_representation(self, value):
+        return value.cache.get_or_set(
+            'ticket_secret_valid_keys',
+            lambda: self._get(value),
+            120
+        )
+
+    def _get(self, value):
+        return {
+            'pretix_sig1': [
+                value.settings.ticket_secrets_pretix_sig1_pubkey
+            ] if value.settings.ticket_secrets_pretix_sig1_pubkey else []
+        }
+
+
 class EventSerializer(I18nAwareModelSerializer):
     meta_data = MetaDataField(required=False, source='*')
     item_meta_properties = MetaPropertyField(required=False, source='*')
     plugins = PluginsField(required=False, source='*')
     seat_category_mapping = SeatCategoryMappingField(source='*', required=False)
     timezone = TimeZoneField(required=False, choices=[(a, a) for a in common_timezones])
+    valid_keys = ValidKeysField(source='*', read_only=True)
 
     class Meta:
         model = Event
         fields = ('name', 'slug', 'live', 'testmode', 'currency', 'date_from',
                   'date_to', 'date_admission', 'is_public', 'presale_start',
                   'presale_end', 'location', 'geo_lat', 'geo_lon', 'has_subevents', 'meta_data', 'seating_plan',
-                  'plugins', 'seat_category_mapping', 'timezone', 'item_meta_properties')
+                  'plugins', 'seat_category_mapping', 'timezone', 'item_meta_properties', 'valid_keys')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not hasattr(self.context['request'], 'event'):
+            self.fields.pop('valid_keys')
 
     def validate(self, data):
         data = super().validate(data)

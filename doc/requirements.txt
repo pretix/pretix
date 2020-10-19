@@ -3,7 +3,7 @@ sphinx==2.3.*
 sphinx-rtd-theme
 sphinxcontrib-httpdomain
 sphinxcontrib-images
-sphinxcontrib-spelling
+sphinxcontrib-spelling==4.*
 pygments-markdown-lexer
 # See https://github.com/rfk/pyenchant/pull/130
 git+https://github.com/raphaelm/pyenchant.git@patch-1#egg=pyenchant

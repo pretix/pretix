@@ -37,6 +37,7 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:checkinlist-status'),
         ('GET', 'api-v1:checkinlistpos-list'),
         ('POST', 'api-v1:checkinlistpos-redeem'),
+        ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:order-list'),
         ('GET', 'api-v1:event.settings'),
     )
@@ -61,6 +62,7 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:checkinlist-list'),
         ('GET', 'api-v1:checkinlist-status'),
         ('POST', 'api-v1:checkinlistpos-redeem'),
+        ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:event.settings'),
     )
 
@@ -98,6 +100,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'plugins:pretix_posbackend:posclosing-list'),
         ('POST', 'plugins:pretix_posbackend:posdebugdump-list'),
         ('POST', 'plugins:pretix_posbackend:stripeterminal.token'),
+        ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:event.settings'),
     )
 

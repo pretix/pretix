@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='orderposition',
             name='secret',
-            field=models.CharField(db_index=True, default=pretix.base.models.orders.generate_position_secret, max_length=64),
+            field=models.CharField(db_index=True, default="invalid", max_length=64),
         ),
         migrations.AlterField(
             model_name='voucher',

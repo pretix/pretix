@@ -89,7 +89,6 @@ class EventViewSet(viewsets.ModelViewSet):
             )
 
         qs = filter_qs_by_attr(qs, self.request)
-
         return qs.prefetch_related(
             'meta_values', 'meta_values__property', 'seat_category_mappings'
         )

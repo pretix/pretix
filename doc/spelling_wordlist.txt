@@ -10,6 +10,8 @@ availabilities
 backend
 backends
 banktransfer
+barcode
+barcodes
 Bcc
 boolean
 booleans
@@ -53,6 +55,7 @@ iframe
 incrementing
 inofficial
 invalidations
+iOS
 iterable
 Jimdo
 jwt
@@ -91,6 +94,7 @@ prepending
 preprocessor
 presale
 pretix
+pretixSCAN
 pretixdroid
 pretixpresale
 prometheus

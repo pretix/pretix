@@ -117,7 +117,7 @@ for example, to check for any errors in any staged files when committing::
     export GIT_WORK_TREE=../
     export GIT_DIR=../.git
     source ../env/bin/activate  # Adjust to however you activate your virtual environment
-    for file in $(git diff --cached --name-only | grep -E '\.py$' | grep -Ev "migrations|mt940\.py|pretix/settings\.py|make_testdata\.py|testutils/settings\.py|tests/settings\.py|pretix/base/models/__init__\.py")
+    for file in $(git diff --cached --name-only | grep -E '\.py$' | grep -Ev "migrations|mt940\.py|pretix/settings\.py|make_testdata\.py|testutils/settings\.py|tests/settings\.py|pretix/base/models/__init__\.py|.*_pb2\.py")
     do
       echo $file
       git show ":$file" | flake8 - --stdin-display-name="$file" || exit 1 # we only want to lint the staged changes, not any un-staged changes

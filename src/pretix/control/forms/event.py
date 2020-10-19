@@ -1069,6 +1069,20 @@ class TicketSettingsForm(SettingsForm):
         'ticket_download_pending',
         'ticket_download_require_validated_email',
     ]
+    ticket_secret_generator = forms.ChoiceField(
+        label=_("Ticket code generator"),
+        help_text=_("For advanced users, usually does not need to be changed."),
+        required=True,
+        widget=forms.RadioSelect,
+        choices=[]
+    )
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.get('obj')
+        super().__init__(*args, **kwargs)
+        self.fields['ticket_secret_generator'].choices = [
+            (r.identifier, r.verbose_name) for r in event.ticket_secret_generators.values()
+        ]
 
     def prepare_fields(self):
         # See clean()

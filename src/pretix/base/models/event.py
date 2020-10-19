@@ -662,7 +662,14 @@ class Event(EventMixin, LoggedModel):
                 s.product = item_map[s.product_id]
             s.save()
 
+        skip_settings = (
+            'ticket_secrets_pretix_sig1_pubkey',
+            'ticket_secrets_pretix_sig1_privkey',
+        )
         for s in other.settings._objects.all():
+            if s.key in skip_settings:
+                continue
+
             s.object = self
             s.pk = None
             if s.value.startswith('file://'):
@@ -753,6 +760,31 @@ class Event(EventMixin, LoggedModel):
                 pp = p(self)
                 renderers[pp.identifier] = pp
         return renderers
+
+    @cached_property
+    def ticket_secret_generators(self) -> dict:
+        """
+        Returns a dictionary of cached initialized ticket secret generators mapped by their identifiers.
+        """
+        from ..signals import register_ticket_secret_generators
+
+        responses = register_ticket_secret_generators.send(self)
+        renderers = {}
+        for receiver, response in responses:
+            if not isinstance(response, list):
+                response = [response]
+            for p in response:
+                pp = p(self)
+                renderers[pp.identifier] = pp
+        return renderers
+
+    @property
+    def ticket_secret_generator(self):
+        """
+        Returns the currently configured ticket secret generator.
+        """
+        tsgs = self.ticket_secret_generators
+        return tsgs[self.settings.ticket_secret_generator]
 
     def get_data_shredders(self) -> dict:
         """

@@ -44,6 +44,9 @@ seat_category_mapping                 object                     An object mappi
                                                                  (strings) to items in the event (integers or ``null``).
 timezone                              string                     Event timezone name
 item_meta_properties                  object                     Item-specific meta data parameters and default values.
+valid_keys                            object                     Cryptographic keys for non-default signature schemes.
+                                                                 For performance reason, value is omitted in lists and
+                                                                 only contained in detail views. Value can be cached.
 ===================================== ========================== =======================================================
 
 
@@ -83,6 +86,10 @@ item_meta_properties                  object                     Item-specific m
 .. versionchanged:: 3.7
 
    The attribute ``item_meta_properties`` has been added.
+
+.. versionchanged:: 3.12
+
+   The attribute ``valid_keys`` has been added.
 
 Endpoints
 ---------
@@ -144,7 +151,7 @@ Endpoints
               "pretix.plugins.stripe"
               "pretix.plugins.paypal"
               "pretix.plugins.ticketoutputpdf"
-            ]
+            ],
           }
         ]
       }
@@ -216,7 +223,12 @@ Endpoints
           "pretix.plugins.stripe"
           "pretix.plugins.paypal"
           "pretix.plugins.ticketoutputpdf"
-        ]
+        ],
+        "valid_keys": {
+          "pretix_sig1": [
+            "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUNvd0JRWURLMlZ3QXlFQTdBRDcvdkZBMzNFc1k0ejJQSHI3aVpQc1o4bjVkaDBhalA4Z3l6Tm1tSXM9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo="
+          ]
+        }
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch

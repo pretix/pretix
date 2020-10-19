@@ -154,7 +154,9 @@ setup(
         'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
         'packaging',
         'tlds>=2020041600',
-        'text-unidecode==1.*'
+        'text-unidecode==1.*',
+        'protobuf==3.13.*',
+        'cryptography',
     ],
     extras_require={
         'dev': [

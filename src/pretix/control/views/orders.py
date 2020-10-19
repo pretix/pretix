@@ -40,13 +40,14 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Checkin, Invoice,
     InvoiceAddress, Item, ItemVariation, LogEntry, Order, QuestionAnswer,
-    Quota, generate_position_secret, generate_secret,
+    Quota, generate_secret,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
 )
 from pretix.base.models.tax import EU_COUNTRIES, cc_to_vat_prefix
 from pretix.base.payment import PaymentException
+from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.cancelevent import cancel_event
 from pretix.base.services.export import export
@@ -1644,8 +1645,9 @@ class OrderContactChange(OrderView):
                 changed = True
                 self.order.secret = generate_secret()
                 for op in self.order.all_positions.all():
-                    op.secret = generate_position_secret()
-                    op.save()
+                    assign_ticket_secret(
+                        self.request.event, position=op, force_invalidate=True, save=True
+                    )
                 tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
                 self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
 

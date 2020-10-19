@@ -26,15 +26,18 @@ from pretix.api.serializers.order import (
     InvoiceSerializer, OrderCreateSerializer, OrderPaymentCreateSerializer,
     OrderPaymentSerializer, OrderPositionSerializer,
     OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
-    PriceCalcSerializer, SimulatedOrderSerializer,
+    PriceCalcSerializer, RevokedTicketSecretSerializer,
+    SimulatedOrderSerializer,
 )
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Device, Event, Invoice, InvoiceAddress,
     Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota, SubEvent,
-    TeamAPIToken, generate_position_secret, generate_secret,
+    TeamAPIToken, generate_secret,
 )
+from pretix.base.models.orders import RevokedTicketSecret
 from pretix.base.payment import PaymentException
+from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -483,8 +486,9 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         order.secret = generate_secret()
         for op in order.all_positions.all():
-            op.secret = generate_position_secret()
-            op.save()
+            assign_ticket_secret(
+                request.event, op, force_invalidate=True, save=True
+            )
         order.save(update_fields=['secret'])
         CachedTicket.objects.filter(order_position__order=order).delete()
         CachedCombinedTicket.objects.filter(order=order).delete()
@@ -1298,3 +1302,26 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
                 auth=self.request.auth,
             )
             return Response(status=204)
+
+
+with scopes_disabled():
+    class RevokedSecretFilter(FilterSet):
+        created_since = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='gte')
+
+        class Meta:
+            model = RevokedTicketSecret
+            fields = []
+
+
+class RevokedSecretViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = RevokedTicketSecretSerializer
+    queryset = RevokedTicketSecret.objects.none()
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    ordering = ('-created',)
+    ordering_fields = ('created', 'secret')
+    filterset_class = RevokedSecretFilter
+    permission = 'can_view_orders'
+    write_permission = 'can_change_orders'
+
+    def get_queryset(self):
+        return RevokedTicketSecret.objects.filter(event=self.request.event)

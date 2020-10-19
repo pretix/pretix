@@ -21,7 +21,7 @@ from pretix.base.models import (
     OrderPosition, Question, QuestionAnswer, Seat, SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
-    CartPosition, OrderFee, OrderPayment, OrderRefund,
+    CartPosition, OrderFee, OrderPayment, OrderRefund, RevokedTicketSecret,
 )
 from pretix.base.pdf import get_variables
 from pretix.base.services.cart import error_messages
@@ -1209,3 +1209,10 @@ class OrderRefundCreateSerializer(I18nAwareModelSerializer):
         order = OrderRefund(order=self.context['order'], payment=p, **validated_data)
         order.save()
         return order
+
+
+class RevokedTicketSecretSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = RevokedTicketSecret
+        fields = ('id', 'secret', 'created')

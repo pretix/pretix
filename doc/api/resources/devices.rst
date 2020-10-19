@@ -216,7 +216,7 @@ Device endpoints
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
-   :param device_id: The ``device_id`` field of the deviec to modify
+   :param device_id: The ``device_id`` field of the device to modify
    :statuscode 200: no error
    :statuscode 400: The device could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure

@@ -374,6 +374,10 @@ DEFAULTS = {
         'default': 'classic',
         'type': str,
     },
+    'ticket_secret_generator': {
+        'default': 'random',
+        'type': str,
+    },
     'reservation_time': {
         'default': '30',
         'type': int,

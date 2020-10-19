@@ -57,8 +57,7 @@ def generate_secret():
 
 
 def generate_position_secret():
-    # Exclude o,0,1,i,l to avoid confusion with bad fonts/printers
-    return get_random_string(length=settings.ENTROPY['ticket_secret'], allowed_chars='abcdefghjkmnpqrstuvwxyz23456789')
+    raise TypeError("Function no longer exists, use secret generators")
 
 
 class Order(LockModel, LoggedModel):
@@ -1938,7 +1937,7 @@ class OrderPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
-    secret = models.CharField(max_length=64, default=generate_position_secret, db_index=True)
+    secret = models.CharField(max_length=255, null=False, blank=False, db_index=True)
     web_secret = models.CharField(max_length=32, default=generate_secret, db_index=True)
     pseudonymization_id = models.CharField(
         max_length=16,
@@ -2031,13 +2030,18 @@ class OrderPosition(AbstractPosition):
             self.tax_rate = Decimal('0.00')
 
     def save(self, *args, **kwargs):
+        from pretix.base.secrets import assign_ticket_secret
+
         if self.tax_rate is None:
             self._calculate_tax()
         self.order.touch()
         if not self.pk:
-            while OrderPosition.all.filter(secret=self.secret,
-                                           order__event__organizer_id=self.order.event.organizer_id).exists():
-                self.secret = generate_position_secret()
+            while not self.secret or OrderPosition.all.filter(
+                secret=self.secret, order__event__organizer_id=self.order.event.organizer_id
+            ).exists():
+                assign_ticket_secret(
+                    event=self.order.event, position=self, force_invalidate=True, save=False
+                )
 
         if not self.pseudonymization_id:
             self.assign_pseudonymization_id()
@@ -2324,6 +2328,18 @@ class CancellationRequest(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     cancellation_fee = models.DecimalField(max_digits=10, decimal_places=2)
     refund_as_giftcard = models.BooleanField(default=False)
+
+
+class RevokedTicketSecret(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='revoked_secrets')
+    position = models.ForeignKey(
+        OrderPosition,
+        on_delete=models.SET_NULL,
+        related_name='revoked_secrets',
+        null=True,
+    )
+    secret = models.TextField(db_index=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(post_delete, sender=CachedTicket)

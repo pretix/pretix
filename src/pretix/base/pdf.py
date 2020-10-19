@@ -48,7 +48,9 @@ DEFAULT_VARIABLES = OrderedDict((
     ("secret", {
         "label": _("Ticket code (barcode content)"),
         "editor_sample": "tdmruoekvkpbv1o2mv8xccvqcikvr58u",
-        "evaluate": lambda orderposition, order, event: orderposition.secret
+        "evaluate": lambda orderposition, order, event: (
+            orderposition.secret[:30] + "…" if len(orderposition.secret) > 32 else orderposition.secret
+        )
     }),
     ("order", {
         "label": _("Order code"),
@@ -427,8 +429,13 @@ class Renderer:
         elif content == 'pseudonymization_id':
             content = op.pseudonymization_id
 
+        level = 'H'
+        if len(content) > 32:
+            level = 'M'
+        if len(content) > 128:
+            level = 'L'
         reqs = float(o['size']) * mm
-        qrw = QrCodeWidget(content, barLevel='H', barHeight=reqs, barWidth=reqs)
+        qrw = QrCodeWidget(content, barLevel=level, barHeight=reqs, barWidth=reqs)
         d = Drawing(reqs, reqs)
         d.add(qrw)
         qr_x = float(o['left']) * mm
