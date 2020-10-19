@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-18 07:00+0000\n"
+"PO-Revision-Date: 2020-10-20 01:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -6723,7 +6723,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:416 pretix/control/forms/organizer.py:287
 msgid "We recommend to upload a picture at least 1170 pixels wide."
-msgstr ""
+msgstr "Suositeltu kuvan leveys vähintään 1170 pikseliä."
 
 #: pretix/control/forms/event.py:420
 msgid "Show event title even if a header image is present"
@@ -6748,14 +6748,14 @@ msgstr ""
 
 #: pretix/control/forms/event.py:435 pretix/control/forms/organizer.py:226
 msgid "Primary color"
-msgstr ""
+msgstr "Pääväri"
 
 #: pretix/control/forms/event.py:439 pretix/control/forms/event.py:449
 #: pretix/control/forms/event.py:459 pretix/control/forms/event.py:468
 #: pretix/control/forms/organizer.py:230 pretix/control/forms/organizer.py:240
 #: pretix/control/forms/organizer.py:250 pretix/control/forms/organizer.py:260
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
-msgstr ""
+msgstr "Syötä värikoodi heksadesimaalina, esim. #990000."
 
 #: pretix/control/forms/event.py:444 pretix/control/forms/organizer.py:235
 msgid "Accent color for success"
@@ -6767,28 +6767,28 @@ msgstr ""
 
 #: pretix/control/forms/event.py:454 pretix/control/forms/organizer.py:245
 msgid "Accent color for errors"
-msgstr ""
+msgstr "Aksenttiväri virheille"
 
 #: pretix/control/forms/event.py:455
 msgid "We strongly suggest to use a dark shade of red."
-msgstr ""
+msgstr "Suosittelemme vahvasti tummaa punaisen sävyä."
 
 #: pretix/control/forms/event.py:464 pretix/control/forms/organizer.py:256
 msgid "Page background color"
-msgstr ""
+msgstr "Sivun taustaväri"
 
 #: pretix/control/forms/event.py:474 pretix/control/forms/organizer.py:266
 msgid "Use round edges"
-msgstr ""
+msgstr "Käytä pyöristettyjä kulmia"
 
 #: pretix/control/forms/event.py:478 pretix/control/forms/organizer.py:316
 #: pretix/control/templates/pretixcontrol/pdf/index.html:305
 msgid "Font"
-msgstr ""
+msgstr "Fontti"
 
 #: pretix/control/forms/event.py:483 pretix/control/forms/organizer.py:321
 msgid "Only respected by modern browsers."
-msgstr ""
+msgstr "Toimii vain moderneissa selaimissa."
 
 #: pretix/control/forms/event.py:539
 #, python-brace-format
@@ -6828,23 +6828,23 @@ msgstr ""
 
 #: pretix/control/forms/event.py:713
 msgid "Invoice style"
-msgstr ""
+msgstr "Laskun tyyli"
 
 #: pretix/control/forms/event.py:719
 msgid "Invoice language"
-msgstr ""
+msgstr "Laskun kieli"
 
 #: pretix/control/forms/event.py:720 pretix/control/forms/event.py:742
 msgid "The user's language"
-msgstr ""
+msgstr "Käyttäjän kieli"
 
 #: pretix/control/forms/event.py:723
 msgid "Logo image"
-msgstr ""
+msgstr "Logokuva"
 
 #: pretix/control/forms/event.py:727
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
-msgstr ""
+msgstr "Kuva näytetään 2,5 cm leveänä ja maksimikorkeudessa."
 
 #: pretix/control/forms/event.py:764
 msgid "The online shop must be selected to receive these emails."
@@ -6868,15 +6868,15 @@ msgstr ""
 
 #: pretix/control/forms/event.py:797
 msgid "Bcc address"
-msgstr ""
+msgstr "Piilokopio"
 
 #: pretix/control/forms/event.py:798
 msgid "All emails will be sent to this address as a Bcc copy"
-msgstr ""
+msgstr "Kaikki sähköpostiviestit lähetetään piilokopiona tähän osoitteeseen"
 
 #: pretix/control/forms/event.py:804
 msgid "Signature"
-msgstr ""
+msgstr "Allekirjoitus"
 
 #: pretix/control/forms/event.py:807
 #, python-brace-format
@@ -6899,7 +6899,7 @@ msgstr ""
 #: pretix/control/forms/event.py:827 pretix/control/forms/event.py:844
 #: pretix/control/forms/event.py:861 pretix/control/forms/event.py:920
 msgid "Send an email to attendees"
-msgstr ""
+msgstr "Lähetä sähköpostia osallistujille"
 
 #: pretix/control/forms/event.py:828 pretix/control/forms/event.py:845
 #: pretix/control/forms/event.py:862 pretix/control/forms/event.py:921
@@ -6920,7 +6920,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:99
 #: pretix/control/templates/pretixcontrol/pdf/index.html:367
 msgid "Text"
-msgstr ""
+msgstr "Teksti"
 
 #: pretix/control/forms/event.py:878
 msgid "Text (sent by admin)"
