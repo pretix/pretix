@@ -616,7 +616,7 @@ def test_auto_checkout_at_correct_time(event, position, clist):
         process_exit_all(sender=None)
     assert clist.inside_count == 0
     assert position.checkins.count() == 2
-    assert position.checkins.last().type == Checkin.TYPE_EXIT
+    assert position.checkins.first().type == Checkin.TYPE_EXIT
     clist.refresh_from_db()
     assert clist.exit_all_at == event.timezone.localize(datetime(2020, 1, 3, 3, 0))
 
