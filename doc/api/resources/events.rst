@@ -484,7 +484,7 @@ Endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
 
 
-.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/items/(id)/
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/
 
    Delete an event. Note that events with orders cannot be deleted to ensure data integrity.
 
