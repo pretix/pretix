@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-20 01:00+0000\n"
+"PO-Revision-Date: 2020-10-20 15:24+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -6948,11 +6948,11 @@ msgstr ""
 
 #: pretix/control/forms/event.py:938
 msgid "Received order"
-msgstr ""
+msgstr "Vastaanotettu tilaus"
 
 #: pretix/control/forms/event.py:943
 msgid "Approved order"
-msgstr ""
+msgstr "Hyväksytty tilaus"
 
 #: pretix/control/forms/event.py:946
 msgid ""
@@ -6962,7 +6962,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:950
 msgid "Approved free order"
-msgstr ""
+msgstr "Hyväksytty ilmainen tilaus"
 
 #: pretix/control/forms/event.py:953
 msgid ""
@@ -6972,11 +6972,11 @@ msgstr ""
 
 #: pretix/control/forms/event.py:957
 msgid "Denied order"
-msgstr ""
+msgstr "Hylätty tilaus"
 
 #: pretix/control/forms/event.py:962
 msgid "Use custom SMTP server"
-msgstr ""
+msgstr "Käytä mukautettua SMTP-palvelinta"
 
 #: pretix/control/forms/event.py:963
 msgid ""
@@ -6986,19 +6986,19 @@ msgstr ""
 
 #: pretix/control/forms/event.py:967
 msgid "Hostname"
-msgstr ""
+msgstr "Isäntänimi"
 
 #: pretix/control/forms/event.py:972
 msgid "Port"
-msgstr ""
+msgstr "Portti"
 
 #: pretix/control/forms/event.py:977
 msgid "Username"
-msgstr ""
+msgstr "Käyttäjänimi"
 
 #: pretix/control/forms/event.py:989
 msgid "Use STARTTLS"
-msgstr ""
+msgstr "Käytä STARTTLS:ää"
 
 #: pretix/control/forms/event.py:990
 msgid "Commonly enabled on port 587."
@@ -7006,7 +7006,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:994
 msgid "Use SSL"
-msgstr ""
+msgstr "Käytä SSL:ää"
 
 #: pretix/control/forms/event.py:995
 msgid "Commonly enabled on port 465."
@@ -7023,39 +7023,39 @@ msgstr ""
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
-msgstr ""
+msgstr "Voit aktivoida joko SSL:n tai STARTTLS:n, mutta et molempia yhtäaikaa."
 
 #: pretix/control/forms/event.py:1110
 msgid "Any country"
-msgstr ""
+msgstr "Mikä tahansa maa"
 
 #: pretix/control/forms/event.py:1111
 msgid "European Union"
-msgstr ""
+msgstr "Euroopan unioni"
 
 #: pretix/control/forms/event.py:1123
 msgid "Any customer"
-msgstr ""
+msgstr "Kaikki asiakkaat"
 
 #: pretix/control/forms/event.py:1124
 msgid "Individual"
-msgstr ""
+msgstr "Yksityishenkilö"
 
 #: pretix/control/forms/event.py:1125
 msgid "Business"
-msgstr ""
+msgstr "Yritys"
 
 #: pretix/control/forms/event.py:1126
 msgid "Business with valid VAT ID"
-msgstr ""
+msgstr "Yritys, jolla ALV-tunnus"
 
 #: pretix/control/forms/event.py:1132
 msgid "Charge VAT"
-msgstr ""
+msgstr "Veloita ALV"
 
 #: pretix/control/forms/event.py:1134
 msgid "No VAT"
-msgstr ""
+msgstr "Ei ALV:ia"
 
 #: pretix/control/forms/event.py:1138
 msgid "Deviating tax rate"
@@ -7063,7 +7063,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1168
 msgid "Pre-selected voucher"
-msgstr ""
+msgstr "Esivalittu kuponki"
 
 #: pretix/control/forms/event.py:1170
 msgid ""
@@ -7075,7 +7075,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1175
 msgid "Compatibility mode"
-msgstr ""
+msgstr "Yhteensopivuustila"
 
 #: pretix/control/forms/event.py:1177
 msgid ""
@@ -7085,7 +7085,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1198
 msgid "The given voucher code does not exist."
-msgstr ""
+msgstr "Annettu kuponkikoodi ei ole olemassa."
 
 #: pretix/control/forms/event.py:1205 pretix/control/forms/organizer.py:48
 #: pretix/control/views/shredder.py:108
@@ -7094,21 +7094,23 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1240
 msgid "Ticket downloads"
-msgstr ""
+msgstr "Lippujen lataus"
 
 #: pretix/control/forms/event.py:1241
 msgid "Your customers will be able to download their tickets in PDF format."
-msgstr ""
+msgstr "Asiakkaat voivat ladata liput PDF-muodossa."
 
 #: pretix/control/forms/event.py:1245
 msgid "Require all attendees to fill in their names"
-msgstr ""
+msgstr "Vaadi nimi kaikilta osallistujilta"
 
 #: pretix/control/forms/event.py:1246
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
 msgstr ""
+"Oletuksena nimeä kysytään, mutta sitä ei vaadita. Voit ottaa tämän pois "
+"päältä asetuksissa."
 
 #: pretix/control/forms/event.py:1272
 msgid "Payment via Stripe"
@@ -7124,7 +7126,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1279
 msgid "Payment by bank transfer"
-msgstr ""
+msgstr "Maksu pankkisiirrolla"
 
 #: pretix/control/forms/event.py:1280
 msgid ""
@@ -7136,24 +7138,24 @@ msgstr ""
 #: pretix/control/forms/event.py:1319
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
-msgstr ""
+msgstr "Hinta (valinnainen)"
 
 #: pretix/control/forms/event.py:1324
 msgid "Free"
-msgstr ""
+msgstr "Ilmainen"
 
 #: pretix/control/forms/event.py:1329
 msgid "Quantity available"
-msgstr ""
+msgstr "Saatavilla oleva määrä"
 
 #: pretix/control/forms/filter.py:89 pretix/control/forms/filter.py:91
 msgid "Search for…"
-msgstr ""
+msgstr "Etsi…"
 
 #: pretix/control/forms/filter.py:106 pretix/control/navigation.py:174
 #: pretix/control/templates/pretixcontrol/items/question.html:19
 msgid "All orders"
-msgstr ""
+msgstr "Kaikki tilaukset"
 
 #: pretix/control/forms/filter.py:107
 msgid "Paid (or canceled with paid fee)"
@@ -7165,17 +7167,17 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/overview.html:67
 #: pretix/plugins/reports/exporters.py:234
 msgid "Pending"
-msgstr ""
+msgstr "Odottaa"
 
 #: pretix/control/forms/filter.py:109
 #: pretix/control/templates/pretixcontrol/items/question.html:23
 msgid "Pending (overdue)"
-msgstr ""
+msgstr "Odottaa (erääntynyt)"
 
 #: pretix/control/forms/filter.py:110
 #: pretix/control/templates/pretixcontrol/items/question.html:22
 msgid "Pending or paid"
-msgstr ""
+msgstr "Odottaa tai maksettu"
 
 #: pretix/control/forms/filter.py:111 pretix/control/forms/filter.py:601
 #: pretix/control/forms/filter.py:1016
@@ -7186,12 +7188,12 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:230
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
 msgid "Expired"
-msgstr ""
+msgstr "Vanhentunut"
 
 #: pretix/control/forms/filter.py:112
 #: pretix/control/templates/pretixcontrol/items/question.html:25
 msgid "Pending or expired"
-msgstr ""
+msgstr "Odottaa tai vanhentunut"
 
 #: pretix/control/forms/filter.py:113
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -7200,7 +7202,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:230
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:22
 msgid "Canceled"
-msgstr ""
+msgstr "Peruttu"
 
 #: pretix/control/forms/filter.py:114
 msgid "Canceled (or with paid fee)"
@@ -7210,7 +7212,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:5
 msgid "Approval pending"
-msgstr ""
+msgstr "Odottaa hyväksyntää"
 
 #: pretix/control/forms/filter.py:116
 msgid "Overpaid"
@@ -7218,17 +7220,17 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:117
 msgid "Underpaid"
-msgstr ""
+msgstr "Maksu vajaa"
 
 #: pretix/control/forms/filter.py:118
 msgid "Pending (but fully paid)"
-msgstr ""
+msgstr "Odottaa (maksettu kokonaan)"
 
 #: pretix/control/forms/filter.py:119 pretix/control/forms/filter.py:586
 #: pretix/control/forms/filter.py:589
 #: pretix/control/templates/pretixcontrol/event/live.html:63
 msgid "Test mode"
-msgstr ""
+msgstr "Testitila"
 
 #: pretix/control/forms/filter.py:120
 msgid "Cancellation requested"
@@ -7239,18 +7241,18 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question.html:29
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:99
 msgid "All products"
-msgstr ""
+msgstr "Kaikki tuotteet"
 
 #: pretix/control/forms/filter.py:290 pretix/control/forms/filter.py:1080
 #: pretix/control/forms/vouchers.py:100 pretix/control/views/typeahead.py:518
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr ""
+msgstr "{product} – Mikä tahansa variaatio"
 
 #: pretix/control/forms/filter.py:349 pretix/control/forms/filter.py:354
 #: pretix/control/forms/filter.py:677 pretix/control/forms/filter.py:682
 msgid "All organizers"
-msgstr ""
+msgstr "Kaikki järjestäjät"
 
 #: pretix/control/forms/filter.py:441 pretix/control/forms/filter.py:588
 #: pretix/control/forms/filter.py:597 pretix/control/forms/filter.py:930
@@ -7270,44 +7272,44 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:444 pretix/control/forms/filter.py:932
 msgid "Inactive"
-msgstr ""
+msgstr "Epäaktiivinen"
 
 #: pretix/control/forms/filter.py:456 pretix/control/forms/subevents.py:286
 #: pretix/control/forms/subevents.py:325
 msgid "Weekday"
-msgstr ""
+msgstr "Viikonpäivä"
 
 #: pretix/control/forms/filter.py:458
 msgid "All days"
-msgstr ""
+msgstr "Kaikki päivät"
 
 #: pretix/control/forms/filter.py:459
 msgid "Monday"
-msgstr ""
+msgstr "maanantai"
 
 #: pretix/control/forms/filter.py:460
 msgid "Tuesday"
-msgstr ""
+msgstr "tiistai"
 
 #: pretix/control/forms/filter.py:461
 msgid "Wednesday"
-msgstr ""
+msgstr "keskiviikko"
 
 #: pretix/control/forms/filter.py:462
 msgid "Thursday"
-msgstr ""
+msgstr "torstai"
 
 #: pretix/control/forms/filter.py:463
 msgid "Friday"
-msgstr ""
+msgstr "perjantai"
 
 #: pretix/control/forms/filter.py:464
 msgid "Saturday"
-msgstr ""
+msgstr "lauantai"
 
 #: pretix/control/forms/filter.py:465
 msgid "Sunday"
-msgstr ""
+msgstr "sunnuntai"
 
 #: pretix/control/forms/filter.py:590
 msgid "Live"
@@ -7315,7 +7317,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:595 pretix/control/forms/filter.py:598
 msgid "Empty"
-msgstr ""
+msgstr "Tyhjä"
 
 #: pretix/control/forms/filter.py:599
 msgid "Valid and with value"
@@ -7332,7 +7334,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:661
 msgid "All events"
-msgstr ""
+msgstr "Kaikki tapahtumat"
 
 #: pretix/control/forms/filter.py:662
 msgid "Shop live"
@@ -7352,7 +7354,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:839 pretix/control/forms/filter.py:841
 msgid "Search attendee…"
-msgstr ""
+msgstr "Etsi osallistuja…"
 
 #: pretix/control/forms/filter.py:847
 msgid "Check-in status"
@@ -7360,7 +7362,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:849
 msgid "All attendees"
-msgstr ""
+msgstr "Kaikki osallistujat"
 
 #: pretix/control/forms/filter.py:850
 msgctxt "checkin state"
@@ -7387,7 +7389,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:937 pretix/control/forms/filter.py:940
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Administrator"
-msgstr ""
+msgstr "Järjestelmänvalvoja"
 
 #: pretix/control/forms/filter.py:941
 msgid "No administrator"
@@ -7395,19 +7397,19 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1012
 msgid "Valid"
-msgstr ""
+msgstr "Voimassa"
 
 #: pretix/control/forms/filter.py:1013
 msgid "Unredeemed"
-msgstr ""
+msgstr "Käyttämätön"
 
 #: pretix/control/forms/filter.py:1014
 msgid "Redeemed at least once"
-msgstr ""
+msgstr "Käytetty vähintään kerran"
 
 #: pretix/control/forms/filter.py:1015
 msgid "Fully redeemed"
-msgstr ""
+msgstr "Käytetty kokonaan"
 
 #: pretix/control/forms/filter.py:1017
 msgid "Redeemed and checked in with ticket"
