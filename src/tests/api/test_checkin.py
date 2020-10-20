@@ -143,6 +143,7 @@ TEST_LIST_RES = {
     "allow_multiple_entries": False,
     "allow_entry_after_exit": True,
     "subevent": None,
+    "exit_all_at": None,
     "rules": {}
 }
 

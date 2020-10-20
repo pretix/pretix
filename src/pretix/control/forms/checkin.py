@@ -1,5 +1,8 @@
+from datetime import datetime, timedelta
+
 from django import forms
 from django.urls import reverse
+from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import pgettext_lazy
 from django_scopes.forms import (
     SafeModelChoiceField, SafeModelMultipleChoiceField,
@@ -8,6 +11,21 @@ from django_scopes.forms import (
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.widgets import Select2
+
+
+class NextTimeField(forms.TimeField):
+    def to_python(self, value):
+        value = super().to_python(value)
+        if value is None:
+            return
+        tz = get_current_timezone()
+        result = make_aware(datetime.combine(
+            now().astimezone(tz).date(),
+            value,
+        ), tz)
+        if result <= now():
+            result += timedelta(days=1)
+        return result
 
 
 class CheckinListForm(forms.ModelForm):
@@ -55,16 +73,19 @@ class CheckinListForm(forms.ModelForm):
             'allow_multiple_entries',
             'allow_entry_after_exit',
             'rules',
+            'exit_all_at',
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '<[name$=all_products]'
             }),
             'auto_checkin_sales_channels': forms.CheckboxSelectMultiple(),
+            'exit_all_at': forms.TimeInput(attrs={'class': 'timepickerfield'}),
         }
         field_classes = {
             'limit_products': SafeModelMultipleChoiceField,
             'subevent': SafeModelChoiceField,
+            'exit_all_at': NextTimeField,
         }
 
 

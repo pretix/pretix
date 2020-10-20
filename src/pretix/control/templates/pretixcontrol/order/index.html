@@ -299,7 +299,11 @@
                                 {% if line.checkins.all %}
                                     {% for c in line.checkins.all %}
                                         {% if c.type == "exit" %}
-                                            <span class="fa fa-fw fa-sign-out" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Exit scan: {{ date }}{% endblocktrans %}"></span>
+                                            {% if c.auto_checked_in %}
+                                                <span class="fa fa-fw fa-hourglass-end" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically marked not present: {{ date }}{% endblocktrans %}"></span>
+                                            {% else %}
+                                                <span class="fa fa-fw fa-sign-out" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Exit scan: {{ date }}{% endblocktrans %}"></span>
+                                            {% endif %}
                                         {% elif c.forced %}
                                             <span class="fa fa-fw fa-warning" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Additional entry scan: {{ date }}{% endblocktrans %}"></span>
                                         {% elif c.auto_checked_in %}
