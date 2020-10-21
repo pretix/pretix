@@ -168,7 +168,7 @@ setup(
             'coveralls',
             'coverage',
             'pytest==5.3.*',
-            'pytest-django',
+            'pytest-django==3.*',
             'pytest-xdist==1.31.*',
             'isort',
             'pytest-mock==2.0.*',
