@@ -393,6 +393,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Seat zone'),
             _('Seat row'),
             _('Seat number'),
+            _('Order comment'),
         ]
 
         questions = list(Question.objects.filter(event__in=self.events))
@@ -488,6 +489,7 @@ class OrderListExporter(MultiSheetListExporter):
                 else:
                     row += ['', '', '', '', '']
 
+                row.append(order.comment)
                 acache = {}
                 for a in op.answers.all():
                     # We do not want to localize Date, Time and Datetime question answers, as those can lead
@@ -528,7 +530,7 @@ class OrderListExporter(MultiSheetListExporter):
                     row += [''] * (8 + (len(name_scheme['fields']) if name_scheme and len(name_scheme['fields']) > 1 else 0))
                 row += [
                     order.sales_channel,
-                    order.locale
+                    order.locale,
                 ]
                 row.append(', '.join([
                     str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
