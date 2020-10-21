@@ -104,7 +104,7 @@ setup(
         'Pillow==7.*',
         'PyPDF2==1.26.*',
         'django-libsass==0.8',
-        'libsass==0.19.2',  # Bump when https://github.com/sass/libsass/issues/3053 is fixed
+        'libsass==0.20.*',
         'django-otp==0.7.*,>=0.7.5',
         'webauthn==0.4.*',
         'python-u2flib-server==4.*',
