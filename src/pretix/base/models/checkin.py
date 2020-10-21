@@ -30,7 +30,10 @@ class CheckinList(LoggedModel):
         help_text=_('Use this option to turn off warnings if a ticket is scanned a second time.'),
         default=False
     )
-
+    exit_all_at = models.DateTimeField(
+        verbose_name=_('Automatically check out everyone at'),
+        null=True, blank=True
+    )
     auto_checkin_sales_channels = MultiStringField(
         default=[],
         blank=True,
@@ -62,7 +65,7 @@ class CheckinList(LoggedModel):
         return qs
 
     @property
-    def inside_count(self):
+    def positions_inside(self):
         return self.positions.annotate(
             last_entry=Subquery(
                 Checkin.objects.filter(
@@ -87,7 +90,11 @@ class CheckinList(LoggedModel):
             & Q(
                 Q(last_exit__isnull=True) | Q(last_exit__lt=F('last_entry'))
             )
-        ).count()
+        )
+
+    @property
+    def inside_count(self):
+        return self.positions_inside.count()
 
     @property
     @scopes_disabled()

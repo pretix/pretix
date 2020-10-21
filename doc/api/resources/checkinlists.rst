@@ -33,6 +33,7 @@ auto_checkin_sales_channels           list of strings            All items on th
 allow_multiple_entries                boolean                    If ``true``, subsequent scans of a ticket on this list should not show a warning but instead be stored as an additional check-in.
 allow_entry_after_exit                boolean                    If ``true``, subsequent scans of a ticket on this list are valid if the last scan of the ticket was an exit scan.
 rules                                 object                     Custom check-in logic. The contents of this field are currently not considered a stable API and modifications through the API are highly discouraged.
+exit_all_at                           datetime                   Automatically check out (i.e. perform an exit scan) at this point in time. After this happened, this property will automatically be set exactly one day into the future. Note that this field is considered "internal configuration" and if you pull the list with ``If-Modified-Since``, the daily change in this field will not trigger a response.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.10
@@ -59,6 +60,10 @@ rules                                 object                     Custom check-in
 .. versionchanged:: 3.11
 
     The ``subevent_match`` and ``exclude`` query parameters have been added.
+
+.. versionchanged:: 3.12
+
+    The ``exit_all_at`` attribute has been added.
 
 Endpoints
 ---------
@@ -103,6 +108,7 @@ Endpoints
             "subevent": null,
             "allow_multiple_entries": false,
             "allow_entry_after_exit": true,
+            "exit_all_at": null,
             "rules": {},
             "auto_checkin_sales_channels": [
               "pretixpos"
@@ -152,6 +158,7 @@ Endpoints
         "subevent": null,
         "allow_multiple_entries": false,
         "allow_entry_after_exit": true,
+        "exit_all_at": null,
         "rules": {},
         "auto_checkin_sales_channels": [
           "pretixpos"

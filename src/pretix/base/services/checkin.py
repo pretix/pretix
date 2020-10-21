@@ -7,11 +7,12 @@ from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import now, override
 from django.utils.translation import gettext as _
+from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import (
     Checkin, CheckinList, Device, Order, OrderPosition, QuestionOption,
 )
-from pretix.base.signals import checkin_created, order_placed
+from pretix.base.signals import checkin_created, order_placed, periodic_task
 from pretix.helpers.jsonlogic import Logic
 
 
@@ -262,5 +263,23 @@ def order_placed(sender, **kwargs):
         for cl in cls:
             if cl.all_products or op.item_id in {i.pk for i in cl.limit_products.all()}:
                 if not cl.subevent_id or cl.subevent_id == op.subevent_id:
-                    ci = Checkin.objects.create(position=op, list=cl, auto_checked_in=True)
+                    ci = Checkin.objects.create(position=op, list=cl, auto_checked_in=True, type=Checkin.TYPE_ENTRY)
                     checkin_created.send(event, checkin=ci)
+
+
+@receiver(periodic_task, dispatch_uid="autocheckin_exit_all")
+@scopes_disabled()
+def process_exit_all(sender, **kwargs):
+    qs = CheckinList.objects.filter(
+        exit_all_at__lte=now(),
+        exit_all_at__isnull=False
+    ).select_related('event', 'event__organizer')
+    for cl in qs:
+        for p in cl.positions_inside:
+            with scope(organizer=cl.event.organizer):
+                ci = Checkin.objects.create(
+                    position=p, list=cl, auto_checked_in=True, type=Checkin.TYPE_EXIT, datetime=cl.exit_all_at
+                )
+                checkin_created.send(cl.event, checkin=ci)
+        cl.exit_all_at = cl.exit_all_at + timedelta(days=1)
+        cl.save(update_fields=['exit_all_at'])

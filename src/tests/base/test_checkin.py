@@ -10,7 +10,7 @@ from freezegun import freeze_time
 
 from pretix.base.models import Checkin, Event, Order, OrderPosition, Organizer
 from pretix.base.services.checkin import (
-    CheckInError, RequiredQuestionsError, perform_checkin,
+    CheckInError, RequiredQuestionsError, perform_checkin, process_exit_all,
 )
 
 
@@ -22,6 +22,7 @@ def event():
         date_from=now(),
         plugins='pretix.plugins.banktransfer'
     )
+    event.settings.timezone = 'Europe/Berlin'
     with scope(organizer=o):
         yield event
 
@@ -600,3 +601,39 @@ def test_position_queries(django_assert_num_queries, position, clist):
         perform_checkin(position, clist, {})
     if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
         assert any('FOR UPDATE' in s['sql'] for s in captured)
+
+
+@pytest.mark.django_db(transaction=True)
+def test_auto_checkout_at_correct_time(event, position, clist):
+    clist.exit_all_at = event.timezone.localize(datetime(2020, 1, 2, 3, 0))
+    clist.save()
+    with freeze_time("2020-01-01 10:00:00+01:00"):
+        perform_checkin(position, clist, {})
+    with freeze_time("2020-01-02 02:55:00+01:00"):
+        process_exit_all(sender=None)
+    assert position.checkins.count() == 1
+    with freeze_time("2020-01-02 03:05:00+01:00"):
+        process_exit_all(sender=None)
+    assert clist.inside_count == 0
+    assert position.checkins.count() == 2
+    assert position.checkins.first().type == Checkin.TYPE_EXIT
+    clist.refresh_from_db()
+    assert clist.exit_all_at == event.timezone.localize(datetime(2020, 1, 3, 3, 0))
+
+
+@pytest.mark.django_db(transaction=True)
+def test_auto_check_out_only_if_checked_in(event, position, clist):
+    clist.exit_all_at = event.timezone.localize(datetime(2020, 1, 2, 3, 0))
+    clist.save()
+    with freeze_time("2020-01-02 03:05:00+01:00"):
+        process_exit_all(sender=None)
+    assert position.checkins.count() == 0
+
+    with freeze_time("2020-01-02 04:05:00+01:00"):
+        perform_checkin(position, clist, {})
+    with freeze_time("2020-01-02 04:10:00+01:00"):
+        perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+
+    with freeze_time("2020-01-03 03:05:00+01:00"):
+        process_exit_all(sender=None)
+    assert position.checkins.count() == 2

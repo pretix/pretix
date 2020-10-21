@@ -15,7 +15,7 @@ class CheckinListSerializer(I18nAwareModelSerializer):
         model = CheckinList
         fields = ('id', 'name', 'all_products', 'limit_products', 'subevent', 'checkin_count', 'position_count',
                   'include_pending', 'auto_checkin_sales_channels', 'allow_multiple_entries', 'allow_entry_after_exit',
-                  'rules')
+                  'rules', 'exit_all_at')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

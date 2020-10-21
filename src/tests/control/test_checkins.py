@@ -4,6 +4,7 @@ from decimal import Decimal
 import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from freezegun import freeze_time
 
 from pretix.base.models import (
     Checkin, Event, Item, ItemAddOn, ItemCategory, LogEntry, Order,
@@ -398,6 +399,7 @@ class CheckinListFormTest(SoupTest):
             organizer=self.orga1, name='30C3', slug='30c3',
             date_from=datetime(2013, 12, 26, tzinfo=timezone.utc),
         )
+        self.event1.settings.timezone = 'Europe/Berlin'
         t = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_view_orders=True)
         t.members.add(self.user)
         t.limit_events.add(self.event1)
@@ -431,6 +433,32 @@ class CheckinListFormTest(SoupTest):
         assert not cl.all_products
         with scopes_disabled():
             assert list(cl.limit_products.all()) == [self.item_ticket]
+
+    @freeze_time("2020-01-02 02:55:00+01:00")
+    def test_update_exit_all_at_current_day(self):
+        with scopes_disabled():
+            cl = self.event1.checkin_lists.create(name='All', all_products=True)
+        doc = self.get_doc('/control/event/%s/%s/checkinlists/%s/change' % (self.orga1.slug, self.event1.slug, cl.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['exit_all_at'] = '03:00:00'
+        doc = self.post_doc('/control/event/%s/%s/checkinlists/%s/change' % (self.orga1.slug, self.event1.slug, cl.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        cl.refresh_from_db()
+        assert cl.exit_all_at == self.event1.timezone.localize(datetime(2020, 1, 2, 3, 0))
+
+    @freeze_time("2020-01-02 03:05:00+01:00")
+    def test_update_exit_all_at_next_day(self):
+        with scopes_disabled():
+            cl = self.event1.checkin_lists.create(name='All', all_products=True)
+        doc = self.get_doc('/control/event/%s/%s/checkinlists/%s/change' % (self.orga1.slug, self.event1.slug, cl.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['exit_all_at'] = '03:00:00'
+        doc = self.post_doc('/control/event/%s/%s/checkinlists/%s/change' % (self.orga1.slug, self.event1.slug, cl.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        cl.refresh_from_db()
+        assert cl.exit_all_at == self.event1.timezone.localize(datetime(2020, 1, 3, 3, 0))
 
     def test_delete(self):
         with scopes_disabled():
