@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-16 20:40+0000\n"
+"PO-Revision-Date: 2020-10-18 14:04+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1113,7 +1113,7 @@ msgstr "Variante"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:51
 #: pretix/presale/templates/pretixpresale/event/order_change.html:51
 msgid "Attendee name"
-msgstr "Name des/der Teilnehmer*in"
+msgstr "Name des Teilnehmenden"
 
 #: pretix/base/exporters/orderlist.py:382 pretix/base/forms/questions.py:273
 #: pretix/base/models/orders.py:1113
@@ -4291,7 +4291,7 @@ msgstr "Preis inklusive Zusatzprodukte"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:71
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:74
 msgid "Attendee company"
-msgstr "Teilnehmer-Firma"
+msgstr "Teilnehmer*innen-Firma"
 
 #: pretix/base/pdf.py:114 pretix/base/pdf.py:217
 #: pretix/base/services/tickets.py:96 pretix/control/views/pdf.py:80

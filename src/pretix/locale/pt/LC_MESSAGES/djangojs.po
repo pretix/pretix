@@ -8,26 +8,24 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-17 20:00+0000\n"
-"Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
-"Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/fi/>\n"
-"Language: fi\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr "Merkitty maksetuksi"
+msgstr ""
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr "Kommentti:"
+msgstr ""
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -37,7 +35,7 @@ msgstr ""
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "Maksetut tilaukset"
+msgstr ""
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -54,7 +52,7 @@ msgstr ""
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
-msgstr "Maksuasi vahvistetaan …"
+msgstr ""
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
@@ -85,7 +83,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:164
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
-msgstr "Tapahtui virhe. Virhekoodi: {code}."
+msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:89
 msgid ""
@@ -96,19 +94,17 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:141
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
-msgstr "Pyyntö aikakatkaistiin. Ole hyvä ja yritä uudelleen."
+msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:167
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
-"Palvelimeen ei juuri nyt saatu yhteyttä. Ole hyvä ja yritä uudelleen. "
-"Virhekoodi: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:189
 msgid "We are processing your request …"
-msgstr "Pyyntöäsi käsitellään …"
+msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:197
 msgid ""
@@ -120,15 +116,15 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:235
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
-msgstr "Sulje viesti"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr "Kopioitu!"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr "Paina Ctrl-C kopioidaksesi!"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:5
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:11
@@ -145,15 +141,15 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
 msgid "Product"
-msgstr "Tuote"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
 msgid "Product variation"
-msgstr "Tuotevariaatio"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:62
 msgid "Current date and time"
-msgstr "Nykyinen päivämäärä ja aika"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:66
 msgid "Number of previous entries"
@@ -177,11 +173,11 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:223
 msgid "Event start"
-msgstr "Tapahtuma alkaa"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:224
 msgid "Event end"
-msgstr "Tapahtuma päättyy"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:225
 msgid "Event admission"
@@ -189,16 +185,16 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:226
 msgid "custom time"
-msgstr "mukautettu aika"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
 msgid "Tolerance (minutes)"
-msgstr "Toleranssi (minuuttia)"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:237
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:441
 msgid "Add condition"
-msgstr "Lisää ehto"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
@@ -218,11 +214,11 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:467
 msgid "Text object"
-msgstr "Tekstiobjekti"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:469
 msgid "Barcode area"
-msgstr "Viivakoodialue"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:471
 msgid "Powered by pretix"
@@ -238,7 +234,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:734
 msgid "Saving failed."
-msgstr "Tallennus epäonnistui."
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:783
 #: pretix/static/pretixcontrol/js/ui/editor.js:821
@@ -251,7 +247,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr "Tapahtui virhe."
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
@@ -259,7 +255,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:70
 msgid "Unknown error."
-msgstr "Tuntematon virhe."
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:233
 msgid "Your color has great contrast and is very easy to read!"
@@ -277,7 +273,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:376
 msgid "All"
-msgstr "Kaikki"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:377
 msgid "None"
@@ -285,35 +281,35 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:698
 msgid "Use a different name internally"
-msgstr "Käytä toista nimeä sisäisesti"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:755
 msgid "Click to close"
-msgstr "Sulje klikkaamalla"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:770
 msgid "You have unsaved changes!"
-msgstr "Sinulla on tallentamattomia muutoksia!"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
-msgstr "Lasketaan oletushintaa…"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr "Muut"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr "Määrä"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:131
 msgid "Yes"
-msgstr "Kyllä"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:132
 msgid "No"
-msgstr "Ei"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -323,11 +319,11 @@ msgstr[1] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr "Ostoskorissasi olevat tuotteet eivät ole enää varattu sinulle."
+msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr "Ostoskori on vanhentunut"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
@@ -354,7 +350,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/ui/main.js:424
 #: pretix/static/pretixpresale/js/ui/main.js:437
 msgid "Time zone:"
-msgstr "Aikavyöhyke:"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:429
 msgid "Your local time:"
@@ -363,12 +359,12 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Sold out"
-msgstr "Loppuunmyyty"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Buy"
-msgstr "Osta"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
@@ -378,12 +374,12 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Reserved"
-msgstr "Varattu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "FREE"
-msgstr "ILMAINEN"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
@@ -403,7 +399,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr "sis. verot"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
@@ -414,12 +410,12 @@ msgstr ""
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr "nyt saatavilla: %s"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr "Saatavilla vain kupongilla"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 #, javascript-format
@@ -430,22 +426,22 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr "Sulje lippukauppa"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr "Lippukauppaa ei voitu ladata."
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "Ostoskoria ei voitu luoda. Ole hyvä ja yritä myöhemmin uudelleen"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "Waiting list"
-msgstr "Jonotuslista"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
@@ -462,145 +458,145 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr "Käytä kuponki"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Redeem"
-msgstr "Käytä"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Voucher code"
-msgstr "Kuponkikoodi"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "Close"
-msgstr "Sulje"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Continue"
-msgstr "Jatka"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "See variations"
-msgstr "Näytä vaihtoehdot"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr "Valitse toinen tapahtuma"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr "Valitse toinen päivämäärä"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Back"
-msgstr "Takaisin"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Next month"
-msgstr "Seuraava kuukausi"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Previous month"
-msgstr "Edellinen kuukausi"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Next week"
-msgstr "Seuraava viikko"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
 msgid "Previous week"
-msgstr "Edellinen viikko"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr "Avaa paikkavalinta"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Mo"
-msgstr "Ma"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Tu"
-msgstr "Ti"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "We"
-msgstr "Ke"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "Th"
-msgstr "To"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "Fr"
-msgstr "Pe"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "Sa"
-msgstr "La"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "Su"
-msgstr "Su"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "January"
-msgstr "Tammikuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "February"
-msgstr "Helmikuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "March"
-msgstr "Maaliskuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "April"
-msgstr "Huhtikuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "May"
-msgstr "Toukokuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "June"
-msgstr "Kesäkuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "July"
-msgstr "Heinäkuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "August"
-msgstr "Elokuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "September"
-msgstr "Syyskuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "October"
-msgstr "Lokakuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
 msgid "November"
-msgstr "Marraskuu"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
-msgstr "Joulukuu"
+msgstr ""

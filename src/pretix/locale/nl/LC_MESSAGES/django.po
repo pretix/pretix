@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-04 22:00+0000\n"
+"PO-Revision-Date: 2020-10-18 14:05+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,26 +50,20 @@ msgid "On sale"
 msgstr "In de verkoop"
 
 #: pretix/api/auth/devicesecurity.py:6
-#, fuzzy
-#| msgid "Full name"
 msgid "Full access"
-msgstr "Volledige naam"
+msgstr "Volledige toegang"
 
 #: pretix/api/auth/devicesecurity.py:22
-#, fuzzy
-#| msgid "Download pretixSCAN"
 msgid "pretixSCAN"
-msgstr "Download pretixSCAN"
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:47
 msgid "pretixSCAN (kiosk mode, online only)"
-msgstr ""
+msgstr "pretixSCAN (kioskmodus, alleen online)"
 
 #: pretix/api/auth/devicesecurity.py:70
-#, fuzzy
-#| msgid "pretix User"
 msgid "pretixPOS"
-msgstr "pretix-gebruiker"
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -329,7 +323,7 @@ msgstr "Ticketcheck-in teruggedraaid"
 #: pretix/base/auth.py:104
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system}-gebruiker"
 
 #: pretix/base/auth.py:113 pretix/base/forms/auth.py:175
 #: pretix/base/models/auth.py:90 pretix/base/models/notifications.py:25
@@ -3903,10 +3897,8 @@ msgid "You need to select a specific seat."
 msgstr "U moet een specifieke stoel kiezen."
 
 #: pretix/base/orderimport.py:672
-#, fuzzy
-#| msgid "Invalid option selected."
 msgid "Ambiguous option selected."
-msgstr "Ongeldige optie geselecteerd."
+msgstr "Onduidelijke optie geselecteerd."
 
 #: pretix/base/payment.py:231
 msgid "Enable payment method"
@@ -4618,6 +4610,8 @@ msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
 msgstr ""
+"Er kunnen geen nieuwe bestellingen worden geplaatst, omdat alle betalingen "
+"voor dit evenement al moeten zijn ontvangen."
 
 #: pretix/base/services/cart.py:70
 msgid ""
@@ -6095,7 +6089,7 @@ msgstr ""
 
 #: pretix/base/settings.py:980
 msgid "Do not issue ticket before email address is validated"
-msgstr ""
+msgstr "Genereer geen tickets voor het e-mailadres is gecontroleerd"
 
 #: pretix/base/settings.py:981
 msgid ""
@@ -6105,6 +6099,12 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
+"Als dit is ingeschakeld zullen tickets niet direct na een bestelling te "
+"downloaden zijn. De tickets zullen als bijlage bij de "
+"betalingsbevestigingsmail worden gevoegd (als de bestanden niet te groot "
+"zijn) en de klant zal de tickets kunnen downloaden van de bestellingspagina "
+"zodra de klant op een link in de e-mail klikt. Dit heeft geen invloed op "
+"bestellingen via andere verkoopkanalen dan de online ticketwinkel."
 
 #: pretix/base/settings.py:998 pretix/base/settings.py:1006
 #: pretix/control/forms/organizer.py:293
@@ -10840,56 +10840,42 @@ msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:15
 msgid "ZVT Terminal"
-msgstr ""
+msgstr "ZVT-terminal"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:16
-#, fuzzy
-#| msgid "Line number"
 msgctxt "terminal_zvt"
 msgid "Trace number"
-msgstr "Regelnummer"
+msgstr "Trace-nummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
-#, fuzzy
-#| msgid "Payment type"
 msgctxt "terminal_zvt"
 msgid "Payment type"
 msgstr "Betalingswijze"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
-#, fuzzy
-#| msgid "Additional text"
 msgctxt "terminal_zvt"
 msgid "Additional text"
 msgstr "Extra tekst"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
-#, fuzzy
-#| msgid "Line number"
 msgctxt "terminal_zvt"
 msgid "Turnover number"
-msgstr "Regelnummer"
+msgstr "Turnover-nummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:24
-#, fuzzy
-#| msgid "Seat number"
 msgctxt "terminal_zvt"
 msgid "Receipt number"
-msgstr "Zitplaatsnummer"
+msgstr "Bonnummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:26
-#, fuzzy
-#| msgid "Card type"
 msgctxt "terminal_zvt"
 msgid "Card type"
 msgstr "Kaarttype"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:28
-#, fuzzy
-#| msgid "Cart position"
 msgctxt "terminal_zvt"
 msgid "Card expiration"
-msgstr "Winkelwagenpositie"
+msgstr "Verloopdatum kaart"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:33
 msgid "Transaction Code"
@@ -18830,16 +18816,12 @@ msgid "Orders by product"
 msgstr "Bestellingen per product"
 
 #: pretix/plugins/reports/exporters.py:208
-#, fuzzy
-#| msgid "incl. taxes"
 msgid "(excl. taxes)"
-msgstr "incl. belasting"
+msgstr "(excl. belasting)"
 
 #: pretix/plugins/reports/exporters.py:208
-#, fuzzy
-#| msgid "incl. taxes"
 msgid "(incl. taxes)"
-msgstr "incl. belasting"
+msgstr "(incl. belasting)"
 
 #: pretix/plugins/reports/exporters.py:213
 #, python-brace-format
@@ -20425,6 +20407,8 @@ msgstr "Bestelling bevestigd"
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Please check your email account, we've sent you your tickets."
 msgstr ""
+"We hebben uw tickets per e-mail naar u verzonden. Kijk in uw inbox om uw "
+"tickets te ontvangen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:17
 msgid ""
@@ -20432,12 +20416,17 @@ msgid ""
 "order clicked the link in the email they received to confirm the email "
 "address is valid."
 msgstr ""
+"U kunt uw tickets ook op deze pagina downloaden zodra het opgegeven e-"
+"mailadres is bevestigd. Dit kan de persoon die de bestelling heeft geplaatst "
+"doen door te klikken op de link in de toegezonden email."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:22
 msgid ""
 "If the email has no attachment, click the link in our email and you will be "
 "able to download them from here."
 msgstr ""
+"Als de email geen bijlage heeft kunt u op de link in de mail klikken om de "
+"tickets te downloaden."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:33
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:55
@@ -21380,6 +21369,8 @@ msgstr "Tickets downloaden is (nog) niet ingeschakeld voor deze bestelling."
 #: pretix/presale/views/order.py:889
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
+"Klik op de link in de email die we u hebben gestuurd om uw tickets te "
+"downloaden."
 
 #: pretix/presale/views/order.py:1048
 msgid "You cannot change this order."
@@ -21540,7 +21531,7 @@ msgstr "Turks"
 
 #: pretix/settings.py:721
 msgid "User profile only"
-msgstr ""
+msgstr "Alleen gebruikersprofiel"
 
 #: pretix/settings.py:722
 msgid "Read access"
