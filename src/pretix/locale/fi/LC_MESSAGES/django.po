@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-20 15:24+0000\n"
+"PO-Revision-Date: 2020-10-21 16:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -107,7 +107,7 @@ msgstr "Rajoita tapahtumiin"
 
 #: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:942
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Tuotteelle \"{}\" ei ole asetettu kiintiötä"
 
 #: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:954
 msgid ""
