@@ -617,13 +617,6 @@ class RefundExportListView(ListView):
     def get_unexported(self) -> QuerySet:
         raise NotImplementedError()
 
-    def dispatch(self, request, *args, **kwargs):
-        if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
-            messages.error(request, _('Please perform per-event refund exports as this organizer has events with '
-                                      'multiple currencies.'))
-            return redirect('control:organizer', organizer=request.organizer.slug)
-        return super().dispatch(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['num_new'] = self.get_unexported().count()
@@ -700,6 +693,13 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
 
 class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExportListView):
     permission = 'can_change_orders'
+
+    def dispatch(self, request, *args, **kwargs):
+        if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
+            messages.error(request, _('Please perform per-event refund exports as this organizer has events with '
+                                      'multiple currencies.'))
+            return redirect('control:organizer', organizer=request.organizer.slug)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={
