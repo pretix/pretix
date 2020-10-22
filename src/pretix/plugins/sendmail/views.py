@@ -143,6 +143,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             cf = CachedFile.objects.create(
                 expires=now() + timedelta(days=1),
                 date=now(),
+                filename=attachment.name,
                 type=attachment.content_type,
             )
             cf.file.save(attachment.name, attachment.file)
