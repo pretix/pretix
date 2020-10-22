@@ -13,6 +13,10 @@ from ...signals import periodic_task
 class Command(BaseCommand):
     help = "Run periodic tasks"
 
+    def add_arguments(self, parser):
+        parser.add_argument('--tasks', action='store', type=str, help='Only execute the tasks with this name '
+                                                                      '(dotted path, comma separation)')
+
     def handle(self, *args, **options):
         verbosity = int(options['verbosity'])
 
@@ -20,8 +24,13 @@ class Command(BaseCommand):
             return
 
         for receiver in periodic_task._live_receivers(self):
+            name = f'{receiver.__module__}.{receiver.__name__}'
+            if options.get('tasks'):
+                if name not in options.get('tasks').split(','):
+                    continue
+
             if verbosity > 1:
-                self.stdout.write(f'Running {receiver.__module__}.{receiver.__name__}…')
+                self.stdout.write(f'Running {name}…')
             t0 = time.time()
             try:
                 r = receiver(signal=periodic_task, sender=self)
@@ -38,6 +47,6 @@ class Command(BaseCommand):
             else:
                 if options.get('verbosity') > 1:
                     if r is SKIPPED:
-                        self.stdout.write(self.style.SUCCESS(f'Skipped {receiver.__module__}.{receiver.__name__}'))
+                        self.stdout.write(self.style.SUCCESS(f'Skipped {name}'))
                     else:
-                        self.stdout.write(self.style.SUCCESS(f'Completed {receiver.__module__}.{receiver.__name__} in {round(time.time() - t0, 3)}s'))
+                        self.stdout.write(self.style.SUCCESS(f'Completed {name} in {round(time.time() - t0, 3)}s'))
