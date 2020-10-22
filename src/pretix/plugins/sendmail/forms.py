@@ -7,6 +7,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import CheckinList, Item, Order, SubEvent
+from pretix.control.forms import ExtFileField
 from pretix.control.forms.widgets import Select2, Select2Multiple
 
 
@@ -20,6 +21,18 @@ class MailForm(forms.Form):
     sendto = forms.MultipleChoiceField()  # overridden later
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
+    attachment = ExtFileField(
+        label=_("Attachment"),
+        required=False,
+        ext_whitelist=(
+            ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
+            ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
+            ".bmp", ".tif", ".tiff"
+        ),
+        help_text=_('Sending an attachment increases the chance of your email not arriving or being sorted into spam folders. We recommend only using PDFs '
+                    'of no more than 2 MB in size.'),
+        max_size=10 * 1024 * 1024
+    )  # TODO i18n
     items = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(
             attrs={'class': 'scrolling-multiple-choice'}

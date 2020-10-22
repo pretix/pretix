@@ -5,7 +5,7 @@
 {% block content %}
     <h1>{% trans "Send out emails" %}</h1>
     {% block inner %}
-        <form class="form-horizontal" method="post" action="">
+        <form class="form-horizontal" method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
             {% bootstrap_field form.recipients layout='horizontal' %}
             {% bootstrap_field form.sendto layout='horizontal' %}
@@ -32,6 +32,7 @@
             </div>
             {% bootstrap_field form.subject layout='horizontal' %}
             {% bootstrap_field form.message layout='horizontal' %}
+            {% bootstrap_field form.attachment layout='horizontal' %}
             {% if request.method == "POST" %}
             <fieldset>
             <legend>{% trans "E-mail preview" %}</legend>

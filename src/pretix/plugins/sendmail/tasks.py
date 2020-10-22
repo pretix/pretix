@@ -10,7 +10,8 @@ from pretix.celery_app import app
 
 @app.task(base=ProfiledEventTask, acks_late=True)
 def send_mails(event: Event, user: int, subject: dict, message: dict, orders: list, items: list,
-               recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list) -> None:
+               recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list,
+               attachments: list = None) -> None:
     failures = []
     user = User.objects.get(pk=user) if user else None
     orders = Order.objects.filter(pk__in=orders, event=event)
@@ -61,7 +62,8 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                             event,
                             locale=o.locale,
                             order=o,
-                            position=p
+                            position=p,
+                            attach_cached_files=attachments
                         )
                         o.log_action(
                             'pretix.plugins.sendmail.order.email.sent.attendee',
@@ -87,7 +89,8 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                         email_context,
                         event,
                         locale=o.locale,
-                        order=o
+                        order=o,
+                        attach_cached_files=attachments
                     )
                     o.log_action(
                         'pretix.plugins.sendmail.order.email.sent',
