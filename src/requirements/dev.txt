@@ -7,8 +7,8 @@ flake8==3.7.*
 codecov
 coverage
 pytest-cov
-pytest==5.3.*
-pytest-django==3.*
+pytest
+pytest-django
 isort
 pytest-rerunfailures==8.*
 pytest-mock==2.0.*
