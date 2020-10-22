@@ -33,8 +33,8 @@ if [ "$1" == "webworker" ]; then
 fi
 
 if [ "$1" == "taskworker" ]; then
-    export C_FORCE_ROOT=True
-    exec celery -A pretix.celery_app worker -l info
+    shift
+    exec celery -A pretix.celery_app worker -l info "$@"
 fi
 
 if [ "$1" == "shell" ]; then
@@ -45,5 +45,4 @@ if [ "$1" == "upgrade" ]; then
     exec python3 -m pretix updatestyles
 fi
 
-echo "Specify argument: all|cron|webworker|taskworker|shell|upgrade"
-exit 1
+exec python3 -m pretix "$@"
