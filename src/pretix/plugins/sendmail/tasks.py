@@ -89,7 +89,8 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                         email_context,
                         event,
                         locale=o.locale,
-                        order=o
+                        order=o,
+                        attach_cached_files=attachments
                     )
                     o.log_action(
                         'pretix.plugins.sendmail.order.email.sent',
