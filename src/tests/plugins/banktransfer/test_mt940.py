@@ -191,29 +191,33 @@ EXPECTED = [
     [
         {'amount': '-800.00',
          'date': '2002-11-01',
-         'payer': 'MUELLER - 234567',
+         'payer': 'MUELLER',
+         'iban': '234567',
          'reference': 'Miete November'},
         {'amount': '3000.00',
          'date': '2002-11-02',
-         'payer': 'MUELLER - 0847564700',
+         'payer': 'MUELLER',
+         'iban': '0847564700',
          'reference': 'Gehalt Oktober Firma Mustermann GmbH'},
     ],
     [
         {'amount': '-400.62',
          'date': '2012-02-02',
-         'payer': 'MARTHAMUELLER -',
+         'payer': 'MARTHAMUELLER',
          'reference': 'RECHNUNGSNR. 1210815 KUNDENNR. 01234 22222222 DATUM 01.02.2012'},
         {'amount': '-1210.00',
          'date': '2012-02-03',
          'reference': 'MIETE GOETHESTR. 12',
-         'payer': 'ABC IMMOBILIEN GMBH - 3333333333'},
+         'payer': 'ABC IMMOBILIEN GMBH',
+         'iban': '3333333333'},
         {'amount': '30.00',
          'date': '2012-02-03',
-         'payer': 'STEFAN SCHMIDT -',
+         'payer': 'STEFAN SCHMIDT',
          'reference': 'RECHNUNG 20120188 STEFAN SCHMIDTKUNDENR. 4711,'},
         {'amount': '89.97',
          'date': '2012-02-03',
-         'payer': 'PETER PETERSEN - 5555555555',
+         'payer': 'PETER PETERSEN',
+         'iban': '5555555555',
          'reference': 'RECHNUNG 20120165 PETER PETERSEN'}
     ],
     [
@@ -228,12 +232,21 @@ EXPECTED = [
         {'amount': '-50000.00', 'date': '2002-03-24', 'reference': ''}
     ],
     [
-        {'amount': '12.00', 'date': '2017-08-23', 'payer': 'Peter Schneider - DE13495179316396679327', 'reference':
-            'Democon-Abcde (Peter Schneider ), Kategorie: Alles - E innahmen - Veranstaltungen Democon #1111'},
-        {'amount': '12.00', 'date': '2017-08-23', 'payer': 'Peter Schneider - DE13495179316396679327', 'reference':
-            'Democon-Abcde (Peter Schneider ), Kategorie: Alles - E innahmen - Veranstaltungen Democon #1111'},
-        {'amount': '12.00', 'date': '2017-08-24', 'payer': 'Peter Schneider - DE13495179316396679327', 'reference':
-            'Democon-Abcde (Peter Schneider ), Kategorie: Alles- E innahmen - Veranstaltungen Democon #1111'},
+        {'amount': '12.00',
+         'date': '2017-08-23',
+         'payer': 'Peter Schneider',
+         'iban': 'DE13495179316396679327',
+         'reference': 'Democon-Abcde (Peter Schneider ), Kategorie: Alles - E innahmen - Veranstaltungen Democon #1111'},
+        {'amount': '12.00',
+         'date': '2017-08-23',
+         'payer': 'Peter Schneider',
+         'iban': 'DE13495179316396679327',
+         'reference': 'Democon-Abcde (Peter Schneider ), Kategorie: Alles - E innahmen - Veranstaltungen Democon #1111'},
+        {'amount': '12.00',
+         'date': '2017-08-24',
+         'payer': 'Peter Schneider',
+         'iban': 'DE13495179316396679327',
+         'reference': 'Democon-Abcde (Peter Schneider ), Kategorie: Alles- E innahmen - Veranstaltungen Democon #1111'},
     ]
 ]
 

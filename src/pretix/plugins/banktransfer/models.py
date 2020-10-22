@@ -1,7 +1,10 @@
 import hashlib
+import json
 import re
+from decimal import Decimal
 
 from django.db import models
+from django.utils.functional import cached_property
 
 
 class BankImportJob(models.Model):
@@ -61,6 +64,9 @@ class BankTransaction(models.Model):
     reference = models.TextField(blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.CharField(max_length=50)
+    date_parsed = models.DateField(null=True)
+    iban = models.CharField(max_length=250, blank=True)
+    bic = models.CharField(max_length=250, blank=True)
     order = models.ForeignKey('pretixbase.Order', null=True, blank=True, on_delete=models.CASCADE)
     comment = models.TextField(blank=True)
 
@@ -80,3 +86,37 @@ class BankTransaction(models.Model):
     class Meta:
         unique_together = ('event', 'organizer', 'checksum')
         ordering = ('date', 'id')
+
+
+class RefundExport(models.Model):
+    event = models.ForeignKey('pretixbase.Event', related_name='banktransfer_refund_exports', on_delete=models.CASCADE, null=True, blank=True)
+    organizer = models.ForeignKey('pretixbase.Organizer', related_name='banktransfer_refund_exports', on_delete=models.PROTECT, null=True, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    testmode = models.BooleanField(default=False)
+    rows = models.TextField(default="[]")
+    downloaded = models.BooleanField(default=False)
+
+    @cached_property
+    def entity_slug(self):
+        if self.organizer:
+            return self.organizer.slug
+        else:
+            return self.event.slug
+
+    @cached_property
+    def currency(self):
+        if self.event:
+            return self.event.currency
+        return self.organizer.events.first().currency
+
+    @property
+    def rows_data(self):
+        return json.loads(self.rows)
+
+    @property
+    def sum(self):
+        return sum(Decimal(row["amount"]) for row in self.rows_data)
+
+    @property
+    def cnt(self):
+        return len(self.rows_data)

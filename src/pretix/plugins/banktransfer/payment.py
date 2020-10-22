@@ -11,8 +11,9 @@ from i18nfield.fields import I18nFormField, I18nTextarea
 from i18nfield.forms import I18nTextInput
 from i18nfield.strings import LazyI18nString
 from localflavor.generic.forms import BICFormField, IBANFormField
+from localflavor.generic.validators import BICValidator, IBANValidator
 
-from pretix.base.models import OrderPayment
+from pretix.base.models import OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 
 
@@ -144,9 +145,7 @@ class BankTransfer(BasePaymentProvider):
 
     def settings_form_clean(self, cleaned_data):
         if cleaned_data.get('payment_banktransfer_bank_details_type') == 'sepa':
-            for f in (
-                    'bank_details_sepa_name', 'bank_details_sepa_bank', 'bank_details_sepa_bic',
-                    'bank_details_sepa_iban'):
+            for f in ('bank_details_sepa_name', 'bank_details_sepa_bank', 'bank_details_sepa_bic', 'bank_details_sepa_iban'):
                 if not cleaned_data.get('payment_banktransfer_%s' % f):
                     raise ValidationError(
                         {'payment_banktransfer_%s' % f: _('Please fill out your bank account details.')})
@@ -213,10 +212,17 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
+        warning = None
+        if not self.payment_refund_supported(payment):
+            warning = _("Invalid IBAN/BIC")
+        return self._render_control_info(request, payment.order, payment.info_data, warning=warning)
+
+    def _render_control_info(self, request, order, info_data, **extra_context):
         template = get_template('pretixplugins/banktransfer/control.html')
         ctx = {'request': request, 'event': self.event,
-               'code': self._code(payment.order),
-               'payment_info': payment.info_data, 'order': payment.order}
+               'code': self._code(order),
+               'payment_info': info_data, 'order': order,
+               **extra_context}
         return template.render(ctx)
 
     def _code(self, order):
@@ -234,3 +240,39 @@ class BankTransfer(BasePaymentProvider):
         d['_shredded'] = True
         obj.info = json.dumps(d)
         obj.save(update_fields=['info'])
+
+    @staticmethod
+    def norm(s):
+        return s.strip().upper().replace(" ", "")
+
+    def payment_refund_supported(self, payment: OrderPayment) -> bool:
+        if not all(payment.info_data.get(key) for key in ("payer", "iban", "bic")):
+            return False
+        try:
+            IBANValidator()(self.norm(payment.info_data['iban']))
+            BICValidator()(self.norm(payment.info_data['bic']))
+        except ValidationError:
+            return False
+        else:
+            return True
+
+    def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
+        return self.payment_refund_supported(payment)
+
+    def execute_refund(self, refund: OrderRefund):
+        """
+        We just keep a created refund object. It will be marked as done using the control view
+        for bank transfer refunds.
+        """
+        if refund.payment is None:
+            raise ValueError(_("Can only create a bank transfer refund from an existing payment."))
+
+        refund.info_data = {
+            'payer': refund.payment.info_data['payer'],
+            'iban': self.norm(refund.payment.info_data['iban']),
+            'bic': self.norm(refund.payment.info_data['bic']),
+        }
+        refund.save(update_fields=["info"])
+
+    def refund_control_render(self, request: HttpRequest, refund: OrderRefund) -> str:
+        return self._render_control_info(request, refund.order, refund.info_data)

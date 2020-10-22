@@ -717,7 +717,7 @@ class BasePaymentProvider:
 
         The default implementation returns an empty string.
 
-        :param order: The order object
+        :param refund: The refund object
         """
         return ''
 

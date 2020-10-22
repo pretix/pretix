@@ -2,6 +2,8 @@ import csv
 import io
 import re
 
+from django.utils.text import Truncator
+
 
 class HintMismatchError(Exception):
     pass
@@ -28,6 +30,11 @@ def parse(data, hint):
             resrow['amount'] = re.sub('[^0-9,+.-]', '', resrow['amount'])
         if hint.get('date') is not None:
             resrow['date'] = row[int(hint.get('date'))].strip()
+        if hint.get('iban') is not None:
+            resrow['iban'] = Truncator(row[int(hint.get('iban'))].strip()).chars(200)
+        if hint.get('bic') is not None:
+            resrow['bic'] = Truncator(row[int(hint.get('bic'))].strip()).chars(200)
+
         if len(resrow['amount']) == 0 or 'amount' not in resrow or resrow.get('date') == '':
             # This is probably a headline or something other special.
             continue
@@ -88,5 +95,7 @@ def new_hint(data):
         'reference': data.getlist('reference') if 'reference' in data else None,
         'date': int(data.get('date')) if 'date' in data else None,
         'amount': int(data.get('amount')) if 'amount' in data else None,
-        'cols': int(data.get('cols')) if 'cols' in data else None
+        'cols': int(data.get('cols')) if 'cols' in data else None,
+        'iban': int(data.get('iban')) if 'iban' in data else None,
+        'bic': int(data.get('bic')) if 'bic' in data else None,
     }

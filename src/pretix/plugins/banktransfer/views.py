@@ -1,21 +1,28 @@
 import csv
+import itertools
 import json
 import logging
 from datetime import timedelta
 from decimal import Decimal
+from typing import Set
 
+from django import forms
 from django.contrib import messages
-from django.db.models import Count, Q
+from django.db import transaction
+from django.db.models import Count, Q, QuerySet
 from django.db.models.functions import Concat
-from django.http import JsonResponse
+from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
-from django.views.generic import DetailView, ListView, View
+from django.views.generic import DetailView, FormView, ListView, View
+from django.views.generic.detail import SingleObjectMixin
+from localflavor.generic.forms import BICFormField, IBANFormField
 
-from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
+from pretix.base.forms.widgets import DatePickerWidget
+from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter
@@ -23,8 +30,15 @@ from pretix.control.permissions import (
     EventPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
 )
 from pretix.control.views.organizer import OrganizerDetailViewMixin
+from pretix.helpers.json import CustomJSONEncoder
 from pretix.plugins.banktransfer import csvimport, mt940import
-from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
+from pretix.plugins.banktransfer.models import (
+    BankImportJob, BankTransaction, RefundExport,
+)
+from pretix.plugins.banktransfer.payment import BankTransfer
+from pretix.plugins.banktransfer.refund_export import (
+    build_sepa_xml, get_refund_export_csv,
+)
 from pretix.plugins.banktransfer.tasks import process_banktransfers
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
@@ -70,6 +84,8 @@ class ActionView(View):
                         'reference': trans.reference,
                         'date': trans.date,
                         'payer': trans.payer,
+                        'iban': trans.iban,
+                        'bic': trans.bic,
                         'trans_id': trans.pk
                     })
                 )
@@ -96,6 +112,8 @@ class ActionView(View):
             'reference': trans.reference,
             'date': trans.date,
             'payer': trans.payer,
+            'iban': trans.iban,
+            'bic': trans.bic,
             'trans_id': trans.pk
         }
         try:
@@ -274,6 +292,33 @@ class JobDetailView(DetailView):
         return ctx
 
 
+class BankTransactionFilterForm(forms.Form):
+    search_text = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': "form-control", "placeholder": _("Search text")}))
+    amount_min = forms.DecimalField(required=False, localize=True, widget=forms.TextInput(attrs={'class': "form-control", "placeholder": _("min"), "size": 8}))
+    amount_max = forms.DecimalField(required=False, localize=True, widget=forms.TextInput(attrs={'class': "form-control", "placeholder": _("max"), "size": 8}))
+    date_min = forms.DateField(required=False, widget=DatePickerWidget(attrs={"size": 8}))
+    date_max = forms.DateField(required=False, widget=DatePickerWidget(attrs={"size": 8}))
+
+    def is_valid(self):
+        return super().is_valid() and any(value for value in self.cleaned_data.values())
+
+    def filter(self, qs):
+        if not self.is_valid():
+            raise ValueError(_("Filter form is not valid."))
+        if self.cleaned_data.get('search_text'):
+            q = self.cleaned_data['search_text']
+            qs = qs.filter(Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q) | Q(iban__icontains=q) | Q(bic__icontains=q))
+        if self.cleaned_data.get('amount_min') is not None:
+            qs = qs.filter(amount__gte=self.cleaned_data['amount_min'])
+        if self.cleaned_data.get("amount_max") is not None:
+            qs = qs.filter(amount__lte=self.cleaned_data['amount_max'])
+        if self.cleaned_data.get('date_min') is not None:
+            qs = qs.filter(ate_parsed__gte=self.cleaned_data['date_min'])
+        if self.cleaned_data.get('date_max') is not None:
+            qs = qs.filter(date_parsed__lte=self.cleaned_data['date_max'])
+        return qs
+
+
 class ImportView(ListView):
     template_name = 'pretixplugins/banktransfer/import_form.html'
     permission = 'can_change_orders'
@@ -293,15 +338,12 @@ class ImportView(ListView):
             BankTransaction.STATE_INVALID, BankTransaction.STATE_ERROR,
             BankTransaction.STATE_DUPLICATE, BankTransaction.STATE_NOMATCH
         ])
-        if 'search' in self.request.GET:
-            q = self.request.GET.get('search')
-            qs = qs.filter(
-                Q(payer__icontains=q) | Q(reference__icontains=q) | Q(comment__icontains=q)
-            ).order_by(
-                '-import_job__created'
-            )
 
-        return qs
+        filter_form = BankTransactionFilterForm(self.request.GET or None)
+        if filter_form.is_valid():
+            qs = filter_form.filter(qs)
+
+        return qs.order_by('-import_job__created')
 
     def discard_all(self):
         self.get_queryset().update(payer='', reference='', state=BankTransaction.STATE_DISCARDED)
@@ -312,8 +354,7 @@ class ImportView(ListView):
             self.discard_all()
             return self.redirect_back()
 
-        elif ('file' in self.request.FILES and '.csv' in self.request.FILES.get('file').name.lower()) \
-                or 'amount' in self.request.POST:
+        elif ('file' in self.request.FILES and '.csv' in self.request.FILES.get('file').name.lower()) or 'amount' in self.request.POST:
             # Process CSV
             return self.process_csv()
 
@@ -465,6 +506,7 @@ class ImportView(ListView):
         ctx = super().get_context_data()
         ctx['job_running'] = self.job_running
         ctx['no_more_payments'] = False
+        ctx['filter_form'] = BankTransactionFilterForm(self.request.GET or None)
 
         if 'event' in self.kwargs:
             ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
@@ -543,3 +585,232 @@ class OrganizerActionView(OrganizerBanktransferView, OrganizerPermissionRequired
                     organizer=self.request.organizer, can_change_orders=True, can_view_orders=True
                 ).values_list('limit_events__id', flat=True)
             )
+
+
+def _row_key_func(row):
+    return row['iban'], row['bic']
+
+
+def _unite_transaction_rows(transaction_rows):
+    united_transactions_rows = []
+    transaction_rows = sorted(transaction_rows, key=_row_key_func)
+    for (iban, bic), group in itertools.groupby(transaction_rows, _row_key_func):
+        rows = list(group)
+        united_transactions_rows.append({
+            "iban": iban,
+            "bic": bic,
+            "id": ", ".join(sorted(set(r['id'] for r in rows))),
+            "payer": ", ".join(sorted(set(r['payer'] for r in rows))),
+            "amount": sum(r['amount'] for r in rows),
+        })
+    return united_transactions_rows
+
+
+class RefundExportListView(ListView):
+    template_name = 'pretixplugins/banktransfer/refund_export.html'
+    model = RefundExport
+    context_object_name = 'exports'
+
+    def get_success_url(self):
+        raise NotImplementedError
+
+    def get_unexported(self) -> QuerySet:
+        raise NotImplementedError()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['num_new'] = self.get_unexported().count()
+        ctx['basetpl'] = "pretixcontrol/event/base.html"
+        if not hasattr(self.request, 'event'):
+            ctx['basetpl'] = "pretixcontrol/organizers/base.html"
+        return ctx
+
+    @transaction.atomic()
+    def post(self, request, *args, **kwargs):
+        unite_transactions = request.POST.get("unite_transactions", False)
+        valid_refunds: Set[OrderRefund] = set()
+        for refund in self.get_unexported().select_related('order', 'order__event'):
+            if not refund.info_data:
+                # Should not happen
+                messages.warning(request,
+                                 _("We could not find bank account information for the refund {refund_id}. It was marked as failed.")
+                                 .format(refund_id=refund.full_id))
+                refund.state = OrderRefund.REFUND_STATE_FAILED
+                refund.save()
+                continue
+            else:
+                valid_refunds.add(refund)
+
+        if valid_refunds:
+            transaction_rows = []
+
+            for refund in valid_refunds:
+                data = refund.info_data
+                transaction_rows.append({
+                    "amount": refund.amount,
+                    "id": refund.full_id,
+                    **{key: data[key] for key in ("payer", "iban", "bic")}
+                })
+                refund.done(user=self.request.user)
+
+            if unite_transactions:
+                transaction_rows = _unite_transaction_rows(transaction_rows)
+
+            rows_data = json.dumps(transaction_rows, cls=CustomJSONEncoder)
+            if hasattr(request, 'event'):
+                RefundExport.objects.create(event=self.request.event, testmode=self.request.event.testmode, rows=rows_data)
+            else:
+                RefundExport.objects.create(organizer=self.request.organizer, testmode=False, rows=rows_data)
+
+        else:
+            messages.warning(request, _('No valid orders have been found.'))
+
+        return redirect(self.get_success_url())
+
+
+class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListView):
+    permission = 'can_change_orders'
+
+    def get_success_url(self):
+        return reverse('plugins:banktransfer:refunds.list', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_queryset(self):
+        return RefundExport.objects.filter(
+            event=self.request.event
+        ).order_by('-datetime')
+
+    def get_unexported(self):
+        return OrderRefund.objects.filter(
+            order__event=self.request.event,
+            provider='banktransfer',
+            state=OrderRefund.REFUND_STATE_CREATED,
+            order__testmode=self.request.event.testmode,
+        )
+
+
+class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExportListView):
+    permission = 'can_change_orders'
+
+    def dispatch(self, request, *args, **kwargs):
+        if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
+            messages.error(request, _('Please perform per-event refund exports as this organizer has events with '
+                                      'multiple currencies.'))
+            return redirect('control:organizer', organizer=request.organizer.slug)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('plugins:banktransfer:refunds.list', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_queryset(self):
+        return RefundExport.objects.filter(
+            Q(organizer=self.request.organizer) | Q(event__organizer=self.request.organizer)
+        ).order_by('-datetime')
+
+    def get_unexported(self):
+        return OrderRefund.objects.filter(
+            order__event__organizer=self.request.organizer,
+            provider='banktransfer',
+            state=OrderRefund.REFUND_STATE_CREATED,
+            order__testmode=False,
+        )
+
+
+class DownloadRefundExportView(DetailView):
+    model = RefundExport
+
+    def get(self, request, *args, **kwargs):
+        self.object: RefundExport = self.get_object()
+        self.object.downloaded = True
+        self.object.save(update_fields=["downloaded"])
+        filename, content_type, data = get_refund_export_csv(self.object)
+        return FileResponse(data, as_attachment=True, filename=filename, content_type=content_type)
+
+
+class EventDownloadRefundExportView(EventPermissionRequiredMixin, DownloadRefundExportView):
+    permission = 'can_change_orders'
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(
+            RefundExport,
+            event=self.request.event,
+            pk=self.kwargs.get('id')
+        )
+
+
+class OrganizerDownloadRefundExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, DownloadRefundExportView):
+    permission = 'can_change_orders'
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(
+            RefundExport,
+            organizer=self.request.organizer,
+            pk=self.kwargs.get('id')
+        )
+
+
+class SepaXMLExportForm(forms.Form):
+    account_holder = forms.CharField(label=_("Account holder"))
+    iban = IBANFormField(label="IBAN")
+    bic = BICFormField(label="BIC")
+
+    def set_initial_from_event(self, event: Event):
+        banktransfer = event.get_payment_providers(cached=True)[BankTransfer.identifier]
+        self.initial["account_holder"] = banktransfer.settings.get("bank_details_sepa_name")
+        self.initial["iban"] = banktransfer.settings.get("bank_details_sepa_iban")
+        self.initial["bic"] = banktransfer.settings.get("bank_details_sepa_bic")
+
+
+class SepaXMLExportView(SingleObjectMixin, FormView):
+    form_class = SepaXMLExportForm
+    model = RefundExport
+    template_name = 'pretixplugins/banktransfer/sepa_export.html'
+    context_object_name = "export"
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.object: RefundExport = self.get_object()
+
+    def form_valid(self, form):
+        self.object.downloaded = True
+        self.object.save(update_fields=["downloaded"])
+        filename, content_type, data = build_sepa_xml(self.object, **form.cleaned_data)
+        return FileResponse(data, as_attachment=True, filename=filename, content_type=content_type)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['basetpl'] = "pretixcontrol/event/base.html"
+        if not hasattr(self.request, 'event'):
+            ctx['basetpl'] = "pretixcontrol/organizers/base.html"
+        return ctx
+
+
+class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
+    permission = 'can_change_orders'
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(
+            RefundExport,
+            event=self.request.event,
+            pk=self.kwargs.get('id')
+        )
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.set_initial_from_event(self.object.event)
+        return form
+
+
+class OrganizerSepaXMLExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, SepaXMLExportView):
+    permission = 'can_change_orders'
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(
+            RefundExport,
+            organizer=self.request.organizer,
+            pk=self.kwargs.get('id')
+        )

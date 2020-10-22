@@ -158,8 +158,9 @@ def parse(file):
             result.append({
                 'amount': str(round_decimal(t.data['amount'].amount)),
                 'reference': reference + (' EREF: {}'.format(eref) if eref else ''),
-                'payer': (payer.get('name', '') + ' - ' + payer.get('iban', '')).strip(),
-                'date': t.data['date'].isoformat()
+                'payer': payer['name'].strip(),
+                'date': t.data['date'].isoformat(),
+                **{k: payer[k].strip() for k in ("iban", "bic") if payer.get(k)}
             })
         else:
             result.append({

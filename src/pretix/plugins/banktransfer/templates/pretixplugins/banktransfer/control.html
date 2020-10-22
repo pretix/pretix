@@ -4,10 +4,24 @@
     <dl class="dl-horizontal">
         <dt>{% trans "Payer" %}</dt>
         <dd>{{ payment_info.payer }}</dd>
-        <dt>{% trans "Payment date" %}</dt>
-        <dd>{{ payment_info.date }}</dd>
-        <dt>{% trans "Reference" %}</dt>
-        <dd>{{ payment_info.reference }}</dd>
+        {% if payment_info.iban %}
+            <dt>{% trans "Account" %}
+            <dd>
+                {{ payment_info.iban }} {{ payment_info.bic }}
+                {% if warning %}
+                    <span class="fa fa-exclamation-triangle text-danger" data-toggle="tooltip" title=""
+                          data-original-title="{{ warning }}"></span>
+                {% endif %}
+            </dd>
+        {% endif %}
+        {% if payment_info.date %}
+            <dt>{% trans "Payment date" %}</dt>
+            <dd>{{ payment_info.date }}</dd>
+        {% endif %}
+        {% if payment_info.reference %}
+            <dt>{% trans "Reference" %}</dt>
+            <dd>{{ payment_info.reference }}</dd>
+        {% endif %}
     </dl>
 {% else %}
     <dl class="dl-horizontal">

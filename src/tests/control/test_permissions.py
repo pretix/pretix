@@ -39,7 +39,6 @@ superuser_urls = [
     "sudo/sessions/",
 ]
 
-
 staff_urls = [
     "global/update/",
     "sudo/",
@@ -305,6 +304,14 @@ event_permission_urls = [
     ("can_change_event_settings", "checkinlists/add", 200),
     ("can_change_event_settings", "checkinlists/1/change", 404),
     ("can_change_event_settings", "checkinlists/1/delete", 404),
+
+    # bank transfer
+    ("can_change_orders", "banktransfer/import/", 200),
+    ("can_change_orders", "banktransfer/job/1/", 404),
+    ("can_change_orders", "banktransfer/action/", 200),
+    ("can_change_orders", "banktransfer/refunds/", 200),
+    ("can_change_orders", "banktransfer/export/1/", 404),
+    ("can_change_orders", "banktransfer/sepa-export/1/", 404),
 ]
 
 
@@ -413,6 +420,14 @@ organizer_permission_urls = [
     ("can_manage_gift_cards", "organizer/dummy/giftcard/add", 200),
     ("can_manage_gift_cards", "organizer/dummy/giftcard/1/", 404),
     ("can_manage_gift_cards", "organizer/dummy/giftcard/1/edit", 404),
+
+    # bank transfer
+    ("can_change_orders", "organizer/dummy/banktransfer/import/", 200),
+    ("can_change_orders", "organizer/dummy/banktransfer/job/1/", 404),
+    ("can_change_orders", "organizer/dummy/banktransfer/action/", 200),
+    ("can_change_orders", "organizer/dummy/banktransfer/refunds/", 200),
+    ("can_change_orders", "organizer/dummy/banktransfer/export/1/", 404),
+    ("can_change_orders", "organizer/dummy/banktransfer/sepa-export/1/", 404),
 ]
 
 

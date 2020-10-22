@@ -1,0 +1,36 @@
+{% extends basetpl %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load rich_text %}
+{% load money %}
+{% load static %}
+{% block title %}{% trans "Export bank transfer refunds" %}{% endblock %}
+{% block content %}
+
+    <h1>{% trans "Export SEPA xml" %}</h1>
+
+    <p>
+        {% blocktrans with cnt=export.cnt sum=export.sum|money:export.currency date=export.datetime|date %}
+            You are trying to download a refund export from {{ date }} with {{ cnt }} order{{ cnt|pluralize }} and a
+            total of {{ sum }}.
+        {% endblocktrans %}
+    </p>
+
+    <p>
+        {% blocktrans %}
+            Please state from which bank account the refunds should be transferred from.
+        {% endblocktrans %}
+    </p>
+
+    <form method="post" class="form-horizontal">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-8 col-md-12">
+                {% bootstrap_form form layout="control" %}
+            </div>
+        </div>
+        <button class="btn btn-primary"><span class="fa fa-download"></span> {% trans "Download" %}</button>
+    </form>
+
+
+{% endblock %}

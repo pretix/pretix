@@ -22,11 +22,11 @@
                     {% if trans.order and trans.state == 'invalid' %}
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="accept"
-                                data-toggle="tooltip" title="{% trans "Accept anyway" %}" data-placement="right">
+                                    data-toggle="tooltip" title="{% trans "Accept anyway" %}" data-placement="right">
                                 <span class="fa fa-check"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                    data-toggle="tooltip" title="{% trans "Discard" %}">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
@@ -34,22 +34,23 @@
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <div class="btn-group" role="group">
                             <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
-                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}" data-placement="right">
+                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}"
+                                    data-placement="right">
                                 <span class="fa fa-check"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                    data-toggle="tooltip" title="{% trans "Discard" %}">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
                     {% elif trans.state == 'error' %}
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
-                                data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
+                                    data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
                                 <span class="fa fa-refresh"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                    data-toggle="tooltip" title="{% trans "Discard" %}">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
@@ -57,23 +58,44 @@
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <div class="btn-group" role="group">
                             <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
-                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}" data-placement="right">
+                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}"
+                                    data-placement="right">
                                 <span class="fa fa-check"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
-                                data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
+                                    data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
                                 <span class="fa fa-refresh"></span>
                             </button>
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                                    data-toggle="tooltip" title="{% trans "Discard" %}">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
                     {% endif %}
                 </td>
-                <td>{{ trans.date }}</td>
                 <td>
-                    {{ trans.payer }}<br/>
+                    {% if trans.date_parsed is not None %}
+                        {{ trans.date_parsed|date:"SHORT_DATE_FORMAT" }}
+                    {% else %}
+                        {{ trans.date }}
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="clearfix">
+                        {% if trans.payer %}
+                            {{ trans.payer }}
+                            <br>
+                        {% endif %}
+                        {% if trans.iban or trans.bic %}
+                            {% if trans.iban %}
+                                <em>{{ trans.iban }}</em>
+                            {% endif %}
+                            {% if trans.bic %}
+                                <em>{{ trans.bic }}</em>
+                            {% endif %}
+                            <br>
+                        {% endif %}
+                    </div>
                     {{ trans.reference }}
                     <div class="comment-box" data-plain="{{ trans.comment }}">
                         <strong>{% trans "Comment:" %}</strong>
@@ -102,7 +124,7 @@
                 <td>
                     {% if trans.order %}
                         <a href="{% url "control:event.order" event=trans.order.event.slug organizer=request.organizer.slug code=trans.order.code %}"
-                            data-toggle="tooltip" title="{{ trans.order.total|money:trans.order.event.currency }}">
+                           data-toggle="tooltip" title="{{ trans.order.total|money:trans.order.event.currency }}">
                             {% if not request.event %}
                                 {{ trans.order.event.slug|upper }}-{{ trans.order.code }}
                             {% else %}
