@@ -104,6 +104,7 @@ var bankimport_transactionlist = {
             var text = $box.find("textarea").val();
             $box.find("input, textarea, button").prop("disabled", true);
             bankimport_transactionlist._action(id, "comment:" + text, function () {
+                $("tr[data-id=" + id + "] button").prop("disabled", false);
             });
         });
         $btn2.click(function () {
