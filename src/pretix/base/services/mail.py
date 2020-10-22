@@ -231,7 +231,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             attach_tickets=attach_tickets,
             attach_ical=attach_ical,
             user=user.pk if user else None,
-            attach_cached_files=[cf.id for cf in attach_cached_files] if attach_cached_files else [],
+            attach_cached_files=[(cf.id if isinstance(cf, CachedFile) else cf) for cf in attach_cached_files] if attach_cached_files else [],
         )
 
         if invoices:
