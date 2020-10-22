@@ -29,6 +29,8 @@ class MailForm(forms.Form):
             ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
             ".bmp", ".tif", ".tiff"
         ),
+        help_text=_('Sending an attachment increases the chance of your email not arriving or being sorted into spam folders. We recommend only using PDFs '
+                    'of no more than 2 MB in size.'),
         max_size=10 * 1024 * 1024
     )  # TODO i18n
     items = forms.ModelMultipleChoiceField(
