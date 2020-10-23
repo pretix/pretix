@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-23 13:55+0000\n"
-"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:6
 msgid "Full access"
-msgstr ""
+msgstr "Acesso total"
 
 #: pretix/api/auth/devicesecurity.py:22
 msgid "pretixSCAN"
@@ -68,15 +68,15 @@ msgstr "pretixPOS"
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr ""
+msgstr "Nome da aplicação"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr ""
+msgstr "URIs de redirecionamento"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Lista de URIs permitidos, separados por espaço"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:77
 msgid "Client ID"
