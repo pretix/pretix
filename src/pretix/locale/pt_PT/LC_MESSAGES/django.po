@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-23 15:28+0000\n"
+"PO-Revision-Date: 2020-10-23 15:57+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -167,12 +167,10 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Plug-in desconhecido: '{name}'."
 
 #: pretix/api/serializers/item.py:68 pretix/control/forms/item.py:781
-#, fuzzy
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr "O item empacotado não deve ser o mesmo que o empacotador."
 
 #: pretix/api/serializers/item.py:71 pretix/control/forms/item.py:783
-#, fuzzy
 msgid "The bundled item must not have bundles on its own."
 msgstr "O item empacotado não deve ter empacotamentos próprios."
 
@@ -966,19 +964,16 @@ msgstr "Ordens"
 
 #: pretix/base/exporters/orderlist.py:42 pretix/base/models/orders.py:1955
 #: pretix/base/notifications.py:190
-#, fuzzy
 msgid "Order positions"
-msgstr "posições de ordem"
+msgstr "Posições das ordens"
 
 #: pretix/base/exporters/orderlist.py:43
-#, fuzzy
 msgid "Order fees"
-msgstr "taxas de ordem"
+msgstr "Impostos das ordens"
 
 #: pretix/base/exporters/orderlist.py:52
-#, fuzzy
 msgid "Only paid orders"
-msgstr "ordens somente pagos"
+msgstr "Apenas ordens pagas"
 
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:258
@@ -986,18 +981,16 @@ msgstr "ordens somente pagos"
 #: pretix/base/exporters/orderlist.py:589
 #: pretix/base/exporters/orderlist.py:677 pretix/control/forms/event.py:1209
 #: pretix/control/forms/organizer.py:52
-#, fuzzy
 msgid "Event slug"
-msgstr "lesma evento"
+msgstr "Slug evento"
 
 #: pretix/base/exporters/orderlist.py:128 pretix/base/notifications.py:186
 #: pretix/control/templates/pretixcontrol/orders/index.html:101
 #: pretix/control/templates/pretixcontrol/search/orders.html:53
 #: pretix/plugins/reports/exporters.py:392
 #: pretix/plugins/reports/exporters.py:531
-#, fuzzy
 msgid "Order total"
-msgstr "Total de pedidos"
+msgstr "Total dos pedidos"
 
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:260
@@ -1021,17 +1014,15 @@ msgstr "Total de pedidos"
 #: pretix/plugins/reports/exporters.py:531
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:61
 #: pretix/presale/templates/pretixpresale/organizers/index.html:67
-#, fuzzy
 msgid "Status"
-msgstr "estado"
+msgstr "Estado"
 
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:360
 #: pretix/control/templates/pretixcontrol/checkin/index.html:77
-#, fuzzy
 msgid "Email"
-msgstr "O email"
+msgstr "Email"
 
 #: pretix/base/exporters/orderlist.py:128
 #: pretix/base/exporters/orderlist.py:262
@@ -1045,24 +1036,20 @@ msgstr "O email"
 #: pretix/plugins/reports/exporters.py:392
 #: pretix/plugins/reports/exporters.py:501
 #: pretix/plugins/reports/exporters.py:529
-#, fuzzy
 msgid "Order date"
 msgstr "Data do pedido"
 
 #: pretix/base/exporters/orderlist.py:129
 #: pretix/base/exporters/orderlist.py:263
 #: pretix/base/exporters/orderlist.py:362
-#, fuzzy
 msgid "Order time"
-msgstr "tempo Order"
+msgstr "Hora do pedido"
 
 #: pretix/base/exporters/orderlist.py:137
-#, fuzzy
 msgid "Date of last payment"
 msgstr "Data do último pagamento"
 
 #: pretix/base/exporters/orderlist.py:137 pretix/base/services/stats.py:193
-#, fuzzy
 msgid "Fees"
 msgstr "Honorários"
 
@@ -1070,9 +1057,8 @@ msgstr "Honorários"
 #: pretix/base/exporters/orderlist.py:419 pretix/base/orderimport.py:548
 #: pretix/control/templates/pretixcontrol/order/index.html:169
 #: pretix/control/templates/pretixcontrol/pdf/index.html:212
-#, fuzzy
 msgid "Order locale"
-msgstr "fim locale"
+msgstr "Local do pedido"
 
 #: pretix/base/exporters/orderlist.py:142
 #, fuzzy, python-brace-format
@@ -1090,21 +1076,18 @@ msgid "Tax value at {rate} % tax"
 msgstr "imposto sobre o valor em {taxa}% imposto"
 
 #: pretix/base/exporters/orderlist.py:147
-#, fuzzy
 msgid "Invoice numbers"
-msgstr "números de faturas"
+msgstr "Número de faturas"
 
 #: pretix/base/exporters/orderlist.py:148
 #: pretix/base/exporters/orderlist.py:419 pretix/base/orderimport.py:574
 #: pretix/control/templates/pretixcontrol/order/index.html:166
-#, fuzzy
 msgid "Sales channel"
 msgstr "Canal de vendas"
 
 #: pretix/base/exporters/orderlist.py:149 pretix/base/models/items.py:400
 #: pretix/base/models/orders.py:172
 #: pretix/plugins/checkinlists/exporters.py:428
-#, fuzzy
 msgid "Requires special attention"
 msgstr "Requer atenção especial"
 
@@ -1112,20 +1095,18 @@ msgstr "Requer atenção especial"
 #: pretix/base/models/vouchers.py:197 pretix/base/orderimport.py:623
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:21
 #: pretix/plugins/checkinlists/exporters.py:429
-#, fuzzy
 msgid "Comment"
-msgstr "Comente"
+msgstr "Comentario"
 
 #: pretix/base/exporters/orderlist.py:151
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
-#, fuzzy
 msgid "Positions"
-msgstr "posições"
+msgstr "Posições"
 
 #: pretix/base/exporters/orderlist.py:264
 #, fuzzy
 msgid "Fee type"
-msgstr "tipo de taxa"
+msgstr "Tipo de taxa"
 
 #: pretix/base/exporters/orderlist.py:266
 #: pretix/base/exporters/orderlist.py:371 pretix/base/models/orders.py:1101
@@ -1135,7 +1116,6 @@ msgstr "tipo de taxa"
 #: pretix/control/templates/pretixcontrol/order/change.html:307
 #: pretix/plugins/checkinlists/exporters.py:295
 #: pretix/plugins/checkinlists/exporters.py:404
-#, fuzzy
 msgid "Price"
 msgstr "Preço"
 
@@ -3894,25 +3874,21 @@ msgstr ""
 "se não há nenhum esquerda."
 
 #: pretix/base/models/vouchers.py:145
-#, fuzzy
 msgid "Price mode"
-msgstr "modo de preço"
+msgstr "Modo de preço"
 
 #: pretix/base/models/vouchers.py:151
-#, fuzzy
 msgid "Voucher value"
-msgstr "valor do vale"
+msgstr "Valor do vale"
 
 #: pretix/base/models/vouchers.py:160 pretix/control/forms/vouchers.py:31
-#, fuzzy
 msgid "This product is added to the user's cart if the voucher is redeemed."
 msgstr ""
 "Este produto é adicionado ao carrinho do usuário se o voucher for resgatado."
 
 #: pretix/base/models/vouchers.py:170
-#, fuzzy
 msgid "This variation of the product select above is being used."
-msgstr "Esta variação do produto seleccione acima está a ser utilizado."
+msgstr "Esta variação do produto seleccionado acima está a ser utilizado."
 
 #: pretix/base/models/vouchers.py:179
 #, fuzzy
@@ -4118,64 +4094,57 @@ msgid "Waiting list entries"
 msgstr "Esperando entradas da lista"
 
 #: pretix/base/models/waitinglist.py:93
-#, fuzzy
 msgid "This product is currently not available."
 msgstr "Este produto não está disponível no momento."
 
 #: pretix/base/models/waitinglist.py:95
-#, fuzzy
 msgid "A voucher has already been sent to this person."
 msgstr "Um voucher já foi enviado para essa pessoa."
 
 #: pretix/base/models/waitinglist.py:97
-#, fuzzy
 msgid "This entry is anonymized and can no longer be used."
-msgstr "Esta entrada é anônima e não pode mais ser usado."
+msgstr "Esta entrada foi anônimizada e não pode ser usada mais."
 
 #: pretix/base/models/waitinglist.py:107
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
-msgstr "Criada automaticamente a partir de espera de entrada lista para {email}"
+msgstr ""
+"Criado automaticamente a partir de entrada em lista de espera para {email}"
 
 #: pretix/base/models/waitinglist.py:131
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr "Você foi selecionado a partir do waitinglist para {evento}"
+msgstr "Você foi selecionado a partir de uma lista de espera para {evento}"
 
 #: pretix/base/models/waitinglist.py:141
-#, fuzzy
 msgid "The selected item does not belong to this event."
 msgstr "O item selecionado não pertence a este evento."
 
 #: pretix/base/models/waitinglist.py:143
-#, fuzzy
 msgid "Please select a specific variation of this product."
 msgstr "Por favor, selecione uma variação específica deste produto."
 
 #: pretix/base/models/waitinglist.py:161
-#, fuzzy
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
 msgstr ""
-"Você já está na lista de espera! Vamos notificá-lo assim que tiver um "
-"bilhete disponível para você."
+"Você já está nesta lista de espera! Vamos notificá-lo assim que tivermos um "
+"bilhete disponível para si."
 
 #: pretix/base/notifications.py:121 pretix/base/notifications.py:134
-#, fuzzy
 msgid "Administrative action required"
-msgstr "administrativas necessárias"
+msgstr "Ação administrativa necessária"
 
 #: pretix/base/notifications.py:135
-#, fuzzy
 msgid ""
 "Something happened in your event that our system cannot handle "
 "automatically, e.g. an external refund. You need to resolve it manually or "
 "choose to ignore it, depending on the issue at hand."
 msgstr ""
-"Algo aconteceu em seu evento que nosso sistema não pode lidar "
-"automaticamente, por exemplo, uma restituição externo. Você precisa resolvê-"
-"lo manualmente ou optar por ignorá-lo, dependendo do assunto em questão."
+"Aconteceu alguma coisa no seu evento que nosso sistema não pode lidar "
+"automaticamente, por exemplo, uma restituição externa. Você precisa resolvê-"
+"la manualmente ou optar por ignorá-la, dependendo do assunto em questão."
 
 #: pretix/base/notifications.py:139
 #, fuzzy
@@ -4187,48 +4156,42 @@ msgstr "Ver todos os problemas não resolvidos"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:5
 #: pretix/control/templates/pretixcontrol/subevents/index.html:7
 #: pretix/presale/templates/pretixpresale/event/index.html:112
-#, fuzzy
 msgctxt "subevent"
 msgid "Dates"
-msgstr "datas"
+msgstr "Datas"
 
 #: pretix/base/notifications.py:184 pretix/base/pdf.py:135
-#, fuzzy
 msgid "Event date"
 msgstr "Data do evento"
 
 #: pretix/base/notifications.py:187
-#, fuzzy
 msgid "Pending amount"
 msgstr "Valor pendente"
 
 #: pretix/base/notifications.py:189 pretix/control/forms/filter.py:104
 #: pretix/control/forms/orderimport.py:16
-#, fuzzy
 msgid "Order status"
-msgstr "Status do pedido"
+msgstr "Estado do pedido"
 
 #: pretix/base/notifications.py:194
-#, fuzzy
 msgid "Purchased products"
-msgstr "produtos adquiridos"
+msgstr "Produtos adquiridos"
 
 #: pretix/base/notifications.py:195
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:40
 #: pretix/base/templates/pretixbase/email/simple_logo.html:243
-#, fuzzy
 msgid "View order details"
-msgstr "Ver detalhes do ordem"
+msgstr "Ver detalhes da ordem"
 
 #: pretix/base/notifications.py:206
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr "A nova ordem foi colocada: {order.code}"
+msgstr "Uma nova ordem foi colocada: {order.code}"
 
 #: pretix/base/notifications.py:212
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr "A nova ordem foi colocado que requer aprovação: {order.code}"
+msgstr "Uma nova ordem foi colocada que requer aprovação: {order.code}"
 
 #: pretix/base/notifications.py:218
 #, fuzzy, python-brace-format
