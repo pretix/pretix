@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-23 16:57+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -425,7 +425,7 @@ msgstr "Questões"
 #: pretix/base/exporters/dekodi.py:82
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr "Bilhete do evento {evento} - {code}"
+msgstr "Bilhete do evento {event} - {code}"
 
 #: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:35
 #: pretix/base/exporters/orderlist.py:366 pretix/control/forms/subevents.py:225
@@ -3902,7 +3902,7 @@ msgstr ""
 #: pretix/base/models/waitinglist.py:131
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr "Você foi selecionado a partir de uma lista de espera para {evento}"
+msgstr "Você foi selecionado a partir de uma lista de espera para {event}"
 
 #: pretix/base/models/waitinglist.py:141
 msgid "The selected item does not belong to this event."
@@ -8197,7 +8197,7 @@ msgstr "A tarefa foi concluída."
 #: pretix/control/forms/__init__.py:116
 #, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr "Por favor, não envie ficheiros maiores que {tamanho}!"
+msgstr "Por favor, não envie ficheiros maiores que {size}!"
 
 #: pretix/control/forms/__init__.py:137
 msgid "Filetype not allowed!"
@@ -8442,7 +8442,7 @@ msgstr "Apenas respeitado pelos navegadores modernos."
 #: pretix/control/forms/event.py:539
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
-msgstr "Peça {campos}, exibição como {exemplo}"
+msgstr "Peça {fields}, exibição como {example}"
 
 #: pretix/control/forms/event.py:545
 msgid "Free text input"
