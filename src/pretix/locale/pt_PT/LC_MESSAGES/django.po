@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-23 19:44+0000\n"
+"PO-Revision-Date: 2020-10-24 05:00+0000\n"
 "Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -19130,180 +19130,152 @@ msgid "The payment has been created successfully."
 msgstr "O pagamento foi criado com sucesso."
 
 #: pretix/control/views/orders.py:1057
-#, fuzzy
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
 msgstr ""
-"O pedido foi cancelado. Agora você pode selecionar como você deseja "
+"A encomenda foi cancelada. Agora você deve selecionar como pretende "
 "transferir o dinheiro de volta para o utilizador ."
 
 #: pretix/control/views/orders.py:1121 pretix/control/views/orders.py:1125
-#, fuzzy
 msgid "No VAT ID specified."
-msgstr "Sem IVA ID especificado."
+msgstr "Sem NIF definido."
 
 #: pretix/control/views/orders.py:1129
-#, fuzzy
 msgid "No country specified."
-msgstr "Nenhum país especificado."
+msgstr "Nenhum país selecionado."
 
 #: pretix/control/views/orders.py:1133
-#, fuzzy
 msgid "VAT ID could not be checked since a non-EU country has been specified."
 msgstr ""
-"IVA ID não pode ser verificado uma vez que um país não pertencente à UE foi "
-"especificado."
+"O NIF não pode ser verificado, uma vez que o país inserido não pertencente à "
+"UE."
 
 #: pretix/control/views/orders.py:1149
-#, fuzzy
 msgid "This VAT ID is not valid."
-msgstr "Este ID do IVA não é válido."
+msgstr "Este NIF não é válido."
 
 #: pretix/control/views/orders.py:1152
-#, fuzzy
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
-"O ID IVA não pode ser verificado, como o serviço de verificação de IVA do "
+"O NIF não pode ser verificado, dado que o serviço de verificação NIFs do "
 "país não está atualmente disponível."
 
 #: pretix/control/views/orders.py:1155
-#, fuzzy
 msgid "This VAT ID is valid."
-msgstr "Este ID de IVA é válido."
+msgstr "Este NIF é válido."
 
 #: pretix/control/views/orders.py:1169 pretix/control/views/orders.py:1194
-#, fuzzy
 msgid "Unknown invoice."
-msgstr "factura desconhecido."
+msgstr "Fatura desconhecida."
 
 #: pretix/control/views/orders.py:1172 pretix/control/views/orders.py:1197
-#, fuzzy
 msgid "The invoice has already been canceled."
-msgstr "A factura já foi cancelada."
+msgstr "A fatura já foi cancelada."
 
 #: pretix/control/views/orders.py:1174 pretix/control/views/orders.py:1199
-#, fuzzy
 msgid "The invoice has been cleaned of personal data."
-msgstr "A factura foi limpo de dados pessoais."
+msgstr "Os dados pessoais foram removidos da fatura."
 
 #: pretix/control/views/orders.py:1230
-#, fuzzy
 msgid "The email has been queued to be sent."
 msgstr "O e-mail foi colocado na fila para ser enviado."
 
 #: pretix/control/views/orders.py:1254 pretix/presale/views/order.py:1012
-#, fuzzy
 msgid "This invoice has not been found"
-msgstr "Esta factura não foi encontrado"
+msgstr "Esta fatura não foi encontrada"
 
 #: pretix/control/views/orders.py:1261 pretix/presale/views/order.py:1019
-#, fuzzy
 msgid "The invoice file is no longer stored on the server."
-msgstr "O arquivo factura não é armazenado no servidor."
+msgstr "O ficheiro da fatura já não está armazenado no servidor."
 
 #: pretix/control/views/orders.py:1266 pretix/presale/views/order.py:1024
-#, fuzzy
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
 msgstr ""
-"O arquivo factura ainda não foi gerado, que irá gerar para você agora. Por "
-"favor, tente novamente em alguns segundos."
+"O ficheiro com a fatura ainda não foi gerado, iremos gerá-lo agora para si. "
+"Por favor, tente novamente dentro de alguns segundos."
 
 #: pretix/control/views/orders.py:1293
-#, fuzzy
 msgid "The payment term has been changed."
 msgstr "O prazo de pagamento foi alterado."
 
 #: pretix/control/views/orders.py:1298 pretix/control/views/orders.py:1342
-#, fuzzy
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
 msgstr ""
-"Nós não fomos capazes de processar o pedido completamente como o servidor "
-"estava ocupado demais."
+"Não fomos capazes de processar o seu pedido dado que o servidor estava "
+"demasiado ocupado."
 
 #: pretix/control/views/orders.py:1306
-#, fuzzy
 msgid "This action is only allowed for pending orders."
-msgstr "Esta ação só é permitido para encomendas pendentes."
+msgstr "Esta ação só é permitida para encomendas pendentes."
 
 #: pretix/control/views/orders.py:1348
-#, fuzzy
 msgid "This action is only allowed for canceled orders."
-msgstr "Esta ação só é permitida para pedidos cancelados."
+msgstr "Esta ação só é permitida para encomendas canceladas."
 
 #: pretix/control/views/orders.py:1370
-#, fuzzy
 msgid "This action is only allowed for pending or paid orders."
-msgstr "Esta ação só é permitida para pendente ou encomendas pagas."
+msgstr "Esta ação só é permitida para encomendas pendentes ou pagas."
 
 #: pretix/control/views/orders.py:1548 pretix/presale/views/order.py:1142
-#, fuzzy
 msgid "An error occurred. Please see the details below."
-msgstr "Um erro ocorreu. Por favor, veja os detalhes abaixo."
+msgstr "Ocorreu um erro. Por favor, veja os detalhes abaixo."
 
 #: pretix/control/views/orders.py:1556
-#, fuzzy
 msgid "The order has been changed and the user has been notified."
-msgstr "O Pedido foi alterado eo utilizador  foi notificado."
+msgstr "A encomenda foi alterada e o utilizador foi notificado."
 
 #: pretix/control/views/orders.py:1558 pretix/control/views/orders.py:1654
 #: pretix/control/views/orders.py:1691 pretix/presale/views/order.py:1159
-#, fuzzy
 msgid "The order has been changed."
-msgstr "O Pedido foi alterado."
+msgstr "O encomenda foi alterada."
 
 #: pretix/control/views/orders.py:1585 pretix/presale/checkoutflow.py:502
 #: pretix/presale/views/order.py:680
-#, fuzzy
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr ""
-"Tivemos dificuldades de processamento sua entrada. Verifique os erros abaixo."
+"Tivemos dificuldades a processar os dados introduzidos. Verifique os erros "
+"abaixo."
 
 #: pretix/control/views/orders.py:1656
-#, fuzzy
 msgid "Nothing about the order had to be changed."
-msgstr "Nada sobre o pedido teve de ser alterado."
+msgstr "Nenhum detalhe da encomenda teve de ser alterado."
 
 #: pretix/control/views/orders.py:1735 pretix/plugins/sendmail/views.py:74
-#, fuzzy
 msgid "We could not send the email. See below for details."
-msgstr "Nós não poderia enviar o e-mail. Veja abaixo para mais detalhes."
+msgstr "Não conseguimos enviar o e-mail. Veja mais detalhes abaixo."
 
 #: pretix/control/views/orders.py:1751 pretix/plugins/sendmail/views.py:133
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Subject: {subject}"
 msgstr "Assunto: {subject}"
 
 #: pretix/control/views/orders.py:1763
-#, fuzzy
 msgid "Your message has been queued and will be sent to {}."
-msgstr "Sua mensagem foi colocado na fila e será enviado para {}."
+msgstr "A sua mensagem foi colocado na fila e será enviado para {}."
 
 #: pretix/control/views/orders.py:1767
-#, fuzzy
 msgid "Failed to send mail to the following user: {}"
-msgstr "Falha ao enviar email para o seguinte utilizador : {}"
+msgstr "Erro ao enviar email para o seguinte utilizador : {}"
 
 #: pretix/control/views/orders.py:1815 pretix/presale/views/order.py:841
-#, fuzzy
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
 msgstr ""
-"Este link não é mais válido. Por favor, volte, atualize a página e tente "
-"novamente."
+"Este link deixou de ser válido. Por favor volte atrás, atualize a página e "
+"tente novamente."
 
 #: pretix/control/views/orders.py:1893
-#, fuzzy
 msgid "There is no order with the given order code."
-msgstr "Não há um pedido com o código do pedido dada."
+msgstr "Não há nenhuma encomenda com o código indicado."
 
 #: pretix/control/views/orders.py:1949 pretix/control/views/organizer.py:1239
 #, fuzzy
@@ -19317,7 +19289,6 @@ msgstr ""
 "Houve um problema ao processar sua entrada. Veja abaixo os detalhes de erro."
 
 #: pretix/control/views/orders.py:2043
-#, fuzzy
 msgid "All orders have been canceled."
 msgstr "Todas as encomendas foram canceladas."
 
@@ -19331,24 +19302,20 @@ msgstr ""
 "verifique todas as pedidos não cancelados."
 
 #: pretix/control/views/orders.py:2066
-#, fuzzy
 msgid "Your input was not valid."
-msgstr "Sua entrada não era válida."
+msgstr "O texto introduzido não é válido."
 
 #: pretix/control/views/organizer.py:92
-#, fuzzy
 msgid "Token name"
-msgstr "nome de token"
+msgstr "Nome do token"
 
 #: pretix/control/views/organizer.py:212
-#, fuzzy
 msgid "This organizer can not be deleted."
-msgstr "Este organizador não pode ser excluído."
+msgstr "Este organizador não pode ser eliminado."
 
 #: pretix/control/views/organizer.py:234
-#, fuzzy
 msgid "The organizer has been deleted."
-msgstr "O organizador foi eliminada."
+msgstr "O organizador foi eliminado."
 
 #: pretix/control/views/organizer.py:237
 #, fuzzy
@@ -19360,36 +19327,31 @@ msgstr ""
 "dados criados por plug-ins) não permitem."
 
 #: pretix/control/views/organizer.py:373
-#, fuzzy
 msgid "The new organizer has been created."
 msgstr "O novo organizador foi criado."
 
 #: pretix/control/views/organizer.py:376
-#, fuzzy
 msgid "Administrators"
 msgstr "Administradores"
 
 #: pretix/control/views/organizer.py:425
-#, fuzzy
 msgid "The team has been created. You can now add members to the team."
-msgstr "A equipe foi criada. Agora você pode adicionar membros à equipe."
+msgstr "A equipa foi criada. Agora pode adicionar membros à equipa."
 
 #: pretix/control/views/organizer.py:436 pretix/control/views/organizer.py:471
 #: pretix/control/views/organizer.py:685 pretix/control/views/organizer.py:734
 #: pretix/control/views/organizer.py:795 pretix/control/views/organizer.py:899
 #: pretix/control/views/organizer.py:941
 msgid "Your changes could not be saved."
-msgstr "Suas alterações não puderam ser salvas."
+msgstr "As alterações não puderam ser guardadas."
 
 #: pretix/control/views/organizer.py:506
-#, fuzzy
 msgid "The selected team has been deleted."
-msgstr "A equipe selecionada foi excluída."
+msgstr "A equipa selecionada foi eliminada."
 
 #: pretix/control/views/organizer.py:509
-#, fuzzy
 msgid "The selected team cannot be deleted."
-msgstr "A equipe selecionada não pode ser excluído."
+msgstr "A equipa selecionada não pode ser eliminada."
 
 #: pretix/control/views/organizer.py:572
 #, fuzzy
@@ -19416,36 +19378,30 @@ msgid "The invite has been revoked."
 msgstr "O convite foi revogado."
 
 #: pretix/control/views/organizer.py:615
-#, fuzzy
 msgid "The invite has been resent."
 msgstr "O convite foi reenviado."
 
 #: pretix/control/views/organizer.py:622
-#, fuzzy
 msgid "Invalid token selected."
-msgstr "Token inválido seleccionado."
+msgstr "Token seleccionado inválido."
 
 #: pretix/control/views/organizer.py:632
-#, fuzzy
 msgid "The token has been revoked."
 msgstr "O token foi revogado."
 
 #: pretix/control/views/organizer.py:644
-#, fuzzy
 msgid "Users need to have a pretix account before they can be invited."
 msgstr ""
-"Os utilizadores precisam ter uma conta pretix antes que eles podem ser "
+"Os utilizadores precisam ter uma conta pretix antes de poderem ser "
 "convidados."
 
 #: pretix/control/views/organizer.py:654
-#, fuzzy
 msgid "The new member has been invited to the team."
-msgstr "O novo membro foi convidado para a equipe."
+msgstr "O novo membro foi convidado para a equipa."
 
 #: pretix/control/views/organizer.py:669
-#, fuzzy
 msgid "The new member has been added to the team."
-msgstr "O novo membro foi adicionado à equipe."
+msgstr "O novo membro foi adicionado à equipa."
 
 #: pretix/control/views/organizer.py:680
 #, fuzzy
@@ -19459,19 +19415,16 @@ msgstr ""
 "vê-lo novamente aqui."
 
 #: pretix/control/views/organizer.py:815
-#, fuzzy
 msgid "This device has been set up successfully."
 msgstr "Este dispositivo foi configurado com sucesso."
 
 #: pretix/control/views/organizer.py:843
-#, fuzzy
 msgid "This device currently does not have access."
-msgstr "Este dispositivo atualmente não têm acesso."
+msgstr "Este dispositivo, atualmente, não tem acesso."
 
 #: pretix/control/views/organizer.py:854
-#, fuzzy
 msgid "Access for this device has been revoked."
-msgstr "Acesso para este dispositivo foi revogado."
+msgstr "O acesso para este dispositivo foi revogado."
 
 #: pretix/control/views/organizer.py:1000
 #, fuzzy
@@ -19495,7 +19448,6 @@ msgid "The transaction could not be reversed."
 msgstr "A transação não pode ser revertida."
 
 #: pretix/control/views/organizer.py:1072
-#, fuzzy
 msgid "The transaction has been reversed."
 msgstr "A transação foi revertida."
 
@@ -19515,92 +19467,76 @@ msgid "The gift card has been created and can now be used."
 msgstr "O cartão presente foi criado e agora pode ser usado."
 
 #: pretix/control/views/pdf.py:53
-#, fuzzy
 msgid "The uploaded PDF file is too large."
-msgstr "O arquivo PDF enviado é muito grande."
+msgstr "O ficheiro PDF enviado é muito grande."
 
 #: pretix/control/views/pdf.py:55
-#, fuzzy
 msgid "The uploaded PDF file is too small."
-msgstr "O arquivo PDF enviado é muito pequeno."
+msgstr "O ficheiro PDF enviado é muito pequeno."
 
 #: pretix/control/views/pdf.py:57
-#, fuzzy
 msgid "Please only upload PDF files."
-msgstr "Por favor, só fazer upload de arquivos PDF."
+msgstr "Por favor, apenas envie ficheiros PDF."
 
 #: pretix/control/views/shredder.py:93
-#, fuzzy
 msgid "The selected data was deleted successfully."
-msgstr "Os dados selecionados foi excluído com sucesso."
+msgstr "O(s) dado(s) selecionado(s) foi/foram excluído(s) com sucesso."
 
 #: pretix/control/views/subevents.py:113 pretix/control/views/subevents.py:399
-#, fuzzy
 msgctxt "subevent"
 msgid "The requested date does not exist."
 msgstr "A data solicitada não existe."
 
 #: pretix/control/views/subevents.py:117 pretix/control/views/subevents.py:128
-#, fuzzy
 msgctxt "subevent"
 msgid "A date can not be deleted if orders already have been placed."
-msgstr "A data não pode ser apagado se os pedidos já foram colocados."
+msgstr "A data não pode ser apagado se já existirem encomendas."
 
 #: pretix/control/views/subevents.py:136
-#, fuzzy
 msgctxt "subevent"
 msgid "The selected date has been deleted."
 msgstr "A data selecionada foi excluída."
 
 #: pretix/control/views/subevents.py:482
-#, fuzzy
 msgctxt "subevent"
 msgid "The new date has been created."
 msgstr "A nova data foi criada."
 
 #: pretix/control/views/subevents.py:550
-#, fuzzy
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
 msgstr "As datas selecionadas foram desativados."
 
 #: pretix/control/views/subevents.py:560
-#, fuzzy
 msgctxt "subevent"
 msgid "The selected dates have been enabled."
 msgstr "As datas selecionadas foram ativadas."
 
 #: pretix/control/views/subevents.py:581
-#, fuzzy
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
-msgstr "As datas selecionadas foram deletadas ou desativado."
+msgstr "As datas selecionadas foram eliminadas ou desativadas."
 
 #: pretix/control/views/subevents.py:869
-#, fuzzy
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr "{} Novas datas foram criados."
+msgstr "{} novas datas foram criadas."
 
 #: pretix/control/views/typeahead.py:55
-#, fuzzy
 msgid "Series:"
-msgstr "Series:"
+msgstr "Séries:"
 
 #: pretix/control/views/typeahead.py:78
-#, fuzzy
 msgid "Order {}"
-msgstr "Ordem {}"
+msgstr "Encomenda {}"
 
 #: pretix/control/views/typeahead.py:91
-#, fuzzy
 msgid "Voucher {}"
-msgstr "Comprovante {}"
+msgstr "Voucher {}"
 
 #: pretix/control/views/user.py:109
-#, fuzzy
 msgid "The password you entered was invalid, please try again."
-msgstr "A palavra-passe digitada era inválido, por favor tente novamente."
+msgstr "A palavra-passe inserida é inválida, por favor tente novamente."
 
 #: pretix/control/views/user.py:283
 #, fuzzy
@@ -19610,7 +19546,6 @@ msgstr ""
 "através de HTTPS."
 
 #: pretix/control/views/user.py:320
-#, fuzzy
 msgid "A two-factor authentication device has been removed from your account."
 msgstr ""
 "Um dispositivo de autenticação de dois fatores foi removido da sua conta."
@@ -19668,9 +19603,8 @@ msgstr ""
 "autenticação de dois fatores."
 
 #: pretix/control/views/user.py:534
-#, fuzzy
 msgid "Two-factor authentication is now enabled for your account."
-msgstr "autenticação de dois fatores agora está ativado para a sua conta."
+msgstr "Autenticação de dois fatores está agora ativada para a sua conta."
 
 #: pretix/control/views/user.py:550
 #, fuzzy
@@ -19687,64 +19621,53 @@ msgstr ""
 "um local seguro no caso de você perder o acesso aos seus dispositivos."
 
 #: pretix/control/views/user.py:583
-#, fuzzy
 msgid "Your notifications have been disabled."
-msgstr "Suas notificações foram desativados."
+msgstr "As suas notificações foram desativadas."
 
 #: pretix/control/views/user.py:632 pretix/control/views/user.py:672
-#, fuzzy
 msgid "Your notification settings have been saved."
-msgstr "As configurações de notificação foram salvas."
+msgstr "As configurações de notificação foram guardadas."
 
 #: pretix/control/views/user.py:750
-#, fuzzy
 msgid "Your comment has been saved."
-msgstr "Seu comentário foi salvo."
+msgstr "O seu comentário foi guardado."
 
 #: pretix/control/views/users.py:102
-#, fuzzy
 msgid "We sent out an e-mail containing further instructions."
-msgstr "Enviamos um e-mail contendo mais instruções."
+msgstr "Enviamos um e-mail com mais instruções."
 
 #: pretix/control/views/users.py:199
-#, fuzzy
 msgid "The new user has been created."
 msgstr "O novo utilizador  foi criado."
 
 #: pretix/control/views/vouchers.py:69
-#, fuzzy
 msgid "Reserve quota"
-msgstr "quota de reserva"
+msgstr "Quota de reserva"
 
 #: pretix/control/views/vouchers.py:69
-#, fuzzy
 msgid "Bypass quota"
-msgstr "quota Bypass"
+msgstr "Ignorar quota"
 
 #: pretix/control/views/vouchers.py:83
-#, fuzzy
 msgid "Any product"
-msgstr "qualquer produto"
+msgstr "Qualquer produto"
 
 #: pretix/control/views/vouchers.py:156 pretix/control/views/vouchers.py:206
-#, fuzzy
 msgid "The requested voucher does not exist."
 msgstr "O voucher solicitado não existe."
 
 #: pretix/control/views/vouchers.py:160 pretix/control/views/vouchers.py:170
-#, fuzzy
 msgid "A voucher can not be deleted if it already has been redeemed."
-msgstr "Um voucher não pode ser excluído se já foi resgatada."
+msgstr "Um voucher não pode ser excluído depois de resgatado."
 
 #: pretix/control/views/vouchers.py:176
-#, fuzzy
 msgid "The selected voucher has been deleted."
-msgstr "O comprovante seleccionado foi deletada."
+msgstr "O voucher seleccionado foi eliminado."
 
 #: pretix/control/views/vouchers.py:259
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The new voucher has been created: {code}"
-msgstr "O novo vale foi criado: {code}"
+msgstr "O novo voucher foi criado: {code}"
 
 #: pretix/control/views/vouchers.py:284
 #, fuzzy
@@ -19752,37 +19675,30 @@ msgid "There is no voucher with the given voucher code."
 msgstr "Não há voucher com o determinado código voucher."
 
 #: pretix/control/views/vouchers.py:341
-#, fuzzy
 msgid "The new vouchers have been created and will be sent out shortly."
-msgstr "Os novos vales foram criados e serão enviados em breve."
+msgstr "Os novos vouchers foram criados e serão enviados em breve."
 
 #: pretix/control/views/vouchers.py:343
-#, fuzzy
 msgid "The new vouchers have been created."
-msgstr "Os novos vales foram criados."
+msgstr "Os novos vouchers foram criados."
 
 #: pretix/control/views/vouchers.py:423
-#, fuzzy
 msgid "The selected vouchers have been deleted or disabled."
-msgstr "Os comprovantes selecionados foram excluídos ou desativados."
+msgstr "Os vouchers selecionados foram excluídos ou desativados."
 
 #: pretix/control/views/waitinglist.py:32
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
-msgstr "{NUM} vales foram criados e enviados por e-mail."
+msgstr "{num} vouchers foram criados e enviados por e-mail."
 
 #: pretix/control/views/waitinglist.py:57
-#, fuzzy
 msgid "You do not have permission to do this"
 msgstr "Você não tem permissão para fazer isso"
 
 #: pretix/control/views/waitinglist.py:70
-#, fuzzy
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
-msgstr ""
-"Um e-mail contendo um código promocional foi enviada para o endereço "
-"especificado."
+msgstr "Um e-mail contendo um voucher foi enviada para o endereço inserido."
 
 #: pretix/control/views/waitinglist.py:74
 #: pretix/control/views/waitinglist.py:87
@@ -19807,14 +19723,12 @@ msgid "On list since"
 msgstr "Na lista desde"
 
 #: pretix/control/views/waitinglist.py:200
-#, fuzzy
 msgid "Priority"
 msgstr "Prioridade"
 
 #: pretix/control/views/waitinglist.py:220
-#, fuzzy
 msgid "Waiting"
-msgstr "Esperando"
+msgstr "Em espera"
 
 #: pretix/control/views/waitinglist.py:253
 #, fuzzy
@@ -19859,9 +19773,8 @@ msgstr "Distintivos"
 #: pretix/plugins/statistics/__init__.py:13
 #: pretix/plugins/stripe/__init__.py:14
 #: pretix/plugins/ticketoutputpdf/__init__.py:14
-#, fuzzy
 msgid "the pretix team"
-msgstr "a equipe pretix"
+msgstr "a equipa pretix"
 
 #: pretix/plugins/badges/__init__.py:16
 #, fuzzy
