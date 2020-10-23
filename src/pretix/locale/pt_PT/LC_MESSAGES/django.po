@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-23 15:57+0000\n"
-"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
+"PO-Revision-Date: 2020-10-23 16:53+0000\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -2971,38 +2971,31 @@ msgstr "É necessária uma resposta a esta pergunta para prosseguir."
 
 #: pretix/base/models/items.py:1150 pretix/base/models/items.py:1168
 #: pretix/base/orderimport.py:662 pretix/base/orderimport.py:670
-#, fuzzy
 msgid "Invalid option selected."
 msgstr "Opção inválida selecionada."
 
 #: pretix/base/models/items.py:1178
-#, fuzzy
 msgid "Invalid number input."
-msgstr "entrada número inválido."
+msgstr "Número introduzido inválido."
 
 #: pretix/base/models/items.py:1185
-#, fuzzy
 msgid "Invalid date input."
-msgstr "input data inválida."
+msgstr "Data introduzida inválida."
 
 #: pretix/base/models/items.py:1192
-#, fuzzy
 msgid "Invalid time input."
-msgstr "input tempo inválido."
+msgstr "Hora introduzida inválida."
 
 #: pretix/base/models/items.py:1202
-#, fuzzy
 msgid "Invalid datetime input."
-msgstr "Inválido de data e hora de entrada."
+msgstr "Data e hora introduzida inválida."
 
 #: pretix/base/models/items.py:1208
-#, fuzzy
 msgid "Unknown country code."
-msgstr "código de país desconhecido."
+msgstr "Código de país desconhecido."
 
 #: pretix/base/models/items.py:1222
 #: pretix/control/templates/pretixcontrol/items/question.html:68
-#, fuzzy
 msgid "Answer"
 msgstr "Responda"
 
@@ -5751,7 +5744,6 @@ msgid "There is no quota defined that allows this operation."
 msgstr "Não existe uma cota definida que permite esta operação."
 
 #: pretix/base/services/orders.py:1159
-#, fuzzy
 msgid "The selected product is not active or has no price set."
 msgstr "O produto selecionado não está ativo ou não tem preço definido."
 
