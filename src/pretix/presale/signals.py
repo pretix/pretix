@@ -185,9 +185,10 @@ contact_form_fields_overrides = EventPluginSignal(
 )
 """
 This signals allows you to override fields of the contact form that is presented during checkout
-and by default only asks for the email address. You are supposed to return a dictionary of
-dictionaries with globally unique keys. The value-dictionary should contain one or more of the
-following keys: ``initial``, ``disabled``.
+and by default only asks for the email address. It is also being used for the invoice address
+form. You are supposed to return a dictionary of dictionaries with globally unique keys. The
+value-dictionary should contain one or more of the following keys: ``initial``, ``disabled``. The
+key of the dictionary should be the name of the form field.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
 argument will contain the request object.
