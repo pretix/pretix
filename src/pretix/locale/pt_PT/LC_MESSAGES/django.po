@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-23 13:55+0000\n"
+"PO-Revision-Date: 2020-10-23 14:26+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -32,7 +32,7 @@ msgstr "Loja desativada"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:100
 #: pretix/control/templates/pretixcontrol/subevents/index.html:115
 msgid "Presale over"
-msgstr ""
+msgstr "Pré-venda terminada"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:967
 #: pretix/control/forms/filter.py:445 pretix/control/forms/filter.py:665
@@ -40,7 +40,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:102
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 msgid "Presale not started"
-msgstr ""
+msgstr "Pré-venda não iniciada"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:969
 #: pretix/control/templates/pretixcontrol/events/index.html:150
@@ -48,7 +48,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
 #: pretix/control/views/dashboards.py:485
 msgid "On sale"
-msgstr ""
+msgstr "Em venda"
 
 #: pretix/api/auth/devicesecurity.py:6
 msgid "Full access"
@@ -88,12 +88,12 @@ msgstr "Segredo do cliente"
 
 #: pretix/api/models.py:76
 msgid "Enable webhook"
-msgstr ""
+msgstr "Ativar webhook"
 
 #: pretix/api/models.py:77
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "URL de destino"
 
 #: pretix/api/models.py:78 pretix/base/models/devices.py:47
 #: pretix/base/models/organizer.py:172
@@ -103,22 +103,23 @@ msgstr "Todos os eventos (incluindo os criados recentemente)"
 #: pretix/api/models.py:79 pretix/base/models/devices.py:48
 #: pretix/base/models/organizer.py:173
 msgid "Limit to events"
-msgstr "Limite dos eventos"
+msgstr "Limite de eventos"
 
 #: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:942
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "O produto \"{}\" não tem cota atribuída."
 
 #: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:954
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
+"Não há cota suficiente disponível na cota \"{}\" para realizar a operação."
 
 #: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:914
 #: pretix/base/services/orders.py:1167
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "O lugar selecionado \"{seat}\" não está disponível."
 
 #: pretix/api/serializers/checkin.py:40 pretix/base/models/event.py:1155
 #: pretix/base/models/items.py:1216 pretix/base/models/items.py:1458
@@ -140,24 +141,26 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Os eventos não podem ser criados como 'ao vivo'. As cotas e o pagamento "
+"devem ser adicionados ao evento antes que as vendas possam estar ao vivo."
 
 #: pretix/api/serializers/event.py:152 pretix/api/serializers/event.py:422
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "A propriedade de metadados '{name}' não existe."
 
 #: pretix/api/serializers/event.py:195
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Plug-in desconhecido: '{name}'."
 
 #: pretix/api/serializers/item.py:68 pretix/control/forms/item.py:781
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "O item empacotado não deve ser o mesmo que o empacotador."
 
 #: pretix/api/serializers/item.py:71 pretix/control/forms/item.py:783
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "O item empacotado não deve ter empacotamentos próprios."
 
 #: pretix/api/serializers/item.py:131
 msgid ""
