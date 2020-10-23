@@ -180,6 +180,19 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the request object.
 """
 
+contact_form_fields_overrides = EventPluginSignal(
+    providing_args=["request"]
+)
+"""
+This signals allows you to override fields of the contact form that is presented during checkout
+and by default only asks for the email address. You are supposed to return a dictionary of
+dictionaries with globally unique keys. The value-dictionary should contain one or more of the
+following keys: ``initial``, ``disabled``.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
+argument will contain the request object.
+"""
+
 question_form_fields = EventPluginSignal(
     providing_args=["position"]
 )
@@ -194,6 +207,21 @@ object, depending on whether the form is called as part of the order checkout or
 later.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+question_form_fields_overrides = EventPluginSignal(
+    providing_args=["position", "request"]
+)
+"""
+This signals allows you to override fields of the questions form that is presented during checkout
+and by default only asks for the questions configured in the backend. You are supposed to return a
+dictionary of dictionaries with globally unique keys. The value-dictionary should contain one or
+more of the following keys: ``initial``, ``disabled``.
+
+The ``position`` keyword argument will contain a ``CartPosition`` object.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
+argument will contain the request object.
 """
 
 order_info = EventPluginSignal(
