@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-23 19:44+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -9985,9 +9985,8 @@ msgstr ""
 "Escolha todas as línguas que sua página organizador deve estar disponível em."
 
 #: pretix/control/forms/organizer.py:324
-#, fuzzy
 msgid "Favicon"
-msgstr "favicon"
+msgstr "Favicon"
 
 #: pretix/control/forms/organizer.py:328
 #, fuzzy
@@ -10000,9 +9999,8 @@ msgstr ""
 "dispositivos."
 
 #: pretix/control/forms/organizer.py:332
-#, fuzzy
 msgid "Length of gift card codes"
-msgstr "Comprimento de códigos de cartão de presente"
+msgstr "Comprimento dos códigos de cartão presente"
 
 #: pretix/control/forms/organizer.py:333
 #, fuzzy
@@ -10015,9 +10013,8 @@ msgstr ""
 "definido aqui."
 
 #: pretix/control/forms/organizer.py:338
-#, fuzzy
 msgid "Validity of gift card codes in years"
-msgstr "Validade de códigos de cartão de presente em anos"
+msgstr "Validade em anos dos códigos de cartão presente"
 
 #: pretix/control/forms/organizer.py:339
 #, fuzzy
@@ -19129,7 +19126,6 @@ msgstr ""
 "confirmação."
 
 #: pretix/control/views/orders.py:1046
-#, fuzzy
 msgid "The payment has been created successfully."
 msgstr "O pagamento foi criado com sucesso."
 
