@@ -8,21 +8,23 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-10-23 13:55+0000\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
+"Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
+"pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:144
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:98
 #: pretix/control/views/dashboards.py:479
 msgid "Shop disabled"
-msgstr ""
+msgstr "Loja desativada"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:965
 #: pretix/control/forms/filter.py:446 pretix/control/forms/filter.py:666
@@ -54,15 +56,15 @@ msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:22
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:47
 msgid "pretixSCAN (kiosk mode, online only)"
-msgstr ""
+msgstr "pretixSCAN (modo kiosk, apenas online)"
 
 #: pretix/api/auth/devicesecurity.py:70
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -78,11 +80,11 @@ msgstr ""
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:77
 msgid "Client ID"
-msgstr ""
+msgstr "ID do cliente"
 
 #: pretix/api/models.py:29
 msgid "Client secret"
-msgstr ""
+msgstr "Segredo do cliente"
 
 #: pretix/api/models.py:76
 msgid "Enable webhook"
@@ -96,12 +98,12 @@ msgstr ""
 #: pretix/api/models.py:78 pretix/base/models/devices.py:47
 #: pretix/base/models/organizer.py:172
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Todos os eventos (incluindo os criados recentemente)"
 
 #: pretix/api/models.py:79 pretix/base/models/devices.py:48
 #: pretix/base/models/organizer.py:173
 msgid "Limit to events"
-msgstr ""
+msgstr "Limite dos eventos"
 
 #: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:942
 msgid "The product \"{}\" is not assigned to a quota."
@@ -121,17 +123,17 @@ msgstr ""
 #: pretix/api/serializers/checkin.py:40 pretix/base/models/event.py:1155
 #: pretix/base/models/items.py:1216 pretix/base/models/items.py:1458
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Um ou mais items não pertencem a este evento."
 
 #: pretix/api/serializers/checkin.py:44 pretix/api/serializers/checkin.py:47
 #: pretix/base/models/items.py:1469 pretix/base/models/items.py:1472
 #: pretix/base/models/waitinglist.py:151 pretix/base/models/waitinglist.py:154
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "O sub-evento não pertence a este evento."
 
 #: pretix/api/serializers/checkin.py:51
 msgid "Unknown sales channel."
-msgstr ""
+msgstr "Canal de vendas desconhecido."
 
 #: pretix/api/serializers/event.py:137
 msgid ""
