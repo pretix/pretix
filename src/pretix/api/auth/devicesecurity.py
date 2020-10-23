@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class FullAccessSecurityProfile:
     identifier = 'full'
-    verbose_name = _('Full access')
+    verbose_name = _('Full device access (reading and changing orders and gift cards, reading of products and settings)')
 
     def is_allowed(self, request):
         return True
