@@ -34,6 +34,12 @@ class BaseQuestionsViewMixin:
     def _positions_for_questions(self):
         raise NotImplementedError()
 
+    def get_questions_initials(self):
+        return {}
+
+    def get_questions_disabled(self):
+        return {}
+
     @cached_property
     def forms(self):
         """
@@ -62,6 +68,19 @@ class BaseQuestionsViewMixin:
                     self.request.event.settings.attendee_addresses_asked
                 ))
             )
+
+            for question_name, question_field in form.fields.items():
+                if hasattr(question_field, 'question'):
+                    if question_field.question.identifier in self.get_questions_initials():
+                        question_field.initial = self.get_questions_initials()[question_field.question.identifier]
+                    if question_field.question.identifier in self.get_questions_disabled():
+                        question_field.disabled = self.get_questions_disabled()[question_field.question.identifier]
+                else:
+                    if question_name in self.get_questions_initials():
+                        question_field.initial = self.get_questions_initials()[question_name]
+                    if question_name in self.get_questions_disabled():
+                        question_field.disabled = self.get_questions_disabled()[question_name]
+
             if len(form.fields) > 0:
                 formlist.append(form)
         return formlist

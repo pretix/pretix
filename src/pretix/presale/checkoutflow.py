@@ -413,6 +413,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     identifier = "questions"
     template_name = "pretixpresale/event/checkout_questions.html"
     label = pgettext_lazy('checkoutflow', 'Your information')
+    contact_overrides = False
+    contact_overrides_initial = {}
+    contact_overrides_disabled = {}
 
     def is_applicable(self, request):
         return True
@@ -423,6 +426,19 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             if resp:
                 return True
         return False
+
+    def get_contact_overrides(self):
+        overrides = contact_form_fields_overrides.send_chained(
+            self.request.event,
+            'contact_form_fields_overrides',
+            request=self.request
+        )
+
+        self.contact_overrides = True
+
+        if overrides:
+            self.contact_overrides_initial = {field: overrides[field]['initial'] for field in overrides if 'initial' in overrides[field]} or {}
+            self.contact_overrides_disabled = {field: overrides[field]['disabled'] for field in overrides if 'disabled' in overrides[field]} or {}
 
     @cached_property
     def contact_form(self):
@@ -435,14 +451,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
 
-        overrides = contact_form_fields_overrides.send_chained(
-            self.request.event,
-            'contact_form_fields_overrides',
-            request=self.request
-        )
-        overrides_initial = {field: overrides[field]['initial'] for field in overrides if 'initial' in overrides[field]}
-        overrides_disabled = {field: overrides[field]['disabled'] for field in overrides if 'disabled' in overrides[field]}
-        initial.update(overrides_initial)
+        if not self.contact_overrides:
+            self.get_contact_overrides()
+
+        initial.update(self.contact_overrides_initial)
 
         f = ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                         event=self.request.event,
@@ -452,37 +464,38 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             f.fields['email'].disabled = True
 
         for name, field in f.fields.items():
-            if name in overrides_disabled:
-                field.disabled = overrides_disabled[name]
+            if name in self.contact_overrides_disabled:
+                field.disabled = self.contact_overrides_disabled[name]
 
         return f
 
-    @cached_property
-    def form_groups(self):
-        for position, forms in self.formdict.items():
+    def get_questions_initials(self):
+        for cr in self._positions_for_questions:
             overrides = question_form_fields_overrides.send_chained(
                 self.request.event,
                 'question_form_fields_overrides',
-                position=position,
+                position=cr,
                 request=self.request
             )
-            overrides_initial = {field: overrides[field]['initial'] for field in overrides if 'initial' in overrides[field]}
-            overrides_disabled = {field: overrides[field]['disabled'] for field in overrides if 'disabled' in overrides[field]}
 
-            for form in forms:
-                for question_name, question_field in form.fields.items():
-                    if hasattr(question_field, 'question'):
-                        if question_field.question.identifier in overrides_initial:
-                            question_field.initial = overrides_initial[question_field.question.identifier]
-                        if question_field.question.identifier in overrides_disabled:
-                            question_field.disabled = overrides_disabled[question_field.question.identifier]
-                    else:
-                        if question_name in overrides_initial:
-                            question_field.initial = overrides_initial[question_name]
-                        if question_name in overrides_disabled:
-                            question_field.disabled = overrides_disabled[question_name]
+            if overrides:
+                return {field: overrides[field]['initial'] for field in overrides if 'initial' in overrides[field]}
+            else:
+                return {}
 
-        return self.formdict.items()
+    def get_questions_disabled(self):
+        for cr in self._positions_for_questions:
+            overrides = question_form_fields_overrides.send_chained(
+                self.request.event,
+                'question_form_fields_overrides',
+                position=cr,
+                request=self.request
+            )
+
+            if overrides:
+                return {field: overrides[field]['disabled'] for field in overrides if 'disabled' in overrides[field]}
+            else:
+                return {}
 
     @cached_property
     def eu_reverse_charge_relevant(self):
@@ -509,6 +522,12 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         else:
             wd_initial = {}
         initial = dict(wd_initial)
+
+        if not self.contact_overrides:
+            self.get_contact_overrides()
+
+        initial.update(self.contact_overrides_initial)
+
         if not self.address_asked and self.request.event.settings.invoice_name_required:
             f = InvoiceNameForm(data=self.request.POST if self.request.method == "POST" else None,
                                 event=self.request.event,
@@ -526,6 +545,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         for name, field in f.fields.items():
             if wd_initial.get(name) and wd.get('fix', '') == 'true':
                 field.disabled = True
+
+        for name, field in f.fields.items():
+            if name in self.contact_overrides_disabled:
+                field.disabled = self.contact_overrides_disabled[name]
+
         return f
 
     @cached_property
@@ -648,7 +672,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['formgroups'] = self.form_groups
+        ctx['formgroups'] = self.formdict.items()
         ctx['contact_form'] = self.contact_form
         ctx['invoice_form'] = self.invoice_form
         ctx['reverse_charge_relevant'] = self.eu_reverse_charge_relevant
