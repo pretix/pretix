@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-23 16:53+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -336,7 +336,7 @@ msgstr "E-mail"
 #: pretix/base/auth.py:115 pretix/base/forms/auth.py:86
 #: pretix/base/forms/auth.py:138 pretix/control/forms/event.py:982
 msgid "Password"
-msgstr "Password"
+msgstr "Palavra-passe"
 
 #: pretix/base/channels.py:84
 msgid "Online shop"
@@ -360,7 +360,7 @@ msgstr "Simples com logotipo"
 #: pretix/base/email.py:504 pretix/base/pdf.py:109 pretix/base/pdf.py:212
 #: pretix/base/services/invoices.py:351 pretix/control/views/event.py:693
 msgid "John Doe"
-msgstr "João Silva"
+msgstr "John Doe"
 
 #: pretix/base/email.py:424
 msgid "Sample Corporation"
