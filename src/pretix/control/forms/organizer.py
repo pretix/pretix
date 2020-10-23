@@ -15,7 +15,7 @@ from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
-from pretix.base.models import Device, GiftCard, Organizer, Team
+from pretix.base.models import Device, Gate, GiftCard, Organizer, Team
 from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget, SplitDateTimeField,
 )
@@ -175,6 +175,17 @@ class TeamForm(forms.ModelForm):
         return data
 
 
+class GateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Gate
+        fields = ['name', 'identifier']
+
+
 class DeviceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -183,6 +194,7 @@ class DeviceForm(forms.ModelForm):
         self.fields['limit_events'].queryset = organizer.events.all().order_by(
             '-has_subevents', '-date_from'
         )
+        self.fields['gate'].queryset = organizer.gates.all()
 
     def clean(self):
         d = super().clean()
@@ -193,7 +205,7 @@ class DeviceForm(forms.ModelForm):
 
     class Meta:
         model = Device
-        fields = ['name', 'all_events', 'limit_events', 'security_profile']
+        fields = ['name', 'all_events', 'limit_events', 'security_profile', 'gate']
         widgets = {
             'limit_events': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_events',

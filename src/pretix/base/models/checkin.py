@@ -159,6 +159,9 @@ class Checkin(models.Model):
     device = models.ForeignKey(
         'pretixbase.Device', related_name='checkins', on_delete=models.PROTECT, null=True, blank=True
     )
+    gate = models.ForeignKey(
+        'pretixbase.Gate', related_name='checkins', on_delete=models.SET_NULL, null=True, blank=True
+    )
     auto_checked_in = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='position__order__event__organizer')

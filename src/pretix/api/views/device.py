@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from pretix.api.auth.device import DeviceTokenAuthentication
 from pretix.base.models import Device
-from pretix.base.models.devices import generate_api_token
+from pretix.base.models.devices import Gate, generate_api_token
 
 logger = logging.getLogger(__name__)
 
@@ -28,14 +28,25 @@ class UpdateRequestSerializer(serializers.Serializer):
     software_version = serializers.CharField(max_length=190)
 
 
+class GateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gate
+        fields = [
+            'id',
+            'name',
+            'identifier',
+        ]
+
+
 class DeviceSerializer(serializers.ModelSerializer):
     organizer = serializers.SlugRelatedField(slug_field='slug', read_only=True)
+    gate = GateSerializer(read_only=True)
 
     class Meta:
         model = Device
         fields = [
             'organizer', 'device_id', 'unique_serial', 'api_token',
-            'name', 'security_profile'
+            'name', 'security_profile', 'gate'
         ]
 
 
