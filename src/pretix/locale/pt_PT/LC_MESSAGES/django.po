@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-23 15:57+0000\n"
-"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
+"Last-Translator: JPolonia <joaovpsilva@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -14225,9 +14225,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/index.html:12
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:18
-#, fuzzy
 msgid "You currently do not have access to any events."
-msgstr "Você atualmente não têm acesso a todos os eventos."
+msgstr "Você actualmente não têm acesso a nenhum evento."
 
 #: pretix/control/templates/pretixcontrol/events/index.html:83
 #: pretix/control/templates/pretixcontrol/subevents/index.html:74
