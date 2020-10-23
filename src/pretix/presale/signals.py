@@ -216,7 +216,8 @@ question_form_fields_overrides = EventPluginSignal(
 This signals allows you to override fields of the questions form that is presented during checkout
 and by default only asks for the questions configured in the backend. You are supposed to return a
 dictionary of dictionaries with globally unique keys. The value-dictionary should contain one or
-more of the following keys: ``initial``, ``disabled``.
+more of the following keys: ``initial``, ``disabled``. The key of the dictionary should not be the
+question's form field name (``question_n``) but rather the questions ``identifier``.
 
 The ``position`` keyword argument will contain a ``CartPosition`` object.
 
