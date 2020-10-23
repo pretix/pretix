@@ -517,6 +517,20 @@ class OrderMailForm(forms.Form):
         self._set_field_placeholders('message', ['event', 'order'])
 
 
+class OrderPositionMailForm(OrderMailForm):
+    def __init__(self, *args, **kwargs):
+        position = self.position = kwargs.pop('position')
+        super().__init__(*args, **kwargs)
+        self.fields['sendto'].initial = position.attendee_email
+        self.fields['message'] = forms.CharField(
+            label=_("Message"),
+            required=True,
+            widget=forms.Textarea,
+            initial=self.order.event.settings.mail_text_order_custom_mail.localize(self.order.locale),
+        )
+        self._set_field_placeholders('message', ['event', 'order', 'position'])
+
+
 class OrderRefundForm(forms.Form):
     action = forms.ChoiceField(
         required=False,

@@ -80,7 +80,7 @@ from pretix.control.forms.orders import (
     ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeChangeForm,
     OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
     OrderPositionAddFormset, OrderPositionChangeForm, OrderRefundForm,
-    OtherOperationsForm,
+    OtherOperationsForm, OrderPositionMailForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -1779,6 +1779,55 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['preview_output'] = getattr(self, 'preview_output', None)
         return ctx
+
+
+class OrderPositionSendMail(OrderSendMail):
+    form_class = OrderPositionMailForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['position'] = get_object_or_404(
+            OrderPosition,
+            order__event=self.request.event,
+            order__code=self.kwargs['code'].upper(),
+            pk=self.kwargs['position']
+        )
+        return kwargs
+
+    def form_valid(self, form):
+        position = get_object_or_404(
+            OrderPosition,
+            order__event=self.request.event,
+            order__code=self.kwargs['code'].upper(),
+            pk=self.kwargs['position']
+        )
+        self.preview_output = {}
+        with language(position.order.locale):
+            email_context = get_email_context(event=position.order.event, order=position.order, position=position)
+        email_template = LazyI18nString(form.cleaned_data['message'])
+        email_subject = str(form.cleaned_data['subject']).format_map(TolerantDict(email_context))
+        email_content = render_mail(email_template, email_context)
+        if self.request.POST.get('action') == 'preview':
+            self.preview_output = {
+                'subject': _('Subject: {subject}').format(subject=email_subject),
+                'html': markdown_compile_email(email_content)
+            }
+            return self.get(self.request, *self.args, **self.kwargs)
+        else:
+            try:
+                position.send_mail(
+                    form.cleaned_data['subject'],
+                    email_template,
+                    email_context,
+                    'pretix.event.order.position.email.custom_sent',
+                    self.request.user
+                )
+                messages.success(self.request,
+                                 _('Your message has been queued and will be sent to {}.'.format(position.attendee_email)))
+            except SendMailException:
+                messages.error(self.request,
+                               _('Failed to send mail to the following user: {}'.format(position.attendee_email)))
+            return super(OrderSendMail, self).form_valid(form)
 
 
 class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):

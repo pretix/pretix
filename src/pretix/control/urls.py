@@ -247,6 +247,8 @@ urlpatterns = [
             name='event.order.info'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/sendmail$', orders.OrderSendMail.as_view(),
             name='event.order.sendmail'),
+        url(r'^orders/(?P<code>[0-9A-Z]+)/(?P<position>[0-9A-Z]+)/sendmail$', orders.OrderPositionSendMail.as_view(),
+            name='event.order.position.sendmail'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/mail_history$', orders.OrderEmailHistory.as_view(),
             name='event.order.mail_history'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/payments/(?P<payment>\d+)/cancel$', orders.OrderPaymentCancel.as_view(),
