@@ -4,7 +4,8 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
-from django.utils.http import urlquote
+#from django.utils.http import urlquote
+from urllib.parse import quote as urlquote
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
