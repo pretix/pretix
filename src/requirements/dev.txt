@@ -7,10 +7,10 @@ flake8==3.7.*
 codecov
 coverage
 pytest-cov
-pytest==5.3.*
-pytest-django==3.*
+pytest==6.*
+pytest-django==4.*
 isort
-pytest-rerunfailures==8.*
+pytest-rerunfailures==9.*
 pytest-mock==2.0.*
 responses
 potypo
