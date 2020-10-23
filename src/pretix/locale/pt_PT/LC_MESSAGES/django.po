@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-23 15:25+0000\n"
-"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -820,7 +820,6 @@ msgstr "Endereço"
 #: pretix/plugins/checkinlists/exporters.py:441
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:105
 #: pretix/presale/templates/pretixpresale/event/order.html:295
-#, fuzzy
 msgctxt "address"
 msgid "State"
 msgstr "Estado"
@@ -828,7 +827,6 @@ msgstr "Estado"
 #: pretix/base/exporters/invoices.py:184 pretix/base/exporters/invoices.py:311
 #: pretix/base/models/orders.py:2227
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:113
-#, fuzzy
 msgid "Beneficiary"
 msgstr "Beneficiário"
 
@@ -836,39 +834,32 @@ msgstr "Beneficiário"
 #: pretix/base/models/orders.py:2222 pretix/base/orderimport.py:367
 #: pretix/control/templates/pretixcontrol/order/index.html:815
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:120
-#, fuzzy
 msgid "Internal reference"
 msgstr "Referência interna"
 
 #: pretix/base/exporters/invoices.py:186 pretix/control/forms/event.py:1133
-#, fuzzy
 msgid "Reverse charge"
-msgstr "Carga reversa"
+msgstr "Auto Liquidação"
 
 #: pretix/base/exporters/invoices.py:187
-#, fuzzy
 msgid "Shown foreign currency"
-msgstr "moeda estrangeira mostrado"
+msgstr "moeda estrangeira apresentada"
 
 #: pretix/base/exporters/invoices.py:188
-#, fuzzy
 msgid "Foreign currency rate"
 msgstr "taxa de moeda estrangeira"
 
 #: pretix/base/exporters/invoices.py:189
-#, fuzzy
 msgid "Total value (with taxes)"
 msgstr "Valor total (com impostos)"
 
 #: pretix/base/exporters/invoices.py:190
-#, fuzzy
 msgid "Total value (without taxes)"
 msgstr "Valor total (sem impostos)"
 
 #: pretix/base/exporters/invoices.py:191
-#, fuzzy
 msgid "Payment matching IDs"
-msgstr "IDs correspondentes pagamento"
+msgstr "Pagamento IDs correspondentes"
 
 #: pretix/base/exporters/invoices.py:192 pretix/base/exporters/invoices.py:313
 #: pretix/base/exporters/orderlist.py:152
