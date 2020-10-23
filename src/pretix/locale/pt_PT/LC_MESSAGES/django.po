@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-23 15:57+0000\n"
-"Last-Translator: JPolonia <joaovpsilva@hotmail.com>\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -163,13 +163,12 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "O item empacotado não deve ter empacotamentos próprios."
 
 #: pretix/api/serializers/item.py:131
-#, fuzzy
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
 "Atualizando add-ons, pacotes, ou variações, através PATCH / PUT não é "
-"suportado. Por favor use o endpoint aninhada dedicado."
+"suportado. Por favor use o endpoint dedicado."
 
 #: pretix/api/serializers/item.py:140 pretix/control/forms/item.py:480
 #, fuzzy
@@ -182,25 +181,23 @@ msgstr ""
 "cartão presente é resgatado."
 
 #: pretix/api/serializers/item.py:145 pretix/control/forms/item.py:486
-#, fuzzy
 msgid "Gift card products should not be admission products at the same time."
 msgstr ""
-"produtos de cartões de presente não deve ser produtos de admissão ao mesmo "
+"Produtos de cartões de presente não deve ser produtos de admissão ao mesmo "
 "tempo."
 
 #: pretix/api/serializers/item.py:182
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "Item de propriedade de dados meta '{nome}' não existe."
+msgstr "Item de propriedade de dados meta '{name}' não existe."
 
 #: pretix/api/serializers/item.py:297
-#, fuzzy
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"opções através PATCH Atualizando / PUT não é suportado. Por favor use o "
-"endpoint aninhada dedicado."
+"Actualização através de PATCH / PUT não é suportado. Por favor use o "
+"endpoint dedicado."
 
 #: pretix/api/serializers/item.py:311 pretix/control/forms/item.py:73
 msgid "Question cannot depend on a question asked during check-in."
@@ -215,7 +212,6 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Este tipo de pergunta não pode ser efetuado durante o check-in."
 
 #: pretix/api/serializers/order.py:927 pretix/api/serializers/order.py:934
-#, fuzzy
 msgid "The product \"{}\" is not available on this date."
 msgstr "O produto \"{}\" não está disponível nesta data."
 
@@ -295,9 +291,8 @@ msgid "Order information changed"
 msgstr "Informações da encomenda alteradas"
 
 #: pretix/api/webhooks.py:146 pretix/base/notifications.py:247
-#, fuzzy
 msgid "Order contact address changed"
-msgstr "endereço ordem de contato mudou"
+msgstr "Endereço da encomenda mudou"
 
 #: pretix/api/webhooks.py:150 pretix/base/notifications.py:253
 #: pretix/control/templates/pretixcontrol/event/mail.html:58
@@ -313,24 +308,21 @@ msgid "Order approved"
 msgstr "Encomenda aprovada"
 
 #: pretix/api/webhooks.py:162
-#, fuzzy
 msgid "Order denied"
-msgstr "fim negado"
+msgstr "Encomenda negada"
 
 #: pretix/api/webhooks.py:166
-#, fuzzy
 msgid "Ticket checked in"
-msgstr "Ticket check-in"
+msgstr "Check-in do bilhete feito"
 
 #: pretix/api/webhooks.py:170
-#, fuzzy
 msgid "Ticket check-in reverted"
-msgstr "check-in Ticket revertidos"
+msgstr "Check-in do bilhete revertido"
 
 #: pretix/base/auth.py:104
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{system} User"
-msgstr "{Sistema} Usuário"
+msgstr "{system} Usuário"
 
 #: pretix/base/auth.py:113 pretix/base/forms/auth.py:175
 #: pretix/base/models/auth.py:90 pretix/base/models/notifications.py:25
