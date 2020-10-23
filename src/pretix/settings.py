@@ -210,6 +210,7 @@ if HAS_REDIS:
         "LOCATION": config.get('redis', 'location'),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "REDIS_CLIENT_KWARGS": {"health_check_interval": 30}
         }
     }
     CACHES['redis_sessions'] = {
@@ -218,6 +219,7 @@ if HAS_REDIS:
         "TIMEOUT": 3600 * 24 * 30,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "REDIS_CLIENT_KWARGS": {"health_check_interval": 30}
         }
     }
     if not HAS_MEMCACHED:
