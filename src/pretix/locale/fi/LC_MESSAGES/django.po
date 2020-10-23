@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-21 17:02+0000\n"
-"PO-Revision-Date: 2020-10-21 16:00+0000\n"
+"PO-Revision-Date: 2020-10-23 16:53+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -72,7 +72,7 @@ msgstr "Sovelluksen nimi"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Uudelleenohjausosoitteet"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
@@ -288,7 +288,7 @@ msgstr "Tilaus muuttunut"
 
 #: pretix/api/webhooks.py:154 pretix/base/notifications.py:265
 msgid "External refund of payment"
-msgstr ""
+msgstr "Ulkoinen maksun palautus"
 
 #: pretix/api/webhooks.py:158
 msgid "Order approved"
@@ -715,7 +715,7 @@ msgstr "Maakunta"
 #: pretix/base/models/orders.py:2231
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:113
 msgid "Beneficiary"
-msgstr ""
+msgstr "Edunsaaja"
 
 #: pretix/base/exporters/invoices.py:185 pretix/base/exporters/invoices.py:312
 #: pretix/base/models/orders.py:2226 pretix/base/orderimport.py:367
@@ -1417,11 +1417,11 @@ msgstr ""
 
 #: pretix/base/forms/user.py:121
 msgid "Device type"
-msgstr ""
+msgstr "Laitteen tyyppi"
 
 #: pretix/base/forms/user.py:122
 msgid "Smartphone with the Authenticator application"
-msgstr ""
+msgstr "Älypuhelin, jossa on tunnistautumissovellus"
 
 #: pretix/base/forms/user.py:123
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
@@ -1441,11 +1441,11 @@ msgstr ""
 #: pretix/base/forms/widgets.py:138 pretix/base/forms/widgets.py:143
 #: pretix/base/models/orders.py:2210
 msgid "Business customer"
-msgstr ""
+msgstr "Yritysasiakas"
 
 #: pretix/base/forms/widgets.py:142
 msgid "Individual customer"
-msgstr ""
+msgstr "Henkilöasiakas"
 
 #: pretix/base/invoice.py:59
 #, python-format
@@ -1506,7 +1506,7 @@ msgstr ""
 #: pretix/base/invoice.py:379
 msgctxt "invoice"
 msgid "Event"
-msgstr ""
+msgstr "Tapahtuma"
 
 #: pretix/base/invoice.py:398
 #, python-brace-format
@@ -1551,7 +1551,7 @@ msgstr ""
 #: pretix/base/invoice.py:484
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Edunsaaja"
 
 #: pretix/base/invoice.py:502
 msgctxt "invoice"
@@ -1573,7 +1573,7 @@ msgstr ""
 #: pretix/base/invoice.py:525 pretix/base/invoice.py:533
 msgctxt "invoice"
 msgid "Description"
-msgstr ""
+msgstr "Kuvaus"
 
 #: pretix/base/invoice.py:526 pretix/base/invoice.py:534
 msgctxt "invoice"
@@ -1598,7 +1598,7 @@ msgstr ""
 #: pretix/base/invoice.py:535
 msgctxt "invoice"
 msgid "Amount"
-msgstr ""
+msgstr "Määrä"
 
 #: pretix/base/invoice.py:560 pretix/base/invoice.py:565
 msgctxt "invoice"
