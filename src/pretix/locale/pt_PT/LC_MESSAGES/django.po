@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-23 15:25+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"PO-Revision-Date: 2020-10-23 15:28+0000\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -14615,8 +14615,8 @@ msgstr ""
 #, python-format
 msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Isso irá tornar %(count)s voucher instável."
+msgstr[1] "Isso irá tornar %(count)s vouchers instáveis."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:29
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:31
@@ -16575,8 +16575,8 @@ msgstr "Soma de todas as páginas"
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 encomenda"
+msgstr[1] "%(s)s encomendas"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:15
@@ -19044,8 +19044,8 @@ msgstr "Em breve"
 #, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num} encomenda"
+msgstr[1] "{num} encomendas"
 
 #: pretix/control/views/event.py:180 pretix/control/views/organizer.py:305
 #, fuzzy
@@ -23091,8 +23091,8 @@ msgstr "Estamos agora a tentar reservar estes add-ons para você!"
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Necessita de escolher exatamente uma opção desta categoria."
+msgstr[1] "Necessita de escolher %(min_count)s opções desta categoria."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:53
 #, fuzzy, python-format
@@ -23483,8 +23483,8 @@ msgstr "Adicionar mais uma"
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Um produto"
+msgstr[1] "%(num)s produtos"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
 #, fuzzy, python-format
@@ -24797,6 +24797,5 @@ msgid "Write access"
 msgstr "acesso de gravação"
 
 #: pretix/settings.py:733
-#, fuzzy
 msgid "Kosovo"
 msgstr "Kosovo"
