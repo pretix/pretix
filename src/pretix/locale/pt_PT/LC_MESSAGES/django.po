@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
 "PO-Revision-Date: 2020-10-23 15:28+0000\n"
-"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -867,19 +867,16 @@ msgstr "Pagamento IDs correspondentes"
 #: pretix/base/exporters/orderlist.py:420
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:287
-#, fuzzy
 msgid "Payment providers"
-msgstr "provedores de pagamento"
+msgstr "Provedores de pagamento"
 
 #: pretix/base/exporters/invoices.py:248 pretix/base/exporters/invoices.py:350
-#, fuzzy
 msgid "Cancellation"
 msgstr "Cancelamento"
 
 #: pretix/base/exporters/invoices.py:248 pretix/base/exporters/invoices.py:350
 #: pretix/control/templates/pretixcontrol/order/index.html:209
 #: pretix/presale/templates/pretixpresale/event/order.html:220
-#, fuzzy
 msgid "Invoice"
 msgstr "Fatura"
 
@@ -893,9 +890,8 @@ msgstr "Fatura"
 #: pretix/plugins/checkinlists/exporters.py:612
 #: pretix/plugins/checkinlists/exporters.py:613
 #: pretix/presale/checkoutflow.py:771
-#, fuzzy
 msgid "Yes"
-msgstr "sim"
+msgstr "Sim"
 
 #: pretix/base/exporters/invoices.py:268 pretix/base/exporters/orderlist.py:230
 #: pretix/base/exporters/orderlist.py:504 pretix/base/models/orders.py:1003
@@ -907,79 +903,66 @@ msgstr "sim"
 #: pretix/plugins/checkinlists/exporters.py:612
 #: pretix/plugins/checkinlists/exporters.py:613
 #: pretix/presale/checkoutflow.py:773
-#, fuzzy
 msgid "No"
 msgstr "Não"
 
 #: pretix/base/exporters/invoices.py:282
-#, fuzzy
 msgid "Line number"
 msgstr "Número da linha"
 
 #: pretix/base/exporters/invoices.py:283 pretix/base/exporters/orderlist.py:265
 #: pretix/base/models/items.py:278 pretix/base/models/items.py:643
 #: pretix/base/models/items.py:650
-#, fuzzy
 msgid "Description"
 msgstr "Descrição"
 
 #: pretix/base/exporters/invoices.py:284 pretix/control/forms/orders.py:241
-#, fuzzy
 msgid "Gross price"
-msgstr "preço bruto"
+msgstr "Preço bruto"
 
 #: pretix/base/exporters/invoices.py:285
-#, fuzzy
 msgid "Net price"
 msgstr "Preço líquido"
 
 #: pretix/base/exporters/invoices.py:286 pretix/base/exporters/orderlist.py:269
 #: pretix/base/exporters/orderlist.py:374 pretix/base/models/orders.py:1839
 #: pretix/base/models/orders.py:1939
-#, fuzzy
 msgid "Tax value"
-msgstr "imposto sobre o valor"
+msgstr "Valor do imposto"
 
 #: pretix/base/exporters/invoices.py:287 pretix/base/exporters/orderlist.py:267
 #: pretix/base/exporters/orderlist.py:372 pretix/base/models/orders.py:1830
 #: pretix/base/models/orders.py:1930 pretix/base/models/tax.py:104
-#, fuzzy
 msgid "Tax rate"
 msgstr "Taxa de imposto"
 
 #: pretix/base/exporters/invoices.py:288
-#, fuzzy
 msgid "Tax name"
-msgstr "nome fiscal"
+msgstr "Nome fiscal"
 
 #: pretix/base/exporters/invoices.py:289
-#, fuzzy
 msgid "Event start date"
-msgstr "data de início do evento"
+msgstr "Data de início do evento"
 
 #: pretix/base/exporters/mail.py:18
-#, fuzzy
 msgid "Email addresses (text file)"
-msgstr "Os endereços de email (arquivo de texto)"
+msgstr "Os endereços de email (ficheiro de texto)"
 
 #: pretix/base/exporters/mail.py:40 pretix/plugins/reports/exporters.py:318
 #: pretix/plugins/reports/exporters.py:490
-#, fuzzy
 msgid "Filter by status"
 msgstr "Filtrar por status"
 
 #: pretix/base/exporters/orderlist.py:32
-#, fuzzy
 msgid "Order data"
-msgstr "dados de pedidos"
+msgstr "Dados dos pedidos"
 
 #: pretix/base/exporters/orderlist.py:41 pretix/base/models/orders.py:205
 #: pretix/control/navigation.py:224
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
-#, fuzzy
 msgid "Orders"
-msgstr "ordens"
+msgstr "Ordens"
 
 #: pretix/base/exporters/orderlist.py:42 pretix/base/models/orders.py:1955
 #: pretix/base/notifications.py:190
