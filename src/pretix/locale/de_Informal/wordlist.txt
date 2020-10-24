@@ -193,6 +193,7 @@ Secret
 Security
 SEPA
 Shirts
+Signaturverfahren
 Social
 Sofort
 SOFORT
@@ -246,6 +247,7 @@ umzubuchen
 URIs
 Ursprüngl
 USt
+Überweisungs
 Veranstaltereinstellungen
 Veranstalterkonten
 Veranstalterkonto

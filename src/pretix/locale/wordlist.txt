@@ -107,5 +107,6 @@ WeChat
 WhatsApp
 whitespace
 xlsx
+xml
 Yubikey
 ZVT
