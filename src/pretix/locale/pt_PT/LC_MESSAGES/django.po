@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
 "PO-Revision-Date: 2020-10-24 20:02+0000\n"
-"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -5101,14 +5101,14 @@ msgid "This order is not pending approval."
 msgstr "Este pedido não está pendente de aprovação."
 
 #: pretix/base/services/orders.py:265
-#, fuzzy, python-format
+#, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr "Encomendar aprovado e confirmado:% (código) s"
+msgstr "Pedido aprovado e confirmado: %(code)s"
 
 #: pretix/base/services/orders.py:268
-#, fuzzy, python-format
+#, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Encomendar aprovados e aguardando pagamento:% (código) s"
+msgstr "Pedido aprovado e aguardando pagamento: %(code)s"
 
 #: pretix/base/services/orders.py:314
 #, fuzzy, python-format
@@ -5433,7 +5433,6 @@ msgid "Ask for email addresses per ticket"
 msgstr "Pergunte para os endereços de e-mail por bilhete"
 
 #: pretix/base/settings.py:111
-#, fuzzy
 msgid ""
 "Normally, pretix asks for one email address per order and the order "
 "confirmation will be sent only to that email address. If you enable this "
@@ -5444,14 +5443,14 @@ msgid ""
 "primary email address, not to the per-attendee addresses. You can however "
 "enable this in the E-mail settings."
 msgstr ""
-"Normalmente, pretix pede um endereço de e-mail por pedido e confirmação do "
-"pedido será enviado apenas para esse endereço de email. Se você ativar essa "
-"opção, o sistema irá ainda pedir para endereços de e-mail individuais para "
-"cada bilhete de entrada. Isto pode ser útil se você quiser obter endereços "
+"Normalmente, pretix pede um endereço de e-mail por pedido e a confirmação do "
+"pedido será enviada apenas para esse endereço de e-mail. Se você ativar esta "
+"opção, o sistema irá ainda pedir endereços de e-mail individuais para cada "
+"bilhete de entrada. Isto pode ser útil se você quiser obter endereços "
 "individuais para cada participante, mesmo em caso de encomendas do grupo. No "
 "entanto, pretix irá enviar a confirmação do pedido por padrão apenas para o "
-"endereço de um e-mail principal, não para os endereços por participante. No "
-"entanto, pode activar esta nas configurações de e-mail."
+"endereço de um e-mail principal, não para os endereços por participante. "
+"Pode , no entanto, activar isto nas configurações de e-mail."
 
 #: pretix/base/settings.py:125
 #, fuzzy
@@ -5749,7 +5748,6 @@ msgid "Set payment term"
 msgstr "Set prazo de pagamento"
 
 #: pretix/base/settings.py:449
-#, fuzzy
 msgid ""
 "If using days, the order will expire at the end of the last day. Using "
 "minutes is more exact, but should only be used for real-time payment methods."
@@ -5832,15 +5830,14 @@ msgid "Automatically expire unpaid orders"
 msgstr "expiram automaticamente encomendas não pagas"
 
 #: pretix/base/settings.py:539
-#, fuzzy
 msgid ""
 "If checked, all unpaid orders will automatically go from 'pending' to "
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
-"Se marcada, todas as encomendas não pagas irá automaticamente de 'pendente' "
-"para 'expirou' após o fim do seu prazo de pagamento. Isto significa que os "
-"bilhetes voltar para a piscina e pode ser encomendado por outras pessoas."
+"Se marcada, todas as encomendas não pagas irão automaticamente de 'pendente' "
+"para 'expiradas' após o fim do seu prazo de pagamento. Isto significa que os "
+"bilhetes voltam para a lista e podem ser encomendados por outras pessoas."
 
 #: pretix/base/settings.py:558
 #, fuzzy
