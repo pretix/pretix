@@ -181,7 +181,7 @@ argument will contain the request object.
 """
 
 contact_form_fields_overrides = EventPluginSignal(
-    providing_args=["request"]
+    providing_args=["request", "order"]
 )
 """
 This signal allows you to override fields of the contact form that is presented during checkout
@@ -191,7 +191,8 @@ value-dictionary should contain one or more of the following keys: ``initial``, 
 key of the dictionary should be the name of the form field.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
-argument will contain the request object.
+argument will contain the request object. The ``order`` argument is ``None`` during the checkout
+process and contains an order if the customer is trying to change an existing order.
 """
 
 question_form_fields = EventPluginSignal(

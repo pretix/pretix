@@ -14,6 +14,7 @@ from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
     QuestionOption,
 )
+from pretix.presale.signals import contact_form_fields_overrides
 
 
 class BaseQuestionsViewMixin:
@@ -34,7 +35,7 @@ class BaseQuestionsViewMixin:
     def _positions_for_questions(self):
         raise NotImplementedError()
 
-    def get_question_overrides(self, cart_position):
+    def get_question_override_sets(self, position):
         return []
 
     @cached_property
@@ -234,23 +235,46 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
         )
 
     @cached_property
+    def _contact_override_sets(self):
+        override_sets = [
+            resp for recv, resp in contact_form_fields_overrides.send(
+                self.request.event,
+                request=self.request,
+                order=self.order,
+            )
+        ]
+        for override in override_sets:
+            for k in override:
+                # We don't want initial values to be modified, they should come from the order directly
+                override[k].pop('initial', None)
+        return override_sets
+
+    @cached_property
     def invoice_form(self):
         if not self.address_asked and self.request.event.settings.invoice_name_required:
-            return self.invoice_name_form_class(
+            f = self.invoice_name_form_class(
                 data=self.request.POST if self.request.method == "POST" else None,
                 event=self.request.event,
                 instance=self.invoice_address, validate_vat_id=False,
                 all_optional=self.all_optional
             )
-        if self.address_asked:
-            return self.invoice_form_class(
+        elif self.address_asked:
+            f = self.invoice_form_class(
                 data=self.request.POST if self.request.method == "POST" else None,
                 event=self.request.event,
                 instance=self.invoice_address, validate_vat_id=False,
                 all_optional=self.all_optional,
             )
         else:
-            return forms.Form(data=self.request.POST if self.request.method == "POST" else None)
+            f = forms.Form(data=self.request.POST if self.request.method == "POST" else None)
+
+        override_sets = self._contact_override_sets
+        for overrides in override_sets:
+            for fname, val in overrides.items():
+                if 'disabled' in val and fname in f.fields:
+                    f.fields[fname].disabled = val['disabled']
+
+        return f
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

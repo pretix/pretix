@@ -50,6 +50,7 @@ from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.forms.order import OrderPositionChangeForm
+from pretix.presale.signals import question_form_fields_overrides
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
@@ -672,6 +673,20 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
         if self.request.GET.get('generate_invoice') == 'true':
             return []
         return super().positions
+
+    def get_question_override_sets(self, order_position):
+        override_sets = [
+            resp for recv, resp in question_form_fields_overrides.send(
+                self.request.event,
+                position=order_position,
+                request=self.request
+            )
+        ]
+        for override in override_sets:
+            for k in override:
+                # We don't want initial values to be modified, they should come from the order directly
+                override[k].pop('initial', None)
+        return override_sets
 
     def post(self, request, *args, **kwargs):
         failed = not self.save() or not self.invoice_form.is_valid()

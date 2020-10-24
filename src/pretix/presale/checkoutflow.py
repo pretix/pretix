@@ -425,11 +425,13 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 return True
         return False
 
-    def _get_contact_overrides(self):
+    @cached_property
+    def _contact_override_sets(self):
         return [
             resp for recv, resp in contact_form_fields_overrides.send(
                 self.request.event,
-                request=self.request
+                request=self.request,
+                order=None,
             )
         ]
 
@@ -444,7 +446,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
 
-        override_sets = self._get_contact_overrides()
+        override_sets = self._contact_override_sets
         for overrides in override_sets:
             initial.update({
                 k: v['initial'] for k, v in overrides.items() if 'initial' in v
@@ -464,7 +466,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         return f
 
-    def get_question_overrides(self, cart_position):
+    def get_question_override_sets(self, cart_position):
         return [
             resp for recv, resp in question_form_fields_overrides.send(
                 self.request.event,
@@ -499,10 +501,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             wd_initial = {}
         initial = dict(wd_initial)
 
-        if not self._contact_overrides_set:
-            self._set_contact_overrides()
-
-        initial.update(self._contact_overrides_initial)
+        override_sets = self._contact_override_sets
+        for overrides in override_sets:
+            initial.update({
+                k: v['initial'] for k, v in overrides.items() if 'initial' in v
+            })
 
         if not self.address_asked and self.request.event.settings.invoice_name_required:
             f = InvoiceNameForm(data=self.request.POST if self.request.method == "POST" else None,
@@ -522,9 +525,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             if wd_initial.get(name) and wd.get('fix', '') == 'true':
                 field.disabled = True
 
-        for name, field in f.fields.items():
-            if name in self._contact_overrides_disabled:
-                field.disabled = self._contact_overrides_disabled[name]
+        for overrides in override_sets:
+            for fname, val in overrides.items():
+                if 'disabled' in val and fname in f.fields:
+                    f.fields[fname].disabled = val['disabled']
 
         return f
 
