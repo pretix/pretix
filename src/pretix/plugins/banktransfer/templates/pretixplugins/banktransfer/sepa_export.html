@@ -10,8 +10,11 @@
     <h1>{% trans "Export SEPA xml" %}</h1>
 
     <p>
-        {% blocktrans with cnt=export.cnt sum=export.sum|money:export.currency date=export.datetime|date %}
-            You are trying to download a refund export from {{ date }} with {{ cnt }} order{{ cnt|pluralize }} and a
+        {% blocktrans with sum=export.sum|money:export.currency date=export.datetime|date count cnt=export.cnt %}
+            You are trying to download a refund export from {{ date }} with one order and a
+            total of {{ sum }}.
+        {% plural %}
+            You are trying to download a refund export from {{ date }} with {{ cnt }} order and a
             total of {{ sum }}.
         {% endblocktrans %}
     </p>
