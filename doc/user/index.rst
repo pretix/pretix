@@ -15,3 +15,4 @@ wanting to use pretix to sell tickets.
    events/giftcards
    faq
    markdown
+   glossary
