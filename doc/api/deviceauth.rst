@@ -49,11 +49,15 @@ information on your device as well as your API token:
        "device_id": 5,
        "unique_serial": "HHZ9LW9JWP390VFZ",
        "api_token": "1kcsh572fonm3hawalrncam4l1gktr2rzx25a22l8g9hx108o9oi0rztpcvwnfnd",
-       "name": "Bar"
+       "name": "Bar",
+       "gate": {
+           "id": 3,
+           "name": "South entrance"
+       }
    }
 
 Please make sure that you store this ``api_token`` value. We also recommend storing your device ID, your assigned
-``unique_serial``, and the ``organizer`` you have access to, but that's up to you.
+``unique_serial``, and the ``organizer`` you have access to, but that's up to you. ``gate`` might be ``null``.
 
 In case of an error, the response will look like this:
 
@@ -98,6 +102,8 @@ following endpoint:
        "software_version": "4.1.0"
    }
 
+You will receive a response equivalent to the response of your initialization request.
+
 Creating a new API key
 ----------------------
 
@@ -126,12 +132,65 @@ invalidate your API key. There is no way to reverse this operation.
 
 This can also be done by the user through the web interface.
 
-Permissions
------------
+Permissions & security profiles
+-------------------------------
 
 Device authentication is currently hardcoded to grant the following permissions:
 
 * View event meta data and products etc.
-* View and change orders
+* View orders
+* Change orders
+* Manage gift cards
 
 Devices cannot change events or products and cannot access vouchers.
+
+Additionally, when creating a device through the user interface or API, a user can specify a "security profile" for
+the device. These include an allow list of specific API calls that may be made by the device. pretix ships with security
+policies for official pretix apps like pretixSCAN and pretixPOS.
+
+Removing a device
+-----------------
+
+If you want implement a way to to deprovision a device in your software, you can call the ``revoke`` endpoint to
+invalidate your API key. There is no way to reverse this operation.
+
+.. sourcecode:: http
+
+   POST /api/v1/device/revoke HTTP/1.1
+   Host: pretix.eu
+   Authorization: Device 1kcsh572fonm3hawalrncam4l1gktr2rzx25a22l8g9hx108o9oi0rztpcvwnfnd
+
+This can also be done by the user through the web interface.
+
+Event selection
+---------------
+
+In most cases, your application should allow the user to select the event and check-in list they work with manually
+from a list. However, in some cases it is required to automatically configure the device for the correct event, for
+example in a kiosk-like situation where nobody is operating the device. In this case, the app can query the server
+for a suggestion which event should be used. You can also submit the confiugration that is currently in use via
+query parameters:
+
+.. sourcecode:: http
+
+   GET /api/v1/device/eventselection?current_event=democon&current_subevent=42&current_checkinlist=542 HTTP/1.1
+   Host: pretix.eu
+   Authorization: Device 1kcsh572fonm3hawalrncam4l1gktr2rzx25a22l8g9hx108o9oi0rztpcvwnfnd
+
+You can get three response codes:
+
+* ``304`` The server things you already selected a good event
+* ``404`` The server has not found a suggestion for you
+* ``200`` The server suggests a new event (body see below)
+
+.. sourcecode:: http
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+
+   {
+      "event": "democon",
+      "subevent": 23,
+      "checkinlist": 5
+   }
+

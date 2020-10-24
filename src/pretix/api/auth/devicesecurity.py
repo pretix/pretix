@@ -22,8 +22,10 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
     verbose_name = _('pretixSCAN')
     allowlist = (
         ('GET', 'api-v1:version'),
+        ('GET', 'api-v1:device.eventselection'),
         ('POST', 'api-v1:device.update'),
         ('POST', 'api-v1:device.revoke'),
+        ('POST', 'api-v1:device.roll'),
         ('GET', 'api-v1:event-list'),
         ('GET', 'api-v1:event-detail'),
         ('GET', 'api-v1:subevent-list'),
@@ -48,8 +50,10 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
     verbose_name = _('pretixSCAN (kiosk mode, online only)')
     allowlist = (
         ('GET', 'api-v1:version'),
+        ('GET', 'api-v1:device.eventselection'),
         ('POST', 'api-v1:device.update'),
         ('POST', 'api-v1:device.revoke'),
+        ('POST', 'api-v1:device.roll'),
         ('GET', 'api-v1:event-list'),
         ('GET', 'api-v1:event-detail'),
         ('GET', 'api-v1:subevent-list'),
@@ -72,8 +76,10 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
     verbose_name = _('pretixPOS')
     allowlist = (
         ('GET', 'api-v1:version'),
+        ('GET', 'api-v1:device.eventselection'),
         ('POST', 'api-v1:device.update'),
         ('POST', 'api-v1:device.revoke'),
+        ('POST', 'api-v1:device.roll'),
         ('GET', 'api-v1:event-list'),
         ('GET', 'api-v1:event-detail'),
         ('GET', 'api-v1:subevent-list'),
