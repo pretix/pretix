@@ -34,11 +34,8 @@ class BaseQuestionsViewMixin:
     def _positions_for_questions(self):
         raise NotImplementedError()
 
-    def get_questions_initials(self):
-        return {}
-
-    def get_questions_disabled(self):
-        return {}
+    def get_question_overrides(self, cart_position):
+        return []
 
     @cached_property
     def forms(self):
@@ -69,17 +66,21 @@ class BaseQuestionsViewMixin:
                 ))
             )
 
-            for question_name, question_field in form.fields.items():
-                if hasattr(question_field, 'question'):
-                    if question_field.question.identifier in self.get_questions_initials():
-                        question_field.initial = self.get_questions_initials()[question_field.question.identifier]
-                    if question_field.question.identifier in self.get_questions_disabled():
-                        question_field.disabled = self.get_questions_disabled()[question_field.question.identifier]
-                else:
-                    if question_name in self.get_questions_initials():
-                        question_field.initial = self.get_questions_initials()[question_name]
-                    if question_name in self.get_questions_disabled():
-                        question_field.disabled = self.get_questions_disabled()[question_name]
+            override_sets = self.get_question_override_sets(cr)
+            for overrides in override_sets:
+                for question_name, question_field in form.fields.items():
+                    if hasattr(question_field, 'question'):
+                        if question_field.question.identifier in overrides:
+                            if 'initial' in overrides[question_field.question.identifier]:
+                                question_field.initial = overrides[question_field.question.identifier]['initial']
+                            if 'disabled' in overrides[question_field.question.identifier]:
+                                question_field.disabled = overrides[question_field.question.identifier]['disabled']
+                    else:
+                        if question_name in overrides:
+                            if 'initial' in overrides[question_name]:
+                                question_field.initial = overrides[question_name]['initial']
+                            if 'disabled' in overrides[question_name]:
+                                question_field.disabled = overrides[question_name]['disabled']
 
             if len(form.fields) > 0:
                 formlist.append(form)

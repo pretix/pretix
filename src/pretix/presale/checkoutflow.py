@@ -415,12 +415,6 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     template_name = "pretixpresale/event/checkout_questions.html"
     label = pgettext_lazy('checkoutflow', 'Your information')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._contact_overrides_set = False
-        self._contact_overrides_initial = {}
-        self._contact_overrides_disabled = {}
-
     def is_applicable(self, request):
         return True
 
@@ -431,17 +425,13 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 return True
         return False
 
-    def _set_contact_overrides(self):
-        overrides = contact_form_fields_overrides.send_chained(
-            self.request.event,
-            'contact_form_fields_overrides',
-            request=self.request
-        )
-
-        self._contact_overrides_set = True
-        if overrides:
-            self._contact_overrides_initial = {field: overrides[field]['initial'] for field in overrides if 'initial' in overrides[field]} or {}
-            self._contact_overrides_disabled = {field: overrides[field]['disabled'] for field in overrides if 'disabled' in overrides[field]} or {}
+    def _get_contact_overrides(self):
+        return [
+            resp for recv, resp in contact_form_fields_overrides.send(
+                self.request.event,
+                request=self.request
+            )
+        ]
 
     @cached_property
     def contact_form(self):
@@ -454,10 +444,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
 
-        if not self._contact_overrides_set:
-            self._set_contact_overrides()
-
-        initial.update(self._contact_overrides_initial)
+        override_sets = self._get_contact_overrides()
+        for overrides in override_sets:
+            initial.update({
+                k: v['initial'] for k, v in overrides.items() if 'initial' in v
+            })
 
         f = ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                         event=self.request.event,
@@ -466,39 +457,21 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         if wd.get('email', '') and wd.get('fix', '') == "true":
             f.fields['email'].disabled = True
 
-        for name, field in f.fields.items():
-            if name in self._contact_overrides_disabled:
-                field.disabled = self._contact_overrides_disabled[name]
+        for overrides in override_sets:
+            for fname, val in overrides.items():
+                if 'disabled' in val and fname in f.fields:
+                    f.fields[fname].disabled = val['disabled']
 
         return f
 
-    def get_questions_initials(self):
-        for cr in self._positions_for_questions:
-            overrides = question_form_fields_overrides.send_chained(
+    def get_question_overrides(self, cart_position):
+        return [
+            resp for recv, resp in question_form_fields_overrides.send(
                 self.request.event,
-                'question_form_fields_overrides',
-                position=cr,
+                position=cart_position,
                 request=self.request
             )
-
-            if overrides:
-                return {field: overrides[field]['initial'] for field in overrides if 'initial' in overrides[field]}
-            else:
-                return {}
-
-    def get_questions_disabled(self):
-        for cr in self._positions_for_questions:
-            overrides = question_form_fields_overrides.send_chained(
-                self.request.event,
-                'question_form_fields_overrides',
-                position=cr,
-                request=self.request
-            )
-
-            if overrides:
-                return {field: overrides[field]['disabled'] for field in overrides if 'disabled' in overrides[field]}
-            else:
-                return {}
+        ]
 
     @cached_property
     def eu_reverse_charge_relevant(self):
