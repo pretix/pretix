@@ -220,7 +220,7 @@ dictionary of dictionaries with globally unique keys. The value-dictionary shoul
 more of the following keys: ``initial``, ``disabled``. The key of the dictionary should not be the
 question's form field name (``question_n``) but rather the questions ``identifier``.
 
-The ``position`` keyword argument will contain a ``CartPosition`` object.
+The ``position`` keyword argument will contain a ``CartPosition`` or ``OrderPosition`` object.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
 argument will contain the request object.
