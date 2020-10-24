@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-24 17:39+0000\n"
+"POT-Creation-Date: 2020-10-24 20:02+0000\n"
 "PO-Revision-Date: 2020-10-24 19:58+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -9588,16 +9588,16 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste \"{list}"
-"\" (Typ \"{type}\")."
+"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste "
+"\"{list}\" (Typ \"{type}\")."
 
 #: pretix/control/logdisplay.py:178
 #, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" für die Liste \"{list}\" (Typ \""
-"{type}\")."
+"Unbekannter Scan von Code \"{barcode}…\" für die Liste \"{list}\" (Typ "
+"\"{type}\")."
 
 #: pretix/control/logdisplay.py:189
 #, python-brace-format
@@ -9605,8 +9605,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste \"{list}"
-"\" (Typ \"{type}\")."
+"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste "
+"\"{list}\" (Typ \"{type}\")."
 
 #: pretix/control/logdisplay.py:199
 #, python-brace-format
@@ -9614,8 +9614,8 @@ msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" für die Liste \"{list}\" (Typ \""
-"{type}\")."
+"Unbekannter Scan von Code \"{barcode}…\" für die Liste \"{list}\" (Typ "
+"\"{type}\")."
 
 #: pretix/control/logdisplay.py:210
 #, python-brace-format
@@ -14907,7 +14907,10 @@ msgid "Create a new gate"
 msgstr "Neue Station erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
-msgid "The list below shows gates that youc an use to group check-in devices."
+#, fuzzy
+#| msgid ""
+#| "The list below shows gates that youc an use to group check-in devices."
+msgid "The list below shows gates that you can use to group check-in devices."
 msgstr ""
 "Die untenstehende Liste zeigt alle Stationen, die du verwenden kannst um "
 "Check-in-Geräte zu gruppieren."
@@ -18546,33 +18549,48 @@ msgid "Export SEPA xml"
 msgstr "SEPA-XML exportieren"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:13
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "            You are trying to download a refund export from %(date)s with "
+#| "%(cnt)s order%(cnt|pluralize)s and a\n"
+#| "            total of %(sum)s.\n"
+#| "        "
 msgid ""
+"You are trying to download a refund export from %(date)s with one order and "
+"a total of %(sum)s."
+msgid_plural ""
+"You are trying to download a refund export from %(date)s with %(cnt)s order "
+"and a total of %(sum)s."
+msgstr[0] ""
 "\n"
-"            You are trying to download a refund export from %(date)s with "
-"%(cnt)s order%(cnt|pluralize)s and a\n"
-"            total of %(sum)s.\n"
+"            Du versuchst einen Export von Erstattungen vom %(date)s mit "
+"%(cnt)s Bestellungen und einem Gesamtbetrag von %(sum)s herunterzuladen.\n"
+"        %(cnt|pluralize)s\n"
 "        "
-msgstr ""
+msgstr[1] ""
 "\n"
 "            Du versuchst einen Export von Erstattungen vom %(date)s mit "
 "%(cnt)s Bestellungen und einem Gesamtbetrag von %(sum)s herunterzuladen.\n"
 "        %(cnt|pluralize)s\n"
 "        "
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:20
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "            Please state from which bank account the refunds should be "
+#| "transferred from.\n"
+#| "        "
 msgid ""
-"\n"
-"            Please state from which bank account the refunds should be "
-"transferred from.\n"
-"        "
+"Please state from which bank account the refunds should be transferred from."
 msgstr ""
 "\n"
 "            Bitte gib an, von welchem Bankkonto die Erstattungen ausgeführt "
 "werden sollen.\n"
 "        "
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:32
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:35
 msgid "Download"
 msgstr "Herunterladen"
 

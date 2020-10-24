@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-24 17:39+0000\n"
+"POT-Creation-Date: 2020-10-24 20:02+0000\n"
 "PO-Revision-Date: 2020-07-30 19:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -14813,7 +14813,7 @@ msgstr "إنشاء موعد جديد"
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
 #, fuzzy
 #| msgid "The list below shows all teams that exist within this organizer."
-msgid "The list below shows gates that youc an use to group check-in devices."
+msgid "The list below shows gates that you can use to group check-in devices."
 msgstr "القائمة أدناه يبين جميع الفرق التي توجد داخل هذه المنظمة."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
@@ -18427,22 +18427,24 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:13
 #, python-format
 msgid ""
-"\n"
-"            You are trying to download a refund export from %(date)s with "
-"%(cnt)s order%(cnt|pluralize)s and a\n"
-"            total of %(sum)s.\n"
-"        "
-msgstr ""
+"You are trying to download a refund export from %(date)s with one order and "
+"a total of %(sum)s."
+msgid_plural ""
+"You are trying to download a refund export from %(date)s with %(cnt)s order "
+"and a total of %(sum)s."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:20
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
-"\n"
-"            Please state from which bank account the refunds should be "
-"transferred from.\n"
-"        "
+"Please state from which bank account the refunds should be transferred from."
 msgstr ""
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:32
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:35
 #, fuzzy
 #| msgid "Download date"
 msgid "Download"
