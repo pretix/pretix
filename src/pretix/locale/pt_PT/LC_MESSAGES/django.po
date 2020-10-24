@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-24 20:02+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"PO-Revision-Date: 2020-10-24 20:05+0000\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -23784,25 +23784,21 @@ msgstr ""
 "os bilhetes ficar disponível novamente."
 
 #: pretix/presale/views/widget.py:264
-#, fuzzy
 msgctxt "widget"
 msgid "event ticketing powered by pretix"
-msgstr "ingressos de eventos alimentado por pretix"
+msgstr "venda de bilhetes por pretix"
 
 #: pretix/presale/views/widget.py:279
-#, fuzzy
 msgid "This ticket shop is currently disabled."
-msgstr "Esta loja bilhete está atualmente desativado."
+msgstr "Esta bilheteira está atualmente desativada."
 
 #: pretix/presale/views/widget.py:288
-#, fuzzy
 msgid "The selected date does not exist in this event series."
 msgstr "A data selecionada não existe nesta série de eventos."
 
 #: pretix/presale/views/widget.py:295
-#, fuzzy
 msgid "This is not an event series."
-msgstr "Esta não é uma série de eventos."
+msgstr "Isto não é uma série de eventos."
 
 #: pretix/presale/views/widget.py:338
 #, fuzzy, python-format
