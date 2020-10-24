@@ -230,6 +230,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             list=clist,
             datetime=dt,
             device=device,
+            gate=device.gate if device else None,
             nonce=nonce,
             forced=force and not entry_allowed,
         )

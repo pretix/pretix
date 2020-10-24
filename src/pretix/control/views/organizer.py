@@ -28,8 +28,8 @@ from django.views.generic import (
 from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
-    CachedFile, Device, GiftCard, LogEntry, OrderPayment, Organizer, Team,
-    TeamInvite, User,
+    CachedFile, Device, Gate, GiftCard, LogEntry, OrderPayment, Organizer,
+    Team, TeamInvite, User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import (
@@ -46,9 +46,9 @@ from pretix.control.forms.filter import (
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
-    DeviceForm, EventMetaPropertyForm, GiftCardCreateForm, GiftCardUpdateForm,
-    OrganizerDeleteForm, OrganizerForm, OrganizerSettingsForm,
-    OrganizerUpdateForm, TeamForm, WebHookForm,
+    DeviceForm, EventMetaPropertyForm, GateForm, GiftCardCreateForm,
+    GiftCardUpdateForm, OrganizerDeleteForm, OrganizerForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm,
 )
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
@@ -1265,3 +1265,105 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['exporters'] = self.exporters
         return ctx
+
+
+class GateListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = Gate
+    template_name = 'pretixcontrol/organizers/gates.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'gates'
+
+    def get_queryset(self):
+        return self.request.organizer.gates.all()
+
+
+class GateCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    model = Gate
+    template_name = 'pretixcontrol/organizers/gate_edit.html'
+    permission = 'can_change_organizer_settings'
+    form_class = GateForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Gate, organizer=self.request.organizer, pk=self.kwargs.get('gate'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.gates', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        messages.success(self.request, _('The gate has been created.'))
+        form.instance.organizer = self.request.organizer
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.gate.created', user=self.request.user, data={
+            k: getattr(self.object, k) for k in form.changed_data
+        })
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class GateUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    model = Gate
+    template_name = 'pretixcontrol/organizers/gate_edit.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'gate'
+    form_class = GateForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Gate, organizer=self.request.organizer, pk=self.kwargs.get('gate'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.gate', kwargs={
+            'organizer': self.request.organizer.slug,
+            'gate': self.object.pk
+        })
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action('pretix.gate.changed', user=self.request.user, data={
+                k: getattr(self.object, k)
+                for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class GateDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+    model = Gate
+    template_name = 'pretixcontrol/organizers/gate_delete.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'gate'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Gate, organizer=self.request.organizer, pk=self.kwargs.get('gate'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.gates', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        success_url = self.get_success_url()
+        self.object = self.get_object()
+        self.object.log_action('pretix.gate.deleted', user=self.request.user)
+        self.object.delete()
+        messages.success(request, _('The selected gate has been deleted.'))
+        return redirect(success_url)

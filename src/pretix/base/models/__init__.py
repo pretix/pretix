@@ -2,7 +2,7 @@ from ..settings import GlobalSettingsObject_SettingsStore
 from .auth import U2FDevice, User, WebAuthnDevice
 from .base import CachedFile, LoggedModel, cachedfile_name
 from .checkin import Checkin, CheckinList
-from .devices import Device
+from .devices import Device, Gate
 from .event import (
     Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
     RequiredAction, SubEvent, SubEventMetaValue, generate_invite_token,
@@ -19,8 +19,8 @@ from .notifications import NotificationSetting
 from .orders import (
     AbstractPosition, CachedCombinedTicket, CachedTicket, CartPosition,
     InvoiceAddress, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    QuestionAnswer, cachedcombinedticket_name, cachedticket_name,
-    generate_position_secret, generate_secret,
+    QuestionAnswer, RevokedTicketSecret, cachedcombinedticket_name,
+    cachedticket_name, generate_position_secret, generate_secret,
 )
 from .organizer import (
     Organizer, Organizer_SettingsStore, Team, TeamAPIToken, TeamInvite,

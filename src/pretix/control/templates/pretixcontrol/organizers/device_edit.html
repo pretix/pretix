@@ -14,10 +14,17 @@
         {% endif %}
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        {% bootstrap_field form.name layout="control" %}
-        {% bootstrap_field form.all_events layout="control" %}
-        {% bootstrap_field form.limit_events layout="control" %}
-        {% bootstrap_field form.security_profile layout="control" %}
+        <fieldset>
+            <legend>{% trans "General" %}</legend>
+            {% bootstrap_field form.name layout="control" %}
+            {% bootstrap_field form.all_events layout="control" %}
+            {% bootstrap_field form.limit_events layout="control" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Advanced settings" %}</legend>
+            {% bootstrap_field form.security_profile layout="control" %}
+            {% bootstrap_field form.gate layout="control" %}
+        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
