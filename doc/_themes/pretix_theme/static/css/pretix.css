@@ -6099,3 +6099,6 @@ img.screenshot, a.screenshot img {
 .versionchanged p:last-child {
     margin-bottom: 0;
 }
+.rst-content td > .line-block {
+    margin-left: 0 !important;
+}
