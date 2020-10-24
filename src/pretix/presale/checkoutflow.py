@@ -526,10 +526,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             wd_initial = {}
         initial = dict(wd_initial)
 
-        if not self.contact_overrides:
-            self.get_contact_overrides()
+        if not self._contact_overrides:
+            self._set_contact_overrides()
 
-        initial.update(self.contact_overrides_initial)
+        initial.update(self._contact_overrides_initial)
 
         if not self.address_asked and self.request.event.settings.invoice_name_required:
             f = InvoiceNameForm(data=self.request.POST if self.request.method == "POST" else None,
@@ -550,8 +550,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 field.disabled = True
 
         for name, field in f.fields.items():
-            if name in self.contact_overrides_disabled:
-                field.disabled = self.contact_overrides_disabled[name]
+            if name in self._contact_overrides_disabled:
+                field.disabled = self._contact_overrides_disabled[name]
 
         return f
 
