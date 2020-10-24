@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-24 21:31+0000\n"
+"PO-Revision-Date: 2020-10-25 06:00+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -11313,7 +11313,7 @@ msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
 "access to your pretix account?"
 msgstr ""
-"Você realmente deseja conceder a aplicação <strong>%(application)s</ strong> "
+"Você realmente deseja conceder a aplicação <strong>%(application)s</strong> "
 "acesso à sua conta pretix?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:23
@@ -11476,9 +11476,9 @@ msgid ""
 "to make sure they do not show up in your reports and statistics and block "
 "people from actually buying tickets."
 msgstr ""
-"Seu evento contém pedidos <strong> modo de teste </ strong>, mesmo que o "
-"modo de <strong> teste foi desativado </ strong>. Você deve excluir essas "
-"pedidos para se certificar de que eles não aparecem em seus relatórios e "
+"Seu evento contém pedidos <strong> modo de teste </strong>, mesmo que o modo "
+"de <strong> teste foi desativado </strong>. Você deve excluir essas pedidos "
+"para se certificar de que eles não aparecem em seus relatórios e "
 "estatísticas e bloquear as pessoas de realmente comprar bilhetes."
 
 #: pretix/control/templates/pretixcontrol/base.html:377
@@ -11756,8 +11756,8 @@ msgstr "Excluir check-in lista"
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
-"Tem certeza de que deseja apagar a lista de check-in <strong>%(name)s</ "
-"strong>?"
+"Tem certeza de que deseja apagar a lista de check-in "
+"<strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
@@ -11765,7 +11765,7 @@ msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
 msgstr ""
-"Isto irá apagar as informações de <strong>%(num)s</ strong> check-ins também."
+"Isto irá apagar as informações de <strong>%(num)s</strong> check-ins também."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:17
@@ -12336,7 +12336,7 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
-"Este evento contém <strong> em excesso pedidos </ strong>, por exemplo, "
+"Este evento contém <strong> em excesso pedidos </strong>, por exemplo, "
 "devido a tentativas de pagamento duplicados. Você deve rever os casos e "
 "considerar reembolso do montante pago em excesso para o utilizador ."
 
@@ -12351,7 +12351,7 @@ msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
 msgstr ""
-"Este evento contém <strong> reembolsos pendentes </ strong> que você deve "
+"Este evento contém <strong> reembolsos pendentes </strong> que você deve "
 "tomar cuidado."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:35
@@ -12365,7 +12365,7 @@ msgid ""
 "This event contains <strong>requested cancellations</strong> that you should "
 "take care of."
 msgstr ""
-"Este evento contém <strong> cancelamentos solicitados </ strong> que você "
+"Este evento contém <strong> cancelamentos solicitados </strong> que você "
 "deve tomar cuidado."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:44
@@ -12379,7 +12379,7 @@ msgid ""
 "This event contains <strong>pending approvals</strong> that you should take "
 "care of."
 msgstr ""
-"Este evento contém <strong> aprovações pendentes </ strong> que você deve "
+"Este evento contém <strong> aprovações pendentes </strong> que você deve "
 "tomar cuidado."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:53
@@ -12395,7 +12395,7 @@ msgid ""
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"Este evento contém <strong> pedidos totalmente pagos </ strong> que não são "
+"Este evento contém <strong> pedidos totalmente pagos </strong> que não são "
 "marcados como pago, provavelmente porque nenhuma quota foi deixado no "
 "momento seu pagamento chegou. Você deve rever os casos e considerar qualquer "
 "reembolso do cliente ou criando mais espaço."
@@ -12812,7 +12812,7 @@ msgstr "Suas alterações foram salvas."
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 #, python-format
 msgid "Version %(v)s by <em>%(a)s</em>"
-msgstr "Versão %(v)s por <em>%(a)s</ em>"
+msgstr "Versão %(v)s por <em>%(a)s</em>"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:30
 #, python-format
@@ -13136,8 +13136,8 @@ msgstr "regra fiscal de exclusão"
 msgid ""
 "Are you sure you want to delete the tax rule <strong>%(taxrule)s</strong>?"
 msgstr ""
-"Tem certeza de que deseja excluir a regra fiscal <strong>%(taxrule)s</ "
-"strong>?"
+"Tem certeza de que deseja excluir a regra fiscal "
+"<strong>%(taxrule)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:12
 #, fuzzy
@@ -13677,9 +13677,9 @@ msgid ""
 "Please note that your product will <strong>not</strong> be available for "
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
-"Por favor note que o seu produto irá <strong> não </ strong> estar "
-"disponível para venda até que tenha adicionado o seu item a um contingente "
-"existente ou recém-criado."
+"Por favor note que o seu produto irá <strong> não </strong> estar disponível "
+"para venda até que tenha adicionado o seu item a um contingente existente ou "
+"recém-criado."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:22
 #, fuzzy
@@ -13726,14 +13726,14 @@ msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered."
 msgstr ""
-"Você não pode excluir o produto <strong>%(item)s</ strong> porque já foi "
+"Você não pode excluir o produto <strong>%(item)s</strong> porque já foi "
 "encomendado."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:19
 #, python-format
 msgid "Are you sure you want to delete the product <strong>%(item)s</strong>?"
 msgstr ""
-"Tem a certeza que pretende eliminar o produto <strong>%(item)s</ strong>?"
+"Tem a certeza que pretende eliminar o produto <strong>%(item)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:22
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:24
@@ -13755,7 +13755,7 @@ msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered, but you can deactivate it."
 msgstr ""
-"Você não pode excluir o produto <strong>%(item)s</ strong> porque ele já foi "
+"Você não pode excluir o produto <strong>%(item)s</strong> porque ele já foi "
 "encomendado, mas você pode desativá-lo."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:41
@@ -13816,7 +13816,7 @@ msgid ""
 "Please note that your variation will <strong>not</strong> be available for "
 "sale until you have added it to an existing or newly created quota."
 msgstr ""
-"Por favor, note que a sua variação será <strong> não </ strong> estar "
+"Por favor, note que a sua variação será <strong> não </strong> estar "
 "disponível para venda até que você tenha adicionado a um contingente "
 "existente ou recém-criado."
 
@@ -13881,7 +13881,7 @@ msgstr "categoria de produto de exclusão"
 #, python-format
 msgid "Are you sure you want to delete the category <strong>%(name)s</strong>?"
 msgstr ""
-"Tem certeza de que deseja excluir a categoria <strong>%(name)s</ strong>?"
+"Tem certeza de que deseja excluir a categoria <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 #, fuzzy
@@ -14038,7 +14038,7 @@ msgstr "questão de exclusão"
 msgid ""
 "Are you sure you want to delete the question <strong>%(question)s</strong>?"
 msgstr ""
-"Tem certeza de que deseja excluir a questão <strong>%(question)s</ strong>?"
+"Tem certeza de que deseja excluir a questão <strong>%(question)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:11
 #, fuzzy
@@ -14047,7 +14047,7 @@ msgid ""
 "will be <strong>lost</strong>."
 msgstr ""
 "Todas as respostas à pergunta dada pelos compradores dos seguintes produtos "
-"serão <strong> perdeu </ strong>."
+"serão <strong> perdeu </strong>."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:30
 #, fuzzy
@@ -14217,7 +14217,7 @@ msgstr "quota de exclusão"
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the quota <strong>%(quota)s</strong>?"
-msgstr "Tem certeza de que deseja excluir a quota <strong>%(quota)s</ strong>?"
+msgstr "Tem certeza de que deseja excluir a quota <strong>%(quota)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:12
 #, fuzzy
@@ -14238,7 +14238,7 @@ msgid ""
 msgstr ""
 "Selecione os produtos ou variações de produtos, o contingente deve ser "
 "aplicado. Se você aplicar duas quotas para o mesmo produto, ele só estará "
-"disponível se <strong> ambos </ strong> quotas têm capacidade de esquerda."
+"disponível se <strong> ambos </strong> quotas têm capacidade de esquerda."
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:41
 #, fuzzy
@@ -14330,8 +14330,8 @@ msgid ""
 "Are you sure you want to disable the application <strong>%(application)s</"
 "strong> permanently?"
 msgstr ""
-"Tem certeza de que deseja desativar a applicação <strong>%(application)s</ "
-"strong> permanentemente?"
+"Tem certeza de que deseja desativar a applicação "
+"<strong>%(application)s</strong> permanentemente?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:6
@@ -14369,7 +14369,7 @@ msgid ""
 "<strong>%(application)s</strong>?"
 msgstr ""
 "Tem certeza de que deseja gerar um novo client secret para a aplicação "
-"<strong>%(application)s</ strong>?"
+"<strong>%(application)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:15
 #, fuzzy
@@ -14397,7 +14397,7 @@ msgid ""
 "<strong>%(application)s</strong>?"
 msgstr ""
 "Tem certeza de que deseja revogar o acesso a sua conta para a aplicação "
-"<strong>%(application)s</ strong>?"
+"<strong>%(application)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:15
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:24
@@ -14479,8 +14479,8 @@ msgid ""
 "This will <strong>not</strong> automatically transfer the money back, but "
 "you will be offered options to refund the payment afterwards."
 msgstr ""
-"Esta vontade <strong> não </ strong> automaticamente transferir o dinheiro "
-"de volta, mas você será oferecido opções para reembolsar o pagamento depois."
+"Esta vontade <strong> não </strong> automaticamente transferir o dinheiro de "
+"volta, mas você será oferecido opções para reembolsar o pagamento depois."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:38
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:169
@@ -15774,7 +15774,7 @@ msgid ""
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
 "Baixar um aplicativo que seja compatível com pretix. Por exemplo, o nosso "
-"check-in aplicativo <strong> pretixSCAN </ strong> está disponível em todas "
+"check-in aplicativo <strong> pretixSCAN </strong> está disponível em todas "
 "as principais plataformas."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
@@ -17675,7 +17675,7 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
-"Você configurou que os vales irá <strong> não </ strong> ser enviados "
+"Você configurou que os vales irá <strong> não </strong> ser enviados "
 "automaticamente. Você pode enviá-los um por um em um pedido de sua escolha, "
 "clicando nos botões ao lado de uma linha nesta tabela (se uma quota "
 "suficiente estiver disponível) ou você pode pressionar o botão grande abaixo "
@@ -19509,8 +19509,8 @@ msgstr "crachá"
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
-"Tem certeza de que deseja excluir o layout de crachá <strong>%(layout)s</ "
-"strong>?"
+"Tem certeza de que deseja excluir o layout de crachá "
+"<strong>%(layout)s</strong>?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
@@ -20109,11 +20109,8 @@ msgid "SEPA XML"
 msgstr "SEPA XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:106
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "{} new dates have been created."
 msgid "No exports have been created yet."
-msgstr "{} novas datas foram criadas."
+msgstr "Nenhuma exportação foi criada ainda."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
@@ -20459,9 +20456,9 @@ msgid "PayPal account"
 msgstr "Conta no PayPal"
 
 #: pretix/plugins/paypal/payment.py:80 pretix/plugins/stripe/payment.py:156
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\"> {text} </a>"
+msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #: pretix/plugins/paypal/payment.py:81 pretix/plugins/stripe/payment.py:157
 msgid "Click here for a tutorial on how to obtain the required keys"
@@ -20499,9 +20496,9 @@ msgstr ""
 "conexão a um já existente."
 
 #: pretix/plugins/paypal/payment.py:139
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr "Conecte-se com {ícone} PayPal"
+msgstr "Conecte com {icon} PayPal"
 
 #: pretix/plugins/paypal/payment.py:149
 #, fuzzy
@@ -20579,9 +20576,8 @@ msgid "There was an error sending the confirmation mail."
 msgstr "Houve um erro ao enviar o e-mail de confirmação."
 
 #: pretix/plugins/paypal/payment.py:508 pretix/plugins/paypal/payment.py:515
-#, fuzzy
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr "Reembolsar o montante via PayPal falhou: {}"
+msgstr "Reembolso do montante via PayPal falhou: {}"
 
 #: pretix/plugins/paypal/payment.py:638 pretix/plugins/paypal/payment.py:646
 #, fuzzy
@@ -20624,9 +20620,8 @@ msgid "Payment pending."
 msgstr "Pagamento pendente."
 
 #: pretix/plugins/paypal/signals.py:44
-#, fuzzy
 msgid "PayPal reported an event: {}"
-msgstr "PayPal informou um evento: {}"
+msgstr "PayPal reportou um evento: {}"
 
 #: pretix/plugins/paypal/signals.py:69
 #, fuzzy
@@ -20837,9 +20832,9 @@ msgid "(incl. taxes)"
 msgstr "(Incl. Impostos)"
 
 #: pretix/plugins/reports/exporters.py:213
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{axis} between {start} and {end}"
-msgstr "{} Eixo entre {início} e {final}"
+msgstr "{axis} entre {start} e {end}"
 
 #: pretix/plugins/reports/exporters.py:238
 #: pretix/plugins/reports/exporters.py:239
@@ -20856,7 +20851,7 @@ msgid "List of orders with taxes (PDF)"
 msgstr "Lista de pedidos com impostos (PDF)"
 
 #: pretix/plugins/reports/exporters.py:387
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Orders by tax rate ({currency})"
 msgstr "Pedidos por taxa de imposto ({currency})"
 
@@ -21365,8 +21360,8 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
-"Apesar do nome, pagamentos SOFORT via Stripe são <strong> não </ strong> "
-"processadas instantaneamente, mas pode levar até <strong> 14 dias </ strong> "
+"Apesar do nome, pagamentos SOFORT via Stripe são <strong> não </strong> "
+"processadas instantaneamente, mas pode levar até <strong> 14 dias </strong> "
 "a ser confirmadas em alguns casos. Por favor, só ativar este método de "
 "pagamento se o seu prazo de pagamento permite para este lag."
 
@@ -21387,7 +21382,7 @@ msgid "WeChat Pay"
 msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:278
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The Stripe plugin is operating in test mode. You can use one of <a {args}"
 ">many test cards</a> to perform a transaction. No money will actually be "
@@ -21839,9 +21834,9 @@ msgid "All PDF tickets in one file"
 msgstr "Todos os bilhetes num ficheiro PDF"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:25
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr "disposição bilhete de PDF para {canal}"
+msgstr "Layout do bilhete de PDF para {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:28
 #, fuzzy
@@ -21875,9 +21870,9 @@ msgid "Ticket layout changed."
 msgstr "disposição bilhete alterado."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:121
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ticket layout {val}"
-msgstr "disposição Ticket {val}"
+msgstr "Layout de bilhete {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
@@ -21980,9 +21975,8 @@ msgid "The selected ticket layout been deleted."
 msgstr "O layout bilhete selecionado foi excluído."
 
 #: pretix/plugins/ticketoutputpdf/views.py:224
-#, fuzzy
 msgid "Ticket PDF layout: {}"
-msgstr "disposição bilhete PDF: {}"
+msgstr "Layout de bilhete PDF: {}"
 
 #: pretix/presale/checkoutflow.py:61
 #, fuzzy
@@ -22092,7 +22086,7 @@ msgid "Tickets: {url}"
 msgstr "Bilhetes: {url}"
 
 #: pretix/presale/ical.py:55
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Admission: {datetime}"
 msgstr "Admissão: {datetime}"
 
@@ -23174,7 +23168,7 @@ msgid ""
 "bit longer."
 msgstr ""
 "Com o método de pagamento utilizado, o valor do reembolso <strong> não pode "
-"ser enviado de volta para você automaticamente </ strong>. Em vez disso, o "
+"ser enviado de volta para você automaticamente </strong>. Em vez disso, o "
 "organizador do evento terão de iniciar a transferência manualmente. Por "
 "favor, seja paciente pois isso pode demorar um pouco mais."
 
