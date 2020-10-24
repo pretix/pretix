@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
 "PO-Revision-Date: 2020-10-24 19:58+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -23714,14 +23714,14 @@ msgid "Ticket download is not (yet) enabled for this order."
 msgstr "O download do bilhete (ainda) não está disponível para esta encomenda."
 
 #: pretix/presale/views/order.py:889
-#, fuzzy
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
-"Por favor, clique no link enviado por e-mail para baixar os seus bilhetes."
+"Por favor, clique no link enviado por e-mail para fazer download dos seus "
+"bilhetes."
 
 #: pretix/presale/views/order.py:1048
 msgid "You cannot change this order."
-msgstr "Você não pode alterar esse pedido."
+msgstr "Você não pode alterar esta encomenda."
 
 #: pretix/presale/views/order.py:1151
 #, python-brace-format
