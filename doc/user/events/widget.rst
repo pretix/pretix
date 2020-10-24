@@ -1,3 +1,5 @@
+.. _widget:
+
 Embeddable Widget
 =================
 

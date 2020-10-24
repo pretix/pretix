@@ -3,6 +3,8 @@
    Warengutschein
    Wertgutschein
 
+.. _giftcards:
+
 Gift cards
 ==========
 
