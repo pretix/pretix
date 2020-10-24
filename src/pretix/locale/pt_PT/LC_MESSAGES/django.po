@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:25+0000\n"
-"Last-Translator: Fazenda Dengo <fazendadengo@gmail.com>\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -4637,8 +4637,7 @@ msgstr "Resposta obrigatória"
 
 #: pretix/base/models/items.py:1503
 msgid "This question will be asked to buyers of the selected products"
-msgstr ""
-"Esta questão será solicitado aos compradores dos produtos seleccionados"
+msgstr "Esta questão será solicitado aos compradores dos produtos seleccionados"
 
 #: pretix/base/models/items.py:1510
 msgid "Ask during check-in instead of in the ticket buying process"
@@ -15315,8 +15314,8 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
-"A posição #{posid} foi verificada manualmente em {datetime} na lista de "
-"\"{list}\"."
+"A posição #{posid} foi verificada manualmente em {datetime} na lista de \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:632
 #, python-brace-format
