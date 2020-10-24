@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 20:02+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-10-24 21:31+0000\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
+"pretix/pretix-js/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -25,7 +27,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr ""
+msgstr "Comentario:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -35,7 +37,7 @@ msgstr ""
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr ""
+msgstr "Encomendas pagas"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -47,7 +49,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
@@ -104,7 +106,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:189
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Estamos processando o seu pedido …"
 
 #: pretix/static/pretixbase/js/asynctask.js:197
 msgid ""
@@ -141,11 +143,11 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
 msgid "Product"
-msgstr ""
+msgstr "Produto"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
 msgid "Product variation"
-msgstr ""
+msgstr "Variação do produto"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:62
 msgid "Current date and time"
@@ -173,15 +175,15 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:223
 msgid "Event start"
-msgstr ""
+msgstr "Início do evento"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:224
 msgid "Event end"
-msgstr ""
+msgstr "Fim do evento"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:225
 msgid "Event admission"
-msgstr ""
+msgstr "Admissão ao evento"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:226
 msgid "custom time"
@@ -230,7 +232,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:477
 msgid "Ticket design"
-msgstr ""
+msgstr "Design do Bilhete"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:734
 msgid "Saving failed."
@@ -273,7 +275,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:376
 msgid "All"
-msgstr ""
+msgstr "Tudo"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:377
 msgid "None"
@@ -301,7 +303,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr ""
+msgstr "Contagem"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:131
 msgid "Yes"
@@ -319,11 +321,11 @@ msgstr[1] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Os itens no seu carrinho já não estão reservados para si."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Carrinho expirado"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
@@ -468,7 +470,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Código do voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
