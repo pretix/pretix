@@ -17180,8 +17180,8 @@ msgstr ""
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
-"Ein neuer Geschenkgutschein wurde erstellt kann nun an den Kunden verschickt "
-"werden."
+"Ein neuer Geschenkgutschein wurde erstellt und kann nun an den Kunden "
+"verschickt werden."
 
 #: pretix/control/views/orders.py:910
 msgid "Your gift card code"
