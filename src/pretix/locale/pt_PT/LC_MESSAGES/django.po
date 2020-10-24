@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-24 20:02+0000\n"
-"PO-Revision-Date: 2020-10-24 19:58+0000\n"
+"POT-Creation-Date: 2020-10-24 17:39+0000\n"
+"PO-Revision-Date: 2020-10-24 20:02+0000\n"
 "Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -23727,36 +23727,31 @@ msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
-"O Pedido foi alterado. Agora você pode pagar a quantia em aberto de {amount}."
+"A encomenda foi alterada. Agora pode pagar o montante pendente de {amount}."
 
 #: pretix/presale/views/user.py:27
-#, fuzzy
 msgid "We had difficulties processing your input."
-msgstr "Tivemos dificuldades de processamento sua entrada."
+msgstr "Tivemos dificuldades em processar o que introduziu."
 
 #: pretix/presale/views/user.py:36
-#, fuzzy
 msgid "We already sent you an email in the last 24 hours."
-msgstr "Nós já enviou um e-mail nas últimas 24 horas."
+msgstr "Já lhe enviamos um e-mail nas últimas 24 horas."
 
 #: pretix/presale/views/user.py:46
-#, fuzzy
 msgid "Your orders for {}"
-msgstr "Suas pedidos para {}"
+msgstr "As suas encomendas para {}"
 
 #: pretix/presale/views/user.py:54
-#, fuzzy
 msgid "We have trouble sending emails right now, please check back later."
-msgstr "Temos enviar e-mails problemas agora, por favor, volte mais tarde."
+msgstr "Tivemos problemas a enviar os e-mails, por favor, tente mais tarde."
 
 #: pretix/presale/views/user.py:57
-#, fuzzy
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
-"Se houvesse qualquer pedido por este utilizador , eles receberão um e-mail "
-"com seus códigos de pedido."
+"Se houver alguma encomenda deste utilizador, ele irá receber um e-mail com "
+"os códigos das encomenda."
 
 #: pretix/presale/views/waiting.py:77
 #, fuzzy
