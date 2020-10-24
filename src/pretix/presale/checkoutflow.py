@@ -526,7 +526,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             wd_initial = {}
         initial = dict(wd_initial)
 
-        if not self._contact_overrides:
+        if not self._contact_overrides_set:
             self._set_contact_overrides()
 
         initial.update(self._contact_overrides_initial)
