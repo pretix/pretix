@@ -32,7 +32,8 @@ from pretix.presale.forms.checkout import (
 )
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
-    contact_form_fields, order_meta_from_request, question_form_fields, contact_form_fields_overrides,
+    contact_form_fields, contact_form_fields_overrides,
+    order_meta_from_request, question_form_fields,
     question_form_fields_overrides,
 )
 from pretix.presale.views import (
@@ -413,9 +414,12 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     identifier = "questions"
     template_name = "pretixpresale/event/checkout_questions.html"
     label = pgettext_lazy('checkoutflow', 'Your information')
-    contact_overrides = False
-    contact_overrides_initial = {}
-    contact_overrides_disabled = {}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._contact_overrides_set = False
+        self._contact_overrides_initial = {}
+        self._contact_overrides_disabled = {}
 
     def is_applicable(self, request):
         return True
@@ -427,18 +431,17 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 return True
         return False
 
-    def get_contact_overrides(self):
+    def _set_contact_overrides(self):
         overrides = contact_form_fields_overrides.send_chained(
             self.request.event,
             'contact_form_fields_overrides',
             request=self.request
         )
 
-        self.contact_overrides = True
-
+        self._contact_overrides_set = True
         if overrides:
-            self.contact_overrides_initial = {field: overrides[field]['initial'] for field in overrides if 'initial' in overrides[field]} or {}
-            self.contact_overrides_disabled = {field: overrides[field]['disabled'] for field in overrides if 'disabled' in overrides[field]} or {}
+            self._contact_overrides_initial = {field: overrides[field]['initial'] for field in overrides if 'initial' in overrides[field]} or {}
+            self._contact_overrides_disabled = {field: overrides[field]['disabled'] for field in overrides if 'disabled' in overrides[field]} or {}
 
     @cached_property
     def contact_form(self):
@@ -451,10 +454,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
 
-        if not self.contact_overrides:
-            self.get_contact_overrides()
+        if not self._contact_overrides_set:
+            self._set_contact_overrides()
 
-        initial.update(self.contact_overrides_initial)
+        initial.update(self._contact_overrides_initial)
 
         f = ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                         event=self.request.event,
@@ -464,8 +467,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             f.fields['email'].disabled = True
 
         for name, field in f.fields.items():
-            if name in self.contact_overrides_disabled:
-                field.disabled = self.contact_overrides_disabled[name]
+            if name in self._contact_overrides_disabled:
+                field.disabled = self._contact_overrides_disabled[name]
 
         return f
 
