@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-24 21:09+0000\n"
+"PO-Revision-Date: 2020-10-24 21:31+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -4855,13 +4855,13 @@ msgid "Your export did not contain any data."
 msgstr "Sua exportação não contém nenhum dado."
 
 #: pretix/base/services/invoices.py:68
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "Por favor, concluir o pagamento antes {EXPIRE_DATE}."
+msgstr "Por favor, concluir o pagamento antes {expire_date}."
 
 #: pretix/base/services/invoices.py:79
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{i.company}\n"
@@ -4870,23 +4870,22 @@ msgid ""
 "{i.zipcode} {i.city} {state}\n"
 "{country}"
 msgstr ""
-"{I.company}\n"
-"{I.name}\n"
-"{I.street}\n"
-"{I.zipcode} {} {i.city estado}\n"
-"{país}"
+"{i.company}\n"
+"{i.name}\n"
+"{i.street}\n"
+"{i.zipcode} {i.city} {state}\n"
+"{country}"
 
 #: pretix/base/services/invoices.py:155
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
 msgstr "Participante: {name}"
 
 #: pretix/base/services/invoices.py:170 pretix/plugins/reports/exporters.py:226
-#, fuzzy
 msgctxt "subevent"
 msgid "Date: {}"
-msgstr "Encontro: {}"
+msgstr "Data: {}"
 
 #: pretix/base/services/invoices.py:187
 msgctxt "invoice"
@@ -4918,7 +4917,6 @@ msgid "012345"
 msgstr "012345"
 
 #: pretix/base/services/invoices.py:369
-#, fuzzy
 msgid "Sample product {}"
 msgstr "Produto simples {}"
 
@@ -4950,18 +4948,18 @@ msgid "You are receiving this email because you placed an order for {event}."
 msgstr "Está recebendo este e-mail porque colocou um pedido para {event}."
 
 #: pretix/base/services/orderimport.py:85
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
-"Erro ao importar valor \"{value}\" para a coluna \"{coluna}\" em linha "
-"\"{line}\": {mensagem}"
+"Erro ao importar valor \"{value}\" para a coluna \"{column}\" em linha \""
+"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:117
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr "dados inválidos na linha {fila}: {mensagem}"
+msgstr "dados inválidos na linha {row}: {message}"
 
 #: pretix/base/services/orders.py:61
 msgid ""
@@ -5123,13 +5121,13 @@ msgid "You cannot cancel this order."
 msgstr "Não pode cancelar este pedido."
 
 #: pretix/base/services/orders.py:360
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
-"Este pedido não pode ser cancelado desde o cartão-presente {cartão} comprado "
-"neste pedido já foi resgatada."
+"Este pedido não pode ser cancelado porque o cartão-presente {card} comprado "
+"neste pedido já foi resgatado."
 
 #: pretix/base/services/orders.py:397 pretix/control/forms/orders.py:136
 #, fuzzy
@@ -5179,7 +5177,7 @@ msgid "You need to select a variation of the product."
 msgstr "Precisa selecionar uma variação do produto."
 
 #: pretix/base/services/orders.py:1163
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
 msgstr "A quota {name} não tem capacidade suficiente para executar a operação."
@@ -5260,13 +5258,13 @@ msgstr ""
 "um cartão-presente."
 
 #: pretix/base/services/orders.py:1674
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
-"A posição não pode ser cancelada uma vez que o cartão-presente {cartão} "
-"comprado neste pedido já foi resgatada."
+"A posição não pode ser cancelada uma vez que o cartão-presente {card} "
+"comprado neste pedido já foi resgatado."
 
 #: pretix/base/services/orders.py:2119
 msgid ""
@@ -5377,9 +5375,9 @@ msgid "Plugin: %s"
 msgstr "Plugin: %s"
 
 #: pretix/base/services/vouchers.py:35 pretix/control/logdisplay.py:357
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr "O voucher foi enviado para {destinatário}."
+msgstr "O voucher foi enviado para {recipient}."
 
 #: pretix/base/settings.py:63
 #, fuzzy
@@ -7656,22 +7654,22 @@ msgid "Download reminders are being sent out"
 msgstr "Download de lembretes estão sendo enviados"
 
 #: pretix/base/timeline.py:153
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
-msgstr "Produto \"{name}\" se torna disponível"
+msgstr "Produto \"{name}\" torna-se disponível"
 
 #: pretix/base/timeline.py:164
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr "Produto \"{name}\" se torna indisponível"
+msgstr "Produto \"{name}\" torna-se indisponível"
 
 #: pretix/base/timeline.py:192
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
-msgstr "provedor de pagamento \"{name}\" já não pode ser selecionado"
+msgstr "O provedor de pagamento \"{name}\" já não pode ser selecionado"
 
 #: pretix/base/validators.py:15
 #, python-format
@@ -8261,9 +8259,9 @@ msgstr "Comumente habilitado na porta 465."
 #: pretix/control/forms/event.py:1025 pretix/control/forms/orders.py:491
 #: pretix/control/forms/orders.py:648 pretix/control/forms/vouchers.py:261
 #: pretix/plugins/sendmail/forms.py:62
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "espaços reservados disponíveis: {list}"
+msgstr "Placeholders disponíveis: {list}"
 
 #: pretix/control/forms/event.py:1060
 #, fuzzy
@@ -8556,9 +8554,9 @@ msgstr "Todos os produtos"
 
 #: pretix/control/forms/filter.py:290 pretix/control/forms/filter.py:1080
 #: pretix/control/forms/vouchers.py:100 pretix/control/views/typeahead.py:518
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{product} – Any variation"
-msgstr "{Produto} - Qualquer variação"
+msgstr "{product} - Qualquer variação"
 
 #: pretix/control/forms/filter.py:349 pretix/control/forms/filter.py:354
 #: pretix/control/forms/filter.py:677 pretix/control/forms/filter.py:682
@@ -8785,7 +8783,7 @@ msgstr "Pesquisar vale"
 #: pretix/control/forms/filter.py:1086 pretix/control/forms/vouchers.py:91
 #: pretix/control/views/typeahead.py:526 pretix/control/views/typeahead.py:530
 #: pretix/control/views/vouchers.py:81
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Any product in quota \"{quota}\""
 msgstr "Qualquer produto em quota \"{quota}\""
 
@@ -9123,7 +9121,7 @@ msgid "Create orders as test mode orders"
 msgstr "Criar pedidos como pedidos modo de teste"
 
 #: pretix/control/forms/orderimport.py:36
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "CSV column: \"{name}\""
 msgstr "CSV coluna: \"{name}\""
 
@@ -9365,9 +9363,8 @@ msgid "Do nothing and keep the order as it is."
 msgstr "Não fazer nada e manter o pedido como ela é."
 
 #: pretix/control/forms/orders.py:555
-#, fuzzy
 msgid "The refund amount needs to be positive and less than {}."
-msgstr "O montante da restituição precisa ser positiva e inferior a {}."
+msgstr "O montante da restituição precisa ser positivo e inferior a {}."
 
 #: pretix/control/forms/orders.py:561
 #, fuzzy
@@ -9646,14 +9643,13 @@ msgid "Length of gift card codes"
 msgstr "Comprimento dos códigos de cartão-presente"
 
 #: pretix/control/forms/organizer.py:345
-#, fuzzy
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
 msgstr ""
-"O sistema gera por padrão {} -character códigos de cartão longo do presente. "
-"No entanto, se for necessário um comprimento diferente, ele pode ser "
-"definido aqui."
+"O sistema gera por padrão códigos {}-character longos cartão-presente. No "
+"entanto, se for necessário um comprimento diferente, ele pode ser definido "
+"aqui."
 
 #: pretix/control/forms/organizer.py:350
 msgid "Validity of gift card codes in years"
@@ -9881,23 +9877,22 @@ msgid "CSV input needs to contain a header row in the first line."
 msgstr "CSV de entrada tem de conter uma linha de cabeçalho na primeira linha."
 
 #: pretix/control/forms/vouchers.py:317
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "CSV input needs to contain a field with the header \"{header}\"."
-msgstr "entrada CSV precisa conter um campo com o cabeçalho \"{header}\"."
+msgstr "O CSV precisa conter um campo com o cabeçalho \"{header}\"."
 
 #: pretix/control/forms/vouchers.py:320
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "CSV input contains an unknown field with the header \"{header}\"."
-msgstr ""
-"CSV de entrada contém um campo desconhecido com o cabeçalho \"{header}\"."
+msgstr "O CSV contém um campo desconhecido com o cabeçalho \"{header}\"."
 
 #: pretix/control/forms/vouchers.py:325 pretix/control/forms/vouchers.py:340
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{value} is not a valid email address."
-msgstr "{Value} não é um endereço de email válido."
+msgstr "{value} não é um endereço de email válido."
 
 #: pretix/control/forms/vouchers.py:334
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid value in row {number}."
 msgstr "Valor inválido na linha {number}."
 
@@ -9915,11 +9910,12 @@ msgstr ""
 "destinatários têm de ser especificados."
 
 #: pretix/control/forms/vouchers.py:362
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You generated {codes} vouchers, but entered recipients for {recp} vouchers."
 msgstr ""
-"Você gerado {códigos} vales, mas entrou destinatários para {rECP} vouchers."
+"Você gerou {codes} vales, mas introduziu {recp} destinatários para os "
+"vouchers."
 
 #: pretix/control/forms/vouchers.py:367
 #, fuzzy
@@ -9932,13 +9928,13 @@ msgid "The order has been changed:"
 msgstr "O Pedido foi alterado:"
 
 #: pretix/control/logdisplay.py:39
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
 msgstr ""
-"Posição # {posid}: {old_item} ({OLD_PRICE}) alterado para {NEW_ITEM} "
-"({NEW_PRICE})."
+"Posição #{posid}: {old_item} ({old_price}) alterado para {new_item} "
+"({new_price})."
 
 #: pretix/control/logdisplay.py:47
 #, python-brace-format
@@ -9946,29 +9942,29 @@ msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
 msgstr "Posição # {posid}: Lugar \"{old_seat}\" alterado para \"{new_seat}\"."
 
 #: pretix/control/logdisplay.py:55
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"Posição # {posid}: Data do evento \"{old_event}\" ({OLD_PRICE}) alterado "
-"para \"{new_event}\" ({NEW_PRICE})."
+"Posição # {posid}: Data do evento \"{old_event}\" ({old_price}) alterado "
+"para \"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:63
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr "Preço da posição # {posid} alterada de {OLD_PRICE} para {NEW_PRICE}."
+msgstr "Preço da posição #{posid} alterada de {old_price} para {new_price}."
 
 #: pretix/control/logdisplay.py:71
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax rule of position #{posid} changed from {old_rule} to {new_rule}."
 msgstr ""
-"regra fiscal de posição # {posid} alterada de {old_rule} para {new_rule}."
+"Regra fiscal de posição #{posid} alterada de {old_rule} para {new_rule}."
 
 #: pretix/control/logdisplay.py:78
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax rule of fee #{fee} changed from {old_rule} to {new_rule}."
-msgstr "regra fiscal da taxa # {taxa} alterada de {old_rule} para {new_rule}."
+msgstr "regra fiscal da taxa #{fee} alterada de {old_rule} para {new_rule}."
 
 #: pretix/control/logdisplay.py:85
 #, fuzzy
@@ -9976,50 +9972,50 @@ msgid "A fee has been added"
 msgstr "A taxa foi adicionado"
 
 #: pretix/control/logdisplay.py:87
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A fee was changed from {old_price} to {new_price}."
-msgstr "A taxa foi alterada de {OLD_PRICE} para {NEW_PRICE}."
+msgstr "A taxa foi alterada de {old_price} para {new_price}."
 
 #: pretix/control/logdisplay.py:92
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A fee of {old_price} was removed."
-msgstr "A taxa de {OLD_PRICE} foi removido."
+msgstr "A taxa de {old_price} foi removido."
 
 #: pretix/control/logdisplay.py:99
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr "Posição # {posid} ({old_item}, {OLD_PRICE}) cancelada."
+msgstr "Posição #{posid} ({old_item}, {old_price}) cancelada."
 
 #: pretix/control/logdisplay.py:110
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
 msgstr ""
-"Posição # {posid} criado: {artigo} ({price}) como um add-on para a posição # "
-"{addon_to}."
+"Posição # {posid} criado: {item} ({price}) como um add-on para a posição "
+"#{addon_to}."
 
 #: pretix/control/logdisplay.py:117
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr "Posição # {posid} criado: {artigo} ({price})."
+msgstr "Posição #{posid} criado: {item} ({price})."
 
 #: pretix/control/logdisplay.py:123
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr "Um novo segredo foi gerado para a posição # {posid}."
+msgstr "Um novo segredo foi gerado para a posição #{posid}."
 
 #: pretix/control/logdisplay.py:135
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
-"Posição # {posid} ({old_item}, {} OLD_PRICE), divididos em novo pedido: {fim}"
+"Posição #{posid} ({old_item}, {old_price}), divididos em novo pedido: {order}"
 
 #: pretix/control/logdisplay.py:142
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This order has been created by splitting the order {order}"
-msgstr "Este pedido foi criada por cisão do pedido {fim}"
+msgstr "Este pedido foi criado por divisão do pedido {order}"
 
 #: pretix/control/logdisplay.py:161 pretix/control/logdisplay.py:163
 #: pretix/control/logdisplay.py:479 pretix/control/logdisplay.py:481
@@ -10029,99 +10025,99 @@ msgid "(unknown)"
 msgstr "(desconhecido)"
 
 #: pretix/control/logdisplay.py:168
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"varredura desconhecida de código \"{código de barras}\" em {data e hora} "
-"para a lista de \"{list}\", digite \"{type}\"."
+"Scan de código desconhecido \"{barcode}\" em {datetime} para a lista de \""
+"{list}\", tipo \"{type}\"."
 
 #: pretix/control/logdisplay.py:178
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
-"varredura desconhecida de código \"{código de barras}\" para a lista de "
-"\"{list}\", digite \"{type}\"."
+"Scan de código desconhecido \"{barcode}\" para a lista \"{list}\", tipo \""
+"{type}\"."
 
 #: pretix/control/logdisplay.py:189
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"varredura desconhecida de código \"{código de barras}\" em {data e hora} "
-"para a lista de \"{list}\", digite \"{type}\"."
+"Scan de código desconhecido \"{barcode}\" em {datetime} para a lista de \""
+"{list}\", tipo \"{type}\", foi carregada."
 
 #: pretix/control/logdisplay.py:199
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
-"varredura desconhecida de código \"{código de barras}\" para a lista de "
-"\"{list}\", digite \"{type}\"."
+"Scan de código removido \"{barcode}\" para a lista de \"{list}\", tipo \""
+"{type}, foi carregada."
 
 #: pretix/control/logdisplay.py:210
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
-"Negado varredura de posição # {posid} em {data e hora} para a lista de "
-"\"{list}\", digite \"{type}\", o código de erro \"{errorcode}\"."
+"Scan negado na posição # {posid} em {datetime} para a lista de \"{list}\", "
+"tipo \"{type}\", o código de erro \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:221
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
 msgstr ""
-"Negado varredura de posição # {posid} para a lista de \"{list}\", digite "
-"\"{type}\", o código de erro \"{errorcode}\"."
+"Scan negado na posição # {posid} para a lista \"{list}\", tipo \"{type}\", "
+"código de erro \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:231
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
 msgstr ""
-"Posição # {posid} foi verificado em {data e hora} para a lista de \"{list}\"."
+"Posição # {posid} foi verificado em {datetime} para a lista de \"{list}\"."
 
 #: pretix/control/logdisplay.py:237
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Position #{posid} has been checked out for list \"{list}\"."
-msgstr "Posição # {posid} foi verificado para a lista de \"{list}\"."
+msgstr "Posição # {posid} foi verificado para a lista \"{list}\"."
 
 #: pretix/control/logdisplay.py:243
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
 msgstr ""
-"Posição # {posid} foi verificado em {data e hora} para a lista de \"{list}\"."
+"Posição # {posid} foi verificado em {datetime} para a lista de \"{list}\"."
 
 #: pretix/control/logdisplay.py:249
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr "Posição # {posid} foi check-in para lista de \"{list}\"."
+msgstr "Posição # {posid} deu check-in para lista \"{list}\"."
 
 #: pretix/control/logdisplay.py:256
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
-"Uma varredura para a posição # {posid} em {data e hora} para a lista de "
-"\"{list}\" foi enviado mesmo que já foi digitalizado."
+"Scan para a posição # {posid} em {datetime} para a lista \"{list}\" foi "
+"enviada apesar de já ter sido digitalizado."
 
 #: pretix/control/logdisplay.py:264
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
 "Posição # {posid} foi digitalizado e rejeitada porque já foi verificado "
-"antes na lista de \"{list}\"."
+"antes na lista \"{list}\"."
 
 #: pretix/control/logdisplay.py:275
 #, fuzzy
@@ -10189,9 +10185,9 @@ msgid "The order has been reactivated."
 msgstr "O Pedido foi reativado."
 
 #: pretix/control/logdisplay.py:288
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The test mode order {code} has been deleted."
-msgstr "O Pedido modo de teste {code} foi excluído."
+msgstr "O Pedido em modo de teste {code} foi excluído."
 
 #: pretix/control/logdisplay.py:289
 #, fuzzy
@@ -10215,11 +10211,11 @@ msgid "The order has been denied."
 msgstr "O pedido foi negado."
 
 #: pretix/control/logdisplay.py:293
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
 msgstr ""
-"O endereço de email foi alterado de \"{OLD_EMAIL}\" para \"{NEW_EMAIL}\"."
+"O endereço de email foi alterado de \"{old_email}\" para \"{new_email}\"."
 
 #: pretix/control/logdisplay.py:295
 msgid "The order locale has been changed."
@@ -10250,7 +10246,7 @@ msgid "The order's flag to require attention at check-in has been toggled."
 msgstr "a bandeira do fim de exigir atenção no check-in foi alternado."
 
 #: pretix/control/logdisplay.py:302
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A new payment {local_id} has been started instead of the previous one."
 msgstr "Um novo pagamento {local_id} foi iniciado em vez do anterior."
 
@@ -10373,34 +10369,34 @@ msgstr ""
 "o utilizador ."
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has been confirmed."
 msgstr "Pagamento {local_id} foi confirmado."
 
 #: pretix/control/logdisplay.py:327
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has been canceled."
 msgstr "Pagamento {local_id} foi cancelada."
 
 #: pretix/control/logdisplay.py:328
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Canceling payment {local_id} has failed."
 msgstr "Cancelamento de pagamento {local_id} falhou."
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has been started."
 msgstr "Pagamento {local_id} foi iniciado."
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has failed."
 msgstr "Pagamento {local_id} falhou."
 
 #: pretix/control/logdisplay.py:331
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr "O Pedido não poderia ser marcado como pago: {mensagem}"
+msgstr "O Pedido não poderia ser marcado como pago: {message}"
 
 #: pretix/control/logdisplay.py:332
 #, fuzzy
@@ -10408,12 +10404,12 @@ msgid "The order has been overpaid."
 msgstr "O Pedido foi pago em excesso."
 
 #: pretix/control/logdisplay.py:333
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has been created."
 msgstr "Reembolso {local_id} foi criado."
 
 #: pretix/control/logdisplay.py:334
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
 msgstr "Reembolso {local_id} foi criado por uma entidade externa."
 
@@ -10423,17 +10419,17 @@ msgid "The customer requested you to issue a refund."
 msgstr "O cliente pediu-lhe para emitir um reembolso."
 
 #: pretix/control/logdisplay.py:336
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has been completed."
-msgstr "Reembolso {local_id} foi concluída."
+msgstr "Reembolso {local_id} foi concluído."
 
 #: pretix/control/logdisplay.py:337
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has been canceled."
-msgstr "Reembolso {local_id} foi cancelada."
+msgstr "Reembolso {local_id} foi cancelado."
 
 #: pretix/control/logdisplay.py:338
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has failed."
 msgstr "Reembolso {local_id} falhou."
 
@@ -10460,16 +10456,16 @@ msgid "Your two-factor emergency codes have been regenerated."
 msgstr "Seus códigos de emergência de dois fatores foram regenerados."
 
 #: pretix/control/logdisplay.py:343
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
 msgstr ""
 "Um novo dispositivo de autenticação de dois fatores \"{name}\" foi "
-"adicionada à sua conta."
+"adicionado à sua conta."
 
 #: pretix/control/logdisplay.py:345
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
@@ -10508,7 +10504,7 @@ msgid "The password has been reset."
 msgstr "A palavra-passe foi redefinida."
 
 #: pretix/control/logdisplay.py:355
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
 msgstr "O organizador \"{name}\" foi eliminado."
 
@@ -10533,9 +10529,9 @@ msgid "The voucher has been deleted."
 msgstr "O voucher foi eliminada."
 
 #: pretix/control/logdisplay.py:361
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr "O voucher foi redimido a fim {order_code}."
+msgstr "O voucher foi redimido no pedido {order_code}."
 
 #: pretix/control/logdisplay.py:362
 #, fuzzy
@@ -10553,19 +10549,19 @@ msgid "The product has been deleted."
 msgstr "O produto foi excluído."
 
 #: pretix/control/logdisplay.py:365
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The variation \"{value}\" has been created."
 msgstr "A variação \"{value}\" foi criada."
 
 #: pretix/control/logdisplay.py:366
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr "A variação \"{value}\" foi eliminado."
+msgstr "A variação \"{value}\" foi eliminada."
 
 #: pretix/control/logdisplay.py:367
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr "A variação \"{value}\" foi alterado."
+msgstr "A variação \"{value}\" foi alterada."
 
 #: pretix/control/logdisplay.py:368
 #, fuzzy
@@ -10894,17 +10890,16 @@ msgstr ""
 "{list}\"."
 
 #: pretix/control/logdisplay.py:489
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
-"Posição # {posid} foi verificado outra vez em {data e hora} na lista de "
-"\"{list}\"."
+"Posição #{posid} foi verificado outra vez em {datetime} na lista \"{list}\"."
 
 #: pretix/control/logdisplay.py:504
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "O check-in de posição # {posid} na lista de \"{lista}\" foi revertido."
+msgstr "O check-in de posição #{posid} na lista \"{list}\" foi revertido."
 
 #: pretix/control/logdisplay.py:510
 #, python-brace-format
@@ -10927,22 +10922,22 @@ msgid "{user} has been invited to the team."
 msgstr "{user} foi convidado para a equipa."
 
 #: pretix/control/logdisplay.py:524
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr "Convidar para {user} foi reenviado."
+msgstr "O convite para {user} foi reenviado."
 
 #: pretix/control/logdisplay.py:527
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The invite for {user} has been revoked."
-msgstr "O convite para {user} foi revogada."
+msgstr "O convite para {user} foi revogado."
 
 #: pretix/control/logdisplay.py:530
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The token \"{name}\" has been created."
 msgstr "O token \"{name}\" foi criado."
 
 #: pretix/control/logdisplay.py:533
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The token \"{name}\" has been revoked."
 msgstr "O token \"{name}\" foi revogado."
 
@@ -10952,7 +10947,7 @@ msgid "Your account settings have been changed."
 msgstr "As configurações da conta foram alterados."
 
 #: pretix/control/logdisplay.py:538 pretix/control/views/user.py:197
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "O seu endereço de email foi alterado para {email}."
 
@@ -10972,14 +10967,12 @@ msgid "Your account has been disabled."
 msgstr "Sua conta foi desativada."
 
 #: pretix/control/logdisplay.py:548
-#, fuzzy
 msgid "You impersonated {}."
-msgstr "Você representado {}."
+msgstr "Você representou {}."
 
 #: pretix/control/logdisplay.py:551
-#, fuzzy
 msgid "You stopped impersonating {}."
-msgstr "Você parou representando {}."
+msgstr "Você parou de representar {}."
 
 #: pretix/control/middleware.py:111
 #, fuzzy
@@ -14807,7 +14800,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:101
 #, python-format
 msgid "This order is currently overpaid by %(amount)s."
-msgstr "Este pedido está em excesso de valor por %(amount)s"
+msgstr "Este pedido está em excesso de valor por %(amount)s."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:105
 #, python-format
@@ -14848,8 +14841,8 @@ msgid ""
 "We know that this email address works because the user clicked a link we "
 "sent them."
 msgstr ""
-"Sabemos que este endereço de e-mail funciona, porque o utilizador  clicou "
-"num link que nós enviamos."
+"Sabemos que este endereço de e-mail funciona, porque o utilizador clicou num "
+"link que nós enviamos."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:216
 msgid "Rebuild the invoice with updated data but the same invoice number."
@@ -16005,7 +15998,7 @@ msgstr "Tem certeza de que deseja excluir a equipa?"
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
 #, fuzzy
 msgid "Gate:"
-msgstr "Encontro: {}"
+msgstr "Gate:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11
@@ -17997,7 +17990,7 @@ msgid "Attendees (paid)"
 msgstr "Os participantes (pago)"
 
 #: pretix/control/views/dashboards.py:102
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Total revenue ({currency})"
 msgstr "A receita total ({currency})"
 
@@ -18017,9 +18010,9 @@ msgid "total waiting list length"
 msgstr "comprimento total lista de espera"
 
 #: pretix/control/views/dashboards.py:220
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{quota} left"
-msgstr "{Quota} esquerda"
+msgstr "{quota} restante"
 
 #: pretix/control/views/dashboards.py:240
 #, fuzzy
@@ -18052,7 +18045,7 @@ msgid "in private test mode"
 msgstr "em modo de teste privado"
 
 #: pretix/control/views/dashboards.py:272
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Present – {list}"
 msgstr "Presente - {list}"
 
@@ -18665,27 +18658,24 @@ msgstr ""
 "suporta reembolsos totais."
 
 #: pretix/control/views/orders.py:870
-#, fuzzy
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
 msgstr ""
-"Um dos reembolsos não conseguiu ser processado. Você deve repetir-se à "
+"Um dos reembolsos não conseguiu ser processado. Você deve repetir a "
 "devolução de uma maneira diferente. A mensagem de erro foi: {}"
 
 #: pretix/control/views/orders.py:876
-#, fuzzy
 msgid "A refund of {} has been processed."
 msgstr "Um reembolso de {} foi processado."
 
 #: pretix/control/views/orders.py:880
-#, fuzzy
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
 "Um reembolso de {} foi salvo, mas ainda não foi totalmente executado. Você "
-"pode marcá-la como completa abaixo."
+"pode marcá-la como completo abaixo."
 
 #: pretix/control/views/orders.py:902
 msgid ""
@@ -18904,13 +18894,13 @@ msgid "All orders have been canceled."
 msgstr "Todas as encomendas foram canceladas."
 
 #: pretix/control/views/orders.py:2047
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
 "check all uncanceled orders."
 msgstr ""
-"As pedidos foram cancelados. Ocorreu um erro com {count} pedidos, por favor, "
-"verifique todas as pedidos não cancelados."
+"Os pedidos foram cancelados. Ocorreu um erro com {count} pedidos, por favor, "
+"verifique todos os pedidos não cancelados."
 
 #: pretix/control/views/orders.py:2068
 msgid "Your input was not valid."
@@ -19014,7 +19004,6 @@ msgid "The new member has been added to the team."
 msgstr "O novo membro foi adicionado à equipa."
 
 #: pretix/control/views/organizer.py:680
-#, fuzzy
 msgid ""
 "A new API token has been created with the following secret: {}\n"
 "Please copy this secret to a safe place. You will not be able to view it "
@@ -19500,9 +19489,9 @@ msgid "Badge layout changed."
 msgstr "Emblema de layout alterado."
 
 #: pretix/plugins/badges/signals.py:168
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Badge layout {val}"
-msgstr "disposição emblema {val}"
+msgstr "Layout de badge {val}"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
@@ -19574,9 +19563,8 @@ msgid "The selected badge layout been deleted."
 msgstr "O layout badge selecionado foi excluído."
 
 #: pretix/plugins/badges/views.py:170
-#, fuzzy
 msgid "Badge layout: {}"
-msgstr "layout de identificação: {}"
+msgstr "Layout de identificação: {}"
 
 #: pretix/plugins/banktransfer/__init__.py:10
 #: pretix/plugins/banktransfer/__init__.py:13
@@ -22735,7 +22723,7 @@ msgstr "O período de pré-venda para este evento é longo."
 #: pretix/presale/views/widget.py:570
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr "A pré-venda para este evento terá início em %(date)às %(time)s."
+msgstr "A pré-venda para este evento terá início em %(date)s às %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:162
 #: pretix/presale/views/widget.py:575
