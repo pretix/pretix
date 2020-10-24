@@ -184,7 +184,7 @@ contact_form_fields_overrides = EventPluginSignal(
     providing_args=["request"]
 )
 """
-This signals allows you to override fields of the contact form that is presented during checkout
+This signal allows you to override fields of the contact form that is presented during checkout
 and by default only asks for the email address. It is also being used for the invoice address
 form. You are supposed to return a dictionary of dictionaries with globally unique keys. The
 value-dictionary should contain one or more of the following keys: ``initial``, ``disabled``. The
