@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-21 17:02+0000\n"
-"PO-Revision-Date: 2020-10-24 05:00+0000\n"
+"PO-Revision-Date: 2020-10-24 16:27+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -107,7 +107,7 @@ msgstr "Rajoita tapahtumiin"
 
 #: pretix/api/serializers/cart.py:59 pretix/api/serializers/order.py:942
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "Tuotteelle \"{}\" ei ole asetettu kiintiötä"
+msgstr "Tuotteelle \"{}\" ei ole asetettu kiintiötä."
 
 #: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:954
 msgid ""
@@ -339,7 +339,7 @@ msgstr "Verkkokauppa"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr "Oletus"
+msgstr "Oletusarvo"
 
 #: pretix/base/email.py:148
 msgid "Simple with logo"
@@ -1144,10 +1144,8 @@ msgid "Seat number"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:396
-#, fuzzy
-#| msgid "Order code"
 msgid "Order comment"
-msgstr "Tilauskoodi"
+msgstr "Tilauksen kommentti"
 
 #: pretix/base/exporters/orderlist.py:550
 msgid "Order payments and refunds"
@@ -7055,10 +7053,8 @@ msgid ""
 msgstr "Voit aktivoida joko SSL:n tai STARTTLS:n, mutta et molempia yhtäaikaa."
 
 #: pretix/control/forms/event.py:1073
-#, fuzzy
-#| msgid "Ticket check-in reverted"
 msgid "Ticket code generator"
-msgstr "Lipun lunastus peruutettu"
+msgstr "Lippukoodigeneraattori"
 
 #: pretix/control/forms/event.py:1074
 msgid "For advanced users, usually does not need to be changed."
@@ -11022,10 +11018,8 @@ msgid "Download time"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:66
-#, fuzzy
-#| msgid "Ticket downloads"
 msgid "Ticket codes"
-msgstr "Lippujen lataus"
+msgstr "Lippukoodit"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
