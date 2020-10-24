@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-24 17:36+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2020-10-24 19:56+0000\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -23686,38 +23686,32 @@ msgid "The payment is too late to be accepted."
 msgstr "O pagamento é tarde demais para ser aceito."
 
 #: pretix/presale/views/order.py:405
-#, fuzzy
 msgid "An invoice has been generated."
-msgstr "Uma factura foi gerada."
+msgstr "Foi gerada uma fatura."
 
 #: pretix/presale/views/order.py:490
-#, fuzzy
 msgid "The payment method for this order cannot be changed."
-msgstr "O método de pagamento para este fim não pode ser alterado."
+msgstr "O método de pagamento para esta encomenda não pode ser alterado."
 
 #: pretix/presale/views/order.py:501
-#, fuzzy
 msgid "A payment is currently pending for this order."
-msgstr "Um pagamento está pendente para este fim."
+msgstr "Um pagamento para esta encomenda está pendente."
 
 #: pretix/presale/views/order.py:733
 msgid "You cannot modify this order"
-msgstr "Você não pode modificar esse pedido"
+msgstr "Você não pode modificar esta encomenda."
 
 #: pretix/presale/views/order.py:796 pretix/presale/views/order.py:801
-#, fuzzy
 msgid "You chose an invalid cancellation fee."
-msgstr "Você escolheu uma taxa de cancelamento inválido."
+msgstr "Você escolheu uma taxa de cancelamento inválida."
 
 #: pretix/presale/views/order.py:826
-#, fuzzy
 msgid "The cancellation has been requested."
 msgstr "O cancelamento foi solicitado."
 
 #: pretix/presale/views/order.py:880
-#, fuzzy
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr "Download bilhete é (ainda) não habilitado para esse fim."
+msgstr "O download do bilhete (ainda) não está disponível para esta encomenda."
 
 #: pretix/presale/views/order.py:889
 #, fuzzy
@@ -23826,99 +23820,80 @@ msgid "from %(start_date)s"
 msgstr "a partir de (%) s data_início"
 
 #: pretix/settings.py:412
-#, fuzzy
 msgid "English"
 msgstr "Inglês"
 
 #: pretix/settings.py:413
-#, fuzzy
 msgid "German"
-msgstr "alemão"
+msgstr "Alemão"
 
 #: pretix/settings.py:414
-#, fuzzy
 msgid "German (informal)"
 msgstr "Alemão (informal)"
 
 #: pretix/settings.py:415
-#, fuzzy
 msgid "Arabic"
-msgstr "árabe"
+msgstr "Árabe"
 
 #: pretix/settings.py:416
-#, fuzzy
 msgid "Chinese (simplified)"
-msgstr "Chinês simplificado)"
+msgstr "Chinês (simplificado)"
 
 #: pretix/settings.py:417
-#, fuzzy
 msgid "Danish"
-msgstr "dinamarquês"
+msgstr "Dinamarquês"
 
 #: pretix/settings.py:418
-#, fuzzy
 msgid "Dutch"
-msgstr "holandês"
+msgstr "Holandês"
 
 #: pretix/settings.py:419
-#, fuzzy
 msgid "Dutch (informal)"
 msgstr "Holandês (informal)"
 
 #: pretix/settings.py:420
-#, fuzzy
 msgid "French"
-msgstr "francês"
+msgstr "Francês"
 
 #: pretix/settings.py:421
-#, fuzzy
 msgid "Finnish"
-msgstr "dinamarquês"
+msgstr "Finlandês"
 
 #: pretix/settings.py:422
-#, fuzzy
 msgid "Greek"
-msgstr "grego"
+msgstr "Grego"
 
 #: pretix/settings.py:423
-#, fuzzy
 msgid "Italian"
-msgstr "italiano"
+msgstr "Italiano"
 
 #: pretix/settings.py:424
-#, fuzzy
 msgid "Latvian"
-msgstr "letão"
+msgstr "Letão"
 
 #: pretix/settings.py:425
-#, fuzzy
 msgid "Polish"
-msgstr "polonês"
+msgstr "Polaco"
 
 #: pretix/settings.py:426
-#, fuzzy
 msgid "Portuguese (Portugal)"
-msgstr "Português (Brasil)"
+msgstr "Português (Portugal)"
 
 #: pretix/settings.py:427
-#, fuzzy
 msgid "Portuguese (Brazil)"
 msgstr "Português (Brasil)"
 
 #: pretix/settings.py:428
-#, fuzzy
 msgid "Russian"
-msgstr "russo"
+msgstr "Russo"
 
 #: pretix/settings.py:429
-#, fuzzy
 msgid "Spanish"
-msgstr "espanhol"
+msgstr "Espanhol"
 
 #: pretix/settings.py:430
-#, fuzzy
 msgid "Turkish"
-msgstr "turco"
+msgstr "Turco"
 
 #: pretix/settings.py:725
 msgid "User profile only"
