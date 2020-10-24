@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-24 17:20+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"PO-Revision-Date: 2020-10-24 17:34+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -6476,7 +6476,7 @@ msgstr ""
 "enviados. O padrão é o nome do evento."
 
 #: pretix/base/settings.py:1289
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6492,16 +6492,16 @@ msgstr ""
 "Olá,\n"
 "\n"
 "receber esta mensagem porque você nos pediu para enviar o link\n"
-"a seu pedido para {evento}.\n"
+"a seu pedido para {event}.\n"
 "\n"
 "Você pode mudar os detalhes do pedido e ver o status do seu pedido no\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1302
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6515,16 +6515,16 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"alguém solicitou uma lista das suas encomendas para {evento}.\n"
+"alguém solicitou uma lista das suas encomendas para {event}.\n"
 "A lista é a seguinte:\n"
 "\n"
-"{pedidos}\n"
+"{orders}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1314
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -6538,16 +6538,16 @@ msgid ""
 msgstr ""
 "Olá {attendee_name},\n"
 "\n"
-"você foi registrado para {evento} com sucesso.\n"
+"você foi registrado para {event} com sucesso.\n"
 "\n"
 "Você pode ver os detalhes eo status de seu bilhete aqui:\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1326
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6562,18 +6562,18 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"a sua encomenda {evento} foi bem sucedida. Como você só ordenou produtos "
+"a sua encomenda {event} foi bem sucedida. Como você só ordenou produtos "
 "gratuitos,\n"
 "não é exigido o pagamento.\n"
 "\n"
 "Você pode mudar os detalhes do pedido e ver o status do seu pedido no\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1343
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6589,19 +6589,19 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"recebemos com sucesso a sua encomenda {evento}. Desde que você pediu\n"
+"recebemos com sucesso a sua encomenda {event}. Desde que você pediu\n"
 "um produto que requer a aprovação pelo organizador do evento, pedimos-lhe "
 "que\n"
 "ser paciente e esperar para o nosso próximo e-mail.\n"
 "\n"
 "Você pode mudar os detalhes do pedido e ver o status do seu pedido no\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1357
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6619,20 +6619,20 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"recebemos com sucesso a sua encomenda {evento} com um valor total de\n"
+"recebemos com sucesso a sua encomenda {event} com um valor total de\n"
 "de {total_with_currency}. Por favor, concluir o pagamento antes "
-"{EXPIRE_DATE}.\n"
+"{expire_date}.\n"
 "\n"
-"{informação de pagamento}\n"
+"{payment_info}\n"
 "\n"
 "Você pode mudar os detalhes do pedido e ver o status do seu pedido no\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1376
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -6646,16 +6646,16 @@ msgid ""
 msgstr ""
 "Olá {attendee_name},\n"
 "\n"
-"um bilhete para {evento} foi ordenado para você.\n"
+"um bilhete para {event} foi ordenado para você.\n"
 "\n"
 "Você pode ver os detalhes eo status de seu bilhete aqui:\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1388
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6669,16 +6669,16 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"a sua encomenda {evento} foi alterado.\n"
+"a sua encomenda {event} foi alterado.\n"
 "\n"
 "Você pode visualizar o status do seu pedido a\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1400
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6694,18 +6694,18 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"recebemos o seu pagamento para {evento}. Obrigado!\n"
+"recebemos o seu pagamento para {event}. Obrigado!\n"
 "\n"
-"{informação de pagamento}\n"
+"{payment_info}\n"
 "\n"
 "Você pode mudar os detalhes do pedido e ver o status do seu pedido no\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1418
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -6719,16 +6719,16 @@ msgid ""
 msgstr ""
 "Olá {attendee_name},\n"
 "\n"
-"um bilhete para {evento} que foi ordenada para você agora é pago.\n"
+"um bilhete para {event} que foi ordenada para você agora é pago.\n"
 "\n"
 "Você pode ver os detalhes eo status de seu bilhete aqui:\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1434
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6744,15 +6744,15 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"que ainda não recebeu um pagamento total para a sua encomenda {evento}.\n"
+"que ainda não recebeu um pagamento total para a sua encomenda {event}.\n"
 "Tenha em mente que só garantir a sua encomenda se recebermos\n"
-"seu pagamento antes {EXPIRE_DATE}.\n"
+"seu pagamento antes {expire_date}.\n"
 "\n"
 "Você pode visualizar as informações de pagamento e o status do seu pedido a\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1448
 #, python-brace-format
@@ -6797,10 +6797,10 @@ msgstr ""
 "resgatar o voucher dentro desse período de tempo.\n"
 "\n"
 "Cumprimentos,\n"
-"A equipa {evento}"
+"A equipa {event}"
 
 #: pretix/base/settings.py:1471
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6814,16 +6814,16 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"seu pedido {code} para {evento} foi cancelada.\n"
+"seu pedido {code} para {event} foi cancelada.\n"
 "\n"
 "Você pode ver os detalhes de seu pedido no\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1483
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6841,20 +6841,20 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"que aprovou a sua encomenda {evento} e terá prazer em recebê-lo\n"
+"que aprovou a sua encomenda {event} e terá prazer em recebê-lo\n"
 "em nosso evento.\n"
 "\n"
-"Por favor, continuem pagando por seu pedido antes {EXPIRE_DATE}.\n"
+"Por favor, continuem pagando por seu pedido antes {expire_date}.\n"
 "\n"
 "Você pode selecionar um método de pagamento e realizar o pagamento aqui:\n"
 "\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1499
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6869,18 +6869,18 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"que aprovou a sua encomenda {evento} e terá prazer em recebê-lo\n"
+"que aprovou a sua encomenda {event} e terá prazer em recebê-lo\n"
 "em nosso evento. Como você pedidos apenas produtos livres, nenhum pagamento "
 "é exigido.\n"
 "\n"
 "Você pode mudar os detalhes do pedido e ver o status do seu pedido no\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1512
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6897,19 +6897,19 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"Infelizmente, nós negado seu pedido para que {evento}.\n"
+"Infelizmente, nós negado seu pedido para que {event}.\n"
 "\n"
-"{Comente}\n"
+"{comment}\n"
 "\n"
 "Você pode ver os detalhes do seu pedido aqui:\n"
 "\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1527
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6922,13 +6922,13 @@ msgstr ""
 "Olá,\n"
 "\n"
 "Você pode mudar os detalhes do pedido e ver o status do seu pedido no\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1545
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -6942,16 +6942,16 @@ msgid ""
 msgstr ""
 "Olá {attendee_name},\n"
 "\n"
-"estiver registado para {evento}.\n"
+"estiver registado para {event}.\n"
 "\n"
 "Se você não fazê-lo, já que você pode baixar o seu bilhete aqui:\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1557
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6965,13 +6965,13 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"você comprou um bilhete para {evento}.\n"
+"você comprou um bilhete para {event}.\n"
 "\n"
 "Se você não fazê-lo, já que você pode baixar o seu bilhete aqui:\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/base/settings.py:1679
 #, fuzzy
@@ -8033,10 +8033,10 @@ msgid "Signature"
 msgstr "Assinatura"
 
 #: pretix/control/forms/event.py:807
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr ""
-"Este será anexado a cada e-mail. espaços reservados disponíveis: {evento}"
+"Este será anexado a cada e-mail. espaços reservados disponíveis: {event}"
 
 #: pretix/control/forms/event.py:812
 #, fuzzy
@@ -9387,12 +9387,12 @@ msgid "Send information to waiting list"
 msgstr "Enviar informações para lista de espera"
 
 #: pretix/control/forms/orders.py:668 pretix/control/forms/orders.py:694
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Canceled: {event}"
-msgstr "Cancelado: {evento}"
+msgstr "Cancelado: {event}"
 
 #: pretix/control/forms/orders.py:679
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9410,20 +9410,20 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"com este e-mail, lamentamos informá-lo que {evento} foi cancelada.\n"
+"com este e-mail, lamentamos informá-lo que {event} foi cancelada.\n"
 "\n"
-"Nós devolvemos {REFUND_AMOUNT} para o seu método de pagamento original.\n"
+"Nós devolvemos {refund_amount} para o seu método de pagamento original.\n"
 "\n"
 "Você pode ver o estado atual do seu pedido aqui:\n"
 "\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
 "\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/control/forms/orders.py:706
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9437,13 +9437,13 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"com este e-mail, lamentamos informá-lo que {evento} foi cancelada.\n"
+"com este e-mail, lamentamos informá-lo que {event} foi cancelada.\n"
 "\n"
 "É, portanto, não receberá um ticket a partir da lista de espera.\n"
 "\n"
 "Cumprimentos,\n"
 "\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/control/forms/orders.py:737
 #, fuzzy
@@ -9738,12 +9738,12 @@ msgid "Send vouchers via email"
 msgstr "Enviar vouchers via e-mail"
 
 #: pretix/control/forms/vouchers.py:231
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your voucher for {event}"
-msgstr "Seu voucher para {evento}"
+msgstr "Seu voucher para {event}"
 
 #: pretix/control/forms/vouchers.py:237
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9763,15 +9763,15 @@ msgstr ""
 "\n"
 "com este e-mail, estamos enviando-lhe um ou mais vouchers para {evento}:\n"
 "\n"
-"{Voucher_list}\n"
+"{voucher_list}\n"
 "\n"
 "Você pode trocá-los aqui em nossa loja bilhete:\n"
 "\n"
-"{Url}\n"
+"{url}\n"
 "\n"
 "Cumprimentos,\n"
 "\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/control/forms/vouchers.py:243
 #, fuzzy
@@ -18496,7 +18496,7 @@ msgid "Your cancellation request"
 msgstr "O seu pedido de cancelamento"
 
 #: pretix/control/views/orders.py:639
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -18510,7 +18510,7 @@ msgstr ""
 "Infelizmente, não fomos capazes de satisfazer o seu pedido e cancelar a sua "
 "encomenda.\n"
 "\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/control/views/orders.py:683
 #, fuzzy
@@ -18585,7 +18585,7 @@ msgid "Your gift card code"
 msgstr "Seu código do cartão do presente"
 
 #: pretix/control/views/orders.py:911
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -18603,7 +18603,7 @@ msgstr ""
 "Você pode usar o código de cartão-presente {giftcard} para pagar futuras "
 "compras de bilhetes em nossa loja.\n"
 "\n"
-"Seu {evento} equipa"
+"Seu {event} equipa"
 
 #: pretix/control/views/orders.py:922
 #, fuzzy
