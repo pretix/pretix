@@ -168,7 +168,7 @@ Event selection
 In most cases, your application should allow the user to select the event and check-in list they work with manually
 from a list. However, in some cases it is required to automatically configure the device for the correct event, for
 example in a kiosk-like situation where nobody is operating the device. In this case, the app can query the server
-for a suggestion which event should be used. You can also submit the confiugration that is currently in use via
+for a suggestion which event should be used. You can also submit the configuration that is currently in use via
 query parameters:
 
 .. sourcecode:: http

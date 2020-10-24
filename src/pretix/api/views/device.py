@@ -234,13 +234,19 @@ class EventSelectionView(APIView):
         if not checkinlist:
             checkinlist = checkinlist_qs.first()
         r = {
-            'event': ev.event.slug if isinstance(ev, SubEvent) else ev.slug,
+            'event': {
+                'slug': ev.event.slug if isinstance(ev, SubEvent) else ev.slug,
+                'name': str(ev.event.name) if isinstance(ev, SubEvent) else str(ev.name),
+            },
             'subevent': ev.pk if isinstance(ev, SubEvent) else None,
             'checkinlist': checkinlist.pk if checkinlist else None,
         }
 
         if r == {
-            'event': current_event.slug if current_event else None,
+            'event': {
+                'slug': current_event.slug if current_event else None,
+                'name': str(current_event.name) if current_event else None,
+            },
             'subevent': (
                 int(self.request.query_params.get('current_subevent'))
                 if self.request.query_params.get('current_subevent') else None
