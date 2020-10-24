@@ -418,10 +418,12 @@ ALL_LANGUAGES = [
     ('nl', _('Dutch')),
     ('nl-informal', _('Dutch (informal)')),
     ('fr', _('French')),
+    ('fi', _('Finnish')),
     ('el', _('Greek')),
     ('it', _('Italian')),
     ('lv', _('Latvian')),
     ('pl', _('Polish')),
+    ('pt-pt', _('Portuguese (Portugal)')),
     ('pt-br', _('Portuguese (Brazil)')),
     ('ru', _('Russian')),
     ('es', _('Spanish')),
@@ -431,7 +433,7 @@ LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_INCUBATING = {
-    'pt-br', 'pl',
+    'pt-br', 'pl', 'fi', 'pt-pt'
 } - set(config.get('languages', 'allow_incubating', fallback='').split(','))
 LANGUAGES_RTL = {
     'ar', 'hw'
