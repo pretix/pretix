@@ -5,6 +5,7 @@ from unittest import mock
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from pytz import UTC
 
 from pretix.base.models import (
@@ -52,6 +53,8 @@ RES_JOB = {
          'payer': 'Foo',
          'reference': '',
          'checksum': '',
+         'iban': '',
+         'bic': '',
          'amount': '0.00',
          'date': 'unknown',
          'state': 'error',
@@ -129,3 +132,33 @@ def test_api_create(env, client):
     assert rdata['transactions'][0]['checksum']
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db(transaction=True)
+def test_api_create_with_iban_bic(env, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.post(
+        '/api/v1/organizers/{}/bankimportjobs/'.format(env[0].organizer.slug), json.dumps({
+            'event': 'dummy',
+            'transactions': [
+                {
+                    'payer': 'Foo',
+                    'reference': 'DUMMY-1Z3AS',
+                    'amount': '23.00',
+                    'iban': 'NL79RABO5373380466',
+                    'bic': 'GENODEM1GLS',
+                    'date': 'yesterday'  # test bogus date format
+                }
+            ]
+        }), content_type="application/json"
+    )
+    assert r.status_code == 201
+    rdata = json.loads(r.content.decode('utf-8'))
+    # This is only because we don't run celery in tests, otherwise it wouldn't be completed yet.
+    assert rdata['state'] == 'completed'
+    assert len(rdata['transactions']) == 1
+    assert rdata['transactions'][0]['checksum']
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+    with scopes_disabled():
+        assert env[2].payments.first().info_data['iban'] == 'NL79RABO5373380466'

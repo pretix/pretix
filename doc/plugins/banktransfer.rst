@@ -34,6 +34,8 @@ transactions                          list of objects            Transactions in
 ├ payer                               string                     Payment source
 ├ reference                           string                     Payment reference
 ├ amount                              string                     Payment amount
+├ iban                                string                     Payment IBAN
+├ bic                                 string                     Payment BIC
 ├ date                                string                     Payment date (in **user-inputted** format)
 ├ order                               string                     Associated order code (or ``null``)
 └ comment                             string                     Internal comment
@@ -83,6 +85,8 @@ Endpoints
                 "date": "26.06.2017",
                 "payer": "John Doe",
                 "order": null,
+                "iban": "",
+                "bic": "",
                 "checksum": "5de03a601644dfa63420dacfd285565f8375a8f2",
                 "reference": "GUTSCHRIFT\r\nSAMPLECONF-NAB12 EREF: SAMPLECONF-NAB12\r\nIBAN: DE1234556…",
                 "state": "nomatch",
@@ -132,6 +136,8 @@ Endpoints
             "comment": "",
             "date": "26.06.2017",
             "payer": "John Doe",
+            "iban": "",
+            "bic": "",
             "order": null,
             "checksum": "5de03a601644dfa63420dacfd285565f8375a8f2",
             "reference": "GUTSCHRIFT\r\nSAMPLECONF-NAB12 EREF: SAMPLECONF-NAB12\r\nIBAN: DE1234556…",
