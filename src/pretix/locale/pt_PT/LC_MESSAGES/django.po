@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-24 20:05+0000\n"
+"PO-Revision-Date: 2020-10-24 21:09+0000\n"
 "Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -10681,9 +10681,8 @@ msgid "The check-in list has been changed."
 msgstr "O check-in lista foi alterado."
 
 #: pretix/control/logdisplay.py:391 pretix/control/logdisplay.py:400
-#, fuzzy
 msgid "The event settings have been changed."
-msgstr "As definições do evento foram alterados."
+msgstr "As definições do evento foram alteradas."
 
 #: pretix/control/logdisplay.py:392
 #, fuzzy
@@ -10691,19 +10690,16 @@ msgid "The ticket download settings have been changed."
 msgstr "As configurações de download ticket foram alterados."
 
 #: pretix/control/logdisplay.py:393
-#, fuzzy
 msgid "A plugin has been enabled."
 msgstr "Um plugin foi ativado."
 
 #: pretix/control/logdisplay.py:394
-#, fuzzy
 msgid "A plugin has been disabled."
 msgstr "Um plug-in foi desativado."
 
 #: pretix/control/logdisplay.py:395
-#, fuzzy
 msgid "The shop has been taken live."
-msgstr "A loja foi tomada ao vivo."
+msgstr "A bilheteira foi aberta ao público."
 
 #: pretix/control/logdisplay.py:396
 #, fuzzy
@@ -10716,12 +10712,10 @@ msgid "The shop has been taken into test mode."
 msgstr "A loja foi tomado em modo de teste."
 
 #: pretix/control/logdisplay.py:398
-#, fuzzy
 msgid "The test mode has been disabled."
 msgstr "O modo de teste foi desativado."
 
 #: pretix/control/logdisplay.py:399
-#, fuzzy
 msgid "The event has been created."
 msgstr "O evento foi criado."
 
@@ -10758,22 +10752,18 @@ msgid "A user has been removed from the event team."
 msgstr "Um utilizador foi removido da equipa do evento."
 
 #: pretix/control/logdisplay.py:408
-#, fuzzy
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr "Um voucher foi enviado para uma pessoa na lista de espera."
+msgstr "Um voucher foi enviado para uma pessoa em lista de espera."
 
 #: pretix/control/logdisplay.py:409
-#, fuzzy
 msgid "An entry has been removed from the waiting list."
-msgstr "Uma entrada foi removido da lista de espera."
+msgstr "Uma entrada foi removida da lista de espera."
 
 #: pretix/control/logdisplay.py:410
-#, fuzzy
 msgid "An entry has been changed on the waiting list."
 msgstr "Uma entrada foi alterado na lista de espera."
 
 #: pretix/control/logdisplay.py:411
-#, fuzzy
 msgid "An entry has been added to the waiting list."
 msgstr "Uma entrada foi adicionada à lista de espera."
 
@@ -10807,74 +10797,61 @@ msgid "The gate has been deleted."
 msgstr "A equipa foi eliminada."
 
 #: pretix/control/logdisplay.py:418
-#, fuzzy
 msgctxt "subevent"
 msgid "The event date has been deleted."
-msgstr "A data do evento foi excluído."
+msgstr "A data do evento foi eliminada."
 
 #: pretix/control/logdisplay.py:419
-#, fuzzy
 msgctxt "subevent"
 msgid "The event date has been canceled."
 msgstr "A data do evento foi cancelado."
 
 #: pretix/control/logdisplay.py:420
-#, fuzzy
 msgctxt "subevent"
 msgid "The event date has been changed."
 msgstr "A data do evento foi alterada."
 
 #: pretix/control/logdisplay.py:421
-#, fuzzy
 msgctxt "subevent"
 msgid "The event date has been created."
-msgstr "A data do evento foi criado."
+msgstr "A data do evento foi criada."
 
 #: pretix/control/logdisplay.py:422
-#, fuzzy
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
 msgstr "A quota foi adicionado à data do evento."
 
 #: pretix/control/logdisplay.py:423
-#, fuzzy
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
 msgstr "A quota foi alterado na data do evento."
 
 #: pretix/control/logdisplay.py:424
-#, fuzzy
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
 msgstr "A quota foi removido da data do evento."
 
 #: pretix/control/logdisplay.py:425
-#, fuzzy
 msgid "The device has been created."
 msgstr "O dispositivo foi criado."
 
 #: pretix/control/logdisplay.py:426
-#, fuzzy
 msgid "The device has been changed."
 msgstr "O dispositivo foi alterado."
 
 #: pretix/control/logdisplay.py:427
-#, fuzzy
 msgid "Access of the device has been revoked."
 msgstr "O acesso do dispositivo foi revogado."
 
 #: pretix/control/logdisplay.py:428
-#, fuzzy
 msgid "The device has been initialized."
 msgstr "O dispositivo foi inicializado."
 
 #: pretix/control/logdisplay.py:429
-#, fuzzy
 msgid "The access token of the device has been regenerated."
-msgstr "O token de acesso do dispositivo foi regenerado."
+msgstr "O token de acesso do dispositivo foi gerado novamente."
 
 #: pretix/control/logdisplay.py:430
-#, fuzzy
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
 "O dispositivo notificou o servidor de uma atualização de hardware ou "
@@ -10889,12 +10866,10 @@ msgid "The gift card has been changed."
 msgstr "O cartão-presente foi alterado."
 
 #: pretix/control/logdisplay.py:433
-#, fuzzy
 msgid "A manual transaction has been performed."
-msgstr "A operação manual foi realizada."
+msgstr "Uma operação manual foi realizada."
 
 #: pretix/control/logdisplay.py:457
-#, fuzzy
 msgid "The settings of a payment provider have been changed."
 msgstr "As configurações de um provedor de pagamentos foram alterados."
 
@@ -10904,18 +10879,17 @@ msgid "The settings of a ticket output provider have been changed."
 msgstr "As configurações de um provedor de saída ticket foram alterados."
 
 #: pretix/control/logdisplay.py:463
-#, fuzzy
 msgid "The user confirmed the following message: \"{}\""
-msgstr "O utilizador  confirmou a seguinte mensagem: \"{}\""
+msgstr "O utilizador confirmou a seguinte mensagem: \"{}\""
 
 #: pretix/control/logdisplay.py:484
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
-"Posição # {posid} foi verificado manualmente em {data e hora} na lista de "
-"\"{list}\"."
+"A posição #{posid} foi verificada manualmente em {datetime} na lista de \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:489
 #, fuzzy, python-brace-format
@@ -14813,7 +14787,6 @@ msgid "View order as user"
 msgstr "Ver pedido como utilizador"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:75
-#, fuzzy
 msgid "View email history"
 msgstr "Ver histórico de e-mail"
 
@@ -14860,34 +14833,31 @@ msgid "Original payment method"
 msgstr "método de pagamento original"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:139
-#, fuzzy
 msgid "Delete request"
-msgstr "Apagar solicitação"
+msgstr "Apagar pedido"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:152
 #: pretix/presale/templates/pretixpresale/event/order.html:8
-#, fuzzy
 msgid "Order details"
-msgstr "Detalhes do pedido"
+msgstr "Detalhes da encomenda"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:162
-#, fuzzy
 msgid "Cancellation date"
-msgstr "data de cancelamento"
+msgstr "Data de cancelamento"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:184
-#, fuzzy
 msgid ""
 "We know that this email address works because the user clicked a link we "
 "sent them."
 msgstr ""
-"Sabemos que este endereço de e-mail funciona porque o utilizador  clicou em "
-"um link que os enviou."
+"Sabemos que este endereço de e-mail funciona, porque o utilizador  clicou "
+"num link que nós enviamos."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:216
 msgid "Rebuild the invoice with updated data but the same invoice number."
 msgstr ""
-"Reconstruir a factura com dados atualizados, mas o mesmo número da factura."
+"Reconstruir a fatura com dados atualizados, mas manter o mesmo número da "
+"fatura."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:217
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:20
@@ -21315,16 +21285,14 @@ msgid "Stripe account"
 msgstr "conta Stripe"
 
 #: pretix/plugins/stripe/payment.py:139
-#, fuzzy
 msgctxt "stripe"
 msgid "Live"
-msgstr "Viver"
+msgstr "Ativo"
 
 #: pretix/plugins/stripe/payment.py:140
-#, fuzzy
 msgctxt "stripe"
 msgid "Testing"
-msgstr "prova"
+msgstr "Em teste"
 
 #: pretix/plugins/stripe/payment.py:142
 #, fuzzy
@@ -21336,31 +21304,26 @@ msgstr ""
 "Stripe, independentemente desta definição."
 
 #: pretix/plugins/stripe/payment.py:155
-#, fuzzy
 msgid "Publishable key"
 msgstr "Chave publicável"
 
 #: pretix/plugins/stripe/payment.py:166
-#, fuzzy
 msgid "Secret key"
 msgstr "Chave secreta"
 
 #: pretix/plugins/stripe/payment.py:175
-#, fuzzy
 msgid ""
 "The country in which your Stripe-account is registered in. Usually, this is "
 "your country of residence."
 msgstr ""
-"O país em que sua conta-Stripe é registrado no. Normalmente, este é o seu "
+"O país em que sua conta Stripe está registada. Normalmente, este é o seu "
 "país de residência."
 
 #: pretix/plugins/stripe/payment.py:183
-#, fuzzy
 msgid "Credit card payments"
-msgstr "pagamentos com cartão de crédito"
+msgstr "Pagamentos com cartão de crédito"
 
 #: pretix/plugins/stripe/payment.py:188 pretix/plugins/stripe/payment.py:871
-#, fuzzy
 msgid "giropay"
 msgstr "giropay"
 
@@ -21369,27 +21332,22 @@ msgstr "giropay"
 #: pretix/plugins/stripe/payment.py:219 pretix/plugins/stripe/payment.py:232
 #: pretix/plugins/stripe/payment.py:239 pretix/plugins/stripe/payment.py:246
 #: pretix/plugins/stripe/payment.py:253
-#, fuzzy
 msgid "Needs to be enabled in your Stripe account first."
-msgstr "Precisa ser habilitado em sua conta Stripe primeiro."
+msgstr "Precisa ser ativo na sua conta Stripe primeiro."
 
 #: pretix/plugins/stripe/payment.py:195 pretix/plugins/stripe/payment.py:935
-#, fuzzy
 msgid "iDEAL"
-msgstr "ideal"
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:202 pretix/plugins/stripe/payment.py:979
-#, fuzzy
 msgid "Alipay"
 msgstr "Alipay"
 
 #: pretix/plugins/stripe/payment.py:209 pretix/plugins/stripe/payment.py:1022
-#, fuzzy
 msgid "Bancontact"
 msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:216 pretix/plugins/stripe/payment.py:1086
-#, fuzzy
 msgid "SOFORT"
 msgstr "SOFORT"
 
@@ -21407,22 +21365,18 @@ msgstr ""
 "pagamento se o seu prazo de pagamento permite para este lag."
 
 #: pretix/plugins/stripe/payment.py:230 pretix/plugins/stripe/payment.py:1155
-#, fuzzy
 msgid "EPS"
 msgstr "EPS"
 
 #: pretix/plugins/stripe/payment.py:237 pretix/plugins/stripe/payment.py:1219
-#, fuzzy
 msgid "Multibanco"
 msgstr "Multibanco"
 
 #: pretix/plugins/stripe/payment.py:244 pretix/plugins/stripe/payment.py:1266
-#, fuzzy
 msgid "Przelewy24"
 msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:251 pretix/plugins/stripe/payment.py:1314
-#, fuzzy
 msgid "WeChat Pay"
 msgstr "WeChat Pay"
 
@@ -21439,9 +21393,9 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:407 pretix/plugins/stripe/payment.py:757
 #: pretix/plugins/stripe/payment.py:852
-#, fuzzy, python-format
+#, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "Stripe relatou um erro com o seu cartão:% s"
+msgstr "O Stripe reportou um erro com o seu cartão: %s"
 
 #: pretix/plugins/stripe/payment.py:434 pretix/plugins/stripe/payment.py:567
 #: pretix/plugins/stripe/payment.py:770 pretix/plugins/stripe/payment.py:864
@@ -21464,14 +21418,13 @@ msgstr ""
 "pagamento completo."
 
 #: pretix/plugins/stripe/payment.py:461 pretix/plugins/stripe/payment.py:818
-#, fuzzy, python-format
+#, python-format
 msgid "Stripe reported an error: %s"
-msgstr "Stripe relatou um erro:% s"
+msgstr "O Stripe reportou um erro: %s"
 
 #: pretix/plugins/stripe/payment.py:517
-#, fuzzy
 msgid "No payment information found."
-msgstr "Nenhuma informação de pagamento encontrados."
+msgstr "Nenhuma informação de pagamento encontrada."
 
 #: pretix/plugins/stripe/payment.py:538
 #, fuzzy
@@ -21483,202 +21436,163 @@ msgstr ""
 "de contato, se as persistir problemas."
 
 #: pretix/plugins/stripe/payment.py:542
-#, fuzzy
 msgid "Stripe returned an error"
-msgstr "Stripe retornou um erro"
+msgstr "O Stripe reportou um erro"
 
 #: pretix/plugins/stripe/payment.py:638
-#, fuzzy
 msgid "Credit card via Stripe"
-msgstr "cartão de crédito via Stripe"
+msgstr "Cartão de crédito via Stripe"
 
 #: pretix/plugins/stripe/payment.py:639
-#, fuzzy
 msgid "Credit card"
 msgstr "Cartão de crédito"
 
 #: pretix/plugins/stripe/payment.py:666
-#, fuzzy
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr "Você pode precisar ativar o JavaScript para pagamentos listra."
+msgstr "Precisa de ativar o JavaScript para pagamentos Stripe."
 
 #: pretix/plugins/stripe/payment.py:812
-#, fuzzy
 msgid "Your payment failed. Please try again."
-msgstr "Seu pagamento falhou. Por favor, tente novamente."
+msgstr "O pagamento falhou. Por favor, tente novamente."
 
 #: pretix/plugins/stripe/payment.py:870
-#, fuzzy
 msgid "giropay via Stripe"
-msgstr "giropay através da listra"
+msgstr "giropay via Stripe"
 
 #: pretix/plugins/stripe/payment.py:902 pretix/plugins/stripe/payment.py:1053
 #: pretix/plugins/stripe/payment.py:1186
-#, fuzzy
 msgid "unknown name"
 msgstr "nome desconhecido"
 
 #: pretix/plugins/stripe/payment.py:934
-#, fuzzy
 msgid "iDEAL via Stripe"
-msgstr "IDEAL através da listra"
+msgstr "iDEAL via Stripe"
 
 #: pretix/plugins/stripe/payment.py:978
-#, fuzzy
 msgid "Alipay via Stripe"
 msgstr "Alipay via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1021
-#, fuzzy
 msgid "Bancontact via Stripe"
 msgstr "Bancontact via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1085
-#, fuzzy
 msgid "SOFORT via Stripe"
 msgstr "SOFORT via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1102
-#, fuzzy
 msgid "Country of your bank"
-msgstr "País de seu banco"
+msgstr "País do seu banco"
 
 #: pretix/plugins/stripe/payment.py:1103
-#, fuzzy
 msgid "Germany"
 msgstr "Alemanha"
 
 #: pretix/plugins/stripe/payment.py:1104
-#, fuzzy
 msgid "Austria"
 msgstr "Áustria"
 
 #: pretix/plugins/stripe/payment.py:1105
-#, fuzzy
 msgid "Belgium"
 msgstr "Bélgica"
 
 #: pretix/plugins/stripe/payment.py:1106
-#, fuzzy
 msgid "Netherlands"
 msgstr "Países Baixos"
 
 #: pretix/plugins/stripe/payment.py:1107
-#, fuzzy
 msgid "Spain"
 msgstr "Espanha"
 
 #: pretix/plugins/stripe/payment.py:1154
-#, fuzzy
 msgid "EPS via Stripe"
 msgstr "EPS via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1218
-#, fuzzy
 msgid "Multibanco via Stripe"
 msgstr "Multibanco via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1265
-#, fuzzy
 msgid "Przelewy24 via Stripe"
 msgstr "Przelewy24 via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1313
-#, fuzzy
 msgid "WeChat Pay via Stripe"
-msgstr "WeChat Pague com listra"
+msgstr "WeChat Pay via Stripe"
 
 #: pretix/plugins/stripe/signals.py:65
-#, fuzzy
 msgid "Charge succeeded."
-msgstr "Carga sucedido."
+msgstr "Pagamento com sucesso."
 
 #: pretix/plugins/stripe/signals.py:66
-#, fuzzy
 msgid "Charge refunded."
-msgstr "Carga devolvido."
+msgstr "Pagamento devolvido."
 
 #: pretix/plugins/stripe/signals.py:67
-#, fuzzy
 msgid "Charge updated."
-msgstr "Carga atualizado."
+msgstr "Pagamento atualizado."
 
 #: pretix/plugins/stripe/signals.py:68
-#, fuzzy
 msgid "Charge pending"
-msgstr "carga pendente"
+msgstr "Pagamento pendente"
 
 #: pretix/plugins/stripe/signals.py:69
-#, fuzzy
 msgid "Payment authorized."
-msgstr "O pagamento autorizado."
+msgstr "Pagamento autorizado."
 
 #: pretix/plugins/stripe/signals.py:70
-#, fuzzy
 msgid "Payment authorization canceled."
-msgstr "autorização de pagamento cancelado."
+msgstr "Autorização de pagamento cancelada."
 
 #: pretix/plugins/stripe/signals.py:71
-#, fuzzy
 msgid "Payment authorization failed."
-msgstr "autorização de pagamento falhou."
+msgstr "A autorização de pagamento falhou."
 
 #: pretix/plugins/stripe/signals.py:77
-#, fuzzy
 msgid "Charge failed. Reason: {}"
-msgstr "Carga falhou. Motivo: {}"
+msgstr "O pagamento falhou. Motivo: {}"
 
 #: pretix/plugins/stripe/signals.py:79
-#, fuzzy
 msgid "Dispute created. Reason: {}"
-msgstr "Disputa criado. Motivo: {}"
+msgstr "Disputa criada. Motivo: {}"
 
 #: pretix/plugins/stripe/signals.py:81
-#, fuzzy
 msgid "Dispute updated. Reason: {}"
-msgstr "Disputa atualizado. Motivo: {}"
+msgstr "Disputa atualizada. Motivo: {}"
 
 #: pretix/plugins/stripe/signals.py:83
-#, fuzzy
 msgid "Dispute closed. Status: {}"
-msgstr "Disputa fechada. Status: {}"
+msgstr "Disputa fechada. Estado: {}"
 
 #: pretix/plugins/stripe/signals.py:86
-#, fuzzy
 msgid "Stripe reported an event: {}"
-msgstr "Stripe relatou um evento: {}"
+msgstr "Stripe reportou um evento: {}"
 
 #: pretix/plugins/stripe/signals.py:97
-#, fuzzy
 msgid "Stripe Connect: Client ID"
-msgstr "Stripe Ligação: ID do cliente"
+msgstr "Stripe Connect: ID do cliente"
 
 #: pretix/plugins/stripe/signals.py:104
-#, fuzzy
 msgid "Stripe Connect: Secret key"
-msgstr "Stripe Ligação: Chave secreta"
+msgstr "Stripe Connect: Chave secreta"
 
 #: pretix/plugins/stripe/signals.py:111
-#, fuzzy
 msgid "Stripe Connect: Publishable key"
-msgstr "Stripe Ligação: chave Publicável"
+msgstr "Stripe Connect: Chave publicável"
 
 #: pretix/plugins/stripe/signals.py:118
-#, fuzzy
 msgid "Stripe Connect: Secret key (test)"
-msgstr "Stripe Ligação: Chave secreta (teste)"
+msgstr "Stripe Connect: Chave secreta (teste)"
 
 #: pretix/plugins/stripe/signals.py:125
-#, fuzzy
 msgid "Stripe Connect: Publishable key (test)"
-msgstr "Stripe Ligação: chave Publicável (teste)"
+msgstr "Stripe Connect: Chave publicável (teste)"
 
 #: pretix/plugins/stripe/signals.py:170
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:6
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:9
-#, fuzzy
 msgid "Stripe Connect"
-msgstr "Stripe Ligue"
+msgstr "Stripe Connect"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, fuzzy, python-format
@@ -21716,17 +21630,15 @@ msgstr ""
 "(%(order)s) como reembolsado?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
-#, fuzzy
 msgid "The total amount will be withdrawn from your credit card."
-msgstr "O montante total será retirado do seu cartão de crédito."
+msgstr "O montante total será debitado do seu cartão de crédito."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:26
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:11
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:41
-#, fuzzy
 msgid "Card type"
-msgstr "Tipo de carta"
+msgstr "Tipo de cartão"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:4
@@ -21751,10 +21663,8 @@ msgstr ""
 "de Strong Authentication Cliente (SCA), sempre que possível"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:16
-#, fuzzy
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr ""
-"Para que um pagamento de cartão de crédito, por favor ligue o JavaScript."
+msgstr "Para pagamentos com cartão de crédito, por favor ative o JavaScript."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:22
 #, fuzzy
@@ -21766,12 +21676,10 @@ msgstr ""
 "do pagamento."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:33
-#, fuzzy
 msgid "Use a different card"
 msgstr "Use um cartão diferente"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:50
-#, fuzzy
 msgid "OR"
 msgstr "OU"
 
@@ -21786,9 +21694,8 @@ msgstr ""
 "servidores."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
-#, fuzzy
 msgid "Charge ID"
-msgstr "carga ID"
+msgstr "ID da cobrança"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:16
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:23
@@ -21799,12 +21706,10 @@ msgid "Payer name"
 msgstr "nome Payer"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:47
-#, fuzzy
 msgid "MOTO"
 msgstr "MOTO"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:65
-#, fuzzy
 msgid "Error message"
 msgstr "Mensagem de erro"
 
@@ -21827,7 +21732,6 @@ msgstr ""
 "para fazer isso ou iniciar um novo pagamento."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:15
-#, fuzzy
 msgid "Confirm payment"
 msgstr "Confirme o pagamento"
 
@@ -21848,7 +21752,6 @@ msgid ""
 msgstr "A operação de pagamento não pôde ser concluída pelo seguinte motivo:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:36
-#, fuzzy
 msgid "Unknown reason"
 msgstr "Razão desconhecida"
 
@@ -21856,31 +21759,27 @@ msgstr "Razão desconhecida"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:6
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:4
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
-#, fuzzy
 msgid "Pay order"
 msgstr "Ordem de pagamento"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
-#, fuzzy, python-format
+#, python-format
 msgid "Confirm payment: %(code)s"
-msgstr "Confirmar pagamento:% (código) s"
+msgstr "Confirmar pagamento: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:18
-#, fuzzy
 msgid "Confirming your payment…"
-msgstr "A confirmação de pagamento ..."
+msgstr "A confirmar pagamento …"
 
 #: pretix/plugins/stripe/views.py:61 pretix/plugins/stripe/views.py:67
 #: pretix/plugins/stripe/views.py:94 pretix/plugins/stripe/views.py:106
-#, fuzzy
 msgid "An error occurred during connecting with Stripe, please try again."
 msgstr ""
-"Ocorreu um erro durante a conexão com listra, por favor tente novamente."
+"Ocorreu um erro durante a conexão com o Stripe, por favor tente novamente."
 
 #: pretix/plugins/stripe/views.py:114 pretix/plugins/stripe/views.py:116
-#, fuzzy
 msgid "Stripe returned an error: {}"
-msgstr "Stripe retornou um erro: {}"
+msgstr "O Stripe retornou um erro: {}"
 
 #: pretix/plugins/stripe/views.py:119
 #, fuzzy
@@ -21892,9 +21791,8 @@ msgstr ""
 "configurações em detalhes abaixo."
 
 #: pretix/plugins/stripe/views.py:403
-#, fuzzy
 msgid "Your Stripe account has been disconnected."
-msgstr "Sua conta da listra foi desconectado."
+msgstr "A sua conta Stripe foi removida."
 
 #: pretix/plugins/stripe/views.py:445 pretix/plugins/stripe/views.py:464
 #: pretix/plugins/stripe/views.py:469
@@ -21916,9 +21814,8 @@ msgstr ""
 "novamente e entrar em contato com a gente, se isso persistir problemas."
 
 #: pretix/plugins/stripe/views.py:528 pretix/plugins/stripe/views.py:531
-#, fuzzy
 msgid "Sorry, there was an error in the payment process."
-msgstr "Desculpe, houve um erro no processo de pagamento."
+msgstr "Pedimos desculpa, houve um erro a processar o pagamento."
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:10
 #: pretix/plugins/ticketoutputpdf/__init__.py:13
@@ -21932,9 +21829,8 @@ msgid "This plugin allows you to print out tickets as PDF files"
 msgstr "Este plugin permite que você imprima bilhetes como arquivos PDF"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:22
-#, fuzzy
 msgid "All PDF tickets in one file"
-msgstr "Todos os bilhetes em PDF em um arquivo"
+msgstr "Todos os bilhetes num ficheiro PDF"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:25
 #, fuzzy, python-brace-format
@@ -21954,7 +21850,6 @@ msgstr "disposição bilhete PDF"
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
 #: pretix/plugins/ticketoutputpdf/views.py:201
-#, fuzzy
 msgid "Default layout"
 msgstr "Layout padrão"
 
@@ -22024,9 +21919,8 @@ msgid "Open Layout Designer"
 msgstr "Abrir Layout Designer"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
-#, fuzzy
 msgid "Advanced mode (multiple layouts)"
-msgstr "Modo Avançado (vários layouts)"
+msgstr "Modo avançado (vários layouts)"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:6
@@ -22041,7 +21935,6 @@ msgstr "Você não criou nenhum layouts ainda."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:17
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:24
-#, fuzzy
 msgid "Create a new layout"
 msgstr "Criar um novo layout"
 
@@ -22051,9 +21944,8 @@ msgid "PDF output"
 msgstr "saída PDF"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:31
-#, fuzzy
 msgid "Download tickets (PDF)"
-msgstr "bilhetes de download (PDF)"
+msgstr "Download dos bilhetes (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:32
 #, fuzzy
@@ -23801,9 +23693,9 @@ msgid "This is not an event series."
 msgstr "Isto não é uma série de eventos."
 
 #: pretix/presale/views/widget.py:338
-#, fuzzy, python-format
+#, python-format
 msgid "from %(start_date)s"
-msgstr "a partir de (%) s data_início"
+msgstr "a partir de %(start_date)s"
 
 #: pretix/settings.py:412
 msgid "English"
