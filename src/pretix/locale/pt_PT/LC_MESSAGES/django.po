@@ -4531,7 +4531,6 @@ msgid "No date was specified."
 msgstr "Nenhuma data foi especificada."
 
 #: pretix/base/services/cart.py:57
-#, fuzzy
 msgid "You selected a product which is not available for sale."
 msgstr "Você selecionou um produto que não está disponível para venda."
 
