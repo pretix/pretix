@@ -60,6 +60,9 @@
                 {% bootstrap_field form.allow_entry_after_exit layout="control" %}
                 {% bootstrap_field form.exit_all_at layout="control" %}
                 {% bootstrap_field form.auto_checkin_sales_channels layout="control" %}
+                {% if form.gates %}
+                    {% bootstrap_field form.gates layout="control" %}
+                {% endif %}
 
                 <h3>{% trans "Custom check-in rule" %}</h3>
                 <div id="rules-editor" class="form-inline">

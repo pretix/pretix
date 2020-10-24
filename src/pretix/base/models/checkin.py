@@ -21,6 +21,11 @@ class CheckinList(LoggedModel):
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '
                                                       'order have not been paid.'))
+    gates = models.ManyToManyField(
+        'Gate', verbose_name=_("Gates"), blank=True,
+        help_text=_("Does not have any effect for the validation of tickets, only for the automatic configuration of "
+                    "check-in devices.")
+    )
     allow_entry_after_exit = models.BooleanField(
         verbose_name=_('Allow re-entering after an exit scan'),
         default=True

@@ -185,3 +185,44 @@ def test_choose_between_subevents(device_client, device):
         resp = device_client.get(f'/api/v1/device/eventselection')
         assert resp.data['event']['slug'] == 'e1'
         assert resp.data['subevent'] == se2.pk
+
+
+@pytest.mark.django_db
+def test_require_gate(device_client, device):
+    with scopes_disabled():
+        g = device.organizer.gates.create(name="Gate 1")
+        device.gate = g
+        device.save()
+        e = device.organizer.events.create(
+            name="Event", slug="e1", live=True,
+            date_from=tz.localize(datetime(2020, 1, 10, 14, 0)),
+            has_subevents=True,
+        )
+        e.settings.timezone = "Asia/Tokyo"
+        se0 = e.subevents.create(
+            name="Event", active=True,
+            date_from=tz.localize(datetime(2020, 1, 10, 9, 0)),
+            date_to=tz.localize(datetime(2020, 1, 10, 10, 0)),
+        )
+        e.subevents.create(
+            name="Event", active=True,
+            date_from=tz.localize(datetime(2020, 1, 10, 14, 0)),
+            date_to=tz.localize(datetime(2020, 1, 10, 15, 0)),
+        )
+        cl1 = e.checkin_lists.create(name="Same name", subevent=se0)
+        se2 = e.subevents.create(
+            name="Event", active=True,
+            date_from=tz.localize(datetime(2020, 1, 10, 16, 0)),
+            date_to=tz.localize(datetime(2020, 1, 10, 17, 0)),
+        )
+        e.checkin_lists.create(name="Same name", subevent=se2)
+        cl3 = e.checkin_lists.create(name="Other name", subevent=se2)
+        cl3.gates.add(g)
+
+    with freeze_time("2020-01-10T11:00:00+09:00"):
+        resp = device_client.get(
+            f'/api/v1/device/eventselection?current_event=e1&current_checkinlist={cl1.pk}&current_subevent={se0.pk}')
+        assert resp.status_code == 200
+        assert resp.data['event']['slug'] == 'e1'
+        assert resp.data['subevent'] == se2.pk
+        assert resp.data['checkinlist'] == cl3.pk

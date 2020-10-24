@@ -1,6 +1,6 @@
 import logging
 
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Coalesce
 from django.utils.timezone import now
 from rest_framework import serializers, status
@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from pretix.api.auth.device import DeviceTokenAuthentication
-from pretix.base.models import Device, SubEvent
+from pretix.base.models import CheckinList, Device, SubEvent
 from pretix.base.models.devices import Gate, generate_api_token
 
 logger = logging.getLogger(__name__)
@@ -131,17 +131,24 @@ class EventSelectionView(APIView):
 
     @property
     def base_event_qs(self):
-        return self.request.auth.organizer.events.annotate(
+        qs = self.request.auth.organizer.events.annotate(
             first_date=Coalesce('date_admission', 'date_from'),
             last_date=Coalesce('date_to', 'date_from'),
         ).filter(
             live=True,
             has_subevents=False
         ).order_by('first_date')
+        if self.request.auth.gate:
+            has_cl = CheckinList.objects.filter(
+                event=OuterRef('pk'),
+                gates__in=[self.request.auth.gate]
+            )
+            qs = qs.annotate(has_cl=Exists(has_cl)).filter(has_cl=True)
+        return qs
 
     @property
     def base_subevent_qs(self):
-        return SubEvent.objects.annotate(
+        qs = SubEvent.objects.annotate(
             first_date=Coalesce('date_admission', 'date_from'),
             last_date=Coalesce('date_to', 'date_from'),
         ).filter(
@@ -149,6 +156,14 @@ class EventSelectionView(APIView):
             event__live=True,
             active=True,
         ).select_related('event').order_by('first_date')
+        if self.request.auth.gate:
+            has_cl = CheckinList.objects.filter(
+                Q(subevent__isnull=True) | Q(subevent=OuterRef('pk')),
+                event_id=OuterRef('event_id'),
+                gates__in=[self.request.auth.gate]
+            )
+            qs = qs.annotate(has_cl=Exists(has_cl)).filter(has_cl=True)
+        return qs
 
     def get(self, request, format=None):
         device = request.auth
@@ -228,6 +243,10 @@ class EventSelectionView(APIView):
             checkinlist_qs = ev.event.checkin_lists.filter(Q(subevent__isnull=True) | Q(subevent=ev))
         else:
             checkinlist_qs = ev.checkin_lists
+
+        if self.request.auth.gate:
+            checkinlist_qs = checkinlist_qs.filter(gates__in=[self.request.auth.gate])
+
         checkinlist = None
         if current_checkinlist:
             checkinlist = checkinlist_qs.filter(Q(name=current_checkinlist.name) | Q(pk=current_checkinlist.pk)).first()
