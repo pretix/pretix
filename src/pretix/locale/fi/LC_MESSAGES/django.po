@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-21 17:02+0000\n"
-"PO-Revision-Date: 2020-10-21 16:00+0000\n"
+"PO-Revision-Date: 2020-10-24 05:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -72,7 +72,7 @@ msgstr "Sovelluksen nimi"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Uudelleenohjausosoitteet"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
@@ -112,7 +112,7 @@ msgstr "Tuotteelle \"{}\" ei ole asetettu kiintiötä"
 #: pretix/api/serializers/cart.py:67 pretix/api/serializers/order.py:954
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "Kiintiössä \"{}\" ei ole tarpeaksi tilaa operaation suorittamiseksi."
 
 #: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:914
 #: pretix/base/services/orders.py:1173
@@ -140,6 +140,8 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Tapahtumia ei voi luoda tilassa 'live'. Tapahtumaan tulee asettaa kiintiöt "
+"ja maksutapa ennen myynnin aloittamista."
 
 #: pretix/api/serializers/event.py:174 pretix/api/serializers/event.py:444
 #, python-brace-format
@@ -153,11 +155,11 @@ msgstr "Tuntematon lisäosa: '{name}'."
 
 #: pretix/api/serializers/item.py:68 pretix/control/forms/item.py:781
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "Tuotetta ei voi niputtaa itsensä kanssa."
 
 #: pretix/api/serializers/item.py:71 pretix/control/forms/item.py:783
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Niputettavalla tuotteella ei saa olla nippuja."
 
 #: pretix/api/serializers/item.py:131
 msgid ""
@@ -178,7 +180,7 @@ msgstr "Lahjakorttituotteiden ei tule olla samalla sisäänpääsytuotteita."
 #: pretix/api/serializers/item.py:182
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Tuotteen metatietoa '{name}' ei ole olemassa."
 
 #: pretix/api/serializers/item.py:297
 msgid ""
@@ -188,7 +190,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:311 pretix/control/forms/item.py:73
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "Kysymys ei voi riippua kysymyksestä, joka kysytään ilmoittautuessa."
 
 #: pretix/api/serializers/item.py:316 pretix/control/forms/item.py:78
 msgid "Circular dependency between questions detected."
@@ -196,7 +198,7 @@ msgstr "Kysymysten välillä on syklinen riippuvuussuhde."
 
 #: pretix/api/serializers/item.py:321 pretix/control/forms/item.py:87
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Tämän tyyppistä kysymystä ei voi kysyä ilmoittautuessa."
 
 #: pretix/api/serializers/order.py:927 pretix/api/serializers/order.py:934
 msgid "The product \"{}\" is not available on this date."
@@ -288,7 +290,7 @@ msgstr "Tilaus muuttunut"
 
 #: pretix/api/webhooks.py:154 pretix/base/notifications.py:265
 msgid "External refund of payment"
-msgstr ""
+msgstr "Ulkoinen maksun palautus"
 
 #: pretix/api/webhooks.py:158
 msgid "Order approved"
@@ -309,7 +311,7 @@ msgstr "Lipun lunastus peruutettu"
 #: pretix/base/auth.py:104
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system}-käyttäjä"
 
 #: pretix/base/auth.py:113 pretix/base/forms/auth.py:175
 #: pretix/base/models/auth.py:90 pretix/base/models/notifications.py:25
@@ -428,6 +430,8 @@ msgid ""
 "Only include invoices issued on or after this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Sisällytä vain laskut, joiden päiväys on tämä päivämäärä tai sen jälkeen. "
+"Huomaa, että laskun päiväys ei aina vastaa tilaus- tai maksupäivämäärää."
 
 #: pretix/base/exporters/dekodi.py:210 pretix/base/exporters/invoices.py:43
 #: pretix/base/exporters/orderlist.py:367
@@ -445,6 +449,8 @@ msgid ""
 "Only include invoices issued on or before this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Sisällytä vain laskut, joiden päiväys on tämä päivämäärä tai ennen sitä. "
+"Huomaa, että laskun päiväys ei aina vastaa tilaus- tai maksupäivämäärää."
 
 #: pretix/base/exporters/invoices.py:51 pretix/base/models/orders.py:1322
 #: pretix/base/models/orders.py:1695 pretix/control/forms/filter.py:97
@@ -715,7 +721,7 @@ msgstr "Maakunta"
 #: pretix/base/models/orders.py:2231
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:113
 msgid "Beneficiary"
-msgstr ""
+msgstr "Edunsaaja"
 
 #: pretix/base/exporters/invoices.py:185 pretix/base/exporters/invoices.py:312
 #: pretix/base/models/orders.py:2226 pretix/base/orderimport.py:367
@@ -734,7 +740,7 @@ msgstr ""
 
 #: pretix/base/exporters/invoices.py:188
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "Valuuttakurssi"
 
 #: pretix/base/exporters/invoices.py:189
 msgid "Total value (with taxes)"
@@ -825,7 +831,7 @@ msgstr "Veroprosentti"
 
 #: pretix/base/exporters/invoices.py:288
 msgid "Tax name"
-msgstr ""
+msgstr "Veron nimi"
 
 #: pretix/base/exporters/invoices.py:289
 msgid "Event start date"
@@ -854,7 +860,7 @@ msgstr "Tilaukset"
 #: pretix/base/exporters/orderlist.py:42 pretix/base/models/orders.py:1954
 #: pretix/base/notifications.py:190
 msgid "Order positions"
-msgstr ""
+msgstr "Tilausrivit"
 
 #: pretix/base/exporters/orderlist.py:43
 msgid "Order fees"
@@ -871,7 +877,7 @@ msgstr "Vain maksetut tilaukset"
 #: pretix/base/exporters/orderlist.py:679 pretix/control/forms/event.py:1223
 #: pretix/control/forms/organizer.py:52
 msgid "Event slug"
-msgstr ""
+msgstr "Tapahtuman tunniste"
 
 #: pretix/base/exporters/orderlist.py:128 pretix/base/notifications.py:186
 #: pretix/control/templates/pretixcontrol/orders/index.html:101
@@ -947,7 +953,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:169
 #: pretix/control/templates/pretixcontrol/pdf/index.html:212
 msgid "Order locale"
-msgstr ""
+msgstr "Tilauksen kieli"
 
 #: pretix/base/exporters/orderlist.py:142
 #, python-brace-format
@@ -966,7 +972,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:147
 msgid "Invoice numbers"
-msgstr ""
+msgstr "Laskunumerot"
 
 #: pretix/base/exporters/orderlist.py:148
 #: pretix/base/exporters/orderlist.py:420 pretix/base/orderimport.py:574
@@ -1417,11 +1423,11 @@ msgstr ""
 
 #: pretix/base/forms/user.py:121
 msgid "Device type"
-msgstr ""
+msgstr "Laitteen tyyppi"
 
 #: pretix/base/forms/user.py:122
 msgid "Smartphone with the Authenticator application"
-msgstr ""
+msgstr "Älypuhelin, jossa on tunnistautumissovellus"
 
 #: pretix/base/forms/user.py:123
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
@@ -1441,11 +1447,11 @@ msgstr ""
 #: pretix/base/forms/widgets.py:138 pretix/base/forms/widgets.py:143
 #: pretix/base/models/orders.py:2210
 msgid "Business customer"
-msgstr ""
+msgstr "Yritysasiakas"
 
 #: pretix/base/forms/widgets.py:142
 msgid "Individual customer"
-msgstr ""
+msgstr "Henkilöasiakas"
 
 #: pretix/base/invoice.py:59
 #, python-format
@@ -1506,7 +1512,7 @@ msgstr ""
 #: pretix/base/invoice.py:379
 msgctxt "invoice"
 msgid "Event"
-msgstr ""
+msgstr "Tapahtuma"
 
 #: pretix/base/invoice.py:398
 #, python-brace-format
@@ -1551,7 +1557,7 @@ msgstr ""
 #: pretix/base/invoice.py:484
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Edunsaaja"
 
 #: pretix/base/invoice.py:502
 msgctxt "invoice"
@@ -1573,7 +1579,7 @@ msgstr ""
 #: pretix/base/invoice.py:525 pretix/base/invoice.py:533
 msgctxt "invoice"
 msgid "Description"
-msgstr ""
+msgstr "Kuvaus"
 
 #: pretix/base/invoice.py:526 pretix/base/invoice.py:534
 msgctxt "invoice"
@@ -1598,7 +1604,7 @@ msgstr ""
 #: pretix/base/invoice.py:535
 msgctxt "invoice"
 msgid "Amount"
-msgstr ""
+msgstr "Määrä"
 
 #: pretix/base/invoice.py:560 pretix/base/invoice.py:565
 msgctxt "invoice"
@@ -6779,11 +6785,11 @@ msgstr "Syötä värikoodi heksadesimaalina, esim. #990000."
 
 #: pretix/control/forms/event.py:444 pretix/control/forms/organizer.py:235
 msgid "Accent color for success"
-msgstr ""
+msgstr "Aksenttiväri onnistumiselle"
 
 #: pretix/control/forms/event.py:445 pretix/control/forms/organizer.py:236
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "Suosittelemme vahvasti jotakin vihreän sävyä."
 
 #: pretix/control/forms/event.py:454 pretix/control/forms/organizer.py:245
 msgid "Accent color for errors"
@@ -6813,7 +6819,7 @@ msgstr "Toimii vain moderneissa selaimissa."
 #: pretix/control/forms/event.py:539
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
-msgstr ""
+msgstr "Kysy {fields}, näytä muodossa {example}"
 
 #: pretix/control/forms/event.py:545
 msgid "Free text input"
@@ -6824,6 +6830,7 @@ msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
 msgstr ""
+"Olet asettanut lahjakortit olemaan voimassa myötämisvuoden lisäksi {} vuotta."
 
 #: pretix/control/forms/event.py:599
 msgid "Tax rule for payment fees"
@@ -6902,10 +6909,12 @@ msgstr "Allekirjoitus"
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr ""
+"Tämä liitetään jokaiseen sähköpostiviestiin. Käytettävissä olevat elementit: "
+"{event}"
 
 #: pretix/control/forms/event.py:812
 msgid "e.g. your contact details"
-msgstr ""
+msgstr "esim. yhteystietosi"
 
 #: pretix/control/forms/event.py:817
 msgid "HTML mail renderer"
@@ -12458,7 +12467,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:100
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 msgid "ZIP code and city"
-msgstr ""
+msgstr "Postinumero ja -toimipaikka"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:803
 msgid "Valid EU VAT ID"
@@ -12466,61 +12475,63 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:809
 msgid "Check"
-msgstr ""
+msgstr "Tarkista"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:855
 msgid "Order history"
-msgstr ""
+msgstr "Tilaushistoria"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:4
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:7
 #: pretix/plugins/sendmail/signals.py:33
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:6
 msgid "Email history"
-msgstr ""
+msgstr "Sähköpostihistoria"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:33
 msgid ""
 "This email has been sent with an older version of pretix. We are therefore "
 "not able to display it here accurately."
 msgstr ""
+"Tämä sähköpostiviesti on lähetetty pretix:in aikaisemmalla versiolla ja "
+"siksi sitä ei voida näyttää tarkasti."
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:39
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:50
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:48
 msgid "Subject:"
-msgstr ""
+msgstr "Aihe:"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
 msgid "Mark order as paid"
-msgstr ""
+msgstr "Merkitse tilaus maksetuksi"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
 msgid "Do you really want to create a manual payment for this order?"
-msgstr ""
+msgstr "Haluatko varmasti luoda manuaalisen maksun tälle tilaukselle?"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:36
 msgid "Create payment"
-msgstr ""
+msgstr "Luo maksu"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:10
 msgid ""
 "Do you really want to cancel this payment? You cannot revert this action."
-msgstr ""
+msgstr "Haluatko varmasti perua tämän maksun? Toimintoa ei voi perua."
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:25
 msgid "Yes, cancel payment"
-msgstr ""
+msgstr "Kyllä, peru maksu"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:5
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:9
 msgid "Mark payment as complete"
-msgstr ""
+msgstr "Merkitse maksu valmiiksi"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:20
 msgid "Do you really want to mark this payment as complete?"
-msgstr ""
+msgstr "Haluatko varmasti merkitä tämän maksun valmiiksi?"
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:18
 msgid ""
@@ -12532,17 +12543,17 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:33
 msgid "Reactivate"
-msgstr ""
+msgstr "Uudelleenaktivoi"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
 msgid "Cancel refund"
-msgstr ""
+msgstr "Peru hyvitys"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
-msgstr ""
+msgstr "Haluatko varmasti perua hyvityksen? Toimintoa ei voi perua."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
@@ -12553,22 +12564,22 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
-msgstr ""
+msgstr "Kyllä, peru hyvitys"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:9
 msgid "Refund order"
-msgstr ""
+msgstr "Hyvitä tilaus"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:21
 msgid "How should the refund be sent?"
-msgstr ""
+msgstr "Kuinka hyvitys lähetetään?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:28
 msgid "Payment confirmation date"
-msgstr ""
+msgstr "Maksun vahvistuspäivämäärä"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:30
 msgid "Amount not refunded"
@@ -12581,24 +12592,24 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:45
 msgctxt "amount_label"
 msgid "Automatically refund"
-msgstr ""
+msgstr "Hyvitä automaattisesti"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:63
 msgid "Automatically refund full amount"
-msgstr ""
+msgstr "Hyvitä täysi summa automaattisesti"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:66
 msgid "This payment method does not support automatic refunds."
-msgstr ""
+msgstr "Tätä maksutapa ei tue automaattisia hyvityksiä."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:74
 msgid "Transfer to other order"
-msgstr ""
+msgstr "Siirrä toiseen tilaukseen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:77
 msgctxt "amount_label"
 msgid "Transfer"
-msgstr ""
+msgstr "Siirrä"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
 msgctxt "order_label"
@@ -12608,21 +12619,23 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:95
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_create.html:5
 msgid "Create a new gift card"
-msgstr ""
+msgstr "Luo uusi lahjakortti"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:113
 msgid ""
 "The gift card can be used to buy tickets for all events of this organizer."
 msgstr ""
+"Lahjakorttia voi käyttää kaikkien tämän järjestäjän tapahtumien tuotteiden "
+"ostamiseen."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:121
 msgid "Manual refund"
-msgstr ""
+msgstr "Manuaalinen hyvitys"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:124
 msgctxt "amount_label"
 msgid "Manually refund"
-msgstr ""
+msgstr "Hyvitä manuaalisesti"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:139
 msgid "Keep transfer as to do"
@@ -12634,7 +12647,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr ""
+msgstr "Merkitse hyvitys valmiiksi"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:153
 msgid ""
@@ -12646,15 +12659,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:174
 msgid "Perform refund"
-msgstr ""
+msgstr "Suorita hyvitys"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
 msgid "Do you really want to mark this refund as complete?"
-msgstr ""
+msgstr "Haluatko varmasti merkitä tämän hyvityksen valmiiksi?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
-msgstr ""
+msgstr "Merkitse valmiiksi"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
 #, python-format
@@ -14895,11 +14908,11 @@ msgstr ""
 
 #: pretix/control/views/event.py:923
 msgid "This event can not be deleted."
-msgstr ""
+msgstr "Tätä tapahtumaa ei voi poistaa."
 
 #: pretix/control/views/event.py:945
 msgid "The event has been deleted."
-msgstr ""
+msgstr "Tapahtuma poistettu."
 
 #: pretix/control/views/event.py:948
 msgid ""
@@ -14921,7 +14934,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:1085 pretix/control/views/main.py:276
 msgid "VAT"
-msgstr ""
+msgstr "ALV"
 
 #: pretix/control/views/event.py:1112
 msgid "The new tax rule has been created."
@@ -14951,20 +14964,20 @@ msgstr ""
 
 #: pretix/control/views/event.py:1408
 msgid "Regular ticket"
-msgstr ""
+msgstr "Peruslippu"
 
 #: pretix/control/views/event.py:1413
 msgid "Reduced ticket"
-msgstr ""
+msgstr "Alennuslippu"
 
 #: pretix/control/views/global_settings.py:29
 #: pretix/control/views/global_settings.py:52
 msgid "Your changes have not been saved, see below for errors."
-msgstr ""
+msgstr "Muutoksia ei tallennettu, katso virheet alta."
 
 #: pretix/control/views/item.py:81 pretix/control/views/item.py:1362
 msgid "The requested product does not exist."
-msgstr ""
+msgstr "Pyydettyä tuotetta ei ole olemassa."
 
 #: pretix/control/views/item.py:94
 msgid "The order of items has been updated."
@@ -14973,15 +14986,15 @@ msgstr ""
 #: pretix/control/views/item.py:126 pretix/control/views/item.py:161
 #: pretix/control/views/item.py:250
 msgid "The requested product category does not exist."
-msgstr ""
+msgstr "Pyydettyä tuotekategoriaa ei ole olemassa."
 
 #: pretix/control/views/item.py:137
 msgid "The selected category has been deleted."
-msgstr ""
+msgstr "Valittu kategoria on poistettu."
 
 #: pretix/control/views/item.py:220
 msgid "The new category has been created."
-msgstr ""
+msgstr "Uusi kategoria luotu."
 
 #: pretix/control/views/item.py:263
 msgid "The order of categories has been updated."
@@ -15030,7 +15043,7 @@ msgstr ""
 
 #: pretix/control/views/item.py:826
 msgid "Available quota"
-msgstr ""
+msgstr "Jäljellä oleva kiintiö"
 
 #: pretix/control/views/item.py:832
 msgid "Waiting list (pending)"
@@ -15043,7 +15056,7 @@ msgstr ""
 #: pretix/control/views/item.py:893 pretix/control/views/item.py:939
 #: pretix/control/views/item.py:993
 msgid "The requested quota does not exist."
-msgstr ""
+msgstr "Pyydettyä kiintiötä ei ole olemassa."
 
 #: pretix/control/views/item.py:914
 msgid "The quota has been re-opened and will not close again."
@@ -15051,17 +15064,19 @@ msgstr ""
 
 #: pretix/control/views/item.py:1007
 msgid "The selected quota has been deleted."
-msgstr ""
+msgstr "Valittu kiintiö on poistettu."
 
 #: pretix/control/views/item.py:1030
 msgid "The requested item does not exist."
-msgstr ""
+msgstr "Pyydettyä tuotetta ei ole olemassa."
 
 #: pretix/control/views/item.py:1165
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr ""
+"Lisätuotteita ei voi liittää tuotteeseen, joka on itsessään saatavilla vain "
+"lisätuotteena."
 
 #: pretix/control/views/item.py:1175
 msgid ""
