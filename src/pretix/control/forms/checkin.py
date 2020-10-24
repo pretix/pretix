@@ -44,6 +44,11 @@ class CheckinListForm(forms.ModelForm):
             widget=forms.CheckboxSelectMultiple
         )
 
+        if not self.event.organizer.gates.exists():
+            del self.fields['gates']
+        else:
+            self.fields['gates'].queryset = self.event.organizer.gates.all()
+
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
             self.fields['subevent'].widget = Select2(
@@ -73,17 +78,22 @@ class CheckinListForm(forms.ModelForm):
             'allow_multiple_entries',
             'allow_entry_after_exit',
             'rules',
+            'gates',
             'exit_all_at',
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '<[name$=all_products]'
             }),
+            'gates': forms.CheckboxSelectMultiple(attrs={
+                'class': 'scrolling-multiple-choice'
+            }),
             'auto_checkin_sales_channels': forms.CheckboxSelectMultiple(),
             'exit_all_at': forms.TimeInput(attrs={'class': 'timepickerfield'}),
         }
         field_classes = {
             'limit_products': SafeModelMultipleChoiceField,
+            'gates': SafeModelMultipleChoiceField,
             'subevent': SafeModelChoiceField,
             'exit_all_at': NextTimeField,
         }
@@ -96,6 +106,11 @@ class SimpleCheckinListForm(forms.ModelForm):
         super().__init__(**kwargs)
         self.fields['limit_products'].queryset = self.event.items.all()
 
+        if not self.event.organizer.gates.exists():
+            del self.fields['gates']
+        else:
+            self.fields['gates'].queryset = self.event.organizer.gates.all()
+
     class Meta:
         model = CheckinList
         localized_fields = '__all__'
@@ -105,13 +120,18 @@ class SimpleCheckinListForm(forms.ModelForm):
             'limit_products',
             'include_pending',
             'allow_entry_after_exit',
+            'gates',
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '<[name$=all_products]'
             }),
+            'gates': forms.CheckboxSelectMultiple(attrs={
+                'class': 'scrolling-multiple-choice'
+            }),
         }
         field_classes = {
             'limit_products': SafeModelMultipleChoiceField,
             'subevent': SafeModelChoiceField,
+            'gates': SafeModelMultipleChoiceField,
         }

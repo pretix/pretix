@@ -96,6 +96,7 @@ presale
 pretix
 pretixSCAN
 pretixdroid
+pretixPOS
 pretixpresale
 prometheus
 proxied

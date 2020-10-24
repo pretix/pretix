@@ -86,6 +86,7 @@ urlpatterns = [
     url(r"^device/update$", device.UpdateView.as_view(), name="device.update"),
     url(r"^device/roll$", device.RollKeyView.as_view(), name="device.roll"),
     url(r"^device/revoke$", device.RevokeKeyView.as_view(), name="device.revoke"),
+    url(r"^device/eventselection$", device.EventSelectionView.as_view(), name="device.eventselection"),
     url(r"^me$", user.MeView.as_view(), name="user.me"),
     url(r"^version$", version.VersionView.as_view(), name="version"),
 ]

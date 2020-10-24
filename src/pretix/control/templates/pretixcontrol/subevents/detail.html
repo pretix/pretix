@@ -193,6 +193,9 @@
                                         {% bootstrap_field form.all_products layout="control" %}
                                         {% bootstrap_field form.limit_products layout="control" %}
                                         {% bootstrap_field form.allow_entry_after_exit layout="control" %}
+                                        {% if form.gates %}
+                                            {% bootstrap_field form.gates layout="control" %}
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}
@@ -222,6 +225,9 @@
                                         {% bootstrap_field cl_formset.empty_form.all_products layout="control" %}
                                         {% bootstrap_field cl_formset.empty_form.limit_products layout="control" %}
                                         {% bootstrap_field cl_formset.empty_form.allow_entry_after_exit layout="control" %}
+                                        {% if cl_formset.empty_form.gates %}
+                                            {% bootstrap_field cl_formset.empty_form.gates layout="control" %}
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endescapescript %}
