@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 20:45+0000\n"
-"PO-Revision-Date: 2020-10-24 16:27+0000\n"
+"PO-Revision-Date: 2020-10-24 17:20+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -4535,7 +4535,6 @@ msgid "You selected a product which is not available for sale."
 msgstr "Você selecionou um produto que não está disponível para venda."
 
 #: pretix/base/services/cart.py:58
-#, fuzzy
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
@@ -4544,7 +4543,6 @@ msgstr ""
 "favor, veja abaixo para mais detalhes."
 
 #: pretix/base/services/cart.py:60
-#, fuzzy
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
@@ -4564,19 +4562,18 @@ msgstr ""
 "Não é possível selecionar mais de% (max) s itens do produto% (produto) s."
 
 #: pretix/base/services/cart.py:64
-#, fuzzy, python-format
+#, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
-msgstr ""
-"Você precisa selecionar pelo menos% (min) s itens do produto% (produto) s."
+msgstr "Precisa selecionar pelo menos %(min)s itens do produto %(product)s."
 
 #: pretix/base/services/cart.py:65
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr ""
-"Nós% removido (produto) é do seu carrinho que você não pode comprar menos de%"
-" (min) s itens do mesmo."
+"Removemos %(product)s do seu carrinho porque não pode comprar menos de %(min)"
+"s itens do mesmo."
 
 #: pretix/base/services/cart.py:67 pretix/base/services/orders.py:73
 #, fuzzy
@@ -4645,26 +4642,23 @@ msgstr ""
 "pagamento. Você pode tentar usá-lo novamente em %d minutos."
 
 #: pretix/base/services/cart.py:81
-#, fuzzy, python-format
+#, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "Este código do voucher só pode ser resgatado% d mais vezes."
+msgstr "Este código de voucher só pode ser resgatado mais %d vezes."
 
 #: pretix/base/services/cart.py:82
-#, fuzzy
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
-"Você já usou esse código do voucher. Remova a linha associada do seu "
+"Você já usou este código de voucher. Remova a linha associada do seu "
 "carrinho, se você quiser usá-lo para um produto diferente."
 
 #: pretix/base/services/cart.py:84
-#, fuzzy
 msgid "This voucher is expired."
 msgstr "Este voucher expirou."
 
 #: pretix/base/services/cart.py:85
-#, fuzzy
 msgid "This voucher is not valid for this product."
 msgstr "Este voucher não é válido para este produto."
 
@@ -4684,79 +4678,69 @@ msgstr ""
 "página."
 
 #: pretix/base/services/cart.py:91
-#, fuzzy
 msgid "Your voucher is valid for a product that is currently not for sale."
 msgstr "O seu voucher é válido para um produto que não está para venda."
 
 #: pretix/base/services/cart.py:92
-#, fuzzy
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr "Este voucher não é válido neste data do evento para."
+msgstr "Este voucher não é válido nesta data do evento."
 
 #: pretix/base/services/cart.py:93
-#, fuzzy
 msgid "You need a valid voucher code to order this product."
-msgstr ""
-"Você precisa de um código do voucher válido para encomendar este produto."
+msgstr "Precisa de um código do voucher válido para encomendar este produto."
 
 #: pretix/base/services/cart.py:94
-#, fuzzy
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr "A data do evento selecionado não está ativo."
+msgstr "A data do evento selecionado não está ativa."
 
 #: pretix/base/services/cart.py:95
-#, fuzzy
 msgid "You can not select an add-on for the selected product."
 msgstr "Não é possível selecionar um add-on para o produto selecionado."
 
 #: pretix/base/services/cart.py:96
-#, fuzzy
 msgid "You can not select two variations of the same add-on product."
 msgstr "Não é possível selecionar duas variações do mesmo produto add-on."
 
 #: pretix/base/services/cart.py:97
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr ""
-"Você pode selecionar no máximo% (max) s add-ons da categoria% (cat) s para o "
-"produto% (base) s."
+"Você pode selecionar no máximo %(max)s add-ons da categoria %(cat)s para o "
+"produto %(base)s."
 
 #: pretix/base/services/cart.py:98
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr ""
-"Você precisa selecionar pelo menos% (min) s add-ons da categoria% (gato) s "
-"para a% do produto (base) s."
+"Você precisa selecionar pelo menos %(min)s add-ons da categoria %(cat)s para "
+"a o produto %(base)s."
 
 #: pretix/base/services/cart.py:100
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can select every add-ons from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
-"Você pode selecionar todos os add-ons da categoria% (cat) s para o produto% "
-"(base) é no máximo uma vez."
+"Pode selecionar todos os add-ons da categoria %(cat)s para o produto %(base)"
+"s no máximo uma vez."
 
 #: pretix/base/services/cart.py:101
-#, fuzzy
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "project."
 msgstr ""
-"Um dos produtos que você selecionou só pode ser comprado como um add-on para "
+"Um dos produtos que selecionou só pode ser comprado como um add-on para "
 "outro projeto."
 
 #: pretix/base/services/cart.py:102
-#, fuzzy
 msgid "One of the products you selected can only be bought part of a bundle."
-msgstr ""
-"Um dos produtos que você selecionou só pode ser comprado parte de um pacote."
+msgstr "Um dos produtos que selecionou só pode ser comprado parte de um pacote."
 
 #: pretix/base/services/cart.py:104
 msgid "Please select a valid seat."
@@ -4888,28 +4872,27 @@ msgid "Sample product A"
 msgstr "Exemplo de produto A"
 
 #: pretix/base/services/mail.py:174
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
-"Você está recebendo este e-mail porque alguém colocou um pedido para {evento}"
-" para você."
+"Está a receber este e-mail porque alguém colocou um pedido para {event} por "
+"si."
 
 #: pretix/base/services/mail.py:178 pretix/base/services/mail.py:194
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
-"Você pode ver os detalhes do pedido no seguinte URL:\n"
-"{Orderurl}."
+"Pode ver os detalhes do pedido no seguinte URL:\n"
+"{orderurl}."
 
 #: pretix/base/services/mail.py:190
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr ""
-"Você está recebendo este e-mail porque você colocou um pedido para {evento}."
+msgstr "Está recebendo este e-mail porque colocou um pedido para {event}."
 
 #: pretix/base/services/orderimport.py:85
 #, fuzzy, python-brace-format
@@ -4926,22 +4909,20 @@ msgid "Invalid data in row {row}: {message}"
 msgstr "dados inválidos na linha {fila}: {mensagem}"
 
 #: pretix/base/services/orders.py:61
-#, fuzzy
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
 msgstr ""
-"Alguns dos produtos que você selecionou já não estavam disponíveis. Por "
-"favor, veja abaixo para mais detalhes."
+"Alguns dos produtos que selecionou já não estavam disponíveis. Por favor, "
+"veja abaixo para mais detalhes."
 
 #: pretix/base/services/orders.py:63
-#, fuzzy
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
-"Alguns dos produtos que você selecionou já não estavam disponíveis na "
-"quantidade selecionada. Por favor, veja abaixo para mais detalhes."
+"Alguns dos produtos que selecionou já não estavam disponíveis na quantidade "
+"selecionada. Por favor, veja abaixo para mais detalhes."
 
 #: pretix/base/services/orders.py:65
 #, fuzzy
@@ -5023,13 +5004,12 @@ msgstr ""
 "para este item. Nós removemos este item do seu carrinho."
 
 #: pretix/base/services/orders.py:84
-#, fuzzy
 msgid ""
 "You need a valid voucher code to order one of the products in your cart. We "
 "removed this item from your cart."
 msgstr ""
-"Você precisa de um código do voucher válido para um fim dos produtos em seu "
-"carrinho. Nós removemos este item do seu carrinho."
+"Precisa de um código do voucher válido para um dos produtos no seu carrinho. "
+"Removemos esse item do seu carrinho."
 
 #: pretix/base/services/orders.py:86
 #, fuzzy
@@ -5084,9 +5064,8 @@ msgstr "Fim negado:% (código) s"
 
 #: pretix/base/services/orders.py:349 pretix/presale/views/order.py:748
 #: pretix/presale/views/order.py:782
-#, fuzzy
 msgid "You cannot cancel this order."
-msgstr "Você não pode cancelar este pedido."
+msgstr "Não pode cancelar este pedido."
 
 #: pretix/base/services/orders.py:360
 #, fuzzy, python-brace-format
@@ -5111,15 +5090,14 @@ msgid "Order canceled: %(code)s"
 msgstr "Pedido cancelado:% (código) s"
 
 #: pretix/base/services/orders.py:818
-#, fuzzy
 msgid ""
 "While trying to place your order, we noticed that the order total has "
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
 "Ao tentar colocar a sua encomenda, percebemos que o total do pedido mudou. "
-"De qualquer um dos preços mudou agora, ou um cartão-presente que você usou "
-"foi utilizado no mesmo período. Verifique os preços abaixo e tente novamente."
+"Ou um dos preços mudou agora, ou um cartão-presente que você usou foi "
+"utilizado no mesmo período. Verifique os preços abaixo e tente novamente."
 
 #: pretix/base/services/orders.py:1030
 #, fuzzy, python-format
@@ -5142,9 +5120,8 @@ msgid "Your order has been changed: %(code)s"
 msgstr "O seu pedido foi alterado: %(code)s"
 
 #: pretix/base/services/orders.py:1156
-#, fuzzy
 msgid "You need to select a variation of the product."
-msgstr "Você precisa selecionar uma variação do produto."
+msgstr "Precisa selecionar uma variação do produto."
 
 #: pretix/base/services/orders.py:1157
 #, fuzzy, python-brace-format
@@ -5191,18 +5168,16 @@ msgstr ""
 "acrescentada."
 
 #: pretix/base/services/orders.py:1165
-#, fuzzy
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
 msgstr ""
-"A posição base seleccionada não permite que você adicione este produto como "
-"um add-on."
+"A posição base seleccionada não permite que adicione este produto como um "
+"add-on."
 
 #: pretix/base/services/orders.py:1166
-#, fuzzy
 msgid "You need to choose a subevent for the new position."
-msgstr "Você precisa escolher um subevento para a nova posição."
+msgstr "Precisa escolher um subevento para a nova posição."
 
 #: pretix/base/services/orders.py:1168
 #, python-brace-format
@@ -5222,13 +5197,12 @@ msgid "The selected product does not allow to select a seat."
 msgstr "O produto selecionado não permite selecionar um lugar."
 
 #: pretix/base/services/orders.py:1171
-#, fuzzy
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
 msgstr ""
-"Você não pode mudar o preço de uma posição que tem sido utilizado para "
-"emitir um cartão-presente."
+"Não pode mudar o preço de uma posição que tenha sido utilizada para emitir "
+"um cartão-presente."
 
 #: pretix/base/services/orders.py:1659
 #, fuzzy, python-brace-format
@@ -5240,13 +5214,12 @@ msgstr ""
 "comprado neste pedido já foi resgatada."
 
 #: pretix/base/services/orders.py:2095
-#, fuzzy
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
 msgstr ""
-"Houve um erro ao tentar enviar o dinheiro de volta para você. Entre em "
-"contato com o organizador do evento para mais informações."
+"Houve um erro ao tentar enviar o dinheiro de volta para si. Entre em contato "
+"com o organizador do evento para mais informações."
 
 #: pretix/base/services/seating.py:35 pretix/base/services/seating.py:92
 #, python-format
@@ -5306,7 +5279,7 @@ msgid "pretix update available"
 msgstr "atualização pretix disponíveis"
 
 #: pretix/base/services/update_check.py:95
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hi!\n"
 "\n"
@@ -5325,22 +5298,22 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
-"Oi!\n"
+"Olá!\n"
 "\n"
-"Uma atualização está disponível para pretix ou para um dos plugins "
-"instalados na sua instalação pretix. Por favor, clique no seguinte link para "
-"mais informações:\n"
+"Uma atualização está disponível para o pretix ou para um dos plugins "
+"instalados na sua instalação de pretix. Por favor, clique no seguinte link "
+"para mais informações:\n"
 "\n"
-" {Url}\n"
+"{url}\n"
 "\n"
-"Você sempre pode encontrar informações sobre as últimas atualizações sobre o "
-"blog pretix.eu:\n"
+"Pode sempre encontrar informações sobre as últimas atualizações no blog "
+"pretix.eu:\n"
 "\n"
 "https://pretix.eu/about/en/blog/\n"
 "\n"
-"melhor,\n"
+"Cumprimentos,\n"
 "\n"
-"seus desenvolvedores pretix"
+"os desenvolvedores do pretix"
 
 #: pretix/base/services/update_check.py:124
 #: pretix/base/services/update_check.py:126
@@ -5684,15 +5657,14 @@ msgid "End of presale text"
 msgstr "Final do texto pré-venda"
 
 #: pretix/base/settings.py:406
-#, fuzzy
 msgid ""
 "This text will be shown above the ticket shop once the designated sales "
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
-"Este texto será mostrado acima da loja de bilhete uma vez que o prazo de "
-"vendas designado para este evento é longo. Você pode usá-lo para descrever "
-"outras opções para obter um bilhete, como um escritório de caixa."
+"Este texto será mostrado acima da loja de bilhetes uma vez que o prazo de "
+"vendas definido para este evento tenha terminado. Você pode usá-lo para "
+"descrever outras opções para obter um bilhete, como na caixa do evento."
 
 #: pretix/base/settings.py:421
 #, fuzzy
@@ -5700,13 +5672,12 @@ msgid "Guidance text"
 msgstr "texto de orientação"
 
 #: pretix/base/settings.py:422
-#, fuzzy
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
 msgstr ""
-"Este texto será mostrado acima as opções de pagamento. Você pode explicar as "
-"escolhas para o utilizador  aqui, se quiser."
+"Este texto será mostrado acima as opções de pagamento. Pode explicar as "
+"escolhas para o utilizador aqui, se quiser."
 
 #: pretix/base/settings.py:433 pretix/base/settings.py:442
 #, fuzzy
@@ -5792,15 +5763,14 @@ msgid "Last date of payments"
 msgstr "Última data de pagamentos"
 
 #: pretix/base/settings.py:523
-#, fuzzy
 msgid ""
 "The last date any payments are accepted. This has precedence over the terms "
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
 msgstr ""
-"A última data quaisquer pagamentos são aceitos. Isto tem precedência sobre "
-"os termos configurados acima. Se você usar o recurso série de eventos e um "
-"pedido contém bilhetes para várias datas, será usada a data mais antiga."
+"A última data que quaisquer pagamentos serão aceites. Isto tem precedência "
+"sobre os termos configurados acima. Se usar série de eventos e um pedido "
+"contém bilhetes para várias datas, será usada a data mais antiga."
 
 #: pretix/base/settings.py:534
 #, fuzzy
@@ -5930,13 +5900,12 @@ msgid "Will be printed on every invoice above the invoice rows."
 msgstr "Será impresso em cada factura acima as linhas."
 
 #: pretix/base/settings.py:720
-#, fuzzy
 msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
 msgstr ""
-"por exemplo. Obrigado para sua compra! Você pode encontrar mais informações "
-"sobre o evento no ..."
+"por exemplo. Obrigado pela sua compra! Pode encontrar mais informações sobre "
+"o evento em ..."
 
 #: pretix/base/settings.py:723
 #, fuzzy
@@ -12837,43 +12806,36 @@ msgid "You just created an event!"
 msgstr "Você acabou de criar um evento!"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:19
-#, fuzzy
 msgid ""
 "You can scroll down and create your first ticket products quickly, or you "
 "can use the navigation on the left to modify the settings of your event in "
 "much more detail."
 msgstr ""
-"Você pode rolar para baixo e criar seus produtos primeiro bilhete "
-"rapidamente, ou você pode usar a navegação do lado esquerdo para modificar "
-"as configurações do seu evento em muito mais detalhes."
+"Você pode fazer scroll para baixo e criar o seus primeiros produtos de "
+"bilhete rapidamente, ou você pode usar a navegação do lado esquerdo para "
+"modificar as configurações do seu evento em muito mais detalhe."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:36
-#, fuzzy
 msgid "Create ticket types"
 msgstr "Criar tipos de bilhetes"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:42
-#, fuzzy
 msgid "Ticket name"
-msgstr "nome do ticket"
+msgstr "Nome do ticket"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:48
-#, fuzzy
 msgid "Capacity (optional)"
 msgstr "Capacidade (opcional)"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:101
-#, fuzzy
 msgid "Add a new ticket type"
 msgstr "Adicionar um novo tipo de bilhete"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:106
-#, fuzzy
 msgid "Total capacity:"
 msgstr "Capacidade total:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:109
-#, fuzzy
 msgid ""
 "You can set a limit on the total number of tickets sold for your event, "
 "regardless of the ticket type."
@@ -12882,7 +12844,6 @@ msgstr ""
 "seu evento, independentemente do tipo de bilhete."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:118
-#, fuzzy
 msgid ""
 "If you want to use more advanced features like non-admission products, "
 "product variations, custom quotas, add-on products or want to modify your "
@@ -12891,9 +12852,9 @@ msgid ""
 msgstr ""
 "Se você quiser usar os recursos mais avançados, como produtos não-admissão, "
 "variações de produtos, quotas personalizados, add-on produtos ou deseja "
-"modificar os seus tipos de bilhetes em mais detalhe, mais tarde você pode "
-"fazê-lo na seção \"Produtos\" na navegação. Não se preocupe, você pode mudar "
-"tudo o que de entrada aqui."
+"modificar os seus tipos de bilhetes em mais detalhe, pode fazê-lo mais tarde "
+"na seção \"Produtos\" na navegação. Não se preocupe, você pode mudar tudo o "
+"que introduza aqui."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 #: pretix/control/views/event.py:286
@@ -12902,58 +12863,52 @@ msgid "Features"
 msgstr "Recursos"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:134
-#, fuzzy
 msgid ""
 "We recommend that you take some time to go through the \"Settings\" part of "
 "your event, but if you're in a hurry and want to get started quickly, here's "
 "a short version:"
 msgstr ""
-"Recomendamos que você levar algum tempo para percorrer a parte \""
-"Configurações\" do seu evento, mas se você está com pressa e quer começar "
-"rapidamente, aqui está uma versão curta:"
+"Recomendamos que perca algum tempo para percorrer a parte \"Configurações\" "
+"do seu evento, mas se você está com pressa e quer começar rapidamente, aqui "
+"está uma versão curta:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:153
-#, fuzzy
 msgid ""
 "pretix supports a <a href=\"https://pretix.eu/about/en/features/payment\" "
 "target=\"_blank\">wide range of payment providers</a> allowing you to choose "
 "the payment methods that fit your workflow best. Here are just two of them "
 "as examples, you can add more in the \"Settings\" part of your event."
 msgstr ""
-"pretix suporta um <a href=\"https://pretix.eu/about/en/features/payment\" "
-"target=\"_blank\"> ampla gama de provedores de pagamento </a> que lhe "
-"permite escolher os métodos de pagamento que cabem no seu fluxo de trabalho "
-"melhor. Aqui estão apenas dois deles como exemplos, você pode adicionar mais "
-"na parte \"Configurações\" do seu evento."
+"pretix suporta uma <a href=\"https://pretix.eu/about/en/features/payment\" "
+"target=\"_blank\">ampla gama de provedores de pagamento</a> que lhe permite "
+"escolher os métodos de pagamento que cabem no seu fluxo de trabalho melhor. "
+"Aqui estão apenas dois deles como exemplos, você pode adicionar mais na "
+"parte \"Configurações\" do seu evento."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:173
-#, fuzzy
 msgid ""
 "After you saved this page, we will redirect you to Stripe to create or "
 "connect an account there. Once you completed this, you will be taken back to "
 "pretix."
 msgstr ""
-"Depois de salvo desta página, que está redireccionado para a listra para "
-"criar ou conectar uma conta lá. Depois de concluída esta, você será levado "
-"de volta para pretix."
+"Depois de salvar esta página, será redireccionado para o Stripe para criar "
+"ou conectar uma conta lá. Depois de concluído, será levado de volta para o "
+"pretix."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:188
-#, fuzzy
 msgid "Getting in touch with you"
 msgstr "Entrar em contato com você"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:190
-#, fuzzy
 msgid ""
 "In case something goes wrong or is unclear, we strongly suggest that you "
 "provide ways for your attendees to contact you:"
 msgstr ""
-"No caso de algo der errado ou não é clara, nós sugerimos que você fornecer "
-"maneiras para os participantes em contato com você:"
+"No caso de algo dar errado ou ser pouco claro, nós sugerimos que você "
+"forneça maneiras para os participantes entrarem em contato com você:"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:12
 #: pretix/control/templates/pretixcontrol/user/settings.html:11
-#, fuzzy
 msgid "General settings"
 msgstr "Configurações Gerais"
 
@@ -12966,9 +12921,8 @@ msgstr "Fundamentos"
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:46
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:349
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:32
-#, fuzzy
 msgid "Geo coordinates"
-msgstr "coordenadas geo"
+msgstr "coordenadas geográficas"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:36
 #: pretix/control/templates/pretixcontrol/event/settings.html:111
@@ -12979,7 +12933,6 @@ msgstr "coordenadas geo"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:470
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:33
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:154
-#, fuzzy
 msgid "Optional"
 msgstr "Opcional"
 
@@ -12987,51 +12940,44 @@ msgstr "Opcional"
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:54
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:357
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:40
-#, fuzzy
 msgid "Geocoding data © OpenStreetMap"
-msgstr "Geocodificação dados © OpenStreetMap"
+msgstr "Geocoding data © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:63
 #: pretix/control/templates/pretixcontrol/item/index.html:26
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:373
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:57
-#, fuzzy
 msgid "Meta data"
 msgstr "meta dados"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:82
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:46
-#, fuzzy
 msgid "Localization"
 msgstr "Localização"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:88
-#, fuzzy
 msgid "Attendee data"
-msgstr "dados de participantes"
+msgstr "Dados do participante"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:103
-#, fuzzy
 msgid "Texts"
-msgstr "Texto:% s"
+msgstr "Textos"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:110
-#, fuzzy
 msgid "Confirmation text"
-msgstr "texto de confirmação"
+msgstr "Texto de confirmação"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:115
-#, fuzzy
 msgid ""
 "These texts need to be confirmed by the user before a purchase is possible. "
 "You could for example link your terms of service here. If you use the Pages "
 "feature to publish your terms of service, you don't need this setting since "
 "you can configure it there."
 msgstr ""
-"Estes textos devem ser confirmados pelo utilizador  antes de uma compra é "
-"possível. Você poderia, por exemplo, ligar os seus termos de serviço aqui. "
-"Se você usar as páginas apresentam para publicar seus termos de serviço, "
-"você não precisa essa configuração, pois você pode configurá-lo lá."
+"Estes textos devem ser confirmados pelo utilizador antes da compra ser "
+"possível. Pode, por exemplo, ligar os seus termos de serviço aqui. Se usar "
+"as páginas apresentam para publicar seus termos de serviço, não precisa esta "
+"configuração, pois pode configurá-lo lá."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:172
 #, fuzzy
