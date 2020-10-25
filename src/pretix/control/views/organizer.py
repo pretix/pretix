@@ -1326,9 +1326,8 @@ class GateUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         return get_object_or_404(Gate, organizer=self.request.organizer, pk=self.kwargs.get('gate'))
 
     def get_success_url(self):
-        return reverse('control:organizer.gate', kwargs={
+        return reverse('control:organizer.gates', kwargs={
             'organizer': self.request.organizer.slug,
-            'gate': self.object.pk
         })
 
     def form_valid(self, form):
