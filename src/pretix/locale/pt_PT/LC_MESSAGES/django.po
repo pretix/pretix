@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
 "PO-Revision-Date: 2020-10-25 18:59+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -8863,14 +8863,12 @@ msgstr "produto empacotado"
 
 #: pretix/control/forms/item.py:750 pretix/control/forms/orders.py:265
 #: pretix/control/forms/orders.py:414
-#, fuzzy
 msgid "inactive"
 msgstr "inativo"
 
 #: pretix/control/forms/orderimport.py:9
-#, fuzzy
 msgid "Import mode"
-msgstr "modo de importação"
+msgstr "Modo de importação"
 
 #: pretix/control/forms/orderimport.py:11
 msgid "Create a separate order for each line"
@@ -8928,12 +8926,10 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:106
 #: pretix/control/templates/pretixcontrol/order/deny.html:19
-#, fuzzy
 msgid "Notify user by e-mail"
-msgstr "Notificar o utilizador  por e-mail"
+msgstr "Notificar o utilizador por e-mail"
 
 #: pretix/control/forms/orders.py:113
-#, fuzzy
 msgid "Keep a cancellation fee of"
 msgstr "Manter uma taxa de cancelamento de"
 
@@ -8952,9 +8948,8 @@ msgstr ""
 "valor bruto, o imposto será calculado automaticamente."
 
 #: pretix/control/forms/orders.py:145
-#, fuzzy
 msgid "Payment amount"
-msgstr "valor do pagamento"
+msgstr "Montante a pagar"
 
 #: pretix/control/forms/orders.py:149
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:18
@@ -8962,17 +8957,14 @@ msgstr "valor do pagamento"
 #: pretix/plugins/reports/exporters.py:392
 #: pretix/plugins/reports/exporters.py:502
 #: pretix/plugins/reports/exporters.py:531
-#, fuzzy
 msgid "Payment date"
 msgstr "Data de pagamento"
 
 #: pretix/control/forms/orders.py:187
-#, fuzzy
 msgid "Re-calculate taxes"
-msgstr "impostos recalcular"
+msgstr "Recalcular impostos"
 
 #: pretix/control/forms/orders.py:190
-#, fuzzy
 msgid "Do not re-calculate taxes"
 msgstr "Não voltar a calcular os impostos"
 
@@ -9044,22 +9036,18 @@ msgstr ""
 #: pretix/control/forms/orders.py:340 pretix/control/forms/orders.py:344
 #: pretix/control/forms/orders.py:355 pretix/control/forms/orders.py:392
 #: pretix/control/forms/orders.py:409 pretix/control/forms/orders.py:437
-#, fuzzy
 msgid "(Unchanged)"
 msgstr "(Inalterado)"
 
 #: pretix/control/forms/orders.py:350 pretix/control/forms/orders.py:432
-#, fuzzy
 msgid "New price (gross)"
 msgstr "Novo preço (bruto)"
 
 #: pretix/control/forms/orders.py:359
-#, fuzzy
 msgid "Generate a new secret"
 msgstr "Gerar um novo segredo"
 
 #: pretix/control/forms/orders.py:363
-#, fuzzy
 msgid "Cancel this position"
 msgstr "Cancelar esta posição"
 
