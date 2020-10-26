@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-26 08:10+0000\n"
+"PO-Revision-Date: 2020-10-26 08:30+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -11237,18 +11237,17 @@ msgid "Custom check-in rule"
 msgstr "Personalizado check-in regra"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
-#, fuzzy
 msgid ""
 "You can create check-in lists that you can use e.g. at the entrance of your "
 "event to track who is coming and if they actually bought a ticket. You can "
 "do this process by printing out the list on paper, using this web interface "
 "or by using one of our mobile or desktop apps to automatically scan tickets."
 msgstr ""
-"Você pode criar check-in listas que podem ser utilizadas por exemplo na "
+"Pode criar listas de check-in que podem ser utilizadas por exemplo na "
 "entrada do seu evento para rastrear quem está chegando e se eles realmente "
-"comprou um bilhete. Você pode fazer este processo imprimindo a lista em "
-"papel, utilizando esta interface web ou usando um dos nossos aplicativos "
-"móveis ou de desktop para bilhetes digitalização automaticamente."
+"compraram um bilhete. Pode fazer este processo imprimindo a lista em papel, "
+"utilizando esta interface web ou usando uma das nossas apps móveis ou de "
+"desktop para digitalizar bilhetes automaticamente."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:14
 #, fuzzy
@@ -13668,16 +13667,14 @@ msgid "Create new application"
 msgstr "Criar uma nova aplicação"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:39
-#, fuzzy
 msgid "No applications registered yet."
-msgstr "Nenhum aplicativo registrado ainda."
+msgstr "Nenhuma aplicação registada ainda."
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:46
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:6
-#, fuzzy
 msgid "Register a new application"
-msgstr "Registrar um novo aplicativo"
+msgstr "Registar uma nova aplicação"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:6
@@ -13701,9 +13698,8 @@ msgstr "segredo rolo"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:6
-#, fuzzy
 msgid "Update an application"
-msgstr "Atualizar um aplicativo"
+msgstr "Atualizar uma aplicação"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:4
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:6
@@ -13736,9 +13732,8 @@ msgid "Authorized applications"
 msgstr "Aplicações Autorizadas"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:9
-#, fuzzy
 msgid "Manage your own apps"
-msgstr "Gerenciar seus próprios aplicativos"
+msgstr "Gerir as suas próprias aplicações"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:18
 #, fuzzy
@@ -13746,9 +13741,8 @@ msgid "Permissions"
 msgstr "permissões"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:59
-#, fuzzy
 msgid "No applications have access to your pretix account."
-msgstr "Nenhum aplicativo tem acesso à sua conta pretix."
+msgstr "Nenhuma aplicação tem acesso à sua conta pretix."
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:4
 #: pretix/control/templates/pretixcontrol/order/approve.html:8
@@ -15071,13 +15065,12 @@ msgid "Connect to device:"
 msgstr "Ligue para o dispositivo:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
-#, fuzzy
 msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
-"Baixar um aplicativo que seja compatível com pretix. Por exemplo, o nosso "
-"check-in aplicativo <strong> pretixSCAN </strong> está disponível em todas "
+"Descarregar uma aplicação que seja compatível com pretix. Por exemplo, a "
+"nossa app de check-in <strong>pretixSCAN</strong> está disponível em todas "
 "as principais plataformas."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
@@ -15086,13 +15079,11 @@ msgid "Download pretixSCAN"
 msgstr "Baixar pretixSCAN"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:18
-#, fuzzy
 msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
-"Abra o aplicativo que você deseja se conectar e, opcionalmente, redefini-lo "
-"para o estado original."
+"Abra a app que deseja ligar-se e, opcionalmente, reinicie ao estado original."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:20
 #, fuzzy
@@ -15100,13 +15091,12 @@ msgid "Scan the following configuration code:"
 msgstr "Digitalize o código seguinte configuração:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:22
-#, fuzzy
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
-"Se o seu aplicativo / dispositivo não suporta a digitalização de um código "
-"QR, você também pode digitar as seguintes informações:"
+"Se a seu app/dispositivo não suporta a digitalização de um código QR, também "
+"pode digitar as seguintes informações:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:24
 #, fuzzy
@@ -16201,10 +16191,8 @@ msgid "To set up this device, please follow the following steps:"
 msgstr "Para configurar este dispositivo, siga os seguintes passos:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:12
-#, fuzzy
 msgid "Download the Google Authenticator application to your phone:"
-msgstr ""
-"Faça o download do aplicativo Google Authenticator para o seu telefone:"
+msgstr "Faça o download da aplicação Google Authenticator para o seu telefone:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:17
 #, fuzzy
@@ -16227,11 +16215,10 @@ msgid "Blackberry (Link via Google)"
 msgstr "Blackberry (Link via Google)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:39
-#, fuzzy
 msgid "Add a new account to the app by scanning the following barcode:"
 msgstr ""
-"Adicionar uma nova conta para o aplicativo, digitalizando o seguinte código "
-"de barras:"
+"Adicionar uma nova conta para a app, digitalizando o seguinte código de "
+"barras:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:43
 #, fuzzy
@@ -16239,9 +16226,8 @@ msgid "Can't scan the barcode?"
 msgstr "Não é possível digitalizar o código de barras?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:49
-#, fuzzy
 msgid "Use the \"provide a key\" option of your authenticator app."
-msgstr "Use a opção \"fornecer uma chave\" do seu aplicativo autenticador."
+msgstr "Use a opção \"fornecer uma chave\" da sua aplicação autenticador."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:52
 #, fuzzy
@@ -16374,7 +16360,6 @@ msgid "Two-factor authentication"
 msgstr "autenticação de dois fatores"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:8
-#, fuzzy
 msgid ""
 "Two-factor authentication is a way to add additional security to your "
 "account. If you enable it, you will not only need your password to log in, "
@@ -16382,10 +16367,10 @@ msgid ""
 "smartphone or a hardware token generator and that changes on a regular basis."
 msgstr ""
 "A autenticação de dois fatores é uma maneira de adicionar segurança "
-"adicional à sua conta. Se você ativá-lo, você não só vai precisar de sua "
-"palavra-passe para entrar, mas também um símbolo adicional que é gerado por "
-"exemplo por um aplicativo em seu smartphone ou um gerador de token de "
-"hardware e que mudanças em uma base regular."
+"adicional à sua conta. Se ativá-la, não só vai precisar de sua palavra-passe "
+"para entrar, mas também um token adicional que é gerado por exemplo por uma "
+"app no seu smartphone ou um gerador de token de hardware e que muda "
+"regularmente."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:17
 #, fuzzy
@@ -17766,9 +17751,8 @@ msgid "A new client secret has been generated and is now effective."
 msgstr "Um novo segredo do cliente foi gerado e é agora eficaz."
 
 #: pretix/control/views/oauth.py:143
-#, fuzzy
 msgid "Access for the selected application has been revoked."
-msgstr "Acesso para o aplicativo selecionado foi revogado."
+msgstr "Acesso para a aplicação selecionada foi revogada."
 
 #: pretix/control/views/orderimport.py:33
 msgid "Please only upload CSV files."
@@ -19262,14 +19246,12 @@ msgstr ""
 "Iremos enviar-lhe um e-mail assim que recebermos o seu pagamento."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:59
-#, fuzzy
 msgid "Open banking app"
-msgstr "Abrir aplicativo bancário"
+msgstr "Abrir app bancária"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:61
-#, fuzzy
 msgid "Requires that the app supports BezahlCode"
-msgstr "Requer que o aplicativo suporta BezahlCode"
+msgstr "Requer que a app suporte BezahlCode"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
@@ -20028,13 +20010,12 @@ msgid "Old check-in device API"
 msgstr "Old check-in API dispositivo"
 
 #: pretix/plugins/pretixdroid/__init__.py:18
-#, fuzzy
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
 msgstr ""
-"Este plugin permite que você use os aplicativos pretixdroid e pretixdesk "
-"para seu evento."
+"Este plugin permite que você use os apps pretixdroid e pretixdesk para seu "
+"evento."
 
 #: pretix/plugins/reports/__init__.py:10 pretix/plugins/reports/__init__.py:13
 #, fuzzy
