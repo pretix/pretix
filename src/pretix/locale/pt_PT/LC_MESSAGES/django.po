@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-26 08:30+0000\n"
+"PO-Revision-Date: 2020-10-26 09:26+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -10670,11 +10670,11 @@ msgid "The application requires the following permissions:"
 msgstr "A aplicação requer as seguintes permissões:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:30
-#, fuzzy
 msgid ""
 "Please select the organizer accounts this application should get access to:"
 msgstr ""
-"Por favor, selecione o organizador contas esta aplicação deve obter acesso a:"
+"Por favor, selecione a conta de organizador que esta aplicação deve obter "
+"acesso a:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:36
 msgid ""
@@ -10685,12 +10685,10 @@ msgstr ""
 "acesso à sua conta pretix acontece por sua conta e risco."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:49
-#, fuzzy
 msgid "Error:"
 msgstr "Erro:"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:7
-#, fuzzy
 msgid "Set new password"
 msgstr "Definir nova palavra-passe"
 
@@ -10743,63 +10741,53 @@ msgid "Save"
 msgstr "Salve"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
-#, fuzzy
 msgid "Create a new account"
 msgstr "Criar uma nova conta"
 
 #: pretix/control/templates/pretixcontrol/base.html:98
-#, fuzzy
 msgid "Toggle navigation"
-msgstr "Alternar de navegação"
+msgstr "Alternar navegação"
 
 #: pretix/control/templates/pretixcontrol/base.html:113
 #: pretix/control/templates/pretixcontrol/base.html:136
 #: pretix/control/templates/pretixcontrol/base.html:140
 #: pretix/control/templates/pretixcontrol/base.html:141
-#, fuzzy
 msgid "Go to shop"
-msgstr "Ir para fazer compras"
+msgstr "Ir para a loja"
 
 #: pretix/control/templates/pretixcontrol/base.html:119
 #: pretix/control/templates/pretixcontrol/base.html:147
 #: pretix/control/templates/pretixcontrol/base.html:148
-#, fuzzy
 msgid "Public profile"
 msgstr "Perfil público"
 
 #: pretix/control/templates/pretixcontrol/base.html:199
-#, fuzzy
 msgid "End admin session"
 msgstr "Terminar a sessão de administração"
 
 #: pretix/control/templates/pretixcontrol/base.html:211
-#, fuzzy
 msgid "Account Settings"
-msgstr "Configurações da conta"
+msgstr "Configurações de conta"
 
 #: pretix/control/templates/pretixcontrol/base.html:216
 #: pretix/control/templates/pretixcontrol/base.html:218
-#, fuzzy
 msgid "Log out"
 msgstr "Sair"
 
 #: pretix/control/templates/pretixcontrol/base.html:244
-#, fuzzy
 msgid "Organizer account"
-msgstr "conta Organizer"
+msgstr "Conta de organizador"
 
 #: pretix/control/templates/pretixcontrol/base.html:267
-#, fuzzy
 msgid "Search for events"
 msgstr "Procurar eventos"
 
 #: pretix/control/templates/pretixcontrol/base.html:322
-#, fuzzy
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
-"Por favor, deixe um breve comentário sobre o que você fez nas sessões "
-"seguintes de administração:"
+"Por favor, deixe um breve comentário sobre o que você fez nas seguintes "
+"sessões de administração:"
 
 #: pretix/control/templates/pretixcontrol/base.html:337
 #, python-format
@@ -10812,9 +10800,8 @@ msgid "Stop impersonating"
 msgstr "Parar personificando"
 
 #: pretix/control/templates/pretixcontrol/base.html:353
-#, fuzzy
 msgid "Read more"
-msgstr "Consulte Mais informação"
+msgstr "Consulte mais informação"
 
 #: pretix/control/templates/pretixcontrol/base.html:370
 msgid ""
@@ -10829,9 +10816,8 @@ msgstr ""
 "estatísticas e bloquear as pessoas de realmente comprar bilhetes."
 
 #: pretix/control/templates/pretixcontrol/base.html:377
-#, fuzzy
 msgid "Show all test mode orders"
-msgstr "Mostrar todas as pedidos do modo de teste"
+msgstr "Mostrar todas as encomendas em do modo de teste"
 
 #: pretix/control/templates/pretixcontrol/base.html:385
 msgid ""
@@ -10849,13 +10835,12 @@ msgstr ""
 "mensagem vai desaparecer assim que clicou nela."
 
 #: pretix/control/templates/pretixcontrol/base.html:398
-#, fuzzy
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
 msgstr ""
 "pretix está sendo executado no modo de depuração. Por razões de segurança, "
-"por favor, nunca executar o modo de depuração em uma instância de produção."
+"por favor, nunca executar o modo de depuração numa instância de produção."
 
 #: pretix/control/templates/pretixcontrol/base.html:407
 #, python-format
@@ -10863,55 +10848,46 @@ msgid "Times displayed in %(tz)s"
 msgstr "Horas apresentadas em %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html:417
-#, fuzzy
 msgid "running in development mode"
 msgstr "execução no modo de desenvolvimento"
 
 #: pretix/control/templates/pretixcontrol/base.html:433
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:12
 #: pretix/presale/templates/pretixpresale/waiting.html:25
-#, fuzzy
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr "Se isso demora mais do que alguns minutos, entre em contato connosco."
+msgstr "Se isto demora mais do que alguns minutos, entre em contato connosco."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:34
-#, fuzzy
 msgid "Device ID"
-msgstr "Identificador do dispositivo"
+msgstr "ID do dispositivo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:6
-#, fuzzy
 msgid "Receipt ID"
-msgstr "ID Receipt"
+msgstr "ID de recibo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
-#, fuzzy
 msgid "ID"
-msgstr "EU IRIA"
+msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:15
-#, fuzzy
 msgid "ZVT Terminal"
 msgstr "Terminal ZVT"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:16
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Trace number"
-msgstr "número de rastreamento"
+msgstr "Número de rastreamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Payment type"
 msgstr "Tipo de pagamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Additional text"
-msgstr "O texto adicional"
+msgstr "Texto adicional"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
 #, fuzzy
@@ -10920,45 +10896,38 @@ msgid "Turnover number"
 msgstr "Número de rotatividade"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:24
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Receipt number"
 msgstr "Número do Recibo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:26
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Card type"
 msgstr "Tipo de carta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:28
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Card expiration"
 msgstr "Validade do cartão"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:33
-#, fuzzy
 msgid "Transaction Code"
-msgstr "Código transação"
+msgstr "Código de transação"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:35
-#, fuzzy
 msgid "Merchant Code"
-msgstr "Código Merchant"
+msgstr "Código Mercante"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:37
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:34
 #: pretix/plugins/banktransfer/refund_export.py:23
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
-#, fuzzy
 msgid "Currency"
 msgstr "Moeda"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:41
 #: pretix/control/templates/pretixcontrol/items/questions.html:22
-#, fuzzy
 msgid "Type"
 msgstr "Tipo"
 
