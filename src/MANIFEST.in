@@ -5,6 +5,7 @@ recursive-include pretix/static.dist *
 recursive-include pretix/locale *
 recursive-include pretix/helpers/locale *
 recursive-include pretix/base/templates *
+recursive-include pretix/base/secretgenerators *
 recursive-include pretix/control/templates *
 recursive-include pretix/presale/templates *
 recursive-include pretix/plugins/banktransfer/templates *
