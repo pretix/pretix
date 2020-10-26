@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-26 09:26+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"PO-Revision-Date: 2020-10-26 10:00+0000\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -10890,7 +10890,6 @@ msgid "Additional text"
 msgstr "Texto adicional"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Turnover number"
 msgstr "Número de rotatividade"
@@ -10933,7 +10932,6 @@ msgstr "Tipo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:43
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:63
-#, fuzzy
 msgid "Card Entry Mode"
 msgstr "Modo de entrada de cartão"
 
@@ -10943,26 +10941,22 @@ msgstr "Modo de entrada de cartão"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:28
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:43
-#, fuzzy
 msgid "Card number"
 msgstr "Número do cartão"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:52
-#, fuzzy
 msgid "Client Transaction Code"
-msgstr "Código Transação cliente"
+msgstr "Código Transação Cliente"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:55
-#, fuzzy
 msgid "Server Transaction Code"
-msgstr "Código Transaction Server"
+msgstr "Código Transaction Servidor"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:61
 msgid "Payment Application"
 msgstr "Aplicação de pagamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
-#, fuzzy
 msgid "Authorization Code"
 msgstr "Código de autorização"
 
@@ -10975,18 +10969,15 @@ msgid "Check-in list: %(name)s"
 msgstr "Lista de check-in: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
-#, fuzzy
 msgid "Edit list configuration"
 msgstr "Editar configuração de lista"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:22
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:30
-#, fuzzy
 msgid "PDF"
 msgstr "PDF"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:27
-#, fuzzy
 msgid "CSV"
 msgstr "CSV"
 
@@ -11009,35 +11000,29 @@ msgstr "CSV"
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:22
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:118
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
-#, fuzzy
 msgid "Filter"
 msgstr "Filtro"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:52
-#, fuzzy
 msgid "No attendee record was found."
-msgstr "Nenhum registro participante foi encontrado."
+msgstr "Nenhum registo de participante foi encontrado."
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:84
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
-#, fuzzy
 msgid "Timestamp"
-msgstr "timestamp"
+msgstr "Timestamp"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:99
-#, fuzzy
 msgid "unpaid"
-msgstr "não remunerado"
+msgstr "Não remunerado"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:138
-#, fuzzy
 msgid "Checked in but left"
-msgstr "O check-in, mas deixou"
+msgstr "Check-in feito, mas saiu"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:143
-#, fuzzy
 msgid "Checked in automatically"
-msgstr "O check-in automaticamente"
+msgstr "Fez check-in automatico"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:154
 #, python-format
