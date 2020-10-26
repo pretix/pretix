@@ -1790,7 +1790,8 @@ class OrderPositionSendMail(OrderSendMail):
             OrderPosition,
             order__event=self.request.event,
             order__code=self.kwargs['code'].upper(),
-            pk=self.kwargs['position']
+            pk=self.kwargs['position'],
+            attendee_email__isnull=False
         )
         return kwargs
 
@@ -1799,7 +1800,8 @@ class OrderPositionSendMail(OrderSendMail):
             OrderPosition,
             order__event=self.request.event,
             order__code=self.kwargs['code'].upper(),
-            pk=self.kwargs['position']
+            pk=self.kwargs['position'],
+            attendee_email__isnull=False
         )
         self.preview_output = {}
         with language(position.order.locale):
