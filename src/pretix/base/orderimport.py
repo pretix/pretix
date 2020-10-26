@@ -18,8 +18,9 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import (
-    ItemVariation, OrderPosition, QuestionAnswer, QuestionOption, Seat,
-    Question)
+    ItemVariation, OrderPosition, Question, QuestionAnswer, QuestionOption,
+    Seat,
+)
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SCHEMES,

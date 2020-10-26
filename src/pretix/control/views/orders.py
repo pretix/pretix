@@ -79,8 +79,8 @@ from pretix.control.forms.orders import (
     CancelForm, CommentForm, ConfirmPaymentForm, EventCancelForm, ExporterForm,
     ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeChangeForm,
     OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
-    OrderPositionAddFormset, OrderPositionChangeForm, OrderRefundForm,
-    OtherOperationsForm, OrderPositionMailForm,
+    OrderPositionAddFormset, OrderPositionChangeForm, OrderPositionMailForm,
+    OrderRefundForm, OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
