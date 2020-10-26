@@ -13,6 +13,8 @@ banktransfer
 barcode
 barcodes
 Bcc
+bic
+BIC
 boolean
 booleans
 cancelled
@@ -49,6 +51,8 @@ gunicorn
 guid
 hardcoded
 hostname
+iban
+IBAN
 ics
 idempotency
 iframe
