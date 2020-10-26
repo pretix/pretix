@@ -182,7 +182,7 @@
                             {{ order.email|default_if_none:"" }}
                             {% if order.email and order.email_known_to_work %}
                                 <span class="fa fa-check-circle text-success" data-toggle="tooltip" title="{% trans "We know that this email address works because the user clicked a link we sent them." %}"></span>
-                            {% endif %}&nbsp;&nbsp;
+                            {% endif %}
                             <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                 <span class="fa fa-edit"></span>
                             </a>
@@ -388,8 +388,12 @@
                                                     {{ line.attendee_email }}
                                                     {% if not line.addon_to %}
                                                         <form class="form-inline helper-display-inline" method="post"
-                                                                action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}">
+                                                              action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}">
                                                             {% csrf_token %}
+                                                            <a href="{% url "control:event.order.position.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}"
+                                                               class="btn btn-default btn-xs">
+                                                                <span class="fa fa-envelope-o"></span>
+                                                            </a>
                                                             <button class="btn btn-default btn-xs">
                                                                 {% trans "Resend link" %}
                                                             </button>
