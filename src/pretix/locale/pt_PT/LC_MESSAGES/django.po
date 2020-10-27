@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 17:39+0000\n"
-"PO-Revision-Date: 2020-10-27 06:00+0000\n"
-"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
+"PO-Revision-Date: 2020-10-27 21:00+0000\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -791,7 +791,7 @@ msgstr "Cancelamento"
 #: pretix/control/templates/pretixcontrol/order/index.html:209
 #: pretix/presale/templates/pretixpresale/event/order.html:220
 msgid "Invoice"
-msgstr "Fatura"
+msgstr "Factura"
 
 #: pretix/base/exporters/invoices.py:268 pretix/base/exporters/orderlist.py:230
 #: pretix/base/exporters/orderlist.py:506 pretix/base/models/orders.py:1000
@@ -1504,12 +1504,12 @@ msgstr "Renderizador clássico (pretix 1.0)"
 #: pretix/base/invoice.py:288
 msgctxt "invoice"
 msgid "Invoice from"
-msgstr "Fatura de"
+msgstr "Factura de"
 
 #: pretix/base/invoice.py:294
 msgctxt "invoice"
 msgid "Invoice to"
-msgstr "Fatura para"
+msgstr "Factura para"
 
 #: pretix/base/invoice.py:322 pretix/base/invoice.py:753
 msgctxt "invoice"
@@ -1703,7 +1703,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:692
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "Renderizador Fatura moderna (pretix 2,7)"
+msgstr "Renderizador Factura moderna (pretix 2,7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -5521,7 +5521,7 @@ msgstr ""
 
 #: pretix/base/settings.py:289
 msgid "Invoice address explanation"
-msgstr "Fatura explicação de endereço"
+msgstr "Factura explicação de endereço"
 
 #: pretix/base/settings.py:292
 msgid "This text will be shown above the invoice address form during checkout."
@@ -7062,7 +7062,7 @@ msgstr ""
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
 msgstr ""
-"Tem que perguntar pelos endereços de faturação se quiser torná-los "
+"Tem que perguntar pelos endereços de facturação se quiser torná-los "
 "obrigatórios."
 
 #: pretix/base/settings.py:2167
@@ -7213,7 +7213,7 @@ msgstr "Erro Interno do Servidor"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr "Tivemos problemas em processar o seu pedido."
+msgstr "Tivemos problemas a processar o seu pedido."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
@@ -11689,7 +11689,7 @@ msgstr "Mostrar mais logs"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:5
 msgid "Invoice settings"
-msgstr "Definições de fatura"
+msgstr "Definições de factura"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:11
 msgid "Invoice generation"
@@ -11705,7 +11705,7 @@ msgstr "Detalhes do emissor"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:46
 msgid "Invoice customization"
-msgstr "Personalização da fatura"
+msgstr "Personalização da factura"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:60
 msgid "Save and show preview"
@@ -13817,8 +13817,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:216
 msgid "Rebuild the invoice with updated data but the same invoice number."
 msgstr ""
-"Reconstruir a fatura com dados atualizados, mas manter o mesmo número da "
-"fatura."
+"Reconstruir a factura com dados atualizados, mas manter o mesmo número da "
+"factura."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:217
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:20
@@ -17221,15 +17221,15 @@ msgstr "Este número de IVA é válido."
 
 #: pretix/control/views/orders.py:1170 pretix/control/views/orders.py:1195
 msgid "Unknown invoice."
-msgstr "Fatura desconhecida."
+msgstr "Factura desconhecida."
 
 #: pretix/control/views/orders.py:1173 pretix/control/views/orders.py:1198
 msgid "The invoice has already been canceled."
-msgstr "A fatura já foi cancelada."
+msgstr "A factura já foi cancelada."
 
 #: pretix/control/views/orders.py:1175 pretix/control/views/orders.py:1200
 msgid "The invoice has been cleaned of personal data."
-msgstr "Os dados pessoais foram removidos da fatura."
+msgstr "Os dados pessoais foram removidos da factura."
 
 #: pretix/control/views/orders.py:1231
 msgid "The email has been queued to be sent."
@@ -17237,18 +17237,18 @@ msgstr "O e-mail foi colocado na fila para ser enviado."
 
 #: pretix/control/views/orders.py:1255 pretix/presale/views/order.py:1012
 msgid "This invoice has not been found"
-msgstr "Esta fatura não foi encontrada"
+msgstr "Esta factura não foi encontrada"
 
 #: pretix/control/views/orders.py:1262 pretix/presale/views/order.py:1019
 msgid "The invoice file is no longer stored on the server."
-msgstr "O ficheiro da fatura já não está armazenado no servidor."
+msgstr "O ficheiro da factura já não está armazenado no servidor."
 
 #: pretix/control/views/orders.py:1267 pretix/presale/views/order.py:1024
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
 msgstr ""
-"O ficheiro com a fatura ainda não foi gerado, iremos gerá-lo agora para si. "
+"O ficheiro com a factura ainda não foi gerado, iremos gerá-lo agora para si. "
 "Por favor, tente novamente dentro de alguns segundos."
 
 #: pretix/control/views/orders.py:1294
@@ -19580,7 +19580,7 @@ msgid ""
 "with us if this problem persists."
 msgstr ""
 "Tivemos problemas a comunicar com o Stripe. Por favor tente novamente e "
-"entrar em contato connosco, se este problema persistir."
+"contacte-nos se este problema persistir."
 
 #: pretix/plugins/stripe/payment.py:452 pretix/plugins/stripe/payment.py:804
 msgid ""
@@ -21037,7 +21037,7 @@ msgid ""
 "You need to select a payment method above before you can request an invoice."
 msgstr ""
 "Tem de selecionar um método de pagamento acima antes de poder solicitar uma "
-"fatura."
+"factura."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:244
 #: pretix/presale/templates/pretixpresale/event/order.html:251
@@ -21584,7 +21584,7 @@ msgstr "O pagamento foi tarde demais para ser aceite."
 
 #: pretix/presale/views/order.py:405
 msgid "An invoice has been generated."
-msgstr "Foi gerada uma fatura."
+msgstr "Foi gerada uma factura."
 
 #: pretix/presale/views/order.py:490
 msgid "The payment method for this order cannot be changed."
