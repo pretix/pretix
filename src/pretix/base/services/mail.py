@@ -372,7 +372,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             backend.send_messages([email])
         except smtplib.SMTPResponseException as e:
             if e.smtp_code in (101, 111, 421, 422, 431, 442, 447, 452):
-                self.retry(max_retries=5, countdown=2 ** (self.request.retries * 2))
+                self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
             logger.exception('Error sending email')
 
             if order:
@@ -389,7 +389,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             raise SendMailException('Failed to send an email to {}.'.format(to))
         except Exception as e:
             if isinstance(e, (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, ssl.SSLError, OSError)):
-                self.retry(max_retries=5, countdown=2 ** (self.request.retries * 2))
+                self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
             if order:
                 order.log_action(
                     'pretix.event.order.email.error',

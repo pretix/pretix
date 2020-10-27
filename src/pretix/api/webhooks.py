@@ -250,7 +250,7 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
                     webhook.enabled = False
                     webhook.save()
                 elif resp.status_code > 299:
-                    raise self.retry(countdown=2 ** (self.request.retries * 2))
+                    raise self.retry(countdown=2 ** (self.request.retries * 2))  # max is 2 ** (8*2) = 65536 seconds = ~18 hours
             except RequestException as e:
                 WebHookCall.objects.create(
                     webhook=webhook,
@@ -262,6 +262,6 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
                     payload=json.dumps(payload),
                     response_body=str(e)[:1024 * 1024]
                 )
-                raise self.retry(countdown=2 ** (self.request.retries * 2))
+                raise self.retry(countdown=2 ** (self.request.retries * 2))  # max is 2 ** (8*2) = 65536 seconds = ~18 hours
         except MaxRetriesExceededError:
             pass
