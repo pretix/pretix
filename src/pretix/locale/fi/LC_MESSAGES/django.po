@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 20:02+0000\n"
-"PO-Revision-Date: 2020-10-24 16:27+0000\n"
+"PO-Revision-Date: 2020-10-27 21:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -6219,7 +6219,7 @@ msgstr ""
 #: pretix/base/settings.py:2009 pretix/base/settings.py:2020
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr ""
+msgstr "Matti Meikäläinen"
 
 #: pretix/base/settings.py:2015
 msgid "Calling name"
