@@ -9,7 +9,7 @@ from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import CheckinList, Item, Order, SubEvent
-from pretix.control.forms import ExtFileField
+from pretix.control.forms import CachedFileField
 from pretix.control.forms.widgets import Select2, Select2Multiple
 
 
@@ -23,7 +23,7 @@ class MailForm(forms.Form):
     sendto = forms.MultipleChoiceField()  # overridden later
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
-    attachment = ExtFileField(
+    attachment = CachedFileField(
         label=_("Attachment"),
         required=False,
         ext_whitelist=(

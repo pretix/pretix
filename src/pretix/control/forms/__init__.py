@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.uploadedfile import UploadedFile
 from django.forms.utils import from_current_timezone
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from ...base.forms import I18nModelForm
@@ -77,6 +78,8 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
 
         @property
         def name(self):
+            if hasattr(self.file, 'display_name'):
+                return self.file.display_name
             return self.file.name
 
         @property
@@ -84,6 +87,8 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
             return any(self.file.name.lower().endswith(e) for e in ('.jpg', '.jpeg', '.png', '.gif'))
 
         def __str__(self):
+            if hasattr(self.file, 'display_name'):
+                return self.file.display_name
             return os.path.basename(self.file.name).split('.', 1)[-1]
 
         @property
@@ -93,6 +98,48 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
     def get_context(self, name, value, attrs):
         ctx = super().get_context(name, value, attrs)
         ctx['widget']['value'] = self.FakeFile(value)
+        ctx['widget']['cachedfile'] = None
+        return ctx
+
+
+class CachedFileInput(forms.ClearableFileInput):
+    template_name = 'pretixbase/forms/widgets/thumbnailed_file_input.html'
+
+    class FakeFile(File):
+        def __init__(self, file):
+            self.file = file
+
+        @property
+        def name(self):
+            return self.file.filename
+
+        @property
+        def is_img(self):
+            return any(self.file.filename.lower().endswith(e) for e in ('.jpg', '.jpeg', '.png', '.gif'))
+
+        def __str__(self):
+            return self.file.filename
+
+        @property
+        def url(self):
+            return self.file.file.url
+
+    def value_from_datadict(self, data, files, name):
+        from ...base.models import CachedFile
+        v = super().value_from_datadict(data, files, name)
+        if v is None and data.get(name + '-cachedfile'):  # An explicit "[x] clear" would be False, not None
+            return CachedFile.objects.filter(id=data[name + '-cachedfile']).first()
+        return v
+
+    def get_context(self, name, value, attrs):
+        from ...base.models import CachedFile
+        if isinstance(value, CachedFile):
+            value = self.FakeFile(value)
+
+        ctx = super().get_context(name, value, attrs)
+        ctx['widget']['value'] = value
+        ctx['widget']['cachedfile'] = value.file if isinstance(value, self.FakeFile) else None
+        ctx['widget']['hidden_name'] = name + '-cachedfile'
         return ctx
 
 
@@ -129,12 +176,55 @@ class ExtFileField(SizeFileField):
 
     def clean(self, *args, **kwargs):
         data = super().clean(*args, **kwargs)
-        if data:
+        if isinstance(data, File):
             filename = data.name
             ext = os.path.splitext(filename)[1]
             ext = ext.lower()
             if ext not in self.ext_whitelist:
                 raise forms.ValidationError(_("Filetype not allowed!"))
+        return data
+
+
+class CachedFileField(ExtFileField):
+    widget = CachedFileInput
+
+    def to_python(self, data):
+        from ...base.models import CachedFile
+
+        if isinstance(data, CachedFile):
+            return data
+
+        return super().to_python(data)
+
+    def bound_data(self, data, initial):
+        from ...base.models import CachedFile
+
+        if isinstance(data, File):
+            cf = CachedFile.objects.create(
+                expires=now() + datetime.timedelta(days=1),
+                date=now(),
+                filename=data.name,
+                type=data.content_type,
+            )
+            cf.file.save(data.name, data.file)
+            cf.save()
+            return cf
+        return super().bound_data(data, initial)
+
+    def clean(self, *args, **kwargs):
+        from ...base.models import CachedFile
+
+        data = super().clean(*args, **kwargs)
+        if isinstance(data, File):
+            cf = CachedFile.objects.create(
+                expires=now() + datetime.timedelta(days=1),
+                date=now(),
+                filename=data.name,
+                type=data.content_type,
+            )
+            cf.file.save(data.name, data.file)
+            cf.save()
+            return cf
         return data
 
 

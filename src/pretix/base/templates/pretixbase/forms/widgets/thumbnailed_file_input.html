@@ -4,3 +4,4 @@
     <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>{% endif %}{% if widget.value.is_img %}<br><a href="{{ widget.value.url }}" data-lightbox="{{ widget.value.name }}"><img src="{{ widget.value|thumb:"200x100" }}" /></a>{% endif %}<br>
     {{ widget.input_text }}:{% endif %}
 <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+{% if widget.cachedfile %}<input type="hidden" name="{{ widget.hidden_name }}" value="{{ widget.cachedfile.id }}">{% endif %}

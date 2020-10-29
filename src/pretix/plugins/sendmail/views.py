@@ -1,5 +1,4 @@
 import logging
-from datetime import timedelta
 
 import bleach
 import dateutil
@@ -13,7 +12,7 @@ from django.views.generic import FormView, ListView
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.i18n import LazyI18nString, language
-from pretix.base.models import CachedFile, LogEntry, Order, OrderPosition
+from pretix.base.models import LogEntry, Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.services.mail import TolerantDict
 from pretix.base.templatetags.rich_text import markdown_compile_email
@@ -124,7 +123,6 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         if self.request.POST.get("action") == "preview":
             for l in self.request.event.settings.locales:
-
                 with language(l):
                     context_dict = TolerantDict()
                     for k, v in get_available_placeholders(self.request.event, ['event', 'order',
@@ -146,17 +144,6 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
             return self.get(self.request, *self.args, **self.kwargs)
 
-        attachment = None
-        if 'attachment' in self.request.FILES:
-            attachment = self.request.FILES['attachment']
-            cf = CachedFile.objects.create(
-                expires=now() + timedelta(days=1),
-                date=now(),
-                filename=attachment.name,
-                type=attachment.content_type,
-            )
-            cf.file.save(attachment.name, attachment.file)
-            cf.save()
         kwargs = {
             'recipients': form.cleaned_data['recipients'],
             'event': self.request.event.pk,
@@ -169,8 +156,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
             'filter_checkins': form.cleaned_data.get('filter_checkins'),
         }
-        if attachment is not None:
-            kwargs['attachments'] = [cf.id]
+        if form.cleaned_data.get('attachment') is not None:
+            kwargs['attachments'] = [form.cleaned_data['attachment'].id]
 
         send_mails.apply_async(
             kwargs=kwargs
