@@ -65,7 +65,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
             if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
                 real_subject = str(subject).format_map(TolerantDict(email_context))
-                email_context = get_email_context(event_or_subevent=subevent or order.event,
+                email_context = get_email_context(event_or_subevent=p.subevent or order.event,
                                                   event=order.event,
                                                   refund_amount=refund_amount,
                                                   position_or_address=p,
@@ -82,11 +82,12 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
-def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_fixed: str,
-                 keep_fee_percentage: str, keep_fees: list=None, manual_refund: bool=False,
+def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
+                 keep_fee_fixed: str, keep_fee_percentage: str, keep_fees: list=None, manual_refund: bool=False,
                  send: bool=False, send_subject: dict=None, send_message: dict=None,
                  send_waitinglist: bool=False, send_waitinglist_subject: dict={}, send_waitinglist_message: dict={},
-                 user: int=None, refund_as_giftcard: bool=False, giftcard_expires=None, giftcard_conditions=None):
+                 user: int=None, refund_as_giftcard: bool=False, giftcard_expires=None, giftcard_conditions=None,
+                 subevents_from: str=None, subevents_to: str=None):
     send_subject = LazyI18nString(send_subject)
     send_message = LazyI18nString(send_message)
     send_waitinglist_subject = LazyI18nString(send_waitinglist_subject)
@@ -102,14 +103,20 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
         pcnt__gt=0
     ).all()
 
-    if subevent:
-        subevent = event.subevents.get(pk=subevent)
+    if subevent or subevents_from:
+        if subevent:
+            subevents = event.subevents.filter(pk=subevent)
+            subevent = subevents.first()
+            subevent_ids = {subevent.pk}
+        else:
+            subevents = event.subevents.filter(date_from__gte=subevents_from, date_from__lt=subevents_to)
+            subevent_ids = set(subevents.values_list('id', flat=True))
 
         has_subevent = OrderPosition.objects.filter(order_id=OuterRef('pk')).filter(
-            subevent=subevent
+            subevent__in=subevents
         )
         has_other_subevent = OrderPosition.objects.filter(order_id=OuterRef('pk')).exclude(
-            subevent=subevent
+            subevent__in=subevents
         )
         orders_to_change = orders_to_cancel.annotate(
             has_subevent=Exists(has_subevent),
@@ -124,15 +131,18 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             has_subevent=True, has_other_subevent=False
         )
 
-        subevent.log_action(
-            'pretix.subevent.canceled', user=user,
-        )
-        subevent.active = False
-        subevent.save(update_fields=['active'])
-        subevent.log_action(
-            'pretix.subevent.changed', user=user, data={'active': False, '_source': 'cancel_event'}
-        )
+        for se in subevents:
+            se.log_action(
+                'pretix.subevent.canceled', user=user,
+            )
+            se.active = False
+            se.save(update_fields=['active'])
+            se.log_action(
+                'pretix.subevent.changed', user=user, data={'active': False, '_source': 'cancel_event'}
+            )
     else:
+        subevents = None
+        subevent_ids = set()
         orders_to_change = event.orders.none()
         event.log_action(
             'pretix.event.canceled', user=user,
@@ -146,7 +156,9 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
             )
     failed = 0
     total = orders_to_cancel.count() + orders_to_change.count()
-    qs_wl = event.waitinglistentries.filter(subevent=subevent, voucher__isnull=True)
+    qs_wl = event.waitinglistentries.filter(voucher__isnull=True).select_related('subevent')
+    if subevents:
+        qs_wl = qs_wl.filter(subevent__in=subevents)
     if send_waitinglist:
         total += qs_wl.count()
     counter = 0
@@ -205,7 +217,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
 
             ocm = OrderChangeManager(o, user=user, notify=False)
             for p in o.positions.all():
-                if p.subevent == subevent:
+                if p.subevent_id in subevent_ids:
                     total += p.price
                     ocm.cancel(p)
                     positions.append(p)
@@ -246,7 +258,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool, keep_fee_
 
     if send_waitinglist:
         for wle in qs_wl:
-            _send_wle_mail(wle, send_waitinglist_subject, send_waitinglist_message, subevent)
+            _send_wle_mail(wle, send_waitinglist_subject, send_waitinglist_message, wle.subevent)
 
             counter += 1
             if not self.request.called_directly and counter % max(10, total // 100) == 0:

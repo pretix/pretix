@@ -27,8 +27,10 @@
         {% if request.event.has_subevents %}
             <fieldset>
                 <legend>{% trans "Select date" context "subevents" %}</legend>
-                {% bootstrap_field form.subevent layout="control" %}
                 {% bootstrap_field form.all_subevents layout="control" %}
+                {% bootstrap_field form.subevent layout="control" %}
+                {% bootstrap_field form.subevents_from layout="control" %}
+                {% bootstrap_field form.subevents_to layout="control" %}
             </fieldset>
         {% endif %}
         <fieldset>

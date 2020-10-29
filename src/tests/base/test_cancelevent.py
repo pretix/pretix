@@ -322,7 +322,7 @@ class SubEventCancelTests(TestCase):
         with scope(organizer=self.o):
             self.event = Event.objects.create(organizer=self.o, name='Dummy', slug='dummy', date_from=now(),
                                               plugins='tests.testdummy', has_subevents=True)
-            self.se1 = self.event.subevents.create(name='One', date_from=now())
+            self.se1 = self.event.subevents.create(name='One', date_from=now() - timedelta(days=30))
             self.se2 = self.event.subevents.create(name='Two', date_from=now())
             self.order = Order.objects.create(
                 code='FOO', event=self.event, email='dummy@dummy.test',
@@ -359,6 +359,27 @@ class SubEventCancelTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PENDING
         assert self.order.positions.count() == 1
+
+    @classscope(attr='o')
+    def test_cancel_subevent_range(self):
+        self.op2.subevent = self.se1
+        self.op2.save()
+        cancel_event(
+            self.event.pk, subevent=None, subevents_from=self.se1.date_from - timedelta(days=3), subevents_to=self.se1.date_from - timedelta(days=2),
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+        cancel_event(
+            self.event.pk, subevent=None, subevents_from=self.se1.date_from - timedelta(days=3), subevents_to=self.se1.date_from + timedelta(days=2),
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_CANCELED
 
     @classscope(attr='o')
     def test_cancel_simple_order(self):
@@ -404,6 +425,27 @@ class SubEventCancelTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         assert '23.00' in djmail.outbox[0].body
+
+    @classscope(attr='o')
+    def test_cancel_mixed_order_range(self):
+        cancel_event(
+            self.event.pk, subevent=None, subevents_from=self.se1.date_from - timedelta(days=3), subevents_to=self.se1.date_from - timedelta(days=2),
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
+            user=None
+        )
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+        assert self.order.positions.count() == 2
+        cancel_event(
+            self.event.pk, subevent=None, subevents_from=self.se1.date_from - timedelta(days=3), subevents_to=self.se1.date_from + timedelta(days=2),
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
+            user=None
+        )
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+        assert self.order.positions.filter(subevent=self.se1, canceled=False).count() == 0
 
     @classscope(attr='o')
     def test_cancel_partially_keep_fees(self):

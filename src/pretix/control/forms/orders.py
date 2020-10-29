@@ -586,7 +586,21 @@ class EventCancelForm(forms.Form):
     all_subevents = forms.BooleanField(
         label=_('Cancel all dates'),
         initial=False,
-        required=False
+        required=False,
+    )
+    subevents_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+            'data-inverse-dependency': '#id_all_subevents',
+        }),
+        label=pgettext_lazy('subevent', 'All dates starting at or after'),
+        required=False,
+    )
+    subevents_to = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+            'data-inverse-dependency': '#id_all_subevents',
+        }),
+        label=pgettext_lazy('subevent', 'All dates starting before'),
+        required=False,
     )
     auto_refund = forms.BooleanField(
         label=_('Automatically refund money if possible'),
@@ -731,6 +745,7 @@ class EventCancelForm(forms.Form):
             self.fields['subevent'].queryset = self.event.subevents.all()
             self.fields['subevent'].widget = Select2(
                 attrs={
+                    'data-inverse-dependency': '#id_all_subevents',
                     'data-model-select2': 'event',
                     'data-select2-url': reverse('control:event.subevents.select2', kwargs={
                         'event': self.event.slug,
@@ -747,6 +762,12 @@ class EventCancelForm(forms.Form):
 
     def clean(self):
         d = super().clean()
-        if self.event.has_subevents and not d['subevent'] and not d['all_subevents']:
+        if d.get('subevent') and d.get('subevents_from'):
+            raise ValidationError(pgettext_lazy('subevent', 'Please either select a specific date or a date range, not both.'))
+        if d.get('all_subevents') and d.get('subevent_from'):
+            raise ValidationError(pgettext_lazy('subevent', 'Please either select all subevents or a date range, not both.'))
+        if bool(d.get('subevents_from')) != bool(d.get('subevents_to')):
+            raise ValidationError(pgettext_lazy('subevent', 'If you set a date range, please set both a start and an end.'))
+        if self.event.has_subevents and not d['subevent'] and not d['all_subevents'] and not d.get('subevents_from'):
             raise ValidationError(_('Please confirm that you want to cancel ALL dates in this event series.'))
         return d
