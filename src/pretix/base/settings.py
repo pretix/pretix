@@ -2049,7 +2049,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             'title': pgettext_lazy('person_name_sample', 'Dr'),
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
-            '_scheme': 'title_salutation_given_family',
+            '_scheme': 'salutation_title_given_family',
         },
     }),
 ])
