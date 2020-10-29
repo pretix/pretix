@@ -11,6 +11,8 @@
             {% bootstrap_field form.sendto layout='horizontal' %}
             {% if form.subevent %}
                 {% bootstrap_field form.subevent layout='horizontal' %}
+                {% bootstrap_field form.subevents_from layout='horizontal' %}
+                {% bootstrap_field form.subevents_to layout='horizontal' %}
             {% endif %}
             {% bootstrap_field form.items layout='horizontal' %}
             <div class="row">

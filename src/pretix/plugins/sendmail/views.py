@@ -2,6 +2,7 @@ import logging
 from datetime import timedelta
 
 import bleach
+import dateutil
 from django.contrib import messages
 from django.db.models import Exists, OuterRef, Q
 from django.http import Http404
@@ -60,6 +61,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     )
                 kwargs['initial']['filter_checkins'] = logentry.parsed_data.get('filter_checkins', False)
                 kwargs['initial']['not_checked_in'] = logentry.parsed_data.get('not_checked_in', False)
+                if logentry.parsed_data.get('subevents_from'):
+                    kwargs['initial']['subevents_from'] = dateutil.parser.parse(logentry.parsed_data['subevents_from'])
+                if logentry.parsed_data.get('subevents_to'):
+                    kwargs['initial']['subevents_to'] = dateutil.parser.parse(logentry.parsed_data['subevents_to'])
                 if logentry.parsed_data.get('subevent'):
                     try:
                         kwargs['initial']['subevent'] = self.request.event.subevents.get(
@@ -105,6 +110,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         if form.cleaned_data.get('subevent'):
             opq = opq.filter(subevent=form.cleaned_data.get('subevent'))
+        if form.cleaned_data.get('subevents_from'):
+            opq = opq.filter(subevent__date_from__gte=form.cleaned_data.get('subevents_from'))
+        if form.cleaned_data.get('subevents_to'):
+            opq = opq.filter(subevent__date_from__lt=form.cleaned_data.get('subevents_to'))
 
         orders = orders.annotate(match_pos=Exists(opq)).filter(match_pos=True).distinct()
 

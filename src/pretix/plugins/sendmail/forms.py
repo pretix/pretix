@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
@@ -6,6 +7,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
+from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import CheckinList, Item, Order, SubEvent
 from pretix.control.forms import ExtFileField
 from pretix.control.forms.widgets import Select2, Select2Multiple
@@ -53,6 +55,24 @@ class MailForm(forms.Form):
         required=False,
         empty_label=pgettext_lazy('subevent', 'All dates')
     )
+    subevents_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(),
+        label=pgettext_lazy('subevent', 'Only send to customers of dates starting at or after'),
+        required=False,
+    )
+    subevents_to = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(),
+        label=pgettext_lazy('subevent', 'Only send to customers of dates starting before'),
+        required=False,
+    )
+
+    def clean(self):
+        d = super().clean()
+        if d.get('subevent') and d.get('subevents_from'):
+            raise ValidationError(pgettext_lazy('subevent', 'Please either select a specific date or a date range, not both.'))
+        if bool(d.get('subevents_from')) != bool(d.get('subevents_to')):
+            raise ValidationError(pgettext_lazy('subevent', 'If you set a date range, please set both a start and an end.'))
+        return d
 
     def _set_field_placeholders(self, fn, base_parameters):
         phs = [
@@ -145,3 +165,5 @@ class MailForm(forms.Form):
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         else:
             del self.fields['subevent']
+            del self.fields['subevents_from']
+            del self.fields['subevents_to']
