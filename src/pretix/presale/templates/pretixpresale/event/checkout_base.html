@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Checkout" %}{% endblock %}
 {% block content %}
-    <details class="panel panel-default cart">
+    <details class="panel panel-default cart" {% if "open_cart" in request.GET %}open{% endif %}>
         <summary class="panel-heading">
             <h3 class="panel-title">
                 <span>

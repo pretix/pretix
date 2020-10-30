@@ -1063,6 +1063,7 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
         if pos.tax_rate != rate:
             current_net = pos.price - pos.tax_value
             new_gross = pos.item.tax(current_net, base_price_is='net', invoice_address=invoice_address).gross
+            totaldiff += new_gross - pos.price
             pos.price = new_gross
             pos.includes_tax = rate != Decimal('0.00')
             pos.override_tax_rate = rate

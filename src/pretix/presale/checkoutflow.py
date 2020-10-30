@@ -554,11 +554,16 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             addr = self.invoice_form.save()
             self.cart_session['invoice_address'] = addr.pk
 
-            update_tax_rates(
+            diff = update_tax_rates(
                 event=request.event,
                 cart_id=get_or_create_cart_id(request),
                 invoice_address=self.invoice_form.instance
             )
+            if abs(diff) > Decimal('0.001'):
+                messages.info(request, _('Due to thec invoice address you entered, we need to apply a different tax '
+                                         'rate to your purchase and the price of the products in your cart has '
+                                         'changed accordingly.'))
+                return redirect(self.get_next_url(request) + '?open_cart=true')
 
         return redirect(self.get_next_url(request))
 
