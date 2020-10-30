@@ -560,7 +560,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 invoice_address=self.invoice_form.instance
             )
             if abs(diff) > Decimal('0.001'):
-                messages.info(request, _('Due to thec invoice address you entered, we need to apply a different tax '
+                messages.info(request, _('Due to the invoice address you entered, we need to apply a different tax '
                                          'rate to your purchase and the price of the products in your cart has '
                                          'changed accordingly.'))
                 return redirect(self.get_next_url(request) + '?open_cart=true')
