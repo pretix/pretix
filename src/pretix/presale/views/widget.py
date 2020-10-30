@@ -192,7 +192,7 @@ class WidgetAPIProductList(EventListMixin, View):
             qs = qs.filter(category__pk__in=self.request.GET.get('categories').split(","))
 
         items, display_add_to_cart = get_grouped_items(
-            self.request.event, subevent=self.subevent, voucher=self.voucher, channel='web',
+            self.request.event, subevent=self.subevent, voucher=self.voucher, channel=self.request.sales_channel.identifier,
             base_qs=qs
         )
 
@@ -536,6 +536,7 @@ class WidgetAPIProductList(EventListMixin, View):
             str(self.subevent.pk) if self.subevent else "",
             request.GET.urlencode(),
             get_language(),
+            request.sales_channel.identifier,
         ])
         if "cart_id" not in request.GET:
             cached_data = cache.get(cache_key)
