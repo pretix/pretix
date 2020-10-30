@@ -1,7 +1,6 @@
 import json
 from decimal import Decimal
 
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.formats import localize
 from django.utils.translation import gettext_lazy as _
@@ -10,7 +9,6 @@ from i18nfield.fields import I18nCharField
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
 from pretix.base.templatetags.money import money_filter
-from pretix.helpers.countries import FastCountryField
 
 
 class TaxedPrice:
@@ -107,21 +105,6 @@ class TaxRule(LoggedModel):
         verbose_name=_("The configured product prices include the tax amount"),
         default=True,
     )
-    eu_reverse_charge = models.BooleanField(
-        verbose_name=_("Use EU reverse charge taxation rules"),
-        default=False,
-        help_text=_("Not recommended. Most events will NOT be qualified for reverse charge since the place of "
-                    "taxation is the location of the event. This option disables charging VAT for all customers "
-                    "outside the EU and for business customers in different EU countries who entered a valid EU VAT "
-                    "ID. Only enable this option after consulting a tax counsel. No warranty given for correct tax "
-                    "calculation. USE AT YOUR OWN RISK.")
-    )
-    home_country = FastCountryField(
-        verbose_name=_('Merchant country'),
-        blank=True,
-        help_text=_('Your country of residence. This is the country the EU reverse charge rule will not apply in, '
-                    'if configured above.'),
-    )
     custom_rules = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -147,17 +130,13 @@ class TaxRule(LoggedModel):
             eu_reverse_charge=False
         )
 
-    def clean(self):
-        if self.eu_reverse_charge and not self.home_country:
-            raise ValidationError(_('You need to set your home country to use the reverse charge feature.'))
-
     def __str__(self):
         if self.price_includes_tax:
             s = _('incl. {rate}% {name}').format(rate=self.rate, name=self.name)
         else:
             s = _('plus {rate}% {name}').format(rate=self.rate, name=self.name)
-        if self.eu_reverse_charge:
-            s += ' ({})'.format(_('reverse charge enabled'))
+        if self.has_custom_rules:
+            s += ' ({})'.format(_('with custom rules'))
         return str(s)
 
     @property
@@ -258,50 +237,12 @@ class TaxRule(LoggedModel):
         if self._custom_rules:
             rule = self.get_matching_rule(invoice_address)
             return rule['action'] == 'reverse'
-
-        if not self.eu_reverse_charge:
-            return False
-
-        if not invoice_address or not invoice_address.country:
-            return False
-
-        if str(invoice_address.country) not in EU_COUNTRIES:
-            return False
-
-        if invoice_address.country == self.home_country:
-            return False
-
-        if invoice_address.is_business and invoice_address.vat_id and invoice_address.vat_id_validated:
-            return True
-
         return False
 
     def _tax_applicable(self, invoice_address):
         if self._custom_rules:
             rule = self.get_matching_rule(invoice_address)
             return rule.get('action', 'vat') == 'vat'
-
-        if not self.eu_reverse_charge:
-            # No reverse charge rules? Always apply VAT!
-            return True
-
-        if not invoice_address or not invoice_address.country:
-            # No country specified? Always apply VAT!
-            return True
-
-        if str(invoice_address.country) not in EU_COUNTRIES:
-            # Non-EU country? Never apply VAT!
-            return False
-
-        if invoice_address.country == self.home_country:
-            # Within same EU country? Always apply VAT!
-            return True
-
-        if invoice_address.is_business and invoice_address.vat_id and invoice_address.vat_id_validated:
-            # Reverse charge case
-            return False
-
-        # Consumer in different EU country / invalid VAT
         return True
 
     def delete(self, *args, **kwargs):

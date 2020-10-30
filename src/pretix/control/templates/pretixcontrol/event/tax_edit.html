@@ -34,15 +34,9 @@
                         for more information. Note that we are not responsible for the correct handling
                         of taxes in your ticket shop. If in doubt, please contact a lawyer or tax consultant.
                     {% endblocktrans %}
-                </div>
-                {% bootstrap_field form.eu_reverse_charge layout="control" %}
-                {% bootstrap_field form.home_country layout="control" %}
-                <h3>{% trans "Custom taxation rules" %}</h3>
-                <div class="alert alert-warning">
+                    <br>
                     {% blocktrans trimmed %}
-                        These settings are intended for professional users with very specific taxation situations.
-                        If you create any rule here, the reverse charge settings above will be ignored. The rules will be
-                        checked in order and once the first rule matches the order, it will be used and all further rules will
+                        The rules will be checked in order and once the first rule matches the order, it will be used and all further rules will
                         be ignored. If no rule matches, tax will be charged.
                     {% endblocktrans %}
                     {% trans "All of these rules will only apply if an invoice address is set." %}
