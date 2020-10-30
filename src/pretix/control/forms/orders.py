@@ -400,7 +400,6 @@ class OrderPositionChangeForm(forms.Form):
         self.fields['tax_rule'].label_from_instance = self.taxrule_label_from_instance
 
         if not instance.seat and not (
-                not instance.event.settings.seating_choice and
                 instance.item.seat_category_mappings.filter(subevent=instance.subevent).exists()
         ):
             del self.fields['seat']
