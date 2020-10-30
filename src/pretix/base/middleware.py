@@ -3,7 +3,8 @@ from urllib.parse import urlsplit
 
 import pytz
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
+from django.middleware.common import CommonMiddleware
 from django.urls import get_script_prefix
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
@@ -252,3 +253,15 @@ class SecurityMiddleware(MiddlewareMixin):
             del resp['Content-Security-Policy']
 
         return resp
+
+
+class CustomCommonMiddleware(CommonMiddleware):
+
+    def get_full_path_with_slash(self, request):
+        """
+        Raise an error regardless of DEBUG mode when in POST, PUT, or PATCH.
+        """
+        new_path = super().get_full_path_with_slash(request)
+        if request.method in ('POST', 'PUT', 'PATCH'):
+            raise Http404('Please append a / at the end of the URL')
+        return new_path
