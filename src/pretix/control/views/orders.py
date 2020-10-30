@@ -2082,6 +2082,7 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
             giftcard_expires=form.cleaned_data.get('gift_card_expires'),
             giftcard_conditions=form.cleaned_data.get('gift_card_conditions'),
             keep_fee_fixed=form.cleaned_data.get('keep_fee_fixed'),
+            keep_fee_per_ticket=form.cleaned_data.get('keep_fee_per_ticket'),
             keep_fee_percentage=form.cleaned_data.get('keep_fee_percentage'),
             keep_fees=form.cleaned_data.get('keep_fees'),
             send=form.cleaned_data.get('send'),

@@ -54,7 +54,7 @@ class EventCancelTests(TestCase):
         self.order.save()
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
             user=None
         )
@@ -69,7 +69,7 @@ class EventCancelTests(TestCase):
         self.op1.save()
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -91,7 +91,7 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -119,7 +119,7 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=False, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=False, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -127,6 +127,84 @@ class EventCancelTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_CANCELED
         assert not self.order.refunds.exists()
+
+    @classscope(attr='o')
+    def test_cancel_refund_paid_with_per_ticket_fees(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        cancel_event(
+            self.event.pk, subevent=None,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="2.00",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('42.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+
+    @classscope(attr='o')
+    def test_cancel_refund_paid_with_per_ticket_fees_ignore_free(self):
+        self.op1.price = Decimal('46.00')
+        self.op1.save()
+        self.op2.price = Decimal('0.00')
+        self.op2.save()
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        cancel_event(
+            self.event.pk, subevent=None,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="2.00",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('44.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+
+    @classscope(attr='o')
+    def test_cancel_refund_paid_with_per_ticket_fees_ignore_addon(self):
+        self.op2.addon_to = self.op1
+        self.op2.save()
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        cancel_event(
+            self.event.pk, subevent=None,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="2.00",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('44.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
 
     @classscope(attr='o')
     def test_cancel_refund_paid_with_fees(self):
@@ -142,7 +220,7 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="10.00", keep_fee_percentage="10.00",
+            auto_refund=True, keep_fee_fixed="10.00", keep_fee_percentage="10.00", keep_fee_per_ticket="",
             send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -170,7 +248,7 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="10.00", keep_fee_percentage="10.00",
+            auto_refund=True, keep_fee_fixed="10.00", keep_fee_percentage="10.00", keep_fee_per_ticket="",
             send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -201,7 +279,7 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00", keep_fees=[OrderFee.FEE_TYPE_PAYMENT],
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00", keep_fees=[OrderFee.FEE_TYPE_PAYMENT], keep_fee_per_ticket="",
             send=False, send_subject="Event canceled", send_message="Event canceled :-(", user=None
         )
         r = self.order.refunds.get()
@@ -237,7 +315,7 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00", keep_fees=[OrderFee.FEE_TYPE_PAYMENT],
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00", keep_fees=[OrderFee.FEE_TYPE_PAYMENT], keep_fee_per_ticket="",
             send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -266,7 +344,7 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None, manual_refund=True,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -302,7 +380,7 @@ class EventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=None, manual_refund=False,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -351,7 +429,7 @@ class SubEventCancelTests(TestCase):
         self.op2.save()
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -366,7 +444,7 @@ class SubEventCancelTests(TestCase):
         self.op2.save()
         cancel_event(
             self.event.pk, subevent=None, subevents_from=self.se1.date_from - timedelta(days=3), subevents_to=self.se1.date_from - timedelta(days=2),
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -374,7 +452,7 @@ class SubEventCancelTests(TestCase):
         assert self.order.status == Order.STATUS_PENDING
         cancel_event(
             self.event.pk, subevent=None, subevents_from=self.se1.date_from - timedelta(days=3), subevents_to=self.se1.date_from + timedelta(days=2),
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -387,7 +465,7 @@ class SubEventCancelTests(TestCase):
         self.op2.save()
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -398,7 +476,7 @@ class SubEventCancelTests(TestCase):
     def test_cancel_all_subevents(self):
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -418,7 +496,7 @@ class SubEventCancelTests(TestCase):
         self.order.save()
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
             user=None
         )
@@ -430,7 +508,7 @@ class SubEventCancelTests(TestCase):
     def test_cancel_mixed_order_range(self):
         cancel_event(
             self.event.pk, subevent=None, subevents_from=self.se1.date_from - timedelta(days=3), subevents_to=self.se1.date_from - timedelta(days=2),
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
             user=None
         )
@@ -439,7 +517,7 @@ class SubEventCancelTests(TestCase):
         assert self.order.positions.count() == 2
         cancel_event(
             self.event.pk, subevent=None, subevents_from=self.se1.date_from - timedelta(days=3), subevents_to=self.se1.date_from + timedelta(days=2),
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=True, send_subject="Event canceled", send_message="Event canceled :-( {refund_amount}",
             user=None
         )
@@ -467,7 +545,7 @@ class SubEventCancelTests(TestCase):
 
         cancel_event(
             self.event.pk, subevent=self.se1.pk,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="10.00", keep_fee_per_ticket="",
             send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             user=None
         )
@@ -485,6 +563,31 @@ class SubEventCancelTests(TestCase):
         assert f.value == Decimal('1.80')
 
     @classscope(attr='o')
+    def test_cancel_partially_keep_fees_per_ticket(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        cancel_event(
+            self.event.pk, subevent=self.se1.pk,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="2.00",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('21.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        f = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_CANCELLATION)
+        assert f.value == Decimal('2.00')
+
+    @classscope(attr='o')
     def test_cancel_send_mail_waitinglist(self):
         v = Voucher.objects.create(event=self.event, block_quota=True, redeemed=1)
         WaitingListEntry.objects.create(
@@ -495,7 +598,7 @@ class SubEventCancelTests(TestCase):
         )
         cancel_event(
             self.event.pk, subevent=None,
-            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00",
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
             send=False, send_subject="Event canceled", send_message="Event canceled :-(",
             send_waitinglist=True, send_waitinglist_message="Event canceled", send_waitinglist_subject=":(",
             user=None

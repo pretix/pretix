@@ -641,6 +641,12 @@ class EventCancelForm(forms.Form):
         max_digits=10, decimal_places=2,
         required=False
     )
+    keep_fee_per_ticket = forms.DecimalField(
+        label=_("Keep a fixed cancellation fee per ticket"),
+        help_text=_("Free tickets and add-on products are not counted"),
+        max_digits=10, decimal_places=2,
+        required=False
+    )
     keep_fee_percentage = forms.DecimalField(
         label=_("Keep a percentual cancellation fee"),
         max_digits=10, decimal_places=2,

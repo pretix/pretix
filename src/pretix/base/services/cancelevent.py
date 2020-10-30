@@ -83,8 +83,8 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
-                 keep_fee_fixed: str, keep_fee_percentage: str, keep_fees: list=None, manual_refund: bool=False,
-                 send: bool=False, send_subject: dict=None, send_message: dict=None,
+                 keep_fee_fixed: str, keep_fee_per_ticket: str, keep_fee_percentage: str, keep_fees: list=None,
+                 manual_refund: bool=False, send: bool=False, send_subject: dict=None, send_message: dict=None,
                  send_waitinglist: bool=False, send_waitinglist_subject: dict={}, send_waitinglist_message: dict={},
                  user: int=None, refund_as_giftcard: bool=False, giftcard_expires=None, giftcard_conditions=None,
                  subevents_from: str=None, subevents_to: str=None):
@@ -182,6 +182,10 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                 fee += Decimal(keep_fee_percentage) / Decimal('100.00') * (o.total - fee_sum)
             if keep_fee_fixed:
                 fee += Decimal(keep_fee_fixed)
+            if keep_fee_per_ticket:
+                for p in o.positions.all():
+                    if p.addon_to_id is None:
+                        fee += min(p.price, Decimal(keep_fee_per_ticket))
             fee = round_decimal(min(fee, o.payment_refund_sum), event.currency)
 
             _cancel_order(o.pk, user, send_mail=False, cancellation_fee=fee, keep_fees=keep_fee_objects)
@@ -213,6 +217,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
         with transaction.atomic():
             o = event.orders.select_for_update().get(pk=o)
             total = Decimal('0.00')
+            fee = Decimal('0.00')
             positions = []
 
             ocm = OrderChangeManager(o, user=user, notify=False)
@@ -222,7 +227,10 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                     ocm.cancel(p)
                     positions.append(p)
 
-            fee = Decimal('0.00')
+                    if keep_fee_per_ticket:
+                        if p.addon_to_id is None:
+                            fee += min(p.price, Decimal(keep_fee_per_ticket))
+
             if keep_fee_fixed:
                 fee += Decimal(keep_fee_fixed)
             if keep_fee_percentage:
