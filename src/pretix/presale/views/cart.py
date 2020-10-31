@@ -2,6 +2,7 @@ import json
 import mimetypes
 import os
 from decimal import Decimal
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib import messages
@@ -283,7 +284,7 @@ def get_or_create_cart_id(request, create=True):
     current_id = orig_current_id = request.session.get(session_keyname)
     if prefix and 'take_cart_id' in request.GET:
         pos = CartPosition.objects.filter(event=request.event, cart_id=request.GET.get('take_cart_id'))
-        if request.method == "POST" or pos.exists():
+        if request.method == "POST" or pos.exists() or 'ajax' in request.GET:
             current_id = request.GET.get('take_cart_id')
 
     if current_id and current_id in request.session.get('carts', {}):
@@ -407,6 +408,15 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
             'cart_id': cart_id,
             'has_cart': CartPosition.objects.filter(cart_id=cart_id, event=self.request.event).exists()
         }
+
+    def get_check_url(self, task_id, ajax):
+        u = super().get_check_url(task_id, ajax)
+        if "next" in self.request.GET:
+            u += "&next=" + quote(self.request.GET.get('next'))
+        if ajax:
+            cart_id = get_or_create_cart_id(self.request)
+            u += '&take_cart_id=' + cart_id
+        return u
 
     def post(self, request, *args, **kwargs):
         cart_id = get_or_create_cart_id(self.request)
