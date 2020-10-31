@@ -58,14 +58,14 @@
                         {% endif %}
                     </em>
                     <div class="row checkout-button-row">
-                        <div class="col-md-4 col-xs-12 hidden-xs">
+                        <div class="col-md-4 col-sm-6 col-xs-12 hidden-xs">
                             <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
                                 {% csrf_token %}
                                 <button class="btn btn-block btn-default btn-lg" type="submit">
                                     <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
                             </form>
                         </div>
-                        <div class="col-md-4 col-md-offset-4 col-xs-12">
+                        <div class="col-md-4 col-sm-6 col-md-offset-4 col-xs-12">
                             <a class="btn btn-block btn-primary btn-lg"
                                     href="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
                                 {% if has_addon_choices or cart.total == 0 %}
