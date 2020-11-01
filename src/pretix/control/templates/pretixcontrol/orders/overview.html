@@ -14,7 +14,7 @@
     </div>
 	<h1>
         {% trans "Order overview" %}
-        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=overview"
+        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=pdfreport"
            class="btn btn-default" target="_blank">
             <span class="fa fa-download"></span>
             {% trans "PDF" %}
