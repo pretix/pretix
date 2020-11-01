@@ -115,9 +115,9 @@ def test_ignore_outside_api(token_client, organizer):
     resp = token_client.post('/control/login'.format(organizer.slug),
                              PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='foo')
     assert resp.status_code == 200
-    resp = token_client.post('/control/invalid'.format(organizer.slug),
+    resp = token_client.post('/control/invalid/'.format(organizer.slug),
                              PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='foo')
-    assert resp.status_code == 301
+    assert resp.status_code == 302
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@ from urllib.parse import urlsplit
 
 import pytz
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import Http404, HttpRequest, HttpResponse
 from django.middleware.common import CommonMiddleware
 from django.urls import get_script_prefix
 from django.utils import timezone, translation
