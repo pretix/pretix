@@ -12,7 +12,14 @@
             <button type="button" data-target=".sum-net" class="btn btn-default">{% trans "Revenue (net)" %}</button>
         </div>
     </div>
-	<h1>{% trans "Order overview" %}</h1>
+	<h1>
+        {% trans "Order overview" %}
+        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=overview"
+           class="btn btn-default" target="_blank">
+            <span class="fa fa-download"></span>
+            {% trans "PDF" %}
+        </a>
+    </h1>
     <div class="row filter-form">
         <form class="" action="" method="get">
             {% if request.event.has_subevents %}
@@ -58,9 +65,11 @@
                     <th>{% trans "Product" %}</th>
                     <th>{% trans "Canceled" %}¹</th>
                     <th>{% trans "Expired" %}</th>
+                    <th>{% trans "Approval pending" %}</th>
                     <th colspan="3" class="text-center">{% trans "Purchased" %}</th>
                 </tr>
                 <tr>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -76,6 +85,7 @@
                             <th>{{ tup.0 }}</th>
                             <th>{{ tup.0.num.canceled|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num.expired|togglesum:request.event.currency }}</th>
+                            <th>{{ tup.0.num.unapproved|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num.pending|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num.paid|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num.total|togglesum:request.event.currency }}</th>
@@ -92,6 +102,11 @@
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=e&amp;provider={{ item.provider }}">
                                     {{ item.num.expired|togglesum:request.event.currency }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=pa&amp;provider={{ item.provider }}">
+                                    {{ item.num.unapproved|togglesum:request.event.currency }}
                                 </a>
                             </td>
                             <td>
@@ -123,6 +138,11 @@
                                         </a>
                                     </td>
                                     <td>
+                                        <a href="{{ listurl }}?item={{ item.id }}-{{ var.id }}&amp;status=pa&amp;provider={{ item.provider }}">
+                                            {{ var.num.unapproved|togglesum:request.event.currency }}
+                                        </a>
+                                    </td>
+                                    <td>
                                         <a href="{{ listurl }}?item={{ item.id }}-{{ var.id }}&amp;status=n&amp;provider={{ item.provider }}">
                                             {{ var.num.pending|togglesum:request.event.currency }}
                                         </a>
@@ -146,6 +166,7 @@
                     <th>{% trans "Total" %}</th>
                     <th>{{ total.num.canceled|togglesum:request.event.currency }}</th>
                     <th>{{ total.num.expired|togglesum:request.event.currency }}</th>
+                    <th>{{ total.num.unapproved|togglesum:request.event.currency }}</th>
                     <th>{{ total.num.pending|togglesum:request.event.currency }}</th>
                     <th>{{ total.num.paid|togglesum:request.event.currency }}</th>
                     <th>{{ total.num.total|togglesum:request.event.currency }}</th>

@@ -14,7 +14,7 @@
         padding-left: 40px;
     }
     td:not(:first-child),
-    th:not(:first-child):not(.text-center) {
+    th:not(:first-child) {
         border-left: 1px solid #ddd;
         padding-right: 10px !important;
         padding-left: 10px !important;
@@ -34,7 +34,7 @@
     .table-product-overview {
         td:not(:first-child),
         th:not(:first-child):not(.text-center) {
-            width: 150px;
+            width: 120px;
         }
     }
 }

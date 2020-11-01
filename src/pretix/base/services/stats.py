@@ -127,6 +127,7 @@ def order_overview(
         order__event=event
     ).annotate(
         status=Case(
+            When(order__status='n', order__require_approval=True, then=Value('unapproved')),
             When(canceled=True, then=Value('c')),
             default=F('order__status')
         )
@@ -135,6 +136,7 @@ def order_overview(
     ).annotate(cnt=Count('id'), price=Sum('price'), tax_value=Sum('tax_value')).order_by()
 
     states = {
+        'unapproved': 'unapproved',
         'canceled': Order.STATUS_CANCELED,
         'paid': Order.STATUS_PAID,
         'pending': Order.STATUS_PENDING,
@@ -198,6 +200,7 @@ def order_overview(
             order__event=event
         ).annotate(
             status=Case(
+                When(order__status='n', order__require_approval=True, then=Value('unapproved')),
                 When(canceled=True, then=Value('c')),
                 default=F('order__status')
             )

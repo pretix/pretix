@@ -1,3 +1,4 @@
+import copy
 import tempfile
 from collections import OrderedDict, defaultdict
 from decimal import Decimal
@@ -14,6 +15,7 @@ from django.utils.formats import date_format, localize
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
 from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER
 from reportlab.platypus import PageBreak
 
 from pretix.base.decimal import round_decimal
@@ -183,27 +185,44 @@ class OverviewReport(Report):
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
         colwidths = [
-            a * doc.width for a in (.33, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075)
+            a * doc.width for a in (
+                1 - (0.05 + 0.075) * 6,
+                0.05, .075,
+                0.05, .075,
+                0.05, .075,
+                0.05, .075,
+                0.05, .075,
+                0.05, .075
+            )
         ]
         tstyledata = [
             ('SPAN', (1, 0), (2, 0)),
             ('SPAN', (3, 0), (4, 0)),
-            ('SPAN', (5, 0), (-1, 0)),
-            ('SPAN', (5, 1), (6, 1)),
+            ('SPAN', (5, 0), (6, 1)),
+            ('SPAN', (7, 0), (-1, 0)),
             ('SPAN', (7, 1), (8, 1)),
             ('SPAN', (9, 1), (10, 1)),
+            ('SPAN', (11, 1), (12, 1)),
             ('ALIGN', (0, 0), (-1, 1), 'CENTER'),
             ('ALIGN', (1, 2), (-1, -1), 'RIGHT'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
             ('FONTNAME', (0, 0), (-1, 1), 'OpenSansBd'),
             ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),
-            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('FONTSIZE', (0, 0), (-1, -1), 8),
             ('LINEBEFORE', (1, 0), (1, -1), 1, colors.lightgrey),
             ('LINEBEFORE', (3, 0), (3, -1), 1, colors.lightgrey),
             ('LINEBEFORE', (5, 0), (5, -1), 1, colors.lightgrey),
-            ('LINEBEFORE', (7, 1), (7, -1), 1, colors.lightgrey),
+            ('LINEBEFORE', (7, 0), (7, -1), 1, colors.lightgrey),
             ('LINEBEFORE', (9, 1), (9, -1), 1, colors.lightgrey),
+            ('LINEBEFORE', (11, 1), (11, -1), 1, colors.lightgrey),
         ]
+        tstyle = copy.copy(self.get_style())
+        tstyle.fontSize = 8
+        tstyle_bold = copy.copy(tstyle)
+        tstyle_bold.fontSize = 8
+        tstyle_bold.fontName = 'OpenSansBd'
+        tstyle_th = copy.copy(tstyle_bold)
+        tstyle_th.alignment = TA_CENTER
         story = [
             Paragraph(_('Orders by product') + ' ' + (_('(excl. taxes)') if net else _('(incl. taxes)')), headlinestyle),
             Spacer(1, 5 * mm)
@@ -227,14 +246,22 @@ class OverviewReport(Report):
             story.append(Spacer(1, 5 * mm))
         tdata = [
             [
-                _('Product'), _('Canceled'), '', _('Expired'), '', _('Purchased'),
+                _('Product'),
+                Paragraph(_('Canceled'), tstyle_th),
+                '',
+                Paragraph(_('Expired'), tstyle_th),
+                '',
+                Paragraph(_('Approval pending'), tstyle_th),
+                '',
+                Paragraph(_('Purchased'), tstyle_th),
                 '', '', '', '', ''
             ],
             [
-                '', '', '', '', '', _('Pending'), '', _('Paid'), '', _('Total'), ''
+                '', '', '', '', '', '', '', _('Pending'), '', _('Paid'), '', _('Total'), ''
             ],
             [
                 '',
+                _('#'), self.event.currency,
                 _('#'), self.event.currency,
                 _('#'), self.event.currency,
                 _('#'), self.event.currency,
@@ -255,6 +282,7 @@ class OverviewReport(Report):
         states = (
             ('canceled', Order.STATUS_CANCELED),
             ('expired', Order.STATUS_EXPIRED),
+            ('unapproved', 'unapproved'),
             ('pending', Order.STATUS_PENDING),
             ('paid', Order.STATUS_PAID),
             ('total', None),
@@ -262,9 +290,8 @@ class OverviewReport(Report):
 
         for tup in items_by_category:
             if tup[0]:
-                tstyledata.append(('FONTNAME', (0, len(tdata)), (-1, len(tdata)), 'OpenSansBd'))
                 tdata.append([
-                    tup[0].name,
+                    Paragraph(tup[0].name, tstyle_bold)
                 ])
                 for l, s in states:
                     tdata[-1].append(str(tup[0].num[l][0]))
@@ -279,7 +306,7 @@ class OverviewReport(Report):
                 if item.has_variations:
                     for var in item.all_variations:
                         tdata.append([
-                            "          " + str(var),
+                            Paragraph("          " + str(var), tstyle)
                         ])
                         for l, s in states:
                             tdata[-1].append(str(var.num[l][0]))
