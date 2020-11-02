@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-24 20:02+0000\n"
-"PO-Revision-Date: 2020-10-27 21:00+0000\n"
+"PO-Revision-Date: 2020-10-29 23:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -18166,6 +18166,8 @@ msgid ""
 "This ticket shop is currently in test mode. Please do not perform any real "
 "purchases as your order might be deleted without notice."
 msgstr ""
+"Tämä lippukauppa on testitilassa. Älä tee oikeita ostoksia, sillä tilauksesi "
+"saatetaan poistaa ilman varoitusta."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:104
 #: pretix/presale/templates/pretixpresale/event/base.html:138
@@ -18176,7 +18178,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:146
 msgid "Contact event organizer"
-msgstr ""
+msgstr "Ota yhteyttä järjestäjään"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:149
 msgid "Imprint"
@@ -18187,22 +18189,24 @@ msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
+"Voit valita lisävaihtoehtoja joillekin korissasi oleville tuotteille ennen "
+"kuin jatkat."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:13
 msgid "We're now trying to book these add-ons for you!"
-msgstr ""
+msgstr "Yritämme nyt varata nämä lisätuotteet sinulle!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:46
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sinun tulee valita tasan yksi vaihtoehto tästä kategoriasta."
+msgstr[1] "Sinun tulee valita %(min_count)s vaihtoehtoa tästä kategoriasta."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:53
 #, python-format
 msgid "You can choose up to %(max_count)s options from this category."
-msgstr ""
+msgstr "Voit valita korkeintaan %(max_count)s vaihtoehtoa tästä kategoriasta."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:57
 #, python-format
@@ -18210,6 +18214,7 @@ msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
 msgstr ""
+"Voit valita %(min_count)s – %(max_count)s vaihtoehtoa tästä kategoriasta."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:91
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:242
@@ -18217,18 +18222,18 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:201
 #, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr ""
+msgstr "vähimmäistilausmäärä: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:102
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:55
 #, python-format
 msgid "from %(price)s"
-msgstr ""
+msgstr "alkaen %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:115
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:69
 msgid "Show variants"
-msgstr ""
+msgstr "Näytä variaatiot"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:156
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:266
@@ -18247,7 +18252,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:179
 #: pretix/presale/templates/pretixpresale/event/voucher.html:285
 msgid "incl. taxes"
-msgstr ""
+msgstr "sis. verot"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:177
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:286
@@ -18257,7 +18262,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:288
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
-msgstr ""
+msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:181
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:290
@@ -18267,7 +18272,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:292
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
-msgstr ""
+msgstr "sis. %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:196
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:155
@@ -18287,25 +18292,25 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:325
 msgid "There are no add-ons available for this product."
-msgstr ""
+msgstr "Tälle tuotteellee ei ole saatavilla lisätuotteita."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:337
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:191
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:72
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:147
 msgid "Go back"
-msgstr ""
+msgstr "Mene takaisin"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:46
 msgid "Checkout"
-msgstr ""
+msgstr "Kassa"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:11
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:33
 #: pretix/presale/templates/pretixpresale/event/index.html:34
 msgid "Your cart"
-msgstr ""
+msgstr "Ostoskorisi"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:18
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
@@ -18319,6 +18324,7 @@ msgstr "Ostoskori on vanhentunut"
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
+"Ostoskorissasi olevat tuotteet on varattu sinulle %(minutes)s minuutiksi."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:46
