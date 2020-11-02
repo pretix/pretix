@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-02 12:46+0000\n"
+"POT-Creation-Date: 2020-11-02 15:59+0000\n"
 "PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -9417,9 +9417,11 @@ msgid "Please either select a specific date or a date range, not both."
 msgstr "Si us plau seleccioneu una variació concreta d'aquest producte."
 
 #: pretix/control/forms/orders.py:773
+#, fuzzy
+#| msgid "Please select a specific variation of this product."
 msgctxt "subevent"
-msgid "Please either select all subevents or a date range, not both."
-msgstr ""
+msgid "Please either select all dates or a date range, not both."
+msgstr "Si us plau seleccioneu una variació concreta d'aquest producte."
 
 #: pretix/control/forms/orders.py:775 pretix/plugins/sendmail/forms.py:74
 msgctxt "subevent"

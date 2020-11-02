@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-02 12:46+0000\n"
+"POT-Creation-Date: 2020-11-02 15:59+0000\n"
 "PO-Revision-Date: 2020-10-07 14:06+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -8415,7 +8415,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:773
 msgctxt "subevent"
-msgid "Please either select all subevents or a date range, not both."
+msgid "Please either select all dates or a date range, not both."
 msgstr ""
 
 #: pretix/control/forms/orders.py:775 pretix/plugins/sendmail/forms.py:74
