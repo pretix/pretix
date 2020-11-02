@@ -132,6 +132,8 @@ event_permission_sub_urls = [
     ('get', 'can_view_orders', 'cartpositions/1/', 404),
     ('post', 'can_change_orders', 'cartpositions/', 400),
     ('delete', 'can_change_orders', 'cartpositions/1/', 404),
+    ('post', 'can_view_orders', 'exporters/invoicedata/run/', 400),
+    ('get', 'can_view_orders', 'exporters/invoicedata/download/bc3f9884-26ee-425b-8636-80613f84b6fa/3cb49ae6-eda3-4605-814e-099e23777b36/', 404),
 ]
 
 org_permission_sub_urls = [

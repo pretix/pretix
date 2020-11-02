@@ -32,16 +32,40 @@ simple_mappings = (
 )
 
 
+class SerializerDescriptionField(serializers.Field):
+    def to_representation(self, value):
+        fields = []
+        for k, v in value.fields.items():
+            d = {
+                'name': k,
+                'required': v.required,
+            }
+            if isinstance(v, serializers.ChoiceField):
+                d['choices'] = list(v.choices.keys())
+            fields.append(d)
+
+        return fields
+
+
 class ExporterSerializer(serializers.Serializer):
     identifier = serializers.CharField()
     verbose_name = serializers.CharField()
-    input_fields = serializers.ListField(serializers.CharField())
+    input_parameters = SerializerDescriptionField(source='_serializer')
 
 
 class JobRunSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         ex = kwargs.pop('exporter')
+        events = kwargs.pop('events', None)
         super().__init__(*args, **kwargs)
+        if events is not None:
+            self.fields["events"] = serializers.SlugRelatedField(
+                queryset=events,
+                required=True,
+                allow_empty=False,
+                slug_field='slug',
+                many=True
+            )
         for k, v in ex.export_form_fields.items():
             for m_from, m_to, m_kwargs in simple_mappings:
                 if isinstance(v, m_from):

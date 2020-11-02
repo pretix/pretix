@@ -27,5 +27,6 @@ Resources and endpoints
    devices
    webhooks
    seatingplans
+   exporters
    billing_invoices
    billing_var
