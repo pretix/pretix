@@ -770,7 +770,7 @@ class EventCancelForm(forms.Form):
         if d.get('subevent') and d.get('subevents_from'):
             raise ValidationError(pgettext_lazy('subevent', 'Please either select a specific date or a date range, not both.'))
         if d.get('all_subevents') and d.get('subevent_from'):
-            raise ValidationError(pgettext_lazy('subevent', 'Please either select all subevents or a date range, not both.'))
+            raise ValidationError(pgettext_lazy('subevent', 'Please either select all dates or a date range, not both.'))
         if bool(d.get('subevents_from')) != bool(d.get('subevents_to')):
             raise ValidationError(pgettext_lazy('subevent', 'If you set a date range, please set both a start and an end.'))
         if self.event.has_subevents and not d['subevent'] and not d['all_subevents'] and not d.get('subevents_from'):
