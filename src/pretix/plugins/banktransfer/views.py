@@ -685,7 +685,7 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
     def get_unexported(self):
         return OrderRefund.objects.filter(
             order__event=self.request.event,
-            provider='banktransfer',
+            provider__in=['banktransfer', 'sepadebit'],
             state=OrderRefund.REFUND_STATE_CREATED,
             order__testmode=self.request.event.testmode,
         )
