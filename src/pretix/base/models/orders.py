@@ -1600,6 +1600,10 @@ class OrderPayment(models.Model):
             'local_id': r.local_id,
             'provider': r.provider,
         })
+
+        if self.order.pending_sum + r.amount == Decimal('0.00'):
+            self.refund.done()
+
         return r
 
 
