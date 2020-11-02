@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-02 12:46+0000\n"
-"PO-Revision-Date: 2020-11-02 12:45+0000\n"
+"PO-Revision-Date: 2020-11-02 13:27+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -8993,12 +8993,12 @@ msgstr "Alle Termine stornieren"
 #: pretix/control/forms/orders.py:594
 msgctxt "subevent"
 msgid "All dates starting at or after"
-msgstr ""
+msgstr "Alle Termine beginnend am oder nach"
 
 #: pretix/control/forms/orders.py:601
 msgctxt "subevent"
 msgid "All dates starting before"
-msgstr ""
+msgstr "Alle Termine beginnend vor"
 
 #: pretix/control/forms/orders.py:605
 msgid "Automatically refund money if possible"
@@ -9041,16 +9041,12 @@ msgid "Special terms and conditions"
 msgstr "Besondere Gutscheinbedingungen"
 
 #: pretix/control/forms/orders.py:644
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "Keep a fixed cancellation fee per ticket"
-msgstr "Feste Stornogebühr einbehalten"
+msgstr "Feste Stornogebühr pro Ticket einbehalten"
 
 #: pretix/control/forms/orders.py:645
-#, fuzzy
-#| msgid "Generate tickets for add-on products"
 msgid "Free tickets and add-on products are not counted"
-msgstr "Tickets für Zusatzprodukte generieren"
+msgstr "Kostenlose Tickets und Zusatzprodukte werden nicht mitgezählt"
 
 #: pretix/control/forms/orders.py:655
 msgid "Keep fees"
@@ -9136,21 +9132,22 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/control/forms/orders.py:771 pretix/plugins/sendmail/forms.py:72
-#, fuzzy
-#| msgid "Please select a specific variation of this product."
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
-msgstr "Du musst eine Produktvariante auswählen."
+msgstr ""
+"Du musst entweder einen einzelnen Termin oder einen Datumsbereich auswählen, "
+"nicht beides."
 
 #: pretix/control/forms/orders.py:773
 msgctxt "subevent"
 msgid "Please either select all subevents or a date range, not both."
 msgstr ""
+"Bitte wähle entweder alle Termine oder einen Datumsbereich, nicht beides."
 
 #: pretix/control/forms/orders.py:775 pretix/plugins/sendmail/forms.py:74
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
-msgstr ""
+msgstr "Wenn du einen Datumsbereich verwendest, lege bitte Start und Ende fest."
 
 #: pretix/control/forms/orders.py:777
 msgid "Please confirm that you want to cancel ALL dates in this event series."
@@ -19314,18 +19311,14 @@ msgid "Only send to customers of"
 msgstr "Nur an Kunden von"
 
 #: pretix/plugins/sendmail/forms.py:60
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers of dates starting at or after"
-msgstr "Nur an Kunden von"
+msgstr "Nur an Kunden für Terminen beginnend um oder nach"
 
 #: pretix/plugins/sendmail/forms.py:65
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers of dates starting before"
-msgstr "Nur an Kunden von"
+msgstr "Nur an Kunden von Terminen beginnend bevor"
 
 #: pretix/plugins/sendmail/forms.py:98
 msgid "Everyone who created a ticket order"
@@ -20294,6 +20287,9 @@ msgid ""
 "rate to your purchase and the price of the products in your cart has changed "
 "accordingly."
 msgstr ""
+"Aufgrund der von dir eingetragenen Rechnungsadresse müssen wir einen anderen "
+"Steuersatz auf deinen Einkauf anwenden und haben die Preise der Produkte in "
+"deinem Warenkorb entsprechend geändert."
 
 #: pretix/presale/checkoutflow.py:576 pretix/presale/checkoutflow.py:582
 msgid "Please enter a valid email address."
@@ -20968,8 +20964,6 @@ msgid "View other date"
 msgstr "Zu anderem Termin wechseln"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:105
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
 msgstr "Wähle einen Termin aus"
 
