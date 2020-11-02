@@ -25,22 +25,30 @@
                 <strong>{{ pending }}</strong>. The order total is <strong>{{ total }}</strong>.
             {% endblocktrans %}
         </p>
-        <p>
-            {% blocktrans trimmed with amount=refund.amount|money:request.event.currency method=refund.payment_provider.verbose_name %}
-                What should happen to the ticket order?
-            {% endblocktrans %}
-        </p>
-    <div class="form-inline">
-        <label class="radio">
-            <input type="radio" name="action" value="n" {% if not propose_cancel %}checked{% endif %}>
-            {% trans "Mark the order as unpaid and allow the customer to pay again with another payment method." %}
-        </label>
-        <br>
-        <label class="radio">
-            <input type="radio" name="action" value="r" {% if propose_cancel %}checked{% endif %}>
-            {% trans "Cancel the order irrevocably." %}
-        </label>
-    </div>
+        {% if order.status != "c" and order.positions.count > 0 %}
+            <p>
+                {% blocktrans trimmed %}
+                    Since the order is already canceled, this will not affect its state.
+                {% endblocktrans %}
+            </p>
+        {% else %}
+            <p>
+                {% blocktrans trimmed with amount=refund.amount|money:request.event.currency method=refund.payment_provider.verbose_name %}
+                    What should happen to the ticket order?
+                {% endblocktrans %}
+            </p>
+            <div class="form-inline">
+                <label class="radio">
+                    <input type="radio" name="action" value="n" {% if not propose_cancel %}checked{% endif %}>
+                    {% trans "Mark the order as unpaid and allow the customer to pay again with another payment method." %}
+                </label>
+                <br>
+                <label class="radio">
+                    <input type="radio" name="action" value="r" {% if propose_cancel %}checked{% endif %}>
+                    {% trans "Cancel the order irrevocably." %}
+                </label>
+            </div>
+        {% endif %}
         <div class="form-group submit-group">
             <a class="btn btn-default btn-lg"
                     href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
