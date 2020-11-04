@@ -5,6 +5,8 @@ export DATA_DIR=/data/
 export HOME=/pretix
 export NUM_WORKERS=$((2 * $(nproc --all)))
 
+AUTOMIGRATE=${AUTOMIGRATE:-yes}
+
 if [ ! -d /data/logs ]; then
     mkdir /data/logs;
 fi
@@ -16,7 +18,9 @@ if [ "$1" == "cron" ]; then
     exec python3 -m pretix runperiodic
 fi
 
-python3 -m pretix migrate --noinput
+if [ "$AUTOMIGRATE" != "skip" ]; then
+  python3 -m pretix migrate --noinput
+fi
 
 if [ "$1" == "all" ]; then
     exec sudo -E /usr/bin/supervisord -n -c /etc/supervisord.all.conf
