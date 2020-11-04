@@ -507,7 +507,7 @@ class Event(EventMixin, LoggedModel):
     def copy_data_from(self, other):
         from ..signals import event_copy_data
         from . import (
-            Item, ItemAddOn, ItemCategory, ItemMetaValue, Question, Quota,
+            Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, Question, Quota,
         )
 
         self.plugins = other.plugins
@@ -571,6 +571,14 @@ class Event(EventMixin, LoggedModel):
             ia.pk = None
             ia.base_item = item_map[ia.base_item.pk]
             ia.addon_category = category_map[ia.addon_category.pk]
+            ia.save()
+
+        for ia in ItemBundle.objects.filter(base_item__event=other).prefetch_related('base_item', 'bundled_item', 'bundled_variation'):
+            ia.pk = None
+            ia.base_item = item_map[ia.base_item.pk]
+            ia.bundled_item = item_map[ia.bundled_item.pk]
+            if ia.bundled_variation:
+                ia.bundled_variation = variation_map[ia.bundled_variation.pk]
             ia.save()
 
         for q in Quota.objects.filter(event=other, subevent__isnull=True).prefetch_related('items', 'variations'):
