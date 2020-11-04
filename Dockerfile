@@ -48,8 +48,7 @@ RUN pip3 install -U \
         -r requirements.txt \
         -r requirements/memcached.txt \
         -r requirements/mysql.txt \
-        -r requirements/redis.txt \
-        gunicorn && \
+        gunicorn django-extensions ipython && \
     rm -rf ~/.cache/pip
 
 COPY deployment/docker/pretix.bash /usr/local/bin/pretix
