@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.8
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -30,7 +30,8 @@ RUN apt-get update && \
     mkdir /data && \
     useradd -ms /bin/bash -d /pretix -u 15371 pretixuser && \
     echo 'pretixuser ALL=(ALL) NOPASSWD:SETENV: /usr/bin/supervisord' >> /etc/sudoers && \
-    mkdir /static
+    mkdir /static && \
+    mkdir /etc/supervisord
 
 ENV LC_ALL=C.UTF-8 \
     DJANGO_SETTINGS_MODULE=production_settings
@@ -47,12 +48,13 @@ RUN pip3 install -U \
         -r requirements.txt \
         -r requirements/memcached.txt \
         -r requirements/mysql.txt \
-        -r requirements/redis.txt \
-        gunicorn && \
+        gunicorn django-extensions ipython && \
     rm -rf ~/.cache/pip
 
 COPY deployment/docker/pretix.bash /usr/local/bin/pretix
-COPY deployment/docker/supervisord.conf /etc/supervisord.conf
+COPY deployment/docker/supervisord /etc/supervisord
+COPY deployment/docker/supervisord.all.conf /etc/supervisord.all.conf
+COPY deployment/docker/supervisord.web.conf /etc/supervisord.web.conf
 COPY deployment/docker/nginx.conf /etc/nginx/nginx.conf
 COPY deployment/docker/production_settings.py /pretix/src/production_settings.py
 COPY src /pretix/src

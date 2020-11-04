@@ -5,6 +5,8 @@ export DATA_DIR=/data/
 export HOME=/pretix
 export NUM_WORKERS=$((2 * $(nproc --all)))
 
+AUTOMIGRATE=${AUTOMIGRATE:-yes}
+
 if [ ! -d /data/logs ]; then
     mkdir /data/logs;
 fi
@@ -16,10 +18,16 @@ if [ "$1" == "cron" ]; then
     exec python3 -m pretix runperiodic
 fi
 
-python3 -m pretix migrate --noinput
+if [ "$AUTOMIGRATE" != "skip" ]; then
+  python3 -m pretix migrate --noinput
+fi
 
 if [ "$1" == "all" ]; then
-    exec sudo -E /usr/bin/supervisord -n -c /etc/supervisord.conf
+    exec sudo -E /usr/bin/supervisord -n -c /etc/supervisord.all.conf
+fi
+
+if [ "$1" == "web" ]; then
+    exec sudo -E /usr/bin/supervisord -n -c /etc/supervisord.web.conf
 fi
 
 if [ "$1" == "webworker" ]; then
@@ -35,10 +43,6 @@ fi
 if [ "$1" == "taskworker" ]; then
     shift
     exec celery -A pretix.celery_app worker -l info "$@"
-fi
-
-if [ "$1" == "shell" ]; then
-    exec python3 -m pretix shell
 fi
 
 if [ "$1" == "upgrade" ]; then

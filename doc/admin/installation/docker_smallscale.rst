@@ -284,6 +284,24 @@ Then, go to that directory and build the image::
 You can now use that image ``mypretix`` instead of ``pretix/standalone`` in your service file (see above). Be sure
 to re-build your custom image after you pulled ``pretix/standalone`` if you want to perform an update.
 
+Scaling up
+----------
+
+If you need to scale to multiple machines, please first read our :ref:`scaling guide <scaling>`.
+
+If you run the official docker container on multiple machines, it is recommended to set the environment
+variable ``AUTOMIGRATE=skip`` on all containers and run ``docker exec -it pretix.service pretix migrate``
+on one machine after each upgrade manually, otherwise multiple containers might try to upgrade the
+database schema at the same time.
+
+To run only the ``pretix-web`` component of pretix as well as a nginx server serving static files, you
+can invoke the container with ``docker run … pretix/standalone:stable web`` (instead of ``all``).
+
+To run only ``pretix-worker``, you can run ``docker run … pretix/standalone:stable taskworker``. You can
+also pass arguments to limit the worker to specific queues or to change the number of concurrent task
+workers, e.g. ``docker run … taskworker -Q notifications --concurrency 32``.
+
+
 .. _Docker: https://docs.docker.com/engine/installation/linux/debian/
 .. _Postfix: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-16-04
 .. _nginx: https://botleg.com/stories/https-with-lets-encrypt-and-nginx/
