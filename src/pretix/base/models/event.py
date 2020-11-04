@@ -507,7 +507,8 @@ class Event(EventMixin, LoggedModel):
     def copy_data_from(self, other):
         from ..signals import event_copy_data
         from . import (
-            Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, Question, Quota,
+            Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, Question,
+            Quota,
         )
 
         self.plugins = other.plugins
