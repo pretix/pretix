@@ -96,8 +96,9 @@ class OrganizerUserTask(app.Task):
         kwargs['organizer'] = organizer
 
         user_id = kwargs['user']
-        user = User.objects.get(pk=user_id)
-        kwargs['user'] = user
+        if user_id is not None:
+            user = User.objects.get(pk=user_id)
+            kwargs['user'] = user
 
         with scope(organizer=organizer):
             ret = super().__call__(*args, **kwargs)

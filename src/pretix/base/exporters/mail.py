@@ -41,7 +41,7 @@ class MailExporter(BaseExporter):
                      initial=[Order.STATUS_PENDING, Order.STATUS_PAID],
                      choices=Order.STATUS_CHOICE,
                      widget=forms.CheckboxSelectMultiple,
-                     required=False
+                     required=True
                  )),
             ]
         )

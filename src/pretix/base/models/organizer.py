@@ -357,3 +357,15 @@ class TeamAPIToken(models.Model):
             return self.team.organizer.events.all()
         else:
             return self.team.limit_events.all()
+
+    def get_events_with_permission(self, permission, request=None):
+        """
+        Returns a queryset of events the token has a specific permissions to.
+
+        :param request: Ignored, for compatibility with User model
+        :return: Iterable of Events
+        """
+        if getattr(self.team, permission, False):
+            return self.get_events_with_any_permission()
+        else:
+            return self.team.organizer.events.none()

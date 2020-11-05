@@ -222,3 +222,15 @@ class Device(LoggedModel):
             return self.organizer.events.all()
         else:
             return self.limit_events.all()
+
+    def get_events_with_permission(self, permission, request=None):
+        """
+        Returns a queryset of events the device has a specific permissions to.
+
+        :param request: Ignored, for compatibility with User model
+        :return: Iterable of Events
+        """
+        if permission in self.permission_set():
+            return self.get_events_with_any_permission()
+        else:
+            return self.organizer.events.none()
