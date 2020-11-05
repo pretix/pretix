@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-02 15:59+0000\n"
-"PO-Revision-Date: 2020-10-29 23:00+0000\n"
+"PO-Revision-Date: 2020-11-06 00:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -1753,11 +1753,8 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:25 pretix/control/navigation.py:467
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Dates"
 msgid "Gates"
-msgstr "Päivämäärät"
+msgstr "Portit"
 
 #: pretix/base/models/checkin.py:26
 msgid ""
@@ -9109,22 +9106,16 @@ msgid "The team has been deleted."
 msgstr ""
 
 #: pretix/control/logdisplay.py:415 pretix/control/views/organizer.py:1300
-#, fuzzy
-#| msgid "The new category has been created."
 msgid "The gate has been created."
-msgstr "Uusi kategoria luotu."
+msgstr "Uusi portti luotu."
 
 #: pretix/control/logdisplay.py:416
-#, fuzzy
-#| msgid "The new category has been created."
 msgid "The gate has been changed."
-msgstr "Uusi kategoria luotu."
+msgstr "Portti muutettu."
 
 #: pretix/control/logdisplay.py:417
-#, fuzzy
-#| msgid "The event has been deleted."
 msgid "The gate has been deleted."
-msgstr "Tapahtuma poistettu."
+msgstr "Portti poistettu."
 
 #: pretix/control/logdisplay.py:418
 msgctxt "subevent"
@@ -13253,10 +13244,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11
-#, fuzzy
-#| msgid "Create a new gift card"
 msgid "Create a new gate"
-msgstr "Luo uusi lahjakortti"
+msgstr "Luo uusi portti"
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
 msgid "The list below shows gates that you can use to group check-in devices."
@@ -15694,10 +15683,8 @@ msgid "The gift card has been created and can now be used."
 msgstr ""
 
 #: pretix/control/views/organizer.py:1367
-#, fuzzy
-#| msgid "The selected category has been deleted."
 msgid "The selected gate has been deleted."
-msgstr "Valittu kategoria on poistettu."
+msgstr "Valittu portti on poistettu."
 
 #: pretix/control/views/pdf.py:53
 msgid "The uploaded PDF file is too large."
@@ -16276,10 +16263,8 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/signals.py:40
 #: pretix/plugins/banktransfer/signals.py:76
-#, fuzzy
-#| msgid "Perform refund"
 msgid "Export refunds"
-msgstr "Suorita hyvitys"
+msgstr "Vie hyvitykset"
 
 #: pretix/plugins/banktransfer/tasks.py:32
 #, python-format
@@ -16303,10 +16288,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:8
-#, fuzzy
-#| msgid "Amount"
 msgid "Account"
-msgstr "Määrä"
+msgstr "Tili"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
@@ -16395,10 +16378,8 @@ msgid "Go to organizer-level import"
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:67
-#, fuzzy
-#| msgid "Amount"
 msgid "Amount from"
-msgstr "Määrä"
+msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:69
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:75
@@ -16532,20 +16513,16 @@ msgid "Exported files"
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:55
-#, fuzzy
-#| msgid "Export format"
 msgid "Export date"
-msgstr "Vientiformaatti"
+msgstr "Vie päivämäärä"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:56
 msgid "Number of orders"
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:76
-#, fuzzy
-#| msgid "Ticket downloads"
 msgid "not downloaded"
-msgstr "Lippujen lataus"
+msgstr "ei ladattu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:81
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:92
@@ -16558,10 +16535,8 @@ msgid "SEPA XML"
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:106
-#, fuzzy
-#| msgid "The new category has been created."
 msgid "No exports have been created yet."
-msgstr "Uusi kategoria luotu."
+msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
@@ -16655,10 +16630,8 @@ msgid "Unknown order code"
 msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:296
-#, fuzzy
-#| msgid "Search attendee…"
 msgid "Search text"
-msgstr "Etsi osallistuja…"
+msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:297
 msgid "min"
@@ -18391,37 +18364,37 @@ msgstr "Ostoskorissasi olevat tuotteet eivät ole enää varattu sinulle."
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:43
 #: pretix/presale/templates/pretixpresale/event/index.html:97
 msgid "Add tickets for a different date"
-msgstr ""
+msgstr "Lisää lippuja toiselle päivämäärälle"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
 msgid "Review order"
-msgstr ""
+msgstr "Tarkasta tilaus"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:10
 msgid "Please review the details below and confirm your order."
-msgstr ""
+msgstr "Ole hyvä ja tarkasta tilauksen tiedot alta ja vahvista tilaus."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "Ole hyvä ja odota, viimeistelemme tilaustasi!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 msgid "Add or remove tickets"
-msgstr ""
+msgstr "Lisää tai poista lippuja"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:61
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:133
 msgid "Modify"
-msgstr ""
+msgstr "Muuta"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:137
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:275
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:33
 msgid "Contact information"
-msgstr ""
+msgstr "Yhteystiedot"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:161
 msgid "Confirmations"
@@ -18450,11 +18423,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
-msgstr ""
+msgstr "Valitse maksutapa."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
 msgid "This sales channel does not provide support for test mode."
-msgstr ""
+msgstr "Tämä myyntikanava ei tue testitilaa."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
 msgid "If you continue, you might pay an actual order with non-existing money!"
@@ -18462,45 +18435,45 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:49
 msgid "This payment provider does not provide support for test mode."
-msgstr ""
+msgstr "Tämä maksunvälittäjä ei tue testitilaa."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:51
 msgid "If you continue, actual money might be transferred."
-msgstr ""
+msgstr "Jos jatkat, rahaa saatetaan siirtää oikeasti."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:62
 msgid "There are no payment providers enabled."
-msgstr ""
+msgstr "Yhtäkään maksunvälittäjää ei ole aktivoitu."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:64
 msgid ""
 "Please go to the payment settings and activate one or more payment providers."
-msgstr ""
+msgstr "Mene maksuasetuksiin ja aktivoi yksi tai useampi maksunvälittäjä."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:6
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "Ennen kuin jatkamme sinun tulee vastata muutamiin kysymyksiin."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
-msgstr ""
+msgstr "Tähdellä (<span>*</span>) merkityt kentätä ovat pakollisia."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:67
 msgid "Copy answers from above"
-msgstr ""
+msgstr "Kopioi vastaukset yltä"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:95
 msgid "Selected add-ons"
-msgstr ""
+msgstr "Valitut lisätuotteet"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:128
 msgid "Copy answers"
-msgstr ""
+msgstr "Kopioi vastaukset"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
-msgstr ""
+msgstr "Ole hyvä ja jatka uudessa välilehdessä"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:10
 msgid ""
@@ -18516,11 +18489,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:24
 msgid "Continue in new tab"
-msgstr ""
+msgstr "Jatka uudessa välilehdessä"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:31
 msgid "Cookies not supported"
-msgstr ""
+msgstr "Evästeitä ei tueta"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:33
 msgid ""
@@ -18528,14 +18501,17 @@ msgid ""
 "cookie to remember who you are and what is in your cart. Please change your "
 "browser settings accordingly."
 msgstr ""
+"Selaimesi ei hyväksy meidän evästeitä. Tarvitsemme evästeitä, jotta "
+"muistamme, kuka olet ja mitä ostoskorissasi on. Ole hyvä ja muuta selaimesi "
+"asetuksia siten, että evästeet sallitaan."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
 msgid "FULLY BOOKED"
-msgstr ""
+msgstr "TÄYTEEN VARATTU"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 msgid "SOLD OUT"
-msgstr ""
+msgstr "LOPPUUNMYYTY"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:20
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
@@ -18544,23 +18520,25 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:109
 #: pretix/presale/views/widget.py:319
 msgid "Reserved"
-msgstr ""
+msgstr "Varattu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:22
 msgid "All remaining products are reserved but might become available again."
 msgstr ""
+"Kaikki jäljellä olevat tuotteet on varattu, mutta ne saattavat vapautua "
+"myöhemmin."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:151
 msgid "Okay, we're removing that…"
-msgstr ""
+msgstr "Selvä, poistamme sen…"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:155
 msgid "Remove one"
-msgstr ""
+msgstr "Poista yksi"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:167
 msgid "We're trying to reserve another one for you!"
-msgstr ""
+msgstr "Yritämme varata toista sinulle!"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:168
 #: pretix/presale/templates/pretixpresale/event/index.html:235
@@ -18571,27 +18549,29 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
+"Kun tuotteet ovat ostoskorissasi, sinulla on %(time)s minuuttia aikaa tehdä "
+"tilaus."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:183
 msgid "Add one more"
-msgstr ""
+msgstr "Lisää yksi"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:278
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Yksi tuote"
+msgstr[1] "%(num)s tuotetta"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
 #, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr ""
+msgstr "sis. %(tax_sum)s veroja"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 #: pretix/presale/templates/pretixpresale/event/index.html:273
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Lunasta kuponki"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:304
 msgid "We're applying this voucher to your cart..."
@@ -18600,11 +18580,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr ""
+msgstr "Tilaus vahvistettu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Please check your email account, we've sent you your tickets."
-msgstr ""
+msgstr "Tarkista sähköpostisi, olemme lähettäneet lippusi sinulle."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:17
 msgid ""
@@ -18618,24 +18598,26 @@ msgid ""
 "If the email has no attachment, click the link in our email and you will be "
 "able to download them from here."
 msgstr ""
+"Jos sähköpostissa ei ole liitettä, voit ladata liput klikkaamalla siitä "
+"löytyvää linkkiä."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:33
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:55
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:75
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
+msgstr "Pidä lippusi valmiina kun saavut tapahtumaan."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:36
 msgid "Download your tickets here:"
-msgstr ""
+msgstr "Lataa lippusi tästä:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:40
 msgid "Download all tickets at once:"
-msgstr ""
+msgstr "Lataa kaikki liput kerralla:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:58
 msgid "Download your ticket here:"
-msgstr ""
+msgstr "Lataa lippusi tästä:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:78
 msgid "Download your tickets using the buttons below."
@@ -18644,21 +18626,21 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:86
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
-msgstr ""
+msgstr "Voit ladata lippusi täältä %(date)s alkaen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr ""
+msgstr "Odottaa vahvistusta"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:9
 msgid "Payment pending"
-msgstr ""
+msgstr "Odottaa maksua"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:15
 msgctxt "order state"
 msgid "Confirmed"
-msgstr ""
+msgstr "Vahvistettu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:61
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:116
@@ -18668,7 +18650,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:272
 msgctxt "price"
 msgid "FREE"
-msgstr ""
+msgstr "ILMAINEN"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:144
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:258
@@ -18678,19 +18660,19 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr ""
+msgstr "%(num)s saatavilla"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:57
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:57
 msgid "Go"
-msgstr ""
+msgstr "Mene"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:21
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:48
 msgid "W"
-msgstr ""
+msgstr "Vko"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:34
@@ -18702,7 +18684,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:118
 #: pretix/presale/views/widget.py:311 pretix/presale/views/widget.py:330
 msgid "Book now"
-msgstr ""
+msgstr "Varaa nyt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:85
@@ -18710,33 +18692,33 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:114
 #: pretix/presale/views/widget.py:326
 msgid "Fully booked"
-msgstr ""
+msgstr "Täyteen varattu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:39
 #: pretix/presale/templates/pretixpresale/organizers/index.html:123
 #, python-format
 msgid "Sale starts %(date)s"
-msgstr ""
+msgstr "Myynti alkaa %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:44
 #: pretix/presale/templates/pretixpresale/organizers/index.html:128
 msgid "Not yet on sale"
-msgstr ""
+msgstr "Ei vielä myynnissä"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 #: pretix/presale/templates/pretixpresale/event/index.html:82
 msgid "Empty cart"
-msgstr ""
+msgstr "Tyhjennä ostoskori"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:74
 #: pretix/presale/templates/pretixpresale/event/index.html:257
 #: pretix/presale/templates/pretixpresale/event/voucher.html:345
 msgid "Proceed with checkout"
-msgstr ""
+msgstr "Siirry kassalle"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:101
 msgid "View other date"
-msgstr ""
+msgstr "Näytä toinen päivämäärä"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:105
 msgid "Choose date to book a ticket"
