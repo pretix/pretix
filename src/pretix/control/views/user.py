@@ -576,7 +576,9 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
 
 
 class UserNotificationsDisableView(TemplateView):
-    def get(self, request, *args, **kwargs):
+    template_name = 'pretixcontrol/user/notifications_disable.html'
+
+    def post(self, request, *args, **kwargs):
         user = get_object_or_404(User, notifications_token=kwargs.get('token'), pk=kwargs.get('id'))
         user.notifications_send = False
         user.save()
