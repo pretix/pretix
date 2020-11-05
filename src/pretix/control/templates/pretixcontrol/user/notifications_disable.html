@@ -1,0 +1,13 @@
+{% extends "pretixcontrol/auth/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Disable notifications" %}{% endblock %}
+{% block content %}
+    <form action="" method="post" class="form-signin">
+        {% csrf_token %}
+        <div class="text-center">
+            <p>Please confirm that you no longer want to receive notifications for any of your events.</p>
+            <p><button type="submit" class="btn btn-primary" value="Disable notifications">Disable notifications</button></p>
+        </div>
+    </form>
+{% endblock %}

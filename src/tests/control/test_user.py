@@ -417,13 +417,13 @@ class UserSettingsNotificationsTest(SoupTest):
 
     def test_disable_all_via_link(self):
         assert self.user.notifications_send
-        self.client.get('/control/settings/notifications/off/{}/{}/'.format(self.user.pk, self.user.notifications_token))
+        self.client.post('/control/settings/notifications/off/{}/{}/'.format(self.user.pk, self.user.notifications_token))
         self.user.refresh_from_db()
         assert not self.user.notifications_send
 
     def test_disable_all_via_link_anonymous(self):
         self.client.logout()
         assert self.user.notifications_send
-        self.client.get('/control/settings/notifications/off/{}/{}/'.format(self.user.pk, self.user.notifications_token))
+        self.client.post('/control/settings/notifications/off/{}/{}/'.format(self.user.pk, self.user.notifications_token))
         self.user.refresh_from_db()
         assert not self.user.notifications_send
