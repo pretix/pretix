@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-22 12:49+0000\n"
-"PO-Revision-Date: 2020-11-09 19:05+0000\n"
+"POT-Creation-Date: 2020-11-02 15:59+0000\n"
+"PO-Revision-Date: 2020-11-06 00:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -9240,7 +9240,7 @@ msgstr ""
 msgid "The team has been deleted."
 msgstr ""
 
-#: pretix/control/logdisplay.py:415 pretix/control/views/organizer.py:1302
+#: pretix/control/logdisplay.py:415 pretix/control/views/organizer.py:1300
 msgid "The gate has been created."
 msgstr "Uusi portti luotu."
 
@@ -15846,7 +15846,7 @@ msgstr ""
 msgid "The gift card has been created and can now be used."
 msgstr ""
 
-#: pretix/control/views/organizer.py:1369
+#: pretix/control/views/organizer.py:1367
 msgid "The selected gate has been deleted."
 msgstr "Valittu portti on poistettu."
 
