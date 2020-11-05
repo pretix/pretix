@@ -85,7 +85,11 @@ class ExportersMixin:
         cf.date = now()
         cf.expires = now() + timedelta(days=3)
         cf.save()
-        async_result = self.do_export(cf, instance, serializer.data)
+        d = serializer.data
+        for k, v in d.items():
+            if isinstance(v, set):
+                d[k] = list(v)
+        async_result = self.do_export(cf, instance, d)
 
         url_kwargs = {
             'asyncid': str(async_result.id),
