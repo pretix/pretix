@@ -244,6 +244,31 @@ class EventMixin:
             return Quota.AVAILABILITY_RESERVED
         return Quota.AVAILABILITY_GONE
 
+    def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
+        qs_annotated = self._seats(ignore_voucher=ignore_voucher)
+
+        qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
+        if self.settings.seating_minimal_distance > 0:
+            qs = qs.filter(has_closeby_taken=False)
+
+        if not (sales_channel in self.settings.seating_allow_blocked_seats_for_channel or include_blocked):
+            qs = qs.filter(blocked=False)
+        return qs
+
+    def total_seats(self, ignore_voucher=None):
+        return self._seats(ignore_voucher=ignore_voucher)
+
+    def taken_seats(self, ignore_voucher=None):
+        return self._seats(ignore_voucher=ignore_voucher).filter(has_order=True)
+
+    def blocked_seats(self, ignore_voucher=None):
+        qs = self._seats(ignore_voucher=ignore_voucher)
+
+        return qs.filter(Q(has_cart=True)
+                         | Q(has_voucher=True)
+                         | Q(blocked=True)
+                         | Q(has_closeby_taken=True, has_order=False))
+
 
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
 class Event(EventMixin, LoggedModel):
@@ -394,7 +419,7 @@ class Event(EventMixin, LoggedModel):
         if img:
             return urljoin(build_absolute_uri(self, 'presale:event.index'), img)
 
-    def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
+    def _seats(self, ignore_voucher=None):
         from .seating import Seat
 
         qs_annotated = Seat.annotated(self.seats, self.pk, None,
@@ -402,13 +427,7 @@ class Event(EventMixin, LoggedModel):
                                       minimal_distance=self.settings.seating_minimal_distance,
                                       distance_only_within_row=self.settings.seating_distance_within_row)
 
-        qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
-        if self.settings.seating_minimal_distance > 0:
-            qs = qs.filter(has_closeby_taken=False)
-
-        if not (sales_channel in self.settings.seating_allow_blocked_seats_for_channel or include_blocked):
-            qs = qs.filter(blocked=False)
-        return qs
+        return qs_annotated
 
     @property
     def presale_has_ended(self):
@@ -1098,19 +1117,13 @@ class SubEvent(EventMixin, LoggedModel):
             date_format(self.date_from.astimezone(self.timezone), "TIME_FORMAT") if self.settings.show_times else ""
         ).strip()
 
-    def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
+    def _seats(self, ignore_voucher=None):
         from .seating import Seat
         qs_annotated = Seat.annotated(self.seats, self.event_id, self,
                                       ignore_voucher_id=ignore_voucher.pk if ignore_voucher else None,
                                       minimal_distance=self.settings.seating_minimal_distance,
                                       distance_only_within_row=self.settings.seating_distance_within_row)
-        qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
-        if self.settings.seating_minimal_distance > 0:
-            qs = qs.filter(has_closeby_taken=False)
-
-        if not (sales_channel in self.settings.seating_allow_blocked_seats_for_channel or include_blocked):
-            qs = qs.filter(blocked=False)
-        return qs
+        return qs_annotated
 
     @cached_property
     def settings(self):
