@@ -130,7 +130,7 @@ class Seat(models.Model):
     seat_number = models.CharField(max_length=190, blank=True, default="")
     seat_label = models.CharField(max_length=190, null=True)
     seat_guid = models.CharField(max_length=190, db_index=True)
-    product = models.ForeignKey('Item', null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
+    product = models.ForeignKey('Item', null=True, blank=True, related_name='seats', on_delete=models.SET_NULL)
     blocked = models.BooleanField(default=False)
     sorting_rank = models.BigIntegerField(default=0)
     x = models.FloatField(null=True)
