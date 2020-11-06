@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
 from django.core.files import File
-from django.db import transaction
+from django.db import transaction, connections
 from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.forms import inlineformset_factory
@@ -863,7 +863,13 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 f.subevent = se
                 f.save()
 
-        LogEntry.objects.bulk_create(log_entries)
+        if connections['default'].features.can_return_rows_from_bulk_insert:
+            LogEntry.objects.bulk_create(log_entries)
+            LogEntry.bulk_postprocess(log_entries)
+        else:
+            for le in log_entries:
+                le.save()
+            LogEntry.bulk_postprocess(log_entries)
 
         self.request.event.cache.clear()
         messages.success(self.request, pgettext_lazy('subevent', '{} new dates have been created.').format(len(subevents)))

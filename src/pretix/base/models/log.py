@@ -63,14 +63,42 @@ class LogEntry(models.Model):
                 return response
         return self.action_type
 
+    @property
+    def webhook_type(self):
+        from pretix.api.webhooks import get_all_webhook_events
+
+        wh_types = get_all_webhook_events()
+        wh_type = None
+        typepath = self.action_type
+        while not wh_type and '.' in typepath:
+            wh_type = wh_type or wh_types.get(typepath + ('.*' if typepath != self.action_type else ''))
+            typepath = typepath.rsplit('.', 1)[0]
+        return wh_type
+
+    @property
+    def notification_type(self):
+        from pretix.base.notifications import get_all_notification_types
+
+        no_type = None
+        no_types = get_all_notification_types()
+        typepath = self.action_type
+        while not no_type and '.' in typepath:
+            no_type = no_type or no_types.get(typepath + ('.*' if typepath != self.action_type else ''))
+            typepath = typepath.rsplit('.', 1)[0]
+        return no_type
+
     @cached_property
     def organizer(self):
+        from .organizer import Organizer
+
         if self.event:
             return self.event.organizer
         elif hasattr(self.content_object, 'event'):
             return self.content_object.event.organizer
         elif hasattr(self.content_object, 'organizer'):
             return self.content_object.organizer
+        elif isinstance(self.content_object, Organizer):
+            return self.content_object
         return None
 
     @cached_property
@@ -188,3 +216,15 @@ class LogEntry(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         raise TypeError("Logs cannot be deleted.")
+
+    @classmethod
+    def bulk_postprocess(cls, objects):
+        from pretix.api.webhooks import notify_webhooks
+        from ..services.notifications import notify
+
+        to_notify = [o.id for o in objects if o.notification_type]
+        if to_notify:
+            notify.apply_async(args=(to_notify,))
+        to_wh = [o.id for o in objects if o.webhook_type]
+        if to_wh:
+            notify_webhooks.apply_async(args=(to_wh,))
