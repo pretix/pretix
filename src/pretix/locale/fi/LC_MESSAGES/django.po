@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-02 15:59+0000\n"
-"PO-Revision-Date: 2020-11-06 00:00+0000\n"
+"PO-Revision-Date: 2020-11-06 15:33+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -15269,15 +15269,15 @@ msgstr ""
 
 #: pretix/control/views/orders.py:545
 msgid "The refund has been canceled."
-msgstr ""
+msgstr "Hyvistys on peruttu."
 
 #: pretix/control/views/orders.py:547
 msgid "This refund can not be canceled at the moment."
-msgstr ""
+msgstr "Tätä hyvitystä ei voi perua tällä hetkellä."
 
 #: pretix/control/views/orders.py:580
 msgid "The refund has been processed."
-msgstr ""
+msgstr "Hyvitys on käsitelty."
 
 #: pretix/control/views/orders.py:582 pretix/control/views/orders.py:608
 msgid "This refund can not be processed at the moment."
@@ -15293,7 +15293,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:639
 msgid "Your cancellation request"
-msgstr ""
+msgstr "Peruutuspyyntösi"
 
 #: pretix/control/views/orders.py:640
 #, python-brace-format
