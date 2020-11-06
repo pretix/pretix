@@ -44,6 +44,12 @@ The following values for ``action_types`` are valid with pretix core:
     * ``pretix.event.order.denied``
     * ``pretix.event.checkin``
     * ``pretix.event.checkin.reverted``
+    * ``pretix.event.added``
+    * ``pretix.event.changed``
+    * ``pretix.event.deleted``
+    * ``pretix.subevent.added``
+    * ``pretix.subevent.changed``
+    * ``pretix.subevent.deleted``
 
 Installed plugins might register more valid values.
 
