@@ -1254,6 +1254,8 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, V
             user=self.request.user.id,
             fileid=str(cf.id),
             provider=self.exporter.identifier,
+            device=None,
+            token=None,
             form_data=self.exporter.form.cleaned_data
         )
 
