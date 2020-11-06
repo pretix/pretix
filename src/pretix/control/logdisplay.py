@@ -397,7 +397,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.testmode.activated': _('The shop has been taken into test mode.'),
         'pretix.event.testmode.deactivated': _('The test mode has been disabled.'),
         'pretix.event.added': _('The event has been created.'),
-        'pretix.event.changed': _('The event settings have been changed.'),
+        'pretix.event.changed': _('The event details have been changed.'),
         'pretix.event.question.option.added': _('An answer option has been added to the question.'),
         'pretix.event.question.option.deleted': _('An answer option has been removed from the question.'),
         'pretix.event.question.option.changed': _('An answer option has been changed.'),

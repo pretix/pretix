@@ -31,8 +31,10 @@ action_types                          list of strings            A list of actio
 The following values for ``action_types`` are valid with pretix core:
 
     * ``pretix.event.order.placed``
+    * ``pretix.event.order.placed.require_approval``
     * ``pretix.event.order.paid``
     * ``pretix.event.order.canceled``
+    * ``pretix.event.order.reactivated``
     * ``pretix.event.order.expired``
     * ``pretix.event.order.modified``
     * ``pretix.event.order.contact.changed``

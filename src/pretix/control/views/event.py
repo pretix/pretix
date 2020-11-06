@@ -937,6 +937,7 @@ class EventDelete(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixi
                     data={
                         'event_id': self.request.event.pk,
                         'name': str(self.request.event.name),
+                        'slug': self.request.event.slug,
                         'logentries': list(self.request.event.logentry_set.values_list('pk', flat=True))
                     }
                 )

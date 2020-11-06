@@ -7,7 +7,7 @@ import requests
 from celery.exceptions import MaxRetriesExceededError
 from django.db.models import Exists, OuterRef, Q
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import scope, scopes_disabled
 from requests import RequestException
 
@@ -97,6 +97,67 @@ class ParametrizedOrderWebhookEvent(WebhookEvent):
         }
 
 
+class ParametrizedEventWebhookEvent(WebhookEvent):
+    def __init__(self, action_type, verbose_name):
+        self._action_type = action_type
+        self._verbose_name = verbose_name
+        super().__init__()
+
+    @property
+    def action_type(self):
+        return self._action_type
+
+    @property
+    def verbose_name(self):
+        return self._verbose_name
+
+    def build_payload(self, logentry: LogEntry):
+        if logentry.action_type == 'pretix.event.deleted':
+            organizer = logentry.content_object
+            return {
+                'notification_id': logentry.pk,
+                'organizer': organizer.slug,
+                'event': logentry.parsed_data.get('slug'),
+                'action': logentry.action_type,
+            }
+
+        event = logentry.content_object
+        if not event:
+            return None
+
+        return {
+            'notification_id': logentry.pk,
+            'organizer': event.organizer.slug,
+            'event': event.slug,
+            'action': logentry.action_type,
+        }
+
+
+class ParametrizedSubEventWebhookEvent(WebhookEvent):
+    def __init__(self, action_type, verbose_name):
+        self._action_type = action_type
+        self._verbose_name = verbose_name
+        super().__init__()
+
+    @property
+    def action_type(self):
+        return self._action_type
+
+    @property
+    def verbose_name(self):
+        return self._verbose_name
+
+    def build_payload(self, logentry: LogEntry):
+        # do not use content_object, this is also called in deletion
+        return {
+            'notification_id': logentry.pk,
+            'organizer': logentry.event.organizer.slug,
+            'event': logentry.event.slug,
+            'subevent': logentry.object_id,
+            'action': logentry.action_type,
+        }
+
+
 class ParametrizedOrderPositionWebhookEvent(ParametrizedOrderWebhookEvent):
 
     def build_payload(self, logentry: LogEntry):
@@ -169,44 +230,69 @@ def register_default_webhook_events(sender, **kwargs):
             'pretix.event.checkin.reverted',
             _('Ticket check-in reverted'),
         ),
+        ParametrizedEventWebhookEvent(
+            'pretix.event.added',
+            _('Event created'),
+        ),
+        ParametrizedEventWebhookEvent(
+            'pretix.event.changed',
+            _('Event details changed'),
+        ),
+        ParametrizedEventWebhookEvent(
+            'pretix.event.deleted',
+            _('Event details changed'),
+        ),
+        ParametrizedSubEventWebhookEvent(
+            'pretix.subevent.added',
+            pgettext_lazy('subevent', 'Event series date added'),
+        ),
+        ParametrizedSubEventWebhookEvent(
+            'pretix.subevent.changed',
+            pgettext_lazy('subevent', 'Event series date changed'),
+        ),
+        ParametrizedSubEventWebhookEvent(
+            'pretix.subevent.deleted',
+            pgettext_lazy('subevent', 'Event series date deleted'),
+        ),
     )
 
 
 @app.task(base=TransactionAwareTask, acks_late=True)
-def notify_webhooks(logentry_id: int):
-    logentry = LogEntry.all.select_related('event', 'event__organizer').get(id=logentry_id)
+def notify_webhooks(logentry_ids: list):
+    if not isinstance(logentry_ids, list):
+        logentry_ids = [logentry_ids]
+    qs = LogEntry.all.select_related('event', 'event__organizer').filter(id__in=logentry_ids)
+    _org, _at, webhooks = None, None, None
+    for logentry in qs:
+        if not logentry.organizer:
+            break  # We need to know the organizer
 
-    if not logentry.organizer:
-        return  # We need to know the organizer
+        notification_type = logentry.webhook_type
 
-    types = get_all_webhook_events()
-    notification_type = None
-    typepath = logentry.action_type
-    while not notification_type and '.' in typepath:
-        notification_type = types.get(typepath + ('.*' if typepath != logentry.action_type else ''))
-        typepath = typepath.rsplit('.', 1)[0]
+        if not notification_type:
+            break  # Ignore, no webhooks for this event type
 
-    if not notification_type:
-        return  # Ignore, no webhooks for this event type
+        if _org != logentry.organizer or _at != logentry.action_type or webhooks is None:
+            _org = logentry.organizer
+            _at = logentry.action_type
 
-    # All webhooks that registered for this notification
-    event_listener = WebHookEventListener.objects.filter(
-        webhook=OuterRef('pk'),
-        action_type=notification_type.action_type
-    )
+            # All webhooks that registered for this notification
+            event_listener = WebHookEventListener.objects.filter(
+                webhook=OuterRef('pk'),
+                action_type=notification_type.action_type
+            )
+            webhooks = WebHook.objects.annotate(has_el=Exists(event_listener)).filter(
+                organizer=logentry.organizer,
+                has_el=True,
+                enabled=True
+            )
+            if logentry.event_id:
+                webhooks = webhooks.filter(
+                    Q(all_events=True) | Q(limit_events__pk=logentry.event_id)
+                )
 
-    webhooks = WebHook.objects.annotate(has_el=Exists(event_listener)).filter(
-        organizer=logentry.organizer,
-        has_el=True,
-        enabled=True
-    )
-    if logentry.event_id:
-        webhooks = webhooks.filter(
-            Q(all_events=True) | Q(limit_events__pk=logentry.event_id)
-        )
-
-    for wh in webhooks:
-        send_webhook.apply_async(args=(logentry_id, notification_type.action_type, wh.pk))
+        for wh in webhooks:
+            send_webhook.apply_async(args=(logentry.id, notification_type.action_type, wh.pk))
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=9, acks_late=True)

@@ -236,6 +236,10 @@ class EventWizard(SafeSessionWizardView):
             event.has_subevents = foundation_data['has_subevents']
             event.testmode = True
             form_dict['basics'].save()
+            event.log_action(
+                'pretix.event.added',
+                user=self.request.user,
+            )
 
             if not EventWizardBasicsForm.has_control_rights(self.request.user, event.organizer):
                 if basics_data["team"] is not None:
