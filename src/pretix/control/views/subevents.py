@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
 from django.core.files import File
-from django.db import transaction, connections
+from django.db import connections, transaction
 from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.forms import inlineformset_factory

@@ -220,6 +220,7 @@ class LogEntry(models.Model):
     @classmethod
     def bulk_postprocess(cls, objects):
         from pretix.api.webhooks import notify_webhooks
+
         from ..services.notifications import notify
 
         to_notify = [o.id for o in objects if o.notification_type]

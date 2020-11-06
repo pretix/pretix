@@ -50,6 +50,7 @@ class LoggingMixin:
         """
         from pretix.api.models import OAuthAccessToken, OAuthApplication
         from pretix.api.webhooks import notify_webhooks
+
         from ..services.notifications import notify
         from .devices import Device
         from .event import Event
