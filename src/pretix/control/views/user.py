@@ -22,6 +22,7 @@ from django.views import View
 from django.views.generic import FormView, ListView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from django_scopes import scopes_disabled
 
 from pretix.base.auth import get_auth_backends
 from pretix.base.forms.auth import ReauthForm
@@ -577,6 +578,10 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
 
 class UserNotificationsDisableView(TemplateView):
     template_name = 'pretixcontrol/user/notifications_disable.html'
+
+    @scopes_disabled()
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         user = get_object_or_404(User, notifications_token=kwargs.get('token'), pk=kwargs.get('id'))
