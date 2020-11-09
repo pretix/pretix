@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-02 15:59+0000\n"
-"PO-Revision-Date: 2020-11-06 15:33+0000\n"
+"PO-Revision-Date: 2020-11-09 19:05+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -14258,6 +14258,8 @@ msgid ""
 "We just want to make sure it's really you. Please re-enter your password to "
 "continue."
 msgstr ""
+"Haluamme varmistaa, että se olet oikeasti sinä. Ole hyvä ja syötä salasanasi "
+"uudelleen jatkaaksesi."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:26
 msgid "Alternatively, you can use your WebAuthn device."
@@ -14265,16 +14267,16 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:40
 msgid "Log in as someone else"
-msgstr ""
+msgstr "Kirjaudu sisään toisena käyttäjänä"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:4
 #: pretix/control/templates/pretixcontrol/user/settings.html:6
 msgid "Account settings"
-msgstr ""
+msgstr "Tilin asetukset"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:35
 msgid "Login settings"
-msgstr ""
+msgstr "Kirjautumisasetukset"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:50
 msgid "Change two-factor settings"
@@ -14282,11 +14284,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:65
 msgid "Show applications"
-msgstr ""
+msgstr "Näytä sovellukset"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:74
 msgid "Show account history"
-msgstr ""
+msgstr "Näytä tilin historia"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:4
 msgid "Staff session"
@@ -14298,7 +14300,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:17
 msgid "Audit log"
-msgstr ""
+msgstr "Auditointiloki"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:30
 msgid "Method"
@@ -14306,7 +14308,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:31
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:32
 msgid "On behalf of"
@@ -14321,31 +14323,31 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:18
 msgid "Start session"
-msgstr ""
+msgstr "Aloita istunto"
 
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:4
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:6
 msgid "Anonymize user"
-msgstr ""
+msgstr "Anonymisoi käyttäjä"
 
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:11
 msgid "Disable and anonymize user"
-msgstr ""
+msgstr "Poista ja anonymisoi käyttäjä"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
 msgid "Create user"
-msgstr ""
+msgstr "Luo käyttäjä"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:11
 #: pretix/control/templates/pretixcontrol/users/form.html:26
 msgid "Base settings"
-msgstr ""
+msgstr "Perusasetukset"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:18
 #: pretix/control/templates/pretixcontrol/users/form.html:34
 msgid "Log-in settings"
-msgstr ""
+msgstr "Kirjautumisasetukset"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:11
 msgid "Send password reset email"
@@ -14353,15 +14355,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:16
 msgid "Impersonate user"
-msgstr ""
+msgstr "Esiinny käyttäjänä"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:18
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonymisoi"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:36
 msgid "Authentication backend"
-msgstr ""
+msgstr "Autentikointijärjestelmä"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:50
 msgid "Team memberships"
@@ -14378,42 +14380,42 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:83
 msgid "User created."
-msgstr ""
+msgstr "Käyttäjä luotu."
 
 #: pretix/control/templates/pretixcontrol/users/index.html:30
 msgid "Create a new user"
-msgstr ""
+msgstr "Luo uusi käyttäjä"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:7
 msgid "Create multiple vouchers"
-msgstr ""
+msgstr "Luo monta kuponkia"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:12
 msgid "Voucher codes"
-msgstr ""
+msgstr "Kuponkikoodit"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
-msgstr ""
+msgstr "Etuliite (valinnainen)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
-msgstr ""
+msgstr "Generoi satunnaiset koodit"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:29
 msgid "Copy codes"
-msgstr ""
+msgstr "Kopioi koodit"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:39
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:27
 msgid "Voucher details"
-msgstr ""
+msgstr "Kupongin yksityiskohdat"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:44
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:46
 #: pretix/control/views/vouchers.py:70
 msgid "Price effect"
-msgstr ""
+msgstr "Vaikutus hintaan"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:56
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:58
@@ -14426,45 +14428,48 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
 msgid "Delete voucher"
-msgstr ""
+msgstr "Poista kuponki"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
 msgstr ""
+"Oletko varma, että haluat poistaa kupongin <strong>%(voucher)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
 msgid "Delete vouchers"
-msgstr ""
+msgstr "Poista kupongit"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:10
 msgid "Are you sure you want to delete the following vouchers?"
-msgstr ""
+msgstr "Oletko varma, että haluat poistaa seuraavat kupongit?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:21
 msgid ""
 "The following vouchers can't be deleted as they already have been redeemed, "
 "but they will be set to fully redeemed instead."
 msgstr ""
+"Seuraavia kuponkeja ei voida poistaa, sillä niitä on jo käytetty. Kupongit "
+"muutetaan kokonaan käytetyiksi."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
-msgstr ""
+msgstr "Tätä kuponkia on jo käytetty. Sen muokkaamista ei suositella."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
 msgid "Order %(code)s"
-msgstr ""
+msgstr "Tilaus %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
 msgid "Voucher link"
-msgstr ""
+msgstr "Kupongin linkki"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:89
 msgid "Voucher history"
-msgstr ""
+msgstr "Kupongin historia"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:10
 msgid ""
@@ -14474,26 +14479,26 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:64
 msgid "Your search did not match any vouchers."
-msgstr ""
+msgstr "Hakusi ei vastannut yhtäkään kuponkia."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:66
 msgid "You haven't created any vouchers yet."
-msgstr ""
+msgstr "Et ole luonut vielä kuponkeja."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:73
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:80
 msgid "Create a new voucher"
-msgstr ""
+msgstr "Luo uusi kuponki"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:75
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:83
 msgid "Create multiple new vouchers"
-msgstr ""
+msgstr "Luo monta uutta kuponkia"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:86
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:121
 msgid "Download list"
-msgstr ""
+msgstr "Lataa lista"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:105
 msgid "Redemptions"
@@ -14506,16 +14511,16 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:167
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr ""
+msgstr "Mikä tahansa tuote kiintiössä \"%(quota)s\""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:183
 msgid "Use as a template for new vouchers"
-msgstr ""
+msgstr "Käytä pohjana uusille kupongeille"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:6
 msgid "Voucher tags"
-msgstr ""
+msgstr "Kupongin tunnisteet"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:8
 msgid ""
@@ -14529,11 +14534,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:43
 msgid "Redeemed vouchers"
-msgstr ""
+msgstr "Lunastetut kupongit"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:57
 msgid "Empty tag"
-msgstr ""
+msgstr "Tyhjä tunniste"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:6
@@ -14546,6 +14551,8 @@ msgid ""
 "Are you sure you want to delete the following waiting list entry <strong>"
 "%(entry)s</strong>?"
 msgstr ""
+"Oletko varma, että haluat poistaa merkinnän <strong>%(entry)s</strong> "
+"jonotuslistalta?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:11
 msgid ""
@@ -14581,7 +14588,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:66
 msgid "Sales estimate"
-msgstr ""
+msgstr "Myyntiarvio"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:69
 #, python-format
