@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:25+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -15594,8 +15594,8 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"Vahvistaaksesi toiminnon, ole hyvä ja kirjoita tapahtuman lyhyt tunniste "
-"(\"%(slug)s\"):"
+"Vahvistaaksesi toiminnon, ole hyvä ja kirjoita tapahtuman lyhyt tunniste (\""
+"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
 msgid "Your event can not be deleted as it already contains orders."
@@ -27710,8 +27710,7 @@ msgstr "Kiitos!"
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
-"Tilauksesi on vastaanotettu onnistuneesti. Katso tilauksen tiedot alta."
+msgstr "Tilauksesi on vastaanotettu onnistuneesti. Katso tilauksen tiedot alta."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 #: pretix/presale/templates/pretixpresale/event/order.html:48
