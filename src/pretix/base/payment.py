@@ -513,7 +513,7 @@ class BasePaymentProvider:
 
         return timing and pricing
 
-    def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
+    def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order=None) -> str:
         """
         When the user selects this provider as their preferred payment method,
         they will be shown the HTML you return from this method.
@@ -522,13 +522,15 @@ class BasePaymentProvider:
         and render the returned form. If your payment method doesn't require
         the user to fill out form fields, you should just return a paragraph
         of explanatory text.
+
+        :param order: Only set when this is a change to a new payment method for an existing order.
         """
         form = self.payment_form(request)
         template = get_template('pretixpresale/event/checkout_payment_form_default.html')
         ctx = {'request': request, 'form': form}
         return template.render(ctx)
 
-    def checkout_confirm_render(self, request) -> str:
+    def checkout_confirm_render(self, request, order: Order=None) -> str:
         """
         If the user has successfully filled in their payment data, they will be redirected
         to a confirmation page which lists all details of their order for a final review.
@@ -537,6 +539,8 @@ class BasePaymentProvider:
 
         In most cases, this should include a short summary of the user's input and
         a short explanation on how the payment process will continue.
+
+        :param order: Only set when this is a change to a new payment method for an existing order.
         """
         raise NotImplementedError()  # NOQA
 

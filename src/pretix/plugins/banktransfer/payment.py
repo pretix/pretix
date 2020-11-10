@@ -155,12 +155,13 @@ class BankTransfer(BasePaymentProvider):
                     {'payment_banktransfer_bank_details': _('Please enter your bank account details.')})
         return cleaned_data
 
-    def payment_form_render(self, request) -> str:
+    def payment_form_render(self, request, total=None, order=None) -> str:
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')
         ctx = {
             'request': request,
             'event': self.event,
             'settings': self.settings,
+            'code': self._code(order) if order else None,
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }
         return template.render(ctx)
@@ -174,8 +175,8 @@ class BankTransfer(BasePaymentProvider):
     def payment_is_valid_session(self, request):
         return True
 
-    def checkout_confirm_render(self, request):
-        return self.payment_form_render(request)
+    def checkout_confirm_render(self, request, order=None):
+        return self.payment_form_render(request, order=order)
 
     def order_pending_mail_render(self, order, payment) -> str:
         template = get_template('pretixplugins/banktransfer/email/order_pending.txt')

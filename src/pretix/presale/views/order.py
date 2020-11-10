@@ -416,7 +416,10 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
         ctx['payment'] = self.payment
-        ctx['payment_info'] = self.payment.payment_provider.checkout_confirm_render(self.request)
+        if 'order' in inspect.signature(self.payment.payment_provider.checkout_confirm_render).parameters:
+            ctx['payment_info'] = self.payment.payment_provider.checkout_confirm_render(self.request, order=self.order)
+        else:
+            ctx['payment_info'] = self.payment.payment_provider.checkout_confirm_render(self.request)
         ctx['payment_provider'] = self.payment.payment_provider
         return ctx
 
@@ -568,7 +571,9 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 continue
             current_fee = sum(f.value for f in self.open_fees) or Decimal('0.00')
             fee = provider.calculate_fee(pending_sum - current_fee)
-            if 'total' in inspect.signature(provider.payment_form_render).parameters:
+            if 'order' in inspect.signature(provider.payment_form_render).parameters:
+                form = provider.payment_form_render(self.request, abs(pending_sum + fee - current_fee), order=self.order)
+            elif 'total' in inspect.signature(provider.payment_form_render).parameters:
                 form = provider.payment_form_render(self.request, abs(pending_sum + fee - current_fee))
             else:
                 form = provider.payment_form_render(self.request)

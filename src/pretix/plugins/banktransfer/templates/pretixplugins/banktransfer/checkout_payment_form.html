@@ -16,7 +16,11 @@
     {% if details %}
         {{ details|linebreaksbr }}<br>
     {% endif %}
-    <strong>
-        {% trans "We will assign you a personal reference code to use after you completed the order." %}
-    </strong>
+    {% if code %}
+        <strong>{% trans "Reference code (important):" %} {{ code }}</strong>
+    {% else %}
+        <strong>
+            {% trans "We will assign you a personal reference code to use after you completed the order." %}
+        </strong>
+    {% endif %}
 </address>
