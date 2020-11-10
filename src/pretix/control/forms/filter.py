@@ -112,6 +112,7 @@ class OrderFilterForm(FilterForm):
             (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
             (Order.STATUS_CANCELED, _('Canceled')),
             ('cp', _('Canceled (or with paid fee)')),
+            ('na', _('Approved, payment pending')),
             ('pa', _('Approval pending')),
             ('overpaid', _('Overpaid')),
             ('underpaid', _('Underpaid')),
@@ -206,6 +207,11 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(
                     status=Order.STATUS_PENDING,
                     require_approval=True
+                )
+            elif s == 'na':
+                qs = qs.filter(
+                    status=Order.STATUS_PENDING,
+                    require_approval=False
                 )
             elif s == 'testmode':
                 qs = qs.filter(
