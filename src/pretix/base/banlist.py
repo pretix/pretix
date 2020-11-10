@@ -73,8 +73,8 @@ banlist = [
     "wtf"
 ]
 
-blacklist_regex = re.compile('(' + '|'.join(banlist) + ')')
+banlist_regex = re.compile('(' + '|'.join(banlist) + ')')
 
 
 def banned(string):
-    return bool(blacklist_regex.search(string.lower()))
+    return bool(banlist_regex.search(string.lower()))
