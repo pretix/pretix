@@ -117,7 +117,9 @@ class MailForm(forms.Form):
         )
         self._set_field_placeholders('subject', ['event', 'order', 'position_or_address'])
         self._set_field_placeholders('message', ['event', 'order', 'position_or_address'])
-        choices = list(Order.STATUS_CHOICE)
+        choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
+        choices.insert(0, ('na', _('payment pending (except unapproved)')))
+        choices.insert(0, ('pa', _('approval pending')))
         if not event.settings.get('payment_term_expire_automatically', as_type=bool):
             choices.append(
                 ('overdue', _('pending with payment overdue'))
@@ -130,7 +132,10 @@ class MailForm(forms.Form):
             choices=choices
         )
         if not self.initial.get('sendto'):
-            self.initial['sendto'] = ['p', 'n']
+            self.initial['sendto'] = ['p', 'na']
+        elif 'n' in self.initial['sendto']:
+            self.initial['sendto'].append('pa')
+            self.initial['sendto'].append('na')
 
         self.fields['items'].queryset = event.items.all()
         if not self.initial.get('items'):

@@ -84,6 +84,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         statusq = Q(status__in=form.cleaned_data['sendto'])
         if 'overdue' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
+        if 'pa' in form.cleaned_data['sendto']:
+            statusq |= Q(status=Order.STATUS_PENDING, require_approval=True)
+        if 'na' in form.cleaned_data['sendto']:
+            statusq |= Q(status=Order.STATUS_PENDING, require_approval=False)
         orders = qs.filter(statusq)
 
         opq = OrderPosition.objects.filter(
@@ -205,6 +209,8 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
         }
         status = dict(Order.STATUS_CHOICE)
         status['overdue'] = _('pending with payment overdue')
+        status['na'] = _('payment pending (except unapproved)')
+        status['pa'] = _('approval pending')
         status['r'] = status['c']
         for log in ctx['logs']:
             log.pdata = log.parsed_data
