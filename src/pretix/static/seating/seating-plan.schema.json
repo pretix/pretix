@@ -50,12 +50,6 @@
           "type": "array",
           "description": "List of areas",
           "items": { "$ref": "#/definitions/area" }
-        },
-        "row_number_position": {
-          "type": ["string", "null"],
-          "enum": ["left", "right", null],
-          "description": "Should the row numbers be hidden?",
-          "$comment": "Currently not implemented."
         }
       },
       "required": ["position", "rows"],
@@ -71,7 +65,7 @@
         },
         "row_label": {
           "type": ["string", "null"],
-          "description": "Human-readable name for the row. May include %s as a placeholder for the row_number value. Not used for rendering the plan, but for describing the seats in text."
+          "description": "Human-readable name for the row. Not used for rendering the plan, but for describing the seats in text."
         },
         "seat_label": {
           "type": ["string", "null"],
@@ -82,14 +76,10 @@
           "description": "List of seats in this row",
           "items": { "$ref": "#/definitions/seat" }
         },
-        "seats_spacing": {
-          "type": "integer",
-          "description": "How far apart should the seats be positioned? This value is ignored for rendering, it is just useful to keep to modify the row later."
-        },
         "row_number_position": {
           "type": ["string", "null"],
-          "enum": ["left", "right", null],
-          "description": "Should the row numbers be hidden? (Overrides the zone setting)"
+          "enum": ["start", "end", "both", null],
+          "description": "Should the row numbers be shown?"
         },
         "position": {
           "$ref": "#/definitions/position"
