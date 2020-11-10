@@ -146,7 +146,7 @@
                                     </div>
                                     {% elif var.cached_availability.0 == 100 %}
                                     <div class="col-md-2 col-xs-6 availability-box available">
-										{% if item.order_max == 1 %}
+										{% if var.order_max == 1 %}
                                             <label class="item-checkbox-label">
                                                 <input type="checkbox" value="1"
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
