@@ -14665,7 +14665,7 @@ msgstr[1] "%(s)s Bestellungen"
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
 msgid "Order overview"
-msgstr "Bestellübersicht"
+msgstr "Bestellüberblick"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Sales"
