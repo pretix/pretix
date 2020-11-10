@@ -581,7 +581,7 @@ class UserNotificationsDisableView(TemplateView):
 
     @scopes_disabled()
     def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(self, request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         user = get_object_or_404(User, notifications_token=kwargs.get('token'), pk=kwargs.get('id'))
