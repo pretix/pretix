@@ -111,10 +111,18 @@ class BankTransfer(BasePaymentProvider):
                 required=False
             )),
             ('omit_hyphen', forms.BooleanField(
-                label=_('Do not include a hyphen in the payment reference.'),
+                label=_('Do not include hyphens in the payment reference.'),
                 help_text=_('This is required in some countries.'),
                 required=False
             )),
+            ('include_invoice_number', forms.BooleanField(
+                label=_('Include invoice number in the payment reference.'),
+                required=False
+            )),
+            ('prefix', forms.CharField(
+                label=_('Prefix for the payment reference'),
+                required=False,
+            ))
         ])
 
     @property
@@ -227,10 +235,16 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def _code(self, order):
+        prefix = self.settings.get('prefix', default='')
+        li = order.invoices.last()
+        invoice_number = li.number if self.settings.get('include_invoice_number', as_type=bool) and li else ''
+
+        code = " ".join((prefix, order.full_code, invoice_number)).strip(" ")
+
         if self.settings.get('omit_hyphen', as_type=bool):
-            return self.event.slug.upper() + order.code
-        else:
-            return order.full_code
+            code = code.replace('-', '')
+
+        return code
 
     def shred_payment_info(self, obj):
         if not obj.info_data:
