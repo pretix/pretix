@@ -21,7 +21,6 @@ SAMPLE_PLAN = """{
         "x": 0,
         "y": 0
       },
-      "row_number_position": "left",
       "rows": [
         {
           "row_number": "0",
