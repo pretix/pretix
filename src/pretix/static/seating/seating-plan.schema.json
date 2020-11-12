@@ -121,7 +121,7 @@
           "description": "Declares this seat as a start point for ordered booking in its row. Can contain '<', '>' or '<>'."
         },
         "radius": {
-          "type": "integer",
+          "type": "number",
           "description": "Defaults to 10"
         },
         "position": { "$ref": "#/definitions/position" },
@@ -169,10 +169,10 @@
           "type": "object",
           "properties": {
             "width": {
-              "type": "integer"
+              "type": "number"
             },
             "height": {
-              "type": "integer"
+              "type": "number"
             }
           },
           "required": ["width", "height"],
@@ -190,7 +190,7 @@
           "type": "object",
           "properties": {
             "radius": {
-              "type": "integer"
+              "type": "number"
             }
           },
           "required": ["radius"],
@@ -202,7 +202,7 @@
             "text": { "type": "string" },
             "color": { "type": "string" },
             "size": {
-              "type": "integer",
+              "type": "number",
               "description": "Defaults to 16"
             },
             "position": {
