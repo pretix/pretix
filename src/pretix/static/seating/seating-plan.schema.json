@@ -40,6 +40,14 @@
           "type": "string",
           "description": "Name of the zone"
         },
+        "zone_id": {
+          "type": "string",
+          "description": "Internal ID of the zone. Currently not used in any way during plan rendering, but only to auto-generate seat GUIDs. May be missing since previous versions of the schema did not include this, in which case a fallback to the name is expected."
+        },
+        "uuid": {
+          "type": "string",
+          "description": "Unique ID of this object. May not under any circumstances be duplicate, not even between different object types. Should be an UUID-4. May be missing since previous versions of the schema did not include this."
+        },
         "position": { "$ref": "#/definitions/position" },
         "rows": {
           "type": "array",
@@ -71,6 +79,10 @@
           "type": ["string", "null"],
           "description": "Human-readable name for the seats in this. May include %s as a placeholder for the seat_number values. Not used for rendering the plan, but for describing the seats in text."
         },
+        "uuid": {
+          "type": "string",
+          "description": "Unique ID of this object. May not under any circumstances be duplicate, not even between different object types. Should be an UUID-4. May be missing since previous versions of the schema did not include this."
+        },
         "seats": {
           "type": "array",
           "description": "List of seats in this row",
@@ -99,6 +111,10 @@
         "seat_number": {
           "type": "string",
           "description": "Human-readable seat number."
+        },
+        "uuid": {
+          "type": "string",
+          "description": "Unique ID of this object. May not under any circumstances be duplicate, not even between different object types. Should be an UUID-4. May be missing since previous versions of the schema did not include this."
         },
         "start_direction": {
           "type": ["string", "null"],
@@ -129,6 +145,10 @@
         },
         "position": {
           "$ref": "#/definitions/position"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "Unique ID of this object. May not under any circumstances be duplicate, not even between different object types. Should be an UUID-4. May be missing since previous versions of the schema did not include this."
         },
         "shape": {
           "type": "string",
