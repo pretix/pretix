@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-02 15:59+0000\n"
-"PO-Revision-Date: 2020-11-09 19:05+0000\n"
+"PO-Revision-Date: 2020-11-13 03:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -4837,7 +4837,7 @@ msgstr ""
 #: pretix/base/services/orders.py:1118
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
-msgstr ""
+msgstr "Lippusi on valmis ladattavaksi: %(code)s"
 
 #: pretix/base/services/orders.py:1156
 #, python-format
@@ -6146,6 +6146,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hei,\n"
+"\n"
+"ostit lipun tapahtumaan {event}.\n"
+"\n"
+"Jos et vielä ladannut lippuasi, voit tehdä sen täällä:\n"
+"{url}\n"
+"\n"
+"Ystävällisin terveisin,\n"
+"{event} -tiimi"
 
 #: pretix/base/settings.py:1683
 msgid "Banner text (top)"
@@ -6580,7 +6589,7 @@ msgstr ""
 
 #: pretix/base/ticketoutput.py:163
 msgid "Download ticket"
-msgstr ""
+msgstr "Lataa lippu"
 
 #: pretix/base/timeline.py:37
 msgctxt "timeline"
@@ -9694,7 +9703,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
 msgid "Continue"
-msgstr ""
+msgstr "Jatka"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -18221,11 +18230,11 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:31
 msgid "Download tickets (PDF)"
-msgstr ""
+msgstr "Lataa liput (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:32
 msgid "Download ticket (PDF)"
-msgstr ""
+msgstr "Lataa lippu (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:36
 msgid "Default ticket layout"
@@ -18252,17 +18261,17 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:63
 msgctxt "checkoutflow"
 msgid "Step"
-msgstr ""
+msgstr "Vaihe"
 
 #: pretix/presale/checkoutflow.py:198
 msgctxt "checkoutflow"
 msgid "Add-on products"
-msgstr ""
+msgstr "Lisätuotteet"
 
 #: pretix/presale/checkoutflow.py:416
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "Tietosi"
 
 #: pretix/presale/checkoutflow.py:563
 msgid ""
@@ -18279,7 +18288,7 @@ msgstr ""
 
 #: pretix/presale/checkoutflow.py:582 pretix/presale/checkoutflow.py:588
 msgid "Please enter a valid email address."
-msgstr ""
+msgstr "Ole hyvä ja anna kelvollinen sähköpostiosoite."
 
 #: pretix/presale/checkoutflow.py:595
 msgid "Please enter your invoicing address."
@@ -18298,7 +18307,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:680
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "Maksu"
 
 #: pretix/presale/checkoutflow.py:725 pretix/presale/views/order.py:607
 msgid "Please select a payment method."
@@ -18312,7 +18321,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:786
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr ""
+msgstr "Tarkista tilaus"
 
 #: pretix/presale/checkoutflow.py:871
 msgid "You need to check all checkboxes on the bottom of the page."
@@ -18576,7 +18585,7 @@ msgstr "Ole hyvä ja tarkasta tilauksen tiedot alta ja vahvista tilaus."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please hang tight, we're finalizing your order!"
-msgstr "Ole hyvä ja odota, viimeistelemme tilaustasi!"
+msgstr "Viimeistelemme tilaustasi, ole hyvä ja odota!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 msgid "Add or remove tickets"
@@ -18614,7 +18623,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:197
 msgid "Place binding order"
-msgstr ""
+msgstr "Vahvista tilaus"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:199
 msgid "Submit registration"
@@ -18656,7 +18665,7 @@ msgstr "Ennen kuin jatkamme sinun tulee vastata muutamiin kysymyksiin."
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
-msgstr "Tähdellä (<span>*</span>) merkityt kentätä ovat pakollisia."
+msgstr "Tähdellä (<span>*</span>) merkityt kentät ovat pakollisia."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:67
 msgid "Copy answers from above"
@@ -18820,7 +18829,7 @@ msgstr "Lataa lippusi tästä:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:78
 msgid "Download your tickets using the buttons below."
-msgstr ""
+msgstr "Lataa lippusi alla olevilla napeilla."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:86
 #, python-format
@@ -18948,36 +18957,36 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:22
 #, python-format
 msgid "Begin: %(time)s"
-msgstr ""
+msgstr "Alkaa: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:193
 #: pretix/presale/templates/pretixpresale/event/voucher.html:27
 #, python-format
 msgid "End: %(time)s"
-msgstr ""
+msgstr "Päättyy: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:203
 #: pretix/presale/templates/pretixpresale/event/voucher.html:35
 #, python-format
 msgid "Admission: %(time)s"
-msgstr ""
+msgstr "Sisäänpääsy: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:209
 #: pretix/presale/templates/pretixpresale/event/voucher.html:39
 #, python-format
 msgid "Admission: %(datetime)s"
-msgstr ""
+msgstr "Sisäänpääsy: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:221
 #: pretix/presale/templates/pretixpresale/event/voucher.html:50
 msgid "Add to Calendar"
-msgstr ""
+msgstr "Lisää kalenteriin"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:234
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:66
 msgid "We're now trying to reserve this for you!"
-msgstr ""
+msgstr "Yritämme varata tuotteita sinulle!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:255
 #: pretix/presale/templates/pretixpresale/event/voucher.html:343
@@ -18988,15 +18997,15 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:260
 #: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
-msgstr ""
+msgstr "Lisää ostoskoriin"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:291
 msgid "Redeem voucher"
-msgstr ""
+msgstr "Lunasta kuponki"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:302
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Jos tilasit jo tuotteita"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:306
 msgid ""
@@ -19005,20 +19014,22 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Jos haluat nähdä tilauksesi tai muuttaa sitä, klikkaa linkkiä saamasti "
+"sähköpostista. Jos et löydä linkkiä, voit tilata sen uudelleen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:315
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
-msgstr ""
+msgstr "Lähetä tilauslinkit uudelleen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 msgid "Thank you!"
-msgstr ""
+msgstr "Kiitos!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:17
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
+msgstr "Tilauksesi on vastaanotettu onnistuneesti. Katso tilauksen tiedot alta."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:20
 msgid ""
@@ -19032,11 +19043,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "Tilauksesi on käsitelty onnistuneesti! Katso tilauksen tiedot alta."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:31
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Maksu vastaanotettu onnistuneesti. Katso tilauksen tiedot alta."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:33
 msgid ""
@@ -19044,12 +19055,17 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Tallenna tämä sivu kirjanmerkkeihin tai kopioi sen osoite talteen, jos "
+"haluat nähdä tilauksen tiedot myöhemmin uudelleen. Lähetimme linkin myös "
+"sähköpostiisi."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:36
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
+"Tallenna oheinen linkki, jos haluat nähdä tilauksen tiedot myöhemmin "
+"uudelleen. Lähetimme linkin myös sähköpostiisi."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:53
 #: pretix/presale/templates/pretixpresale/event/position.html:18
@@ -19064,16 +19080,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:70
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr ""
+msgstr "Ole hyvä ja maksa tilaus ennen %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:79
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "Yritä maksua uudelleen tai valitse toinen maksutapa"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:87
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
 msgid "Pay now"
-msgstr ""
+msgstr "Maksa nyt"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:100
 msgid ""
@@ -19564,23 +19580,24 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:363
 msgid "Your cart has been updated."
-msgstr ""
+msgstr "Ostoskori on päivitetty."
 
 #: pretix/presale/views/cart.py:366 pretix/presale/views/cart.py:388
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "Ostoskori on tyhjennetty."
 
 #: pretix/presale/views/cart.py:403
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Tuotteet lisätty ostoskoriin onnistuneesti."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
-msgstr ""
+msgstr "Ostoskorisi on tyhjä"
 
 #: pretix/presale/views/checkout.py:38
 msgid "The presale for this event is over or has not yet started."
 msgstr ""
+"Tämän tapahtuman ennakkomyynti ei ole alkanut vielä tai se on jo päättynyt."
 
 #: pretix/presale/views/event.py:548
 msgid "Unknown event code or not authorized to access this event."
