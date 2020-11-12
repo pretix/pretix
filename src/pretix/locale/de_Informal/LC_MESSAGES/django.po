@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-02 15:59+0000\n"
-"PO-Revision-Date: 2020-11-02 13:27+0000\n"
+"PO-Revision-Date: 2020-11-10 18:38+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17800,7 +17800,7 @@ msgstr ""
 
 #: pretix/control/views/user.py:583
 msgid "Your notifications have been disabled."
-msgstr "Deine Benachrichtigungen wurden aktiviert."
+msgstr "Deine Benachrichtigungen wurden deaktiviert."
 
 #: pretix/control/views/user.py:632 pretix/control/views/user.py:672
 msgid "Your notification settings have been saved."
