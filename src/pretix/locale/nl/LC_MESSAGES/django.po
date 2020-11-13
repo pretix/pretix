@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-22 12:49+0000\n"
-"PO-Revision-Date: 2020-10-26 04:00+0000\n"
+"POT-Creation-Date: 2020-11-02 15:59+0000\n"
+"PO-Revision-Date: 2020-11-13 10:45+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9165,16 +9165,12 @@ msgid "Special terms and conditions"
 msgstr "Bijzondere voorwaarden"
 
 #: pretix/control/forms/orders.py:644
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "Keep a fixed cancellation fee per ticket"
-msgstr "Houd een vast bedrag als annuleringskosten in"
+msgstr "Houd een vast bedrag per ticket als annuleringskosten in"
 
 #: pretix/control/forms/orders.py:645
-#, fuzzy
-#| msgid "Generate tickets for add-on products"
 msgid "Free tickets and add-on products are not counted"
-msgstr "Genereer tickets voor add-onproducten"
+msgstr "Gratis tickets en add-onproducten worden niet meegeteld"
 
 #: pretix/control/forms/orders.py:655
 msgid "Keep fees"
@@ -9260,23 +9256,21 @@ msgstr ""
 "Organisatie van {event}"
 
 #: pretix/control/forms/orders.py:771 pretix/plugins/sendmail/forms.py:72
-#, fuzzy
-#| msgid "Please select a specific variation of this product."
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
-msgstr "Selecteer een specifieke variant van dit product."
+msgstr ""
+"Kies een specifieke evenementsdatum of een datumbereik, maar niet beiden."
 
 #: pretix/control/forms/orders.py:773
-#, fuzzy
-#| msgid "Please select a specific variation of this product."
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
-msgstr "Selecteer een specifieke variant van dit product."
+msgstr "Kies alle evenementsdatums of een datumbereik, maar niet beiden."
 
 #: pretix/control/forms/orders.py:775 pretix/plugins/sendmail/forms.py:74
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
 msgstr ""
+"Als u een datumbereik kiest moet u zowel een begin als een einde opgeven."
 
 #: pretix/control/forms/orders.py:777
 msgid "Please confirm that you want to cancel ALL dates in this event series."
@@ -18787,7 +18781,7 @@ msgstr[1] ""
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
 msgstr ""
-"Voer het rekeningnummer in waarvan de terugbetalingen uitgevoerd moeten "
+"Voer het rekeningnummer in waarvandaan de terugbetalingen overgemaakt moeten "
 "worden."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:35
@@ -19495,18 +19489,14 @@ msgid "Only send to customers of"
 msgstr "Stuur alleen naar klanten van"
 
 #: pretix/plugins/sendmail/forms.py:60
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers of dates starting at or after"
-msgstr "Stuur alleen naar klanten van"
+msgstr "Stuur alleen naar klanten van subevenementen die beginnen op of na"
 
 #: pretix/plugins/sendmail/forms.py:65
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers of dates starting before"
-msgstr "Stuur alleen naar klanten van"
+msgstr "Stuur alleen naar klanten van subevenementen die beginnen voor"
 
 #: pretix/plugins/sendmail/forms.py:98
 msgid "Everyone who created a ticket order"
@@ -20490,6 +20480,9 @@ msgid ""
 "rate to your purchase and the price of the products in your cart has changed "
 "accordingly."
 msgstr ""
+"Vanwege het factureringsadres dat u invoerde moeten wij een ander "
+"belastingtarief toepassen voor uw aankoop en hebben we de prijs van de "
+"producten in uw winkelwagen aangepast."
 
 #: pretix/presale/checkoutflow.py:582 pretix/presale/checkoutflow.py:588
 msgid "Please enter a valid email address."
@@ -21162,8 +21155,6 @@ msgid "View other date"
 msgstr "Bekijk andere datum"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:105
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
 msgstr "Kies een datum om een ticket te kopen"
 
