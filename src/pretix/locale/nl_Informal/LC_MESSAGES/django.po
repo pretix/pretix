@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-22 12:49+0000\n"
-"PO-Revision-Date: 2020-10-18 14:05+0000\n"
+"POT-Creation-Date: 2020-11-02 15:59+0000\n"
+"PO-Revision-Date: 2020-11-13 10:45+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -55,6 +55,8 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Volledige apparaattoegang (bestellingen en cadeaubonnen inzien en wijzigen, "
+"producten en instellingen inzien)"
 
 #: pretix/api/auth/devicesecurity.py:22
 msgid "pretixSCAN"
@@ -1229,7 +1231,7 @@ msgstr "Stoelnummer"
 #, fuzzy
 #| msgid "Order code"
 msgid "Order comment"
-msgstr "Bestelcode"
+msgstr "Opmerking bestelling"
 
 #: pretix/base/exporters/orderlist.py:593
 msgid "Order payments and refunds"
@@ -1861,17 +1863,16 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:25 pretix/control/navigation.py:467
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Dates"
 msgid "Gates"
-msgstr "Datums"
+msgstr "Toegangslocaties"
 
 #: pretix/base/models/checkin.py:26
 msgid ""
 "Does not have any effect for the validation of tickets, only for the "
 "automatic configuration of check-in devices."
 msgstr ""
+"Heeft geen effect op het controleren van kaartjes, alleen voor het "
+"automatisch instellen van incheckapparaten."
 
 #: pretix/base/models/checkin.py:30
 msgid "Allow re-entering after an exit scan"
@@ -1889,10 +1890,8 @@ msgstr ""
 "hetzelfde kaartje uitschakelen."
 
 #: pretix/base/models/checkin.py:39
-#, fuzzy
-#| msgid "Automatically checked in"
 msgid "Automatically check out everyone at"
-msgstr "Automatisch ingecheckt"
+msgstr "Automatisch iedereen uitchecken om"
 
 #: pretix/base/models/checkin.py:45
 msgid "Sales channels to automatically check in"
@@ -1939,7 +1938,7 @@ msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
 #: pretix/base/models/devices.py:91
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 msgid "Gate"
-msgstr ""
+msgstr "Toegangslocatie"
 
 #: pretix/base/models/devices.py:109
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -4639,7 +4638,7 @@ msgstr "Niet ingesteld"
 
 #: pretix/base/secrets.py:84
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "Willekeurig (standaard, werkt met alle pretix-apps)"
 
 #: pretix/base/secrets.py:114
 msgid ""
@@ -4647,6 +4646,9 @@ msgid ""
 "pretixSCAN on iOS and changes semantics of offline scanning – please refer "
 "to documentation or support for details)"
 msgstr ""
+"pretix handtekeningschema 1 (voor zeer grote evenementen, werkt niet met "
+"pretixSCAN op iOS en verandert hoe offline scannen werkt –­zie de "
+"documentatie of neem contact op met de ondersteuning voor details)"
 
 #: pretix/base/services/cart.py:52 pretix/base/services/orders.py:71
 msgid ""
@@ -8103,14 +8105,14 @@ msgstr ""
 "tegelijkertijd."
 
 #: pretix/control/forms/event.py:1073
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket code generator"
-msgstr "Kaartjescode"
+msgstr "Kaartjescode-generator"
 
 #: pretix/control/forms/event.py:1074
 msgid "For advanced users, usually does not need to be changed."
 msgstr ""
+"Voor geavanceerde gebruikers, dit hoeft normaal gesproken niet te worden "
+"aangepast."
 
 #: pretix/control/forms/event.py:1124
 msgid "Any country"
@@ -9157,16 +9159,12 @@ msgid "Special terms and conditions"
 msgstr "Bijzondere voorwaarden"
 
 #: pretix/control/forms/orders.py:644
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "Keep a fixed cancellation fee per ticket"
-msgstr "Houd een vast bedrag als annuleringskosten in"
+msgstr "Houd een vast bedrag per ticket als annuleringskosten in"
 
 #: pretix/control/forms/orders.py:645
-#, fuzzy
-#| msgid "Generate tickets for add-on products"
 msgid "Free tickets and add-on products are not counted"
-msgstr "Genereer kaartjes voor add-onproducten"
+msgstr "Gratis tickets en add-onproducten worden niet meegeteld"
 
 #: pretix/control/forms/orders.py:655
 msgid "Keep fees"
@@ -9252,23 +9250,21 @@ msgstr ""
 "Organisatie van {event}"
 
 #: pretix/control/forms/orders.py:771 pretix/plugins/sendmail/forms.py:72
-#, fuzzy
-#| msgid "Please select a specific variation of this product."
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
-msgstr "Selecteer een specifieke variant van dit product."
+msgstr ""
+"Kies een specifieke evenementsdatum of een datumbereik, maar niet allebei."
 
 #: pretix/control/forms/orders.py:773
-#, fuzzy
-#| msgid "Please select a specific variation of this product."
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
-msgstr "Selecteer een specifieke variant van dit product."
+msgstr "Kies alle evenementsdatums of een datumbereik, maar niet allebei."
 
 #: pretix/control/forms/orders.py:775 pretix/plugins/sendmail/forms.py:74
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
 msgstr ""
+"Als je een datumbereik kiest moet je zowel een begin als een einde opgeven."
 
 #: pretix/control/forms/orders.py:777
 msgid "Please confirm that you want to cancel ALL dates in this event series."
@@ -9735,47 +9731,39 @@ msgid "(unknown)"
 msgstr "(onbekend)"
 
 #: pretix/control/logdisplay.py:168
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Unknown scan of code \"{barcode}\" at {datetime} for list \"{list}\", "
-#| "type \"{type}\"."
+#, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"Onbekende scan van code \"{barcode}\" om {datetime} voor lijst \"{list}\", "
+"Onbekende scan van code \"{barcode}…\" om {datetime} voor lijst \"{list}\", "
 "type \"{type}\"."
 
 #: pretix/control/logdisplay.py:178
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Unknown scan of code \"{barcode}\" for list \"{list}\", type \"{type}\"."
+#, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Onbekende scan van code \"{barcode}\" voor lijst \"{list}\", type \"{type}\"."
+"Onbekende scan van code \"{barcode}…\" voor lijst \"{list}\", type \"{type}\""
+"."
 
 #: pretix/control/logdisplay.py:189
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Unknown scan of code \"{barcode}\" at {datetime} for list \"{list}\", "
-#| "type \"{type}\"."
+#, python-brace-format
 msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"Onbekende scan van code \"{barcode}\" om {datetime} voor lijst \"{list}\", "
-"type \"{type}\"."
+"Een scan van ingetrokken code \"{barcode}…\" om {datetime} voor lijst \""
+"{list}\", type \"{type}\" is geüpload."
 
 #: pretix/control/logdisplay.py:199
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Unknown scan of code \"{barcode}\" for list \"{list}\", type \"{type}\"."
+#, python-brace-format
 msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
-"Onbekende scan van code \"{barcode}\" voor lijst \"{list}\", type \"{type}\"."
+"Scan van ingetrokken code \"{barcode}\" voor lijst \"{list}\", type \"{type}"
+"\" is geüpload."
 
 #: pretix/control/logdisplay.py:210
 #, python-brace-format
@@ -10426,19 +10414,15 @@ msgstr "Het team is verwijderd."
 #, fuzzy
 #| msgid "The team has been created."
 msgid "The gate has been created."
-msgstr "Het team is aangepast."
+msgstr "De toegangslocatie is aangemaakt."
 
 #: pretix/control/logdisplay.py:416
-#, fuzzy
-#| msgid "The category has been changed."
 msgid "The gate has been changed."
-msgstr "De categorie is aangepast."
+msgstr "De toegangslocatie is aangepast."
 
 #: pretix/control/logdisplay.py:417
-#, fuzzy
-#| msgid "The team has been deleted."
 msgid "The gate has been deleted."
-msgstr "Het team is verwijderd."
+msgstr "De toegangslocatie is verwijderd."
 
 #: pretix/control/logdisplay.py:418
 msgctxt "subevent"
@@ -12663,10 +12647,8 @@ msgid "Download time"
 msgstr "Downloadtijd"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:66
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket codes"
-msgstr "Kaartjescode"
+msgstr "Kaartjescodes"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
@@ -14115,10 +14097,9 @@ msgid "Ordered items"
 msgstr "Bestelde items"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:303
-#, fuzzy, python-format
-#| msgid "Automatically checked in: %(date)s"
+#, python-format
 msgid "Automatically marked not present: %(date)s"
-msgstr "Automatisch ingecheckt: %(date)s"
+msgstr "Automatisch als afwezig gemarkeerd: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:305
 #, python-format
@@ -15088,39 +15069,27 @@ msgstr ""
 "kaartjeslayouts. Dit kan je tijd schelen als je veel evenementen aanmaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Delete date"
 msgid "Delete gate:"
-msgstr "Datum verwijderen"
+msgstr "Toegangslocatie verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:8
-#, fuzzy
-#| msgid "Are you sure you want to delete the team?"
 msgid "Are you sure you want to delete the gate?"
-msgstr "Weet je zeker dat je het team wilt verwijderen?"
+msgstr "Weet je zeker dat je de toegangslocatie wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Date: {}"
 msgid "Gate:"
-msgstr "Datum: {}"
+msgstr "Toegangslocatie:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create a new date"
 msgid "Create a new gate"
-msgstr "Nieuwe datum aanmaken"
+msgstr "Nieuwe toegangslocatie aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
-#, fuzzy
-#| msgid "The list below shows all teams that exist within this organizer."
 msgid "The list below shows gates that you can use to group check-in devices."
 msgstr ""
-"De lijst hieronder toont alle teams die bestaan binnen deze organisator."
+"De lijst hieronder toont de toegangslocaties die je kan gebruiken om "
+"incheckapparaten te groeperen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:6
@@ -17825,7 +17794,7 @@ msgstr "De cadeaubon is aangemaakt en kan nu worden gebruikt."
 #| msgctxt "subevent"
 #| msgid "The selected date has been deleted."
 msgid "The selected gate has been deleted."
-msgstr "De geselecteerde datum is verwijderd."
+msgstr "De geselecteerde toegangslocatie is verwijderd."
 
 #: pretix/control/views/pdf.py:53
 msgid "The uploaded PDF file is too large."
@@ -18445,11 +18414,13 @@ msgstr "Bank"
 
 #: pretix/plugins/banktransfer/payment.py:234
 msgid "Invalid IBAN/BIC"
-msgstr ""
+msgstr "Ongeldig IBAN/BIC"
 
 #: pretix/plugins/banktransfer/payment.py:291
 msgid "Can only create a bank transfer refund from an existing payment."
 msgstr ""
+"Een terugbetaling via bankoverschrijving kan alleen van een bestaande "
+"betaling gestart worden."
 
 #: pretix/plugins/banktransfer/refund_export.py:23
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
@@ -18469,10 +18440,8 @@ msgstr "Bankgegevens importeren"
 
 #: pretix/plugins/banktransfer/signals.py:40
 #: pretix/plugins/banktransfer/signals.py:76
-#, fuzzy
-#| msgid "Perform refund"
 msgid "Export refunds"
-msgstr "Terugbetaling uitvoeren"
+msgstr "Terugbetalingen exporteren"
 
 #: pretix/plugins/banktransfer/tasks.py:32
 #, python-format
@@ -18506,10 +18475,8 @@ msgstr ""
 "betalingskenmerk geven om te gebruiken."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:8
-#, fuzzy
-#| msgid "Amount"
 msgid "Account"
-msgstr "Bedrag"
+msgstr "Rekening"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
@@ -18619,19 +18586,17 @@ msgid "Go to organizer-level import"
 msgstr "Ga naar import op organisator-niveau"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:67
-#, fuzzy
-#| msgid "Amount"
 msgid "Amount from"
-msgstr "Bedrag"
+msgstr "Bedrag van"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:69
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:75
 msgid "up to"
-msgstr ""
+msgstr "tot"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:81
 msgid "Clear"
-msgstr ""
+msgstr "Leegmaken"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:90
 msgid "Discard all"
@@ -18712,7 +18677,7 @@ msgstr "Vereist dat de app BezahlCode ondersteunt"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:7
 msgid "Export bank transfer refunds"
-msgstr ""
+msgstr "Terugbetalingen per bankoverschrijving exporteren"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:9
 #, python-format
@@ -18720,34 +18685,34 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
+"<strong>%(num_new)s</strong> terugbetalingen per bankoverschrijving zijn "
+"aangemaakt en nog niet geëxporteerd."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
 msgstr ""
+"In de testmodus zullen je geëxporteerde bestanden alleen bestellingen uit de "
+"testmodus bevatten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:19
 msgid ""
 "If you want, you can now also create these exports for multiple events "
 "combined."
 msgstr ""
+"Als je dit wilt kan je deze exportbestanden nu ook voor meerdere evenementen "
+"tegelijk aanmaken."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
-#, fuzzy
-#| msgid "Go to organizer-level import"
 msgid "Go to organizer-level exports"
-msgstr "Ga naar import op organisator-niveau"
+msgstr "Ga naar exporteren op organisator-niveau"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:32
-#, fuzzy
-#| msgid "Create a new tax rule"
 msgid "Create new export file"
-msgstr "Maak een nieuwe belastingregel"
+msgstr "Maak nieuw exportbestand"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:38
-#, fuzzy
-#| msgid "Please transfer the full amount to the following bank account:"
 msgid "Aggregate transactions to the same bank account"
-msgstr "Maak het volledige bedrag over naar de volgende bankrekening:"
+msgstr "Overschrijvingen naar hetzelfde rekeningnummer samenvoegen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:43
 msgid ""
@@ -18758,53 +18723,46 @@ msgid ""
 "refunds.\n"
 "                "
 msgstr ""
+"\n"
+"                    Let op: terugbetalingen zullen als uitgevoerd worden "
+"gemarkeerd zodra er een exportbestand wordt aangemaakt.\n"
+"                    Zorg ervoor dat je het exportbestand downloadt en de "
+"terugbetalingen daadwerkelijk uitvoert.\n"
+"                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
-#, fuzzy
-#| msgid "Import file"
 msgid "Exported files"
-msgstr "Bestand importeren"
+msgstr "Geëxporteerde bestanden"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:55
-#, fuzzy
-#| msgid "Expiry date"
 msgid "Export date"
-msgstr "Verloopdatum"
+msgstr "Exportdatum"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:56
-#, fuzzy
-#| msgid "Number of days"
 msgid "Number of orders"
-msgstr "Aantal dagen"
+msgstr "Aantal bestellingen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:76
-#, fuzzy
-#| msgid "Ticket download"
 msgid "not downloaded"
-msgstr "Downloaden van kaartjes"
+msgstr "niet gedownload"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:81
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:92
-#, fuzzy
-#| msgid "Download date"
 msgid "Download CSV"
-msgstr "Downloaddatum"
+msgstr "Download CSV"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:86
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:97
 msgid "SEPA XML"
-msgstr ""
+msgstr "SEPA-XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:106
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "{} new dates have been created."
 msgid "No exports have been created yet."
-msgstr "{} nieuwe datums zijn aangemaakt."
+msgstr "Er zijn nog geen exports aangemaakt."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
-msgstr ""
+msgstr "Exporteer SEPA-XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:13
 #, python-format
@@ -18815,18 +18773,23 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
+"Je probeert een exportbestand met terugbetalingen te downloaden dat is "
+"aangemaakt op %(date)s, met één bestelling en een totaalbedrag van %(sum)s."
 msgstr[1] ""
+"Je probeert een exportbestand met terugbetalingen te downloaden dat is "
+"aangemaakt op %(date)s, met %(cnt)s bestellingen en een totaalbedrag van "
+"%(sum)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
 msgstr ""
+"Voer het rekeningnummer in waarvandaan de terugbetalingen overgemaakt moeten "
+"worden."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:35
-#, fuzzy
-#| msgid "Download date"
 msgid "Download"
-msgstr "Downloaddatum"
+msgstr "Downloaden"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
@@ -18898,28 +18861,20 @@ msgid "Unknown order code"
 msgstr "Onbekende bestelcode"
 
 #: pretix/plugins/banktransfer/views.py:296
-#, fuzzy
-#| msgid "Search"
 msgid "Search text"
-msgstr "Zoeken"
+msgstr "Tekst zoeken"
 
 #: pretix/plugins/banktransfer/views.py:297
-#, fuzzy
-#| msgid "Imprint"
 msgid "min"
-msgstr "Colofon"
+msgstr "min"
 
 #: pretix/plugins/banktransfer/views.py:298
-#, fuzzy
-#| msgid "Tax"
 msgid "max"
-msgstr "Belasting"
+msgstr "max"
 
 #: pretix/plugins/banktransfer/views.py:307
-#, fuzzy
-#| msgid "This VAT ID is not valid."
 msgid "Filter form is not valid."
-msgstr "Dit btw-nummer is niet geldig."
+msgstr "De filteropdracht is ongeldig."
 
 #: pretix/plugins/banktransfer/views.py:350
 msgid "All unresolved transactions have been discarded."
@@ -18980,24 +18935,20 @@ msgid ""
 "We could not find bank account information for the refund {refund_id}. It "
 "was marked as failed."
 msgstr ""
+"We konden geen rekeninggegevens vinden voor de terugbetaling {refund_id}. De "
+"terugbetaling is als mislukt gemarkeerd."
 
 #: pretix/plugins/banktransfer/views.py:666
-#, fuzzy
-#| msgid "All orders have been canceled."
 msgid "No valid orders have been found."
-msgstr "Alle bestellingen zijn geannuleerd."
+msgstr "Er zijn geen geldige bestellingen gevonden."
 
 #: pretix/plugins/banktransfer/views.py:699
-#, fuzzy
-#| msgid ""
-#| "Please perform per-event bank imports as this organizer has events with "
-#| "multiple currencies."
 msgid ""
 "Please perform per-event refund exports as this organizer has events with "
 "multiple currencies."
 msgstr ""
-"Voer imports per evenement uit, omdat deze organisator evenementen met "
-"meerdere munteenheden heeft."
+"Omdat deze organisator evenementen met verschillende munteenheden heeft moet "
+"je de terugbetalingen per evenement apart exporteren."
 
 #: pretix/plugins/checkinlists/__init__.py:13
 msgid "Check-in list exporter"
@@ -19512,7 +19463,7 @@ msgstr "Stuur e-mail naar"
 
 #: pretix/plugins/sendmail/forms.py:27
 msgid "Attachment"
-msgstr ""
+msgstr "Bijlage"
 
 #: pretix/plugins/sendmail/forms.py:34
 msgid ""
@@ -19520,6 +19471,9 @@ msgid ""
 "being sorted into spam folders. We recommend only using PDFs of no more than "
 "2 MB in size."
 msgstr ""
+"Het toevoegen van bijlagen vergroot de kans dat je e-mails niet aankomen of "
+"als spam worden gemarkeerd. We raden aan om alleen PDF-bestanden bij te "
+"voegen en een maximale grootte van 2 MB te gebruiken."
 
 #: pretix/plugins/sendmail/forms.py:42
 msgid "Only send to people who bought"
@@ -19538,18 +19492,14 @@ msgid "Only send to customers of"
 msgstr "Stuur alleen naar klanten van"
 
 #: pretix/plugins/sendmail/forms.py:60
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers of dates starting at or after"
-msgstr "Stuur alleen naar klanten van"
+msgstr "Stuur alleen naar klanten van subevenementen die beginnen op of na"
 
 #: pretix/plugins/sendmail/forms.py:65
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers of dates starting before"
-msgstr "Stuur alleen naar klanten van"
+msgstr "Stuur alleen naar klanten van subevenementen die beginnen voor"
 
 #: pretix/plugins/sendmail/forms.py:98
 msgid "Everyone who created a ticket order"
@@ -20534,6 +20484,9 @@ msgid ""
 "rate to your purchase and the price of the products in your cart has changed "
 "accordingly."
 msgstr ""
+"Vanwege het factureringsadres dat je invoerde moeten wij een ander "
+"belastingtarief toepassen voor je bestelling en hebben we de prijs van de "
+"producten in je winkelwagen aangepast."
 
 #: pretix/presale/checkoutflow.py:582 pretix/presale/checkoutflow.py:588
 msgid "Please enter a valid email address."
@@ -21206,8 +21159,6 @@ msgid "View other date"
 msgstr "Bekijk andere datum"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:105
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
 msgstr "Kies een datum om een kaartje te kopen"
 
@@ -22157,10 +22108,8 @@ msgid "French"
 msgstr "Frans"
 
 #: pretix/settings.py:422
-#, fuzzy
-#| msgid "Danish"
 msgid "Finnish"
-msgstr "Deens"
+msgstr "Fins"
 
 #: pretix/settings.py:423
 msgid "Greek"
@@ -22179,10 +22128,8 @@ msgid "Polish"
 msgstr "Pools"
 
 #: pretix/settings.py:427
-#, fuzzy
-#| msgid "Portuguese (Brazil)"
 msgid "Portuguese (Portugal)"
-msgstr "Portugees (Brazilië)"
+msgstr "Portugees (Portugal)"
 
 #: pretix/settings.py:428
 msgid "Portuguese (Brazil)"
