@@ -108,6 +108,10 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'plugins:pretix_posbackend:stripeterminal.token'),
         ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:event.settings'),
+        ('GET', 'plugins:pretix_seating:event.event'),
+        ('GET', 'plugins:pretix_seating:event.event.subevent'),
+        ('GET', 'plugins:pretix_seating:event.plan'),
+        ('GET', 'plugins:pretix_seating:selection.simple'),
     )
 
 
