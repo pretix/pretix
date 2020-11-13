@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-02 15:59+0000\n"
-"PO-Revision-Date: 2020-11-12 08:03+0000\n"
+"PO-Revision-Date: 2020-11-13 07:45+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -3219,12 +3219,9 @@ msgid "pending"
 msgstr "afventer"
 
 #: pretix/base/models/orders.py:1294
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr "Bestilling bekræftet"
+msgstr "bekræftet"
 
 #: pretix/base/models/orders.py:1295
 #, fuzzy
@@ -21305,13 +21302,11 @@ msgid "Add one more"
 msgstr "Tilføj nyt element"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:278
-#, fuzzy, python-format
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Tilføjelsesprodukter"
-msgstr[1] "Tilføjelsesprodukter"
+msgstr[0] "Produkt"
+msgstr[1] "%(num)s produkter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
 #, fuzzy, python-format
@@ -21695,16 +21690,12 @@ msgid "Change details"
 msgstr "Ret oplysningerne"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:186
-#, fuzzy
-#| msgid "Last date of payments"
 msgid "Successful payments"
-msgstr "Seneste betalingsdato"
+msgstr "Gennemførte betalinger"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:195
-#, fuzzy
-#| msgid "Payment date"
 msgid "Pending total"
-msgstr "Betalingsdato"
+msgstr "Afventende i alt"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:239
 msgid ""
@@ -21722,11 +21713,9 @@ msgid "Internal Reference"
 msgstr "Intern reference"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:320
-#, fuzzy
-#| msgid "Change for all events"
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Ændr for alle arrangementer"
+msgstr "Ret eller afbestil din ordre"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:327
 msgid ""
@@ -21735,17 +21724,15 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Change order"
-msgstr "Annuller bestilling"
+msgstr "Ret din ordre"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:344
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
-msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
+msgstr ""
+"Du kan anmode om at annullere denne ordre, men du ville ikke få pengene "
+"tilbage."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:348
 #, fuzzy
