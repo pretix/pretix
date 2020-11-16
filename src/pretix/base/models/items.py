@@ -314,7 +314,7 @@ class Item(LoggedModel):
     )
     allow_waitinglist = models.BooleanField(
         verbose_name=_("Show a waiting list for this ticket"),
-        help_text=_("This will only work of waiting lists are enabled for this event."),
+        help_text=_("This will only work if waiting lists are enabled for this event."),
         default=True
     )
     show_quota_left = models.NullBooleanField(
