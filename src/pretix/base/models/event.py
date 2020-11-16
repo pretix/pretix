@@ -263,11 +263,14 @@ class EventMixin:
 
     def blocked_seats(self, ignore_voucher=None):
         qs = self._seats(ignore_voucher=ignore_voucher)
-
-        return qs.filter(Q(has_cart=True)
-                         | Q(has_voucher=True)
-                         | Q(blocked=True)
-                         | Q(has_closeby_taken=True, has_order=False))
+        q = (
+            Q(has_cart=True)
+            | Q(has_voucher=True)
+            | Q(blocked=True)
+        )
+        if self.settings.seating_minimal_distance > 0:
+            q |= Q(has_closeby_taken=True, has_order=False)
+        return qs.filter(q)
 
 
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
