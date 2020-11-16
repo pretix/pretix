@@ -1516,7 +1516,7 @@ class OrderChange(OrderView):
                 elif change_subevent is not None:
                     ocm.change_subevent(p, *change_subevent)
 
-                if p.form.cleaned_data.get('seat') and (not p.seat or p.form.cleaned_data['seat'] != p.seat.seat_guid):
+                if p.form.cleaned_data.get('seat') and (not p.seat or p.form.cleaned_data['seat'] != p.seat.seat_guid or change_subevent):
                     ocm.change_seat(p, p.form.cleaned_data['seat'])
 
                 if p.form.cleaned_data['price'] is not None and p.form.cleaned_data['price'] != p.price:
