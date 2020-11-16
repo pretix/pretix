@@ -535,6 +535,7 @@ class Event(EventMixin, LoggedModel):
 
         self.plugins = other.plugins
         self.is_public = other.is_public
+        self.date_admission = other.date_admission
         self.testmode = other.testmode
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
