@@ -176,7 +176,7 @@ def get_event_navigation(request: HttpRequest):
                     'event': request.event.slug,
                     'organizer': request.event.organizer.slug,
                 }),
-                'active': url.url_name in ('event.orders', 'event.order') or "event.order." in url.url_name,
+                'active': url.url_name in ('event.orders', 'event.order', 'event.orders.search') or "event.order." in url.url_name,
             },
             {
                 'label': _('Overview'),

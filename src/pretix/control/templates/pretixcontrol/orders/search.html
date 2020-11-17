@@ -1,0 +1,23 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load money %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Order search" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Order search" %}</h1>
+    <form class="form-horizontal" action="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}" method="get">
+        {% for f in forms %}
+            {% bootstrap_form_errors f layout='control' %}
+            {% for field in f %}
+                {% bootstrap_field field layout='control' %}
+            {% endfor %}
+        {% endfor %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Search" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

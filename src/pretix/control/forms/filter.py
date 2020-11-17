@@ -1,16 +1,22 @@
 from datetime import datetime, time
+from decimal import Decimal
 from urllib.parse import urlencode
 
 from django import forms
 from django.apps import apps
-from django.db.models import Exists, F, OuterRef, Q
+from django.conf import settings
+from django.db.models import Exists, F, Model, OuterRef, Q, QuerySet
 from django.db.models.functions import Coalesce, ExtractWeekDay
 from django.urls import reverse, reverse_lazy
+from django.utils.formats import date_format, localize
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 
-from pretix.base.forms.widgets import DatePickerWidget
+from pretix.base.channels import get_all_sales_channels
+from pretix.base.forms.widgets import (
+    DatePickerWidget, SplitDateTimePickerWidget,
+)
 from pretix.base.models import (
     Checkin, Event, EventMetaProperty, EventMetaValue, Invoice, InvoiceAddress,
     Item, Order, OrderPayment, OrderPosition, OrderRefund, Organizer, Question,
@@ -19,7 +25,9 @@ from pretix.base.models import (
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
 from pretix.control.signals import order_search_filter_q
+from pretix.helpers.countries import CachedCountries
 from pretix.helpers.database import FixedOrderBy, rolledback_transaction
+from pretix.helpers.dicts import move_to_end
 from pretix.helpers.i18n import i18ncomp
 
 PAYMENT_PROVIDERS = []
@@ -83,6 +91,38 @@ class FilterForm(forms.Form):
         else:
             return self.orders[o]
 
+    def filter_to_strings(self):
+        string = []
+        for k, f in self.fields.items():
+            v = self.cleaned_data.get(k)
+            if v is None or (isinstance(v, (list, str, QuerySet)) and len(v) == 0):
+                continue
+            if k == "saveas":
+                continue
+
+            if isinstance(v, bool):
+                val = _('Yes') if v else _('No')
+            elif isinstance(v, QuerySet):
+                q = ['"' + str(m) + '"' for m in v]
+                if not q:
+                    continue
+                val = ' or '.join(q)
+            elif isinstance(v, Model):
+                val = '"' + str(v) + '"'
+            elif isinstance(f, forms.MultipleChoiceField):
+                valdict = dict(f.choices)
+                val = ' or '.join([str(valdict.get(m)) for m in v])
+            elif isinstance(f, forms.ChoiceField):
+                val = str(dict(f.choices).get(v))
+            elif isinstance(v, datetime):
+                val = date_format(v, 'SHORT_DATETIME_FORMAT')
+            elif isinstance(v, Decimal):
+                val = localize(v)
+            else:
+                val = v
+            string.append('{}: {}'.format(f.label, val))
+        return string
+
 
 class OrderFilterForm(FilterForm):
     query = forms.CharField(
@@ -104,21 +144,29 @@ class OrderFilterForm(FilterForm):
         label=_('Order status'),
         choices=(
             ('', _('All orders')),
-            (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
-            (Order.STATUS_PENDING, _('Pending')),
-            ('o', _('Pending (overdue)')),
-            (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
-            (Order.STATUS_EXPIRED, _('Expired')),
-            (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
-            (Order.STATUS_CANCELED, _('Canceled')),
-            ('cp', _('Canceled (or with paid fee)')),
-            ('na', _('Approved, payment pending')),
-            ('pa', _('Approval pending')),
-            ('overpaid', _('Overpaid')),
-            ('underpaid', _('Underpaid')),
-            ('pendingpaid', _('Pending (but fully paid)')),
+            (_('Valid orders'), (
+                (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
+                (Order.STATUS_PENDING, _('Pending')),
+                (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
+            )),
+            (_('Cancellations'), (
+                (Order.STATUS_CANCELED, _('Canceled')),
+                ('cp', _('Canceled (or with paid fee)')),
+                ('rc', _('Cancellation requested')),
+            )),
+            (_('Payment process'), (
+                (Order.STATUS_EXPIRED, _('Expired')),
+                (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
+                ('o', _('Pending (overdue)')),
+                ('overpaid', _('Overpaid')),
+                ('underpaid', _('Underpaid')),
+                ('pendingpaid', _('Pending (but fully paid)')),
+            )),
+            (_('Approval process'), (
+                ('na', _('Approved, payment pending')),
+                ('pa', _('Approval pending')),
+            )),
             ('testmode', _('Test mode')),
-            ('rc', _('Cancellation requested')),
         ),
         required=False,
     )
@@ -339,6 +387,237 @@ class EventOrderFilterForm(OrderFilterForm):
                     answer__exact=fdata.get('answer')
                 )
                 qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
+
+        return qs
+
+
+class FilterNullBooleanSelect(forms.NullBooleanSelect):
+    def __init__(self, attrs=None):
+        choices = (
+            ('unknown', _('All')),
+            ('true', _('Yes')),
+            ('false', _('No')),
+        )
+        super(forms.NullBooleanSelect, self).__init__(attrs, choices)
+
+
+class EventOrderExpertFilterForm(EventOrderFilterForm):
+    subevents_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+        }),
+        label=pgettext_lazy('subevent', 'All dates starting at or after'),
+        required=False,
+    )
+    subevents_to = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+        }),
+        label=pgettext_lazy('subevent', 'All dates starting before'),
+        required=False,
+    )
+    created_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+        }),
+        label=_('Order placed at or after'),
+        required=False,
+    )
+    created_to = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+        }),
+        label=_('Order placed before'),
+        required=False,
+    )
+    email = forms.CharField(
+        required=False,
+        label=_('E-mail address')
+    )
+    comment = forms.CharField(
+        required=False,
+        label=_('Comment')
+    )
+    locale = forms.ChoiceField(
+        required=False,
+        label=_('Locale'),
+        choices=settings.LANGUAGES
+    )
+    email_known_to_work = forms.NullBooleanField(
+        required=False,
+        widget=FilterNullBooleanSelect,
+        label=_('E-mail address verified'),
+    )
+    total = forms.DecimalField(
+        localize=True,
+        required=False,
+        label=_('Total amount'),
+    )
+    sales_channel = forms.ChoiceField(
+        label=_('Sales channel'),
+        required=False,
+        choices=[('', '')] + [
+            (k, v.verbose_name) for k, v in get_all_sales_channels().items()
+        ]
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        del self.fields['query']
+        del self.fields['question']
+        del self.fields['answer']
+        del self.fields['ordering']
+        if not self.event.has_subevents:
+            del self.fields['subevents_from']
+            del self.fields['subevents_to']
+
+        locale_names = dict(settings.LANGUAGES)
+        self.fields['locale'].choices = [('', '')] + [(a, locale_names[a]) for a in self.event.settings.locales]
+
+        move_to_end(self.fields, 'item')
+        move_to_end(self.fields, 'provider')
+
+        self.fields['invoice_address_company'] = forms.CharField(
+            required=False,
+            label=gettext('Invoice address') + ': ' + gettext('Company')
+        )
+        self.fields['invoice_address_name'] = forms.CharField(
+            required=False,
+            label=gettext('Invoice address') + ': ' + gettext('Name')
+        )
+        self.fields['invoice_address_street'] = forms.CharField(
+            required=False,
+            label=gettext('Invoice address') + ': ' + gettext('Address')
+        )
+        self.fields['invoice_address_zipcode'] = forms.CharField(
+            required=False,
+            label=gettext('Invoice address') + ': ' + gettext('ZIP code'),
+            help_text=_('Exact matches only')
+        )
+        self.fields['invoice_address_city'] = forms.CharField(
+            required=False,
+            label=gettext('Invoice address') + ': ' + gettext('City'),
+            help_text=_('Exact matches only')
+        )
+        self.fields['invoice_address_country'] = forms.ChoiceField(
+            required=False,
+            label=gettext('Invoice address') + ': ' + gettext('Country'),
+            choices=[('', '')] + list(CachedCountries())
+        )
+        self.fields['attendee_name'] = forms.CharField(
+            required=False,
+            label=_('Attendee name')
+        )
+        self.fields['attendee_email'] = forms.CharField(
+            required=False,
+            label=_('Attendee e-mail address')
+        )
+        self.fields['attendee_address_company'] = forms.CharField(
+            required=False,
+            label=gettext('Attendee address') + ': ' + gettext('Company')
+        )
+        self.fields['attendee_address_street'] = forms.CharField(
+            required=False,
+            label=gettext('Attendee address') + ': ' + gettext('Address')
+        )
+        self.fields['attendee_address_zipcode'] = forms.CharField(
+            required=False,
+            label=gettext('Attendee address') + ': ' + gettext('ZIP code'),
+            help_text=_('Exact matches only')
+        )
+        self.fields['attendee_address_city'] = forms.CharField(
+            required=False,
+            label=gettext('Attendee address') + ': ' + gettext('City'),
+            help_text=_('Exact matches only')
+        )
+        self.fields['attendee_address_country'] = forms.ChoiceField(
+            required=False,
+            label=gettext('Attendee address') + ': ' + gettext('Country'),
+            choices=[('', '')] + list(CachedCountries())
+        )
+        self.fields['ticket_secret'] = forms.CharField(
+            label=_('Ticket secret'),
+            required=False
+        )
+        for q in self.event.questions.all():
+            self.fields['question_{}'.format(q.pk)] = forms.CharField(
+                label=q.question,
+                required=False,
+                help_text=_('Exact matches only')
+            )
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+        qs = super().filter_qs(qs)
+
+        if fdata.get('subevents_from'):
+            qs = qs.filter(
+                all_positions__subevent__date_from__gte=fdata.get('subevents_from'),
+                all_positions__canceled=False
+            ).distinct()
+        if fdata.get('subevents_to'):
+            qs = qs.filter(
+                all_positions__subevent__date_from__lt=fdata.get('subevents_to'),
+                all_positions__canceled=False
+            ).distinct()
+        if fdata.get('email'):
+            qs = qs.filter(
+                email__icontains=fdata.get('email')
+            )
+        if fdata.get('created_from'):
+            qs = qs.filter(datetime__gte=fdata.get('created_from'))
+        if fdata.get('created_to'):
+            qs = qs.filter(datetime__gte=fdata.get('created_to'))
+        if fdata.get('comment'):
+            qs = qs.filter(comment__icontains=fdata.get('comment'))
+        if fdata.get('sales_channel'):
+            qs = qs.filter(sales_channel=fdata.get('sales_channel'))
+        if fdata.get('total'):
+            qs = qs.filter(total=fdata.get('total'))
+        if fdata.get('email_known_to_work') is not None:
+            qs = qs.filter(email_known_to_work=fdata.get('email_known_to_work'))
+        if fdata.get('locale'):
+            qs = qs.filter(locale=fdata.get('locale'))
+        if fdata.get('invoice_address_company'):
+            qs = qs.filter(invoice_address__company__icontains=fdata.get('invoice_address_company'))
+        if fdata.get('invoice_address_name'):
+            qs = qs.filter(invoice_address__name_cached__icontains=fdata.get('invoice_address_name'))
+        if fdata.get('invoice_address_street'):
+            qs = qs.filter(invoice_address__street__icontains=fdata.get('invoice_address_street'))
+        if fdata.get('invoice_address_zipcode'):
+            qs = qs.filter(invoice_address__zipcode__iexact=fdata.get('invoice_address_zipcode'))
+        if fdata.get('invoice_address_city'):
+            qs = qs.filter(invoice_address__city__iexact=fdata.get('invoice_address_city'))
+        if fdata.get('invoice_address_country'):
+            qs = qs.filter(invoice_address__country=fdata.get('invoice_address_country'))
+        if fdata.get('attendee_name'):
+            qs = qs.filter(
+                all_positions__attendee_name_cached__icontains=fdata.get('attendee_name')
+            )
+        if fdata.get('attendee_address_company'):
+            qs = qs.filter(
+                all_positions__company__icontains=fdata.get('attendee_address_company')
+            ).distinct()
+        if fdata.get('attendee_address_street'):
+            qs = qs.filter(
+                all_positions__street__icontains=fdata.get('attendee_address_street')
+            ).distinct()
+        if fdata.get('attendee_address_city'):
+            qs = qs.filter(
+                all_positions__city__iexact=fdata.get('attendee_address_city')
+            ).distinct()
+        if fdata.get('attendee_address_country'):
+            qs = qs.filter(
+                all_positions__country=fdata.get('attendee_address_country')
+            ).distinct()
+        if fdata.get('ticket_secret'):
+            qs = qs.filter(
+                all_positions__secret__icontains=fdata.get('ticket_secret')
+            ).distinct()
+        for q in self.event.questions.all():
+            if fdata.get(f'question_{q.pk}'):
+                answers = QuestionAnswer.objects.filter(
+                    question_id=q.pk,
+                    orderposition__order_id=OuterRef('pk'),
+                    answer__iexact=fdata.get(f'question_{q.pk}')
+                )
+                qs = qs.annotate(**{f'q_{q.pk}': Exists(answers)}).filter(**{f'q_{q.pk}': True})
 
         return qs
 

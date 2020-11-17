@@ -7,7 +7,7 @@
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Orders" %}</h1>
-    {% if not filter_form.filtered and orders|length == 0 %}
+    {% if not filter_form.filtered and orders|length == 0 and not filter_strings %}
         <div class="empty-collection">
             <p>
                 {% blocktrans trimmed %}
@@ -21,57 +21,72 @@
                     {% trans "Take your shop live" %}
                 </a>
             {% else %}
-                <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-primary btn-lg">
+                <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-primary btn-lg" target="_blank">
                     {% trans "Go to the ticket shop" %}
                 </a>
             {% endif %}
         </div>
     {% else %}
-        <div class="row filter-form">
-            <form class="col-md-2 col-xs-12"
-                    action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
-                <div class="input-group">
-                    <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}" autofocus>
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
-                    </span>
-                </div>
-            </form>
-            <form class="" action="" method="get">
-                <div class="col-md-2 col-xs-6">
-                    {% bootstrap_field filter_form.status layout='inline' %}
-                </div>
-                {% if request.event.has_subevents %}
-                    <div class="col-md-1 col-xs-6">
-                        {% bootstrap_field filter_form.item layout='inline' %}
-                    </div>
-                    <div class="col-md-2 col-xs-6">
-                        {% bootstrap_field filter_form.subevent layout='inline' %}
-                    </div>
-                    <div class="col-md-1 col-xs-6">
-                        {% bootstrap_field filter_form.provider layout='inline' %}
-                    </div>
-                {% else %}
-                    <div class="col-md-2 col-xs-6">
-                        {% bootstrap_field filter_form.item layout='inline' %}
-                    </div>
-                    <div class="col-md-2 col-xs-6">
-                        {% bootstrap_field filter_form.provider layout='inline' %}
-                    </div>
-                {% endif %}
-                <div class="col-md-2 col-xs-6">
-                    {% bootstrap_field filter_form.query layout='inline' %}
-                </div>
-                <div class="col-md-2 col-xs-6">
-                    <button class="btn btn-primary btn-block" type="submit">
-                        <span class="fa fa-filter"></span>
-                        <span class="hidden-md">
-                            {% trans "Filter" %}
+        {% if filter_strings %}
+            <p>
+                <span class="fa fa-filter"></span>
+                {% trans "Search query:" %}
+                {{ filter_strings|join:" · " }}
+                ·
+                <a href="{% url "control:event.orders.search" event=request.event.slug organizer=request.event.organizer.slug %}?{{ request.META.QUERY_STRING }}">
+                    <span class="fa fa-edit"></span>
+                    {% trans "Edit" %}
+                </a>
+            </p>
+        {% else %}
+            <div class="row filter-form">
+                <form class="col-md-2 col-xs-12"
+                        action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
+                    <div class="input-group">
+                        <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}" autofocus>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
                         </span>
-                    </button>
-                </div>
-            </form>
-        </div>
+                    </div>
+                </form>
+                <form class="" action="" method="get">
+                    <div class="col-md-2 col-xs-6">
+                        {% bootstrap_field filter_form.status layout='inline' %}
+                    </div>
+                    {% if request.event.has_subevents %}
+                        <div class="col-md-1 col-xs-6">
+                            {% bootstrap_field filter_form.item layout='inline' %}
+                        </div>
+                        <div class="col-md-2 col-xs-6">
+                            {% bootstrap_field filter_form.subevent layout='inline' %}
+                        </div>
+                        <div class="col-md-1 col-xs-6">
+                            {% bootstrap_field filter_form.provider layout='inline' %}
+                        </div>
+                    {% else %}
+                        <div class="col-md-2 col-xs-6">
+                            {% bootstrap_field filter_form.item layout='inline' %}
+                        </div>
+                        <div class="col-md-2 col-xs-6">
+                            {% bootstrap_field filter_form.provider layout='inline' %}
+                        </div>
+                    {% endif %}
+                    <div class="col-md-2 col-xs-6">
+                        {% bootstrap_field filter_form.query layout='inline' %}
+                    </div>
+                    <div class="col-md-1 col-xs-6">
+                        <button class="btn btn-primary btn-block" type="submit">
+                            <span class="fa fa-filter"></span>
+                        </button>
+                    </div>
+                    <div class="col-md-1 col-xs-6">
+                        <a href="{% url "control:event.orders.search" event=request.event.slug organizer=request.event.organizer.slug %}" class="btn btn-default btn-block" type="submit" data-toggle="tooltip" title="{% trans "Advanced search" %}">
+                            <span class="fa fa-cog"></span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
         {% if filter_form.is_valid and filter_form.cleaned_data.question %}
             <p class="text-muted">
                 <span class="fa fa-filter"></span>

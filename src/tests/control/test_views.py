@@ -163,6 +163,7 @@ def logged_in_client(client, event):
     ('/control/event/{orga}/{event}/orders/overview/', 200),
     ('/control/event/{orga}/{event}/orders/export/', 200),
     ('/control/event/{orga}/{event}/orders/go', 302),
+    ('/control/event/{orga}/{event}/orders/search', 200),
     ('/control/event/{orga}/{event}/orders/', 200),
     ('/control/event/{orga}/{event}/waitinglist/', 200),
     ('/control/event/{orga}/{event}/waitinglist/auto_assign', 405),

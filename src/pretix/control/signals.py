@@ -323,3 +323,19 @@ this is not an Event signal and will be called even if your plugin is not active
 event if the search is performed within an event, and ``None`` otherwise. The search query will be passed as
 ``query``.
 """
+
+order_search_forms = EventPluginSignal(
+    providing_args=['request']
+)
+"""
+This signal allows you to return additional forms that should be rendered in the advanced order search.
+You are passed ``request`` argument and are expected to return an instance of a form class that you bind
+yourself when appropriate. Your form will be executed as part of the standard validation and rendering
+cycle and rendered using default bootstrap styles.
+
+You are required to set ``prefix`` on your form instance. You are required to implement a ``filter_qs(queryset)``
+method on your form that returns a new, filtered query set. You are required to implement a ``filter_to_strings()``
+method on your form that returns a list of strings describing the currently active filters.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""

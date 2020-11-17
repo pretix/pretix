@@ -283,6 +283,7 @@ urlpatterns = [
         url(r'^orders/refunds/$', orders.RefundList.as_view(), name='event.orders.refunds'),
         url(r'^orders/go$', orders.OrderGo.as_view(), name='event.orders.go'),
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
+        url(r'^orders/search$', orders.OrderSearch.as_view(), name='event.orders.search'),
         url(r'^dangerzone/$', event.DangerZone.as_view(), name='event.dangerzone'),
         url(r'^cancel/$', orders.EventCancel.as_view(), name='event.cancel'),
         url(r'^shredder/$', shredder.StartShredView.as_view(), name='event.shredder.start'),

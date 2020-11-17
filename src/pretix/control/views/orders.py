@@ -74,7 +74,8 @@ from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import (
-    EventOrderFilterForm, OverviewFilterForm, RefundFilterForm,
+    EventOrderExpertFilterForm, EventOrderFilterForm, OverviewFilterForm,
+    RefundFilterForm,
 )
 from pretix.control.forms.orders import (
     CancelForm, CommentForm, ConfirmPaymentForm, EventCancelForm, ExporterForm,
@@ -84,6 +85,7 @@ from pretix.control.forms.orders import (
     OrderRefundForm, OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
@@ -91,7 +93,31 @@ from pretix.presale.signals import question_form_fields
 logger = logging.getLogger(__name__)
 
 
-class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
+class OrderSearchMixin:
+    def get_forms(self):
+        f = [
+            EventOrderExpertFilterForm(
+                data=self.request.GET,
+                event=self.request.event,
+                prefix='expert',
+            )
+        ]
+        for recv, resp in order_search_forms.send(sender=self.request.event, request=self.request):
+            f.append(resp)
+        return f
+
+
+class OrderSearch(OrderSearchMixin, EventPermissionRequiredMixin, TemplateView):
+    template_name = 'pretixcontrol/orders/search.html'
+    permission = 'can_view_orders'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['forms'] = self.get_forms()
+        return ctx
+
+
+class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = Order
     context_object_name = 'orders'
     template_name = 'pretixcontrol/orders/index.html'
@@ -105,11 +131,20 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
+        for f in self.get_forms():
+            if any(k.startswith(f.prefix) for k in self.request.GET.keys()) and f.is_valid():
+                qs = f.filter_qs(qs)
+
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
+
+        ctx['filter_strings'] = []
+        for f in self.get_forms():
+            if any(k.startswith(f.prefix) for k in self.request.GET.keys()) and f.is_valid():
+                ctx['filter_strings'] += f.filter_to_strings()
 
         # Only compute this annotations for this page (query optimization)
         s = OrderPosition.objects.filter(
