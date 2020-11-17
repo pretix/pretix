@@ -452,9 +452,6 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
     sales_channel = forms.ChoiceField(
         label=_('Sales channel'),
         required=False,
-        choices=[('', '')] + [
-            (k, v.verbose_name) for k, v in get_all_sales_channels().items()
-        ]
     )
 
     def __init__(self, *args, **kwargs):
@@ -466,6 +463,10 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         if not self.event.has_subevents:
             del self.fields['subevents_from']
             del self.fields['subevents_to']
+
+        self.fields['sales_channel'].choices = [('', '')] + [
+            (k, v.verbose_name) for k, v in get_all_sales_channels().items()
+        ]
 
         locale_names = dict(settings.LANGUAGES)
         self.fields['locale'].choices = [('', '')] + [(a, locale_names[a]) for a in self.event.settings.locales]
