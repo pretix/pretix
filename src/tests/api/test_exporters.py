@@ -28,7 +28,11 @@ SAMPLE_EXPORTER_CONFIG = {
         {
             "name": "paid_only",
             "required": False
-        }
+        },
+        {
+            "name": "include_payment_amounts",
+            "required": False
+        },
     ]
 }
 
