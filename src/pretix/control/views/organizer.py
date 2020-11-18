@@ -1057,7 +1057,7 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                     })
                 )
                 try:
-                    r.payment_provider.execute_payment(None, r)
+                    r.payment_provider.execute_payment(request, r)
                 except PaymentException as e:
                     with transaction.atomic():
                         r.state = OrderPayment.PAYMENT_STATE_FAILED
