@@ -1,4 +1,5 @@
 import base64
+import inspect
 import struct
 
 from cryptography.hazmat.backends.openssl.backend import Backend
@@ -52,10 +53,10 @@ class BaseTicketSecretGenerator:
         return False
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                        current_secret: str = None, force_invalidate=False) -> str:
+                        attendee_name: str = None, current_secret: str = None, force_invalidate=False) -> str:
         """
         Generate a new secret for a ticket with product ``item``, variation ``variation``, subevent ``subevent``,
-        and the current secret ``current_secret`` (if any).
+        attendee name ``attendee_name`` (can be ``None``) and the current secret ``current_secret`` (if any).
 
         The result must be a string that should only contain the characters ``A-Za-z0-9+/=``.
 
@@ -70,6 +71,11 @@ class BaseTicketSecretGenerator:
         If ``force_invalidate`` is set to ``False`` and ``item``, ``variation`` and ``subevent`` have a different value
         as when ``current_secret`` was generated, then this method MAY OR MAY NOT return ``current_secret`` unchanged,
         depending on the semantics of the method.
+
+        .. note:: While it is guaranteed that ``generate_secret`` and the revocation list process are called every
+                  time the ``item``, ``variation``, or ``subevent`` parameters change, it is currently **NOT**
+                  guaranteed that this process is triggered if the ``attendee_name`` parameter changes. You should
+                  therefore not rely on this value for more than informational or debugging purposes.
         """
         raise NotImplementedError()
 
@@ -80,7 +86,7 @@ class RandomTicketSecretGenerator(BaseTicketSecretGenerator):
     use_revocation_list = False
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                        current_secret: str = None, force_invalidate=False):
+                        attendee_name: str = None, current_secret: str = None, force_invalidate=False):
         if current_secret and not force_invalidate:
             return current_secret
         return get_random_string(
@@ -187,12 +193,17 @@ def assign_ticket_secret(event, position, force_invalidate_if_revokation_list_us
     gen = event.ticket_secret_generator
     if gen.use_revocation_list and force_invalidate_if_revokation_list_used:
         force_invalidate = True
+
+    kwargs = {}
+    if 'attendee_name' in inspect.signature(gen.generate_secret).parameters:
+        kwargs['attendee_name'] = position.attendee_name
     secret = gen.generate_secret(
         item=position.item,
         variation=position.variation,
         subevent=position.subevent,
         current_secret=position.secret,
-        force_invalidate=force_invalidate
+        force_invalidate=force_invalidate,
+        **kwargs
     )
     changed = position.secret != secret
     if position.secret and changed and gen.use_revocation_list:
