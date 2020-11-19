@@ -1,4 +1,5 @@
 from django import forms
+from django.http import QueryDict
 from rest_framework import serializers
 
 
@@ -117,6 +118,8 @@ class JobRunSerializer(serializers.Serializer):
                 self.fields[k] = FormFieldWrapperField(form_field=v, required=v.required, allow_null=not v.required)
 
     def to_internal_value(self, data):
+        if isinstance(data, QueryDict):
+            data = data.copy()
         for k, v in self.fields.items():
             if isinstance(v, serializers.ManyRelatedField) and k not in data:
                 data[k] = []
