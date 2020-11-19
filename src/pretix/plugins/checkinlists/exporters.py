@@ -163,7 +163,8 @@ class CheckInListMixin(BaseExporter):
         if self.event.has_subevents and not cl.subevent:
             o = ('subevent__date_from', 'subevent__name')
 
-        if form_data['sort'] == 'name':
+        sort = form_data.get('sort') or 'name'
+        if sort == 'name':
             qs = qs.order_by(
                 *o,
                 Coalesce(
@@ -173,10 +174,10 @@ class CheckInListMixin(BaseExporter):
                     'order__code'
                 )
             )
-        elif form_data['sort'] == 'code':
+        elif sort == 'code':
             qs = qs.order_by(*o, 'order__code')
-        elif form_data['sort'].startswith('name:'):
-            part = form_data['sort'][5:]
+        elif sort.startswith('name:'):
+            part = sort[5:]
             qs = qs.annotate(
                 resolved_name=Case(
                     When(attendee_name_cached__ne='', then='attendee_name_parts'),
