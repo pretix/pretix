@@ -260,11 +260,16 @@ Vue.component('availbox', {
             return this.avail[0] < 100 && this.$root.waiting_list_enabled && this.item.allow_waitinglist;
         },
         waiting_list_url: function () {
+            var u
             if (this.item.has_variations) {
-                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
             } else {
-                return this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
             }
+            if (this.$root.subevent) {
+                u += '&subevent=' + this.$root.subevent
+            }
+            return u
         }
     }
 });
