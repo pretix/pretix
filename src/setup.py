@@ -120,7 +120,7 @@ setup(
         'dj-static',
         'csscompressor',
         'django-markup',
-        'markdown<=2.2',
+        'markdown==3.3.*',
         'bleach>=3.1.4,<3.2.0',
         'sentry-sdk==0.14.*',
         'babel',
