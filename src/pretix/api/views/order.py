@@ -65,6 +65,7 @@ with scopes_disabled():
         modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
         created_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
         subevent_after = django_filters.IsoDateTimeFilter(method='subevent_after_qs')
+        subevent_before = django_filters.IsoDateTimeFilter(method='subevent_before_qs')
         search = django_filters.CharFilter(method='search_qs')
 
         class Meta:
@@ -82,6 +83,19 @@ with scopes_disabled():
                     )
                 )
             ).filter(has_se_after=True)
+            return qs
+
+        def subevent_before_qs(self, qs, name, value):
+            qs = qs.annotate(
+                has_se_before=Exists(
+                    OrderPosition.all.filter(
+                        subevent_id__in=SubEvent.objects.filter(
+                            Q(date_from__lt=value), event=OuterRef(OuterRef('event_id'))
+                        ).values_list('id'),
+                        order_id=OuterRef('pk'),
+                    )
+                )
+            ).filter(has_se_before=True)
             return qs
 
         def search_qs(self, qs, name, value):

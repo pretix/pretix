@@ -282,6 +282,19 @@ def test_order_list_filter_subevent_date(token_client, organizer, event, order, 
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?subevent_before={}'.format(
+        organizer.slug, event.slug,
+        (subevent.date_from - datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?subevent_before={}'.format(
+        organizer.slug, event.slug,
+        (subevent.date_from + datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
 
 @pytest.mark.django_db
 def test_order_list(token_client, organizer, event, order, item, taxrule, question):
