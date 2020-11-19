@@ -119,16 +119,40 @@ class EventMixin:
         return pytz.timezone(self.settings.timezone)
 
     @property
+    def effective_presale_end(self):
+        """
+        Returns the effective presale end date, taking for subevents into consideration if the presale end
+        date might have been further limited by the event-level presale end date
+        """
+        if isinstance(self, SubEvent):
+            presale_ends = [self.presale_end, self.event.presale_end]
+            return min(filter(lambda x: x is not None, presale_ends)) if any(presale_ends) else None
+        else:
+            return self.presale_end
+
+    @property
     def presale_has_ended(self):
         """
         Is true, when ``presale_end`` is set and in the past.
         """
-        if self.presale_end:
-            return now() > self.presale_end
+        if self.effective_presale_end:
+            return now() > self.effective_presale_end
         elif self.date_to:
             return now() > self.date_to
         else:
             return now().astimezone(self.timezone).date() > self.date_from.astimezone(self.timezone).date()
+
+    @property
+    def effective_presale_start(self):
+        """
+        Returns the effective presale start date, taking for subevents into consideration if the presale start
+        date might have been further limited by the event-level presale start date
+        """
+        if isinstance(self, SubEvent):
+            presale_starts = [self.presale_start, self.event.presale_start]
+            return max(filter(lambda x: x is not None, presale_starts)) if any(presale_starts) else None
+        else:
+            return self.presale_start
 
     @property
     def presale_is_running(self):
@@ -136,7 +160,7 @@ class EventMixin:
         Is true, when ``presale_end`` is not set or in the future and ``presale_start`` is not
         set or in the past.
         """
-        if self.presale_start and now() < self.presale_start:
+        if self.effective_presale_start and now() < self.effective_presale_start:
             return False
         return not self.presale_has_ended
 

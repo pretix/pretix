@@ -155,7 +155,7 @@
                         {% endblocktrans %}
                     {% endif %}
                 {% elif event.settings.presale_start_show_date %}
-                    {% blocktrans trimmed with date=ev.presale_start|date:"SHORT_DATE_FORMAT" time=ev.presale_start|time:"TIME_FORMAT" %}
+                    {% blocktrans trimmed with date=ev.effective_presale_start|date:"SHORT_DATE_FORMAT" time=ev.effective_presale_start|time:"TIME_FORMAT" %}
                         The presale for this event will start on {{ date }} at {{ time }}.
                     {% endblocktrans %}
                 {% else %}
