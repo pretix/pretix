@@ -53,6 +53,13 @@ class ExporterSerializer(serializers.Serializer):
     input_parameters = SerializerDescriptionField(source='_serializer')
 
 
+class PrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
+    def to_representation(self, value):
+        if isinstance(value, int):
+            return value
+        return super().to_representation(value)
+
+
 class JobRunSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         ex = kwargs.pop('exporter')
@@ -78,7 +85,7 @@ class JobRunSerializer(serializers.Serializer):
                     break
 
             if isinstance(v, forms.ModelMultipleChoiceField):
-                self.fields[k] = serializers.PrimaryKeyRelatedField(
+                self.fields[k] = PrimaryKeyRelatedField(
                     queryset=v.queryset,
                     required=v.required,
                     allow_empty=not v.required,
@@ -86,7 +93,7 @@ class JobRunSerializer(serializers.Serializer):
                     many=True
                 )
             elif isinstance(v, forms.ModelChoiceField):
-                self.fields[k] = serializers.PrimaryKeyRelatedField(
+                self.fields[k] = PrimaryKeyRelatedField(
                     queryset=v.queryset,
                     required=v.required,
                     allow_null=not v.required,
@@ -108,3 +115,10 @@ class JobRunSerializer(serializers.Serializer):
                 )
             else:
                 self.fields[k] = FormFieldWrapperField(form_field=v, required=v.required, allow_null=not v.required)
+
+    def to_internal_value(self, data):
+        for k, v in self.fields.items():
+            if isinstance(v, serializers.ManyRelatedField) and k not in data:
+                data[k] = []
+        data = super().to_internal_value(data)
+        return data

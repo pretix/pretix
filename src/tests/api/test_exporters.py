@@ -85,7 +85,7 @@ def test_org_validate_events(token_client, organizer, team, event):
         '_format': 'xlsx',
     }, format='json')
     assert resp.status_code == 400
-    assert resp.data == {"events": ["This field is required."]}
+    assert resp.data == {"events": ["This list may not be empty."]}
 
     resp = token_client.post('/api/v1/organizers/{}/exporters/orderlist/run/'.format(organizer.slug), data={
         '_format': 'xlsx',
