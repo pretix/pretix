@@ -122,7 +122,14 @@ class BankTransfer(BasePaymentProvider):
             ('prefix', forms.CharField(
                 label=_('Prefix for the payment reference'),
                 required=False,
-            ))
+            )),
+            ('pending_description', I18nFormField(
+                label=_('Additional text to show on pending orders'),
+                help_text=_('This text will be shown on the order confirmation page for pending orders in addition to'
+                            'the standard text.'),
+                widget=I18nTextarea,
+                required=False,
+            )),
         ])
 
     @property
@@ -216,6 +223,7 @@ class BankTransfer(BasePaymentProvider):
             'order': payment.order,
             'amount': payment.amount,
             'settings': self.settings,
+            'pending_description': self.settings.get('pending_description', as_type=LazyI18nString),
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }
         return template.render(ctx)

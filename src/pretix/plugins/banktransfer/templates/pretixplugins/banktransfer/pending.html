@@ -5,7 +5,11 @@
 {% load ibanformat %}
 {% load money %}
 {% load unidecode %}
+{% load rich_text %}
 
+{% if pending_description %}
+    {{ pending_description|rich_text }}
+{% endif %}
 <p>{% blocktrans trimmed %}
     Please transfer the full amount to the following bank account:
 {% endblocktrans %}</p>
