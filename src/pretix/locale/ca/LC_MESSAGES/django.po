@@ -18064,7 +18064,7 @@ msgstr "Genera tiquets per a productes de no admissió"
 #: pretix/plugins/banktransfer/payment.py:128
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
-"addition tothe standard text."
+"addition to the standard text."
 msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:166

@@ -125,7 +125,7 @@ class BankTransfer(BasePaymentProvider):
             )),
             ('pending_description', I18nFormField(
                 label=_('Additional text to show on pending orders'),
-                help_text=_('This text will be shown on the order confirmation page for pending orders in addition to'
+                help_text=_('This text will be shown on the order confirmation page for pending orders in addition to '
                             'the standard text.'),
                 widget=I18nTextarea,
                 required=False,
