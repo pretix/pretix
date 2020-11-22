@@ -4,6 +4,7 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.formats import localize
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _
 from i18nfield.fields import I18nCharField
 
@@ -83,6 +84,14 @@ EU_CURRENCIES = {
     'RO': 'RON',
     'SE': 'SEK'
 }
+
+
+def is_eu_country(cc):
+    cc = str(cc)
+    if cc == 'GB':
+        return now().astimezone(get_current_timezone()).year <= 2020
+    else:
+        return cc in EU_COUNTRIES
 
 
 def cc_to_vat_prefix(country_code):
@@ -246,7 +255,7 @@ class TaxRule(LoggedModel):
         rules = self._custom_rules
         if invoice_address:
             for r in rules:
-                if r['country'] == 'EU' and str(invoice_address.country) not in EU_COUNTRIES:
+                if r['country'] == 'EU' and not is_eu_country(invoice_address.country):
                     continue
                 if r['country'] not in ('ZZ', 'EU') and r['country'] != str(invoice_address.country):
                     continue
@@ -270,7 +279,7 @@ class TaxRule(LoggedModel):
         if not invoice_address or not invoice_address.country:
             return False
 
-        if str(invoice_address.country) not in EU_COUNTRIES:
+        if not is_eu_country(invoice_address.country):
             return False
 
         if invoice_address.country == self.home_country:
@@ -296,7 +305,7 @@ class TaxRule(LoggedModel):
             # No country specified? Always apply VAT!
             return True
 
-        if str(invoice_address.country) not in EU_COUNTRIES:
+        if not is_eu_country(invoice_address.country):
             # Non-EU country? Never apply VAT!
             return False
 

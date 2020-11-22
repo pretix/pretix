@@ -24,7 +24,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
 )
-from pretix.base.models.tax import EU_COUNTRIES, EU_CURRENCIES
+from pretix.base.models.tax import EU_CURRENCIES, is_eu_country
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import invoice_line_text, periodic_task
@@ -181,7 +181,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         if reverse_charge:
             if invoice.additional_text:
                 invoice.additional_text += "<br /><br />"
-            if str(invoice.invoice_to_country) in EU_COUNTRIES:
+            if is_eu_country(invoice.invoice_to_country):
                 invoice.additional_text += pgettext(
                     "invoice",
                     "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability "
