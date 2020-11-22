@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-22 12:49+0000\n"
-"PO-Revision-Date: 2020-11-10 18:38+0000\n"
+"POT-Creation-Date: 2020-11-02 15:59+0000\n"
+"PO-Revision-Date: 2020-11-22 13:10+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -268,10 +268,9 @@ msgstr ""
 
 #: pretix/api/views/order.py:567 pretix/base/services/cart.py:109
 #: pretix/base/services/orders.py:92 pretix/presale/views/order.py:707
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "One of the selected products is not available in the selected country."
-msgstr "Das ausgewählte Produkt erlaubt keine Sitzplatzwahl."
+msgstr ""
+"Eines der ausgewählten Produkte ist im ausgewählten Land nicht verfügbar."
 
 #: pretix/api/webhooks.py:179 pretix/base/notifications.py:205
 msgid "New order placed"
@@ -332,37 +331,27 @@ msgid "Ticket check-in reverted"
 msgstr "Check-in rückgängig gemacht"
 
 #: pretix/api/webhooks.py:235
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "Veranstaltungsdatum"
+msgstr "Veranstaltung erstellt"
 
 #: pretix/api/webhooks.py:239 pretix/api/webhooks.py:243
-#, fuzzy
-#| msgid "Event date range"
 msgid "Event details changed"
-msgstr "Veranstaltungsdatum Beginn und Ende"
+msgstr "Veranstaltungsdetails geändert"
 
 #: pretix/api/webhooks.py:247
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Veranstaltungsdatum und Uhrzeit"
+msgstr "Veranstaltungsreihe: Termin erstellt"
 
 #: pretix/api/webhooks.py:251
-#, fuzzy
-#| msgid "Event date range"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "Veranstaltungsdatum Beginn und Ende"
+msgstr "Veranstaltungsreihe: Termin geändert"
 
 #: pretix/api/webhooks.py:255
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr "Veranstaltungsdatum und Uhrzeit"
+msgstr "Veranstaltungsreihe: Termin gelöscht"
 
 #: pretix/base/auth.py:104
 #, python-brace-format
@@ -941,10 +930,8 @@ msgid "Only paid orders"
 msgstr "Nur bezahlte Bestellungen"
 
 #: pretix/base/exporters/orderlist.py:58
-#, fuzzy
-#| msgid "Payment amount"
 msgid "Include payment amounts"
-msgstr "Zahlbetrag"
+msgstr "Gezahlte Beträge mit anzeigen"
 
 #: pretix/base/exporters/orderlist.py:142
 #: pretix/base/exporters/orderlist.py:301
@@ -1077,10 +1064,9 @@ msgid "Positions"
 msgstr "Positionen"
 
 #: pretix/base/exporters/orderlist.py:170
-#, fuzzy, python-brace-format
-#| msgid "Payment via {method}"
+#, python-brace-format
 msgid "Paid by {method}"
-msgstr "Zahlung mittels {method}"
+msgstr "Bezahlt mit {method}"
 
 #: pretix/base/exporters/orderlist.py:307
 msgid "Fee type"
@@ -2355,8 +2341,6 @@ msgid "Show a waiting list for this ticket"
 msgstr "Warteliste für Ticket anzeigen"
 
 #: pretix/base/models/items.py:317
-#, fuzzy
-#| msgid "This will only work of waiting lists are enabled for this event."
 msgid "This will only work if waiting lists are enabled for this event."
 msgstr ""
 "Setzt voraus, dass die Wartelisten für diese Veranstaltung aktiviert sind."
@@ -5335,10 +5319,8 @@ msgid "The selected product does not allow to select a seat."
 msgstr "Das ausgewählte Produkt erlaubt keine Sitzplatzwahl."
 
 #: pretix/base/services/orders.py:1183
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected country is blocked by your tax rule."
-msgstr "Das ausgewählte Produkt ist nicht aktiv oder hat keinen Preis."
+msgstr "Das ausgewählte Land ist von der Steuer-Regel blockiert."
 
 #: pretix/base/services/orders.py:1184
 msgid ""
@@ -8160,10 +8142,8 @@ msgid "No VAT"
 msgstr "Keine MwSt."
 
 #: pretix/control/forms/event.py:1149
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Sale not allowed"
-msgstr "Dateityp nicht erlaubt!"
+msgstr "Verkauf nicht erlaubt"
 
 #: pretix/control/forms/event.py:1153
 msgid "Deviating tax rate"
@@ -8280,10 +8260,8 @@ msgid "All orders"
 msgstr "Alle Bestellungen"
 
 #: pretix/control/forms/filter.py:147
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Valid orders"
-msgstr "Bezahlte Bestellungen"
+msgstr "Gültige Bestellungen"
 
 #: pretix/control/forms/filter.py:148
 msgid "Paid (or canceled with paid fee)"
@@ -8303,10 +8281,8 @@ msgid "Pending or paid"
 msgstr "ausstehend oder bezahlt"
 
 #: pretix/control/forms/filter.py:152
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellations"
-msgstr "Storno"
+msgstr "Stornierungen"
 
 #: pretix/control/forms/filter.py:153
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -8326,10 +8302,8 @@ msgid "Cancellation requested"
 msgstr "Stornierung angefragt"
 
 #: pretix/control/forms/filter.py:157
-#, fuzzy
-#| msgid "Payment providers"
 msgid "Payment process"
-msgstr "Zahlungsmethoden"
+msgstr "Zahlungsprozess"
 
 #: pretix/control/forms/filter.py:158 pretix/control/forms/filter.py:887
 #: pretix/control/forms/filter.py:1302
@@ -8365,16 +8339,12 @@ msgid "Pending (but fully paid)"
 msgstr "ausstehend (aber voll bezahlt)"
 
 #: pretix/control/forms/filter.py:165
-#, fuzzy
-#| msgid "Order approval process"
 msgid "Approval process"
 msgstr "Freigabeprozess"
 
 #: pretix/control/forms/filter.py:166
-#, fuzzy
-#| msgid "Approval pending"
 msgid "Approved, payment pending"
-msgstr "Freigabe ausstehend"
+msgstr "Freigegeben, Zahlung ausstehend"
 
 #: pretix/control/forms/filter.py:167
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:7
@@ -8427,19 +8397,17 @@ msgstr "Alle Termine beginnend vor"
 
 #: pretix/control/forms/filter.py:420
 msgid "Order placed at or after"
-msgstr ""
+msgstr "Bestellung getätigt um oder nach"
 
 #: pretix/control/forms/filter.py:426
-#, fuzzy
-#| msgid "New order placed"
 msgid "Order placed before"
-msgstr "Neue Bestellung eingegangen"
+msgstr "Bestellung getätigt vor"
 
 #: pretix/control/forms/filter.py:492 pretix/control/forms/filter.py:497
 #: pretix/control/forms/filter.py:523 pretix/control/forms/filter.py:528
 #: pretix/control/forms/filter.py:543
 msgid "Exact matches only"
-msgstr ""
+msgstr "Nur exakte Treffer"
 
 #: pretix/control/forms/filter.py:536
 #: pretix/control/templates/pretixcontrol/order/change.html:177
@@ -9272,9 +9240,6 @@ msgstr ""
 "nicht beides."
 
 #: pretix/control/forms/orders.py:773
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Please either select all subevents or a date range, not both."
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
 msgstr ""
@@ -10372,10 +10337,8 @@ msgid "The event has been created."
 msgstr "Die Veranstaltung wurde erstellt."
 
 #: pretix/control/logdisplay.py:400
-#, fuzzy
-#| msgid "The event settings have been changed."
 msgid "The event details have been changed."
-msgstr "Die Veranstaltungs-Einstellungen wurden geändert."
+msgstr "Die Veranstaltungsdetails wurden geändert."
 
 #: pretix/control/logdisplay.py:401
 msgid "An answer option has been added to the question."
@@ -14531,6 +14494,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
 msgstr ""
+"Da die Bestellung bereits storniert ist, beeinflusst dies ihren Status nicht."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:36
 msgid "What should happen to the ticket order?"
@@ -14752,10 +14716,8 @@ msgid "Go to the ticket shop"
 msgstr "Zum Ticket-Shop"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:33
-#, fuzzy
-#| msgid "Search query"
 msgid "Search query:"
-msgstr "Suchbegriff"
+msgstr "Suchanfrage:"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:48
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:21
@@ -14763,10 +14725,8 @@ msgid "Go!"
 msgstr "Los!"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
-#, fuzzy
-#| msgid "Advanced"
 msgid "Advanced search"
-msgstr "Erweitert"
+msgstr "Erweiterte Suche"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:93
 #, python-format
@@ -14865,10 +14825,8 @@ msgid "Actions"
 msgstr "Aktionen"
 
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
-#, fuzzy
-#| msgid "March"
 msgid "Search"
-msgstr "März"
+msgstr "Suche"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
@@ -16213,10 +16171,8 @@ msgid "You have no permission to receive this notification"
 msgstr "Du hast keine Berechtigung diese Benachrichtigung zu erhalten."
 
 #: pretix/control/templates/pretixcontrol/user/notifications_disable.html:4
-#, fuzzy
-#| msgid "E-mail notifications"
 msgid "Disable notifications"
-msgstr "E-Mail-Benachrichtigungen"
+msgstr "Benachrichtigungen deaktivieren"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:12
 #, python-format
@@ -18371,38 +18327,32 @@ msgstr ""
 "nach Zahlungseingang zu generieren."
 
 #: pretix/plugins/banktransfer/payment.py:114
-#, fuzzy
-#| msgid "Do not include a hyphen in the payment reference."
 msgid "Do not include hyphens in the payment reference."
-msgstr "Keinen Bindestrich im Verwendungszweck verwenden."
+msgstr "Keine Bindestriche im Verwendungszweck verwenden."
 
 #: pretix/plugins/banktransfer/payment.py:115
 msgid "This is required in some countries."
 msgstr "Dies ist in manchen Ländern erforderlich."
 
 #: pretix/plugins/banktransfer/payment.py:119
-#, fuzzy
-#| msgid "Do not include a hyphen in the payment reference."
 msgid "Include invoice number in the payment reference."
-msgstr "Keinen Bindestrich im Verwendungszweck verwenden."
+msgstr "Rechnungsnummer im Verwendungszweck angeben."
 
 #: pretix/plugins/banktransfer/payment.py:123
-#, fuzzy
-#| msgid "Tax rule for payment fees"
 msgid "Prefix for the payment reference"
-msgstr "Steuer-Regel für Zahlungsgebühren"
+msgstr "Präfix für den Verwendungszweck"
 
 #: pretix/plugins/banktransfer/payment.py:127
-#, fuzzy
-#| msgid "This action is only allowed for pending orders."
 msgid "Additional text to show on pending orders"
-msgstr "Diese Aktion ist nur für unbezahlte Bestellungen möglich."
+msgstr "Zusätzlicher Text zur Anzeige bei ausstehenden Bestellungen"
 
 #: pretix/plugins/banktransfer/payment.py:128
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
 msgstr ""
+"Dieser Text wird auf der Bestellbestätigungsseite für ausstehende "
+"Bestellungen zusätzlich zum Standardtext bezahlt."
 
 #: pretix/plugins/banktransfer/payment.py:166
 msgid "Please fill out your bank account details."
@@ -19535,11 +19485,9 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:121 pretix/plugins/sendmail/views.py:212
 msgid "payment pending (except unapproved)"
-msgstr ""
+msgstr "Zahlung ausstehend (außer nicht freigegebene)"
 
 #: pretix/plugins/sendmail/forms.py:122 pretix/plugins/sendmail/views.py:213
-#, fuzzy
-#| msgid "Approval pending"
 msgid "approval pending"
 msgstr "Freigabe ausstehend"
 
@@ -20492,6 +20440,8 @@ msgid ""
 "Unfortunately, based on the invoice address you entered, we're not able to "
 "sell you the selected products for tax-related legal reasons."
 msgstr ""
+"Leider können wir dir auf Basis der eingegebenen Rechnungsadresse die "
+"ausgewählten Produkte aus steuerrechtlichen Gründen nicht verkaufen."
 
 #: pretix/presale/checkoutflow.py:569
 msgid ""
