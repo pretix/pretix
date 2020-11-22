@@ -23,7 +23,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
-    CachedTicket, GiftCard, Invoice, Order, OrderPosition, Quota,
+    CachedTicket, GiftCard, Invoice, Order, OrderPosition, Quota, TaxRule,
 )
 from pretix.base.models.orders import (
     CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
@@ -699,6 +699,13 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
+        if 'country' in self.invoice_form.cleaned_data:
+            trs = TaxRule.objects.filter(id__in=[p.tax_rule_id for p in self.positions])
+            for tr in trs:
+                if tr.get_matching_rule(self.invoice_form.instance).get('action', 'vat') == 'block':
+                    messages.error(self.request,
+                                   _('One of the selected products is not available in the selected country.'))
+                    return self.get(request, *args, **kwargs)
         if hasattr(self.invoice_form, 'save'):
             self.invoice_form.save()
         self.order.log_action('pretix.event.order.modified', {

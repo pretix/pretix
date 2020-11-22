@@ -106,6 +106,7 @@ error_messages = {
     'seat_unavailable': _('The seat you selected has already been taken. Please select a different seat.'),
     'seat_multiple': _('You can not select the same seat multiple times.'),
     'gift_card': _("You entered a gift card instead of a voucher. Gift cards can be entered later on when you're asked for your payment details."),
+    'country_blocked': _('One of the selected products is not available in the selected country.'),
 }
 
 
@@ -324,6 +325,8 @@ class CartManager:
                 custom_price_is_net=cp_is_net if cp_is_net is not None else self.event.settings.display_net_prices,
                 invoice_address=self.invoice_address, force_custom_price=force_custom_price, bundled_sum=bundled_sum
             )
+        except TaxRule.SaleNotAllowed:
+            raise CartError(error_messages['country_blocked'])
         except ValueError as e:
             if str(e) == 'price_too_high':
                 raise CartError(error_messages['price_too_high'])

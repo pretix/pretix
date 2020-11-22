@@ -378,6 +378,55 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.00')
 
+    def test_custom_tax_rules_blocked(self):
+        self.tr19.custom_rules = json.dumps([
+            {'country': 'AT', 'address_type': 'business_vat_id', 'action': 'reverse'},
+            {'country': 'ZZ', 'address_type': '', 'action': 'block'},
+        ])
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        r = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name': 'Bar',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'DE',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(r.rendered_content, "lxml")
+        assert doc.select(".alert-danger")
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            r = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+        doc = BeautifulSoup(r.rendered_content, "lxml")
+        assert not doc.select(".alert-danger")
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('19.33')
+
     def test_country_taxing(self):
         self._enable_country_specific_taxing()
 

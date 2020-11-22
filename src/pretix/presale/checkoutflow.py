@@ -18,7 +18,7 @@ from django_scopes import scopes_disabled
 
 from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
-from pretix.base.models.tax import TaxedPrice
+from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
     CartError, error_messages, get_fees, set_cart_addons, update_tax_rates,
 )
@@ -552,13 +552,19 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         self.cart_session['contact_form_data'] = self.contact_form.cleaned_data
         if self.address_asked or self.request.event.settings.invoice_name_required:
             addr = self.invoice_form.save()
-            self.cart_session['invoice_address'] = addr.pk
+            try:
+                diff = update_tax_rates(
+                    event=request.event,
+                    cart_id=get_or_create_cart_id(request),
+                    invoice_address=addr
+                )
+            except TaxRule.SaleNotAllowed:
+                messages.error(request,
+                               _("Unfortunately, based on the invoice address you entered, we're not able to sell you "
+                                 "the selected products for tax-related legal reasons."))
+                return self.render()
 
-            diff = update_tax_rates(
-                event=request.event,
-                cart_id=get_or_create_cart_id(request),
-                invoice_address=self.invoice_form.instance
-            )
+            self.cart_session['invoice_address'] = addr.pk
             if abs(diff) > Decimal('0.001'):
                 messages.info(request, _('Due to the invoice address you entered, we need to apply a different tax '
                                          'rate to your purchase and the price of the products in your cart has '

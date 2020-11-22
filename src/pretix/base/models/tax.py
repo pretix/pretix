@@ -127,6 +127,9 @@ class TaxRule(LoggedModel):
     class Meta:
         ordering = ('event', 'rate', 'id')
 
+    class SaleNotAllowed(Exception):
+        pass
+
     def allow_delete(self):
         from pretix.base.models.orders import OrderFee, OrderPosition
 
@@ -169,6 +172,8 @@ class TaxRule(LoggedModel):
             return Decimal('0.00')
         if self.has_custom_rules:
             rule = self.get_matching_rule(invoice_address)
+            if rule.get('action', 'vat') == 'block':
+                raise self.SaleNotAllowed()
             if rule.get('action', 'vat') == 'vat' and rule.get('rate') is not None:
                 return Decimal(rule.get('rate'))
         return Decimal(self.rate)
@@ -279,6 +284,8 @@ class TaxRule(LoggedModel):
     def _tax_applicable(self, invoice_address):
         if self._custom_rules:
             rule = self.get_matching_rule(invoice_address)
+            if rule.get('action', 'vat') == 'block':
+                raise self.SaleNotAllowed()
             return rule.get('action', 'vat') == 'vat'
 
         if not self.eu_reverse_charge:

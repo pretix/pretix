@@ -33,7 +33,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Device, Event, Invoice, InvoiceAddress,
     Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota, SubEvent,
-    TeamAPIToken, generate_secret,
+    TaxRule, TeamAPIToken, generate_secret,
 )
 from pretix.base.models.orders import RevokedTicketSecret
 from pretix.base.payment import PaymentException
@@ -561,7 +561,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer = OrderCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():
-            self.perform_create(serializer)
+            try:
+                self.perform_create(serializer)
+            except TaxRule.SaleNotAllowed:
+                raise ValidationError(_('One of the selected products is not available in the selected country.'))
             send_mail = serializer._send_mail
             order = serializer.instance
             if not order.pk:

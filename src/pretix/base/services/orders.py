@@ -89,6 +89,7 @@ error_messages = {
                              'positions have been removed from your cart.'),
     'seat_invalid': _('One of the seats in your order was invalid, we removed the position from your cart.'),
     'seat_unavailable': _('One of the seats in your order has been taken in the meantime, we removed the position from your cart.'),
+    'country_blocked': _('One of the selected products is not available in the selected country.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -615,34 +616,39 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             current_discount = cp.price_before_voucher - cp.price
             max_discount = max(v_budget[cp.voucher] + current_discount, 0)
 
-        if cp.is_bundled:
-            try:
-                bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
-                bprice = bundle.designated_price or 0
-            except ItemBundle.DoesNotExist:
-                bprice = cp.price
-            except ItemBundle.MultipleObjectsReturned:
-                raise OrderError("Invalid product configuration (duplicate bundle)")
-            price = get_price(cp.item, cp.variation, cp.voucher, bprice, cp.subevent, custom_price_is_net=False,
-                              custom_price_is_tax_rate=cp.override_tax_rate,
-                              invoice_address=address, force_custom_price=True, max_discount=max_discount)
-            pbv = get_price(cp.item, cp.variation, None, bprice, cp.subevent, custom_price_is_net=False,
-                            custom_price_is_tax_rate=cp.override_tax_rate,
-                            invoice_address=address, force_custom_price=True, max_discount=max_discount)
-            changed_prices[cp.pk] = bprice
-        else:
-            bundled_sum = 0
-            if not cp.addon_to_id:
-                for bundledp in cp.addons.all():
-                    if bundledp.is_bundled:
-                        bundled_sum += changed_prices.get(bundledp.pk, bundledp.price)
+        try:
+            if cp.is_bundled:
+                try:
+                    bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
+                    bprice = bundle.designated_price or 0
+                except ItemBundle.DoesNotExist:
+                    bprice = cp.price
+                except ItemBundle.MultipleObjectsReturned:
+                    raise OrderError("Invalid product configuration (duplicate bundle)")
+                price = get_price(cp.item, cp.variation, cp.voucher, bprice, cp.subevent, custom_price_is_net=False,
+                                  custom_price_is_tax_rate=cp.override_tax_rate,
+                                  invoice_address=address, force_custom_price=True, max_discount=max_discount)
+                pbv = get_price(cp.item, cp.variation, None, bprice, cp.subevent, custom_price_is_net=False,
+                                custom_price_is_tax_rate=cp.override_tax_rate,
+                                invoice_address=address, force_custom_price=True, max_discount=max_discount)
+                changed_prices[cp.pk] = bprice
+            else:
+                bundled_sum = 0
+                if not cp.addon_to_id:
+                    for bundledp in cp.addons.all():
+                        if bundledp.is_bundled:
+                            bundled_sum += changed_prices.get(bundledp.pk, bundledp.price)
 
-            price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
-                              addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
-                              max_discount=max_discount, custom_price_is_tax_rate=cp.override_tax_rate)
-            pbv = get_price(cp.item, cp.variation, None, cp.price, cp.subevent, custom_price_is_net=False,
-                            addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
-                            max_discount=max_discount, custom_price_is_tax_rate=cp.override_tax_rate)
+                price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
+                                  addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
+                                  max_discount=max_discount, custom_price_is_tax_rate=cp.override_tax_rate)
+                pbv = get_price(cp.item, cp.variation, None, cp.price, cp.subevent, custom_price_is_net=False,
+                                addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
+                                max_discount=max_discount, custom_price_is_tax_rate=cp.override_tax_rate)
+        except TaxRule.SaleNotAllowed:
+            err = err or error_messages['country_blocked']
+            cp.delete()
+            continue
 
         if max_discount is not None:
             v_budget[cp.voucher] = v_budget[cp.voucher] + current_discount - (pbv.gross - price.gross)
@@ -1174,6 +1180,7 @@ class OrderChangeManager:
         'seat_subevent_mismatch': _('You selected seat "{seat}" for a date that does not match the selected ticket date. Please choose a seat again.'),
         'seat_required': _('The selected product requires you to select a seat.'),
         'seat_forbidden': _('The selected product does not allow to select a seat.'),
+        'tax_rule_country_blocked': _('The selected country is blocked by your tax rule.'),
         'gift_card_change': _('You cannot change the price of a position that has been used to issue a gift card.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
@@ -1241,8 +1248,11 @@ class OrderChangeManager:
         self._operations.append(self.SeatOperation(position, seat))
 
     def change_subevent(self, position: OrderPosition, subevent: SubEvent):
-        price = get_price(position.item, position.variation, voucher=position.voucher, subevent=subevent,
-                          invoice_address=self._invoice_address)
+        try:
+            price = get_price(position.item, position.variation, voucher=position.voucher, subevent=subevent,
+                              invoice_address=self._invoice_address)
+        except TaxRule.SaleNotAllowed:
+            raise OrderError(self.error_messages['tax_rule_country_blocked'])
 
         if price is None:  # NOQA
             raise OrderError(self.error_messages['product_invalid'])
@@ -1262,8 +1272,11 @@ class OrderChangeManager:
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
             raise OrderError(self.error_messages['product_without_variation'])
 
-        price = get_price(item, variation, voucher=position.voucher, subevent=subevent,
-                          invoice_address=self._invoice_address)
+        try:
+            price = get_price(item, variation, voucher=position.voucher, subevent=subevent,
+                              invoice_address=self._invoice_address)
+        except TaxRule.SaleNotAllowed:
+            raise OrderError(self.error_messages['tax_rule_country_blocked'])
 
         if price is None:  # NOQA
             raise OrderError(self.error_messages['product_invalid'])
@@ -1321,7 +1334,10 @@ class OrderChangeManager:
             if not pos.price:
                 continue
 
-            new_rate = tax_rule.tax_rate_for(ia)
+            try:
+                new_rate = tax_rule.tax_rate_for(ia)
+            except TaxRule.SaleNotAllowed:
+                raise OrderError(error_messages['tax_rule_country_blocked'])
             # We use override_tax_rate to make sure .tax() doesn't get clever and re-adjusts the pricing itself
             if new_rate != pos.tax_rate:
                 if keep == 'net':
@@ -1374,10 +1390,13 @@ class OrderChangeManager:
                 except Seat.DoesNotExist:
                     raise OrderError(error_messages['seat_invalid'])
 
-        if price is None:
-            price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
-        else:
-            price = item.tax(price, base_price_is='gross', invoice_address=self._invoice_address)
+        try:
+            if price is None:
+                price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
+            else:
+                price = item.tax(price, base_price_is='gross', invoice_address=self._invoice_address)
+        except TaxRule.SaleNotAllowed:
+            raise OrderError(self.error_messages['tax_rule_country_blocked'])
 
         if price is None:
             raise OrderError(self.error_messages['product_invalid'])
@@ -1952,7 +1971,10 @@ class OrderChangeManager:
                     self._check_quotas()
                 self._check_seats()
                 self._check_complete_cancel()
-                self._perform_operations()
+                try:
+                    self._perform_operations()
+                except TaxRule.SaleNotAllowed:
+                    raise OrderError(self.error_messages['tax_rule_country_blocked'])
             self._recalculate_total_and_payment_fee()
             self._reissue_invoice()
             self._clear_tickets_cache()

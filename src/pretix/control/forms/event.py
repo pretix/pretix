@@ -1146,6 +1146,7 @@ class TaxRuleLineForm(forms.Form):
             ('vat', _('Charge VAT')),
             ('reverse', _('Reverse charge')),
             ('no', _('No VAT')),
+            ('block', _('Sale not allowed')),
         ],
     )
     rate = forms.DecimalField(
