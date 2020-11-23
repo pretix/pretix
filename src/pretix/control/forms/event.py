@@ -657,6 +657,8 @@ class ProviderForm(SettingsForm):
         enabled = cleaned_data.get(self.settingspref + '_enabled')
         if not enabled:
             return
+        if cleaned_data.get(self.settingspref + '_hidden_url', None):
+            cleaned_data[self.settingspref + '_hidden_url'] = None
         for k, v in self.fields.items():
             val = cleaned_data.get(k)
             if v._required and not val:
