@@ -14,9 +14,94 @@
                 {% bootstrap_field form.internal_name layout="control" %}
             </div>
             {% bootstrap_field form.copy_from layout="control" %}
-            {% bootstrap_field form.has_variations layout="control" %}
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">{% trans "Product type" %}</label>
+                <div class="col-md-9">
+                    <div class="big-radio radio">
+                        <label>
+                            <input type="radio" value="on" name="{{ form.admission.html_name }}" {% if form.admission.value %}checked{% endif %}>
+                            <span class="fa fa-user"></span>
+                            <strong>{% trans "Admission product" %}</strong><br>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    Every purchase of this product represents one person who is allowed to enter your event.
+                                    By default, pretix will only ask for attendee information and offer ticket downloads for these products.
+                                {% endblocktrans %}
+                            </div>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    This option should be set for most things that you would call a "ticket". For product add-ons or bundles, this should
+                                    be set on the main ticket, except if the add-on products or bundled products represent additional people (e.g. group bundles).
+                                {% endblocktrans %}
+                            </div>
+                        </label>
+                    </div>
+                    <div class="big-radio radio">
+                        <label>
+                            <input type="radio" value="" name="{{ form.admission.html_name }}" {% if not form.admission.value %}checked{% endif %}>
+                            <span class="fa fa-cube"></span>
+                            <strong>{% trans "Non-admission product" %}</strong>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    A product that does not represent a person. By default, pretix will not ask for attendee information or offer
+                                    ticket downloads.
+                                {% endblocktrans %}
+                            </div>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    Examples: Merchandise, donations, gift cards, add-ons to a main ticket.
+                                {% endblocktrans %}
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             {% bootstrap_field form.category layout="control" %}
-            {% bootstrap_field form.admission layout="control" %}
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">{% trans "Product variations" %}</label>
+                <div class="col-md-9">
+                    <div class="big-radio radio">
+                        <label>
+                            <input type="radio" value="" name="{{ form.has_variations.html_name }}" {% if not form.has_variations.value %}checked{% endif %}>
+                            <span class="fa fa-fw fa-square"></span>
+                            <strong>{% trans "Simple product" %}</strong><br>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    This product is available in only one variation.
+                                {% endblocktrans %}
+                            </div>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    This can't be changed later.
+                                {% endblocktrans %}
+                            </div>
+                        </label>
+                    </div>
+                    <div class="big-radio radio">
+                        <label>
+                            <input type="radio" value="on" name="{{ form.has_variations.html_name }}" {% if form.has_variations.value %}checked{% endif %}>
+                            <span class="fa fa-fw fa-th-large"></span>
+                            <strong>{% trans "Product with multiple variations" %}</strong>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    This product exists in multiple variations which are different in either their name, price, quota, or description.
+                                    All other settings need to be the same.
+                                {% endblocktrans %}
+                            </div>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    Examples: Ticket category with variations for "full price" and "reduced", merchandise with variations for different sizes,
+                                    workshop add-on with variations for simultaneous workshops.
+                                {% endblocktrans %}
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
         </fieldset>
         {% if form.quota_option %}
             <fieldset>

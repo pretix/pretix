@@ -439,9 +439,9 @@ table td > .checkbox input[type="checkbox"] {
   }
 }
 .form-horizontal .big-radio {
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
+  border-bottom: 0;
   padding: 0;
-  border-radius: $border-radius-base;
   label {
     padding: 15px 15px 15px 30px;
   }
@@ -449,9 +449,15 @@ table td > .checkbox input[type="checkbox"] {
   .help-block {
     margin-bottom: 0;
   }
-}
-.form-horizontal .big-radio:not(:last-child) {
-  margin-bottom: 15px;
+  &:first-child {
+    border-top-left-radius: $border-radius-base;
+    border-top-right-radius: $border-radius-base;
+  }
+  &:last-child {
+    border-bottom-left-radius: $border-radius-base;
+    border-bottom-right-radius: $border-radius-base;
+    border-bottom: 1px solid #ccc;
+  }
 }
 .accordion-radio {
   display: block;

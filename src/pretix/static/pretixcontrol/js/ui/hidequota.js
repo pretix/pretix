@@ -31,9 +31,9 @@ $(document).ready(function () {
   );
 
   function toggleblock() {
-    $("#new-quota-group").closest('fieldset').toggle(!$("#id_has_variations").prop('checked'));
+    $("#new-quota-group").closest('fieldset').toggle(!$("[name=has_variations][value=on]").prop('checked'));
   }
 
-  $("#id_has_variations").change(toggleblock);
+  $("[name=has_variations]").change(toggleblock);
   toggleblock();
 });

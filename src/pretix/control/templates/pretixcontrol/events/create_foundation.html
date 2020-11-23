@@ -4,11 +4,11 @@
 {% block form %}
     {% bootstrap_field form.organizer layout="horizontal" %}
     <div class="form-group">
-        <label class="col-md-3 control-label">Event type</label>
+        <label class="col-md-3 control-label">{% trans "Event type" %}</label>
         <div class="col-md-9">
             <div class="big-radio radio">
                 <label>
-                    <input type="radio" value="" name="{{ form.has_subevents.html_name }}">
+                    <input type="radio" value="" name="{{ form.has_subevents.html_name }}" {% if not form.has_subevents.value %}checked{% endif %}>
                     <span class="fa fa-calendar-o"></span>
                     <strong>{% trans "Singular event or non-event shop" %}</strong><br>
                     <div class="help-block">
@@ -27,7 +27,7 @@
             </div>
             <div class="big-radio radio">
                 <label>
-                    <input type="radio" value="on" name="{{ form.has_subevents.html_name }}">
+                    <input type="radio" value="on" name="{{ form.has_subevents.html_name }}" {% if not form.has_subevents.value %}checked{% endif %}>
                     <span class="fa fa-calendar"></span>
                     <strong>{% trans "Event series or time slot booking" %}</strong>
                     <div class="help-block">

@@ -226,6 +226,8 @@ class ItemCreateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
         self.user = kwargs.pop('user')
+        kwargs.setdefault('initial', {})
+        kwargs['initial'].setdefault('admission', True)
         super().__init__(*args, **kwargs)
 
         self.fields['category'].queryset = self.instance.event.categories.all()
