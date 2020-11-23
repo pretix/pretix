@@ -11,16 +11,19 @@ from pkg_resources import iter_entry_points
 from pycountry import currencies
 
 from . import __version__
+from .helpers.config import EnvOrParserConfig
+
 
 from django.contrib.messages import constants as messages  # NOQA
 from django.utils.translation import gettext_lazy as _  # NOQA
 
-config = configparser.RawConfigParser()
+_config = configparser.RawConfigParser()
 if 'PRETIX_CONFIG_FILE' in os.environ:
-    config.read_file(open(os.environ.get('PRETIX_CONFIG_FILE'), encoding='utf-8'))
+    _config.read_file(open(os.environ.get('PRETIX_CONFIG_FILE'), encoding='utf-8'))
 else:
-    config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
-                encoding='utf-8')
+    _config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
+                 encoding='utf-8')
+config = EnvOrParserConfig(_config)
 
 CONFIG_FILE = config
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
