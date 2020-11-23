@@ -67,17 +67,7 @@
                         <label>
                             <input type="radio" value="" name="{{ form.has_variations.html_name }}" {% if not form.has_variations.value %}checked{% endif %}>
                             <span class="fa fa-fw fa-square"></span>
-                            <strong>{% trans "Simple product" %}</strong><br>
-                            <div class="help-block">
-                                {% blocktrans trimmed %}
-                                    This product is available in only one variation.
-                                {% endblocktrans %}
-                            </div>
-                            <div class="help-block">
-                                {% blocktrans trimmed %}
-                                    This can't be changed later.
-                                {% endblocktrans %}
-                            </div>
+                            <strong>{% trans "Product without variations" %}</strong><br>
                         </label>
                     </div>
                     <div class="big-radio radio">
