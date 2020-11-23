@@ -48,7 +48,7 @@ def get_ical(events):
             else:
                 # with full-day events date_to in pretix is included (e.g. last day)
                 # whereas dtend in vcalendar is non-inclusive => add one day for export
-                vevent.add('dtend').value = ev.date_to.astimezone(tz).date() + datetime.timedelta(days=1) 
+                vevent.add('dtend').value = ev.date_to.astimezone(tz).date() + datetime.timedelta(days=1)
 
         descr = []
         descr.append(_('Tickets: {url}').format(url=url))
