@@ -822,7 +822,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
                 except:
                     messages.error(request, _('You chose an invalid cancellation fee.'))
                     return redirect(self.get_order_url())
-            if custom_fee and fee <= custom_fee <= self.order.payment_refund_sum:
+            if custom_fee is not None and fee <= custom_fee <= self.order.payment_refund_sum:
                 fee = custom_fee
             else:
                 messages.error(request, _('You chose an invalid cancellation fee.'))
