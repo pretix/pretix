@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-24 09:10+0000\n"
-"PO-Revision-Date: 2020-11-22 13:10+0000\n"
+"PO-Revision-Date: 2020-11-24 10:49+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -12798,11 +12798,8 @@ msgstr ""
 "angepasst werden."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:7
-#, fuzzy
-#| msgctxt "webhooks"
-#| msgid "Event types"
 msgid "Event type"
-msgstr "Benachrichtigungsarten"
+msgstr "Veranstaltungsart"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
@@ -13057,17 +13054,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:19
 #: pretix/control/templates/pretixcontrol/item/index.html:21
-#, fuzzy
-#| msgid "Product name"
 msgid "Product type"
-msgstr "Produktbezeichnung"
+msgstr "Produkttyp"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:25
 #: pretix/control/templates/pretixcontrol/item/index.html:27
-#, fuzzy
-#| msgid "All admission products"
 msgid "Admission product"
-msgstr "Alle Produkte die Eintritt erlauben"
+msgstr "Zutrittsprodukt"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:27
 #: pretix/control/templates/pretixcontrol/item/index.html:29
@@ -13076,6 +13069,9 @@ msgid ""
 "your event. By default, pretix will only ask for attendee information and "
 "offer ticket downloads for these products."
 msgstr ""
+"Jeder Kauf dieses Produktes repräsentiert eine Person, die die Veranstaltung "
+"betreten darf. Standardmäßig fragt pretix nur bei diesen Produkten "
+"Teilnehmerdaten ab und bietet nur für diese Produkte Ticket-Downloads an."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:33
 #: pretix/control/templates/pretixcontrol/item/index.html:35
@@ -13085,13 +13081,16 @@ msgid ""
 "except if the add-on products or bundled products represent additional "
 "people (e.g. group bundles)."
 msgstr ""
+"Diese Option sollte für die meisten Produkte gewählt werden, die man "
+"üblicherweise als \"Ticket\" bezeichnen würde. Für Zusatzprodukte oder "
+"enthaltene Produkte sollte diese Option nur für das Haupt-Ticket gewählt "
+"werden, außer wenn es sich bei den Zusatzprodukten oder enthaltenen "
+"Produkten um weitere Personen handelt (z.B. Gruppenpaket)."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:44
 #: pretix/control/templates/pretixcontrol/item/index.html:46
-#, fuzzy
-#| msgid "All admission products"
 msgid "Non-admission product"
-msgstr "Alle Produkte die Eintritt erlauben"
+msgstr "Kein Zutrittsprodukt"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:46
 #: pretix/control/templates/pretixcontrol/item/index.html:48
@@ -13099,23 +13098,23 @@ msgid ""
 "A product that does not represent a person. By default, pretix will not ask "
 "for attendee information or offer ticket downloads."
 msgstr ""
+"Ein Produkt, das keine Person repräsentiert. pretix fragt standardmäßig "
+"nicht nach Teilnehmerdaten und bietet keine Ticketdownloads an."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:52
 #: pretix/control/templates/pretixcontrol/item/index.html:54
 msgid "Examples: Merchandise, donations, gift cards, add-ons to a main ticket."
 msgstr ""
+"Beispiele: Merchandise, Spenden, Geschenkgutscheine, Zusatzprodukte zum "
+"Haupt-Ticket."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:70
-#, fuzzy
-#| msgid "Product with variations"
 msgid "Product without variations"
-msgstr "Produkt mit Varianten"
+msgstr "Produkt ohne Varianten"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:77
-#, fuzzy
-#| msgid "Product with variations"
 msgid "Product with multiple variations"
-msgstr "Produkt mit Varianten"
+msgstr "Produkt mit mehreren Varianten"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:79
 msgid ""
@@ -13123,6 +13122,9 @@ msgid ""
 "their name, price, quota, or description. All other settings need to be the "
 "same."
 msgstr ""
+"Dieses Produkt existiert in mehreren Varianten, die sich in Name, Preis, "
+"Kontingent oder Beschreibung unterscheiden. Alle anderen Eigenschaften sind "
+"gleich."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:85
 msgid ""
@@ -13130,6 +13132,9 @@ msgid ""
 "\", merchandise with variations for different sizes, workshop add-on with "
 "variations for simultaneous workshops."
 msgstr ""
+"Beispiele: Ticketkategorie mit Varianten für \"Regulär\" und \"Ermäßigt\", "
+"Merchandise mit Varianten für verschiedene Größen, Workshop-Zusatzprodukte "
+"mit Varianten für simultane Workshops."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
 msgid "Quota settings"
