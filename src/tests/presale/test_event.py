@@ -1172,7 +1172,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.save()
         ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('DTSTART;VALUE=DATE:%s' % self.event.date_from.strftime('%Y%m%d'), ical, 'incorrect start date')
-        self.assertIn('DTEND;VALUE=DATE:%s' % self.event.date_to.strftime('%Y%m%d'), ical, 'incorrect end date')
+        self.assertIn('DTEND;VALUE=DATE:%s' % (self.event.date_to + datetime.timedelta(days=1)).strftime('%Y%m%d'), ical, 'incorrect end date')
 
     def test_no_date_to(self):
         self.event.settings.timezone = 'Asia/Tokyo'
@@ -1202,7 +1202,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.save()
         ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('DTSTART;VALUE=DATE:20131227', ical, 'incorrect start date')
-        self.assertIn('DTEND;VALUE=DATE:20131229', ical, 'incorrect end date')
+        self.assertIn('DTEND;VALUE=DATE:20131230', ical, 'incorrect end date')
 
     def test_subevent_required(self):
         self.event.has_subevents = True
@@ -1226,7 +1226,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.settings.show_times = False
         ical = self.client.get('/%s/%s/ical/%d/' % (self.orga.slug, self.event.slug, se1.pk)).content.decode()
         self.assertIn('DTSTART;VALUE=DATE:20141226', ical, 'incorrect start date')
-        self.assertIn('DTEND;VALUE=DATE:20141228', ical, 'incorrect end date')
+        self.assertIn('DTEND;VALUE=DATE:20141229', ical, 'incorrect end date')
         self.assertIn('SUMMARY:%s' % se1.name, ical, 'incorrect correct summary')
         self.assertIn('LOCATION:Heeeeeere', ical, 'incorrect location')
 
