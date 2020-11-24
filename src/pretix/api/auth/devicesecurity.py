@@ -102,6 +102,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('DELETE', 'api-v1:cartposition-detail'),
         ('GET', 'api-v1:giftcard-list'),
         ('POST', 'api-v1:giftcard-transact'),
+        ('GET', 'plugins:pretix_posbackend:posclosing-list'),
         ('POST', 'plugins:pretix_posbackend:posreceipt-list'),
         ('POST', 'plugins:pretix_posbackend:posclosing-list'),
         ('POST', 'plugins:pretix_posbackend:posdebugdump-list'),
