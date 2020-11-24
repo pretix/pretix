@@ -1888,7 +1888,8 @@ class EventTest(TestCase):
     def test_copy(self):
         event1 = Event.objects.create(
             organizer=self.organizer, name='Download', slug='ab1234',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            date_from=datetime.datetime(2013, 12, 26, 9, 0, 0, tzinfo=datetime.timezone.utc),
+            date_admission=datetime.datetime(2013, 12, 26, 8, 0, 0, tzinfo=datetime.timezone.utc),
             is_public=True,
         )
         tr7 = event1.tax_rules.create(rate=Decimal('7.00'))
@@ -1919,13 +1920,15 @@ class EventTest(TestCase):
 
         event2 = Event.objects.create(
             organizer=self.organizer, name='Download', slug='ab54321',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
+            date_from=datetime.datetime(2013, 12, 27, 9, 0, 0, tzinfo=datetime.timezone.utc),
         )
         event2.copy_data_from(event1)
 
         for a in (tr7, c1, c2, i1, q1, que1, cl1):
             a.refresh_from_db()
             assert a.event == event1
+
+        assert event2.date_admission == datetime.datetime(2013, 12, 27, 8, 0, 0, tzinfo=datetime.timezone.utc)
 
         trnew = event2.tax_rules.first()
         assert trnew.rate == tr7.rate
