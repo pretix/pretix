@@ -114,14 +114,14 @@
         {% endfor %}
     {% endif %}
     {% if request.event.settings.banner_text %}
-        <div class="banner-top">
+        <div class="site-notice-top">
             {{ request.event.settings.banner_text|rich_text }}
         </div>
     {% endif %}
     {% block content %}
     {% endblock %}
     {% if request.event.settings.banner_text_bottom %}
-        <div class="banner-bottom">
+        <div class="site-notice-bottom">
             {{ request.event.settings.banner_text_bottom|rich_text }}
         </div>
     {% endif %}
