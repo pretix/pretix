@@ -8,6 +8,11 @@ from .utils import _detect_event
 
 
 class EventMiddleware:
+    NO_REQUIRE_LIVE_URLS = {
+        'event.widget.productlist',
+        'event.widget.css',
+    }
+
     def __init__(self, get_response=None):
         self.get_response = get_response
         super().__init__()
@@ -19,7 +24,7 @@ class EventMiddleware:
             return self.get_response(request)
 
         if 'organizer' in url.kwargs or 'event' in url.kwargs or getattr(request, 'event_domain', False):
-            redirect = _detect_event(request, require_live=url.url_name != 'event.widget.productlist')
+            redirect = _detect_event(request, require_live=url.url_name not in self.NO_REQUIRE_LIVE_URLS)
             if redirect:
                 return redirect
 
