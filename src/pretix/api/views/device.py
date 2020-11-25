@@ -131,7 +131,7 @@ class EventSelectionView(APIView):
 
     @property
     def base_event_qs(self):
-        qs = self.request.auth.organizer.events.annotate(
+        qs = self.request.auth.get_events_with_any_permission().annotate(
             first_date=Coalesce('date_admission', 'date_from'),
             last_date=Coalesce('date_to', 'date_from'),
         ).filter(
@@ -154,6 +154,7 @@ class EventSelectionView(APIView):
         ).filter(
             event__organizer=self.request.auth.organizer,
             event__live=True,
+            event__in=self.request.auth.get_events_with_any_permission(),
             active=True,
         ).select_related('event').order_by('first_date')
         if self.request.auth.gate:
