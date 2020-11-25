@@ -20,7 +20,7 @@ class CheckinList(LoggedModel):
     include_pending = models.BooleanField(verbose_name=pgettext_lazy('checkin', 'Include pending orders'),
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '
-                                                      'order have not been paid.'))
+                                                      'order has not been paid.'))
     gates = models.ManyToManyField(
         'Gate', verbose_name=_("Gates"), blank=True,
         help_text=_("Does not have any effect for the validation of tickets, only for the automatic configuration of "
