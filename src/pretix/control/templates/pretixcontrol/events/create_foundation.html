@@ -27,7 +27,7 @@
             </div>
             <div class="big-radio radio">
                 <label>
-                    <input type="radio" value="on" name="{{ form.has_subevents.html_name }}" {% if not form.has_subevents.value %}checked{% endif %}>
+                    <input type="radio" value="on" name="{{ form.has_subevents.html_name }}" {% if form.has_subevents.avalue %}checked{% endif %}>
                     <span class="fa fa-calendar"></span>
                     <strong>{% trans "Event series or time slot booking" %}</strong>
                     <div class="help-block">
