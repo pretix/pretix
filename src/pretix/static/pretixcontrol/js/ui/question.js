@@ -102,6 +102,10 @@ $(function () {
         var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
         $("#answer-options").toggle(show);
 
+        $("#valid-date").toggle($("#id_type").val() == "D");
+        $("#valid-datetime").toggle($("#id_type").val() == "W");
+        $("#valid-number").toggle($("#id_type").val() == "N");
+
         show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
         $(".alert-required-boolean").toggle(show);
     }

@@ -1,9 +1,10 @@
 import os
+from datetime import date
 
 from django import forms
 from django.utils.formats import get_format
 from django.utils.functional import lazy
-from django.utils.timezone import now
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _
 
 
@@ -92,7 +93,7 @@ class UploadedFileWidget(forms.ClearableFileInput):
 class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
     template_name = 'pretixbase/forms/widgets/splitdatetime.html'
 
-    def __init__(self, attrs=None, date_format=None, time_format=None):
+    def __init__(self, attrs=None, date_format=None, time_format=None, min_date=None, max_date=None):
         attrs = attrs or {}
         if 'placeholder' in attrs:
             del attrs['placeholder']
@@ -106,6 +107,14 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
         time_attrs['class'] += ' timepickerfield'
         date_attrs['autocomplete'] = 'date-picker-do-not-autofill'
         time_attrs['autocomplete'] = 'time-picker-do-not-autofill'
+        if min_date:
+            date_attrs['data-min'] = (
+                min_date if isinstance(min_date, date) else min_date.astimezone(get_current_timezone()).date()
+            ).isoformat()
+        if max_date:
+            date_attrs['data-max'] = (
+                max_date if isinstance(max_date, date) else max_date.astimezone(get_current_timezone()).date()
+            ).isoformat()
 
         def date_placeholder():
             df = date_format or get_format('DATE_INPUT_FORMATS')[0]

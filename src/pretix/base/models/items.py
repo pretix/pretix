@@ -1084,6 +1084,18 @@ class Question(LoggedModel):
         'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
     dependency_values = MultiStringField(default=[])
+    valid_number_min = models.DecimalField(decimal_places=6, max_digits=16, null=True, blank=True,
+                                           verbose_name=_('Minimum value'), help_text=_('Currently not supported in our apps'))
+    valid_number_max = models.DecimalField(decimal_places=6, max_digits=16, null=True, blank=True,
+                                           verbose_name=_('Maximum value'), help_text=_('Currently not supported in our apps'))
+    valid_date_min = models.DateField(null=True, blank=True,
+                                      verbose_name=_('Minimum value'), help_text=_('Currently not supported in our apps'))
+    valid_date_max = models.DateField(null=True, blank=True,
+                                      verbose_name=_('Maximum value'), help_text=_('Currently not supported in our apps'))
+    valid_datetime_min = models.DateTimeField(null=True, blank=True,
+                                              verbose_name=_('Minimum value'), help_text=_('Currently not supported in our apps'))
+    valid_datetime_max = models.DateTimeField(null=True, blank=True,
+                                              verbose_name=_('Maximum value'), help_text=_('Currently not supporetd in our apps'))
 
     objects = ScopedManager(organizer='event__organizer')
 
@@ -1173,14 +1185,24 @@ class Question(LoggedModel):
             answer = formats.sanitize_separators(answer)
             answer = str(answer).strip()
             try:
-                return Decimal(answer)
+                v = Decimal(answer)
+                if self.valid_number_min is not None and v < self.valid_number_min:
+                    raise ValidationError(_('The number is to low.'))
+                if self.valid_number_max is not None and v > self.valid_number_max:
+                    raise ValidationError(_('The number is to high.'))
+                return v
             except DecimalException:
                 raise ValidationError(_('Invalid number input.'))
         elif self.type == Question.TYPE_DATE:
             if isinstance(answer, date):
                 return answer
             try:
-                return dateutil.parser.parse(answer).date()
+                dt = dateutil.parser.parse(answer).date()
+                if self.valid_date_min is not None and dt < self.valid_date_min:
+                    raise ValidationError(_('Please choose a later date.'))
+                if self.valid_date_max is not None and dt > self.valid_date_max:
+                    raise ValidationError(_('Please choose an earlier date.'))
+                return dt
             except:
                 raise ValidationError(_('Invalid date input.'))
         elif self.type == Question.TYPE_TIME:
@@ -1197,6 +1219,10 @@ class Question(LoggedModel):
                 dt = dateutil.parser.parse(answer)
                 if is_naive(dt):
                     dt = make_aware(dt, pytz.timezone(self.event.settings.timezone))
+                if self.valid_datetime_min is not None and dt < self.valid_datetime_min:
+                    raise ValidationError(_('Please choose a later date.'))
+                if self.valid_datetime_max is not None and dt > self.valid_datetime_max:
+                    raise ValidationError(_('Please choose an earlier date.'))
                 return dt
             except:
                 raise ValidationError(_('Invalid datetime input.'))

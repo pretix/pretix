@@ -2468,11 +2468,15 @@ class SeatingTestCase(TestCase):
 @pytest.mark.parametrize("qtype,answer,expected", [
     (Question.TYPE_STRING, "a", "a"),
     (Question.TYPE_TEXT, "v", "v"),
+    (Question.TYPE_NUMBER, "0.9", ValidationError),
+    (Question.TYPE_NUMBER, "1", Decimal("1")),
     (Question.TYPE_NUMBER, "3", Decimal("3")),
     (Question.TYPE_NUMBER, "2.56", Decimal("2.56")),
     (Question.TYPE_NUMBER, 2.45, Decimal("2.45")),
     (Question.TYPE_NUMBER, 3, Decimal("3")),
     (Question.TYPE_NUMBER, Decimal("4.56"), Decimal("4.56")),
+    (Question.TYPE_NUMBER, 100, Decimal("100")),
+    (Question.TYPE_NUMBER, 100.1, ValidationError),
     (Question.TYPE_NUMBER, "abc", ValidationError),
     (Question.TYPE_BOOLEAN, "True", True),
     (Question.TYPE_BOOLEAN, "true", True),
@@ -2485,6 +2489,8 @@ class SeatingTestCase(TestCase):
     (Question.TYPE_DATE, "2018-01-16", datetime.date(2018, 1, 16)),
     (Question.TYPE_DATE, datetime.date(2018, 1, 16), datetime.date(2018, 1, 16)),
     (Question.TYPE_DATE, "2018-13-16", ValidationError),
+    (Question.TYPE_DATE, "2018-12-16", ValidationError),
+    (Question.TYPE_DATE, "2018-01-14", ValidationError),
     (Question.TYPE_TIME, "15:20", datetime.time(15, 20)),
     (Question.TYPE_TIME, datetime.time(15, 20), datetime.time(15, 20)),
     (Question.TYPE_TIME, "44:20", ValidationError),
@@ -2495,6 +2501,8 @@ class SeatingTestCase(TestCase):
     (Question.TYPE_DATETIME, "2018-01-16T15:20:00",
      datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 3600))),
     (Question.TYPE_DATETIME, "2018-01-16T15:AB:CD", ValidationError),
+    (Question.TYPE_DATETIME, "2018-01-16T13:20:00+01:00", ValidationError),
+    (Question.TYPE_DATETIME, "2018-01-16T16:20:00+01:00", ValidationError),
 ])
 def test_question_answer_validation(qtype, answer, expected):
     o = Organizer.objects.create(name='Dummy', slug='dummy')
@@ -2504,7 +2512,15 @@ def test_question_answer_validation(qtype, answer, expected):
             date_from=now(),
         )
         event.settings.timezone = 'Europe/Berlin'
-        q = Question(type=qtype, event=event)
+        q = Question(
+            type=qtype, event=event,
+            valid_date_min=datetime.date(2018, 1, 15),
+            valid_date_max=datetime.date(2018, 12, 15),
+            valid_datetime_min=datetime.datetime(2018, 1, 16, 14, 0, 0, tzinfo=tzoffset(None, 3600)),
+            valid_datetime_max=datetime.datetime(2018, 1, 16, 16, 0, 0, tzinfo=tzoffset(None, 3600)),
+            valid_number_min=Decimal('1'),
+            valid_number_max=Decimal('100'),
+        )
         if isinstance(expected, type) and issubclass(expected, Exception):
             with pytest.raises(expected):
                 q.clean_answer(answer)

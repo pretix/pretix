@@ -53,6 +53,12 @@ options                               list of objects            In case of ques
 ├ identifier                          string                     An arbitrary string that can be used for matching with
                                                                  other sources.
 └ answer                              multi-lingual string       The displayed value of this option
+valid_number_min                      string                     Minimum value for number questions (optional)
+valid_number_max                      string                     Maximum value for number questions (optional)
+valid_date_min                        date                       Minimum value for date questions (optional)
+valid_date_max                        date                       Maximum value for date questions (optional)
+valid_datetime_min                    datetime                   Minimum value for date and time questions (optional)
+valid_datetime_max                    datetime                   Maximum value for date and time questions (optional)
 dependency_question                   integer                    Internal ID of a different question. The current
                                                                  question will only be shown if the question given in
                                                                  this attribute is set to the value given in
@@ -91,6 +97,10 @@ dependency_value                      string                     An old version 
 .. versionchanged:: 3.5
 
   The attribute ``help_text`` has been added.
+
+.. versionchanged:: 3.14
+
+  The attributes ``valid_min_*``/``valid_max_*`` have been added.
 
 Endpoints
 ---------
@@ -137,6 +147,12 @@ Endpoints
             "ask_during_checkin": false,
             "hidden": false,
             "print_on_invoice": false,
+            "valid_number_min": null,
+            "valid_number_max": null,
+            "valid_date_min": null,
+            "valid_date_max": null,
+            "valid_datetime_min": null,
+            "valid_datetime_max": null,
             "dependency_question": null,
             "dependency_value": null,
             "dependency_values": [],
@@ -208,6 +224,12 @@ Endpoints
         "ask_during_checkin": false,
         "hidden": false,
         "print_on_invoice": false,
+        "valid_number_min": null,
+        "valid_number_max": null,
+        "valid_date_min": null,
+        "valid_date_max": null,
+        "valid_datetime_min": null,
+        "valid_datetime_max": null,
         "dependency_question": null,
         "dependency_value": null,
         "dependency_values": [],
@@ -302,6 +324,12 @@ Endpoints
         "dependency_question": null,
         "dependency_value": null,
         "dependency_values": [],
+        "valid_number_min": null,
+        "valid_number_max": null,
+        "valid_date_min": null,
+        "valid_date_max": null,
+        "valid_datetime_min": null,
+        "valid_datetime_max": null,
         "options": [
           {
             "id": 1,
@@ -377,6 +405,12 @@ Endpoints
         "dependency_question": null,
         "dependency_value": null,
         "dependency_values": [],
+        "valid_number_min": null,
+        "valid_number_max": null,
+        "valid_date_min": null,
+        "valid_date_max": null,
+        "valid_datetime_min": null,
+        "valid_datetime_max": null,
         "options": [
           {
             "id": 1,

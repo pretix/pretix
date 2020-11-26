@@ -64,6 +64,14 @@ var form_handlers = function (el) {
                 close: 'fa fa-remove'
             },
         };
+        if ($(this).is('[data-min]')) {
+            opts["minDate"] = $(this).attr("data-min");
+            opts["viewDate"] = $(this).attr("data-min");
+        }
+        if ($(this).is('[data-max]')) {
+            opts["maxDate"] = $(this).attr("data-max");
+            opts["viewDate"] = $(this).attr("data-max");
+        }
         $(this).datetimepicker(opts);
         if ($(this).parent().is('.splitdatetimerow')) {
             $(this).on("dp.change", function (ev) {

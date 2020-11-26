@@ -277,7 +277,9 @@ class QuestionSerializer(I18nAwareModelSerializer):
         model = Question
         fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
                   'ask_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
-                  'hidden', 'dependency_value', 'print_on_invoice', 'help_text')
+                  'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
+                  'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max'
+                  )
 
     def validate_identifier(self, value):
         Question._clean_identifier(self.context['event'], value, self.instance)

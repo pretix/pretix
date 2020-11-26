@@ -113,6 +113,14 @@ var form_handlers = function (el) {
                 close: 'fa fa-remove'
             },
         };
+        if ($(this).is('[data-min]')) {
+            opts["minDate"] = $(this).attr("data-min");
+            opts["viewDate"] = $(this).attr("data-min");
+        }
+        if ($(this).is('[data-max]')) {
+            opts["maxDate"] = $(this).attr("data-max");
+            opts["viewDate"] = $(this).attr("data-max");
+        }
         if ($(this).is('[data-is-payment-date]'))
             opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
         $(this).datetimepicker(opts);
