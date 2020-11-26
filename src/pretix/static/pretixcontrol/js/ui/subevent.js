@@ -83,7 +83,10 @@ $(function () {
             } else {
                 var date = $form.find("input[name*=until]").data("DateTimePicker").date();
                 if (date !== null) {
-                    rule_args.until = date.toDate();
+                    // rrule.until is non-inclusive, whereas in pretix-backend "until" is inclusive => add 1 day
+                    // date is a Moment-object. Moment.add() mutates, but is save to do here
+                    date.add(1, 'days');
+                    rule_args.until = date;
                 }
             }
 
