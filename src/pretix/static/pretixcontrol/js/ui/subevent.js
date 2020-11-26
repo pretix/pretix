@@ -27,7 +27,7 @@ $(function () {
     }
 
     function rrule_preview() {
-        var ruleset = new RRuleSet();
+        var ruleset = new rrule.RRuleSet();
 
         $(".rrule-form").each(function () {
             if ($(this).find("input[name$=DELETE]").prop("checked")) {
@@ -47,7 +47,7 @@ $(function () {
             rule_args.interval = parseInt($form.find("input[name*=interval]").val()) || 1;
 
             if (freq === 'yearly') {
-                rule_args.freq = RRule.YEARLY;
+                rule_args.freq = rrule.RRule.YEARLY;
 
                 var same = $form.find("input[name*=yearly_same]:checked").val();
                 if (same === "off") {
@@ -56,7 +56,7 @@ $(function () {
                     rule_args.bymonth = parseInt($form.find("select[name*=yearly_bymonth]").val());
                 }
             } else if (freq === 'monthly') {
-                rule_args.freq = RRule.MONTHLY;
+                rule_args.freq = rrule.RRule.MONTHLY;
 
                 var same = $form.find("input[name*=monthly_same]:checked").val();
                 if (same === "off") {
@@ -64,7 +64,7 @@ $(function () {
                     rule_args.byweekday = parse_weekday($form.find("select[name*=monthly_byweekday]").val());
                 }
             } else if (freq === 'weekly') {
-                rule_args.freq = RRule.WEEKLY;
+                rule_args.freq = rrule.RRule.WEEKLY;
 
                 var days = [];
                 $form.find("input[name*=weekly_byweekday]:checked").each(function () {
@@ -74,7 +74,7 @@ $(function () {
                     rule_args.byweekday = days;
                 }
             } else if (freq === 'daily') {
-                rule_args.freq = RRule.DAILY;
+                rule_args.freq = rrule.RRule.DAILY;
             }
 
             var end = $form.find("input[name*=end]:checked").val();
@@ -88,10 +88,10 @@ $(function () {
             }
 
             if ($form.find("input[name*=exclude]").prop("checked")) {
-                ruleset.exrule(new RRule(rule_args));
+                ruleset.exrule(new rrule.RRule(rule_args));
                 $form.closest(".panel").addClass("panel-danger").removeClass("panel-default");
             } else {
-                ruleset.rrule(new RRule(rule_args));
+                ruleset.rrule(new rrule.RRule(rule_args));
                 $form.closest(".panel").addClass("panel-default").removeClass("panel-danger");
             }
         });
