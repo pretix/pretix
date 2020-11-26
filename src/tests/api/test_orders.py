@@ -3358,7 +3358,7 @@ def test_order_create_send_emails(token_client, organizer, event, item, quota, q
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
-    res['send_mail'] = True
+    res['send_email'] = True
     djmail.outbox = []
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -3378,7 +3378,7 @@ def test_order_create_send_emails_free(token_client, organizer, event, item, quo
     res['payment_provider'] = 'free'
     del res['fees']
     res['positions'][0]['answers'][0]['question'] = question.pk
-    res['send_mail'] = True
+    res['send_email'] = True
     djmail.outbox = []
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -3392,6 +3392,25 @@ def test_order_create_send_emails_free(token_client, organizer, event, item, quo
 
 @pytest.mark.django_db
 def test_order_create_send_emails_paid(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['send_email'] = True
+    res['status'] = 'p'
+    djmail.outbox = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert len(djmail.outbox) == 2
+    assert djmail.outbox[0].subject == "Your order: {}".format(resp.data['code'])
+    assert djmail.outbox[1].subject == "Payment received for your order: {}".format(resp.data['code'])
+
+
+@pytest.mark.django_db
+def test_order_create_send_emails_legacy(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk

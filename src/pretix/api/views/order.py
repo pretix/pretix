@@ -558,6 +558,8 @@ class OrderViewSet(viewsets.ModelViewSet):
             )
 
     def create(self, request, *args, **kwargs):
+        if 'send_mail' in request.data and 'send_email' not in request.data:
+            request.data['send_email'] = request.data['send_mail']
         serializer = OrderCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():

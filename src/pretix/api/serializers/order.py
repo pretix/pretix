@@ -682,7 +682,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     consume_carts = serializers.ListField(child=serializers.CharField(), required=False)
     force = serializers.BooleanField(default=False, required=False)
     payment_date = serializers.DateTimeField(required=False, allow_null=True)
-    send_mail = serializers.BooleanField(default=False, required=False)
+    send_email = serializers.BooleanField(default=False, required=False)
     simulate = serializers.BooleanField(default=False, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -693,7 +693,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'payment_date', 'consume_carts',
-                  'force', 'send_mail', 'simulate')
+                  'force', 'send_email', 'simulate')
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -786,7 +786,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         payment_date = validated_data.pop('payment_date', now())
         force = validated_data.pop('force', False)
         simulate = validated_data.pop('simulate', False)
-        self._send_mail = validated_data.pop('send_mail', False)
+        self._send_mail = validated_data.pop('send_email', False)
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')

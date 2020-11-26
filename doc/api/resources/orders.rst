@@ -940,9 +940,9 @@ Creating orders
         during order generation and is not respected automatically when the order changes later.)
 
    * ``force`` (optional). If set to ``true``, quotas will be ignored.
-   * ``send_mail`` (optional). If set to ``true``, the same emails will be sent as for a regular order, regardless of
+   * ``send_email`` (optional). If set to ``true``, the same emails will be sent as for a regular order, regardless of
      whether these emails are enabled for certain sales channels. Defaults to
-     ``false``.
+     ``false``. Used to be ``send_mail`` before pretix 3.14.
 
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
    to incrementing integers starting with ``1``. Then, you can reference one of these
