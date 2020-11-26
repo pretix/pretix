@@ -1976,6 +1976,7 @@ Order payment endpoints
         "amount": "23.00",
         "payment_date": "2017-12-04T12:13:12Z",
         "info": {},
+        "send_email": false,
         "provider": "banktransfer"
       }
 

@@ -956,6 +956,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return order.payments.all()
 
     def create(self, request, *args, **kwargs):
+        send_mail = request.data.get('send_email', True)
         serializer = OrderPaymentCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():
@@ -971,7 +972,8 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                         user=self.request.user if self.request.user.is_authenticated else None,
                         auth=self.request.auth,
                         count_waitinglist=False,
-                        force=request.data.get('force', False)
+                        force=request.data.get('force', False),
+                        send_mail=send_mail,
                     )
                 except Quota.QuotaExceededException:
                     pass

@@ -433,12 +433,14 @@ def test_payment_detail(token_client, organizer, event, order):
 
 @pytest.mark.django_db
 def test_payment_create_confirmed(token_client, organizer, event, order):
+    djmail.outbox = []
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(
         organizer.slug, event.slug, order.code
     ), format='json', data={
         'provider': 'banktransfer',
         'state': 'confirmed',
         'amount': order.total,
+        'send_email': False,
         'info': {
             'foo': 'bar'
         }
@@ -450,6 +452,7 @@ def test_payment_create_confirmed(token_client, organizer, event, order):
     assert p.info_data == {'foo': 'bar'}
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
+    assert len(djmail.outbox) == 0
 
 
 @pytest.mark.django_db
