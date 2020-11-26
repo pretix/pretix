@@ -100,7 +100,7 @@ dependency_value                      string                     An old version 
 
 .. versionchanged:: 3.14
 
-  The attributes ``valid_min_*``/``valid_max_*`` have been added.
+  The attributes ``valid_*`` have been added.
 
 Endpoints
 ---------
