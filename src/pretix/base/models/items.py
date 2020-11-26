@@ -1219,13 +1219,14 @@ class Question(LoggedModel):
                 dt = dateutil.parser.parse(answer)
                 if is_naive(dt):
                     dt = make_aware(dt, pytz.timezone(self.event.settings.timezone))
+            except:
+                raise ValidationError(_('Invalid datetime input.'))
+            else:
                 if self.valid_datetime_min is not None and dt < self.valid_datetime_min:
                     raise ValidationError(_('Please choose a later date.'))
                 if self.valid_datetime_max is not None and dt > self.valid_datetime_max:
                     raise ValidationError(_('Please choose an earlier date.'))
                 return dt
-            except:
-                raise ValidationError(_('Invalid datetime input.'))
         elif self.type == Question.TYPE_COUNTRYCODE and answer:
             c = Country(answer.upper())
             if c.name:
