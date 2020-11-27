@@ -90,6 +90,19 @@
     {% endif %}
 
     {% if request.event.has_subevents %}
+        {% if not subevent %}
+            {% if event_logo and request.event.settings.logo_show_title %}
+                <h2 class="content-header">
+                    {{ event.name }}
+                </h2>
+            {% endif %}
+            {% if frontpage_text and not cart_namespace %}
+                <div>
+                    {{ frontpage_text|rich_text }}
+                </div>
+            {% endif %}
+        {% endif %}
+
         {% if subevent and "year" not in request.GET %}
             {% if show_cart %}
                 <a class="subevent-toggle btn btn-primary btn-block btn-lg">
@@ -126,21 +139,26 @@
         </div>
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
-        {% endif %}
-    {% endif %}
-    {% if event_logo and request.event.settings.logo_show_title and not subevent %}
-        <h2 class="content-header">
-            {{ event.name }}
-            {% if request.event.settings.show_dates_on_frontpage and not event.has_subevents %}
-                <small>{{ event.get_date_range_display }}</small>
+            {% if frontpage_text and not cart_namespace %}
+                <div>
+                    {{ frontpage_text|rich_text }}
+                </div>
             {% endif %}
-        </h2>
-    {% endif %}
-
-    {% if frontpage_text and not cart_namespace %}
-        <div>
-            {{ frontpage_text|rich_text }}
-        </div>
+        {% endif %}
+    {% else %}
+        {% if event_logo and request.event.settings.logo_show_title %}
+            <h2 class="content-header">
+                {{ event.name }}
+                {% if request.event.settings.show_dates_on_frontpage %}
+                    <small>{{ event.get_date_range_display }}</small>
+                {% endif %}
+            </h2>
+        {% endif %}
+        {% if frontpage_text and not cart_namespace %}
+            <div>
+                {{ frontpage_text|rich_text }}
+            </div>
+        {% endif %}
     {% endif %}
 
     {% if subevent or not event.has_subevents %}
