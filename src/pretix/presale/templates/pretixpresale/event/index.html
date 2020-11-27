@@ -153,11 +153,11 @@
                     <small>{{ event.get_date_range_display }}</small>
                 {% endif %}
             </h2>
-            {% if frontpage_text and not cart_namespace %}
-                <div>
-                    {{ frontpage_text|rich_text }}
-                </div>
-            {% endif %}
+        {% endif %}
+        {% if frontpage_text and not cart_namespace %}
+            <div>
+                {{ frontpage_text|rich_text }}
+            </div>
         {% endif %}
     {% endif %}
 
