@@ -116,7 +116,7 @@ a.btn, button.btn {
     display: flex;
     flex-direction: row;
     input, select {
-      width: auto;
+      min-width: 5em;
       flex-basis: 0;
       flex-grow: 1;
     }
