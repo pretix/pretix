@@ -13,10 +13,13 @@ from babel import localedata
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import QuerySet
 from django.forms import Select
+from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from django.utils.timezone import get_current_timezone
 from django.utils.translation import (
     get_language, gettext_lazy as _, pgettext_lazy,
 )
@@ -234,6 +237,43 @@ class QuestionCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
     option_template_name = 'pretixbase/forms/widgets/checkbox_option_with_links.html'
 
 
+class MinDateValidator(MinValueValidator):
+    def __call__(self, value):
+        try:
+            return super().__call__(value)
+        except ValidationError as e:
+            e.params['limit_value'] = date_format(e.params['limit_value'], 'SHORT_DATE_FORMAT')
+            raise e
+
+
+class MinDateTimeValidator(MinValueValidator):
+    def __call__(self, value):
+        try:
+            return super().__call__(value)
+        except ValidationError as e:
+            e.params['limit_value'] = date_format(e.params['limit_value'].astimezone(get_current_timezone()), 'SHORT_DATETIME_FORMAT')
+            raise e
+
+
+class MaxDateValidator(MaxValueValidator):
+
+    def __call__(self, value):
+        try:
+            return super().__call__(value)
+        except ValidationError as e:
+            e.params['limit_value'] = date_format(e.params['limit_value'], 'SHORT_DATE_FORMAT')
+            raise e
+
+
+class MaxDateTimeValidator(MaxValueValidator):
+    def __call__(self, value):
+        try:
+            return super().__call__(value)
+        except ValidationError as e:
+            e.params['limit_value'] = date_format(e.params['limit_value'].astimezone(get_current_timezone()), 'SHORT_DATETIME_FORMAT')
+            raise e
+
+
 class BaseQuestionsForm(forms.Form):
     """
     This form class is responsible for asking order-related questions. This includes
@@ -392,9 +432,10 @@ class BaseQuestionsForm(forms.Form):
             elif q.type == Question.TYPE_NUMBER:
                 field = forms.DecimalField(
                     label=label, required=required,
+                    min_value=q.valid_number_min or Decimal('0.00'),
+                    max_value=q.valid_number_max,
                     help_text=q.help_text,
                     initial=initial.answer if initial else None,
-                    min_value=Decimal('0.00'),
                 )
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
@@ -453,12 +494,21 @@ class BaseQuestionsForm(forms.Form):
                     max_size=10 * 1024 * 1024,
                 )
             elif q.type == Question.TYPE_DATE:
+                attrs = {}
+                if q.valid_date_min:
+                    attrs['data-min'] = q.valid_date_min.isoformat()
+                if q.valid_date_max:
+                    attrs['data-max'] = q.valid_date_max.isoformat()
                 field = forms.DateField(
                     label=label, required=required,
                     help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).date() if initial and initial.answer else None,
-                    widget=DatePickerWidget(),
+                    widget=DatePickerWidget(attrs),
                 )
+                if q.valid_date_min:
+                    field.validators.append(MinDateValidator(q.valid_date_min))
+                if q.valid_date_max:
+                    field.validators.append(MaxDateValidator(q.valid_date_max))
             elif q.type == Question.TYPE_TIME:
                 field = forms.TimeField(
                     label=label, required=required,
@@ -471,8 +521,16 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
-                    widget=SplitDateTimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
+                    widget=SplitDateTimePickerWidget(
+                        time_format=get_format_without_seconds('TIME_INPUT_FORMATS'),
+                        min_date=q.valid_datetime_min,
+                        max_date=q.valid_datetime_max
+                    ),
                 )
+                if q.valid_datetime_min:
+                    field.validators.append(MinDateTimeValidator(q.valid_datetime_min))
+                if q.valid_datetime_max:
+                    field.validators.append(MaxDateTimeValidator(q.valid_datetime_max))
             elif q.type == Question.TYPE_PHONENUMBER:
                 babel_locale = 'en'
                 # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal

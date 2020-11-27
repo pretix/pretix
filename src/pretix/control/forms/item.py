@@ -16,6 +16,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms import I18nFormSet, I18nModelForm
+from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
@@ -111,14 +112,26 @@ class QuestionForm(I18nModelForm):
             'dependency_question',
             'dependency_values',
             'print_on_invoice',
+            'valid_number_min',
+            'valid_number_max',
+            'valid_datetime_min',
+            'valid_datetime_max',
+            'valid_date_min',
+            'valid_date_max',
         ]
         widgets = {
+            'valid_datetime_min': SplitDateTimePickerWidget(),
+            'valid_datetime_max': SplitDateTimePickerWidget(),
+            'valid_date_min': DatePickerWidget(),
+            'valid_date_max': DatePickerWidget(),
             'items': forms.CheckboxSelectMultiple(
                 attrs={'class': 'scrolling-multiple-choice'}
             ),
             'dependency_values': forms.SelectMultiple,
         }
         field_classes = {
+            'valid_datetime_min': SplitDateTimeField,
+            'valid_datetime_max': SplitDateTimeField,
             'items': SafeModelMultipleChoiceField,
             'dependency_question': SafeModelChoiceField,
         }

@@ -1808,6 +1808,12 @@ TEST_QUESTION_RES = {
     "dependency_question": None,
     "dependency_value": None,
     "dependency_values": [],
+    "valid_number_min": None,
+    "valid_number_max": None,
+    "valid_date_min": None,
+    "valid_date_max": None,
+    "valid_datetime_min": None,
+    "valid_datetime_max": None,
     "help_text": {"en": "This is an example question"},
     "options": [
         {

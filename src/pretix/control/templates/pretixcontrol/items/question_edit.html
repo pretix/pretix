@@ -32,6 +32,18 @@
                         accepted. If you want to allow both options, do not make this field required.
                     {% endblocktrans %}
                 </div>
+                <div id="valid-number">
+                    {% bootstrap_field form.valid_number_min layout="control" %}
+                    {% bootstrap_field form.valid_number_max layout="control" %}
+                </div>
+                <div id="valid-date">
+                    {% bootstrap_field form.valid_date_min layout="control" %}
+                    {% bootstrap_field form.valid_date_max layout="control" %}
+                </div>
+                <div id="valid-datetime">
+                    {% bootstrap_field form.valid_datetime_min layout="control" %}
+                    {% bootstrap_field form.valid_datetime_max layout="control" %}
+                </div>
                 <div id="answer-options">
                     <h3>{% trans "Answer options" %}</h3>
                     <noscript>
