@@ -1,4 +1,7 @@
-.. spelling:: checkin, datetime
+.. spelling::
+
+   checkin
+   datetime
 
 .. _rest-questions:
 
