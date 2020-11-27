@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-24 09:10+0000\n"
+"POT-Creation-Date: 2020-11-27 15:24+0000\n"
 "PO-Revision-Date: 2020-04-27 20:00+0000\n"
 "Last-Translator: Gonzalo Gabriel Perez <zalitoar@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -289,17 +289,17 @@ msgstr "Generando mensajes…"
 msgid "Unknown error."
 msgstr "Error desconocido."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:233
+#: pretix/static/pretixcontrol/js/ui/main.js:241
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "¡Tu color tiene gran contraste y es muy legible!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:237
+#: pretix/static/pretixcontrol/js/ui/main.js:245
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "¡Tu color tiene un contraste decente y es probablemente suficientemente "
 "legible!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:241
+#: pretix/static/pretixcontrol/js/ui/main.js:249
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -307,23 +307,23 @@ msgstr ""
 "Tu color tiene mal contraste para un texto con fondo blanco, por favor "
 "escoge un tono más oscuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:376
+#: pretix/static/pretixcontrol/js/ui/main.js:384
 msgid "All"
 msgstr "Todos"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:377
+#: pretix/static/pretixcontrol/js/ui/main.js:385
 msgid "None"
 msgstr "Ninguno"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:698
+#: pretix/static/pretixcontrol/js/ui/main.js:706
 msgid "Use a different name internally"
 msgstr "Usar un nombre diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:755
+#: pretix/static/pretixcontrol/js/ui/main.js:763
 msgid "Click to close"
 msgstr "Click para cerrar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:770
+#: pretix/static/pretixcontrol/js/ui/main.js:778
 msgid "You have unsaved changes!"
 msgstr "¡Tienes cambios sin guardar!"
 
@@ -339,15 +339,15 @@ msgstr "Otros"
 msgid "Count"
 msgstr "Cantidad"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:131
+#: pretix/static/pretixcontrol/js/ui/question.js:135
 msgid "Yes"
 msgstr "Si"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:132
+#: pretix/static/pretixcontrol/js/ui/question.js:136
 msgid "No"
 msgstr "No"
 
-#: pretix/static/pretixcontrol/js/ui/subevent.js:108
+#: pretix/static/pretixcontrol/js/ui/subevent.js:111
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
 msgstr[0] "(una fecha más)"
@@ -369,34 +369,34 @@ msgstr[0] ""
 msgstr[1] ""
 "Los elementos en su carrito de compras se han reservado por {num} minutos."
 
-#: pretix/static/pretixpresale/js/ui/main.js:260
+#: pretix/static/pretixpresale/js/ui/main.js:268
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Por favor, introduce un valor para cada tipo de entrada."
 
-#: pretix/static/pretixpresale/js/ui/main.js:386
+#: pretix/static/pretixpresale/js/ui/main.js:394
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "a partir de %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:394
+#: pretix/static/pretixpresale/js/ui/main.js:402
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "a partir de %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:410
+#: pretix/static/pretixpresale/js/ui/main.js:418
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:424
-#: pretix/static/pretixpresale/js/ui/main.js:437
+#: pretix/static/pretixpresale/js/ui/main.js:432
+#: pretix/static/pretixpresale/js/ui/main.js:445
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:429
+#: pretix/static/pretixpresale/js/ui/main.js:437
 msgid "Your local time:"
 msgstr ""
 
@@ -651,6 +651,159 @@ msgstr "Noviembre"
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
 msgstr "Diciembre"
+
+#: pretix/static/rrule/rrule.js:2995
+msgid "RRule error: Unable to fully convert this rrule to text"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:2997
+msgid "every"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3001
+msgid "until"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3006
+msgid "for"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3008
+msgid "times"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3008
+msgid "time"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3011
+msgid "(~ approximate)"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3018
+msgid "hours"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3018
+msgid "hour"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3025
+msgid "minutes"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3026
+msgid "minute"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3034 pretix/static/rrule/rrule.js:3062
+#: pretix/static/rrule/rrule.js:3066 pretix/static/rrule/rrule.js:3111
+msgid "weekdays"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3035 pretix/static/rrule/rrule.js:3063
+msgid "weekday"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3038 pretix/static/rrule/rrule.js:3070
+msgid "days"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3038 pretix/static/rrule/rrule.js:3070
+#: pretix/static/rrule/rrule.js:3143
+#, fuzzy
+#| msgid "May"
+msgid "day"
+msgstr "Mayo"
+
+#: pretix/static/rrule/rrule.js:3041 pretix/static/rrule/rrule.js:3076
+#: pretix/static/rrule/rrule.js:3093 pretix/static/rrule/rrule.js:3146
+msgid "in"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3057 pretix/static/rrule/rrule.js:3148
+msgid "weeks"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3057 pretix/static/rrule/rrule.js:3074
+#: pretix/static/rrule/rrule.js:3149
+msgid "week"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3066 pretix/static/rrule/rrule.js:3111
+#: pretix/static/rrule/rrule.js:3156 pretix/static/rrule/rrule.js:3169
+#, fuzzy
+#| msgid "None"
+msgid "on"
+msgstr "Ninguno"
+
+#: pretix/static/rrule/rrule.js:3091 pretix/static/rrule/rrule.js:3104
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Next month"
+msgid "months"
+msgstr "Siguiente mes"
+
+#: pretix/static/rrule/rrule.js:3105
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Next month"
+msgid "month"
+msgstr "Siguiente mes"
+
+#: pretix/static/rrule/rrule.js:3122 pretix/static/rrule/rrule.js:3132
+msgid "years"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3132
+msgid "year"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3141 pretix/static/rrule/rrule.js:3162
+#: pretix/static/rrule/rrule.js:3174
+msgid "on the"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3142 pretix/static/rrule/rrule.js:3150
+#: pretix/static/rrule/rrule.js:3162 pretix/static/rrule/rrule.js:3173
+#: pretix/static/rrule/rrule.js:3174 pretix/static/rrule/rrule.js:3179
+#: pretix/static/rrule/rrule.js:3182
+msgid "and"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3157 pretix/static/rrule/rrule.js:3159
+msgid "or"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3158
+#, fuzzy
+#| msgid "Others"
+msgid "the"
+msgstr "Otros"
+
+#: pretix/static/rrule/rrule.js:3179
+msgid "at"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3190 pretix/static/rrule/rrule.js:3209
+msgid "last"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3196
+msgid "st"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3200
+msgid "nd"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3204
+msgid "rd"
+msgstr ""
+
+#: pretix/static/rrule/rrule.js:3207
+msgid "th"
+msgstr ""
 
 #~ msgctxt "widget"
 #~ msgid ""
