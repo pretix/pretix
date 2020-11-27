@@ -19,6 +19,7 @@ from django.forms import Select
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from django.utils.timezone import get_current_timezone
 from django.utils.translation import (
     get_language, gettext_lazy as _, pgettext_lazy,
 )
@@ -250,7 +251,7 @@ class MinDateTimeValidator(MinValueValidator):
         try:
             return super().__call__(value)
         except ValidationError as e:
-            e.params['limit_value'] = date_format(e.params['limit_value'], 'SHORT_DATETIME_FORMAT')
+            e.params['limit_value'] = date_format(e.params['limit_value'].astimezone(get_current_timezone()), 'SHORT_DATETIME_FORMAT')
             raise e
 
 
@@ -269,7 +270,7 @@ class MaxDateTimeValidator(MaxValueValidator):
         try:
             return super().__call__(value)
         except ValidationError as e:
-            e.params['limit_value'] = date_format(e.params['limit_value'], 'SHORT_DATETIME_FORMAT')
+            e.params['limit_value'] = date_format(e.params['limit_value'].astimezone(get_current_timezone()), 'SHORT_DATETIME_FORMAT')
             raise e
 
 
