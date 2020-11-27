@@ -307,6 +307,10 @@ INSTALLED_APPS = [
     'phonenumber_field'
 ]
 
+if db_backend == 'postgresql':
+    # ALlow plugins to use django.contrib.postgres
+    INSTALLED_APPS.insert(0, 'django.contrib.postgres')
+
 try:
     import django_extensions  # noqa
     INSTALLED_APPS.append('django_extensions')
