@@ -2052,6 +2052,30 @@ PERSON_NAME_SCHEMES = OrderedDict([
             '_scheme': 'salutation_title_given_family',
         },
     }),
+    ('salutation_title_given_family_degree', {
+        'fields': (
+            ('salutation', pgettext_lazy('person_name', 'Salutation'), 1),
+            ('title', pgettext_lazy('person_name', 'Title'), 1),
+            ('given_name', _('Given name'), 2),
+            ('family_name', _('Family name'), 2),
+            ('degree', pgettext_lazy('person_name', 'Degree (after name)'), 2),
+        ),
+        'concatenation': lambda d: (
+            ' '.join(
+                str(p) for p in (d.get(key, '') for key in ["title", "given_name", "family_name"]) if p
+            ) +
+            str((', ' if d.get('degree') else '')) +
+            str(d.get('degree', ''))
+        ),
+        'sample': {
+            'salutation': pgettext_lazy('person_name_sample', 'Mr'),
+            'title': pgettext_lazy('person_name_sample', 'Dr'),
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            'degree': pgettext_lazy('person_name_sample', 'MA'),
+            '_scheme': 'salutation_title_given_family_degree',
+        },
+    }),
 ])
 COUNTRIES_WITH_STATE_IN_ADDRESS = {
     # Source: http://www.bitboost.com/ref/international-address-formats.html
