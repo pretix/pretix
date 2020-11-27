@@ -1095,7 +1095,7 @@ class Question(LoggedModel):
     valid_datetime_min = models.DateTimeField(null=True, blank=True,
                                               verbose_name=_('Minimum value'), help_text=_('Currently not supported in our apps'))
     valid_datetime_max = models.DateTimeField(null=True, blank=True,
-                                              verbose_name=_('Maximum value'), help_text=_('Currently not supporetd in our apps'))
+                                              verbose_name=_('Maximum value'), help_text=_('Currently not supported in our apps'))
 
     objects = ScopedManager(organizer='event__organizer')
 

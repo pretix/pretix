@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-27 15:23+0000\n"
+"POT-Creation-Date: 2020-11-27 17:08+0000\n"
 "PO-Revision-Date: 2020-07-30 19:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -2808,7 +2808,7 @@ msgstr "عدد الحد الأدنى"
 
 #: pretix/base/models/items.py:1088 pretix/base/models/items.py:1090
 #: pretix/base/models/items.py:1092 pretix/base/models/items.py:1094
-#: pretix/base/models/items.py:1096
+#: pretix/base/models/items.py:1096 pretix/base/models/items.py:1098
 msgid "Currently not supported in our apps"
 msgstr ""
 
@@ -2818,10 +2818,6 @@ msgstr ""
 #| msgid "Maximum number"
 msgid "Maximum value"
 msgstr "العدد الأقصى"
-
-#: pretix/base/models/items.py:1098
-msgid "Currently not supporetd in our apps"
-msgstr ""
 
 #: pretix/base/models/items.py:1148
 msgid "An answer to this question is required to proceed."
