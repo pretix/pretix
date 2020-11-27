@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-27 17:08+0000\n"
+"POT-Creation-Date: 2020-11-27 17:32+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -640,160 +640,37 @@ msgstr "十一月"
 msgid "December"
 msgstr "十二月"
 
-#: pretix/static/rrule/rrule.js:2995
-msgid "RRule error: Unable to fully convert this rrule to text"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:2997
-msgid "every"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3001
-msgid "until"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3006
-msgid "for"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3008
-msgid "times"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3008
-msgid "time"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3011
-msgid "(~ approximate)"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3018
-msgid "hours"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3018
-msgid "hour"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3025
-msgid "minutes"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3026
-msgid "minute"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3034 pretix/static/rrule/rrule.js:3062
-#: pretix/static/rrule/rrule.js:3066 pretix/static/rrule/rrule.js:3111
-msgid "weekdays"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3035 pretix/static/rrule/rrule.js:3063
-msgid "weekday"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3038 pretix/static/rrule/rrule.js:3070
-msgid "days"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3038 pretix/static/rrule/rrule.js:3070
-#: pretix/static/rrule/rrule.js:3143
 #, fuzzy
-#| msgid "May"
-msgid "day"
-msgstr "五月"
+#~| msgid "May"
+#~ msgid "day"
+#~ msgstr "五月"
 
-#: pretix/static/rrule/rrule.js:3041 pretix/static/rrule/rrule.js:3076
-#: pretix/static/rrule/rrule.js:3093 pretix/static/rrule/rrule.js:3146
 #, fuzzy
-#| msgid "Nein"
-msgid "in"
-msgstr "否"
+#~| msgid "Nein"
+#~ msgid "in"
+#~ msgstr "否"
 
-#: pretix/static/rrule/rrule.js:3057 pretix/static/rrule/rrule.js:3148
-msgid "weeks"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3057 pretix/static/rrule/rrule.js:3074
-#: pretix/static/rrule/rrule.js:3149
-msgid "week"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3066 pretix/static/rrule/rrule.js:3111
-#: pretix/static/rrule/rrule.js:3156 pretix/static/rrule/rrule.js:3169
 #, fuzzy
-#| msgid "None"
-msgid "on"
-msgstr "无"
+#~| msgid "None"
+#~ msgid "on"
+#~ msgstr "无"
 
-#: pretix/static/rrule/rrule.js:3091 pretix/static/rrule/rrule.js:3104
 #, fuzzy
-#| msgctxt "widget"
-#| msgid "Next month"
-msgid "months"
-msgstr "下个月"
+#~| msgctxt "widget"
+#~| msgid "Next month"
+#~ msgid "months"
+#~ msgstr "下个月"
 
-#: pretix/static/rrule/rrule.js:3105
 #, fuzzy
-#| msgctxt "widget"
-#| msgid "Next month"
-msgid "month"
-msgstr "下个月"
+#~| msgctxt "widget"
+#~| msgid "Next month"
+#~ msgid "month"
+#~ msgstr "下个月"
 
-#: pretix/static/rrule/rrule.js:3122 pretix/static/rrule/rrule.js:3132
-msgid "years"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3132
-msgid "year"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3141 pretix/static/rrule/rrule.js:3162
-#: pretix/static/rrule/rrule.js:3174
-msgid "on the"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3142 pretix/static/rrule/rrule.js:3150
-#: pretix/static/rrule/rrule.js:3162 pretix/static/rrule/rrule.js:3173
-#: pretix/static/rrule/rrule.js:3174 pretix/static/rrule/rrule.js:3179
-#: pretix/static/rrule/rrule.js:3182
-msgid "and"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3157 pretix/static/rrule/rrule.js:3159
-msgid "or"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3158
 #, fuzzy
-#| msgid "Others"
-msgid "the"
-msgstr "其他"
-
-#: pretix/static/rrule/rrule.js:3179
-msgid "at"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3190 pretix/static/rrule/rrule.js:3209
-msgid "last"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3196
-msgid "st"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3200
-msgid "nd"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3204
-msgid "rd"
-msgstr ""
-
-#: pretix/static/rrule/rrule.js:3207
-msgid "th"
-msgstr ""
+#~| msgid "Others"
+#~ msgid "the"
+#~ msgstr "其他"
 
 #~ msgctxt "widget"
 #~ msgid ""

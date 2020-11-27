@@ -7,7 +7,7 @@ localecompile:
 
 localegen:
 	./manage.py makemessages --keep-pot --ignore "pretix/helpers/*" $(LNGS)
-	./manage.py makemessages --keep-pot -d djangojs --ignore "pretix/helpers/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static.dist/*" --ignore "data/*" --ignore "build/*" $(LNGS)
+	./manage.py makemessages --keep-pot -d djangojs --ignore "pretix/helpers/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static.dist/*" --ignore "data/*" --ignore "pretix/static/rrule/*" --ignore "build/*" $(LNGS)
 
 staticfiles: jsi18n
 	./manage.py collectstatic --noinput
