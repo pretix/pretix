@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-24 09:10+0000\n"
-"PO-Revision-Date: 2020-09-02 16:59+0000\n"
+"PO-Revision-Date: 2020-11-27 04:00+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -19567,11 +19567,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:197
 msgid "Place binding order"
-msgstr "Ievietojiet saistošu pasūtījumu"
+msgstr "Izveidot pasūtījumu"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:199
 msgid "Submit registration"
-msgstr "Iesniegt reģistrāciju"
+msgstr "Nosūtīt"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
