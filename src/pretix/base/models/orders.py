@@ -639,7 +639,7 @@ class Order(LockModel, LoggedModel):
                 return
 
             if iteration > 20:
-                # Safeguard: If we don't find an unused and non-blacklisted code within 20 iterations, we increase
+                # Safeguard: If we don't find an unused and non-banlisted code within 20 iterations, we increase
                 # the length.
                 length += 1
                 iteration = 0
