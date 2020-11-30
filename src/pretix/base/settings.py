@@ -488,7 +488,6 @@ DEFAULTS = {
             widget=forms.CheckboxInput(
                 attrs={
                     'data-display-dependency': '#id_payment_term_mode_0',
-                    'data-required-if': '#id_payment_term_mode_0'
                 },
             ),
         )
