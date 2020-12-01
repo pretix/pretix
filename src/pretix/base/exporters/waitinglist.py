@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+import pytz
 from django import forms
 from django.db.models import F, Q
 from django.dispatch import receiver
@@ -86,7 +87,9 @@ class WaitingListExporter(ListExporter):
             _('Variation'),
             _('Event slug'),
             _('Event name'),
-            pgettext_lazy('subevents', 'Date'),
+            pgettext_lazy('subevents', 'Date'),  # Name of subevent
+            _('Start date'),  # Start date of subevent or event
+            _('End date'),  # End date of subevent or event
             _('Language'),
             _('Priority'),
             _('Status'),
@@ -106,14 +109,22 @@ class WaitingListExporter(ListExporter):
                     status_label = status_labels['voucher-assigned']
             else:
                 status_label = status_labels['awaiting-voucher']
+
+            # which event should be used to output dates in columns "Start date" and "End date"
+            event_for_date_columns = entry.subevent if entry.subevent else entry.event
+            tz = pytz.timezone(entry.event.settings.timezone)
+            datetime_format = '%Y-%m-%d %H:%M:%S'
+
             row = [
-                entry.created.isoformat(),
+                entry.created.astimezone(tz).strftime(datetime_format),  # alternative: .isoformat(),
                 entry.email,
                 str(entry.item) if entry.item else "",
                 str(entry.variation) if entry.variation else "",
                 entry.event.slug,
                 entry.event.name,
-                str(entry.subevent) if entry.subevent else "",
+                entry.subevent.name if entry.subevent else "",
+                event_for_date_columns.date_from.astimezone(tz).strftime(datetime_format),
+                event_for_date_columns.date_to.astimezone(tz).strftime(datetime_format) if event_for_date_columns.date_to else "",
                 entry.locale,
                 str(entry.priority),
                 status_label,
