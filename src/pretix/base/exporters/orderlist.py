@@ -147,8 +147,8 @@ class OrderListExporter(MultiSheetListExporter):
             for k, label, w in name_scheme['fields']:
                 headers.append(label)
         headers += [
-            _('Address'), _('ZIP code'), _('City'), _('Country'), pgettext('address', 'State'), _('VAT ID'),
-            _('Date of last payment'), _('Fees'), _('Order locale')
+            _('Address'), _('ZIP code'), _('City'), _('Country'), pgettext('address', 'State'),
+            _('Custom address field'), _('VAT ID'), _('Date of last payment'), _('Fees'), _('Order locale')
         ]
 
         for tr in tax_rates:
@@ -235,10 +235,11 @@ class OrderListExporter(MultiSheetListExporter):
                     order.invoice_address.country if order.invoice_address.country else
                     order.invoice_address.country_old,
                     order.invoice_address.state,
+                    order.invoice_address.custom_field,
                     order.invoice_address.vat_id,
                 ]
             except InvoiceAddress.DoesNotExist:
-                row += [''] * (8 + (len(name_scheme['fields']) if name_scheme and len(name_scheme['fields']) > 1 else 0))
+                row += [''] * (9 + (len(name_scheme['fields']) if name_scheme and len(name_scheme['fields']) > 1 else 0))
 
             row += [
                 order.payment_date.astimezone(tz).strftime('%Y-%m-%d') if order.payment_date else '',
