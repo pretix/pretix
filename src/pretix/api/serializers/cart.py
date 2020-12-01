@@ -107,6 +107,7 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
     def validate_cart_id(self, cid):
         if cid and not cid.endswith('@api'):
             raise ValidationError('Cart ID should end in @api or be empty.')
+        return cid
 
     def validate_item(self, item):
         if item.event != self.context['event']:
