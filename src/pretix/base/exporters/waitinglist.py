@@ -65,8 +65,8 @@ class WaitingListExporter(ListExporter):
 
     def iterate_list(self, form_data):
         # create dicts for easier access by key, which is passed by form_data[status]
-        status_labels = dict([(k, v) for (k, v, c) in self.status_filters])
-        queryset_mutators = dict([(k, c) for (k, v, c) in self.status_filters])
+        status_labels = {k: v for k, v, c in self.status_filters}
+        queryset_mutators = {k: c for k, v, c in self.status_filters}
 
         entries = WaitingListEntry.objects.filter(
             event__in=self.events,
