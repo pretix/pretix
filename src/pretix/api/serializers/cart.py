@@ -87,7 +87,10 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                     raise ValidationError('The specified seat ID is not unique.')
                 else:
                     validated_data['seat'] = seat
-                    if not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web')):
+                    if not seat.is_available(
+                        sales_channel=validated_data.get('sales_channel', 'web'),
+                        distance_ignore_cart_id=validated_data['cart_id'],
+                    ):
                         raise ValidationError(gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name))
             elif seated:
                 raise ValidationError('The specified product requires to choose a seat.')
