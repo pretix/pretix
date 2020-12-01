@@ -121,6 +121,26 @@ DEFAULT_VARIABLES = OrderedDict((
         'editor_sample': _('John Doe\nSample company\nSesame Street 42\n12345 Any City\nAtlantis'),
         'evaluate': lambda op, order, event: op.address_format()
     }),
+    ("attendee_street", {
+        "label": _("Attendee street"),
+        "editor_sample": 'Sesame Street 42',
+        "evaluate": lambda op, order, ev: op.street or (op.addon_to.street if op.addon_to else '')
+    }),
+    ("attendee_zipcode", {
+        "label": _("Attendee ZIP code"),
+        "editor_sample": '12345',
+        "evaluate": lambda op, order, ev: op.zipcode or (op.addon_to.zipcode if op.addon_to else '')
+    }),
+    ("attendee_city", {
+        "label": _("Attendee city"),
+        "editor_sample": 'Any City',
+        "evaluate": lambda op, order, ev: op.city or (op.addon_to.city if op.addon_to else '')
+    }),
+    ("attendee_state", {
+        "label": _("Attendee state"),
+        "editor_sample": 'Sample State',
+        "evaluate": lambda op, order, ev: op.state or (op.addon_to.state if op.addon_to else '')
+    }),
     ("attendee_country", {
         "label": _("Attendee country"),
         "editor_sample": 'Atlantis',
@@ -219,10 +239,30 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Sample company"),
         "evaluate": lambda op, order, ev: order.invoice_address.company if getattr(order, 'invoice_address', None) else ''
     }),
+    ("invoice_street", {
+        "label": _("Invoice address street"),
+        "editor_sample": _("Sesame Street 42"),
+        "evaluate": lambda op, order, ev: order.invoice_address.street if getattr(order, 'invoice_address', None) else ''
+    }),
+    ("invoice_zipcode", {
+        "label": _("Invoice address ZIP code"),
+        "editor_sample": _("12345"),
+        "evaluate": lambda op, order, ev: order.invoice_address.zipcode if getattr(order, 'invoice_address', None) else ''
+    }),
     ("invoice_city", {
         "label": _("Invoice address city"),
         "editor_sample": _("Sample city"),
         "evaluate": lambda op, order, ev: order.invoice_address.city if getattr(order, 'invoice_address', None) else ''
+    }),
+    ("invoice_state", {
+        "label": _("Invoice address state"),
+        "editor_sample": _("Sample State"),
+        "evaluate": lambda op, order, ev: order.invoice_address.state if getattr(order, 'invoice_address', None) else ''
+    }),
+    ("invoice_country", {
+        "label": _("Invoice address country"),
+        "editor_sample": _("Atlantis"),
+        "evaluate": lambda op, order, ev: order.invoice_address.country if getattr(order, 'invoice_address', None) else ''
     }),
     ("addons", {
         "label": _("List of Add-Ons"),
