@@ -9,16 +9,13 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
-from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import Device, Gate, GiftCard, Organizer, Team
-from pretix.control.forms import (
-    ExtFileField, FontSelect, MultipleLanguagesWidget, SplitDateTimeField,
-)
+from pretix.control.forms import ExtFileField, FontSelect, SplitDateTimeField
 from pretix.control.forms.event import SafeEventMultipleChoiceField
 from pretix.multidomain.models import KnownDomain
 from pretix.presale.style import get_fonts
@@ -218,21 +215,18 @@ class DeviceForm(forms.ModelForm):
 
 
 class OrganizerSettingsForm(SettingsForm):
-
-    organizer_info_text = I18nFormField(
-        label=_('Info text'),
-        required=False,
-        widget=I18nTextarea,
-        help_text=_('Not displayed anywhere by default, but if you want to, you can use this e.g. in ticket templates.')
-    )
-
-    event_team_provisioning = forms.BooleanField(
-        label=_('Allow creating a new team during event creation'),
-        help_text=_('Users that do not have access to all events under this organizer, must select one of their teams '
-                    'to have access to the created event. This setting allows users to create an event-specified team'
-                    ' on-the-fly, even when they do not have \"Can change teams and permissions\" permission.'),
-        required=False,
-    )
+    auto_fields = [
+        'organizer_info_text',
+        'event_list_type',
+        'event_list_availability',
+        'organizer_homepage_text',
+        'organizer_link_back',
+        'organizer_logo_image_large',
+        'giftcard_length',
+        'giftcard_expiry_years',
+        'locales',
+        'event_team_provisioning',
+    ]
 
     primary_color = forms.CharField(
         label=_("Primary color"),
@@ -278,12 +272,6 @@ class OrganizerSettingsForm(SettingsForm):
         label=_("Use round edges"),
         required=False,
     )
-    organizer_homepage_text = I18nFormField(
-        label=_('Homepage text'),
-        required=False,
-        widget=I18nTextarea,
-        help_text=_('This will be displayed on the organizer homepage.')
-    )
     organizer_logo_image = ExtFileField(
         label=_('Header image'),
         ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
@@ -293,36 +281,6 @@ class OrganizerSettingsForm(SettingsForm):
                     'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
                     'can increase the size with the setting below. We recommend not using small details on the picture '
                     'as it will be resized on smaller screens.')
-    )
-    organizer_logo_image_large = forms.BooleanField(
-        label=_('Use header image in its full size'),
-        help_text=_('We recommend to upload a picture at least 1170 pixels wide.'),
-        required=False,
-    )
-    event_list_type = forms.ChoiceField(
-        label=_('Default overview style'),
-        choices=(
-            ('list', _('List')),
-            ('week', _('Week calendar')),
-            ('calendar', _('Month calendar')),
-        )
-    )
-    event_list_availability = forms.BooleanField(
-        label=_('Show availability in event overviews'),
-        help_text=_('If checked, the list of events will show if events are sold out. This might '
-                    'make for longer page loading times if you have lots of events and the shown status might be out '
-                    'of date for up to two minutes.'),
-        required=False
-    )
-    organizer_link_back = forms.BooleanField(
-        label=_('Link back to organizer overview on all event pages'),
-        required=False
-    )
-    locales = forms.MultipleChoiceField(
-        choices=settings.LANGUAGES,
-        label=_("Use languages"),
-        widget=MultipleLanguagesWidget,
-        help_text=_('Choose all languages that your organizer homepage should be available in.')
     )
     primary_font = forms.ChoiceField(
         label=_('Font'),
@@ -339,18 +297,6 @@ class OrganizerSettingsForm(SettingsForm):
         max_size=1 * 1024 * 1024,
         help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
                     'We recommend a size of at least 200x200px to accommodate most devices.')
-    )
-    giftcard_length = forms.IntegerField(
-        label=_('Length of gift card codes'),
-        help_text=_('The system generates by default {}-character long gift card codes. However, if a different length '
-                    'is required, it can be set here.'.format(settings.ENTROPY['giftcard_secret'])),
-        required=False
-    )
-    giftcard_expiry_years = forms.IntegerField(
-        label=_('Validity of gift card codes in years'),
-        help_text=_('If you set a number here, gift cards will by default expire at the end of the year after this '
-                    'many years. If you keep it empty, gift cards do not have an explicit expiry date.'),
-        required=False
     )
 
     def __init__(self, *args, **kwargs):

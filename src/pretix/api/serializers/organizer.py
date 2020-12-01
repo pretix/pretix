@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.db.models import Q
 from django.utils.translation import get_language, gettext_lazy as _
+from hierarkey.proxy import HierarkeyProxy
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -14,6 +15,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
+from pretix.base.settings import DEFAULTS, validate_settings
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -187,3 +189,54 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'email', 'fullname', 'require_2fa'
         )
+
+
+class OrganizerSettingsSerializer(serializers.Serializer):
+    default_fields = [
+        'organizer_info_text',
+        'event_list_type',
+        'event_list_availability',
+        'organizer_homepage_text',
+        'organizer_link_back',
+        'organizer_logo_image_large',
+        'giftcard_length',
+        'giftcard_expiry_years',
+        'locales',
+        'event_team_provisioning',
+    ]
+
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+        for fname in self.default_fields:
+            kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
+            if callable(kwargs):
+                kwargs = kwargs()
+            kwargs.setdefault('required', False)
+            kwargs.setdefault('allow_null', True)
+            form_kwargs = DEFAULTS[fname].get('form_kwargs', {})
+            if callable(form_kwargs):
+                form_kwargs = form_kwargs()
+            if 'serializer_class' not in DEFAULTS[fname]:
+                raise ValidationError('{} has no serializer class'.format(fname))
+            f = DEFAULTS[fname]['serializer_class'](
+                **kwargs
+            )
+            f._label = form_kwargs.get('label', fname)
+            f._help_text = form_kwargs.get('help_text')
+            self.fields[fname] = f
+
+    def update(self, instance: HierarkeyProxy, validated_data):
+        for attr, value in validated_data.items():
+            if value is None:
+                instance.delete(attr)
+            elif instance.get(attr, as_type=type(value)) != value:
+                instance.set(attr, value)
+        return instance
+
+    def validate(self, data):
+        data = super().validate(data)
+        settings_dict = self.instance.freeze()
+        settings_dict.update(data)
+        validate_settings(self.organizer, settings_dict)
+        return data

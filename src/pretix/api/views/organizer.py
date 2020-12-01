@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import filters, mixins, serializers, status, viewsets
+from rest_framework import filters, mixins, serializers, status, viewsets, views
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
@@ -18,7 +18,7 @@ from pretix.api.serializers.organizer import (
     DeviceSerializer, GiftCardSerializer, OrganizerSerializer,
     SeatingPlanSerializer, TeamAPITokenSerializer, TeamInviteSerializer,
     TeamMemberSerializer, TeamSerializer,
-)
+    OrganizerSettingsSerializer)
 from pretix.base.models import (
     Device, GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
     User,
@@ -396,3 +396,35 @@ class DeviceViewSet(mixins.CreateModelMixin,
             data=self.request.data
         )
         return inst
+
+
+class OrganizerSettingsView(views.APIView):
+    permission = 'can_change_organizer_settings'
+
+    def get(self, request, *args, **kwargs):
+        s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer)
+        if 'explain' in request.GET:
+            return Response({
+                fname: {
+                    'value': s.data[fname],
+                    'label': getattr(field, '_label', fname),
+                    'help_text': getattr(field, '_help_text', None)
+                } for fname, field in s.fields.items()
+            })
+        return Response(s.data)
+
+    def patch(self, request, *wargs, **kwargs):
+        s = OrganizerSettingsSerializer(
+            instance=request.organizer.settings, data=request.data, partial=True,
+            organizer=request.organizer
+        )
+        s.is_valid(raise_exception=True)
+        with transaction.atomic():
+            s.save()
+            self.request.organizer.log_action(
+                'pretix.organizer.settings', user=self.request.user, auth=self.request.auth, data={
+                    k: v for k, v in s.validated_data.items()
+                }
+            )
+        s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer)
+        return Response(s.data)

@@ -252,7 +252,6 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Ask for beneficiary"),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
-            required=False
         )
     },
     'invoice_address_custom_field': {
@@ -421,7 +420,6 @@ DEFAULTS = {
             widget_kwargs={'attrs': {
                 'rows': 3,
             }},
-            required=False,
             label=_("Guidance text"),
             help_text=_("This text will be shown above the payment options. You can explain the choices to the user here, "
                         "if you want.")
@@ -441,7 +439,6 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Set payment term"),
             widget=forms.RadioSelect,
-            required=True,
             choices=(
                 ('days', _("in days")),
                 ('minutes', _("in minutes"))
@@ -989,7 +986,16 @@ DEFAULTS = {
     },
     'event_list_availability': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_('Show availability in event overviews'),
+            help_text=_('If checked, the list of events will show if events are sold out. This might '
+                        'make for longer page loading times if you have lots of events and the shown status might be out '
+                        'of date for up to two minutes.'),
+            required=False
+        )
     },
     'event_list_type': {
         'default': 'list',
@@ -1653,7 +1659,13 @@ Your {event} team"""))
     },
     'organizer_logo_image_large': {
         'default': 'False',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Use header image in its full size'),
+            help_text=_('We recommend to upload a picture at least 1170 pixels wide.'),
+        )
     },
     'og_image': {
         'default': None,
@@ -1732,11 +1744,26 @@ Your {event} team"""))
     },
     'organizer_info_text': {
         'default': '',
-        'type': LazyI18nString
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_('Info text'),
+            widget=I18nTextarea,
+            help_text=_('Not displayed anywhere by default, but if you want to, you can use this e.g. in ticket templates.')
+        )
     },
     'event_team_provisioning': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Allow creating a new team during event creation'),
+            help_text=_('Users that do not have access to all events under this organizer, must select one of their teams '
+                        'to have access to the created event. This setting allows users to create an event-specified team'
+                        ' on-the-fly, even when they do not have \"Can change teams and permissions\" permission.'),
+        )
     },
     'update_check_ack': {
         'default': 'False',
@@ -1810,13 +1837,51 @@ Your {event} team"""))
             # When adding a new ordering, remember to also define it in the event model
         )
     },
+    'organizer_link_back': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Link back to organizer overview on all event pages'),
+        )
+    },
+    'organizer_homepage_text': {
+        'default': '',
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_('Homepage text'),
+            widget=I18nTextarea,
+            help_text=_('This will be displayed on the organizer homepage.')
+        )
+    },
     'name_scheme': {
         'default': 'full',
         'type': str
     },
     'giftcard_length': {
         'default': settings.ENTROPY['giftcard_secret'],
-        'type': int
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_('Length of gift card codes'),
+            help_text=_('The system generates by default {}-character long gift card codes. However, if a different length '
+                        'is required, it can be set here.'.format(settings.ENTROPY['giftcard_secret'])),
+        )
+    },
+    'giftcard_expiry_years': {
+        'default': None,
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_('Validity of gift card codes in years'),
+            help_text=_('If you set a number here, gift cards will by default expire at the end of the year after this '
+                        'many years. If you keep it empty, gift cards do not have an explicit expiry date.'),
+        )
     },
     'seating_choice': {
         'default': 'True',
@@ -2168,6 +2233,7 @@ class SettingsSandbox:
 
 def validate_settings(event, settings_dict):
     from pretix.base.signals import validate_event_settings
+    from pretix.base.models import Event
 
     if 'locales' in settings_dict and settings_dict['locale'] not in settings_dict['locales']:
         raise ValidationError({
@@ -2197,4 +2263,5 @@ def validate_settings(event, settings_dict):
                 'payment_term_last': _('The last payment date cannot be before the end of presale.')
             })
 
-    validate_event_settings.send(sender=event, settings_dict=settings_dict)
+    if isinstance(event, Event):
+        validate_event_settings.send(sender=event, settings_dict=settings_dict)
