@@ -70,8 +70,8 @@ class WaitingListExporter(ListExporter):
 
         entries = WaitingListEntry.objects.filter(
             event__in=self.events,
-        ).select_related('item', 'variation', 'voucher', 'subevent').prefetch_related(
-            'item__quotas', 'variation__quotas'
+        ).select_related(
+            'item', 'variation', 'voucher', 'subevent'
         ).order_by('created')
 
         # apply filter to queryset/entries according to status
