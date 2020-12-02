@@ -2,10 +2,10 @@ from django.template.response import TemplateResponse
 from django.urls import resolve
 from django_scopes import scope
 
+from pretix.base.channels import WebshopSalesChannel
 from pretix.presale.signals import process_response
 
 from .utils import _detect_event
-from pretix.base.channels import WebshopSalesChannel
 
 
 class EventMiddleware:
