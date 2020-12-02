@@ -279,6 +279,11 @@ class WidgetAPIProductList(EventListMixin, View):
                 'error': gettext('This ticket shop is currently disabled.')
             })
 
+        if request.sales_channel.identifier not in request.event.sales_channels:
+            return self.response({
+                'error': gettext('Tickets for this event cannot be purchased on this sales channel.')
+            })
+
         self.subevent = None
         if request.event.has_subevents:
             if 'subevent' in kwargs:
