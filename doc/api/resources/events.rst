@@ -182,6 +182,7 @@ Endpoints
         only contain the events matching the set criteria. Providing ``?attr[Format]=Seminar`` would return only those
         events having set their ``Format`` meta data to ``Seminar``, ``?attr[Format]=`` only those, that have no value
         set. Please note that this filter will respect default values set on organizer level.
+   :query sales_channel: If set to a sales channel identifier, only events allowed to be sold on the specified sales channel are returned.
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
    :statuscode 401: Authentication failure
