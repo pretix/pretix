@@ -15,13 +15,13 @@ from rest_framework.viewsets import GenericViewSet
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
-    DeviceSerializer, GiftCardSerializer, OrganizerSerializer,
-    SeatingPlanSerializer, TeamAPITokenSerializer, TeamInviteSerializer,
-    TeamMemberSerializer, TeamSerializer,
+    DeviceSerializer, GiftCardSerializer, GiftCardTransactionSerializer,
+    OrganizerSerializer, SeatingPlanSerializer, TeamAPITokenSerializer,
+    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
 )
 from pretix.base.models import (
-    Device, GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
-    User,
+    Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan, Team,
+    TeamAPIToken, TeamInvite, User,
 )
 from pretix.helpers.dicts import merge_dicts
 
@@ -189,6 +189,24 @@ class GiftCardViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         raise MethodNotAllowed("Gift cards cannot be deleted.")
+
+
+class GiftCardTransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = GiftCardTransactionSerializer
+    queryset = GiftCardTransaction.objects.none()
+    permission = 'can_manage_gift_cards'
+    write_permission = 'can_manage_gift_cards'
+
+    @cached_property
+    def giftcard(self):
+        if self.request.GET.get('include_accepted') == 'true':
+            qs = self.request.organizer.accepted_gift_cards
+        else:
+            qs = self.request.organizer.issued_gift_cards.all()
+        return get_object_or_404(qs, pk=self.kwargs.get('giftcard'))
+
+    def get_queryset(self):
+        return self.giftcard.transactions.select_related('order', 'order__event')
 
 
 class TeamViewSet(viewsets.ModelViewSet):
