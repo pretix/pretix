@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, validate_email
 from django.db.models import Q
-from django.forms import formset_factory, CheckboxSelectMultiple
+from django.forms import CheckboxSelectMultiple, formset_factory
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
