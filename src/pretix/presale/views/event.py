@@ -348,6 +348,9 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             r._csp_ignore = True
             return r
 
+        if 'web' not in request.event.sales_channels:
+            raise Http404
+
         if request.event.has_subevents:
             if 'subevent' in kwargs:
                 self.subevent = request.event.subevents.using(settings.DATABASE_REPLICA).filter(pk=kwargs['subevent'], active=True).first()
