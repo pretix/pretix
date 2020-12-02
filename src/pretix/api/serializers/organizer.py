@@ -11,7 +11,7 @@ from pretix.base.auth import get_auth_backends
 from pretix.base.models import (
     Device, GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
     User,
-)
+    GiftCardTransaction)
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.urls import build_absolute_uri
@@ -57,6 +57,21 @@ class GiftCardSerializer(I18nAwareModelSerializer):
     class Meta:
         model = GiftCard
         fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode', 'expires', 'conditions')
+
+
+class OrderEventSlugField(serializers.RelatedField):
+
+    def to_representation(self, obj):
+        return obj.event.slug
+
+
+class GiftCardTransactionSerializer(I18nAwareModelSerializer):
+    order = serializers.SlugRelatedField(slug_field='code', read_only=True)
+    event = OrderEventSlugField(source='order', read_only=True)
+
+    class Meta:
+        model = GiftCardTransaction
+        fields = ('id', 'datetime', 'value', 'event', 'order', 'text')
 
 
 class EventSlugField(serializers.SlugRelatedField):

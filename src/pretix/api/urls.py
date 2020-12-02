@@ -62,6 +62,9 @@ order_router = routers.DefaultRouter()
 order_router.register(r'payments', order.PaymentViewSet)
 order_router.register(r'refunds', order.RefundViewSet)
 
+giftcard_router = routers.DefaultRouter()
+giftcard_router.register(r'transactions', organizer.GiftCardTransactionViewSet)
+
 # Force import of all plugins to give them a chance to register URLs with the router
 for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
@@ -71,6 +74,7 @@ for app in apps.get_app_configs():
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/', include(orga_router.urls)),
+    url(r'^organizers/(?P<organizer>[^/]+)/giftcards/(?P<giftcard>[^/]+)/', include(giftcard_router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/settings/$', event.EventSettingsView.as_view(),
         name="event.settings"),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/', include(event_router.urls)),
