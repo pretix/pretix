@@ -23,7 +23,9 @@ class EventMiddleware:
         if url.namespace != 'presale':
             return self.get_response(request)
 
-        if 'organizer' in url.kwargs or 'event' in url.kwargs or getattr(request, 'event_domain', False):
+        if 'organizer' in url.kwargs or 'event' in url.kwargs or getattr(request, 'event_domain', False) or getattr(
+                request, 'organizer_domain', False
+        ):
             redirect = _detect_event(request, require_live=url.url_name not in self.NO_REQUIRE_LIVE_URLS)
             if redirect:
                 return redirect
