@@ -23,13 +23,13 @@ from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models.base import LoggedModel
+from pretix.base.models.fields import MultiStringField
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.validators import EventSlugBanlistValidator
 from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
 from pretix.helpers.thumb import get_thumbnail
-from pretix.base.models.fields import MultiStringField
 
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
