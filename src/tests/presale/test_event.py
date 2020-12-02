@@ -28,7 +28,7 @@ class EventTestMixin:
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
-            live=True
+            live=True, sales_channels=['web', 'bar']
         )
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         t = Team.objects.create(organizer=self.orga, can_change_event_settings=True)

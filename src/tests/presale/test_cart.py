@@ -34,7 +34,8 @@ class CartTestMixin:
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
             live=True,
-            plugins="pretix.plugins.banktransfer"
+            plugins="pretix.plugins.banktransfer",
+            sales_channels=['web', 'bar']
         )
         self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
