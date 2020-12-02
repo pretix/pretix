@@ -419,6 +419,9 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         return u
 
     def post(self, request, *args, **kwargs):
+        if request.sales_channel.identifier not in request.event.sales_channels:
+            raise Http404(_('Tickets for this event cannot be purchased on this sales channel.'))
+
         cart_id = get_or_create_cart_id(self.request)
         if "widget_data" in request.POST:
             try:

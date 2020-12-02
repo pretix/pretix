@@ -414,7 +414,6 @@ class Event(EventMixin, LoggedModel):
         verbose_name=_('Restrict to specific sales channels'),
         help_text=_('Only sell tickets for this event on the following sales channels.'),
         default=['web'],
-        blank=True,
     )
     objects = ScopedManager(organizer='organizer')
 

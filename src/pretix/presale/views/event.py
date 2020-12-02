@@ -348,8 +348,8 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             r._csp_ignore = True
             return r
 
-        if 'web' not in request.event.sales_channels:
-            raise Http404
+        if request.sales_channel.identifier not in request.event.sales_channels:
+            raise Http404(_('Tickets for this event cannot be purchased on this sales channel.'))
 
         if request.event.has_subevents:
             if 'subevent' in kwargs:
