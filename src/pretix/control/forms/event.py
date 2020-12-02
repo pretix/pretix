@@ -3,7 +3,7 @@ from urllib.parse import urlencode, urlparse
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator, validate_email
+from django.core.validators import validate_email
 from django.db.models import Q
 from django.forms import formset_factory
 from django.urls import reverse
@@ -28,8 +28,8 @@ from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_settings,
 )
 from pretix.control.forms import (
-    ExtFileField, FontSelect, MultipleLanguagesWidget, SlugWidget,
-    SplitDateTimeField, SplitDateTimePickerWidget,
+    ExtFileField, MultipleLanguagesWidget, SlugWidget, SplitDateTimeField,
+    SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.multidomain.models import KnownDomain
@@ -431,57 +431,6 @@ class EventSettingsForm(SettingsForm):
                     'WhatsApp and Reddit only show a square preview, so we recommend to make sure it still looks good '
                     'only the center square is shown. If you do not fill this, we will use the logo given above.')
     )
-    primary_color = forms.CharField(
-        label=_("Primary color"),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    theme_color_success = forms.CharField(
-        label=_("Accent color for success"),
-        help_text=_("We strongly suggest to use a shade of green."),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    theme_color_danger = forms.CharField(
-        label=_("Accent color for errors"),
-        help_text=_("We strongly suggest to use a dark shade of red."),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    theme_color_background = forms.CharField(
-        label=_("Page background color"),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield no-contrast'})
-    )
-    theme_round_borders = forms.BooleanField(
-        label=_("Use round edges"),
-        required=False,
-    )
-    primary_font = forms.ChoiceField(
-        label=_('Font'),
-        choices=[
-            ('Open Sans', 'Open Sans')
-        ],
-        widget=FontSelect,
-        help_text=_('Only respected by modern browsers.')
-    )
 
     auto_fields = [
         'imprint_url',
@@ -523,6 +472,12 @@ class EventSettingsForm(SettingsForm):
         'order_email_asked_twice',
         'last_order_modification_date',
         'checkout_show_copy_answers_button',
+        'primary_color',
+        'theme_color_success',
+        'theme_color_danger',
+        'theme_color_background',
+        'theme_round_borders',
+        'primary_font',
     ]
 
     def clean(self):

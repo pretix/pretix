@@ -4,7 +4,6 @@ from urllib.parse import urlparse
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -15,10 +14,9 @@ from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import Device, Gate, GiftCard, Organizer, Team
-from pretix.control.forms import ExtFileField, FontSelect, SplitDateTimeField
+from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import SafeEventMultipleChoiceField
 from pretix.multidomain.models import KnownDomain
-from pretix.presale.style import get_fonts
 
 
 class OrganizerForm(I18nModelForm):
@@ -226,52 +224,15 @@ class OrganizerSettingsForm(SettingsForm):
         'giftcard_expiry_years',
         'locales',
         'event_team_provisioning',
+        'primary_color',
+        'theme_color_success',
+        'theme_color_danger',
+        'theme_color_background',
+        'theme_round_borders',
+        'primary_font'
+
     ]
 
-    primary_color = forms.CharField(
-        label=_("Primary color"),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    theme_color_success = forms.CharField(
-        label=_("Accent color for success"),
-        help_text=_("We strongly suggest to use a shade of green."),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    theme_color_danger = forms.CharField(
-        label=_("Accent color for errors"),
-        help_text=_("We strongly suggest to use a shade of red."),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
-    )
-    theme_color_background = forms.CharField(
-        label=_("Page background color"),
-        required=False,
-        validators=[
-            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-
-        ],
-        widget=forms.TextInput(attrs={'class': 'colorpickerfield no-contrast'})
-    )
-    theme_round_borders = forms.BooleanField(
-        label=_("Use round edges"),
-        required=False,
-    )
     organizer_logo_image = ExtFileField(
         label=_('Header image'),
         ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
@@ -282,14 +243,6 @@ class OrganizerSettingsForm(SettingsForm):
                     'can increase the size with the setting below. We recommend not using small details on the picture '
                     'as it will be resized on smaller screens.')
     )
-    primary_font = forms.ChoiceField(
-        label=_('Font'),
-        choices=[
-            ('Open Sans', 'Open Sans')
-        ],
-        widget=FontSelect,
-        help_text=_('Only respected by modern browsers.')
-    )
     favicon = ExtFileField(
         label=_('Favicon'),
         ext_whitelist=(".ico", ".png", ".jpg", ".gif", ".jpeg"),
@@ -298,12 +251,6 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
                     'We recommend a size of at least 200x200px to accommodate most devices.')
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['primary_font'].choices += [
-            (a, {"title": a, "data": v}) for a, v in get_fonts().items()
-        ]
 
 
 class WebHookForm(forms.ModelForm):

@@ -18,7 +18,9 @@ from pretix.base.models import (
     CartPosition, Device, Event, TaxRule, TeamAPIToken,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers.dicts import merge_dicts
+from pretix.presale.style import regenerate_css
 from pretix.presale.views.organizer import filter_qs_by_attr
 
 with scopes_disabled():
@@ -385,5 +387,7 @@ class EventSettingsView(views.APIView):
                     k: v for k, v in s.validated_data.items()
                 }
             )
+        if any(p in s.changed_data for p in SETTINGS_AFFECTING_CSS):
+            regenerate_css.apply_async(args=(request.organizer.pk,))
         s = EventSettingsSerializer(instance=request.event.settings, event=request.event)
         return Response(s.data)

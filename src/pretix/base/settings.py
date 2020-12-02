@@ -9,7 +9,9 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files import File
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    MaxValueValidator, MinValueValidator, RegexValidator,
+)
 from django.db.models import Model
 from django.utils.translation import (
     gettext_lazy as _, gettext_noop, pgettext, pgettext_lazy,
@@ -26,7 +28,9 @@ from pretix.base.reldate import (
     RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
     SerializerRelativeDateField, SerializerRelativeDateTimeField,
 )
-from pretix.control.forms import MultipleLanguagesWidget, SingleLanguageWidget
+from pretix.control.forms import (
+    FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
+)
 from pretix.helpers.countries import CachedCountries
 
 
@@ -35,6 +39,18 @@ def country_choice_kwargs():
     allcountries.insert(0, ('', _('Select country')))
     return {
         'choices': allcountries
+    }
+
+
+def primary_font_kwargs():
+    from pretix.presale.style import get_fonts
+
+    choices = [('Open Sans', 'Open Sans')]
+    choices += [
+        (a, {"title": a, "data": v}) for a, v in get_fonts().items()
+    ]
+    return {
+        'choices': choices,
     }
 
 
@@ -1604,26 +1620,106 @@ Your {event} team"""))
     'primary_color': {
         'default': settings.PRETIX_PRIMARY_COLOR,
         'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'serializer_kwargs': dict(
+            validators=[
+                RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                               message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+            ],
+        ),
+        'form_kwargs': dict(
+            label=_("Primary color"),
+            validators=[
+                RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                               message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+            ],
+            widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+        ),
     },
     'theme_color_success': {
         'default': '#50A167',
-        'type': str
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'serializer_kwargs': dict(
+            validators=[
+                RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                               message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+            ],
+        ),
+        'form_kwargs': dict(
+            label=_("Accent color for success"),
+            help_text=_("We strongly suggest to use a shade of green."),
+            validators=[
+                RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                               message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+            ],
+            widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+        ),
     },
     'theme_color_danger': {
         'default': '#D36060',
-        'type': str
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'serializer_kwargs': dict(
+            validators=[
+                RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                               message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+            ],
+        ),
+        'form_kwargs': dict(
+            label=_("Accent color for errors"),
+            help_text=_("We strongly suggest to use a shade of red."),
+            validators=[
+                RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                               message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+            ],
+            widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+        ),
     },
     'theme_color_background': {
         'default': '#FFFFFF',
-        'type': str
+        'type': str,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
+        'serializer_kwargs': dict(
+            validators=[
+                RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                               message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+            ],
+        ),
+        'form_kwargs': dict(
+            label=_("Page background color"),
+            validators=[
+                RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                               message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+            ],
+            widget=forms.TextInput(attrs={'class': 'colorpickerfield no-contrast'})
+        ),
     },
     'theme_round_borders': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Use round edges"),
+        )
     },
     'primary_font': {
         'default': 'Open Sans',
-        'type': str
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': lambda: dict(**primary_font_kwargs()),
+        'form_kwargs': lambda: dict(
+            label=_('Font'),
+            help_text=_('Only respected by modern browsers.'),
+            widget=FontSelect,
+            **primary_font_kwargs()
+        ),
     },
     'presale_css_file': {
         'default': None,
@@ -1916,6 +2012,10 @@ Your {event} team"""))
             label=_("Show button to copy user input from other products"),
         ),
     }
+}
+SETTINGS_AFFECTING_CSS = {
+    'primary_color', 'theme_color_success', 'theme_color_danger', 'primary_font',
+    'theme_color_background', 'theme_round_borders'
 }
 PERSON_NAME_TITLE_GROUPS = OrderedDict([
     ('english_common', (_('Most common English titles'), (
@@ -2232,8 +2332,8 @@ class SettingsSandbox:
 
 
 def validate_settings(event, settings_dict):
-    from pretix.base.signals import validate_event_settings
     from pretix.base.models import Event
+    from pretix.base.signals import validate_event_settings
 
     if 'locales' in settings_dict and settings_dict['locale'] not in settings_dict['locales']:
         raise ValidationError({

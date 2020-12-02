@@ -203,10 +203,17 @@ class OrganizerSettingsSerializer(serializers.Serializer):
         'giftcard_expiry_years',
         'locales',
         'event_team_provisioning',
+        'primary_color',
+        'theme_color_success',
+        'theme_color_danger',
+        'theme_color_background',
+        'theme_round_borders',
+        'primary_font'
     ]
 
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
+        self.changed_data = []
         super().__init__(*args, **kwargs)
         for fname in self.default_fields:
             kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
@@ -230,8 +237,10 @@ class OrganizerSettingsSerializer(serializers.Serializer):
         for attr, value in validated_data.items():
             if value is None:
                 instance.delete(attr)
+                self.changed_data.append(attr)
             elif instance.get(attr, as_type=type(value)) != value:
                 instance.set(attr, value)
+                self.changed_data.append(attr)
         return instance
 
     def validate(self, data):

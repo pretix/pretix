@@ -39,6 +39,7 @@ from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import multiexport
 from pretix.base.services.mail import SendMailException, mail
+from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import (
@@ -287,11 +288,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
                     for k in self.sform.changed_data
                 }
             )
-            display_properties = (
-                'primary_color', 'theme_color_success', 'theme_color_danger', 'primary_font',
-                'theme_color_background', 'theme_round_borders'
-            )
-            if any(p in self.sform.changed_data for p in display_properties):
+            if any(p in self.sform.changed_data for p in SETTINGS_AFFECTING_CSS):
                 change_css = True
         if form.has_changed():
             self.request.organizer.log_action(

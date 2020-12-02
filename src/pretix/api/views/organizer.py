@@ -6,7 +6,9 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import filters, mixins, serializers, status, viewsets, views
+from rest_framework import (
+    filters, mixins, serializers, status, views, viewsets,
+)
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
@@ -16,14 +18,16 @@ from rest_framework.viewsets import GenericViewSet
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
     DeviceSerializer, GiftCardSerializer, OrganizerSerializer,
-    SeatingPlanSerializer, TeamAPITokenSerializer, TeamInviteSerializer,
-    TeamMemberSerializer, TeamSerializer,
-    OrganizerSettingsSerializer)
+    OrganizerSettingsSerializer, SeatingPlanSerializer, TeamAPITokenSerializer,
+    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
+)
 from pretix.base.models import (
     Device, GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
     User,
 )
+from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers.dicts import merge_dicts
+from pretix.presale.style import regenerate_organizer_css
 
 
 class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
@@ -426,5 +430,7 @@ class OrganizerSettingsView(views.APIView):
                     k: v for k, v in s.validated_data.items()
                 }
             )
+        if any(p in s.changed_data for p in SETTINGS_AFFECTING_CSS):
+            regenerate_organizer_css.apply_async(args=(request.organizer.pk,))
         s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer)
         return Response(s.data)

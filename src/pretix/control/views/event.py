@@ -56,7 +56,7 @@ from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
 from ...base.models.items import ItemMetaProperty
-from ...base.settings import LazyI18nStringList
+from ...base.settings import SETTINGS_AFFECTING_CSS, LazyI18nStringList
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -161,11 +161,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             if self.confirm_texts_formset.has_changed():
                 data.update(confirm_texts=self.confirm_texts_formset.cleaned_data)
             self.request.event.log_action('pretix.event.settings', user=self.request.user, data=data)
-            display_properties = (
-                'primary_color', 'theme_color_success', 'theme_color_danger', 'primary_font',
-                'theme_color_background', 'theme_round_borders',
-            )
-            if any(p in self.sform.changed_data for p in display_properties):
+            if any(p in self.sform.changed_data for p in SETTINGS_AFFECTING_CSS):
                 change_css = True
         if form.has_changed():
             self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
