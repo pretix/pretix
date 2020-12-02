@@ -424,7 +424,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 add_subevents_for_days(
                     filter_qs_by_attr(
                         self.request.event.subevents_annotated('web').filter(
-                            sales_channels__contains=self.request.sales_channel.identifier
+                            event__sales_channels__contains=self.request.sales_channel.identifier
                         ), self.request
                     ),
                     before, after, ebd, set(), self.request.event,
