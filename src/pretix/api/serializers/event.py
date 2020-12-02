@@ -124,7 +124,8 @@ class EventSerializer(I18nAwareModelSerializer):
         fields = ('name', 'slug', 'live', 'testmode', 'currency', 'date_from',
                   'date_to', 'date_admission', 'is_public', 'presale_start',
                   'presale_end', 'location', 'geo_lat', 'geo_lon', 'has_subevents', 'meta_data', 'seating_plan',
-                  'plugins', 'seat_category_mapping', 'timezone', 'item_meta_properties', 'valid_keys')
+                  'plugins', 'seat_category_mapping', 'timezone', 'item_meta_properties', 'valid_keys',
+                  'sales_channels')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

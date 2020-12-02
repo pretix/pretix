@@ -29,6 +29,7 @@ from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
 from pretix.helpers.thumb import get_thumbnail
+from pretix.base.models.fields import MultiStringField
 
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
@@ -409,7 +410,12 @@ class Event(EventMixin, LoggedModel):
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
                                      related_name='events')
-
+    sales_channels = MultiStringField(
+        verbose_name=_('Restrict to specific sales channels'),
+        help_text=_('Only sell tickets for this event on the following sales channels.'),
+        default=['web'],
+        blank=True,
+    )
     objects = ScopedManager(organizer='organizer')
 
     class Meta:
