@@ -15,14 +15,14 @@ from rest_framework.viewsets import GenericViewSet
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
-    DeviceSerializer, GiftCardSerializer, OrganizerSerializer,
-    SeatingPlanSerializer, TeamAPITokenSerializer, TeamInviteSerializer,
-    TeamMemberSerializer, TeamSerializer,
-    GiftCardTransactionSerializer)
+    DeviceSerializer, GiftCardSerializer, GiftCardTransactionSerializer,
+    OrganizerSerializer, SeatingPlanSerializer, TeamAPITokenSerializer,
+    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
+)
 from pretix.base.models import (
-    Device, GiftCard, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
-    User,
-    GiftCardTransaction)
+    Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan, Team,
+    TeamAPIToken, TeamInvite, User,
+)
 from pretix.helpers.dicts import merge_dicts
 
 
