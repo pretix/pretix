@@ -262,7 +262,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("invoice_country", {
         "label": _("Invoice address country"),
         "editor_sample": _("Atlantis"),
-        "evaluate": lambda op, order, ev: order.invoice_address.country if getattr(order, 'invoice_address', None) else ''
+        "evaluate": lambda op, order, ev: str(getattr(order.invoice_address.country, 'name', '')) if getattr(order, 'invoice_address', None) else ''
     }),
     ("addons", {
         "label": _("List of Add-Ons"),
