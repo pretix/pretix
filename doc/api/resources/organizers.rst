@@ -165,7 +165,7 @@ information about the properties.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
 
-.. http:patch:: /api/v1/organizers/(organizer)//settings/
+.. http:patch:: /api/v1/organizers/(organizer)/settings/
 
    Updates organizer settings. Note that ``PUT`` is not allowed here, only ``PATCH``.
 
