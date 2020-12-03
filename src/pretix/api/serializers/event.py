@@ -661,10 +661,17 @@ class EventSettingsSerializer(serializers.Serializer):
         'change_allow_user_variation',
         'change_allow_user_until',
         'change_allow_user_price',
+        'primary_color',
+        'theme_color_success',
+        'theme_color_danger',
+        'theme_color_background',
+        'theme_round_borders',
+        'primary_font',
     ]
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
+        self.changed_data = []
         super().__init__(*args, **kwargs)
         for fname in self.default_fields:
             kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
@@ -693,8 +700,10 @@ class EventSettingsSerializer(serializers.Serializer):
         for attr, value in validated_data.items():
             if value is None:
                 instance.delete(attr)
+                self.changed_data.append(attr)
             elif instance.get(attr, as_type=type(value)) != value:
                 instance.set(attr, value)
+                self.changed_data.append(attr)
         return instance
 
     def validate(self, data):

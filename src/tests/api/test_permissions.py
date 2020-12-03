@@ -137,6 +137,8 @@ event_permission_sub_urls = [
 ]
 
 org_permission_sub_urls = [
+    ('get', 'can_change_organizer_settings', 'settings/', 200),
+    ('patch', 'can_change_organizer_settings', 'settings/', 200),
     ('get', 'can_change_organizer_settings', 'webhooks/', 200),
     ('post', 'can_change_organizer_settings', 'webhooks/', 400),
     ('get', 'can_change_organizer_settings', 'webhooks/1/', 404),
