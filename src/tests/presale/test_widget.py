@@ -121,6 +121,21 @@ class WidgetCartTest(CartTestMixin, TestCase):
         self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[0].text)
         self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[1].text)
 
+    def test_saleschannel_disabled(self):
+        self.event.sales_channels = []
+        self.event.save()
+        response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
+        data = json.loads(response.content.decode())
+        assert data == {
+            "error": "Tickets for this event cannot be purchased on this sales channel.",
+            'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
+        }
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post('/%s/%s/w/aaaaaaaaaaaaaaab/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertEqual(response.status_code, 404)
+
     def test_product_list_view(self):
         response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'

@@ -47,6 +47,8 @@ item_meta_properties                  object                     Item-specific m
 valid_keys                            object                     Cryptographic keys for non-default signature schemes.
                                                                  For performance reason, value is omitted in lists and
                                                                  only contained in detail views. Value can be cached.
+sales_channels                        list                       A list of sales channels this event is available for
+                                                                 sale on.
 ===================================== ========================== =======================================================
 
 
@@ -90,6 +92,11 @@ valid_keys                            object                     Cryptographic k
 .. versionchanged:: 3.12
 
    The attribute ``valid_keys`` has been added.
+
+.. versionchanged:: 3.14
+
+    The attribute ``sales_channels`` has been added.
+
 
 Endpoints
 ---------
@@ -147,11 +154,16 @@ Endpoints
             "timezone": "Europe/Berlin",
             "item_meta_properties": {},
             "plugins": [
-              "pretix.plugins.banktransfer"
-              "pretix.plugins.stripe"
-              "pretix.plugins.paypal"
+              "pretix.plugins.banktransfer",
+              "pretix.plugins.stripe",
+              "pretix.plugins.paypal",
               "pretix.plugins.ticketoutputpdf"
             ],
+            "sales_channels": [
+              "web",
+              "pretixpos",
+              "resellers"
+            ]
           }
         ]
       }
@@ -170,6 +182,7 @@ Endpoints
         only contain the events matching the set criteria. Providing ``?attr[Format]=Seminar`` would return only those
         events having set their ``Format`` meta data to ``Seminar``, ``?attr[Format]=`` only those, that have no value
         set. Please note that this filter will respect default values set on organizer level.
+   :query sales_channel: If set to a sales channel identifier, only events allowed to be sold on the specified sales channel are returned.
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
    :statuscode 401: Authentication failure
@@ -219,16 +232,21 @@ Endpoints
         "timezone": "Europe/Berlin",
         "item_meta_properties": {},
         "plugins": [
-          "pretix.plugins.banktransfer"
-          "pretix.plugins.stripe"
-          "pretix.plugins.paypal"
+          "pretix.plugins.banktransfer",
+          "pretix.plugins.stripe",
+          "pretix.plugins.paypal",
           "pretix.plugins.ticketoutputpdf"
         ],
         "valid_keys": {
           "pretix_sig1": [
             "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUNvd0JRWURLMlZ3QXlFQTdBRDcvdkZBMzNFc1k0ejJQSHI3aVpQc1o4bjVkaDBhalA4Z3l6Tm1tSXM9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo="
           ]
-        }
+        },
+        "sales_channels": [
+          "web",
+          "pretixpos",
+          "resellers"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -279,6 +297,11 @@ Endpoints
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
+        ],
+        "sales_channels": [
+          "web",
+          "pretixpos",
+          "resellers"
         ]
       }
 
@@ -314,6 +337,11 @@ Endpoints
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
+        ],
+        "sales_channels": [
+          "web",
+          "pretixpos",
+          "resellers"
         ]
       }
 
@@ -369,6 +397,11 @@ Endpoints
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
+        ],
+        "sales_channels": [
+          "web",
+          "pretixpos",
+          "resellers"
         ]
       }
 
@@ -404,6 +437,11 @@ Endpoints
         "plugins": [
           "pretix.plugins.stripe",
           "pretix.plugins.paypal"
+        ],
+        "sales_channels": [
+          "web",
+          "pretixpos",
+          "resellers"
         ]
       }
 
@@ -473,6 +511,11 @@ Endpoints
           "pretix.plugins.stripe",
           "pretix.plugins.paypal",
           "pretix.plugins.pretixdroid"
+        ],
+        "sales_channels": [
+          "web",
+          "pretixpos",
+          "resellers"
         ]
       }
 

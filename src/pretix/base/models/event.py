@@ -23,6 +23,7 @@ from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models.base import LoggedModel
+from pretix.base.models.fields import MultiStringField
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.validators import EventSlugBanlistValidator
 from pretix.helpers.database import GroupConcat
@@ -331,6 +332,8 @@ class Event(EventMixin, LoggedModel):
     :type plugins: str
     :param has_subevents: Enable event series functionality
     :type has_subevents: bool
+    :param sales_channels: A list of sales channel identifiers, that this event is available for sale on
+    :type sales_channels: list
     """
 
     settings_namespace = 'event'
@@ -409,7 +412,11 @@ class Event(EventMixin, LoggedModel):
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
                                      related_name='events')
-
+    sales_channels = MultiStringField(
+        verbose_name=_('Restrict to specific sales channels'),
+        help_text=_('Only sell tickets for this event on the following sales channels.'),
+        default=['web'],
+    )
     objects = ScopedManager(organizer='organizer')
 
     class Meta:

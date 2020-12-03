@@ -85,7 +85,8 @@ TEST_EVENT_RES = {
     ],
     'item_meta_properties': {
         'day': 'Monday',
-    }
+    },
+    'sales_channels': ['web']
 }
 
 

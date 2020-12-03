@@ -11,7 +11,6 @@ from django.urls import resolve
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scope
 
-from pretix.base.channels import WebshopSalesChannel
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Event, Organizer
 from pretix.multidomain.urlreverse import (
@@ -32,6 +31,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
         db = settings.DATABASE_REPLICA
 
     url = resolve(request.path_info)
+
     try:
         if hasattr(request, 'event_domain'):
             # We are on an event's custom domain
@@ -127,9 +127,6 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 if require_plugin not in request.event.get_plugins() and not is_core:
                     raise Http404(_('This feature is not enabled.'))
 
-            if not hasattr(request, 'sales_channel'):
-                # The environ lookup is only relevant during unit testing
-                request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', WebshopSalesChannel())
             for receiver, response in process_request.send(request.event, request=request):
                 if response:
                     return response

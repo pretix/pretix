@@ -28,6 +28,7 @@ with scopes_disabled():
         is_past = django_filters.rest_framework.BooleanFilter(method='is_past_qs')
         is_future = django_filters.rest_framework.BooleanFilter(method='is_future_qs')
         ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
+        sales_channel = django_filters.rest_framework.CharFilter(method='sales_channel_qs')
 
         class Meta:
             model = Event
@@ -68,6 +69,9 @@ with scopes_disabled():
                 return queryset.filter(expr)
             else:
                 return queryset.exclude(expr)
+
+        def sales_channel_qs(self, queryset, name, value):
+            return queryset.filter(sales_channels__contains=value)
 
 
 class EventViewSet(viewsets.ModelViewSet):

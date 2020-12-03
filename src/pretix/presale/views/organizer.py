@@ -101,6 +101,7 @@ class EventListMixin:
     def _get_event_queryset(self):
         query = Q(is_public=True) & Q(live=True)
         qs = self.request.organizer.events.using(settings.DATABASE_REPLICA).filter(query)
+        qs = qs.filter(sales_channels__contains=self.request.sales_channel.identifier)
         qs = qs.annotate(
             min_from=Min('subevents__date_from'),
             min_to=Min('subevents__date_to'),
@@ -487,11 +488,16 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
+            settings.DATABASE_REPLICA
+        ).filter(
+            sales_channels__contains=self.request.sales_channel.identifier
+        ), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
+            event__sales_channels__contains=self.request.sales_channel.identifier
         ).prefetch_related(
             'event___settings_objects', 'event__organizer___settings_objects'
         )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
@@ -539,11 +545,16 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
+            settings.DATABASE_REPLICA
+        ).filter(
+            sales_channels__contains=self.request.sales_channel.identifier
+        ), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
+            event__sales_channels__contains=self.request.sales_channel.identifier
         ).prefetch_related(
             'event___settings_objects', 'event__organizer___settings_objects'
         )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
@@ -556,7 +567,12 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
     def get(self, request, *args, **kwargs):
         events = list(
             filter_qs_by_attr(
-                self.request.organizer.events.filter(is_public=True, live=True, has_subevents=False),
+                self.request.organizer.events.filter(
+                    is_public=True,
+                    live=True,
+                    has_subevents=False,
+                    sales_channels__contains=self.request.sales_channel.identifier
+                ),
                 request
             ).order_by(
                 'date_from'
@@ -571,7 +587,8 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
                     event__is_public=True,
                     event__live=True,
                     is_public=True,
-                    active=True
+                    active=True,
+                    event__sales_channels__contains=self.request.sales_channel.identifier
                 ),
                 request
             ).prefetch_related(

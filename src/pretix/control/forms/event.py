@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db.models import Q
-from django.forms import formset_factory
+from django.forms import CheckboxSelectMultiple, formset_factory
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -311,6 +311,16 @@ class EventUpdateForm(I18nModelForm):
                 required=False,
                 help_text=_('You need to configure the custom domain in the webserver beforehand.')
             )
+        self.fields['sales_channels'] = forms.MultipleChoiceField(
+            label=self.fields['sales_channels'].label,
+            help_text=self.fields['sales_channels'].help_text,
+            required=self.fields['sales_channels'].required,
+            initial=self.fields['sales_channels'].initial,
+            choices=(
+                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
+            ),
+            widget=forms.CheckboxSelectMultiple
+        )
 
     def clean_domain(self):
         d = self.cleaned_data['domain']
@@ -367,6 +377,7 @@ class EventUpdateForm(I18nModelForm):
             'location',
             'geo_lat',
             'geo_lon',
+            'sales_channels'
         ]
         field_classes = {
             'date_from': SplitDateTimeField,
@@ -381,6 +392,7 @@ class EventUpdateForm(I18nModelForm):
             'date_admission': SplitDateTimePickerWidget(attrs={'data-date-default': '#id_date_from_0'}),
             'presale_start': SplitDateTimePickerWidget(),
             'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
+            'sales_channels': CheckboxSelectMultiple()
         }
 
 
