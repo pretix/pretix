@@ -1018,6 +1018,23 @@ class DeadlineTest(EventTestMixin, TestCase):
         )
         self.assertNotEqual(response.status_code, 403)
 
+    def test_saleschannel_disabled(self):
+        self.event.presale_start = None
+        self.event.presale_end = None
+        self.event.sales_channels = []
+        self.event.save()
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 404)
+        response = self.client.post(
+            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
+            {
+                'item_%d' % self.item.id: '1'
+            }
+        )
+        self.assertEqual(response.status_code, 404)
+
     def test_in_time(self):
         self.event.presale_start = now() - datetime.timedelta(days=1)
         self.event.presale_end = now() + datetime.timedelta(days=1)
