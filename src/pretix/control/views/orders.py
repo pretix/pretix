@@ -1885,7 +1885,8 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
         )
         qs = order.all_logentries()
         qs = qs.filter(
-            action_type__contains="order.email"
+            Q(action_type__contains="order.email") |
+            Q(action_type__contains="order.position.email")
         )
         return qs
 

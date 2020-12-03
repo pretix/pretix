@@ -150,6 +150,8 @@ org_permission_sub_urls = [
     ('get', 'can_manage_gift_cards', 'giftcards/1/', 404),
     ('put', 'can_manage_gift_cards', 'giftcards/1/', 404),
     ('patch', 'can_manage_gift_cards', 'giftcards/1/', 404),
+    ('get', 'can_manage_gift_cards', 'giftcards/1/transactions/', 404),
+    ('get', 'can_manage_gift_cards', 'giftcards/1/transactions/1/', 404),
     ('get', 'can_change_organizer_settings', 'devices/', 200),
     ('post', 'can_change_organizer_settings', 'devices/', 400),
     ('get', 'can_change_organizer_settings', 'devices/1/', 404),

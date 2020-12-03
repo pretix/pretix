@@ -3,7 +3,7 @@ from io import BytesIO
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from PIL import Image
+from PIL import Image, ImageOps
 from PIL.Image import LANCZOS
 
 from pretix.helpers.models import Thumbnail
@@ -55,6 +55,9 @@ def create_thumbnail(sourcename, size):
         image.load()
     except:
         raise ThumbnailError('Could not load image')
+
+    # before we calc thumbnail, we need to check and apply EXIF-orientation
+    image = ImageOps.exif_transpose(image)
 
     scale, crop = get_sizes(size, image.size)
     image = image.resize(scale, resample=LANCZOS)

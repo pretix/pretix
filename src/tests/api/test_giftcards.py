@@ -186,3 +186,26 @@ def test_giftcard_no_deletion(token_client, organizer, event, giftcard):
         '/api/v1/organizers/{}/giftcards/{}/'.format(organizer.slug, giftcard.pk),
     )
     assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_giftcard_transactions(token_client, organizer, giftcard):
+    resp = token_client.get(
+        '/api/v1/organizers/{}/giftcards/{}/transactions/'.format(organizer.slug, giftcard.pk),
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        "count": 1,
+        "next": None,
+        "previous": None,
+        "results": [
+            {
+                "id": giftcard.transactions.first().pk,
+                "datetime": giftcard.transactions.first().datetime.isoformat().replace("+00:00", "Z"),
+                "value": "23.00",
+                "event": None,
+                "order": None,
+                "text": None
+            }
+        ]
+    }

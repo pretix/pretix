@@ -22,8 +22,27 @@ expires                               datetime                   Expiry date (or
 conditions                            string                     Special terms and conditions for this card (or ``null``)
 ===================================== ========================== =======================================================
 
+The gift card transaction resource contains the following public fields:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID of the gift card transaction
+datetime                              datetime                   Creation date of the transaction
+value                                 money (string)             Transaction amount
+event                                 string                     Event slug, if the gift card was used in the web shop (or ``null``)
+order                                 string                     Order code, if the gift card was used in the web shop (or ``null``)
+text                                  string                     Custom text of the transaction (or ``null``)
+===================================== ========================== =======================================================
+
 Endpoints
 ---------
+
+.. versionadded:: 3.14
+
+   The transaction list endpoint was added.
 
 .. http:get:: /api/v1/organizers/(organizer)/giftcards/
 
@@ -250,3 +269,45 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to change this resource.
    :statuscode 409: There is not sufficient credit on the gift card.
+
+.. http:get:: /api/v1/organizers/(organizer)/giftcards/(id)/transactions/
+
+   List all transactions of a gift card.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/giftcards/1/transactions/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 82,
+            "datetime": "2020-06-22T15:41:42.800534Z",
+            "value": "50.00",
+            "event": "democon",
+            "order": "FXQYW",
+            "text": null
+          }
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer to view
+   :param id: The ``id`` field of the gift card to view
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
