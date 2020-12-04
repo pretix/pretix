@@ -951,6 +951,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['order'] = get_object_or_404(Order, code=self.kwargs['order'], event=self.request.event)
+        ctx['event'] = self.request.event
         return ctx
 
     def get_queryset(self):
