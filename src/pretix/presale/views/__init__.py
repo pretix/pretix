@@ -24,6 +24,10 @@ def cached_invoice_address(request):
     from .cart import cart_session
 
     if not hasattr(request, '_checkout_flow_invoice_address'):
+        if not request.session.session_key:
+            # do not create a session, if we don't have a session we also don't have an invoice address ;)
+            request._checkout_flow_invoice_address = InvoiceAddress()
+            return request._checkout_flow_invoice_address
         cs = cart_session(request)
         iapk = cs.get('invoice_address')
         if not iapk:
