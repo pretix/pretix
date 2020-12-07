@@ -17,7 +17,7 @@ from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
-from pretix.base.settings import DEFAULTS, validate_settings
+from pretix.base.settings import DEFAULTS, validate_event_settings
 from pretix.base.signals import api_event_settings_fields
 
 
@@ -711,7 +711,7 @@ class EventSettingsSerializer(serializers.Serializer):
         data = super().validate(data)
         settings_dict = self.instance.freeze()
         settings_dict.update(data)
-        validate_settings(self.event, settings_dict)
+        validate_event_settings(self.event, settings_dict)
         return data
 
 

@@ -15,7 +15,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
-from pretix.base.settings import DEFAULTS, validate_settings
+from pretix.base.settings import DEFAULTS, validate_organizer_settings
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -262,5 +262,5 @@ class OrganizerSettingsSerializer(serializers.Serializer):
         data = super().validate(data)
         settings_dict = self.instance.freeze()
         settings_dict.update(data)
-        validate_settings(self.organizer, settings_dict)
+        validate_organizer_settings(self.organizer, settings_dict)
         return data

@@ -25,7 +25,7 @@ from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import (
-    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_settings,
+    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.control.forms import (
     ExtFileField, MultipleLanguagesWidget, SlugWidget, SplitDateTimeField,
@@ -496,7 +496,7 @@ class EventSettingsForm(SettingsForm):
         data = super().clean()
         settings_dict = self.event.settings.freeze()
         settings_dict.update(data)
-        validate_settings(self.event, data)
+        validate_event_settings(self.event, data)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -585,7 +585,7 @@ class PaymentSettingsForm(SettingsForm):
         data = super().clean()
         settings_dict = self.obj.settings.freeze()
         settings_dict.update(data)
-        validate_settings(self.obj, data)
+        validate_event_settings(self.obj, data)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -717,7 +717,7 @@ class InvoiceSettingsForm(SettingsForm):
         data = super().clean()
         settings_dict = self.obj.settings.freeze()
         settings_dict.update(data)
-        validate_settings(self.obj, data)
+        validate_event_settings(self.obj, data)
         return data
 
 

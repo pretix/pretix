@@ -2331,7 +2331,7 @@ class SettingsSandbox:
         self._event.settings.set(self._convert_key(key), value)
 
 
-def validate_settings(event, settings_dict):
+def validate_event_settings(event, settings_dict):
     from pretix.base.models import Event
     from pretix.base.signals import validate_event_settings
 
@@ -2365,3 +2365,12 @@ def validate_settings(event, settings_dict):
 
     if isinstance(event, Event):
         validate_event_settings.send(sender=event, settings_dict=settings_dict)
+
+
+def validate_organizer_settings(organizer, settings_dict):
+    # This is not doing anything for the time being.
+    # But earlier we called validate_event_settings for the organizer, too - and that didn't do anything for
+    # organizer-settings either.
+    #
+    # N.B.: When actually fleshing out this stub, adding it to the OrganizerUpdateForm should be considered.
+    pass
