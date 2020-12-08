@@ -1,6 +1,7 @@
 import copy
 import tempfile
 from collections import OrderedDict, defaultdict
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 
 import pytz
@@ -9,17 +10,19 @@ from django import forms
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.db import models
-from django.db.models import Max, OuterRef, Subquery, Sum
-from django.template.defaultfilters import floatformat
+from django.db.models import DateTimeField, Max, OuterRef, Subquery, Sum
+from django.template.defaultfilters import floatformat, time
 from django.utils.formats import date_format, localize
-from django.utils.timezone import get_current_timezone, now
+from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
+from django_countries.fields import Country
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
 from reportlab.platypus import PageBreak
 
 from pretix.base.decimal import round_decimal
-from pretix.base.exporter import BaseExporter, ListExporter
+from pretix.base.exporter import BaseExporter, MultiSheetListExporter
+from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee, OrderPayment
@@ -503,9 +506,17 @@ class OrderTaxListReportPDF(Report):
         return story
 
 
-class OrderTaxListReport(ListExporter):
+class OrderTaxListReport(MultiSheetListExporter):
     identifier = 'ordertaxeslist'
     verbose_name = gettext_lazy('List of orders with taxes')
+
+    @property
+    def sheets(self):
+        return (
+            ('orders', _('Orders')),
+            ('countries', _('Taxes by country')),
+            ('companies', _('Business customers')),
+        )
 
     @property
     def export_form_fields(self):
@@ -531,12 +542,192 @@ class OrderTaxListReport(ListExporter):
                      widget=forms.RadioSelect,
                      required=False
                  )),
+                ('date_axis',
+                 forms.ChoiceField(
+                     label=_('Date filter'),
+                     choices=(
+                         ('', _('Filter by…')),
+                         ('order_date', _('Order date')),
+                         ('last_payment_date', _('Date of last successful payment')),
+                     ),
+                     required=False,
+                 )),
+                ('date_from', forms.DateField(
+                    label=_('Date from'),
+                    required=False,
+                    widget=DatePickerWidget,
+                )),
+                ('date_until', forms.DateField(
+                    label=_('Date until'),
+                    required=False,
+                    widget=DatePickerWidget,
+                ))
             ]
         ))
         return f
 
-    def iterate_list(self, form_data):
-        tz = pytz.timezone(self.event.settings.timezone)
+    def filter_qs(self, qs, form_data):
+        date_from = form_data.get('date_from')
+        date_until = form_data.get('date_until')
+        date_filter = form_data.get('date_axis')
+        if date_from and isinstance(date_from, date):
+            date_from = make_aware(datetime.combine(
+                date_from,
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), self.event.timezone)
+
+        if date_until and isinstance(date_until, date):
+            date_until = make_aware(datetime.combine(
+                date_until + timedelta(days=1),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), self.event.timezone)
+
+        if date_filter == 'order_date':
+            if date_from:
+                qs = qs.filter(order__datetime__gte=date_from)
+            if date_until:
+                qs = qs.filter(order__datetime__lt=date_until)
+        elif date_filter == 'last_payment_date':
+            p_date = OrderPayment.objects.filter(
+                order=OuterRef('order'),
+                state__in=[OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED],
+                payment_date__isnull=False
+            ).values('order').annotate(
+                m=Max('payment_date')
+            ).values('m').order_by()
+            qs = qs.annotate(payment_date=Subquery(p_date, output_field=DateTimeField()))
+            if date_from:
+                qs = qs.filter(payment_date__gte=date_from)
+            if date_until:
+                qs = qs.filter(payment_date__lt=date_until)
+        return qs
+
+    def iterate_sheet(self, form_data, sheet):
+        if sheet == 'orders':
+            yield from self.iterate_orders(form_data)
+        elif sheet == 'countries':
+            yield from self.iterate_countries(form_data)
+        elif sheet == 'companies':
+            yield from self.iterate_companies(form_data)
+
+    def _combine(self, *qs, keys=tuple()):
+        cache = {}
+
+        def kf(r):
+            return tuple(r[k] for k in keys)
+
+        for q in qs:
+            for r in q:
+                if kf(r) not in cache:
+                    cache[kf(r)] = {
+                        'prices': Decimal('0.00'),
+                        'tax_values': Decimal('0.00'),
+                    }
+                cache[kf(r)]['prices'] += (r['prices'] or Decimal('0.00'))
+                cache[kf(r)]['tax_values'] += (r['tax_values'] or Decimal('0.00'))
+
+        return [
+            dict(**{kname: k[i] for i, kname in enumerate(keys)}, **v)
+            for k, v in sorted(cache.items(), key=lambda item: item[0])
+        ]
+
+    def iterate_countries(self, form_data):
+        keys = (
+            'order__invoice_address__country',
+            'tax_rate',
+        )
+        opqs = self.filter_qs(OrderPosition.objects, form_data).filter(
+            order__status__in=form_data['status'],
+            order__event=self.event,
+        ).values(*keys).annotate(
+            prices=Sum('price'),
+            tax_values=Sum('tax_value')
+        )
+        ofqs = self.filter_qs(OrderFee.objects, form_data).filter(
+            order__status__in=form_data['status'],
+            order__event=self.event,
+        ).values(*keys).annotate(
+            prices=Sum('value'),
+            tax_values=Sum('tax_value')
+        )
+        yield [
+            _('Country code'),
+            _('Country'),
+            _('Tax rate'),
+            _('Gross'),
+            _('Tax')
+        ]
+        res = self._combine(opqs, ofqs, keys=keys)
+        for r in res:
+            yield [
+                str(r['order__invoice_address__country']),
+                Country(r['order__invoice_address__country']).name,
+                r['tax_rate'],
+                r['prices'],
+                r['tax_values'],
+            ]
+
+    def iterate_companies(self, form_data):
+        keys = (
+            'order__invoice_address__country',
+            'tax_rate',
+            'order__invoice_address__company',
+            'order__invoice_address__street',
+            'order__invoice_address__zipcode',
+            'order__invoice_address__city',
+            'order__invoice_address__state',
+            'order__invoice_address__vat_id',
+            'order__invoice_address__custom_field',
+        )
+        opqs = self.filter_qs(OrderPosition.objects, form_data).filter(
+            order__status__in=form_data['status'],
+            order__event=self.event,
+            order__invoice_address__is_business=True,
+        ).values(*keys).annotate(
+            prices=Sum('price'),
+            tax_values=Sum('tax_value')
+        )
+        ofqs = self.filter_qs(OrderFee.objects, form_data).filter(
+            order__status__in=form_data['status'],
+            order__event=self.event,
+            order__invoice_address__is_business=True,
+        ).values(*keys).annotate(
+            prices=Sum('value'),
+            tax_values=Sum('tax_value')
+        )
+        yield [
+            _('Country code'),
+            _('Country'),
+            _('Tax rate'),
+            _('Company'),
+            _('Address'),
+            _('ZIP code'),
+            _('City'),
+            pgettext('address', 'State'),
+            _('VAT ID'),
+            self.event.settings.invoice_address_custom_field or 'Custom field',
+            _('Gross'),
+            _('Tax')
+        ]
+        res = self._combine(opqs, ofqs, keys=keys)
+        for r in res:
+            yield [
+                str(r['order__invoice_address__country']),
+                Country(r['order__invoice_address__country']).name,
+                r['tax_rate'],
+                r['order__invoice_address__company'],
+                r['order__invoice_address__street'],
+                r['order__invoice_address__zipcode'],
+                r['order__invoice_address__city'],
+                r['order__invoice_address__state'],
+                r['order__invoice_address__vat_id'],
+                r['order__invoice_address__custom_field'],
+                r['prices'],
+                r['tax_values'],
+            ]
+
+    def iterate_orders(self, form_data):
+        tz = self.event.timezone
 
         tax_rates = set(
             a for a
@@ -568,7 +759,7 @@ class OrderTaxListReport(ListExporter):
         ).values(
             'm'
         ).order_by()
-        qs = OrderPosition.objects.filter(
+        qs = self.filter_qs(OrderPosition.objects, form_data).filter(
             order__status__in=form_data['status'],
             order__event=self.event,
         ).annotate(payment_date=Subquery(op_date, output_field=models.DateTimeField())).values(
