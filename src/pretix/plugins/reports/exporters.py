@@ -628,7 +628,13 @@ class OrderTaxListReport(MultiSheetListExporter):
 
         return [
             dict(**{kname: k[i] for i, kname in enumerate(keys)}, **v)
-            for k, v in sorted(cache.items(), key=lambda item: item[0])
+            for k, v in sorted(
+                cache.items(),
+                key=lambda item: (
+                    tuple(((iv or Decimal('0.00')) if keys[i] == 'tax_rate' else (iv or ''))
+                          for i, iv in enumerate(item))
+                )
+            )
         ]
 
     def iterate_countries(self, form_data):
