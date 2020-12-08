@@ -631,8 +631,10 @@ class OrderTaxListReport(MultiSheetListExporter):
             for k, v in sorted(
                 cache.items(),
                 key=lambda item: (
-                    tuple(((iv or Decimal('0.00')) if keys[i] == 'tax_rate' else (iv or ''))
-                          for i, iv in enumerate(item))
+                    tuple(
+                        ((iv or Decimal('0.00')) if keys[i] == 'tax_rate' else (iv or ''))
+                        for i, iv in enumerate(item[0])
+                    )
                 )
             )
         ]
