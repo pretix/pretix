@@ -5,6 +5,8 @@
         <span class="label label-warning {{ class }}">{% trans "Approval pending" %}</span>
     {% elif order.total == 0 %}
         <span class="label label-warning {{ class }}">{% trans "Confirmation pending" context "order state" %}</span>
+    {% elif event.settings.payment_pending_hidden %}
+        {# intentionally left blank #}
     {% else %}
         <span class="label label-warning {{ class }}">{% trans "Payment pending" %}</span>
     {% endif %}

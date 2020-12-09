@@ -559,6 +559,7 @@ class PaymentSettingsForm(SettingsForm):
         'payment_term_last',
         'payment_term_expire_automatically',
         'payment_term_accept_late',
+        'payment_pending_hidden',
         'payment_explanation',
     ]
     tax_rate_default = forms.ModelChoiceField(

@@ -53,7 +53,7 @@
                 {% trans "View in backend" %}
             </a>
         {% endif %}
-        {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right flip" %}
+        {% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event class="pull-right flip" %}
         <div class="clearfix"></div>
     </h2>
     {% if order.status == "n" and not order.require_approval %}

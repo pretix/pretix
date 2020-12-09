@@ -607,6 +607,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'payment_term_expire_automatically',
         'payment_term_accept_late',
         'payment_explanation',
+        'payment_pending_hidden',
         'ticket_download',
         'ticket_download_date',
         'ticket_download_addons',

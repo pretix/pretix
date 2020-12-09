@@ -553,6 +553,18 @@ DEFAULTS = {
                         "the pool and can be ordered by other people."),
         )
     },
+    'payment_pending_hidden': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Hide "payment pending" state on customer-facing pages'),
+            help_text=_("The payment instructions panel will still be shown to the primary customer, but no indication "
+                        "of missing payment will be visible on the ticket pages of attendees who did not buy the ticket "
+                        "themselves.")
+        )
+    },
     'payment_giftcard__enabled': {
         'default': 'True',
         'type': bool
