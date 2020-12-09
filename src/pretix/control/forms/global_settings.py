@@ -41,6 +41,10 @@ class GlobalSettingsForm(SettingsForm):
                 required=False,
                 label=_("OpenCage API key for geocoding"),
             )),
+            ('mapquest_apikey', SecretKeySettingsField(
+                required=False,
+                label=_("MapQuest API key for geocoding"),
+            )),
             ('leaflet_tiles', forms.CharField(
                 required=False,
                 label=_("Leaflet tiles URL pattern"),

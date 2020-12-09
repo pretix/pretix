@@ -48,6 +48,7 @@ Kosovo
 Lead
 Leaflet
 LLC
+MapQuest
 MOTO
 Multibanco
 multiline

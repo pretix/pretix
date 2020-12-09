@@ -14,20 +14,33 @@ logger = logging.getLogger(__name__)
 
 class GeoCodeView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        gs = GlobalSettingsObject()
-        if not gs.settings.opencagedata_apikey:
-            return JsonResponse({
-                'success': False,
-                'results': []
-            }, status=200)
-
-        q = request.GET.get('q')
+        q = self.request.GET.get('q')
         cd = cache.get('geocode:{}'.format(q))
         if cd:
             return JsonResponse({
                 'success': True,
                 'results': cd
             }, status=200)
+
+        gs = GlobalSettingsObject()
+        if gs.settings.opencagedata_apikey:
+            res = self._use_opencage(q)
+        if gs.settings.mapquest_apikey:
+            res = self._use_mapquest(q)
+        else:
+            return JsonResponse({
+                'success': False,
+                'results': []
+            }, status=200)
+
+        cache.set('geocode:{}'.format(q), res, timeout=3600 * 6)
+        return JsonResponse({
+            'success': True,
+            'results': res
+        }, status=200)
+
+    def _use_opencage(self, q):
+        gs = GlobalSettingsObject()
 
         try:
             r = requests.get(
@@ -51,9 +64,31 @@ class GeoCodeView(LoginRequiredMixin, View):
                 'lon': r['geometry']['lng'],
             } for r in d['results']
         ]
-        cache.set('geocode:{}'.format(q), res, timeout=3600 * 6)
+        return res
 
-        return JsonResponse({
-            'success': True,
-            'results': res
-        }, status=200)
+    def _use_mapquest(self, q):
+        gs = GlobalSettingsObject()
+
+        try:
+            r = requests.get(
+                'http://www.mapquestapi.com/geocoding/v1/address?location={}&key={}'.format(
+                    quote(q), gs.settings.mapquest_apikey
+                )
+            )
+            r.raise_for_status()
+        except IOError:
+            logger.exception("Geocoding failed")
+            return JsonResponse({
+                'success': False,
+                'results': []
+            }, status=200)
+        else:
+            d = r.json()
+        res = [
+            {
+                'formatted': q,
+                'lat': r['locations'][0]['latLng']['lat'],
+                'lon': r['locations'][0]['latLng']['lng'],
+            } for r in d['results']
+        ]
+        return res

@@ -1926,6 +1926,10 @@ Your {event} team"""))
         'default': None,
         'type': str
     },
+    'mapquest_apikey': {
+        'default': None,
+        'type': str
+    },
     'leaflet_tiles': {
         'default': None,
         'type': str
