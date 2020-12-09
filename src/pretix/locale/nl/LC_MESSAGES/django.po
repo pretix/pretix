@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-11-13 10:45+0000\n"
+"PO-Revision-Date: 2020-12-10 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -268,10 +268,9 @@ msgstr ""
 
 #: pretix/api/views/order.py:569 pretix/base/services/cart.py:109
 #: pretix/base/services/orders.py:92 pretix/presale/views/order.py:707
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "One of the selected products is not available in the selected country."
-msgstr "Het gekozen product staat niet toe dat u een stoel kiest."
+msgstr ""
+"Een van de gekozen producten is niet beschikbaar in het geselecteerde land."
 
 #: pretix/api/webhooks.py:179 pretix/base/notifications.py:205
 msgid "New order placed"
@@ -332,37 +331,27 @@ msgid "Ticket check-in reverted"
 msgstr "Ticketcheck-in teruggedraaid"
 
 #: pretix/api/webhooks.py:235
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "Evenementdatum"
+msgstr "Evenement aangemaakt"
 
 #: pretix/api/webhooks.py:239 pretix/api/webhooks.py:243
-#, fuzzy
-#| msgid "Event date range"
 msgid "Event details changed"
-msgstr "Datumbereik evenement"
+msgstr "Evenementsdetails aangepast"
 
 #: pretix/api/webhooks.py:247
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Begindatum en tijd van evenement"
+msgstr "Evenementenreeks: datum toegevoegd"
 
 #: pretix/api/webhooks.py:251
-#, fuzzy
-#| msgid "Event date range"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "Datumbereik evenement"
+msgstr "Evenementenreeks: datum aangepast"
 
 #: pretix/api/webhooks.py:255
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr "Begindatum en tijd van evenement"
+msgstr "Evenementenreeks: datum verwijderd"
 
 #: pretix/base/auth.py:104
 #, python-brace-format
@@ -940,10 +929,8 @@ msgid "Only paid orders"
 msgstr "Alleen betaalde bestellingen"
 
 #: pretix/base/exporters/orderlist.py:58
-#, fuzzy
-#| msgid "Payment amount"
 msgid "Include payment amounts"
-msgstr "Te betalen bedrag"
+msgstr "Inclusief betaalde bedragen"
 
 #: pretix/base/exporters/orderlist.py:142
 #: pretix/base/exporters/orderlist.py:301
@@ -1076,10 +1063,9 @@ msgid "Positions"
 msgstr "Plaatsen"
 
 #: pretix/base/exporters/orderlist.py:170
-#, fuzzy, python-brace-format
-#| msgid "Payment method"
+#, python-brace-format
 msgid "Paid by {method}"
-msgstr "Betalingsmethode"
+msgstr "Betaald met {method}"
 
 #: pretix/base/exporters/orderlist.py:307
 msgid "Fee type"
@@ -1852,16 +1838,12 @@ msgid "Include pending orders"
 msgstr "Neem ook openstaande bestellingen mee"
 
 #: pretix/base/models/checkin.py:22
-#, fuzzy
-#| msgid ""
-#| "With this option, people will be able to check in even if the order have "
-#| "not been paid."
 msgid ""
 "With this option, people will be able to check in even if the order has not "
 "been paid."
 msgstr ""
-"Als deze optie is ingeschakeld kunnen mensen ingecheckt worden zelfs als de "
-"bestelling niet betaald is."
+"Als deze optie is ingeschakeld kunnen mensen ingecheckt worden zelfs als er "
+"nog niet is betaald voor de bestelling."
 
 #: pretix/base/models/checkin.py:25 pretix/control/navigation.py:467
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
@@ -2359,8 +2341,6 @@ msgid "Show a waiting list for this ticket"
 msgstr "Toon een wachtlijst voor dit ticket"
 
 #: pretix/base/models/items.py:317
-#, fuzzy
-#| msgid "This will only work of waiting lists are enabled for this event."
 msgid "This will only work if waiting lists are enabled for this event."
 msgstr "Dit werkt alleen als wachtlijsten zijn ingeschakeld voor uw evenement."
 
@@ -2797,23 +2777,19 @@ msgstr "Print antwoord op facturen"
 
 #: pretix/base/models/items.py:1088 pretix/base/models/items.py:1092
 #: pretix/base/models/items.py:1096
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Minimum value"
-msgstr "Minimum aantal"
+msgstr "Minimumwaarde"
 
 #: pretix/base/models/items.py:1088 pretix/base/models/items.py:1090
 #: pretix/base/models/items.py:1092 pretix/base/models/items.py:1094
 #: pretix/base/models/items.py:1096 pretix/base/models/items.py:1098
 msgid "Currently not supported in our apps"
-msgstr ""
+msgstr "Momenteel niet ondersteund in onze apps"
 
 #: pretix/base/models/items.py:1090 pretix/base/models/items.py:1094
 #: pretix/base/models/items.py:1098
-#, fuzzy
-#| msgid "Maximum number"
 msgid "Maximum value"
-msgstr "Maximum aantal"
+msgstr "Maximumwaarde"
 
 #: pretix/base/models/items.py:1148
 msgid "An answer to this question is required to proceed."
@@ -2825,16 +2801,12 @@ msgid "Invalid option selected."
 msgstr "Ongeldige optie geselecteerd."
 
 #: pretix/base/models/items.py:1190
-#, fuzzy
-#| msgid "That page number is less than 1"
 msgid "The number is to low."
-msgstr "Dat paginanummer is kleiner dan 1"
+msgstr "Het getal is te laag."
 
 #: pretix/base/models/items.py:1192
-#, fuzzy
-#| msgid "The entered price is to high."
 msgid "The number is to high."
-msgstr "De ingevoerde prijs is te hoog."
+msgstr "Het getal is te hoog."
 
 #: pretix/base/models/items.py:1195
 msgid "Invalid number input."
