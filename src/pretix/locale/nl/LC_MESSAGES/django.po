@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-12-10 04:00+0000\n"
+"PO-Revision-Date: 2020-12-11 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -2813,16 +2813,12 @@ msgid "Invalid number input."
 msgstr "Ongeldige getalinvoer."
 
 #: pretix/base/models/items.py:1202 pretix/base/models/items.py:1226
-#, fuzzy
-#| msgid "Please enter a shorter name."
 msgid "Please choose a later date."
-msgstr "Vul alstublieft een kortere naam in."
+msgstr "Kies een latere datum."
 
 #: pretix/base/models/items.py:1204 pretix/base/models/items.py:1228
-#, fuzzy
-#| msgid "Please enter a valid state."
 msgid "Please choose an earlier date."
-msgstr "Kies een geldige staat."
+msgstr "Kies een eerdere datum."
 
 #: pretix/base/models/items.py:1207
 msgid "Invalid date input."
@@ -5338,10 +5334,8 @@ msgid "The selected product does not allow to select a seat."
 msgstr "Het gekozen product staat niet toe dat u een stoel kiest."
 
 #: pretix/base/services/orders.py:1183
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected country is blocked by your tax rule."
-msgstr "Het gekozen product is niet actief of heeft geen ingestelde prijs."
+msgstr "Het gekozen land is geblokkeerd door uw belastingregel."
 
 #: pretix/base/services/orders.py:1184
 msgid ""
@@ -7184,16 +7178,14 @@ msgid "Mr"
 msgstr "De heer"
 
 #: pretix/base/settings.py:2061
-#, fuzzy
-#| msgid "Require customer name"
 msgctxt "person_name"
 msgid "Degree (after name)"
-msgstr "Verplicht klantnaam"
+msgstr "Graad (na naam)"
 
 #: pretix/base/settings.py:2075
 msgctxt "person_name_sample"
 msgid "MA"
-msgstr ""
+msgstr "Msc."
 
 #: pretix/base/settings.py:2175 pretix/control/forms/event.py:172
 msgid ""
@@ -8188,10 +8180,8 @@ msgid "No VAT"
 msgstr "Geen btw"
 
 #: pretix/control/forms/event.py:1151
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Sale not allowed"
-msgstr "Bestandstype niet toegestaan!"
+msgstr "Verkoop niet toegestaan"
 
 #: pretix/control/forms/event.py:1155
 msgid "Deviating tax rate"
@@ -8308,10 +8298,8 @@ msgid "All orders"
 msgstr "Alle bestellingen"
 
 #: pretix/control/forms/filter.py:147
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Valid orders"
-msgstr "Betaalde bestellingen"
+msgstr "Geldige bestellingen"
 
 #: pretix/control/forms/filter.py:148
 msgid "Paid (or canceled with paid fee)"
@@ -8331,10 +8319,8 @@ msgid "Pending or paid"
 msgstr "Openstaand of betaald"
 
 #: pretix/control/forms/filter.py:152
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellations"
-msgstr "Annulering"
+msgstr "Annuleringen"
 
 #: pretix/control/forms/filter.py:153
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -8354,10 +8340,8 @@ msgid "Cancellation requested"
 msgstr "Annulering aangevraagd"
 
 #: pretix/control/forms/filter.py:157
-#, fuzzy
-#| msgid "Payment providers"
 msgid "Payment process"
-msgstr "Betalingsaanbieders"
+msgstr "Betalingsproces"
 
 #: pretix/control/forms/filter.py:158 pretix/control/forms/filter.py:887
 #: pretix/control/forms/filter.py:1302
@@ -8393,16 +8377,12 @@ msgid "Pending (but fully paid)"
 msgstr "Openstaand (maar volledig betaald)"
 
 #: pretix/control/forms/filter.py:165
-#, fuzzy
-#| msgid "Order approval process"
 msgid "Approval process"
-msgstr "Goedkeuringsproces voor bestellingen"
+msgstr "Goedkeuringsproces"
 
 #: pretix/control/forms/filter.py:166
-#, fuzzy
-#| msgid "Approval pending"
 msgid "Approved, payment pending"
-msgstr "Wachtend op goedkeuring"
+msgstr "Goedgekeurd, wacht op betaling"
 
 #: pretix/control/forms/filter.py:167
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:7
@@ -8446,12 +8426,12 @@ msgstr "Alle"
 #: pretix/control/forms/filter.py:408 pretix/control/forms/orders.py:594
 msgctxt "subevent"
 msgid "All dates starting at or after"
-msgstr ""
+msgstr "Alle subevenementen beginnend op of na"
 
 #: pretix/control/forms/filter.py:414 pretix/control/forms/orders.py:601
 msgctxt "subevent"
 msgid "All dates starting before"
-msgstr ""
+msgstr "Alle subevenementen beginnend voor"
 
 #: pretix/control/forms/filter.py:420
 msgid "Order placed at or after"
