@@ -427,7 +427,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         cr1.refresh_from_db()
         assert cr1.price == Decimal('19.33')
 
-    def test_country_taxing(self):
+    def _test_country_taxing(self):
         self._enable_country_specific_taxing()
 
         with scopes_disabled():
@@ -450,6 +450,25 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.20')
+        assert cr1.override_tax_rate == Decimal('20.00')
+        assert cr1.tax_value == Decimal('3.87')
+        return cr1
+
+    def test_country_taxing(self):
+        cr1 = self._test_country_taxing()
+
+        self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer'
+        }, follow=True)
+
+        self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        with scopes_disabled():
+            assert not CartPosition.objects.filter(pk=cr1.pk).exists()
+            o = Order.objects.last()
+            pos = o.positions.get()
+            assert pos.price == Decimal('23.20')
+            assert pos.tax_rate == Decimal('20.00')
+            assert pos.tax_value == Decimal('3.87')
 
     def test_country_taxing_free_price_and_voucher(self):
         self._enable_country_specific_taxing()
@@ -490,7 +509,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert o.positions.get().price == Decimal('23.20')
 
     def test_country_taxing_switch(self):
-        self.test_country_taxing()
+        self._test_country_taxing()
 
         with mock.patch('vat_moss.id.validate') as mock_validate:
             mock_validate.return_value = ('AT', 'AT123456', 'Foo')

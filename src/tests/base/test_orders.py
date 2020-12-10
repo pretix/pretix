@@ -2512,7 +2512,7 @@ class OrderChangeManagerTests(TestCase):
         assert nop.price == Decimal('23.00')
         assert nop.tax_rule == self.tr19
         assert nop.tax_rate == Decimal('100.00')
-        assert nop.tax_value == Decimal('19.33')
+        assert nop.tax_value == Decimal('11.50')
 
     @classscope(attr='o')
     def test_change_taxrate_from_reverse_charge(self):

@@ -1874,7 +1874,7 @@ class OrderFee(models.Model):
             self.tax_rule = self.order.event.settings.tax_rate_default
 
         if self.tax_rule:
-            tax = self.tax_rule.tax(self.value, base_price_is='gross', invoice_address=ia)
+            tax = self.tax_rule.tax(self.value, base_price_is='gross', invoice_address=ia, force_fixed_gross_price=True)
             self.tax_rate = tax.rate
             self.tax_value = tax.tax
         else:
@@ -2026,7 +2026,7 @@ class OrderPosition(AbstractPosition):
         except InvoiceAddress.DoesNotExist:
             ia = None
         if self.tax_rule:
-            tax = self.tax_rule.tax(self.price, invoice_address=ia, base_price_is='gross')
+            tax = self.tax_rule.tax(self.price, invoice_address=ia, base_price_is='gross', force_fixed_gross_price=True)
             self.tax_rate = tax.rate
             self.tax_value = tax.tax
         else:
