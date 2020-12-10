@@ -564,7 +564,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         if fdata.get('created_from'):
             qs = qs.filter(datetime__gte=fdata.get('created_from'))
         if fdata.get('created_to'):
-            qs = qs.filter(datetime__gte=fdata.get('created_to'))
+            qs = qs.filter(datetime__lte=fdata.get('created_to'))
         if fdata.get('comment'):
             qs = qs.filter(comment__icontains=fdata.get('comment'))
         if fdata.get('sales_channel'):
