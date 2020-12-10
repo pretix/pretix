@@ -315,7 +315,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 availability['color'] = 'green'
                 availability['text'] = gettext('Book now')
                 availability['reason'] = 'ok'
-            elif event.settings.waiting_list_enabled and ev.best_availability_state >= 0:
+            elif event.settings.waiting_list_enabled and (ev.best_availability_state is not None and ev.best_availability_state >= 0):
                 availability['color'] = 'orange'
                 availability['text'] = gettext('Waiting list')
                 availability['reason'] = 'waitinglist'
