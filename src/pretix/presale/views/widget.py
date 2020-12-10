@@ -310,7 +310,7 @@ class WidgetAPIProductList(EventListMixin, View):
 
     def _get_availability(self, ev, event):
         availability = {}
-        if ev.presale_is_running and event.settings.event_list_availability and ev.best_availability_state is not None:
+        if ev.presale_is_running and event.settings.event_list_availability:
             if ev.best_availability_state == Quota.AVAILABILITY_OK:
                 availability['color'] = 'green'
                 availability['text'] = gettext('Book now')
@@ -330,6 +330,10 @@ class WidgetAPIProductList(EventListMixin, View):
                 else:
                     availability['text'] = gettext('Fully booked')
                 availability['reason'] = 'full'
+            else:  # unknown / no product
+                availability['color'] = 'none'
+                availability['text'] = ''
+                availability['reason'] = 'unknown'
         elif ev.presale_is_running:
             availability['color'] = 'green'
             availability['text'] = gettext('Book now')

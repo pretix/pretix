@@ -929,7 +929,7 @@ Vue.component('pretix-widget-event-calendar-event', {
         + '{{ event.name }}'
         + '</strong>'
         + '<div class="pretix-widget-event-calendar-event-date" v-if="!event.continued && event.time">{{ event.time }}</div>'
-        + '<div class="pretix-widget-event-calendar-event-availability" v-if="!event.continued">{{ event.availability.text }}</div>'
+        + '<div class="pretix-widget-event-calendar-event-availability" v-if="!event.continued && event.availability.text">{{ event.availability.text }}</div>'
         + '</a>'),
     props: {
         event: Object

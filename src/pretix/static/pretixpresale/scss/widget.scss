@@ -438,7 +438,8 @@
   .pretix-widget-event-availability-orange.pretix-widget-event-calendar-event {
     background-color: $brand-warning;
   }
-  .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span {
+  .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span,
+  .pretix-widget-event-availability-none.pretix-widget-event-calendar-event {
     background-color: $brand-primary;
   }
   .pretix-widget-event-availability-green .pretix-widget-event-list-entry-availability span,
