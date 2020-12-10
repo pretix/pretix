@@ -75,6 +75,9 @@
                     </summary>
                     <div>
                         <div class="panel-body questions-form">
+                            {% if event.settings.attendee_data_explanation_text and pos.item.admission %}
+                                {{ event.settings.attendee_data_explanation_text|rich_text }}
+                            {% endif %}
                             {% if pos.seat %}
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">

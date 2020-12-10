@@ -1832,6 +1832,19 @@ Your {event} team"""))
                         "how to obtain a voucher code.")
         )
     },
+    'attendee_data_explanation_text': {
+        'default': '',
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Attendee data explanation"),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_("This text will be shown above the questions asked for every admission product. You can use it e.g. to explain "
+                        "why you need information from them.")
+        )
+    },
     'checkout_email_helptext': {
         'default': LazyI18nString.from_gettext(gettext_noop(
             'Make sure to enter a valid email address. We will send you an order '

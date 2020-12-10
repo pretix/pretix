@@ -597,6 +597,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'attendee_addresses_required',
         'attendee_company_asked',
         'attendee_company_required',
+        'attendee_data_explanation_text',
         'confirm_texts',
         'order_email_asked_twice',
         'payment_term_mode',

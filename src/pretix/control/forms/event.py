@@ -479,6 +479,7 @@ class EventSettingsForm(SettingsForm):
         'attendee_company_required',
         'attendee_addresses_asked',
         'attendee_addresses_required',
+        'attendee_data_explanation_text',
         'banner_text',
         'banner_text_bottom',
         'order_email_asked_twice',
