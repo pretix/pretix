@@ -323,7 +323,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 availability['color'] = 'orange'
                 availability['text'] = gettext('Reserved')
                 availability['reason'] = 'reserved'
-            elif ev.best_availability_state < Quota.AVAILABILITY_RESERVED:
+            elif ev.best_availability_state is not None and ev.best_availability_state < Quota.AVAILABILITY_RESERVED:
                 availability['color'] = 'red'
                 if ev.has_paid_item:
                     availability['text'] = gettext('Sold out')
