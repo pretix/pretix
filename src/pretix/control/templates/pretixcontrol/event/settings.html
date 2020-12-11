@@ -85,20 +85,113 @@
                 {% bootstrap_field sform.timezone layout="control" %}
             </fieldset>
             <fieldset>
-                <legend>{% trans "Attendee data" %}</legend>
-                {% bootstrap_field sform.attendee_names_asked layout="control" %}
-                {% bootstrap_field sform.attendee_names_required layout="control" %}
+                <legend>{% trans "Customer and attendee data" %}</legend>
+                {% trans "Asked" context "attendee_data" as asked %}
+                {% trans "Required" context "attendee_data" as required %}
+                <h4>{% trans "Customer data (once per order)" %}</h4>
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "E-mail" %}
+                    </label>
+                    <div class="col-md-3">
+                        <div class="checkbox">
+                            <label><input type="checkbox" checked="checked" disabled="disabled"> {{ asked }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="checkbox">
+                            <label><input type="checkbox" checked="checked" disabled="disabled"> {{ required }}</label>
+                        </div>
+                    </div>
+                </div>
+                {% bootstrap_field sform.order_email_asked_twice layout="control" %}
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "Phone number" %}
+                    </label>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.order_phone_asked layout="inline" form_group_class="" label=asked %}
+                    </div>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.order_phone_required layout="inline" form_group_class="" label=required %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "Name and address" %}
+                    </label>
+                    <div class="col-md-9 static-form-row">
+                        <p>
+                            <a href="{% url "control:event.settings.invoice" event=request.event.slug organizer=request.organizer.slug %}#tab-0-1-open" target="_blank">
+                                {% trans "See invoice settings" %}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <h4>{% trans "Attendee data (once per admission ticket)" %}</h4>
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "Name" %}
+                    </label>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.attendee_names_asked layout="inline" form_group_class="" label=asked %}
+                    </div>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.attendee_names_required layout="inline" form_group_class="" label=required %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "E-mail" %}
+                    </label>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.attendee_emails_asked layout="inline" form_group_class="" label=asked %}
+                    </div>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.attendee_emails_required layout="inline" form_group_class="" label=required %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "Company" %}
+                    </label>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.attendee_company_asked layout="inline" form_group_class="" label=asked %}
+                    </div>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.attendee_company_required layout="inline" form_group_class="" label=required %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "Address" %}
+                    </label>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.attendee_addresses_asked layout="inline" form_group_class="" label=asked %}
+                    </div>
+                    <div class="col-md-3 form-field-boundary">
+                        {% bootstrap_field sform.attendee_addresses_required layout="inline" form_group_class="" label=required %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "Custom fields" %}
+                    </label>
+                    <div class="col-md-9 static-form-row">
+                        <p>
+                            <a href="{% url "control:event.items.questions" event=request.event.slug organizer=request.organizer.slug %}" target="_blank">
+                                {% trans "Manage questions" %}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                {% bootstrap_field sform.attendee_data_explanation_text layout="control" %}
+
+                <h4>{% trans "Other settings" %}</h4>
                 {% bootstrap_field sform.name_scheme layout="control" %}
                 {% bootstrap_field sform.name_scheme_titles layout="control" %}
-                {% bootstrap_field sform.order_email_asked_twice layout="control" %}
-                {% bootstrap_field sform.attendee_emails_asked layout="control" %}
-                {% bootstrap_field sform.attendee_emails_required layout="control" %}
-                {% bootstrap_field sform.attendee_company_asked layout="control" %}
-                {% bootstrap_field sform.attendee_company_required layout="control" %}
-                {% bootstrap_field sform.attendee_addresses_asked layout="control" %}
-                {% bootstrap_field sform.attendee_addresses_required layout="control" %}
                 {% bootstrap_field sform.checkout_show_copy_answers_button layout="control" %}
-                {% bootstrap_field sform.attendee_data_explanation_text layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Texts" %}</legend>
@@ -177,6 +270,7 @@
                 </div>
 
                 {% bootstrap_field sform.checkout_email_helptext layout="control" %}
+                {% bootstrap_field sform.checkout_phone_helptext layout="control" %}
                 {% bootstrap_field sform.banner_text layout="control" %}
                 {% bootstrap_field sform.banner_text_bottom layout="control" %}
             </fieldset>

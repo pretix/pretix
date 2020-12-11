@@ -442,7 +442,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             'email': (
                 self.cart_session.get('email', '') or
                 wd.get('email', '')
-            )
+            ),
+            'phone': wd.get('phone', None)
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
 
@@ -549,7 +550,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.render()
         self.cart_session['email'] = self.contact_form.cleaned_data['email']
-        self.cart_session['contact_form_data'] = self.contact_form.cleaned_data
+        d = dict(self.contact_form.cleaned_data)
+        if d.get('phone'):
+            d['phone'] = str(d['phone'])
+        self.cart_session['contact_form_data'] = d
         if self.address_asked or self.request.event.settings.invoice_name_required:
             addr = self.invoice_form.save()
             try:
@@ -820,6 +824,9 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             ]
         else:
             ctx['contact_info'] = []
+        phone = self.cart_session.get('contact_form_data', {}).get('phone')
+        if phone:
+            ctx['contact_info'].append((_('Phone number'), phone))
         responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():

@@ -1,13 +1,19 @@
 from itertools import chain
 
+from babel import localedata
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, get_language
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumbers import NumberParseException
+from phonenumber_field.phonenumber import PhoneNumber
+from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseQuestionsForm,
-)
+    guess_country, WrappedPhoneNumberPrefixWidget)
+from pretix.base.i18n import language
 from pretix.base.validators import EmailBanlistValidator
 from pretix.presale.signals import contact_form_fields
 
@@ -30,6 +36,36 @@ class ContactForm(forms.Form):
                 label=_('E-mail address (repeated)'),
                 help_text=_('Please enter the same email address again to make sure you typed it correctly.'),
             )
+
+        print(self.data, self.initial)
+        if self.event.settings.order_phone_asked:
+            babel_locale = 'en'
+            # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal
+            if localedata.exists(get_language()):
+                babel_locale = get_language()
+            elif localedata.exists(get_language()[:2]):
+                babel_locale = get_language()[:2]
+            with language(babel_locale):
+                default_country = guess_country(self.event)
+                default_prefix = None
+                for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+                    if str(default_country) in values:
+                        default_prefix = prefix
+                try:
+                    initial = self.initial.pop('phone', None)
+                    initial = PhoneNumber().from_string(initial) if initial else "+{}.".format(default_prefix)
+                except NumberParseException:
+                    initial = None
+                self.fields['phone'] = PhoneNumberField(
+                    label=_('Phone number'),
+                    required=self.event.settings.order_phone_required,
+                    help_text=self.event.settings.checkout_phone_helptext,
+                    # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
+                    # a country code but no number as an initial value. It's a bit hacky, but should be stable for
+                    # the future.
+                    initial=initial,
+                    widget=WrappedPhoneNumberPrefixWidget()
+                )
 
         if not self.request.session.get('iframe_session', False):
             # There is a browser quirk in Chrome that leads to incorrect initial scrolling in iframes if there
