@@ -10,7 +10,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
-from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.db.models import ProtectedError
 from django.forms import inlineformset_factory
@@ -28,6 +27,7 @@ from django.views.generic import DeleteView, FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
+from i18nfield.utils import I18nJSONEncoder
 from pytz import timezone
 
 from pretix.base.channels import get_all_sales_channels
@@ -1093,6 +1093,7 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
     def formset(self):
         return TaxRuleLineFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
+            event=self.request.event,
         )
 
     def get_context_data(self, **kwargs):
@@ -1105,7 +1106,7 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
         form.instance.event = self.request.event
         form.instance.custom_rules = json.dumps([
             f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
-        ], cls=DjangoJSONEncoder)
+        ], cls=I18nJSONEncoder)
         messages.success(self.request, _('The new tax rule has been created.'))
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.taxrule.added', user=self.request.user, data=dict(form.cleaned_data))
@@ -1143,6 +1144,7 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
     def formset(self):
         return TaxRuleLineFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
+            event=self.request.event,
             initial=json.loads(self.object.custom_rules) if self.object.custom_rules else []
         )
 
@@ -1156,7 +1158,7 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
         messages.success(self.request, _('Your changes have been saved.'))
         form.instance.custom_rules = json.dumps([
             f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
-        ], cls=DjangoJSONEncoder)
+        ], cls=I18nJSONEncoder)
         if form.has_changed():
             self.object.log_action(
                 'pretix.event.taxrule.changed', user=self.request.user, data={

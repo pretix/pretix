@@ -24,7 +24,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
 )
-from pretix.base.models.tax import EU_CURRENCIES, is_eu_country
+from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import invoice_line_text, periodic_task
@@ -142,6 +142,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
         reverse_charge = False
 
         positions.sort(key=lambda p: p.sort_key)
+
+        tax_texts = []
         for i, p in enumerate(positions):
             if not invoice.event.settings.invoice_include_free and p.price == Decimal('0.00') and not p.addon_c:
                 continue
@@ -178,22 +180,10 @@ def build_invoice(invoice: Invoice) -> Invoice:
             if p.tax_rule and p.tax_rule.is_reverse_charge(ia) and p.price and not p.tax_value:
                 reverse_charge = True
 
-        if reverse_charge:
-            if invoice.additional_text:
-                invoice.additional_text += "<br /><br />"
-            if is_eu_country(invoice.invoice_to_country):
-                invoice.additional_text += pgettext(
-                    "invoice",
-                    "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability "
-                    "rests with the service recipient."
-                )
-            else:
-                invoice.additional_text += pgettext(
-                    "invoice",
-                    "VAT liability rests with the service recipient."
-                )
-            invoice.reverse_charge = True
-            invoice.save()
+            if p.tax_rule:
+                tax_text = p.tax_rule.invoice_text(ia)
+                if tax_text and tax_text not in tax_texts:
+                    tax_texts.append(tax_text)
 
         offset = len(positions)
         for i, fee in enumerate(invoice.order.fees.all()):
@@ -212,6 +202,20 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 tax_rate=fee.tax_rate,
                 tax_name=fee.tax_rule.name if fee.tax_rule else ''
             )
+
+            if fee.tax_rule and fee.tax_rule.is_reverse_charge(ia) and fee.value and not fee.tax_value:
+                reverse_charge = True
+
+            if fee.tax_rule:
+                tax_text = fee.tax_rule.invoice_text(ia)
+                if tax_text and tax_text not in tax_texts:
+                    tax_texts.append(tax_text)
+
+        if tax_texts:
+            invoice.additional_text += "<br /><br />"
+            invoice.additional_text += "<br />".join(tax_texts)
+        invoice.reverse_charge = reverse_charge
+        invoice.save()
 
         return invoice
 

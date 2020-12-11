@@ -19,7 +19,9 @@ from pytz import common_timezones, timezone
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
-from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
+from pretix.base.forms import (
+    I18nModelForm, PlaceholderValidator, SettingsForm,
+)
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
@@ -1099,7 +1101,7 @@ class CountriesAndEU(CachedCountries):
     cache_subkey = 'with_any_or_eu'
 
 
-class TaxRuleLineForm(forms.Form):
+class TaxRuleLineForm(I18nForm):
     country = LazyTypedChoiceField(
         choices=CountriesAndEU(),
         required=False
@@ -1126,10 +1128,25 @@ class TaxRuleLineForm(forms.Form):
         max_digits=10, decimal_places=2,
         required=False
     )
+    invoice_text = I18nFormField(
+        label=_('Text on invoice'),
+        required=False,
+        widget=I18nTextInput
+    )
+
+
+class I18nBaseFormSet(I18nFormSetMixin, forms.BaseFormSet):
+    # compatibility shim for django-i18nfield library
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        if self.event:
+            kwargs['locales'] = self.event.settings.get('locales')
+        super().__init__(*args, **kwargs)
 
 
 TaxRuleLineFormSet = formset_factory(
-    TaxRuleLineForm,
+    TaxRuleLineForm, formset=I18nBaseFormSet,
     can_order=True, can_delete=True, extra=0
 )
 

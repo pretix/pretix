@@ -5,8 +5,9 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.formats import localize
 from django.utils.timezone import get_current_timezone, now
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.fields import I18nCharField
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
@@ -267,6 +268,25 @@ class TaxRule(LoggedModel):
                     continue
                 return r
         return {'action': 'vat'}
+
+    def invoice_text(self, invoice_address):
+        if self._custom_rules:
+            rule = self.get_matching_rule(invoice_address)
+            t = rule.get('invoice_text', {})
+            if t and any(l for l in t.values()):
+                return str(LazyI18nString(t))
+        if self.is_reverse_charge(invoice_address):
+            if is_eu_country(invoice_address.country):
+                return pgettext(
+                    "invoice",
+                    "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability "
+                    "rests with the service recipient."
+                )
+            else:
+                return pgettext(
+                    "invoice",
+                    "VAT liability rests with the service recipient."
+                )
 
     def is_reverse_charge(self, invoice_address):
         if self._custom_rules:

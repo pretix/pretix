@@ -575,9 +575,7 @@ table td > .checkbox input[type="checkbox"] {
   margin-right: -15px;
 }
 .tax-rule-line {
-  padding-bottom: 5px;
   padding-top: 5px;
-  border-bottom: 1px solid $input-border;
   margin: 0;
   & > div {
     padding-top: 5px;
@@ -586,4 +584,5 @@ table td > .checkbox input[type="checkbox"] {
 }
 .tax-rule-lines .tax-rule-line {
   border-bottom: 1px solid $input-border;
+  padding-bottom: 5px;
 }

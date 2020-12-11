@@ -201,6 +201,40 @@ def test_reverse_charge_note(env):
 
 
 @pytest.mark.django_db
+def test_custom_tax_note(env):
+    event, order = env
+
+    tr = event.tax_rules.first()
+    tr.eu_reverse_charge = True
+    tr.home_country = Country('DE')
+    tr.custom_rules = json.dumps([
+        {
+            'country': 'PL',
+            'address_type': '',
+            'action': 'vat',
+            'rate': '20',
+            'invoice_text': {
+                'de': 'Polnische Steuer anwendbar',
+                'en': 'Polish tax applies'
+            }
+        }
+    ])
+    tr.save()
+
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street', zipcode='12345', city='Warsaw',
+                                  country=Country('PL'), vat_id='PL123456780', vat_id_validated=True, order=order,
+                                  is_business=True)
+
+    ocm = OrderChangeManager(order, None)
+    ocm.recalculate_taxes()
+    ocm.commit()
+
+    inv = generate_invoice(order)
+    assert "Polish tax applies" in inv.additional_text
+
+
+@pytest.mark.django_db
 def test_reverse_charge_foreign_currency_data_too_old(env):
     event, order = env
     gs = GlobalSettingsObject()
