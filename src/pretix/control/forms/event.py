@@ -11,7 +11,6 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
-from django_countries import Countries
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
@@ -32,6 +31,7 @@ from pretix.control.forms import (
     SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
+from pretix.helpers.countries import CachedCountries
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.banktransfer.payment import BankTransfer
@@ -1090,12 +1090,13 @@ class CommentForm(I18nModelForm):
         }
 
 
-class CountriesAndEU(Countries):
+class CountriesAndEU(CachedCountries):
     override = {
         'ZZ': _('Any country'),
         'EU': _('European Union')
     }
     first = ['ZZ', 'EU']
+    cache_subkey = 'with_any_or_eu'
 
 
 class TaxRuleLineForm(forms.Form):

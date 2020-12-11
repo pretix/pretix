@@ -6,6 +6,7 @@ from django_countries.fields import CountryField
 
 class CachedCountries(Countries):
     _cached_lists = {}
+    cache_subkey = None
 
     def __iter__(self):
         """
@@ -14,6 +15,8 @@ class CachedCountries(Countries):
         slow.
         """
         cache_key = "countries:all:{}".format(get_language())
+        if self.cache_subkey:
+            cache_key += ":" + self.cache_subkey
         if cache_key in self._cached_lists:
             yield from self._cached_lists[cache_key]
             return
