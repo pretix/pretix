@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2019-10-31 14:39+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2020-12-12 08:00+0000\n"
+"Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -57,20 +57,16 @@ msgid ""
 msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:22
-#, fuzzy
-#| msgid "Download ticket"
 msgid "pretixSCAN"
-msgstr "Baixa el tiquet"
+msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:50
 msgid "pretixSCAN (kiosk mode, online only)"
 msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:76
-#, fuzzy
-#| msgid "pretix default"
 msgid "pretixPOS"
-msgstr "predeterminat de pretix"
+msgstr ""
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -122,11 +118,9 @@ msgstr "No hi ha prou quota disponible a \"{}\" per realitzar l'operació."
 
 #: pretix/api/serializers/cart.py:91 pretix/api/serializers/order.py:914
 #: pretix/base/services/orders.py:1179
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "The selected event date is not active."
+#, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "La data de l'esdeveniment seleccionada no es troba activa."
+msgstr "El seient \"{seat}\" no està disponible."
 
 #: pretix/api/serializers/checkin.py:40 pretix/base/models/event.py:1238
 #: pretix/base/models/items.py:1243 pretix/base/models/items.py:1485
@@ -140,10 +134,8 @@ msgid "The subevent does not belong to this event."
 msgstr "El sub-esdeveniment no pertany a aquest esdeveniment."
 
 #: pretix/api/serializers/checkin.py:51
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Unknown sales channel."
-msgstr "Canal de vendes"
+msgstr "Canal de vendes desconegut."
 
 #: pretix/api/serializers/event.py:159
 msgid ""
@@ -7319,6 +7311,9 @@ msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
+"Assegureu-vos de posar una adreça de correu vàlida. Us hi enviarem una "
+"confirmació amb un enllaç que us farà falta per accedir a la comanda més "
+"endavant."
 
 #: pretix/base/settings.py:1725
 msgid "Help text of the email field"
@@ -11187,7 +11182,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
 msgid "Continue"
-msgstr ""
+msgstr "Continuar"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -18461,6 +18456,8 @@ msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
 msgstr ""
+"Un cop hagueu fet la transferència podeu tancar aquesta finestra. Us "
+"enviarem un correu electrònic tan aviat com rebem el pagament."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:63
 msgid "Open banking app"
@@ -19862,7 +19859,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "L'import total es carregarà a la vostra targeta de crèdit."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:26
@@ -19909,6 +19906,8 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"El vostre pagament el processarà Stripe, Inc. Les dades de la vostra targeta "
+"es transmeten directament a Stripe i mai es desen als nostres servidors."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
 msgid "Charge ID"
@@ -20004,6 +20003,8 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Ens sap greu, alguna cosa no ha anat bé durant el procés de pagament. Si us "
+"plau consulteu el correu electrònic per continuar."
 
 #: pretix/plugins/stripe/views.py:501
 msgid ""
@@ -20168,7 +20169,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:416
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "Les vostres dades"
 
 #: pretix/presale/checkoutflow.py:563
 msgid ""
@@ -20193,32 +20194,32 @@ msgstr ""
 
 #: pretix/presale/checkoutflow.py:599
 msgid "Please enter your name."
-msgstr ""
+msgstr "Si us plau introduïu el vostre nom."
 
 #: pretix/presale/checkoutflow.py:633 pretix/presale/checkoutflow.py:638
 #: pretix/presale/checkoutflow.py:643 pretix/presale/checkoutflow.py:648
 #: pretix/presale/checkoutflow.py:653
 msgid "Please fill in answers to all required questions."
-msgstr ""
+msgstr "Si us plau responeu a totes les preguntes."
 
 #: pretix/presale/checkoutflow.py:680
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "Pagament"
 
 #: pretix/presale/checkoutflow.py:725 pretix/presale/views/order.py:607
 msgid "Please select a payment method."
-msgstr ""
+msgstr "Si us plau trieu un mètode de pagament."
 
 #: pretix/presale/checkoutflow.py:749 pretix/presale/checkoutflow.py:755
 #: pretix/presale/views/order.py:387 pretix/presale/views/order.py:455
 msgid "The payment information you entered was incomplete."
-msgstr ""
+msgstr "Les dades de pagament que heu introduït són incompletes."
 
 #: pretix/presale/checkoutflow.py:786
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr ""
+msgstr "Revisió comanda"
 
 #: pretix/presale/checkoutflow.py:871
 msgid "You need to check all checkboxes on the bottom of the page."
@@ -20268,7 +20269,7 @@ msgstr "La variació del producte seleccionat més amunt."
 #: pretix/presale/ical.py:54
 #, python-brace-format
 msgid "Tickets: {url}"
-msgstr ""
+msgstr "Entrades: {url}"
 
 #: pretix/presale/ical.py:57
 #, python-brace-format
@@ -20433,7 +20434,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:72
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:147
 msgid "Go back"
-msgstr ""
+msgstr "Enrera"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:46
@@ -20450,7 +20451,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
 #: pretix/presale/templates/pretixpresale/event/index.html:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Comanda expirada"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:30
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:42
@@ -20458,6 +20459,7 @@ msgstr ""
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
+"El contingut de la vostra cistella està reservat durant %(minutes)s minuts."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:46
@@ -20487,7 +20489,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 msgid "Add or remove tickets"
-msgstr ""
+msgstr "Afegir o suprimir entrades"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:61
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
@@ -20545,11 +20547,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:51
 msgid "If you continue, actual money might be transferred."
-msgstr ""
+msgstr "Si continueu, pot ser que envieu diners reals."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:62
 msgid "There are no payment providers enabled."
-msgstr ""
+msgstr "No hi ha cap proveïdor de pagament actiu."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:64
 msgid ""
@@ -20558,12 +20560,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:6
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "Abans de continuar, cal que respongueu a unes preguntes."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
-msgstr ""
+msgstr "Heu d'omplir tots els camps marcats amb <span>*</span> per a continuar."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:67
 msgid "Copy answers from above"
@@ -20682,7 +20684,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr ""
+msgstr "Confirmació de la comanda"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:13
 msgid "Please check your email account, we've sent you your tickets."
@@ -20708,10 +20710,8 @@ msgid "Please have your ticket ready when entering the event."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:36
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download your tickets here:"
-msgstr "Baixa el tiquet"
+msgstr "Descarregueu les entrades aquí:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:40
 msgid "Download all tickets at once:"
@@ -20724,11 +20724,8 @@ msgid "Download your ticket here:"
 msgstr "Baixa el tiquet"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:78
-#, fuzzy
-#| msgid "Two-factor authentication is required to log in"
 msgid "Download your tickets using the buttons below."
-msgstr ""
-"Es necessita un factor d'autenticació de dues passes per iniciar sessió"
+msgstr "Descarregueu-vos les entrades clicant als botons de sota."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:86
 #, python-format
@@ -20744,15 +20741,12 @@ msgstr "Text de confirmació"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:9
 msgid "Payment pending"
-msgstr ""
+msgstr "Pendent de pagament"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:15
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "confirmed"
 msgctxt "order state"
 msgid "Confirmed"
-msgstr "confirmat"
+msgstr "Confirmat"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:61
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:116
@@ -20796,7 +20790,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:118
 #: pretix/presale/views/widget.py:311 pretix/presale/views/widget.py:330
 msgid "Book now"
-msgstr ""
+msgstr "Reservar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:85
@@ -20820,13 +20814,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 #: pretix/presale/templates/pretixpresale/event/index.html:82
 msgid "Empty cart"
-msgstr ""
+msgstr "Buidar cistella"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:74
 #: pretix/presale/templates/pretixpresale/event/index.html:275
 #: pretix/presale/templates/pretixpresale/event/voucher.html:345
 msgid "Proceed with checkout"
-msgstr ""
+msgstr "Fer el pagament"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:114
 msgid "View other date"
@@ -20900,12 +20894,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:343
 msgctxt "free_tickets"
 msgid "Register"
-msgstr ""
+msgstr "Registreu-vos"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:278
 #: pretix/presale/templates/pretixpresale/event/voucher.html:348
 msgid "Add to cart"
-msgstr ""
+msgstr "Afegir a la cistella"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:309
 msgid "Redeem voucher"
@@ -20953,7 +20947,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:31
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Hem rebut el vostre pagament. Veieu-ne els detalls a continuació."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:33
 msgid ""
@@ -21038,10 +21032,8 @@ msgid "Change details"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:186
-#, fuzzy
-#| msgid "Only successful payments"
 msgid "Successful payments"
-msgstr "Només pagaments correctes"
+msgstr "Pagaments correctes"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:195
 #, fuzzy
@@ -21099,7 +21091,7 @@ msgstr "Heu introduït una comanda que no es pot trobar."
 #: pretix/presale/templates/pretixpresale/event/order.html:396
 #: pretix/presale/templates/pretixpresale/event/order.html:409
 msgid "This will invalidate all tickets in this order."
-msgstr ""
+msgstr "Això invalidarà totes les entrades de la comanda."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:357
 #, python-format
@@ -21265,13 +21257,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
-msgstr ""
+msgstr "Canviar el mode de pagament"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:8
-#, fuzzy, python-format
-#| msgid "Your order is pending payment: %(code)s"
+#, python-format
 msgid "Choose payment method: %(code)s"
-msgstr "La vostra comanda està pendent de pagament: %(code)s"
+msgstr "Trieu un mètode de pagament: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:13
 msgid ""
@@ -21285,7 +21276,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
-msgstr ""
+msgstr "Si us plau, confirmeu els següents detalls de pagament."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
@@ -21515,15 +21506,15 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:366 pretix/presale/views/cart.py:388
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "La cistella és buida."
 
 #: pretix/presale/views/cart.py:403
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Els productes s'han afegit a la vostra cistella."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
-msgstr ""
+msgstr "La vostra cistella és buida"
 
 #: pretix/presale/views/checkout.py:38
 msgid "The presale for this event is over or has not yet started."
@@ -21570,7 +21561,7 @@ msgstr ""
 
 #: pretix/presale/views/order.py:505
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "Aquesta comanda està pendent de pagament."
 
 #: pretix/presale/views/order.py:760
 msgid "You cannot modify this order"
@@ -21595,6 +21586,8 @@ msgstr ""
 #: pretix/presale/views/order.py:916
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
+"Cliqueu a l'enllaç que us hem enviat per correu electrònic per tal de "
+"descarregar les vostres entrades."
 
 #: pretix/presale/views/order.py:1075
 #, fuzzy
