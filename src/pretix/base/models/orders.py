@@ -2029,6 +2029,8 @@ class OrderPosition(AbstractPosition):
             tax = self.tax_rule.tax(self.price, invoice_address=ia, base_price_is='gross', force_fixed_gross_price=True)
             self.tax_rate = tax.rate
             self.tax_value = tax.tax
+            if tax.gross != self.price:
+                raise ValueError('Invalid tax calculation')
         else:
             self.tax_value = Decimal('0.00')
             self.tax_rate = Decimal('0.00')
@@ -2038,6 +2040,7 @@ class OrderPosition(AbstractPosition):
 
         if self.tax_rate is None:
             self._calculate_tax()
+
         self.order.touch()
         if not self.pk:
             while not self.secret or OrderPosition.all.filter(
