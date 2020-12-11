@@ -569,3 +569,21 @@ table td > .checkbox input[type="checkbox"] {
     border-left: 4px solid $brand-success;
   }
 }
+
+.tax-rules-formset {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.tax-rule-line {
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-bottom: 1px solid $input-border;
+  margin: 0;
+  & > div {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
+.tax-rule-lines .tax-rule-line {
+  border-bottom: 1px solid $input-border;
+}

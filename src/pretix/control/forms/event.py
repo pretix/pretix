@@ -1130,7 +1130,7 @@ class TaxRuleLineForm(forms.Form):
 
 TaxRuleLineFormSet = formset_factory(
     TaxRuleLineForm,
-    can_order=False, can_delete=True, extra=0
+    can_order=True, can_delete=True, extra=0
 )
 
 

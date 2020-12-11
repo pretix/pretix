@@ -1104,7 +1104,7 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
     def form_valid(self, form):
         form.instance.event = self.request.event
         form.instance.custom_rules = json.dumps([
-            f.cleaned_data for f in self.formset if f not in self.formset.deleted_forms
+            f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
         ], cls=DjangoJSONEncoder)
         messages.success(self.request, _('The new tax rule has been created.'))
         ret = super().form_valid(form)
@@ -1155,7 +1155,7 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
         form.instance.custom_rules = json.dumps([
-            f.cleaned_data for f in self.formset if f not in self.formset.deleted_forms
+            f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
         ], cls=DjangoJSONEncoder)
         if form.has_changed():
             self.object.log_action(

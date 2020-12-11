@@ -50,66 +50,78 @@
                             {% trans "All of these rules will only apply if an invoice address is set." %}
                         </div>
 
-                        <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                        <div class="formset tax-rules-formset" data-formset data-formset-prefix="{{ formset.prefix }}">
                             {{ formset.management_form }}
                             {% bootstrap_formset_errors formset %}
-                            <div data-formset-body>
-                                {% for form in formset %}
-                                    {% bootstrap_form_errors form %}
-                                    <div class="row" data-formset-form>
-                                        <div class="sr-only">
-                                            {{ form.id }}
-                                            {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            {% bootstrap_field form.country layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            {% bootstrap_field form.address_type layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            {% bootstrap_field form.action layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-sm-2">
-                                            {% bootstrap_field form.rate layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-sm-1 text-right flip">
-                                            <button type="button" class="btn btn-block btn-danger" data-formset-delete-button>
-                                                <i class="fa fa-trash"></i></button>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
                             <script type="form-template" data-formset-empty-form>
                                 {% escapescript %}
-                                    <div class="row" data-formset-form>
+                                    <div class="row tax-rule-line" data-formset-form>
                                         <div class="sr-only">
-                                            {{ form.id }}
+                                            {{ formset.empty_form.id }}
                                             {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                            {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-6 col-md-3 col-lg-4">
                                             {% bootstrap_field formset.empty_form.country layout='inline' form_group_class="" %}
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-6 col-md-3 col-lg-3">
                                             {% bootstrap_field formset.empty_form.address_type layout='inline' form_group_class="" %}
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-6 col-md-3 col-lg-3">
                                             {% bootstrap_field formset.empty_form.action layout='inline' form_group_class="" %}
                                         </div>
-                                        <div class="col-sm-2">
-                                            {% bootstrap_field formset.empty_form.rate layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-sm-1 text-right flip">
-                                            <button type="button" class="btn btn-block btn-danger" data-formset-delete-button>
+                                        <div class="col-sm-6 col-md-3 col-lg-2 text-right flip">
+                                            <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                                <i class="fa fa-arrow-up"></i></button>
+                                            <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                                <i class="fa fa-arrow-down"></i></button>
+                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
                                                 <i class="fa fa-trash"></i></button>
+                                        </div>
+                                        <div class="col-sm-6 col-md-3 col-lg-3 col-md-offset-3 col-lg-offset-4">
+                                            {% bootstrap_field formset.empty_form.rate layout='inline' form_group_class="" %}
                                         </div>
                                     </div>
                                 {% endescapescript %}
                             </script>
-                            <p>
-                                <button type="button" class="btn btn-default" data-formset-add>
-                                    <i class="fa fa-plus"></i> {% trans "Add a new rule" %}</button>
-                            </p>
+                            <div data-formset-body class="tax-rule-lines">
+                                {% for form in formset %}
+                                    {% bootstrap_form_errors form %}
+                                    <div class="row tax-rule-line" data-formset-form>
+                                        <div class="sr-only">
+                                            {{ form.id }}
+                                            {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                            {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
+                                        </div>
+                                        <div class="col-sm-6 col-md-3 col-lg-4">
+                                            {% bootstrap_field form.country layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-sm-6 col-md-3 col-lg-3">
+                                            {% bootstrap_field form.address_type layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-sm-6 col-md-3 col-lg-3">
+                                            {% bootstrap_field form.action layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-sm-6 col-md-3 col-lg-2 text-right flip">
+                                            <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                                <i class="fa fa-arrow-up"></i></button>
+                                            <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                                <i class="fa fa-arrow-down"></i></button>
+                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                        <div class="col-sm-6 col-md-3 col-lg-3 col-md-offset-3 col-lg-offset-4">
+                                            {% bootstrap_field form.rate layout='inline' form_group_class="" %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="row tax-rule-line" data-formset-form>
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-default" data-formset-add>
+                                        <i class="fa fa-plus"></i> {% trans "Add a new rule" %}</button>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                 </div>
