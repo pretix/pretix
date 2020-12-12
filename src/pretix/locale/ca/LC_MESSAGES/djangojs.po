@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:32+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-12-13 00:00+0000\n"
+"Last-Translator: albert <albert.serra.monner@gmail.com>\n"
+"Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -104,7 +106,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:189
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Estem processant la vostra sol·licitud …"
 
 #: pretix/static/pretixbase/js/asynctask.js:197
 msgid ""
@@ -319,11 +321,11 @@ msgstr[1] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "El contingut de la cistella ja no el teniu reservat."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Cistella expirada"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
