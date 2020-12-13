@@ -63,6 +63,7 @@ def item_group_by_category(items):
 
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
                       quota_cache=None, filter_items=None, filter_categories=None):
+    base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
     requires_seat = Exists(
@@ -139,8 +140,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         items = items.filter(category_id__in=[a for a in filter_categories if a.isdigit()])
 
     display_add_to_cart = False
-    external_quota_cache = quota_cache or event.cache.get('item_quota_cache')
-    quota_cache = external_quota_cache or {}
+    quota_cache_key = f'item_quota_cache:{subevent.id if subevent else 0}:{channel}:{bool(require_seat)}'
+    quota_cache = quota_cache or event.cache.get(quota_cache_key) or {}
+    quota_cache_existed = bool(quota_cache)
 
     if subevent:
         item_price_override = subevent.item_price_overrides
@@ -159,11 +161,11 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         if item.has_variations:
             for v in item.available_variations:
                 for q in v._subevent_quotas:
-                    if q not in quota_cache:
+                    if q.pk not in quota_cache:
                         quotas_to_compute.append(q)
         else:
             for q in item._subevent_quotas:
-                if q not in quota_cache:
+                if q.pk not in quota_cache:
                     quotas_to_compute.append(q)
 
     if quotas_to_compute:
@@ -306,8 +308,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
 
             item._remove = not bool(item.available_variations)
 
-    if not external_quota_cache and not voucher and not allow_addons:
-        event.cache.set('item_quota_cache', quota_cache, 5)
+    if not quota_cache_existed and not voucher and not allow_addons and not base_qs_set and not filter_items and not filter_categories:
+        event.cache.set(quota_cache_key, quota_cache, 5)
     items = [item for item in items
              if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
     return items, display_add_to_cart
