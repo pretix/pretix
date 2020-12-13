@@ -673,7 +673,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return ctx
 
 
-class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+class PaymentStep(CartMixin, TemplateFlowStep):
     priority = 200
     identifier = "payment"
     template_name = "pretixpresale/event/checkout_payment.html"

@@ -245,6 +245,8 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         ).exclude(
             provider__in=('offsetting', 'reseller', 'boxoffice', 'manual')
         )
+        ctx['user_change_allowed'] = self.order.user_change_allowed
+        ctx['user_cancel_allowed'] = self.order.user_cancel_allowed
         for r in ctx['refunds']:
             if r.provider == 'giftcard':
                 gc = GiftCard.objects.get(pk=r.info_data.get('gift_card'))

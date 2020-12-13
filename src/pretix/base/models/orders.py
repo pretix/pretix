@@ -902,7 +902,7 @@ class Order(LockModel, LoggedModel):
 
     @property
     def positions_with_tickets(self):
-        for op in self.positions.all():
+        for op in self.positions.select_related('item'):
             if not op.generate_ticket:
                 continue
             yield op
@@ -1155,7 +1155,7 @@ class AbstractPosition(models.Model):
         (2) questions: a list of Question objects, extended by an 'answer' property
         """
         self.answ = {}
-        for a in self.answers.all():
+        for a in getattr(self, 'answerlist', self.answers.all()):  # use prefetch_related cache from get_cart
             self.answ[a.question_id] = a
 
         # We need to clone our question objects, otherwise we will override the cached

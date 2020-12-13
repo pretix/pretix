@@ -313,7 +313,7 @@
         {% endif %}
         <div class="clearfix"></div>
     </div>
-    {% if order.user_change_allowed or order.user_cancel_allowed %}
+    {% if user_change_allowed or user_cancel_allowed %}
         <div class="panel panel-primary panel-cancellation">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -321,7 +321,7 @@
                 </h3>
             </div>
             <ul class="list-group">
-                {% if order.user_change_allowed %}
+                {% if user_change_allowed %}
                     <li class="list-group-item">
                         <p>
                             {% blocktrans trimmed %}
@@ -335,7 +335,7 @@
                         </a>
                     </li>
                 {% endif %}
-                {% if order.user_cancel_allowed %}
+                {% if user_cancel_allowed %}
                     <li class="list-group-item">
                         {% if order.status == "p" and order.total != 0 %}
                             {% if order.user_cancel_fee >= order.total %}

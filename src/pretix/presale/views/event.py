@@ -408,7 +408,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['ev'] = self.subevent or self.request.event
         context['subevent'] = self.subevent
         context['cart'] = self.get_cart()
-        context['has_addon_choices'] = get_cart(self.request).filter(item__addons__isnull=False).exists()
+        context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))\
 
         if self.subevent:
             context['frontpage_text'] = str(self.subevent.frontpage_text)
