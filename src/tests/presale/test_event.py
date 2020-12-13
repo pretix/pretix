@@ -27,7 +27,7 @@ class EventTestMixin:
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
-            date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
+            date_from=datetime.datetime(now().year + 1, 12, 26, 14, 0, tzinfo=datetime.timezone.utc),
             live=True, sales_channels=['web', 'bar']
         )
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
@@ -1306,3 +1306,49 @@ class EventSlugBanlistValidatorTest(EventTestMixin, SoupTest):
                 event.save()
 
         self.assertEqual(Event.objects.filter(name='download').count(), 0)
+
+
+class EventLocaleTest(EventTestMixin, SoupTest):
+    @scopes_disabled()
+    def setUp(self):
+        super().setUp()
+        self.event.settings.locales = ['de', 'en']
+        self.event.settings.locale = 'de'
+        self.event.settings.timezone = 'UTC'
+
+    def test_german_by_default(self):
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('26. Dezember', response.rendered_content)
+        self.assertIn('14:00', response.rendered_content)
+
+    def test_english_no_region_set(self):
+        self.client.get('/locale/set?locale=en')
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Dec. 26,', response.rendered_content)
+        self.assertIn('14:00', response.rendered_content)
+
+    def test_english_region_US(self):
+        self.event.settings.region = 'US'
+        self.client.get('/locale/set?locale=en')
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Dec. 26,', response.rendered_content)
+        self.assertIn('2 p.m.', response.rendered_content)
+
+    def test_german_region_US(self):
+        self.event.settings.region = 'US'
+        self.client.get('/locale/set?locale=de')
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('26. Dezember', response.rendered_content)
+        self.assertIn('14:00', response.rendered_content)

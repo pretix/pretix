@@ -2683,6 +2683,20 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             o.payments.first().confirm()
             assert len(djmail.outbox) == 0
 
+    def test_locale_region_not_saved(self):
+        self.event.settings.origin = 'US'
+        self.event.settings.locales = ['de']
+        self.event.settings.locale = 'de'
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=0, expires=now() + timedelta(minutes=10)
+            )
+
+        self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        with scopes_disabled():
+            self.assertEqual(Order.objects.first().locale, 'de')
+
 
 class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
 
