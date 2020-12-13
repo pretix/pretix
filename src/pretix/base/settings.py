@@ -832,6 +832,20 @@ DEFAULTS = {
             label=_("Default language"),
         )
     },
+    'region': {
+        'default': None,
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': lambda: dict(**country_choice_kwargs()),
+        'form_kwargs': lambda: dict(
+            label=_('Region'),
+            help_text=_('Will be used to determine date and time formatting as well as default country for customer '
+                        'addresses and phone numbers. For formatting, this takes less priority than the language and '
+                        'is therefore mostly relevant for languages used in different regions globally (like English).'),
+            **country_choice_kwargs()
+        ),
+    },
     'show_dates_on_frontpage': {
         'default': 'True',
         'type': bool,
@@ -2403,3 +2417,9 @@ def validate_organizer_settings(organizer, settings_dict):
     #
     # N.B.: When actually fleshing out this stub, adding it to the OrganizerUpdateForm should be considered.
     pass
+
+
+def global_settings_object(holder):
+    if not hasattr(holder, '_global_settings_object'):
+        holder._global_settings_object = GlobalSettingsObject()
+    return holder._global_settings_object

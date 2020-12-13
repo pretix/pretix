@@ -223,6 +223,7 @@ class OrganizerSettingsForm(SettingsForm):
         'giftcard_length',
         'giftcard_expiry_years',
         'locales',
+        'region',
         'event_team_provisioning',
         'primary_color',
         'theme_color_success',

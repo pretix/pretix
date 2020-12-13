@@ -19,9 +19,7 @@ from pytz import common_timezones, timezone
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
-from pretix.base.forms import (
-    I18nModelForm, PlaceholderValidator, SettingsForm,
-)
+from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
@@ -459,6 +457,7 @@ class EventSettingsForm(SettingsForm):
         'presale_start_show_date',
         'locales',
         'locale',
+        'region',
         'show_quota_left',
         'waiting_list_enabled',
         'waiting_list_hours',

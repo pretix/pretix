@@ -66,10 +66,42 @@ class LazyNumber:
         return number_format(self.value, decimal_pos=self.decimal_pos)
 
 
+ALLOWED_LANGUAGES = dict(settings.LANGUAGES)
+
+
+def get_language_without_region(lng=None):
+    """
+    Returns the currently active language, but strips what pretix calls a ``region``. For example,
+    if the currently active language is ``en-us``, you will be returned ``en`` since pretix does not
+    ship with separate language files for ``en-us``. If the currently active language is ``pt-br``,
+    you will be returned ``pt-br`` since there are separate language files for ``pt-br``.
+
+    tl;dr: You will be always passed a language that is defined in settings.LANGUAGES.
+    """
+    lng = lng or translation.get_language() or settings.LANGUAGE_CODE
+    if lng not in ALLOWED_LANGUAGES:
+        lng = lng.split('-')[0]
+    if lng not in ALLOWED_LANGUAGES:
+        lng = settings.LANGUAGE_CODE
+    return lng
+
+
 @contextmanager
-def language(lng):
+def language(lng, region=None):
+    """
+    Temporarily change the active language to ``lng``. Will automatically be rolled back when the
+    context manager returns.
+
+    You can optionally pass a "region". For example, if you pass ``en`` as ``lng`` and ``US`` as
+    ``region``, the active language will be ``en-us``, which will mostly affect date/time
+    formatting. If you pass a ``lng`` that already contains a region, e.g. ``pt-br``, the ``region``
+    attribute will be ignored.
+    """
     _lng = translation.get_language()
-    translation.activate(lng or settings.LANGUAGE_CODE)
+    lng = lng or settings.LANGUAGE_CODE
+    if '-' not in lng and region:
+        lng += '-' + region.lower()
+    translation.activate(lng)
     try:
         yield
     finally:

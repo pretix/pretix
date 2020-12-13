@@ -79,7 +79,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
     def generate_order(self, order: Order):
         merger = PdfFileMerger()
-        with language(order.locale):
+        with language(order.locale, self.event.settings.region):
             for op in order.positions_with_tickets:
                 layout = override_layout.send_chained(
                     order.event, 'layout', orderposition=op, layout=self.layout_map.get(
@@ -111,7 +111,7 @@ class PdfTicketOutput(BaseTicketOutput):
                 )
             )
         )
-        with language(order.locale):
+        with language(order.locale, self.event.settings.region):
             outbuffer = self._draw_page(layout, op, order)
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
 

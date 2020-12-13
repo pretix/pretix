@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.db.models import Q
-from django.utils.translation import get_language, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from hierarkey.proxy import HierarkeyProxy
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -9,6 +9,7 @@ from rest_framework.exceptions import ValidationError
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 from pretix.base.auth import get_auth_backends
+from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
     Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan, Team,
     TeamAPIToken, TeamInvite, User,
@@ -145,7 +146,7 @@ class TeamInviteSerializer(serializers.ModelSerializer):
                     })
                 },
                 event=None,
-                locale=get_language()  # TODO: expose?
+                locale=get_language_without_region()  # TODO: expose?
             )
         except SendMailException:
             pass  # Already logged
@@ -217,6 +218,7 @@ class OrganizerSettingsSerializer(serializers.Serializer):
         'giftcard_length',
         'giftcard_expiry_years',
         'locales',
+        'region',
         'event_team_provisioning',
         'primary_color',
         'theme_color_success',

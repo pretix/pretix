@@ -329,7 +329,10 @@ def iframe_entry_view_wrapper(view_func):
 
         locale = request.GET.get('locale')
         if locale and locale in [lc for lc, ll in settings.LANGUAGES]:
-            with language(locale):
+            region = None
+            if hasattr(request, 'event'):
+                region = request.event.settings.region
+            with language(locale, region):
                 resp = view_func(request, *args, **kwargs)
             max_age = 10 * 365 * 24 * 60 * 60
             set_cookie_without_samesite(

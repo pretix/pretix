@@ -421,6 +421,7 @@ class Renderer:
         self.layout = layout
         self.background_file = background_file
         self.variables = get_variables(event)
+        self.event = event
         if self.background_file:
             self.bg_bytes = self.background_file.read()
             self.bg_pdf = PdfFileReader(BytesIO(self.bg_bytes), strict=False)
@@ -487,7 +488,7 @@ class Renderer:
 
     def _get_text_content(self, op: OrderPosition, order: Order, o: dict, inner=False):
         if o.get('locale', None) and not inner:
-            with language(o['locale']):
+            with language(o['locale'], self.event.settings.region):
                 return self._get_text_content(op, order, o, True)
 
         ev = self._get_ev(op, order)

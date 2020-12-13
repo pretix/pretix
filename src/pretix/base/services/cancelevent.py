@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 def _send_wle_mail(wle: WaitingListEntry, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent):
-    with language(wle.locale):
+    with language(wle.locale, wle.event.settings.region):
         email_context = get_email_context(event_or_subevent=subevent or wle.event, event=wle.event)
         try:
             mail(
@@ -41,7 +41,7 @@ def _send_wle_mail(wle: WaitingListEntry, subject: LazyI18nString, message: Lazy
 
 def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent,
                refund_amount: Decimal, user: User, positions: list):
-    with language(order.locale):
+    with language(order.locale, order.event.settings.region):
         try:
             ia = order.invoice_address
         except InvoiceAddress.DoesNotExist:

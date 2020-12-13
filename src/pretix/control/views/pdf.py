@@ -188,7 +188,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
                 pass
 
         if "preview" in request.POST:
-            with rolledback_transaction(), language(request.event.settings.locale):
+            with rolledback_transaction(), language(request.event.settings.locale, request.event.settings.region):
                 p = self._get_preview_position()
                 fname, mimet, data = self.generate(
                     p,

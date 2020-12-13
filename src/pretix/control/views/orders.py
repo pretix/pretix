@@ -666,7 +666,7 @@ class OrderCancellationRequestDelete(OrderView):
             }, user=self.request.user)
 
         messages.success(self.request, _('The request has been removed. If you want, you can now inform the user.'))
-        with language(self.order.locale):
+        with language(self.order.locale, self.request.event.settings.region):
             return redirect(reverse('control:event.order.sendmail', kwargs={
                 'event': self.request.event.slug,
                 'organizer': self.request.event.organizer.slug,
@@ -937,7 +937,7 @@ class OrderRefundView(OrderView):
                     if giftcard_value and self.order.email:
                         messages.success(self.request, _('A new gift card was created. You can now send the user their '
                                                          'gift card code.'))
-                        with language(self.order.locale):
+                        with language(self.order.locale, self.request.event.settings.region):
                             return redirect(reverse('control:event.order.sendmail', kwargs={
                                 'event': self.request.event.slug,
                                 'organizer': self.request.event.organizer.slug,
@@ -1779,7 +1779,7 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
             code=self.kwargs['code'].upper()
         )
         self.preview_output = {}
-        with language(order.locale):
+        with language(order.locale, self.request.event.settings.region):
             email_context = get_email_context(event=order.event, order=order)
         email_template = LazyI18nString(form.cleaned_data['message'])
         email_subject = str(form.cleaned_data['subject']).format_map(TolerantDict(email_context))
@@ -1842,7 +1842,7 @@ class OrderPositionSendMail(OrderSendMail):
             attendee_email__isnull=False
         )
         self.preview_output = {}
-        with language(position.order.locale):
+        with language(position.order.locale, self.request.event.settings.region):
             email_context = get_email_context(event=position.order.event, order=position.order, position=position)
         email_template = LazyI18nString(form.cleaned_data['message'])
         email_subject = str(form.cleaned_data['subject']).format_map(TolerantDict(email_context))

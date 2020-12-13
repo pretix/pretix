@@ -10,11 +10,15 @@ from pretix.base.signals import register_global_settings
 
 
 class GlobalSettingsForm(SettingsForm):
+    auto_fields = [
+        'region'
+    ]
+
     def __init__(self, *args, **kwargs):
         self.obj = GlobalSettingsObject()
         super().__init__(*args, obj=self.obj, **kwargs)
 
-        self.fields = OrderedDict([
+        self.fields = OrderedDict(list(self.fields.items()) + [
             ('footer_text', I18nFormField(
                 widget=I18nTextInput,
                 required=False,

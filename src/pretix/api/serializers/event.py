@@ -574,6 +574,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'presale_start_show_date',
         'locales',
         'locale',
+        'region',
         'last_order_modification_date',
         'show_quota_left',
         'waiting_list_enabled',

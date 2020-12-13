@@ -43,7 +43,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
 
     lp = invoice.order.payments.last()
 
-    with language(invoice.locale):
+    with language(invoice.locale, invoice.event.settings.region):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
         invoice.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
         invoice.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
@@ -244,7 +244,7 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.date = timezone.now().date()
     cancellation.payment_provider_text = ''
     cancellation.file = None
-    with language(invoice.locale):
+    with language(invoice.locale, invoice.event.settings.region):
         cancellation.invoice_from = invoice.event.settings.get('invoice_address_from')
         cancellation.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
         cancellation.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
@@ -297,7 +297,7 @@ def invoice_pdf_task(invoice: int):
             return None
         if i.file:
             i.file.delete()
-        with language(i.locale):
+        with language(i.locale, i.event.settings.region):
             fname, ftype, fcontent = i.event.invoice_renderer.generate(i)
             i.file.save(fname, ContentFile(fcontent))
             i.save()
@@ -328,7 +328,7 @@ def build_preview_invoice_pdf(event):
     if not locale or locale == '__user__':
         locale = event.settings.locale
 
-    with rolledback_transaction(), language(locale):
+    with rolledback_transaction(), language(locale, event.settings.region):
         order = event.orders.create(status=Order.STATUS_PENDING, datetime=timezone.now(),
                                     expires=timezone.now(), code="PREVIEW", total=100 * event.tax_rules.count())
         invoice = Invoice(

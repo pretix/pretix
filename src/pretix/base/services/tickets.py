@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 def generate_orderposition(order_position: int, provider: str):
     order_position = OrderPosition.objects.select_related('order', 'order__event').get(id=order_position)
 
-    with language(order_position.order.locale):
+    with language(order_position.order.locale, order_position.order.event.settings.region):
         responses = register_ticket_outputs.send(order_position.order.event)
         for receiver, response in responses:
             prov = response(order_position.order.event)
@@ -41,7 +41,7 @@ def generate_orderposition(order_position: int, provider: str):
 def generate_order(order: int, provider: str):
     order = Order.objects.select_related('event').get(id=order)
 
-    with language(order.locale):
+    with language(order.locale, order.event.settings.region):
         responses = register_ticket_outputs.send(order.event)
         for receiver, response in responses:
             prov = response(order.event)
@@ -75,7 +75,7 @@ class DummyRollbackException(Exception):
 def preview(event: int, provider: str):
     event = Event.objects.get(id=event)
 
-    with rolledback_transaction(), language(event.settings.locale):
+    with rolledback_transaction(), language(event.settings.locale, event.settings.region):
         item = event.items.create(name=_("Sample product"), default_price=42.23,
                                   description=_("Sample product description"))
         item2 = event.items.create(name=_("Sample workshop"), default_price=23.40)

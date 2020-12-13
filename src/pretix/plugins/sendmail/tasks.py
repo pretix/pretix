@@ -52,7 +52,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                     continue
 
                 try:
-                    with language(o.locale):
+                    with language(o.locale, event.settings.region):
                         email_context = get_email_context(event=event, order=o, position_or_address=p, position=p)
                         mail(
                             p.attendee_email,
@@ -80,7 +80,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
 
         if send_to_order and o.email:
             try:
-                with language(o.locale):
+                with language(o.locale, event.settings.region):
                     email_context = get_email_context(event=event, order=o, position_or_address=ia)
                     mail(
                         o.email,

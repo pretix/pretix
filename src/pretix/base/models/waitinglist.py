@@ -125,7 +125,7 @@ class WaitingListEntry(LoggedModel):
             self.voucher = v
             self.save()
 
-        with language(self.locale):
+        with language(self.locale, self.event.settings.region):
             mail(
                 self.email,
                 _('You have been selected from the waitinglist for {event}').format(event=str(self.event)),

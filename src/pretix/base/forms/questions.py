@@ -35,7 +35,7 @@ from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
     TimePickerWidget, UploadedFileWidget,
 )
-from pretix.base.i18n import language
+from pretix.base.i18n import get_language_without_region, language
 from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import (
     EU_COUNTRIES, cc_to_vat_prefix, is_eu_country,
@@ -216,8 +216,8 @@ class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 def guess_country(event):
     # Try to guess the initial country from either the country of the merchant
     # or the locale. This will hopefully save at least some users some scrolling :)
-    locale = get_language()
-    country = event.settings.invoice_address_from_country
+    locale = get_language_without_region()
+    country = event.settings.region or event.settings.invoice_address_from_country
     if not country:
         valid_countries = countries.countries
         if '-' in locale:
