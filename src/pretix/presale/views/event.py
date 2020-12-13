@@ -415,13 +415,33 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         else:
             context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
 
+        if self.request.event.has_subevents:
+            context.update(self._subevent_list_context())
+
+        context['show_cart'] = (
+            context['cart']['positions'] and (
+                self.request.event.has_subevents or self.request.event.presale_is_running
+            )
+        )
+        if self.request.event.settings.redirect_to_checkout_directly:
+            context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
+                                                    kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
+            if context['cart_redirect'].startswith('https:'):
+                context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
+        else:
+            context['cart_redirect'] = self.request.path
+
+        return context
+
+    def _subevent_list_context(self):
+        context = {}
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
         if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
             if self.request.event.settings.event_list_type not in ("calendar", "week"):
                 self.request.event.settings.event_list_type = "calendar"
             context['list_type'] = "calendar"
 
-        if context['list_type'] == "calendar" and self.request.event.has_subevents:
+        if context['list_type'] == "calendar":
             self._set_month_year()
             tz = pytz.timezone(self.request.event.settings.timezone)
             _, ndays = calendar.monthrange(self.year, self.month)
@@ -436,7 +456,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             add_subevents_for_days(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
-                kwargs.get('cart_namespace')
+                self.kwargs.get('cart_namespace')
             )
 
             context['show_names'] = ebd.get('_subevents_different_names', False) or sum(
@@ -445,7 +465,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['years'] = range(now().year - 2, now().year + 3)
-        elif context['list_type'] == "week" and self.request.event.has_subevents:
+        elif context['list_type'] == "week":
             self._set_week_year()
             tz = pytz.timezone(self.request.event.settings.timezone)
             week = isoweek.Week(self.year, self.week)
@@ -464,7 +484,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             add_subevents_for_days(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
-                kwargs.get('cart_namespace')
+                self.kwargs.get('cart_namespace')
             )
 
             context['show_names'] = ebd.get('_subevents_different_names', False) or sum(
@@ -479,24 +499,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['week_format'] = get_format('WEEK_FORMAT')
             if context['week_format'] == 'WEEK_FORMAT':
                 context['week_format'] = WEEK_FORMAT
-        elif self.request.event.has_subevents:
+        else:
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
             )
-
-        context['show_cart'] = (
-            context['cart']['positions'] and (
-                self.request.event.has_subevents or self.request.event.presale_is_running
-            )
-        )
-        if self.request.event.settings.redirect_to_checkout_directly:
-            context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
-                                                    kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
-            if context['cart_redirect'].startswith('https:'):
-                context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
-        else:
-            context['cart_redirect'] = self.request.path
-
         return context
 
 
