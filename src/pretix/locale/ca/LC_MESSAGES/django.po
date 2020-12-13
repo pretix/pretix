@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-12-13 00:00+0000\n"
+"PO-Revision-Date: 2020-12-13 18:16+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -178,17 +178,13 @@ msgid ""
 msgstr ""
 
 #: pretix/api/serializers/item.py:145 pretix/control/forms/item.py:501
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
-"No podeu seleccionar una quota i un producte específic al mateix temps."
+msgstr "Els vals regal no haurien de ser també entrades."
 
 #: pretix/api/serializers/item.py:182
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "No existeix la propietat de dada meta '{name}'."
+msgstr "La propietat de metadades '{name}' no existeix."
 
 #: pretix/api/serializers/item.py:299
 msgid ""
@@ -211,10 +207,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr ""
 
 #: pretix/api/serializers/order.py:927 pretix/api/serializers/order.py:934
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "El producte \"{}\" no s'ha assignat a una quota."
+msgstr "El producte \"{}\" no està disponible en aquesta data."
 
 #: pretix/api/serializers/organizer.py:53 pretix/control/forms/organizer.py:416
 msgid ""
@@ -264,10 +258,8 @@ msgstr ""
 
 #: pretix/api/views/order.py:569 pretix/base/services/cart.py:109
 #: pretix/base/services/orders.py:92 pretix/presale/views/order.py:707
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "One of the selected products is not available in the selected country."
-msgstr "El producte seleccionat no està actiu o no te cap preu establert."
+msgstr "El producte seleccionat no està disponible en aquesta geografia."
 
 #: pretix/api/webhooks.py:179 pretix/base/notifications.py:205
 msgid "New order placed"
@@ -287,10 +279,8 @@ msgid "Order canceled"
 msgstr "S'ha cancel·lat la comanda"
 
 #: pretix/api/webhooks.py:195 pretix/base/notifications.py:229
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order reactivated"
-msgstr "S'ha denegat la comanda"
+msgstr "Comanda reactivada"
 
 #: pretix/api/webhooks.py:199 pretix/base/notifications.py:235
 msgid "Order expired"
@@ -330,37 +320,27 @@ msgid "Ticket check-in reverted"
 msgstr "S'ha tornat enrere l'activació del tiquet"
 
 #: pretix/api/webhooks.py:235
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "Data de l'esdeveniment"
+msgstr "Esdeveniment creat"
 
 #: pretix/api/webhooks.py:239 pretix/api/webhooks.py:243
-#, fuzzy
-#| msgid "Event date range"
 msgid "Event details changed"
-msgstr "Rang de data de l'esdeveniment"
+msgstr "S'han canviat els detalls de l'acte"
 
 #: pretix/api/webhooks.py:247
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Dia i hora de l'inici de l'esdeveniment"
+msgstr "S'ha afegit la data de la sèrie d'actes"
 
 #: pretix/api/webhooks.py:251
-#, fuzzy
-#| msgid "Event date range"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "Rang de data de l'esdeveniment"
+msgstr "S'ha canviat la data de la sèrie d'actes"
 
 #: pretix/api/webhooks.py:255
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr "Dia i hora de l'inici de l'esdeveniment"
+msgstr "S'ha esborrat la data de la sèrie d'actes"
 
 #: pretix/base/auth.py:104
 #, python-brace-format
@@ -719,7 +699,7 @@ msgstr "Ciutat"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:102
 #: pretix/presale/templates/pretixpresale/event/order.html:292
 msgid "Country"
-msgstr "País"
+msgstr "Estat"
 
 #: pretix/base/exporters/invoices.py:174 pretix/base/exporters/invoices.py:301
 msgid "Tax ID"
@@ -946,10 +926,8 @@ msgid "Only paid orders"
 msgstr "Només les comandes pagades"
 
 #: pretix/base/exporters/orderlist.py:58
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Include payment amounts"
-msgstr "Activa el mètode de pagament"
+msgstr "Incloure imports de pagament"
 
 #: pretix/base/exporters/orderlist.py:142
 #: pretix/base/exporters/orderlist.py:301
@@ -1018,10 +996,8 @@ msgstr "Data de la comanda"
 #: pretix/base/exporters/orderlist.py:143
 #: pretix/base/exporters/orderlist.py:306
 #: pretix/base/exporters/orderlist.py:405
-#, fuzzy
-#| msgid "Order date"
 msgid "Order time"
-msgstr "Data de la comanda"
+msgstr "Hora de la comanda"
 
 #: pretix/base/exporters/orderlist.py:151
 msgid "Date of last payment"
@@ -1210,60 +1186,44 @@ msgstr "Identificador de la pseudonimització"
 
 #: pretix/base/exporters/orderlist.py:434 pretix/base/orderimport.py:594
 #: pretix/plugins/checkinlists/exporters.py:431
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat ID"
-msgstr "ID del client"
+msgstr "Codi de seient"
 
 #: pretix/base/exporters/orderlist.py:435
 #: pretix/plugins/checkinlists/exporters.py:432
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat name"
-msgstr "Nom de l'equip"
+msgstr "Nom de seient"
 
 #: pretix/base/exporters/orderlist.py:436
 #: pretix/plugins/checkinlists/exporters.py:433
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat zone"
-msgstr "Nom de l'equip"
+msgstr "Zona de seient"
 
 #: pretix/base/exporters/orderlist.py:437
 #: pretix/plugins/checkinlists/exporters.py:434
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat row"
-msgstr "ID del client"
+msgstr "Filera de seient"
 
 #: pretix/base/exporters/orderlist.py:438
 #: pretix/plugins/checkinlists/exporters.py:435
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat number"
-msgstr "Nom de l'equip"
+msgstr "Número de seient"
 
 #: pretix/base/exporters/orderlist.py:439
-#, fuzzy
-#| msgid "Order code"
 msgid "Order comment"
-msgstr "Codi de comanda"
+msgstr "Comentari de la comanda"
 
 #: pretix/base/exporters/orderlist.py:593
 msgid "Order payments and refunds"
 msgstr "Pagaments i reemborsaments de les comandes"
 
 #: pretix/base/exporters/orderlist.py:601
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment states"
-msgstr "Tarifa de pagament"
+msgstr "Estats del pagament"
 
 #: pretix/base/exporters/orderlist.py:609
-#, fuzzy
-#| msgid "Refund requested"
 msgid "Refund states"
-msgstr "S'ha demanat un reemborsament"
+msgstr "Estats del reemborsament"
 
 #: pretix/base/exporters/orderlist.py:634
 #: pretix/base/exporters/orderlist.py:722 pretix/base/models/orders.py:203
@@ -1366,10 +1326,8 @@ msgid "Waiting list"
 msgstr "Llista d'espera"
 
 #: pretix/base/exporters/orderlist.py:675
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Exited orders"
-msgstr "Comandes pagades"
+msgstr "Comandes abandonades"
 
 #: pretix/base/exporters/orderlist.py:675
 msgid "Current availability"
@@ -1383,10 +1341,8 @@ msgid "Infinite"
 msgstr "Infinit"
 
 #: pretix/base/exporters/orderlist.py:705
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card redemptions"
-msgstr "Targeta regal"
+msgstr "Usos de vals regal"
 
 #: pretix/base/exporters/orderlist.py:722 pretix/base/models/giftcards.py:54
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:10
@@ -1395,27 +1351,21 @@ msgstr "Targeta regal"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:28
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:51
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:39
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card code"
-msgstr "Targeta regal"
+msgstr "Codi del val regal"
 
 #: pretix/base/exporters/orderlist.py:722
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
-#, fuzzy
-#| msgid "View order details"
 msgid "Issuer"
-msgstr "Visualitza els detalls de la comanda"
+msgstr "Emissor"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:99
 msgid "Keep me logged in"
 msgstr "Manté la sessió iniciada"
 
 #: pretix/base/forms/auth.py:20 pretix/base/forms/auth.py:190
-#, fuzzy
-#| msgid "This voucher code is not known in our database."
 msgid "This combination of credentials is not known to our system."
-msgstr "El codi de val es desconegut dins la nostra base de dades."
+msgstr "El sistema no reconeix aquesta combinació de credencials."
 
 #: pretix/base/forms/auth.py:21 pretix/base/forms/auth.py:191
 msgid "This account is inactive."
@@ -1442,21 +1392,17 @@ msgid "Repeat password"
 msgstr "Repetiu la contrasenya"
 
 #: pretix/base/forms/questions.py:202
-#, fuzzy
-#| msgid "Please enter the same password twice"
 msgid "Please enter a shorter name."
-msgstr "Si us plau, introduïu la mateixa contrasenya dues vegades"
+msgstr "Si us plau, introduïu un nom més curt."
 
 #: pretix/base/forms/questions.py:337 pretix/base/forms/questions.py:643
 msgid "Street and Number"
 msgstr "Carrer i número"
 
 #: pretix/base/forms/questions.py:371 pretix/base/forms/questions.py:683
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "address"
 msgid "Select state"
-msgstr "No ha començat la prevenda"
+msgstr "Seleccioneu l'estat"
 
 #: pretix/base/forms/questions.py:597 pretix/base/forms/questions.py:774
 #: pretix/base/payment.py:51 pretix/control/forms/event.py:608
@@ -1693,12 +1639,9 @@ msgid "Customer reference: {reference}"
 msgstr "Referència de client: {reference}"
 
 #: pretix/base/invoice.py:477
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Client"
+msgstr "Client VAT ID"
 
 #: pretix/base/invoice.py:484
 msgctxt "invoice"
@@ -1706,11 +1649,9 @@ msgid "Beneficiary"
 msgstr "Beneficiari"
 
 #: pretix/base/invoice.py:502
-#, fuzzy
-#| msgid "Invoice"
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "Factura"
+msgstr "Impostos de la factura"
 
 #: pretix/base/invoice.py:503
 msgctxt "invoice"
@@ -1760,11 +1701,9 @@ msgid "Invoice total"
 msgstr "Total de la factura"
 
 #: pretix/base/invoice.py:573
-#, fuzzy
-#| msgid "Accept late payments"
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Accepta pagaments tardans"
+msgstr "Pagaments rebuts"
 
 #: pretix/base/invoice.py:576
 msgctxt "invoice"
@@ -1931,10 +1870,8 @@ msgid "Allow re-entering after an exit scan"
 msgstr ""
 
 #: pretix/base/models/checkin.py:34
-#, fuzzy
-#| msgid "Ask for email addresses per ticket"
 msgid "Allow multiple entries per ticket"
-msgstr "Demana adreces de correu per tiquet"
+msgstr "Permetre múltiples entrades per tiquet"
 
 #: pretix/base/models/checkin.py:35
 msgid ""
@@ -1960,10 +1897,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/checkin.py:153
-#, fuzzy
-#| msgid "Country"
 msgid "Entry"
-msgstr "País"
+msgstr "Entrada"
 
 #: pretix/base/models/checkin.py:154
 msgid "Exit"
@@ -2245,16 +2180,12 @@ msgid "No value can contain the delimiter character."
 msgstr "Cap valor pot tenir el caràcter delimitador."
 
 #: pretix/base/models/giftcards.py:58
-#, fuzzy
-#| msgid "The slug may only contain letters, numbers, dots and dashes."
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
-msgstr "El mot només pot contenir lletres, números, punts i guions."
+msgstr "El val regal només pot contenir lletres, números, punts i guions."
 
 #: pretix/base/models/giftcards.py:63
-#, fuzzy
-#| msgid "Test mode"
 msgid "Test mode card"
-msgstr "Mode de prova"
+msgstr "Targeta de prova"
 
 #: pretix/base/models/giftcards.py:67
 #: pretix/control/templates/pretixcontrol/order/index.html:177
@@ -2331,10 +2262,8 @@ msgid "{category} (Add-On products)"
 msgstr "{category} (productes de complements)"
 
 #: pretix/base/models/items.py:121
-#, fuzzy
-#| msgid "Optional. No products will be sold before this date."
 msgid "Disable product for this date"
-msgstr "Opcional. No es vendrà cap producte abans d'aquesta data."
+msgstr "Desactivar producte per aquesta data"
 
 #: pretix/base/models/items.py:261 pretix/base/models/items.py:827
 #: pretix/control/templates/pretixcontrol/items/index.html:38
@@ -2408,10 +2337,8 @@ msgid "Generate tickets"
 msgstr "Genera tiquets"
 
 #: pretix/base/models/items.py:316
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Show a waiting list for this ticket"
-msgstr "A la llista d'espera des de"
+msgstr "Mostrar una llista d'espera per a aquest tiquet"
 
 #: pretix/base/models/items.py:317
 #, fuzzy
@@ -2425,11 +2352,8 @@ msgid "Show number of tickets left"
 msgstr "Mostra el número restant de tiquets"
 
 #: pretix/base/models/items.py:322
-#, fuzzy
-#| msgid ""
-#| "Publicly show how many tickets of a certain type are still available."
 msgid "Publicly show how many tickets are still available."
-msgstr "Mostra públicament quants tiquets queden d'un tipus determinat."
+msgstr "Mostra públicament quants tiquets hi ha encara disponibles."
 
 #: pretix/base/models/items.py:329
 msgid "Product picture"
@@ -5099,7 +5023,7 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:192
 msgid "This order is not marked as paid."
-msgstr "Aquesta comanda no està marcada com pagada."
+msgstr "Aquesta comanda no està marcada com a pagada."
 
 #: pretix/base/services/checkin.py:197
 msgid "You need to answer questions to complete this check-in."
@@ -5126,7 +5050,7 @@ msgstr "No heu seleccionat cap producte."
 #, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr ""
+msgstr "Si us plau, penseu a fer el pagament abans del dia {expire_date}."
 
 #: pretix/base/services/invoices.py:79
 #, fuzzy, python-brace-format
@@ -5661,16 +5585,12 @@ msgstr ""
 "recomana!)"
 
 #: pretix/base/settings.py:74
-#, fuzzy
-#| msgid ""
-#| "Independent of your choice, the cart will show gross prices as this the "
-#| "price that needs to be paid"
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
 "Independentment de la vostra elecció, la cistella mostrarà el preu brut ja "
-"que aquest és el preu que s'ha de pagar"
+"que aquest és el preu que s'ha de pagar."
 
 #: pretix/base/settings.py:89
 msgid "Ask for attendee names"
@@ -5842,7 +5762,7 @@ msgstr ""
 
 #: pretix/base/settings.py:301
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "Mostrar import pagat en les factures parcialment pagades"
 
 #: pretix/base/settings.py:302
 msgid ""
@@ -6089,7 +6009,7 @@ msgstr ""
 
 #: pretix/base/settings.py:538
 msgid "Automatically expire unpaid orders"
-msgstr "Expira automàticament comandes no pagades"
+msgstr "Expira automàticament les comandes no pagades"
 
 #: pretix/base/settings.py:539
 msgid ""
@@ -7031,7 +6951,7 @@ msgstr ""
 "\n"
 "{url}\n"
 "\n"
-"Si us plau, teniu en compte que aquest enllaç només és vàlid durant les "
+"Si us plau, tingueu en compte que aquest enllaç només és vàlid durant les "
 "següents {hours} hores!\n"
 "Reassignarem el tiquet a la següent persona de la llista si no bescanvieu el "
 "val\n"
@@ -7064,21 +6984,7 @@ msgstr ""
 "el vostre equip de l'esdeveniment {event}"
 
 #: pretix/base/settings.py:1487
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we approved your order for {event} and will be happy to welcome you\n"
-#| "at our event.\n"
-#| "\n"
-#| "Please continue by paying for your order before {date}.\n"
-#| "\n"
-#| "You can select a payment method and perform the payment here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -7096,10 +7002,11 @@ msgid ""
 msgstr ""
 "Hola,\n"
 "\n"
-"hem aprovat la vostra comanda per {event} i ens encantarà donar-vos la\n"
-"benvinguda al nostre esdeveniment.\n"
+"hem aprovat la vostra comanda per {event} i ens complaurà donar-vos la\n"
+"benvinguda a aquest esdeveniment.\n"
 "\n"
-"Si us plau, continueu amb el pagament de la vostra comanda abans de {date}.\n"
+"Si us plau, continueu amb el pagament de la vostra comanda abans de  "
+"{expire_date}.\n"
 "\n"
 "Podeu seleccionar un mètode de pagament i realitzar-lo aquí:\n"
 "\n"
@@ -9537,17 +9444,7 @@ msgstr ""
 "el vostre equip de l'esdeveniment {event}"
 
 #: pretix/control/forms/orders.py:739
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order for {event} has been changed.\n"
-#| "\n"
-#| "You can view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9561,10 +9458,9 @@ msgid ""
 msgstr ""
 "Hola,\n"
 "\n"
-"ha canviat la vostra comanda per {event}.\n"
+"lamentem comunicar-vos que l'acte {event} ha estat cancel·lat.\n"
 "\n"
-"Podeu veure l'estat de la comanda a\n"
-"{url}\n"
+"No rebreu cap ticket de la llista d'espera.\n"
 "\n"
 "Atentament,\n"
 "el vostre equip de l'esdeveniment {event}"
@@ -9822,20 +9718,7 @@ msgid "Your voucher for {event}"
 msgstr ""
 
 #: pretix/control/forms/vouchers.py:237
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "unfortunately, we denied your order request for {event}.\n"
-#| "\n"
-#| "{comment}\n"
-#| "\n"
-#| "You can view the details of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9853,16 +9736,17 @@ msgid ""
 msgstr ""
 "Hola,\n"
 "\n"
-"malauradament hem denegat la vostra petició de pagament per {event}.\n"
+"en aquest missatge us fem arribar un o més vals per a l'acte {event}:\n"
 "\n"
-"{comment}\n"
+"{voucher_list}\n"
 "\n"
-"Podeu veure els detalls de la vostra comanda aquí:\n"
+"Els podeu bescanviar a la nostra botiga d'entrades:\n"
 "\n"
 "{url}\n"
 "\n"
 "Atentament,\n"
-"el vostre equip de l'esdeveniment {event}"
+"\n"
+"l'equip de l'esdeveniment {event}"
 
 #: pretix/control/forms/vouchers.py:243
 msgid "Recipients"
@@ -10132,7 +10016,7 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:279
 msgid "The order has been marked as unpaid."
-msgstr ""
+msgstr "La comanda ha estat marcada com a no pagada."
 
 #: pretix/control/logdisplay.py:280
 msgid "The order's secret has been changed."
@@ -10148,7 +10032,7 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:283
 msgid "The order has been marked as paid."
-msgstr ""
+msgstr "La comanda ha estat marcada com a pagada."
 
 #: pretix/control/logdisplay.py:284
 #, fuzzy
@@ -11077,7 +10961,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:7
 msgid "Accept an invitation"
-msgstr ""
+msgstr "Acceptar una invitació"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:10
 #, python-format
@@ -11086,40 +10970,45 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"Si ja teniu un compte en aquest lloc amb una adreça de correu electrònic "
+"diferent, podeu <a %(login_href)s>inicar la sessió</a> i després fer clic en "
+"aquest enllaç per acceptar la invitació amb el compte existent."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
 msgid "Login"
-msgstr ""
+msgstr "Iniciar sessió"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr ""
+msgstr "Registrar-vos"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 msgid "Log in"
-msgstr ""
+msgstr "Iniciar sessió"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:38
 msgid "Lost password?"
-msgstr ""
+msgstr "Heu oblidat la clau d'accés ?"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:9
 #: pretix/control/templates/pretixcontrol/user/reauth.html:9
 msgid "Welcome back!"
-msgstr ""
+msgstr "Ben tornat !"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:11
 msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
 msgstr ""
+"Heu configurat el vostre compte per a requerir autenticació via un segon "
+"medi, com ara el vostre telèfon. Si us plau, entreu el codi de verificació :"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:14
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:18
 #: pretix/control/templates/pretixcontrol/user/reauth.html:22
@@ -11789,6 +11678,15 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Hola,\n"
+"\n"
+"heu demanat una nova clau d'accés. Si us plau aneu a la pàgina següent per a "
+"canviar-la:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Atentament,\n"
+"L'equip de pretix\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -11810,6 +11708,23 @@ msgid ""
 "\n"
 "Your pretix team\n"
 msgstr ""
+"Hola,\n"
+"\n"
+"us hem convidat a formar part d'un equip de gestió d'esdeveniments a pretix,"
+"\n"
+"una plataforma de venda de tickets.\n"
+"\n"
+"Organitzador: %(organizer)s\n"
+"Equip: %(team)s\n"
+"\n"
+"Si voleu formar-ne part només heu de clicar aquest enllaç:\n"
+"%(url)s\n"
+"\n"
+"Si no us hi voleu unir, senzillament ignoreu aquest missatge.\n"
+"\n"
+"Atentament,\n"
+"\n"
+"L'equip de pretix\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
 #, python-format
@@ -13752,7 +13667,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:27
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:161
 msgid "No, take me back"
-msgstr ""
+msgstr "No, tornar enrera"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:25
 msgid "Yes, approve order"
@@ -13766,7 +13681,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:414
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
-msgstr ""
+msgstr "Cancel·lar comanda"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:11
 #: pretix/control/templates/pretixcontrol/order/deny.html:10
@@ -13782,7 +13697,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/cancel.html:38
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:169
 msgid "Yes, cancel order"
-msgstr ""
+msgstr "Sí, cancel·lar la comanda"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:4
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:8
@@ -17163,20 +17078,7 @@ msgid "Your cancellation request"
 msgstr "Tarifa de cancel·lació"
 
 #: pretix/control/views/orders.py:676
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "unfortunately, we denied your order request for {event}.\n"
-#| "\n"
-#| "{comment}\n"
-#| "\n"
-#| "You can view the details of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -17187,13 +17089,8 @@ msgid ""
 msgstr ""
 "Hola,\n"
 "\n"
-"malauradament hem denegat la vostra petició de pagament per {event}.\n"
+"malauradament no hem pogut atendre la vostra petició i cancel·lar la comanda."
 "\n"
-"{comment}\n"
-"\n"
-"Podeu veure els detalls de la vostra comanda aquí:\n"
-"\n"
-"{url}\n"
 "\n"
 "Atentament,\n"
 "el vostre equip de l'esdeveniment {event}"
@@ -17265,6 +17162,14 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Hola,\n"
+"\n"
+"us hem reintegrat {amount} de la vostra comanda.\n"
+"\n"
+"Podeu fer servir el codi de val {giftcard} per les vostres futures compres a "
+"la botiga.\n"
+"\n"
+"l'equip de l'acte {event}"
 
 #: pretix/control/views/orders.py:959
 msgid "The refunds you selected do not match the selected total refund amount."
@@ -17275,6 +17180,8 @@ msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
 msgstr ""
+"La comanda ha estat marcada com a pagada, però no hem pogut enviar un correu "
+"de confirmació."
 
 #: pretix/control/views/orders.py:1083
 msgid "The payment has been created successfully."
@@ -20270,7 +20177,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:26
 msgid "This shop is currently only visible to you and your team."
-msgstr ""
+msgstr "Aquesta botiga ara mateix només és visible pel vostre equip."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:28
 msgid "Take it live now"
@@ -20287,7 +20194,7 @@ msgid ""
 "This ticket shop is currently in test mode. Please do not perform any real "
 "purchases as your order might be deleted without notice."
 msgstr ""
-"Aquesta botiga està ara mateix en mode de proves. Si us plau, no feu cap "
+"Aquesta botiga és ara mateix en mode de proves. Si us plau, no feu cap "
 "compra real perquè la comanda podria ser suprimida sense avís previ."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:104
@@ -20545,7 +20452,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:6
 msgid "Before we continue, we need you to answer some questions."
-msgstr "Abans de continuar, cal que empleneu algunes dades."
+msgstr "Abans de continuar, necessitem que ens proporcioneu més informació."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid ""
@@ -20620,7 +20527,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:151
 msgid "Okay, we're removing that…"
-msgstr ""
+msgstr "D'acord, eliminem això …"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:155
 msgid "Remove one"
@@ -20628,7 +20535,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:167
 msgid "We're trying to reserve another one for you!"
-msgstr ""
+msgstr "Estem mirant de reservar-ne un altre !"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:168
 #: pretix/presale/templates/pretixpresale/event/index.html:253
@@ -20921,6 +20828,7 @@ msgstr "Moltes gràcies!"
 #: pretix/presale/templates/pretixpresale/event/order.html:17
 msgid "Your order has been placed successfully. See below for details."
 msgstr ""
+"La comanda s'ha registrat correctament. Veieu-ne els detalls aquí a sota."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:20
 msgid ""
@@ -20935,6 +20843,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Your order has been processed successfully! See below for details."
 msgstr ""
+"La comanda s'ha processat correctament ! Veieu-ne els detalls aquí a sota."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:31
 msgid "We successfully received your payment. See below for details."
@@ -21054,11 +20963,9 @@ msgid "Internal Reference"
 msgstr "Refererència interna"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:320
-#, fuzzy
-#| msgid "All organizers"
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Tots els organitzadors"
+msgstr "Canvieu o cancel·leu la vostra comanda"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:327
 msgid ""
@@ -21147,7 +21054,7 @@ msgstr "S'ha cancel·lat la comanda: %(code)s"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "Cancel·lar la comanda: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:26
 msgid ""
@@ -21161,6 +21068,8 @@ msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"Si cancel·leu aquesta comanda, tots els tickets seràn invalidats i no es "
+"podran fer servir. Aquesta acció no es pot desfer."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:43
 #, python-format
