@@ -599,7 +599,7 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
         )
 
         if 'locale' in request.GET and request.GET.get('locale') in dict(settings.LANGUAGES):
-            with language(request.GET.get('locale')):
+            with language(request.GET.get('locale'), self.request.organizer.settings.region):
                 cal = get_ical(events)
         else:
             cal = get_ical(events)

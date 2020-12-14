@@ -82,7 +82,7 @@ class AllTicketsPDF(BaseExporter):
             if op.order.event != o.event:
                 o = PdfTicketOutput(op.event)
 
-            with language(op.order.locale):
+            with language(op.order.locale, o.event.settings.region):
                 layout = o.layout_map.get(
                     (op.item_id, op.order.sales_channel),
                     o.layout_map.get(

@@ -126,6 +126,7 @@ def get_javascript_format_without_seconds(format_name):
 
 def get_moment_locale(locale=None):
     cur_lang = locale or translation.get_language()
+    cur_lang = cur_lang.lower()
     if cur_lang in moment_locales:
         return cur_lang
     if '-' in cur_lang or '_' in cur_lang:

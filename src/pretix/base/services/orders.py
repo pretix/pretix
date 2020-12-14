@@ -23,7 +23,9 @@ from django_scopes import scopes_disabled
 from pretix.api.models import OAuthApplication
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_email_context
-from pretix.base.i18n import LazyLocaleException, language
+from pretix.base.i18n import (
+    LazyLocaleException, get_language_without_region, language,
+)
 from pretix.base.models import (
     CartPosition, Device, Event, GiftCard, Item, ItemVariation, Order,
     OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
@@ -260,7 +262,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
             # send_mail will trigger PDF generation later
 
     if send_mail:
-        with language(order.locale):
+        with language(order.locale, order.event.settings.region):
             if order.total == Decimal('0.00'):
                 email_template = order.event.settings.mail_text_order_approved_free
                 email_subject = _('Order approved and confirmed: %(code)s') % {'code': order.code}
@@ -311,7 +313,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
     if send_mail:
         email_template = order.event.settings.mail_text_order_denied
         email_context = get_email_context(event=order.event, order=order, comment=comment)
-        with language(order.locale):
+        with language(order.locale, order.event.settings.region):
             email_subject = _('Order denied: %(code)s') % {'code': order.code}
             try:
                 order.send_mail(
@@ -422,7 +424,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
         if send_mail:
             email_template = order.event.settings.mail_text_order_canceled
-            with language(order.locale):
+            with language(order.locale, order.event.settings.region):
                 email_context = get_email_context(event=order.event, order=order)
                 email_subject = _('Order canceled: %(code)s') % {'code': order.code}
                 try:
@@ -777,7 +779,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             event=event,
             email=email,
             datetime=now_dt,
-            locale=locale,
+            locale=get_language_without_region(locale),
             total=total,
             testmode=True if sales_channel.testmode_supported and event.testmode else False,
             meta_info=json.dumps(meta_info or {}),
@@ -1033,7 +1035,7 @@ def send_expiry_warnings(sender, **kwargs):
                     # Race condition
                     continue
 
-                with language(o.locale):
+                with language(o.locale, settings.region):
                     o.expiry_reminder_sent = True
                     o.save(update_fields=['expiry_reminder_sent'])
                     email_template = settings.mail_text_order_expire_warning
@@ -1110,7 +1112,7 @@ def send_download_reminders(sender, **kwargs):
             if not send:
                 continue
 
-            with language(o.locale):
+            with language(o.locale, o.event.settings.region):
                 o.download_reminder_sent = True
                 o.save(update_fields=['download_reminder_sent'])
                 email_template = event.settings.mail_text_download_reminder
@@ -1150,7 +1152,7 @@ def send_download_reminders(sender, **kwargs):
 
 
 def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
-    with language(order.locale):
+    with language(order.locale, order.event.settings.region):
         email_template = order.event.settings.mail_text_order_changed
         email_context = get_email_context(event=order.event, order=order)
         email_subject = _('Your order has been changed: %(code)s') % {'code': order.code}

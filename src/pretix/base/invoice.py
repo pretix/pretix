@@ -144,7 +144,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
 
     def _upper(self, val):
         # We uppercase labels, but not in every language
-        if get_language() == 'el':
+        if get_language().startswith('el'):
             return val
         return val.upper()
 

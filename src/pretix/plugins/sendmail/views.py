@@ -127,7 +127,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         if self.request.POST.get("action") == "preview":
             for l in self.request.event.settings.locales:
-                with language(l):
+                with language(l, self.request.event.settings.region):
                     context_dict = TolerantDict()
                     for k, v in get_available_placeholders(self.request.event, ['event', 'order',
                                                                                 'position_or_address']).items():

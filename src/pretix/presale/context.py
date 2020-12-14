@@ -12,6 +12,7 @@ from pretix.helpers.i18n import (
     get_javascript_format_without_seconds, get_moment_locale,
 )
 
+from ..base.i18n import get_language_without_region
 from .signals import (
     footer_link, global_html_footer, global_html_head, global_html_page_header,
     html_footer, html_head, html_page_header,
@@ -116,7 +117,7 @@ def _default_context(request):
     ctx['js_date_format'] = get_javascript_format_without_seconds('DATE_INPUT_FORMATS')
     ctx['js_time_format'] = get_javascript_format_without_seconds('TIME_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
-    ctx['html_locale'] = translation.get_language_info(translation.get_language()).get('public_code', translation.get_language())
+    ctx['html_locale'] = translation.get_language_info(get_language_without_region()).get('public_code', translation.get_language())
     ctx['settings'] = pretix_settings
     ctx['django_settings'] = settings
 

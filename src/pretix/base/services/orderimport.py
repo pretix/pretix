@@ -65,7 +65,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
     # TODO: quotacheck?
     cf = CachedFile.objects.get(id=fileid)
     user = User.objects.get(pk=user)
-    with language(locale):
+    with language(locale, event.settings.region):
         cols = get_all_columns(event)
         parsed = parse_csv(cf.file)
         orders = []
@@ -163,7 +163,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                     )
 
             for o in orders:
-                with language(o.locale):
+                with language(o.locale, event.settings.region):
                     order_placed.send(event, order=o)
                     if o.status == Order.STATUS_PAID:
                         order_paid.send(event, order=o)

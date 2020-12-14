@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils import translation
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -12,6 +11,7 @@ from pretix.base.templatetags.urlreplace import url_replace
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 
+from ...base.i18n import get_language_without_region
 from ...base.models import Item, ItemVariation, WaitingListEntry
 from ..forms.waitinglist import WaitingListForm
 from . import allow_frame_if_namespaced
@@ -27,7 +27,7 @@ class WaitingView(EventViewMixin, FormView):
         kwargs['event'] = self.request.event
         kwargs['instance'] = WaitingListEntry(
             item=self.item_and_variation[0], variation=self.item_and_variation[1],
-            event=self.request.event, locale=translation.get_language(),
+            event=self.request.event, locale=get_language_without_region(),
             subevent=self.subevent
         )
         return kwargs

@@ -290,7 +290,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 except Order.DoesNotExist:
                     order = None
                 else:
-                    with language(order.locale):
+                    with language(order.locale, event.settings.region):
                         if position:
                             try:
                                 position = order.positions.get(pk=position)

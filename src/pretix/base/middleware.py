@@ -15,7 +15,8 @@ from django.utils.translation.trans_real import (
     parse_accept_lang_header,
 )
 
-from pretix.base.settings import GlobalSettingsObject
+from pretix.base.i18n import get_language_without_region
+from pretix.base.settings import global_settings_object
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
 )
@@ -35,19 +36,30 @@ class LocaleMiddleware(MiddlewareMixin):
         # Normally, this middleware runs *before* the event is set. However, on event frontend pages it
         # might be run a second time by pretix.presale.EventMiddleware and in this case the event is already
         # set and can be taken into account for the decision.
-        if hasattr(request, 'event') and not request.path.startswith(get_script_prefix() + 'control'):
-            if language not in request.event.settings.locales:
-                firstpart = language.split('-')[0]
-                if firstpart in request.event.settings.locales:
-                    language = firstpart
-                else:
-                    language = request.event.settings.locale
-                    for lang in request.event.settings.locales:
-                        if lang.startswith(firstpart + '-'):
-                            language = lang
-                            break
+        if not request.path.startswith(get_script_prefix() + 'control'):
+            if hasattr(request, 'event'):
+                if language not in request.event.settings.locales:
+                    firstpart = language.split('-')[0]
+                    if firstpart in request.event.settings.locales:
+                        language = firstpart
+                    else:
+                        language = request.event.settings.locale
+                        for lang in request.event.settings.locales:
+                            if lang.startswith(firstpart + '-'):
+                                language = lang
+                                break
+                if '-' not in language and request.event.settings.region:
+                    language += '-' + request.event.settings.region
+            elif hasattr(request, 'organizer'):
+                if '-' not in language and request.organizer.settings.region:
+                    language += '-' + request.organizer.settings.region
+        else:
+            gs = global_settings_object(request)
+            if '-' not in language and gs.settings.region:
+                language += '-' + gs.settings.region
+
         translation.activate(language)
-        request.LANGUAGE_CODE = translation.get_language()
+        request.LANGUAGE_CODE = get_language_without_region()
 
         tzname = None
         if hasattr(request, 'event'):
@@ -192,7 +204,7 @@ class SecurityMiddleware(MiddlewareMixin):
         resp['P3P'] = 'CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"'
 
         img_src = []
-        gs = GlobalSettingsObject()
+        gs = global_settings_object(request)
         if gs.settings.leaflet_tiles:
             img_src.append(gs.settings.leaflet_tiles[:gs.settings.leaflet_tiles.index("/", 10)].replace("{s}", "*"))
 

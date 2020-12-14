@@ -19,7 +19,6 @@ from django.http import (
 )
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
@@ -55,6 +54,7 @@ from pretix.multidomain.urlreverse import get_event_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
+from ...base.i18n import language
 from ...base.models.items import ItemMetaProperty
 from ...base.settings import SETTINGS_AFFECTING_CSS, LazyI18nStringList
 from ..logdisplay import OVERVIEW_BANLIST
@@ -659,7 +659,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             if matched is not None:
                 idx = matched.group('idx')
                 if idx in self.supported_locale:
-                    with translation.override(self.supported_locale[idx]):
+                    with language(self.supported_locale[idx], self.request.event.settings.region):
                         msgs[self.supported_locale[idx]] = markdown_compile_email(
                             v.format_map(self.placeholders(preview_item))
                         )

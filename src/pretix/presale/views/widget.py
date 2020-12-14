@@ -302,8 +302,9 @@ class WidgetAPIProductList(EventListMixin, View):
         return self._get_event_view(request, **kwargs)
 
     def dispatch(self, request, *args, **kwargs):
+        o = getattr(request, 'event', request.organizer)
         if 'lang' in request.GET and request.GET.get('lang') in [lc for lc, ll in settings.LANGUAGES]:
-            with language(request.GET.get('lang')):
+            with language(request.GET.get('lang'), o.settings.region):
                 return self.get(request, **kwargs)
         else:
             return self.get(request, **kwargs)

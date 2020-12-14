@@ -857,7 +857,7 @@ class Order(LockModel, LoggedModel):
         for k, v in self.event.meta_data.items():
             context['meta_' + k] = v
 
-        with language(self.locale):
+        with language(self.locale, self.event.settings.region):
             recipient = self.email
             if position and position.attendee_email:
                 recipient = position.attendee_email
@@ -890,7 +890,7 @@ class Order(LockModel, LoggedModel):
                 )
 
     def resend_link(self, user=None, auth=None):
-        with language(self.locale):
+        with language(self.locale, self.event.settings.region):
             email_template = self.event.settings.mail_text_resend_link
             email_context = get_email_context(event=self.event, order=self)
             email_subject = _('Your order: %(code)s') % {'code': self.code}
@@ -1514,7 +1514,7 @@ class OrderPayment(models.Model):
     def _send_paid_mail_attendee(self, position, user):
         from pretix.base.services.mail import SendMailException
 
-        with language(self.order.locale):
+        with language(self.order.locale, self.order.event.settings.region):
             email_template = self.order.event.settings.mail_text_order_paid_attendee
             email_context = get_email_context(event=self.order.event, order=self.order, position=position)
             email_subject = _('Event registration confirmed: %(code)s') % {'code': self.order.code}
@@ -1532,7 +1532,7 @@ class OrderPayment(models.Model):
     def _send_paid_mail(self, invoice, user, mail_text):
         from pretix.base.services.mail import SendMailException
 
-        with language(self.order.locale):
+        with language(self.order.locale, self.order.event.settings.region):
             email_template = self.order.event.settings.mail_text_order_paid
             email_context = get_email_context(event=self.order.event, order=self.order, payment_info=mail_text)
             email_subject = _('Payment received for your order: %(code)s') % {'code': self.order.code}
@@ -2104,7 +2104,7 @@ class OrderPosition(AbstractPosition):
         for k, v in self.event.meta_data.items():
             context['meta_' + k] = v
 
-        with language(self.order.locale):
+        with language(self.order.locale, self.order.event.settings.region):
             recipient = self.attendee_email
             try:
                 email_content = render_mail(template, context)
@@ -2132,7 +2132,7 @@ class OrderPosition(AbstractPosition):
 
     def resend_link(self, user=None, auth=None):
 
-        with language(self.order.locale):
+        with language(self.order.locale, self.order.event.settings.region):
             email_template = self.event.settings.mail_text_resend_link
             email_context = get_email_context(event=self.order.event, order=self.order, position=self)
             email_subject = _('Your event registration: %(code)s') % {'code': self.order.code}

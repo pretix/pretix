@@ -582,7 +582,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 auth=request.auth,
             )
 
-        with language(order.locale):
+        with language(order.locale, self.request.event.settings.region):
             order_placed.send(self.request.event, order=order)
             if order.status == Order.STATUS_PAID:
                 order_paid.send(self.request.event, order=order)
@@ -886,7 +886,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
 
         price = get_price(**kwargs)
         tr = kwargs.get('tax_rule', kwargs.get('item').tax_rule)
-        with language(data.get('locale') or self.request.event.settings.locale):
+        with language(data.get('locale') or self.request.event.settings.locale, self.request.event.settings.region):
             return Response({
                 'gross': price.gross,
                 'gross_formatted': money_filter(price.gross, self.request.event.currency, hide_currency=True),

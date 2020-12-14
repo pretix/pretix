@@ -32,7 +32,7 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
             )
 
     file = CachedFile.objects.get(id=fileid)
-    with language(event.settings.locale), override(event.settings.timezone):
+    with language(event.settings.locale, event.settings.region), override(event.settings.timezone):
         responses = register_data_exporters.send(event)
         for receiver, response in responses:
             ex = response(event, set_progress)
@@ -67,15 +67,18 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
     if user:
         locale = user.locale
         timezone = user.timezone
+        region = None  # todo: add to user?
     else:
         e = allowed_events.first()
         if e:
             locale = e.settings.locale
             timezone = e.settings.timezone
+            region = e.settings.region
         else:
             locale = settings.LANGUAGE_CODE
             timezone = settings.TIME_ZONE
-    with language(locale), override(timezone):
+            region = None
+    with language(locale, region), override(timezone):
         if isinstance(form_data['events'][0], str):
             events = allowed_events.filter(slug__in=form_data.get('events'), organizer=organizer)
         else:

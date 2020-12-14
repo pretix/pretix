@@ -180,7 +180,7 @@ class PdfDataSerializer(serializers.Field):
         res = {}
 
         ev = instance.subevent or instance.order.event
-        with language(instance.order.locale):
+        with language(instance.order.locale, instance.order.event.settings.region):
             # This needs to have some extra performance improvements to avoid creating hundreds of queries when
             # we serialize a list.
 

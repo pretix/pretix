@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 def notify_incomplete_payment(o: Order):
-    with language(o.locale):
+    with language(o.locale, o.event.settings.region):
         email_template = o.event.settings.mail_text_order_expire_warning
         email_context = get_email_context(event=o.event, order=o)
         email_subject = gettext('Your order received an incomplete payment: %(code)s') % {'code': o.code}

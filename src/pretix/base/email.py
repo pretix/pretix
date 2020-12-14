@@ -115,7 +115,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
             'body': body_md,
             'subject': str(subject),
             'color': settings.PRETIX_PRIMARY_COLOR,
-            'rtl': get_language() in settings.LANGUAGES_RTL
+            'rtl': get_language() in settings.LANGUAGES_RTL or get_language().split('-')[0] in settings.LANGUAGES_RTL,
         }
         if self.event:
             htmlctx['event'] = self.event
