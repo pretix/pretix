@@ -772,7 +772,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         fees, pf, gift_card_values = _get_fees(positions, payment_provider, address, meta_info, event, checked_gift_cards)
         total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
-        print(meta_info)
         order = Order(
             status=Order.STATUS_PENDING,
             event=event,
