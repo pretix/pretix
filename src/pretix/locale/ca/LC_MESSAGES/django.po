@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-12-13 18:16+0000\n"
+"PO-Revision-Date: 2020-12-15 06:00+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -58,15 +58,15 @@ msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:22
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:50
 msgid "pretixSCAN (kiosk mode, online only)"
-msgstr ""
+msgstr "pretixSCAN (mode quiosc, només online)"
 
 #: pretix/api/auth/devicesecurity.py:76
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -176,6 +176,8 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Els vals regal haurien d'estar associats a una taxa impositiva, perquè en el "
+"moment del bescanvi s'aplicaran les taxes de venda."
 
 #: pretix/api/serializers/item.py:145 pretix/control/forms/item.py:501
 msgid "Gift card products should not be admission products at the same time."
@@ -197,6 +199,8 @@ msgstr ""
 #: pretix/api/serializers/item.py:313 pretix/control/forms/item.py:74
 msgid "Question cannot depend on a question asked during check-in."
 msgstr ""
+"Aquesta pregunta no ha de dependre d'una altra pregunta que es faci durant "
+"el procés de registre."
 
 #: pretix/api/serializers/item.py:318 pretix/control/forms/item.py:79
 msgid "Circular dependency between questions detected."
@@ -204,7 +208,7 @@ msgstr "S'ha detectat una dependència cíclica entre les preguntes."
 
 #: pretix/api/serializers/item.py:323 pretix/control/forms/item.py:88
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Aquest tipus de preguntes no es pot fer durant el procés de registre."
 
 #: pretix/api/serializers/order.py:927 pretix/api/serializers/order.py:934
 msgid "The product \"{}\" is not available on this date."
@@ -215,21 +219,23 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Ja hi ha un val regal amb el mateix secret en algun compte d'organitzador "
+"vinculat."
 
 #: pretix/api/serializers/organizer.py:120
 #: pretix/control/views/organizer.py:542
 msgid "pretix account invitation"
-msgstr ""
+msgstr "invitació a un compte pretix"
 
 #: pretix/api/serializers/organizer.py:142
 #: pretix/control/views/organizer.py:641
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Aquest usuari ja ha estat convidat a aquest equip."
 
 #: pretix/api/serializers/organizer.py:158
 #: pretix/control/views/organizer.py:658
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Aquest usuari ja té permisos per a aquest equip."
 
 #: pretix/api/views/oauth.py:85 pretix/control/logdisplay.py:351
 #, python-brace-format
@@ -373,11 +379,11 @@ msgstr "Tenda en línia"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "Predeterminat"
 
 #: pretix/base/email.py:148
 msgid "Simple with logo"
-msgstr ""
+msgstr "Simple amb logo"
 
 #: pretix/base/email.py:420 pretix/base/email.py:483 pretix/base/email.py:499
 #: pretix/base/email.py:504 pretix/base/pdf.py:111 pretix/base/pdf.py:214
@@ -387,25 +393,25 @@ msgstr "Joan Pons"
 
 #: pretix/base/email.py:424
 msgid "Sample Corporation"
-msgstr ""
+msgstr "Associació de mostra"
 
 #: pretix/base/email.py:462
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "Exemple de tiquet d'entrada"
 
 #: pretix/base/email.py:487
 msgid "An individual text with a reason can be inserted here."
 msgstr ""
 
 #: pretix/base/email.py:491
-#, fuzzy
-#| msgid "The bundled item must not have bundles on its own."
 msgid "The amount has been charged to your card."
-msgstr "L'element empaquetat no pot tenir paquets ell mateix."
+msgstr "S'ha carregat l'import a la vostra targeta."
 
 #: pretix/base/email.py:495
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr ""
+"Si us plau, feu una transferència a aquest compte bancari: "
+"9999-9999-9999-9999"
 
 #: pretix/base/exporter.py:106 pretix/base/exporter.py:233
 msgid "Export format"
@@ -445,7 +451,7 @@ msgstr "Preguntes"
 #: pretix/base/exporters/dekodi.py:82
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "Tiquet per l'acte {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:35
 #: pretix/base/exporters/orderlist.py:409 pretix/control/forms/subevents.py:225
@@ -1057,7 +1063,7 @@ msgstr "Commentari"
 #: pretix/base/exporters/orderlist.py:165
 #: pretix/control/templates/pretixcontrol/orders/index.html:119
 msgid "Positions"
-msgstr ""
+msgstr "Posicions"
 
 #: pretix/base/exporters/orderlist.py:170
 #, python-brace-format
@@ -1706,9 +1712,10 @@ msgid "Received payments"
 msgstr "Pagaments rebuts"
 
 #: pretix/base/invoice.py:576
+#, fuzzy
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr ""
+msgstr "Pagaments sortints"
 
 #: pretix/base/invoice.py:605
 msgctxt "invoice"
@@ -1752,11 +1759,8 @@ msgstr ""
 "{total}."
 
 #: pretix/base/invoice.py:692
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Classic renderer (pretix 1.0)"
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "Renderització clàssica (pretix 1.0)"
+msgstr "Generador Modern de Factures (pretix 2.7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -1841,33 +1845,29 @@ msgid "Include pending orders"
 msgstr "Inclou comandes pendents"
 
 #: pretix/base/models/checkin.py:22
-#, fuzzy
-#| msgid ""
-#| "With this option, people will be able to check in even if the order have "
-#| "not been paid. This only works with pretixdesk 0.3.0 or newer or "
-#| "pretixdroid 1.9 or newer."
 msgid ""
 "With this option, people will be able to check in even if the order has not "
 "been paid."
 msgstr ""
-"Amb aquesta opció la gent podrà validar fins i tot si la comanda no s'ha "
-"pagat. Només funciona amb pretixdesk 0.3.0 o més nou o pretixdroid 1.9 o més "
-"nou."
+"Amb aquesta opció la gent podrà validar el tiquet fins i tot si la comanda "
+"no s'ha pagat."
 
 #: pretix/base/models/checkin.py:25 pretix/control/navigation.py:467
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
 msgid "Gates"
-msgstr ""
+msgstr "Portes"
 
 #: pretix/base/models/checkin.py:26
 msgid ""
 "Does not have any effect for the validation of tickets, only for the "
 "automatic configuration of check-in devices."
 msgstr ""
+"No té cap efecte de cara a la validació dels tiquets, només per a la "
+"configuració automàtica dels dispositius de check-in."
 
 #: pretix/base/models/checkin.py:30
 msgid "Allow re-entering after an exit scan"
-msgstr ""
+msgstr "Permetre tornar a entrar després d'un escaneig de sortida"
 
 #: pretix/base/models/checkin.py:34
 msgid "Allow multiple entries per ticket"
@@ -1879,10 +1879,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/checkin.py:39
-#, fuzzy
-#| msgid "Automatically on payment"
 msgid "Automatically check out everyone at"
-msgstr "Automàticament durant el pagament"
+msgstr "Fes check-out automàtic de tothom a"
 
 #: pretix/base/models/checkin.py:45
 msgid "Sales channels to automatically check in"
@@ -1902,7 +1900,7 @@ msgstr "Entrada"
 
 #: pretix/base/models/checkin.py:154
 msgid "Exit"
-msgstr ""
+msgstr "Sortida"
 
 #: pretix/base/models/devices.py:50 pretix/base/models/items.py:1041
 msgid "Internal identifier"
@@ -1923,7 +1921,7 @@ msgstr "Aquest identificador ja s'està utilitzar per a una pregunta diferent."
 #: pretix/base/models/devices.py:91
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 msgid "Gate"
-msgstr ""
+msgstr "Porta"
 
 #: pretix/base/models/devices.py:109
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -2045,11 +2043,11 @@ msgstr "Ubicació"
 
 #: pretix/base/models/event.py:391 pretix/base/models/event.py:1115
 msgid "Latitude"
-msgstr ""
+msgstr "Latitud"
 
 #: pretix/base/models/event.py:395 pretix/base/models/event.py:1119
 msgid "Longitude"
-msgstr ""
+msgstr "Longitud"
 
 #: pretix/base/models/event.py:400 pretix/control/navigation.py:44
 msgid "Plugins"
@@ -2191,13 +2189,13 @@ msgstr "Targeta de prova"
 #: pretix/control/templates/pretixcontrol/order/index.html:177
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:57
 msgid "Expiry date"
-msgstr ""
+msgstr "Data de caducitat"
 
 #: pretix/base/models/giftcards.py:70
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Termes i condicions especials"
 
 #: pretix/base/models/invoices.py:129
 #, python-format
@@ -2341,10 +2339,10 @@ msgid "Show a waiting list for this ticket"
 msgstr "Mostrar una llista d'espera per a aquest tiquet"
 
 #: pretix/base/models/items.py:317
-#, fuzzy
-#| msgid "This voucher is not valid for this product."
 msgid "This will only work if waiting lists are enabled for this event."
-msgstr "Aquest val no és vàlid per a aquest producte."
+msgstr ""
+"Això només funcionarà si les llistes d'espera estan activades per a aquest "
+"acte."
 
 #: pretix/base/models/items.py:321 pretix/base/settings.py:857
 #: pretix/control/forms/event.py:1245
@@ -2377,7 +2375,7 @@ msgstr "Aquest producte no es vendrà després de la data especificada."
 
 #: pretix/base/models/items.py:347
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "Mostrar només quan s'hagin esgotat els"
 
 #: pretix/base/models/items.py:348
 msgid ""
@@ -2450,10 +2448,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/items.py:381
-#, fuzzy
-#| msgid "Allow product to be canceled"
 msgid "Allow product to be canceled or changed"
-msgstr "Permet la cancel·lació del producte"
+msgstr "Permet la cancel·lació o el canvi del producte"
 
 #: pretix/base/models/items.py:383
 #, fuzzy
@@ -2532,16 +2528,16 @@ msgid "Sales channels"
 msgstr "Canals de venda"
 
 #: pretix/base/models/items.py:419
-#, fuzzy
-#| msgid "The product the user waits for."
 msgid "This product is a gift card"
-msgstr "El producte pel que l'usuari espera."
+msgstr "Aquest producte és un val regal"
 
 #: pretix/base/models/items.py:420
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
+"Quan un client compra aquest producte, rebrà un val regal amb un valor "
+"equivalent al preu del producte."
 
 #: pretix/base/models/items.py:429 pretix/base/models/items.py:1062
 #: pretix/control/forms/filter.py:299 pretix/control/forms/filter.py:1144
@@ -2618,10 +2614,8 @@ msgstr ""
 "si els complement normalment tenen un cost individual."
 
 #: pretix/base/models/items.py:846
-#, fuzzy
-#| msgid "You cannot select more than %s items per order."
 msgid "Allow the same product to be selected multiple times"
-msgstr "No podeu seleccionar més de %s element per comanda."
+msgstr "Permetre triar el mateix producte diverses vegades"
 
 #: pretix/base/models/items.py:865
 msgid "The add-on's category must belong to the same event as the item."
@@ -2729,10 +2723,8 @@ msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr ""
 
 #: pretix/base/models/items.py:1026
-#, fuzzy
-#| msgid "Line number"
 msgid "Phone number"
-msgstr "Número de línia"
+msgstr "Número de telèfon"
 
 #: pretix/base/models/items.py:1037 pretix/base/models/items.py:1103
 #: pretix/base/orderimport.py:652 pretix/control/forms/item.py:45
@@ -2771,10 +2763,8 @@ msgstr ""
 
 #: pretix/base/models/items.py:1075
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
-#, fuzzy
-#| msgid "Required question"
 msgid "Hidden question"
-msgstr "Pregunta obligatòria"
+msgstr "Pregunta oculta"
 
 #: pretix/base/models/items.py:1076
 #, fuzzy
@@ -2784,17 +2774,13 @@ msgstr ""
 "Aquesta pregunta es demanarà als compradors dels productes seleccionats"
 
 #: pretix/base/models/items.py:1080
-#, fuzzy
-#| msgid "Text on invoices"
 msgid "Print answer on invoices"
-msgstr "Text a les factures"
+msgstr "Mostra la resposta a les factures"
 
 #: pretix/base/models/items.py:1088 pretix/base/models/items.py:1092
 #: pretix/base/models/items.py:1096
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Minimum value"
-msgstr "Número mínim"
+msgstr "Valor mínim"
 
 #: pretix/base/models/items.py:1088 pretix/base/models/items.py:1090
 #: pretix/base/models/items.py:1092 pretix/base/models/items.py:1094
@@ -2804,10 +2790,8 @@ msgstr ""
 
 #: pretix/base/models/items.py:1090 pretix/base/models/items.py:1094
 #: pretix/base/models/items.py:1098
-#, fuzzy
-#| msgid "Maximum number"
 msgid "Maximum value"
-msgstr "Número màxim"
+msgstr "Valor màxim"
 
 #: pretix/base/models/items.py:1148
 msgid "An answer to this question is required to proceed."
@@ -2819,32 +2803,24 @@ msgid "Invalid option selected."
 msgstr "S'ha seleccionat una opció invàlida."
 
 #: pretix/base/models/items.py:1190
-#, fuzzy
-#| msgid "The entered price is to high."
 msgid "The number is to low."
-msgstr "El preu introduït és massa alt."
+msgstr "El número és massa petit."
 
 #: pretix/base/models/items.py:1192
-#, fuzzy
-#| msgid "The entered price is to high."
 msgid "The number is to high."
-msgstr "El preu introduït és massa alt."
+msgstr "El número és massa gran."
 
 #: pretix/base/models/items.py:1195
 msgid "Invalid number input."
 msgstr "Entrada de número incorrecte."
 
 #: pretix/base/models/items.py:1202 pretix/base/models/items.py:1226
-#, fuzzy
-#| msgid "Please enter the same password twice"
 msgid "Please choose a later date."
-msgstr "Si us plau, introduïu la mateixa contrasenya dues vegades"
+msgstr "Si us plau, trieu una data posterior."
 
 #: pretix/base/models/items.py:1204 pretix/base/models/items.py:1228
-#, fuzzy
-#| msgid "Please enter the same password twice"
 msgid "Please choose an earlier date."
-msgstr "Si us plau, introduïu la mateixa contrasenya dues vegades"
+msgstr "Si us plau, trieu una data anterior."
 
 #: pretix/base/models/items.py:1207
 msgid "Invalid date input."
@@ -2859,10 +2835,8 @@ msgid "Invalid datetime input."
 msgstr "Entrada de dia i hora incorrecta."
 
 #: pretix/base/models/items.py:1235
-#, fuzzy
-#| msgid "Unknown cart position."
 msgid "Unknown country code."
-msgstr "Posició del carretó desconeguda."
+msgstr "Codi d'estat desconegut."
 
 #: pretix/base/models/items.py:1249
 #: pretix/control/templates/pretixcontrol/items/question.html:68
@@ -2901,7 +2875,7 @@ msgstr "Variacions"
 
 #: pretix/base/models/items.py:1382
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "Tancar aquesta quota permanentment un cop s'hagi exhaurit"
 
 #: pretix/base/models/items.py:1383
 msgid ""
@@ -2912,7 +2886,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1391
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "Permetre vendre més tiquets un cop la gent hagi sortit de l'acte"
 
 #: pretix/base/models/items.py:1392
 msgid ""
@@ -3083,10 +3057,9 @@ msgid "The ordered product \"{item}\" is no longer available."
 msgstr "El producte comanat \"{item}\" ja no està disponible."
 
 #: pretix/base/models/orders.py:766
-#, fuzzy, python-brace-format
-#| msgid "The ordered product \"{item}\" is no longer available."
+#, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr "El producte comanat \"{item}\" ja no està disponible."
+msgstr "El seient \"{seat}\" ja no està disponible."
 
 #: pretix/base/models/orders.py:767
 #, python-brace-format
@@ -3094,10 +3067,9 @@ msgid "The voucher \"{voucher}\" no longer has sufficient budget."
 msgstr ""
 
 #: pretix/base/models/orders.py:768
-#, fuzzy, python-brace-format
-#| msgid "A voucher has already been sent to this person."
+#, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr "Ja s'ha enviat un val a aquesta persona."
+msgstr "El val \"{voucher}\" ha estat usat simultàniament."
 
 #: pretix/base/models/orders.py:896 pretix/base/services/orders.py:858
 #: pretix/control/views/event.py:698
@@ -3160,10 +3132,9 @@ msgid "Payment information"
 msgstr "Dades de pagament"
 
 #: pretix/base/models/orders.py:1520
-#, fuzzy, python-format
-#| msgid "Order approved and confirmed: %(code)s"
+#, python-format
 msgid "Event registration confirmed: %(code)s"
-msgstr "S'ha confirmat i aprovat la comanda: %(code)s"
+msgstr "Registre confirmat: %(code)s"
 
 #: pretix/base/models/orders.py:1538
 #, python-format
@@ -3253,10 +3224,9 @@ msgid "Order position"
 msgstr "Posició de la comanda"
 
 #: pretix/base/models/orders.py:2135 pretix/base/services/orders.py:873
-#, fuzzy, python-format
-#| msgid "Your order: %(code)s"
+#, python-format
 msgid "Your event registration: %(code)s"
-msgstr "La vostra comanda: %(code)s"
+msgstr "El vostre registre: %(code)s"
 
 #: pretix/base/models/orders.py:2164
 msgid "Cart ID (e.g. session key)"
@@ -3337,10 +3307,8 @@ msgstr ""
 "compte a qui afegiu dins aquest equip!"
 
 #: pretix/base/models/organizer.py:191
-#, fuzzy
-#| msgid "Can change orders"
 msgid "Can manage gift cards"
-msgstr "Pot canviar les comandes"
+msgstr "Pot gestionar vals regal"
 
 #: pretix/base/models/organizer.py:196
 msgid "Can change event settings"
@@ -3395,16 +3363,14 @@ msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgstr ""
 
 #: pretix/base/models/seating.py:154
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "Row {number}"
-msgstr "Número de la factura"
+msgstr "Fila {number}"
 
 #: pretix/base/models/seating.py:159
-#, fuzzy, python-brace-format
-#| msgid "Team name"
+#, python-brace-format
 msgid "Seat {number}"
-msgstr "Nom de l'equip"
+msgstr "Seient {number}"
 
 #: pretix/base/models/tax.py:107
 msgid "Should be short, e.g. \"VAT\""
@@ -3506,10 +3472,8 @@ msgid "Redeemed"
 msgstr "Reemborsat"
 
 #: pretix/base/models/vouchers.py:119
-#, fuzzy
-#| msgid "Maximum amount per order"
 msgid "Maximum discount budget"
-msgstr "Quantitat màxima per comanda"
+msgstr "Pressupost màxim per descomptes"
 
 #: pretix/base/models/vouchers.py:120
 msgid ""
@@ -3573,7 +3537,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:186
 msgid "Specific seat"
-msgstr ""
+msgstr "Seient específic"
 
 #: pretix/base/models/vouchers.py:190
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:115
@@ -3594,7 +3558,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:202
 msgid "Shows hidden products that match this voucher"
-msgstr ""
+msgstr "Mostrar productes ocults que coincideixin amb aquest val"
 
 #: pretix/base/models/vouchers.py:210 pretix/control/navigation.py:236
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
@@ -3641,13 +3605,12 @@ msgid "It is currently not possible to create vouchers for add-on products."
 msgstr "Actualment no es poden crear vals per a complements de productes."
 
 #: pretix/base/models/vouchers.py:253 pretix/base/models/vouchers.py:346
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
 msgstr ""
-"No podeu seleccionar una quota i un producte específic al mateix temps."
+"Heu de triar una quota o un producte específic si aquest val ha de reservar "
+"tiquets."
 
 #: pretix/base/models/vouchers.py:263
 #, python-format
@@ -3683,16 +3646,13 @@ msgid "A voucher with this code already exists."
 msgstr "Ja existeix un val amb aquest codi."
 
 #: pretix/base/models/vouchers.py:363
-#, fuzzy
-#| msgid "You need to select a variation of the product."
 msgid "You need to choose a date if you select a seat."
-msgstr "Heu de seleccionar una variació del producte."
+msgstr "Heu de triar una data si trieu un seient."
 
 #: pretix/base/models/vouchers.py:372
-#, fuzzy, python-brace-format
-#| msgid "The selected item does not belong to this event."
+#, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr "L'element seleccionat no pertany a aquest esdeveniment."
+msgstr "El seient especificat \"{id}\" no existeix per a aquest acte."
 
 #: pretix/base/models/vouchers.py:376
 #, python-brace-format
@@ -3813,7 +3773,7 @@ msgstr "Mireu tots els problemes no resolts"
 #: pretix/presale/templates/pretixpresale/event/index.html:125
 msgctxt "subevent"
 msgid "Dates"
-msgstr ""
+msgstr "Dates"
 
 #: pretix/base/notifications.py:184 pretix/base/pdf.py:137
 msgid "Event date"
@@ -3859,10 +3819,9 @@ msgid "Order {order.code} has been canceled."
 msgstr "S'ha cancel·lat la comanda {order.code} ."
 
 #: pretix/base/notifications.py:230
-#, fuzzy, python-brace-format
-#| msgid "Order {order.code} has been changed."
+#, python-brace-format
 msgid "Order {order.code} has been reactivated."
-msgstr "Ha canviat la comanda {order.code} ."
+msgstr "La comanda {order.code} s'ha reactivat."
 
 #: pretix/base/notifications.py:236
 #, python-brace-format
@@ -3909,7 +3868,7 @@ msgstr "Se us ha demanat que emeteu un reemborsament per {order.code}."
 
 #: pretix/base/orderimport.py:66
 msgid "Keep empty"
-msgstr ""
+msgstr "Mantenir buit"
 
 #: pretix/base/orderimport.py:93
 #, python-brace-format
@@ -3918,8 +3877,6 @@ msgstr ""
 
 #: pretix/base/orderimport.py:139
 #: pretix/control/templates/pretixcontrol/checkin/index.html:70
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevents"
 msgid "Date"
 msgstr "Data"
@@ -3927,28 +3884,25 @@ msgstr "Data"
 #: pretix/base/orderimport.py:153 pretix/presale/views/waiting.py:94
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr ""
+msgstr "Heu de triar una data."
 
 #: pretix/base/orderimport.py:160
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date was specified."
 msgctxt "subevent"
 msgid "No matching date was found."
-msgstr "No s'ha especificat cap data."
+msgstr "No hi ha cap data que coincideixi."
 
 #: pretix/base/orderimport.py:162
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr ""
+msgstr "S'han trobat diverses dates que coincideixen."
 
 #: pretix/base/orderimport.py:196
 msgid "No matching product was found."
-msgstr ""
+msgstr "No s'ha trobat cap producte que coincideixi."
 
 #: pretix/base/orderimport.py:198
 msgid "Multiple matching products were found."
-msgstr ""
+msgstr "S'han trobat diversos productes que coincideixen."
 
 #: pretix/base/orderimport.py:227
 msgid "No matching variation was found."
@@ -11630,7 +11584,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "Els vostres propers esdeveniments"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:20
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -11639,31 +11593,31 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:57
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:12
 msgid "Create a new event"
-msgstr ""
+msgstr "Crear un nou esdeveniment"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:39
 msgid "View all upcoming events"
-msgstr ""
+msgstr "Veure tots els esdeveniments futurs"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
-msgstr ""
+msgstr "Els vostres esdeveniments més recents"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:60
 msgid "View all recent events"
-msgstr ""
+msgstr "Veure tots els esdeveniments recents"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:65
 msgid "Your event series"
-msgstr ""
+msgstr "La vostra sèrie d'esdeveniments"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:81
 msgid "View all event series"
-msgstr ""
+msgstr "Veure totes les sèries d'esdeveniments"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:86
 msgid "Other features"
-msgstr ""
+msgstr "Altres característiques"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
 #, python-format
@@ -18231,12 +18185,16 @@ msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
 msgstr ""
+"Aquesta pàgina us permet pujar extractes bancaris per a processar els "
+"pagaments rebuts."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
 msgstr ""
+"Actualment, aquesta característica contempla fitxers <code>.csv</code> i "
+"fitxers en el format MT940."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:29
 #: pretix/plugins/banktransfer/views.py:487
@@ -18246,11 +18204,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:40
 msgid "Start upload"
-msgstr ""
+msgstr "Començar la càrrega"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:50
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "Transaccions no resoltes"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:55
 msgid ""
@@ -18260,34 +18218,32 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:60
 msgid "Go to organizer-level import"
-msgstr ""
+msgstr "Anar a la importació a nivell d'organitzador"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:67
-#, fuzzy
-#| msgid "Amount"
 msgid "Amount from"
-msgstr "Quantitat"
+msgstr "Quantitat des de"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:69
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:75
 msgid "up to"
-msgstr ""
+msgstr "fins a"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:81
 msgid "Clear"
-msgstr ""
+msgstr "Netejar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:90
 msgid "Discard all"
-msgstr ""
+msgstr "Descartar-ho tot"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:102
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "La cerca no ha trobat cap transacció que coincideixi."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "Resultat de la importació"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
@@ -18297,7 +18253,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
+msgstr "Hi ha hagut un error intern mentre es processaven les dades."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try to re-import the file."
@@ -18310,19 +18266,19 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr ""
+msgstr "Comandes marcades com a pagades"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
-msgstr ""
+msgstr "Pagaments invàlids"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:38
 msgid "Ignored payments"
-msgstr ""
+msgstr "Pagaments ignorats"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:44
 msgid "Review invalid and ignored payments"
-msgstr ""
+msgstr "Revisar pagaments invàlids i ignorats"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:13
 msgid "Please transfer the full amount to the following bank account:"
@@ -18332,7 +18288,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:29
 msgid "Amount:"
-msgstr ""
+msgstr "Import:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:33
 msgid ""
@@ -18344,7 +18300,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:63
 msgid "Open banking app"
-msgstr ""
+msgstr "Obrir aplicació bancària"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:65
 msgid "Requires that the app supports BezahlCode"
@@ -18365,7 +18321,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
-msgstr ""
+msgstr "En mode de prova, les exportacions només contindran comandes de prova."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:19
 msgid ""
@@ -18375,15 +18331,15 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
 msgid "Go to organizer-level exports"
-msgstr ""
+msgstr "Anar a les exportacions de nivell organitzador"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:32
 msgid "Create new export file"
-msgstr ""
+msgstr "Crear un nou fitxer d'exportació"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:38
 msgid "Aggregate transactions to the same bank account"
-msgstr ""
+msgstr "Agregar transaccions cap al mateix compte bancari"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:43
 msgid ""
@@ -18397,43 +18353,33 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
 msgid "Exported files"
-msgstr ""
+msgstr "Fitxers exportats"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:55
-#, fuzzy
-#| msgid "Expired"
 msgid "Export date"
-msgstr "Expirat"
+msgstr "Data d'exportació"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:56
-#, fuzzy
-#| msgid "Number of days"
 msgid "Number of orders"
-msgstr "Número de dies"
+msgstr "Número de comandes"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:76
-#, fuzzy
-#| msgid "Ticket downloads"
 msgid "not downloaded"
-msgstr "Descàrregues de tiquets"
+msgstr "no descarregat"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:81
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:92
-#, fuzzy
-#| msgid "Download date"
 msgid "Download CSV"
-msgstr "Data de descàrrega"
+msgstr "Descarregar CSV"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:86
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:97
 msgid "SEPA XML"
-msgstr ""
+msgstr "SEPA XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:106
-#, fuzzy
-#| msgid "This order position has been canceled."
 msgid "No exports have been created yet."
-msgstr "Aquesta posició de la comanda s'ha cancel·lat."
+msgstr "Encara no s'han creat exportacions."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
@@ -18456,51 +18402,49 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:35
-#, fuzzy
-#| msgid "Download date"
 msgid "Download"
-msgstr "Data de descàrrega"
+msgstr "Descàrrega"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
-msgstr ""
+msgstr "Pagador i referència"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 msgid "Result"
-msgstr ""
+msgstr "Resultat"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr ""
+msgstr "Acceptar de totes maneres"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:29
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:42
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:53
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:70
 msgid "Discard"
-msgstr ""
+msgstr "Descartar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:61
 msgid "Assign to order"
-msgstr ""
+msgstr "Assignar a la comanda"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:49
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:66
 msgid "Retry"
-msgstr ""
+msgstr "Reintentar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:101
 msgid "Comment:"
-msgstr ""
+msgstr "Comentari:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:113
 msgid "No order code detected"
-msgstr ""
+msgstr "No s'ha detectat cap codi de comanda"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:115
 msgid "Invalid for this order"
-msgstr ""
+msgstr "No vàlid per a aquesta comanda"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:117
 msgid "Error while processing"
@@ -18508,11 +18452,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:119
 msgid "The order is already marked as paid"
-msgstr ""
+msgstr "La comanda ja està marcada com a pagada"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:121
 msgid "Order already paid"
-msgstr ""
+msgstr "Comanda ja pagada"
 
 #: pretix/plugins/banktransfer/views.py:100
 msgid ""
@@ -18522,28 +18466,23 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:126
 msgid "Problem sending email."
-msgstr ""
+msgstr "Hi ha hagut un problema enviant el correu electrònic."
 
 #: pretix/plugins/banktransfer/views.py:147
 msgid "Unknown order code"
-msgstr ""
+msgstr "Codi de comanda desconegut"
 
 #: pretix/plugins/banktransfer/views.py:296
-#, fuzzy
-#| msgid "Help text"
 msgid "Search text"
-msgstr "Text d'ajuda"
+msgstr "Text a cercar"
 
 #: pretix/plugins/banktransfer/views.py:297
 msgid "min"
-msgstr ""
+msgstr "mín"
 
 #: pretix/plugins/banktransfer/views.py:298
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Tax"
 msgid "max"
-msgstr "Impost"
+msgstr "màx"
 
 #: pretix/plugins/banktransfer/views.py:307
 #, fuzzy
@@ -18557,7 +18496,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:369
 msgid "You must choose a file to import."
-msgstr ""
+msgstr "Heu de triar un fitxer per importar."
 
 #: pretix/plugins/banktransfer/views.py:373
 msgid ""
@@ -18568,7 +18507,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/views.py:386
 #: pretix/plugins/banktransfer/views.py:430
 msgid "We were unable to process your input."
-msgstr ""
+msgstr "No hem pogut processar el que heu introduït."
 
 #: pretix/plugins/banktransfer/views.py:395
 msgid ""
@@ -18584,7 +18523,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:420
 msgid "Invalid input data."
-msgstr ""
+msgstr "Dades d'entrada no vàlides."
 
 #: pretix/plugins/banktransfer/views.py:424
 msgid "You need to select the column containing the payment reference."
@@ -18604,10 +18543,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:666
-#, fuzzy
-#| msgid "This order position has been canceled."
 msgid "No valid orders have been found."
-msgstr "Aquesta posició de la comanda s'ha cancel·lat."
+msgstr "No s'han trobat comandes vàlides."
 
 #: pretix/plugins/banktransfer/views.py:699
 msgid ""
@@ -19278,15 +19215,15 @@ msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
 msgid "Sold Seats"
-msgstr ""
+msgstr "Seients venuts"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:80
 msgid "Blocked Seats"
-msgstr ""
+msgstr "Seients blocats"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:86
 msgid "Free Seats"
-msgstr ""
+msgstr "Seients lliures"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:94
 #, fuzzy
@@ -19296,39 +19233,33 @@ msgstr "Entrades a la llista d'espera"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:102
 msgid "Unsold Seats"
-msgstr ""
+msgstr "Seients no venuts"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:103
 msgid "Potential Profits"
-msgstr ""
+msgstr "Beneficis potencials"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:107
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Minimum Price"
-msgstr "Número mínim"
+msgstr "Preu Mínim"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Blocat"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
-#, fuzzy
-#| msgid "Available from"
 msgid "Available"
-msgstr "Disponible des de"
+msgstr "Disponible"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
 msgid "On Sale"
-msgstr ""
+msgstr "En Venda"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:136
-#, fuzzy
-#| msgid "Not found"
 msgid "Not on Sale"
-msgstr "No s'ha trobat"
+msgstr "No en Venda"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:146
 msgid "Seats not attributed to any specific product"
@@ -19343,7 +19274,7 @@ msgstr ""
 #: pretix/plugins/stripe/__init__.py:10 pretix/plugins/stripe/__init__.py:13
 #: pretix/plugins/stripe/payment.py:46
 msgid "Stripe"
-msgstr ""
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/__init__.py:17
 msgid "This plugin allows you to receive credit card payments via Stripe"
@@ -19377,11 +19308,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:79
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "Connectar-se amb Stripe"
 
 #: pretix/plugins/stripe/payment.py:89
 msgid "Disconnect from Stripe"
-msgstr ""
+msgstr "Desconnectar-se de Stripe"
 
 #: pretix/plugins/stripe/payment.py:93
 msgid ""
@@ -19402,7 +19333,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:115
 msgid "Stripe Integration security guide"
-msgstr ""
+msgstr "Guia de seguretat de la integració amb Stripe"
 
 #: pretix/plugins/stripe/payment.py:109
 #, python-format
@@ -19417,17 +19348,17 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:131
 msgid "Stripe account"
-msgstr ""
+msgstr "Compte de Stripe"
 
 #: pretix/plugins/stripe/payment.py:139
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "En directe"
 
 #: pretix/plugins/stripe/payment.py:140
 msgctxt "stripe"
 msgid "Testing"
-msgstr ""
+msgstr "Proves"
 
 #: pretix/plugins/stripe/payment.py:142
 msgid ""
@@ -19437,11 +19368,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:155
 msgid "Publishable key"
-msgstr ""
+msgstr "Clau publicable"
 
 #: pretix/plugins/stripe/payment.py:166
 msgid "Secret key"
-msgstr ""
+msgstr "Clau secreta"
 
 #: pretix/plugins/stripe/payment.py:175
 msgid ""
@@ -19455,7 +19386,7 @@ msgstr "Pagaments amb targeta de crèdit"
 
 #: pretix/plugins/stripe/payment.py:188 pretix/plugins/stripe/payment.py:871
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:190 pretix/plugins/stripe/payment.py:197
 #: pretix/plugins/stripe/payment.py:204 pretix/plugins/stripe/payment.py:211
@@ -19467,11 +19398,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:195 pretix/plugins/stripe/payment.py:935
 msgid "iDEAL"
-msgstr ""
+msgstr "IDEAL"
 
 #: pretix/plugins/stripe/payment.py:202 pretix/plugins/stripe/payment.py:979
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: pretix/plugins/stripe/payment.py:209 pretix/plugins/stripe/payment.py:1022
 msgid "Bancontact"
@@ -19946,24 +19877,24 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/signals.py:108
 msgid "Ticket layout changed."
-msgstr ""
+msgstr "S'ha canviat el disseny dels tiquets."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:121
 #, python-brace-format
 msgid "Ticket layout {val}"
-msgstr ""
+msgstr "Disseny del tiquet {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr ""
+msgstr "Disseny del tiquet"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
-msgstr ""
+msgstr "Esteu segur de voler eliminar el disseny <strong>%(layout)s</strong>?"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
@@ -21664,14 +21595,13 @@ msgstr ""
 
 #: pretix/settings.py:740
 msgid "Read access"
-msgstr ""
+msgstr "Accés de lectura"
 
 #: pretix/settings.py:741
 msgid "Write access"
 msgstr "Accés d'escriptura"
 
 #: pretix/settings.py:751
-#, fuzzy
 msgid "Kosovo"
 msgstr "Kosovo"
 
