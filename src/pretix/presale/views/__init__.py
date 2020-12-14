@@ -5,14 +5,15 @@ from functools import wraps
 from itertools import groupby
 
 from django.conf import settings
-from django.db.models import Prefetch, Sum, Exists, OuterRef
+from django.db.models import Exists, OuterRef, Prefetch, Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CartPosition, InvoiceAddress, OrderPosition, QuestionAnswer, ItemAddOn, Question, QuestionOption,
+    CartPosition, InvoiceAddress, ItemAddOn, OrderPosition, Question,
+    QuestionAnswer, QuestionOption,
 )
 from pretix.base.services.cart import get_fees
 from pretix.helpers.cookies import set_cookie_without_samesite
