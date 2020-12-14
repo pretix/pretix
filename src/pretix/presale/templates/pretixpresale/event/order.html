@@ -205,7 +205,7 @@
     {% eventsignal event "pretix.presale.signals.order_info" order=order request=request %}
     <div class="row">
         {% if invoices %}
-            <div class="col-xs-12 {% if invoice_address_asked or request.event.settings.invoice_name_required %}col-md-6{% endif %}">
+            <div class="col-xs-12 col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
@@ -226,7 +226,7 @@
                 </div>
             </div>
         {% elif can_generate_invoice %}
-            <div class="col-xs-12 {% if invoice_address_asked or request.event.settings.invoice_name_required %}col-md-6{% endif %}">
+            <div class="col-xs-12 col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
@@ -256,10 +256,10 @@
                 </div>
             </div>
         {% endif %}
-        {% if invoice_address_asked or request.event.settings.invoice_name_required %}
-            <div class="col-xs-12 {% if invoices or can_generate_invoice %}col-md-6{% endif %}">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
+        <div class="col-xs-12 {% if invoices or can_generate_invoice %}col-md-6{% endif %}">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {% if invoice_address_asked or request.event.settings.invoice_name_required %}
                         {% if order.can_modify_answers %}
                             <div class="pull-right flip">
                                 <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
@@ -268,49 +268,53 @@
                                 </a>
                             </div>
                         {% endif %}
-                        <h3 class="panel-title">
-                            {% if request.event.settings.invoice_address_asked %}
-                                {% trans "Invoice information" %}
-                            {% else %}
-                                {% trans "Contact information" %}
+                    {% endif %}
+                    <h3 class="panel-title">
+                        {% trans "Your information" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        {% if order.email %}
+                            <dt>{% trans "E-mail" %}</dt>
+                            <dd>{{ order.email }}</dd>
+                        {% endif %}
+                        {% if order.phone %}
+                            <dt>{% trans "Phone number" %}</dt>
+                            <dd>{{ order.phone }}</dd>
+                        {% endif %}
+                        {% if invoice_address_asked %}
+                            <dt>{% trans "Company" %}</dt>
+                            <dd>{{ order.invoice_address.company }}</dd>
+                        {% endif %}
+                        <dt>{% trans "Name" %}</dt>
+                        <dd>{{ order.invoice_address.name }}</dd>
+                        {% if invoice_address_asked %}
+                            <dt>{% trans "Address" %}</dt>
+                            <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
+                            <dt>{% trans "ZIP code and city" %}</dt>
+                            <dd>{{ order.invoice_address.zipcode }} {{ order.invoice_address.city }}</dd>
+                            <dt>{% trans "Country" %}</dt>
+                            <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
+                            {% if order.invoice_address.state %}
+                                <dt>{% trans "State" context "address" %}</dt>
+                                <dd>{{ order.invoice_address.state_name }}</dd>
                             {% endif %}
-                        </h3>
-                    </div>
-                    <div class="panel-body">
-                        <dl class="dl-horizontal">
-                            {% if invoice_address_asked %}
-                                <dt>{% trans "Company" %}</dt>
-                                <dd>{{ order.invoice_address.company }}</dd>
+                            {% if request.event.settings.invoice_address_vatid %}
+                                <dt>{% trans "VAT ID" %}</dt>
+                                <dd>{{ order.invoice_address.vat_id }}</dd>
                             {% endif %}
-                            <dt>{% trans "Name" %}</dt>
-                            <dd>{{ order.invoice_address.name }}</dd>
-                            {% if invoice_address_asked %}
-                                <dt>{% trans "Address" %}</dt>
-                                <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
-                                <dt>{% trans "ZIP code and city" %}</dt>
-                                <dd>{{ order.invoice_address.zipcode }} {{ order.invoice_address.city }}</dd>
-                                <dt>{% trans "Country" %}</dt>
-                                <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
-                                {% if order.invoice_address.state %}
-                                    <dt>{% trans "State" context "address" %}</dt>
-                                    <dd>{{ order.invoice_address.state_name }}</dd>
-                                {% endif %}
-                                {% if request.event.settings.invoice_address_vatid %}
-                                    <dt>{% trans "VAT ID" %}</dt>
-                                    <dd>{{ order.invoice_address.vat_id }}</dd>
-                                {% endif %}
-                                {% if request.event.settings.invoice_address_custom_field and order.invoice_address.custom_field %}
-                                    <dt>{{ request.event.settings.invoice_address_custom_field }}</dt>
-                                    <dd>{{ order.invoice_address.custom_field }}</dd>
-                                {% endif %}
-                                <dt>{% trans "Internal Reference" %}</dt>
-                                <dd>{{ order.invoice_address.internal_reference }}</dd>
+                            {% if request.event.settings.invoice_address_custom_field and order.invoice_address.custom_field %}
+                                <dt>{{ request.event.settings.invoice_address_custom_field }}</dt>
+                                <dd>{{ order.invoice_address.custom_field }}</dd>
                             {% endif %}
-                        </dl>
-                    </div>
+                            <dt>{% trans "Internal Reference" %}</dt>
+                            <dd>{{ order.invoice_address.internal_reference }}</dd>
+                        {% endif %}
+                    </dl>
                 </div>
             </div>
-        {% endif %}
+        </div>
         <div class="clearfix"></div>
     </div>
     {% if order.user_change_allowed or order.user_cancel_allowed %}
