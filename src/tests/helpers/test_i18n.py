@@ -34,9 +34,9 @@ def test_set_region():
     with language('de-informal', 'DE'):
         assert get_language() == 'de-informal'
         assert get_language_without_region() == 'de-informal'
-    with language('pt', 'BR'):
-        assert get_language() == 'pt-br'
-        assert get_language_without_region() == 'pt-br'
-    with language('pt-br', 'PT'):
-        assert get_language() == 'pt-br'
-        assert get_language_without_region() == 'pt-br'
+    with language('pt', 'PT'):
+        assert get_language() == 'pt-pt'
+        assert get_language_without_region() == 'pt-pt'
+    with language('pt-pt', 'BR'):
+        assert get_language() == 'pt-pt'
+        assert get_language_without_region() == 'pt-pt'
