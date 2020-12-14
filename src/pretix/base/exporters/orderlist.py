@@ -139,7 +139,7 @@ class OrderListExporter(MultiSheetListExporter):
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
-            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
+            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'), _('Order date'),
             _('Order time'), _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
@@ -215,6 +215,7 @@ class OrderListExporter(MultiSheetListExporter):
                 order.total,
                 order.get_status_display(),
                 order.email,
+                str(order.phone) if order.phone else '',
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
                 order.datetime.astimezone(tz).strftime('%H:%M:%S'),
             ]
@@ -303,6 +304,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Order code'),
             _('Status'),
             _('Email'),
+            _('Phone number'),
             _('Order date'),
             _('Order time'),
             _('Fee type'),
@@ -334,6 +336,7 @@ class OrderListExporter(MultiSheetListExporter):
                 order.code,
                 order.get_status_display(),
                 order.email,
+                str(order.phone) if order.phone else '',
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
                 order.datetime.astimezone(tz).strftime('%H:%M:%S'),
                 op.get_fee_type_display(),
@@ -402,6 +405,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Position ID'),
             _('Status'),
             _('Email'),
+            _('Phone number'),
             _('Order date'),
             _('Order time'),
         ]
@@ -481,6 +485,7 @@ class OrderListExporter(MultiSheetListExporter):
                     op.positionid,
                     order.get_status_display(),
                     order.email,
+                    str(order.phone) if order.phone else '',
                     order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
                     order.datetime.astimezone(tz).strftime('%H:%M:%S'),
                 ]
