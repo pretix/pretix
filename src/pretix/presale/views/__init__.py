@@ -5,14 +5,15 @@ from functools import wraps
 from itertools import groupby
 
 from django.conf import settings
-from django.db.models import Prefetch, Sum
+from django.db.models import Exists, OuterRef, Prefetch, Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CartPosition, InvoiceAddress, OrderPosition, QuestionAnswer,
+    CartPosition, InvoiceAddress, ItemAddOn, OrderPosition, Question,
+    QuestionAnswer, QuestionOption,
 )
 from pretix.base.services.cart import get_fees
 from pretix.helpers.cookies import set_cookie_without_samesite
@@ -68,12 +69,15 @@ class CartMixin:
                 prefetch.append(Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options')))
 
             cartpos = queryset.order_by(
-                'item__category__position', 'item__category_id', 'item__position', 'item__name', 'variation__value'
+                'item__category__position', 'item__category_id', 'item__position', 'item__name',
+                'variation__value'
             ).select_related(
-                'item', 'variation', 'addon_to', 'subevent', 'subevent__event', 'subevent__event__organizer', 'seat'
+                'item', 'variation', 'addon_to', 'subevent', 'subevent__event',
+                'subevent__event__organizer', 'seat'
             ).prefetch_related(
                 *prefetch
             )
+
         else:
             cartpos = self.positions
 
@@ -123,7 +127,7 @@ class CartMixin:
                     or pos.pk in has_addons \
                     or pos.addon_to_id \
                     or pos.item.issue_giftcard \
-                    or (answers and (has_attendee_data or pos.item.questions.exists())):
+                    or (answers and (has_attendee_data or bool(pos.item.questions.all()))):  # do not use .exists() to re-use prefetch cache
                 return (
                     # standalone positions are grouped by main product position id, addons below them also sorted by position id
                     i, addon_penalty, pos.pk,
@@ -147,7 +151,8 @@ class CartMixin:
             group.total = group.count * group.price
             group.net_total = group.count * group.net_price
             group.has_questions = answers and k[0] != ""
-            group.tax_rule = group.item.tax_rule
+            if not hasattr(group, 'tax_rule'):
+                group.tax_rule = group.item.tax_rule
 
             group.bundle_sum = group.price + sum(a.price for a in has_addons[group.pk])
             group.bundle_sum_net = group.net_price + sum(a.net_price for a in has_addons[group.pk])
@@ -214,6 +219,8 @@ def cart_exists(request):
 
 def get_cart(request):
     from pretix.presale.views.cart import get_or_create_cart_id
+    qqs = request.event.questions.all()
+    qqs = qqs.filter(ask_during_checkin=False, hidden=False)
 
     if not hasattr(request, '_cart_cache'):
         cart_id = get_or_create_cart_id(request, create=False)
@@ -222,11 +229,36 @@ def get_cart(request):
         else:
             request._cart_cache = CartPosition.objects.filter(
                 cart_id=cart_id, event=request.event
+            ).annotate(
+                has_addon_choices=Exists(
+                    ItemAddOn.objects.filter(
+                        base_item_id=OuterRef('item_id')
+                    )
+                )
             ).order_by(
-                'item', 'variation'
+                'item__category__position', 'item__category_id', 'item__position', 'item__name', 'variation__value'
             ).select_related(
                 'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
                 'item__tax_rule', 'addon_to'
+            ).select_related(
+                'addon_to'
+            ).prefetch_related(
+                'addons', 'addons__item', 'addons__variation',
+                Prefetch('answers',
+                         QuestionAnswer.objects.prefetch_related('options'),
+                         to_attr='answerlist'),
+                Prefetch('item__questions',
+                         qqs.prefetch_related(
+                             Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
+                                 # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                                 # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                                 # a prefetch lookup on this query...
+                                 'question',
+                                 Question.objects.none(),
+                                 to_attr='dummy'
+                             )))
+                         ).select_related('dependency_question'),
+                         to_attr='questions_to_ask')
             )
             for cp in request._cart_cache:
                 cp.event = request.event  # Populate field with known value to save queries

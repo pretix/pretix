@@ -63,6 +63,7 @@ def item_group_by_category(items):
 
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
                       quota_cache=None, filter_items=None, filter_categories=None):
+    base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
     requires_seat = Exists(
@@ -139,8 +140,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         items = items.filter(category_id__in=[a for a in filter_categories if a.isdigit()])
 
     display_add_to_cart = False
-    external_quota_cache = quota_cache or event.cache.get('item_quota_cache')
-    quota_cache = external_quota_cache or {}
+    quota_cache_key = f'item_quota_cache:{subevent.id if subevent else 0}:{channel}:{bool(require_seat)}'
+    quota_cache = quota_cache or event.cache.get(quota_cache_key) or {}
+    quota_cache_existed = bool(quota_cache)
 
     if subevent:
         item_price_override = subevent.item_price_overrides
@@ -159,11 +161,11 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         if item.has_variations:
             for v in item.available_variations:
                 for q in v._subevent_quotas:
-                    if q not in quota_cache:
+                    if q.pk not in quota_cache:
                         quotas_to_compute.append(q)
         else:
             for q in item._subevent_quotas:
-                if q not in quota_cache:
+                if q.pk not in quota_cache:
                     quotas_to_compute.append(q)
 
     if quotas_to_compute:
@@ -306,8 +308,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
 
             item._remove = not bool(item.available_variations)
 
-    if not external_quota_cache and not voucher and not allow_addons:
-        event.cache.set('item_quota_cache', quota_cache, 5)
+    if not quota_cache_existed and not voucher and not allow_addons and not base_qs_set and not filter_items and not filter_categories:
+        event.cache.set(quota_cache_key, quota_cache, 5)
     items = [item for item in items
              if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
     return items, display_add_to_cart
@@ -406,20 +408,40 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['ev'] = self.subevent or self.request.event
         context['subevent'] = self.subevent
         context['cart'] = self.get_cart()
-        context['has_addon_choices'] = get_cart(self.request).filter(item__addons__isnull=False).exists()
+        context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))\
 
         if self.subevent:
             context['frontpage_text'] = str(self.subevent.frontpage_text)
         else:
             context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
 
+        if self.request.event.has_subevents:
+            context.update(self._subevent_list_context())
+
+        context['show_cart'] = (
+            context['cart']['positions'] and (
+                self.request.event.has_subevents or self.request.event.presale_is_running
+            )
+        )
+        if self.request.event.settings.redirect_to_checkout_directly:
+            context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
+                                                    kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
+            if context['cart_redirect'].startswith('https:'):
+                context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
+        else:
+            context['cart_redirect'] = self.request.path
+
+        return context
+
+    def _subevent_list_context(self):
+        context = {}
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
         if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
             if self.request.event.settings.event_list_type not in ("calendar", "week"):
                 self.request.event.settings.event_list_type = "calendar"
             context['list_type'] = "calendar"
 
-        if context['list_type'] == "calendar" and self.request.event.has_subevents:
+        if context['list_type'] == "calendar":
             self._set_month_year()
             tz = pytz.timezone(self.request.event.settings.timezone)
             _, ndays = calendar.monthrange(self.year, self.month)
@@ -434,7 +456,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             add_subevents_for_days(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
-                kwargs.get('cart_namespace')
+                self.kwargs.get('cart_namespace')
             )
 
             context['show_names'] = ebd.get('_subevents_different_names', False) or sum(
@@ -443,7 +465,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['years'] = range(now().year - 2, now().year + 3)
-        elif context['list_type'] == "week" and self.request.event.has_subevents:
+        elif context['list_type'] == "week":
             self._set_week_year()
             tz = pytz.timezone(self.request.event.settings.timezone)
             week = isoweek.Week(self.year, self.week)
@@ -462,7 +484,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             add_subevents_for_days(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
-                kwargs.get('cart_namespace')
+                self.kwargs.get('cart_namespace')
             )
 
             context['show_names'] = ebd.get('_subevents_different_names', False) or sum(
@@ -477,24 +499,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['week_format'] = get_format('WEEK_FORMAT')
             if context['week_format'] == 'WEEK_FORMAT':
                 context['week_format'] = WEEK_FORMAT
-        elif self.request.event.has_subevents:
+        else:
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
             )
-
-        context['show_cart'] = (
-            context['cart']['positions'] and (
-                self.request.event.has_subevents or self.request.event.presale_is_running
-            )
-        )
-        if self.request.event.settings.redirect_to_checkout_directly:
-            context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
-                                                    kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
-            if context['cart_redirect'].startswith('https:'):
-                context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
-        else:
-            context['cart_redirect'] = self.request.path
-
         return context
 
 

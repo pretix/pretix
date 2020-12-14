@@ -113,10 +113,11 @@ class QuotaAvailability:
                 raise e
 
     def _write_cache(self, quotas, now_dt):
-        events = {q.event for q in quotas}
+        # We used to also delete item_quota_cache:* from the event cache here, but as the cache
+        # gets more complex, this does not seem worth it. The cache is only present for up to
+        # 5 seconds to prevent high peaks, and a 5-second delay in availability is usually
+        # tolerable
         update = []
-        for e in events:
-            e.cache.delete('item_quota_cache')
         for q in quotas:
             rewrite_cache = self._count_waitinglist and (
                 not q.cache_is_hot(now_dt) or self.results[q][0] > q.cached_availability_state
