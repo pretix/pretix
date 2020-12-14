@@ -1678,7 +1678,7 @@ class OrderContactChange(OrderView):
                     user=self.request.user,
                 )
 
-            new_phone = self.form.cleaned_data['phone']
+            new_phone = self.form.cleaned_data.get('phone')
             if new_phone != old_phone:
                 changed = True
                 self.order.log_action(
