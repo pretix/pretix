@@ -20,6 +20,7 @@ from pretix.base.models import (
 )
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.signals import register_data_shredders
+from pretix.helpers.json import CustomJSONEncoder
 
 
 class ShredError(LazyLocaleException):
@@ -119,6 +120,31 @@ def shred_log_fields(logentry, banlist=None, whitelist=None):
     logentry.data = json.dumps(d)
     logentry.shredded = True
     logentry.save(update_fields=['data', 'shredded'])
+
+
+class PhoneNumberShredder(BaseDataShredder):
+    verbose_name = _('Phone numbers')
+    identifier = 'phone_numbers'
+    description = _('This will remove all phone numbers from orders.')
+
+    def generate_files(self) -> List[Tuple[str, str, str]]:
+        yield 'phone-by-order.json', 'application/json', json.dumps({
+            o.code: o.phone for o in self.event.orders.filter(phone__isnull=False)
+        }, cls=CustomJSONEncoder, indent=4)
+
+    @transaction.atomic
+    def shred_data(self):
+        for o in self.event.orders.all():
+            o.phone = None
+            d = o.meta_info_data
+            if d:
+                if 'contact_form_data' in d and 'phone' in d['contact_form_data']:
+                    del d['contact_form_data']['phone']
+                o.meta_info = json.dumps(d)
+            o.save(update_fields=['meta_info', 'phone'])
+
+        for le in self.event.logentry_set.filter(action_type="pretix.event.order.phone.changed"):
+            shred_log_fields(le, banlist=['old_phone', 'new_phone'])
 
 
 class EmailAddressShredder(BaseDataShredder):
@@ -372,9 +398,10 @@ class PaymentInfoShredder(BaseDataShredder):
 
 
 @receiver(register_data_shredders, dispatch_uid="shredders_builtin")
-def register_payment_provider(sender, **kwargs):
+def register_core_shredders(sender, **kwargs):
     return [
         EmailAddressShredder,
+        PhoneNumberShredder,
         AttendeeInfoShredder,
         InvoiceAddressShredder,
         QuestionAnswerShredder,

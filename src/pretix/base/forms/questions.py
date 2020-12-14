@@ -28,7 +28,7 @@ from django_countries.fields import Country, CountryField
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
-from phonenumbers import NumberParseException
+from phonenumbers import NumberParseException, national_significant_number
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.widgets import (
@@ -211,6 +211,38 @@ class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 
     def format_output(self, rendered_widgets) -> str:
         return '<div class="nameparts-form-group">%s</div>' % ''.join(rendered_widgets)
+
+    def decompress(self, value):
+        """
+        If an incomplete phone number (e.g. without country prefix) is currently entered,
+        the default implementation just discards the value and shows nothing at all.
+        Let's rather show something invalid, so the user is prompted to fix it, instead of
+        silently deleting data.
+        """
+        if value:
+            if type(value) == PhoneNumber:
+                if value.country_code and value.national_number:
+                    return [
+                        "+%d" % value.country_code,
+                        national_significant_number(value),
+                    ]
+                return [
+                    None,
+                    str(value)
+                ]
+            elif "." in value:
+                return value.split(".")
+            else:
+                return [None, value]
+        return [None, ""]
+
+    def value_from_datadict(self, data, files, name):
+        # In contrast to defualt implementation, do not silently fail if a number without
+        # country prefix is entered
+        values = super(PhoneNumberPrefixWidget, self).value_from_datadict(data, files, name)
+        if values[1]:
+            return "%s.%s" % tuple(values)
+        return ""
 
 
 def guess_country(event):

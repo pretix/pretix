@@ -5,6 +5,7 @@
 {% load money %}
 {% load expiresformat %}
 {% load eventurl %}
+{% load phone_format %}
 {% block title %}{% trans "Order details" %}{% endblock %}
 {% block content %}
     {% if "thanks" in request.GET or "paid" in request.GET %}
@@ -281,7 +282,7 @@
                         {% endif %}
                         {% if order.phone %}
                             <dt>{% trans "Phone number" %}</dt>
-                            <dd>{{ order.phone }}</dd>
+                            <dd>{{ order.phone|phone_format }}</dd>
                         {% endif %}
                         {% if invoice_address_asked %}
                             <dt>{% trans "Company" %}</dt>

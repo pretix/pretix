@@ -4,15 +4,16 @@ from babel import localedata
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
-from django.utils.translation import gettext_lazy as _, get_language
+from django.utils.translation import get_language, gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
-from phonenumbers import NumberParseException
 from phonenumber_field.phonenumber import PhoneNumber
+from phonenumbers import NumberParseException
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.questions import (
-    BaseInvoiceAddressForm, BaseQuestionsForm,
-    guess_country, WrappedPhoneNumberPrefixWidget)
+    BaseInvoiceAddressForm, BaseQuestionsForm, WrappedPhoneNumberPrefixWidget,
+    guess_country,
+)
 from pretix.base.i18n import language
 from pretix.base.validators import EmailBanlistValidator
 from pretix.presale.signals import contact_form_fields
@@ -37,7 +38,6 @@ class ContactForm(forms.Form):
                 help_text=_('Please enter the same email address again to make sure you typed it correctly.'),
             )
 
-        print(self.data, self.initial)
         if self.event.settings.order_phone_asked:
             babel_locale = 'en'
             # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal

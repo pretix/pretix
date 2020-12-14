@@ -6,6 +6,7 @@
 {% load rich_text %}
 {% load safelink %}
 {% load eventsignal %}
+{% load phone_format %}
 {% block title %}
     {% blocktrans trimmed with code=order.code %}
         Order details: {{ code }}
@@ -201,6 +202,15 @@
                                 {% endif %}
                             {% endif %}
                         </dd>
+                        {% if order.phone or request.event.settings.order_phone_asked %}
+                            <dt>{% trans "Phone number" %}</dt>
+                            <dd>
+                                {{ order.phone|default_if_none:""|phone_format }}
+                                <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                            </dd>
+                        {% endif %}
                         {% if invoices %}
                             <dt>{% trans "Invoices" %}</dt>
                             <dd>
