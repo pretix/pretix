@@ -1,6 +1,6 @@
 from django.utils.translation import get_language
 
-from pretix.base.i18n import language, get_language_without_region
+from pretix.base.i18n import get_language_without_region, language
 from pretix.helpers.i18n import get_javascript_format, get_moment_locale
 
 
