@@ -361,7 +361,7 @@ class OrderSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Order
         fields = (
-            'code', 'status', 'testmode', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
+            'code', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
             'url'
@@ -393,7 +393,7 @@ class OrderSerializer(I18nAwareModelSerializer):
     def update(self, instance, validated_data):
         # Even though all fields that shouldn't be edited are marked as read_only in the serializer
         # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
-        update_fields = ['comment', 'checkin_attention', 'email', 'locale']
+        update_fields = ['comment', 'checkin_attention', 'email', 'locale', 'phone']
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
@@ -691,7 +691,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('code', 'status', 'testmode', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
+        fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'payment_date', 'consume_carts',
                   'force', 'send_email', 'simulate')
 

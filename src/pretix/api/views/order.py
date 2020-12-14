@@ -674,6 +674,17 @@ class OrderViewSet(viewsets.ModelViewSet):
                     }
                 )
 
+            if 'phone' in self.request.data and serializer.instance.phone != self.request.data.get('phone'):
+                serializer.instance.log_action(
+                    'pretix.event.order.phone.changed',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'old_phone': serializer.instance.phone,
+                        'new_phone': self.request.data.get('phone'),
+                    }
+                )
+
             if 'locale' in self.request.data and serializer.instance.locale != self.request.data.get('locale'):
                 serializer.instance.log_action(
                     'pretix.event.order.locale.changed',

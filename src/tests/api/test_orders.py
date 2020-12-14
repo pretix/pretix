@@ -211,6 +211,7 @@ TEST_ORDER_RES = {
     "testmode": False,
     "secret": "k24fiuwvu8kxz3y1",
     "email": "dummy@dummy.test",
+    "phone": None,
     "locale": "en",
     "datetime": "2017-12-01T10:00:00Z",
     "expires": "2017-12-10T10:00:00Z",
@@ -1528,6 +1529,7 @@ def test_order_invalid_state_deny(token_client, organizer, event, order):
 
 ORDER_CREATE_PAYLOAD = {
     "email": "dummy@dummy.test",
+    "phone": "+49622112345",
     "locale": "en",
     "sales_channel": "web",
     "fees": [
@@ -1589,6 +1591,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
     assert o.email == "dummy@dummy.test"
+    assert o.phone == "+49622112345"
     assert o.locale == "en"
     assert o.total == Decimal('23.25')
     assert o.status == Order.STATUS_PENDING
@@ -1657,6 +1660,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         'status': 'n',
         'testmode': False,
         'email': 'dummy@dummy.test',
+        'phone': '+49622112345',
         'locale': 'en',
         'datetime': None,
         'payment_date': None,
@@ -4107,6 +4111,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
             'comment': 'Here is a comment',
             'checkin_attention': True,
             'email': 'foo@bar.com',
+            'phone': '+4962219999',
             'locale': 'de',
             'invoice_address': {
                 "is_business": False,
@@ -4128,6 +4133,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
     assert order.comment == 'Here is a comment'
     assert order.checkin_attention
     assert order.email == 'foo@bar.com'
+    assert order.phone == '+4962219999'
     assert order.locale == 'de'
     assert order.invoice_address.company == "This is my company name"
     assert order.invoice_address.name_cached == "John Doe"
@@ -4139,6 +4145,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
         assert order.all_logentries().get(action_type='pretix.event.order.comment')
         assert order.all_logentries().get(action_type='pretix.event.order.checkin_attention')
         assert order.all_logentries().get(action_type='pretix.event.order.contact.changed')
+        assert order.all_logentries().get(action_type='pretix.event.order.phone.changed')
         assert order.all_logentries().get(action_type='pretix.event.order.locale.changed')
         assert order.all_logentries().get(action_type='pretix.event.order.modified')
 
