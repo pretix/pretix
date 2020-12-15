@@ -2843,10 +2843,6 @@ msgstr "Dia i hora"
 msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr ""
 
-#: pretix/base/models/items.py:1026
-msgid "Phone number"
-msgstr "Número de telèfon"
-
 #: pretix/base/models/items.py:1037 pretix/base/models/items.py:1103
 #: pretix/base/orderimport.py:652 pretix/control/forms/item.py:45
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:10
@@ -3999,12 +3995,6 @@ msgstr "Mantenir buit"
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
 msgstr ""
-
-#: pretix/base/orderimport.py:139
-#: pretix/control/templates/pretixcontrol/checkin/index.html:70
-msgctxt "subevents"
-msgid "Date"
-msgstr "Data"
 
 #: pretix/base/orderimport.py:153 pretix/presale/views/waiting.py:94
 msgctxt "subevent"
