@@ -113,7 +113,7 @@
                         <a href="?{% url_replace request 'ordering' '-datetime' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'datetime' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
-                    <th class="text-right flip">{% trans "Order total" %}
+                    <th class="text-right flip">{% trans "Order  paid / total" %}
                         <a href="?{% url_replace request 'ordering' '-total' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a></th>
                     <th class="text-right flip">{% trans "Positions" %}</th>
@@ -157,6 +157,13 @@
                                 <span class="label label-danger">{% trans "UNDERPAID" %}</span>
                             {% elif o.is_pending_with_full_payment %}
                                 <span class="label label-danger">{% trans "FULLY PAID" %}</span>
+                            {% endif %}
+                            {% if o.payment_refund_sum == o.total or o.payment_refund_sum == 0 %}
+                                <span class="text-muted">
+                            {% endif %}
+                            {{ o.payment_refund_sum|money:request.event.currency }} /
+                            {% if o.payment_refund_sum == o.total or o.payment_refund_sum == 0 %}
+                                </span>
                             {% endif %}
                             {{ o.total|money:request.event.currency }}
                         </td>

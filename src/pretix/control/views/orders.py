@@ -153,7 +153,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
         annotated = {
             o['pk']: o
             for o in
-            Order.annotate_overpayments(Order.objects).filter(
+            Order.annotate_overpayments(Order.objects, sums=True).filter(
                 pk__in=[o.pk for o in ctx['orders']]
             ).annotate(
                 pcnt=Subquery(s, output_field=IntegerField()),

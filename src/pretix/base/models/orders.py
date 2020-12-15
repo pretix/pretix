@@ -333,6 +333,9 @@ class Order(LockModel, LoggedModel):
                 payment_sum=payment_sum_sq,
                 refund_sum=refund_sum_sq,
             )
+            qs = qs.annotate(
+                payment_refund_sum=Coalesce(payment_sum_sq, 0) - Coalesce(refund_sum_sq, 0),
+            )
 
         qs = qs.annotate(
             pending_sum_t=F('total') - Coalesce(payment_sum_sq, 0) + Coalesce(refund_sum_sq, 0),
