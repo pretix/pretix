@@ -141,7 +141,11 @@
                                 <br>{{ o.invoice_address.name }}
                             {% endif %}
                         </td>
-                        <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>
+                            <span class="fa fa-{{ o.sales_channel_obj.icon }} text-muted"
+                                  data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
+                            {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        </td>
                         <td class="text-right flip">
                             {% if o.has_cancellation_request %}
                                 <span class="label label-warning">{% trans "CANCELLATION REQUESTED" %}</span>

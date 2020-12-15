@@ -164,6 +164,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
             )
         }
 
+        scs = get_all_sales_channels()
         for o in ctx['orders']:
             if o.pk not in annotated:
                 continue
@@ -174,6 +175,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
             o.has_external_refund = annotated.get(o.pk)['has_external_refund']
             o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
             o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
+            o.sales_channel_obj = scs[o.sales_channel]
 
         if ctx['page_obj'].paginator.count < 1000:
             # Performance safeguard: Only count positions if the data set is small
