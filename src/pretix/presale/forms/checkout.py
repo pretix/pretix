@@ -40,7 +40,7 @@ class ContactForm(forms.Form):
 
         if self.event.settings.order_phone_asked:
             babel_locale = 'en'
-            # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal
+            # Babel, and therefore django-phonenumberfield, do not support our custom locales such as de_Informal
             if localedata.exists(get_language()):
                 babel_locale = get_language()
             elif localedata.exists(get_language()[:2]):
