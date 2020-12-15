@@ -162,11 +162,11 @@
                             {% elif o.is_pending_with_full_payment %}
                                 <span class="label label-danger">{% trans "FULLY PAID" %}</span>
                             {% endif %}
-                            {% if o.payment_refund_sum == o.total or o.payment_refund_sum == 0 %}
+                            {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
                                 <span class="text-muted">
                             {% endif %}
-                            {{ o.payment_refund_sum|money:request.event.currency }} /
-                            {% if o.payment_refund_sum == o.total or o.payment_refund_sum == 0 %}
+                            {{ o.computed_payment_refund_sum|money:request.event.currency }} /
+                            {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
                                 </span>
                             {% endif %}
                             {{ o.total|money:request.event.currency }}

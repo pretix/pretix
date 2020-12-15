@@ -160,7 +160,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
                 has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk')))
             ).values(
                 'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
-                'has_pending_refund', 'has_cancellation_request'
+                'has_pending_refund', 'has_cancellation_request', 'computed_payment_refund_sum'
             )
         }
 
@@ -175,6 +175,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
             o.has_external_refund = annotated.get(o.pk)['has_external_refund']
             o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
             o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
+            o.computed_payment_refund_sum = annotated.get(o.pk)['computed_payment_refund_sum']
             o.sales_channel_obj = scs[o.sales_channel]
 
         if ctx['page_obj'].paginator.count < 1000:

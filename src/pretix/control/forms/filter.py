@@ -150,8 +150,8 @@ class OrderFilterForm(FilterForm):
                 (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
             )),
             (_('Cancellations'), (
-                (Order.STATUS_CANCELED, _('Canceled')),
-                ('cp', _('Canceled (or with paid fee)')),
+                (Order.STATUS_CANCELED, _('Canceled (fully)')),
+                ('cp', _('Canceled (fully or with paid fee)')),
                 ('rc', _('Cancellation requested')),
             )),
             (_('Payment process'), (
@@ -159,7 +159,8 @@ class OrderFilterForm(FilterForm):
                 (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
                 ('o', _('Pending (overdue)')),
                 ('overpaid', _('Overpaid')),
-                ('underpaid', _('Underpaid')),
+                ('partially_paid', _('Partially paid')),
+                ('underpaid', _('Underpaid (but confirmed)')),
                 ('pendingpaid', _('Pending (but fully paid)')),
             )),
             (_('Approval process'), (
@@ -244,6 +245,14 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(
                     Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
                     & Q(require_approval=False)
+                )
+            elif s == 'partially_paid':
+                qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
+                qs = qs.filter(
+                    computed_payment_refund_sum__lt=F('total'),
+                    computed_payment_refund_sum__gt=Decimal('0.00')
+                ).exclude(
+                    status=Order.STATUS_CANCELED
                 )
             elif s == 'underpaid':
                 qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
