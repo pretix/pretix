@@ -1663,6 +1663,7 @@ class OrderContactChange(OrderView):
 
     def post(self, *args, **kwargs):
         old_email = self.order.email
+        old_phone = self.order.phone
         changed = False
         if self.form.is_valid():
             new_email = self.form.cleaned_data['email']
@@ -1673,6 +1674,18 @@ class OrderContactChange(OrderView):
                     data={
                         'old_email': old_email,
                         'new_email': self.form.cleaned_data['email'],
+                    },
+                    user=self.request.user,
+                )
+
+            new_phone = self.form.cleaned_data.get('phone')
+            if new_phone != old_phone:
+                changed = True
+                self.order.log_action(
+                    'pretix.event.order.phone.changed',
+                    data={
+                        'old_phone': old_phone,
+                        'new_phone': self.form.cleaned_data['phone'],
                     },
                     user=self.request.user,
                 )

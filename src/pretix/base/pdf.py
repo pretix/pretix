@@ -39,6 +39,7 @@ from pretix.base.models import Order, OrderPosition
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_text_variables
 from pretix.base.templatetags.money import money_filter
+from pretix.base.templatetags.phone_format import phone_format
 from pretix.presale.style import get_fonts
 
 logger = logging.getLogger(__name__)
@@ -228,6 +229,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Event location"),
         "editor_sample": _("Random City"),
         "evaluate": lambda op, order, ev: str(ev.location)
+    }),
+    ("telephone", {
+        "label": _("Phone number"),
+        "editor_sample": "+01 1234 567890",
+        "evaluate": lambda op, order, ev: phone_format(order.phone)
     }),
     ("invoice_name", {
         "label": _("Invoice address name"),

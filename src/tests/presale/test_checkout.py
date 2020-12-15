@@ -568,6 +568,44 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert not cr1.answers.exists()
         assert not os.path.exists(os.path.join(settings.MEDIA_ROOT, a.file.name))
 
+    def test_phone_required(self):
+        self.event.settings.set('order_phone_asked', True)
+        self.event.settings.set('order_phone_required', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="phone_1"]')), 1)
+
+        # Not all required fields filled out, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'admin@localhost',
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Corrected request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'admin@localhost',
+            'phone_0': '+49',
+            'phone_1': '0622199999',  # yeah the 0 is wrong but users don't know that so it should work fine
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            assert o.phone == '+49622199999'
+
     def test_attendee_email_required(self):
         self.event.settings.set('attendee_emails_asked', True)
         self.event.settings.set('attendee_emails_required', True)

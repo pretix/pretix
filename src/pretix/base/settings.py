@@ -193,6 +193,25 @@ DEFAULTS = {
             help_text=_("Require customers to fill in the primary email address twice to avoid errors."),
         )
     },
+    'order_phone_asked': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Ask for a phone number per order"),
+        )
+    },
+    'order_phone_required': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Require a phone number per order"),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-order_phone_asked'}),
+        )
+    },
     'invoice_address_asked': {
         'default': 'True',
         'type': bool,
@@ -1857,6 +1876,17 @@ Your {event} team"""))
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown above the questions asked for every admission product. You can use it e.g. to explain "
                         "why you need information from them.")
+        )
+    },
+    'checkout_phone_helptext': {
+        'default': '',
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Help text of the phone number field"),
+            widget_kwargs={'attrs': {'rows': '2'}},
+            widget=I18nTextarea
         )
     },
     'checkout_email_helptext': {

@@ -30,6 +30,7 @@ testmode                              boolean                    If ``true``, th
                                                                  test mode. Only orders in test mode can be deleted.
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
+phone                                 string                     The customer phone number
 locale                                string                     The locale used for communication with this customer
 sales_channel                         string                     Channel this sale was created through, such as
                                                                  ``"web"``.
@@ -166,6 +167,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 3.13
 
    The ``subevent_before`` query parameter has been added.
+
+.. versionchanged:: 3.14
+
+   The ``phone`` attribute has been added.
 
 
 .. _order-position-resource:
@@ -372,6 +377,7 @@ List of all orders
             "secret": "k24fiuwvu8kxz3y1",
             "url": "https://test.pretix.eu/dummy/dummy/order/ABC12/k24fiuwvu8kxz3y1/",
             "email": "tester@example.org",
+            "phone": "+491234567",
             "locale": "en",
             "sales_channel": "web",
             "datetime": "2017-12-01T10:00:00Z",
@@ -539,6 +545,7 @@ Fetching individual orders
         "secret": "k24fiuwvu8kxz3y1",
         "url": "https://test.pretix.eu/dummy/dummy/order/ABC12/k24fiuwvu8kxz3y1/",
         "email": "tester@example.org",
+        "phone": "+491234567",
         "locale": "en",
         "sales_channel": "web",
         "datetime": "2017-12-01T10:00:00Z",
@@ -704,6 +711,8 @@ Updating order fields
    Updates specific fields on an order. Currently, only the following fields are supported:
 
    * ``email``
+
+   * ``phone``
 
    * ``checkin_attention``
 

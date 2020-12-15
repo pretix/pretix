@@ -292,6 +292,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.denied': _('The order has been denied.'),
         'pretix.event.order.contact.changed': _('The email address has been changed from "{old_email}" '
                                                 'to "{new_email}".'),
+        'pretix.event.order.phone.changed': _('The phone number has been changed from "{old_phone}" '
+                                              'to "{new_phone}".'),
         'pretix.event.order.locale.changed': _('The order locale has been changed.'),
         'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),

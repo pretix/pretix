@@ -778,6 +778,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             status=Order.STATUS_PENDING,
             event=event,
             email=email,
+            phone=(meta_info or {}).get('contact_form_data', {}).get('phone'),
             datetime=now_dt,
             locale=get_language_without_region(locale),
             total=total,

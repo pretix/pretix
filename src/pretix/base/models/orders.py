@@ -31,6 +31,7 @@ from django_countries.fields import Country
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
+from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumbers import NumberParseException
 
@@ -86,6 +87,8 @@ class Order(LockModel, LoggedModel):
     :type event: Event
     :param email: The email of the person who ordered this
     :type email: str
+    :param phone: The phone number of the person who ordered this
+    :type phone: str
     :param testmode: Whether this is a test mode order
     :type testmode: bool
     :param locale: The locale of this order
@@ -143,6 +146,10 @@ class Order(LockModel, LoggedModel):
     email = models.EmailField(
         null=True, blank=True,
         verbose_name=_('E-mail')
+    )
+    phone = PhoneNumberField(
+        null=True, blank=True,
+        verbose_name=_('Phone number'),
     )
     locale = models.CharField(
         null=True, blank=True, max_length=32,

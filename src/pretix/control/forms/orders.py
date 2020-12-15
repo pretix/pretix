@@ -16,6 +16,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.forms.questions import WrappedPhoneNumberPrefixWidget
 from pretix.base.forms.widgets import (
     DatePickerWidget, SplitDateTimePickerWidget,
 )
@@ -460,7 +461,15 @@ class OrderContactForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['email', 'email_known_to_work']
+        fields = ['email', 'email_known_to_work', 'phone']
+        widgets = {
+            'phone': WrappedPhoneNumberPrefixWidget()
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.event.settings.order_phone_asked and not self.instance.phone:
+            del self.fields['phone']
 
 
 class OrderLocaleForm(forms.ModelForm):

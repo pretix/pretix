@@ -258,7 +258,7 @@ var form_handlers = function (el) {
             dependency = $($(this).attr("data-checkbox-dependency")),
             update = function () {
                 var enabled = dependency.prop('checked');
-                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+                dependent.prop('disabled', !enabled).closest('.form-group, .form-field-boundary').toggleClass('disabled', !enabled);
                 if (!enabled && !$(this).is('[data-checkbox-dependency-visual]')) {
                     dependent.prop('checked', false);
                 }
@@ -278,7 +278,7 @@ var form_handlers = function (el) {
         var dependent = $(this),
             update = function () {
                 var enabled = !dependency.prop('checked');
-                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+                dependent.prop('disabled', !enabled).closest('.form-group, .form-field-boundary').toggleClass('disabled', !enabled);
             };
         update();
         dependency.on("change", update);
