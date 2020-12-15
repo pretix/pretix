@@ -10,10 +10,13 @@ def phone_format(value: str):
     if not value:
         return ""
 
-    if isinstance(value, PhoneNumber) and value.as_international:
+    if isinstance(value, str):
+        try:
+            return PhoneNumber.from_string(value).as_international
+        except NumberParseException:
+            return value
+
+    if isinstance(value, PhoneNumber) and value.national_number:
         return value.as_international
 
-    try:
-        return PhoneNumber.from_string(value).as_international
-    except NumberParseException:
-        return value
+    return str(value)
