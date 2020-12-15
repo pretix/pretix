@@ -288,8 +288,10 @@
                             <dt>{% trans "Company" %}</dt>
                             <dd>{{ order.invoice_address.company }}</dd>
                         {% endif %}
-                        <dt>{% trans "Name" %}</dt>
-                        <dd>{{ order.invoice_address.name }}</dd>
+                        {% if invoice_address_asked or request.event.settings.invoice_name_required %}
+                            <dt>{% trans "Name" %}</dt>
+                            <dd>{{ order.invoice_address.name }}</dd>
+                        {% endif %}
                         {% if invoice_address_asked %}
                             <dt>{% trans "Address" %}</dt>
                             <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
