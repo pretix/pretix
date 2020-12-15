@@ -81,7 +81,7 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
 .tabbed-form > .tab-pane {
   padding: 10px;
 
-  h4 {
+  & > h4 {
     // like bs3 legend
     display: block;
     width: 100%;
