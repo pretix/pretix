@@ -10,7 +10,7 @@ def phone_format(value: str):
     if not value:
         return ""
 
-    if isinstance(value, PhoneNumber):
+    if isinstance(value, PhoneNumber) and value.as_international:
         return value.as_international
 
     try:
