@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-12-16 07:00+0000\n"
+"PO-Revision-Date: 2020-12-16 09:46+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -1412,37 +1412,37 @@ msgstr "Emissor"
 #: pretix/base/exporters/waitinglist.py:26
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:82
 msgid "All entries"
-msgstr ""
+msgstr "Totes les entrades"
 
 #: pretix/base/exporters/waitinglist.py:31
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:85
 msgid "Waiting for a voucher"
-msgstr ""
+msgstr "Esperant un val"
 
 #: pretix/base/exporters/waitinglist.py:36
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:170
 #: pretix/control/views/waitinglist.py:218
 msgid "Voucher assigned"
-msgstr ""
+msgstr "Val assignat"
 
 #: pretix/base/exporters/waitinglist.py:41
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
 msgid "Waiting for redemption"
-msgstr ""
+msgstr "Esperant el bescanvi del val"
 
 #: pretix/base/exporters/waitinglist.py:49
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
 #: pretix/control/views/waitinglist.py:214
 msgid "Voucher redeemed"
-msgstr ""
+msgstr "Val bescanviat"
 
 #: pretix/base/exporters/waitinglist.py:57
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:96
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:168
 #: pretix/control/views/waitinglist.py:216
 msgid "Voucher expired"
-msgstr ""
+msgstr "Val expirat"
 
 #: pretix/base/exporters/waitinglist.py:86 pretix/base/pdf.py:67
 #: pretix/control/forms/event.py:1321
@@ -1468,7 +1468,7 @@ msgstr "Data"
 #: pretix/base/exporters/waitinglist.py:94
 #: pretix/control/views/waitinglist.py:200
 msgid "Priority"
-msgstr ""
+msgstr "Prioritat"
 
 #: pretix/base/exporters/waitinglist.py:96 pretix/base/models/vouchers.py:104
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:19
@@ -1827,10 +1827,9 @@ msgid "Received payments"
 msgstr "Pagaments rebuts"
 
 #: pretix/base/invoice.py:576
-#, fuzzy
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr "Pagaments sortints"
+msgstr "Pagaments emesos"
 
 #: pretix/base/invoice.py:605
 msgctxt "invoice"
@@ -2177,7 +2176,7 @@ msgstr "Sèrie d'esdeveniments"
 
 #: pretix/base/models/event.py:416 pretix/base/payment.py:312
 msgid "Restrict to specific sales channels"
-msgstr ""
+msgstr "Restringir a canals de venda especícifs"
 
 #: pretix/base/models/event.py:417
 msgid "Only sell tickets for this event on the following sales channels."
@@ -3762,22 +3761,17 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/vouchers.py:381
-#, fuzzy
-#| msgid "You need to select a variation of the product."
 msgid "You need to choose a specific product if you select a seat."
-msgstr "Heu de seleccionar una variació del producte."
+msgstr "Si trieu un seient heu de seleccionar un producte en concret."
 
 #: pretix/base/models/vouchers.py:384
-#, fuzzy
-#| msgid "This product can only be bought using a voucher."
 msgid "Seat-specific vouchers can only be used once."
-msgstr "Aquest producte només es pot comprar mitjançant un val."
+msgstr "El vals lligats a seients només es poden usar un cop."
 
 #: pretix/base/models/vouchers.py:387
-#, fuzzy, python-brace-format
-#| msgid "You need to choose a subevent for the new position."
+#, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "Heu de triar un sub-esdeveniment per la nova posició."
+msgstr "Per a aquest seient heu de triar el producte \"{prod}\"."
 
 #: pretix/base/models/vouchers.py:390
 #, fuzzy, python-brace-format
@@ -4020,10 +4014,8 @@ msgstr "Heu de seleccionar una variació del producte."
 #: pretix/control/forms/filter.py:483 pretix/control/forms/filter.py:487
 #: pretix/control/forms/filter.py:491 pretix/control/forms/filter.py:496
 #: pretix/control/forms/filter.py:501
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address"
-msgstr "Adreces de les factures"
+msgstr "Adreça de la factura"
 
 #: pretix/base/orderimport.py:319 pretix/base/orderimport.py:465
 #, fuzzy
@@ -4044,8 +4036,6 @@ msgid "Please enter a valid state."
 msgstr "Si us plau, introduïu la mateixa contrasenya dues vegades"
 
 #: pretix/base/orderimport.py:393 pretix/control/forms/filter.py:510
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee e-mail address"
 msgstr "Correu electrònic de l'assistent"
 
@@ -4058,10 +4048,8 @@ msgstr "Correu electrònic de l'assistent"
 #: pretix/control/templates/pretixcontrol/order/index.html:427
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:81
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:84
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee address"
-msgstr "Correu electrònic de l'assistent"
+msgstr "Adreça de l'assistent"
 
 #: pretix/base/orderimport.py:477
 #, fuzzy
@@ -4070,28 +4058,24 @@ msgid "State"
 msgstr "Estat"
 
 #: pretix/base/orderimport.py:500
-#, fuzzy
-#| msgid "Subtract from product price"
 msgid "Calculate from product"
-msgstr "Resta del preu del producte"
+msgstr "Calcular des del producte"
 
 #: pretix/base/orderimport.py:508 pretix/control/views/orders.py:783
 #: pretix/control/views/orders.py:806 pretix/control/views/orders.py:835
 #: pretix/control/views/orders.py:866
 msgid "You entered an invalid number."
-msgstr ""
+msgstr "Heu introduït un número invàlid."
 
 #: pretix/base/orderimport.py:526
 #: pretix/control/templates/pretixcontrol/checkin/index.html:81
 #: pretix/control/templates/pretixcontrol/order/index.html:367
 msgid "Ticket code"
-msgstr ""
+msgstr "Codi del tiquet"
 
 #: pretix/base/orderimport.py:527
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Generate automatically"
-msgstr "Genera tiquets"
+msgstr "Generar automàticament"
 
 #: pretix/base/orderimport.py:536
 msgid "You cannot assign a position secret that already exists."
@@ -4099,11 +4083,11 @@ msgstr ""
 
 #: pretix/base/orderimport.py:565
 msgid "Please enter a valid language code."
-msgstr ""
+msgstr "Si us plau, introduïu un codi d'idioma vàlid."
 
 #: pretix/base/orderimport.py:585
 msgid "Please enter a valid sales channel."
-msgstr ""
+msgstr "Si us plau, introduïu un canal de venda vàlid."
 
 #: pretix/base/orderimport.py:608
 msgid "No matching seat was found."
@@ -4195,7 +4179,7 @@ msgstr "Valor absolut"
 
 #: pretix/base/payment.py:284
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Percentatge del total de la comanda."
 
 #: pretix/base/payment.py:290
 msgid "Calculate the fee from the total value including the fee."
@@ -4234,10 +4218,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/payment.py:324
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Hide payment method"
-msgstr "Activa el mètode de pagament"
+msgstr "Amaga el mètode de pagament"
 
 #: pretix/base/payment.py:327
 msgid ""
@@ -4246,10 +4228,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/payment.py:333
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Link to enable payment method"
-msgstr "Activa el mètode de pagament"
+msgstr "Enllaç per activar el mètode de pagament"
 
 #: pretix/base/payment.py:342
 msgid "Share this link with customers who should use this payment method."
@@ -4369,12 +4349,12 @@ msgstr "Comandes amb equilibri en contra: %s"
 
 #: pretix/base/payment.py:1038
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "En mode de proves només funcionen les targetes de prova."
 
 #: pretix/base/payment.py:1103 pretix/base/payment.py:1166
 #: pretix/base/payment.py:1210 pretix/base/services/orders.py:772
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr ""
+msgstr "No es pot fer servir un val regal per comprar un val regal."
 
 #: pretix/base/payment.py:1112 pretix/base/payment.py:1174
 #: pretix/base/payment.py:1218 pretix/base/services/orders.py:763
@@ -4393,7 +4373,7 @@ msgstr "Aquest producte només es pot comprar mitjançant un val."
 #: pretix/base/payment.py:1118 pretix/base/payment.py:1180
 #: pretix/base/services/orders.py:767
 msgid "Only test gift cards can be used in test mode."
-msgstr ""
+msgstr "En mode de proves només es poden fer servir targetes regal de proves."
 
 #: pretix/base/payment.py:1121 pretix/base/payment.py:1183
 #: pretix/base/payment.py:1224
@@ -4417,12 +4397,12 @@ msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
 msgstr ""
+"S'ha bescanviat la targeta regal però encara falten {} per pagar. Si us "
+"plau, selecciona una forma de pagament."
 
 #: pretix/base/payment.py:1148
-#, fuzzy
-#| msgid "The task has been completed."
 msgid "Your gift card has been applied."
-msgstr "S'ha completat la tasca."
+msgstr "S'ha bescanviat la targeta regal."
 
 #: pretix/base/payment.py:1156 pretix/base/payment.py:1198
 msgid ""
@@ -4432,7 +4412,7 @@ msgstr ""
 
 #: pretix/base/payment.py:1159 pretix/base/payment.py:1201
 msgid "This gift card is not known."
-msgstr ""
+msgstr "Aquesta targeta regal és desconeguda."
 
 #: pretix/base/payment.py:1161 pretix/base/payment.py:1203
 msgid ""
@@ -4441,18 +4421,13 @@ msgid ""
 msgstr ""
 
 #: pretix/base/payment.py:1220 pretix/base/services/orders.py:769
-#, fuzzy
-#| msgid "This order is not yet approved by the event organizer."
 msgid "This gift card is not accepted by this event organizer."
 msgstr ""
-"Aquesta comanda encara no s'ha aprovat per l'organitzador de l'esdeveniment."
+"Aquesta targeta regal no és acceptada per l'organitzador de l'esdeveniment."
 
 #: pretix/base/payment.py:1222
-#, fuzzy
-#| msgid "There was an error sending the mail. Please try again later."
 msgid "This gift card was used in the meantime. Please try again."
-msgstr ""
-"S'ha produït un error enviant el correu. Si us plau intenteu-ho més tard."
+msgstr "Aquesta targeta regal ja s'ha fet servir. Si us plau torneu a provar."
 
 #: pretix/base/pdf.py:50
 msgid "Ticket code (barcode content)"
@@ -4504,7 +4479,7 @@ msgstr "123.45 EUR"
 
 #: pretix/base/pdf.py:102
 msgid "Price including add-ons"
-msgstr ""
+msgstr "Preu incloent complements"
 
 #: pretix/base/pdf.py:116
 #: pretix/control/templates/pretixcontrol/order/index.html:419
