@@ -35,7 +35,7 @@
 {% if DEBUG %}
     <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
 {% else %}
-    <script src="{% statici18n LANGUAGE_CODE %}" async></script>
+    <script src="{% statici18n request.LANGUAGE_CODE %}" async></script>
 {% endif %}
 {% if request.session.iframe_session %}
     {% compress js %}
