@@ -502,6 +502,34 @@ class EventSettingsForm(SettingsForm):
         settings_dict = self.event.settings.freeze()
         settings_dict.update(data)
         validate_event_settings(self.event, data)
+
+        # set all dependants of virtual_keys and
+        # delete all virtual_fields to prevent them from being saved
+        for virtual_key in self.virtual_keys:
+            if virtual_key not in data:
+                continue
+            base_key = virtual_key[:-15]
+            asked_key = base_key + "_asked"
+            required_key = base_key + "_required"
+
+            if data[virtual_key] == 'optional':
+                data[asked_key] = True
+                data[required_key] = False
+            elif data[virtual_key] == 'required':
+                data[asked_key] = True
+                data[required_key] = True
+            # Explicitly check for 'do_not_ask'.
+            # Do not overwrite as default-behaviour when no value for virtual field is transmitted!
+            elif data[virtual_key] == 'do_not_ask':
+                data[asked_key] = False
+                data[required_key] = False
+
+            # hierarkey.forms cannot handle non-existent keys in cleaned_data => do not delete, but set to None
+            data[virtual_key] = None
+
+        # TODO: do we need to re-validate?
+        # if len(self.virtual_keys):
+        #     validate_event_settings(self.event, data)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -527,6 +555,35 @@ class EventSettingsForm(SettingsForm):
         self.fields['primary_font'].choices += [
             (a, {"title": a, "data": v}) for a, v in get_fonts().items()
         ]
+
+        # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields
+        self.virtual_keys = []
+        for asked_key in [key for key in self.fields.keys() if key.endswith('_asked') and key[:-5] + 'required' in self.fields]:
+            required_key = asked_key[:-5] + 'required'
+            virtual_key = asked_key + '_required'
+            if virtual_key in self.fields:
+                # there already is a field with virtual_key defined manually, so do not overwrite
+                continue
+
+            asked_field = self.fields[asked_key]
+
+            self.fields[virtual_key] = forms.ChoiceField(
+                label=asked_field.label,
+                help_text=asked_field.help_text,
+                required=True,
+                choices=[
+                    # default key needs a value other than '' because with '' it would also overwrite even if combi-field is not transmitted
+                    ('do_not_ask', _('Do not ask')),
+                    ('optional', _('Ask, but do not require input')),
+                    ('required', _('Ask and require input'))
+                ]
+            )
+            self.virtual_keys.append(virtual_key)
+
+            if self.initial[required_key]:
+                self.initial[virtual_key] = ['required']
+            elif self.initial[asked_key]:
+                self.initial[virtual_key] = ['optional']
 
 
 class CancelSettingsForm(SettingsForm):
