@@ -295,7 +295,9 @@ on one machine after each upgrade manually, otherwise multiple containers might 
 database schema at the same time.
 
 To run only the ``pretix-web`` component of pretix as well as a nginx server serving static files, you
-can invoke the container with ``docker run … pretix/standalone:stable web`` (instead of ``all``).
+can invoke the container with ``docker run … pretix/standalone:stable web`` (instead of ``all``). You
+can adjust the number of ``gunicorn`` processes with the ``NUM_WORKERS`` environment variable (defaults to
+two times the number of CPUs detected).
 
 To run only ``pretix-worker``, you can run ``docker run … pretix/standalone:stable taskworker``. You can
 also pass arguments to limit the worker to specific queues or to change the number of concurrent task

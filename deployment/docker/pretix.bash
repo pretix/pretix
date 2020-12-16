@@ -3,9 +3,10 @@ cd /pretix/src
 export DJANGO_SETTINGS_MODULE=production_settings
 export DATA_DIR=/data/
 export HOME=/pretix
-export NUM_WORKERS=$((2 * $(nproc --all)))
 
 AUTOMIGRATE=${AUTOMIGRATE:-yes}
+NUM_WORKERS_DEFAULT=$((2 * $(nproc --all)))
+export NUM_WORKERS=${NUM_WORKERS:-$NUM_WORKERS_DEFAULT}
 
 if [ ! -d /data/logs ]; then
     mkdir /data/logs;
