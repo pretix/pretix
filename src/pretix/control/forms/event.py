@@ -571,6 +571,7 @@ class EventSettingsForm(SettingsForm):
                 label=asked_field.label,
                 help_text=asked_field.help_text,
                 required=True,
+                widget=forms.RadioSelect,
                 choices=[
                     # default key needs a value other than '' because with '' it would also overwrite even if combi-field is not transmitted
                     ('do_not_ask', _('Do not ask')),
