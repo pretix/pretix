@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-12-16 09:46+0000\n"
+"PO-Revision-Date: 2020-12-18 07:00+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -1042,10 +1042,8 @@ msgid "Order time"
 msgstr "Hora de la comanda"
 
 #: pretix/base/exporters/orderlist.py:151 pretix/base/settings.py:298
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Custom address field"
-msgstr "Adreça de correu electrònic"
+msgstr "Camp d'adreça personalitzat"
 
 #: pretix/base/exporters/orderlist.py:151
 msgid "Date of last payment"
@@ -21226,7 +21224,7 @@ msgstr "Modificar comanda"
 #: pretix/presale/templates/pretixpresale/event/order_change.html:74
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:87
 msgid "Save changes"
-msgstr ""
+msgstr "Desar els canvis"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
 #, python-format
@@ -21246,7 +21244,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr ""
+msgstr "Pagar comanda: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
@@ -21287,7 +21285,7 @@ msgstr "Període de reserva"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:10
 msgid "Your registration"
-msgstr ""
+msgstr "El vostre registre"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:29
 #, fuzzy
@@ -21317,27 +21315,29 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
-msgstr ""
+msgstr "Enviar enllaços"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
 msgid "Voucher redemption"
-msgstr ""
+msgstr "Bescanvi de vals"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:58
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
+"Heu introduït un codi de val que us permet comprar un dels productes "
+"següents al preu indicat:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:117
 #, python-format
 msgid "from %(minprice)s"
-msgstr ""
+msgstr "des de %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
-msgstr ""
+msgstr "Afegiu-me a la llista d'espera"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:29
 #, python-format
@@ -21349,7 +21349,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:34
 msgid "Add me to the list"
-msgstr ""
+msgstr "Afegiu-me a la llista"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:94
 #, python-format
@@ -21369,7 +21369,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Hola !"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -21377,12 +21377,16 @@ msgid ""
 "This is a self-hosted installation of <a %(a_attr)s>pretix, your free and "
 "open source ticket sales software</a>."
 msgstr ""
+"Aquesta és una instal·lació autònoma de <a %(a_attr)s>pretix, la vostra "
+"solució lliure i de codi obert per a vendre tiquets</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:15
 msgid ""
 "If you're looking to buy a ticket, you need to follow a direct link to an "
 "event or organizer profile."
 msgstr ""
+"Si esteu mirant de comprar un tiquet, has de seguir un enllaç directe cap a "
+"un esdeveniment o cap a un organitzador."
 
 #: pretix/presale/templates/pretixpresale/index.html:20
 #, python-format
@@ -21390,15 +21394,17 @@ msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
 msgstr ""
+"Si esteu mirant de configurar aquesta instal·lació, si us plau <a %(a_attr)s>"
+"ves cap aquí</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "Gaudiu!"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:6
 msgid "Event overview"
-msgstr ""
+msgstr "Visió general dels esdeveniments"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:30
@@ -21410,7 +21416,7 @@ msgstr "Setmana"
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:36
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
 msgid "Month"
-msgstr ""
+msgstr "Mes"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:42
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:42
@@ -21425,11 +21431,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
-msgstr ""
+msgstr "Llista d'esdeveniments"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
-msgstr ""
+msgstr "Esdeveniments passats"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
@@ -21437,7 +21443,7 @@ msgstr "Properes actuacions"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:53
 msgid "Show upcoming"
-msgstr ""
+msgstr "Mostrar propers"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:55
 msgid "Show past events"
@@ -21445,7 +21451,7 @@ msgstr "Mostrar actuacions passades"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:137
 msgid "More info"
-msgstr ""
+msgstr "Més informació"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:145
 msgid "No archived events found."
@@ -21453,12 +21459,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:149
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "No hi ha cap acte públic pròximament."
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr ""
+msgstr "Pàgina %(page)s de %(of)s"
 
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
@@ -21467,7 +21473,7 @@ msgstr "Estem processant la vostra sol·licitud …"
 #: pretix/presale/utils.py:43 pretix/presale/utils.py:155
 #: pretix/presale/utils.py:156
 msgid "The selected event was not found."
-msgstr ""
+msgstr "No s'ha trobat l'acte seleccionat."
 
 #: pretix/presale/utils.py:123
 msgid "The selected ticket shop is currently not available."
@@ -21475,7 +21481,7 @@ msgstr ""
 
 #: pretix/presale/utils.py:128
 msgid "This feature is not enabled."
-msgstr ""
+msgstr "Aquesta funció no està habilitada."
 
 #: pretix/presale/utils.py:164 pretix/presale/utils.py:168
 msgid "The selected organizer was not found."
@@ -21484,11 +21490,11 @@ msgstr ""
 #: pretix/presale/views/cart.py:114 pretix/presale/views/cart.py:119
 #: pretix/presale/views/cart.py:136 pretix/presale/views/cart.py:148
 msgid "Please enter numbers only."
-msgstr ""
+msgstr "Si us plau, introduïu només nombres."
 
 #: pretix/presale/views/cart.py:121
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "Si us plau, introduïu només nombres positius."
 
 #: pretix/presale/views/cart.py:341
 msgid "We applied the voucher to as many products in your cart as we could."
@@ -21581,6 +21587,7 @@ msgstr "S'ha completat la tasca."
 #: pretix/presale/views/order.py:909
 msgid "Ticket download is not (yet) enabled for this order."
 msgstr ""
+"La baixada de tiquets encara no ha estat habilitada per a aquesta comanda."
 
 #: pretix/presale/views/order.py:918
 msgid "Please click the link we sent you via email to download your tickets."
@@ -21609,7 +21616,7 @@ msgstr ""
 
 #: pretix/presale/views/user.py:46
 msgid "Your orders for {}"
-msgstr ""
+msgstr "Les vostres comandes per a {}"
 
 #: pretix/presale/views/user.py:54
 msgid "We have trouble sending emails right now, please check back later."
@@ -21623,7 +21630,7 @@ msgstr ""
 
 #: pretix/presale/views/waiting.py:77
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "Les llistes d'espera no estan habilitades per a aquest esdeveniment."
 
 #: pretix/presale/views/waiting.py:81
 msgid "We could not identify the product you selected."
@@ -21671,79 +21678,79 @@ msgstr ""
 
 #: pretix/settings.py:426
 msgid "English"
-msgstr ""
+msgstr "Anglès"
 
 #: pretix/settings.py:427
 msgid "German"
-msgstr ""
+msgstr "Alemany"
 
 #: pretix/settings.py:428
 msgid "German (informal)"
-msgstr ""
+msgstr "Alemany (informal)"
 
 #: pretix/settings.py:429
 msgid "Arabic"
-msgstr ""
+msgstr "Àrab"
 
 #: pretix/settings.py:430
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Xinès (simplificat)"
 
 #: pretix/settings.py:431
 msgid "Danish"
-msgstr ""
+msgstr "Danès"
 
 #: pretix/settings.py:432
 msgid "Dutch"
-msgstr ""
+msgstr "Holandès"
 
 #: pretix/settings.py:433
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Holandès (informal)"
 
 #: pretix/settings.py:434
 msgid "French"
-msgstr ""
+msgstr "Francès"
 
 #: pretix/settings.py:435
 msgid "Finnish"
-msgstr ""
+msgstr "Finlandès"
 
 #: pretix/settings.py:436
 msgid "Greek"
-msgstr ""
+msgstr "Grec"
 
 #: pretix/settings.py:437
 msgid "Italian"
-msgstr ""
+msgstr "Italià"
 
 #: pretix/settings.py:438
 msgid "Latvian"
-msgstr ""
+msgstr "Letó"
 
 #: pretix/settings.py:439
 msgid "Polish"
-msgstr ""
+msgstr "Polonès"
 
 #: pretix/settings.py:440
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portuguès (Portugal)"
 
 #: pretix/settings.py:441
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portuguès (Brasil)"
 
 #: pretix/settings.py:442
 msgid "Russian"
-msgstr ""
+msgstr "Rus"
 
 #: pretix/settings.py:443
 msgid "Spanish"
-msgstr ""
+msgstr "Espanyol"
 
 #: pretix/settings.py:444
 msgid "Turkish"
-msgstr ""
+msgstr "Turc"
 
 #: pretix/settings.py:737
 msgid "User profile only"
