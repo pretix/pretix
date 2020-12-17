@@ -501,16 +501,15 @@ class EventSettingsForm(SettingsForm):
         data = super().clean()
         settings_dict = self.event.settings.freeze()
         settings_dict.update(data)
-        validate_event_settings(self.event, data)
 
         # set all dependants of virtual_keys and
         # delete all virtual_fields to prevent them from being saved
         for virtual_key in self.virtual_keys:
             if virtual_key not in data:
                 continue
-            base_key = virtual_key[:-15]
-            asked_key = base_key + "_asked"
-            required_key = base_key + "_required"
+            base_key = virtual_key.rsplit('_', 2)[0]
+            asked_key = base_key + '_asked'
+            required_key = base_key + '_required'
 
             if data[virtual_key] == 'optional':
                 data[asked_key] = True
@@ -527,9 +526,7 @@ class EventSettingsForm(SettingsForm):
             # hierarkey.forms cannot handle non-existent keys in cleaned_data => do not delete, but set to None
             data[virtual_key] = None
 
-        # TODO: do we need to re-validate?
-        # if len(self.virtual_keys):
-        #     validate_event_settings(self.event, data)
+        validate_event_settings(self.event, data)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -558,10 +555,11 @@ class EventSettingsForm(SettingsForm):
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields
         self.virtual_keys = []
-        for asked_key in [key for key in self.fields.keys() if key.endswith('_asked') and key[:-5] + 'required' in self.fields]:
-            required_key = asked_key[:-5] + 'required'
+        for asked_key in [key for key in self.fields.keys() if key.endswith('_asked')]:
+            required_key = asked_key.rsplit('_', 1)[0] + '_required'
             virtual_key = asked_key + '_required'
-            if virtual_key in self.fields:
+            if required_key not in self.fields or virtual_key in self.fields:
+                # either no matching required key or
                 # there already is a field with virtual_key defined manually, so do not overwrite
                 continue
 
@@ -582,9 +580,11 @@ class EventSettingsForm(SettingsForm):
             self.virtual_keys.append(virtual_key)
 
             if self.initial[required_key]:
-                self.initial[virtual_key] = ['required']
+                self.initial[virtual_key] = 'required'
             elif self.initial[asked_key]:
-                self.initial[virtual_key] = ['optional']
+                self.initial[virtual_key] = 'optional'
+            else:
+                self.initial[virtual_key] = 'do_not_ask'
 
 
 class CancelSettingsForm(SettingsForm):
