@@ -614,7 +614,10 @@ $(function () {
         $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
     }
     $('a[data-toggle="tab"]').on('click', function (e) {
-        window.location.hash = e.target.hash;
+        if (!$(this).closest(".panel").length) {
+            // only append hash if not inside a .panel
+            window.location.hash = this.hash;
+        }
     });
 
     // Event wizard
