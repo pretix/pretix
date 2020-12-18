@@ -106,17 +106,7 @@
                     </div>
                 </div>
                 {% bootstrap_field sform.order_email_asked_twice layout="control" %}
-                <div class="form-group">
-                    <label class="control-label col-md-3">
-                        {% trans "Phone number" %}
-                    </label>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.order_phone_asked layout="inline" form_group_class="" label=asked %}
-                    </div>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.order_phone_required layout="inline" form_group_class="" label=required %}
-                    </div>
-                </div>
+                {% bootstrap_field sform.order_phone_asked_required layout="control" %}
                 <div class="form-group">
                     <label class="control-label col-md-3">
                         {% trans "Name and address" %}
@@ -131,50 +121,12 @@
                 </div>
 
                 <h4>{% trans "Attendee data (once per admission ticket)" %}</h4>
-                <div class="form-group">
-                    <label class="control-label col-md-3">
-                        {% trans "Name" %}
-                    </label>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.attendee_names_asked layout="inline" form_group_class="" label=asked %}
-                    </div>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.attendee_names_required layout="inline" form_group_class="" label=required %}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-3">
-                        {% trans "E-mail" %}
-                    </label>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.attendee_emails_asked layout="inline" form_group_class="" label=asked %}
-                    </div>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.attendee_emails_required layout="inline" form_group_class="" label=required %}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-3">
-                        {% trans "Company" %}
-                    </label>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.attendee_company_asked layout="inline" form_group_class="" label=asked %}
-                    </div>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.attendee_company_required layout="inline" form_group_class="" label=required %}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-3">
-                        {% trans "Address" %}
-                    </label>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.attendee_addresses_asked layout="inline" form_group_class="" label=asked %}
-                    </div>
-                    <div class="col-md-3 form-field-boundary">
-                        {% bootstrap_field sform.attendee_addresses_required layout="inline" form_group_class="" label=required %}
-                    </div>
-                </div>
+
+                {% bootstrap_field sform.attendee_names_asked_required layout="control" %}
+                {% bootstrap_field sform.attendee_emails_asked_required layout="control" %}
+                {% bootstrap_field sform.attendee_company_asked_required layout="control" %}
+                {% bootstrap_field sform.attendee_addresses_asked_required layout="control" %}
+
                 <div class="form-group">
                     <label class="control-label col-md-3">
                         {% trans "Custom fields" %}
