@@ -74,7 +74,9 @@ def login(request):
         backend = [b for b in backends if b.visible][0]
     if request.user.is_authenticated:
         next_url = backend.get_next_url(request) or 'control:index'
-        return redirect(next_url)
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
+            return redirect(next_url)
+        return redirect(reverse('control:index'))
     if request.method == 'POST':
         form = LoginForm(backend=backend, data=request.POST)
         if form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier:
