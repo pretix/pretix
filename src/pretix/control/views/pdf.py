@@ -137,7 +137,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
             buffer = BytesIO()
             p.write(buffer)
             buffer.seek(0)
-            c = CachedFile()
+            c = CachedFile(web_download=True)
             c.expires = now() + timedelta(days=7)
             c.date = now()
             c.filename = 'background_preview.pdf'
@@ -162,7 +162,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
                     "status": "error",
                     "error": error
                 })
-            c = CachedFile()
+            c = CachedFile(web_download=True)
             c.expires = now() + timedelta(days=7)
             c.date = now()
             c.filename = 'background_preview.pdf'

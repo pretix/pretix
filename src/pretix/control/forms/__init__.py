@@ -203,6 +203,7 @@ class CachedFileField(ExtFileField):
             cf = CachedFile.objects.create(
                 expires=now() + datetime.timedelta(days=1),
                 date=now(),
+                web_download=True,
                 filename=data.name,
                 type=data.content_type,
             )
@@ -218,6 +219,7 @@ class CachedFileField(ExtFileField):
         if isinstance(data, File):
             cf = CachedFile.objects.create(
                 expires=now() + datetime.timedelta(days=1),
+                web_download=True,
                 date=now(),
                 filename=data.name,
                 type=data.content_type,

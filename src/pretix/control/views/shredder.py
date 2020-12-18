@@ -75,7 +75,7 @@ class ShredExportView(RecentAuthenticationRequiredMixin, EventPermissionRequired
         if constr:
             return self.error(ShredError(self.get_error_url()))
 
-        return self.do(self.request.event.id, request.POST.getlist("shredder"))
+        return self.do(self.request.event.id, request.POST.getlist("shredder"), self.request.session.session_key)
 
 
 class ShredDoView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, AsyncAction, View):

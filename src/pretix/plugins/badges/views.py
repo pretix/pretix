@@ -235,7 +235,7 @@ class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
 
     def post(self, request, *args, **kwargs):
         order = get_object_or_404(self.request.event.orders, code=request.GET.get("code"))
-        cf = CachedFile()
+        cf = CachedFile(web_download=True, session_key=self.request.session.session_key)
         cf.date = now()
         cf.type = 'application/pdf'
         cf.expires = now() + timedelta(days=3)

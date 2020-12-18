@@ -13,7 +13,11 @@ class DownloadView(TemplateView):
     @cached_property
     def object(self) -> CachedFile:
         try:
-            return get_object_or_404(CachedFile, id=self.kwargs['id'])
+            o = get_object_or_404(CachedFile, id=self.kwargs['id'], web_download=True)
+            if o.session_key:
+                if o.session_key != self.request.session.session_key:
+                    raise Http404()
+            return o
         except ValueError:   # Invalid URLs
             raise Http404()
 

@@ -2064,7 +2064,7 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
             messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
             return self.get(request, *args, **kwargs)
 
-        cf = CachedFile()
+        cf = CachedFile(web_download=True, session_key=request.session.session_key)
         cf.date = now()
         cf.expires = now() + timedelta(days=3)
         cf.save()
