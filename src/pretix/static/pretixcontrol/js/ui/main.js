@@ -614,7 +614,7 @@ $(function () {
         $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
     }
     $('a[data-toggle="tab"]').on('click', function (e) {
-        if (!$(this).closest(".panel").length) {
+        if (!$(this).closest(".tab-content").length) {
             // only append hash if not inside a .panel
             window.location.hash = this.hash;
         }
