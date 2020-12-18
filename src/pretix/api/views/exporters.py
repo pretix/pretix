@@ -83,7 +83,7 @@ class ExportersMixin:
 
         cf = CachedFile(web_download=False)
         cf.date = now()
-        cf.expires = now() + timedelta(days=3)
+        cf.expires = now() + timedelta(hours=24)
         cf.save()
         d = serializer.data
         for k, v in d.items():
