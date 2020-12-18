@@ -81,7 +81,7 @@ class ExportersMixin:
         serializer = JobRunSerializer(exporter=instance, data=self.request.data, **self.get_serializer_kwargs())
         serializer.is_valid(raise_exception=True)
 
-        cf = CachedFile()
+        cf = CachedFile(web_download=False)
         cf.date = now()
         cf.expires = now() + timedelta(days=3)
         cf.save()

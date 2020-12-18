@@ -28,6 +28,8 @@ class CachedFile(models.Model):
     filename = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     file = models.FileField(null=True, blank=True, upload_to=cachedfile_name, max_length=255)
+    web_download = models.BooleanField(default=True)  # allow web download, True for backwards compatibility in plugins
+    session_key = models.TextField(null=True, blank=True)  # only allow download in this session
 
 
 @receiver(post_delete, sender=CachedFile)
