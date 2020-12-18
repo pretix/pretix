@@ -1958,7 +1958,7 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
 
         cf = CachedFile(web_download=True, session_key=request.session.session_key)
         cf.date = now()
-        cf.expires = now() + timedelta(days=3)
+        cf.expires = now() + timedelta(hours=24)
         cf.save()
         return self.do(self.request.event.id, str(cf.id), self.exporter.identifier, self.exporter.form.cleaned_data)
 

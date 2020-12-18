@@ -1240,7 +1240,7 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, V
 
         cf = CachedFile(web_download=True, session_key=request.session.session_key)
         cf.date = now()
-        cf.expires = now() + timedelta(days=3)
+        cf.expires = now() + timedelta(hours=24)
         cf.save()
         return self.do(
             organizer=self.request.organizer.id,
