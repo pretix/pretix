@@ -90,6 +90,10 @@ class LoginFormTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn('/control/events/', response['Location'])
 
+        response = self.client.get('/control/login?next=//evilsite.com')
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/', response['Location'])
+
     def test_logout(self):
         response = self.client.post('/control/login', {
             'email': 'dummy@dummy.dummy',
