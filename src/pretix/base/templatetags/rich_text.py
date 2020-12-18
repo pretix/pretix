@@ -1,3 +1,4 @@
+import re
 import urllib.parse
 
 import bleach
@@ -71,6 +72,10 @@ EMAIL_RE = build_email_re(tlds=sorted(tld_set, key=len, reverse=True))
 
 
 def safelink_callback(attrs, new=False):
+    """
+    Makes sure that all links to a different domain are passed through a redirection handler
+    to ensure there's no passing of referers with secrets inside them.
+    """
     url = attrs.get((None, 'href'), '/')
     if not url_has_allowed_host_and_scheme(url, allowed_hosts=None) and not url.startswith('mailto:') and not url.startswith('tel:'):
         signer = signing.Signer(salt='safe-redirect')
@@ -80,7 +85,42 @@ def safelink_callback(attrs, new=False):
     return attrs
 
 
+def truelink_callback(attrs, new=False):
+    """
+    Tries to prevent "phishing" attacks in which a link looks like it points to a safe place but instead
+    points somewhere else, e.g.
+
+        <a href="https://evilsite.com">https://google.com</a>
+
+    At the same time, custom texts are still allowed:
+
+        <a href="https://maps.google.com">Get to the event</a>
+
+    Suffixes are also allowed:
+
+        <a href="https://maps.google.com/location/foo">https://maps.google.com</a>
+    """
+    text = re.sub('[^a-zA-Z0-9.-/_]', '', attrs.get('_text'))  # clean up link text
+    if URL_RE.match(text):
+        # link text looks like a url
+        if text.startswith('//'):
+            text = 'https:' + text
+        elif not text.startswith('http'):
+            text = 'https://' + text
+
+        text_url = urllib.parse.urlparse(text)
+        href_url = urllib.parse.urlparse(attrs[None, 'href'])
+        if text_url.netloc != href_url.netloc or not href_url.path.startswith(href_url.path):
+            # link text contains an URL that has a different base than the actual URL
+            attrs['_text'] = attrs[None, 'href']
+    return attrs
+
+
 def abslink_callback(attrs, new=False):
+    """
+    Makes sure that all links will be absolute links and will be opened in a new page with no
+    window.opener attribute.
+    """
     url = attrs.get((None, 'href'), '/')
     if not url.startswith('mailto:') and not url.startswith('tel:'):
         attrs[None, 'href'] = urllib.parse.urljoin(settings.SITE_URL, url)
@@ -93,6 +133,7 @@ def markdown_compile_email(source):
     linker = bleach.Linker(
         url_re=URL_RE,
         email_re=EMAIL_RE,
+        callbacks=DEFAULT_CALLBACKS + [truelink_callback, abslink_callback],
         parse_email=True
     )
     return linker.linkify(bleach.clean(
@@ -145,7 +186,7 @@ def rich_text(text: str, **kwargs):
     linker = bleach.Linker(
         url_re=URL_RE,
         email_re=EMAIL_RE,
-        callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
+        callbacks=DEFAULT_CALLBACKS + ([truelink_callback, safelink_callback] if kwargs.get('safelinks', True) else [truelink_callback, abslink_callback]),
         parse_email=True
     )
     body_md = linker.linkify(markdown_compile(text))
@@ -161,7 +202,7 @@ def rich_text_snippet(text: str, **kwargs):
     linker = bleach.Linker(
         url_re=URL_RE,
         email_re=EMAIL_RE,
-        callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
+        callbacks=DEFAULT_CALLBACKS + ([truelink_callback, safelink_callback] if kwargs.get('safelinks', True) else [truelink_callback, abslink_callback]),
         parse_email=True
     )
     body_md = linker.linkify(markdown_compile(text, snippet=True))
