@@ -82,6 +82,14 @@ class BaseDataShredder:
         return False
 
     @property
+    def require_download_confirmation(self):
+        """
+        Indicates whether the data of this shredder needs to be downloaded, before it is actually shredded. By default
+        this value is equal to the tax relevant flag.
+        """
+        return self.tax_relevant
+
+    @property
     def verbose_name(self) -> str:
         """
         A human-readable name for what this shredder removes. This should be short but self-explanatory.
