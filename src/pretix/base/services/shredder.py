@@ -17,7 +17,7 @@ from pretix.celery_app import app
 
 
 @app.task(base=ProfiledEventTask)
-def export(event: Event, shredders: List[str]) -> None:
+def export(event: Event, shredders: List[str], session_key=None) -> None:
     known_shredders = event.get_data_shredders()
 
     with NamedTemporaryFile() as rawfile:
@@ -54,7 +54,9 @@ def export(event: Event, shredders: List[str]) -> None:
         cf = CachedFile()
         cf.date = now()
         cf.filename = event.slug + '.zip'
-        cf.type = 'application/pdf'
+        cf.type = 'application/zip'
+        cf.session_key = session_key
+        cf.web_download = True
         cf.expires = now() + timedelta(hours=1)
         cf.save()
         cf.file.save(cachedfile_name(cf, cf.filename), rawfile)
