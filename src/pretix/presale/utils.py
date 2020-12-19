@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import resolve
 from django.utils.translation import gettext_lazy as _
+from django.views.defaults import permission_denied
 from django_scopes import scope
 
 from pretix.base.middleware import LocaleMiddleware
@@ -120,7 +121,11 @@ def _detect_event(request, require_live=True, require_plugin=None):
                         can_access = 'event_access' in parentdata
 
                 if not can_access:
-                    raise PermissionDenied(_('The selected ticket shop is currently not available.'))
+                    # Directly construct view instead of just calling `raise` since this case is so common that we
+                    # don't want it to show in our log files.
+                    return permission_denied(
+                        request, PermissionDenied(_('The selected ticket shop is currently not available.'))
+                    )
 
             if require_plugin:
                 is_core = any(require_plugin.startswith(m) for m in settings.CORE_MODULES)
