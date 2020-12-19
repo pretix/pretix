@@ -594,7 +594,7 @@ class MailSettings(EventSettingsViewMixin, EventSettingsFormView):
                 )
 
             if request.POST.get('test', '0').strip() == '1':
-                backend = self.request.event.get_mail_backend(force_custom=True)
+                backend = self.request.event.get_mail_backend(force_custom=True, timeout=10)
                 try:
                     backend.test(self.request.event.settings.mail_from)
                 except Exception as e:

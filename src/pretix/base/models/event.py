@@ -528,7 +528,7 @@ class Event(EventMixin, LoggedModel):
 
         return locking.LockManager(self)
 
-    def get_mail_backend(self, force_custom=False):
+    def get_mail_backend(self, timeout=None, force_custom=False):
         """
         Returns an email server connection, either by using the system-wide connection
         or by returning a custom one based on the event's settings.
@@ -542,7 +542,7 @@ class Event(EventMixin, LoggedModel):
                                      password=self.settings.smtp_password,
                                      use_tls=self.settings.smtp_use_tls,
                                      use_ssl=self.settings.smtp_use_ssl,
-                                     fail_silently=False)
+                                     fail_silently=False, timeout=timeout)
         else:
             return get_connection(fail_silently=False)
 
