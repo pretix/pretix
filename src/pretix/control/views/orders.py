@@ -265,6 +265,8 @@ class OrderDetail(OrderView):
         ctx['overpaid'] = self.order.pending_sum * -1
         ctx['sales_channel'] = get_all_sales_channels().get(self.order.sales_channel)
         ctx['download_buttons'] = self.download_buttons
+        ctx['payment_refund_sum'] = self.order.payment_refund_sum
+        ctx['pending_sum'] = self.order.pending_sum
         return ctx
 
     @cached_property

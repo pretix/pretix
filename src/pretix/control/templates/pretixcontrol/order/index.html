@@ -570,6 +570,26 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
+                    {% if order.status != "c" and order.total != payment_refund_sum %}
+                        <div class="row-fluid product-row cart-row">
+                            <div class="col-md-4 col-xs-6">
+                                {% trans "Successful payments" %}
+                            </div>
+                            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                                {{ payment_refund_sum|money:event.currency }}
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="row-fluid product-row total text-danger">
+                            <div class="col-md-4 col-xs-6">
+                                <strong>{% trans "Pending total" %}</strong>
+                            </div>
+                            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                                <strong>{{ order.pending_sum|money:event.currency }}</strong>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             {% eventsignal event "pretix.control.signals.order_info" order=order request=request %}
