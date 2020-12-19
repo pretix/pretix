@@ -4,9 +4,9 @@ from decimal import Decimal
 
 import dateutil.parser
 from celery.exceptions import MaxRetriesExceededError
-from django.conf import settings
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Max, Min, Q
+from django.db.models.functions import Length
 from django.utils.translation import gettext, gettext_noop
 from django_scopes import scope, scopes_disabled
 
@@ -65,43 +65,69 @@ def cancel_old_payments(order):
 
 
 @transaction.atomic
-def _handle_transaction(trans: BankTransaction, code: str, event: Event = None, organizer: Organizer = None,
-                        slug: str = None):
+def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = None, organizer: Organizer = None):
+    orders = []
     if event:
-        try:
-            trans.order = event.orders.get(code=code)
-        except Order.DoesNotExist:
-            normalized_code = Order.normalize_code(code)
+        for slug, code in matches:
             try:
-                trans.order = event.orders.get(code=normalized_code)
+                orders.append(event.orders.get(code=code))
             except Order.DoesNotExist:
-                trans.state = BankTransaction.STATE_NOMATCH
-                trans.save()
-                return
+                normalized_code = Order.normalize_code(code)
+                try:
+                    orders.append(event.orders.get(code=normalized_code))
+                except Order.DoesNotExist:
+                    pass
     else:
         qs = Order.objects.filter(event__organizer=organizer)
-        if slug:
-            qs = qs.filter(event__slug__iexact=slug)
-        try:
-            trans.order = qs.get(code=code)
-        except Order.DoesNotExist:
-            normalized_code = Order.normalize_code(code)
+        for slug, code in matches:
             try:
-                trans.order = qs.get(code=normalized_code)
+                orders.append(qs.get(event__slug__iexact=slug, code=code))
             except Order.DoesNotExist:
-                trans.state = BankTransaction.STATE_NOMATCH
-                trans.save()
-                return
+                normalized_code = Order.normalize_code(code)
+                try:
+                    orders.append(qs.get(event__slug__iexact=slug, code=normalized_code))
+                except Order.DoesNotExist:
+                    pass
 
-    if trans.order.status == Order.STATUS_PAID and trans.order.pending_sum <= Decimal('0.00'):
-        trans.state = BankTransaction.STATE_DUPLICATE
-    elif trans.order.status == Order.STATUS_CANCELED:
-        trans.state = BankTransaction.STATE_ERROR
-        trans.message = gettext_noop('The order has already been canceled.')
+    if not orders:
+        # No match
+        trans.state = BankTransaction.STATE_NOMATCH
+        trans.save()
+        return
     else:
+        trans.order = orders[0]
+
+    for o in orders:
+        if o.status == Order.STATUS_PAID and o.pending_sum <= Decimal('0.00'):
+            trans.state = BankTransaction.STATE_DUPLICATE
+            trans.save()
+            return
+        elif o.status == Order.STATUS_CANCELED:
+            trans.state = BankTransaction.STATE_ERROR
+            trans.message = gettext_noop('The order has already been canceled.')
+            trans.save()
+            return
+
+    if len(orders) > 1:
+        # Multi-match! Can we split this automatically?
+        order_pending_sum = sum(o.pending_sum for o in orders)
+        if order_pending_sum != trans.amount:
+            # we can't :( this needs to be dealt with by a human
+            trans.state = BankTransaction.STATE_NOMATCH
+            trans.message = gettext_noop('Automatic split to multiple orders not possible.')
+            trans.save()
+            return
+
+        # we can!
+        splits = [(o, o.pending_sum) for o in orders]
+    else:
+        splits = [(orders[0], trans.amount)]
+
+    trans.state = BankTransaction.STATE_VALID
+    for order, amount in splits:
         try:
-            p, created = trans.order.payments.get_or_create(
-                amount=trans.amount,
+            p, created = order.payments.get_or_create(
+                amount=amount,
                 provider='banktransfer',
                 state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
                 defaults={
@@ -110,8 +136,8 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event = None, 
             )
         except OrderPayment.MultipleObjectsReturned:
             created = False
-            p = trans.order.payments.filter(
-                amount=trans.amount,
+            p = order.payments.filter(
+                amount=amount,
                 provider='banktransfer',
                 state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
             ).last()
@@ -122,12 +148,13 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event = None, 
             'payer': trans.payer,
             'iban': trans.iban,
             'bic': trans.bic,
+            'full_amount': str(trans.amount),
             'trans_id': trans.pk
         }
 
         if created:
             # We're perform a payment method switching on-demand here
-            old_fee, new_fee, fee, p = change_payment_provider(trans.order, p.payment_provider, p.amount,
+            old_fee, new_fee, fee, p = change_payment_provider(order, p.payment_provider, p.amount,
                                                                new_payment=p, create_log=False)  # noqa
             if fee:
                 p.fee = fee
@@ -136,19 +163,17 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event = None, 
         try:
             p.confirm()
         except Quota.QuotaExceededException:
-            trans.state = BankTransaction.STATE_VALID
-            cancel_old_payments(trans.order)
+            # payment confirmed but order status could not be set, no longer problem of this plugin
+            cancel_old_payments(order)
         except SendMailException:
-            trans.state = BankTransaction.STATE_VALID
-            cancel_old_payments(trans.order)
+            # payment confirmed but order status could not be set, no longer problem of this plugin
+            cancel_old_payments(order)
         else:
-            trans.state = BankTransaction.STATE_VALID
-            cancel_old_payments(trans.order)
+            cancel_old_payments(order)
 
-            o = trans.order
-            o.refresh_from_db()
-            if o.pending_sum > Decimal('0.00') and o.status == Order.STATUS_PENDING:
-                notify_incomplete_payment(o)
+            order.refresh_from_db()
+            if order.pending_sum > Decimal('0.00') and order.status == Order.STATUS_PENDING:
+                notify_incomplete_payment(order)
 
     trans.save()
 
@@ -213,7 +238,6 @@ def process_banktransfers(self, job: int, data: list) -> None:
         with scope(organizer=job.organizer or job.event.organizer):
             job.state = BankImportJob.STATE_RUNNING
             job.save()
-            prefixes = []
 
             try:
                 # Delete left-over transactions from a failed run before so they can reimported
@@ -221,26 +245,30 @@ def process_banktransfers(self, job: int, data: list) -> None:
 
                 transactions = _get_unknown_transactions(job, data, **job.owner_kwargs)
 
-                code_len = settings.ENTROPY['order_code']
+                code_len_agg = Order.objects.filter(event__organizer=job.organizer).annotate(
+                    clen=Length('code')
+                ).aggregate(min=Min('clen'), max=Max('clen'))
                 if job.event:
-                    pattern = re.compile(job.event.slug.upper() + r"[ \-_]*([A-Z0-9]{%s})" % code_len)
+                    prefixes = [job.event.slug.upper()]
                 else:
-                    if not prefixes:
-                        prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"[\- ]*")
-                                    for e in job.organizer.events.all()]
-                    pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
+                    prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"[\- ]*")
+                                for e in job.organizer.events.all()]
+                pattern = re.compile(
+                    "(%s)[ \\-_]*([A-Z0-9]{%s,%s})" % (
+                        "|".join(prefixes),
+                        code_len_agg['min'] or 0,
+                        code_len_agg['max'] or 5
+                    )
+                )
 
                 for trans in transactions:
-                    match = pattern.search(trans.reference.replace(" ", "").replace("\n", "").upper())
+                    matches = pattern.findall(trans.reference.replace(" ", "").replace("\n", "").upper())
 
-                    if match:
+                    if matches:
                         if job.event:
-                            code = match.group(1)
-                            _handle_transaction(trans, code, event=job.event)
+                            _handle_transaction(trans, matches, event=job.event)
                         else:
-                            slug = match.group(1)
-                            code = match.group(2)
-                            _handle_transaction(trans, code, organizer=job.organizer, slug=slug)
+                            _handle_transaction(trans, matches, organizer=job.organizer)
                     else:
                         trans.state = BankTransaction.STATE_NOMATCH
                         trans.save()

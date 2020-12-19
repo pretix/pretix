@@ -275,6 +275,20 @@ def test_mark_paid_organizer_dash_in_slug(env, orga_job):
 
 
 @pytest.mark.django_db
+def test_mark_paid_organizer_varying_order_code_length(env, orga_job):
+    env[2].code = "123412341234"
+    env[2].save()
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY-123412341234',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_mark_paid_organizer_weird_slug(env, orga_job):
     env[0].slug = 'du.m-y'
     env[0].save()
@@ -316,6 +330,56 @@ def test_keep_unmatched(env, orga_job):
         job = BankImportJob.objects.last()
         t = job.transactions.last()
         assert t.state == BankTransaction.STATE_NOMATCH
+
+
+@pytest.mark.django_db
+def test_split_payment_success(env, orga_job):
+    o4 = Order.objects.create(
+        code='99999', event=env[0],
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() + timedelta(days=10),
+        total=12
+    )
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellungen DUMMY-1Z3AS DUMMY-99999',
+        'date': '2016-01-26',
+        'amount': '35.00'
+    }])
+    with scopes_disabled():
+        job = BankImportJob.objects.last()
+        t = job.transactions.last()
+        assert t.state == BankTransaction.STATE_VALID
+        env[2].refresh_from_db()
+        assert env[2].status == Order.STATUS_PAID
+        assert env[2].payments.get().amount == Decimal('23.00')
+        o4.refresh_from_db()
+        assert o4.status == Order.STATUS_PAID
+        assert o4.payments.get().amount == Decimal('12.00')
+
+
+@pytest.mark.django_db
+def test_split_payment_mismatch(env, orga_job):
+    o4 = Order.objects.create(
+        code='99999', event=env[0],
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() + timedelta(days=10),
+        total=12
+    )
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellungen DUMMY-1Z3AS DUMMY-99999',
+        'date': '2016-01-26',
+        'amount': '36.00'
+    }])
+    with scopes_disabled():
+        job = BankImportJob.objects.last()
+        t = job.transactions.last()
+        assert t.state == BankTransaction.STATE_NOMATCH
+        env[2].refresh_from_db()
+        assert env[2].status == Order.STATUS_PENDING
+        o4.refresh_from_db()
+        assert o4.status == Order.STATUS_PENDING
 
 
 @pytest.mark.django_db

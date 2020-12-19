@@ -19,6 +19,10 @@
             <dd>{{ payment_info.date }}</dd>
         {% endif %}
         {% if payment_info.reference %}
+            <dt>{% trans "Transfer amount" %}</dt>
+            <dd>{{ payment_info.full_amount }}</dd>
+        {% endif %}
+        {% if payment_info.reference %}
             <dt>{% trans "Reference" %}</dt>
             <dd>{{ payment_info.reference }}</dd>
         {% endif %}
