@@ -1,4 +1,8 @@
+from datetime import timedelta
+
 import django_filters
+from django.db.models import Q
+from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import serializers, status, viewsets
 from rest_framework.exceptions import PermissionDenied
@@ -72,6 +76,13 @@ class BankImportJobViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         perm_holder = (request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user)
         if not perm_holder.has_organizer_permission(request.organizer, 'can_change_orders'):
             raise PermissionDenied('Invalid set of permissions')
+
+        if BankImportJob.objects.filter(Q(organizer=request.organizer)).filter(
+            state=BankImportJob.STATE_RUNNING,
+            created__lte=now() - timedelta(minutes=30)  # safety timeout
+        ).exists():
+            return Response({'error': ['A job is currently running.']}, status=status.HTTP_409_CONFLICT)
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         job = self.perform_create(serializer)
