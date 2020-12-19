@@ -32,7 +32,7 @@
                                 <label class="col-md-3 control-label" for="id_url">{% trans "Voucher link" %}</label>
                                 <div class="col-md-9">
                                     <input type="text" name="url"
-                                            value="{% abseventurl request.event "presale:event.redeem" %}?voucher={{ voucher.code }}&subevent={{ voucher.subevent_id }}"
+                                            value="{% abseventurl request.event "presale:event.redeem" %}?voucher={{ voucher.code }}{% if voucher.subevent_id %}&subevent={{ voucher.subevent_id }}{% endif %}"
                                             class="form-control"
                                             id="id_url" readonly>
                                 </div>
