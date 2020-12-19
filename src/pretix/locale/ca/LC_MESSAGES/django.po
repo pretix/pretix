@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-12-19 07:00+0000\n"
+"PO-Revision-Date: 2020-12-20 08:00+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -2178,7 +2178,7 @@ msgstr "Restringir a canals de venda especícifs"
 
 #: pretix/base/models/event.py:417
 msgid "Only sell tickets for this event on the following sales channels."
-msgstr ""
+msgstr "Vendre només tiquets per aquest acte als canals de venda següents."
 
 #: pretix/base/models/event.py:423 pretix/base/models/items.py:254
 #: pretix/base/models/items.py:1346 pretix/base/models/orders.py:142
@@ -4016,10 +4016,8 @@ msgid "Invoice address"
 msgstr "Adreça de la factura"
 
 #: pretix/base/orderimport.py:319 pretix/base/orderimport.py:465
-#, fuzzy
-#| msgid "Please enter the same password twice"
 msgid "Please enter a valid country code."
-msgstr "Si us plau, introduïu la mateixa contrasenya dues vegades"
+msgstr "Si us plau, introduïu un codi d'estat vàlid."
 
 #: pretix/base/orderimport.py:336 pretix/base/orderimport.py:482
 #, fuzzy
@@ -4089,7 +4087,7 @@ msgstr "Si us plau, introduïu un canal de venda vàlid."
 
 #: pretix/base/orderimport.py:608
 msgid "No matching seat was found."
-msgstr ""
+msgstr "No s'ha trobat un seient que coincideixi."
 
 #: pretix/base/orderimport.py:611 pretix/base/services/cart.py:106
 #, fuzzy
@@ -4099,16 +4097,12 @@ msgid ""
 msgstr "Ja s'ha utilitzat aquest mot per a un altre esdeveniment."
 
 #: pretix/base/orderimport.py:614 pretix/base/services/cart.py:103
-#, fuzzy
-#| msgid "You need to select a variation of the product."
 msgid "You need to select a specific seat."
-msgstr "Heu de seleccionar una variació del producte."
+msgstr "Heu de seleccionar un seient específic."
 
 #: pretix/base/orderimport.py:664 pretix/base/orderimport.py:672
-#, fuzzy
-#| msgid "Invalid option selected."
 msgid "Ambiguous option selected."
-msgstr "S'ha seleccionat una opció invàlida."
+msgstr "S'ha seleccionat una opció ambigua."
 
 #: pretix/base/payment.py:231
 msgid "Enable payment method"
@@ -4375,14 +4369,12 @@ msgstr "En mode de proves només es poden fer servir targetes regal de proves."
 
 #: pretix/base/payment.py:1121 pretix/base/payment.py:1183
 #: pretix/base/payment.py:1224
-#, fuzzy
-#| msgid "The task has been completed."
 msgid "This gift card is no longer valid."
-msgstr "S'ha completat la tasca."
+msgstr "Aquesta targeta regal ja no és vàlida."
 
 #: pretix/base/payment.py:1124 pretix/base/payment.py:1186
 msgid "All credit on this gift card has been used."
-msgstr ""
+msgstr "Ja s'ha fet servir tot el crèdit de la targeta regal."
 
 #: pretix/base/payment.py:1129
 #, fuzzy
@@ -4432,10 +4424,8 @@ msgid "Ticket code (barcode content)"
 msgstr "Codi de tiquet (contingut del codi de barres)"
 
 #: pretix/base/pdf.py:62
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position number"
-msgstr "Posició de la comanda"
+msgstr "Número de posició de la comanda"
 
 #: pretix/base/pdf.py:68 pretix/base/services/tickets.py:79
 #: pretix/control/views/event.py:687 pretix/control/views/pdf.py:64
@@ -4483,10 +4473,8 @@ msgstr "Preu incloent complements"
 #: pretix/control/templates/pretixcontrol/order/index.html:419
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:71
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:74
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee company"
-msgstr "Correu electrònic de l'assistent"
+msgstr "Empresa de l'assistent"
 
 #: pretix/base/pdf.py:117 pretix/base/pdf.py:245
 #: pretix/base/services/tickets.py:96 pretix/control/views/pdf.py:80
@@ -4494,10 +4482,8 @@ msgid "Sample company"
 msgstr "Empresa de mostra"
 
 #: pretix/base/pdf.py:121
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Full attendee address"
-msgstr "Correu electrònic de l'assistent"
+msgstr "Adreça completa de l'assistent"
 
 #: pretix/base/pdf.py:122
 msgid ""
@@ -4507,36 +4493,33 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"Joan Qualsevol\n"
+"Empresa exemple\n"
+"Carrer Sense Nom 42\n"
+"12345 Una Ciutat\n"
+"Atlantis"
 
 #: pretix/base/pdf.py:126
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee street"
-msgstr "Nom de l'assistent"
+msgstr "Carrer de l'assistent"
 
 #: pretix/base/pdf.py:131
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee ZIP code"
-msgstr "Nom de l'assistent"
+msgstr "Codi postal de l'assistent"
 
 #: pretix/base/pdf.py:136
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee city"
-msgstr "Correu electrònic de l'assistent"
+msgstr "Ciutat de l'assistent"
 
 #: pretix/base/pdf.py:141
 #, fuzzy
 #| msgid "Attendee name"
 msgid "Attendee state"
-msgstr "Nom de l'assistent"
+msgstr "Comarca de l'assistent"
 
 #: pretix/base/pdf.py:146
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee country"
-msgstr "Correu electrònic de l'assistent"
+msgstr "Estat de l'assistent"
 
 #: pretix/base/pdf.py:154
 msgid "Sample event name"
@@ -4623,32 +4606,24 @@ msgid "Invoice address company"
 msgstr "Empresa de l'adreça de les factures"
 
 #: pretix/base/pdf.py:249
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address street"
-msgstr "Adreces de les factures"
+msgstr "Carrer de la factura"
 
 #: pretix/base/pdf.py:250
 msgid "Sesame Street 42"
-msgstr ""
+msgstr "Carrer Sense Nom 42"
 
 #: pretix/base/pdf.py:254
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address ZIP code"
-msgstr "Adreces de les factures"
+msgstr "Codi postal de la factura"
 
 #: pretix/base/pdf.py:255
-#, fuzzy
-#| msgid "012345"
 msgid "12345"
-msgstr "012345"
+msgstr "12345"
 
 #: pretix/base/pdf.py:259
-#, fuzzy
-#| msgid "Invoice address company"
 msgid "Invoice address city"
-msgstr "Empresa de l'adreça de les factures"
+msgstr "Ciutat de la factura"
 
 #: pretix/base/pdf.py:260 pretix/base/services/invoices.py:358
 msgid "Sample city"
@@ -4658,23 +4633,19 @@ msgstr "Ciutat Exemple"
 #, fuzzy
 #| msgid "Invoice address name"
 msgid "Invoice address state"
-msgstr "Nom de l'adreça de la factura"
+msgstr "Estat de la factura"
 
 #: pretix/base/pdf.py:265
-#, fuzzy
-#| msgid "Sample city"
 msgid "Sample State"
-msgstr "Ciutat Exemple"
+msgstr "Estat Exemple"
 
 #: pretix/base/pdf.py:269
-#, fuzzy
-#| msgid "Invoice address company"
 msgid "Invoice address country"
-msgstr "Empresa de l'adreça de les factures"
+msgstr "Estat de la factura"
 
 #: pretix/base/pdf.py:270
 msgid "Atlantis"
-msgstr ""
+msgstr "Atlantis"
 
 #: pretix/base/pdf.py:274
 msgid "List of Add-Ons"
@@ -4719,41 +4690,33 @@ msgid "Printing time"
 msgstr "Hora de la impressió"
 
 #: pretix/base/pdf.py:320
-#, fuzzy
-#| msgid "Full name"
 msgid "Seat: Full name"
-msgstr "Nom complet"
+msgstr "Seient: Nom complet"
 
 #: pretix/base/pdf.py:321
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "Platea, Filera 3, Seient 4"
 
 #: pretix/base/pdf.py:323 pretix/base/pdf.py:329
 #: pretix/control/forms/orders.py:235
-#, fuzzy
-#| msgid "Event admission"
 msgid "General admission"
-msgstr "Admissió de l'esdeveniment"
+msgstr "Entrada general"
 
 #: pretix/base/pdf.py:326
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat: zone"
-msgstr "Nom de l'equip"
+msgstr "Seient: Zona"
 
 #: pretix/base/pdf.py:327
 msgid "Ground floor"
-msgstr ""
+msgstr "Platea"
 
 #: pretix/base/pdf.py:332
 msgid "Seat: row"
-msgstr ""
+msgstr "Seient: Filera"
 
 #: pretix/base/pdf.py:337
-#, fuzzy
-#| msgid "Street and Number"
 msgid "Seat: seat number"
-msgstr "Carrer i número"
+msgstr "Seient: Número"
 
 #: pretix/base/pdf.py:373
 #, python-brace-format
@@ -4812,10 +4775,8 @@ msgid "Relative date:"
 msgstr "Data relativa:"
 
 #: pretix/base/reldate.py:189
-#, fuzzy
-#| msgid "Relative date:"
 msgid "Relative time:"
-msgstr "Data relativa:"
+msgstr "Temps relatiu:"
 
 #: pretix/base/reldate.py:197 pretix/base/reldate.py:299
 msgid "Not set"
@@ -4823,7 +4784,7 @@ msgstr "No s'ha establert"
 
 #: pretix/base/secrets.py:84
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "Aleatori (per defecte, funciona amb totes les apps de pretix)"
 
 #: pretix/base/secrets.py:114
 msgid ""
@@ -4976,11 +4937,8 @@ msgid "This voucher is not valid for this product."
 msgstr "Aquest val no és vàlid per a aquest producte."
 
 #: pretix/base/services/cart.py:86
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This voucher is not valid for this seat."
-msgstr "Aquest val no és vàlid per a aquesta data de l'esdeveniment."
+msgstr "Aquest val no és vàlid per a aquest seient."
 
 #: pretix/base/services/cart.py:87
 msgid ""
@@ -5063,13 +5021,11 @@ msgstr ""
 
 #: pretix/base/services/cart.py:104
 msgid "Please select a valid seat."
-msgstr ""
+msgstr "Si us plau, trieu un seient vàlid."
 
 #: pretix/base/services/cart.py:105
-#, fuzzy
-#| msgid "You can not select an add-on for the selected product."
 msgid "You can not select a seat for this position."
-msgstr "No podeu seleccionar un complement per a aquest producte."
+msgstr "No podeu seleccionar un seient per a aquesta posició."
 
 #: pretix/base/services/cart.py:107
 #, fuzzy
@@ -5111,20 +5067,16 @@ msgstr ""
 "Necessitau respondre aquestes preguntes per completar aquesta validació."
 
 #: pretix/base/services/checkin.py:207
-#, fuzzy
-#| msgid "This entry is anonymized and can no longer be used."
 msgid "This entry is not permitted due to custom rules."
-msgstr "Aquesta entrada està anonimitzada i ja no es pot utilitzar."
+msgstr "Aquesta entrada no està permesa degut a regles personalitzades."
 
 #: pretix/base/services/checkin.py:249
 msgid "This ticket has already been redeemed."
 msgstr "Ja s'ha validat aquest tiquet."
 
 #: pretix/base/services/export.py:43 pretix/base/services/export.py:96
-#, fuzzy
-#| msgid "You did not select any products."
 msgid "Your export did not contain any data."
-msgstr "No heu seleccionat cap producte."
+msgstr "L'exportació no conté dades."
 
 #: pretix/base/services/invoices.py:68
 #, python-brace-format
@@ -5133,14 +5085,7 @@ msgid "Please complete your payment before {expire_date}."
 msgstr "Si us plau, penseu a fer el pagament abans del dia {expire_date}."
 
 #: pretix/base/services/invoices.py:79
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "{i.company}\n"
-#| "{i.name}\n"
-#| "{i.street}\n"
-#| "{i.zipcode} {i.city}\n"
-#| "{country}"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{i.company}\n"
@@ -5152,7 +5097,7 @@ msgstr ""
 "{i.company}\n"
 "{i.name}\n"
 "{i.street}\n"
-"{i.zipcode} {i.city}\n"
+"{i.zipcode} {i.city} {state}\n"
 "{country}"
 
 #: pretix/base/services/invoices.py:157
@@ -5187,13 +5132,13 @@ msgid "Sample product A"
 msgstr "Producte de mostra A"
 
 #: pretix/base/services/mail.py:174
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr "Heu rebut aquest correu perquè heu fet una comanda per {event}."
+msgstr ""
+"Heu rebut aquest correu perquè algú ha fet una comanda per {event} en nom "
+"vostre."
 
 #: pretix/base/services/mail.py:178 pretix/base/services/mail.py:194
 #, python-brace-format
@@ -5217,10 +5162,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/orderimport.py:117
-#, fuzzy, python-brace-format
-#| msgid "Invalid date input."
+#, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr "Entrada de data incorrecta."
+msgstr "Dades invàlides a la fila {row}: {message}"
 
 #: pretix/base/services/orders.py:63
 msgid ""
@@ -5499,16 +5443,12 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/orders.py:1184
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected product requires you to select a seat."
-msgstr "El producte seleccionat no està actiu o no te cap preu establert."
+msgstr "El producte seleccionat necessita que trieu un seient."
 
 #: pretix/base/services/orders.py:1185
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected product does not allow to select a seat."
-msgstr "El producte seleccionat no està actiu o no te cap preu establert."
+msgstr "El producte seleccionat no permet triar un seient."
 
 #: pretix/base/services/orders.py:1186
 #, fuzzy
@@ -7104,7 +7044,7 @@ msgstr ""
 "hem aprovat la vostra comanda per {event} i ens complaurà donar-vos la\n"
 "benvinguda a aquest esdeveniment.\n"
 "\n"
-"Si us plau, continueu amb el pagament de la vostra comanda abans de  "
+"Si us plau, continueu amb el pagament de la vostra comanda abans de "
 "{expire_date}.\n"
 "\n"
 "Podeu seleccionar un mètode de pagament i realitzar-lo aquí:\n"
