@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-12-20 08:00+0000\n"
+"PO-Revision-Date: 2020-12-20 17:00+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -13782,10 +13782,8 @@ msgstr "Sí, cancel·lar la comanda"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:4
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:8
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Ignore cancellation request"
-msgstr "Tarifa de cancel·lació"
+msgstr "Ignorar la petició de cancel·lació"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:10
 msgid ""
@@ -13890,6 +13888,8 @@ msgstr "Incloent tots els impostos"
 #: pretix/control/templates/pretixcontrol/order/change.html:191
 msgid "Removing this position will also remove all add-ons to this position."
 msgstr ""
+"Eliminar aquesta posició també eliminarà tots els productes afegits a la "
+"posició."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:212
 #: pretix/control/templates/pretixcontrol/order/change.html:250
@@ -13922,15 +13922,17 @@ msgstr "Canviar les dades de contacte"
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:5
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:9
 msgid "Change locale information"
-msgstr ""
+msgstr "Canviar la informació d'idioma"
 
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:18
 msgid "This language will be used whenever emails are sent to the users."
 msgstr ""
+"Aquesta llengua es farà servir sempre que s'envïin correus electr[onics als "
+"usuaris."
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:9
 msgid "Change order information"
-msgstr ""
+msgstr "Canviar la informació de la comanda"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:25
 #: pretix/control/templates/pretixcontrol/order/index.html:793
@@ -13949,7 +13951,7 @@ msgstr "(opcional)"
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
 msgid "Delete order"
-msgstr ""
+msgstr "Esborrar comanda"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:10
 msgid ""
@@ -13959,66 +13961,64 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:25
 msgid "Yes, delete order"
-msgstr ""
+msgstr "Sí, esborrar la comanda"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:4
 #: pretix/control/templates/pretixcontrol/order/deny.html:8
 msgid "Deny order"
-msgstr ""
+msgstr "Denegar la comanda"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:23
 msgid "Comment (will be sent to the user)"
-msgstr ""
+msgstr "Comentari (s'enviarà a l'usuari)"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:35
 msgid "Yes, deny order"
-msgstr ""
+msgstr "Sí, denegar la comanda"
 
 #: pretix/control/templates/pretixcontrol/order/extend.html:5
 #: pretix/control/templates/pretixcontrol/order/extend.html:9
 #: pretix/control/templates/pretixcontrol/order/index.html:57
 msgid "Extend payment term"
-msgstr ""
+msgstr "Ampliar el termini de pagament"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:11
 #: pretix/control/templates/pretixcontrol/order/index.html:18
 #, python-format
 msgid "Order details: %(code)s"
-msgstr ""
+msgstr "Detalls de la comanda: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:16
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:6
 msgid "taxes"
-msgstr ""
+msgstr "impostos"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:43
 msgid "Approve"
-msgstr ""
+msgstr "Aprovar"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:48
 msgid "Deny"
-msgstr ""
+msgstr "Denegar"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:54
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:31
 msgid "Mark as paid"
-msgstr ""
+msgstr "Marcar com a pagat"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:66
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:5
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:9
-#, fuzzy
-#| msgid "Received order"
 msgid "Reactivate order"
-msgstr "S'ha rebut la comanda"
+msgstr "Reactivar la comanda"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:73
 msgid "View order as user"
-msgstr ""
+msgstr "Veure la comanda com a usuari"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:76
 msgid "View email history"
-msgstr ""
+msgstr "Veure l'historial de correus electrònics"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:87
 msgid "Expire order"
@@ -14039,39 +14039,30 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:106
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr ""
+msgstr "Iniciar un reemborsament de %(amount)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:120
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Cancellation request"
-msgstr "Tarifa de cancel·lació"
+msgstr "Petició de cancel·lació"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:124
 msgid "The customer asked you to cancel the order with the following settings:"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:131
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Original payment method"
-msgstr "Activa el mètode de pagament"
+msgstr "Forma de pagament original"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:140
-#, fuzzy
-#| msgid "Refund requested"
 msgid "Delete request"
-msgstr "S'ha demanat un reemborsament"
+msgstr "Esborrar petició"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:153
 #: pretix/presale/templates/pretixpresale/event/order.html:9
 msgid "Order details"
-msgstr ""
+msgstr "Detalls de la comanda"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:163
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Cancellation date"
 msgstr "Data de cancel·lació"
 
@@ -14361,7 +14352,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:20
 msgid "Do you really want to mark this payment as complete?"
-msgstr ""
+msgstr "Segur que voleu marcar aquest pagament com a complet ?"
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:18
 msgid ""
@@ -14380,12 +14371,14 @@ msgstr "Inactiu"
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
 msgid "Cancel refund"
-msgstr ""
+msgstr "Cancel·lar reemborsament"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
 msgstr ""
+"Segur que voleu cancel·lar aquest reemborsament ? Aquesta acció no es pot "
+"desfer."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
@@ -14396,62 +14389,62 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
-msgstr ""
+msgstr "Sí, cancel·lar el reemborsament"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:9
 msgid "Refund order"
-msgstr ""
+msgstr "Reemborsar comanda"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:21
 msgid "How should the refund be sent?"
-msgstr ""
+msgstr "Com s'ha d'enviar el reemborsament ?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:28
 msgid "Payment confirmation date"
-msgstr ""
+msgstr "Data de confirmació del pagament"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:30
 msgid "Amount not refunded"
-msgstr ""
+msgstr "Import no reemborsat"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:31
 msgid "Refund"
-msgstr ""
+msgstr "Reemborsar"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:45
 msgctxt "amount_label"
 msgid "Automatically refund"
-msgstr ""
+msgstr "Reemborsar automàticament"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:63
 msgid "Automatically refund full amount"
-msgstr ""
+msgstr "Reemborsar automàticament l'import total"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:66
 msgid "This payment method does not support automatic refunds."
-msgstr ""
+msgstr "Aquesta forma de pagament no admet reemborsaments automàtics."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:74
 msgid "Transfer to other order"
-msgstr ""
+msgstr "Transferir a una altra comanda"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:77
 msgctxt "amount_label"
 msgid "Transfer"
-msgstr ""
+msgstr "Transferir"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
 msgctxt "order_label"
 msgid "to"
-msgstr ""
+msgstr "a"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:95
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_create.html:5
 msgid "Create a new gift card"
-msgstr ""
+msgstr "Crear una nova targeta regal"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:113
 msgid ""
@@ -14462,16 +14455,16 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:121
 msgid "Manual refund"
-msgstr ""
+msgstr "Reemborsament manual"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:124
 msgctxt "amount_label"
 msgid "Manually refund"
-msgstr ""
+msgstr "Reemborsar manualment"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:139
 msgid "Keep transfer as to do"
-msgstr ""
+msgstr "Mantenir la transferència com a per fer"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:143
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:5
@@ -14479,7 +14472,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr ""
+msgstr "Marcar el reemborsament com a fet"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:153
 msgid ""
@@ -14491,15 +14484,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:174
 msgid "Perform refund"
-msgstr ""
+msgstr "Efectuar el reemborsament"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
 msgid "Do you really want to mark this refund as complete?"
-msgstr ""
+msgstr "Segur que voleu marcar aquest reemborsament com a completat ?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
-msgstr ""
+msgstr "Marcar com a fet"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
 #, python-format
@@ -14509,32 +14502,39 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
 "%(total)s</strong>."
 msgstr ""
+"Hem rebut una notificació de que s'han reemborsat <strong>%(amount)s</strong>"
+" via <strong>%(method)s</strong>. Si aquest reemborsament ha estat "
+"processat, encara faltaria per pagar un import de "
+"<strong>%(pending)s</strong>. El total de la comanda és de "
+"<strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
-msgstr ""
+msgstr "Com que la comanda ja està cancel·lada, això no afectarà al seu estat."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:36
 msgid "What should happen to the ticket order?"
-msgstr ""
+msgstr "Què li hauria de passar a la comanda de tiquets ?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:43
 msgid ""
 "Mark the order as unpaid and allow the customer to pay again with another "
 "payment method."
 msgstr ""
+"Marcar la comanda com a no pagada i permetre al client de pagar un altre com "
+"amb una altra forma de pagament."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:48
 msgid "Cancel the order irrevocably."
-msgstr ""
+msgstr "Cancel·lar la comanda de forma irrevocable."
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:20
 msgid "How much do you want to refund?"
-msgstr ""
+msgstr "Quant vols reemborsar ?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:25
 msgid "Refund full paid amount"
-msgstr ""
+msgstr "Reemborsar tot l'import pagat"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
 msgid "Refund only"
@@ -14740,7 +14740,7 @@ msgstr "cancel·lat"
 #: pretix/control/templates/pretixcontrol/orders/index.html:93
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr ""
+msgstr "Llista filtrada per les respostes a la pregunta \"%(question)s\"."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:98
 msgid "Remove filter"
@@ -14749,7 +14749,7 @@ msgstr "Treure el filtre"
 #: pretix/control/templates/pretixcontrol/orders/index.html:147
 #: pretix/control/templates/pretixcontrol/search/orders.html:83
 msgid "CANCELLATION REQUESTED"
-msgstr ""
+msgstr "CANCEL·LACIÓ DEMANADA"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:150
 #: pretix/control/templates/pretixcontrol/orders/index.html:152
@@ -14822,7 +14822,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:31
 msgid "No refunds are currently open."
-msgstr ""
+msgstr "Ara mateix no hi ha reemborsaments oberts."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:47
 msgid "Actions"
@@ -14856,6 +14856,8 @@ msgid ""
 "This organizer account can not be deleted as it already contains orders, "
 "invoices, or devices."
 msgstr ""
+"Aquest compte d'organitzador no es pot esborrar perquè conté comandes, "
+"factures o dispositius."
 
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:6
 #, python-format
@@ -14988,7 +14990,7 @@ msgstr "Programari"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:66
 msgid "Not yet initialized"
-msgstr ""
+msgstr "Encara no està inicialitzat"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:69
 msgid "Revoked"
@@ -15001,11 +15003,11 @@ msgstr "Connectar"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:100
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:70
 msgid "Logs"
-msgstr ""
+msgstr "Registres"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:12
 msgid "Organizer settings"
-msgstr ""
+msgstr "Configuració de l'organitzador"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:37
 msgid "Organizer page"
