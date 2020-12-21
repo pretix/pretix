@@ -228,6 +228,8 @@ class SecurityMiddleware(MiddlewareMixin):
             h['report-uri'] = ["/csp_report/"]
         if 'Content-Security-Policy' in resp:
             _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
+        if settings.CSP_ADDITIONAL_HEADER:
+            _merge_csp(h, _parse_csp(settings.CSP_ADDITIONAL_HEADER))
 
         staticdomain = "'self'"
         dynamicdomain = "'self'"

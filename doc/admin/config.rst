@@ -105,7 +105,12 @@ Example::
 
 ``csp_log``
     Log violations of the Content Security Policy (CSP). Defaults to ``on``.
-    
+
+``csp_additional_header``
+    Specifies a CSP header that will be **merged** with pretix's default header. For example, if you set this
+    to ``script-src https://mycdn.com``, pretix will add ``https://mycdn.com`` as an **additional** allowed source
+    to all CSP headers. Empty by default.
+
 ``loglevel``
     Set console and file log level (``DEBUG``, ``INFO``, ``WARNING``, ``ERROR`` or ``CRITICAL``). Defaults to ``INFO``.
 
