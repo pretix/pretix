@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-15 08:22+0000\n"
-"PO-Revision-Date: 2020-12-11 04:00+0000\n"
+"PO-Revision-Date: 2020-12-22 06:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -803,7 +803,7 @@ msgstr "Ontvanger"
 #: pretix/control/templates/pretixcontrol/order/index.html:833
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:120
 msgid "Internal reference"
-msgstr "Intern kenmerk"
+msgstr "Interne referentie"
 
 #: pretix/base/exporters/invoices.py:186 pretix/control/forms/event.py:1123
 msgid "Reverse charge"
@@ -1753,7 +1753,7 @@ msgstr "Factuur {num}"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "Klantkenmerk: {reference}"
+msgstr "Klantreferentie: {reference}"
 
 #: pretix/base/invoice.py:477
 msgctxt "invoice"
@@ -1957,7 +1957,7 @@ msgid ""
 "With this option, people will be able to check in even if the order has not "
 "been paid."
 msgstr ""
-"Als deze optie is ingeschakeld kunnen mensen ingecheckt worden zelfs als er "
+"Als deze optie is ingeschakeld kunnen gasten altijd inchecken, zelfs als er "
 "nog niet is betaald voor de bestelling."
 
 #: pretix/base/models/checkin.py:25 pretix/control/navigation.py:467
@@ -2027,8 +2027,8 @@ msgid ""
 "sources. If you do not input one, we will generate one automatically."
 msgstr ""
 "U kunt hier een willekeurige waarde invoeren om het gemakkelijker te maken "
-"de data te koppelen aan andere bronnen. Als u niets invoert zal een kenmerk "
-"automatisch worden gegenereerd."
+"de data te koppelen aan andere bronnen. Als u niets invoert zal er "
+"automatisch een kenmerk worden gegenereerd."
 
 #: pretix/base/models/devices.py:70 pretix/base/models/items.py:1124
 msgid "This identifier is already used for a different question."
@@ -2069,7 +2069,7 @@ msgstr ""
 "een datum met minder dan 10 tekens aan die u gemakkelijk kunt onthouden, "
 "maar u kunt er ook voor kiezen om een willekeurige waarde te gebruiken. Deze "
 "waarde wordt gebruikt in URL's, bestelcodes, factuurnummers en "
-"bankoverschrijvingskenmerken."
+"bankoverschrijvingscodes."
 
 #: pretix/base/models/event.py:358 pretix/base/models/organizer.py:43
 msgid "The slug may only contain letters, numbers, dots and dashes."
@@ -2179,14 +2179,9 @@ msgid "Restrict to specific sales channels"
 msgstr "Beperken tot specifieke verkoopkanalen"
 
 #: pretix/base/models/event.py:417
-#, fuzzy
-#| msgid ""
-#| "Only allow the usage of this payment provider in the selected sales "
-#| "channels."
 msgid "Only sell tickets for this event on the following sales channels."
 msgstr ""
-"Sta het gebruik van deze betalingsprovider alleen toe voor de geselecteerde "
-"verkoopkanalen."
+"Verkoop tickets voor dit evenement alleen via de volgende verkoopkanalen."
 
 #: pretix/base/models/event.py:423 pretix/base/models/items.py:254
 #: pretix/base/models/items.py:1346 pretix/base/models/orders.py:142
@@ -3371,7 +3366,9 @@ msgstr "Alleen voor zakelijke klanten binnen de EU."
 
 #: pretix/base/models/orders.py:2241
 msgid "This reference will be printed on your invoice for your convenience."
-msgstr "Dit kenmerk wordt voor u op de factuur afgedrukt."
+msgstr ""
+"Deze referentie wordt voor u op de factuur afgedrukt en kunt u voor uw eigen "
+"administratie gebruiken."
 
 #: pretix/base/models/organizer.py:38
 msgid ""
@@ -4528,28 +4525,20 @@ msgstr ""
 "Nederland"
 
 #: pretix/base/pdf.py:126
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee street"
-msgstr "Naam van aanwezige"
+msgstr "Adres gast: straat"
 
 #: pretix/base/pdf.py:131
-#, fuzzy
-#| msgid "Attendee badges"
 msgid "Attendee ZIP code"
-msgstr "Badges van gasten"
+msgstr "Adres gast: postcode"
 
 #: pretix/base/pdf.py:136
-#, fuzzy
-#| msgid "Attendee country"
 msgid "Attendee city"
-msgstr "Land van gast"
+msgstr "Adres gast: land"
 
 #: pretix/base/pdf.py:141
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee state"
-msgstr "Naam van aanwezige"
+msgstr "Adres gast: staat"
 
 #: pretix/base/pdf.py:146
 msgid "Attendee country"
@@ -4640,26 +4629,20 @@ msgid "Invoice address company"
 msgstr "Bedrijf factuuradres"
 
 #: pretix/base/pdf.py:249
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address street"
-msgstr "Factuuradressen"
+msgstr "Factuuradres: straat"
 
 #: pretix/base/pdf.py:250
 msgid "Sesame Street 42"
-msgstr ""
+msgstr "Voorbeeldstraat 42"
 
 #: pretix/base/pdf.py:254
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address ZIP code"
-msgstr "Factuuradressen"
+msgstr "Factuuradres: postcode"
 
 #: pretix/base/pdf.py:255
-#, fuzzy
-#| msgid "012345"
 msgid "12345"
-msgstr "012345"
+msgstr "1234 AB"
 
 #: pretix/base/pdf.py:259
 msgid "Invoice address city"
@@ -4670,26 +4653,20 @@ msgid "Sample city"
 msgstr "Voorbeeldstad"
 
 #: pretix/base/pdf.py:264
-#, fuzzy
-#| msgid "Invoice address name"
 msgid "Invoice address state"
-msgstr "Naam factuuradres"
+msgstr "Factuuradres: staat"
 
 #: pretix/base/pdf.py:265
-#, fuzzy
-#| msgid "Sample city"
 msgid "Sample State"
-msgstr "Voorbeeldstad"
+msgstr "Voorbeeldstaat"
 
 #: pretix/base/pdf.py:269
-#, fuzzy
-#| msgid "Invoice address city"
 msgid "Invoice address country"
-msgstr "Stad factuuradres"
+msgstr "Factuuradres: land"
 
 #: pretix/base/pdf.py:270
 msgid "Atlantis"
-msgstr ""
+msgstr "Atlantis"
 
 #: pretix/base/pdf.py:274
 msgid "List of Add-Ons"
@@ -5729,11 +5706,11 @@ msgstr ""
 
 #: pretix/base/settings.py:202
 msgid "Ask for a phone number per order"
-msgstr ""
+msgstr "Vraag om een telefoonnummer bij bestelling"
 
 #: pretix/base/settings.py:211
 msgid "Require a phone number per order"
-msgstr ""
+msgstr "Verplicht het opgeven van een telefoonnummer"
 
 #: pretix/base/settings.py:221
 msgid "Ask for invoice address"
@@ -6055,7 +6032,7 @@ msgstr ""
 
 #: pretix/base/settings.py:581
 msgid "Hide \"payment pending\" state on customer-facing pages"
-msgstr ""
+msgstr "Verberg \"wacht op betaling\"-status op pagina's zichtbaar voor klanten"
 
 #: pretix/base/settings.py:582
 msgid ""
@@ -6063,6 +6040,9 @@ msgid ""
 "but no indication of missing payment will be visible on the ticket pages of "
 "attendees who did not buy the ticket themselves."
 msgstr ""
+"Het paneel met betalingsinstructies zal nog steeds getoond worden aan de "
+"hoofdklant, maar er zal geen melding worden getoond op de ticketpagina's van "
+"de gasten die hun tickets niet zelf hebben gekocht."
 
 #: pretix/base/settings.py:601
 msgid "Accept late payments"
@@ -6237,7 +6217,7 @@ msgstr "Standaardtaal"
 
 #: pretix/base/settings.py:861
 msgid "Region"
-msgstr ""
+msgstr "Regio"
 
 #: pretix/base/settings.py:862
 msgid ""
@@ -6246,6 +6226,11 @@ msgid ""
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
 msgstr ""
+"De hier ingestelde regio wordt gebruikt om de datum- en tijdnotatie in te "
+"stellen en wordt gebruikt als het standaardland voor adressen en "
+"telefoonnummers van klanten. Voor notatie heeft deze optie minder prioriteit "
+"dan de taal, deze optie is hiervoor vooral relevant voor talen die in "
+"verschillende landen gesproken worden (zoals Engels)."
 
 #: pretix/base/settings.py:874
 msgid "Show event times and dates on the ticket shop"
@@ -7290,29 +7275,21 @@ msgstr ""
 "verkrijgen."
 
 #: pretix/base/settings.py:1874
-#, fuzzy
-#| msgid "Attendee data"
 msgid "Attendee data explanation"
-msgstr "Gegevens van gasten"
+msgstr "Verklaring voor dataverzameling"
 
 #: pretix/base/settings.py:1877
-#, fuzzy
-#| msgid ""
-#| "This text will be shown next to the input for a voucher code. You can use "
-#| "it e.g. to explain how to obtain a voucher code."
 msgid ""
 "This text will be shown above the questions asked for every admission "
 "product. You can use it e.g. to explain why you need information from them."
 msgstr ""
-"Deze tekst zal worden getoond naast het invoerveld voor een vouchercode. U "
-"kunt dit bijvoorbeeld gebruiken om uit te leggen hoe een voucher te "
-"verkrijgen."
+"Deze tekst zal boven de vragen voor elk toegangsbewijs worden getoond. U "
+"kunt deze tekst bijvoorbeeld gebruiken om uit te leggen waarom u om deze "
+"informatie vraagt."
 
 #: pretix/base/settings.py:1887
-#, fuzzy
-#| msgid "Help text of the email field"
 msgid "Help text of the phone number field"
-msgstr "Helptekst van het e-mailveld"
+msgstr "Hulptekst bij telefoonnummerveld"
 
 #: pretix/base/settings.py:1894
 msgid ""
@@ -7580,16 +7557,12 @@ msgid "Your ticket shop needs to be offline to use this feature."
 msgstr "Uw ticketwinkel moet offline zijn om deze functie te gebruiken."
 
 #: pretix/base/shredder.py:126
-#, fuzzy
-#| msgid "Phone number"
 msgid "Phone numbers"
-msgstr "Telefoonnummer"
+msgstr "Telefoonnummers"
 
 #: pretix/base/shredder.py:128
-#, fuzzy
-#| msgid "This will remove all email addresses from the waiting list."
 msgid "This will remove all phone numbers from orders."
-msgstr "Dit zal alle e-mailadressen van de wachtlijst verwijderen."
+msgstr "Dit zal alle telefoonnummers van bestellingen verwijderen."
 
 #: pretix/base/shredder.py:151
 msgid "E-mails"
@@ -8491,10 +8464,8 @@ msgid "Deviating tax rate"
 msgstr "Afwijkend belastingtarief"
 
 #: pretix/control/forms/event.py:1134
-#, fuzzy
-#| msgid "Text on invoices"
 msgid "Text on invoice"
-msgstr "Tekst op facturen"
+msgstr "Tekst op factuur"
 
 #: pretix/control/forms/event.py:1174
 msgid "Pre-selected voucher"
@@ -8744,19 +8715,17 @@ msgstr "Alle subevenementen beginnend voor"
 
 #: pretix/control/forms/filter.py:420
 msgid "Order placed at or after"
-msgstr ""
+msgstr "Bestelling geplaatst op of na"
 
 #: pretix/control/forms/filter.py:426
-#, fuzzy
-#| msgid "New order placed"
 msgid "Order placed before"
-msgstr "Nieuwe bestelling geplaatst"
+msgstr "Bestelling geplaatst voor"
 
 #: pretix/control/forms/filter.py:492 pretix/control/forms/filter.py:497
 #: pretix/control/forms/filter.py:523 pretix/control/forms/filter.py:528
 #: pretix/control/forms/filter.py:543
 msgid "Exact matches only"
-msgstr ""
+msgstr "Alleen exacte overeenkomsten"
 
 #: pretix/control/forms/filter.py:536
 #: pretix/control/templates/pretixcontrol/order/change.html:177
@@ -9004,10 +8973,8 @@ msgid "OpenCage API key for geocoding"
 msgstr "OpenCage-API-sleutel voor geocoding"
 
 #: pretix/control/forms/global_settings.py:50
-#, fuzzy
-#| msgid "OpenCage API key for geocoding"
 msgid "MapQuest API key for geocoding"
-msgstr "OpenCage-API-sleutel voor geocoding"
+msgstr "MapQuest-API-sleutel voor geocoding"
 
 #: pretix/control/forms/global_settings.py:54
 msgid "Leaflet tiles URL pattern"
@@ -10152,13 +10119,11 @@ msgid ""
 msgstr "Het e-mailadres is veranderd van \"{old_email}\" naar \"{new_email}\"."
 
 #: pretix/control/logdisplay.py:295
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to "
-#| "\"{new_email}\"."
+#, python-brace-format
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
-msgstr "Het e-mailadres is veranderd van \"{old_email}\" naar \"{new_email}\"."
+msgstr ""
+"Het telefoonnummer is veranderd van \"{old_phone}\" naar \"{new_phone}\"."
 
 #: pretix/control/logdisplay.py:297
 msgid "The order locale has been changed."
@@ -10214,10 +10179,8 @@ msgid "A custom email has been sent."
 msgstr "Een aangepaste email is verstuurd."
 
 #: pretix/control/logdisplay.py:310
-#, fuzzy
-#| msgid "A custom email has been sent."
 msgid "A custom email has been sent to an attendee."
-msgstr "Een aangepaste email is verstuurd."
+msgstr "Een aangepaste email is verstuurd naar een gast."
 
 #: pretix/control/logdisplay.py:311
 msgid ""
@@ -10612,10 +10575,8 @@ msgid "The event has been created."
 msgstr "Het evenement is aangemaakt."
 
 #: pretix/control/logdisplay.py:403
-#, fuzzy
-#| msgid "The event settings have been changed."
 msgid "The event details have been changed."
-msgstr "De evenementsinstellingen zijn aangepast."
+msgstr "De evenementsdetails zijn aangepast."
 
 #: pretix/control/logdisplay.py:404
 msgid "An answer option has been added to the question."
@@ -12700,64 +12661,46 @@ msgid "Localization"
 msgstr "Lokalisatie"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:89
-#, fuzzy
-#| msgid "Attendee data"
 msgid "Customer and attendee data"
-msgstr "Gegevens van gasten"
+msgstr "Gegevens van klanten en gasten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:90
 msgctxt "attendee_data"
 msgid "Asked"
-msgstr ""
+msgstr "Gevraagd"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:91
-#, fuzzy
-#| msgid "expired"
 msgctxt "attendee_data"
 msgid "Required"
-msgstr "verlopen"
+msgstr "Verplicht"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:92
-#, fuzzy
-#| msgid "Customers can cancel their paid orders"
 msgid "Customer data (once per order)"
-msgstr "Klanten kunnen hun betaalde bestellingen annuleren"
+msgstr "Klantgegevens (eenmaal per bestelling)"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:122
-#, fuzzy
-#| msgid "Sender address"
 msgid "Name and address"
-msgstr "Afzenderadres"
+msgstr "Naam en adres"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:127
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "See invoice settings"
-msgstr "Factuurinstellingen"
+msgstr "Zie factuurinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:133
-#, fuzzy
-#| msgid "Is an admission ticket"
 msgid "Attendee data (once per admission ticket)"
-msgstr "Is een toegangsbewijs"
+msgstr "Gastgegevens (eenmaal per toegangsbewijs)"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:180
-#, fuzzy
-#| msgid "Custom address field"
 msgid "Custom fields"
-msgstr "Aangepast adresveld"
+msgstr "Aangepaste velden"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:185
-#, fuzzy
-#| msgid "Include questions"
 msgid "Manage questions"
-msgstr "Inclusief vragen"
+msgstr "Vragen beheren"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:192
-#, fuzzy
-#| msgid "User settings"
 msgid "Other settings"
-msgstr "Gebruikersinstellingen"
+msgstr "Andere instellingen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:198
 msgid "Texts"
@@ -12913,10 +12856,8 @@ msgid "Add a new rule"
 msgstr "Nieuwe regel toevoegen"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:144
-#, fuzzy
-#| msgid "Change to"
 msgid "Change history"
-msgstr "Veranderen naar"
+msgstr "Wijzigingsgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:9
 msgid "You haven't created any tax rules yet."
@@ -13076,8 +13017,8 @@ msgid ""
 "bank transfer references as an abbreviation to reference this event."
 msgstr ""
 "We zullen dit ook gebruiken in sommige plaatsen, zoals bestelcodes, "
-"factuurnummers of betalingskenmerken als een afkorting om naar dit evenement "
-"te verwijzen."
+"factuurnummers of betalingscodes als een afkorting om naar dit evenement te "
+"verwijzen."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:32
 msgid ""
@@ -13109,11 +13050,8 @@ msgstr ""
 "en teksten die de evenementsnaam bevatten."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:7
-#, fuzzy
-#| msgctxt "webhooks"
-#| msgid "Event types"
 msgid "Event type"
-msgstr "Evenementstypes"
+msgstr "Evenementstype"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
@@ -13369,17 +13307,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:19
 #: pretix/control/templates/pretixcontrol/item/index.html:21
-#, fuzzy
-#| msgid "Product name"
 msgid "Product type"
-msgstr "Productnaam"
+msgstr "Producttype"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:25
 #: pretix/control/templates/pretixcontrol/item/index.html:27
-#, fuzzy
-#| msgid "All admission products"
 msgid "Admission product"
-msgstr "Alle producten aangemerkt als toegangsbewijs"
+msgstr "Toegangsbewijs"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:27
 #: pretix/control/templates/pretixcontrol/item/index.html:29
@@ -13388,6 +13322,9 @@ msgid ""
 "your event. By default, pretix will only ask for attendee information and "
 "offer ticket downloads for these products."
 msgstr ""
+"Iedere aankoop van dit product komt overeen met één persoon die uw evenement "
+"mag betreden. Standaard zal pretix alleen om gastinformatie vragen en alleen "
+"ticketdownloads toestaan voor deze producten."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:33
 #: pretix/control/templates/pretixcontrol/item/index.html:35
@@ -13397,13 +13334,15 @@ msgid ""
 "except if the add-on products or bundled products represent additional "
 "people (e.g. group bundles)."
 msgstr ""
+"Deze optie moet gebruikt worden voor de meeste producten die een \"ticket\"/"
+"\"kaartje\" genoemd zouden kunnen worden. Voor add-onproducten of bundels "
+"moet dit op het hoofdproduct worden ingesteld, tenzij de add-onproducten of "
+"gebundelde producten extra gasten toelaten (bijv. groepskortingen)."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:44
 #: pretix/control/templates/pretixcontrol/item/index.html:46
-#, fuzzy
-#| msgid "All admission products"
 msgid "Non-admission product"
-msgstr "Alle producten aangemerkt als toegangsbewijs"
+msgstr "Geen toegangsbewijs"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:46
 #: pretix/control/templates/pretixcontrol/item/index.html:48
@@ -13411,23 +13350,24 @@ msgid ""
 "A product that does not represent a person. By default, pretix will not ask "
 "for attendee information or offer ticket downloads."
 msgstr ""
+"Een product dat geen persoon toelaat tot uw evenement. Standaard zal pretix "
+"voor deze producten geen gastinformatie vragen en geen ticketdownloads "
+"aanbieden."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:52
 #: pretix/control/templates/pretixcontrol/item/index.html:54
 msgid "Examples: Merchandise, donations, gift cards, add-ons to a main ticket."
 msgstr ""
+"Voorbeelden: merchandise, donaties, cadeaubonnen, add-onproducten bij een "
+"ander ticket."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:70
-#, fuzzy
-#| msgid "Product with variations"
 msgid "Product without variations"
-msgstr "Product met varianten"
+msgstr "Product zonder varianten"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:77
-#, fuzzy
-#| msgid "Product with variations"
 msgid "Product with multiple variations"
-msgstr "Product met varianten"
+msgstr "Product met meerdere varianten"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:79
 msgid ""
@@ -13435,6 +13375,9 @@ msgid ""
 "their name, price, quota, or description. All other settings need to be the "
 "same."
 msgstr ""
+"Dit product bestaat in meerdere varianten, die kunnen verschillen in hun "
+"naam, prijs, quotum en beschrijving. Alle andere instellingen moeten gelijk "
+"zijn."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:85
 msgid ""
@@ -13442,6 +13385,10 @@ msgid ""
 "\", merchandise with variations for different sizes, workshop add-on with "
 "variations for simultaneous workshops."
 msgstr ""
+"Voorbeelden: ticketcategorie met varianten voor \"normale prijs\" en \""
+"gereduceerd tarief\", merchandise met varianten voor verschillende "
+"kledingmaten, add-ontickets voor workshops met varianten voor gelijktijdige "
+"workshops."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
 msgid "Quota settings"
@@ -14909,6 +14856,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
 msgstr ""
+"Omdat de bestelling al is geannuleerd zal dit de staat van de bestelling "
+"niet aanpassen."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:36
 msgid "What should happen to the ticket order?"
@@ -15131,10 +15080,8 @@ msgid "Go to the ticket shop"
 msgstr "Ga naar ticketwinkel"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:33
-#, fuzzy
-#| msgid "Search query"
 msgid "Search query:"
-msgstr "Zoekopdracht"
+msgstr "Zoekopdracht:"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:48
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:21
@@ -15142,10 +15089,8 @@ msgid "Go!"
 msgstr "Ga!"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
-#, fuzzy
-#| msgid "Advanced"
 msgid "Advanced search"
-msgstr "Geavanceerd"
+msgstr "Geavanceerde zoekopdracht"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:93
 #, python-format
@@ -15244,10 +15189,8 @@ msgid "Actions"
 msgstr "Acties"
 
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
-#, fuzzy
-#| msgid "Search text"
 msgid "Search"
-msgstr "Tekst zoeken"
+msgstr "Zoeken"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
@@ -16589,10 +16532,8 @@ msgid "You have no permission to receive this notification"
 msgstr "U heeft geen toestemming om deze melding te ontvangen"
 
 #: pretix/control/templates/pretixcontrol/user/notifications_disable.html:4
-#, fuzzy
-#| msgid "E-mail notifications"
 msgid "Disable notifications"
-msgstr "E-mailnotificaties"
+msgstr "E-mailnotificaties uitschakelen"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:12
 #, python-format
@@ -18703,7 +18644,7 @@ msgid ""
 msgstr ""
 "Voor SEPA-rekeningen kunt u dit leeg laten. Voeg anders alles toe dat uw "
 "klanten nodig zouden kunnen hebben om het geld over te maken, bijv. "
-"rekeningnummers, bankkenmerken, adressen, etc."
+"rekeningnummers, bankgegevens, adressen, etc."
 
 #: pretix/plugins/banktransfer/payment.py:104
 msgid ""
@@ -18715,38 +18656,32 @@ msgstr ""
 "betaling is voldaan."
 
 #: pretix/plugins/banktransfer/payment.py:114
-#, fuzzy
-#| msgid "Do not include a hyphen in the payment reference."
 msgid "Do not include hyphens in the payment reference."
-msgstr "Zet geen streepje (-) in het betalingskenmerk."
+msgstr "Zet geen streepjes in de betalingscode."
 
 #: pretix/plugins/banktransfer/payment.py:115
 msgid "This is required in some countries."
 msgstr "Dit is in sommige landen verplicht."
 
 #: pretix/plugins/banktransfer/payment.py:119
-#, fuzzy
-#| msgid "Do not include a hyphen in the payment reference."
 msgid "Include invoice number in the payment reference."
-msgstr "Zet geen streepje (-) in het betalingskenmerk."
+msgstr "Zet factuurnummer in de betalingscode."
 
 #: pretix/plugins/banktransfer/payment.py:123
-#, fuzzy
-#| msgid "Tax rule for payment fees"
 msgid "Prefix for the payment reference"
-msgstr "Belastingregel voor betalingstoeslagen"
+msgstr "Voorvoegsel voor de betalingscode"
 
 #: pretix/plugins/banktransfer/payment.py:127
-#, fuzzy
-#| msgid "This action is only allowed for pending orders."
 msgid "Additional text to show on pending orders"
-msgstr "Deze actie is alleen toegestaan voor openstaande bestellingen."
+msgstr "Extra tekst om te tonen bij openstaande bestellingen"
 
 #: pretix/plugins/banktransfer/payment.py:128
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
 msgstr ""
+"Deze tekst zal naast de standaardtekst worden getoond op de "
+"bevestigingspagina voor openstaande bestellingen."
 
 #: pretix/plugins/banktransfer/payment.py:166
 msgid "Please fill out your bank account details."
@@ -18821,22 +18756,22 @@ msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
-"Nadat u uw bestelling heeft afgerond zullen we u vragen om het bestelbedrag "
-"over te maken naar het volgende bankrekeningnummer, met in de beschrijving "
-"een persoonlijk betalingskenmerk:"
+"Nadat u uw bestelling heeft afgerond zullen we u vragen om het te betalen "
+"bedrag over te maken naar het volgende bankrekeningnummer, met in de "
+"beschrijving een persoonlijke betalingscode:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:20
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:30
 msgid "Reference code (important):"
-msgstr "Kenmerk (belangrijk, plaats in omschrijving):"
+msgstr "Betalingscode (belangrijk, plaats in omschrijving):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:23
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
 msgstr ""
-"We zullen u nadat u de bestelling hebt geplaatst een persoonlijk "
-"betalingskenmerk geven om te gebruiken."
+"We zullen u nadat u de bestelling hebt geplaatst een persoonlijke "
+"betalingscode geven die u in de omschrijving moet zetten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:8
 msgid "Account"
@@ -18849,7 +18784,7 @@ msgstr "Kenmerk"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:28
 msgid "Reference code"
-msgstr "Betalingskenmerk"
+msgstr "Betalingscode"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/email/order_pending.txt:1
 #, python-format
@@ -18862,9 +18797,9 @@ msgid ""
 "%(bank)s\n"
 msgstr ""
 "\n"
-"Maak het volledige bedrag over naar de volgende bankrekening:\n"
+"Maak het te betalen bedrag over naar de volgende bankrekening:\n"
 "\n"
-"    Kenmerk (plaats in omschrijving): %(code)s\n"
+"    Betalingscode (plaats in omschrijving): %(code)s\n"
 "    Bedrag: %(total)s\n"
 "%(bank)s\n"
 
@@ -19283,7 +19218,7 @@ msgstr "Ongeldige invoergegevens."
 
 #: pretix/plugins/banktransfer/views.py:424
 msgid "You need to select the column containing the payment reference."
-msgstr "U moet de kolom selecteren die het betalingskenmerk bevat."
+msgstr "U moet de kolom selecteren die de betalingscode bevat."
 
 #: pretix/plugins/banktransfer/views.py:545
 msgid ""
@@ -19431,7 +19366,7 @@ msgstr "Endpoint"
 
 #: pretix/plugins/paypal/payment.py:105
 msgid "Reference prefix"
-msgstr "Kenmerk-prefix"
+msgstr "Kenmerk-voorvoegsel"
 
 #: pretix/plugins/paypal/payment.py:106
 msgid ""
@@ -19536,7 +19471,7 @@ msgstr "PayPal-betalingskenmerk"
 
 #: pretix/plugins/paypal/payment.py:641
 msgid "PayPal sale ID"
-msgstr "PayPal verkoopskenmerk"
+msgstr "PayPal-verkoopskenmerk"
 
 #: pretix/plugins/paypal/signals.py:31
 msgid "Payment completed."
@@ -19786,23 +19721,17 @@ msgid "List of orders with taxes"
 msgstr "Lijst van bestellingen met belasting"
 
 #: pretix/plugins/reports/exporters.py:517
-#, fuzzy
-#| msgid "Any country"
 msgid "Taxes by country"
-msgstr "Ieder land"
+msgstr "Belastingen per land"
 
 #: pretix/plugins/reports/exporters.py:518
-#, fuzzy
-#| msgid "Business customer"
 msgid "Business customers"
-msgstr "Zakelijke klant"
+msgstr "Zakelijke klanten"
 
 #: pretix/plugins/reports/exporters.py:662
 #: pretix/plugins/reports/exporters.py:707
-#, fuzzy
-#| msgid "Country"
 msgid "Country code"
-msgstr "Land"
+msgstr "Landcode"
 
 #: pretix/plugins/returnurl/__init__.py:9
 #: pretix/plugins/returnurl/__init__.py:12
@@ -19907,13 +19836,11 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:121 pretix/plugins/sendmail/views.py:212
 msgid "payment pending (except unapproved)"
-msgstr ""
+msgstr "wacht op betaling (excl. nog niet goedgekeurde bestellingen)"
 
 #: pretix/plugins/sendmail/forms.py:122 pretix/plugins/sendmail/views.py:213
-#, fuzzy
-#| msgid "Approval pending"
 msgid "approval pending"
-msgstr "Wachtend op goedkeuring"
+msgstr "wacht op goedkeuring"
 
 #: pretix/plugins/sendmail/forms.py:125 pretix/plugins/sendmail/views.py:211
 msgid "pending with payment overdue"
@@ -20863,6 +20790,8 @@ msgid ""
 "Unfortunately, based on the invoice address you entered, we're not able to "
 "sell you the selected products for tax-related legal reasons."
 msgstr ""
+"Door het factuuradres dat u heeft opgegeven kunnen we u om "
+"belastingtechnische redenen helaas de geselecteerde producten niet verkopen."
 
 #: pretix/presale/checkoutflow.py:573
 msgid ""
@@ -21790,15 +21719,12 @@ msgid "Request invoice"
 msgstr "Vraag factuur aan"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:274
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Your information"
-msgstr "Uw gegevens"
+msgstr "Uw informatie"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:312
 msgid "Internal Reference"
-msgstr "Intern kenmerk"
+msgstr "Interne referentie"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:325
 msgctxt "action"
@@ -22305,6 +22231,7 @@ msgstr "De producten zijn succesvol aan uw winkelwagen toegevoegd."
 #: pretix/presale/views/widget.py:284
 msgid "Tickets for this event cannot be purchased on this sales channel."
 msgstr ""
+"Tickets voor dit evenement kunnen niet worden gekocht via dit verkoopkanaal."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
