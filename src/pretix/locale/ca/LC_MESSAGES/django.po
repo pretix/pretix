@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 17:08+0000\n"
-"PO-Revision-Date: 2020-12-20 17:00+0000\n"
+"PO-Revision-Date: 2020-12-22 06:00+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -13516,7 +13516,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:38
 msgid "Open quota"
-msgstr ""
+msgstr "Obrir quota"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:39
 msgid ""
@@ -13527,7 +13527,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:47
 msgid "Usage overview"
-msgstr ""
+msgstr "Visió general de l'ús"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:54
 msgid "Availability calculation"
@@ -13552,7 +13552,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:104
 msgid "Quota history"
-msgstr ""
+msgstr "Historial de quotes"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:6
@@ -13562,11 +13562,12 @@ msgstr "Esborrar quota"
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the quota <strong>%(quota)s</strong>?"
-msgstr ""
+msgstr "Segur que voleu esborrar la quota <strong>%(quota)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:12
 msgid "The following products might be no longer available for sale:"
 msgstr ""
+"Els productes que segueixen pot ser que no estiguin disponibles per vendre:"
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:29
 msgid "Items"
@@ -13596,11 +13597,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:25
 msgid "Your search did not match any quotas."
-msgstr ""
+msgstr "La vostra cerca no ha coincidit amb cap quota."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:27
 msgid "You haven't created any quotas yet."
-msgstr ""
+msgstr "Encara no heu creat cap quota."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:34
 #: pretix/control/templates/pretixcontrol/items/quotas.html:38
@@ -13669,12 +13670,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:6
 msgid "Register a new application"
-msgstr ""
+msgstr "Registrar una nova aplicació"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:6
 msgid "Generate new application secret"
-msgstr ""
+msgstr "Generar un nou codi secret d'aplicació"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:9
 #, python-format
@@ -13690,7 +13691,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:6
 msgid "Update an application"
-msgstr ""
+msgstr "Actualitzar una aplicació"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:4
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:6
@@ -13715,7 +13716,7 @@ msgstr "Revocar"
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:6
 #: pretix/control/templates/pretixcontrol/user/settings.html:61
 msgid "Authorized applications"
-msgstr ""
+msgstr "Aplicacions autoritzades"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:9
 msgid "Manage your own apps"
@@ -13727,7 +13728,7 @@ msgstr "Permisos"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:59
 msgid "No applications have access to your pretix account."
-msgstr ""
+msgstr "No hi ha cap aplicació amb accés al vostre compte de pretix."
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:4
 #: pretix/control/templates/pretixcontrol/order/approve.html:8
