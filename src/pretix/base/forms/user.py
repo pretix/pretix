@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
@@ -19,6 +20,7 @@ class UserSettingsForm(forms.ModelForm):
                         "address or password."),
         'pw_current_wrong': _("The current password you entered was not correct."),
         'pw_mismatch': _("Please enter the same password twice"),
+        'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
     }
 
     old_pw = forms.CharField(max_length=255,
@@ -64,6 +66,18 @@ class UserSettingsForm(forms.ModelForm):
 
     def clean_old_pw(self):
         old_pw = self.cleaned_data.get('old_pw')
+
+        if old_pw and settings.HAS_REDIS:
+            from django_redis import get_redis_connection
+            rc = get_redis_connection("redis")
+            cnt = rc.incr('pretix_pwchange_%s' % self.user.pk)
+            rc.expire('pretix_pwchange_%s' % self.user.pk, 300)
+            if cnt > 10:
+                raise forms.ValidationError(
+                    self.error_messages['rate_limit'],
+                    code='rate_limit',
+                )
+
         if old_pw and not check_password(old_pw, self.user.password):
             raise forms.ValidationError(
                 self.error_messages['pw_current_wrong'],
