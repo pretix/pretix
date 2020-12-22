@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 
+from babel import localedata
 from django.conf import settings
 from django.utils import translation
 from django.utils.formats import date_format, number_format
@@ -67,6 +68,16 @@ class LazyNumber:
 
 
 ALLOWED_LANGUAGES = dict(settings.LANGUAGES)
+
+
+def get_babel_locale():
+    babel_locale = 'en'
+    # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal
+    if localedata.exists(translation.get_language()):
+        babel_locale = translation.get_language()
+    elif localedata.exists(translation.get_language()[:2]):
+        babel_locale = translation.get_language()[:2]
+    return babel_locale
 
 
 def get_language_without_region(lng=None):

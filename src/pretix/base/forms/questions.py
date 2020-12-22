@@ -9,7 +9,6 @@ import pycountry
 import pytz
 import vat_moss.errors
 import vat_moss.id
-from babel import localedata
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -20,14 +19,14 @@ from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone
-from django.utils.translation import (
-    get_language, gettext_lazy as _, pgettext_lazy,
-)
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries import countries
 from django_countries.fields import Country, CountryField
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
-from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from phonenumber_field.widgets import (
+    PhoneNumberPrefixWidget, PhonePrefixSelect,
+)
 from phonenumbers import NumberParseException, national_significant_number
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
@@ -35,7 +34,9 @@ from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
     TimePickerWidget, UploadedFileWidget,
 )
-from pretix.base.i18n import get_language_without_region, language
+from pretix.base.i18n import (
+    get_babel_locale, get_language_without_region, language,
+)
 from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import (
     EU_COUNTRIES, cc_to_vat_prefix, is_eu_country,
@@ -204,7 +205,18 @@ class NamePartsFormField(forms.MultiValueField):
         return value
 
 
+class WrappedPhonePrefixSelect(PhonePrefixSelect):
+    def __init__(self, *args, **kwargs):
+        with language(get_babel_locale()):
+            super().__init__(*args, **kwargs)
+
+
 class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
+
+    def __init__(self, attrs=None, initial=None):
+        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput())
+        super(PhoneNumberPrefixWidget, self).__init__(widgets, attrs)
+
     def render(self, name, value, attrs=None, renderer=None):
         output = super().render(name, value, attrs, renderer)
         return mark_safe(self.format_output(output))
@@ -564,13 +576,7 @@ class BaseQuestionsForm(forms.Form):
                 if q.valid_datetime_max:
                     field.validators.append(MaxDateTimeValidator(q.valid_datetime_max))
             elif q.type == Question.TYPE_PHONENUMBER:
-                babel_locale = 'en'
-                # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal
-                if localedata.exists(get_language()):
-                    babel_locale = get_language()
-                elif localedata.exists(get_language()[:2]):
-                    babel_locale = get_language()[:2]
-                with language(babel_locale):
+                with language(get_babel_locale()):
                     default_country = guess_country(event)
                     default_prefix = None
                     for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
