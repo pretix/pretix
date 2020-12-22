@@ -1,12 +1,17 @@
+import hashlib
+import ipaddress
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import User
 from pretix.helpers.dicts import move_to_end
+from pretix.helpers.http import get_client_ip
 
 
 class LoginForm(forms.Form):
@@ -18,6 +23,7 @@ class LoginForm(forms.Form):
 
     error_messages = {
         'invalid_login': _("This combination of credentials is not known to our system."),
+        'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
         'inactive': _("This account is inactive.")
     }
 
@@ -39,10 +45,36 @@ class LoginForm(forms.Form):
         else:
             move_to_end(self.fields, 'keep_logged_in')
 
+    @cached_property
+    def ratelimit_key(self):
+        if not settings.HAS_REDIS:
+            return None
+        client_ip = get_client_ip(self.request)
+        if not client_ip:
+            return None
+        try:
+            client_ip = ipaddress.ip_address(client_ip)
+        except ValueError:
+            # Web server not set up correctly
+            return None
+        if client_ip.is_private:
+            # This is the private IP of the server, web server not set up correctly
+            return None
+        return 'pretix_login_{}'.format(hashlib.sha1(str(client_ip).encode()).hexdigest())
+
     def clean(self):
         if all(k in self.cleaned_data for k, f in self.fields.items() if f.required):
+            if self.ratelimit_key:
+                from django_redis import get_redis_connection
+                rc = get_redis_connection("redis")
+                cnt = rc.get(self.ratelimit_key)
+                if cnt and int(cnt) > 10:
+                    raise forms.ValidationError(self.error_messages['rate_limit'], code='rate_limit')
             self.user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
             if self.user_cache is None:
+                if self.ratelimit_key:
+                    rc.incr(self.ratelimit_key)
+                    rc.expire(self.ratelimit_key, 300)
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],
                     code='invalid_login'
