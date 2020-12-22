@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2020-12-22 06:00+0000\n"
+"PO-Revision-Date: 2020-12-23 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1484,6 +1484,8 @@ msgstr ""
 #: pretix/base/forms/auth.py:26 pretix/base/forms/user.py:23
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
+"Om veiligheidsredenen moet u vijf minuten wachten voor u dit opnieuw kunt "
+"proberen."
 
 #: pretix/base/forms/auth.py:27 pretix/base/forms/auth.py:223
 msgid "This account is inactive."
@@ -8155,18 +8157,16 @@ msgid "Free text input"
 msgstr "Vrije tekstinvoer"
 
 #: pretix/control/forms/event.py:575
-#, fuzzy
-#| msgid "Do not copy"
 msgid "Do not ask"
-msgstr "Niet kopiëren"
+msgstr "Niet vragen"
 
 #: pretix/control/forms/event.py:576
 msgid "Ask, but do not require input"
-msgstr ""
+msgstr "Vraag, maar maak invoer niet verplicht"
 
 #: pretix/control/forms/event.py:577
 msgid "Ask and require input"
-msgstr ""
+msgstr "Vraag, invullen is niet verplicht"
 
 #: pretix/control/forms/event.py:612
 msgid ""
@@ -8616,16 +8616,12 @@ msgid "Cancellations"
 msgstr "Annuleringen"
 
 #: pretix/control/forms/filter.py:153
-#, fuzzy
-#| msgid "Canceled (paid fee)"
 msgid "Canceled (fully)"
-msgstr "Geannuleerd (betaalde kosten)"
+msgstr "Geannuleerd (hele bestelling)"
 
 #: pretix/control/forms/filter.py:154
-#, fuzzy
-#| msgid "Canceled (or with paid fee)"
 msgid "Canceled (fully or with paid fee)"
-msgstr "Geannuleerd (of met betaalde kosten)"
+msgstr "Geannuleerd (hele bestelling of met betaalde kosten)"
 
 #: pretix/control/forms/filter.py:155
 msgid "Cancellation requested"
@@ -8661,17 +8657,12 @@ msgid "Overpaid"
 msgstr "Overbetaald"
 
 #: pretix/control/forms/filter.py:162
-#, fuzzy
-#| msgid "Mark as paid"
 msgid "Partially paid"
-msgstr "Markeren als betaald"
+msgstr "Gedeeltelijk betaald"
 
 #: pretix/control/forms/filter.py:163
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgid "Underpaid (but confirmed)"
-msgstr "Bestelling bevestigd"
+msgstr "Onderbetaald (maar bevestigd)"
 
 #: pretix/control/forms/filter.py:164
 msgid "Pending (but fully paid)"
@@ -15141,10 +15132,8 @@ msgid "Remove filter"
 msgstr "Verwijder filter"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:116
-#, fuzzy
-#| msgid "Order total"
 msgid "Order  paid / total"
-msgstr "Totaalbedrag van bestelling"
+msgstr "Bestelling betaald / totaal"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/search/orders.html:83
@@ -18798,7 +18787,7 @@ msgstr "De bestelling is al geannuleerd."
 
 #: pretix/plugins/banktransfer/tasks.py:117
 msgid "Automatic split to multiple orders not possible."
-msgstr ""
+msgstr "Automatisch uitsplitsen naar meerdere bestellingen niet mogelijk."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:4
 msgid ""
@@ -18827,11 +18816,8 @@ msgid "Account"
 msgstr "Rekening"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Transfer"
 msgid "Transfer amount"
-msgstr "Overdragen"
+msgstr "Overschrijvingsbedrag"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
