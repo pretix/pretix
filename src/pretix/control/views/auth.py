@@ -78,11 +78,11 @@ def login(request):
             return redirect(next_url)
         return redirect(reverse('control:index'))
     if request.method == 'POST':
-        form = LoginForm(backend=backend, data=request.POST)
+        form = LoginForm(backend=backend, data=request.POST, request=request)
         if form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier:
             return process_login(request, form.user_cache, form.cleaned_data.get('keep_logged_in', False))
     else:
-        form = LoginForm(backend=backend)
+        form = LoginForm(backend=backend, request=request)
     ctx['form'] = form
     ctx['can_register'] = settings.PRETIX_REGISTRATION
     ctx['can_reset'] = settings.PRETIX_PASSWORD_RESET
