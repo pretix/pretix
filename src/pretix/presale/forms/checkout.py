@@ -1,10 +1,9 @@
 from itertools import chain
 
-from babel import localedata
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
-from django.utils.translation import get_language, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumbers import NumberParseException
@@ -14,7 +13,7 @@ from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseQuestionsForm, WrappedPhoneNumberPrefixWidget,
     guess_country,
 )
-from pretix.base.i18n import language
+from pretix.base.i18n import get_babel_locale, language
 from pretix.base.validators import EmailBanlistValidator
 from pretix.presale.signals import contact_form_fields
 
@@ -39,13 +38,7 @@ class ContactForm(forms.Form):
             )
 
         if self.event.settings.order_phone_asked:
-            babel_locale = 'en'
-            # Babel, and therefore django-phonenumberfield, do not support our custom locales such as de_Informal
-            if localedata.exists(get_language()):
-                babel_locale = get_language()
-            elif localedata.exists(get_language()[:2]):
-                babel_locale = get_language()[:2]
-            with language(babel_locale):
+            with language(get_babel_locale()):
                 default_country = guess_country(self.event)
                 default_prefix = None
                 for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
