@@ -12,6 +12,18 @@
                 <p>
                     {% trans "Your shop is currently live. If you take it down, it will only be visible to you and your team." %}
                 </p>
+                {% if issues|length > 0 %}
+                    <div class="alert alert-warning">
+                        <p>
+                            {% trans "Your shop is already live, however the following issues would normally prevent your shop to go live:" %}
+                        </p>
+                        <ul>
+                            {% for issue in issues %}
+                                <li>{{ issue|safe }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
                 <form action="" method="post" class="text-right flip">
                     {% csrf_token %}
                     <input type="hidden" name="live" value="false">
