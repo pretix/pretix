@@ -62,7 +62,7 @@ else:
 debug_fallback = "runserver" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 LOG_CSP = config.getboolean('pretix', 'csp_log', fallback=True)
-CSP_ADDITIONAL_HEADER = config.get('pretix', 'csp_additional_header', fallback=True)
+CSP_ADDITIONAL_HEADER = config.get('pretix', 'csp_additional_header', fallback='')
 
 PDFTK = config.get('tools', 'pdftk', fallback=None)
 
