@@ -6,11 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0170_remove_hidden_urls'),
-    ]
-    replaces = [
-        ('pretixbase', '0162b_auto_20201218_1810'),
-        ('pretixbase', '0169b_auto_20201218_1810'),
+        ('pretixbase', '0162_remove_seat_name'),
     ]
 
     operations = [
