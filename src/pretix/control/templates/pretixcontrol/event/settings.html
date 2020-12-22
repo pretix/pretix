@@ -87,21 +87,14 @@
             </fieldset>
             <fieldset>
                 <legend>{% trans "Customer and attendee data" %}</legend>
-                {% trans "Asked" context "attendee_data" as asked %}
-                {% trans "Required" context "attendee_data" as required %}
                 <h4>{% trans "Customer data (once per order)" %}</h4>
                 <div class="form-group">
                     <label class="control-label col-md-3">
                         {% trans "E-mail" %}
                     </label>
-                    <div class="col-md-3">
+                    <div class="col-md-9">
                         <div class="checkbox">
-                            <label><input type="checkbox" checked="checked" disabled="disabled"> {{ asked }}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="checkbox">
-                            <label><input type="checkbox" checked="checked" disabled="disabled"> {{ required }}</label>
+                            <label><input type="checkbox" checked="checked" disabled="disabled"> {% trans "Ask and require input" %}</label>
                         </div>
                     </div>
                 </div>
