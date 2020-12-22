@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2020-12-15 08:51+0000\n"
+"PO-Revision-Date: 2020-12-22 11:33+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1483,6 +1483,7 @@ msgstr "Diese Kombination von Zugangsdaten ist uns nicht bekannt."
 #: pretix/base/forms/auth.py:26 pretix/base/forms/user.py:23
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
+"Warte aus Sicherheitsgründen bitte 5 Minuten, bevor du es erneut versuchst."
 
 #: pretix/base/forms/auth.py:27 pretix/base/forms/auth.py:223
 msgid "This account is inactive."
@@ -8167,18 +8168,16 @@ msgid "Free text input"
 msgstr "Freie Texteingabe"
 
 #: pretix/control/forms/event.py:575
-#, fuzzy
-#| msgid "Do not copy"
 msgid "Do not ask"
-msgstr "Nicht übernehmen"
+msgstr "Nicht fragen"
 
 #: pretix/control/forms/event.py:576
 msgid "Ask, but do not require input"
-msgstr ""
+msgstr "Fragen, aber Eingabe ist optional"
 
 #: pretix/control/forms/event.py:577
 msgid "Ask and require input"
-msgstr ""
+msgstr "Fragen, Eingabe ist verpflichtend"
 
 #: pretix/control/forms/event.py:612
 msgid ""
@@ -8621,16 +8620,12 @@ msgid "Cancellations"
 msgstr "Stornierungen"
 
 #: pretix/control/forms/filter.py:153
-#, fuzzy
-#| msgid "Canceled (paid fee)"
 msgid "Canceled (fully)"
-msgstr "storniert (bezahlte Gebühr)"
+msgstr "Storniert (komplett)"
 
 #: pretix/control/forms/filter.py:154
-#, fuzzy
-#| msgid "Canceled (or with paid fee)"
 msgid "Canceled (fully or with paid fee)"
-msgstr "Storniert (oder mit bezahlter Gebühr)"
+msgstr "Storniert (komplett oder mit Gebühr)"
 
 #: pretix/control/forms/filter.py:155
 msgid "Cancellation requested"
@@ -8666,17 +8661,12 @@ msgid "Overpaid"
 msgstr "Überzahlt"
 
 #: pretix/control/forms/filter.py:162
-#, fuzzy
-#| msgid "Mark as paid"
 msgid "Partially paid"
-msgstr "Als bezahlt markieren"
+msgstr "Teilweise bezahlt"
 
 #: pretix/control/forms/filter.py:163
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgid "Underpaid (but confirmed)"
-msgstr "Bestellbestätigung"
+msgstr "Unterzahlt (aber bestätigt)"
 
 #: pretix/control/forms/filter.py:164
 msgid "Pending (but fully paid)"
@@ -15153,10 +15143,8 @@ msgid "Remove filter"
 msgstr "Filter entfernen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:116
-#, fuzzy
-#| msgid "Order total"
 msgid "Order  paid / total"
-msgstr "Gesamtbetrag"
+msgstr "Bestellung bezahlt / gesamt"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/search/orders.html:83
@@ -18812,7 +18800,7 @@ msgstr "Die Rechnung wurde bereits storniert."
 
 #: pretix/plugins/banktransfer/tasks.py:117
 msgid "Automatic split to multiple orders not possible."
-msgstr ""
+msgstr "Automatische Aufteilung auf mehrere Bestellungen nicht möglich."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:4
 msgid ""
@@ -18841,11 +18829,8 @@ msgid "Account"
 msgstr "Konto"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Transfer"
 msgid "Transfer amount"
-msgstr "Verrechne"
+msgstr "Überweisungsbetrag"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
