@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-15 08:22+0000\n"
+"POT-Creation-Date: 2020-12-22 11:06+0000\n"
 "PO-Revision-Date: 2020-08-05 06:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -294,15 +294,15 @@ msgstr "Alle"
 msgid "None"
 msgstr "Geen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:706
+#: pretix/static/pretixcontrol/js/ui/main.js:709
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:763
+#: pretix/static/pretixcontrol/js/ui/main.js:766
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:778
+#: pretix/static/pretixcontrol/js/ui/main.js:781
 msgid "You have unsaved changes!"
 msgstr "U heeft nog niet opgeslagen wijzigingen!"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-15 08:22+0000\n"
+"POT-Creation-Date: 2020-12-22 11:06+0000\n"
 "PO-Revision-Date: 2019-03-19 09:00+0000\n"
 "Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -319,15 +319,15 @@ msgstr "Todos"
 msgid "None"
 msgstr "Nenhum"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:706
+#: pretix/static/pretixcontrol/js/ui/main.js:709
 msgid "Use a different name internally"
 msgstr "Use um nome diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:763
+#: pretix/static/pretixcontrol/js/ui/main.js:766
 msgid "Click to close"
 msgstr "Clique para fechar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:778
+#: pretix/static/pretixcontrol/js/ui/main.js:781
 msgid "You have unsaved changes!"
 msgstr ""
 

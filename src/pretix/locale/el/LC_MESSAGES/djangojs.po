@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-15 08:22+0000\n"
+"POT-Creation-Date: 2020-12-22 11:06+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -320,15 +320,15 @@ msgstr "Όλα"
 msgid "None"
 msgstr "Κανένας"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:706
+#: pretix/static/pretixcontrol/js/ui/main.js:709
 msgid "Use a different name internally"
 msgstr "Χρησιμοποιήστε διαφορετικό όνομα εσωτερικά"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:763
+#: pretix/static/pretixcontrol/js/ui/main.js:766
 msgid "Click to close"
 msgstr "Κάντε κλικ για να κλείσετε"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:778
+#: pretix/static/pretixcontrol/js/ui/main.js:781
 msgid "You have unsaved changes!"
 msgstr ""
 
