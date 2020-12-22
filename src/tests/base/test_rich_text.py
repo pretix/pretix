@@ -1,6 +1,8 @@
 import pytest
 
-from pretix.base.templatetags.rich_text import rich_text, rich_text_snippet, markdown_compile_email
+from pretix.base.templatetags.rich_text import (
+    markdown_compile_email, rich_text, rich_text_snippet,
+)
 
 
 @pytest.mark.parametrize("link", [
