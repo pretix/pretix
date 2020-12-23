@@ -16,7 +16,9 @@ We recommend all relevant models to inherit from ``LoggedModel`` as it simplifie
 .. autoclass:: pretix.base.models.LoggedModel
    :members: log_action, all_logentries
 
-To actually log an action, you can just call the ``log_action`` method on your object::
+To actually log an action, you can just call the ``log_action`` method on your object:
+
+.. code-block:: python
 
    order.log_action('pretix.event.order.canceled', user=user, data={})
 
@@ -29,7 +31,9 @@ Logging form actions
 """"""""""""""""""""
 
 A very common use case is to log the changes to a model that have been done in a ``ModelForm``. In this case,
-we generally use a custom ``form_valid`` method on our ``FormView`` that looks like this::
+we generally use a custom ``form_valid`` method on our ``FormView`` that looks like this:
+
+.. code-block:: python
 
     @transaction.atomic
     def form_valid(self, form):
@@ -40,7 +44,9 @@ we generally use a custom ``form_valid`` method on our ``FormView`` that looks l
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
-It gets a little bit more complicated if your form allows file uploads::
+It gets a little bit more complicated if your form allows file uploads:
+
+.. code-block:: python
 
     @transaction.atomic
     def form_valid(self, form):
@@ -67,7 +73,9 @@ following ready-to-include template::
 
 We now need a way to translate the action codes like ``pretix.event.changed`` into human-readable
 strings. The :py:attr:`pretix.base.signals.logentry_display` signals allows you to do so. A simple
-implementation could look like::
+implementation could look like:
+
+.. code-block:: python
 
     from django.utils.translation import gettext as _
     from pretix.base.signals import logentry_display
@@ -88,7 +96,9 @@ Sending notifications
 
 If you think that the logged information might be important or urgent enough to send out a notification to interested
 organizers. In this case, you should listen for the :py:attr:`pretix.base.signals.register_notification_types` signal
-to register a notification type::
+to register a notification type:
+
+.. code-block:: python
 
     @receiver(register_notification_types)
     def register_my_notification_types(sender, **kwargs):
@@ -103,7 +113,9 @@ You should subclass the base ``NotificationType`` class and implement all its me
 .. autoclass:: pretix.base.notifications.NotificationType
    :members: action_type, verbose_name, required_permission, build_notification
 
-A simple implementation could look like this::
+A simple implementation could look like this:
+
+.. code-block:: python
 
     class MyNotificationType(NotificationType):
         required_permission = "can_view_orders"
@@ -143,7 +155,9 @@ Logging technical information
 -----------------------------
 
 If you just want to log technical information to a log file on disk that does not need to be parsed
-and displayed later, you can just use Python's ``logging`` module::
+and displayed later, you can just use Python's ``logging`` module:
+
+.. code-block:: python
 
    import logging
 
@@ -151,7 +165,9 @@ and displayed later, you can just use Python's ``logging`` module::
 
    logger.info('Startup complete.')
 
-This is also very useful to provide debugging information when an exception occurs::
+This is also very useful to provide debugging information when an exception occurs:
+
+.. code-block:: python
 
    try:
       foo()
