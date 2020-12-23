@@ -1,4 +1,5 @@
 from django.conf.urls import include, url
+from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, geo, global_settings, item, main, oauth,
@@ -303,4 +304,5 @@ urlpatterns = [
         url(r'^checkinlists/(?P<list>\d+)/delete$', checkin.CheckinListDelete.as_view(),
             name='event.orders.checkinlists.delete'),
     ])),
+    url(r'^event/(?P<organizer>[^/]+)/$', RedirectView.as_view(pattern_name='control:organizer'), name='event.organizerredirect'),
 ]
