@@ -44,7 +44,7 @@ A usage example taken directly from the code is:
         """
         A view that executes a task asynchronously. A POST request will kick off the
         task into the background or run it in the foreground if celery is not installed.
-        In the former case, subsequent GET calls can be used to determinine the current
+        In the former case, subsequent GET calls can be used to determine the current
         status of the task.
         """
 
