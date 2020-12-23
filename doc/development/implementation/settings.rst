@@ -39,7 +39,9 @@ subclass that also adds support for internationalized fields:
 
 .. autoclass:: pretix.base.forms.SettingsForm
 
-You can simply use it like this::
+You can simply use it like this:
+
+.. code-block:: python
 
    class EventSettingsForm(SettingsForm):
        show_date_to = forms.BooleanField(
@@ -56,7 +58,9 @@ You can simply use it like this::
 Defaults in plugins
 -------------------
 
-Plugins can add custom hardcoded defaults in the following way::
+Plugins can add custom hardcoded defaults in the following way:
+
+.. code-block:: python
 
     from pretix.base.settings import settings_hierarkey
 
