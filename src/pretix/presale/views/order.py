@@ -120,8 +120,10 @@ class OrderOpen(EventViewMixin, OrderDetailMixin, View):
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if kwargs.get('hash') == self.order.email_confirm_hash():
-            self.order.email_known_to_work = True
-            self.order.save(update_fields=['email_known_to_work'])
+            if not self.order.email_known_to_work:
+                self.order.log_action('pretix.event.order.contact.confirmed')
+                self.order.email_known_to_work = True
+                self.order.save(update_fields=['email_known_to_work'])
         return redirect(self.get_order_url())
 
 
