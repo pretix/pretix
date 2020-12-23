@@ -55,6 +55,10 @@ class EventsTest(SoupTest):
         self.assertNotIn("31C3", tabletext)
         self.assertNotIn("MRMCD14", tabletext)
 
+    def test_convenience_organizer_redirect(self):
+        resp = self.client.get('/control/event/%s/' % (self.orga1.slug))
+        self.assertRedirects(resp, '/control/organizer/%s/' % (self.orga1.slug))
+
     def test_quick_setup_later(self):
         with scopes_disabled():
             self.event1.quotas.create(name='foo', size=2)
