@@ -15,7 +15,9 @@ Requiring permissions for a view
 --------------------------------
 
 pretix provides a number of useful mixins and decorators that allow you to specify that a user needs a certain
-permission level to access a view::
+permission level to access a view:
+
+.. code-block:: python
 
     from pretix.control.permissions import (
         OrganizerPermissionRequiredMixin, organizer_permission_required
@@ -44,7 +46,9 @@ permission level to access a view::
         # Only users with *any* permission on this organizer can access this
 
 
-Of course, the same is available on event level::
+Of course, the same is available on event level:
+
+.. code-block:: python
 
     from pretix.control.permissions import (
         EventPermissionRequiredMixin, event_permission_required
@@ -73,7 +77,9 @@ Of course, the same is available on event level::
         # Only users with *any* permission on this event can access this
 
 You can also require that this view is only accessible by system administrators with an active "admin session"
-(see below for what this means)::
+(see below for what this means):
+
+.. code-block:: python
 
     from pretix.control.permissions import (
         AdministratorPermissionRequiredMixin, administrator_permission_required
@@ -89,7 +95,9 @@ You can also require that this view is only accessible by system administrators 
         # ...
 
 In rare cases it might also be useful to expose a feature only to people who have a staff account but do not
-necessarily have an active admin session::
+necessarily have an active admin session:
+
+.. code-block:: python
 
     from pretix.control.permissions import (
         StaffMemberRequiredMixin, staff_member_required
