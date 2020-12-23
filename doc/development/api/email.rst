@@ -15,7 +15,9 @@ Output registration
 The email HTML renderer API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available email renderers. Your plugin
 should listen for this signal and return the subclass of ``pretix.base.email.BaseHTMLMailRenderer``
-that we'll provide in this plugin::
+that we'll provide in this plugin:
+
+.. code-block:: python
 
     from django.dispatch import receiver
 
@@ -72,7 +74,9 @@ class ``TemplateBasedMailRenderer`` that you can re-use to perform the following
 * Call `inlinestyler`_ to convert all ``<style>`` style sheets to inline ``style=""``
   attributes for better compatibility
 
-To use it, you just need to implement some variables::
+To use it, you just need to implement some variables:
+
+.. code-block:: python
 
     class ClassicMailRenderer(TemplateBasedMailRenderer):
         verbose_name = _('pretix default')
