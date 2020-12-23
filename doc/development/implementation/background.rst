@@ -12,7 +12,9 @@ Implementing a task
 -------------------
 
 A common pattern for implementing asynchronous tasks can be seen a lot in ``pretix.base.services``
-and looks like this::
+and looks like this:
+
+.. code-block:: python
 
     from pretix.celery_app import app
 
@@ -34,13 +36,15 @@ If your user needs to wait for the response of the asynchronous task, there are 
 that will probably move to ``pretix.base`` at some point. They consist of the view mixin ``AsyncAction`` that allows
 you to easily write a view that kicks off and waits for an asynchronous task. ``AsyncAction`` will determine whether
 to run the task asynchronously or not and will do some magic to look nice for users with and without JavaScript support.
-A usage example taken directly from the code is::
+A usage example taken directly from the code is:
+
+.. code-block:: python
 
     class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         """
         A view that executes a task asynchronously. A POST request will kick off the
         task into the background or run it in the foreground if celery is not installed.
-        In the former case, subsequent GET calls can be used to determinine the current
+        In the former case, subsequent GET calls can be used to determine the current
         status of the task.
         """
 
@@ -79,7 +83,9 @@ A usage example taken directly from the code is::
             return super().get_error_message(exception)
 
 On the client side, this can be used by simply adding a ``data-asynctask`` attribute to an HTML form. This will enable
-AJAX sending of the form and display a loading indicator::
+AJAX sending of the form and display a loading indicator:
+
+.. code-block:: html
 
     <form method="post" data-asynctask
           action="{% eventurl request.event "presale:event.order.cancel.do" … %}">

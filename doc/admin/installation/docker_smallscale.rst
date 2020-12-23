@@ -135,7 +135,7 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     user=pretix
     ; Replace with the password you chose above
     password=*********
-    ; In most docker setups, 172.17.0.1 is the address of the docker host. Adjuts
+    ; In most docker setups, 172.17.0.1 is the address of the docker host. Adjust
     ; this to wherever your database is running, e.g. the name of a linked container
     ; or of a mounted MySQL socket.
     host=172.17.0.1

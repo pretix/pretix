@@ -13,7 +13,9 @@ Placeholder registration
 
 The placeholder API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available email placeholders. Your plugin
-should listen for this signal and return an instance of a subclass of ``pretix.base.email.BaseMailTextPlaceholder``::
+should listen for this signal and return an instance of a subclass of ``pretix.base.email.BaseMailTextPlaceholder``:
+
+.. code-block:: python
 
     from django.dispatch import receiver
 
@@ -71,7 +73,9 @@ Helper class for simple placeholders
 ------------------------------------
 
 pretix ships with a helper class that makes it easy to provide placeholders based on simple
-functions::
+functions:
+
+.. code-block:: python
 
      placeholder = SimpleFunctionalMailTextPlaceholder(
          'code', ['order'], lambda order: order.code, sample='F8VVL'

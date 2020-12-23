@@ -19,7 +19,9 @@ Provider registration
 The payment provider API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available payment providers. Your plugin
 should listen for this signal and return the subclass of ``pretix.base.payment.BasePaymentProvider``
-that the plugin will provide::
+that the plugin will provide:
+
+.. code-block:: python
 
     from django.dispatch import receiver
 
@@ -140,7 +142,9 @@ it is necessary to introduce additional views. One example is the PayPal
 provider. It redirects the user to a PayPal website in the
 :py:meth:`BasePaymentProvider.checkout_prepare` step of the checkout process
 and provides PayPal with a URL to redirect back to. This URL points to a
-view which looks roughly like this::
+view which looks roughly like this:
+
+.. code-block:: python
 
     @login_required
     def success(request):

@@ -14,7 +14,9 @@ Control panel views
 -------------------
 
 If you want to add a custom view to the control area of an event, just register an URL in your
-``urls.py`` that lives in the ``/control/`` subpath::
+``urls.py`` that lives in the ``/control/`` subpath:
+
+.. code-block:: python
 
     from django.conf.urls import url
 
@@ -44,7 +46,9 @@ If only the ``organizer`` parameter is present, it will be ensured that:
 * The user has permission to access view the current organizer
 
 If you want to require specific permission types, we provide you with a decorator or a mixin for
-your views::
+your views:
+
+.. code-block:: python
 
     from pretix.control.permissions import (
         event_permission_required, EventPermissionRequiredMixin
@@ -61,8 +65,9 @@ your views::
         ...
 
 Similarly, there is ``organizer_permission_required`` and ``OrganizerPermissionRequiredMixin``. In case of
-event-related views, there is also a signal that allows you to add the view to the event navigation like this::
+event-related views, there is also a signal that allows you to add the view to the event navigation like this:
 
+.. code-block:: python
 
     from django.urls import resolve, reverse
     from django.dispatch import receiver
@@ -90,7 +95,9 @@ Event settings view
 -------------------
 
 A special case of a control panel view is a view hooked into the event settings page. For this case, there is a
-special navigation signal::
+special navigation signal:
+
+.. code-block:: python
 
     @receiver(nav_event_settings, dispatch_uid='friends_tickets_nav_settings')
     def navbar_settings(sender, request, **kwargs):
@@ -105,7 +112,9 @@ special navigation signal::
         }]
 
 Also, your view should inherit from ``EventSettingsViewMixin`` and your template from ``pretixcontrol/event/settings_base.html``
-for good integration. If you just want to display a form, you could do it like the following::
+for good integration. If you just want to display a form, you could do it like the following:
+
+.. code-block:: python
 
     class MySettingsView(EventSettingsViewMixin, EventSettingsFormView):
         model = Event
@@ -147,7 +156,9 @@ Including a custom view into the participant-facing frontend is a little bit dif
 no path prefix like ``control/``.
 
 First, define your URL in your ``urls.py``, but this time in the ``event_patterns`` section and wrapped by
-``event_url``::
+``event_url``:
+
+.. code-block:: python
 
     from pretix.multidomain import event_url
 
@@ -182,8 +193,9 @@ standard Django request handling: There are `ViewSets`_ to group related views i
 automatically build URL configurations from them.
 
 To integrate a custom viewset with pretix' REST API, you can just register with one of our routers within the
-``urls.py`` module of your plugin::
+``urls.py`` module of your plugin:
 
+.. code-block:: python
 
     from pretix.api.urls import event_router, router, orga_router
 
@@ -200,7 +212,9 @@ in the control panel. However, you need to make sure on your own only to return 
 .event`` and ``request.organizer`` are available as usual.
 
 To require a special permission like ``can_view_orders``, you do not need to inherit from a special ViewSet base
-class, you can just set the ``permission`` attribute on your viewset::
+class, you can just set the ``permission`` attribute on your viewset:
+
+.. code-block:: python
 
     class MyViewSet(ModelViewSet):
         permission = 'can_view_orders'
@@ -208,8 +222,9 @@ class, you can just set the ``permission`` attribute on your viewset::
 
 If you want to check the permission only for some methods of your viewset, you have to do it yourself. Note here that
 API authentications can be done via user sessions or API tokens and you should therefore check something like the
-following::
+following:
 
+.. code-block:: python
 
     perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken) else request.user)
     if perm_holder.has_event_permission(request.event.organizer, request.event, 'can_view_orders'):

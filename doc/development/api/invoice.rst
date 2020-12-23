@@ -15,7 +15,9 @@ Output registration
 The invoice renderer API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available invoice renderers. Your plugin
 should listen for this signal and return the subclass of ``pretix.base.invoice.BaseInvoiceRenderer``
-that we'll provide in this plugin::
+that we'll provide in this plugin:
+
+.. code-block:: python
 
     from django.dispatch import receiver
 

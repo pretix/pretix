@@ -74,7 +74,7 @@ looks like this:
 
         def generate_files(self) -> List[Tuple[str, str, str]]:
             yield 'invoice-addresses.json', 'application/json', json.dumps({
-                ia.order.code: InvoiceAdddressSerializer(ia).data
+                ia.order.code: InvoiceAddressSerializer(ia).data
                 for ia in InvoiceAddress.objects.filter(order__event=self.event)
             }, indent=4)
 
