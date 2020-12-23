@@ -27,7 +27,9 @@ numbers and dates, ``LazyDate`` and ``LazyNumber``. There also is a ``LazyLocale
 exceptions with gettext-localized exception messages.
 
 Last, but definitely not least, we have the ``language`` context manager (``pretix.base.i18n.language``) that allows
-you to execute a piece of code with a different locale::
+you to execute a piece of code with a different locale:
+
+.. code-block:: python
 
     with language('de'):
         render_mail_template()
