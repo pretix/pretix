@@ -17,7 +17,9 @@ Exporter registration
 The exporter API does not make a lot of usage from signals, however, it does use a signal to get a list of
 all available exporters. Your plugin should listen for this signal and return the subclass of
 ``pretix.base.exporter.BaseExporter``
-that we'll provide in this plugin::
+that we'll provide in this plugin:
+
+.. code-block:: python
 
     from django.dispatch import receiver
 
@@ -31,7 +33,9 @@ that we'll provide in this plugin::
 
 Some exporters might also prove to be useful, when provided on an organizer-level. In order to declare your
 exporter as capable of providing exports spanning multiple events, your plugin should listen for this signal
-and return the subclass of ``pretix.base.exporter.BaseExporter`` that we'll provide in this plugin::
+and return the subclass of ``pretix.base.exporter.BaseExporter`` that we'll provide in this plugin:
+
+.. code-block:: python
 
     from django.dispatch import receiver
 
