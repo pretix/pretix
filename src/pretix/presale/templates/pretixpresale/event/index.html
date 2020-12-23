@@ -183,7 +183,7 @@
                 {% endif %}
             </div>
         {% endif %}
-        {% if not cart_namespace %}
+        {% if not cart_namespace or subevent %}
             <div>
                 {% if ev.location %}
                     <div class="info-row">
