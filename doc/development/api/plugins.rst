@@ -55,7 +55,9 @@ restricted         boolean (optional)   ``False`` by default, restricts a plugin
 compatibility      string               Specifier for compatible pretix versions.
 ================== ==================== ===========================================================
 
-A working example would be::
+A working example would be:
+
+.. code-block:: python
 
     try:
         from pretix.base.plugins import PluginConfig
@@ -81,7 +83,7 @@ A working example would be::
 
     default_app_config = 'pretix_paypal.PaypalApp'
 
-The ``AppConfig`` class may implement a property ``compatiblity_errors``, that checks
+The ``AppConfig`` class may implement a property ``compatibility_errors``, that checks
 whether the pretix installation meets all requirements of the plugin. If so,
 it should contain ``None`` or an empty list, otherwise a list of strings containing
 human-readable error messages. We recommend using the ``django.utils.functional.cached_property``
@@ -96,7 +98,9 @@ Plugin registration
 
 Somehow, pretix needs to know that your plugin exists at all. For this purpose, we
 make use of the `entry point`_ feature of setuptools. To register a plugin that lives
-in a separate python package, your ``setup.py`` should contain something like this::
+in a separate python package, your ``setup.py`` should contain something like this:
+
+.. code-block:: python
 
     setup(
         args...,
@@ -118,7 +122,9 @@ The various components of pretix define a number of signals which your plugin ca
 listen for. We will go into the details of the different signals in the following
 pages. We suggest that you put your signal receivers into a ``signals`` submodule
 of your plugin. You should extend your ``AppConfig`` (see above) by the following
-method to make your receivers available::
+method to make your receivers available:
+
+.. code-block:: python
 
     class PaypalApp(AppConfig):
         …
@@ -127,7 +133,9 @@ method to make your receivers available::
             from . import signals  # NOQA
 
 You can optionally specify code that is executed when your plugin is activated for an event
-in the ``installed`` method::
+in the ``installed`` method:
+
+.. code-block:: python
 
     class PaypalApp(AppConfig):
         …
