@@ -313,7 +313,7 @@ class BankTransactionFilterForm(forms.Form):
         if self.cleaned_data.get("amount_max") is not None:
             qs = qs.filter(amount__lte=self.cleaned_data['amount_max'])
         if self.cleaned_data.get('date_min') is not None:
-            qs = qs.filter(ate_parsed__gte=self.cleaned_data['date_min'])
+            qs = qs.filter(date_parsed__gte=self.cleaned_data['date_min'])
         if self.cleaned_data.get('date_max') is not None:
             qs = qs.filter(date_parsed__lte=self.cleaned_data['date_max'])
         return qs
