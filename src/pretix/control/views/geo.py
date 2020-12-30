@@ -71,7 +71,7 @@ class GeoCodeView(LoginRequiredMixin, View):
 
         try:
             r = requests.get(
-                'http://www.mapquestapi.com/geocoding/v1/address?location={}&key={}'.format(
+                'https://www.mapquestapi.com/geocoding/v1/address?location={}&key={}'.format(
                     quote(q), gs.settings.mapquest_apikey
                 )
             )
