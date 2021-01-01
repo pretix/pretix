@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2020-12-22 06:00+0000\n"
+"PO-Revision-Date: 2020-12-29 04:00+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -1483,6 +1483,8 @@ msgstr "El sistema no reconeix aquesta combinació de credencials."
 #: pretix/base/forms/auth.py:26 pretix/base/forms/user.py:23
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
+"Per raons de seguretat, si us plau espereu 5 minuts abans de tornar-ho a "
+"provar."
 
 #: pretix/base/forms/auth.py:27 pretix/base/forms/auth.py:223
 msgid "This account is inactive."
@@ -1987,6 +1989,8 @@ msgstr "Permetre múltiples entrades per tiquet"
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
 msgstr ""
+"Feu servir aquesta opció per desactivar els avisos si un tiquet és escanejat "
+"per segon cop."
 
 #: pretix/base/models/checkin.py:39
 msgid "Automatically check out everyone at"
@@ -1994,7 +1998,7 @@ msgstr "Fes check-out automàtic de tothom a"
 
 #: pretix/base/models/checkin.py:45
 msgid "Sales channels to automatically check in"
-msgstr ""
+msgstr "Canals de venda amb check-in automàtic"
 
 #: pretix/base/models/checkin.py:46
 msgid ""
@@ -16145,28 +16149,28 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:40
 msgid "Log in as someone else"
-msgstr ""
+msgstr "Connectar-se amb un altre compte"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:4
 #: pretix/control/templates/pretixcontrol/user/settings.html:6
 msgid "Account settings"
-msgstr ""
+msgstr "Configuració del compte"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:35
 msgid "Login settings"
-msgstr ""
+msgstr "Configuració d'inici de sessió"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:50
 msgid "Change two-factor settings"
-msgstr ""
+msgstr "Canviar la configuració d'autenticació de dos factors"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:65
 msgid "Show applications"
-msgstr ""
+msgstr "Mostrar aplicacions"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:74
 msgid "Show account history"
-msgstr ""
+msgstr "Mostrar l'historial del compte"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:4
 msgid "Staff session"
@@ -16174,23 +16178,23 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:6
 msgid "Session notes"
-msgstr ""
+msgstr "Notes de la sessió"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:17
 msgid "Audit log"
-msgstr ""
+msgstr "Registre d'auditoria"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:30
 msgid "Method"
-msgstr ""
+msgstr "Mètode"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:31
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:32
 msgid "On behalf of"
-msgstr ""
+msgstr "En nom de"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:8
 msgid ""
@@ -16201,12 +16205,12 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:18
 msgid "Start session"
-msgstr ""
+msgstr "Iniciar sessió"
 
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:4
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:6
 msgid "Anonymize user"
-msgstr ""
+msgstr "Anonimitzar usuari"
 
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:11
 msgid "Disable and anonymize user"
@@ -16215,12 +16219,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
 msgid "Create user"
-msgstr ""
+msgstr "Crear usuari"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:11
 #: pretix/control/templates/pretixcontrol/users/form.html:26
 msgid "Base settings"
-msgstr ""
+msgstr "Configuració base"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:18
 #: pretix/control/templates/pretixcontrol/users/form.html:34
@@ -16229,15 +16233,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:11
 msgid "Send password reset email"
-msgstr ""
+msgstr "Enviar correu electrònic de restabliment de clau d'accés"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:16
 msgid "Impersonate user"
-msgstr ""
+msgstr "Impersonar usuari"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:18
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonimitzar"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:36
 msgid "Authentication backend"
@@ -16258,19 +16262,19 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:83
 msgid "User created."
-msgstr ""
+msgstr "S'ha creat l'usuari."
 
 #: pretix/control/templates/pretixcontrol/users/index.html:30
 msgid "Create a new user"
-msgstr ""
+msgstr "Crear un nou usuari"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:7
 msgid "Create multiple vouchers"
-msgstr ""
+msgstr "Crear múltiples vals"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:12
 msgid "Voucher codes"
-msgstr ""
+msgstr "Codis de vals"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
@@ -16278,16 +16282,16 @@ msgstr "Prefix (opcional)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
-msgstr ""
+msgstr "Generar codis a l'atzar"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:29
 msgid "Copy codes"
-msgstr ""
+msgstr "Copiar codis"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:39
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:27
 msgid "Voucher details"
-msgstr ""
+msgstr "Detalls del val"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:44
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:46
@@ -16306,22 +16310,22 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
 msgid "Delete voucher"
-msgstr ""
+msgstr "Esborrar val"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
-msgstr ""
+msgstr "Segur que voleu esborrar el val <strong>%(voucher)s</strong> ?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
 msgid "Delete vouchers"
-msgstr ""
+msgstr "Esborrar vals"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:10
 msgid "Are you sure you want to delete the following vouchers?"
-msgstr ""
+msgstr "Segur que voleu esborrar els vals següents ?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:21
 msgid ""
@@ -16331,16 +16335,16 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
-msgstr ""
+msgstr "Aquest val ja ha estat fet servir. No es recomanable de modificar-lo."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
 msgid "Order %(code)s"
-msgstr ""
+msgstr "Comanda %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
 msgid "Voucher link"
-msgstr ""
+msgstr "Enllaç al val"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:89
 msgid "Voucher history"
@@ -16358,12 +16362,12 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:66
 msgid "You haven't created any vouchers yet."
-msgstr ""
+msgstr "Encara no heu creat cap val."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:73
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:80
 msgid "Create a new voucher"
-msgstr ""
+msgstr "Crear un nou val"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:75
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:83
@@ -16377,11 +16381,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:105
 msgid "Redemptions"
-msgstr ""
+msgstr "Bescanvis"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:110
 msgid "Expiry"
-msgstr ""
+msgstr "Venciment"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:167
 #, python-format
@@ -16409,7 +16413,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:43
 msgid "Redeemed vouchers"
-msgstr ""
+msgstr "Vals bescanviats"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:57
 msgid "Empty tag"
@@ -16418,7 +16422,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:6
 msgid "Delete entry"
-msgstr ""
+msgstr "Esborrar entrada"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
@@ -16435,7 +16439,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:21
 msgid "Send vouchers"
-msgstr ""
+msgstr "Enviar vals"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:27
 msgid ""
@@ -16457,11 +16461,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:57
 msgid "Send as many vouchers as possible"
-msgstr ""
+msgstr "Enviar tants vals com sigui possible"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:66
 msgid "Sales estimate"
-msgstr ""
+msgstr "Estimació de vendes"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:69
 #, python-format
@@ -16473,11 +16477,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:93
 msgid "Successfully redeemed"
-msgstr ""
+msgstr "Bescanviat amb èxit"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:135
 msgid "On the list since"
-msgstr ""
+msgstr "A la llista des de"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:158
 msgid ""
@@ -16499,7 +16503,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:189
 msgid "Send a voucher"
-msgstr ""
+msgstr "Enviar un val"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:196
 msgid "Move to the top of the list"
@@ -16511,11 +16515,11 @@ msgstr ""
 
 #: pretix/control/templatetags/hierarkey_form.py:44
 msgid "Organizer-level settings"
-msgstr ""
+msgstr "Configuració del nivell de l'organitzador"
 
 #: pretix/control/templatetags/hierarkey_form.py:44
 msgid "Site-level settings"
-msgstr ""
+msgstr "Configuració del lloc"
 
 #: pretix/control/templatetags/hierarkey_form.py:47
 msgid ""
@@ -16958,10 +16962,8 @@ msgid "The order of categories has been updated."
 msgstr ""
 
 #: pretix/control/views/item.py:339
-#, fuzzy
-#| msgid "Street address"
 msgid "Street"
-msgstr "Adreça"
+msgstr "Carrer"
 
 #: pretix/control/views/item.py:392
 msgid "Some of the provided question ids are invalid."
@@ -16995,10 +16997,8 @@ msgid "The new quota has been created."
 msgstr ""
 
 #: pretix/control/views/item.py:804
-#, fuzzy
-#| msgid "Gift card"
 msgid "Exit scans"
-msgstr "Targeta regal"
+msgstr "Escanejos de sortida"
 
 #: pretix/control/views/item.py:811
 msgid "Vouchers and waiting list reservations"
@@ -17006,11 +17006,11 @@ msgstr ""
 
 #: pretix/control/views/item.py:826
 msgid "Available quota"
-msgstr ""
+msgstr "Quota disponible"
 
 #: pretix/control/views/item.py:832
 msgid "Waiting list (pending)"
-msgstr ""
+msgstr "Llista d'espera (pendent)"
 
 #: pretix/control/views/item.py:839
 msgid "Currently for sale"
@@ -17019,7 +17019,7 @@ msgstr ""
 #: pretix/control/views/item.py:893 pretix/control/views/item.py:939
 #: pretix/control/views/item.py:993
 msgid "The requested quota does not exist."
-msgstr ""
+msgstr "La quota que heu demanat no existeix."
 
 #: pretix/control/views/item.py:914
 msgid "The quota has been re-opened and will not close again."
@@ -17031,7 +17031,7 @@ msgstr ""
 
 #: pretix/control/views/item.py:1030
 msgid "The requested item does not exist."
-msgstr ""
+msgstr "L'element que heu demanat no existeix pas."
 
 #: pretix/control/views/item.py:1165
 msgid ""
@@ -17054,20 +17054,20 @@ msgstr ""
 
 #: pretix/control/views/item.py:1374
 msgid "The selected product has been deleted."
-msgstr ""
+msgstr "El producte seleccionat ha estat esborrat."
 
 #: pretix/control/views/item.py:1383
 msgid "The selected product has been deactivated."
-msgstr ""
+msgstr "El producte seleccionat ha estat desactivat."
 
 #: pretix/control/views/main.py:187
 msgid "You do not have permission to clone this event."
-msgstr ""
+msgstr "No teniu permís per clonar aquest event."
 
 #: pretix/control/views/main.py:250
 #, python-brace-format
 msgid "Team {event}"
-msgstr ""
+msgstr "Equip {event}"
 
 #: pretix/control/views/oauth.py:85
 msgid "A new client secret has been generated and is now effective."
@@ -17075,19 +17075,19 @@ msgstr ""
 
 #: pretix/control/views/oauth.py:143
 msgid "Access for the selected application has been revoked."
-msgstr ""
+msgstr "S'ha revocat l'accés a l'aplicació seleccionada."
 
 #: pretix/control/views/orderimport.py:33
 msgid "Please only upload CSV files."
-msgstr ""
+msgstr "Si us plau pugeu només fitxers CSV."
 
 #: pretix/control/views/orderimport.py:39
 msgid "Please do not upload files larger than 10 MB."
-msgstr ""
+msgstr "Si us plau no pugeu fitxers més grans de 10 MB."
 
 #: pretix/control/views/orderimport.py:96
 msgid "The import was successful."
-msgstr ""
+msgstr "La importació ha anat bé."
 
 #: pretix/control/views/orderimport.py:106
 msgid "We've been unable to parse the uploaded file as a CSV file."
@@ -21557,19 +21557,15 @@ msgstr "Aquesta comanda està pendent de pagament."
 
 #: pretix/presale/views/order.py:762
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "No podeu modificar aquesta comanda"
 
 #: pretix/presale/views/order.py:825 pretix/presale/views/order.py:830
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "You chose an invalid cancellation fee."
-msgstr "Manté una tarifa fixa de cancel·lació"
+msgstr "Heu triat una taxa de cancel·lació no vàlida."
 
 #: pretix/presale/views/order.py:855
-#, fuzzy
-#| msgid "The task has been completed."
 msgid "The cancellation has been requested."
-msgstr "S'ha completat la tasca."
+msgstr "S'ha demanat la cancel·lació."
 
 #: pretix/presale/views/order.py:909
 msgid "Ticket download is not (yet) enabled for this order."
@@ -21599,7 +21595,7 @@ msgstr ""
 
 #: pretix/presale/views/user.py:36
 msgid "We already sent you an email in the last 24 hours."
-msgstr ""
+msgstr "Ja us hem enviat un correu electrònic durant les darreres 24 hores."
 
 #: pretix/presale/views/user.py:46
 msgid "Your orders for {}"
@@ -21608,6 +21604,8 @@ msgstr "Les vostres comandes per a {}"
 #: pretix/presale/views/user.py:54
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
+"Tenim problemes enviant correus electrònics ara mateix. Si us plau, proveu-"
+"ho més tard."
 
 #: pretix/presale/views/user.py:57
 msgid ""
@@ -21621,25 +21619,27 @@ msgstr "Les llistes d'espera no estan habilitades per a aquest esdeveniment."
 
 #: pretix/presale/views/waiting.py:81
 msgid "We could not identify the product you selected."
-msgstr ""
+msgstr "No podem identificar el producte que heu seleccionat."
 
 #: pretix/presale/views/waiting.py:85
-#, fuzzy
-#| msgid "This voucher is not valid for this product."
 msgid "The waiting list is disabled for this product."
-msgstr "Aquest val no és vàlid per a aquest producte."
+msgstr "La llista d'espera està desactivada per a aquest producte."
 
 #: pretix/presale/views/waiting.py:106
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"No us podeu afegir a la llista d'espera perquè aquest producte encara està "
+"disponible."
 
 #: pretix/presale/views/waiting.py:111
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
+"Us hem afegit a la llista d'espera. Rebreu un correu electrònic quan hi "
+"torni a haver tiquets disponibles."
 
 #: pretix/presale/views/widget.py:264
 msgctxt "widget"
@@ -21656,12 +21656,12 @@ msgstr ""
 
 #: pretix/presale/views/widget.py:300
 msgid "This is not an event series."
-msgstr ""
+msgstr "Això no és una sèrie d'events."
 
 #: pretix/presale/views/widget.py:348
 #, python-format
 msgid "from %(start_date)s"
-msgstr ""
+msgstr "des de %(start_date)s"
 
 #: pretix/settings.py:427
 msgid "English"
