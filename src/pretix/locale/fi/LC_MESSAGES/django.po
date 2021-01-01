@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2020-11-13 03:00+0000\n"
+"PO-Revision-Date: 2021-01-02 07:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -318,37 +318,27 @@ msgid "Ticket check-in reverted"
 msgstr "Lipun lunastus peruutettu"
 
 #: pretix/api/webhooks.py:235
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "Tapahtuman päivämäärä"
+msgstr "Tapahtuma luotu"
 
 #: pretix/api/webhooks.py:239 pretix/api/webhooks.py:243
-#, fuzzy
-#| msgid "Event end"
 msgid "Event details changed"
-msgstr "Tapahtuma päättyy"
+msgstr "Tapahtuman tiedot muutettu"
 
 #: pretix/api/webhooks.py:247
-#, fuzzy
-#| msgid "Event series"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Tapahtumasarja"
+msgstr "Tapahtumapäivä lisätty"
 
 #: pretix/api/webhooks.py:251
-#, fuzzy
-#| msgid "Event series"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "Tapahtumasarja"
+msgstr "Tapahtumapäivä muutettu"
 
 #: pretix/api/webhooks.py:255
-#, fuzzy
-#| msgid "Event series"
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr "Tapahtumasarja"
+msgstr "Tapahtumapäivä poistettu"
 
 #: pretix/base/auth.py:104
 #, python-brace-format
@@ -940,10 +930,8 @@ msgid "Only paid orders"
 msgstr "Vain maksetut tilaukset"
 
 #: pretix/base/exporters/orderlist.py:58
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Include payment amounts"
-msgstr "Tilauksen maksut ja palautukset"
+msgstr "Sisällytä maksujen summat"
 
 #: pretix/base/exporters/orderlist.py:142
 #: pretix/base/exporters/orderlist.py:303
@@ -1094,10 +1082,9 @@ msgid "Positions"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:170
-#, fuzzy, python-brace-format
-#| msgid "Payment method"
+#, python-brace-format
 msgid "Paid by {method}"
-msgstr "Maksutapa"
+msgstr "Maksettu maksutavalla {method}"
 
 #: pretix/base/exporters/orderlist.py:310
 msgid "Fee type"
@@ -2759,10 +2746,8 @@ msgstr ""
 
 #: pretix/base/models/items.py:1090 pretix/base/models/items.py:1094
 #: pretix/base/models/items.py:1098
-#, fuzzy
-#| msgid "Maximum usages"
 msgid "Maximum value"
-msgstr "Enimmäiskäyttökerrat"
+msgstr "Suurin arvo"
 
 #: pretix/base/models/items.py:1148
 msgid "An answer to this question is required to proceed."
@@ -4239,28 +4224,20 @@ msgid ""
 msgstr ""
 
 #: pretix/base/pdf.py:126
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee street"
-msgstr "Osallistujan nimi"
+msgstr "Osallistujan kadunnimi"
 
 #: pretix/base/pdf.py:131
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee ZIP code"
-msgstr "Osallistujan nimi"
+msgstr "Osallistujan postinumero"
 
 #: pretix/base/pdf.py:136
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee city"
-msgstr "Osallistujan sähköposti"
+msgstr "Osallistujan kaupunki"
 
 #: pretix/base/pdf.py:141
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee state"
-msgstr "Osallistujan nimi"
+msgstr "Osallistujan maakunta"
 
 #: pretix/base/pdf.py:146
 msgid "Attendee country"
@@ -4351,10 +4328,8 @@ msgid "Invoice address company"
 msgstr ""
 
 #: pretix/base/pdf.py:249
-#, fuzzy
-#| msgid "Invoice style"
 msgid "Invoice address street"
-msgstr "Laskun tyyli"
+msgstr "Laskutusosoiteen kadunnimi"
 
 #: pretix/base/pdf.py:250
 msgid "Sesame Street 42"
@@ -4377,22 +4352,16 @@ msgid "Sample city"
 msgstr ""
 
 #: pretix/base/pdf.py:264
-#, fuzzy
-#| msgid "Invoice data"
 msgid "Invoice address state"
-msgstr "Laskun tiedot"
+msgstr "Laskutusosoitteen maakunta"
 
 #: pretix/base/pdf.py:265
-#, fuzzy
-#| msgid "Sample Corporation"
 msgid "Sample State"
-msgstr "Esimerkkiyritys"
+msgstr "Esimerkkimaakunta"
 
 #: pretix/base/pdf.py:269
-#, fuzzy
-#| msgid "Invoice recipient:"
 msgid "Invoice address country"
-msgstr "Laskun vastaanottaja:"
+msgstr "Laskutusosoitteen maa"
 
 #: pretix/base/pdf.py:270
 msgid "Atlantis"
@@ -6457,10 +6426,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1874
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee data explanation"
-msgstr "Osallistujan sähköposti"
+msgstr ""
 
 #: pretix/base/settings.py:1877
 msgid ""
@@ -6707,10 +6674,8 @@ msgid "Your ticket shop needs to be offline to use this feature."
 msgstr ""
 
 #: pretix/base/shredder.py:126
-#, fuzzy
-#| msgid "Line number"
 msgid "Phone numbers"
-msgstr "Rivinumero"
+msgstr "Puhelinnumerot"
 
 #: pretix/base/shredder.py:128
 msgid "This will remove all phone numbers from orders."
@@ -7520,10 +7485,8 @@ msgid "No VAT"
 msgstr "Ei ALV:ia"
 
 #: pretix/control/forms/event.py:1183
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Sale not allowed"
-msgstr "Ennakkomyynti ei ole alkanut"
+msgstr "Myynti ei sallittu"
 
 #: pretix/control/forms/event.py:1187
 msgid "Deviating tax rate"
@@ -7630,10 +7593,8 @@ msgid "All orders"
 msgstr "Kaikki tilaukset"
 
 #: pretix/control/forms/filter.py:147
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Valid orders"
-msgstr "Maksetut tilaukset"
+msgstr "Voimassaolevat tilaukset"
 
 #: pretix/control/forms/filter.py:148
 msgid "Paid (or canceled with paid fee)"
@@ -7653,16 +7614,12 @@ msgid "Pending or paid"
 msgstr "Odottaa tai maksettu"
 
 #: pretix/control/forms/filter.py:152
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellations"
-msgstr "Peruutus"
+msgstr "Peruutukset"
 
 #: pretix/control/forms/filter.py:153
-#, fuzzy
-#| msgid "Canceled"
 msgid "Canceled (fully)"
-msgstr "Peruttu"
+msgstr "Peruttu (kokonaan)"
 
 #: pretix/control/forms/filter.py:154
 msgid "Canceled (fully or with paid fee)"
@@ -7673,10 +7630,8 @@ msgid "Cancellation requested"
 msgstr ""
 
 #: pretix/control/forms/filter.py:157
-#, fuzzy
-#| msgid "Payment providers"
 msgid "Payment process"
-msgstr "Maksunvälittäjät"
+msgstr "Maksuprosessi"
 
 #: pretix/control/forms/filter.py:158 pretix/control/forms/filter.py:896
 #: pretix/control/forms/filter.py:1311
@@ -7708,27 +7663,20 @@ msgid "Partially paid"
 msgstr ""
 
 #: pretix/control/forms/filter.py:163
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgid "Underpaid (but confirmed)"
-msgstr "Tilaus vahvistettu"
+msgstr ""
 
 #: pretix/control/forms/filter.py:164
 msgid "Pending (but fully paid)"
 msgstr "Odottaa (maksettu kokonaan)"
 
 #: pretix/control/forms/filter.py:166
-#, fuzzy
-#| msgid "Approval pending"
 msgid "Approval process"
-msgstr "Odottaa hyväksyntää"
+msgstr "Hyväksyntäprosessi"
 
 #: pretix/control/forms/filter.py:167
-#, fuzzy
-#| msgid "Approval pending"
 msgid "Approved, payment pending"
-msgstr "Odottaa hyväksyntää"
+msgstr "Hyväksytty, odottaa maksua"
 
 #: pretix/control/forms/filter.py:168
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:7
@@ -7784,10 +7732,8 @@ msgid "Order placed at or after"
 msgstr ""
 
 #: pretix/control/forms/filter.py:435
-#, fuzzy
-#| msgid "New order placed"
 msgid "Order placed before"
-msgstr "Uusi tilaus tehty"
+msgstr ""
 
 #: pretix/control/forms/filter.py:501 pretix/control/forms/filter.py:506
 #: pretix/control/forms/filter.py:532 pretix/control/forms/filter.py:537
@@ -9460,10 +9406,8 @@ msgid "The event has been created."
 msgstr ""
 
 #: pretix/control/logdisplay.py:403
-#, fuzzy
-#| msgid "The gate has been changed."
 msgid "The event details have been changed."
-msgstr "Portti muutettu."
+msgstr "Tapahtuman tietoja muutettu."
 
 #: pretix/control/logdisplay.py:404
 msgid "An answer option has been added to the question."
@@ -10539,7 +10483,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "Tulevat tapahtumasi"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:20
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -10552,7 +10496,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:39
 msgid "View all upcoming events"
-msgstr ""
+msgstr "Näytä kaikki tulevat tapahtumat"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
@@ -11348,50 +11292,37 @@ msgid "Asked"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:91
-#, fuzzy
-#| msgid "expired"
 msgctxt "attendee_data"
 msgid "Required"
-msgstr "vanhentunut"
+msgstr "Pakollinen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:92
 msgid "Customer data (once per order)"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:112
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Name and address"
-msgstr "Sähköpostiosoite"
+msgstr "Nimi ja osoite"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:117
-#, fuzzy
-#| msgid "Login settings"
 msgid "See invoice settings"
-msgstr "Kirjautumisasetukset"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:123
 msgid "Attendee data (once per admission ticket)"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:132
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Custom fields"
-msgstr "Asiakas"
+msgstr "Mukautetut kentät"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:137
-#, fuzzy
-#| msgid "Questions"
 msgid "Manage questions"
-msgstr "Kysymykset"
+msgstr "Hallitse kysymyksiä"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:144
-#, fuzzy
-#| msgid "Base settings"
 msgid "Other settings"
-msgstr "Perusasetukset"
+msgstr "Muut asetukset"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:150
 msgid "Texts"
@@ -11520,10 +11451,8 @@ msgid "Add a new rule"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:144
-#, fuzzy
-#| msgid "Voucher history"
 msgid "Change history"
-msgstr "Kupongin historia"
+msgstr "Muutoshistoria"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:9
 msgid "You haven't created any tax rules yet."
@@ -11687,10 +11616,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:7
-#, fuzzy
-#| msgid "Event date"
 msgid "Event type"
-msgstr "Tapahtuman päivämäärä"
+msgstr "Tapahtuman tyyppi"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
@@ -11905,18 +11832,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:19
 #: pretix/control/templates/pretixcontrol/item/index.html:21
-#, fuzzy
-#| msgid "Product"
 msgid "Product type"
-msgstr "Tuote"
+msgstr "Tuotetyyppi"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:25
 #: pretix/control/templates/pretixcontrol/item/index.html:27
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Admission product"
-msgstr "Lisätuotteet"
+msgstr "Sisäänpääsytuote"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:27
 #: pretix/control/templates/pretixcontrol/item/index.html:29
@@ -11937,11 +11859,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:44
 #: pretix/control/templates/pretixcontrol/item/index.html:46
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Non-admission product"
-msgstr "Lisätuotteet"
+msgstr "Ei-sisäänpääsytuote"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:46
 #: pretix/control/templates/pretixcontrol/item/index.html:48
@@ -11956,16 +11875,12 @@ msgid "Examples: Merchandise, donations, gift cards, add-ons to a main ticket."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:70
-#, fuzzy
-#| msgid "Product variation"
 msgid "Product without variations"
-msgstr "Tuotevariaatio"
+msgstr "Tuote ilman variaatioita"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:77
-#, fuzzy
-#| msgid "Product variation"
 msgid "Product with multiple variations"
-msgstr "Tuotevariaatio"
+msgstr "Tuote variaatioilla"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:79
 msgid ""
@@ -13520,10 +13435,8 @@ msgid "Go to the ticket shop"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:33
-#, fuzzy
-#| msgid "Search for…"
 msgid "Search query:"
-msgstr "Etsi…"
+msgstr "Hakukysely:"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:48
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:21
@@ -13544,10 +13457,8 @@ msgid "Remove filter"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:116
-#, fuzzy
-#| msgid "Order total"
 msgid "Order  paid / total"
-msgstr "Tilauksen summa"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/search/orders.html:83
@@ -13632,10 +13543,8 @@ msgid "Actions"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
-#, fuzzy
-#| msgid "Search for…"
 msgid "Search"
-msgstr "Etsi…"
+msgstr "Etsi"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
@@ -15476,7 +15385,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:120
 #: pretix/presale/views/widget.py:344
 msgid "Sale over"
-msgstr ""
+msgstr "Myynti päättynyt"
 
 #: pretix/control/views/dashboards.py:483
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:98
@@ -16895,11 +16804,8 @@ msgid "Account"
 msgstr "Tili"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Transfer"
 msgid "Transfer amount"
-msgstr "Siirrä"
+msgstr "Siirron summa"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
@@ -17736,23 +17642,17 @@ msgid "List of orders with taxes"
 msgstr ""
 
 #: pretix/plugins/reports/exporters.py:517
-#, fuzzy
-#| msgid "Any country"
 msgid "Taxes by country"
-msgstr "Mikä tahansa maa"
+msgstr ""
 
 #: pretix/plugins/reports/exporters.py:518
-#, fuzzy
-#| msgid "Business customer"
 msgid "Business customers"
-msgstr "Yritysasiakas"
+msgstr "Yritysasiakkaat"
 
 #: pretix/plugins/reports/exporters.py:662
 #: pretix/plugins/reports/exporters.py:707
-#, fuzzy
-#| msgid "Country"
 msgid "Country code"
-msgstr "Maa"
+msgstr "Maakoodi"
 
 #: pretix/plugins/returnurl/__init__.py:9
 #: pretix/plugins/returnurl/__init__.py:12
@@ -17848,8 +17748,6 @@ msgid "payment pending (except unapproved)"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:122 pretix/plugins/sendmail/views.py:213
-#, fuzzy
-#| msgid "Approval pending"
 msgid "approval pending"
 msgstr "Odottaa hyväksyntää"
 
@@ -18832,7 +18730,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:49
 #, python-format
 msgid "Show all events of %(name)s"
-msgstr ""
+msgstr "Näytä kaikki järjestäjän %(name)s tapahtumat"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:98
 #: pretix/presale/templates/pretixpresale/event/base.html:132
@@ -19376,7 +19274,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:171
 #: pretix/presale/views/widget.py:588
 msgid "The presale period for this event is over."
-msgstr ""
+msgstr "Tämän tapahtuman ennakkomyynti on päättynyt."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:176
 #: pretix/presale/views/widget.py:590
@@ -19584,9 +19482,6 @@ msgid "Request invoice"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:274
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Your information"
 msgstr "Tietosi"
 
@@ -19924,19 +19819,19 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:30
 #: pretix/presale/templates/pretixpresale/organizers/index.html:39
 msgid "Week"
-msgstr ""
+msgstr "Viikko"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:36
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:36
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
 msgid "Month"
-msgstr ""
+msgstr "Kuukausi"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:42
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:42
 #: pretix/presale/templates/pretixpresale/organizers/index.html:50
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:76
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:95
@@ -19949,23 +19844,23 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
-msgstr ""
+msgstr "Menneet tapahtumat"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
-msgstr ""
+msgstr "Tulevat tapahtumat"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:53
 msgid "Show upcoming"
-msgstr ""
+msgstr "Näytä tulevat"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:55
 msgid "Show past events"
-msgstr ""
+msgstr "Näytä menneet tapahtumat"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:137
 msgid "More info"
-msgstr ""
+msgstr "Lisätietoja"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:145
 msgid "No archived events found."
@@ -19973,7 +19868,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:149
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "Tulevia julkisia tapahtumia ei löytynyt."
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
