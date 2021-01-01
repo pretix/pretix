@@ -1,5 +1,7 @@
+import json
 import logging
 from collections import OrderedDict
+from zipfile import ZipFile
 
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -43,8 +45,27 @@ class ShredDownloadView(RecentAuthenticationRequiredMixin, EventPermissionRequir
     template_name = 'pretixcontrol/shredder/download.html'
 
     def get_context_data(self, **kwargs):
+        try:
+            cf = CachedFile.objects.get(pk=kwargs['file'])
+        except CachedFile.DoesNotExist:
+            raise ShredError(_("The download file could no longer be found on the server, please try to start again."))
+
+        with ZipFile(cf.file.file, 'r') as zipfile:
+            indexdata = json.loads(zipfile.read('index.json').decode())
+
+        if indexdata['organizer'] != kwargs['organizer'] or indexdata['event'] != kwargs['event']:
+            raise ShredError(_("This file is from a different event."))
+
+        shredders = []
+        for s in indexdata['shredders']:
+            shredder = self.shredders.get(s)
+            if not shredder:
+                continue
+            shredders.append(shredder)
+
         ctx = super().get_context_data(**kwargs)
         ctx['shredders'] = self.shredders
+        ctx['download_on_shred'] = any(shredder.require_download_confirmation for shredder in shredders)
         ctx['file'] = get_object_or_404(CachedFile, pk=kwargs.get("file"))
         return ctx
 

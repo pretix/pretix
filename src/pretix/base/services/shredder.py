@@ -75,16 +75,19 @@ def shred(event: Event, fileid: str, confirm_code: str) -> None:
         indexdata = json.loads(zipfile.read('index.json').decode())
     if indexdata['organizer'] != event.organizer.slug or indexdata['event'] != event.slug:
         raise ShredError(_("This file is from a different event."))
-    if indexdata['confirm_code'] != confirm_code:
-        raise ShredError(_("The confirm code you entered was incorrect."))
-    if event.logentry_set.filter(datetime__gte=parse(indexdata['time'])):
-        raise ShredError(_("Something happened in your event after the export, please try again."))
-
+    shredders = []
     for s in indexdata['shredders']:
         shredder = known_shredders.get(s)
         if not shredder:
             continue
+        shredders.append(shredder)
+    if any(shredder.require_download_confirmation for shredder in shredders):
+        if indexdata['confirm_code'] != confirm_code:
+            raise ShredError(_("The confirm code you entered was incorrect."))
+    if event.logentry_set.filter(datetime__gte=parse(indexdata['time'])):
+        raise ShredError(_("Something happened in your event after the export, please try again."))
 
+    for shredder in shredders:
         shredder.shred_data()
 
     cf.file.delete(save=False)

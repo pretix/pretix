@@ -11,12 +11,16 @@
           method="post" class="form-horizontal" data-asynctask>
         {% csrf_token %}
         <fieldset>
-            <legend>{% trans "Step 1: Download data" %}</legend>
+            {% if download_on_shred %}
+                <legend>{% trans "Step 1: Download data" %}</legend>
+            {% else %}
+                <legend>{% trans "(Optional) Step 1: Download data" %}</legend>
+            {% endif %}
             <p>
                 {% blocktrans trimmed %}
                     You are about to permanently delete data from the server, even though you might be required to
                     keep
-                    some of this data on file. You should therefore download the following file and store it in a safe
+                    some of this data on file. You can therefore download the following file and store it in a safe
                     place:
                 {% endblocktrans %}
             </p>
@@ -27,18 +31,7 @@
             </p>
         </fieldset>
         <fieldset>
-            <legend>{% trans "Step 2: Confirm download" %}</legend>
-            <p>
-                {% blocktrans trimmed %}
-                    In the downloaded file, there is a text file named "CONFIRM_CODE.txt" with a six-character code.
-                    Please enter this code here to confirm that you successfully downloaded the file.
-                {% endblocktrans %}
-            </p>
-            <input type="text" class="form-control" name="confirm_code" required placeholder="{% trans "Confirmation code" %}">
-            <br>
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Step 3: Confirm deletion" %}</legend>
+            <legend>{% trans "Step 2: Confirm deletion" %}</legend>
             <p>
                 {% blocktrans trimmed with event=request.event.name slug=request.event.slug %}
                 Please re-check that you are fully certain that you want to delete the selected categories of data from the event <strong>{{ event }}</strong>.
@@ -46,7 +39,21 @@
                 {% endblocktrans %}
             </p>
             <input type="text" class="form-control" name="slug" required placeholder="{% trans "Event short name" %}">
+            <br>
         </fieldset>
+        {% if download_on_shred %}
+            <fieldset>
+                <legend>{% trans "Step 3: Confirm download" %}</legend>
+                <p>
+                    {% blocktrans trimmed %}
+                        In the downloaded file, there is a text file named "CONFIRM_CODE.txt" with a six-character code.
+                        Please enter this code here to confirm that you successfully downloaded the file.
+                    {% endblocktrans %}
+                </p>
+                <input type="text" class="form-control" name="confirm_code" required placeholder="{% trans "Confirmation code" %}">
+                <br>
+            </fieldset>
+        {% endif %}
         <input type="hidden" name="file" value="{{ file.pk }}">
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
