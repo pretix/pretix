@@ -142,7 +142,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         data = json.loads(response.content.decode())
         assert data == {
             "name": "30C3",
-            "date_range": "Dec. 26, 2021 00:00",
+            "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -276,7 +276,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         data = json.loads(response.content.decode())
         assert data == {
             "name": "30C3",
-            "date_range": "Dec. 26, 2021 00:00",
+            "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -327,7 +327,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         data = json.loads(response.content.decode())
         assert data == {
             "name": "30C3",
-            "date_range": "Dec. 26, 2021 00:00",
+            "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -394,7 +394,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         data = json.loads(response.content.decode())
         assert data == {
             "name": "30C3",
-            "date_range": "Dec. 26, 2021 00:00",
+            "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
             "currency": "EUR",
             'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
             "show_variations_expanded": False,
