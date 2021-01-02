@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2021-01-02 07:00+0000\n"
+"PO-Revision-Date: 2021-01-02 18:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -6444,6 +6444,9 @@ msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
+"Tarkista, että syötät oikean sähköpostiosoitteen. Lähetämme sinulle "
+"tilausvahvistuksen, joka sisältää linkin, jolla pääset tarkastelemaan "
+"tilaustasi uudelleen myöhemmin."
 
 #: pretix/base/settings.py:1901
 msgid "Help text of the email field"
@@ -6836,7 +6839,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:412
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr ""
+msgstr "powered by <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
@@ -12843,7 +12846,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:293
 #: pretix/presale/templates/pretixpresale/event/order.html:179
 msgid "Ordered items"
-msgstr ""
+msgstr "Tilatut tuotteet"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:313
 #, python-format
@@ -12948,7 +12951,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:828
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:276
 msgid "Total"
-msgstr ""
+msgstr "Kokonaissumma"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:576
 #: pretix/presale/templates/pretixpresale/event/order.html:187
@@ -18717,7 +18720,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/base_footer.html:36
 #, python-format
 msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s>lippukauppa-alustan tarjoaa pretix</a>"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:26
 msgid "This shop is currently only visible to you and your team."
@@ -19698,7 +19701,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
 msgid "Total: %(total)s"
-msgstr ""
+msgstr "Summa: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
 msgid "Registration details"
@@ -20056,7 +20059,7 @@ msgstr ""
 #: pretix/presale/views/widget.py:264
 msgctxt "widget"
 msgid "event ticketing powered by pretix"
-msgstr ""
+msgstr "lippukauppa-alustan tarjoaa pretix"
 
 #: pretix/presale/views/widget.py:279
 msgid "This ticket shop is currently disabled."
