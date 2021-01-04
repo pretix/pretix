@@ -23,11 +23,18 @@ class GeoCodeView(LoginRequiredMixin, View):
             }, status=200)
 
         gs = GlobalSettingsObject()
-        if gs.settings.opencagedata_apikey:
-            res = self._use_opencage(q)
-        elif gs.settings.mapquest_apikey:
-            res = self._use_mapquest(q)
-        else:
+        try:
+            if gs.settings.opencagedata_apikey:
+                res = self._use_opencage(q)
+            elif gs.settings.mapquest_apikey:
+                res = self._use_mapquest(q)
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'results': []
+                }, status=200)
+        except IOError:
+            logger.exception("Geocoding failed")
             return JsonResponse({
                 'success': False,
                 'results': []
@@ -42,21 +49,13 @@ class GeoCodeView(LoginRequiredMixin, View):
     def _use_opencage(self, q):
         gs = GlobalSettingsObject()
 
-        try:
-            r = requests.get(
-                'https://api.opencagedata.com/geocode/v1/json?q={}&key={}'.format(
-                    quote(q), gs.settings.opencagedata_apikey
-                )
+        r = requests.get(
+            'https://api.opencagedata.com/geocode/v1/json?q={}&key={}'.format(
+                quote(q), gs.settings.opencagedata_apikey
             )
-            r.raise_for_status()
-        except IOError:
-            logger.exception("Geocoding failed")
-            return JsonResponse({
-                'success': False,
-                'results': []
-            }, status=200)
-        else:
-            d = r.json()
+        )
+        r.raise_for_status()
+        d = r.json()
         res = [
             {
                 'formatted': r['formatted'],
@@ -69,21 +68,13 @@ class GeoCodeView(LoginRequiredMixin, View):
     def _use_mapquest(self, q):
         gs = GlobalSettingsObject()
 
-        try:
-            r = requests.get(
-                'https://www.mapquestapi.com/geocoding/v1/address?location={}&key={}'.format(
-                    quote(q), gs.settings.mapquest_apikey
-                )
+        r = requests.get(
+            'https://www.mapquestapi.com/geocoding/v1/address?location={}&key={}'.format(
+                quote(q), gs.settings.mapquest_apikey
             )
-            r.raise_for_status()
-        except IOError:
-            logger.exception("Geocoding failed")
-            return JsonResponse({
-                'success': False,
-                'results': []
-            }, status=200)
-        else:
-            d = r.json()
+        )
+        r.raise_for_status()
+        d = r.json()
         res = [
             {
                 'formatted': q,
