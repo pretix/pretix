@@ -25,7 +25,7 @@ class GeoCodeView(LoginRequiredMixin, View):
         gs = GlobalSettingsObject()
         if gs.settings.opencagedata_apikey:
             res = self._use_opencage(q)
-        if gs.settings.mapquest_apikey:
+        elif gs.settings.mapquest_apikey:
             res = self._use_mapquest(q)
         else:
             return JsonResponse({
