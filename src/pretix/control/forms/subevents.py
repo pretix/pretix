@@ -55,6 +55,8 @@ class SubEventForm(I18nModelForm):
             'date_admission': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
             'presale_start': SplitDateTimePickerWidget(),
             'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
+            'geo_lat': forms.NumberInput(attrs={'min': '-90', 'max': '90'}),
+            'geo_lon': forms.NumberInput(attrs={'min': '-180', 'max': '180'}),
         }
 
 

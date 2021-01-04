@@ -68,7 +68,13 @@ $(function () {
 
       function getpoint() {
         if ($lat.val() !== "" && $lon.val() !== "") {
-          return [parseFloat($lat.val().replace(",", ".")), parseFloat($lon.val().replace(",", "."))];
+          var p = [parseFloat($lat.val().replace(",", ".")), parseFloat($lon.val().replace(",", "."))];
+          // Clip to valid ranges. Very invalid lon/lat values can even lead to browser crashes in leaflet apparently
+          if (p[0] < -90) p[0] = -90
+          if (p[0] > 90) p[0] = 90
+          if (p[1] < -180) p[1] = -180
+          if (p[1] > 180) p[1] = 180
+          return p
         } else {
           return [0.0, 0.0];
         }

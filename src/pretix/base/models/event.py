@@ -10,7 +10,9 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from django.core.mail import get_connection
-from django.core.validators import RegexValidator
+from django.core.validators import (
+    MaxValueValidator, MinValueValidator, RegexValidator,
+)
 from django.db import models
 from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery, Value
 from django.template.defaultfilters import date as _date
@@ -393,10 +395,18 @@ class Event(EventMixin, LoggedModel):
     geo_lat = models.FloatField(
         verbose_name=_("Latitude"),
         null=True, blank=True,
+        validators=[
+            MinValueValidator(-90),
+            MaxValueValidator(90),
+        ]
     )
     geo_lon = models.FloatField(
         verbose_name=_("Longitude"),
         null=True, blank=True,
+        validators=[
+            MinValueValidator(-180),
+            MaxValueValidator(180),
+        ]
     )
     plugins = models.TextField(
         null=False, blank=True,
@@ -1121,10 +1131,18 @@ class SubEvent(EventMixin, LoggedModel):
     geo_lat = models.FloatField(
         verbose_name=_("Latitude"),
         null=True, blank=True,
+        validators=[
+            MinValueValidator(-90),
+            MaxValueValidator(90),
+        ]
     )
     geo_lon = models.FloatField(
         verbose_name=_("Longitude"),
-        null=True, blank=True
+        null=True, blank=True,
+        validators=[
+            MinValueValidator(-180),
+            MaxValueValidator(180),
+        ]
     )
     frontpage_text = I18nTextField(
         null=True, blank=True,
