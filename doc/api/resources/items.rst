@@ -36,8 +36,8 @@ admission                             boolean                    ``true`` for it
                                                                  (such as primary tickets) and ``false`` for others
                                                                  (such as add-ons or merchandise).
 position                              integer                    An integer, used for sorting
-picture                               string                     A product picture to be displayed in the shop
-                                                                 (read-only, can be ``null``).
+picture                               file                       A product picture to be displayed in the shop
+                                                                 (can be ``null``).
 sales_channels                        list of strings            Sales channels this product is available on, such as
                                                                  ``"web"`` or ``"resellers"``. Defaults to ``["web"]``.
 available_from                        datetime                   The first date time at which this item can be bought
