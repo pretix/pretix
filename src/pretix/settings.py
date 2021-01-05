@@ -344,6 +344,11 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
+    'TEST_REQUEST_RENDERER_CLASSES': [
+        'rest_framework.renderers.MultiPartRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'pretix.testutils.api.UploadRenderer',
+    ],
     'EXCEPTION_HANDLER': 'pretix.api.exception.custom_exception_handler',
     'UNICODE_JSON': False
 }
