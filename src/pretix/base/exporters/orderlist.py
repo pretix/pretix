@@ -59,6 +59,12 @@ class OrderListExporter(MultiSheetListExporter):
                      initial=False,
                      required=False
                  )),
+                ('group_multiple_choice',
+                 forms.BooleanField(
+                     label=_('Show multiple choice answers grouped in one colum'),
+                     initial=False,
+                     required=False
+                 )),
             ]
         )
 
@@ -449,9 +455,14 @@ class OrderListExporter(MultiSheetListExporter):
         for q in questions:
             if q.type == Question.TYPE_CHOICE_MULTIPLE:
                 options[q.pk] = []
-                for o in q.options.all():
-                    headers.append(str(q.question) + ' – ' + str(o.answer))
-                    options[q.pk].append(o)
+                if form_data['group_multiple_choice']:
+                    for o in q.options.all():
+                        options[q.pk].append(o)
+                    headers.append(str(q.question))
+                else:
+                    for o in q.options.all():
+                        headers.append(str(q.question) + ' – ' + str(o.answer))
+                        options[q.pk].append(o)
             else:
                 headers.append(str(q.question))
         headers += [
@@ -551,8 +562,11 @@ class OrderListExporter(MultiSheetListExporter):
                         acache[a.question_id] = str(a)
                 for q in questions:
                     if q.type == Question.TYPE_CHOICE_MULTIPLE:
-                        for o in options[q.pk]:
-                            row.append(_('Yes') if o.pk in acache.get(q.pk, set()) else _('No'))
+                        if form_data['group_multiple_choice']:
+                            row.append(", ".join(str(o.answer) for o in options[q.pk] if o.pk in acache.get(q.pk, set())))
+                        else:
+                            for o in options[q.pk]:
+                                row.append(_('Yes') if o.pk in acache.get(q.pk, set()) else _('No'))
                     else:
                         row.append(acache.get(q.pk, ''))
 
