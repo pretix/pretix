@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2021-01-02 18:00+0000\n"
+"PO-Revision-Date: 2021-01-07 03:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -790,7 +790,7 @@ msgstr ""
 
 #: pretix/base/exporters/invoices.py:187
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "Näytetty vieras valuutta"
 
 #: pretix/base/exporters/invoices.py:188
 msgid "Foreign currency rate"
@@ -7667,7 +7667,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:163
 msgid "Underpaid (but confirmed)"
-msgstr ""
+msgstr "Osa maksamatta (mutta hyväksytty)"
 
 #: pretix/control/forms/filter.py:164
 msgid "Pending (but fully paid)"
@@ -7736,7 +7736,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:435
 msgid "Order placed before"
-msgstr ""
+msgstr "Tilattu jälkeen"
 
 #: pretix/control/forms/filter.py:501 pretix/control/forms/filter.py:506
 #: pretix/control/forms/filter.py:532 pretix/control/forms/filter.py:537
@@ -11309,7 +11309,7 @@ msgstr "Nimi ja osoite"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:117
 msgid "See invoice settings"
-msgstr ""
+msgstr "Katso laskun asetukset"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:123
 msgid "Attendee data (once per admission ticket)"
@@ -13461,7 +13461,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:116
 msgid "Order  paid / total"
-msgstr ""
+msgstr "Tilaus  maksettu / kokonaissumma"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/search/orders.html:83
@@ -16898,7 +16898,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:67
 msgid "Amount from"
-msgstr ""
+msgstr "Summa alkaen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:69
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:75
@@ -17051,7 +17051,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:106
 msgid "No exports have been created yet."
-msgstr ""
+msgstr "Vientejä ei ole vielä tehty."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
