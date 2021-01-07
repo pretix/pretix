@@ -1026,7 +1026,7 @@ class Question(LoggedModel):
         (TYPE_PHONENUMBER, _("Phone number")),
     )
     UNLOCALIZED_TYPES = [TYPE_DATE, TYPE_TIME, TYPE_DATETIME]
-    ASK_DURING_CHECKIN_UNSUPPORTED = [TYPE_FILE, TYPE_PHONENUMBER]
+    ASK_DURING_CHECKIN_UNSUPPORTED = [TYPE_PHONENUMBER]
 
     event = models.ForeignKey(
         Event,
@@ -1069,6 +1069,7 @@ class Question(LoggedModel):
     )
     ask_during_checkin = models.BooleanField(
         verbose_name=_('Ask during check-in instead of in the ticket buying process'),
+        help_text=_('Not supported by all check-in apps for all question types.'),
         default=False
     )
     hidden = models.BooleanField(
