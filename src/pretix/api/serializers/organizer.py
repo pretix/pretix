@@ -1,13 +1,15 @@
+import logging
 from decimal import Decimal
 
 from django.db.models import Q
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
-from hierarkey.proxy import HierarkeyProxy
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
+from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
@@ -16,8 +18,10 @@ from pretix.base.models import (
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
-from pretix.base.settings import DEFAULTS, validate_organizer_settings
+from pretix.base.settings import validate_organizer_settings
 from pretix.helpers.urls import build_absolute_uri
+
+logger = logging.getLogger(__name__)
 
 
 class OrganizerSerializer(I18nAwareModelSerializer):
@@ -207,7 +211,7 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         )
 
 
-class OrganizerSettingsSerializer(serializers.Serializer):
+class OrganizerSettingsSerializer(SettingsSerializer):
     default_fields = [
         'organizer_info_text',
         'event_list_type',
@@ -225,40 +229,13 @@ class OrganizerSettingsSerializer(serializers.Serializer):
         'theme_color_danger',
         'theme_color_background',
         'theme_round_borders',
-        'primary_font'
+        'primary_font',
+        'organizer_logo_image'
     ]
 
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
-        self.changed_data = []
         super().__init__(*args, **kwargs)
-        for fname in self.default_fields:
-            kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
-            if callable(kwargs):
-                kwargs = kwargs()
-            kwargs.setdefault('required', False)
-            kwargs.setdefault('allow_null', True)
-            form_kwargs = DEFAULTS[fname].get('form_kwargs', {})
-            if callable(form_kwargs):
-                form_kwargs = form_kwargs()
-            if 'serializer_class' not in DEFAULTS[fname]:
-                raise ValidationError('{} has no serializer class'.format(fname))
-            f = DEFAULTS[fname]['serializer_class'](
-                **kwargs
-            )
-            f._label = form_kwargs.get('label', fname)
-            f._help_text = form_kwargs.get('help_text')
-            self.fields[fname] = f
-
-    def update(self, instance: HierarkeyProxy, validated_data):
-        for attr, value in validated_data.items():
-            if value is None:
-                instance.delete(attr)
-                self.changed_data.append(attr)
-            elif instance.get(attr, as_type=type(value)) != value:
-                instance.set(attr, value)
-                self.changed_data.append(attr)
-        return instance
 
     def validate(self, data):
         data = super().validate(data)
@@ -266,3 +243,11 @@ class OrganizerSettingsSerializer(serializers.Serializer):
         settings_dict.update(data)
         validate_organizer_settings(self.organizer, settings_dict)
         return data
+
+    def get_new_filename(self, name: str) -> str:
+        nonce = get_random_string(length=8)
+        fname = '%s/%s.%s.%s' % (
+            self.organizer.slug, name.split('/')[-1], nonce, name.split('.')[-1]
+        )
+        # TODO: make sure pub is always correct
+        return 'pub/' + fname

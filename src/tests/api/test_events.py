@@ -5,6 +5,7 @@ from unittest import mock
 
 import pytest
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
@@ -1105,3 +1106,74 @@ def test_patch_event_settings_validation(token_client, organizer, event):
     assert resp.data == {
         'cancel_allow_user_until': ['Invalid relative date']
     }
+
+
+@pytest.mark.django_db
+def test_patch_event_settings_file(token_client, organizer, event):
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile('file.png', 'invalid png content')
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'application/pdf',
+            'file': ContentFile('file.pdf', 'invalid pdf content')
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.pdf"',
+    )
+    assert r.status_code == 201
+    file_id_pdf = r.data['id']
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'logo_image': 'invalid'
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'logo_image': ['The submitted file ID was not found.']
+    }
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'logo_image': file_id_pdf
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'logo_image': ['The submitted file has a file type that is not allowed in this field.']
+    }
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'logo_image': file_id_png
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['logo_image'].startswith('http')
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'logo_image': None
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['logo_image'] is None

@@ -183,6 +183,9 @@ Relative date         *either* String in ISO 8601  ``"2017-12-27"``,
                       constructed from a number of
                       days before the base point
                       and the base point.
+File                  URL in responses, ``file:``  ``"https://…"``, ``"file:…"``
+                      specifiers in requests
+                      (see below).
 ===================== ============================ ===================================
 
 Query parameters
@@ -226,5 +229,49 @@ We store idempotency keys for 24 hours, so you should never retry a request afte
 
 All ``POST``, ``PUT``, ``PATCH``, or ``DELETE`` api calls support idempotency keys. Adding an idempotency key to a
 ``GET``, ``HEAD``, or ``OPTIONS`` request has no effect.
+
+
+File upload
+-----------
+
+In some places, the API supports working with files, for example when setting the picture of a product. In this case,
+you will first need to make a separate request to our file upload endpoint:
+
+.. sourcecode:: http
+
+   POST /api/v1/upload HTTP/1.1
+   Host: pretix.eu
+   Authorization: Token e1l6gq2ye72thbwkacj7jbri7a7tvxe614ojv8ybureain92ocub46t5gab5966k
+   Content-Type: image/png
+   Content-Disposition: attachment; filename="logo.png"
+   Content-Length: 1234
+
+   <raw file content>
+
+Note that the ``Content-Type`` and ``Content-Disposition`` headers are required. If the upload was successful, you will
+receive a JSON response with the ID of the file:
+
+.. sourcecode:: http
+
+   HTTP/1.1 201 Created
+   Content-Type: application/json
+
+   {
+     "id": "file:1cd99455-1ebd-4cda-b1a2-7a7d2a969ad1"
+   }
+
+You can then use this file ID in the request you want to use it in. File IDs are currently valid for 24 hours and can only
+be used using the same authorization method and user that was used to upload them.
+
+.. sourcecode:: http
+
+   PATCH /api/v1/organizers/test/events/test/items/3/ HTTP/1.1
+   Host: pretix.eu
+   Content-Type: application/json
+
+   {
+     "picture": "file:1cd99455-1ebd-4cda-b1a2-7a7d2a969ad1"
+   }
+
 
 .. _CSRF policies: https://docs.djangoproject.com/en/1.11/ref/csrf/#ajax

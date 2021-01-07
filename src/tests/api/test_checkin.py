@@ -7,6 +7,7 @@ from unittest import mock
 from urllib.parse import quote as urlquote
 
 import pytest
+from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
@@ -995,3 +996,46 @@ def test_question_multiple_choice(token_client, organizer, clist, event, order, 
     with scopes_disabled():
         assert order.positions.first().answers.get(question=question[0]).answer == 'M, L'
         assert set(order.positions.first().answers.get(question=question[0]).options.all()) == {question[1], question[2]}
+
+
+@pytest.mark.django_db
+def test_question_upload(token_client, organizer, clist, event, order, question):
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile('file.png', 'invalid png content')
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+
+    with scopes_disabled():
+        p = order.positions.first()
+    question[0].type = 'F'
+    question[0].save()
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'answers': {question[0].pk: "invalid"}}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'answers': {question[0].pk: file_id_png}}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert order.positions.first().answers.get(question=question[0]).answer.startswith('file://')
+        assert order.positions.first().answers.get(question=question[0]).file

@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 import dateutil
+from django.core.files import File
 from django.db import transaction
 from django.db.models.functions import TruncDate
 from django.dispatch import receiver
@@ -125,6 +126,14 @@ def _save_answers(op, answers, given_answers):
             else:
                 qa = op.answers.create(question=q, answer=", ".join([str(o) for o in a]))
             qa.options.add(*a)
+        elif isinstance(a, File):
+            if q in answers:
+                qa = answers[q]
+            else:
+                qa = op.answers.create(question=q, answer=str(a))
+            qa.file.save(a.name, a, save=False)
+            qa.answer = 'file://' + qa.file.name
+            qa.save()
         else:
             if q in answers:
                 qa = answers[q]

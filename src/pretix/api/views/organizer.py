@@ -425,7 +425,9 @@ class OrganizerSettingsView(views.APIView):
     permission = 'can_change_organizer_settings'
 
     def get(self, request, *args, **kwargs):
-        s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer)
+        s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer, context={
+            'request': request
+        })
         if 'explain' in request.GET:
             return Response({
                 fname: {
@@ -439,7 +441,9 @@ class OrganizerSettingsView(views.APIView):
     def patch(self, request, *wargs, **kwargs):
         s = OrganizerSettingsSerializer(
             instance=request.organizer.settings, data=request.data, partial=True,
-            organizer=request.organizer
+            organizer=request.organizer, context={
+                'request': request
+            }
         )
         s.is_valid(raise_exception=True)
         with transaction.atomic():
@@ -451,5 +455,7 @@ class OrganizerSettingsView(views.APIView):
             )
         if any(p in s.changed_data for p in SETTINGS_AFFECTING_CSS):
             regenerate_organizer_css.apply_async(args=(request.organizer.pk,))
-        s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer)
+        s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer, context={
+            'request': request
+        })
         return Response(s.data)

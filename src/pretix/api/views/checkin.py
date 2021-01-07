@@ -22,7 +22,7 @@ from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Checkin, CheckinList, Event, Order, OrderPosition,
+    CachedFile, Checkin, CheckinList, Event, Order, OrderPosition, Question,
 )
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, perform_checkin,
@@ -302,7 +302,10 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             for q in op.item.questions.filter(ask_during_checkin=True):
                 if str(q.pk) in aws:
                     try:
-                        given_answers[q] = q.clean_answer(aws[str(q.pk)])
+                        if q.type == Question.TYPE_FILE:
+                            given_answers[q] = self._handle_file_upload(aws[str(q.pk)])
+                        else:
+                            given_answers[q] = q.clean_answer(aws[str(q.pk)])
                     except ValidationError:
                         pass
 
@@ -352,3 +355,25 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
             }, status=201)
+
+    def _handle_file_upload(self, data):
+        try:
+            cf = CachedFile.objects.get(
+                session_key=f'api-upload-{str(type(self.request.user or self.request.auth))}-{(self.request.user or self.request.auth).pk}',
+                file__isnull=False,
+                pk=data[len("file:"):],
+            )
+        except (ValidationError, IndexError):  # invalid uuid
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
+        except CachedFile.DoesNotExist:
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
+
+        allowed_types = (
+            'image/png', 'image/jpeg', 'image/gif', 'application/pdf'
+        )
+        if cf.type not in allowed_types:
+            raise ValidationError('The submitted file "{fid}" has a file type that is not allowed in this field.'.format(fid=data))
+        if cf.file.size > 10 * 1024 * 1024:
+            raise ValidationError('The submitted file "{fid}" is too large to be used in this field.'.format(fid=data))
+
+        return cf.file

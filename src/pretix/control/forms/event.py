@@ -27,7 +27,7 @@ from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.control.forms import (
-    ExtFileField, MultipleLanguagesWidget, SlugWidget, SplitDateTimeField,
+    MultipleLanguagesWidget, SlugWidget, SplitDateTimeField,
     SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
@@ -416,36 +416,6 @@ class EventSettingsForm(SettingsForm):
                     "restrict the set of selectable titles."),
         required=False,
     )
-    logo_image = ExtFileField(
-        label=_('Header image'),
-        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
-        required=False,
-        max_size=10 * 1024 * 1024,
-        help_text=_('If you provide a logo image, we will by default not show your event name and date '
-                    'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
-                    'can increase the size with the setting below. We recommend not using small details on the picture '
-                    'as it will be resized on smaller screens.')
-    )
-    logo_image_large = forms.BooleanField(
-        label=_('Use header image in its full size'),
-        help_text=_('We recommend to upload a picture at least 1170 pixels wide.'),
-        required=False,
-    )
-    logo_show_title = forms.BooleanField(
-        label=_('Show event title even if a header image is present'),
-        help_text=_('The title will only be shown on the event front page.'),
-        required=False,
-    )
-    og_image = ExtFileField(
-        label=_('Social media image'),
-        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
-        required=False,
-        max_size=10 * 1024 * 1024,
-        help_text=_('This picture will be used as a preview if you post links to your ticket shop on social media. '
-                    'Facebook advises to use a picture size of 1200 x 630 pixels, however some platforms like '
-                    'WhatsApp and Reddit only show a square preview, so we recommend to make sure it still looks good '
-                    'only the center square is shown. If you do not fill this, we will use the logo given above.')
-    )
 
     auto_fields = [
         'imprint_url',
@@ -498,6 +468,10 @@ class EventSettingsForm(SettingsForm):
         'theme_color_background',
         'theme_round_borders',
         'primary_font',
+        'logo_image',
+        'logo_image_large',
+        'logo_show_title',
+        'og_image',
     ]
 
     def clean(self):
@@ -733,6 +707,7 @@ class InvoiceSettingsForm(SettingsForm):
         'invoice_additional_text',
         'invoice_footer_text',
         'invoice_eu_currencies',
+        'invoice_logo_image',
     ]
 
     invoice_generate_sales_channels = forms.MultipleChoiceField(
@@ -751,13 +726,6 @@ class InvoiceSettingsForm(SettingsForm):
         widget=forms.Select, required=True,
         label=_("Invoice language"),
         choices=[('__user__', _('The user\'s language'))] + settings.LANGUAGES,
-    )
-    invoice_logo_image = ExtFileField(
-        label=_('Logo image'),
-        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
-        required=False,
-        max_size=10 * 1024 * 1024,
-        help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
     )
 
     def __init__(self, *args, **kwargs):

@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from pretix.api.serializers.event import MetaDataField
+from pretix.api.serializers.fields import UploadedFileField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemVariation,
@@ -113,6 +114,9 @@ class ItemSerializer(I18nAwareModelSerializer):
     variations = InlineItemVariationSerializer(many=True, required=False)
     tax_rate = ItemTaxRateField(source='*', read_only=True)
     meta_data = MetaDataField(required=False, source='*')
+    picture = UploadedFileField(required=False, allow_null=True, allowed_types=(
+        'image/png', 'image/jpeg', 'image/gif'
+    ), max_size=10 * 1024 * 1024)
 
     class Meta:
         model = Item
@@ -123,7 +127,7 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
                   'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard', 'meta_data')
-        read_only_fields = ('has_variations', 'picture')
+        read_only_fields = ('has_variations',)
 
     def validate(self, data):
         data = super().validate(data)
