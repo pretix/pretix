@@ -427,28 +427,30 @@ def base_placeholders(sender, **kwargs):
             'orders', ['event', 'orders'], lambda event, orders: '\n' + '\n\n'.join(
                 '* {} - {}'.format(
                     order.full_code,
-                    build_absolute_uri(event, 'presale:event.order', kwargs={
+                    build_absolute_uri(event, 'presale:event.order.open', kwargs={
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'order': order.code,
-                        'secret': order.secret
+                        'secret': order.secret,
+                        'hash': order.email_confirm_hash(),
                     }),
                 )
                 for order in orders
             ), lambda event: '\n' + '\n\n'.join(
                 '* {} - {}'.format(
                     '{}-{}'.format(event.slug.upper(), order['code']),
-                    build_absolute_uri(event, 'presale:event.order', kwargs={
+                    build_absolute_uri(event, 'presale:event.order.open', kwargs={
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'order': order['code'],
-                        'secret': order['secret']
+                        'secret': order['secret'],
+                        'hash': order['hash'],
                     }),
                 )
                 for order in [
-                    {'code': 'F8VVL', 'secret': '6zzjnumtsx136ddy'},
-                    {'code': 'HIDHK', 'secret': '98kusd8ofsj8dnkd'},
-                    {'code': 'OPKSB', 'secret': '09pjdksflosk3njd'}
+                    {'code': 'F8VVL', 'secret': '6zzjnumtsx136ddy', 'hash': 'abcdefghi'},
+                    {'code': 'HIDHK', 'secret': '98kusd8ofsj8dnkd', 'hash': 'jklmnopqr'},
+                    {'code': 'OPKSB', 'secret': '09pjdksflosk3njd', 'hash': 'stuvwxy2z'}
                 ]
             ),
         ),
