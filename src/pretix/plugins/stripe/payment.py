@@ -864,6 +864,21 @@ class StripeCC(StripeMethod):
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
 
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        try:
+            if "charges" in pi:
+                card = pi["charges"]["data"][0]["payment_method_details"]["card"]
+            else:
+                card = pi["source"]["card"]
+        except:
+            logger.exception('Could not parse payment data')
+            return super().payment_presale_render(payment)
+        return f'{self.public_name}: ' \
+               f'{card.get("brand", "").title()} ' \
+               f'************{card.get("last4", "****")}, ' \
+               f'{_("expires {month}/{year}").format(month=card.get("exp_month"), year=card.get("exp_year"))}'
+
 
 class StripeGiropay(StripeMethod):
     identifier = 'stripe_giropay'
@@ -928,6 +943,14 @@ class StripeGiropay(StripeMethod):
             return True
         return False
 
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        try:
+            return gettext('Bank account at {bank}').format(bank=pi["source"]["giropay"]["bank_name"])
+        except:
+            logger.exception('Could not parse payment data')
+            return super().payment_presale_render(payment)
+
 
 class StripeIdeal(StripeMethod):
     identifier = 'stripe_ideal'
@@ -971,6 +994,14 @@ class StripeIdeal(StripeMethod):
 
     def checkout_prepare(self, request, cart):
         return True
+
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        try:
+            return gettext('Bank account at {bank}').format(bank=pi["source"]["ideal"]["bank"])
+        except:
+            logger.exception('Could not parse payment data')
+            return super().payment_presale_render(payment)
 
 
 class StripeAlipay(StripeMethod):
@@ -1079,6 +1110,14 @@ class StripeBancontact(StripeMethod):
             return True
         return False
 
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        try:
+            return gettext('Bank account at {bank}').format(bank=pi["source"]["bancontact"]["bank_name"])
+        except:
+            logger.exception('Could not parse payment data')
+            return super().payment_presale_render(payment)
+
 
 class StripeSofort(StripeMethod):
     identifier = 'stripe_sofort'
@@ -1148,6 +1187,17 @@ class StripeSofort(StripeMethod):
     def payment_can_retry(self, payment):
         return payment.state != OrderPayment.PAYMENT_STATE_PENDING and self._is_still_available(order=payment.order)
 
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        try:
+            return gettext('Bank account {iban} at {bank}').format(
+                iban=f'{pi["source"]["sofort"]["country"]}****{pi["source"]["sofort"]["iban_last4"]}',
+                bank=pi["source"]["sofort"]["bank_name"]
+            )
+        except:
+            logger.exception('Could not parse payment data')
+            return super().payment_presale_render(payment)
+
 
 class StripeEPS(StripeMethod):
     identifier = 'stripe_eps'
@@ -1211,6 +1261,14 @@ class StripeEPS(StripeMethod):
             request.session['payment_stripe_eps_account'] = form.cleaned_data['account']
             return True
         return False
+
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        try:
+            return gettext('Bank account at {bank}').format(bank=pi["source"]["eps"]["bank"].replace('_', '').title())
+        except:
+            logger.exception('Could not parse payment data')
+            return super().payment_presale_render(payment)
 
 
 class StripeMultibanco(StripeMethod):
@@ -1306,6 +1364,14 @@ class StripePrzelewy24(StripeMethod):
 
     def checkout_prepare(self, request, cart):
         return True
+
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        try:
+            return gettext('Bank account at {bank}').format(bank=pi["source"]["p24"]["bank"].replace('_', '').title())
+        except:
+            logger.exception('Could not parse payment data')
+            return super().payment_presale_render(payment)
 
 
 class StripeWeChatPay(StripeMethod):

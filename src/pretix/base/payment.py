@@ -706,7 +706,7 @@ class BasePaymentProvider:
         It should return HTML code containing information regarding the current payment
         status and, if applicable, next steps.
 
-        The default implementation returns the verbose name of the payment provider.
+        The default implementation returns an empty string.
 
         :param order: The order object
         """
@@ -724,6 +724,19 @@ class BasePaymentProvider:
         :param refund: The refund object
         """
         return ''
+
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        """
+        Will be called if the *ticket customer* views the details of a payment. This is
+        currently used e.g. when the customer requests a refund to show which payment
+        method is used for the refund. This should only include very basic information
+        about the payment, such das "VISA card ****9999", and never raw payment information.
+
+        The default implementation returns the public name of the payment provider.
+
+        :param order: The order object
+        """
+        return self.public_name
 
     def payment_refund_supported(self, payment: OrderPayment) -> bool:
         """

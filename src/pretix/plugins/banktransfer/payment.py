@@ -6,7 +6,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest
 from django.template.loader import get_template
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from i18nfield.fields import I18nFormField, I18nTextarea
 from i18nfield.forms import I18nTextInput
 from i18nfield.strings import LazyI18nString
@@ -281,6 +281,18 @@ class BankTransfer(BasePaymentProvider):
 
     def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
         return self.payment_refund_supported(payment)
+
+    def payment_presale_render(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        if self.payment_refund_supported(payment):
+            try:
+                iban = self.norm(pi['iban'])
+                return gettext('Bank account {iban}').format(
+                    iban=iban[0:2] + '****' + iban[-4:]
+                )
+            except:
+                pass
+        return super().payment_presale_render(payment)
 
     def execute_refund(self, refund: OrderRefund):
         """

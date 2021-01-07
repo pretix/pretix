@@ -110,6 +110,8 @@ The provider class
 
    .. automethod:: payment_partial_refund_supported
 
+   .. automethod:: payment_presale_render
+
    .. automethod:: execute_refund
 
    .. automethod:: refund_control_render
