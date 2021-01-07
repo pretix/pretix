@@ -119,6 +119,16 @@
                                 statement.
                             {% endblocktrans %}
                         </p>
+                        <p class="help-block">
+                            {% blocktrans trimmed %}
+                                The following payment methods will be used to refund the money to you:
+                            {% endblocktrans %}
+                        </p>
+                        <ul class="help-block">
+                            {% for prop in proposals %}
+                                <li>{{ prop }}</li>
+                            {% endfor %}
+                        </ul>
                     {% else %}
                         <p class="help-block">
                             {% blocktrans trimmed %}
@@ -140,6 +150,16 @@
                             {% endblocktrans %}
                         </strong>
                     </p>
+                    <p>
+                        {% blocktrans trimmed %}
+                            The following payment methods will be used to refund the money to you:
+                        {% endblocktrans %}
+                    </p>
+                    <ul>
+                        {% for prop in proposals %}
+                            <li>{{ prop }}</li>
+                        {% endfor %}
+                    </ul>
                 {% else %}
                     <p>
                         {% blocktrans trimmed %}

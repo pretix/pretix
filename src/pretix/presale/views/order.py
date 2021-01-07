@@ -792,6 +792,10 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx['cancel_fee'] = fee
         ctx['refund_amount'] = refund_amount
         ctx['can_auto_refund'] = sum(proposals.values()) == refund_amount
+        ctx['proposals'] = [
+            p.payment_provider.payment_presale_render(payment=p)
+            for p in proposals
+        ]
         return ctx
 
 
