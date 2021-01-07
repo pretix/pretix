@@ -31,6 +31,11 @@
                                     here immediately. If you want, you can also send them out manually right now.
                                 {% endblocktrans %}
                             </p>
+                            {% if not running %}
+                                <div class="alert alert-warning">
+                                    {% trans "Currently, no vouchers will be sent since your event is not live or is not selling tickets." %}
+                                </div>
+                            {% endif %}
                         {% else %}
                             <p>
                                 {% blocktrans trimmed %}

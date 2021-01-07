@@ -174,6 +174,12 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
         ctx['any_avail'] = any_avail
         ctx['estimate'] = self.get_sales_estimate()
+
+        ctx['running'] = (
+            self.request.event.live
+            and (self.request.event.has_subevents or self.request.event.presale_is_running)
+        )
+
         return ctx
 
     def get_sales_estimate(self):
