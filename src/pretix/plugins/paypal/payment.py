@@ -12,6 +12,7 @@ from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
+from django.utils.timezone import now
 from django.utils.translation import gettext as __, gettext_lazy as _
 from i18nfield.strings import LazyI18nString
 from paypalrestsdk.exceptions import BadRequest, UnauthorizedAccess
@@ -477,10 +478,12 @@ class Paypal(BasePaymentProvider):
         return template.render(ctx)
 
     def payment_partial_refund_supported(self, payment: OrderPayment):
-        return True
+        # Paypal refunds are possible for 180 days after purchase:
+        # https://www.paypal.com/lc/smarthelp/article/how-do-i-issue-a-refund-faq780#:~:text=Refund%20after%20180%20days%20of,PayPal%20balance%20of%20the%20recipient.
+        return (now() - payment.payment_date).days <= 180
 
     def payment_refund_supported(self, payment: OrderPayment):
-        return True
+        self.payment_partial_refund_supported(payment)
 
     def execute_refund(self, refund: OrderRefund):
         self.init_api()
