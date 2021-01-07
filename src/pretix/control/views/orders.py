@@ -1974,7 +1974,7 @@ class OrderGo(EventPermissionRequiredMixin, View):
         try:
             return Order.objects.get(code=code, event=self.request.event)
         except Order.DoesNotExist:
-            return Order.objects.get(code=Order.normalize_code(code), event=self.request.event)
+            return Order.objects.get(code=Order.normalize_code(code, is_fallback=True), event=self.request.event)
 
     def get(self, request, *args, **kwargs):
         code = request.GET.get("code", "").upper().strip()

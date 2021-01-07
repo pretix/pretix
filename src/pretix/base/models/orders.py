@@ -615,21 +615,26 @@ class Order(LockModel, LoggedModel):
         return proposals
 
     @staticmethod
-    def normalize_code(code):
-        tr = str.maketrans({
+    def normalize_code(code, is_fallback=False):
+        d = {
             '2': 'Z',
             '4': 'A',
             '5': 'S',
             '6': 'G',
-        })
+        }
+        if is_fallback:
+            d['8'] = 'B'
+            # 8 has been removed from the character set only in 2021, which means there are a lot of order codes
+            # with an 8 in it around. We only want to replace this when this is used in a fallback.
+        tr = str.maketrans(d)
         return code.upper().translate(tr)
 
     def assign_code(self):
         # This omits some character pairs completely because they are hard to read even on screens (1/I and O/0)
         # and includes only one of two characters for some pairs because they are sometimes hard to distinguish in
-        # handwriting (2/Z, 4/A, 5/S, 6/G). This allows for better detection e.g. in incoming wire transfers that
+        # handwriting (2/Z, 4/A, 5/S, 6/G, 8/B). This allows for better detection e.g. in incoming wire transfers that
         # might include OCR'd handwritten text
-        charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
+        charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ379')
         iteration = 0
         length = settings.ENTROPY['order_code']
         while True:

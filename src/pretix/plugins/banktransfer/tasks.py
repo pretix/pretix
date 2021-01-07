@@ -72,7 +72,7 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
             try:
                 orders.append(event.orders.get(code=code))
             except Order.DoesNotExist:
-                normalized_code = Order.normalize_code(code)
+                normalized_code = Order.normalize_code(code, is_fallback=True)
                 try:
                     orders.append(event.orders.get(code=normalized_code))
                 except Order.DoesNotExist:
@@ -83,7 +83,7 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
             try:
                 orders.append(qs.get(event__slug__iexact=slug, code=code))
             except Order.DoesNotExist:
-                normalized_code = Order.normalize_code(code)
+                normalized_code = Order.normalize_code(code, is_fallback=True)
                 try:
                     orders.append(qs.get(event__slug__iexact=slug, code=normalized_code))
                 except Order.DoesNotExist:
