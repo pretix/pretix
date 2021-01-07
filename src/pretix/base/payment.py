@@ -730,7 +730,7 @@ class BasePaymentProvider:
         Will be called if the *ticket customer* views the details of a payment. This is
         currently used e.g. when the customer requests a refund to show which payment
         method is used for the refund. This should only include very basic information
-        about the payment, such das "VISA card ****9999", and never raw payment information.
+        about the payment, such as "VISA card ****9999", and never raw payment information.
 
         The default implementation returns the public name of the payment provider.
 
