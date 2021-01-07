@@ -107,9 +107,9 @@ def _default_context(request):
         ctx['organizer_homepage_text'] = request.organizer.settings.get('organizer_homepage_text', as_type=LazyI18nString)
         ctx['organizer'] = request.organizer
 
-    ctx['html_head'] = "".join(_html_head)
-    ctx['html_foot'] = "".join(_html_foot)
-    ctx['html_page_header'] = "".join(_html_page_header)
+    ctx['html_head'] = "".join(h for h in _html_head if h)
+    ctx['html_foot'] = "".join(h for h in _html_foot if h)
+    ctx['html_page_header'] = "".join(h for h in _html_page_header if h)
     ctx['footer'] = _footer
     ctx['site_url'] = settings.SITE_URL
 
