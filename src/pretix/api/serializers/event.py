@@ -1,24 +1,28 @@
+import logging
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import gettext as _
 from django_countries.serializers import CountryFieldMixin
-from hierarkey.proxy import HierarkeyProxy
 from pytz import common_timezones
-from rest_framework import serializers
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import Event, TaxRule
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
-from pretix.base.settings import DEFAULTS, validate_event_settings
+from pretix.base.settings import validate_event_settings
 from pretix.base.signals import api_event_settings_fields
+
+logger = logging.getLogger(__name__)
 
 
 class MetaDataField(Field):
@@ -558,7 +562,7 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
         fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country')
 
 
-class EventSettingsSerializer(serializers.Serializer):
+class EventSettingsSerializer(SettingsSerializer):
     default_fields = [
         'imprint_url',
         'checkout_email_helptext',
@@ -654,6 +658,7 @@ class EventSettingsSerializer(serializers.Serializer):
         'invoice_additional_text',
         'invoice_footer_text',
         'invoice_eu_currencies',
+        'invoice_logo_image',
         'cancel_allow_user',
         'cancel_allow_user_until',
         'cancel_allow_user_paid',
@@ -674,44 +679,20 @@ class EventSettingsSerializer(serializers.Serializer):
         'theme_color_background',
         'theme_round_borders',
         'primary_font',
+        'logo_image',
+        'logo_image_large',
+        'logo_show_title',
+        'og_image',
     ]
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
-        self.changed_data = []
         super().__init__(*args, **kwargs)
-        for fname in self.default_fields:
-            kwargs = DEFAULTS[fname].get('serializer_kwargs', {})
-            if callable(kwargs):
-                kwargs = kwargs()
-            kwargs.setdefault('required', False)
-            kwargs.setdefault('allow_null', True)
-            form_kwargs = DEFAULTS[fname].get('form_kwargs', {})
-            if callable(form_kwargs):
-                form_kwargs = form_kwargs()
-            if 'serializer_class' not in DEFAULTS[fname]:
-                raise ValidationError('{} has no serializer class'.format(fname))
-            f = DEFAULTS[fname]['serializer_class'](
-                **kwargs
-            )
-            f._label = form_kwargs.get('label', fname)
-            f._help_text = form_kwargs.get('help_text')
-            self.fields[fname] = f
 
         for recv, resp in api_event_settings_fields.send(sender=self.event):
             for fname, field in resp.items():
                 field.required = False
                 self.fields[fname] = field
-
-    def update(self, instance: HierarkeyProxy, validated_data):
-        for attr, value in validated_data.items():
-            if value is None:
-                instance.delete(attr)
-                self.changed_data.append(attr)
-            elif instance.get(attr, as_type=type(value)) != value:
-                instance.set(attr, value)
-                self.changed_data.append(attr)
-        return instance
 
     def validate(self, data):
         data = super().validate(data)
@@ -719,6 +700,14 @@ class EventSettingsSerializer(serializers.Serializer):
         settings_dict.update(data)
         validate_event_settings(self.event, settings_dict)
         return data
+
+    def get_new_filename(self, name: str) -> str:
+        nonce = get_random_string(length=8)
+        fname = '%s/%s/%s.%s.%s' % (
+            self.event.organizer.slug, self.event.slug, name.split('/')[-1], nonce, name.split('.')[-1]
+        )
+        # TODO: make sure pub is always correct
+        return 'pub/' + fname
 
 
 class DeviceEventSettingsSerializer(EventSettingsSerializer):

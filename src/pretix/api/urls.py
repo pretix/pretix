@@ -7,8 +7,8 @@ from rest_framework import routers
 from pretix.api.views import cart
 
 from .views import (
-    checkin, device, event, exporters, item, oauth, order, organizer, user,
-    upload, version, voucher, waitinglist, webhooks,
+    checkin, device, event, exporters, item, oauth, order, organizer, upload,
+    user, version, voucher, waitinglist, webhooks,
 )
 
 router = routers.DefaultRouter()

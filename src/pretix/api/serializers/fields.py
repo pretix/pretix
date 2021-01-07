@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 
@@ -52,6 +53,8 @@ class UploadedFileField(serializers.Field):
                 file__isnull=False,
                 pk=data[len("file:"):],
             )
+        except (ValidationError, IndexError):  # invalid uuid
+            self.fail('not_found')
         except CachedFile.DoesNotExist:
             self.fail('not_found')
 
@@ -70,7 +73,5 @@ class UploadedFileField(serializers.Field):
             url = value.url
         except AttributeError:
             return None
-        request = self.context.get('request', None)
-        if request is not None:
-            return request.build_absolute_uri(url)
-        return url
+        request = self.context['request']
+        return request.build_absolute_uri(url)

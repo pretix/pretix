@@ -21,7 +21,9 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 from rest_framework import serializers
 
-from pretix.api.serializers.fields import ListMultipleChoiceField
+from pretix.api.serializers.fields import (
+    ListMultipleChoiceField, UploadedFileField,
+)
 from pretix.api.serializers.i18n import I18nField
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import (
@@ -29,7 +31,7 @@ from pretix.base.reldate import (
     SerializerRelativeDateField, SerializerRelativeDateTimeField,
 )
 from pretix.control.forms import (
-    FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
+    ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
 )
 from pretix.helpers.countries import CachedCountries
 
@@ -1784,19 +1786,66 @@ Your {event} team"""))
     },
     'logo_image': {
         'default': None,
-        'type': File
+        'type': File,
+        'form_class': ExtFileField,
+        'form_kwargs': dict(
+            label=_('Header image'),
+            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+            max_size=10 * 1024 * 1024,
+            help_text=_('If you provide a logo image, we will by default not show your event name and date '
+                        'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                        'can increase the size with the setting below. We recommend not using small details on the picture '
+                        'as it will be resized on smaller screens.')
+        ),
+        'serializer_class': UploadedFileField,
+        'serializer_kwargs': dict(
+            allowed_types=[
+                'image/png', 'image/jpeg', 'image/gif'
+            ],
+            max_size=10 * 1024 * 1024,
+        )
+
     },
     'logo_image_large': {
         'default': 'False',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Use header image in its full size'),
+            help_text=_('We recommend to upload a picture at least 1170 pixels wide.'),
+        )
     },
     'logo_show_title': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Show event title even if a header image is present'),
+            help_text=_('The title will only be shown on the event front page.'),
+        )
     },
     'organizer_logo_image': {
         'default': None,
-        'type': File
+        'type': File,
+        'form_class': ExtFileField,
+        'form_kwargs': dict(
+            label=_('Header image'),
+            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+            max_size=10 * 1024 * 1024,
+            help_text=_('If you provide a logo image, we will by default not show your organization name '
+                        'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                        'can increase the size with the setting below. We recommend not using small details on the picture '
+                        'as it will be resized on smaller screens.')
+        ),
+        'serializer_class': UploadedFileField,
+        'serializer_kwargs': dict(
+            allowed_types=[
+                'image/png', 'image/jpeg', 'image/gif'
+            ],
+            max_size=10 * 1024 * 1024,
+        )
     },
     'organizer_logo_image_large': {
         'default': 'False',
@@ -1810,11 +1859,43 @@ Your {event} team"""))
     },
     'og_image': {
         'default': None,
-        'type': File
+        'type': File,
+        'form_class': ExtFileField,
+        'form_kwargs': dict(
+            label=_('Social media image'),
+            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+            max_size=10 * 1024 * 1024,
+            help_text=_('This picture will be used as a preview if you post links to your ticket shop on social media. '
+                        'Facebook advises to use a picture size of 1200 x 630 pixels, however some platforms like '
+                        'WhatsApp and Reddit only show a square preview, so we recommend to make sure it still looks good '
+                        'only the center square is shown. If you do not fill this, we will use the logo given above.')
+        ),
+        'serializer_class': UploadedFileField,
+        'serializer_kwargs': dict(
+            allowed_types=[
+                'image/png', 'image/jpeg', 'image/gif'
+            ],
+            max_size=10 * 1024 * 1024,
+        )
     },
     'invoice_logo_image': {
         'default': None,
-        'type': File
+        'type': File,
+        'form_class': ExtFileField,
+        'form_kwargs': dict(
+            label=_('Logo image'),
+            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+            required=False,
+            max_size=10 * 1024 * 1024,
+            help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
+        ),
+        'serializer_class': UploadedFileField,
+        'serializer_kwargs': dict(
+            allowed_types=[
+                'image/png', 'image/jpeg', 'image/gif'
+            ],
+            max_size=10 * 1024 * 1024,
+        )
     },
     'frontpage_text': {
         'default': '',

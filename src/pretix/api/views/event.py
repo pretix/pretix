@@ -365,9 +365,13 @@ class EventSettingsView(views.APIView):
 
     def get(self, request, *args, **kwargs):
         if isinstance(request.auth, Device):
-            s = DeviceEventSettingsSerializer(instance=request.event.settings, event=request.event)
+            s = DeviceEventSettingsSerializer(instance=request.event.settings, event=request.event, context={
+                'request': request
+            })
         elif 'can_change_event_settings' in request.eventpermset:
-            s = EventSettingsSerializer(instance=request.event.settings, event=request.event)
+            s = EventSettingsSerializer(instance=request.event.settings, event=request.event, context={
+                'request': request
+            })
         else:
             raise PermissionDenied()
         if 'explain' in request.GET:
@@ -382,7 +386,7 @@ class EventSettingsView(views.APIView):
 
     def patch(self, request, *wargs, **kwargs):
         s = EventSettingsSerializer(instance=request.event.settings, data=request.data, partial=True,
-                                    event=request.event)
+                                    event=request.event, context={'request': request})
         s.is_valid(raise_exception=True)
         with transaction.atomic():
             s.save()
@@ -393,5 +397,8 @@ class EventSettingsView(views.APIView):
             )
         if any(p in s.changed_data for p in SETTINGS_AFFECTING_CSS):
             regenerate_css.apply_async(args=(request.organizer.pk,))
-        s = EventSettingsSerializer(instance=request.event.settings, event=request.event)
+        s = EventSettingsSerializer(
+            instance=request.event.settings, event=request.event, context={
+                'request': request
+            })
         return Response(s.data)
