@@ -64,20 +64,35 @@ is valid in every text):
 Placeholder                    Description
 ============================== ===============================================================================
 event                          The event name
+event_slug                     The event's short form
+code                           In case of the waiting list, the voucher code to redeem
+currency                       The currency used for the event (three-letter code)
 total                          The order's total value
 total_with_currency            The order's total value with a localized currency sign
-currency                       The currency used for the event (three-letter code)
+refund_amount                  (For cancellation emails) The amount of money that will be refunded, including
+                               the currency
 payment_info                   Information text specific to the payment method (e.g. banking details)
 url                            An URL pointing to the download/status page of the order
-invoice_name                   The name field of the invoice address
+url_info_change                An URL pointing to the page of the order that can be used to change ticket
+                               information
+url_products_change            An URL pointing to the page of the order that can be used to change the products
+                               in the order
+url_cancel                     An URL pointing to the page of the order that can be used to cancel the order
+name, name_*                   Any name that can be used to address the recipient (e.g. name from invoice address,
+                               name from first ticket, …)
+invoice_name, invoice_name_*   The name field of the invoice address
 invoice_company                The company field of the invoice address
+attendee_name, attendee_name_* The name of the attendee represented by the ticket
 expire_date                    The order's expiration date
+comment                        When rejecting an order, this will contain the reason for the rejection
 date                           The same as ``expire_date``, but in a different e-mail (for backwards
                                compatibility)
 orders                         A list of orders including links to their status pages, specific to the "resend
                                link (requested by user)" e-mail
-code                           In case of the waiting list, the voucher code to redeem
 hours                          In case of the waiting list, the number of hours the voucher code is valid
+product                        In case of the waiting list, the product that has become available
+voucher_list                   When sending out vouchers in bulk, this will be replaced with the list of
+                               vouchers
 ============================== ===============================================================================
 
 The different e-mails are explained in the following:
