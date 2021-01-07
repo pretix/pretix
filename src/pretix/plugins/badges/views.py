@@ -239,11 +239,15 @@ class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
         cf.date = now()
         cf.type = 'application/pdf'
         cf.expires = now() + timedelta(days=3)
-        cf.save()
         if 'position' in request.GET:
-            positions = [p.pk for p in order.positions.filter(pk=request.GET.get('position'))]
+            qs = order.positions.filter(pk=request.GET.get('position'))
+            positions = [p.pk for p in qs]
+            if len(positions) < 5:
+                cf.filename = f'badges_{self.request.event.slug}_{order.code}_{"_".join(str(p.positionid) for p in qs)}.pdf'
         else:
             positions = [p.pk for p in order.positions.all()]
+            cf.filename = f'badges_{self.request.event.slug}_{order.code}.pdf'
+        cf.save()
         return self.do(
             self.request.event.pk,
             str(cf.id),
