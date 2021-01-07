@@ -160,15 +160,24 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
         quota_cache = {}
         any_avail = False
         for wle in ctx[self.context_object_name]:
-            if (wle.item, wle.variation) in itemvar_cache:
-                wle.availability = itemvar_cache.get((wle.item, wle.variation))
+            if (wle.item, wle.variation, wle.subevent) in itemvar_cache:
+                wle.availability = itemvar_cache.get((wle.item, wle.variation, wle.subevent))
             else:
-                wle.availability = (
-                    wle.variation.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
-                    if wle.variation
-                    else wle.item.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
+                ev = (wle.subevent or self.request.event)
+                disabled = (
+                    not ev.presale_is_running or
+                    (wle.subevent and not wle.subevent.active) or
+                    not wle.item.is_available()
                 )
-                itemvar_cache[(wle.item, wle.variation)] = wle.availability
+                if disabled:
+                    wle.availability = (0, "forbidden")
+                else:
+                    wle.availability = (
+                        wle.variation.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
+                        if wle.variation
+                        else wle.item.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
+                    )
+                itemvar_cache[(wle.item, wle.variation, wle.subevent)] = wle.availability
             if wle.availability[0] == 100:
                 any_avail = True
 
