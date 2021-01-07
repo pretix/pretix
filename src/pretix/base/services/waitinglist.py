@@ -45,7 +45,8 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
                 continue
             if wle.subevent and not wle.subevent.presale_is_running:
                 continue
-            if not wle.item.active or (wle.variation and not wle.variation.active):
+            if not wle.item.is_available():
+                gone.add((wle.item, wle.variation, wle.subevent))
                 continue
 
             quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
