@@ -396,7 +396,7 @@ class EventSettingsView(views.APIView):
                 }
             )
         if any(p in s.changed_data for p in SETTINGS_AFFECTING_CSS):
-            regenerate_css.apply_async(args=(request.organizer.pk,))
+            regenerate_css.apply_async(args=(request.event.pk,))
         s = EventSettingsSerializer(
             instance=request.event.settings, event=request.event, context={
                 'request': request
