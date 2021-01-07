@@ -23,7 +23,7 @@ def get_logic_environment(ev):
         elif t == 'date_from':
             return ev.date_from
         elif t == 'date_to':
-            return ev.date_to
+            return ev.date_to or ev.date_from
         elif t == 'date_admission':
             return ev.date_admission or ev.date_from
 
