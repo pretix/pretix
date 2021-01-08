@@ -193,31 +193,37 @@ EXPECTED = [
          'date': '2002-11-01',
          'payer': 'MUELLER',
          'iban': '234567',
+         'bic': '10020030',
          'reference': 'Miete November'},
         {'amount': '3000.00',
          'date': '2002-11-02',
          'payer': 'MUELLER',
          'iban': '0847564700',
+         'bic': '50060400',
          'reference': 'Gehalt Oktober Firma Mustermann GmbH'},
     ],
     [
         {'amount': '-400.62',
          'date': '2012-02-02',
          'payer': 'MARTHAMUELLER',
+         'bic': '20020020',
          'reference': 'RECHNUNGSNR. 1210815 KUNDENNR. 01234 22222222 DATUM 01.02.2012'},
         {'amount': '-1210.00',
          'date': '2012-02-03',
          'reference': 'MIETE GOETHESTR. 12',
          'payer': 'ABC IMMOBILIEN GMBH',
+         'bic': '30030030',
          'iban': '3333333333'},
         {'amount': '30.00',
          'date': '2012-02-03',
          'payer': 'STEFAN SCHMIDT',
+         'bic': '40040040',
          'reference': 'RECHNUNG 20120188 STEFAN SCHMIDTKUNDENR. 4711,'},
         {'amount': '89.97',
          'date': '2012-02-03',
          'payer': 'PETER PETERSEN',
          'iban': '5555555555',
+         'bic': '50050050',
          'reference': 'RECHNUNG 20120165 PETER PETERSEN'}
     ],
     [
@@ -236,16 +242,19 @@ EXPECTED = [
          'date': '2017-08-23',
          'payer': 'Peter Schneider',
          'iban': 'DE13495179316396679327',
+         'bic': 'NOTABIC',
          'reference': 'Democon-Abcde (Peter Schneider ), Kategorie: Alles - E innahmen - Veranstaltungen Democon #1111'},
         {'amount': '12.00',
          'date': '2017-08-23',
          'payer': 'Peter Schneider',
          'iban': 'DE13495179316396679327',
+         'bic': 'NOTABIC',
          'reference': 'Democon-Abcde (Peter Schneider ), Kategorie: Alles - E innahmen - Veranstaltungen Democon #1111'},
         {'amount': '12.00',
          'date': '2017-08-24',
          'payer': 'Peter Schneider',
          'iban': 'DE13495179316396679327',
+         'bic': 'NOTABIC',
          'reference': 'Democon-Abcde (Peter Schneider ), Kategorie: Alles- E innahmen - Veranstaltungen Democon #1111'},
     ]
 ]
@@ -257,4 +266,3 @@ def test_parse():
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(parsed)
         assert parsed == EXPECTED[i]
-        print("done")

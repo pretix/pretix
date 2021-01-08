@@ -149,7 +149,10 @@ def parse(file):
 
             payer = {
                 'name': transaction_details.get('accountholder', ''),
+                # In reality, these fields are sometimes IBANs and BICs, and sometimes legacy numbers. We don't
+                # really know (except for a syntax check) which will be performed anyways much later in the stack.
                 'iban': transaction_details.get('accountnumber', ''),
+                'bic': transaction_details.get('blz', ''),
             }
             reference, eref = join_reference(transaction_details.get('reference', '').split('\n'), payer)
             if not eref:
