@@ -9,12 +9,14 @@ import pycountry
 import pytz
 import vat_moss.errors
 import vat_moss.id
+from babel import Locale
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import QuerySet
 from django.forms import Select
+from django.utils import translation
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -24,9 +26,7 @@ from django_countries import countries
 from django_countries.fields import Country, CountryField
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
-from phonenumber_field.widgets import (
-    PhoneNumberPrefixWidget, PhonePrefixSelect,
-)
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from phonenumbers import NumberParseException, national_significant_number
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
@@ -205,10 +205,39 @@ class NamePartsFormField(forms.MultiValueField):
         return value
 
 
-class WrappedPhonePrefixSelect(PhonePrefixSelect):
-    def __init__(self, *args, **kwargs):
-        with language(get_babel_locale()):
-            super().__init__(*args, **kwargs)
+class WrappedPhonePrefixSelect(Select):
+    initial = None
+
+    def __init__(self, initial=None):
+        choices = [("", "---------")]
+        language = get_babel_locale()  # changed from default implementation that used the django locale
+        locale = Locale(translation.to_locale(language))
+        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+            prefix = "+%d" % prefix
+            if initial and initial in values:
+                self.initial = prefix
+            for country_code in values:
+                country_name = locale.territories.get(country_code)
+                if country_name:
+                    choices.append((prefix, "{} {}".format(country_name, prefix)))
+        super().__init__(choices=sorted(choices, key=lambda item: item[1]))
+
+    def render(self, name, value, *args, **kwargs):
+        return super().render(name, value or self.initial, *args, **kwargs)
+
+    def get_context(self, name, value, attrs):
+        if value and self.choices[1][0] != value:
+            matching_choices = len([1 for p, c in self.choices if p == value])
+            if matching_choices > 1:
+                # Some countries share a phone pretix, for example +1 is used all over the Americas.
+                # This causes a UX problem: If the default value or the existing data is +12125552368,
+                # the widget will just show the first <option> entry with value="+1" as selected,
+                # which alphabetically is America Samoa, although most numbers statistically are from
+                # the US. As a workaround, we detect this case and add an aditional choice value with
+                # just <option value="+1">+1</option> without an explicit country.
+                self.choices.insert(1, (value, value))
+        context = super().get_context(name, value, attrs)
+        return context
 
 
 class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
