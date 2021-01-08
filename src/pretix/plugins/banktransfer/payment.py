@@ -11,7 +11,7 @@ from i18nfield.fields import I18nFormField, I18nTextarea
 from i18nfield.forms import I18nTextInput
 from i18nfield.strings import LazyI18nString
 from localflavor.generic.forms import BICFormField, IBANFormField
-from localflavor.generic.validators import BICValidator, IBANValidator
+from localflavor.generic.validators import IBANValidator
 
 from pretix.base.models import OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
@@ -269,11 +269,10 @@ class BankTransfer(BasePaymentProvider):
         return s.strip().upper().replace(" ", "")
 
     def payment_refund_supported(self, payment: OrderPayment) -> bool:
-        if not all(payment.info_data.get(key) for key in ("payer", "iban", "bic")):
+        if not all(payment.info_data.get(key) for key in ("payer", "iban")):
             return False
         try:
             IBANValidator()(self.norm(payment.info_data['iban']))
-            BICValidator()(self.norm(payment.info_data['bic']))
         except ValidationError:
             return False
         else:
@@ -305,7 +304,7 @@ class BankTransfer(BasePaymentProvider):
         refund.info_data = {
             'payer': refund.payment.info_data['payer'],
             'iban': self.norm(refund.payment.info_data['iban']),
-            'bic': self.norm(refund.payment.info_data['bic']),
+            'bic': self.norm(refund.payment.info_data['bic']) if refund.payment.info_data.get('bic') else None,
         }
         refund.save(update_fields=["info"])
 

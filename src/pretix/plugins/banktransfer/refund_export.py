@@ -4,8 +4,10 @@ import io
 from decimal import Decimal
 
 from defusedcsv import csv
+from django.core.exceptions import ValidationError
 from django.templatetags.l10n import localize
 from django.utils.translation import gettext_lazy as _
+from localflavor.generic.validators import BICValidator
 
 from pretix.plugins.banktransfer.models import RefundExport
 
@@ -22,10 +24,18 @@ def get_refund_export_csv(refund_export: RefundExport):
     writer = csv.writer(output)
     writer.writerow([_("Payer"), "IBAN", "BIC", _("Amount"), _("Currency"), _("Code")])
     for row in refund_export.rows_data:
+        bic = ''
+        if row.get('bic'):
+            try:
+                BICValidator()(row['bic'])
+            except ValidationError:
+                pass
+            else:
+                bic = row['bic']
         writer.writerow([
             row['payer'],
             row['iban'],
-            row['bic'],
+            bic,
             localize(Decimal(row['amount'])),
             refund_export.currency,
             row['id'],
@@ -56,11 +66,18 @@ def build_sepa_xml(refund_export: RefundExport, account_holder, iban, bic):
         payment = {
             "name": row['payer'],
             "IBAN": row["iban"],
-            "BIC": row["bic"],
             "amount": int(Decimal(row['amount']) * 100),  # in euro-cents
             "execution_date": datetime.date.today(),
             "description": f"{_('Refund')} {refund_export.entity_slug} {row['id']}",
         }
+        if row.get('bic'):
+            try:
+                BICValidator()(row['bic'])
+            except ValidationError:
+                pass
+            else:
+                payment['BIC'] = row['bic']
+
         sepa.add_payment(payment)
 
     data = sepa.export(validate=True)

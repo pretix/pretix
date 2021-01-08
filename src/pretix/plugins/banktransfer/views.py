@@ -649,7 +649,7 @@ class RefundExportListView(ListView):
                 transaction_rows.append({
                     "amount": refund.amount,
                     "id": refund.full_id,
-                    **{key: data[key] for key in ("payer", "iban", "bic")}
+                    **{key: data.get(key) for key in ("payer", "iban", "bic")}
                 })
                 refund.done(user=self.request.user)
 

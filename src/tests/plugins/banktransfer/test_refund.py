@@ -86,3 +86,15 @@ def test_cannot_perform_refund_with_invalid_iban(client, env):
     assert r.status_code == 200  # no successfull POST
     with scope(organizer=event.organizer):
         assert not OrderRefund.objects.exists()
+
+
+@pytest.mark.django_db
+def test_can_perform_refund_without_valid_bic(client, env):
+    event, user, payment = env
+    payment.info_data = {
+        'payer': "Abc Def",
+        'iban': "DE27520521540534534466",
+        'bic': "TROLOLOL",
+    }
+    payment.save()
+    assert payment.payment_provider.payment_refund_supported(payment)

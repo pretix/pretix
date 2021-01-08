@@ -62,7 +62,9 @@ def test_export_refunds_as_sepa_xml(client, env, url_prefix):
         "iban": "DE71720690050653667120",
         "bic": "GENODEF1AIL",
     })
-    assert "DE27520521540534534466" in "".join(str(part) for part in r.streaming_content)
+    r = "".join(str(part) for part in r.streaming_content)
+    assert "DE27520521540534534466" in r
+    assert "HELADEF" in r
 
 
 @pytest.mark.django_db
@@ -78,7 +80,41 @@ def test_export_refunds(client, env, url_prefix):
     assert b"Download CSV" in r.content
     r = client.get(f'{url_prefix}banktransfer/export/{refund.id}/')
     assert r.status_code == 200
-    assert "DE27520521540534534466" in "".join(str(part) for part in r.streaming_content)
+    r = "".join(str(part) for part in r.streaming_content)
+    assert "DE27520521540534534466" in r
+    assert "HELADEF" in r
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url_prefix", url_prefixes)
+def test_export_refunds_omit_invalid_bic(client, env, url_prefix):
+    d = env[2].info_data
+    d['bic'] = 'TROLOLO'
+    env[2].info = json.dumps(d)
+    env[2].save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.get(f'{url_prefix}banktransfer/refunds/')
+    assert r.status_code == 200
+    r = client.post(f'{url_prefix}banktransfer/refunds/', {"unite_transactions": True}, follow=True)
+    assert r.status_code == 200
+    refund = RefundExport.objects.last()
+    assert refund is not None
+    assert b"Download CSV" in r.content
+    r = client.get(f'{url_prefix}banktransfer/export/{refund.id}/')
+    assert r.status_code == 200
+    r = "".join(str(part) for part in r.streaming_content)
+    assert "DE27520521540534534466" in r
+    assert "TROLOLO" not in r
+    assert "HELADEF" not in r
+    r = client.post(f'{url_prefix}banktransfer/sepa-export/{refund.id}/', {
+        "account_holder": "Fission Festival",
+        "iban": "DE71720690050653667120",
+        "bic": "GENODEF1AIL",
+    })
+    assert r.status_code == 200
+    r = "".join(str(part) for part in r.streaming_content)
+    assert "DE27520521540534534466" in r
+    assert "TROLOLO" not in r
 
 
 def test_unite_transaction_rows():
