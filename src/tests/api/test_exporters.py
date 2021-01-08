@@ -33,6 +33,10 @@ SAMPLE_EXPORTER_CONFIG = {
             "name": "include_payment_amounts",
             "required": False
         },
+        {
+            "name": "group_multiple_choice",
+            "required": False
+        },
     ]
 }
 
