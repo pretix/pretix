@@ -2055,14 +2055,22 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
     def post(self, request, *args, **kwargs):
         if not self.exporter:
             messages.error(self.request, _('The selected exporter was not found.'))
-            return redirect('control:event.orders.export', kwargs={
+            return redirect(reverse('control:event.orders.export', kwargs={
                 'event': self.request.event.slug,
                 'organizer': self.request.event.organizer.slug
-            })
+            }))
 
         if not self.exporter.form.is_valid():
-            messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
-            return self.get(request, *args, **kwargs)
+            messages.error(
+                self.request,
+                str(_('There was a problem processing your input:')) + ' ' + ', '.join(
+                    ', '.join(l) for l in self.exporter.form.errors.values()
+                )
+            )
+            return redirect(reverse('control:event.orders.export', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug
+            }) + '?identifier=' + self.exporter.identifier)
 
         cf = CachedFile(web_download=True, session_key=request.session.session_key)
         cf.date = now()
