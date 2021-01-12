@@ -15,7 +15,7 @@ from pretix.base.templatetags.rich_text import (
     ("[Foo](/foo)",
      '<a href="http://example.com/foo" rel="noopener" target="_blank">Foo</a>'),
     ("mail@example.org",
-     '<a href="mailto:mail@example.org">mailto:mail@example.org</a>'),
+     '<a href="mailto:mail@example.org">mail@example.org</a>'),
     # Test truelink_callback
     ('<a href="https://evilsite.com">Evil Site</a>',
      '<a href="https://evilsite.com" rel="noopener" target="_blank">Evil Site</a>'),
