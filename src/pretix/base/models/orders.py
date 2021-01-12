@@ -1224,6 +1224,9 @@ class AbstractPosition(models.Model):
                 else self.variation.quotas.filter(subevent=self.subevent))
 
     def save(self, *args, **kwargs):
+        update_fields = kwargs.get('update_fields', [])
+        if 'attendee_name_parts' in update_fields:
+            update_fields.append('attendee_name_cached')
         self.attendee_name_cached = self.attendee_name
         if self.attendee_name_parts is None:
             self.attendee_name_parts = {}

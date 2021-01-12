@@ -205,13 +205,14 @@ class PdfDataSerializer(serializers.Field):
 
 
 class OrderPositionSerializer(I18nAwareModelSerializer):
-    checkins = CheckinSerializer(many=True)
+    checkins = CheckinSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True)
-    downloads = PositionDownloadsField(source='*')
+    downloads = PositionDownloadsField(source='*', read_only=True)
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
-    pdf_data = PdfDataSerializer(source='*')
+    pdf_data = PdfDataSerializer(source='*', read_only=True)
     seat = InlineSeatSerializer(read_only=True)
     country = CompatibleCountryField(source='*')
+    attendee_name = serializers.CharField(required=False)
 
     class Meta:
         model = OrderPosition
@@ -219,11 +220,63 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                   'company', 'street', 'zipcode', 'city', 'country', 'state',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled')
+        read_only_fields = (
+            'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
+            'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data',
+            'seat', 'canceled'
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if 'request' in self.context and not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
             self.fields.pop('pdf_data')
+
+    def validate(self, data):
+        if data.get('attendee_name') and data.get('attendee_name_parts'):
+            raise ValidationError(
+                {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
+            )
+        if data.get('attendee_name_parts') and '_scheme' not in data.get('attendee_name_parts'):
+            data['attendee_name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
+
+        if data.get('country'):
+            if not pycountry.countries.get(alpha_2=data.get('country').code):
+                raise ValidationError(
+                    {'country': ['Invalid country code.']}
+                )
+
+        if data.get('state'):
+            cc = str(data.get('country') or self.instance.country or '')
+            if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                raise ValidationError(
+                    {'state': ['States are not supported in country "{}".'.format(cc)]}
+                )
+            if not pycountry.subdivisions.get(code=cc + '-' + data.get('state')):
+                raise ValidationError(
+                    {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
+                )
+        return data
+
+    def update(self, instance, validated_data):
+        # Even though all fields that shouldn't be edited are marked as read_only in the serializer
+        # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
+        update_fields = [
+            'attendee_name_parts', 'company', 'street', 'zipcode', 'city', 'country',
+            'state', 'attendee_email',
+        ]
+
+        name = validated_data.pop('attendee_name', '')
+        if name and not validated_data.get('attendee_name_parts'):
+            validated_data['attendee_name_parts'] = {
+                '_legacy': name
+            }
+
+        for attr, value in validated_data.items():
+            if attr in update_fields:
+                setattr(instance, attr, value)
+
+        instance.save(update_fields=update_fields)
+        return instance
 
 
 class RequireAttentionField(serializers.Field):

@@ -4609,3 +4609,147 @@ def test_revoked_secret_list(token_client, organizer, event):
     ))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_position_update_ignore_fields(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data={
+            'price': '99.99'
+        }
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.price == Decimal('23.00')
+
+
+@pytest.mark.django_db
+def test_position_update_only_partial(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    resp = token_client.put(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data={
+            'price': '99.99'
+        }
+    )
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_position_update(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    payload = {
+        'company': 'VILE',
+        'attendee_name_parts': {
+            'full_name': 'Max Mustermann'
+        },
+        'street': 'Sesame Street 21',
+        'zipcode': '99999',
+        'city': 'Springfield',
+        'country': 'US',
+        'state': 'CA',
+        'attendee_email': 'foo@example.org'
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.company == 'VILE'
+    assert op.attendee_name_cached == 'Max Mustermann'
+    assert op.attendee_name_parts == {
+        '_scheme': 'full',
+        'full_name': 'Max Mustermann'
+    }
+    assert op.street == 'Sesame Street 21'
+    assert op.zipcode == '99999'
+    assert op.city == 'Springfield'
+    assert str(op.country) == 'US'
+    assert op.state == 'CA'
+    assert op.attendee_email == 'foo@example.org'
+    with scopes_disabled():
+        le = order.all_logentries().last()
+    assert le.action_type == 'pretix.event.order.modified'
+    assert le.parsed_data == {
+        'data': [
+            {
+                'position': op.pk,
+                'company': 'VILE',
+                'attendee_name_parts': {
+                    '_scheme': 'full',
+                    'full_name': 'Max Mustermann'
+                },
+                'street': 'Sesame Street 21',
+                'zipcode': '99999',
+                'city': 'Springfield',
+                'country': 'US',
+                'state': 'CA',
+                'attendee_email': 'foo@example.org'
+            }
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert order.all_logentries().last().pk == le.pk
+
+
+@pytest.mark.django_db
+def test_position_update_legacy_name(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    payload = {
+        'attendee_name': 'Max Mustermann',
+        'attendee_name_parts': {
+            '_legacy': 'maria'
+        },
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    payload = {
+        'attendee_name': 'Max Mustermann',
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.attendee_name_cached == 'Max Mustermann'
+    assert op.attendee_name_parts == {
+        '_legacy': 'Max Mustermann'
+    }
+
+
+@pytest.mark.django_db
+def test_position_update_state_validation(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    payload = {
+        'country': 'DE',
+        'state': 'BW'
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
