@@ -143,6 +143,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert data == {
             "name": "30C3",
             "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
+            "frontpage_text": "",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -277,6 +278,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert data == {
             "name": "30C3",
             "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
+            "frontpage_text": "",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -328,6 +330,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert data == {
             "name": "30C3",
             "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
+            "frontpage_text": "",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -395,6 +398,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert data == {
             "name": "30C3",
             "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
+            "frontpage_text": "",
             "currency": "EUR",
             'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
             "show_variations_expanded": False,
