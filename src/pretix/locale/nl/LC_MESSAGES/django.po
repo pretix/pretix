@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2020-12-23 04:00+0000\n"
+"PO-Revision-Date: 2021-01-13 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -8166,7 +8166,7 @@ msgstr "Vraag, maar maak invoer niet verplicht"
 
 #: pretix/control/forms/event.py:577
 msgid "Ask and require input"
-msgstr "Vraag, invullen is niet verplicht"
+msgstr "Vraag en maak invullen verplicht"
 
 #: pretix/control/forms/event.py:612
 msgid ""
