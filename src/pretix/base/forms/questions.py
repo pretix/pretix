@@ -229,7 +229,7 @@ class WrappedPhonePrefixSelect(Select):
         if value and self.choices[1][0] != value:
             matching_choices = len([1 for p, c in self.choices if p == value])
             if matching_choices > 1:
-                # Some countries share a phone pretix, for example +1 is used all over the Americas.
+                # Some countries share a phone prefix, for example +1 is used all over the Americas.
                 # This causes a UX problem: If the default value or the existing data is +12125552368,
                 # the widget will just show the first <option> entry with value="+1" as selected,
                 # which alphabetically is America Samoa, although most numbers statistically are from
