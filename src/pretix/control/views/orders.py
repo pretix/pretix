@@ -2044,7 +2044,7 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
         return reverse('control:event.orders.export', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug
-        })
+        }) + '?identifier=' + self.exporter.identifier
 
     @cached_property
     def exporter(self):
