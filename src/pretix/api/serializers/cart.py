@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.core.files import File
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy
@@ -100,8 +101,15 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
 
         for answ_data in answers_data:
             options = answ_data.pop('options')
-            answ = cp.answers.create(**answ_data)
-            answ.options.add(*options)
+            if isinstance(answ_data['answer'], File):
+                an = answ_data.pop('answer')
+                answ = cp.answers.create(**answ_data, answer='')
+                answ.file.save(an.name, an, save=False)
+                answ.answer = 'file://' + answ.file.name
+                answ.save()
+            else:
+                answ = cp.answers.create(**answ_data)
+                answ.options.add(*options)
         return cp
 
     def validate_cart_id(self, cid):

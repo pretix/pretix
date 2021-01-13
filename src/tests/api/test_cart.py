@@ -4,6 +4,7 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from pytz import UTC
@@ -434,6 +435,19 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
     assert resp.status_code == 400
     assert resp.data == {'answers': [{'non_field_errors': ['You can specify at most one option for this question.']}]}
 
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile('file.png', 'invalid png content')
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+    res['answers'][0]['options'] = []
+    res['answers'][0]['answer'] = file_id_png
     question.type = Question.TYPE_FILE
     question.save()
     resp = token_client.post(
@@ -441,8 +455,12 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
             organizer.slug, event.slug
         ), format='json', data=res
     )
-    assert resp.status_code == 400
-    assert resp.data == {'answers': [{'non_field_errors': ['File uploads are currently not supported via the API.']}]}
+    assert resp.status_code == 201
+    with scopes_disabled():
+        pos = CartPosition.objects.get(pk=resp.data['id'])
+        answ = pos.answers.first()
+    assert answ.file
+    assert answ.answer.startswith("file://")
 
     question.type = Question.TYPE_CHOICE_MULTIPLE
     question.save()
