@@ -783,6 +783,11 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
         },
     }
 
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
+
     def get_queryset(self):
         if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
             qs = OrderPosition.all
@@ -967,6 +972,11 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
             new_data = serializer.data
 
             if old_data != new_data:
+                log_data = self.request.data
+                if 'answers' in log_data:
+                    for a in new_data['answers']:
+                        log_data[f'question_{a["question"]}'] = a["answer"]
+                    log_data.pop('answers', None)
                 serializer.instance.order.log_action(
                     'pretix.event.order.modified',
                     user=self.request.user,
@@ -975,8 +985,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
                         'data': [
                             dict(
                                 position=serializer.instance.pk,
-                                # todo: shredder-compatible format
-                                **self.request.data
+                                **log_data
                             )
                         ]
                     }

@@ -2693,6 +2693,21 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         {'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}]}
 
     with scopes_disabled():
+        question2.options.create(answer="L")
+    with scopes_disabled():
+        res['positions'][0]['answers'][0]['options'] = [
+            question2.options.first().pk,
+        ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [{'answers': [{'non_field_errors': ['The specified option does not belong to this question.']}]}]}
+
+    with scopes_disabled():
         question.options.create(answer="L")
     with scopes_disabled():
         res['positions'][0]['answers'][0]['options'] = [
@@ -4642,9 +4657,12 @@ def test_position_update_only_partial(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
-def test_position_update(token_client, organizer, event, order):
+def test_position_update(token_client, organizer, event, order, question):
     with scopes_disabled():
         op = order.positions.first()
+        question.type = Question.TYPE_CHOICE_MULTIPLE
+        question.save()
+        opt = question.options.create(answer="L")
     payload = {
         'company': 'VILE',
         'attendee_name_parts': {
@@ -4655,7 +4673,14 @@ def test_position_update(token_client, organizer, event, order):
         'city': 'Springfield',
         'country': 'US',
         'state': 'CA',
-        'attendee_email': 'foo@example.org'
+        'attendee_email': 'foo@example.org',
+        'answers': [
+            {
+                'question': question.pk,
+                'answer': 'ignored',
+                'options': [opt.pk]
+            }
+        ]
     }
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
@@ -4663,6 +4688,15 @@ def test_position_update(token_client, organizer, event, order):
         ), format='json', data=payload
     )
     assert resp.status_code == 200
+    assert resp.data['answers'] == [
+        {
+            'question': question.pk,
+            'question_identifier': question.identifier,
+            'answer': 'L',
+            'options': [opt.pk],
+            'option_identifiers': [opt.identifier],
+        }
+    ]
     op.refresh_from_db()
     assert op.company == 'VILE'
     assert op.attendee_name_cached == 'Max Mustermann'
@@ -4670,13 +4704,14 @@ def test_position_update(token_client, organizer, event, order):
         '_scheme': 'full',
         'full_name': 'Max Mustermann'
     }
-    assert op.street == 'Sesame Street 21'
-    assert op.zipcode == '99999'
-    assert op.city == 'Springfield'
-    assert str(op.country) == 'US'
-    assert op.state == 'CA'
-    assert op.attendee_email == 'foo@example.org'
     with scopes_disabled():
+        assert op.answers.get().answer == 'L'
+        assert op.street == 'Sesame Street 21'
+        assert op.zipcode == '99999'
+        assert op.city == 'Springfield'
+        assert str(op.country) == 'US'
+        assert op.state == 'CA'
+        assert op.attendee_email == 'foo@example.org'
         le = order.all_logentries().last()
     assert le.action_type == 'pretix.event.order.modified'
     assert le.parsed_data == {
@@ -4693,7 +4728,8 @@ def test_position_update(token_client, organizer, event, order):
                 'city': 'Springfield',
                 'country': 'US',
                 'state': 'CA',
-                'attendee_email': 'foo@example.org'
+                'attendee_email': 'foo@example.org',
+                f'question_{question.pk}': 'L'
             }
         ]
     }
@@ -4737,6 +4773,8 @@ def test_position_update_legacy_name(token_client, organizer, event, order):
     assert op.attendee_name_parts == {
         '_legacy': 'Max Mustermann'
     }
+    with scopes_disabled():
+        assert op.answers.count() == 1  # answer does not get deleted
 
 
 @pytest.mark.django_db
@@ -4753,3 +4791,55 @@ def test_position_update_state_validation(token_client, organizer, event, order)
         ), format='json', data=payload
     )
     assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_position_update_question_handling(token_client, organizer, event, order, question):
+    with scopes_disabled():
+        op = order.positions.first()
+    payload = {
+        'answers': [
+            {
+                'question': question.pk,
+                'answer': 'FOOBAR',
+            },
+            {
+                'question': question.pk,
+                'answer': 'FOOBAR',
+            },
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    payload = {
+        'answers': [
+            {
+                'question': question.pk,
+                'answer': 'FOOBAR',
+            },
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert op.answers.count() == 1
+    payload = {
+        'answers': [
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert op.answers.count() == 0

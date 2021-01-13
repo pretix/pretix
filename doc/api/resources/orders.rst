@@ -1706,6 +1706,67 @@ Order position ticket download
 Manipulating individual positions
 ---------------------------------
 
+.. versionchanged:: 3.15
+
+   The ``PATCH`` method has been added for individual positions.
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
+
+   Updates specific fields on an order position. Currently, only the following fields are supported:
+
+   * ``attendee_email``
+
+   * ``attendee_name_parts`` or ``attendee_name``
+
+   * ``company``
+
+   * ``street``
+
+   * ``zipcode``
+
+   * ``city``
+
+   * ``country``
+
+   * ``state``
+
+   * ``answers``: If specified, you will need to provide **all** answers for this order position.
+     Validation is handled the same way as when creating orders through the API. You are therefore
+     expected to provide ``question``, ``answer``, and possibly ``options``. ``question_identifier``
+     and ``option_identifiers`` will be ignored.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "attendee_email": "other@example.org"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+   :param id: The ``id`` field of the order position to update
+
+   :statuscode 200: no error
+   :statuscode 400: The order could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order.
+
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 
    Deletes an order position, identified by its internal ID.

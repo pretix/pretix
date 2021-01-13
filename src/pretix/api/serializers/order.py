@@ -94,12 +94,9 @@ class AnswerQuestionIdentifierField(serializers.Field):
 
 class AnswerQuestionOptionsIdentifierField(serializers.Field):
     def to_representation(self, instance: QuestionAnswer):
-        return [o.identifier for o in instance.options.all()]
-
-
-class AnswerQuestionOptionsField(serializers.Field):
-    def to_representation(self, instance: QuestionAnswer):
-        return [o.pk for o in instance.options.all()]
+        if isinstance(instance, WrappedModel) or instance.pk:
+            return [o.identifier for o in instance.options.all()]
+        return []
 
 
 class InlineSeatSerializer(I18nAwareModelSerializer):
@@ -112,11 +109,67 @@ class InlineSeatSerializer(I18nAwareModelSerializer):
 class AnswerSerializer(I18nAwareModelSerializer):
     question_identifier = AnswerQuestionIdentifierField(source='*', read_only=True)
     option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
-    options = AnswerQuestionOptionsField(source='*', read_only=True)
 
     class Meta:
         model = QuestionAnswer
         fields = ('question', 'answer', 'question_identifier', 'options', 'option_identifiers')
+
+    def validate_question(self, q):
+        if q.event != self.context['event']:
+            raise ValidationError(
+                'The specified question does not belong to this event.'
+            )
+        return q
+
+    def validate(self, data):
+        if data.get('question').type == Question.TYPE_FILE:
+            raise ValidationError(
+                'File uploads are currently not supported via the API.'
+            )
+        elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+            if not data.get('options'):
+                raise ValidationError(
+                    'You need to specify options if the question is of a choice type.'
+                )
+            if data.get('question').type == Question.TYPE_CHOICE and len(data.get('options')) > 1:
+                raise ValidationError(
+                    'You can specify at most one option for this question.'
+                )
+            for o in data.get('options'):
+                if o.question_id != data.get('question').pk:
+                    raise ValidationError(
+                        'The specified option does not belong to this question.'
+                    )
+
+            data['answer'] = ", ".join([str(o) for o in data.get('options')])
+
+        else:
+            if data.get('options'):
+                raise ValidationError(
+                    'You should not specify options if the question is not of a choice type.'
+                )
+
+            if data.get('question').type == Question.TYPE_BOOLEAN:
+                if data.get('answer') in ['true', 'True', '1', 'TRUE']:
+                    data['answer'] = 'True'
+                elif data.get('answer') in ['false', 'False', '0', 'FALSE']:
+                    data['answer'] = 'False'
+                else:
+                    raise ValidationError(
+                        'Please specify "true" or "false" for boolean questions.'
+                    )
+            elif data.get('question').type == Question.TYPE_NUMBER:
+                serializers.DecimalField(
+                    max_digits=50,
+                    decimal_places=25
+                ).to_internal_value(data.get('answer'))
+            elif data.get('question').type == Question.TYPE_DATE:
+                data['answer'] = serializers.DateField().to_internal_value(data.get('answer'))
+            elif data.get('question').type == Question.TYPE_TIME:
+                data['answer'] = serializers.TimeField().to_internal_value(data.get('answer'))
+            elif data.get('question').type == Question.TYPE_DATETIME:
+                data['answer'] = serializers.DateTimeField().to_internal_value(data.get('answer'))
+        return data
 
 
 class CheckinSerializer(I18nAwareModelSerializer):
@@ -264,6 +317,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             'attendee_name_parts', 'company', 'street', 'zipcode', 'city', 'country',
             'state', 'attendee_email',
         ]
+        answers_data = validated_data.pop('answers', None)
 
         name = validated_data.pop('attendee_name', '')
         if name and not validated_data.get('attendee_name_parts'):
@@ -276,6 +330,29 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                 setattr(instance, attr, value)
 
         instance.save(update_fields=update_fields)
+
+        if answers_data is not None:
+            qs_seen = set()
+            answercache = {
+                a.question_id: a for a in instance.answers.all()
+            }
+            for answ_data in answers_data:
+                options = answ_data.pop('options', [])
+                if answ_data['question'].pk in qs_seen:
+                    raise ValidationError(f'Question {answ_data["question"]} was sent twice.')
+                if answ_data['question'].pk in answercache:
+                    a = answercache[answ_data['question'].pk]
+                    for attr, value in answ_data.items():
+                        setattr(a, attr, value)
+                    a.save()
+                else:
+                    a = instance.answers.create(**answ_data)
+                a.options.set(options)
+                qs_seen.add(a.question_id)
+            for qid, a in answercache.items():
+                if qid not in qs_seen:
+                    a.delete()
+
         return instance
 
 
@@ -478,7 +555,17 @@ class OrderSerializer(I18nAwareModelSerializer):
         return instance
 
 
+class AnswerQuestionOptionsField(serializers.Field):
+    def to_representation(self, instance: QuestionAnswer):
+        return [o.pk for o in instance.options.all()]
+
+
+class SimulatedAnswerSerializer(AnswerSerializer):
+    options = AnswerQuestionOptionsField(read_only=True, source='*')
+
+
 class SimulatedOrderPositionSerializer(OrderPositionSerializer):
+    answers = SimulatedAnswerSerializer(many=True)
     addon_to = serializers.SlugRelatedField(read_only=True, slug_field='positionid')
 
 
@@ -505,62 +592,8 @@ class PriceCalcSerializer(serializers.Serializer):
             del self.fields['subevent']
 
 
-class AnswerCreateSerializer(I18nAwareModelSerializer):
-
-    class Meta:
-        model = QuestionAnswer
-        fields = ('question', 'answer', 'options')
-
-    def validate_question(self, q):
-        if q.event != self.context['event']:
-            raise ValidationError(
-                'The specified question does not belong to this event.'
-            )
-        return q
-
-    def validate(self, data):
-        if data.get('question').type == Question.TYPE_FILE:
-            raise ValidationError(
-                'File uploads are currently not supported via the API.'
-            )
-        elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
-            if not data.get('options'):
-                raise ValidationError(
-                    'You need to specify options if the question is of a choice type.'
-                )
-            if data.get('question').type == Question.TYPE_CHOICE and len(data.get('options')) > 1:
-                raise ValidationError(
-                    'You can specify at most one option for this question.'
-                )
-            data['answer'] = ", ".join([str(o) for o in data.get('options')])
-
-        else:
-            if data.get('options'):
-                raise ValidationError(
-                    'You should not specify options if the question is not of a choice type.'
-                )
-
-            if data.get('question').type == Question.TYPE_BOOLEAN:
-                if data.get('answer') in ['true', 'True', '1', 'TRUE']:
-                    data['answer'] = 'True'
-                elif data.get('answer') in ['false', 'False', '0', 'FALSE']:
-                    data['answer'] = 'False'
-                else:
-                    raise ValidationError(
-                        'Please specify "true" or "false" for boolean questions.'
-                    )
-            elif data.get('question').type == Question.TYPE_NUMBER:
-                serializers.DecimalField(
-                    max_digits=50,
-                    decimal_places=25
-                ).to_internal_value(data.get('answer'))
-            elif data.get('question').type == Question.TYPE_DATE:
-                data['answer'] = serializers.DateField().to_internal_value(data.get('answer'))
-            elif data.get('question').type == Question.TYPE_TIME:
-                data['answer'] = serializers.TimeField().to_internal_value(data.get('answer'))
-            elif data.get('question').type == Question.TYPE_DATETIME:
-                data['answer'] = serializers.DateTimeField().to_internal_value(data.get('answer'))
-        return data
+class AnswerCreateSerializer(AnswerSerializer):
+    pass
 
 
 class OrderFeeCreateSerializer(I18nAwareModelSerializer):
