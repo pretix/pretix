@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import (
-    MaxValueValidator, MinValueValidator, RegexValidator,
+    MaxValueValidator, MinLengthValidator, MinValueValidator, RegexValidator,
 )
 from django.db import models
 from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery, Value
@@ -355,8 +355,11 @@ class Event(EventMixin, LoggedModel):
             "remembered, but you can also choose to use a random value. "
             "This will be used in URLs, order codes, invoice numbers, and bank transfer references."),
         validators=[
+            MinLengthValidator(
+                limit_value=2,
+            ),
             RegexValidator(
-                regex="^[a-zA-Z0-9][a-zA-Z0-9.-]*$",
+                regex="^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$",
                 message=_("The slug may only contain letters, numbers, dots and dashes."),
             ),
             EventSlugBanlistValidator()

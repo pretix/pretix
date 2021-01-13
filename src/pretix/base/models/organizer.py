@@ -1,7 +1,7 @@
 import string
 from datetime import date, datetime, time
 
-from django.core.validators import RegexValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.db.models import Exists, OuterRef, Q
 from django.utils.crypto import get_random_string
@@ -38,8 +38,11 @@ class Organizer(LoggedModel):
             "Should be short, only contain lowercase letters, numbers, dots, and dashes. Every slug can only be used "
             "once. This is being used in URLs to refer to your organizer accounts and your events."),
         validators=[
+            MinLengthValidator(
+                limit_value=2,
+            ),
             RegexValidator(
-                regex="^[a-zA-Z0-9][a-zA-Z0-9.-]+$",
+                regex="^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$",
                 message=_("The slug may only contain letters, numbers, dots and dashes.")
             ),
             OrganizerSlugBanlistValidator()
