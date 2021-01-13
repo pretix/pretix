@@ -1634,10 +1634,16 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
             self.invoice_form.save()
         self.order.log_action('pretix.event.order.modified', {
             'invoice_data': self.invoice_form.cleaned_data,
-            'data': [{
-                k: (f.cleaned_data.get(k).name if isinstance(f.cleaned_data.get(k), File) else f.cleaned_data.get(k))
-                for k in f.changed_data
-            } for f in self.forms]
+            'data': [
+                dict(
+                    position=f.orderpos.pk,
+                    **{
+                        k: (f.cleaned_data.get(k).name if isinstance(f.cleaned_data.get(k),
+                                                                     File) else f.cleaned_data.get(k))
+                        for k in f.changed_data
+                    }
+                ) for f in self.forms
+            ]
         }, user=request.user)
         if self.invoice_form.has_changed():
             success_message = ('The invoice address has been updated. If you want to generate a new invoice, '

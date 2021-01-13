@@ -6,6 +6,7 @@ from unittest import mock
 
 import pytest
 from django.core import mail as djmail
+from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
@@ -2693,6 +2694,21 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         {'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}]}
 
     with scopes_disabled():
+        question2.options.create(answer="L")
+    with scopes_disabled():
+        res['positions'][0]['answers'][0]['options'] = [
+            question2.options.first().pk,
+        ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [{'answers': [{'non_field_errors': ['The specified option does not belong to this question.']}]}]}
+
+    with scopes_disabled():
         question.options.create(answer="L")
     with scopes_disabled():
         res['positions'][0]['answers'][0]['options'] = [
@@ -2708,6 +2724,19 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     assert resp.data == {
         'positions': [{'answers': [{'non_field_errors': ['You can specify at most one option for this question.']}]}]}
 
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile('file.png', 'invalid png content')
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+    res['positions'][0]['answers'][0]['options'] = []
+    res['positions'][0]['answers'][0]['answer'] = file_id_png
     question.type = Question.TYPE_FILE
     question.save()
     resp = token_client.post(
@@ -2715,9 +2744,13 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
             organizer.slug, event.slug
         ), format='json', data=res
     )
-    assert resp.status_code == 400
-    assert resp.data == {
-        'positions': [{'answers': [{'non_field_errors': ['File uploads are currently not supported via the API.']}]}]}
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+        answ = pos.answers.first()
+    assert answ.file
+    assert answ.answer.startswith("file://")
 
     question.type = Question.TYPE_CHOICE_MULTIPLE
     question.save()
@@ -4609,3 +4642,254 @@ def test_revoked_secret_list(token_client, organizer, event):
     ))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_position_update_ignore_fields(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data={
+            'price': '99.99'
+        }
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.price == Decimal('23.00')
+
+
+@pytest.mark.django_db
+def test_position_update_only_partial(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    resp = token_client.put(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data={
+            'price': '99.99'
+        }
+    )
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_position_update(token_client, organizer, event, order, question):
+    with scopes_disabled():
+        op = order.positions.first()
+        question.type = Question.TYPE_CHOICE_MULTIPLE
+        question.save()
+        opt = question.options.create(answer="L")
+    payload = {
+        'company': 'VILE',
+        'attendee_name_parts': {
+            'full_name': 'Max Mustermann'
+        },
+        'street': 'Sesame Street 21',
+        'zipcode': '99999',
+        'city': 'Springfield',
+        'country': 'US',
+        'state': 'CA',
+        'attendee_email': 'foo@example.org',
+        'answers': [
+            {
+                'question': question.pk,
+                'answer': 'ignored',
+                'options': [opt.pk]
+            }
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    assert resp.data['answers'] == [
+        {
+            'question': question.pk,
+            'question_identifier': question.identifier,
+            'answer': 'L',
+            'options': [opt.pk],
+            'option_identifiers': [opt.identifier],
+        }
+    ]
+    op.refresh_from_db()
+    assert op.company == 'VILE'
+    assert op.attendee_name_cached == 'Max Mustermann'
+    assert op.attendee_name_parts == {
+        '_scheme': 'full',
+        'full_name': 'Max Mustermann'
+    }
+    with scopes_disabled():
+        assert op.answers.get().answer == 'L'
+        assert op.street == 'Sesame Street 21'
+        assert op.zipcode == '99999'
+        assert op.city == 'Springfield'
+        assert str(op.country) == 'US'
+        assert op.state == 'CA'
+        assert op.attendee_email == 'foo@example.org'
+        le = order.all_logentries().last()
+    assert le.action_type == 'pretix.event.order.modified'
+    assert le.parsed_data == {
+        'data': [
+            {
+                'position': op.pk,
+                'company': 'VILE',
+                'attendee_name_parts': {
+                    '_scheme': 'full',
+                    'full_name': 'Max Mustermann'
+                },
+                'street': 'Sesame Street 21',
+                'zipcode': '99999',
+                'city': 'Springfield',
+                'country': 'US',
+                'state': 'CA',
+                'attendee_email': 'foo@example.org',
+                f'question_{question.pk}': 'L'
+            }
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert order.all_logentries().last().pk == le.pk
+
+
+@pytest.mark.django_db
+def test_position_update_legacy_name(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    payload = {
+        'attendee_name': 'Max Mustermann',
+        'attendee_name_parts': {
+            '_legacy': 'maria'
+        },
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    payload = {
+        'attendee_name': 'Max Mustermann',
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.attendee_name_cached == 'Max Mustermann'
+    assert op.attendee_name_parts == {
+        '_legacy': 'Max Mustermann'
+    }
+    with scopes_disabled():
+        assert op.answers.count() == 1  # answer does not get deleted
+
+
+@pytest.mark.django_db
+def test_position_update_state_validation(token_client, organizer, event, order):
+    with scopes_disabled():
+        op = order.positions.first()
+    payload = {
+        'country': 'DE',
+        'state': 'BW'
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_position_update_question_handling(token_client, organizer, event, order, question):
+    with scopes_disabled():
+        op = order.positions.first()
+    payload = {
+        'answers': [
+            {
+                'question': question.pk,
+                'answer': 'FOOBAR',
+            },
+            {
+                'question': question.pk,
+                'answer': 'FOOBAR',
+            },
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    payload = {
+        'answers': [
+            {
+                'question': question.pk,
+                'answer': 'FOOBAR',
+            },
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert op.answers.count() == 1
+    payload = {
+        'answers': [
+        ]
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert op.answers.count() == 0
+
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile('file.png', 'invalid png content')
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+    payload = {
+        'answers': [
+            {
+                "question": question.id,
+                "answer": file_id_png
+            }
+        ]
+    }
+    question.type = Question.TYPE_FILE
+    question.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        answ = op.answers.get()
+    assert answ.file
+    assert answ.answer.startswith("file://")

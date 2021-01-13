@@ -763,7 +763,7 @@ with scopes_disabled():
             }
 
 
-class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
+class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderPositionSerializer
     queryset = OrderPosition.all.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -782,6 +782,11 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
             'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')
         },
     }
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
 
     def get_queryset(self):
         if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
@@ -950,6 +955,44 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
             raise ValidationError(str(e))
         except Quota.QuotaExceededException as e:
             raise ValidationError(str(e))
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.get('partial', False)
+        if not partial:
+            return Response(
+                {"detail": "Method \"PUT\" not allowed."},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED,
+            )
+        return super().update(request, *args, **kwargs)
+
+    def perform_update(self, serializer):
+        with transaction.atomic():
+            old_data = self.get_serializer_class()(instance=serializer.instance, context=self.get_serializer_context()).data
+            serializer.save()
+            new_data = serializer.data
+
+            if old_data != new_data:
+                log_data = self.request.data
+                if 'answers' in log_data:
+                    for a in new_data['answers']:
+                        log_data[f'question_{a["question"]}'] = a["answer"]
+                    log_data.pop('answers', None)
+                serializer.instance.order.log_action(
+                    'pretix.event.order.modified',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'data': [
+                            dict(
+                                position=serializer.instance.pk,
+                                **log_data
+                            )
+                        ]
+                    }
+                )
+
+        tickets.invalidate_cache.apply_async(kwargs={'event': serializer.instance.order.event.pk, 'order': serializer.instance.order.pk})
+        order_modified.send(sender=serializer.instance.order.event, order=serializer.instance.order)
 
 
 class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
