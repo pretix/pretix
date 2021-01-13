@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2020-10-03 22:00+0000\n"
-"Last-Translator: ethan.wang <wangkepengwkp@hotmail.com>\n"
+"PO-Revision-Date: 2021-01-10 18:00+0000\n"
+"Last-Translator: Li Thomas <lmy013@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -54,23 +54,19 @@ msgstr "正在销售"
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
-msgstr ""
+msgstr "完整设备访问（读取和修改订单以及礼品卡，还有读取产品和设置）"
 
 #: pretix/api/auth/devicesecurity.py:22
-#, fuzzy
-#| msgid "1. Download pretixdesk"
 msgid "pretixSCAN"
-msgstr "1.下载pretixdesk"
+msgstr "pretix 扫码端"
 
 #: pretix/api/auth/devicesecurity.py:50
 msgid "pretixSCAN (kiosk mode, online only)"
-msgstr ""
+msgstr "pretix 扫码器（展台模式-仅在线）"
 
 #: pretix/api/auth/devicesecurity.py:76
-#, fuzzy
-#| msgid "pretix User"
 msgid "pretixPOS"
-msgstr "pretix 用户"
+msgstr "pretix 终端"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -183,10 +179,9 @@ msgid "Gift card products should not be admission products at the same time."
 msgstr "礼品卡产品不应该同时是入场产品。"
 
 #: pretix/api/serializers/item.py:182
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "元数据属性“{name}”不存在."
+msgstr "项目元数据属性“{name}”不存在."
 
 #: pretix/api/serializers/item.py:299
 msgid ""
@@ -203,16 +198,12 @@ msgid "Circular dependency between questions detected."
 msgstr "检测到问题之间存在循环依赖关系。"
 
 #: pretix/api/serializers/item.py:323 pretix/control/forms/item.py:88
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "This type of question cannot be asked during check-in."
-msgstr "这个问题将在签入时提出。"
+msgstr "此类型问题不能在检票时询问。"
 
 #: pretix/api/serializers/order.py:927 pretix/api/serializers/order.py:934
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "产品“{}”没有关联到配额。"
+msgstr "商品 “{}” 在这个日期不可用。"
 
 #: pretix/api/serializers/organizer.py:56 pretix/control/forms/organizer.py:310
 msgid ""
@@ -259,10 +250,8 @@ msgstr "发送邮件时出错。请稍后再试。"
 
 #: pretix/api/views/order.py:569 pretix/base/services/cart.py:109
 #: pretix/base/services/orders.py:94 pretix/presale/views/order.py:709
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "One of the selected products is not available in the selected country."
-msgstr "所选产品不允许选择座位。"
+msgstr "选中的一项产品在选择的地区不可用。"
 
 #: pretix/api/webhooks.py:179 pretix/base/notifications.py:205
 msgid "New order placed"
@@ -282,10 +271,8 @@ msgid "Order canceled"
 msgstr "已取消的订单"
 
 #: pretix/api/webhooks.py:195 pretix/base/notifications.py:229
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order reactivated"
-msgstr "拒绝的订单"
+msgstr "订单已重激活"
 
 #: pretix/api/webhooks.py:199 pretix/base/notifications.py:235
 msgid "Order expired"
@@ -325,42 +312,32 @@ msgid "Ticket check-in reverted"
 msgstr "已检票回退"
 
 #: pretix/api/webhooks.py:235
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "活动日期"
+msgstr "事件创建"
 
 #: pretix/api/webhooks.py:239 pretix/api/webhooks.py:243
-#, fuzzy
-#| msgid "Event date range"
 msgid "Event details changed"
-msgstr "活动日期范围"
+msgstr "活动详情被修改"
 
 #: pretix/api/webhooks.py:247
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "活动开始日期和时间"
+msgstr "事件链日期添加"
 
 #: pretix/api/webhooks.py:251
-#, fuzzy
-#| msgid "Event date range"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "活动日期范围"
+msgstr "事件链日期修改"
 
 #: pretix/api/webhooks.py:255
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr "活动开始日期和时间"
+msgstr "事件链日期删除"
 
 #: pretix/base/auth.py:104
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system} 用户"
 
 #: pretix/base/auth.py:113 pretix/base/forms/auth.py:207
 #: pretix/base/models/auth.py:90 pretix/base/models/notifications.py:25
@@ -824,10 +801,8 @@ msgid "Total value (without taxes)"
 msgstr "总价 (未税)"
 
 #: pretix/base/exporters/invoices.py:191
-#, fuzzy
-#| msgid "Payment settings"
 msgid "Payment matching IDs"
-msgstr "支付设置"
+msgstr "支付匹配ID"
 
 #: pretix/base/exporters/invoices.py:192 pretix/base/exporters/invoices.py:313
 #: pretix/base/exporters/orderlist.py:166
@@ -951,10 +926,8 @@ msgid "Only paid orders"
 msgstr "仅支付的订单"
 
 #: pretix/base/exporters/orderlist.py:58
-#, fuzzy
-#| msgid "Payment amount"
 msgid "Include payment amounts"
-msgstr "支付金额"
+msgstr "包括支付数额"
 
 #: pretix/base/exporters/orderlist.py:142
 #: pretix/base/exporters/orderlist.py:303
@@ -1015,10 +988,8 @@ msgstr "Email"
 #: pretix/control/templates/pretixcontrol/order/index.html:206
 #: pretix/presale/checkoutflow.py:829 pretix/presale/forms/checkout.py:60
 #: pretix/presale/templates/pretixpresale/event/order.html:284
-#, fuzzy
-#| msgid "Line number"
 msgid "Phone number"
-msgstr "行号"
+msgstr "电话号码"
 
 #: pretix/base/exporters/orderlist.py:142
 #: pretix/base/exporters/orderlist.py:308
@@ -1039,16 +1010,12 @@ msgstr "订单日期"
 #: pretix/base/exporters/orderlist.py:143
 #: pretix/base/exporters/orderlist.py:309
 #: pretix/base/exporters/orderlist.py:410
-#, fuzzy
-#| msgid "Order date"
 msgid "Order time"
-msgstr "订单日期"
+msgstr "订单时间"
 
 #: pretix/base/exporters/orderlist.py:151 pretix/base/settings.py:298
-#, fuzzy
-#| msgid "E-mail address verified"
 msgid "Custom address field"
-msgstr "E-mail 地址已验证"
+msgstr "自定义地址池"
 
 #: pretix/base/exporters/orderlist.py:151
 msgid "Date of last payment"
