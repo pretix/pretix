@@ -3,6 +3,7 @@ from collections import Counter, defaultdict
 from decimal import Decimal
 
 import pycountry
+from django.core.files import File
 from django.db.models import F, Q
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy
@@ -17,8 +18,9 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Checkin, Invoice, InvoiceAddress, InvoiceLine, Item, ItemVariation, Order,
-    OrderPosition, Question, QuestionAnswer, Seat, SubEvent, TaxRule, Voucher,
+    CachedFile, Checkin, Invoice, InvoiceAddress, InvoiceLine, Item,
+    ItemVariation, Order, OrderPosition, Question, QuestionAnswer, Seat,
+    SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund, RevokedTicketSecret,
@@ -121,11 +123,34 @@ class AnswerSerializer(I18nAwareModelSerializer):
             )
         return q
 
+    def _handle_file_upload(self, data):
+        try:
+            ao = self.context["request"].user or self.context["request"].auth
+            cf = CachedFile.objects.get(
+                session_key=f'api-upload-{str(type(ao))}-{ao.pk}',
+                file__isnull=False,
+                pk=data['answer'][len("file:"):],
+            )
+        except (ValidationError, IndexError):  # invalid uuid
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
+        except CachedFile.DoesNotExist:
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
+
+        allowed_types = (
+            'image/png', 'image/jpeg', 'image/gif', 'application/pdf'
+        )
+        if cf.type not in allowed_types:
+            raise ValidationError('The submitted file "{fid}" has a file type that is not allowed in this field.'.format(fid=data))
+        if cf.file.size > 10 * 1024 * 1024:
+            raise ValidationError('The submitted file "{fid}" is too large to be used in this field.'.format(fid=data))
+
+        data['options'] = []
+        data['answer'] = cf.file
+        return data
+
     def validate(self, data):
         if data.get('question').type == Question.TYPE_FILE:
-            raise ValidationError(
-                'File uploads are currently not supported via the API.'
-            )
+            return self._handle_file_upload(data)
         elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
             if not data.get('options'):
                 raise ValidationError(
@@ -342,11 +367,22 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                     raise ValidationError(f'Question {answ_data["question"]} was sent twice.')
                 if answ_data['question'].pk in answercache:
                     a = answercache[answ_data['question'].pk]
-                    for attr, value in answ_data.items():
-                        setattr(a, attr, value)
+                    if isinstance(answ_data['answer'], File):
+                        a.file.save(answ_data['answer'].name, answ_data['answer'], save=False)
+                        a.answer = 'file://' + a.file.name
+                    else:
+                        for attr, value in answ_data.items():
+                            setattr(a, attr, value)
                     a.save()
                 else:
-                    a = instance.answers.create(**answ_data)
+                    if isinstance(answ_data['answer'], File):
+                        an = answ_data.pop('answer')
+                        a = instance.answers.create(**answ_data, answer='')
+                        a.file.save(an.name, an, save=False)
+                        a.answer = 'file://' + a.file.name
+                        a.save()
+                    else:
+                        a = instance.answers.create(**answ_data)
                 a.options.set(options)
                 qs_seen.add(a.question_id)
             for qid, a in answercache.items():
@@ -1130,8 +1166,16 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     pos.save()
                     for answ_data in answers_data:
                         options = answ_data.pop('options', [])
-                        answ = pos.answers.create(**answ_data)
-                        answ.options.add(*options)
+
+                        if isinstance(answ_data['answer'], File):
+                            an = answ_data.pop('answer')
+                            answ = pos.answers.create(**answ_data, answer='')
+                            answ.file.save(an.name, an, save=False)
+                            answ.answer = 'file://' + answ.file.name
+                            answ.save()
+                        else:
+                            answ = pos.answers.create(**answ_data)
+                            answ.options.add(*options)
                 pos_map[pos.positionid] = pos
 
             if not simulate:
