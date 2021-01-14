@@ -19,7 +19,6 @@ from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import change_payment_provider
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.celery_app import app
-
 from .models import BankImportJob, BankTransaction
 
 logger = logging.getLogger(__name__)
@@ -251,11 +250,11 @@ def process_banktransfers(self, job: int, data: list) -> None:
                 if job.event:
                     prefixes = [job.event.slug.upper()]
                 else:
-                    prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"[\- ]*")
+                    prefixes = [e.slug.upper()
                                 for e in job.organizer.events.all()]
                 pattern = re.compile(
                     "(%s)[ \\-_]*([A-Z0-9]{%s,%s})" % (
-                        "|".join(prefixes),
+                        "|".join(p.replace(".", r"\.").replace("-", r"[\- ]*") for p in prefixes),
                         code_len_agg['min'] or 0,
                         code_len_agg['max'] or 5
                     )
