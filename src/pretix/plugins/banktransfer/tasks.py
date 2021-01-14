@@ -4,6 +4,7 @@ from decimal import Decimal
 
 import dateutil.parser
 from celery.exceptions import MaxRetriesExceededError
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Max, Min, Q
 from django.db.models.functions import Length
@@ -63,30 +64,34 @@ def cancel_old_payments(order):
             )
 
 
+def _find_order_for_code(base_qs, code):
+    try_codes = [
+        code,
+        Order.normalize_code(code, is_fallback=True),
+        code[:settings.ENTROPY['order_code']],
+        Order.normalize_code(code[:settings.ENTROPY['order_code']], is_fallback=True)
+    ]
+    for c in try_codes:
+        try:
+            return base_qs.get(code=c)
+        except Order.DoesNotExist:
+            pass
+
+
 @transaction.atomic
 def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = None, organizer: Organizer = None):
     orders = []
     if event:
         for slug, code in matches:
-            try:
-                orders.append(event.orders.get(code=code))
-            except Order.DoesNotExist:
-                normalized_code = Order.normalize_code(code, is_fallback=True)
-                try:
-                    orders.append(event.orders.get(code=normalized_code))
-                except Order.DoesNotExist:
-                    pass
+            order = _find_order_for_code(event.orders, code)
+            if order:
+                orders.append(order)
     else:
         qs = Order.objects.filter(event__organizer=organizer)
         for slug, code in matches:
-            try:
-                orders.append(qs.get(event__slug__iexact=slug, code=code))
-            except Order.DoesNotExist:
-                normalized_code = Order.normalize_code(code, is_fallback=True)
-                try:
-                    orders.append(qs.get(event__slug__iexact=slug, code=normalized_code))
-                except Order.DoesNotExist:
-                    pass
+            order = _find_order_for_code(qs.filter(event__slug__iexact=slug), code)
+            if order:
+                orders.append(order)
 
     if not orders:
         # No match
