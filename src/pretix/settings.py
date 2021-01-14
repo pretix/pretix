@@ -38,6 +38,7 @@ import logging
 import os
 import sys
 from urllib.parse import urlparse
+from json import loads
 
 import django.conf.locale
 from django.utils.crypto import get_random_string
@@ -291,9 +292,15 @@ if not SESSION_ENGINE:
         SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 HAS_CELERY = config.has_option('celery', 'broker')
+HAS_CELERY_BROKER_TRANSPORT_OPTS = config.has_option('celery', 'broker_transport_options')
+HAS_CELERY_BACKEND_TRANSPORT_OPTS = config.has_option('celery', 'backend_transport_options')
 if HAS_CELERY:
     CELERY_BROKER_URL = config.get('celery', 'broker')
     CELERY_RESULT_BACKEND = config.get('celery', 'backend')
+    if HAS_CELERY_BROKER_TRANSPORT_OPTS:
+        CELERY_BROKER_TRANSPORT_OPTIONS = loads(config.get('celery', 'broker_transport_options'))
+    if HAS_CELERY_BACKEND_TRANSPORT_OPTS:
+        CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = loads(config.get('celery', 'backend_transport_options'))
 else:
     CELERY_TASK_ALWAYS_EAGER = True
 
