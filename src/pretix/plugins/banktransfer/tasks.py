@@ -84,13 +84,13 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
     if event:
         for slug, code in matches:
             order = _find_order_for_code(event.orders, code)
-            if order:
+            if order and order.code not in {o.code for o in orders}:
                 orders.append(order)
     else:
         qs = Order.objects.filter(event__organizer=organizer)
         for slug, code in matches:
             order = _find_order_for_code(qs.filter(event__slug__iexact=slug), code)
-            if order:
+            if order and order.code not in {o.code for o in orders}:
                 orders.append(order)
 
     if not orders:

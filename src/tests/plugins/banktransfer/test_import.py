@@ -261,6 +261,18 @@ def test_mark_paid_organizer(env, orga_job):
 
 
 @pytest.mark.django_db
+def test_mark_paid_double_reference(env, orga_job):
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY-1234S DUMMY-1234S',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_mark_paid_organizer_dash_in_slug(env, orga_job):
     env[0].slug = "foo-bar"
     env[0].save()
