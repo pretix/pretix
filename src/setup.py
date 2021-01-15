@@ -156,7 +156,7 @@ setup(
         'text-unidecode==1.*',
         'protobuf==3.13.*',
         'cryptography',
-        'sepaxml==2.4.*',
+        'sepaxml==2.4.*,>=2.4.1',
     ],
     extras_require={
         'dev': [
