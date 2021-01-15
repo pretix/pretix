@@ -1225,6 +1225,21 @@ DEFAULTS = {
                         "e.g. to explain choosing a lower refund will help your organization.")
         )
     },
+    'cancel_allow_user_paid_adjust_fees_step': {
+        'default': None,
+        'type': Decimal,
+        'form_class': forms.DecimalField,
+        'serializer_class': serializers.DecimalField,
+        'serializer_kwargs': dict(
+            max_digits=10, decimal_places=2
+        ),
+        'form_kwargs': dict(
+            max_digits=10, decimal_places=2,
+            label=_("Step size for reduction amount"),
+            help_text=_('By default, customers can choose an arbitrary amount for you to keep. If you set this to e.g. '
+                        '10, they will only be able to choose values in increments of 10.')
+        )
+    },
     'cancel_allow_user_paid_require_approval': {
         'default': 'False',
         'type': bool,

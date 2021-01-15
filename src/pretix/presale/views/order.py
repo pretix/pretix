@@ -1,4 +1,5 @@
 import inspect
+import json
 import mimetypes
 import os
 import re
@@ -786,16 +787,27 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
+        prs = self.order.payment_refund_sum
         fee = self.order.user_cancel_fee
-        refund_amount = self.order.payment_refund_sum - fee
+        refund_amount = prs - fee
         proposals = self.order.propose_auto_refunds(refund_amount)
         ctx['cancel_fee'] = fee
         ctx['refund_amount'] = refund_amount
+        ctx['payment_refund_sum'] = prs
         ctx['can_auto_refund'] = sum(proposals.values()) == refund_amount
         ctx['proposals'] = [
             p.payment_provider.payment_presale_render(payment=p)
             for p in proposals
         ]
+        if self.request.event.settings.cancel_allow_user_paid_adjust_fees_step:
+            steps = [fee]
+            s = fee
+            while s < prs:
+                steps.append(s)
+                s += self.request.event.settings.cancel_allow_user_paid_adjust_fees_step
+            if prs not in steps:
+                steps.append(prs)
+            ctx['ticks'] = json.dumps([float(p) for p in steps])
         return ctx
 
 
@@ -831,6 +843,11 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
                     messages.error(request, _('You chose an invalid cancellation fee.'))
                     return redirect(self.get_order_url())
             if custom_fee is not None and fee <= custom_fee <= self.order.payment_refund_sum:
+                if self.request.event.settings.cancel_allow_user_paid_adjust_fees_step:
+                    if (custom_fee - fee) % self.request.event.settings.cancel_allow_user_paid_adjust_fees_step != Decimal('0.00'):
+                        messages.error(request, _('You chose an invalid cancellation fee.'))
+                        return redirect(self.get_order_url())
+
                 fee = custom_fee
             else:
                 messages.error(request, _('You chose an invalid cancellation fee.'))

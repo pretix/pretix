@@ -214,6 +214,11 @@ h2.subevent-head {
         @include slider_background-image($brand-success, darken($brand-success, 5%), mix($brand-success, darken($brand-success, 5%)));
     }
 
+    .slider-tick-container {
+        opacity: 0;
+        visibility: hidden;
+    }
+
     input {
         flex: 0;
     }

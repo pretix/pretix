@@ -62,13 +62,20 @@
                         value="{{ cancel_fee|stringformat:".2f" }}"
                         data-slider-min="{{ cancel_fee|stringformat:".2f" }}"
                         data-slider-value="{{ cancel_fee|stringformat:".2f" }}"
-                        data-slider-step="0.01"
-                        data-slider-max="{{ order.payment_refund_sum|stringformat:".2f" }}"
+                        {% if request.event.settings.cancel_allow_user_paid_adjust_fees_step %}
+                            data-slider-ticks="{{ ticks }}"
+                            data-slider-lock-to-ticks="true"
+                        {% else %}
+                            data-slider-step="0.01"
+                        {% endif %}
+                        data-slider-max="{{ payment_refund_sum|stringformat:".2f" }}"
                         data-slider-tooltip="hide"/>
                 <div id="cancel-fee-refund"></div>
             </div>
             <div class="text-center" id="cancel-fee-custom-link">
-                <a id="cancel-fee-custom"><small>{% trans "Enter custom amount" %}</small></a>
+                {% if not request.event.settings.cancel_allow_user_paid_adjust_fees_step %}
+                    <a id="cancel-fee-custom"><small>{% trans "Enter custom amount" %}</small></a>
+                {% endif %}
             </div>
         {% else %}
             <p>
