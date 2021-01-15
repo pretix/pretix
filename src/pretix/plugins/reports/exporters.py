@@ -1,7 +1,7 @@
 import copy
 import tempfile
 from collections import OrderedDict, defaultdict
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from decimal import Decimal
 
 import pytz
@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.db import models
 from django.db.models import DateTimeField, Max, OuterRef, Subquery, Sum
-from django.template.defaultfilters import floatformat, time
+from django.template.defaultfilters import floatformat
 from django.utils.formats import date_format, localize
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
@@ -570,17 +570,23 @@ class OrderTaxListReport(MultiSheetListExporter):
         date_from = form_data.get('date_from')
         date_until = form_data.get('date_until')
         date_filter = form_data.get('date_axis')
-        if date_from and isinstance(date_from, date):
-            date_from = make_aware(datetime.combine(
-                date_from,
-                time(hour=0, minute=0, second=0, microsecond=0)
-            ), self.event.timezone)
+        if date_from:
+            if isinstance(date_from, str):
+                date_from = parse(date_from).date()
+            if isinstance(date_from, date):
+                date_from = make_aware(datetime.combine(
+                    date_from,
+                    time(hour=0, minute=0, second=0, microsecond=0)
+                ), self.event.timezone)
 
-        if date_until and isinstance(date_until, date):
-            date_until = make_aware(datetime.combine(
-                date_until + timedelta(days=1),
-                time(hour=0, minute=0, second=0, microsecond=0)
-            ), self.event.timezone)
+        if date_until:
+            if isinstance(date_until, str):
+                date_from = parse(date_until).date()
+            if isinstance(date_until, date):
+                date_until = make_aware(datetime.combine(
+                    date_until + timedelta(days=1),
+                    time(hour=0, minute=0, second=0, microsecond=0)
+                ), self.event.timezone)
 
         if date_filter == 'order_date':
             if date_from:
