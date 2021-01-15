@@ -13,6 +13,7 @@
             <th>{% trans "Amount" %}</th>
             <th>{% trans "Result" %}</th>
             <th>{% trans "Order" %}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -20,40 +21,22 @@
             <tr data-id="{{ trans.id }}">
                 <td class="actions">
                     {% if trans.order and trans.state == 'invalid' %}
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="accept"
-                                    data-toggle="tooltip" title="{% trans "Accept anyway" %}" data-placement="right">
-                                <span class="fa fa-check"></span>
-                            </button>
-                            <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                    data-toggle="tooltip" title="{% trans "Discard" %}">
-                                <span class="fa fa-trash"></span>
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="accept"
+                                data-toggle="tooltip" title="{% trans "Accept anyway" %}" data-placement="right">
+                            <span class="fa fa-check"></span>
+                        </button>
                     {% elif trans.state == 'nomatch' %}
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
-                                    value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}"
-                                    data-placement="right">
-                                <span class="fa fa-check"></span>
-                            </button>
-                            <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                    data-toggle="tooltip" title="{% trans "Discard" %}">
-                                <span class="fa fa-trash"></span>
-                            </button>
-                        </div>
+                        <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
+                                value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}"
+                                data-placement="right">
+                            <span class="fa fa-check"></span>
+                        </button>
                     {% elif trans.state == 'error' %}
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
-                                    data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
-                                <span class="fa fa-refresh"></span>
-                            </button>
-                            <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                    data-toggle="tooltip" title="{% trans "Discard" %}">
-                                <span class="fa fa-trash"></span>
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
+                                data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
+                            <span class="fa fa-refresh"></span>
+                        </button>
                     {% elif trans.state == 'already' %}
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <div class="btn-group" role="group">
@@ -65,10 +48,6 @@
                             <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
                                     data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
                                 <span class="fa fa-refresh"></span>
-                            </button>
-                            <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                                    data-toggle="tooltip" title="{% trans "Discard" %}">
-                                <span class="fa fa-trash"></span>
                             </button>
                         </div>
                     {% endif %}
@@ -124,7 +103,7 @@
                 <td>
                     {% if trans.order %}
                         <a href="{% url "control:event.order" event=trans.order.event.slug organizer=request.organizer.slug code=trans.order.code %}"
-                           data-toggle="tooltip" title="{{ trans.order.total|money:trans.order.event.currency }}">
+                                data-toggle="tooltip" title="{{ trans.order.total|money:trans.order.event.currency }}">
                             {% if not request.event %}
                                 {{ trans.order.event.slug|upper }}-{{ trans.order.code }}
                             {% else %}
@@ -132,6 +111,12 @@
                             {% endif %}
                         </a>
                     {% endif %}
+                </td>
+                <td class="discard">
+                    <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
+                            data-toggle="tooltip" title="{% trans "Discard" %}">
+                        <span class="fa fa-trash"></span>
+                    </button>
                 </td>
             </tr>
         {% endfor %}

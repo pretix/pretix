@@ -1,3 +1,6 @@
 table.transaction-list td.actions {
     width: 100px;
 }
+table.transaction-list td.discard {
+    width: 50px;
+}
