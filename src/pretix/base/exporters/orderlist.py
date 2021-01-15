@@ -652,7 +652,7 @@ class PaymentListExporter(ListExporter):
 
         headers = [
             _('Event slug'), _('Order'), _('Payment ID'), _('Creation date'), _('Completion date'), _('Status'),
-            _('Status code'), _('Amount'), _('Payment method')
+            _('Status code'), _('Amount'), _('Payment method'), _('Comment')
         ]
         yield headers
 
@@ -674,7 +674,8 @@ class PaymentListExporter(ListExporter):
                 obj.get_state_display(),
                 obj.state,
                 obj.amount * (-1 if isinstance(obj, OrderRefund) else 1),
-                provider_names.get(obj.provider, obj.provider)
+                provider_names.get(obj.provider, obj.provider),
+                obj.comment if isinstance(obj, OrderRefund) else "",
             ]
             yield row
 

@@ -22,7 +22,7 @@ def get_refund_export_csv(refund_export: RefundExport):
     output = StreamWriter(byte_data)
 
     writer = csv.writer(output)
-    writer.writerow([_("Payer"), "IBAN", "BIC", _("Amount"), _("Currency"), _("Code")])
+    writer.writerow([_("Payer"), "IBAN", "BIC", _("Amount"), _("Currency"), _("Code"), _("Comment")])
     for row in refund_export.rows_data:
         bic = ''
         if row.get('bic'):
@@ -39,6 +39,7 @@ def get_refund_export_csv(refund_export: RefundExport):
             localize(Decimal(row['amount'])),
             refund_export.currency,
             row['id'],
+            row.get('comment') or '',
         ])
 
     filename = _get_filename(refund_export) + ".csv"
@@ -68,7 +69,7 @@ def build_sepa_xml(refund_export: RefundExport, account_holder, iban, bic):
             "IBAN": row["iban"],
             "amount": int(Decimal(row['amount']) * 100),  # in euro-cents
             "execution_date": datetime.date.today(),
-            "description": f"{_('Refund')} {refund_export.entity_slug} {row['id']}",
+            "description": f"{_('Refund')} {refund_export.entity_slug} {row['id']} {row.get('comment') or ''}".strip()[:140],
         }
         if row.get('bic'):
             try:

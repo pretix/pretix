@@ -162,6 +162,13 @@
         <input type="hidden" name="start-mode" value="{{ start_form.cleaned_data.mode }}">
         <input type="hidden" name="start-partial_amount" value="{{ partial_amount }}">
 
+        <div class="form-group">
+            <label class="control-label" for="id_comment">{% trans "Refund reason" %}</label>
+            <input type="text" name="comment" class="form-control" title="{% trans "May be shown to the end user or used e.g. as part of a payment reference." %}" id="id_comment"
+                value="{{ comment|default:"" }}">
+            <div class="help-block">{% trans "May be shown to the end user or used e.g. as part of a payment reference." %}</div>
+        </div>
+
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"

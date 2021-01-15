@@ -502,7 +502,7 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = OrderRefund
-        fields = ('local_id', 'state', 'source', 'amount', 'payment', 'created', 'execution_date', 'provider')
+        fields = ('local_id', 'state', 'source', 'amount', 'payment', 'created', 'execution_date', 'comment', 'provider')
 
 
 class OrderURLField(serializers.URLField):
@@ -1324,7 +1324,7 @@ class OrderRefundCreateSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = OrderRefund
-        fields = ('state', 'source', 'amount', 'payment', 'execution_date', 'provider', 'info')
+        fields = ('state', 'source', 'amount', 'payment', 'execution_date', 'provider', 'info', 'comment')
 
     def create(self, validated_data):
         pid = validated_data.pop('payment', None)

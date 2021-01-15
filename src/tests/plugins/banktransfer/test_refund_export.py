@@ -124,6 +124,7 @@ def test_unite_transaction_rows():
             'iban': 'DE12345678901234567890',
             'bic': 'HARKE9000',
             'id': "ROLLA-R-1",
+            'comment': None,
             'amount': Decimal("42.23"),
         },
         {
@@ -131,6 +132,7 @@ def test_unite_transaction_rows():
             'iban': 'DE111111111111111111111',
             'bic': 'ikswez2020',
             'id': "PARTY-R-1",
+            'comment': None,
             'amount': Decimal("6.50"),
         }
     ], key=_row_key_func)
@@ -143,6 +145,7 @@ def test_unite_transaction_rows():
             'iban': 'DE12345678901234567890',
             'bic': 'HARKE9000',
             'id': "ROLLA-R-1",
+            'comment': None,
             'amount': Decimal("7.77"),
         },
         {
@@ -150,6 +153,7 @@ def test_unite_transaction_rows():
             'iban': 'DE111111111111111111111',
             'bic': 'ikswez2020',
             'id': "PARTY-R-2",
+            'comment': None,
             'amount': Decimal("13.50"),
         }
     ], key=_row_key_func)
@@ -160,6 +164,7 @@ def test_unite_transaction_rows():
             'iban': 'DE12345678901234567890',
             'bic': 'HARKE9000',
             'id': "ROLLA-R-1",
+            'comment': None,
             'amount': Decimal("50.00"),
         },
         {
@@ -167,5 +172,6 @@ def test_unite_transaction_rows():
             'iban': 'DE111111111111111111111',
             'bic': 'ikswez2020',
             'id': 'PARTY-R-1, PARTY-R-2',
+            'comment': None,
             'amount': Decimal('20.00'),
         }], key=_row_key_func)

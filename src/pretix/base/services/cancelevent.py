@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.db import transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Subquery
+from django.utils.translation import gettext
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.decimal import round_decimal
@@ -195,7 +196,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                 if auto_refund:
                     _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True,
                                      source=OrderRefund.REFUND_SOURCE_ADMIN, refund_as_giftcard=refund_as_giftcard,
-                                     giftcard_expires=giftcard_expires, giftcard_conditions=giftcard_conditions)
+                                     giftcard_expires=giftcard_expires, giftcard_conditions=giftcard_conditions,
+                                     comment=gettext('Event canceled'))
             finally:
                 if send:
                     _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all())
@@ -252,7 +254,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
             if auto_refund:
                 _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True,
                                  source=OrderRefund.REFUND_SOURCE_ADMIN, refund_as_giftcard=refund_as_giftcard,
-                                 giftcard_expires=giftcard_expires, giftcard_conditions=giftcard_conditions)
+                                 giftcard_expires=giftcard_expires, giftcard_conditions=giftcard_conditions,
+                                 comment=gettext('Event canceled'))
 
             if send:
                 _send_mail(o, send_subject, send_message, subevent, refund_amount, user, positions)

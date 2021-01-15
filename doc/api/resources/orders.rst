@@ -325,7 +325,8 @@ state                                 string                     Payment state, 
 source                                string                     How this refund has been created, one of ``buyer``, ``admin``, or ``external``
 amount                                money (string)             Payment amount
 created                               datetime                   Date and time of creation of this payment
-payment_date                          datetime                   Date and time of completion of this payment (or ``null``)
+comment                               string                     Reason for refund (shown to the customer in some cases, can be ``null``).
+execution_date                        datetime                   Date and time of completion of this refund (or ``null``)
 provider                              string                     Identification string of the payment provider
 ===================================== ========================== =======================================================
 
@@ -2119,6 +2120,7 @@ Order refund endpoints
             "payment": 1,
             "created": "2017-12-01T10:00:00Z",
             "execution_date": "2017-12-04T12:13:12Z",
+            "comment": "Cancellation",
             "provider": "banktransfer"
           }
         ]
@@ -2161,6 +2163,7 @@ Order refund endpoints
         "payment": 1,
         "created": "2017-12-01T10:00:00Z",
         "execution_date": "2017-12-04T12:13:12Z",
+        "comment": "Cancellation",
         "provider": "banktransfer"
       }
 
@@ -2195,6 +2198,7 @@ Order refund endpoints
         "amount": "23.00",
         "payment": 1,
         "execution_date": null,
+        "comment": "Cancellation",
         "provider": "manual",
         "mark_canceled": false,
         "mark_pending": true
@@ -2216,6 +2220,7 @@ Order refund endpoints
         "payment": 1,
         "created": "2017-12-01T10:00:00Z",
         "execution_date": null,
+        "comment": "Cancellation",
         "provider": "manual"
       }
 

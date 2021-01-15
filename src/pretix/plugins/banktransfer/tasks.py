@@ -20,6 +20,7 @@ from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import change_payment_provider
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.celery_app import app
+
 from .models import BankImportJob, BankTransaction
 
 logger = logging.getLogger(__name__)

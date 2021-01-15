@@ -602,6 +602,7 @@ def _unite_transaction_rows(transaction_rows):
             "id": ", ".join(sorted(set(r['id'] for r in rows))),
             "payer": ", ".join(sorted(set(r['payer'] for r in rows))),
             "amount": sum(r['amount'] for r in rows),
+            "comment": ", ".join(r['comment'] for r in rows if r.get('comment')) or None,
         })
     return united_transactions_rows
 
@@ -649,6 +650,7 @@ class RefundExportListView(ListView):
                 transaction_rows.append({
                     "amount": refund.amount,
                     "id": refund.full_id,
+                    "comment": refund.comment,
                     **{key: data.get(key) for key in ("payer", "iban", "bic")}
                 })
                 refund.done(user=self.request.user)

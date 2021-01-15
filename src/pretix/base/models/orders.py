@@ -1716,6 +1716,11 @@ class OrderRefund(models.Model):
         max_length=255,
         verbose_name=_("Payment provider")
     )
+    comment = models.TextField(
+        verbose_name=_("Refund reason"),
+        help_text=_('May be shown to the end user or used e.g. as part of a payment reference.'),
+        null=True, blank=True
+    )
     info = models.TextField(
         verbose_name=_("Payment information"),
         null=True, blank=True

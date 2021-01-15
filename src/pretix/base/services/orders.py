@@ -2034,7 +2034,7 @@ _unset = object()
 
 
 def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=OrderRefund.REFUND_SOURCE_BUYER,
-                     refund_as_giftcard=False, giftcard_expires=_unset, giftcard_conditions=None):
+                     refund_as_giftcard=False, giftcard_expires=_unset, giftcard_conditions=None, comment=None):
     notify_admin = False
     error = False
     if isinstance(order, int):
@@ -2059,6 +2059,7 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
                 order=order,
                 payment=None,
                 source=source,
+                comment=comment,
                 state=OrderRefund.REFUND_STATE_CREATED,
                 execution_date=now(),
                 amount=can_auto_refund_sum,
@@ -2096,6 +2097,7 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
                     source=source,
                     state=OrderRefund.REFUND_STATE_CREATED,
                     amount=value,
+                    comment=comment,
                     provider=p.provider
                 )
                 order.log_action('pretix.event.order.refund.created', {
@@ -2125,6 +2127,7 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
             with transaction.atomic():
                 r = order.refunds.create(
                     source=source,
+                    comment=comment,
                     state=OrderRefund.REFUND_STATE_CREATED,
                     amount=refund_amount - can_auto_refund_sum,
                     provider='manual'
@@ -2149,13 +2152,14 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 @scopes_disabled()
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
-                 device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False):
+                 device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False, comment=None):
     try:
         try:
             ret = _cancel_order(order, user, send_mail, api_token, device, oauth_application,
                                 cancellation_fee)
             if try_auto_refund:
-                _try_auto_refund(order, refund_as_giftcard=refund_as_giftcard)
+                _try_auto_refund(order, refund_as_giftcard=refund_as_giftcard,
+                                 comment=comment)
             return ret
         except LockTimeoutException:
             self.retry()

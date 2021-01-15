@@ -6,6 +6,7 @@
 {% load rich_text %}
 {% load safelink %}
 {% load eventsignal %}
+{% load l10n %}
 {% load phone_format %}
 {% block title %}
     {% blocktrans trimmed with code=order.code %}
@@ -97,7 +98,10 @@
             {% csrf_token %}
             <input type="hidden" name="start-action" value="do_nothing">
             <input type="hidden" name="start-mode" value="partial">
-            <input type="hidden" name="start-partial_amount" value="{{ overpaid }}">
+            {% localize off %}
+            <input type="hidden" name="start-partial_amount" value="{{ overpaid|floatformat:2 }}">
+            {% endlocalize %}
+            <input type="hidden" name="comment" value="{% trans "Refund for overpayment" %}">
             <div class="alert alert-warning">
                 {% blocktrans trimmed with amount=overpaid|money:request.event.currency %}
                     This order is currently overpaid by {{ amount }}.
@@ -759,11 +763,19 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            {% if r.html_info %}
+                                            {% if r.html_info or staff_session or r.comment %}
                                                 <tr>
                                                     <td colspan="1"></td>
                                                     <td colspan="7">
-                                                        {{ r.html_info|safe }}
+                                                        {% if r.comment %}
+                                                            <dl class="dl-horizontal">
+                                                                <dt>{% trans "Comment" %}</dt>
+                                                                <dd>{{ r.comment }}</dd>
+                                                            </dl>
+                                                        {% endif %}
+                                                        {% if r.html_info %}
+                                                            {{ r.html_info|safe }}
+                                                        {% endif %}
                                                         {% if staff_session %}
                                                             <p>
                                                                 <a href="" class="btn btn-default btn-xs" data-expandrefund
@@ -773,17 +785,6 @@
                                                                 </a>
                                                             </p>
                                                         {% endif %}
-                                                    </td>
-                                                </tr>
-                                            {% elif staff_session %}
-                                                <tr>
-                                                    <td colspan="1"></td>
-                                                    <td colspan="7">
-                                                        <a href="" class="btn btn-default btn-xs" data-expandrefund
-                                                           data-id="{{ r.pk }}">
-                                                            <span class="fa-eye fa fa-fw"></span>
-                                                            {% trans "Inspect" %}
-                                                        </a>
                                                     </td>
                                                 </tr>
                                             {% endif %}

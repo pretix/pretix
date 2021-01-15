@@ -5,7 +5,7 @@ import os
 import re
 from datetime import datetime, time, timedelta
 from decimal import Decimal, DecimalException
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 
 import vat_moss.id
 from django.conf import settings
@@ -759,6 +759,7 @@ class OrderRefundView(OrderView):
 
     def choose_form(self):
         payments = list(self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED))
+        comment = self.request.POST.get("comment") or self.request.GET.get("comment") or None
         if self.start_form.cleaned_data.get('mode') == 'full':
             full_refund = self.order.payment_refund_sum
         else:
@@ -800,6 +801,7 @@ class OrderRefundView(OrderView):
                             else OrderRefund.REFUND_STATE_CREATED
                         ),
                         amount=manual_value,
+                        comment=comment,
                         provider='manual'
                     ))
 
@@ -827,6 +829,7 @@ class OrderRefundView(OrderView):
                         execution_date=now(),
                         amount=giftcard_value,
                         provider='giftcard',
+                        comment=comment,
                         info=json.dumps({
                             'gift_card': giftcard.pk
                         })
@@ -857,6 +860,7 @@ class OrderRefundView(OrderView):
                             execution_date=now(),
                             amount=offsetting_value,
                             provider='offsetting',
+                            comment=comment,
                             info=json.dumps({
                                 'orders': [order.code]
                             })
@@ -891,6 +895,7 @@ class OrderRefundView(OrderView):
                             source=OrderRefund.REFUND_SOURCE_ADMIN,
                             state=OrderRefund.REFUND_STATE_CREATED,
                             amount=value,
+                            comment=comment,
                             provider=p.provider
                         ))
 
@@ -968,6 +973,7 @@ class OrderRefundView(OrderView):
             'payments': payments,
             'remainder': to_refund,
             'order': self.order,
+            'comment': comment,
             'giftcard_proposal': giftcard_proposal,
             'partial_amount': (
                 self.request.POST.get('start-partial_amount') if self.request.method == 'POST'
@@ -1098,14 +1104,16 @@ class OrderTransition(OrderView):
                 if self.order.pending_sum < 0:
                     messages.success(self.request, _('The order has been canceled. You can now select how you want to '
                                                      'transfer the money back to the user.'))
-                    return redirect(reverse('control:event.order.refunds.start', kwargs={
-                        'event': self.request.event.slug,
-                        'organizer': self.request.event.organizer.slug,
-                        'code': self.order.code
-                    }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}&giftcard={}'.format(
-                        round_decimal(self.order.pending_sum * -1),
-                        'true' if self.req and self.req.refund_as_giftcard else 'false'
-                    ))
+                    with language(self.order.locale):
+                        return redirect(reverse('control:event.order.refunds.start', kwargs={
+                            'event': self.request.event.slug,
+                            'organizer': self.request.event.organizer.slug,
+                            'code': self.order.code
+                        }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}&giftcard={}&comment={}'.format(
+                            round_decimal(self.order.pending_sum * -1),
+                            'true' if self.req and self.req.refund_as_giftcard else 'false',
+                            quote(gettext('Order canceled'))
+                        ))
 
                 messages.success(self.request, _('The order has been canceled.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'e':

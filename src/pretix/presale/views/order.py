@@ -18,7 +18,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
@@ -849,7 +849,9 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             self.order.log_action('pretix.event.order.refund.requested')
             return self.success(None)
         else:
-            return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True, refund_as_giftcard=giftcard)
+            comment = gettext('Canceled by customer')
+            return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True, refund_as_giftcard=giftcard,
+                           comment=comment)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

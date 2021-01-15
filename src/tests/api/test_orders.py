@@ -201,6 +201,7 @@ TEST_REFUNDS_RES = [
         "source": "admin",
         "created": "2017-12-01T10:00:00Z",
         "execution_date": "2017-12-01T10:00:00Z",
+        "comment": None,
         "provider": "stripe",
         "state": "done",
         "amount": "23.00"
