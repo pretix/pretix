@@ -458,6 +458,16 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         required=False,
         label=_('Total amount'),
     )
+    payment_sum_min = forms.DecimalField(
+        localize=True,
+        required=False,
+        label=_('Minimal sum of payments and refunds'),
+    )
+    payment_sum_max = forms.DecimalField(
+        localize=True,
+        required=False,
+        label=_('Maximal sum of payments and refunds'),
+    )
     sales_channel = forms.ChoiceField(
         label=_('Sales channel'),
         required=False,
@@ -584,6 +594,16 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             qs = qs.filter(email_known_to_work=fdata.get('email_known_to_work'))
         if fdata.get('locale'):
             qs = qs.filter(locale=fdata.get('locale'))
+        if fdata.get('payment_sum_min') is not None:
+            qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
+            qs = qs.filter(
+                computed_payment_refund_sum__gte=fdata['payment_sum_min'],
+            )
+        if fdata.get('payment_sum_max') is not None:
+            qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
+            qs = qs.filter(
+                computed_payment_refund_sum__lte=fdata['payment_sum_max'],
+            )
         if fdata.get('invoice_address_company'):
             qs = qs.filter(invoice_address__company__icontains=fdata.get('invoice_address_company'))
         if fdata.get('invoice_address_name'):
