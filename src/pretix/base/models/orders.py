@@ -1759,7 +1759,7 @@ class OrderRefund(models.Model):
         Marks the refund as complete. This does not modify the state of the order.
 
         :param user: The user who performed the change
-        :param user: The API auth token that performed the change
+        :param auth: The API auth token that performed the change
         """
         self.state = self.REFUND_STATE_DONE
         self.execution_date = self.execution_date or now()
