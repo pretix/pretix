@@ -299,6 +299,15 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
         return ctx
 
 
+def has_before_after(eventqs, subeventqs, before, after):
+    eqs = eventqs.filter(is_public=True, live=True, has_subevents=False)
+    sqs = subeventqs.filter(active=True, is_public=True)
+    return (
+        eqs.filter(Q(date_from__lte=before)).exists() or sqs.filter(Q(date_from__lte=before)).exists(),
+        eqs.filter(Q(date_to__gte=after) | Q(date_from__gte=after)).exists() or sqs.filter(Q(date_to__gte=after) | Q(date_from__gte=after)).exists()
+    )
+
+
 def add_events_for_days(request, baseqs, before, after, ebd, timezones):
     qs = baseqs.filter(is_public=True, live=True, has_subevents=False).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
@@ -478,6 +487,20 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['after'] = after
         ebd = self._events_by_day(before, after)
 
+        ctx['has_before'], ctx['has_after'] = has_before_after(
+            self.request.organizer.events.filter(
+                sales_channels__contains=self.request.sales_channel.identifier
+            ),
+            SubEvent.objects.filter(
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+                event__sales_channels__contains=self.request.sales_channel.identifier
+            ),
+            before,
+            after,
+        )
+
         ctx['multiple_timezones'] = self._multiple_timezones
         ctx['weeks'] = weeks_for_template(ebd, self.year, self.month)
         ctx['months'] = [date(self.year, i + 1, 1) for i in range(12)]
@@ -528,6 +551,20 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['after'] = after
 
         ebd = self._events_by_day(before, after)
+
+        ctx['has_before'], ctx['has_after'] = has_before_after(
+            self.request.organizer.events.filter(
+                sales_channels__contains=self.request.sales_channel.identifier
+            ),
+            SubEvent.objects.filter(
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+                event__sales_channels__contains=self.request.sales_channel.identifier
+            ),
+            before,
+            after,
+        )
 
         ctx['days'] = days_for_template(ebd, week)
         ctx['weeks'] = [

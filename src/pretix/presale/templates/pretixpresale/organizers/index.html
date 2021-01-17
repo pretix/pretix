@@ -28,23 +28,23 @@
     {% endif %}
     <div>
         <div class="btn-group" role="group">
-            <a href="?{% url_replace request "style" "list" %}" type="button"
+            <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" %}" type="button"
                     class="btn btn-default active">
                 <span class="fa fa-list"></span>
                 {% trans "List" %}
             </a>
-            <a href="?{% url_replace request "style" "week" %}" type="button"
+            <a href="?{% url_replace request "style" "week" "month" "" "old" "" "page" "" %}" type="button"
                     class="btn btn-default">
                 <span class="fa fa-calendar"></span>
                 {% trans "Week" %}
             </a>
-            <a href="?{% url_replace request "style" "calendar" %}" type="button"
+            <a href="?{% url_replace request "style" "calendar" "week" "" "old" "" "page" "" %}" type="button"
                     class="btn btn-default">
                 <span class="fa fa-calendar"></span>
                 {% trans "Month" %}
             </a>
         </div>
-        <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "style" "" "month" "" "year" "" %}"
+        <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" %}"
                 class="btn btn-default">
             <span class="fa fa-calendar-plus-o"></span>
             {% trans "iCal" %}

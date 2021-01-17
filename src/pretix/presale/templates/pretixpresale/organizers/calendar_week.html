@@ -11,7 +11,8 @@
         </div>
     {% endif %}
     <h3>{{ date|date:"F Y" }}</h3>
-    <form class="form-inline" method="get" id="monthselform" action="{% eventurl request.organizer "presale:organizer.index" %}">
+    <form class="form-inline" method="get" id="monthselform"
+          action="{% eventurl request.organizer "presale:organizer.index" %}">
         {% for f, v in request.GET.items %}
             {% if f != "week" and f != "year" %}
                 <input type="hidden" name="{{ f }}" value="{{ v }}">
@@ -20,24 +21,25 @@
         <div class="row">
             <div class="col-sm-4 hidden-xs text-left flip">
                 <div class="btn-group" role="group">
-                    <a href="?{% url_replace request "style" "list" %}" type="button" class="btn btn-default">
+                    <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" %}" type="button"
+                       class="btn btn-default">
                         <span class="fa fa-list"></span>
                         {% trans "List" %}
                     </a>
-                    <a href="?{% url_replace request "style" "week" %}" type="button"
-                            class="btn btn-default active">
+                    <a href="?{% url_replace request "style" "week" "month" "" "old" "" %}" type="button"
+                       class="btn btn-default active">
                         <span class="fa fa-calendar"></span>
                         {% trans "Week" %}
                     </a>
-                    <a href="?{% url_replace request "style" "calendar" %}"
-                            type="button"
-                            class="btn btn-default">
+                    <a href="?{% url_replace request "style" "calendar" "week" "" "old" "" "year" "" %}"
+                       type="button"
+                       class="btn btn-default">
                         <span class="fa fa-calendar"></span>
                         {% trans "Month" %}
                     </a>
                 </div>
-                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "style" "" "month" "" "year" "" %}"
-                        class="btn btn-default">
+                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" %}"
+                   class="btn btn-default">
                     <span class="fa fa-calendar-plus-o"></span>
                     {% trans "iCal" %}
                 </a>
@@ -45,7 +47,10 @@
             <div class="col-sm-4 col-xs-12 text-center">
                 <select name="week" class="form-control select-calendar-week-short">
                     {% for w in weeks %}
-                        <option value="{{ w.0.isocalendar.1 }}" {% if w.0.isocalendar.1 == date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }} ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})</option>
+                        <option value="{{ w.0.isocalendar.1 }}"
+                                {% if w.0.isocalendar.1 == date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }}
+                            ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})
+                        </option>
                     {% endfor %}
                 </select>
                 <select name="year" class="form-control">
@@ -58,16 +63,20 @@
                 </button>
             </div>
             <div class="col-sm-4 hidden-xs text-right flip">
-                <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
-                        class="btn btn-default">
-                    <span class="fa fa-arrow-left"></span>
-                    {{ before|date:week_format }}
-                </a>
-                <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
-                        class="btn btn-default">
-                    {{ after|date:week_format }}
-                    <span class="fa fa-arrow-right"></span>
-                </a>
+                {% if has_before %}
+                    <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+                       class="btn btn-default">
+                        <span class="fa fa-arrow-left"></span>
+                        {{ before|date:week_format }}
+                    </a>
+                {% endif %}
+                {% if has_after %}
+                    <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+                       class="btn btn-default">
+                        {{ after|date:week_format }}
+                        <span class="fa fa-arrow-right"></span>
+                    </a>
+                {% endif %}
             </div>
         </div>
         {% for f, v in request.GET.items %}
@@ -78,16 +87,20 @@
     </form>
     {% include "pretixpresale/fragment_week_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
     <div class="col-sm-4 visible-xs text-center">
-        <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
-                class="btn btn-default">
-            <span class="fa fa-arrow-left"></span>
-            {{ before|date:week_format }}
-        </a>
-        <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
-                class="btn btn-default">
-            {{ after|date:week_format }}
-            <span class="fa fa-arrow-right"></span>
-        </a>
+        {% if has_before %}
+            <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+               class="btn btn-default">
+                <span class="fa fa-arrow-left"></span>
+                {{ before|date:week_format }}
+            </a>
+        {% endif %}
+        {% if has_after %}
+            <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+               class="btn btn-default">
+                {{ after|date:week_format }}
+                <span class="fa fa-arrow-right"></span>
+            </a>
+        {% endif %}
     </div>
 
     {% if multiple_timezones %}
