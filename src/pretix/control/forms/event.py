@@ -133,8 +133,6 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_start': SplitDateTimePickerWidget(),
             'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-presale_start_0'}),
             'slug': SlugWidget,
-            'geo_lat': forms.NumberInput(attrs={'min': '-90', 'max': '90'}),
-            'geo_lon': forms.NumberInput(attrs={'min': '-180', 'max': '180'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -394,8 +392,6 @@ class EventUpdateForm(I18nModelForm):
             'presale_start': SplitDateTimePickerWidget(),
             'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
             'sales_channels': CheckboxSelectMultiple(),
-            'geo_lat': forms.NumberInput(attrs={'min': '-90', 'max': '90'}),
-            'geo_lon': forms.NumberInput(attrs={'min': '-180', 'max': '180'}),
         }
 
 
