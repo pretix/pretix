@@ -22,6 +22,12 @@ from pretix.helpers.money import change_decimal_field
 class SubEventForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
+        instance = kwargs.get('instance')
+        if instance and not instance.pk:
+            kwargs['initial'].setdefault('name', self.event.name)
+            kwargs['initial'].setdefault('location', self.event.location)
+            kwargs['initial'].setdefault('geo_lat', self.event.geo_lat)
+            kwargs['initial'].setdefault('geo_lon', self.event.geo_lon)
         super().__init__(*args, **kwargs)
         self.fields['location'].widget.attrs['rows'] = '3'
 
