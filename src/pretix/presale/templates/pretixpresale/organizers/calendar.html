@@ -19,7 +19,7 @@
         {% endfor %}
         <div class="row">
             <div class="col-sm-4 col-xs-12 text-left flip">
-                <div class="btn-group" role="group"                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" %}">
+                <div class="btn-group" role="group">
                     <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" %}" type="button" class="btn btn-default">
                         <span class="fa fa-list"></span>
                         {% trans "List" %}
