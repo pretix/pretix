@@ -305,56 +305,50 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
   made through this widget will be counted towards this campaign.
 
 * If you use the tracking plugin, you can enable cross-domain tracking. To do so, you need to dynamically build 
-  the pretix-widget. Use the html code to embed the widget and add one the following code snippets.
+  the pretix-widget. Use the html code to embed the widget and add one the following code snippets. Make sure to
+  replace all occurrences of <MEASUREMENT_ID> with your Google Analytics MEASUREMENT_ID (UA-XXXXXXX-X or G-XXXXXXXX)
 
-  If you use Google Analytics 4 (GA4)::
+  Please also make sure to add the embedding website to your `Referral exclusions
+  <https://support.google.com/analytics/answer/2795830>`_ in your Google Analytics settings.
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
+  If you use gtag.js (Universal Analytics or GA4)::
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<MEASUREMENT_ID>"></script>
     <script type="text/javascript">
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXX', {
-            'linker': {
-                'domains': ['pretix.eu'],// if you host pretix on your own domain, replace accordingly
-                'decorate_forms': true
-            }
-        });
-    </script>
-
-  Please note, that pretix-widget currently does not fully support cross-domain tracking with GA4 yet. The following code
-  is future proof and as soon as pretix will support cross-domain tracking with GA4, it will just work. If you use GA4 and
-  need cross-domain tracking right now, you can set up an Universal Analytics property and link it to your GA4 property in 
-  Google’s Analytics settings. At the moment you need to embed the Universal Analytics snippet on your page to make
-  cross-domain tracking work. See `Add a Google Analytics 4 property (to a site that already has Analytics) 
-  <https://support.google.com/analytics/answer/9744165?hl=en>`_
-
-  If you use gtag to embed Google Analytics (Universal Analytics)::
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
-    <script type="text/javascript">
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-XXXXXXXXX-X', {
+        gtag('config', '<MEASUREMENT_ID>', {
             'linker': {
                 'domains': ['pretix.eu'],// if you host pretix on your own domain, replace accordingly
                 'decorate_forms': true
             }
         });
 
-        // build pretix-widget with cross-domain tracking, if available 
         window.pretixWidgetCallback = function () {
             window.PretixWidget.build_widgets = false;
-            window.addEventListener('load', function() {
-                // ga is only available if gtag loads a Universal Analytics property, if GA4 is used, then no window.ga is definded
-                if (window.ga && ga.getAll) window.PretixWidget.widget_data["tracking-ga-id"] = ga.getAll()[0].get('clientId');
-                window.PretixWidget.buildWidgets()
+            window.addEventListener('load', function() { // Wait for GA to be loaded
+                if (!window['google_tag_manager']) {
+                    window.PretixWidget.buildWidgets();
+                    return;
+                }
+                var widgetsNotYetBuilt = window.setTimeout(function() {
+                    widgetsNotYetBuilt = false;
+                    window.PretixWidget.buildWidgets();
+                }, 1000);
+                gtag('get', '<MEASUREMENT_ID>', 'client_id', function(client_id) {
+                    if (widgetsNotYetBuilt) {
+                        window.clearTimeout(widgetsNotYetBuilt);
+                        window.PretixWidget.widget_data["tracking-ga-id"] = client_id;
+                        window.PretixWidget.buildWidgets();
+                    }
+                });
             });
         };
     </script>
 
-  If you use analytics.js to embed Google Analytics::
+
+  If you use analytics.js (Universal Analytics)::
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -374,7 +368,7 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
                         window.PretixWidget.buildWidgets()
                     });
                 } else { // Tracking is probably blocked
-                       window.PretixWidget.buildWidgets()
+                    window.PretixWidget.buildWidgets()
                 }
             });
         };
