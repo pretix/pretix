@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2021-01-07 03:00+0000\n"
+"PO-Revision-Date: 2021-01-19 02:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -254,10 +254,8 @@ msgstr ""
 
 #: pretix/api/views/order.py:569 pretix/base/services/cart.py:109
 #: pretix/base/services/orders.py:94 pretix/presale/views/order.py:709
-#, fuzzy
-#| msgid "The product \"{}\" is not available on this date."
 msgid "One of the selected products is not available in the selected country."
-msgstr "Tuote \"{}\" ei ole saatavilla tällä päivämäärällä."
+msgstr "Jokin valituista tuotteista ei ole saatavilla tässä maassa."
 
 #: pretix/api/webhooks.py:179 pretix/base/notifications.py:205
 msgid "New order placed"
