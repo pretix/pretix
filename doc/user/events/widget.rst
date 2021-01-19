@@ -311,19 +311,14 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
   Please also make sure to add the embedding website to your `Referral exclusions
   <https://support.google.com/analytics/answer/2795830>`_ in your Google Analytics settings.
 
-  If you use gtag.js (Universal Analytics or GA4)::
+  If you use Google Analytics 4 (GA4 – G-XXXXXXXX)::
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=<MEASUREMENT_ID>"></script>
     <script type="text/javascript">
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '<MEASUREMENT_ID>', {
-            'linker': {
-                'domains': ['pretix.eu'],// if you host pretix on your own domain, replace accordingly
-                'decorate_forms': true
-            }
-        });
+        gtag('config', '<MEASUREMENT_ID>');
 
         window.pretixWidgetCallback = function () {
             window.PretixWidget.build_widgets = false;
@@ -332,21 +327,67 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
                     window.PretixWidget.buildWidgets();
                     return;
                 }
-                var widgetsNotYetBuilt = window.setTimeout(function() {
-                    widgetsNotYetBuilt = false;
+
+                var clientId;
+                var sessionId;
+                var loadingTimeout;
+                function build() {
+                    // use loadingTimeout to make sure build() is only called once
+                    if (!loadingTimeout) return;
+                    window.clearTimeout(loadingTimeout);
+                    loadingTimeout = null;
+                    if (clientId) window.PretixWidget.widget_data["tracking-ga-id"] = clientId;
+                    if (sessionId) window.PretixWidget.widget_data["tracking-ga-sessid"] = sessionId;
+                    window.PretixWidget.buildWidgets();
+                };
+                // make sure to build pretix-widgets if gtag fails to load either client_id or session_id
+                loadingTimeout = window.setTimeout(build, 2000);
+
+                gtag('get', '<MEASUREMENT_ID>', 'client_id', function(id) {
+                    clientId = id;
+                    if (sessionId !== undefined) build();
+                });
+                gtag('get', '<MEASUREMENT_ID>', 'session_id', function(id) {
+                    sessionId = id;
+                    if (clientId !== undefined) build();
+                });
+            });
+        };
+    </script>
+
+  If you use Universal Analytics with gtag.js (UA-XXXXXXX-X)::
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<MEASUREMENT_ID>"></script>
+    <script type="text/javascript">
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<MEASUREMENT_ID>');
+
+        window.pretixWidgetCallback = function () {
+            window.PretixWidget.build_widgets = false;
+            window.addEventListener('load', function() { // Wait for GA to be loaded
+                if (!window['google_tag_manager']) {
+                    window.PretixWidget.buildWidgets();
+                    return;
+                }
+
+                // make sure to build pretix-widgets if gtag fails to load client_id
+                var loadingTimeout = window.setTimeout(function() {
+                    loadingTimeout = null;
                     window.PretixWidget.buildWidgets();
                 }, 1000);
-                gtag('get', '<MEASUREMENT_ID>', 'client_id', function(client_id) {
-                    if (widgetsNotYetBuilt) {
-                        window.clearTimeout(widgetsNotYetBuilt);
-                        window.PretixWidget.widget_data["tracking-ga-id"] = client_id;
+
+                gtag('get', '<MEASUREMENT_ID>', 'client_id', function(id) {
+                    if (loadingTimeout) {
+                        window.clearTimeout(loadingTimeout);
+                        window.PretixWidget.widget_data["tracking-ga-id"] = id;
                         window.PretixWidget.buildWidgets();
                     }
                 });
             });
         };
     </script>
-
 
   If you use analytics.js (Universal Analytics)::
 
@@ -356,20 +397,29 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-XXXXXX-1', 'auto');
+        ga('create', '<MEASUREMENT_ID>', 'auto');
         ga('send', 'pageview');
 
         window.pretixWidgetCallback = function () {
             window.PretixWidget.build_widgets = false;
             window.addEventListener('load', function() { // Wait for GA to be loaded
-                if (window.ga && ga.create) {
-                    ga(function(tracker) {
-                        window.PretixWidget.widget_data["tracking-ga-id"] = tracker.get('clientId');
-                        window.PretixWidget.buildWidgets()
-                    });
-                } else { // Tracking is probably blocked
+                if (!window['ga'] || !ga.create) {
+                    // Tracking is probably blocked
                     window.PretixWidget.buildWidgets()
+                    return;
                 }
+
+                var loadingTimeout = window.setTimeout(function() {
+                    loadingTimeout = null;
+                    window.PretixWidget.buildWidgets();
+                }, 1000);
+                ga(function(tracker) {
+                    if (loadingTimeout) {
+                        window.clearTimeout(loadingTimeout);
+                        window.PretixWidget.widget_data["tracking-ga-id"] = tracker.get('clientId');
+                        window.PretixWidget.buildWidgets();
+                    }
+                });
             });
         };
     </script>
