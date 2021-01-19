@@ -907,6 +907,10 @@ Vue.component('pretix-widget-event-list', {
         + strings['back']
         + '</a>'
         + '</div>'
+        + '<div class="pretix-widget-event-header" v-if="$root.parent_stack.length > 0">'
+        + '<strong>{{ $root.name }}</strong>'
+        + '</div>'
+        + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<pretix-widget-event-list-entry v-for="event in $root.events" :event="event" :key="event.url"></pretix-widget-event-list-entry>'
         + '</div>'),
     methods: {
@@ -914,6 +918,8 @@ Vue.component('pretix-widget-event-list', {
             if (this.$root.weeks) {
                 this.$root.events = undefined;
                 this.$root.view = "weeks";
+                this.$root.name = null;
+                this.$root.frontpage_text = null;
             } else {
                 this.$root.loading++;
                 this.$root.target_url = this.$root.parent_stack.pop();
@@ -1091,6 +1097,10 @@ Vue.component('pretix-widget-event-calendar', {
         + strings['back']
         + '</a>'
         + '</div>'
+        + '<div class="pretix-widget-event-header" v-if="$root.parent_stack.length > 0">'
+        + '<strong>{{ $root.name }}</strong>'
+        + '</div>'
+        + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<div class="pretix-widget-event-calendar-head">'
         + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent="prevmonth">&laquo; '
         + strings['previous_month']
@@ -1126,6 +1136,8 @@ Vue.component('pretix-widget-event-calendar', {
         back_to_list: function () {
             this.$root.weeks = undefined;
             this.$root.view = "events";
+            this.$root.name = null;
+            this.$root.frontpage_text = null;
         },
         prevmonth: function () {
             var curMonth = parseInt(this.$root.date.substr(5, 2));
@@ -1161,6 +1173,10 @@ Vue.component('pretix-widget-event-week-calendar', {
         + strings['back']
         + '</a>'
         + '</div>'
+        + '<div class="pretix-widget-event-header" v-if="$root.parent_stack.length > 0">'
+        + '<strong>{{ $root.name }}</strong>'
+        + '</div>'
+        + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<div class="pretix-widget-event-calendar-head">'
         + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent="prevweek">&laquo; '
         + strings['previous_week']
@@ -1188,6 +1204,8 @@ Vue.component('pretix-widget-event-week-calendar', {
     methods: {
         back_to_list: function () {
             this.$root.weeks = undefined;
+            this.$root.name = null;
+            this.$root.frontpage_text = null;
             this.$root.view = "events";
         },
         prevweek: function () {
@@ -1347,21 +1365,27 @@ var shared_root_methods = {
                 root.week = null;
                 root.events = undefined;
                 root.view = "weeks";
+                root.name = data.name;
+                root.frontpage_text = data.frontpage_text;
             } else if (data.days !== undefined) {
                 root.days = data.days;
                 root.date = null;
                 root.week = data.week;
                 root.events = undefined;
                 root.view = "days";
+                root.name = data.name;
+                root.frontpage_text = data.frontpage_text;
             } else if (data.events !== undefined) {
                 root.events = data.events;
                 root.weeks = undefined;
                 root.view = "events";
+                root.name = data.name;
+                root.frontpage_text = data.frontpage_text;
             } else {
                 root.view = "event";
                 root.name = data.name;
-                root.date_range = data.date_range;
                 root.frontpage_text = data.frontpage_text;
+                root.date_range = data.date_range;
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;

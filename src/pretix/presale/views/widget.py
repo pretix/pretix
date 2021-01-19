@@ -398,6 +398,10 @@ class WidgetAPIProductList(EventListMixin, View):
                     self.request.event.settings.event_list_type = "calendar"
                 data['list_type'] = list_type = 'calendar'
 
+        if hasattr(self.request, 'event'):
+            data['name'] = str(request.event.name)
+            data['frontpage_text'] = str(rich_text(request.event.settings.frontpage_text, safelinks=False))
+
         cache_key = ':'.join([
             'widget.py',
             'eventlist',
