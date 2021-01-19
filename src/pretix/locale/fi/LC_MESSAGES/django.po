@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2021-01-19 02:00+0000\n"
+"PO-Revision-Date: 2021-01-20 05:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -6128,6 +6128,19 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hei!\n"
+"\n"
+"Olemme vastaanottaneet tilauksesi tapahtumaan {event} onnistuneesti.\n"
+"Ole hyvä ja maksa tilauksesi (summa {total_with_currency}) {expire_date} "
+"mennessä.\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Näet tilauksesi tiedot ja voit muuttaa sitä osoitteessa\n"
+"{url}\n"
+"\n"
+"Ystävällisin terveisin,\n"
+"{event} -tiimi"
 
 #: pretix/base/settings.py:1446
 #, python-brace-format
@@ -6172,6 +6185,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hei!\n"
+"\n"
+"Olemme vastaanottaneet maksusi tapahtumaan {event} onnistuneesti. Kiitos!\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Näet tilauksesi tiedot ja voit muuttaa sitä osoitteessa\n"
+"{url}\n"
+"\n"
+"Ystävällisin terveisin,\n"
+"{event} -tiimi"
 
 #: pretix/base/settings.py:1488
 #, python-brace-format
@@ -6759,7 +6783,7 @@ msgstr ""
 #: pretix/base/templates/404.html:12 pretix/base/templates/500.html:22
 #: pretix/base/templates/csrffail.html:26
 msgid "Take a step back"
-msgstr ""
+msgstr "Mene takaisin"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/403.html:13
 #: pretix/base/templates/500.html:23
@@ -6784,15 +6808,15 @@ msgstr ""
 
 #: pretix/base/templates/404.html:4 pretix/base/templates/404.html:8
 msgid "Not found"
-msgstr ""
+msgstr "Sivua ei löydy"
 
 #: pretix/base/templates/404.html:9
 msgid "I'm afraid we could not find the the resource you requested."
-msgstr ""
+msgstr "Pyytämääsi resurssia ei löytynyt."
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Palvelinvirhe"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
@@ -6872,21 +6896,21 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/simple_logo.html:231
 #: pretix/base/templates/pretixbase/email/simple_logo.html:239
 msgid "Event:"
-msgstr ""
+msgstr "Tapahtuma:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:29
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:37
 #: pretix/base/templates/pretixbase/email/simple_logo.html:232
 #: pretix/base/templates/pretixbase/email/simple_logo.html:240
 msgid "Order code:"
-msgstr ""
+msgstr "Tilauskoodi:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:30
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:38
 #: pretix/base/templates/pretixbase/email/simple_logo.html:233
 #: pretix/base/templates/pretixbase/email/simple_logo.html:241
 msgid "Order date:"
-msgstr ""
+msgstr "Tilauspäivämäärä:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:32
 #: pretix/base/templates/pretixbase/email/simple_logo.html:235
@@ -6899,6 +6923,7 @@ msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
 msgstr ""
+"Sait tämän sähköpostin, koska olet tehnyt tilauksen seuraavaan tapahtumaan:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
@@ -15726,6 +15751,8 @@ msgstr ""
 #: pretix/presale/views/order.py:1075
 msgid "Unknown order code or not authorized to access this order."
 msgstr ""
+"Tilausnumeroa ei löytynyt tai sinulla ei ole oikeuksia tarkastella tätä "
+"tilausta."
 
 #: pretix/control/views/orders.py:379 pretix/presale/views/order.py:911
 msgid "Ticket download is not enabled for this product."
@@ -19469,7 +19496,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:174
 #: pretix/presale/templates/pretixpresale/event/order.html:268
 msgid "Change details"
-msgstr ""
+msgstr "Muuta tietoja"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:240
 msgid ""
