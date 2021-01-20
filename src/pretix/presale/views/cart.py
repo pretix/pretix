@@ -71,6 +71,19 @@ class CartActionMixin:
         return self.get_next_url()
 
     def get_error_url(self):
+        if "next_error" in self.request.GET and is_safe_url(self.request.GET.get("next_error"), allowed_hosts=None):
+            u = self.request.GET.get('next_error')
+            if '?' in u:
+                u += '&require_cookie=true'
+            else:
+                u += '?require_cookie=true'
+            disclose_cart_id = (
+                'iframe' in self.request.GET or settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+            ) and self.kwargs.get('cart_namespace')
+            if disclose_cart_id:
+                cart_id = get_or_create_cart_id(self.request)
+                u += '&cart_id={}'.format(cart_id)
+            return u
         return self.get_next_url()
 
     @cached_property
@@ -413,6 +426,8 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         u = super().get_check_url(task_id, ajax)
         if "next" in self.request.GET:
             u += "&next=" + quote(self.request.GET.get('next'))
+        if "next_error" in self.request.GET:
+            u += "&next_error=" + quote(self.request.GET.get('next_error'))
         if ajax:
             cart_id = get_or_create_cart_id(self.request)
             u += '&take_cart_id=' + cart_id

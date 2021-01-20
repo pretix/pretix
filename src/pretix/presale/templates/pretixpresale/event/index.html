@@ -252,7 +252,7 @@
                     data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
                     data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
                     class="{% if event.seating_plan_id %}has-seating{% endif %}"
-                    action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}">
+                    action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}&next_error={{ request.path|urlencode }}">
                 {% csrf_token %}
                 <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
                 {% if ev.seating_plan_id and event.settings.seating_choice %}
