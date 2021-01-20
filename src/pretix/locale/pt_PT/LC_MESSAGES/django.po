@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-20 16:32+0000\n"
+"POT-Creation-Date: 2021-01-20 16:41+0000\n"
 "PO-Revision-Date: 2020-10-29 10:22+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -964,7 +964,7 @@ msgid "Include payment amounts"
 msgstr "Montante a pagar"
 
 #: pretix/base/exporters/orderlist.py:64
-msgid "Show multiple choice answers grouped in one colum"
+msgid "Show multiple choice answers grouped in one column"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:148
