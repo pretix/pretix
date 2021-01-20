@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from pretix import __version__
 from pretix.api.auth.device import DeviceTokenAuthentication
+from pretix.api.auth.permission import AnyAuthenticatedClientPermission
 from pretix.api.auth.token import TeamTokenAuthentication
 
 
@@ -48,6 +49,7 @@ class VersionView(APIView):
     authentication_classes = (
         SessionAuthentication, OAuth2Authentication, DeviceTokenAuthentication, TeamTokenAuthentication
     )
+    permission_classes = [AnyAuthenticatedClientPermission]
 
     def get(self, request, format=None):
         return Response({

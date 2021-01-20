@@ -89,10 +89,38 @@ class EventCRUDPermission(EventPermission):
 class ProfilePermission(BasePermission):
 
     def has_permission(self, request, view):
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated and not isinstance(request.auth, (Device, TeamAPIToken)):
             return False
+
+        if request.user.is_authenticated:
+            try:
+                # If this logic is updated, make sure to also update the logic in pretix/control/middleware.py
+                assert_session_valid(request)
+            except SessionInvalid:
+                return False
+            except SessionReauthRequired:
+                return False
 
         if isinstance(request.auth, OAuthAccessToken):
             if not (request.auth.allow_scopes(['read']) or request.auth.allow_scopes(['profile'])) and request.method in SAFE_METHODS:
                 return False
+
+        return True
+
+
+class AnyAuthenticatedClientPermission(BasePermission):
+
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated and not isinstance(request.auth, (Device, TeamAPIToken)):
+            return False
+
+        if request.user.is_authenticated:
+            try:
+                # If this logic is updated, make sure to also update the logic in pretix/control/middleware.py
+                assert_session_valid(request)
+            except SessionInvalid:
+                return False
+            except SessionReauthRequired:
+                return False
+
         return True

@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from pretix.api.auth.device import DeviceTokenAuthentication
+from pretix.api.auth.permission import AnyAuthenticatedClientPermission
 from pretix.api.auth.token import TeamTokenAuthentication
 from pretix.base.models import CachedFile
 
@@ -25,6 +26,7 @@ class UploadView(APIView):
         SessionAuthentication, OAuth2Authentication, DeviceTokenAuthentication, TeamTokenAuthentication
     )
     parser_classes = [FileUploadParser]
+    permission_classes = [AnyAuthenticatedClientPermission]
 
     def post(self, request):
         if 'file' not in request.data:
