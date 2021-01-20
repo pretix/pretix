@@ -101,6 +101,7 @@ var form_handlers = function (el) {
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
             showClear: !$(this).prop("required"),
+            viewMode: 'years',
             icons: {
                 time: 'fa fa-clock-o',
                 date: 'fa fa-calendar',
@@ -563,6 +564,7 @@ $(function () {
         }
     );
     $("[data-formset]").on("formAdded", "div", function (event) {
+        console.log("formAdded")
         form_handlers($(event.target));
     });
     $(document).on("click", ".variations .variations-select-all", function (e) {

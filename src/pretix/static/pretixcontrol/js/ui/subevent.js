@@ -136,6 +136,51 @@ $(function () {
         rrule_form_toggles($form);
     }
 
+    $("#subevent_add_many_slots_go").on("click", function () {
+        $("#time-formset [data-formset-form]").each(function () {
+            var tf = $(this).find("[name$=time_from]").val()
+            if (!tf) {
+                $(this).remove();
+            }
+        })
+
+        var first = $("#subevent_add_many_slots_first").data('DateTimePicker').date();
+        var end = $("#subevent_add_many_slots_end").data('DateTimePicker').date();
+        var length_m = parseFloat($("#subevent_add_many_slots_length").val()) || 0;
+        var break_m = parseFloat($("#subevent_add_many_slots_break").val()) || 0;
+        if (!first || !end || !length_m) {
+            console.log("invalid", first, end, length_m)
+            return
+        }
+
+        function closure($form, time) {
+            return function () {
+                console.log("setting value", time)
+                $form.find("[name$=time_from]").data('DateTimePicker').date(time);
+                time.add(length_m, 'minutes');
+                $form.find("[name$=time_to]").data('DateTimePicker').date(time);
+            }
+        }
+
+        var pointer = first.clone();
+        while (pointer.isBefore(end)) {
+            var $form = $("#time-formset").formset("getOrCreate").addForm();
+            $form.attr("data-formset-created-at-runtime", "false");  // prevents animation
+            var time = pointer.clone();
+            window.setTimeout(closure($form, time), 1);
+            // jquery.formset.js only calls trigger("formAdded") after a setTimeout of 0,
+            // but we need to run after that to make sure the date pickers are initialized
+            pointer.add(break_m + length_m, 'minutes');
+        }
+        $("#subevent_add_many_slots").addClass("hidden");
+        $("#subevent_add_many_slots_start").removeClass("hidden");
+
+    });
+    $("#subevent_add_many_slots_start").on("click", function () {
+       $("#subevent_add_many_slots").removeClass("hidden");
+       $(this).addClass("hidden");
+    });
+
     $("#rrule-formset").on("change keydown keyup keypress dp.change", "input, select", function () {
         rrule_preview();
     });

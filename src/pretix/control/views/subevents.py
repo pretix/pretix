@@ -1,5 +1,5 @@
 import copy
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
@@ -11,6 +11,7 @@ from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.formats import get_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -622,6 +623,10 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
         ctx = super().get_context_data(**kwargs)
         ctx['rrule_formset'] = self.rrule_formset
         ctx['time_formset'] = self.time_formset
+
+        tf = get_format('TIME_INPUT_FORMATS')[0]
+        ctx['time_begin_sample'] = time(9, 0, 0).strftime(tf)
+        ctx['time_end_sample'] = time(18, 0, 0).strftime(tf)
         return ctx
 
     @cached_property

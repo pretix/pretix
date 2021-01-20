@@ -332,9 +332,51 @@
                         </div>
                     {% endescapescript %}
                 </script>
+                <div class="panel panel-default hidden" id="subevent_add_many_slots">
+                    <div class="panel-body row">
+                        <div class="col-md-2 col-sm-12">
+                            <label for="subevent_add_many_slots_first">
+                                <strong>{% trans "Start of first slot" %}</strong>
+                            </label>
+                            <input class="form-control timepickerfield" id="subevent_add_many_slots_first" value="{{ time_begin_sample }}">
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                            <label for="subevent_add_many_slots_end">
+                                <strong>{% trans "End of time slots" %}</strong>
+                            </label>
+                            <input class="form-control timepickerfield" id="subevent_add_many_slots_end" value="{{ time_end_sample }}">
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <label for="subevent_add_many_slots_length">
+                                <strong>{% trans "Length of slots" %}</strong>
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="subevent_add_many_slots_length" value="15">
+                                <span class="input-group-addon">{% trans "minutes" %}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <label for="subevent_add_many_slots_break">
+                                <strong>{% trans "Break between slots" %}</strong>
+                            </label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="subevent_add_many_slots_break" value="0">
+                                <span class="input-group-addon">{% trans "minutes" %}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                            <label>&nbsp;</label>
+                            <button class="btn-block btn btn-primary" id="subevent_add_many_slots_go" type="button">
+                                <span class="fa fa-check"></span> {% trans "Create" %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <p>
                     <button type="button" class="btn btn-default" data-formset-add>
-                        <i class="fa fa-plus"></i> {% trans "Add a new time slot" %}</button>
+                        <i class="fa fa-plus"></i> {% trans "Add a single time slot" %}</button>
+                    <button type="button" class="btn btn-default" id="subevent_add_many_slots_start">
+                        <i class="fa fa-calendar"></i> {% trans "Add many time slots" %}</button>
                 </p>
             </div>
         </fieldset>
