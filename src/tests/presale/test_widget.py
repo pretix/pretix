@@ -496,6 +496,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
             settings.SITE_URL = 'http://example.com'
             assert data == {
                 'list_type': 'list',
+                'name': '30C3',
+                'frontpage_text': '',
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'events': [
                     {'name': 'Present', 'date_range': 'Jan. 1, 2019 11:00', 'availability': {'color': 'none', 'text': '', 'reason': 'unknown'},
@@ -523,6 +525,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
             assert data == {
                 'list_type': 'calendar',
                 'date': '2019-01-01',
+                'name': '30C3',
+                'frontpage_text': '',
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'weeks': [
                     [
@@ -596,6 +600,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'week',
+                'name': '30C3',
+                'frontpage_text': '',
                 'week': [2019, 1],
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">event ticketing powered by pretix</a>',
                 'days': [
