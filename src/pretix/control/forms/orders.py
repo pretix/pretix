@@ -616,7 +616,7 @@ class EventCancelForm(forms.Form):
         required=False
     )
     manual_refund = forms.BooleanField(
-        label=_('Create manual refund if the payment method odes not support automatic refunds'),
+        label=_('Create manual refund if the payment method does not support automatic refunds'),
         widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_auto_refund'}),
         initial=True,
         required=False,
