@@ -61,7 +61,7 @@ class OrderListExporter(MultiSheetListExporter):
                  )),
                 ('group_multiple_choice',
                  forms.BooleanField(
-                     label=_('Show multiple choice answers grouped in one colum'),
+                     label=_('Show multiple choice answers grouped in one column'),
                      initial=False,
                      required=False
                  )),
