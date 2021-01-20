@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2021-01-20 05:00+0000\n"
+"PO-Revision-Date: 2021-01-20 16:10+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -796,11 +796,11 @@ msgstr "Valuuttakurssi"
 
 #: pretix/base/exporters/invoices.py:189
 msgid "Total value (with taxes)"
-msgstr "Kokonaissumma (sis. verot)"
+msgstr "Summa (sis. verot)"
 
 #: pretix/base/exporters/invoices.py:190
 msgid "Total value (without taxes)"
-msgstr "Kokonaissumma (ilman veroja)"
+msgstr "Summa (ilman veroja)"
 
 #: pretix/base/exporters/invoices.py:191
 msgid "Payment matching IDs"
@@ -7142,16 +7142,16 @@ msgstr ""
 
 #: pretix/control/forms/event.py:250
 msgid "Copy configuration from"
-msgstr ""
+msgstr "Kopioi asetukset tapahtumasta"
 
 #: pretix/control/forms/event.py:256 pretix/control/forms/event.py:259
 #: pretix/control/forms/item.py:266
 msgid "Do not copy"
-msgstr ""
+msgstr "Älä kopioi"
 
 #: pretix/control/forms/event.py:310 pretix/control/forms/organizer.py:82
 msgid "Custom domain"
-msgstr ""
+msgstr "Mukautettu verkkotunnus"
 
 #: pretix/control/forms/event.py:312 pretix/control/forms/organizer.py:84
 msgid "You need to configure the custom domain in the webserver beforehand."
@@ -10288,7 +10288,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:99
 msgid "unpaid"
-msgstr ""
+msgstr "maksamaton"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:138
 msgid "Checked in but left"
@@ -10633,7 +10633,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:36
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
 msgid "Change notification settings"
-msgstr ""
+msgstr "Muuta ilmoitusasetuksia"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:42
 msgid "Order changes"
@@ -10650,27 +10650,29 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/live.html:119
 #: pretix/control/templates/pretixcontrol/event/settings.html:353
 msgid "Cancel or delete event"
-msgstr ""
+msgstr "Peruuta tai poista tapahtuma"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
 #: pretix/control/templates/pretixcontrol/event/delete.html:60
 #: pretix/control/templates/pretixcontrol/event/live.html:19
 msgid "Go offline"
-msgstr ""
+msgstr "Piilota tapahtuma"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:13
 msgid ""
 "You can take your event offline. Nobody except your team will be able to see "
 "or access it any more."
 msgstr ""
+"Voit piilottaa tapahtuman, jolloin muut kuin tiimisi jäsenet eivät näe sitä "
+"enää."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:34
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
 msgid "Cancel event"
-msgstr ""
+msgstr "Peruuta tapahtuma"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
 msgid ""
@@ -10683,7 +10685,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/delete.html:56
 #: pretix/control/templates/pretixcontrol/event/delete.html:70
 msgid "Delete personal data"
-msgstr ""
+msgstr "Poista henkilötiedot"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 msgid ""
@@ -12158,7 +12160,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:263
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:19
 msgid "Paid"
-msgstr ""
+msgstr "Maksettu"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:26
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:35
@@ -12762,7 +12764,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:54
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:31
 msgid "Mark as paid"
-msgstr ""
+msgstr "Merkitse maksetuksi"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:66
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:5
@@ -12974,7 +12976,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:828
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:276
 msgid "Total"
-msgstr "Kokonaissumma"
+msgstr "Summa"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:576
 #: pretix/presale/templates/pretixpresale/event/order.html:187
@@ -13012,7 +13014,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:642
 msgid "Confirm as paid"
-msgstr ""
+msgstr "Vahvista maksu"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:685
 msgid "Create a refund"
@@ -13484,7 +13486,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:116
 msgid "Order  paid / total"
-msgstr "Tilaus  maksettu / kokonaissumma"
+msgstr "Tilaus  maksettu / summa"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/search/orders.html:83
