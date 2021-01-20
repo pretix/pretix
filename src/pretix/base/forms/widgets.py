@@ -18,10 +18,13 @@ class DatePickerWidget(forms.DateInput):
         date_attrs['class'] += ' datepickerfield'
         date_attrs['autocomplete'] = 'date-picker-do-not-autofill'
 
-        df = date_format or get_format('DATE_INPUT_FORMATS')[0]
-        date_attrs['placeholder'] = now().replace(
-            year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
-        ).strftime(df)
+        def placeholder():
+            df = date_format or get_format('DATE_INPUT_FORMATS')[0]
+            return now().replace(
+                year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
+            ).strftime(df)
+
+        date_attrs['placeholder'] = lazy(placeholder, str)
 
         forms.DateInput.__init__(self, date_attrs, date_format)
 
@@ -36,10 +39,13 @@ class TimePickerWidget(forms.TimeInput):
         time_attrs['class'] += ' timepickerfield'
         time_attrs['autocomplete'] = 'time-picker-do-not-autofill'
 
-        tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
-        time_attrs['placeholder'] = now().replace(
-            year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
-        ).strftime(tf)
+        def placeholder():
+            tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
+            return now().replace(
+                year=2000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
+            ).strftime(tf)
+
+        time_attrs['placeholder'] = lazy(placeholder, str)
 
         forms.TimeInput.__init__(self, time_attrs, time_format)
 
