@@ -42,6 +42,7 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:order-list'),
         ('GET', 'api-v1:event.settings'),
+        ('POST', 'api-v1:upload'),
     )
 
 
@@ -68,6 +69,7 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:checkinlistpos-redeem'),
         ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:event.settings'),
+        ('POST', 'api-v1:upload'),
     )
 
 
@@ -113,6 +115,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('GET', 'plugins:pretix_seating:event.event.subevent'),
         ('GET', 'plugins:pretix_seating:event.plan'),
         ('GET', 'plugins:pretix_seating:selection.simple'),
+        ('POST', 'api-v1:upload'),
     )
 
 
