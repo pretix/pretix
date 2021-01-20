@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-22 11:06+0000\n"
+"POT-Creation-Date: 2021-01-20 16:33+0000\n"
 "PO-Revision-Date: 2020-10-27 06:00+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -271,16 +271,16 @@ msgstr "A gerar mensagens…"
 msgid "Unknown error."
 msgstr "Erro desconhecido."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:241
+#: pretix/static/pretixcontrol/js/ui/main.js:242
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "A sua cor tem um grande contraste e é muito fácil de ler!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:245
+#: pretix/static/pretixcontrol/js/ui/main.js:246
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Sua cor tem contraste decente e é provavelmente bom o suficiente para ler!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:249
+#: pretix/static/pretixcontrol/js/ui/main.js:250
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -288,23 +288,23 @@ msgstr ""
 "A sua cor tem um mau contraste para texto no fundo branco, por favor escolha "
 "uma tonalidade mais escura."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:384
+#: pretix/static/pretixcontrol/js/ui/main.js:385
 msgid "All"
 msgstr "Tudo"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:385
+#: pretix/static/pretixcontrol/js/ui/main.js:386
 msgid "None"
 msgstr "Nada"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:709
+#: pretix/static/pretixcontrol/js/ui/main.js:711
 msgid "Use a different name internally"
 msgstr "Use um nome interno diferente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:766
+#: pretix/static/pretixcontrol/js/ui/main.js:768
 msgid "Click to close"
 msgstr "Clique para fechar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:781
+#: pretix/static/pretixcontrol/js/ui/main.js:783
 msgid "You have unsaved changes!"
 msgstr "Tem alterações por guardar!"
 
