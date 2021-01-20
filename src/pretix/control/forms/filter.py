@@ -1506,6 +1506,9 @@ class VoucherTagFilterForm(FilterForm):
 
 
 class RefundFilterForm(FilterForm):
+    orders = {'provider': 'provider', 'state': 'state', 'order': 'order__code',
+              'source': 'source', 'amount': 'amount', 'created': 'created'}
+
     provider = forms.ChoiceField(
         label=_('Payment provider'),
         choices=[
@@ -1542,6 +1545,10 @@ class RefundFilterForm(FilterForm):
             qs = qs.filter(state__in=[OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT,
                                       OrderRefund.REFUND_STATE_EXTERNAL])
 
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by('-created')
         return qs
 
 
