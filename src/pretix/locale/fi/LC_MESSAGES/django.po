@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2021-01-07 03:00+0000\n"
+"PO-Revision-Date: 2021-01-20 16:10+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -254,10 +254,8 @@ msgstr ""
 
 #: pretix/api/views/order.py:569 pretix/base/services/cart.py:109
 #: pretix/base/services/orders.py:94 pretix/presale/views/order.py:709
-#, fuzzy
-#| msgid "The product \"{}\" is not available on this date."
 msgid "One of the selected products is not available in the selected country."
-msgstr "Tuote \"{}\" ei ole saatavilla tällä päivämäärällä."
+msgstr "Jokin valituista tuotteista ei ole saatavilla tässä maassa."
 
 #: pretix/api/webhooks.py:179 pretix/base/notifications.py:205
 msgid "New order placed"
@@ -798,11 +796,11 @@ msgstr "Valuuttakurssi"
 
 #: pretix/base/exporters/invoices.py:189
 msgid "Total value (with taxes)"
-msgstr "Kokonaissumma (sis. verot)"
+msgstr "Summa (sis. verot)"
 
 #: pretix/base/exporters/invoices.py:190
 msgid "Total value (without taxes)"
-msgstr "Kokonaissumma (ilman veroja)"
+msgstr "Summa (ilman veroja)"
 
 #: pretix/base/exporters/invoices.py:191
 msgid "Payment matching IDs"
@@ -6130,6 +6128,19 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hei!\n"
+"\n"
+"Olemme vastaanottaneet tilauksesi tapahtumaan {event} onnistuneesti.\n"
+"Ole hyvä ja maksa tilauksesi (summa {total_with_currency}) {expire_date} "
+"mennessä.\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Näet tilauksesi tiedot ja voit muuttaa sitä osoitteessa\n"
+"{url}\n"
+"\n"
+"Ystävällisin terveisin,\n"
+"{event} -tiimi"
 
 #: pretix/base/settings.py:1446
 #, python-brace-format
@@ -6174,6 +6185,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hei!\n"
+"\n"
+"Olemme vastaanottaneet maksusi tapahtumaan {event} onnistuneesti. Kiitos!\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Näet tilauksesi tiedot ja voit muuttaa sitä osoitteessa\n"
+"{url}\n"
+"\n"
+"Ystävällisin terveisin,\n"
+"{event} -tiimi"
 
 #: pretix/base/settings.py:1488
 #, python-brace-format
@@ -6761,7 +6783,7 @@ msgstr ""
 #: pretix/base/templates/404.html:12 pretix/base/templates/500.html:22
 #: pretix/base/templates/csrffail.html:26
 msgid "Take a step back"
-msgstr ""
+msgstr "Mene takaisin"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/403.html:13
 #: pretix/base/templates/500.html:23
@@ -6786,15 +6808,15 @@ msgstr ""
 
 #: pretix/base/templates/404.html:4 pretix/base/templates/404.html:8
 msgid "Not found"
-msgstr ""
+msgstr "Sivua ei löydy"
 
 #: pretix/base/templates/404.html:9
 msgid "I'm afraid we could not find the the resource you requested."
-msgstr ""
+msgstr "Pyytämääsi resurssia ei löytynyt."
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Palvelinvirhe"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
@@ -6874,21 +6896,21 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/simple_logo.html:231
 #: pretix/base/templates/pretixbase/email/simple_logo.html:239
 msgid "Event:"
-msgstr ""
+msgstr "Tapahtuma:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:29
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:37
 #: pretix/base/templates/pretixbase/email/simple_logo.html:232
 #: pretix/base/templates/pretixbase/email/simple_logo.html:240
 msgid "Order code:"
-msgstr ""
+msgstr "Tilauskoodi:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:30
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:38
 #: pretix/base/templates/pretixbase/email/simple_logo.html:233
 #: pretix/base/templates/pretixbase/email/simple_logo.html:241
 msgid "Order date:"
-msgstr ""
+msgstr "Tilauspäivämäärä:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:32
 #: pretix/base/templates/pretixbase/email/simple_logo.html:235
@@ -6901,6 +6923,7 @@ msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
 msgstr ""
+"Sait tämän sähköpostin, koska olet tehnyt tilauksen seuraavaan tapahtumaan:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
@@ -7119,16 +7142,16 @@ msgstr ""
 
 #: pretix/control/forms/event.py:250
 msgid "Copy configuration from"
-msgstr ""
+msgstr "Kopioi asetukset tapahtumasta"
 
 #: pretix/control/forms/event.py:256 pretix/control/forms/event.py:259
 #: pretix/control/forms/item.py:266
 msgid "Do not copy"
-msgstr ""
+msgstr "Älä kopioi"
 
 #: pretix/control/forms/event.py:310 pretix/control/forms/organizer.py:82
 msgid "Custom domain"
-msgstr ""
+msgstr "Mukautettu verkkotunnus"
 
 #: pretix/control/forms/event.py:312 pretix/control/forms/organizer.py:84
 msgid "You need to configure the custom domain in the webserver beforehand."
@@ -10265,7 +10288,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:99
 msgid "unpaid"
-msgstr ""
+msgstr "maksamaton"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:138
 msgid "Checked in but left"
@@ -10610,7 +10633,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:36
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
 msgid "Change notification settings"
-msgstr ""
+msgstr "Muuta ilmoitusasetuksia"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:42
 msgid "Order changes"
@@ -10627,27 +10650,29 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/live.html:119
 #: pretix/control/templates/pretixcontrol/event/settings.html:353
 msgid "Cancel or delete event"
-msgstr ""
+msgstr "Peruuta tai poista tapahtuma"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
 #: pretix/control/templates/pretixcontrol/event/delete.html:60
 #: pretix/control/templates/pretixcontrol/event/live.html:19
 msgid "Go offline"
-msgstr ""
+msgstr "Piilota tapahtuma"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:13
 msgid ""
 "You can take your event offline. Nobody except your team will be able to see "
 "or access it any more."
 msgstr ""
+"Voit piilottaa tapahtuman, jolloin muut kuin tiimisi jäsenet eivät näe sitä "
+"enää."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:34
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
 msgid "Cancel event"
-msgstr ""
+msgstr "Peruuta tapahtuma"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
 msgid ""
@@ -10660,7 +10685,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/delete.html:56
 #: pretix/control/templates/pretixcontrol/event/delete.html:70
 msgid "Delete personal data"
-msgstr ""
+msgstr "Poista henkilötiedot"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 msgid ""
@@ -12135,7 +12160,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:263
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:19
 msgid "Paid"
-msgstr ""
+msgstr "Maksettu"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:26
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:35
@@ -12739,7 +12764,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:54
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:31
 msgid "Mark as paid"
-msgstr ""
+msgstr "Merkitse maksetuksi"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:66
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:5
@@ -12951,7 +12976,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:828
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:276
 msgid "Total"
-msgstr "Kokonaissumma"
+msgstr "Summa"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:576
 #: pretix/presale/templates/pretixpresale/event/order.html:187
@@ -12989,7 +13014,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:642
 msgid "Confirm as paid"
-msgstr ""
+msgstr "Vahvista maksu"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:685
 msgid "Create a refund"
@@ -13461,7 +13486,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:116
 msgid "Order  paid / total"
-msgstr "Tilaus  maksettu / kokonaissumma"
+msgstr "Tilaus  maksettu / summa"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/search/orders.html:83
@@ -15728,6 +15753,8 @@ msgstr ""
 #: pretix/presale/views/order.py:1075
 msgid "Unknown order code or not authorized to access this order."
 msgstr ""
+"Tilausnumeroa ei löytynyt tai sinulla ei ole oikeuksia tarkastella tätä "
+"tilausta."
 
 #: pretix/control/views/orders.py:379 pretix/presale/views/order.py:911
 msgid "Ticket download is not enabled for this product."
@@ -19471,7 +19498,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:174
 #: pretix/presale/templates/pretixpresale/event/order.html:268
 msgid "Change details"
-msgstr ""
+msgstr "Muuta tietoja"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:240
 msgid ""
