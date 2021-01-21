@@ -1,0 +1,352 @@
+#
+# This file is part of pretix (Community Edition).
+#
+# Copyright (C) 2014-2020 Raphael Michel and contributors
+# Copyright (C) 2020-2021 rami.io GmbH and contributors
+#
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+# Public License as published by the Free Software Foundation in version 3 of the License.
+#
+# ADDITIONAL TERMS APPLY: Pursuant to Section 7 of the GNU Affero General Public License, additional terms are
+# applicable granting you additional permissions and placing additional restrictions on your usage of this software.
+# Please refer to the pretix LICENSE file to obtain the full terms applicable to this work. If you did not receive
+# this file, see <https://pretix.eu/about/en/license>.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
+# <https://www.gnu.org/licenses/>.
+#
+
+import datetime
+
+import pytest
+import pytz
+from django.core import mail as djmail
+from django.utils.timezone import now, utc
+from django_scopes import scopes_disabled
+
+from pretix.base.models import Order
+from pretix.plugins.sendmail.models import Rule, ScheduledMail
+from pretix.plugins.sendmail.signals import sendmail_run_rules
+
+
+@pytest.mark.django_db
+def test_sendmail_rule_create_single(event):
+    dt = now()
+    r = Rule.objects.create(event=event, subject='dummy mail', template='mail body', send_date=dt)
+
+    mails = ScheduledMail.objects.filter(rule=r)
+    assert mails.count() == 1
+
+    mail = mails.get()
+    assert mail.computed_datetime == dt
+
+
+dt_now = now()
+NZ = pytz.timezone('NZ')
+Berlin = pytz.timezone('Europe/Berlin')
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "event_from,event_to,event_tz,rule,expected",
+    [
+
+        # Tests for all possible configurations of relative times
+        (  # "Absolute"
+            None,
+            None,
+            'UTC',
+            Rule(date_is_absolute=True, send_date=dt_now),
+            dt_now
+        ),
+        (  # "Relative, after event start"
+            None,
+            None,
+            'UTC',
+            Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=1, send_offset_time=datetime.time(hour=9)),
+            (dt_now + datetime.timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+        ),
+        (  # "Relative, before event start"
+            datetime.datetime(2021, 5, 17, 12, 14, 0, tzinfo=utc),
+            None,
+            'UTC',
+            Rule(date_is_absolute=False, send_offset_days=2, send_offset_time=datetime.time(hour=0)),
+            datetime.datetime(2021, 5, 15, 0, tzinfo=utc)
+        ),
+        (  # "Relative, after event end"
+            datetime.datetime(2021, 5, 17, 18, tzinfo=utc),
+            datetime.datetime(2021, 5, 18, 5, tzinfo=utc),
+            'UTC',
+            Rule(date_is_absolute=False, offset_to_event_end=True, offset_is_after=True, send_offset_days=1, send_offset_time=datetime.time(hour=10)),
+            datetime.datetime(2021, 5, 19, 10, tzinfo=utc)
+        ),
+        (  # "Relative, before event end"
+            datetime.datetime(2021, 5, 17, 18, tzinfo=utc),
+            datetime.datetime(2021, 5, 22, 5, tzinfo=utc),
+            'UTC',
+            Rule(date_is_absolute=False, offset_to_event_end=True, offset_is_after=False, send_offset_days=1, send_offset_time=datetime.time(hour=10)),
+            datetime.datetime(2021, 5, 21, 10, tzinfo=utc)
+        ),
+
+        # Tests for timezone quirks
+        (  # Test sending on leap day
+            datetime.datetime(2020, 2, 27, 9, tzinfo=utc),
+            None,
+            'UTC',
+            Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=2, send_offset_time=datetime.time(hour=9)),
+            datetime.datetime(2020, 2, 29, 9, tzinfo=utc)
+        ),
+        (  # Test timezone far off from UTC
+            NZ.localize(datetime.datetime(2021, 5, 17, 22)),
+            None,
+            'NZ',
+            Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=1, send_offset_time=datetime.time(hour=9)),
+            NZ.localize(datetime.datetime(2021, 5, 18, 9))
+        ),
+        (  # Test across DST change
+            Berlin.localize(datetime.datetime(2021, 10, 29, 16, 30)),
+            None,
+            'Europe/Berlin',
+            Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=4, send_offset_time=datetime.time(hour=2, minute=30)),
+            Berlin.localize(datetime.datetime(2021, 11, 2, 2, 30))
+        ),
+        (  # Test ambiguous time at DST change
+            Berlin.localize(datetime.datetime(2021, 10, 29, 18, 30)),
+            None,
+            'Europe/Berlin',
+            Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=2, send_offset_time=datetime.time(hour=2, minute=30)),
+            datetime.datetime(2021, 10, 31, 1, 30, tzinfo=utc)
+        ),
+        (  # Test non-existing time at DST change
+            Berlin.localize(datetime.datetime(2021, 3, 29, 14, 30)),
+            None,
+            'Europe/Berlin',
+            Rule(date_is_absolute=False, offset_is_after=False, send_offset_days=1, send_offset_time=datetime.time(hour=2, minute=30)),
+            datetime.datetime(2021, 3, 28, 1, 30, tzinfo=utc)
+        ),
+
+    ])
+def test_sendmail_rule_send_time(event_from, event_to, event_tz, rule, expected, event):
+    if event_from:
+        event.date_from = event_from
+        event.save()
+
+    if event_to:
+        event.date_to = event_to
+        event.save()
+
+    event.settings.timezone = event_tz
+
+    rule.event = event
+    rule.save()
+    m = ScheduledMail.objects.filter(rule=rule).get()
+
+    assert m.computed_datetime.astimezone(event.timezone) == expected
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_recompute(event):
+    event.has_subevents = True
+    event.save()
+    se1 = event.subevents.create(name="meow", date_from=dt_now)
+
+    rule = event.sendmail_rules.create(date_is_absolute=False, offset_is_after=False, send_offset_days=1,
+                                       send_offset_time=datetime.time(4, 30))
+
+    se1.date_from += datetime.timedelta(days=1)
+    se1.save()
+
+    expected = dt_now.replace(hour=4, minute=30, second=0, microsecond=0)
+
+    sendmail_run_rules(None)
+
+    m = ScheduledMail.objects.filter(rule=rule).first()
+    assert m.computed_datetime.astimezone(utc) == expected
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('send_to,amount_mails,recipients', [
+    (Rule.CUSTOMERS, 1, ['dummy@dummy.test']),
+    (Rule.ATTENDEES, 1, ['meow@dummy.test']),
+    (Rule.BOTH, 2, ['dummy@dummy.test', 'meow@dummy.test']),
+])
+@scopes_disabled()
+def test_sendmail_rule_send_order_vs_pos(send_to, amount_mails, recipients, order, event, item):
+    djmail.outbox = []
+
+    order.status = order.STATUS_PAID
+    order.save()
+
+    order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
+                                      send_to=send_to,
+                                      subject='meow', template='meow meow meow')
+    order.all_positions.create(item=item, price=0, attendee_email='meow@dummy.test')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == amount_mails
+
+    _recipients = [mail.to[0] for mail in djmail.outbox]
+    assert set(recipients) == set(_recipients)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_send_attendees_unset_mail(order, event, item):
+    djmail.outbox = []
+    order.status = order.STATUS_PAID
+    order.save()
+
+    order.all_positions.create(item=item, price=13)
+    order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
+                                      send_to=Rule.ATTENDEES,
+                                      subject='meow', template='meow meow meow')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 1
+    mail = djmail.outbox[0]
+    assert mail.to[0] == 'dummy@dummy.test'
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_send_both_same_email(order, event, item):
+    djmail.outbox = []
+    order.status = order.STATUS_PAID
+    order.save()
+
+    order.all_positions.create(item=item, price=13, attendee_email='dummy@dummy.test')
+    order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
+                                      send_to=Rule.BOTH,
+                                      subject='meow', template='meow meow meow')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_send_correct_subevent(order, event_series, subevent1, subevent2, item):
+    djmail.outbox = []
+
+    order.status = order.STATUS_PAID
+    order.save()
+
+    event_series.sendmail_rules.create(date_is_absolute=False, offset_is_after=False, send_offset_days=2,
+                                       send_offset_time=datetime.time(9, 30), send_to=Rule.ATTENDEES,
+                                       subject='meow', template='meow meow meow')
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='se1@dummy.test', subevent=subevent1)
+    order.all_positions.create(item=item, price=23, attendee_email='se2@dummy.test', subevent=subevent2)
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 1
+
+    assert djmail.outbox[0].to[0] == p1.attendee_email
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_send_correct_products(event, order, item, item2):
+    djmail.outbox = []
+
+    order.status = order.STATUS_PAID
+    order.save()
+
+    rule = event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), send_to=Rule.ATTENDEES,
+                                       subject='meow', template='meow meow meow', all_products=False)
+
+    rule.limit_products.set([item])
+    rule.save()
+
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    order.all_positions.create(item=item2, price=13, attendee_email='item2@dummy.test')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 1
+
+    assert djmail.outbox[0].to[0] == p1.attendee_email
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_send_order_pending(event, order):
+    djmail.outbox = []
+
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+                                subject='meow', template='meow meow meow')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_send_order_pending_excluded(event, order):
+    djmail.outbox = []
+
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=False,
+                                subject='meow', template='meow meow meow')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('status', [
+    Order.STATUS_EXPIRED,
+    Order.STATUS_CANCELED,
+])
+@scopes_disabled()
+def test_sendmail_rule_send_order_status(status, event, order):
+    djmail.outbox = []
+
+    order.status = status
+    order.save()
+
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+                                subject='meow', template='meow meow meow')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_send_order_approval(event, order):
+    djmail.outbox = []
+
+    order.require_approval = True
+    order.save()
+
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+                                subject='meow', template='meow meow meow')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_only_send_once(event, order):
+    djmail.outbox = []
+
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+                                subject='meow', template='meow meow meow')
+
+    sendmail_run_rules(None)
+    assert len(djmail.outbox) == 1
+    sendmail_run_rules(None)
+    assert len(djmail.outbox) == 1

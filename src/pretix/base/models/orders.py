@@ -899,7 +899,7 @@ class Order(LockModel, LoggedModel):
             return str(e)
         return True
 
-    def send_mail(self, subject: str, template: Union[str, LazyI18nString],
+    def send_mail(self, subject: Union[str, LazyI18nString], template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
                   auth=None, attach_tickets=False, position: 'OrderPosition'=None, auto_email=True,
@@ -942,7 +942,7 @@ class Order(LockModel, LoggedModel):
 
             try:
                 email_content = render_mail(template, context)
-                subject = subject.format_map(TolerantDict(context))
+                subject = str(subject).format_map(TolerantDict(context))
                 mail(
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers=headers, sender=sender,

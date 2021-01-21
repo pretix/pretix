@@ -39,5 +39,16 @@ from . import views
 urlpatterns = [
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/$', views.SenderView.as_view(),
             name='send'),
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/history/', views.EmailHistoryView.as_view(), name='history')
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/history/', views.EmailHistoryView.as_view(),
+            name='history'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/rules/create', views.CreateRule.as_view(),
+            name='rule.create'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/rules/(?P<rule>[^/]+)/delete',
+            views.DeleteRule.as_view(),
+            name='rule.delete'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/rules/(?P<rule>[^/]+)',
+            views.UpdateRule.as_view(),
+            name='rule.update'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/rules', views.ListRules.as_view(),
+            name='rule.list'),
 ]

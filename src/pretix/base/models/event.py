@@ -75,7 +75,6 @@ from .organizer import Organizer, Team
 
 
 class EventMixin:
-
     def clean(self):
         if self.presale_start and self.presale_end and self.presale_start > self.presale_end:
             raise ValidationError({'presale_end': _('The end of the presale period has to be later than its start.')})
@@ -494,11 +493,17 @@ class Event(EventMixin, LoggedModel):
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
                                      related_name='events')
+
+    last_modified = models.DateTimeField(
+        auto_now=True, db_index=True
+    )
+
     sales_channels = MultiStringField(
         verbose_name=_('Restrict to specific sales channels'),
         help_text=_('Only sell tickets for this event on the following sales channels.'),
         default=default_sales_channels,
     )
+
     objects = ScopedManager(organizer='organizer')
 
     class Meta:
@@ -1255,12 +1260,13 @@ class SubEvent(EventMixin, LoggedModel):
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
                                      related_name='subevents')
-    last_modified = models.DateTimeField(
-        auto_now=True, db_index=True
-    )
 
     items = models.ManyToManyField('Item', through='SubEventItem')
     variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')
+
+    last_modified = models.DateTimeField(
+        auto_now=True, db_index=True
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 
