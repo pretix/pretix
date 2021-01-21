@@ -44,18 +44,18 @@
                 <tr>
                     <th>{% trans "Quota name" %}
                         <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a></th>
+                        <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
                     <th>{% trans "Products" %}</th>
                     {% if request.event.has_subevents %}
                         <th>{% trans "Date" context "subevent" %}
                             <a href="?{% url_replace request 'ordering' '-date' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'date' %}"><i class="fa fa-caret-up"></i></a></th>
+                            <a href="?{% url_replace request 'ordering' 'date' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                     {% endif %}
                     <th>{% trans "Total capacity" %}
                         <a href="?{% url_replace request 'ordering' '-size' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'size' %}"><i class="fa fa-caret-up"></i></a></th>
+                        <a href="?{% url_replace request 'ordering' 'size' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
                     <th>{% trans "Capacity left" %}</th>
                     <th class="action-col-2"></th>

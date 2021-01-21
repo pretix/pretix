@@ -1,9 +1,15 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Send out emails" %}{% endblock %}
+{% block title %}{% trans "Email history" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Email history" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            This page shows you all mass emails you sent out manually. It does not include emails sent out
+            automatically.
+        {% endblocktrans %}
+    </p>
     <div>
         <ul class="list-group">
             {% for log in logs %}

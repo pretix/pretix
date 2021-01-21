@@ -1,0 +1,39 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Create Email Rule" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Create Email Rule" %}</h1>
+    {% block inner %}
+        <form class="form-horizontal" method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form_errors form %}
+
+            <fieldset>
+                <legend>{% trans "Content" %}</legend>
+                {% bootstrap_field form.subject layout='control' %}
+                {% bootstrap_field form.template layout='control' %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Recipients" %}</legend>
+                {% bootstrap_field form.send_to layout='control' %}
+                {% bootstrap_field form.include_pending layout='control' %}
+                {% bootstrap_field form.all_products layout='control' %}
+                {% bootstrap_field form.limit_products layout='horizontal' %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Time" %}</legend>
+                {% bootstrap_field form.schedule_type layout='horizontal' %}
+                {% bootstrap_field form.send_date layout='horizontal' %}
+                {% bootstrap_field form.send_offset_days layout='horizontal' %}
+                {% bootstrap_field form.send_offset_time layout='horizontal' %}
+            </fieldset>
+
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        </form>
+    {% endblock %}
+{% endblock %}

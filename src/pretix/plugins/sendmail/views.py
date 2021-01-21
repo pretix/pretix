@@ -38,12 +38,14 @@ import logging
 import bleach
 import dateutil
 from django.contrib import messages
-from django.db.models import Exists, OuterRef, Q
-from django.http import Http404
-from django.shortcuts import redirect
+from django.db import transaction
+from django.db.models import Count, Exists, Max, Min, OuterRef, Q
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView, ListView
+from django.views.generic import DeleteView, FormView, ListView
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.i18n import LazyI18nString, language
@@ -52,9 +54,11 @@ from pretix.base.models.event import SubEvent
 from pretix.base.services.mail import TolerantDict
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import CreateView, PaginationMixin, UpdateView
 from pretix.plugins.sendmail.tasks import send_mails
 
 from . import forms
+from .models import Rule
 
 logger = logging.getLogger('pretix.plugins.sendmail')
 
@@ -280,3 +284,165 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
                     pass
 
         return ctx
+
+
+class CreateRule(EventPermissionRequiredMixin, CreateView):
+    template_name = 'pretixplugins/sendmail/rule_create.html'
+    permission = 'can_change_event_settings'
+    form_class = forms.RuleForm
+
+    model = Rule
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        return kwargs
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        self.output = {}
+
+        if self.request.POST.get("action") == "preview":
+            for l in self.request.event.settings.locales:
+                with language(l, self.request.event.settings.region):
+                    context_dict = TolerantDict()
+                    for k, v in get_available_placeholders(self.request.event, ['event', 'order',
+                                                                                'position_or_address']).items():
+                        context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
+                            _('This value will be replaced based on dynamic parameters.'),
+                            v.render_sample(self.request.event)
+                        )
+
+                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
+                    preview_subject = subject.format_map(context_dict)
+                    template = form.cleaned_data['template'].localize(l)
+                    preview_text = markdown_compile_email(template.format_map(context_dict))
+
+                    self.output[l] = {
+                        'subject': _('Subject: {subject}').format(subject=preview_subject),
+                        'html': preview_text,
+                    }
+
+            return self.get(self.request, *self.args, **self.kwargs)
+
+        messages.success(self.request, _('Your rule has been created.'))
+
+        form.instance.event = self.request.event
+
+        self.object = form.save()
+
+        return redirect(
+            'plugins:sendmail:rule.update',
+            event=self.request.event.slug,
+            organizer=self.request.event.organizer.slug,
+            rule=self.object.pk,
+        )
+
+
+class UpdateRule(EventPermissionRequiredMixin, UpdateView):
+    model = Rule
+    form_class = forms.RuleForm
+    template_name = 'pretixplugins/sendmail/rule_update.html'
+    permission = 'can_change_event_settings'
+
+    def get_object(self, queryset=None) -> Rule:
+        return get_object_or_404(Rule, event=self.request.event, id=self.kwargs['rule'])
+
+    def get_success_url(self):
+        return reverse('plugins:sendmail:rule.update', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'rule': self.object.pk,
+        })
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        o = {}
+
+        for lang in self.request.event.settings.locales:
+            with language(lang, self.request.event.settings.region):
+                placeholders = TolerantDict()
+                for k, v in get_available_placeholders(self.request.event, ['event', 'order', 'position_or_address']).items():
+                    placeholders[k] = '<span class="placeholder" title="{}">{}</span>'.format(
+                        _('This value will be replaced based on dynamic parameters.'),
+                        v.render_sample(self.request.event)
+                    )
+
+                subject = bleach.clean(self.object.subject.localize(lang), tags=[])
+                preview_subject = subject.format_map(placeholders)
+                template = self.object.template.localize(lang)
+                preview_text = markdown_compile_email(template.format_map(placeholders))
+
+                o[lang] = {
+                    'subject': _('Subject: {subject}'.format(subject=preview_subject)),
+                    'html': preview_text,
+                }
+
+        ctx['output'] = o
+
+        return ctx
+
+
+class ListRules(EventPermissionRequiredMixin, PaginationMixin, ListView):
+    template_name = 'pretixplugins/sendmail/rule_list.html'
+    model = Rule
+    context_object_name = 'rules'
+
+    def get_queryset(self):
+        return self.request.event.sendmail_rules.annotate(
+            total_mails=Count('scheduledmail'),
+            sent_mails=Count('scheduledmail', filter=Q(scheduledmail__sent=True)),
+            last_execution=Max(
+                'scheduledmail__computed_datetime',
+                filter=Q(scheduledmail__sent=True)
+            ),
+            next_execution=Min(
+                'scheduledmail__computed_datetime',
+                filter=Q(scheduledmail__sent=False)
+            ),
+        ).prefetch_related(
+            'limit_products'
+        )
+
+
+class DeleteRule(EventPermissionRequiredMixin, DeleteView):
+    model = Rule
+    permission = 'can_change_event_settings'
+    template_name = 'pretixplugins/sendmail/rule_delete.html'
+    context_object_name = 'rule'
+
+    def get_success_url(self):
+        return reverse("plugins:sendmail:rule.list", kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_object(self, queryset=None) -> Rule:
+        return get_object_or_404(Rule, event=self.request.event, id=self.kwargs['rule'])
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        self.request.event.log_action('pretix.plugins.sendmail.rule.deleted',
+                                      user=self.request.user,
+                                      data={
+                                          'subject': self.object.subject,
+                                          'text': self.object.template,
+                                      })
+
+        self.object.delete()
+        messages.success(self.request, _('The selected rule has been deleted.'))
+        return HttpResponseRedirect(success_url)

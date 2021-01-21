@@ -1,0 +1,96 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Automated email rules" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Automated email rules" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            Email rules allow you to automatically sent emails to your customers at a specific time before or after
+            your event.
+        {% endblocktrans %}
+    </p>
+
+    {% if rules %}
+        <p>
+            <a href="{% url "plugins:sendmail:rule.create" organizer=request.organizer.slug event=request.event.slug %}">
+                <button class="btn btn-default"><span class="fa fa-plus"></span> {% trans "Create a new rule" %}</button>
+            </a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Email subject" %}</th>
+                    <th>{% trans "Recipient" %}</th>
+                    <th>{% trans "Scheduled time" %}</th>
+                    <th>{% trans "Products" %}</th>
+                    <th>{% trans "Sent / Total dates" context "subevent" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for r in rules %}
+                    <tr>
+                        <td>
+                            <strong><a href="{% url "plugins:sendmail:rule.update" organizer=request.organizer.slug event=request.event.slug rule=r.pk %}">{{ r.subject }}</a></strong>
+                        </td>
+                        <td>
+                            {{ r.get_send_to_display }}
+                        </td>
+                        <td>
+                            {{ r.human_readable_time }}
+                            {% if not r.date_is_absolute %}
+                                <br>
+                                {% trans "Next execution:" %}
+                                {% if r.next_execution %}
+                                    {{ r.next_execution|date:"SHORT_DATETIME_FORMAT" }}
+                                {% else %}
+                                    {% trans "unknown" %}
+                                {% endif %}
+                                {% if r.last_execution %}
+                                    <br>
+                                    {% trans "Last execution:" %}
+                                    {{ r.last_execution|date:"SHORT_DATETIME_FORMAT" }}
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if r.all_products %}
+                                <em>{% trans "All" %}</em>
+                            {% else %}
+                                <ul>
+                                    {% for item in r.limit_products.all %}
+                                        <li>
+                                            <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ r.sent_mails }} / {{ r.total_mails }}
+                        </td>
+                        <td class="text-right flip">
+                            <a class="btn btn-sm btn-default" href="{% url "plugins:sendmail:rule.update" organizer=request.organizer.slug event=request.event.slug rule=r.pk %}"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-sm btn-danger" href="{% url "plugins:sendmail:rule.delete" organizer=request.organizer.slug event=request.event.slug rule=r.pk %}"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% else %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any rules yet.
+                {% endblocktrans %}
+            </p>
+            <a href="{% url "plugins:sendmail:rule.create" organizer=request.organizer.slug event=request.event.slug %}">
+                <button class="btn btn-primary btn-lg">{% trans "Create a new rule" %}</button>
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}

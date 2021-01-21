@@ -41,14 +41,35 @@ from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.email import get_available_placeholders
-from pretix.base.forms import PlaceholderValidator
-from pretix.base.forms.widgets import SplitDateTimePickerWidget
+from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.forms.widgets import (
+    SplitDateTimePickerWidget, TimePickerWidget,
+)
 from pretix.base.models import CheckinList, Item, Order, SubEvent
-from pretix.control.forms import CachedFileField
+from pretix.control.forms import CachedFileField, SplitDateTimeField
 from pretix.control.forms.widgets import Select2, Select2Multiple
+from pretix.plugins.sendmail.models import Rule
 
 
-class MailForm(forms.Form):
+class FormPlaceholderMixin:
+    def _set_field_placeholders(self, fn, base_parameters):
+        phs = [
+            '{%s}' % p
+            for p in sorted(get_available_placeholders(self.event, base_parameters).keys())
+        ]
+        ht = _('Available placeholders: {list}').format(
+            list=', '.join(phs)
+        )
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(phs)
+        )
+
+
+class MailForm(FormPlaceholderMixin, forms.Form):
     recipients = forms.ChoiceField(
         label=_('Send email to'),
         widget=forms.RadioSelect,
@@ -118,22 +139,6 @@ class MailForm(forms.Form):
         if bool(d.get('subevents_from')) != bool(d.get('subevents_to')):
             raise ValidationError(pgettext_lazy('subevent', 'If you set a date range, please set both a start and an end.'))
         return d
-
-    def _set_field_placeholders(self, fn, base_parameters):
-        phs = [
-            '{%s}' % p
-            for p in sorted(get_available_placeholders(self.event, base_parameters).keys())
-        ]
-        ht = _('Available placeholders: {list}').format(
-            list=', '.join(phs)
-        )
-        if self.fields[fn].help_text:
-            self.fields[fn].help_text += ' ' + str(ht)
-        else:
-            self.fields[fn].help_text = ht
-        self.fields[fn].validators.append(
-            PlaceholderValidator(phs)
-        )
 
     def __init__(self, *args, **kwargs):
         event = self.event = kwargs.pop('event')
@@ -217,3 +222,104 @@ class MailForm(forms.Form):
             del self.fields['subevent']
             del self.fields['subevents_from']
             del self.fields['subevents_to']
+
+
+class RuleForm(FormPlaceholderMixin, I18nModelForm):
+    class Meta:
+        model = Rule
+
+        fields = ['subject', 'template',
+                  'send_date', 'send_offset_days', 'send_offset_time',
+                  'include_pending', 'all_products', 'limit_products',
+                  'send_to']
+
+        field_classes = {
+            'subevent': SafeModelMultipleChoiceField,
+            'limit_products': SafeModelMultipleChoiceField,
+            'send_date': SplitDateTimeField,
+        }
+
+        widgets = {
+            'send_date': SplitDateTimePickerWidget(attrs={
+                'data-display-dependency': '#id_schedule_type_0',
+            }),
+            'send_offset_days': forms.NumberInput(attrs={
+                'data-display-dependency': '#id_schedule_type_1,#id_schedule_type_2,#id_schedule_type_3,'
+                                           '#id_schedule_type_4',
+            }),
+            'send_offset_time': TimePickerWidget(attrs={
+                'data-display-dependency': '#id_schedule_type_1,#id_schedule_type_2,#id_schedule_type_3,'
+                                           '#id_schedule_type_4',
+            }),
+            'limit_products': forms.CheckboxSelectMultiple(
+                attrs={'class': 'scrolling-multiple-choice',
+                       'data-inverse-dependency': '#id_all_products'},
+            ),
+            'send_to': forms.RadioSelect,
+        }
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+
+        if instance:
+            if instance.date_is_absolute:
+                dia = "abs"
+            else:
+                dia = "rel"
+                dia += "_a" if instance.offset_is_after else "_b"
+                dia += "_e" if instance.offset_to_event_end else "_s"
+
+        else:
+            dia = "abs"
+
+        kwargs.setdefault('initial', {})
+        kwargs['initial']['schedule_type'] = dia
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['limit_products'].queryset = Item.objects.filter(event=self.event)
+
+        self.fields['schedule_type'] = forms.ChoiceField(
+            label=_('Type of schedule time'),
+            widget=forms.RadioSelect,
+            choices=[
+                ('abs', _('Absolute')),
+                ('rel_b_s', _('Relative, before event start')),
+                ('rel_b_e', _('Relative, before event end')),
+                ('rel_a_s', _('Relative, after event start')),
+                ('rel_a_e', _('Relative, after event end'))
+            ]
+        )
+
+        self._set_field_placeholders('subject', ['event', 'order'])
+        self._set_field_placeholders('template', ['event', 'order'])
+
+    def clean(self):
+        d = super().clean()
+
+        dia = d.get('schedule_type')
+        if dia == 'abs':
+            if not d.get('send_date'):
+                raise ValidationError({'send_date': _('Please specify the send date')})
+            d['date_is_absolute'] = True
+            d['send_offset_days'] = d['send_offset_time'] = None
+        else:
+            if not (d.get('send_offset_days') and d.get('send_offset_time')):
+                raise ValidationError(_('Please specify the offset days and time'))
+            d['offset_is_after'] = '_a' in dia
+            d['offset_to_event_end'] = '_e' in dia
+            d['date_is_absolute'] = False
+            d['send_date'] = None
+
+        if d.get('all_products'):
+            # having products checked while the option is ignored is probably counterintuitive
+            d['limit_products'] = Item.objects.none()
+        else:
+            if not d.get('limit_products'):
+                raise ValidationError({'limit_products': _('Please specify a product')})
+
+        self.instance.offset_is_after = d.get('offset_is_after', False)
+        self.instance.offset_to_event_end = d.get('offset_to_event_end', False)
+        self.instance.date_is_absolute = d.get('date_is_absolute', False)
+
+        return d

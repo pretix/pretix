@@ -40,48 +40,7 @@ from django.core import mail as djmail
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import (
-    Checkin, Event, Item, Order, OrderPosition, Organizer, Team, User,
-)
-
-
-@pytest.fixture
-def event():
-    """Returns an event instance"""
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
-    event = Event.objects.create(
-        organizer=o, name='Dummy', slug='dummy',
-        date_from=now(),
-        plugins='pretix.plugins.sendmail,tests.testdummy',
-    )
-    return event
-
-
-@pytest.fixture
-def item(event):
-    """Returns an item instance"""
-    return Item.objects.create(name='Test item', event=event, default_price=13)
-
-
-@pytest.fixture
-def checkin_list(event):
-    """Returns an checkin list instance"""
-    return event.checkin_lists.create(name="Test Checkinlist", all_products=True)
-
-
-@pytest.fixture
-def order(item):
-    """Returns an order instance"""
-    o = Order.objects.create(event=item.event, status=Order.STATUS_PENDING,
-                             expires=now() + datetime.timedelta(hours=1),
-                             total=13, code='DUMMY', email='dummy@dummy.test',
-                             datetime=now(), locale='en')
-    return o
-
-
-@pytest.fixture
-def pos(order, item):
-    return OrderPosition.objects.create(order=order, item=item, price=13)
+from pretix.base.models import Checkin, Item, Order, OrderPosition, Team, User
 
 
 @pytest.fixture
@@ -102,6 +61,15 @@ def sendmail_url(event):
         event=event.slug, orga=event.organizer.slug,
     )
     return url
+
+
+@pytest.fixture
+def subevent(event):
+    event.has_subevents = True
+    event.save()
+    se = event.subevents.create(name='se1', date_from=now())
+
+    return se
 
 
 @pytest.mark.django_db
