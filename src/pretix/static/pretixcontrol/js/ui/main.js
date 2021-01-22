@@ -101,7 +101,6 @@ var form_handlers = function (el) {
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
             showClear: !$(this).prop("required"),
-            viewMode: 'years',
             icons: {
                 time: 'fa fa-clock-o',
                 date: 'fa fa-calendar',
