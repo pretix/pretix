@@ -47,6 +47,7 @@ from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
 
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
+from ...base.channels import get_all_sales_channels
 
 
 class ItemList(ListView):
@@ -65,6 +66,11 @@ class ItemList(ListView):
         ).prefetch_related("category").order_by(
             'category__position', 'category', 'position'
         )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['sales_channels'] = get_all_sales_channels()
+        return ctx
 
 
 def item_move(request, item, up=True):

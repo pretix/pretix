@@ -31,7 +31,7 @@
                 <thead>
                 <tr>
                     <th>{% trans "Product name" %}</th>
-                    <th class="iconcol"></th>
+                    <th></th>
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
@@ -51,7 +51,17 @@
                         {% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}">{{ i }}</a>
                                 {% if not i.active %}</strike>{% endif %}
                                 </strong>
-                                <br><small class="text-muted">#{{ i.pk }}</small>
+                                <br>
+                                <small class="text-muted">
+                                    #{{ i.pk }}
+                                    {% for k, c in sales_channels.items %}
+                                        {% if k in i.sales_channels %}
+                                            <span class="fa fa-fw fa-{{ c.icon }} text-muted"
+                                                  data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
+                                        {% else %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </small>
                             </td>
                             <td>
                                 {% if i.available_from or i.available_until %}
@@ -70,6 +80,8 @@
                             <td>
                                 {% if i.admission %}
                                     <span class="fa fa-user fa-fw text-muted" data-toggle="tooltip" title="{% trans "Admission ticket" %}"></span>
+                                {% elif i.issue_giftcard %}
+                                    <span class="fa fa-gift fa-fw text-muted" data-toggle="tooltip" title="{% trans "Gift card" %}"></span>
                                 {% endif %}
                             </td>
                             <td>
@@ -81,6 +93,9 @@
                                 {% if i.category.is_addon %}
                                     <span class="fa fa-puzzle-piece fa-fw text-muted" data-toggle="tooltip"
                                             title="{% trans "Only available as an add-on product" %}"></span>
+                                {% elif i.require_bundling %}
+                                    <span class="fa fa-puzzle-piece fa-fw text-muted" data-toggle="tooltip"
+                                          title="{% trans "Only available as part of a bundle" %}"></span>
                                 {% elif i.hide_without_voucher %}
                                     <span class="fa fa-tags fa-fw text-muted" data-toggle="tooltip"
                                             title="{% trans "Only visible with a voucher" %}"></span>
