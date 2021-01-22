@@ -50,7 +50,8 @@
                                 <a href="
                         {% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}">{{ i }}</a>
                                 {% if not i.active %}</strike>{% endif %}
-                            </strong>
+                                </strong>
+                                <br><small class="text-muted">#{{ i.pk }}</small>
                             </td>
                             <td>
                                 {% if i.available_from or i.available_until %}
