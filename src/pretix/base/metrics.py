@@ -1,4 +1,6 @@
+import json
 import math
+import time
 from collections import defaultdict
 
 from django.apps import apps
@@ -6,6 +8,7 @@ from django.conf import settings
 from django.db import connection
 
 from pretix.base.models import Event, Invoice, Order, OrderPosition, Organizer
+from pretix.celery_app import app
 
 if settings.HAS_REDIS:
     import django_redis
@@ -247,6 +250,19 @@ def metric_values():
             metrics['pretix_model_instances']['{model="%s"}' % m._meta] = m.objects.count()
         else:
             metrics['pretix_model_instances']['{model="%s"}' % m._meta] = estimate_count_fast(m)
+
+    if settings.HAS_CELERY:
+        client = app.broker_connection().channel().client
+        for q in settings.CELERY_TASK_QUEUES:
+            llen = client.llen(q.name)
+            lfirst = client.lindex(q.name, -1)
+            metrics['pretix_celery_tasks_queued_count']['{queue="%s"}' % q.name] = llen
+            if lfirst:
+                ldata = json.loads(lfirst)
+                dt = time.time() - ldata.get('created', 0)
+                metrics['pretix_celery_tasks_queued_age_seconds']['{queue="%s"}' % q.name] = dt
+            else:
+                metrics['pretix_celery_tasks_queued_age_seconds']['{queue="%s"}' % q.name] = 0
 
     return metrics
 

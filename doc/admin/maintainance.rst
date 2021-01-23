@@ -95,6 +95,12 @@ pretix_model_instances
     the ``model`` name. Starting with pretix 3.11, these numbers might only be approximate for
     most tables when running on PostgreSQL to mitigate performance impact.
 
+pretix_celery_tasks_queued_count
+    The number of background tasks in the worker queue, labeled with ``queue``.
+
+pretix_celery_tasks_queued_age_seconds
+    The age of the longest-waiting in the worker queue in seconds, labeled with ``queue``.
+
 .. _metric types: https://prometheus.io/docs/concepts/metric_types/
 .. _Prometheus: https://prometheus.io/
 .. _cProfile: https://docs.python.org/3/library/profile.html
