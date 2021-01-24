@@ -116,6 +116,10 @@ The provider class
 
    .. automethod:: refund_control_render
 
+   .. automethod:: new_refund_control_form_render
+
+   .. automethod:: new_refund_control_form_process
+
    .. automethod:: api_payment_details
 
    .. automethod:: matching_id

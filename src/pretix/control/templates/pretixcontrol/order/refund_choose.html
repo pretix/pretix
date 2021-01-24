@@ -68,6 +68,28 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    {% for prov, form in new_refunds %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                {{ prov.verbose_name }}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% trans "Automatically refund" context "amount_label" %}
+                                <div class="input-group">
+                                    <input type="text" name="newrefund-{{ prov }}"
+                                           placeholder="{{ 0|floatformat:2 }}"
+                                           title="" class="form-control">
+                                    <span class="input-group-addon">
+                                        {{ request.event.currency }}
+                                    </span>
+                                </div><br>
+                                {{ form|safe }}
+                            </td>
+                        </tr>
+                    {% endfor %}
                     <tr>
                         <td></td>
                         <td></td>

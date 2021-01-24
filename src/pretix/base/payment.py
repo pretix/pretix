@@ -9,7 +9,7 @@ import pytz
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import transaction
 from django.dispatch import receiver
 from django.forms import Form
@@ -772,6 +772,32 @@ class BasePaymentProvider:
         On failure, you should raise a PaymentException.
         """
         raise PaymentException(_('Automatic refunds are not supported by this payment provider.'))
+
+    def new_refund_control_form_render(self, request: HttpRequest, order: Order) -> str:
+        """
+        Render a form that will be shown to backend users when trying to create a new refund.
+
+        Usually, refunds are created from an existing payment object, e.g. if there is a credit card
+        payment and the credit card provider returns ``True`` from ``payment_refund_supported``, the system
+        will automatically create an ``OrderRefund`` and call ``execute_refund`` on that payment. This method
+        can and should not be used in that situation! Instead, by implementing this method you can add a refund
+        flow for this payment provider that starts without an existing payment. For example, even though an order
+        was paid by credit card, it could easily be refunded by SEPA bank transfer. In that case, the SEPA bank
+        transfer provider would implement this method and return a form that asks for the IBAN.
+
+        This method should return HTML or ``None``. All form fields should have a globally unique name.
+        """
+        return
+
+    def new_refund_control_form_process(self, request: HttpRequest, amount: Decimal, order: Order) -> OrderRefund:
+        """
+        Process a backend user's request to initiate a new refund with an amount of ``amount`` for ``order``.
+
+        This method should parse the input provided to the form created and either raise ``ValidationError``
+        or return an ``OrderRefund`` object in ``created`` state that has not yet been saved to the database.
+        The system will then call ``execute_refund`` on that object.
+        """
+        raise ValidationError('Not implemented')
 
     def shred_payment_info(self, obj: Union[OrderPayment, OrderRefund]):
         """
