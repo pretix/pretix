@@ -37,7 +37,7 @@
                         {% endif %}
                         {% if not event.continued %}
                             {% if event.time %}
-                                <span class="event-time">
+                                <span class="event-time" data-time="{{ event.event.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
                                     <span class="fa fa-clock-o"></span>
                                     {% if not show_names|default_if_none:True %}
                                         <strong>

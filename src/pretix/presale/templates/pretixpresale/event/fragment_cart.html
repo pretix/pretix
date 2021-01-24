@@ -28,8 +28,10 @@
             {% if line.subevent %}
                 <br /><span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
                 {% if event.settings.show_times %}
-                    <span class="fa fa-clock-o"></span>
-                    {{ line.subevent.date_from|date:"TIME_FORMAT" }}
+                    <span data-time="{{ line.subevent.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}" data-time-short>
+                        <span class="fa fa-clock-o"></span>
+                        {{ line.subevent.date_from|date:"TIME_FORMAT" }}
+                    </span>
                 {% endif %}
             {% endif %}
 

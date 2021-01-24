@@ -115,8 +115,10 @@
                                         <ul class="addon-list">
                                             {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display }}
                                             {% if pos.event.settings.show_times %}
-                                                <span class="fa fa-clock-o"></span>
-                                                {{ pos.subevent.date_from|date:"TIME_FORMAT" }}
+                                                <span data-time="{{ pos.subevent.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}">
+                                                    <span class="fa fa-clock-o"></span>
+                                                    {{ pos.subevent.date_from|date:"TIME_FORMAT" }}
+                                                </span>
                                             {% endif %}
                                         </ul>
                                     </div>

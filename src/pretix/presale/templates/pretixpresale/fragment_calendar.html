@@ -51,16 +51,14 @@
                                         {% endif %}
                                         {% if not event.continued %}
                                             {% if event.time %}
-                                                <span class="event-time">
+                                                <span class="event-time" data-time="{{ event.event.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
                                                     <span class="fa fa-clock-o"></span>
                                                     {% if not show_names|default_if_none:True %}
                                                         <strong>
                                                     {% endif %}
                                                     {{ event.time|date:"TIME_FORMAT" }}
-                                                    {% if event.time_end %}
+                                                    {% if event.event.settings.show_date_to and event.time_end %}
                                                         – {{ event.time_end|date:"TIME_FORMAT" }}
-                                                    {% endif %}
-                                                    {% if event.event.settings.show_date_to and event. %}
                                                     {% endif %}
                                                     {% if not show_names|default_if_none:True %}
                                                         </strong>

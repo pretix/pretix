@@ -11,8 +11,10 @@
                 <span class="fa fa-calendar"></span>
                 {{ subev.get_date_range_display }}
                 {% if event.settings.show_times %}
-                    <span class="fa fa-clock-o"></span>
-                    {{ subev.date_from|date:"TIME_FORMAT" }}
+                    <span data-time="{{ subev.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
+                        <span class="fa fa-clock-o"></span>
+                        {{ subev.date_from|date:"TIME_FORMAT" }}
+                    </span>
                 {% endif %}
             </div>
             <div class="col-md-2 text-right flip">
