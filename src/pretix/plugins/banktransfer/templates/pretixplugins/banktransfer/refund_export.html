@@ -81,7 +81,7 @@
                                 <span class="fa fa-download"></span> {% trans "Download CSV" %}
                             </a>
                             {% if export.currency == "EUR" %}
-                                <a class="btn btn-secondary"
+                                <a class="btn btn-default"
                                    href="{% url "plugins:banktransfer:refunds.sepa" organizer=request.organizer.slug event=export.event.slug id=export.id %}">
                                     {% trans "SEPA XML" %}
                                 </a>
@@ -92,7 +92,7 @@
                                 <span class="fa fa-download"></span> {% trans "Download CSV" %}
                             </a>
                             {% if export.currency == "EUR" %}
-                                <a class="btn btn-secondary"
+                                <a class="btn btn-default"
                                    href="{% url "plugins:banktransfer:refunds.sepa" organizer=export.organizer.slug id=export.id %}">
                                     {% trans "SEPA XML" %}
                                 </a>

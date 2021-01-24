@@ -27,13 +27,13 @@
 
     <form method="post" class="form-horizontal">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-lg-8 col-md-12">
-                {% bootstrap_form form layout="control" %}
-            </div>
-        </div>
-        <button class="btn btn-primary"><span class="fa fa-download"></span> {% trans "Download" %}</button>
-    </form>
+        {% bootstrap_form form layout="control" %}
 
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                <span class="fa fa-download"></span> {% trans "Download" %}
+            </button>
+        </div>
+    </form>
 
 {% endblock %}
