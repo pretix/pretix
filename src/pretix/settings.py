@@ -654,7 +654,11 @@ LOGGING = {
             'handlers': ['file', 'console'],
             'level': 'INFO',  # Do not output all the queries
             'propagate': True,
-        }
+        },
+        'asyncio': {
+            'handlers': ['file', 'console'],
+            'level': 'WARNING',
+        },
     },
 }
 
