@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2021-01-20 16:32+0000\n"
+"PO-Revision-Date: 2021-01-26 03:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -2367,11 +2367,11 @@ msgstr ""
 #: pretix/base/models/items.py:321 pretix/base/settings.py:916
 #: pretix/control/forms/event.py:1257
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "Näytä jäljellä olevien lippujen määrä"
 
 #: pretix/base/models/items.py:322
 msgid "Publicly show how many tickets are still available."
-msgstr ""
+msgstr "Näytä jäljellä olevien lippujen määrä julkisesti."
 
 #: pretix/base/models/items.py:329
 msgid "Product picture"
@@ -8177,7 +8177,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:306
 msgid "Number of tickets"
-msgstr ""
+msgstr "Lippujen määrä"
 
 #: pretix/control/forms/item.py:398
 msgid "Quota name is required."
@@ -9783,7 +9783,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "Tickets"
-msgstr ""
+msgstr "Liput"
 
 #: pretix/control/navigation.py:68
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
@@ -12093,7 +12093,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/index.html:115
 msgid "Tickets & check-in"
-msgstr ""
+msgstr "Liput & ilmoittautuminen"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:120
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:600
@@ -12937,11 +12937,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:287
 msgid "Change answers"
-msgstr ""
+msgstr "Muuta vastauksia"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:292
 msgid "Change products"
-msgstr ""
+msgstr "Muuta tuotteita"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:297
 #: pretix/presale/templates/pretixpresale/event/order.html:179
@@ -19581,7 +19581,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:68
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "Tilauksesta on maksamatta %(total)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:71
 #, python-format
@@ -19610,7 +19610,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:125
 msgid "Print"
-msgstr ""
+msgstr "Tulosta"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:127
 #, python-format
