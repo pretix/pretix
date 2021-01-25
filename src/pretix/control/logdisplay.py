@@ -357,6 +357,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
                                           'account.'),
         'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
         'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
+        'pretix.control.auth.user.forgot_password.denied.repeated': _('A repeated password reset has been denied, as '
+                                                                      'the last request was less than 24 hours ago.'),
         'pretix.organizer.deleted': _('The organizer "{name}" has been deleted.'),
         'pretix.voucher.added': _('The voucher has been created.'),
         'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
