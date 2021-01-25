@@ -18,7 +18,7 @@
                     <div class="input-group">
                         <input type="number" class="form-control input-xs"
                                id="voucher-bulk-codes-num"
-                               placeholder="{% trans "Number" %}">
+                               placeholder="{% trans "Number" context "number_of_things" %}">
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="button" id="voucher-bulk-codes-generate"
                                     data-rng-url="{% url 'control:event.vouchers.rng' organizer=request.event.organizer.slug event=request.event.slug %}">
