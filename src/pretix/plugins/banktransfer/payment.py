@@ -14,7 +14,7 @@ from i18nfield.strings import LazyI18nString
 from localflavor.generic.forms import BICFormField, IBANFormField
 from localflavor.generic.validators import IBANValidator
 
-from pretix.base.models import OrderPayment, OrderRefund, Order
+from pretix.base.models import Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 
 

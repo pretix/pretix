@@ -46,8 +46,8 @@ from pretix.control.permissions import (
 from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
 
-from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 from ...base.channels import get_all_sales_channels
+from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
 class ItemList(ListView):
