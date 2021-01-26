@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-20 16:41+0000\n"
-"PO-Revision-Date: 2021-01-20 16:10+0000\n"
+"POT-Creation-Date: 2020-12-22 11:05+0000\n"
+"PO-Revision-Date: 2021-01-26 03:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -2367,11 +2367,11 @@ msgstr ""
 #: pretix/base/models/items.py:321 pretix/base/settings.py:916
 #: pretix/control/forms/event.py:1257
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "Näytä jäljellä olevien lippujen määrä"
 
 #: pretix/base/models/items.py:322
 msgid "Publicly show how many tickets are still available."
-msgstr ""
+msgstr "Näytä jäljellä olevien lippujen määrä julkisesti."
 
 #: pretix/base/models/items.py:329
 msgid "Product picture"
@@ -8177,7 +8177,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:306
 msgid "Number of tickets"
-msgstr ""
+msgstr "Lippujen määrä"
 
 #: pretix/control/forms/item.py:398
 msgid "Quota name is required."
@@ -9783,7 +9783,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "Tickets"
-msgstr ""
+msgstr "Liput"
 
 #: pretix/control/navigation.py:68
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
@@ -10759,12 +10759,14 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
+"Voit poistaa henkilötiedot kuten nimet ja sähköpostiosoitteet, jolloin "
+"jäljelle jää vain taloustiedot kuten myytyjen lippujen tyypit ja määrät."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
 #: pretix/control/templates/pretixcontrol/event/delete.html:5
 msgid "Delete event"
-msgstr ""
+msgstr "Poista tapahtuma"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:80
 msgid ""
@@ -10777,12 +10779,16 @@ msgid ""
 "This operation will destroy your event including all configuration, "
 "products, quotas, questions, vouchers, lists, etc."
 msgstr ""
+"Tämä operaatio tuhoaa tapahtumasi mukaan lukien kaikki siihen liittyvät "
+"asetukset, tuotteet, kiintiöt, kysymykset, kupongit ym."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:15
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:15
 msgid ""
 "This operation is irreversible and there is no way to bring your data back."
 msgstr ""
+"Tämä on peruuttamaton operaatio eikä poistettuja tietoja voi enää myöhemmin "
+"palauttaa."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:22
 #, python-format
@@ -10790,10 +10796,12 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"Vahvistaaksesi toiminnon, ole hyvä ja kirjoita tapahtuman lyhyt tunniste (\""
+"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
 msgid "Your event can not be deleted as it already contains orders."
-msgstr ""
+msgstr "Tapahtumaa ei voida poistaa, sillä siihen on jo tehty tilauksia."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:39
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:39
@@ -10816,7 +10824,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
-msgstr ""
+msgstr "Aikajanasi"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:21
 msgid ""
@@ -12085,7 +12093,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/index.html:115
 msgid "Tickets & check-in"
-msgstr ""
+msgstr "Liput & ilmoittautuminen"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:120
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:600
@@ -12929,11 +12937,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:287
 msgid "Change answers"
-msgstr ""
+msgstr "Muuta vastauksia"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:292
 msgid "Change products"
-msgstr ""
+msgstr "Muuta tuotteita"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:297
 #: pretix/presale/templates/pretixpresale/event/order.html:179
@@ -15817,15 +15825,15 @@ msgstr ""
 
 #: pretix/control/views/item.py:1374
 msgid "The selected product has been deleted."
-msgstr ""
+msgstr "Valittu tuote on poistettu."
 
 #: pretix/control/views/item.py:1383
 msgid "The selected product has been deactivated."
-msgstr ""
+msgstr "Valittu tuote on poistettu käytöstä."
 
 #: pretix/control/views/main.py:187
 msgid "You do not have permission to clone this event."
-msgstr ""
+msgstr "Sinulla ei ole oikeuksia kloonata tätä tapahtumaa."
 
 #: pretix/control/views/main.py:250
 #, python-brace-format
@@ -15842,19 +15850,19 @@ msgstr ""
 
 #: pretix/control/views/orderimport.py:33
 msgid "Please only upload CSV files."
-msgstr ""
+msgstr "Ole hyvä ja lataa vain CSV-tiedostoja."
 
 #: pretix/control/views/orderimport.py:39
 msgid "Please do not upload files larger than 10 MB."
-msgstr ""
+msgstr "Latausten suurin sallittu koko on 10 Mt."
 
 #: pretix/control/views/orderimport.py:96
 msgid "The import was successful."
-msgstr ""
+msgstr "Tuonti onnistui."
 
 #: pretix/control/views/orderimport.py:106
 msgid "We've been unable to parse the uploaded file as a CSV file."
-msgstr ""
+msgstr "Ladatun CSV-tiedoston parsiminen epäonnistui."
 
 #: pretix/control/views/orders.py:377 pretix/presale/views/order.py:122
 #: pretix/presale/views/order.py:168 pretix/presale/views/order.py:268
@@ -15871,11 +15879,11 @@ msgstr ""
 
 #: pretix/control/views/orders.py:379 pretix/presale/views/order.py:936
 msgid "Ticket download is not enabled for this product."
-msgstr ""
+msgstr "Lippujen lataus ei ole käytössä tälle tuotteelle."
 
 #: pretix/control/views/orders.py:487
 msgid "The order has been deleted."
-msgstr ""
+msgstr "Tilaus poistettu."
 
 #: pretix/control/views/orders.py:493
 msgid ""
@@ -15885,7 +15893,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:501
 msgid "Only orders created in test mode can be deleted."
-msgstr ""
+msgstr "Vain testitilassa tehdyt tilaukset voidaan poistaa."
 
 #: pretix/control/views/orders.py:520
 msgid "The order has been denied and is therefore now canceled."
@@ -15893,7 +15901,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:557
 msgid "This payment has been canceled."
-msgstr ""
+msgstr "Tämä maksu on peruttu."
 
 #: pretix/control/views/orders.py:559
 msgid "This payment can not be canceled at the moment."
@@ -19573,7 +19581,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:68
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "Tilauksesta on maksamatta %(total)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:71
 #, python-format
@@ -19602,7 +19610,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:125
 msgid "Print"
-msgstr ""
+msgstr "Tulosta"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:127
 #, python-format
