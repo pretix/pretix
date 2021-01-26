@@ -10,6 +10,7 @@ from urllib.parse import quote, urlencode
 import vat_moss.id
 from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
@@ -866,6 +867,29 @@ class OrderRefundView(OrderView):
                             })
                         ))
 
+            for identifier, prov in self.request.event.get_payment_providers().items():
+                prof_value = self.request.POST.get(f'newrefund-{identifier}', '0') or '0'
+                prof_value = formats.sanitize_separators(prof_value)
+                try:
+                    prof_value = Decimal(prof_value)
+                except (DecimalException, TypeError):
+                    messages.error(self.request, _('You entered an invalid number.'))
+                    is_valid = False
+                    continue
+                if prof_value > Decimal('0.00'):
+                    try:
+                        refund = prov.new_refund_control_form_process(self.request, prof_value, self.order)
+                    except ValidationError as e:
+                        for err in e:
+                            messages.error(self.request, err)
+                        is_valid = False
+                        continue
+                    if refund:
+                        refund_selected += refund.amount
+                        refund.comment = comment
+                        refund.source = OrderRefund.REFUND_SOURCE_ADMIN
+                        refunds.append(refund)
+
             for p in payments:
                 value = self.request.POST.get('refund-{}'.format(p.pk), '0') or '0'
                 value = formats.sanitize_separators(value)
@@ -907,7 +931,7 @@ class OrderRefundView(OrderView):
                         'local_id': r.local_id,
                         'provider': r.provider,
                     }, user=self.request.user)
-                    if r.payment or r.provider == "offsetting" or r.provider == "giftcard":
+                    if r.provider != "manual":
                         try:
                             r.payment_provider.execute_refund(r)
                         except PaymentException as e:
@@ -969,8 +993,17 @@ class OrderRefundView(OrderView):
                 messages.error(self.request, _('The refunds you selected do not match the selected total refund '
                                                'amount.'))
 
+        new_refunds = []
+        for identifier, prov in self.request.event.get_payment_providers().items():
+            form = prov.new_refund_control_form_render(self.request, self.order)
+            if form:
+                new_refunds.append(
+                    (prov, form)
+                )
+
         return render(self.request, 'pretixcontrol/order/refund_choose.html', {
             'payments': payments,
+            'new_refunds': new_refunds,
             'remainder': to_refund,
             'order': self.order,
             'comment': comment,
@@ -2078,7 +2111,7 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
             messages.error(
                 self.request,
                 str(_('There was a problem processing your input:')) + ' ' + ', '.join(
-                    ', '.join(l) for l in self.exporter.form.errors.values()
+                    ', '.join(line) for line in self.exporter.form.errors.values()
                 )
             )
             return redirect(reverse('control:event.orders.export', kwargs={

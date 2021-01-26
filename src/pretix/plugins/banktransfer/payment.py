@@ -1,6 +1,7 @@
 import json
 import textwrap
 from collections import OrderedDict
+from decimal import Decimal
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -13,7 +14,7 @@ from i18nfield.strings import LazyI18nString
 from localflavor.generic.forms import BICFormField, IBANFormField
 from localflavor.generic.validators import IBANValidator
 
-from pretix.base.models import OrderPayment, OrderRefund
+from pretix.base.models import Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 
 
@@ -298,6 +299,9 @@ class BankTransfer(BasePaymentProvider):
         We just keep a created refund object. It will be marked as done using the control view
         for bank transfer refunds.
         """
+        if refund.info_data.get('iban'):
+            return  # we're already done here
+
         if refund.payment is None:
             raise ValueError(_("Can only create a bank transfer refund from an existing payment."))
 
@@ -310,3 +314,59 @@ class BankTransfer(BasePaymentProvider):
 
     def refund_control_render(self, request: HttpRequest, refund: OrderRefund) -> str:
         return self._render_control_info(request, refund.order, refund.info_data)
+
+    class NewRefundForm(forms.Form):
+        payer = forms.CharField(
+            label=_('Account holder'),
+        )
+        iban = IBANFormField(
+            label=_('IBAN'),
+        )
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for n, f in self.fields.items():
+                f.required = False
+                f.widget.is_required = False
+
+        def clean_payer(self):
+            val = self.cleaned_data.get('payer')
+            if not val:
+                raise ValidationError(_("This field is required."))
+            return val
+
+        def clean_iban(self):
+            val = self.cleaned_data.get('iban')
+            if not val:
+                raise ValidationError(_("This field is required."))
+            return val
+
+    def new_refund_control_form_render(self, request: HttpRequest, order: Order) -> str:
+        f = self.NewRefundForm(
+            prefix="refund-banktransfer",
+            data=request.POST if request.method == "POST" and request.POST.get("refund-banktransfer-iban") else None,
+        )
+        template = get_template('pretixplugins/banktransfer/new_refund_control_form.html')
+        ctx = {
+            'form': f,
+        }
+        return template.render(ctx)
+
+    def new_refund_control_form_process(self, request: HttpRequest, amount: Decimal, order: Order) -> OrderRefund:
+        f = self.NewRefundForm(
+            prefix="refund-banktransfer",
+            data=request.POST
+        )
+        if not f.is_valid():
+            raise ValidationError(_('Your input was invalid, please see below for details.'))
+        return OrderRefund(
+            order=order,
+            payment=None,
+            state=OrderRefund.REFUND_STATE_CREATED,
+            amount=amount,
+            provider=self.identifier,
+            info=json.dumps({
+                'payer': f.cleaned_data['payer'],
+                'iban': self.norm(f.cleaned_data['iban']),
+            })
+        )

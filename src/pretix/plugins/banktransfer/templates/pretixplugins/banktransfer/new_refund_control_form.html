@@ -1,0 +1,8 @@
+{% load i18n %}
+{% load ibanformat %}
+{% load bootstrap3 %}
+
+{% trans "to" %}
+{% bootstrap_field form.payer layout="inline" %}
+{% bootstrap_field form.iban layout="inline" %}
+{% bootstrap_form_errors form error_types="all" %}
