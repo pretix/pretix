@@ -512,17 +512,11 @@ table td > .checkbox input[type="checkbox"] {
 .form-refund-choose {
   .payment-details {
     max-width: 200px;
-    overflow: hidden;
-    dt {
-      float: none;
-      text-align: left;
-      font-weight: normal;
-      width: auto;
-      color: $text-muted;
-    }
-    dd {
-      margin-left: 0px;
-      word-break: break-word;
+  }
+  .refund-amount {
+    width: 250px;
+    input.form-control {
+      width: 100px;
     }
   }
 }

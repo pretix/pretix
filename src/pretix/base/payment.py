@@ -950,7 +950,7 @@ class ManualPayment(BasePaymentProvider):
 
     @property
     def public_name(self):
-        return str(self.settings.get('public_name', as_type=LazyI18nString))
+        return str(self.settings.get('public_name', as_type=LazyI18nString) or _('Manual payment'))
 
     @property
     def settings_form_fields(self):

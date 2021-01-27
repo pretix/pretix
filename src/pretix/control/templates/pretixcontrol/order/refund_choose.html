@@ -35,18 +35,17 @@
                         <th>{% trans "Payment" %}</th>
                         <th>{% trans "Payment details" %}</th>
                         <th>{% trans "Amount not refunded" %}</th>
-                        <th>{% trans "Refund" %}</th>
+                        <th class="text-right flip refund-amount">{% trans "Refund amount" %}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for p in payments %}
                         <tr>
                             <td>{{ p.full_id }}<br/>{{ p.payment_date|date:"SHORT_DATETIME_FORMAT" }}<br/>{{ p.payment_provider.verbose_name }}</td>
-                            <td class="payment-details">{{ p.html_info|safe }}</td>
+                            <td class="payment-details">{{ p.html_info|default_if_none:""|safe }}</td>
                             <td>{{ p.available_amount|money:request.event.currency }}</td>
-                            <td>
+                            <td class="text-right flip refund-amount">
                                 {% if p.partial_refund_possible %}
-                                    {% trans "Automatically refund" context "amount_label" %}
                                     <div class="input-group">
                                         <input type="text" name="refund-{{ p.pk }}"
                                                 {% if p.propose_refund %}
@@ -64,10 +63,10 @@
                                         <input type="checkbox" name="refund-{{ p.pk }}"
                                                 value="{{ p.amount|floatformat:2 }}"
                                                 {% if p.propose_refund == p.amount %}checked{% endif %}>
-                                        {% trans "Automatically refund full amount" %}
+                                        {% trans "Full amount" %} ({{ p.amount|money:request.event.currency }})
                                     </label>
                                 {% else %}
-                                    <em>{% trans "This payment method does not support automatic refunds." %}</em>
+                                    <em class="text-muted">{% trans "This payment method does not support automatic refunds." %}</em>
                                 {% endif %}
                             </td>
                         </tr>
@@ -82,7 +81,8 @@
                     <thead>
                     <tr>
                         <th>{% trans "Payment method" %}</th>
-                        <th>{% trans "Refund" %}</th>
+                        <th>{% trans "Receipient / options" %}</th>
+                        <th class="text-right flip refund-amount">{% trans "Refund amount" %}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -94,7 +94,9 @@
                                 </strong>
                             </td>
                             <td>
-                                {% trans "Automatically refund" context "amount_label" %}
+                                {{ form|safe }}
+                            </td>
+                            <td class="text-right flip refund-amount">
                                 <div class="input-group">
                                     <input type="text" name="newrefund-{{ prov }}"
                                             placeholder="{{ 0|floatformat:2 }}"
@@ -103,15 +105,16 @@
                                         {{ request.event.currency }}
                                     </span>
                                 </div>
-                                <br>
-                                {{ form|safe }}
                             </td>
                         </tr>
                     {% endfor %}
                     <tr>
                         <td><strong>{% trans "Transfer to other order" %}</strong></td>
                         <td>
-                            {% trans "Transfer" context "amount_label" %}
+                            <input type="text" name="order-offsetting" placeholder="{% trans "Order code" %}"
+                                    value="" title="" class="form-control">
+                        </td>
+                        <td class="text-right flip refund-amount">
                             <div class="input-group">
                                 <input type="text" name="refund-offsetting"
                                         title="" class="form-control" placeholder="{{ 0|floatformat:2 }}">
@@ -119,17 +122,18 @@
                                     {{ request.event.currency }}
                                 </span>
                             </div>
-                            {% trans "to" context "order_label" %}
-                            <input type="text" name="order-offsetting"
-                                    value="" title="" class="form-control">
                         </td>
-
                     </tr>
                     <tr>
                         <td>
                             <strong>{% trans "Create a new gift card" %}</strong>
                         </td>
                         <td>
+                            <div class="text-muted">
+                                {% trans "The gift card can be used to buy tickets for all events of this organizer." %}
+                            </div>
+                        </td>
+                        <td class="text-right flip refund-amount">
                             <div class="input-group">
                                 <input type="text" name="refund-new-giftcard"
                                         title="" class="form-control"
@@ -143,16 +147,22 @@
                                     {{ request.event.currency }}
                                 </span>
                             </div>
-                            <div class="text-muted">
-                                {% trans "The gift card can be used to buy tickets for all events of this organizer." %}
-                            </div>
                         </td>
-
                     </tr>
                     <tr>
                         <td><strong>{% trans "Manual refund" %}</strong></td>
                         <td>
-                            {% trans "Manually refund" context "amount_label" %}
+                            <label class="radio no-bold">
+                                <input type="radio" name="manual_state" value="created" checked>
+                                {% trans "Keep transfer as to do" %}
+                            </label><br>
+                            <label class="radio no-bold">
+                                <input type="radio" name="manual_state" value="done">
+                                {% trans "Mark refund as done" %}
+                            </label>
+                        </td>
+
+                        <td class="text-right flip refund-amount">
                             <div class="input-group">
                                 <input type="text" name="refund-manual"
                                         {% if remainder %}
@@ -164,17 +174,8 @@
                                 <span class="input-group-addon">
                                             {{ request.event.currency }}
                                         </span>
-                            </div><br>
-                            <label class="radio no-bold">
-                                <input type="radio" name="manual_state" value="created" checked>
-                                {% trans "Keep transfer as to do" %}
-                            </label>
-                            <label class="radio no-bold">
-                                <input type="radio" name="manual_state" value="done">
-                                {% trans "Mark refund as done" %}
-                            </label>
+                            </div>
                         </td>
-
                     </tr>
                     </tbody>
                 </table>
