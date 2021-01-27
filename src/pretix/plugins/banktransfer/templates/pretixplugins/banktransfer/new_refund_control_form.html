@@ -2,7 +2,7 @@
 {% load ibanformat %}
 {% load bootstrap3 %}
 
-{% trans "to" %}
+{% trans "to" context "refund_recipient" %}
 {% bootstrap_field form.payer layout="inline" %}
 {% bootstrap_field form.iban layout="inline" %}
 {% bootstrap_field form.bic layout="inline" %}
