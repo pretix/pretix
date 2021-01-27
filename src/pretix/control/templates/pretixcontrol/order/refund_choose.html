@@ -17,16 +17,23 @@
     </h1>
     <form method="post" href="">
         {% csrf_token %}
-        <fieldset class="form-inline form-order-change">
+        <fieldset class="form-inline form-refund-choose">
             <legend>{% trans "How should the refund be sent?" %}</legend>
+            <p>
+                {% blocktrans trimmed %}
+                    Any payments that you selected for automatical refunds will be immediately communicate the refund
+                    request to the respective payment provider. Manual refunds will be created as pending refunds, you
+                    can then later mark them as done once you actually transferred the money back to the customer.
+                {% endblocktrans %}
+            </p>
 
+            <h4>{% trans "Refund to original payment method" %}</h4>
             <div class="table-responsive">
                 <table class="table table-condensed">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>{% trans "Payment confirmation date" %}</th>
-                        <th>{% trans "Payment method" %}</th>
+                        <th>{% trans "Payment" %}</th>
+                        <th>{% trans "Payment details" %}</th>
                         <th>{% trans "Amount not refunded" %}</th>
                         <th>{% trans "Refund" %}</th>
                     </tr>
@@ -34,11 +41,8 @@
                     <tbody>
                     {% for p in payments %}
                         <tr>
-                            <td>{{ p.full_id }}</td>
-                            <td>{{ p.payment_date|date:"SHORT_DATETIME_FORMAT" }}</td>
-                            <td>
-                                {{ p.payment_provider.verbose_name }}
-                            </td>
+                            <td>{{ p.full_id }}<br/>{{ p.payment_date|date:"SHORT_DATETIME_FORMAT" }}<br/>{{ p.payment_provider.verbose_name }}</td>
+                            <td class="payment-details">{{ p.html_info|safe }}</td>
                             <td>{{ p.available_amount|money:request.event.currency }}</td>
                             <td>
                                 {% if p.partial_refund_possible %}
@@ -46,9 +50,9 @@
                                     <div class="input-group">
                                         <input type="text" name="refund-{{ p.pk }}"
                                                 {% if p.propose_refund %}
-                                                value="{{ p.propose_refund|floatformat:2 }}"
+                                                    value="{{ p.propose_refund|floatformat:2 }}"
                                                 {% else %}
-                                                placeholder="{{ p.propose_refund|floatformat:2 }}"
+                                                    placeholder="{{ p.propose_refund|floatformat:2 }}"
                                                 {% endif %}
                                                 title="" class="form-control">
                                         <span class="input-group-addon">
@@ -68,59 +72,67 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>{% trans "Refund to a different payment method" %}</h4>
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Payment method" %}</th>
+                        <th>{% trans "Refund" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {% for prov, form in new_refunds %}
                         <tr>
-                            <td></td>
-                            <td></td>
                             <td>
-                                {{ prov.verbose_name }}
+                                <strong>
+                                    {{ prov.verbose_name }}
+                                </strong>
                             </td>
-                            <td></td>
                             <td>
                                 {% trans "Automatically refund" context "amount_label" %}
                                 <div class="input-group">
                                     <input type="text" name="newrefund-{{ prov }}"
-                                           placeholder="{{ 0|floatformat:2 }}"
-                                           title="" class="form-control">
+                                            placeholder="{{ 0|floatformat:2 }}"
+                                            title="" class="form-control">
                                     <span class="input-group-addon">
                                         {{ request.event.currency }}
                                     </span>
-                                </div><br>
+                                </div>
+                                <br>
                                 {{ form|safe }}
                             </td>
                         </tr>
                     {% endfor %}
                     <tr>
-                        <td></td>
-                        <td></td>
                         <td><strong>{% trans "Transfer to other order" %}</strong></td>
-                        <td></td>
                         <td>
                             {% trans "Transfer" context "amount_label" %}
                             <div class="input-group">
                                 <input type="text" name="refund-offsetting"
-                                       title="" class="form-control" placeholder="{{ 0|floatformat:2 }}">
+                                        title="" class="form-control" placeholder="{{ 0|floatformat:2 }}">
                                 <span class="input-group-addon">
                                     {{ request.event.currency }}
                                 </span>
                             </div>
                             {% trans "to" context "order_label" %}
                             <input type="text" name="order-offsetting"
-                                   value="" title="" class="form-control">
+                                    value="" title="" class="form-control">
                         </td>
 
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
                         <td>
                             <strong>{% trans "Create a new gift card" %}</strong>
                         </td>
-                        <td></td>
                         <td>
                             <div class="input-group">
                                 <input type="text" name="refund-new-giftcard"
-                                       title="" class="form-control"
+                                        title="" class="form-control"
                                         {% if giftcard_proposal %}
                                             value="{{ giftcard_proposal|floatformat:2 }}"
                                         {% else %}
@@ -138,29 +150,26 @@
 
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
                         <td><strong>{% trans "Manual refund" %}</strong></td>
-                        <td></td>
                         <td>
                             {% trans "Manually refund" context "amount_label" %}
                             <div class="input-group">
                                 <input type="text" name="refund-manual"
                                         {% if remainder %}
-                                        value="{{ remainder|floatformat:2 }}"
+                                            value="{{ remainder|floatformat:2 }}"
                                         {% else %}
-                                        placeholder="{{ remainder|floatformat:2 }}"
+                                            placeholder="{{ remainder|floatformat:2 }}"
                                         {% endif %}
                                         title="" class="form-control">
                                 <span class="input-group-addon">
                                             {{ request.event.currency }}
                                         </span>
-                            </div>
-                            <label class="radio">
+                            </div><br>
+                            <label class="radio no-bold">
                                 <input type="radio" name="manual_state" value="created" checked>
                                 {% trans "Keep transfer as to do" %}
                             </label>
-                            <label class="radio">
+                            <label class="radio no-bold">
                                 <input type="radio" name="manual_state" value="done">
                                 {% trans "Mark refund as done" %}
                             </label>
@@ -171,13 +180,6 @@
                 </table>
             </div>
         </fieldset>
-        <p>
-            {% blocktrans trimmed %}
-                Any payments that you selected for automatical refunds will be immediately communicate the refund
-                request to the respective payment provider. Manual refunds will be created as pending refunds, you
-                can then later mark them as done once you actually transferred the money back to the customer.
-            {% endblocktrans %}
-        </p>
         <p>&nbsp;</p>
 
         <input type="hidden" name="start-action" value="{{ start_form.cleaned_data.action }}">
@@ -187,7 +189,7 @@
         <div class="form-group">
             <label class="control-label" for="id_comment">{% trans "Refund reason" %}</label>
             <input type="text" name="comment" class="form-control" title="{% trans "May be shown to the end user or used e.g. as part of a payment reference." %}" id="id_comment"
-                value="{{ comment|default:"" }}">
+                    value="{{ comment|default:"" }}">
             <div class="help-block">{% trans "May be shown to the end user or used e.g. as part of a payment reference." %}</div>
         </div>
 

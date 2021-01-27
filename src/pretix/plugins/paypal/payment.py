@@ -477,6 +477,9 @@ class Paypal(BasePaymentProvider):
                'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
         return template.render(ctx)
 
+    def payment_control_render_short(self, payment: OrderPayment) -> str:
+        return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
+
     def payment_partial_refund_supported(self, payment: OrderPayment):
         # Paypal refunds are possible for 180 days after purchase:
         # https://www.paypal.com/lc/smarthelp/article/how-do-i-issue-a-refund-faq780#:~:text=Refund%20after%20180%20days%20of,PayPal%20balance%20of%20the%20recipient.

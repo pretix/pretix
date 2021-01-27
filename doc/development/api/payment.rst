@@ -106,6 +106,8 @@ The provider class
 
    .. automethod:: payment_control_render
 
+   .. automethod:: payment_control_render_short
+
    .. automethod:: payment_refund_supported
 
    .. automethod:: payment_partial_refund_supported

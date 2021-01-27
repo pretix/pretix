@@ -712,6 +712,18 @@ class BasePaymentProvider:
         """
         return ''
 
+    def payment_control_render_short(self, payment: OrderPayment) -> str:
+        """
+        Will be called if the *event administrator* performs an action on the payment. Should
+        return a very short version of the payment method. Usually, this should return e.g.
+        a transaction ID or account identifier, but no information on status, dates, etc.
+
+        The default implementation falls back to payment_presa_elrender.
+
+        :param order: The order object
+        """
+        return self.payment_presale_render(payment)
+
     def refund_control_render(self, request: HttpRequest, refund: OrderRefund) -> str:
         """
         Will be called if the *event administrator* views the details of a refund.

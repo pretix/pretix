@@ -282,6 +282,19 @@ class BankTransfer(BasePaymentProvider):
     def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
         return self.payment_refund_supported(payment)
 
+    def payment_control_render_short(self, payment: OrderPayment) -> str:
+        pi = payment.info_data or {}
+        r = pi.get('payer', '')
+        if pi.get('iban'):
+            if r:
+                r += ' / '
+            r += pi.get('iban')
+        if pi.get('bic'):
+            if r:
+                r += ' / '
+            r += pi.get('bic')
+        return r
+
     def payment_presale_render(self, payment: OrderPayment) -> str:
         pi = payment.info_data or {}
         if self.payment_refund_supported(payment):

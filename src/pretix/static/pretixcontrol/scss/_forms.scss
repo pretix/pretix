@@ -327,6 +327,9 @@ input[type=number].short {
 label.label-empty {
   pointer-events: none;
 }
+label.no-bold {
+  font-weight: normal;
+}
 label .optional {
   color: $text-muted;
   font-weight: normal;
@@ -501,9 +504,26 @@ table td > .checkbox input[type="checkbox"] {
   }
 }
 
-.form-order-change {
+.form-order-change, .form-refund-choose {
   .row {
     padding: 5px 0;
+  }
+}
+.form-refund-choose {
+  .payment-details {
+    max-width: 200px;
+    overflow: hidden;
+    dt {
+      float: none;
+      text-align: left;
+      font-weight: normal;
+      width: auto;
+      color: $text-muted;
+    }
+    dd {
+      margin-left: 0px;
+      word-break: break-word;
+    }
   }
 }
 

@@ -1001,6 +1001,10 @@ class OrderRefundView(OrderView):
                     (prov, form)
                 )
 
+        for p in payments:
+            if p.payment_provider:
+                p.html_info = (p.payment_provider.payment_control_render_short(p) or "").strip()
+
         return render(self.request, 'pretixcontrol/order/refund_choose.html', {
             'payments': payments,
             'new_refunds': new_refunds,
