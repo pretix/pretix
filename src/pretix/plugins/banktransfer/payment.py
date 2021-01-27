@@ -322,6 +322,10 @@ class BankTransfer(BasePaymentProvider):
         iban = IBANFormField(
             label=_('IBAN'),
         )
+        bic = BICFormField(
+            label=_('BIC (optional)'),
+            required=False,
+        )
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -359,14 +363,17 @@ class BankTransfer(BasePaymentProvider):
         )
         if not f.is_valid():
             raise ValidationError(_('Your input was invalid, please see below for details.'))
+        d = {
+            'payer': f.cleaned_data['payer'],
+            'iban': self.norm(f.cleaned_data['iban']),
+        }
+        if f.cleaned_data.get('bic'):
+            d['bic'] = f.cleaned_data['bic']
         return OrderRefund(
             order=order,
             payment=None,
             state=OrderRefund.REFUND_STATE_CREATED,
             amount=amount,
             provider=self.identifier,
-            info=json.dumps({
-                'payer': f.cleaned_data['payer'],
-                'iban': self.norm(f.cleaned_data['iban']),
-            })
+            info=json.dumps(d)
         )
