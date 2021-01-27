@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-20 16:42+0000\n"
+"POT-Creation-Date: 2021-01-27 17:45+0000\n"
 "PO-Revision-Date: 2020-06-12 20:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -283,39 +283,39 @@ msgstr "Stiamo generando i messaggi …"
 msgid "Unknown error."
 msgstr "Errore sconosciuto."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:242
+#: pretix/static/pretixcontrol/js/ui/main.js:241
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Il colore scelto ha un ottimo contrasto ed è molto leggibile!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:246
+#: pretix/static/pretixcontrol/js/ui/main.js:245
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Il colore scelto ha un buon contrasto e probabilmente è abbastanza leggibile!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:250
+#: pretix/static/pretixcontrol/js/ui/main.js:249
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
 "Il colore scelto non ha un buon contrasto, per favore scegline uno più scuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:385
+#: pretix/static/pretixcontrol/js/ui/main.js:384
 msgid "All"
 msgstr "Tutto"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:386
+#: pretix/static/pretixcontrol/js/ui/main.js:385
 msgid "None"
 msgstr "Nessuno"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:711
+#: pretix/static/pretixcontrol/js/ui/main.js:710
 msgid "Use a different name internally"
 msgstr "Utilizza un nome diverso internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:768
+#: pretix/static/pretixcontrol/js/ui/main.js:767
 msgid "Click to close"
 msgstr "Clicca per chiudere"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:783
+#: pretix/static/pretixcontrol/js/ui/main.js:782
 msgid "You have unsaved changes!"
 msgstr "Hai cambiamenti non salvati!"
 
@@ -376,11 +376,11 @@ msgid "Please enter the amount the organizer can keep."
 msgstr "Inserisci l'importo che l'organizzatore può trattenere."
 
 #: pretix/static/pretixpresale/js/ui/main.js:432
-#: pretix/static/pretixpresale/js/ui/main.js:445
+#: pretix/static/pretixpresale/js/ui/main.js:450
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:437
+#: pretix/static/pretixpresale/js/ui/main.js:441
 msgid "Your local time:"
 msgstr ""
 
