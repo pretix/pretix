@@ -5,7 +5,7 @@ from urllib.parse import urlencode
 from django import forms
 from django.apps import apps
 from django.conf import settings
-from django.db.models import Exists, F, Model, OuterRef, Q, QuerySet
+from django.db.models import Exists, F, Max, Model, OuterRef, Q, QuerySet
 from django.db.models.functions import Coalesce, ExtractWeekDay
 from django.urls import reverse, reverse_lazy
 from django.utils.formats import date_format, localize
@@ -239,6 +239,10 @@ class OrderFilterForm(FilterForm):
             elif s == 'rc':
                 qs = qs.filter(
                     cancellation_requests__isnull=False
+                ).annotate(
+                    cancellation_request_time=Max('cancellation_requests__created')
+                ).order_by(
+                    '-cancellation_request_time'
                 )
             elif s == 'pendingpaid':
                 qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
