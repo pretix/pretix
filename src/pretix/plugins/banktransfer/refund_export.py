@@ -69,7 +69,7 @@ def build_sepa_xml(refund_export: RefundExport, account_holder, iban, bic):
             "IBAN": row["iban"],
             "amount": int(Decimal(row['amount']) * 100),  # in euro-cents
             "execution_date": datetime.date.today(),
-            "description": f"{_('Refund')} {refund_export.entity_slug} {row['id']} {row.get('comment') or ''}".strip()[:140],
+            "description": f"{row['id']} {refund_export.entity_slug} {_('Refund')} {row.get('comment') or ''}".strip()[:140],
         }
         if row.get('bic'):
             try:
