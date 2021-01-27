@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-27 17:45+0000\n"
-"PO-Revision-Date: 2020-12-22 11:33+0000\n"
+"PO-Revision-Date: 2021-01-27 17:58+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -955,7 +955,7 @@ msgstr "Gezahlte Beträge mit anzeigen"
 
 #: pretix/base/exporters/orderlist.py:64
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "Multiple-Choice-Fragen in einer Spalte gruppieren"
 
 #: pretix/base/exporters/orderlist.py:148
 #: pretix/base/exporters/orderlist.py:309
@@ -2886,7 +2886,7 @@ msgstr "Frage beim Einchecken statt im Verkaufsprozess"
 
 #: pretix/base/models/items.py:1072
 msgid "Not supported by all check-in apps for all question types."
-msgstr ""
+msgstr "Nicht für alle Fragetypen von allen unseren Check-in-Apps unterstützt."
 
 #: pretix/base/models/items.py:1076
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
@@ -3324,10 +3324,8 @@ msgstr "Extern"
 
 #: pretix/base/models/orders.py:1720
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:191
-#, fuzzy
-#| msgid "Refund only"
 msgid "Refund reason"
-msgstr "Nur diesen Betrag erstatten"
+msgstr "Grund für die Erstattung"
 
 #: pretix/base/models/orders.py:1721
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:192
@@ -3335,6 +3333,7 @@ msgstr "Nur diesen Betrag erstatten"
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
+"Kann dem Nutzer angezeigt werden, z.B. als Teil eines Verwendungszwecks."
 
 #: pretix/base/models/orders.py:1831
 msgid "Payment fee"
@@ -4855,10 +4854,8 @@ msgstr ""
 
 #: pretix/base/services/cancelevent.py:200
 #: pretix/base/services/cancelevent.py:258
-#, fuzzy
-#| msgid "Event created"
 msgid "Event canceled"
-msgstr "Veranstaltung erstellt"
+msgstr "Veranstaltung abgesagt"
 
 #: pretix/base/services/cart.py:52 pretix/base/services/orders.py:73
 msgid ""
@@ -6630,7 +6627,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1238
 msgid "Step size for reduction amount"
-msgstr ""
+msgstr "Schrittweite für Reduzierung"
 
 #: pretix/base/settings.py:1239
 msgid ""
@@ -6638,6 +6635,8 @@ msgid ""
 "set this to e.g. 10, they will only be able to choose values in increments "
 "of 10."
 msgstr ""
+"Standardmäßig können Kunden auf einen beliebigen Betrag verzichten. Wenn du "
+"diesen Wert z.B. auf 10 setzt, sind nur noch Werte im Abstand von 10 erlaubt."
 
 #: pretix/base/settings.py:1249
 msgid ""
@@ -8799,16 +8798,12 @@ msgid "Order placed before"
 msgstr "Bestellung getätigt vor"
 
 #: pretix/control/forms/filter.py:468
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Minimal sum of payments and refunds"
-msgstr "Bezahlungen und Erstattungen"
+msgstr "Minimale Summe von Zahlungen und Erstattungen"
 
 #: pretix/control/forms/filter.py:473
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Maximal sum of payments and refunds"
-msgstr "Bezahlungen und Erstattungen"
+msgstr "Maximale Summe von Zahlungen und Erstattungen"
 
 #: pretix/control/forms/filter.py:515 pretix/control/forms/filter.py:520
 #: pretix/control/forms/filter.py:546 pretix/control/forms/filter.py:551
@@ -9522,10 +9517,6 @@ msgid "Automatically refund money if possible"
 msgstr "Geld automatisch zurückerstatten wenn möglich"
 
 #: pretix/control/forms/orders.py:619
-#, fuzzy
-#| msgid ""
-#| "Create manual refund if the payment method odes not support automatic "
-#| "refunds"
 msgid ""
 "Create manual refund if the payment method does not support automatic refunds"
 msgstr ""
@@ -10218,6 +10209,8 @@ msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
 msgstr ""
+"Die E-Mail-Adresse wurde als funktionierend bestätigt (der Nutzer hat "
+"erstmalig auf einen Link aus einer E-Mail geklickt)."
 
 #: pretix/control/logdisplay.py:297
 #, python-brace-format
@@ -12292,6 +12285,8 @@ msgid ""
 "Your shop is already live, however the following issues would normally "
 "prevent your shop to go live:"
 msgstr ""
+"Dein Shop ist bereits aktiv, aber die folgenden Probleme würden eine erneute "
+"Aktivierung verhindern:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:37
 #: pretix/control/templates/pretixcontrol/event/live.html:56
@@ -14472,10 +14467,8 @@ msgstr ""
 "schaffen, kannst du die Bestellung manuell als abgelaufen markieren."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:104
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund for overpayment"
-msgstr "Bestellung erstatten"
+msgstr "Erstattung für Überzahlung"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:106
 #, python-format
@@ -16094,17 +16087,10 @@ msgid "Step 1: Download data"
 msgstr "Schritt 1: Daten herunterladen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:17
-#, fuzzy
-#| msgid "Step 1: Download data"
 msgid "(Optional) Step 1: Download data"
-msgstr "Schritt 1: Daten herunterladen"
+msgstr "(Optionaler) Schritt 1: Daten herunterladen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:20
-#, fuzzy
-#| msgid ""
-#| "You are about to permanently delete data from the server, even though you "
-#| "might be required to keep some of this data on file. You should therefore "
-#| "download the following file and store it in a safe place:"
 msgid ""
 "You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You can therefore "
@@ -16120,10 +16106,8 @@ msgid "Download data"
 msgstr "Daten herunterladen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:34
-#, fuzzy
-#| msgid "Step 3: Confirm deletion"
 msgid "Step 2: Confirm deletion"
-msgstr "Schritt 3: Löschung bestätigen"
+msgstr "Schritt 2: Löschung bestätigen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:36
 #, python-format
@@ -16142,10 +16126,8 @@ msgid "Event short name"
 msgstr "Veranstaltungs-Kürzel"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:46
-#, fuzzy
-#| msgid "Step 2: Confirm download"
 msgid "Step 3: Confirm download"
-msgstr "Schritt 2: Download bestätigen"
+msgstr "Schritt 3: Download bestätigen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
 msgid ""
@@ -16280,54 +16262,37 @@ msgid "Times"
 msgstr "Uhrzeiten"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:339
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "Start of ticket sales"
 msgid "Start of first slot"
-msgstr "Beginn des Vorverkaufs"
+msgstr "Beginn des ersten Zeitfensters"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:345
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "End of ticket sales"
 msgid "End of time slots"
-msgstr "Ende des Vorverkaufs"
+msgstr "Ende der Zeitfenster"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:351
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Length of slots"
-msgstr "Code-Länge für Geschenkgutscheine"
+msgstr "Länge der Zeitfenster"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
-#, fuzzy
-#| msgid "in minutes"
 msgid "minutes"
-msgstr "in Minuten"
+msgstr "Minuten"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:360
 msgid "Break between slots"
-msgstr ""
+msgstr "Pause zwischen Zeitfenstern"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:370
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "created"
 msgid "Create"
-msgstr "erstellt"
+msgstr "Erstellen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:377
-#, fuzzy
-#| msgid "Add a new time slot"
 msgid "Add a single time slot"
-msgstr "Neue Uhrzeit hinzufügen"
+msgstr "Einzelnes Zeitfenster hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:379
-#, fuzzy
-#| msgid "Add a new time slot"
 msgid "Add many time slots"
-msgstr "Neue Uhrzeit hinzufügen"
+msgstr "Viele Zeitfenster hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:502
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:144
@@ -17099,6 +17064,8 @@ msgid ""
 "Currently, no vouchers will be sent since your event is not live or is not "
 "selling tickets."
 msgstr ""
+"Derzeit werden keine Gutscheine verschickt, da die Veranstaltung deaktiviert "
+"ist oder keine Tickets verkauft."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:41
 msgid ""
@@ -18146,11 +18113,8 @@ msgid "The selected exporter was not found."
 msgstr "Das ausgewählte Exportformat wurde nicht gefunden."
 
 #: pretix/control/views/orders.py:2117
-#, fuzzy
-#| msgid ""
-#| "There was a problem processing your input. See below for error details."
 msgid "There was a problem processing your input:"
-msgstr "Die Eingabe konnte nicht verarbeitet werden."
+msgstr "Die Eingabe konnte nicht verarbeitet werden:"
 
 #: pretix/control/views/orders.py:2213
 msgid "All orders have been canceled."
@@ -18954,10 +18918,9 @@ msgid "Invalid IBAN/BIC"
 msgstr "Ungültige IBAN/BIC"
 
 #: pretix/plugins/banktransfer/payment.py:313
-#, fuzzy, python-brace-format
-#| msgid "Bank account type"
+#, python-brace-format
 msgid "Bank account {iban}"
-msgstr "Art der Bankverbindung"
+msgstr "Bankkonto {iban}"
 
 #: pretix/plugins/banktransfer/payment.py:329
 msgid "Can only create a bank transfer refund from an existing payment."
@@ -20546,10 +20509,9 @@ msgstr "unbekannter Name"
 #: pretix/plugins/stripe/payment.py:949 pretix/plugins/stripe/payment.py:1001
 #: pretix/plugins/stripe/payment.py:1116 pretix/plugins/stripe/payment.py:1268
 #: pretix/plugins/stripe/payment.py:1371
-#, fuzzy, python-brace-format
-#| msgid "Bank account type"
+#, python-brace-format
 msgid "Bank account at {bank}"
-msgstr "Art der Bankverbindung"
+msgstr "Bankkonto bei {bank}"
 
 #: pretix/plugins/stripe/payment.py:957
 msgid "iDEAL via Stripe"
@@ -20592,10 +20554,9 @@ msgid "Spain"
 msgstr "Spanien"
 
 #: pretix/plugins/stripe/payment.py:1193
-#, fuzzy, python-brace-format
-#| msgid "Bank account details"
+#, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr "Bankverbindung"
+msgstr "Bankkonto {iban} bei {bank}"
 
 #: pretix/plugins/stripe/payment.py:1204
 msgid "EPS via Stripe"
@@ -22173,6 +22134,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:161
 msgid "The following payment methods will be used to refund the money to you:"
 msgstr ""
+"Die folgenden Zahlungsmethoden werden verwendet, um dir das Geld "
+"zurückzuerstatten:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:141
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:172
@@ -22565,10 +22528,8 @@ msgid "You chose an invalid cancellation fee."
 msgstr "Du hast eine ungültige Stornogebühr gewählt."
 
 #: pretix/presale/views/order.py:869
-#, fuzzy
-#| msgid "Any customer"
 msgid "Canceled by customer"
-msgstr "Beliebiger Kunde"
+msgstr "Storniert durch Kunde"
 
 #: pretix/presale/views/order.py:880
 msgid "The cancellation has been requested."
