@@ -230,7 +230,6 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = Non
             trans.state = BankTransaction.STATE_UNCHECKED
             trans.save()
             transactions.append(trans)
-            known_checksums.add(trans.checksum)
 
     return transactions
 
