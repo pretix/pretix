@@ -151,7 +151,8 @@ class SubEventEditorMixin(MetaDataEditorMixin):
     @cached_property
     def plugin_forms(self):
         forms = []
-        for rec, resp in subevent_forms.send(sender=self.request.event, subevent=self.object, request=self.request):
+        for rec, resp in subevent_forms.send(sender=self.request.event, subevent=self.object, request=self.request,
+                                             copy_from=self.copy_from):
             if isinstance(resp, (list, tuple)):
                 forms.extend(resp)
             else:
@@ -323,7 +324,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
 
     @cached_property
     def copy_from(self):
-        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+        if self.request.GET.get("copy_from") and (not getattr(self, 'object', None) or not self.object.pk):
             try:
                 return self.request.event.subevents.get(pk=self.request.GET.get("copy_from"))
             except SubEvent.DoesNotExist:

@@ -36,7 +36,7 @@ def validate_plan_change(event, subevent, plan):
                               'already sold.'), leftovers[0])
 
 
-def generate_seats(event, subevent, plan, mapping):
+def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
     current_seats = {}
     for s in event.seats.select_related('product').annotate(
             has_op=Count('orderposition'), has_v=Count('vouchers')
@@ -68,7 +68,10 @@ def generate_seats(event, subevent, plan, mapping):
                     update(seat, 'seat_label', ss.seat_label),
                     update(seat, 'x', ss.x),
                     update(seat, 'y', ss.y),
-                ])
+                ] + (
+                    [update(seat, 'blocked', ss.guid in blocked_guids)]
+                    if blocked_guids else []
+                ))
                 if updated:
                     seat.save()
             else:
@@ -84,6 +87,7 @@ def generate_seats(event, subevent, plan, mapping):
                     seat_label=ss.seat_label,
                     x=ss.x,
                     y=ss.y,
+                    blocked=bool(blocked_guids and ss.guid in blocked_guids),
                     product=p,
                 ))
 

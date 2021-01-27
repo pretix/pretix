@@ -291,7 +291,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 """
 
 subevent_forms = EventPluginSignal(
-    providing_args=['request', 'subevent']
+    providing_args=['request', 'subevent', 'copy_from']
 )
 """
 This signal allows you to return additional forms that should be rendered on the subevent creation
@@ -301,7 +301,8 @@ as part of the standard validation and rendering cycle and rendered using defaul
 styles. It is advisable to set a prefix for your form to avoid clashes with other plugins.
 
 ``subevent`` can be ``None`` during creation. Before ``save()`` is called, a ``subevent`` property of
-your form instance will automatically being set to the subevent that has just been created.
+your form instance will automatically being set to the subevent that has just been created. During
+creation, ``copy_from`` can be a subevent that is being copied from.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
