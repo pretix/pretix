@@ -131,6 +131,15 @@ class BankTransfer(BasePaymentProvider):
                 widget=I18nTextarea,
                 required=False,
             )),
+            ('refund_iban_blocklist', forms.CharField(
+                label=_('IBAN blocklist for refunds'),
+                required=False,
+                widget=forms.Textarea,
+                help_text=_('Put one IBAN or IBAN prefix per line. The system will not attempt to send refunds to any '
+                            'of these IBANs. Useful e.g. if you receive a lot of "forwarded payments" by a third-party pyment '
+                            'provider. You can also list country codes such as "GB" if you never want to send refunds to '
+                            'IBANs from a specific country.')
+            )),
         ])
 
     @property
@@ -273,11 +282,12 @@ class BankTransfer(BasePaymentProvider):
         if not all(payment.info_data.get(key) for key in ("payer", "iban")):
             return False
         try:
-            IBANValidator()(self.norm(payment.info_data['iban']))
+            iban = self.norm(payment.info_data['iban'])
+            IBANValidator()(iban)
         except ValidationError:
             return False
         else:
-            return True
+            return not any(iban.startswith(b) for b in (self.settings.refund_iban_blocklist or '').splitlines() if b)
 
     def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
         return self.payment_refund_supported(payment)
