@@ -10806,6 +10806,7 @@ msgstr ""
 msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
+msgstr ""
 "Vahvistaaksesi toiminnon, ole hyvä ja kirjoita tapahtuman lyhyt tunniste (\""
 "%(slug)s\"):"
 
