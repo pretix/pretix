@@ -186,7 +186,7 @@
 
                     {% if request.user.is_staff and not staff_session %}
                         <li>
-                            <form action="{% url 'control:user.sudo' %}?next={{ request.path|urlencode }}" method="post">
+                            <form action="{% url 'control:user.sudo' %}?next={{ request.path|add:"?"|add:request.GET.urlencode|urlencode }}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-link" id="button-sudo">
                                     <i class="fa fa-id-card"></i> {% trans "Admin mode" %}

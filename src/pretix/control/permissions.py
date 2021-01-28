@@ -6,6 +6,13 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 
+def current_url(request):
+    if len(request.GET):
+        return request.path + '?' + request.GET.urlencode()
+    else:
+        return request.path
+
+
 def event_permission_required(permission):
     """
     This view decorator rejects all requests with a 403 response which are not from
@@ -94,7 +101,7 @@ def administrator_permission_required():
                 raise PermissionDenied()
             if not request.user.has_active_staff_session(request.session.session_key):
                 if request.user.is_staff:
-                    return redirect(reverse('control:user.sudo') + '?next=' + quote(request.path))
+                    return redirect(reverse('control:user.sudo') + '?next=' + quote(current_url(request)))
                 raise PermissionDenied(_('You do not have permission to view this content.'))
             return function(request, *args, **kw)
         return wrapper

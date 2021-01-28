@@ -13,7 +13,7 @@
             &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
         </p>
         {% if request.user.is_staff and not staff_session %}
-            <form action="{% url 'control:user.sudo' %}?next={{ request.path|urlencode }}" method="post">
+            <form action="{% url 'control:user.sudo' %}?next={{ request.path|add:"?"|add:request.GET.urlencode|urlencode }}" method="post">
                 <p>
                     {% csrf_token %}
                     <button type="submit" class="btn btn-default" id="button-sudo">
