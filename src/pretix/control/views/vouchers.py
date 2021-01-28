@@ -327,7 +327,7 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
                 v.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user, save=False)
             )
             voucherids.append(v.pk)
-        LogEntry.objects.bulk_create(log_entries)
+        LogEntry.objects.bulk_create(log_entries, batch_size=200)
 
         if form.cleaned_data['send']:
             vouchers_send.apply_async(kwargs={
