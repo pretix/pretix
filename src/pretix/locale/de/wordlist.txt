@@ -47,6 +47,7 @@ chardet
 charge
 Checkout
 Chrome
+Choice
 CONFIRM
 Connect
 Cronjob
@@ -76,6 +77,7 @@ Erstattungsmethode
 Erstattungsoptionen
 Erstattungsstatus
 Erstattungsweg
+erstmalig
 Erweiterungs
 etc
 Event
@@ -99,6 +101,8 @@ Gutscheineinlöser
 herunterscrollen
 hochlädst
 HTTPS
+IBAN
+IBANs
 iCal
 ics
 ID

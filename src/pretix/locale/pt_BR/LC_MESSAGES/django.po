@@ -14286,7 +14286,7 @@ msgstr "Meio de pagamento"
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:84
 #, fuzzy
 #| msgid "Question option"
-msgid "Receipient / options"
+msgid "Recipient / options"
 msgstr "Opção de pergunta"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:112
@@ -18116,7 +18116,7 @@ msgstr ""
 msgid ""
 "Put one IBAN or IBAN prefix per line. The system will not attempt to send "
 "refunds to any of these IBANs. Useful e.g. if you receive a lot of "
-"\"forwarded payments\" by a third-party pyment provider. You can also list "
+"\"forwarded payments\" by a third-party payment provider. You can also list "
 "country codes such as \"GB\" if you never want to send refunds to IBANs from "
 "a specific country."
 msgstr ""

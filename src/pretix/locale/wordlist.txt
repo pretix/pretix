@@ -12,6 +12,7 @@ barcode
 Bcc
 BCC
 BezahlCode
+blocklist
 Bundles
 chardet
 checkboxes
@@ -38,6 +39,7 @@ giropay
 hostname
 HTTPS
 IBAN
+IBANs
 iCal
 ics
 iDEAL

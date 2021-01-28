@@ -136,7 +136,7 @@ class BankTransfer(BasePaymentProvider):
                 required=False,
                 widget=forms.Textarea,
                 help_text=_('Put one IBAN or IBAN prefix per line. The system will not attempt to send refunds to any '
-                            'of these IBANs. Useful e.g. if you receive a lot of "forwarded payments" by a third-party pyment '
+                            'of these IBANs. Useful e.g. if you receive a lot of "forwarded payments" by a third-party payment '
                             'provider. You can also list country codes such as "GB" if you never want to send refunds to '
                             'IBANs from a specific country.')
             )),
