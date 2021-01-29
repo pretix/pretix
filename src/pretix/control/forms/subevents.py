@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 
 from django import forms
 from django.forms import formset_factory
+from django.forms.utils import ErrorDict
 from django.urls import reverse
 from django.utils.dates import MONTHS, WEEKDAYS
 from django.utils.functional import cached_property
@@ -86,6 +87,33 @@ class SubEventBulkForm(SubEventForm):
         del self.fields['date_from']
         del self.fields['date_to']
         del self.fields['date_admission']
+
+
+class SubEventBulkEdit(I18nModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['location'].widget.attrs['rows'] = '3'
+
+        self.fields['name'].widget.attrs['placeholder'] = _('Keep the same')
+        self.fields['name'].one_required = False
+
+    class Meta:
+        model = SubEvent
+        localized_fields = '__all__'
+        fields = [
+            'name',
+        ]
+        field_classes = {
+        }
+        widgets = {
+        }
+
+    def full_clean(self):
+        if len(self.data) == 0:
+            # form wasn't submitted
+            self._errors = ErrorDict()
+            return
+        super().full_clean()
 
 
 class SubEventItemOrVariationFormMixin:

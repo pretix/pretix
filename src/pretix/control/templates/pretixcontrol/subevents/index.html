@@ -53,6 +53,9 @@
         </p>
         <form action="{% url "control:event.subevents.bulkaction"  organizer=request.event.organizer.slug event=request.event.slug %}" method="post">
             {% csrf_token %}
+            <div class="hidden">
+                {{ filter_form.as_p }}
+            </div>
             <div class="table-responsive">
                 <table class="table table-hover table-quotas">
                     <thead>
@@ -149,6 +152,10 @@
             {% if "can_change_event_settings" in request.eventpermset %}
                 <button type="submit" class="btn btn-default btn-save" name="action" value="delete">
                     {% trans "Delete selected" %}
+                </button>
+                <button type="submit" class="btn btn-default btn-save" name="action" value="disable"
+                        formaction="{% url "control:event.subevents.bulkedit"  organizer=request.event.organizer.slug event=request.event.slug %}">
+                    {% trans "Change selected" %}
                 </button>
                 <button type="submit" class="btn btn-default btn-save" name="action" value="enable">
                     {% trans "Enable selected" %}

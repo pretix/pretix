@@ -5,10 +5,10 @@ from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
 from django.core.files import File
 from django.db import connections, transaction
-from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum
+from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum, Count
 from django.db.models.functions import Coalesce
 from django.forms import inlineformset_factory
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.formats import get_format
@@ -16,7 +16,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView, FormView
 
 from pretix.base.models import CartPosition, LogEntry
 from pretix.base.models.checkin import CheckinList
@@ -33,7 +33,7 @@ from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
     CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkForm,
     SubEventForm, SubEventItemForm, SubEventItemVariationForm,
-    SubEventMetaValueForm, TimeFormSet,
+    SubEventMetaValueForm, TimeFormSet, SubEventBulkEdit,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
@@ -42,11 +42,13 @@ from pretix.control.views.event import MetaDataEditorMixin
 from pretix.helpers.models import modelcopy
 
 
-class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
-    model = SubEvent
-    context_object_name = 'subevents'
-    template_name = 'pretixcontrol/subevents/index.html'
-    permission = 'can_change_settings'
+class SubEventQueryMixin:
+
+    @cached_property
+    def request_data(self):
+        if self.request.method == "POST":
+            return self.request.POST
+        return self.request.GET
 
     def get_queryset(self):
         sum_tickets_paid = Quota.objects.filter(
@@ -56,7 +58,6 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
         ).values(
             's'
         )
-
         qs = self.request.event.subevents.annotate(
             sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
         ).prefetch_related(
@@ -66,7 +67,24 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
         )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
+
+        if 'subevent' in self.request_data:
+            qs = qs.filter(
+                id__in=self.request_data.getlist('subevent')
+            )
+
         return qs
+
+    @cached_property
+    def filter_form(self):
+        return SubEventFilterForm(data=self.request_data, prefix='filter')
+
+
+class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryMixin, ListView):
+    model = SubEvent
+    context_object_name = 'subevents'
+    template_name = 'pretixcontrol/subevents/index.html'
+    permission = 'can_change_settings'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -94,10 +112,6 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
                     round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
                 )
         return ctx
-
-    @cached_property
-    def filter_form(self):
-        return SubEventFilterForm(data=self.request.GET)
 
 
 class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
@@ -535,19 +549,13 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         return formlist
 
 
-class SubEventBulkAction(EventPermissionRequiredMixin, View):
+class SubEventBulkAction(SubEventQueryMixin, EventPermissionRequiredMixin, View):
     permission = 'can_change_settings'
-
-    @cached_property
-    def objects(self):
-        return self.request.event.subevents.filter(
-            id__in=self.request.POST.getlist('subevent')
-        )
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         if request.POST.get('action') == 'disable':
-            for obj in self.objects:
+            for obj in self.get_queryset():
                 obj.log_action(
                     'pretix.subevent.changed', user=self.request.user, data={
                         'active': False
@@ -557,7 +565,7 @@ class SubEventBulkAction(EventPermissionRequiredMixin, View):
                 obj.save(update_fields=['active'])
             messages.success(request, pgettext_lazy('subevent', 'The selected dates have been disabled.'))
         elif request.POST.get('action') == 'enable':
-            for obj in self.objects:
+            for obj in self.get_queryset():
                 obj.log_action(
                     'pretix.subevent.changed', user=self.request.user, data={
                         'active': True
@@ -568,11 +576,11 @@ class SubEventBulkAction(EventPermissionRequiredMixin, View):
             messages.success(request, pgettext_lazy('subevent', 'The selected dates have been enabled.'))
         elif request.POST.get('action') == 'delete':
             return render(request, 'pretixcontrol/subevents/delete_bulk.html', {
-                'allowed': self.objects.filter(orderposition__isnull=True),
-                'forbidden': self.objects.filter(orderposition__isnull=False),
+                'allowed': self.get_queryset().filter(orderposition__isnull=True),
+                'forbidden': self.get_queryset().filter(orderposition__isnull=False).distinct(),
             })
         elif request.POST.get('action') == 'delete_confirm':
-            for obj in self.objects:
+            for obj in self.get_queryset():
                 if obj.allow_delete():
                     CartPosition.objects.filter(addon_to__subevent=obj).delete()
                     obj.cartposition_set.all().delete()
@@ -899,3 +907,63 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return self.form_invalid(form)
+
+
+class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormView):
+    permission = 'can_change_settings'
+    form_class = SubEventBulkEdit
+    template_name = 'pretixcontrol/subevents/bulk_edit.html'
+    context_object_name = 'subevent'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.subevents', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=405)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['subevents'] = self.get_queryset()
+        return ctx
+
+    @cached_property
+    def is_submitted(self):
+        # Usually, django considers a form "bound" / "submitted" on every POST request. However, this view is always
+        # called with POST method, even if just to pass the selection of objects to work on, so we want to modify
+        # that behaviour
+        ignored_fields = {'csrfmiddlewaretoken', 'action', 'subevent'}
+        return len([
+            k for k, v in self.request.POST.items() if v and k not in ignored_fields and not k.startswith('filter-')
+        ]) > 0
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        kwargs['prefix'] = 'bulkedit'
+        if not self.is_submitted:
+            kwargs['data'] = None
+            kwargs['files'] = None
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if self.is_submitted and form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_initial(self):
+        initial = super().get_initial()
+        fields = {
+            'name'
+        }
+        for k in fields:
+            existing_values = list(self.get_queryset().order_by(k).values(k).annotate(c=Count('*')))
+            if len(existing_values) == 1:
+                initial[k] = existing_values[0][k]
+            else:
+                initial[k] = None
+        return initial
