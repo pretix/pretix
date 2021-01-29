@@ -718,7 +718,7 @@ class BasePaymentProvider:
         return a very short version of the payment method. Usually, this should return e.g.
         a transaction ID or account identifier, but no information on status, dates, etc.
 
-        The default implementation falls back to payment_presa_elrender.
+        The default implementation falls back to ``payment_presale_render``.
 
         :param order: The order object
         """
