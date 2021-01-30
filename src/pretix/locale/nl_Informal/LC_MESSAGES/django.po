@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-27 17:45+0000\n"
-"PO-Revision-Date: 2021-01-13 05:00+0000\n"
+"PO-Revision-Date: 2021-01-29 11:23+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -955,7 +955,7 @@ msgstr "Inclusief betaalde bedragen"
 
 #: pretix/base/exporters/orderlist.py:64
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "Toon antwoorden voor meerkeuzevragen gegroepeerd in één kolom"
 
 #: pretix/base/exporters/orderlist.py:148
 #: pretix/base/exporters/orderlist.py:309
@@ -2883,7 +2883,7 @@ msgstr "Vraag bij inchecken in plaats van bij het kopen van een kaartje"
 
 #: pretix/base/models/items.py:1072
 msgid "Not supported by all check-in apps for all question types."
-msgstr ""
+msgstr "Niet al onze incheckapps ondersteunen dit voor alle vraagsoorten."
 
 #: pretix/base/models/items.py:1076
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
@@ -3319,10 +3319,8 @@ msgstr "Extern"
 
 #: pretix/base/models/orders.py:1720
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:191
-#, fuzzy
-#| msgid "Refund only"
 msgid "Refund reason"
-msgstr "Betaal alleen"
+msgstr "Reden voor de terugbetaling"
 
 #: pretix/base/models/orders.py:1721
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:192
@@ -3330,6 +3328,8 @@ msgstr "Betaal alleen"
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
+"Deze tekst kan aan de gebruiker getoond worden, bijvoorbeeld als deel van de "
+"betalingsinformatie."
 
 #: pretix/base/models/orders.py:1831
 msgid "Payment fee"
@@ -4844,10 +4844,8 @@ msgstr ""
 
 #: pretix/base/services/cancelevent.py:200
 #: pretix/base/services/cancelevent.py:258
-#, fuzzy
-#| msgid "Event created"
 msgid "Event canceled"
-msgstr "Evenement aangemaakt"
+msgstr "Evenement geannuleerd"
 
 #: pretix/base/services/cart.py:52 pretix/base/services/orders.py:73
 msgid ""
@@ -6621,7 +6619,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1238
 msgid "Step size for reduction amount"
-msgstr ""
+msgstr "Stapgrootte voor lagere terugbetaling"
 
 #: pretix/base/settings.py:1239
 msgid ""
@@ -6629,6 +6627,10 @@ msgid ""
 "set this to e.g. 10, they will only be able to choose values in increments "
 "of 10."
 msgstr ""
+"Standaard kunnen klanten een willekeurig bedrag invoeren dat van de "
+"terugbetaling wordt afgetrokken. Als je deze waarde bijvoorbeeld op 10 "
+"instelt zullen klanten alleen bedragen kunnen kiezen die een meervoud van 10 "
+"zijn."
 
 #: pretix/base/settings.py:1249
 msgid ""
@@ -8787,16 +8789,12 @@ msgid "Order placed before"
 msgstr "Bestelling geplaatst voor"
 
 #: pretix/control/forms/filter.py:468
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Minimal sum of payments and refunds"
-msgstr "Betalingen en terugbetalingen van bestelling"
+msgstr "Minimale som van betalingen en terugbetalingen"
 
 #: pretix/control/forms/filter.py:473
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Maximal sum of payments and refunds"
-msgstr "Betalingen en terugbetalingen van bestelling"
+msgstr "Maximale som van betalingen en terugbetalingen"
 
 #: pretix/control/forms/filter.py:515 pretix/control/forms/filter.py:520
 #: pretix/control/forms/filter.py:546 pretix/control/forms/filter.py:551
@@ -9508,10 +9506,6 @@ msgid "Automatically refund money if possible"
 msgstr "Geld automatisch terugbetalen indien mogelijk"
 
 #: pretix/control/forms/orders.py:619
-#, fuzzy
-#| msgid ""
-#| "Create manual refund if the payment method odes not support automatic "
-#| "refunds"
 msgid ""
 "Create manual refund if the payment method does not support automatic refunds"
 msgstr ""
@@ -10192,6 +10186,8 @@ msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
 msgstr ""
+"Het e-mailadres is gecontroleerd (de gebruiker heeft op een link in een naar "
+"de gebruiker verzonden mail geklikt)."
 
 #: pretix/control/logdisplay.py:297
 #, python-brace-format
@@ -10472,6 +10468,8 @@ msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
 msgstr ""
+"Een herhaald wachtwoordherstelverzoek is geweigerd, omdat het vorige verzoek "
+"minder dan 24 uur geleden was."
 
 #: pretix/control/logdisplay.py:362
 #, python-brace-format
@@ -12273,6 +12271,8 @@ msgid ""
 "Your shop is already live, however the following issues would normally "
 "prevent your shop to go live:"
 msgstr ""
+"Je winkel staat al live, maar de volgende problemen zouden normaal gesproken "
+"verhinderen dat je winkel live kan worden gezet:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:37
 #: pretix/control/templates/pretixcontrol/event/live.html:56
@@ -13702,10 +13702,8 @@ msgid "Only available as an add-on product"
 msgstr "Alleen beschikbaar als add-onproduct"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:98
-#, fuzzy
-#| msgid "Only sell this product as part of a bundle"
 msgid "Only available as part of a bundle"
-msgstr "Verkoop dit product alleen als deel van een bundel"
+msgstr "Alleen beschikbaar als deel van een bundel"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:101
 msgid "Only visible with a voucher"
@@ -14450,10 +14448,8 @@ msgstr ""
 "kan je de bestelling handmatig als verlopen markeren."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:104
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund for overpayment"
-msgstr "Bestelling terugbetalen"
+msgstr "Terugbetaling voor overbetaling"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:106
 #, python-format
@@ -14866,16 +14862,12 @@ msgstr ""
 "daadwerkelijk het geld hebt overgemaakt naar de klant."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:30
-#, fuzzy
-#| msgid "Original payment method"
 msgid "Refund to original payment method"
-msgstr "Oorspronkelijke betalingsmethode"
+msgstr "Terugbetalen naar oorspronkelijke betalingsmethode"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:36
-#, fuzzy
-#| msgid "Payment settings"
 msgid "Payment details"
-msgstr "Betalingsinstellingen"
+msgstr "Betalingsdetails"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:37
 msgid "Amount not refunded"
@@ -14883,32 +14875,24 @@ msgstr "Bedrag niet terugbetaald"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
-#, fuzzy
-#| msgid "Refund amount:"
 msgid "Refund amount"
-msgstr "Terug te betalen bedrag:"
+msgstr "Terug te betalen bedrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:66
-#, fuzzy
-#| msgid "Full name"
 msgid "Full amount"
-msgstr "Volledige naam"
+msgstr "Volledige bedrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:69
 msgid "This payment method does not support automatic refunds."
 msgstr "Deze betalingsmethode ondersteunt geen automatische terugbetalingen."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:78
-#, fuzzy
-#| msgid "Link to enable payment method"
 msgid "Refund to a different payment method"
-msgstr "Link om betalingsmethode in te schakelen"
+msgstr "Terugbetalen naar een andere betalingsmethode"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:84
-#, fuzzy
-#| msgid "Rendering option"
 msgid "Recipient / options"
-msgstr "Weergaveoptie"
+msgstr "Ontvanger / opties"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:112
 msgid "Transfer to other order"
@@ -16073,24 +16057,17 @@ msgid "Step 1: Download data"
 msgstr "Stap 1: Download gegevens"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:17
-#, fuzzy
-#| msgid "Step 1: Download data"
 msgid "(Optional) Step 1: Download data"
-msgstr "Stap 1: Download gegevens"
+msgstr "(Optioneel) Stap 1: Download gegevens"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:20
-#, fuzzy
-#| msgid ""
-#| "You are about to permanently delete data from the server, even though you "
-#| "might be required to keep some of this data on file. You should therefore "
-#| "download the following file and store it in a safe place:"
 msgid ""
 "You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You can therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
 "Je gaat gegevens permanent van de server verwijderen, ook al ben je mogelijk "
-"verplicht om sommige van deze gegevens te bewaren. Je moet hierom het "
+"verplicht om sommige van deze gegevens te bewaren. Je kan hierom het "
 "volgende bestand downloaden en op een veilige plaats bewaren:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:29
@@ -16098,10 +16075,8 @@ msgid "Download data"
 msgstr "Download gegevens"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:34
-#, fuzzy
-#| msgid "Step 3: Confirm deletion"
 msgid "Step 2: Confirm deletion"
-msgstr "Stap 3: Bevestig verwijdering"
+msgstr "Stap 2: Bevestig verwijdering"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:36
 #, python-format
@@ -16121,10 +16096,8 @@ msgid "Event short name"
 msgstr "Korte naam evenement"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:46
-#, fuzzy
-#| msgid "Step 2: Confirm download"
 msgid "Step 3: Confirm download"
-msgstr "Stap 2: Bevestig download"
+msgstr "Stap 3: Bevestig download"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
 msgid ""
@@ -16259,54 +16232,37 @@ msgid "Times"
 msgstr "Tijden"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:339
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "Start of ticket sales"
 msgid "Start of first slot"
-msgstr "Begin van de kaartverkoop"
+msgstr "Begin van eerste tijdsslot"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:345
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "End of ticket sales"
 msgid "End of time slots"
-msgstr "Einde van de kaartverkoop"
+msgstr "Einde van tijdsslots"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:351
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Length of slots"
-msgstr "Lengte van cadeauboncodes"
+msgstr "Lengte van elk tijdsslot"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
-#, fuzzy
-#| msgid "in minutes"
 msgid "minutes"
-msgstr "in minuten"
+msgstr "minuten"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:360
 msgid "Break between slots"
-msgstr ""
+msgstr "Pauze tussen tijdsslots"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:370
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "created"
 msgid "Create"
-msgstr "aangemaakt"
+msgstr "Aanmaken"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:377
-#, fuzzy
-#| msgid "Add a new time slot"
 msgid "Add a single time slot"
-msgstr "Voeg een nieuw tijdsslot toe"
+msgstr "Nieuw tijdsslot toevoegen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:379
-#, fuzzy
-#| msgid "Add a new time slot"
 msgid "Add many time slots"
-msgstr "Voeg een nieuw tijdsslot toe"
+msgstr "Meerdere nieuwe tijdsslots toevoegen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:502
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:144
@@ -16873,11 +16829,9 @@ msgid "Prefix (optional)"
 msgstr "Voorvoegsel (optioneel)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
-#, fuzzy
-#| msgid "Number"
 msgctxt "number_of_things"
 msgid "Number"
-msgstr "Getal"
+msgstr "Aantal"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
@@ -17080,6 +17034,8 @@ msgid ""
 "Currently, no vouchers will be sent since your event is not live or is not "
 "selling tickets."
 msgstr ""
+"Momenteel zullen er geen vouchers worden verzonden, omdat je evenement niet "
+"live is of geen kaartjes verkoopt."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:41
 msgid ""
@@ -18126,12 +18082,8 @@ msgid "The selected exporter was not found."
 msgstr "De gekozen exporteerder was niet gevonden."
 
 #: pretix/control/views/orders.py:2117
-#, fuzzy
-#| msgid ""
-#| "There was a problem processing your input. See below for error details."
 msgid "There was a problem processing your input:"
-msgstr ""
-"Er was een probleem met het verwerken van je invoer. Zie onder voor details."
+msgstr "Er is een probleem opgetreden bij het verwerken van je invoer:"
 
 #: pretix/control/views/orders.py:2213
 msgid "All orders have been canceled."
@@ -18888,10 +18840,8 @@ msgstr ""
 "bevestigingspagina voor openstaande bestellingen."
 
 #: pretix/plugins/banktransfer/payment.py:135
-#, fuzzy
-#| msgid "All open refunds"
 msgid "IBAN blocklist for refunds"
-msgstr "Alle openstaande terugbetalingen"
+msgstr "IBAN-blokkadelijst voor terugbetalingen"
 
 #: pretix/plugins/banktransfer/payment.py:138
 msgid ""
@@ -18901,6 +18851,12 @@ msgid ""
 "country codes such as \"GB\" if you never want to send refunds to IBANs from "
 "a specific country."
 msgstr ""
+"Voer hier één IBAN of IBAN-prefix per regel in. Het systeem zal niet "
+"proberen om terugbetalingen te sturen naar deze rekeningnummers. Dit kan "
+"handig zijn als je bijvoorbeeld een groot aantal \"doorgestuurde betalingen\""
+" ontvangt van een derde partij zoals een betalingsprovider. Je kan hier ook "
+"landcodes zoals \"GB\" of \"NL\" invullen als je nooit automatisch "
+"terugbetalingen wilt overmaken naar IBANs uit een bepaald land."
 
 #: pretix/plugins/banktransfer/payment.py:176
 msgid "Please fill out your bank account details."
@@ -18936,10 +18892,9 @@ msgid "Invalid IBAN/BIC"
 msgstr "Ongeldig IBAN/BIC"
 
 #: pretix/plugins/banktransfer/payment.py:313
-#, fuzzy, python-brace-format
-#| msgid "Bank account type"
+#, python-brace-format
 msgid "Bank account {iban}"
-msgstr "Bankrekeningtype"
+msgstr "Bankrekening {iban}"
 
 #: pretix/plugins/banktransfer/payment.py:329
 msgid "Can only create a bank transfer refund from an existing payment."
@@ -18948,16 +18903,12 @@ msgstr ""
 "betaling gestart worden."
 
 #: pretix/plugins/banktransfer/payment.py:349
-#, fuzzy
-#| msgid "(optional)"
 msgid "BIC (optional)"
-msgstr "(optioneel)"
+msgstr "BIC (optioneel)"
 
 #: pretix/plugins/banktransfer/payment.py:388
-#, fuzzy
-#| msgid "Your input was invalid, please try again."
 msgid "Your input was invalid, please see below for details."
-msgstr "Je invoer was ongeldig, probeer het opnieuw."
+msgstr "Je invoer was ongeldig, zie hieronder voor details."
 
 #: pretix/plugins/banktransfer/refund_export.py:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
@@ -20533,10 +20484,9 @@ msgstr "onbekende naam"
 #: pretix/plugins/stripe/payment.py:949 pretix/plugins/stripe/payment.py:1001
 #: pretix/plugins/stripe/payment.py:1116 pretix/plugins/stripe/payment.py:1268
 #: pretix/plugins/stripe/payment.py:1371
-#, fuzzy, python-brace-format
-#| msgid "Bank account type"
+#, python-brace-format
 msgid "Bank account at {bank}"
-msgstr "Bankrekeningtype"
+msgstr "Bankrekening bij {bank}"
 
 #: pretix/plugins/stripe/payment.py:957
 msgid "iDEAL via Stripe"
@@ -20579,10 +20529,9 @@ msgid "Spain"
 msgstr "Spanje"
 
 #: pretix/plugins/stripe/payment.py:1193
-#, fuzzy, python-brace-format
-#| msgid "Bank account details"
+#, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr "Bankrekeninginformatie"
+msgstr "Bankrekening {iban} bij {bank}"
 
 #: pretix/plugins/stripe/payment.py:1204
 msgid "EPS via Stripe"
@@ -22159,6 +22108,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:161
 msgid "The following payment methods will be used to refund the money to you:"
 msgstr ""
+"De volgende betalingsmethoden zullen worden gebruikt om je terugbetaling uit "
+"te voeren:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:141
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:172
@@ -22549,10 +22500,8 @@ msgid "You chose an invalid cancellation fee."
 msgstr "Je hebt een ongeldig bedrag voor de annuleringskosten gekozen."
 
 #: pretix/presale/views/order.py:869
-#, fuzzy
-#| msgid "Any customer"
 msgid "Canceled by customer"
-msgstr "Iedere klant"
+msgstr "Geannuleerd door klant"
 
 #: pretix/presale/views/order.py:880
 msgid "The cancellation has been requested."
@@ -22593,6 +22542,11 @@ msgid ""
 "{number} hours. If the email did not arrive, please your check spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Als het e-mailadres dat je invoerde geldig is en is gekoppeld aan een "
+"kaartje hebben we je in de afgelopen {number} uur al een link naar je "
+"kaartje gestuurd. Controleer als je nog geen mail hebt ontvangen of het "
+"bericht misschien in je ongewenste e-mail terecht is gekomen en of je het "
+"juiste e-mailadres hebt ingevuld."
 
 #: pretix/presale/views/user.py:49
 msgid "Your orders for {}"

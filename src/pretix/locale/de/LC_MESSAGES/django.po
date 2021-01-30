@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-27 17:45+0000\n"
-"PO-Revision-Date: 2021-01-27 17:58+0000\n"
+"PO-Revision-Date: 2021-01-30 19:49+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.4.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
@@ -10499,6 +10499,8 @@ msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
 msgstr ""
+"Eine Zurücksetzung des Passworts wurde abgelehnt, da es bereits eine Anfrage "
+"innerhalb der letzten 24 Stunden gab."
 
 #: pretix/control/logdisplay.py:362
 #, python-brace-format
@@ -13736,12 +13738,8 @@ msgid "Only available as an add-on product"
 msgstr "Nur als Zusatzprodukt verfügbar"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:98
-#, fuzzy
-#| msgid "Only sell this product as part of a bundle"
 msgid "Only available as part of a bundle"
-msgstr ""
-"Dieses Produkt nicht einzeln verkaufen, sondern nur als Teil eines festen "
-"Produktpakets"
+msgstr "Nur als Teil eines festen Pakets verfügbar"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:101
 msgid "Only visible with a voucher"
@@ -14904,16 +14902,12 @@ msgstr ""
 "haben."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:30
-#, fuzzy
-#| msgid "Original payment method"
 msgid "Refund to original payment method"
-msgstr "Ursprüngliche Zahlungsmethode"
+msgstr "Auf das ursprüngliche Zahlungsmittel erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:36
-#, fuzzy
-#| msgid "Payment settings"
 msgid "Payment details"
-msgstr "Zahlungseinstellungen"
+msgstr "Zahlungsdetails"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:37
 msgid "Amount not refunded"
@@ -14921,32 +14915,24 @@ msgstr "Nicht erstatteter Betrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
-#, fuzzy
-#| msgid "Refund amount:"
 msgid "Refund amount"
-msgstr "Erstattungsbetrag:"
+msgstr "Erstattungsbetrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:66
-#, fuzzy
-#| msgid "Full name"
 msgid "Full amount"
-msgstr "Voller Name"
+msgstr "Voller Betrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:69
 msgid "This payment method does not support automatic refunds."
 msgstr "Diese Zahlungsmethode unterstützt keine automatische Erstattung."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:78
-#, fuzzy
-#| msgid "Use different payment method"
 msgid "Refund to a different payment method"
-msgstr "Andere Zahlungsmethode wählen"
+msgstr "Erstattung auf anderes Zahlungsmittel"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:84
-#, fuzzy
-#| msgid "Rendering option"
 msgid "Recipient / options"
-msgstr "Ausgabemodus"
+msgstr "Empfänger / Optionen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:112
 msgid "Transfer to other order"
@@ -16891,11 +16877,9 @@ msgid "Prefix (optional)"
 msgstr "Präfix (optional)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
-#, fuzzy
-#| msgid "Number"
 msgctxt "number_of_things"
 msgid "Number"
-msgstr "Zahl"
+msgstr "Anzahl"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
@@ -18905,10 +18889,8 @@ msgstr ""
 "Bestellungen zusätzlich zum Standardtext bezahlt."
 
 #: pretix/plugins/banktransfer/payment.py:135
-#, fuzzy
-#| msgid "All open refunds"
 msgid "IBAN blocklist for refunds"
-msgstr "Alle offenen Erstattungen"
+msgstr "IBAN-Blockliste für Erstattungen"
 
 #: pretix/plugins/banktransfer/payment.py:138
 msgid ""
@@ -18918,6 +18900,11 @@ msgid ""
 "country codes such as \"GB\" if you never want to send refunds to IBANs from "
 "a specific country."
 msgstr ""
+"Eine IBAN oder ein IBAN-Prefix pro Zeile. Das System versucht keine "
+"automatischen Rückerstattungen an diese IBANs zu senden. Dies ist z.B. "
+"nützlich wenn Sie viele \"weitergeleitete Zahlungen\" von einem "
+"Zahlungsdienstleister erhalten. Sie können auch Ländercodes wie \"GB\" "
+"auflisten, wenn Sie nie Erstattungen an britische IBANs anstoßen wollen."
 
 #: pretix/plugins/banktransfer/payment.py:176
 msgid "Please fill out your bank account details."
@@ -18964,16 +18951,13 @@ msgstr ""
 "Zahlung gestartet werden."
 
 #: pretix/plugins/banktransfer/payment.py:349
-#, fuzzy
-#| msgid "(optional)"
 msgid "BIC (optional)"
-msgstr "(optional)"
+msgstr "BIC (optional)"
 
 #: pretix/plugins/banktransfer/payment.py:388
-#, fuzzy
-#| msgid "Your input was invalid, please try again."
 msgid "Your input was invalid, please see below for details."
-msgstr "Die Eingabe war nicht korrekt, bitte erneut versuchen."
+msgstr ""
+"Die Eingabe war nicht korrekt, die Fehler finden Sie im Detail weiter unten."
 
 #: pretix/plugins/banktransfer/refund_export.py:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
@@ -22620,6 +22604,11 @@ msgid ""
 "{number} hours. If the email did not arrive, please your check spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Wenn die von Ihnen eingegebene E-Mail-Adresse gültig ist und ein Ticket für "
+"diese Adresse vorliegt, haben wir Ihnen in den letzten {number} Stunden "
+"bereits eine E-Mail geschickt. Wenn diese E-Mail nicht ankam, bitte "
+"überprüfen Sie Ihren Spam-Ordner und überprüfen Sie, dass Sie die richtige E"
+"-Mail-Adresse verwendet haben."
 
 #: pretix/presale/views/user.py:49
 msgid "Your orders for {}"
