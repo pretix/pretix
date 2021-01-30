@@ -33,7 +33,7 @@ from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
     CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkForm,
     SubEventForm, SubEventItemForm, SubEventItemVariationForm,
-    SubEventMetaValueForm, TimeFormSet, SubEventBulkEdit,
+    SubEventMetaValueForm, TimeFormSet, SubEventBulkEditForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
@@ -911,7 +911,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
 class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormView):
     permission = 'can_change_settings'
-    form_class = SubEventBulkEdit
+    form_class = SubEventBulkEditForm
     template_name = 'pretixcontrol/subevents/bulk_edit.html'
     context_object_name = 'subevent'
 
@@ -927,6 +927,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['subevents'] = self.get_queryset()
+        ctx['filter_form'] = self.filter_form
         return ctx
 
     @cached_property
@@ -940,9 +941,33 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         ]) > 0
 
     def get_form_kwargs(self):
+        initial = {}
+        mixed_values = set()
+
+        fields = {
+            'name',
+            'location',
+            'frontpage_text',
+            'geo_lat',
+            'geo_lon',
+            'is_public',
+            'active',
+        }
+        for k in fields:
+            existing_values = list(self.get_queryset().order_by(k).values(k).annotate(c=Count('*')))
+            print(k, existing_values)
+            if len(existing_values) == 1:
+                initial[k] = existing_values[0][k]
+            elif len(existing_values) > 1:
+                mixed_values.add(k)
+                initial[k] = None
+
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
         kwargs['prefix'] = 'bulkedit'
+        kwargs['initial'] = initial
+        kwargs['queryset'] = self.get_queryset()
+        kwargs['mixed_values'] = mixed_values
         if not self.is_submitted:
             kwargs['data'] = None
             kwargs['files'] = None
@@ -955,15 +980,19 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         else:
             return self.form_invalid(form)
 
-    def get_initial(self):
-        initial = super().get_initial()
-        fields = {
-            'name'
-        }
-        for k in fields:
-            existing_values = list(self.get_queryset().order_by(k).values(k).annotate(c=Count('*')))
-            if len(existing_values) == 1:
-                initial[k] = existing_values[0][k]
-            else:
-                initial[k] = None
-        return initial
+    @transaction.atomic()
+    def form_valid(self, form):
+        form.save()
+        log_entries = []
+        if form.has_changed():
+            for obj in self.get_initial():
+                log_entries.append(
+                    obj.log_action('pretix.subevent.changed', data={
+                        k: v for k, v in form.cleaned_data.items() if k in form.changed_data
+                    }, user=self.request.user, save=False)
+                )
+        LogEntry.objects.bulk_create(log_entries, batch_size=200)
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    # todo: times, quota, prices, checkin lists, plugins

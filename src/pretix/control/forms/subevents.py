@@ -89,24 +89,76 @@ class SubEventBulkForm(SubEventForm):
         del self.fields['date_admission']
 
 
-class SubEventBulkEdit(I18nModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # self.fields['location'].widget.attrs['rows'] = '3'
+class NullBooleanSelect(forms.NullBooleanSelect):
+    def __init__(self, attrs=None):
+        choices = (
+            ('unknown', _('Keep the current values')),
+            ('true', _('Yes')),
+            ('false', _('No')),
+        )
+        super(forms.NullBooleanSelect, self).__init__(attrs, choices)
 
-        self.fields['name'].widget.attrs['placeholder'] = _('Keep the same')
-        self.fields['name'].one_required = False
+
+class SubEventBulkEditForm(I18nModelForm):
+    def __init__(self, *args, **kwargs):
+        self.mixed_values = kwargs.pop('mixed_values')
+        self.queryset = kwargs.pop('queryset')
+        super().__init__(*args, **kwargs)
+        self.fields['location'].widget.attrs['rows'] = '3'
+
+        for k in ('name', 'location', 'frontpage_text'):
+            # i18n fields
+            if k in self.mixed_values:
+                self.fields[k].widget.attrs['placeholder'] = _('Keep the current values')
+            else:
+                self.fields[k].widget.attrs['placeholder'] = ''
+            self.fields[k].one_required = False
+
+        for k in ('geo_lat', 'geo_lon'):
+            # scalar fields
+            if k in self.mixed_values:
+                self.fields[k].widget.attrs['placeholder'] = _('Keep the current values')
+            else:
+                self.fields[k].widget.attrs['placeholder'] = ''
+            self.fields[k].widget.is_required = False
+            self.fields[k].required = False
 
     class Meta:
         model = SubEvent
         localized_fields = '__all__'
         fields = [
             'name',
+            'location',
+            'frontpage_text',
+            'geo_lat',
+            'geo_lon',
+            'is_public',
+            'active',
         ]
         field_classes = {
+            'is_public': forms.NullBooleanField,
+            'active': forms.NullBooleanField,
         }
         widgets = {
+            'is_public': NullBooleanSelect,
+            'active': NullBooleanSelect,
         }
+
+    def save(self, commit=True):
+        objs = list(self.queryset)
+        fields = set()
+        for k in self.changed_data:
+            # i18n and scalar fields
+            if k in ('name', 'location', 'frontpage_text', 'geo_lat', 'geo_lon') and self.cleaned_data[k]:
+                fields.add(k)
+                for obj in objs:
+                    setattr(obj, k, self.cleaned_data[k])
+            if k in ('active', 'is_public') and self.cleaned_data[k] is not None:
+                fields.add(k)
+                for obj in objs:
+                    setattr(obj, k, self.cleaned_data[k])
+        if fields:
+            SubEvent.objects.bulk_update(objs, fields, 200)
 
     def full_clean(self):
         if len(self.data) == 0:
