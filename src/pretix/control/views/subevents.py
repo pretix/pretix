@@ -1,14 +1,17 @@
 import copy
+from collections import defaultdict
 from datetime import datetime, time, timedelta
 
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
 from django.core.files import File
 from django.db import connections, transaction
-from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum, Count
+from django.db.models import (
+    Count, F, IntegerField, OuterRef, Prefetch, Subquery, Sum,
+)
 from django.db.models.functions import Coalesce
 from django.forms import inlineformset_factory
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.formats import get_format
@@ -16,7 +19,9 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView, FormView
+from django.views.generic import (
+    CreateView, DeleteView, FormView, ListView, UpdateView,
+)
 
 from pretix.base.models import CartPosition, LogEntry
 from pretix.base.models.checkin import CheckinList
@@ -31,14 +36,15 @@ from pretix.control.forms.checkin import SimpleCheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
-    CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkForm,
-    SubEventForm, SubEventItemForm, SubEventItemVariationForm,
-    SubEventMetaValueForm, TimeFormSet, SubEventBulkEditForm,
+    CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkEditForm,
+    SubEventBulkForm, SubEventForm, SubEventItemForm,
+    SubEventItemVariationForm, SubEventMetaValueForm, TimeFormSet,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
+from pretix.helpers import GroupConcat
 from pretix.helpers.models import modelcopy
 
 
@@ -924,11 +930,148 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
     def get(self, request, *args, **kwargs):
         return HttpResponse(status=405)
 
+    @cached_property
+    def quota_formset(self):
+        extra = 0
+        kwargs = {}
+
+        if self.sampled_quotas is not None:
+            kwargs['instance'] = self.get_queryset()[0]
+
+        formsetclass = inlineformset_factory(
+            SubEvent, Quota,
+            form=QuotaForm, formset=QuotaFormSet, min_num=0, validate_min=False,
+            can_order=False, can_delete=True, extra=extra,
+        )
+        return formsetclass(
+            self.request.POST if self.is_submitted else None,
+            event=self.request.event, **kwargs
+        )
+
+    def save_quota_formset(self, log_entries):
+        if not self.quota_formset.has_changed():
+            return
+        qidx = 0
+        subevents = list(self.get_queryset().prefetch_related('quotas'))
+        to_save_items = []
+        to_save_variations = []
+        to_delete_quota_ids = []
+
+        if self.sampled_quotas is None:
+            if len(self.quota_formset.forms) == 0:
+                return
+            else:
+                for se in subevents:
+                    for q in se.quotas.all():
+                        to_delete_quota_ids.append(q.pk)
+                        log_entries += [
+                            q.log_action(action='pretix.event.quota.deleted', user=self.request.user, save=False),
+                            se.log_action('pretix.subevent.quota.deleted', user=self.request.user, data={
+                                'id': q.pk
+                            }, save=False)
+                        ]
+
+                if to_delete_quota_ids:
+                    Quota.objects.filter(id__in=to_delete_quota_ids).delete()
+
+        for f in self.quota_formset.forms:
+            if self.quota_formset._should_delete_form(f) and f in self.quota_formset.extra_forms:
+                continue
+
+            selected_items = set(list(self.request.event.items.filter(id__in=[
+                i.split('-')[0] for i in f.cleaned_data.get('itemvars', [])
+            ])))
+            selected_variations = list(ItemVariation.objects.filter(item__event=self.request.event, id__in=[
+                i.split('-')[1] for i in f.cleaned_data.get('itemvars', []) if '-' in i
+            ]))
+
+            if self.quota_formset._should_delete_form(f):
+                for se in subevents:
+                    list(se.quotas.all())[qidx].delete()
+            elif f in self.quota_formset.extra_forms:
+                change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                for se in subevents:
+                    q = copy.copy(f.instance)
+                    q.pk = None
+                    q.subevent = se
+                    q.event = self.request.event
+                    q.save(clear_cache=False)
+                    for _i in selected_items:
+                        to_save_items.append(Quota.items.through(quota_id=q.pk, item_id=_i.pk))
+                    for _i in selected_variations:
+                        to_save_variations.append(Quota.variations.through(quota_id=q.pk, itemvariation_id=_i.pk))
+
+                    change_data['id'] = q.pk
+                    log_entries.append(
+                        q.log_action(action='pretix.event.quota.added', user=self.request.user,
+                                     data=change_data, save=False)
+                    )
+                    log_entries.append(
+                        se.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data,
+                                      save=False)
+                    )
+            else:
+                if f.changed_data:
+                    change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                    for se in subevents:
+                        q = list(se.quotas.all())[qidx]
+                        for fname in ('size', 'name', 'release_after_exit'):
+                            setattr(q, fname, f.cleaned_data.get(fname))
+                        q.save(clear_cache=False)
+                        if 'itemvar' in f.changed_data:
+                            q.items.set(selected_items)
+                            q.variations.set(selected_variations)
+                        log_entries.append(
+                            q.log_action(action='pretix.event.quota.added', user=self.request.user,
+                                         data=change_data, save=False)
+                        )
+            if to_save_items:
+                Quota.items.through.objects.bulk_create(to_save_items)
+            if to_save_variations:
+                Quota.variations.through.objects.bulk_create(to_save_variations)
+            qidx += 1
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['subevents'] = self.get_queryset()
         ctx['filter_form'] = self.filter_form
+        ctx['sampled_quotas'] = self.sampled_quotas
+        ctx['formset'] = self.quota_formset
         return ctx
+
+    @cached_property
+    def sampled_quotas(self):
+        all_quotas = Quota.objects.filter(
+            subevent__in=self.get_queryset()
+        ).annotate(
+            item_list=GroupConcat('items__id'),
+            var_list=GroupConcat('variations__id'),
+        ).values(
+            'item_list', 'var_list',
+            *(f.name for f in Quota._meta.fields if f.name not in (
+                'id', 'event', 'items', 'variations', 'cached_availability_state', 'cached_availability_number',
+                'cached_availability_paid_orders', 'cached_availability_time', 'closed',
+            ))
+        ).order_by('subevent_id')
+
+        if not all_quotas:
+            return Quota.objects.none()
+
+        quotas_by_subevent = defaultdict(list)
+        for q in all_quotas:
+            quotas_by_subevent[q.pop('subevent')].append(q)
+
+        prev = None
+        for se in self.get_queryset():
+            if se.pk not in quotas_by_subevent:
+                return None
+
+            if prev is None:
+                prev = quotas_by_subevent[se.pk]
+
+            if quotas_by_subevent[se.pk] != prev:
+                return None
+        return se.quotas.all()
 
     @cached_property
     def is_submitted(self):
@@ -955,7 +1098,6 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         }
         for k in fields:
             existing_values = list(self.get_queryset().order_by(k).values(k).annotate(c=Count('*')))
-            print(k, existing_values)
             if len(existing_values) == 1:
                 initial[k] = existing_values[0][k]
             elif len(existing_values) > 1:
@@ -975,15 +1117,17 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        if self.is_submitted and form.is_valid():
+        if self.is_submitted and form.is_valid() and self.quota_formset.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     @transaction.atomic()
     def form_valid(self, form):
-        form.save()
         log_entries = []
+
+        # Main form
+        form.save()
         if form.has_changed():
             for obj in self.get_initial():
                 log_entries.append(
@@ -991,7 +1135,19 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                         k: v for k, v in form.cleaned_data.items() if k in form.changed_data
                     }, user=self.request.user, save=False)
                 )
-        LogEntry.objects.bulk_create(log_entries, batch_size=200)
+
+        # Formsets
+        self.save_quota_formset(log_entries)
+
+        if connections['default'].features.can_return_rows_from_bulk_insert:
+            LogEntry.objects.bulk_create(log_entries, batch_size=200)
+            LogEntry.bulk_postprocess(log_entries)
+        else:
+            for le in log_entries:
+                le.save()
+            LogEntry.bulk_postprocess(log_entries)
+
+        self.request.event.cache.clear()
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
