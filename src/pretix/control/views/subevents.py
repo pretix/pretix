@@ -948,6 +948,83 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             event=self.request.event, **kwargs
         )
 
+    @cached_property
+    def list_formset(self):
+        extra = 0
+        kwargs = {}
+
+        if self.sampled_lists is not None:
+            kwargs['instance'] = self.get_queryset()[0]
+
+        formsetclass = inlineformset_factory(
+            SubEvent, CheckinList,
+            form=SimpleCheckinListForm, formset=CheckinListFormSet, min_num=0, validate_min=False,
+            can_order=False, can_delete=True, extra=extra,
+        )
+        return formsetclass(
+            self.request.POST if self.is_submitted else None,
+            event=self.request.event, **kwargs
+        )
+
+    def save_list_formset(self, log_entries):
+        if not self.list_formset.has_changed() or self.sampled_lists is None:
+            return
+        qidx = 0
+        subevents = list(self.get_queryset().prefetch_related('checkinlist_set'))
+        to_save_products = []
+        to_save_gates = []
+
+        for f in self.list_formset.forms:
+            if self.list_formset._should_delete_form(f) and f in self.list_formset.extra_forms:
+                continue
+
+            if self.list_formset._should_delete_form(f):
+                for se in subevents:
+                    q = list(se.checkinlist_set.all())[qidx]
+                    log_entries += [
+                        q.log_action(action='pretix.event.checkinlist.deleted', user=self.request.user, save=False),
+                    ]
+                    q.delete()
+            elif f in self.list_formset.extra_forms:
+                change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                for se in subevents:
+                    q = copy.copy(f.instance)
+                    q.pk = None
+                    q.subevent = se
+                    q.event = self.request.event
+                    q.save()
+                    for _i in f.cleaned_data.get('limit_products', []):
+                        to_save_products.append(CheckinList.limit_products.through(checkinlist_id=q.pk, item_id=_i.pk))
+                    for _i in f.cleaned_data.get('gates', []):
+                        to_save_gates.append(CheckinList.gates.through(checkinlist_id=q.pk, gate_id=_i.pk))
+                    change_data['id'] = q.pk
+                    log_entries.append(
+                        q.log_action(action='pretix.event.checkinlist.added', user=self.request.user,
+                                     data=change_data, save=False)
+                    )
+            else:
+                if f.changed_data:
+                    change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                    for se in subevents:
+                        q = list(se.checkinlist_set.all())[qidx]
+                        for fname in ('name', 'all_products', 'include_pending', 'allow_entry_after_exit'):
+                            setattr(q, fname, f.cleaned_data.get(fname))
+                        q.save()
+                        if 'limit_products' in f.changed_data:
+                            q.limit_products.set(f.cleaned_data.get('limit_products', []))
+                        if 'gates' in f.changed_data:
+                            q.gates.set(f.cleaned_data.get('limit_products', []))
+                        log_entries.append(
+                            q.log_action(action='pretix.event.checkinlist.changed', user=self.request.user,
+                                         data=change_data, save=False)
+                        )
+            if to_save_products:
+                CheckinList.limit_products.through.objects.bulk_create(to_save_products)
+            if to_save_gates:
+                CheckinList.gates.through.objects.bulk_create(to_save_gates)
+
+            qidx += 1
+
     def save_quota_formset(self, log_entries):
         if not self.quota_formset.has_changed():
             return
@@ -987,7 +1064,14 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
             if self.quota_formset._should_delete_form(f):
                 for se in subevents:
-                    list(se.quotas.all())[qidx].delete()
+                    q = list(se.quotas.all())[qidx]
+                    log_entries += [
+                        q.log_action(action='pretix.event.quota.deleted', user=self.request.user, save=False),
+                        se.log_action('pretix.subevent.quota.deleted', user=self.request.user, data={
+                            'id': q.pk
+                        }, save=False)
+                    ]
+                    q.delete()
             elif f in self.quota_formset.extra_forms:
                 change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
                 for se in subevents:
@@ -1036,7 +1120,9 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         ctx['subevents'] = self.get_queryset()
         ctx['filter_form'] = self.filter_form
         ctx['sampled_quotas'] = self.sampled_quotas
+        ctx['sampled_lists'] = self.sampled_lists
         ctx['formset'] = self.quota_formset
+        ctx['cl_formset'] = self.list_formset
         return ctx
 
     @cached_property
@@ -1072,6 +1158,39 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             if quotas_by_subevent[se.pk] != prev:
                 return None
         return se.quotas.all()
+
+    @cached_property
+    def sampled_lists(self):
+        all_lists = CheckinList.objects.filter(
+            subevent__in=self.get_queryset()
+        ).annotate(
+            item_list=GroupConcat('limit_products__id'),
+            gates_list=GroupConcat('gates__id'),
+        ).values(
+            'item_list', 'gates_list',
+            *(f.name for f in CheckinList._meta.fields if f.name not in (
+                'id', 'event', 'limit_products', 'gates',
+            ))
+        ).order_by('subevent_id')
+
+        if not all_lists:
+            return SubEvent.objects.none()
+
+        lists_by_subevent = defaultdict(list)
+        for cl in all_lists:
+            lists_by_subevent[cl.pop('subevent')].append(cl)
+
+        prev = None
+        for se in self.get_queryset():
+            if se.pk not in lists_by_subevent:
+                return None
+
+            if prev is None:
+                prev = lists_by_subevent[se.pk]
+
+            if lists_by_subevent[se.pk] != prev:
+                return None
+        return se.checkinlist_set.all()
 
     @cached_property
     def is_submitted(self):
@@ -1117,7 +1236,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        if self.is_submitted and form.is_valid() and self.quota_formset.is_valid():
+        if self.is_submitted and form.is_valid() and self.quota_formset.is_valid() and self.list_formset.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -1138,6 +1257,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         # Formsets
         self.save_quota_formset(log_entries)
+        self.save_list_formset(log_entries)
 
         if connections['default'].features.can_return_rows_from_bulk_insert:
             LogEntry.objects.bulk_create(log_entries, batch_size=200)
