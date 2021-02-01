@@ -640,15 +640,20 @@ Receivers are expected to return a dictionary with globally unique identifiers a
 dictionaries as values that contain keys like in the following example::
 
     return {
-        "product": {
+        "profile": {
             "label": _("Profile picture"),
-            "evaluate": lambda orderposition, order, event: ContentFile(b"some-image-data")
+            "evaluate": lambda orderposition, order, event: ContentFile(b"some-image-data"),
+            "check": lambda orderposition, order, event: True
         }
     }
 
 The ``evaluate`` member will be called with the order position, order and event as arguments. The event might
 also be a subevent, if applicable. The return value of ``evaluate`` should be an instance of Django's ``File``
 class and point to a valid JPEG or PNG file.
+
+The ``check`` member will be called with the same arguments as ``evaluate`` but should only return a ``bool`` value
+indicating whether there is an image available for this order position or not. In some cases, this can speed up the
+implementation.
 """
 
 

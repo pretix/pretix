@@ -112,6 +112,17 @@ class AnswerSerializer(I18nAwareModelSerializer):
     question_identifier = AnswerQuestionIdentifierField(source='*', read_only=True)
     option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
 
+    def to_representation(self, instance):
+        r = super().to_representation(instance)
+        if r['answer'].startswith('file://'):
+            r['answer'] = reverse('api-v1:orderposition-answer', kwargs={
+                'organizer': instance.orderposition.order.event.organizer.slug,
+                'event': instance.orderposition.order.event.slug,
+                'pk': instance.orderposition.pk,
+                'question': instance.question_id,
+            }, request=self.context['request'])
+        return r
+
     class Meta:
         model = QuestionAnswer
         fields = ('question', 'answer', 'question_identifier', 'options', 'option_identifiers')

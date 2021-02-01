@@ -1,4 +1,6 @@
 import datetime
+import mimetypes
+import os
 from decimal import Decimal
 
 import django_filters
@@ -35,7 +37,7 @@ from pretix.base.models import (
     Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota, SubEvent,
     TaxRule, TeamAPIToken, generate_secret,
 )
-from pretix.base.models.orders import RevokedTicketSecret
+from pretix.base.models.orders import RevokedTicketSecret, QuestionAnswer
 from pretix.base.payment import PaymentException
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
@@ -912,6 +914,27 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
                 'tax': price.tax,
                 'tax_rule': tr.pk if tr else None,
             })
+
+    @action(detail=True, url_name='answer', url_path=r'answer/(?P<question>\d+)')
+    def answer(self, request, **kwargs):
+        pos = self.get_object()
+        answer = get_object_or_404(
+            QuestionAnswer,
+            orderposition=self.get_object(),
+            question_id=kwargs.get('question')
+        )
+        if not answer.file:
+            raise NotFound()
+
+        ftype, ignored = mimetypes.guess_type(answer.file.name)
+        resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
+            self.request.event.slug.upper(),
+            pos.order.code,
+            pos.positionid,
+            os.path.basename(answer.file.name).split('.', 1)[1]
+        )
+        return resp
 
     @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):

@@ -344,7 +344,7 @@ DEFAULT_IMAGES = OrderedDict([])
 
 @receiver(layout_image_variables, dispatch_uid="pretix_base_layout_image_variables_questions")
 def images_from_questions(sender, *args, **kwargs):
-    def get_answer(op, order, event, question_id):
+    def get_answer(op, order, event, question_id, check):
         a = None
         if op.addon_to:
             if 'answers' in getattr(op.addon_to, '_prefetched_objects_cache', {}):
@@ -364,8 +364,12 @@ def images_from_questions(sender, *args, **kwargs):
             a = op.answers.filter(question_id=question_id).first()
 
         if not a.file or not any(a.file.name.lower().endswith(e) for e in (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".tiff")):
+            if check:
+                return False
             return None
         else:
+            if check:
+                return True
             return a.file
 
     d = {}
@@ -374,7 +378,8 @@ def images_from_questions(sender, *args, **kwargs):
             continue
         d['question_{}'.format(q.identifier)] = {
             'label': _('Question: {question}').format(question=q.question),
-            'evaluate': partial(get_answer, question_id=q.pk)
+            'evaluate': partial(get_answer, question_id=q.pk, check=False),
+            'check': partial(get_answer, question_id=q.pk, check=True),
         }
     return d
 
