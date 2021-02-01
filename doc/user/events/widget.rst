@@ -197,6 +197,9 @@ should be added to the cart. The syntax of this attribute is ``item_ITEMID=1,ite
 where ``ITEMID`` are the internal IDs of items to be added and ``VARID`` are the internal IDs of variations of those
 items, if the items have variations. If you omit the ``items`` attribute, the general start page will be presented.
 
+In case you are using an event-series, you will need to specify the subevent for which the item(s) should be put in the
+cart. This can be done by specifying the ``subevent``-attribute.
+
 Just as the widget, the button supports the optional attributes ``voucher`` and ``skip-ssl-check``.
 
 You can style the button using the ``pretix-button`` CSS class.
