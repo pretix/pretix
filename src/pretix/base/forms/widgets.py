@@ -16,7 +16,7 @@ class DatePickerWidget(forms.DateInput):
         date_attrs = dict(attrs)
         date_attrs.setdefault('class', 'form-control')
         date_attrs['class'] += ' datepickerfield'
-        date_attrs['autocomplete'] = 'date-picker-do-not-autofill'
+        date_attrs['autocomplete'] = 'off'
 
         def placeholder():
             df = date_format or get_format('DATE_INPUT_FORMATS')[0]
@@ -37,7 +37,7 @@ class TimePickerWidget(forms.TimeInput):
         time_attrs = dict(attrs)
         time_attrs.setdefault('class', 'form-control')
         time_attrs['class'] += ' timepickerfield'
-        time_attrs['autocomplete'] = 'time-picker-do-not-autofill'
+        time_attrs['autocomplete'] = 'off'
 
         def placeholder():
             tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
@@ -111,8 +111,8 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
         time_attrs.setdefault('autocomplete', 'off')
         date_attrs['class'] += ' datepickerfield'
         time_attrs['class'] += ' timepickerfield'
-        date_attrs['autocomplete'] = 'date-picker-do-not-autofill'
-        time_attrs['autocomplete'] = 'time-picker-do-not-autofill'
+        date_attrs['autocomplete'] = 'off'
+        time_attrs['autocomplete'] = 'off'
         if min_date:
             date_attrs['data-min'] = (
                 min_date if isinstance(min_date, date) else min_date.astimezone(get_current_timezone()).date()
