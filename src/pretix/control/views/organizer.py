@@ -395,7 +395,7 @@ class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, L
             memcount=Count('members', distinct=True),
             eventcount=Count('limit_events', distinct=True),
             invcount=Count('invites', distinct=True)
-        ).all()
+        ).all().order_by('name')
 
 
 class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
