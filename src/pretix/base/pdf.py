@@ -35,9 +35,9 @@ from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
 from pretix.base.invoice import ThumbnailingImageReader
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Order, OrderPosition, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
-from pretix.base.signals import layout_text_variables
+from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.presale.style import get_fonts
@@ -339,6 +339,44 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: str(op.seat.seat_number if op.seat else "")
     }),
 ))
+DEFAULT_IMAGES = OrderedDict([])
+
+
+@receiver(layout_image_variables, dispatch_uid="pretix_base_layout_image_variables_questions")
+def images_from_questions(sender, *args, **kwargs):
+    def get_answer(op, order, event, question_id):
+        a = None
+        if op.addon_to:
+            if 'answers' in getattr(op.addon_to, '_prefetched_objects_cache', {}):
+                try:
+                    a = [a for a in op.addon_to.answers.all() if a.question_id == question_id][0]
+                except IndexError:
+                    pass
+            else:
+                a = op.addon_to.answers.filter(question_id=question_id).first()
+
+        if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
+            try:
+                a = [a for a in op.answers.all() if a.question_id == question_id][0]
+            except IndexError:
+                pass
+        else:
+            a = op.answers.filter(question_id=question_id).first()
+
+        if not a.file or not any(a.file.name.lower().endswith(e) for e in (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".tiff")):
+            return None
+        else:
+            return a.file
+
+    d = {}
+    for q in sender.questions.all():
+        if q.type != Question.TYPE_FILE:
+            continue
+        d['question_{}'.format(q.identifier)] = {
+            'label': _('Question: {question}').format(question=q.question),
+            'evaluate': partial(get_answer, question_id=q.pk)
+        }
+    return d
 
 
 @receiver(layout_text_variables, dispatch_uid="pretix_base_layout_text_variables_questions")
@@ -369,6 +407,8 @@ def variables_from_questions(sender, *args, **kwargs):
 
     d = {}
     for q in sender.questions.all():
+        if q.type == Question.TYPE_FILE:
+            continue
         d['question_{}'.format(q.pk)] = {
             'label': _('Question: {question}').format(question=q.question),
             'editor_sample': _('<Answer: {question}>').format(question=q.question),
@@ -385,6 +425,15 @@ def _get_attendee_name_part(key, op, order, ev):
 
 def _get_ia_name_part(key, op, order, ev):
     return order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
+
+
+def get_images(event):
+    v = copy.copy(DEFAULT_IMAGES)
+
+    for recv, res in layout_image_variables.send(sender=event):
+        v.update(res)
+
+    return v
 
 
 def get_variables(event):
@@ -427,6 +476,7 @@ class Renderer:
         self.layout = layout
         self.background_file = background_file
         self.variables = get_variables(event)
+        self.images = get_images(event)
         self.event = event
         if self.background_file:
             self.bg_bytes = self.background_file.read()
@@ -514,6 +564,47 @@ class Renderer:
                 return '(error)'
         return ''
 
+    def _draw_imagearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
+        ev = self._get_ev(op, order)
+        if not o['content'] or o['content'] not in self.images:
+            image_file = None
+        else:
+            try:
+                image_file = self.images[o['content']]['evaluate'](op, order, ev)
+            except:
+                logger.exception('Failed to process variable.')
+                image_file = None
+
+        if image_file:
+            ir = ThumbnailingImageReader(image_file)
+            try:
+                ir.resize(float(o['width']) * mm, float(o['height']) * mm, 300)
+            except:
+                logger.exception("Can not resize image")
+                pass
+            canvas.drawImage(
+                image=ir,
+                x=float(o['left']) * mm,
+                y=float(o['bottom']) * mm,
+                width=float(o['width']) * mm,
+                height=float(o['height']) * mm,
+                preserveAspectRatio=True,
+                anchor='c',  # centered in frame
+                mask='auto'
+            )
+        else:
+            canvas.saveState()
+            canvas.setFillColorRGB(.8, .8, .8, alpha=1)
+            canvas.rect(
+                x=float(o['left']) * mm,
+                y=float(o['bottom']) * mm,
+                width=float(o['width']) * mm,
+                height=float(o['height']) * mm,
+                stroke=0,
+                fill=1,
+            )
+            canvas.restoreState()
+
     def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
         font = o['fontfamily']
         if o['bold']:
@@ -572,6 +663,8 @@ class Renderer:
         for o in self.layout:
             if o['type'] == "barcodearea":
                 self._draw_barcodearea(canvas, op, o)
+            elif o['type'] == "imagearea":
+                self._draw_imagearea(canvas, op, order, o)
             elif o['type'] == "textarea":
                 self._draw_textarea(canvas, op, order, o)
             elif o['type'] == "poweredby":

@@ -12,12 +12,10 @@ from django.utils.formats import date_format, localize
 from django.utils.translation import (
     get_language, gettext, gettext_lazy, pgettext,
 )
-from PIL.Image import BICUBIC
 from reportlab.lib import pagesizes
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
-from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase.ttfonts import TTFont
@@ -31,6 +29,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Invoice, Order
 from pretix.base.signals import register_invoice_renderers
 from pretix.base.templatetags.money import money_filter
+from pretix.helpers.reportlab import ThumbnailingImageReader
 
 logger = logging.getLogger(__name__)
 
@@ -219,26 +218,6 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         self._build_doc(buffer)
         buffer.seek(0)
         return 'invoice.pdf', 'application/pdf', buffer.read()
-
-
-class ThumbnailingImageReader(ImageReader):
-    def resize(self, width, height, dpi):
-        if width is None:
-            width = height * self._image.size[0] / self._image.size[1]
-        if height is None:
-            height = width * self._image.size[1] / self._image.size[0]
-        self._image.thumbnail(
-            size=(int(width * dpi / 72), int(height * dpi / 72)),
-            resample=BICUBIC
-        )
-        self._data = None
-        return width, height
-
-    def _jpeg_fh(self):
-        # Bypass a reportlab-internal optimization that falls back to the original
-        # file handle if the file is a JPEG, and therefore does not respect the
-        # (smaller) size of the modified image.
-        return None
 
 
 class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):

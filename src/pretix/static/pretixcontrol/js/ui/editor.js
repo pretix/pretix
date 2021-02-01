@@ -20,6 +20,32 @@ fabric.Poweredby = fabric.util.createClass(fabric.Image, {
 fabric.Poweredby.fromObject = function (object, callback, forceAsync) {
     return fabric.Object._fromObject('Poweredby', object, callback, forceAsync);
 };
+fabric.Imagearea = fabric.util.createClass(fabric.Rect, {
+    type: 'imagearea',
+
+    initialize: function (text, options) {
+        options || (options = {});
+
+        this.callSuper('initialize', text, options);
+        this.set('label', options.label || '');
+    },
+
+    toObject: function () {
+        return fabric.util.object.extend(this.callSuper('toObject'), {});
+    },
+
+    _render: function (ctx) {
+        ctx.fillStyle = '#009'
+        this.callSuper('_render', ctx);
+
+        ctx.font = '12px Helvetica';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(this.content, -this.width / 2, -this.height / 2 + 20, this.width);
+    },
+});
+fabric.Imagearea.fromObject = function (object, callback, forceAsync) {
+    return fabric.Object._fromObject('Imagearea', object, callback, forceAsync);
+};
 fabric.Barcodearea = fabric.util.createClass(fabric.Rect, {
     type: 'barcodearea',
 
@@ -139,6 +165,15 @@ var editor = {
                     rotation: o.angle,
                     align: o.textAlign,
                 });
+            } else  if (o.type === "imagearea") {
+                d.push({
+                    type: "imagearea",
+                    left: editor._px2mm(left).toFixed(2),
+                    bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
+                    height: editor._px2mm(o.height * o.scaleY).toFixed(2),
+                    width: editor._px2mm(o.width * o.scaleX).toFixed(2),
+                    content: o.content,
+                });
             } else  if (o.type === "barcodearea") {
                 d.push({
                     type: "barcodearea",
@@ -165,6 +200,13 @@ var editor = {
             o = editor._add_qrcode();
             o.content = d.content;
             o.scaleToHeight(editor._mm2px(d.size));
+        } else if (d.type === "imagearea") {
+            o = editor._add_imagearea(d.content);
+            o.content = d.content;
+            o.setHeight(editor._mm2px(d.height));
+            o.setWidth(editor._mm2px(d.width));
+            o.setScaleX(1);
+            o.setScaleY(1);
         } else if (d.type === "poweredby") {
             o = editor._add_poweredby(d.content);
             o.content = d.content;
@@ -356,6 +398,10 @@ var editor = {
 
         if (o.type === "barcodearea") {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
+        } else if (o.type === "imagearea") {
+            $("#toolbox-height").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
+            $("#toolbox-width").val(editor._px2mm(o.width * o.scaleX).toFixed(2));
+            $("#toolbox-imagecontent").val(o.content);
         } else if (o.type === "poweredby") {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-poweredby-style").val(o.content);
@@ -411,6 +457,16 @@ var editor = {
             o.setScaleX(1);
             o.setScaleY(1);
             o.set('top', new_top)
+        } else if (o.type === "imagearea") {
+            var new_w = editor._mm2px($("#toolbox-width").val());
+            var new_h = editor._mm2px($("#toolbox-height").val());
+            new_top += o.height * o.scaleY - new_h;
+            o.setHeight(new_h);
+            o.setWidth(new_w);
+            o.setScaleX(1);
+            o.setScaleY(1);
+            o.set('top', new_top)
+            o.content = $("#toolbox-imagecontent").val();
         } else if (o.type === "poweredby") {
             var new_h = Math.max(1, editor._mm2px($("#toolbox-squaresize").val()));
             new_top += o.height * o.scaleY - new_h;
@@ -467,6 +523,8 @@ var editor = {
                 $("#toolbox-heading").text(gettext("Text object"));
             } else if (o.type === "barcodearea") {
                 $("#toolbox-heading").text(gettext("Barcode area"));
+            } else if (o.type === "imagearea") {
+                $("#toolbox-heading").text(gettext("Image area"));
             } else if (o.type === "poweredby") {
                 $("#toolbox-heading").text(gettext("Powered by pretix"));
             } else {
@@ -523,6 +581,22 @@ var editor = {
             lockRotation: true,
             lockUniScaling: true,
             content: content
+        });
+        rect.setControlsVisibility({'mtr': false});
+        editor.fabric.add(rect);
+        editor._create_savepoint();
+        return rect;
+    },
+
+    _add_imagearea: function () {
+        var rect = new fabric.Imagearea({
+            left: 100,
+            top: 100,
+            width: 100,
+            height: 100,
+            lockRotation: true,
+            fill: '#666',
+            content: '',
         });
         rect.setControlsVisibility({'mtr': false});
         editor.fabric.add(rect);
@@ -795,6 +869,7 @@ var editor = {
         editor.$cva = $("#editor-canvas-area");
         editor._load_pdf();
         $("#editor-add-qrcode, #editor-add-qrcode-lead").click(editor._add_qrcode);
+        $("#editor-add-image").click(editor._add_imagearea);
         $("#editor-add-text").click(editor._add_text);
         $("#editor-add-poweredby").click(function() {editor._add_poweredby("dark")});
         editor.$cva.get(0).tabIndex = 1000;

@@ -15,14 +15,18 @@ body {
 }
 #toolbox .position,
 #toolbox .squaresize,
+#toolbox .rectsize,
 #toolbox .poweredby,
 #toolbox[data-type] .pdf-info,
 #toolbox .text,
+#toolbox .imagecontent,
 #toolbox .object-buttons {
     display: none;
 }
 #toolbox[data-type] .position,
 #toolbox[data-type=barcodearea] .squaresize,
+#toolbox[data-type=imagearea] .rectsize,
+#toolbox[data-type=imagearea] .imagecontent,
 #toolbox[data-type=poweredby] .poweredby,
 #toolbox[data-type=text] .text,
 #toolbox[data-type=textarea] .text,

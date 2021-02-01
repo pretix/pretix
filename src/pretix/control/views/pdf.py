@@ -22,7 +22,7 @@ from reportlab.lib.units import mm
 
 from pretix.base.i18n import language
 from pretix.base.models import CachedFile, InvoiceAddress, OrderPosition
-from pretix.base.pdf import get_variables
+from pretix.base.pdf import get_images, get_variables
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.database import rolledback_transaction
@@ -211,11 +211,15 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
     def get_variables(self):
         return get_variables(self.request.event)
 
+    def get_images(self):
+        return get_images(self.request.event)
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['fonts'] = get_fonts()
         ctx['pdf'] = self.get_current_background()
         ctx['variables'] = self.get_variables()
+        ctx['images'] = self.get_images()
         ctx['layout'] = json.dumps(self.get_current_layout())
         ctx['title'] = self.title
         ctx['locales'] = [p for p in settings.LANGUAGES if p[0] in self.request.event.settings.locales]
