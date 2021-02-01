@@ -643,7 +643,7 @@ dictionaries as values that contain keys like in the following example::
         "profile": {
             "label": _("Profile picture"),
             "evaluate": lambda orderposition, order, event: ContentFile(b"some-image-data"),
-            "check": lambda orderposition, order, event: True
+            "etag": lambda orderposition, order, event: hash(b"some-image-data")
         }
     }
 
@@ -651,9 +651,9 @@ The ``evaluate`` member will be called with the order position, order and event 
 also be a subevent, if applicable. The return value of ``evaluate`` should be an instance of Django's ``File``
 class and point to a valid JPEG or PNG file. If no image is available, ``evaluate`` should return ``None``.
 
-The ``check`` member will be called with the same arguments as ``evaluate`` but should only return a ``bool`` value
-indicating whether there is an image available for this order position or not. In some cases, this can speed up the
-implementation.
+The ``etag`` member will be called with the same arguments as ``evaluate`` but should return a ``str`` value
+uniquely identifying the version of the file. This can be a hash of the file, but can also be something else.
+If no image is available, ``etag`` should return ``None``. In some cases, this can speed up the implementation.
 """
 
 

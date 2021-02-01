@@ -296,14 +296,21 @@ class PdfDataSerializer(serializers.Field):
             res['images'] = {}
 
             for k, f in self.context['vars_images'].items():
-                has_image = f.get('check', f['evaluate'])(instance, instance.order, ev)
+                if 'etag' in f:
+                    has_image = etag = f['etag'](instance, instance.order, ev)
+                else:
+                    has_image = f['etag'](instance, instance.order, ev)
+                    etag = None
                 if has_image:
-                    res['images'][k] = reverse('api-v1:orderposition-pdf_image', kwargs={
+                    url = reverse('api-v1:orderposition-pdf_image', kwargs={
                         'organizer': instance.order.event.organizer.slug,
                         'event': instance.order.event.slug,
                         'pk': instance.pk,
                         'key': k,
                     }, request=self.context['request'])
+                    if etag:
+                        url += f'#etag={etag}'
+                    res['images'][k] = url
                 else:
                     res['images'][k] = None
 
