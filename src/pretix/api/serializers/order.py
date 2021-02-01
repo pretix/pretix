@@ -114,7 +114,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
-        if r['answer'].startswith('file://'):
+        if r['answer'].startswith('file://') and instance.orderposition:
             r['answer'] = reverse('api-v1:orderposition-answer', kwargs={
                 'organizer': instance.orderposition.order.event.organizer.slug,
                 'event': instance.orderposition.order.event.slug,
