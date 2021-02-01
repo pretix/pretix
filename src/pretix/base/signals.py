@@ -649,7 +649,7 @@ dictionaries as values that contain keys like in the following example::
 
 The ``evaluate`` member will be called with the order position, order and event as arguments. The event might
 also be a subevent, if applicable. The return value of ``evaluate`` should be an instance of Django's ``File``
-class and point to a valid JPEG or PNG file.
+class and point to a valid JPEG or PNG file. If no image is available, ``evaluate`` should return ``None``.
 
 The ``check`` member will be called with the same arguments as ``evaluate`` but should only return a ``bool`` value
 indicating whether there is an image available for this order position or not. In some cases, this can speed up the
