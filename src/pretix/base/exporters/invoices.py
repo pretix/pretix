@@ -66,7 +66,7 @@ class InvoiceExporterMixin:
         )
 
     def invoices_queryset(self, form_data: dict):
-        qs = Invoice.objects.filter(event__in=self.events)
+        qs = Invoice.objects.filter(event__in=self.events).select_related('order')
 
         if form_data.get('payment_provider'):
             qs = qs.annotate(
@@ -112,13 +112,13 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
                             invoice_pdf_task.apply(args=(i.pk,))
                             i.refresh_from_db()
                         i.file.open('rb')
-                        zipf.writestr('{}.pdf'.format(i.number), i.file.read())
+                        zipf.writestr('{}-{}.pdf'.format(i.number, i.order.code), i.file.read())
                         i.file.close()
                     except FileNotFoundError:
                         invoice_pdf_task.apply(args=(i.pk,))
                         i.refresh_from_db()
                         i.file.open('rb')
-                        zipf.writestr('{}.pdf'.format(i.number), i.file.read())
+                        zipf.writestr('{}-{}.pdf'.format(i.number, i.order.code), i.file.read())
                         i.file.close()
                     counter += 1
                     if total and counter % max(10, total // 100) == 0:
