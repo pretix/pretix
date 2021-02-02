@@ -101,7 +101,8 @@ def truelink_callback(attrs, new=False):
         <a href="https://maps.google.com/location/foo">https://maps.google.com</a>
     """
     text = re.sub(r'[^a-zA-Z0-9.\-/_]', '', attrs.get('_text'))  # clean up link text
-    href_url = urllib.parse.urlparse(attrs[None, 'href'])
+    url = attrs.get((None, 'href'), '/')
+    href_url = urllib.parse.urlparse(url)
     if URL_RE.match(text) and href_url.scheme not in ('tel', 'mailto'):
         # link text looks like a url
         if text.startswith('//'):
