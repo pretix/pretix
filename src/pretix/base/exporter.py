@@ -242,7 +242,10 @@ class MultiSheetListExporter(ListExporter):
         pass
 
     def iterate_sheet(self, form_data, sheet):
-        raise NotImplementedError()  # noqa
+        if hasattr(self, 'iterate_' + sheet):
+            yield from getattr(self, 'iterate_' + sheet)(form_data)
+        else:
+            raise NotImplementedError()  # noqa
 
     def _render_sheet_csv(self, form_data, sheet, output_file=None, **kwargs):
         total = 0
@@ -288,6 +291,9 @@ class MultiSheetListExporter(ListExporter):
         n_sheets = len(self.sheets)
         for i_sheet, (s, l) in enumerate(self.sheets):
             ws = wb.create_sheet(str(l))
+            if hasattr(self, 'prepare_xlsx_sheet_' + s):
+                getattr(self, 'prepare_xlsx_sheet_' + s)(ws)
+
             total = 0
             counter = 0
             for i, line in enumerate(self.iterate_sheet(form_data, sheet=s)):

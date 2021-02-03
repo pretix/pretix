@@ -581,7 +581,7 @@ class OrderTaxListReport(MultiSheetListExporter):
 
         if date_until:
             if isinstance(date_until, str):
-                date_from = parse(date_until).date()
+                date_until = parse(date_until).date()
             if isinstance(date_until, date):
                 date_until = make_aware(datetime.combine(
                     date_until + timedelta(days=1),
