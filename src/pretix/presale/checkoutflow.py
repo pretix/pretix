@@ -695,7 +695,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     @cached_property
     def provider_forms(self):
         providers = []
-        for provider in self.request.event.get_payment_providers().values():
+        for provider in sorted(self.request.event.get_payment_providers().values(), key=lambda p: str(p.public_name)):
             if not provider.is_enabled or not self._is_allowed(provider, self.request):
                 continue
             fee = provider.calculate_fee(self._total_order_value)
