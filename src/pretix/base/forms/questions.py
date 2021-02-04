@@ -848,11 +848,13 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         ) and len(data.get('name_parts', {})) == 1:
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
+
+        if data.get('vat_id') and is_eu_country(data.get('country')) and data.get('vat_id')[:2] != cc_to_vat_prefix(str(data.get('country'))):
+            raise ValidationError(_('Your VAT ID does not match the selected country.'))
+
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass
         elif self.validate_vat_id and data.get('is_business') and is_eu_country(data.get('country')) and data.get('vat_id'):
-            if data.get('vat_id')[:2] != cc_to_vat_prefix(str(data.get('country'))):
-                raise ValidationError(_('Your VAT ID does not match the selected country.'))
             try:
                 result = vat_moss.id.validate(data.get('vat_id'))
                 if result:
