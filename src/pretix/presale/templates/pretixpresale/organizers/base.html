@@ -3,6 +3,7 @@
 {% load static %}
 {% load thumb %}
 {% load eventurl %}
+{% load safelink %}
 {% block thetitle %}
     {% block title %}{% endblock %}{% if url_name != "organizer.index" %} :: {% endif %}{{ organizer.name }}
 {% endblock %}
@@ -64,4 +65,11 @@
     {% endblock %}
 {% endblock %}
 {% block footer %}
+    {% if not request.event and request.organizer.settings.contact_mail %}
+        <a href="mailto:{{ request.organizer.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
+    {% endif %}
+    {% if not request.event and request.organizer.settings.imprint_url %}
+        <a href="{% safelink request.organizer.settings.imprint_url %}" target="_blank" rel="noopener">{% trans "Imprint" %}</a>
+        &middot;
+    {% endif %}
 {% endblock %}

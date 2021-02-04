@@ -214,6 +214,8 @@ class DeviceForm(forms.ModelForm):
 
 class OrganizerSettingsForm(SettingsForm):
     auto_fields = [
+        'contact_mail',
+        'imprint_url',
         'organizer_info_text',
         'event_list_type',
         'event_list_availability',

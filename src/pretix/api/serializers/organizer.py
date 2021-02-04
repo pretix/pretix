@@ -213,6 +213,8 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 
 class OrganizerSettingsSerializer(SettingsSerializer):
     default_fields = [
+        'contact_mail',
+        'imprint_url',
         'organizer_info_text',
         'event_list_type',
         'event_list_availability',
