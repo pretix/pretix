@@ -121,7 +121,7 @@ setup(
         'csscompressor',
         'django-markup',
         'markdown==3.3.*',
-        'bleach>=3.1.4,<3.2.0',
+        'bleach==3.3.*",'
         'sentry-sdk==0.14.*',
         'babel',
         'paypalrestsdk==1.13.*',

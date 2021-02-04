@@ -32,7 +32,7 @@ dj-static
 csscompressor
 django-markup
 markdown==3.3.*
-bleach>=3.1.4,<3.2.0
+bleach==3.3.*
 sentry-sdk==0.14.*
 babel
 django-i18nfield>=1.7.0
