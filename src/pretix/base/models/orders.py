@@ -666,6 +666,8 @@ class Order(LockModel, LoggedModel):
         related to the order. This checks order status and modification deadlines. It also
         returns ``False`` if there are no questions that can be answered.
         """
+        from .checkin import Checkin
+
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED):
             return False
 
@@ -681,10 +683,21 @@ class Order(LockModel, LoggedModel):
 
         if modify_deadline is not None and now() > modify_deadline:
             return False
+
+        positions = list(
+            self.positions.all().annotate(
+                has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
+            ).select_related('item').prefetch_related('item__questions')
+        )
+        if not self.event.settings.allow_modifications_after_checkin:
+            for cp in positions:
+                if cp.has_checkin:
+                    return False
+
         if self.event.settings.get('invoice_address_asked', as_type=bool):
             return True
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
-        for cp in self.positions.all().prefetch_related('item__questions'):
+        for cp in positions:
             if (cp.item.admission and ask_names) or cp.item.questions.all():
                 return True
 

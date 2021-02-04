@@ -580,6 +580,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'locale',
         'region',
         'last_order_modification_date',
+        'allow_modifications_after_checkin',
         'show_quota_left',
         'waiting_list_enabled',
         'waiting_list_hours',

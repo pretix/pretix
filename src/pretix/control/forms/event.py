@@ -457,6 +457,7 @@ class EventSettingsForm(SettingsForm):
         'banner_text_bottom',
         'order_email_asked_twice',
         'last_order_modification_date',
+        'allow_modifications_after_checkin',
         'checkout_show_copy_answers_button',
         'primary_color',
         'theme_color_success',
