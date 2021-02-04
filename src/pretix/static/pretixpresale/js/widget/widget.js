@@ -1503,7 +1503,7 @@ var shared_root_computed = {
         return form_target
     },
     useIframe: function () {
-        return Math.min(screen.width, window.innerWidth) >= 800 && (this.skip_ssl || site_is_secure());
+        return !this.disable_iframe && Math.min(screen.width, window.innerWidth) >= 800 && (this.skip_ssl || site_is_secure());
     },
     showPrices: function () {
         var has_priced = false;
@@ -1574,6 +1574,7 @@ var create_widget = function (element) {
     var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
     var style = element.attributes.style ? element.attributes.style.value : null;
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
+    var disable_iframe = element.attributes["disable-iframe"] ? true : false;
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     var filter = element.attributes.filter ? element.attributes.filter.value : null;
@@ -1611,6 +1612,7 @@ var create_widget = function (element) {
                 voucher_explanation_text: null,
                 show_variations_expanded: false,
                 skip_ssl: skip_ssl,
+                disable_iframe: disable_iframe,
                 style: style,
                 error: null,
                 weeks: null,
@@ -1652,6 +1654,7 @@ var create_button = function (element) {
     var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
     var raw_items = element.attributes.items ? element.attributes.items.value : "";
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
+    var disable_iframe = element.attributes["disable-iframe"] ? true : false;
     var button_text = element.innerHTML;
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     for (var i = 0; i < element.attributes.length; i++) {
@@ -1682,6 +1685,7 @@ var create_button = function (element) {
                 subevent: subevent,
                 is_button: true,
                 skip_ssl: skip_ssl,
+                disable_iframe: disable_iframe,
                 voucher_code: voucher,
                 items: items,
                 error: null,
@@ -1728,7 +1732,7 @@ window.PretixWidget.buildWidgets = function () {
     });
 };
 
-window.PretixWidget.open = function (target_url, voucher, subevent, items, widget_data, skip_ssl_check) {
+window.PretixWidget.open = function (target_url, voucher, subevent, items, widget_data, skip_ssl_check, disable_iframe) {
     if (!target_url.match(/\/$/)) {
         target_url += "/";
     }
@@ -1749,6 +1753,7 @@ window.PretixWidget.open = function (target_url, voucher, subevent, items, widge
                 subevent: subevent || null,
                 is_button: true,
                 skip_ssl: skip_ssl_check || false,
+                disable_iframe: disable_iframe || false,
                 voucher_code: voucher || null,
                 items: items || [],
                 error: null,

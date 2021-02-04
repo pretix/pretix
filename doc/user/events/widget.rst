@@ -88,6 +88,15 @@ website. If you confident to have a good reason for not using SSL, you can overr
 
    <pretix-widget event="https://pretix.eu/demo/democon/" skip-ssl-check></pretix-widget>
 
+Always open a new tab
+---------------------
+
+If you want the checkout process to always open a new tab regardless of screen size, you can pass the ``disable-iframe``
+attribute::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" disable-iframe></pretix-widget>
+
+
 Pre-selecting a voucher
 -----------------------
 
@@ -200,7 +209,7 @@ items, if the items have variations. If you omit the ``items`` attribute, the ge
 In case you are using an event-series, you will need to specify the subevent for which the item(s) should be put in the
 cart. This can be done by specifying the ``subevent``-attribute.
 
-Just as the widget, the button supports the optional attributes ``voucher`` and ``skip-ssl-check``.
+Just as the widget, the button supports the optional attributes ``voucher``, ``disable-iframe``, and ``skip-ssl-check``.
 
 You can style the button using the ``pretix-button`` CSS class.
 
