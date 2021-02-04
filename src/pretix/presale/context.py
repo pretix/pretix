@@ -14,8 +14,8 @@ from pretix.helpers.i18n import (
 
 from ..base.i18n import get_language_without_region
 from .signals import (
-    footer_link, global_html_footer, global_html_head, global_html_page_header,
-    html_footer, html_head, html_page_header,
+    footer_link, global_footer_link, global_html_footer, global_html_head,
+    global_html_page_header, html_footer, html_head, html_page_header,
 )
 
 logger = logging.getLogger(__name__)
@@ -65,6 +65,11 @@ def _default_context(request):
         _html_head.append(response)
     for receiver, response in global_html_footer.send(None, request=request):
         _html_foot.append(response)
+    for receiver, response in global_footer_link.send(None, request=request):
+        if isinstance(response, list):
+            _footer += response
+        else:
+            _footer.append(response)
 
     if hasattr(request, 'event') and get_scope():
         for receiver, response in html_head.send(request.event, request=request):

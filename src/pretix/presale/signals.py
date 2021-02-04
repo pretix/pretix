@@ -105,6 +105,14 @@ are expected to return a dictionary containing the keys ``label`` and ``url``.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+global_footer_link = Signal(
+    providing_args=["request"]
+)
+"""
+The signal ``pretix.presale.signals.global_footer_link`` allows you to add links to the footer of any page. You
+are expected to return a dictionary containing the keys ``label`` and ``url``.
+"""
+
 checkout_confirm_messages = EventPluginSignal()
 """
 This signal is sent out to retrieve short messages that need to be acknowledged by the user before the
