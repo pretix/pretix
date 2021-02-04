@@ -2,7 +2,6 @@ import copy
 import hashlib
 import json
 import logging
-import os
 import string
 from collections import Counter
 from datetime import datetime, time, timedelta
@@ -1505,7 +1504,7 @@ class OrderPayment(models.Model):
                        OrderRefund.REFUND_STATE_CREATED)
         ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
         if payment_sum - refund_sum < self.order.total:
-            logger.info('Confirmed payment {} but payment sum is {} and refund sum is.'.format(
+            logger.info('Confirmed payment {} but payment sum is {} and refund sum is {}.'.format(
                 self.full_id, payment_sum, refund_sum
             ))
             return
@@ -2333,7 +2332,6 @@ def cachedticket_name(instance, filename: str) -> str:
         no=instance.order_position.positionid,
         code=instance.order_position.order.code,
         secret=secret,
-        ext=os.path.splitext(filename)[1]
     )
 
 
