@@ -151,6 +151,9 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
         s = OrderPosition.objects.filter(
             order=OuterRef('pk')
         ).order_by().values('order').annotate(k=Count('id')).values('k')
+        i = Invoice.objects.filter(
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
         annotated = {
             o['pk']: o
             for o in
@@ -158,6 +161,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
                 pk__in=[o.pk for o in ctx['orders']]
             ).annotate(
                 pcnt=Subquery(s, output_field=IntegerField()),
+                icnt=Subquery(i, output_field=IntegerField()),
                 has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk')))
             ).values(
                 'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
@@ -1133,6 +1137,7 @@ class OrderTransition(OrderView):
             try:
                 cancel_order(self.order.pk, user=self.request.user,
                              send_mail=self.mark_canceled_form.cleaned_data['send_email'],
+                             cancel_invoice=self.mark_canceled_form.cleaned_data.get('cancel_invoice', True),
                              cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
             except OrderError as e:
                 messages.error(self.request, str(e))

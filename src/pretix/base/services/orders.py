@@ -327,7 +327,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
 
 def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device=None, oauth_application=None,
-                  cancellation_fee=None, keep_fees=None):
+                  cancellation_fee=None, keep_fees=None, cancel_invoice=True):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -351,9 +351,10 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
         invoices = []
-        i = order.invoices.filter(is_cancellation=False).last()
-        if i and not i.refered.exists():
-            invoices.append(generate_cancellation(i))
+        if cancel_invoice:
+            i = order.invoices.filter(is_cancellation=False).last()
+            if i and not i.refered.exists():
+                invoices.append(generate_cancellation(i))
 
         for position in order.positions.all():
             for gc in position.issued_gift_cards.all():
@@ -403,7 +404,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 order.cancellation_date = now()
                 order.save(update_fields=['status', 'cancellation_date', 'total'])
 
-            if i:
+            if cancel_invoice and i:
                 invoices.append(generate_invoice(order))
         else:
             with order.event.lock():
@@ -2152,11 +2153,12 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 @scopes_disabled()
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
-                 device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False, comment=None):
+                 device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False, comment=None,
+                 cancel_invoice=True):
     try:
         try:
             ret = _cancel_order(order, user, send_mail, api_token, device, oauth_application,
-                                cancellation_fee)
+                                cancellation_fee, cancel_invoice=cancel_invoice)
             if try_auto_refund:
                 _try_auto_refund(order, refund_as_giftcard=refund_as_giftcard,
                                  comment=comment)
