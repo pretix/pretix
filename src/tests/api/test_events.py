@@ -164,7 +164,14 @@ def test_event_get(token_client, organizer, event):
 
 
 @pytest.mark.django_db
-def test_event_create(token_client, organizer, event, meta_prop):
+def test_event_create(team, token_client, organizer, event, meta_prop):
+    meta_prop.allowed_values = "Conference\nWorkshop"
+    meta_prop.save()
+    team.can_change_organizer_settings = False
+    team.save()
+    organizer.meta_properties.create(
+        name="protected", protected=True
+    )
     resp = token_client.post(
         '/api/v1/organizers/{}/events/'.format(organizer.slug),
         {
@@ -183,7 +190,8 @@ def test_event_create(token_client, organizer, event, meta_prop):
             "location": None,
             "slug": "2030",
             "meta_data": {
-                meta_prop.name: "Conference"
+                meta_prop.name: "Conference",
+                "protected": "ignored",
             },
             "seat_category_mapping": {},
             "timezone": "Europe/Amsterdam"
@@ -195,6 +203,9 @@ def test_event_create(token_client, organizer, event, meta_prop):
         assert not organizer.events.get(slug="2030").testmode
         assert organizer.events.get(slug="2030").meta_values.filter(
             property__name=meta_prop.name, value="Conference"
+        ).exists()
+        assert not organizer.events.get(slug="2030").meta_values.filter(
+            property__name="protected"
         ).exists()
         assert organizer.events.get(slug="2030").plugins == settings.PRETIX_PLUGINS_DEFAULT
         assert organizer.events.get(slug="2030").settings.timezone == "Europe/Amsterdam"
@@ -224,6 +235,32 @@ def test_event_create(token_client, organizer, event, meta_prop):
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"meta_data":["Meta data property \'foo\' does not exist."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/'.format(organizer.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "currency": "EUR",
+            "date_from": "2017-12-27T10:00:00Z",
+            "date_to": "2017-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2020",
+            "meta_data": {
+                meta_prop.name: "bar"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"meta_data":["Meta data property \'type\' does not allow value \'bar\'."]}'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/'.format(organizer.slug),

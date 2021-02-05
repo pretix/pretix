@@ -91,6 +91,10 @@ class MetaDataEditorMixin:
         return self.meta_form(
             prefix='prop-{}'.format(p.pk),
             property=p,
+            disabled=(
+                p.protected and
+                not self.request.user.has_organizer_permission(self.request.organizer, 'can_change_organizer_settings', request=self.request)
+            ),
             instance=val_instances.get(p.pk, self.meta_model(property=p, event=self.object)),
             data=(self.request.POST if self.request.method == "POST" else None)
         )

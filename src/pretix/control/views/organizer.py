@@ -1384,7 +1384,7 @@ class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionR
     form_class = EventMetaPropertyForm
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Gate, organizer=self.request.organizer, pk=self.kwargs.get('property'))
+        return get_object_or_404(EventMetaProperty, organizer=self.request.organizer, pk=self.kwargs.get('property'))
 
     def get_success_url(self):
         return reverse('control:organizer.properties', kwargs={
