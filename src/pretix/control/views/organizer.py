@@ -12,7 +12,7 @@ from django.db.models import (
     Count, Max, Min, OuterRef, Prefetch, ProtectedError, Subquery, Sum,
 )
 from django.db.models.functions import Coalesce, Greatest
-from django.forms import DecimalField, inlineformset_factory
+from django.forms import DecimalField
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -269,12 +269,10 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['sform'] = self.sform
-        context['formset'] = self.formset
         return context
 
     @transaction.atomic
     def form_valid(self, form):
-        self.save_formset(self.object)
         self.sform.save()
         change_css = False
         if self.sform.has_changed():
@@ -321,37 +319,10 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        if form.is_valid() and self.sform.is_valid() and self.formset.is_valid():
+        if form.is_valid() and self.sform.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
-
-    @cached_property
-    def formset(self):
-        formsetclass = inlineformset_factory(
-            Organizer, EventMetaProperty,
-            form=EventMetaPropertyForm, can_order=False, can_delete=True, extra=0
-        )
-        return formsetclass(self.request.POST if self.request.method == "POST" else None,
-                            instance=self.object, queryset=self.object.meta_properties.all())
-
-    def save_formset(self, obj):
-        for form in self.formset.initial_forms:
-            if form in self.formset.deleted_forms:
-                if not form.instance.pk:
-                    continue
-                form.instance.delete()
-                form.instance.pk = None
-            elif form.has_changed():
-                form.save()
-
-        for form in self.formset.extra_forms:
-            if not form.has_changed():
-                continue
-            if self.formset._should_delete_form(form):
-                continue
-            form.instance.organizer = obj
-            form.save()
 
 
 class OrganizerCreate(CreateView):
@@ -1364,4 +1335,95 @@ class GateDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         self.object.log_action('pretix.gate.deleted', user=self.request.user)
         self.object.delete()
         messages.success(request, _('The selected gate has been deleted.'))
+        return redirect(success_url)
+
+
+class EventMetaPropertyListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = EventMetaProperty
+    template_name = 'pretixcontrol/organizers/properties.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'properties'
+
+    def get_queryset(self):
+        return self.request.organizer.meta_properties.all()
+
+
+class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    model = EventMetaProperty
+    template_name = 'pretixcontrol/organizers/property_edit.html'
+    permission = 'can_change_organizer_settings'
+    form_class = EventMetaPropertyForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(EventMetaProperty, organizer=self.request.organizer, pk=self.kwargs.get('property'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.properties', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        messages.success(self.request, _('The property has been created.'))
+        form.instance.organizer = self.request.organizer
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.property.created', user=self.request.user, data={
+            k: getattr(self.object, k) for k in form.changed_data
+        })
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    model = EventMetaProperty
+    template_name = 'pretixcontrol/organizers/property_edit.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'property'
+    form_class = EventMetaPropertyForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Gate, organizer=self.request.organizer, pk=self.kwargs.get('property'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.properties', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action('pretix.property.changed', user=self.request.user, data={
+                k: getattr(self.object, k)
+                for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+    model = EventMetaProperty
+    template_name = 'pretixcontrol/organizers/property_delete.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'property'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(EventMetaProperty, organizer=self.request.organizer, pk=self.kwargs.get('property'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.properties', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        success_url = self.get_success_url()
+        self.object = self.get_object()
+        self.object.log_action('pretix.property.deleted', user=self.request.user)
+        self.object.delete()
+        messages.success(request, _('The selected property has been deleted.'))
         return redirect(success_url)

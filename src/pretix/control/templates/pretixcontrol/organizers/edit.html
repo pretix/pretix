@@ -70,65 +70,6 @@
                 {% bootstrap_field sform.giftcard_expiry_years layout="control" %}
                 {% bootstrap_field sform.giftcard_length layout="control" %}
             </fieldset>
-            <fieldset>
-                <legend>{% trans "Event metadata" %}</legend>
-                <p>
-                    {% blocktrans trimmed %}
-                        You can here define a set of metadata properties (i.e. variables) that you can later set for your
-                        events and re-use in places like ticket layouts. This is an useful timesaver if you create lots and
-                        lots of events.
-                    {% endblocktrans %}
-                </p>
-                <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
-                    {{ formset.management_form }}
-                    {% bootstrap_formset_errors formset %}
-                    <div data-formset-body>
-                        {% for form in formset %}
-                            <div class="row" data-formset-form>
-                                <div class="sr-only">
-                                    {{ form.id }}
-                                    {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                                </div>
-                                <div class="col-md-5">
-                                    {% bootstrap_form_errors form %}
-                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-md-5 col-lg-6">
-                                    {% bootstrap_field form.default layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-md-2 col-lg-1 text-right flip">
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                        <i class="fa fa-trash"></i></button>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <script type="form-template" data-formset-empty-form>
-                        {% escapescript %}
-                            <div class="row" data-formset-form>
-                                <div class="sr-only">
-                                    {{ formset.empty_form.id }}
-                                    {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
-                                </div>
-                                <div class="col-md-5">
-                                    {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-md-5 col-lg-6">
-                                    {% bootstrap_field formset.empty_form.default layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-md-2 col-lg-1 text-right flip">
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                        <i class="fa fa-trash"></i></button>
-                                </div>
-                            </div>
-                        {% endescapescript %}
-                    </script>
-                    <p>
-                        <button type="button" class="btn btn-default" data-formset-add>
-                            <i class="fa fa-plus"></i> {% trans "Add property" %}</button>
-                    </p>
-                </div>
-            </fieldset>
         </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

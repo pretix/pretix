@@ -1363,7 +1363,7 @@ class EventMetaProperty(LoggedModel):
         ],
         verbose_name=_("Name"),
     )
-    default = models.TextField(blank=True)
+    default = models.TextField(blank=True, verbose_name=_("Default value"))
 
 
 class EventMetaValue(LoggedModel):
