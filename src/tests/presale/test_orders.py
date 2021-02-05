@@ -178,11 +178,11 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        doc = BeautifulSoup(response.rendered_content, "lxml")
+        doc = BeautifulSoup(response.content.decode(), "lxml")
         assert len(doc.select(".cart-row")) > 0
         assert "pending" in doc.select(".label-warning")[0].text.lower()
-        assert "Peter" in response.rendered_content
-        assert "Lukas" not in response.rendered_content
+        assert "Peter" in response.content.decode()
+        assert "Lukas" not in response.content.decode()
 
     def test_ticket_detail(self):
         response = self.client.get(
@@ -190,11 +190,11 @@ class OrdersTest(BaseOrdersTest):
                                          self.ticket_pos.positionid, self.ticket_pos.web_secret)
         )
         assert response.status_code == 200
-        doc = BeautifulSoup(response.rendered_content, "lxml")
+        doc = BeautifulSoup(response.content.decode(), "lxml")
         assert len(doc.select(".cart-row")) > 0
         assert "pending" in doc.select(".label-warning")[0].text.lower()
-        assert "Peter" in response.rendered_content
-        assert "Lukas" not in response.rendered_content
+        assert "Peter" in response.content.decode()
+        assert "Lukas" not in response.content.decode()
 
     def test_orders_modify_invalid(self):
         self.order.status = Order.STATUS_CANCELED
@@ -212,7 +212,7 @@ class OrdersTest(BaseOrdersTest):
 
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
-        doc = BeautifulSoup(response.rendered_content, "lxml")
+        doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % self.ticket_pos.id)), 1)
 
         # Not all fields filled out, expect success
@@ -234,17 +234,17 @@ class OrdersTest(BaseOrdersTest):
 
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
-        doc = BeautifulSoup(response.rendered_content, "lxml")
+        doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % self.ticket_pos.id)), 1)
-        assert "Peter" in response.rendered_content
-        assert "Lukas" not in response.rendered_content
+        assert "Peter" in response.content.decode()
+        assert "Lukas" not in response.content.decode()
 
         # Not all required fields filled out, expect failure
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-attendee_name_parts_0' % self.ticket_pos.id: '',
             }, follow=True)
-        doc = BeautifulSoup(response.rendered_content, "lxml")
+        doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         response = self.client.post(
@@ -264,7 +264,7 @@ class OrdersTest(BaseOrdersTest):
 
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
-        doc = BeautifulSoup(response.rendered_content, "lxml")
+        doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (
             self.ticket_pos.id, self.question.id))), 1)
 
@@ -288,7 +288,7 @@ class OrdersTest(BaseOrdersTest):
 
         response = self.client.get('/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
                                                                   self.order.secret))
-        doc = BeautifulSoup(response.rendered_content, "lxml")
+        doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (
             self.ticket_pos.id, self.question.id))), 1)
 
@@ -297,7 +297,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): '',
             }, follow=True)
-        doc = BeautifulSoup(response.rendered_content, "lxml")
+        doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         response = self.client.post(
@@ -361,7 +361,7 @@ class OrdersTest(BaseOrdersTest):
         r = self.client.post(
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
             }, follow=True)
-        assert 'btn-danger' not in r.rendered_content
+        assert 'btn-danger' not in r.content.decode()
         self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
             }, follow=True)
@@ -438,8 +438,8 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        assert 'manually' not in response.rendered_content
-        assert "gift card" in response.rendered_content
+        assert 'manually' not in response.content.decode()
+        assert "gift card" in response.content.decode()
         response = self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 'giftcard': 'true'
@@ -448,7 +448,7 @@ class OrdersTest(BaseOrdersTest):
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
-        assert "gift card" in response.rendered_content
+        assert "gift card" in response.content.decode()
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         assert self.order.total == Decimal('3.00')
@@ -469,8 +469,8 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        assert 'manually' not in response.rendered_content
-        assert "gift card" in response.rendered_content
+        assert 'manually' not in response.content.decode()
+        assert "gift card" in response.content.decode()
         response = self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 'giftcard': 'false'
@@ -479,7 +479,7 @@ class OrdersTest(BaseOrdersTest):
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
-        assert "gift card" in response.rendered_content
+        assert "gift card" in response.content.decode()
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         assert self.order.total == Decimal('3.00')
@@ -499,7 +499,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        assert 'manually' not in response.rendered_content
+        assert 'manually' not in response.content.decode()
         response = self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
             }, follow=True)
@@ -577,13 +577,13 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        assert 'cancellation fee of <strong>€3.00</strong>' in response.rendered_content
+        assert 'cancellation fee of <strong>€3.00</strong>' in response.content.decode()
         response = self.client.get(
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        assert 'manually' in response.rendered_content
-        assert '20.00' in response.rendered_content
+        assert 'manually' in response.content.decode()
+        assert '20.00' in response.content.decode()
         response = self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
             }, follow=True)
@@ -610,7 +610,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {}, follow=True)
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
     def test_invoice_create_duplicate(self):
         self.event.settings.set('invoice_generate', 'user')
@@ -619,7 +619,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {}, follow=True)
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
     def test_invoice_create_wrong_secret(self):
         self.event.settings.set('invoice_generate', 'user')
@@ -635,7 +635,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {}, follow=True)
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
         with scopes_disabled():
             assert not self.order.invoices.exists()
 
@@ -647,7 +647,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {}, follow=True)
-        assert 'alert-success' in response.rendered_content
+        assert 'alert-success' in response.content.decode()
         with scopes_disabled():
             assert self.order.invoices.exists()
 
@@ -787,7 +787,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             follow=True
         )
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
     def test_pay_wrong_payment_state(self):
         with scopes_disabled():
@@ -801,19 +801,19 @@ class OrdersTest(BaseOrdersTest):
                                             p.pk),
             follow=True
         )
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/%d/confirm' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
                                                    p.pk),
             follow=True
         )
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/%d/complete' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
                                                     p.pk),
             follow=True
         )
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
     def test_pay_wrong_order_state(self):
         self.order.status = Order.STATUS_PAID
@@ -829,19 +829,19 @@ class OrdersTest(BaseOrdersTest):
                                             p.pk),
             follow=True
         )
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/%d/confirm' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
                                                    p.pk),
             follow=True
         )
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/%d/complete' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
                                                     p.pk),
             follow=True
         )
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
     def test_pay_change_link(self):
         self.order.status = Order.STATUS_PAID
@@ -856,7 +856,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             follow=True
         )
-        assert '/pay/change' not in response.rendered_content
+        assert '/pay/change' not in response.content.decode()
         self.order.status = Order.STATUS_PENDING
         self.order.save()
         p.state = OrderPayment.PAYMENT_STATE_PENDING
@@ -865,14 +865,14 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             follow=True
         )
-        assert '/pay/change' in response.rendered_content
+        assert '/pay/change' in response.content.decode()
         p.provider = 'testdummy'
         p.save()
         response = self.client.get(
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             follow=True
         )
-        assert '/pay/change' not in response.rendered_content
+        assert '/pay/change' not in response.content.decode()
 
     def test_change_paymentmethod_partial(self):
         self.event.settings.set('payment_banktransfer__enabled', True)
@@ -890,8 +890,8 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
-        assert 'Test dummy' in response.rendered_content
-        assert '+ €1.30' in response.rendered_content
+        assert 'Test dummy' in response.content.decode()
+        assert '+ €1.30' in response.content.decode()
         self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -933,8 +933,8 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
-        assert 'Test dummy' in response.rendered_content
-        assert '+ €1.30' in response.rendered_content
+        assert 'Test dummy' in response.content.decode()
+        assert '+ €1.30' in response.content.decode()
         self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1033,8 +1033,8 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
-        assert 'Test dummy' in response.rendered_content
-        assert '- €1.40' in response.rendered_content
+        assert 'Test dummy' in response.content.decode()
+        assert '- €1.40' in response.content.decode()
         self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1068,8 +1068,8 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
-        assert 'Test dummy' in response.rendered_content
-        assert '+ €12.00' in response.rendered_content
+        assert 'Test dummy' in response.content.decode()
+        assert '+ €12.00' in response.content.decode()
         self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1101,7 +1101,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
-        assert 'Gift card' in response.rendered_content
+        assert 'Gift card' in response.content.decode()
         response = self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1146,7 +1146,7 @@ class OrdersTest(BaseOrdersTest):
                 'giftcard': gc.secret
             }
         )
-        assert "You cannot pay with gift cards when buying a gift card." in response.rendered_content
+        assert "You cannot pay with gift cards when buying a gift card." in response.content.decode()
 
     def test_change_paymentmethod_giftcard_wrong_currency(self):
         with scopes_disabled():
@@ -1159,7 +1159,7 @@ class OrdersTest(BaseOrdersTest):
                 'giftcard': gc.secret
             }
         )
-        assert "This gift card does not support this currency." in response.rendered_content
+        assert "This gift card does not support this currency." in response.content.decode()
 
     def test_change_paymentmethod_giftcard_in_test_mode(self):
         with scopes_disabled():
@@ -1174,7 +1174,7 @@ class OrdersTest(BaseOrdersTest):
                 'giftcard': gc.secret
             }
         )
-        assert "Only test gift cards can be used in test mode." in response.rendered_content
+        assert "Only test gift cards can be used in test mode." in response.content.decode()
 
     def test_change_paymentmethod_giftcard_not_in_test_mode(self):
         with scopes_disabled():
@@ -1187,7 +1187,7 @@ class OrdersTest(BaseOrdersTest):
                 'giftcard': gc.secret
             }
         )
-        assert "This gift card can only be used in test mode." in response.rendered_content
+        assert "This gift card can only be used in test mode." in response.content.decode()
 
     def test_change_paymentmethod_giftcard_empty(self):
         with scopes_disabled():
@@ -1199,7 +1199,7 @@ class OrdersTest(BaseOrdersTest):
                 'giftcard': gc.secret
             }
         )
-        assert "All credit on this gift card has been used." in response.rendered_content
+        assert "All credit on this gift card has been used." in response.content.decode()
 
     def test_change_paymentmethod_giftcard_wrong_organizer(self):
         with scopes_disabled():
@@ -1214,7 +1214,7 @@ class OrdersTest(BaseOrdersTest):
                 'giftcard': gc.secret
             }
         )
-        assert "This gift card is not known." in response.rendered_content
+        assert "This gift card is not known." in response.content.decode()
 
     def test_change_paymentmethod_giftcard(self):
         with scopes_disabled():
@@ -1228,7 +1228,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
-        assert 'Gift card' in response.rendered_content
+        assert 'Gift card' in response.content.decode()
         response = self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1275,7 +1275,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
-        match = re.search(r"\?token=([^'\"&]+)", response.rendered_content)
+        match = re.search(r"\?token=([^'\"&]+)", response.content.decode())
         assert match
 
         response = self.client.get(
@@ -1349,7 +1349,7 @@ class OrdersTest(BaseOrdersTest):
                 f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
             }, follow=True)
         assert response.status_code == 200
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
         shirt_pos.variation = self.shirt_blue
         shirt_pos.price = Decimal('12.00')
@@ -1387,7 +1387,7 @@ class OrdersTest(BaseOrdersTest):
             follow=True
         )
         shirt_pos.refresh_from_db()
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
         assert shirt_pos.variation == self.shirt_blue
         assert shirt_pos.price == Decimal('14.00')
 
@@ -1412,7 +1412,7 @@ class OrdersTest(BaseOrdersTest):
                 f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
             }, follow=True)
         assert response.status_code == 200
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
         shirt_pos.variation = self.shirt_blue
         shirt_pos.price = Decimal('12.00')
@@ -1450,7 +1450,7 @@ class OrdersTest(BaseOrdersTest):
             follow=True
         )
         shirt_pos.refresh_from_db()
-        assert 'alert-success' in response.rendered_content
+        assert 'alert-success' in response.content.decode()
         assert shirt_pos.variation == self.shirt_red
         assert shirt_pos.price == Decimal('14.00')
 
@@ -1475,7 +1475,7 @@ class OrdersTest(BaseOrdersTest):
                 f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
             }, follow=True)
         assert response.status_code == 200
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
     def test_change_variation_require_same_product(self):
         self.event.settings.change_allow_user_variation = True
@@ -1498,7 +1498,7 @@ class OrdersTest(BaseOrdersTest):
                 f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
             }, follow=True)
         assert response.status_code == 200
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
     def test_change_variation_require_quota(self):
         self.event.settings.change_allow_user_variation = True
@@ -1526,7 +1526,7 @@ class OrdersTest(BaseOrdersTest):
                 f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
             }, follow=True)
         assert response.status_code == 200
-        assert 'alert-danger' in response.rendered_content
+        assert 'alert-danger' in response.content.decode()
 
         q.variations.add(self.shirt_blue)
 
@@ -1574,7 +1574,7 @@ class OrdersTest(BaseOrdersTest):
                              '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code,
                                                                 self.order.secret),
                              target_status_code=200)
-        assert 'The order has been changed. You can now proceed by paying the open amount of €2.00.' in response.rendered_content
+        assert 'The order has been changed. You can now proceed by paying the open amount of €2.00.' in response.content.decode()
         shirt_pos.refresh_from_db()
         assert shirt_pos.variation == self.shirt_red
         assert shirt_pos.price == Decimal('14.00')
