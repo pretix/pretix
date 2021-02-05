@@ -2376,6 +2376,22 @@ PERSON_NAME_SCHEMES = OrderedDict([
             '_scheme': 'full_transcription',
         },
     }),
+    ('salutation_given_family', {
+        'fields': (
+            ('salutation', pgettext_lazy('person_name', 'Salutation'), 1),
+            ('given_name', _('Given name'), 2),
+            ('family_name', _('Family name'), 2),
+        ),
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in (d.get(key, '') for key in ["given_name", "family_name"]) if p
+        ),
+        'sample': {
+            'salutation': pgettext_lazy('person_name_sample', 'Mr'),
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'salutation_given_family',
+        },
+    }),
     ('salutation_title_given_family', {
         'fields': (
             ('salutation', pgettext_lazy('person_name', 'Salutation'), 1),
