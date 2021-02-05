@@ -117,6 +117,11 @@ class CancelForm(ConfirmPaymentForm):
                     'in your cancellation fee if you want to keep them. Please always enter a gross value, '
                     'tax will be calculated automatically.'),
     )
+    cancel_invoice = forms.BooleanField(
+        label=_('Generate cancellation for invoice'),
+        initial=True,
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -130,6 +135,8 @@ class CancelForm(ConfirmPaymentForm):
             self.fields['cancellation_fee'].max_value = prs
         else:
             del self.fields['cancellation_fee']
+        if not self.instance.invoices.exists():
+            del self.fields['cancel_invoice']
 
     def clean_cancellation_fee(self):
         val = self.cleaned_data['cancellation_fee'] or Decimal('0.00')

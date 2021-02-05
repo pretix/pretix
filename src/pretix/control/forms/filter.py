@@ -5,7 +5,7 @@ from urllib.parse import urlencode
 from django import forms
 from django.apps import apps
 from django.conf import settings
-from django.db.models import Exists, F, Max, Model, OuterRef, Q, QuerySet
+from django.db.models import Exists, F, Max, Model, OuterRef, Q, QuerySet, Count
 from django.db.models.functions import Coalesce, ExtractWeekDay
 from django.urls import reverse, reverse_lazy
 from django.utils.formats import date_format, localize
@@ -153,6 +153,7 @@ class OrderFilterForm(FilterForm):
                 (Order.STATUS_CANCELED, _('Canceled (fully)')),
                 ('cp', _('Canceled (fully or with paid fee)')),
                 ('rc', _('Cancellation requested')),
+                ('cni', _('Fully canceled but invoice not canceled')),
             )),
             (_('Payment process'), (
                 (Order.STATUS_EXPIRED, _('Expired')),
@@ -263,6 +264,18 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(
                     status=Order.STATUS_PAID,
                     pending_sum_t__gt=0
+                )
+            elif s == 'cni':
+                i = Invoice.objects.filter(
+                    order=OuterRef('pk'),
+                    is_cancellation=False,
+                    refered__isnull=True,
+                ).order_by().values('order').annotate(k=Count('id')).values('k')
+                qs = qs.annotate(
+                    icnt=i
+                ).filter(
+                    icnt__gt=0,
+                    status=Order.STATUS_CANCELED,
                 )
             elif s == 'pa':
                 qs = qs.filter(

@@ -23,13 +23,16 @@
         <input type="hidden" name="status" value="c"/>
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.send_email layout='' %}
+        {% if form.cancel_invoice %}
+            {% bootstrap_field form.cancel_invoice layout='' %}
+        {% endif %}
         {% if form.cancellation_fee %}
             {% bootstrap_field form.cancellation_fee layout='' %}
         {% endif %}
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
-                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                   href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                     {% trans "No, take me back" %}
                 </a>
             </div>

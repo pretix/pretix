@@ -170,6 +170,10 @@
                                 </span>
                             {% endif %}
                             {{ o.total|money:request.event.currency }}
+                            {% if o.status == "c" and o.icnt %}
+                                <br>
+                                <span class="label label-warning">{% trans "INVOICE NOT CANCELED" %}</span>
+                            {% endif %}
                         </td>
                         <td class="text-right flip">{{ o.pcnt|default_if_none:"0" }}</td>
                         <td class="text-right flip">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
