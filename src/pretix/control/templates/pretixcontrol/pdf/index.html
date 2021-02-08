@@ -228,6 +228,18 @@
                                     id="toolbox-position-y">
                         </div>
                     </div>
+                    <div class="row control-group rectsize">
+                        <div class="col-sm-6">
+                            <label>{% trans "Width (mm)" %}</label><br>
+                            <input type="number" value="13" class="input-block-level form-control" step="0.01"
+                                    id="toolbox-width">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>{% trans "Height (mm)" %}</label><br>
+                            <input type="number" value="13" class="input-block-level form-control" step="0.01"
+                                    id="toolbox-height">
+                        </div>
+                    </div>
                     <div class="row control-group squaresize poweredby">
                         <div class="col-sm-12">
                             <label>{% trans "Size (mm)" %}</label><br>
@@ -332,6 +344,17 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row control-group imagecontent">
+                        <div class="col-sm-12">
+                            <label>{% trans "Image content" %}</label><br>
+                            <select class="input-block-level form-control" id="toolbox-imagecontent">
+                                <option value="">{% trans "Empty" %}</option>
+                                {% for varname, var in images.items %}
+                                    <option value="{{ varname }}">{{ var.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                     <div class="row control-group text">
                         <div class="col-sm-12">
                             <label>{% trans "Text content" %}</label><br>
@@ -381,6 +404,10 @@
                             disabled>
                         <span class="fa fa-image"></span>
                         {% trans "pretix Logo" %}
+                    </button>
+                    <button class="btn btn-default btn-block" id="editor-add-image" disabled>
+                        <span class="fa fa-image"></span>
+                        {% trans "Dynamic image" %}
                     </button>
                 </div>
             </div>

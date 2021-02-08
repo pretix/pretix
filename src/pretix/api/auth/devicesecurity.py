@@ -41,6 +41,7 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:checkinlistpos-redeem'),
         ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:order-list'),
+        ('GET', 'api-v1:orderposition-pdf_image'),
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
     )
@@ -68,6 +69,7 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:checkinlist-status'),
         ('POST', 'api-v1:checkinlistpos-redeem'),
         ('GET', 'api-v1:revokedsecrets-list'),
+        ('GET', 'api-v1:orderposition-pdf_image'),
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
     )
@@ -97,6 +99,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:order-list'),
         ('GET', 'api-v1:order-detail'),
         ('DELETE', 'api-v1:orderposition-detail'),
+        ('GET', 'api-v1:orderposition-pdf_image'),
         ('POST', 'api-v1:order-mark_canceled'),
         ('POST', 'api-v1:orderpayment-list'),
         ('POST', 'api-v1:orderrefund-list'),

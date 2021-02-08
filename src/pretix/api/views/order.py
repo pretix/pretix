@@ -1,4 +1,6 @@
 import datetime
+import mimetypes
+import os
 from decimal import Decimal
 
 import django_filters
@@ -12,6 +14,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
+from PIL import Image
 from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import (
@@ -35,8 +38,9 @@ from pretix.base.models import (
     Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota, SubEvent,
     TaxRule, TeamAPIToken, generate_secret,
 )
-from pretix.base.models.orders import RevokedTicketSecret
+from pretix.base.models.orders import QuestionAnswer, RevokedTicketSecret
 from pretix.base.payment import PaymentException
+from pretix.base.pdf import get_images
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.invoices import (
@@ -912,6 +916,62 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
                 'tax': price.tax,
                 'tax_rule': tr.pk if tr else None,
             })
+
+    @action(detail=True, url_name='answer', url_path=r'answer/(?P<question>\d+)')
+    def answer(self, request, **kwargs):
+        pos = self.get_object()
+        answer = get_object_or_404(
+            QuestionAnswer,
+            orderposition=self.get_object(),
+            question_id=kwargs.get('question')
+        )
+        if not answer.file:
+            raise NotFound()
+
+        ftype, ignored = mimetypes.guess_type(answer.file.name)
+        resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
+            self.request.event.slug.upper(),
+            pos.order.code,
+            pos.positionid,
+            os.path.basename(answer.file.name).split('.', 1)[1]
+        )
+        return resp
+
+    @action(detail=True, url_name='pdf_image', url_path=r'pdf_image/(?P<key>[^/]+)')
+    def pdf_image(self, request, key, **kwargs):
+        pos = self.get_object()
+
+        image_vars = get_images(request.event)
+        if key not in image_vars:
+            raise NotFound('Unknown key')
+
+        image_file = image_vars[key]['evaluate'](pos, pos.order, pos.subevent or self.request.event)
+        if image_file is None:
+            raise NotFound('No image available')
+
+        if getattr(image_file, 'name', ''):
+            ftype, ignored = mimetypes.guess_type(image_file.name)
+            extension = os.path.basename(image_file.name).split('.')[-1]
+        else:
+            img = Image.open(image_file)
+            ftype = Image.MIME[img.format]
+            extensions = {
+                'GIF': 'gif', 'TIFF': 'tif', 'BMP': 'bmp', 'JPEG': 'jpg', 'PNG': 'png'
+            }
+            extension = extensions.get(img.format, 'bin')
+            if hasattr(image_file, 'seek'):
+                image_file.seek(0)
+
+        resp = FileResponse(image_file, content_type=ftype or 'application/binary')
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}.{}"'.format(
+            self.request.event.slug.upper(),
+            pos.order.code,
+            pos.positionid,
+            key,
+            extension,
+        )
+        return resp
 
     @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):

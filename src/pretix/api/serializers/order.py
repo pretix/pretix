@@ -25,7 +25,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund, RevokedTicketSecret,
 )
-from pretix.base.pdf import get_variables
+from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
 from pretix.base.services.locking import NoLockManager
 from pretix.base.services.pricing import get_price
@@ -111,6 +111,17 @@ class InlineSeatSerializer(I18nAwareModelSerializer):
 class AnswerSerializer(I18nAwareModelSerializer):
     question_identifier = AnswerQuestionIdentifierField(source='*', read_only=True)
     option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
+
+    def to_representation(self, instance):
+        r = super().to_representation(instance)
+        if r['answer'].startswith('file://') and instance.orderposition:
+            r['answer'] = reverse('api-v1:orderposition-answer', kwargs={
+                'organizer': instance.orderposition.order.event.organizer.slug,
+                'event': instance.orderposition.order.event.slug,
+                'pk': instance.orderposition.pk,
+                'question': instance.question_id,
+            }, request=self.context['request'])
+        return r
 
     class Meta:
         model = QuestionAnswer
@@ -265,6 +276,9 @@ class PdfDataSerializer(serializers.Field):
             if 'vars' not in self.context:
                 self.context['vars'] = get_variables(self.context['request'].event)
 
+            if 'vars_images' not in self.context:
+                self.context['vars_images'] = get_images(self.context['request'].event)
+
             for k, f in self.context['vars'].items():
                 res[k] = f['evaluate'](instance, instance.order, ev)
 
@@ -279,7 +293,28 @@ class PdfDataSerializer(serializers.Field):
             for k, v in instance.item._cached_meta_data.items():
                 res['itemmeta:' + k] = v
 
-        return res
+            res['images'] = {}
+
+            for k, f in self.context['vars_images'].items():
+                if 'etag' in f:
+                    has_image = etag = f['etag'](instance, instance.order, ev)
+                else:
+                    has_image = f['etag'](instance, instance.order, ev)
+                    etag = None
+                if has_image:
+                    url = reverse('api-v1:orderposition-pdf_image', kwargs={
+                        'organizer': instance.order.event.organizer.slug,
+                        'event': instance.order.event.slug,
+                        'pk': instance.pk,
+                        'key': k,
+                    }, request=self.context['request'])
+                    if etag:
+                        url += f'#etag={etag}'
+                    res['images'][k] = url
+                else:
+                    res['images'][k] = None
+
+            return res
 
 
 class OrderPositionSerializer(I18nAwareModelSerializer):

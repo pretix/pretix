@@ -613,6 +613,7 @@ If the email is associated with a specific user, e.g. a notification email, the 
 well, otherwise it will be ``None``.
 """
 
+
 layout_text_variables = EventPluginSignal()
 """
 This signal is sent out to collect variables that can be used to display text in ticket-related PDF layouts.
@@ -627,8 +628,32 @@ dictionaries as values that contain keys like in the following example::
         }
     }
 
-The evaluate member will be called with the order position, order and event as arguments. The event might
+The ``evaluate`` member will be called with the order position, order and event as arguments. The event might
 also be a subevent, if applicable.
+"""
+
+
+layout_image_variables = EventPluginSignal()
+"""
+This signal is sent out to collect variables that can be used to display dynamic images in ticket-related PDF layouts.
+Receivers are expected to return a dictionary with globally unique identifiers as keys and more
+dictionaries as values that contain keys like in the following example::
+
+    return {
+        "profile": {
+            "label": _("Profile picture"),
+            "evaluate": lambda orderposition, order, event: ContentFile(b"some-image-data"),
+            "etag": lambda orderposition, order, event: hash(b"some-image-data")
+        }
+    }
+
+The ``evaluate`` member will be called with the order position, order and event as arguments. The event might
+also be a subevent, if applicable. The return value of ``evaluate`` should be an instance of Django's ``File``
+class and point to a valid JPEG or PNG file. If no image is available, ``evaluate`` should return ``None``.
+
+The ``etag`` member will be called with the same arguments as ``evaluate`` but should return a ``str`` value
+uniquely identifying the version of the file. This can be a hash of the file, but can also be something else.
+If no image is available, ``etag`` should return ``None``. In some cases, this can speed up the implementation.
 """
 
 

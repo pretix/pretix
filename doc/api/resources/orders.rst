@@ -220,7 +220,7 @@ downloads                             list of objects            List of ticket 
 └ url                                 string                     Download URL
 answers                               list of objects            Answers to user-defined questions
 ├ question                            integer                    Internal ID of the answered question
-├ answer                              string                     Text representation of the answer
+├ answer                              string                     Text representation of the answer (URL if answer is a file)
 ├ question_identifier                 string                     The question's ``identifier`` field
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 └ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
@@ -273,6 +273,10 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 3.9
 
   The ``checkin.type`` attribute has been added.
+
+.. versionchanged:: 3.16
+
+   Answers to file questions are now returned as an URL.
 
 .. _order-payment-resource:
 
