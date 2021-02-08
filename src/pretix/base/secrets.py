@@ -4,7 +4,7 @@ import struct
 
 from cryptography.hazmat.backends.openssl.backend import Backend
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-from cryptography.hazmat.primitives.serialization.base import (
+from cryptography.hazmat.primitives.serialization import (
     Encoding, NoEncryption, PrivateFormat, PublicFormat, load_pem_private_key,
     load_pem_public_key,
 )

@@ -155,7 +155,7 @@ setup(
         'tlds>=2020041600',
         'text-unidecode==1.*',
         'protobuf==3.13.*',
-        'cryptography',
+        'cryptography>=3.4.2',
         'sepaxml==2.4.*,>=2.4.1',
     ],
     extras_require={
