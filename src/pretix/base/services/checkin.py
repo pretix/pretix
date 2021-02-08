@@ -143,7 +143,6 @@ def _save_answers(op, answers, given_answers):
                 op.answers.create(question=q, answer=str(a))
 
 
-@transaction.atomic
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY):
@@ -163,18 +162,16 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     """
     dt = datetime or now()
 
-    # Lock order positions
-    op = OrderPosition.all.select_for_update().get(pk=op.pk)
-    checkin_questions = list(
-        clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
-    )
-
     if op.canceled or op.order.status not in (Order.STATUS_PAID, Order.STATUS_PENDING):
         raise CheckInError(
             _('This order position has been canceled.'),
             'canceled' if canceled_supported else 'unpaid'
         )
 
+    # Do this outside of transaction so it is saved even if the checkin fails for some other reason
+    checkin_questions = list(
+        clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
+    )
     require_answers = []
     if checkin_questions:
         answers = {a.question: a for a in op.answers.all()}
@@ -184,80 +181,84 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
         _save_answers(op, answers, given_answers)
 
-    if not clist.all_products and op.item_id not in [i.pk for i in clist.limit_products.all()]:
-        raise CheckInError(
-            _('This order position has an invalid product for this check-in list.'),
-            'product'
-        )
-    elif clist.subevent_id and op.subevent_id != clist.subevent_id:
-        raise CheckInError(
-            _('This order position has an invalid date for this check-in list.'),
-            'product'
-        )
-    elif op.order.status != Order.STATUS_PAID and not force and not (
-        ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
-    ):
-        raise CheckInError(
-            _('This order is not marked as paid.'),
-            'unpaid'
-        )
-    elif require_answers and not force and questions_supported:
-        raise RequiredQuestionsError(
-            _('You need to answer questions to complete this check-in.'),
-            'incomplete',
-            require_answers
-        )
+    with transaction.atomic():
+        # Lock order positions
+        op = OrderPosition.all.select_for_update().get(pk=op.pk)
 
-    if type == Checkin.TYPE_ENTRY and clist.rules and not force:
-        rule_data = LazyRuleVars(op, clist, dt)
-        logic = get_logic_environment(op.subevent or clist.event)
-        if not logic.apply(clist.rules, rule_data):
+        if not clist.all_products and op.item_id not in [i.pk for i in clist.limit_products.all()]:
             raise CheckInError(
-                _('This entry is not permitted due to custom rules.'),
-                'rules'
+                _('This order position has an invalid product for this check-in list.'),
+                'product'
+            )
+        elif clist.subevent_id and op.subevent_id != clist.subevent_id:
+            raise CheckInError(
+                _('This order position has an invalid date for this check-in list.'),
+                'product'
+            )
+        elif op.order.status != Order.STATUS_PAID and not force and not (
+            ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
+        ):
+            raise CheckInError(
+                _('This order is not marked as paid.'),
+                'unpaid'
+            )
+        elif require_answers and not force and questions_supported:
+            raise RequiredQuestionsError(
+                _('You need to answer questions to complete this check-in.'),
+                'incomplete',
+                require_answers
             )
 
-    device = None
-    if isinstance(auth, Device):
-        device = auth
+        if type == Checkin.TYPE_ENTRY and clist.rules and not force:
+            rule_data = LazyRuleVars(op, clist, dt)
+            logic = get_logic_environment(op.subevent or clist.event)
+            if not logic.apply(clist.rules, rule_data):
+                raise CheckInError(
+                    _('This entry is not permitted due to custom rules.'),
+                    'rules'
+                )
 
-    last_ci = op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce').first()
-    entry_allowed = (
-        type == Checkin.TYPE_EXIT or
-        clist.allow_multiple_entries or
-        last_ci is None or
-        (clist.allow_entry_after_exit and last_ci.type == Checkin.TYPE_EXIT)
-    )
+        device = None
+        if isinstance(auth, Device):
+            device = auth
 
-    if nonce and ((last_ci and last_ci.nonce == nonce) or op.checkins.filter(type=type, list=clist, device=device, nonce=nonce).exists()):
-        return
-
-    if entry_allowed or force:
-        ci = Checkin.objects.create(
-            position=op,
-            type=type,
-            list=clist,
-            datetime=dt,
-            device=device,
-            gate=device.gate if device else None,
-            nonce=nonce,
-            forced=force and not entry_allowed,
+        last_ci = op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce').first()
+        entry_allowed = (
+            type == Checkin.TYPE_EXIT or
+            clist.allow_multiple_entries or
+            last_ci is None or
+            (clist.allow_entry_after_exit and last_ci.type == Checkin.TYPE_EXIT)
         )
-        op.order.log_action('pretix.event.checkin', data={
-            'position': op.id,
-            'positionid': op.positionid,
-            'first': True,
-            'forced': force or op.order.status != Order.STATUS_PAID,
-            'datetime': dt,
-            'type': type,
-            'list': clist.pk
-        }, user=user, auth=auth)
-        checkin_created.send(op.order.event, checkin=ci)
-    else:
-        raise CheckInError(
-            _('This ticket has already been redeemed.'),
-            'already_redeemed',
-        )
+
+        if nonce and ((last_ci and last_ci.nonce == nonce) or op.checkins.filter(type=type, list=clist, device=device, nonce=nonce).exists()):
+            return
+
+        if entry_allowed or force:
+            ci = Checkin.objects.create(
+                position=op,
+                type=type,
+                list=clist,
+                datetime=dt,
+                device=device,
+                gate=device.gate if device else None,
+                nonce=nonce,
+                forced=force and not entry_allowed,
+            )
+            op.order.log_action('pretix.event.checkin', data={
+                'position': op.id,
+                'positionid': op.positionid,
+                'first': True,
+                'forced': force or op.order.status != Order.STATUS_PAID,
+                'datetime': dt,
+                'type': type,
+                'list': clist.pk
+            }, user=user, auth=auth)
+            checkin_created.send(op.order.event, checkin=ci)
+        else:
+            raise CheckInError(
+                _('This ticket has already been redeemed.'),
+                'already_redeemed',
+            )
 
 
 @receiver(order_placed, dispatch_uid="autocheckin_order_placed")
