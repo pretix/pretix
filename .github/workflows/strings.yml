@@ -31,7 +31,7 @@ jobs:
       - name: Install system packages
         run: sudo apt update && sudo apt install gettext
       - name: Install Dependencies
-        run: pip3 install --no-use-pep517 -Ur src/requirements.txt
+        run: pip3 install -Ur src/requirements.txt
       - name: Compile messages
         run: python manage.py compilemessages
         working-directory: ./src
@@ -56,7 +56,7 @@ jobs:
       - name: Install system packages
         run: sudo apt update && sudo apt install enchant hunspell hunspell-de-de aspell-en aspell-de
       - name: Install Dependencies
-        run: pip3 install --no-use-pep517 -Ur src/requirements/dev.txt
+        run: pip3 install -Ur src/requirements/dev.txt
       - name: Spellcheck translations
         run: potypo
         working-directory: ./src
