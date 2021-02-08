@@ -15,7 +15,6 @@ from django.db import transaction
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext
@@ -52,17 +51,10 @@ class StripeSettingsHolder(BasePaymentProvider):
         self.settings = SettingsSandbox('payment', 'stripe', event)
 
     def get_connect_url(self, request):
-        request.session['payment_stripe_oauth_event'] = request.event.pk
-        if 'payment_stripe_oauth_token' not in request.session:
-            request.session['payment_stripe_oauth_token'] = get_random_string(32)
-        return (
-            "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={}&state={}"
-            "&scope=read_write&redirect_uri={}"
-        ).format(
-            self.settings.connect_client_id,
-            request.session['payment_stripe_oauth_token'],
-            urllib.parse.quote(build_global_uri('plugins:stripe:oauth.return')),
-        )
+        return reverse('plugins:stripe:oauth.connect', kwargs={
+            'organizer': self.event.organizer.slug,
+            'event': self.event.slug,
+        })
 
     def settings_content_render(self, request):
         if self.settings.connect_client_id and not self.settings.secret_key:

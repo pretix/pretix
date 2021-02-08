@@ -4,8 +4,8 @@ from pretix.multidomain import event_url
 
 from .views import (
     OrganizerSettingsFormView, ReturnView, ScaReturnView, ScaView,
-    applepay_association, oauth_disconnect, oauth_return, redirect_view,
-    webhook,
+    applepay_association, oauth_connect, oauth_disconnect, oauth_return,
+    redirect_view, webhook,
 )
 
 event_patterns = [
@@ -29,6 +29,8 @@ organizer_patterns = [
 urlpatterns = [
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/stripe/disconnect/',
         oauth_disconnect, name='oauth.disconnect'),
+    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/stripe/connect/',
+        oauth_connect, name='oauth.connect'),
     url(r'^control/organizer/(?P<organizer>[^/]+)/stripeconnect/',
         OrganizerSettingsFormView.as_view(), name='settings.connect'),
     url(r'^_stripe/webhook/$', webhook, name='webhook'),

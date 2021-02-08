@@ -8,12 +8,8 @@
 {% compress css %}
     <link type="text/css" rel="stylesheet" href="{% static "pretixplugins/stripe/pretix-stripe.css" %}">
 {% endcompress %}
-{% if testmode %}
-    <script type="text/plain" id="stripe_pubkey">{{ settings.publishable_test_key }}</script>
-{% else %}
-    <script type="text/plain" id="stripe_pubkey">{{ settings.publishable_key }}</script>
-{% endif %}
+<script type="text/plain" id="stripe_pubkey">{{ pubkey }}</script>
 {% if settings.connect_user_id %}
     <script type="text/plain" id="stripe_connectedAccountId">{{ settings.connect_user_id }}</script>
 {% endif %}
-    <script type="text/plain" id="stripe_merchantcountry">{{ settings.merchant_country|default:"" }}</script>
+<script type="text/plain" id="stripe_merchantcountry">{{ settings.merchant_country|default:"" }}</script>
