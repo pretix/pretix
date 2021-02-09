@@ -452,14 +452,17 @@ class BaseQuestionsForm(forms.Form):
                 types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
                 statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
                 c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
+                state = (cartpos.state if cartpos else orderpos.state)
             elif fprefix + 'state' in self.data:
                 self.data = self.data.copy()
+                state = None
                 del self.data[fprefix + 'state']
 
             add_fields['state'] = forms.ChoiceField(
                 label=pgettext_lazy('address', 'State'),
                 required=False,
                 choices=c,
+                initial=state,
                 widget=forms.Select(attrs={
                     'autocomplete': 'address-level1',
                 }),
