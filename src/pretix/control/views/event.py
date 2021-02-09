@@ -171,6 +171,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 for k in form.changed_data
             })
 
+        tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk})
         if change_css:
             regenerate_css.apply_async(args=(self.request.event.pk,))
             messages.success(self.request, _('Your changes have been saved. Please note that it can '

@@ -25,6 +25,7 @@ from pretix.base.models.items import (
     ItemVariation, Quota, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.base.services import tickets
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms.checkin import SimpleCheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
@@ -428,6 +429,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
         for f in self.plugin_forms:
             f.subevent = self.object
             f.save()
+        tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk})
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
