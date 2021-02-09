@@ -444,6 +444,7 @@ class BaseQuestionsForm(forms.Form):
             c = [('', pgettext_lazy('address', 'Select state'))]
             fprefix = str(self.prefix) + '-' if self.prefix is not None and self.prefix != '-' else ''
             cc = None
+            state = None
             if fprefix + 'country' in self.data:
                 cc = str(self.data[fprefix + 'country'])
             elif country:
@@ -455,7 +456,6 @@ class BaseQuestionsForm(forms.Form):
                 state = (cartpos.state if cartpos else orderpos.state)
             elif fprefix + 'state' in self.data:
                 self.data = self.data.copy()
-                state = None
                 del self.data[fprefix + 'state']
 
             add_fields['state'] = forms.ChoiceField(
