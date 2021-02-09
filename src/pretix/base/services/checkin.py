@@ -102,9 +102,11 @@ class RequiredQuestionsError(Exception):
 
 
 def _save_answers(op, answers, given_answers):
+    written = False
     for q, a in given_answers.items():
         if not a:
             if q in answers:
+                written = True
                 answers[q].delete()
             else:
                 continue
@@ -113,6 +115,7 @@ def _save_answers(op, answers, given_answers):
                 qa = answers[q]
                 qa.answer = str(a.answer)
                 qa.save()
+                written = True
                 qa.options.clear()
             else:
                 qa = op.answers.create(question=q, answer=str(a.answer))
@@ -122,6 +125,7 @@ def _save_answers(op, answers, given_answers):
                 qa = answers[q]
                 qa.answer = ", ".join([str(o) for o in a])
                 qa.save()
+                written = True
                 qa.options.clear()
             else:
                 qa = op.answers.create(question=q, answer=", ".join([str(o) for o in a]))
@@ -134,6 +138,7 @@ def _save_answers(op, answers, given_answers):
             qa.file.save(a.name, a, save=False)
             qa.answer = 'file://' + qa.file.name
             qa.save()
+            written = True
         else:
             if q in answers:
                 qa = answers[q]
@@ -141,6 +146,12 @@ def _save_answers(op, answers, given_answers):
                 qa.save()
             else:
                 op.answers.create(question=q, answer=str(a))
+            written = True
+
+    if written:
+        prefetched_objects_cache = getattr(op, '_prefetched_objects_cache', {})
+        if 'answers' in prefetched_objects_cache:
+            del prefetched_objects_cache['answers']
 
 
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
