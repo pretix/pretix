@@ -720,6 +720,7 @@ BOOTSTRAP3 = {
         'default': 'bootstrap3.renderers.FieldRenderer',
         'inline': 'bootstrap3.renderers.InlineFieldRenderer',
         'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
+        'bulkedit': 'pretix.control.forms.renderers.BulkEditFieldRenderer',
         'checkout': 'pretix.presale.forms.renderers.CheckoutFieldRenderer',
     },
 }

@@ -955,6 +955,8 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         if self.sampled_lists is not None:
             kwargs['instance'] = self.get_queryset()[0]
+        else:
+            return None
 
         formsetclass = inlineformset_factory(
             SubEvent, CheckinList,
@@ -1123,6 +1125,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         ctx['sampled_lists'] = self.sampled_lists
         ctx['formset'] = self.quota_formset
         ctx['cl_formset'] = self.list_formset
+        ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
         return ctx
 
     @cached_property
@@ -1236,9 +1239,10 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        if self.is_submitted and form.is_valid() and self.quota_formset.is_valid() and self.list_formset.is_valid():
+        if self.is_submitted and form.is_valid() and self.quota_formset.is_valid() and (not self.list_formset or self.list_formset.is_valid()):
             return self.form_valid(form)
         else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.form_invalid(form)
 
     @transaction.atomic()
@@ -1256,8 +1260,10 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                 )
 
         # Formsets
-        self.save_quota_formset(log_entries)
-        self.save_list_formset(log_entries)
+        if '__quotas' in self.request.POST.getlist('_bulk'):
+            self.save_quota_formset(log_entries)
+        if '__checkinlists' in self.request.POST.getlist('_bulk'):
+            self.save_list_formset(log_entries)
 
         if connections['default'].features.can_return_rows_from_bulk_insert:
             LogEntry.objects.bulk_create(log_entries, batch_size=200)

@@ -613,3 +613,27 @@ table td > .checkbox input[type="checkbox"] {
   border-bottom: 1px solid $input-border;
   padding-bottom: 5px;
 }
+
+.bulk-edit-field-group {
+  .field-toggle {
+    font-weight: normal;
+    display: inline-block;
+    background: $gray-lighter;
+    padding: 2px 8px 4px;
+    border-top-left-radius: $border-radius-base;
+    border-top-right-radius: $border-radius-base;
+    margin-bottom: 0;
+    input {
+      position: relative;
+      top: 2px;
+    }
+  }
+  .field-content {
+    border: 2px solid $gray-lighter;
+    padding: 15px;
+    opacity: 0.5;
+    &.enabled {
+      opacity: 1;
+    }
+  }
+}

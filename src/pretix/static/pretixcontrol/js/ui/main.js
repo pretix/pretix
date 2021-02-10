@@ -546,6 +546,21 @@ var form_handlers = function (el) {
         );
     });
 
+    el.find(".bulk-edit-field-group").each(function () {
+        var $checkbox = $(this).find("input[type=checkbox][name=_bulk]");
+        var $content = $(this).find(".field-content")
+        console.log($checkbox, $content)
+        var update = function () {
+            $content.toggleClass("enabled", $checkbox.prop("checked"));
+        }
+        $content.find("input, select, textarea, button").on("focus click change", function () {
+            $checkbox.prop("checked", true);
+            update();
+        });
+        $checkbox.on('change', update)
+        update();
+    });
+
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
 };
@@ -563,7 +578,6 @@ $(function () {
         }
     );
     $("[data-formset]").on("formAdded", "div", function (event) {
-        console.log("formAdded")
         form_handlers($(event.target));
     });
     $(document).on("click", ".variations .variations-select-all", function (e) {

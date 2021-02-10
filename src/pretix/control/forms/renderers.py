@@ -58,3 +58,32 @@ class ControlFieldRenderer(FieldRenderer):
             optional=not required and not isinstance(self.widget, CheckboxInput)
         ) + html
         return html
+
+
+class BulkEditFieldRenderer(FieldRenderer):
+    def __init__(self, *args, **kwargs):
+        kwargs['layout'] = 'horizontal'
+        super().__init__(*args, **kwargs)
+
+    def wrap_field(self, html):
+        field_class = self.get_field_class()
+        if field_class:
+            name = '{}{}'.format(self.field.form.prefix, self.field.name)
+            checked = self.field.form.data and name in self.field.form.data.getlist('_bulk')
+            html = (
+                '<div class="{klass} bulk-edit-field-group">'
+                '<label class="field-toggle">'
+                '<input type="checkbox" name="_bulk" value="{name}" {checked}> {label}'
+                '</label>'
+                '<div class="field-content">'
+                '{html}'
+                '</div>'
+                '</div>'
+            ).format(
+                klass=field_class,
+                name=name,
+                label=pgettext('form_bulk', 'change'),
+                checked='checked' if checked else '',
+                html=html
+            )
+        return html

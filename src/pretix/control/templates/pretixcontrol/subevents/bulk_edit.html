@@ -28,38 +28,47 @@
         </div>
         <fieldset>
             <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="control" %}
-            {% bootstrap_field form.active layout="control" %}
+            {% bootstrap_field form.name layout="bulkedit" %}
+            {% bootstrap_field form.active layout="bulkedit" %}
             <div class="geodata-section">
-                {% bootstrap_field form.location layout="control" %}
+                {% bootstrap_field form.location layout="bulkedit" %}
                 <div class="form-group geodata-group"
-                     data-tiles="{{ global_settings.leaflet_tiles|default_if_none:"" }}"
-                     data-attrib="{{ global_settings.leaflet_tiles_attribution }}"
-                     data-icon="{% static "leaflet/images/marker-icon.png" %}"
-                     data-shadow="{% static "leaflet/images/marker-shadow.png" %}">
+                        data-tiles="{{ global_settings.leaflet_tiles|default_if_none:"" }}"
+                        data-attrib="{{ global_settings.leaflet_tiles_attribution }}"
+                        data-icon="{% static "leaflet/images/marker-icon.png" %}"
+                        data-shadow="{% static "leaflet/images/marker-shadow.png" %}">
                     <label class="col-md-3 control-label">
-                        {% trans "Geo coordinates" %}<br>
-                        <span class="optional">{% trans "Optional" %}</span>
+                        {% trans "Geo coordinates" %}
                     </label>
-                    <div class="col-md-4">
-                        {% bootstrap_field form.geo_lat layout="inline" %}
-                        {% if global_settings.opencagedata_apikey %}
-                            <p class="attrib">
-                                <a href="https://openstreetmap.org/" target="_blank">
-                                    {% trans "Geocoding data © OpenStreetMap" %}
-                                </a>
-                            </p>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-4">
-                        {% bootstrap_field form.geo_lon layout="inline" %}
-                    </div>
-                    <div class="col-md-1">
+                    <div class="col-md-9">
+                        <div class="bulk-edit-field-group">
+                            <label class="field-toggle">
+                                <input type="checkbox" name="_bulk" value="{{ form.prefix }}__geo" {% if form.prefix|add:"__geo" in bulk_selected %}checked{% endif %}>
+                                {% trans "change" context "form_bulk" %}
+                            </label>
+                            <div class="field-content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {% bootstrap_field form.geo_lat layout="inline" %}
+                                        {% if global_settings.opencagedata_apikey %}
+                                            <p class="attrib">
+                                                <a href="https://openstreetmap.org/" target="_blank">
+                                                    {% trans "Geocoding data © OpenStreetMap" %}
+                                                </a>
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% bootstrap_field form.geo_lon layout="inline" %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% bootstrap_field form.frontpage_text layout="control" %}
-            {% bootstrap_field form.is_public layout="control" %}
+            {% bootstrap_field form.frontpage_text layout="bulkedit" %}
+            {% bootstrap_field form.is_public layout="bulkedit" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Quotas" %}</legend>
@@ -72,156 +81,172 @@
                     {% endblocktrans %}
                 </div>
             {% endif %}
-            <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
-                {{ formset.management_form }}
-                {% bootstrap_formset_errors formset %}
-                <div data-formset-body>
-                    {% for form in formset %}
-                        <div class="panel panel-default" data-formset-form>
-                            <div class="sr-only">
-                                {{ form.id }}
-                                {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                            </div>
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            {% bootstrap_field form.name layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-md-2 text-right flip">
-                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                                <i class="fa fa-trash"></i></button>
-                                        </div>
+            <div class="bulk-edit-field-group">
+                <label class="field-toggle">
+                    <input type="checkbox" name="_bulk" value="__quotas" {% if "__quotas" in bulk_selected %}checked{% endif %}>
+                    {% trans "change" context "form_bulk" %}
+                </label>
+                <div class="field-content">
+                    <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                        {{ formset.management_form }}
+                        {% bootstrap_formset_errors formset %}
+                        <div data-formset-body>
+                            {% for form in formset %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ form.id }}
+                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
                                     </div>
-                                </h4>
-                            </div>
-                            <div class="panel-body form-horizontal">
-                                {% bootstrap_form_errors form %}
-                                {% bootstrap_field form.size layout="control" %}
-                                {% bootstrap_field form.itemvars layout="control" %}
-                                {% bootstrap_field form.release_after_exit layout="control" %}
-                            </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_form_errors form %}
+                                        {% bootstrap_field form.size layout="control" %}
+                                        {% bootstrap_field form.itemvars layout="control" %}
+                                        {% bootstrap_field form.release_after_exit layout="control" %}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                        <script type="form-template" data-formset-empty-form>
+                            {% escapescript %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ formset.empty_form.id }}
+                                        {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_field formset.empty_form.size layout="control" %}
+                                        {% bootstrap_field formset.empty_form.itemvars layout="control" %}
+                                        {% bootstrap_field formset.empty_form.release_after_exit layout="control" %}
+                                    </div>
+                                </div>
+                            {% endescapescript %}
+                        </script>
+                        <p>
+                            <button type="button" class="btn btn-default" data-formset-add>
+                                <i class="fa fa-plus"></i> {% trans "Add a new quota" %}</button>
+                        </p>
+                    </div>
                 </div>
-                <script type="form-template" data-formset-empty-form>
-                    {% escapescript %}
-                        <div class="panel panel-default" data-formset-form>
-                            <div class="sr-only">
-                                {{ formset.empty_form.id }}
-                                {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
-                            </div>
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-md-2 text-right flip">
-                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                                <i class="fa fa-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </h4>
-                            </div>
-                            <div class="panel-body form-horizontal">
-                                {% bootstrap_field formset.empty_form.size layout="control" %}
-                                {% bootstrap_field formset.empty_form.itemvars layout="control" %}
-                                {% bootstrap_field formset.empty_form.release_after_exit layout="control" %}
-                            </div>
-                        </div>
-                    {% endescapescript %}
-                </script>
-                <p>
-                    <button type="button" class="btn btn-default" data-formset-add>
-                        <i class="fa fa-plus"></i> {% trans "Add a new quota" %}</button>
-                </p>
             </div>
         </fieldset>
+        <p>&nbsp;</p>
         <fieldset>
             <legend>{% trans "Check-in lists" %}</legend>
             {% if sampled_lists|default_if_none:"NONE" == "NONE" %}
                 <div class="alert alert-warning">
                     {% blocktrans trimmed %}
                         You selected a set of dates that currently have different check-in list setups. You can
-                        therefore
-                        not change their check-in lists in bulk.
+                        therefore not change their check-in lists in bulk.
                     {% endblocktrans %}
                 </div>
             {% else %}
-                <div class="formset" data-formset data-formset-prefix="{{ cl_formset.prefix }}">
-                {{ cl_formset.management_form }}
-                {% bootstrap_formset_errors cl_formset %}
-                <div data-formset-body>
-                    {% for form in cl_formset %}
-                        <div class="panel panel-default" data-formset-form>
-                            <div class="sr-only">
-                                {{ form.id }}
-                                {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                            </div>
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            {% bootstrap_field form.name layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-md-2 text-right flip">
-                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                                <i class="fa fa-trash"></i></button>
-                                        </div>
+            <div class="bulk-edit-field-group">
+                <label class="field-toggle">
+                    <input type="checkbox" name="_bulk" value="__checkinlists" {% if "__checkinlists" in bulk_selected %}checked{% endif %}>
+                    {% trans "change" context "form_bulk" %}
+                </label>
+                <div class="field-content">
+                        <div class="formset" data-formset data-formset-prefix="{{ cl_formset.prefix }}">
+                        {{ cl_formset.management_form }}
+                        {% bootstrap_formset_errors cl_formset %}
+                        <div data-formset-body>
+                            {% for form in cl_formset %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ form.id }}
+                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
                                     </div>
-                                </h4>
-                            </div>
-                            <div class="panel-body form-horizontal">
-                                {% bootstrap_form_errors form %}
-                                {% bootstrap_field form.include_pending layout="control" %}
-                                {% bootstrap_field form.all_products layout="control" %}
-                                {% bootstrap_field form.limit_products layout="control" %}
-                                {% bootstrap_field form.allow_entry_after_exit layout="control" %}
-                                {% if form.gates %}
-                                    {% bootstrap_field form.gates layout="control" %}
-                                {% endif %}
-                            </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_form_errors form %}
+                                        {% bootstrap_field form.include_pending layout="control" %}
+                                        {% bootstrap_field form.all_products layout="control" %}
+                                        {% bootstrap_field form.limit_products layout="control" %}
+                                        {% bootstrap_field form.allow_entry_after_exit layout="control" %}
+                                        {% if form.gates %}
+                                            {% bootstrap_field form.gates layout="control" %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                        <script type="form-template" data-formset-empty-form>
+                            {% escapescript %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ cl_formset.empty_form.id }}
+                                        {% bootstrap_field cl_formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field cl_formset.empty_form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_field cl_formset.empty_form.include_pending layout="control" %}
+                                        {% bootstrap_field cl_formset.empty_form.all_products layout="control" %}
+                                        {% bootstrap_field cl_formset.empty_form.limit_products layout="control" %}
+                                        {% bootstrap_field cl_formset.empty_form.allow_entry_after_exit layout="control" %}
+                                        {% if cl_formset.empty_form.gates %}
+                                            {% bootstrap_field cl_formset.empty_form.gates layout="control" %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endescapescript %}
+                        </script>
+                        <p>
+                            <button type="button" class="btn btn-default" data-formset-add>
+                                <i class="fa fa-plus"></i> {% trans "Add a new check-in list" %}
+                            </button>
+                        </p>
+                    </div>
                 </div>
-                <script type="form-template" data-formset-empty-form>
-                    {% escapescript %}
-                        <div class="panel panel-default" data-formset-form>
-                            <div class="sr-only">
-                                {{ cl_formset.empty_form.id }}
-                                {% bootstrap_field cl_formset.empty_form.DELETE form_group_class="" layout="inline" %}
-                            </div>
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            {% bootstrap_field cl_formset.empty_form.name layout='inline' form_group_class="" %}
-                                        </div>
-                                        <div class="col-md-2 text-right flip">
-                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                                <i class="fa fa-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </h4>
-                            </div>
-                            <div class="panel-body form-horizontal">
-                                {% bootstrap_field cl_formset.empty_form.include_pending layout="control" %}
-                                {% bootstrap_field cl_formset.empty_form.all_products layout="control" %}
-                                {% bootstrap_field cl_formset.empty_form.limit_products layout="control" %}
-                                {% bootstrap_field cl_formset.empty_form.allow_entry_after_exit layout="control" %}
-                                {% if cl_formset.empty_form.gates %}
-                                    {% bootstrap_field cl_formset.empty_form.gates layout="control" %}
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endescapescript %}
-                </script>
-                <p>
-                    <button type="button" class="btn btn-default" data-formset-add>
-                        <i class="fa fa-plus"></i> {% trans "Add a new check-in list" %}
-                    </button>
-                </p>
             {% endif %}
         </fieldset>
         <div class="form-group submit-group">

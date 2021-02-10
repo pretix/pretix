@@ -109,7 +109,7 @@ class SubEventBulkEditForm(I18nModelForm):
         for k in ('name', 'location', 'frontpage_text'):
             # i18n fields
             if k in self.mixed_values:
-                self.fields[k].widget.attrs['placeholder'] = _('Keep the current values')
+                self.fields[k].widget.attrs['placeholder'] = _('Mixed values')
             else:
                 self.fields[k].widget.attrs['placeholder'] = ''
             self.fields[k].one_required = False
@@ -117,7 +117,7 @@ class SubEventBulkEditForm(I18nModelForm):
         for k in ('geo_lat', 'geo_lon'):
             # scalar fields
             if k in self.mixed_values:
-                self.fields[k].widget.attrs['placeholder'] = _('Keep the current values')
+                self.fields[k].widget.attrs['placeholder'] = _('Mixed values')
             else:
                 self.fields[k].widget.attrs['placeholder'] = ''
             self.fields[k].widget.is_required = False
@@ -136,27 +136,25 @@ class SubEventBulkEditForm(I18nModelForm):
             'active',
         ]
         field_classes = {
-            'is_public': forms.NullBooleanField,
-            'active': forms.NullBooleanField,
         }
         widgets = {
-            'is_public': NullBooleanSelect,
-            'active': NullBooleanSelect,
         }
 
     def save(self, commit=True):
         objs = list(self.queryset)
         fields = set()
-        for k in self.changed_data:
-            # i18n and scalar fields
-            if k in ('name', 'location', 'frontpage_text', 'geo_lat', 'geo_lon') and self.cleaned_data[k]:
+
+        check_map = {
+            'geo_lat': '__geo',
+            'geo_lon': '__geo',
+        }
+        for k in self.fields:
+            cb_val = self.prefix + check_map.get(k, k)
+            if cb_val in self.data.getlist('_bulk'):
                 fields.add(k)
                 for obj in objs:
                     setattr(obj, k, self.cleaned_data[k])
-            if k in ('active', 'is_public') and self.cleaned_data[k] is not None:
-                fields.add(k)
-                for obj in objs:
-                    setattr(obj, k, self.cleaned_data[k])
+
         if fields:
             SubEvent.objects.bulk_update(objs, fields, 200)
 
