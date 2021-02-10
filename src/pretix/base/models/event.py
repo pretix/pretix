@@ -1394,6 +1394,8 @@ class EventMetaProperty(LoggedModel):
         super().full_clean(exclude, validate_unique)
         if self.default and self.required:
             raise ValidationError(_("A property can either be required or have a default value, not both."))
+        if self.default and self.allowed_values and self.default not in self.allowed_values.splitlines():
+            raise ValidationError(_("You cannot set a default value that is not a valid value."))
 
 
 class EventMetaValue(LoggedModel):
