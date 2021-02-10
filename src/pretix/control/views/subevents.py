@@ -9,7 +9,7 @@ from django.db import connections, transaction
 from django.db.models import (
     Count, F, IntegerField, OuterRef, Prefetch, Subquery, Sum,
 )
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, TruncDate, TruncTime
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -1208,6 +1208,22 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
     def get_form_kwargs(self):
         initial = {}
         mixed_values = set()
+        qs = self.get_queryset()
+
+        qs = qs.annotate(
+            **{
+                # TODO: Once we're on Django 3.2, pass a tzinfo parameter
+                # Before Django 3.2, it uses the current timezone, which is hopefully fine
+                # as well in all cases we are concerned about
+                # See also: https://code.djangoproject.com/ticket/31948
+                k + '_day': TruncDate(k)
+                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
+            },
+            **{
+                k + '_time': TruncTime(k)
+                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
+            },
+        )
 
         fields = {
             'name',
@@ -1217,9 +1233,19 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             'geo_lon',
             'is_public',
             'active',
+            'date_from_day',
+            'date_from_time',
+            'date_to_day',
+            'date_to_time',
+            'date_admission_day',
+            'date_admission_time',
+            'presale_start_day',
+            'presale_start_time',
+            'presale_end_day',
+            'presale_end_time',
         }
         for k in fields:
-            existing_values = list(self.get_queryset().order_by(k).values(k).annotate(c=Count('*')))
+            existing_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
             if len(existing_values) == 1:
                 initial[k] = existing_values[0][k]
             elif len(existing_values) > 1:
@@ -1242,7 +1268,8 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         if self.is_submitted and form.is_valid() and self.quota_formset.is_valid() and (not self.list_formset or self.list_formset.is_valid()):
             return self.form_valid(form)
         else:
-            messages.error(self.request, _('We could not save your changes. See below for details.'))
+            if self.is_submitted:
+                messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.form_invalid(form)
 
     @transaction.atomic()

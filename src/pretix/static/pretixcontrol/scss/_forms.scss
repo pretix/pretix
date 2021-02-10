@@ -632,8 +632,14 @@ table td > .checkbox input[type="checkbox"] {
     border: 2px solid $gray-lighter;
     padding: 15px;
     opacity: 0.5;
+    .datepickerfield::placeholder, .timepickerfield::placeholder {
+      opacity: 0;
+    }
     &.enabled {
       opacity: 1;
+      .datepickerfield::placeholder, .timepickerfield::placeholder {
+        opacity: 1;
+      }
     }
   }
 }

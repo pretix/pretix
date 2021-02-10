@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from urllib.parse import urlencode
 
 from django import forms
@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
+from pretix.base.forms.widgets import DatePickerWidget, TimePickerWidget
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
 from pretix.base.reldate import RelativeDateTimeField
@@ -123,6 +124,20 @@ class SubEventBulkEditForm(I18nModelForm):
             self.fields[k].widget.is_required = False
             self.fields[k].required = False
 
+        for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end'):
+            self.fields[k + '_day'] = forms.DateField(
+                label=self._meta.model._meta.get_field(k).verbose_name,
+                help_text=self._meta.model._meta.get_field(k).help_text,
+                widget=DatePickerWidget(),
+                required=False,
+            )
+            self.fields[k + '_time'] = forms.TimeField(
+                label=self._meta.model._meta.get_field(k).verbose_name,
+                help_text=self._meta.model._meta.get_field(k).help_text,
+                widget=TimePickerWidget(),
+                required=False,
+            )
+
     class Meta:
         model = SubEvent
         localized_fields = '__all__'
@@ -150,7 +165,52 @@ class SubEventBulkEditForm(I18nModelForm):
         }
         for k in self.fields:
             cb_val = self.prefix + check_map.get(k, k)
-            if cb_val in self.data.getlist('_bulk'):
+            if cb_val not in self.data.getlist('_bulk'):
+                continue
+
+            if k.endswith('_day'):
+                for obj in objs:
+                    oldval = getattr(obj, k.replace('_day', ''))
+                    cval = self.cleaned_data[k]
+                    if cval is None:
+                        newval = None
+                        if not self._meta.model._meta.get_field(k.replace('_day', '')).null:
+                            continue
+                    elif oldval:
+                        oldval = oldval.astimezone(self.event.timezone)
+                        newval = oldval.replace(
+                            year=cval.year,
+                            month=cval.month,
+                            day=cval.day,
+                        )
+                    else:
+                        # If there is no previous date/time set, we'll just set to midnight
+                        # If the user also selected a time, this will be overridden anyways
+                        newval = datetime(
+                            year=cval.year,
+                            month=cval.month,
+                            day=cval.day,
+                            tzinfo=self.event.timezone
+                        )
+                    setattr(obj, k.replace('_day', ''), newval)
+                fields.add(k.replace('_day', ''))
+            elif k.endswith('_time'):
+                for obj in objs:
+                    # If there is no previous date/time set and only a time is changed not the
+                    # date, we instead use the date of the event
+                    oldval = getattr(obj, k.replace('_time', '')) or obj.date_from
+                    cval = self.cleaned_data[k]
+                    if cval is None:
+                        continue
+                    oldval = oldval.astimezone(self.event.timezone)
+                    newval = oldval.replace(
+                        hour=cval.hour,
+                        minute=cval.minute,
+                        second=cval.second,
+                    )
+                    setattr(obj, k.replace('_time', ''), newval)
+                fields.add(k.replace('_time', ''))
+            else:
                 fields.add(k)
                 for obj in objs:
                     setattr(obj, k, self.cleaned_data[k])

@@ -1,4 +1,4 @@
-from bootstrap3.renderers import FieldRenderer
+from bootstrap3.renderers import FieldRenderer, InlineFieldRenderer
 from bootstrap3.text import text_value
 from django.forms import CheckboxInput
 from django.forms.utils import flatatt
@@ -60,30 +60,38 @@ class ControlFieldRenderer(FieldRenderer):
         return html
 
 
-class BulkEditFieldRenderer(FieldRenderer):
+class BulkEditMixin:
+
     def __init__(self, *args, **kwargs):
-        kwargs['layout'] = 'horizontal'
+        kwargs['layout'] = self.layout
         super().__init__(*args, **kwargs)
 
     def wrap_field(self, html):
         field_class = self.get_field_class()
-        if field_class:
-            name = '{}{}'.format(self.field.form.prefix, self.field.name)
-            checked = self.field.form.data and name in self.field.form.data.getlist('_bulk')
-            html = (
-                '<div class="{klass} bulk-edit-field-group">'
-                '<label class="field-toggle">'
-                '<input type="checkbox" name="_bulk" value="{name}" {checked}> {label}'
-                '</label>'
-                '<div class="field-content">'
-                '{html}'
-                '</div>'
-                '</div>'
-            ).format(
-                klass=field_class,
-                name=name,
-                label=pgettext('form_bulk', 'change'),
-                checked='checked' if checked else '',
-                html=html
-            )
+        name = '{}{}'.format(self.field.form.prefix, self.field.name)
+        checked = self.field.form.data and name in self.field.form.data.getlist('_bulk')
+        html = (
+            '<div class="{klass} bulk-edit-field-group">'
+            '<label class="field-toggle">'
+            '<input type="checkbox" name="_bulk" value="{name}" {checked}> {label}'
+            '</label>'
+            '<div class="field-content">'
+            '{html}'
+            '</div>'
+            '</div>'
+        ).format(
+            klass=field_class or '',
+            name=name,
+            label=pgettext('form_bulk', 'change'),
+            checked='checked' if checked else '',
+            html=html
+        )
         return html
+
+
+class BulkEditFieldRenderer(BulkEditMixin, FieldRenderer):
+    layout = 'horizontal'
+
+
+class InlineBulkEditFieldRenderer(BulkEditMixin, InlineFieldRenderer):
+    layout = 'inline'
