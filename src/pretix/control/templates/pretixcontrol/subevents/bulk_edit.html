@@ -129,6 +129,22 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend>{% trans "Item prices" %}</legend>
+            {% for f in itemvar_forms %}
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="id_{{ f.prefix }}-price">
+                        {% if f.variation %}{{ f.item }} – {{ f.variation }}{% else %}{{ f.item }}{% endif %}
+                    </label>
+                    <div class="col-md-6">
+                        {% bootstrap_field f.price addon_after=request.event.currency form_group_class="" layout="bulkedit_inline" %}
+                    </div>
+                    <div class="col-md-3">
+                        {% bootstrap_field f.disabled layout="bulkedit_inline" form_group_class="" %}
+                    </div>
+                </div>
+            {% endfor %}
+        </fieldset>
+        <fieldset>
             <legend>{% trans "Quotas" %}</legend>
             {% if sampled_quotas|default_if_none:"NONE" == "NONE" %}
                 <div class="alert alert-warning">

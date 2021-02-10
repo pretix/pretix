@@ -931,6 +931,48 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         return HttpResponse(status=405)
 
     @cached_property
+    def itemvar_forms(self):
+        matches = defaultdict(list)
+        for sei in SubEventItem.objects.filter(
+            subevent__in=self.get_queryset()
+        ).order_by().values('item', 'price', 'disabled').annotate(c=Count('*')):
+            matches['item', sei['item']].append(sei)
+        for sei in SubEventItemVariation.objects.filter(
+            subevent__in=self.get_queryset()
+        ).order_by().values('variation', 'price', 'disabled').annotate(c=Count('*')):
+            matches['variation', sei['variation']].append(sei)
+        total = len(self.get_queryset())
+
+        formlist = []
+        for i in self.request.event.items.filter(active=True).prefetch_related('variations'):
+            if i.has_variations:
+                for v in i.variations.all():
+                    m = matches['variation', v.pk]
+                    if m and len(m) == 1 and m[0]['c'] == total:
+                        inst = SubEventItemVariation(variation=v, disabled=m[0]['disabled'], price=m[0]['price'])
+                    else:
+                        inst = SubEventItemVariation(variation=v)
+                    formlist.append(SubEventItemVariationForm(
+                        prefix='itemvar-{}'.format(v.pk),
+                        item=i, variation=v,
+                        instance=inst,
+                        data=(self.request.POST if self.is_submitted else None)
+                    ))
+            else:
+                m = matches['item', i.pk]
+                if m and len(m) == 1 and m[0]['c'] == total:
+                    inst = SubEventItem(item=i, disabled=m[0]['disabled'], price=m[0]['price'])
+                else:
+                    inst = SubEventItem(item=i)
+                formlist.append(SubEventItemForm(
+                    prefix='item-{}'.format(i.pk),
+                    item=i,
+                    instance=inst,
+                    data=(self.request.POST if self.is_submitted else None)
+                ))
+        return formlist
+
+    @cached_property
     def quota_formset(self):
         extra = 0
         kwargs = {}
@@ -1125,6 +1167,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         ctx['sampled_lists'] = self.sampled_lists
         ctx['formset'] = self.quota_formset
         ctx['cl_formset'] = self.list_formset
+        ctx['itemvar_forms'] = self.itemvar_forms
         ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
         return ctx
 
@@ -1265,12 +1308,57 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        if self.is_submitted and form.is_valid() and self.quota_formset.is_valid() and (not self.list_formset or self.list_formset.is_valid()):
+        is_valid = (
+            self.is_submitted and
+            form.is_valid() and
+            self.quota_formset.is_valid() and
+            (not self.list_formset or self.list_formset.is_valid()) and
+            all(f.is_valid() for f in self.itemvar_forms)
+        )
+        if is_valid:
             return self.form_valid(form)
         else:
             if self.is_submitted:
                 messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.form_invalid(form)
+
+    def save_itemvars(self):
+        for f in self.itemvar_forms:
+            u = {}
+            if f.prefix + 'price' in self.request.POST.getlist('_bulk'):
+                u['price'] = f.cleaned_data.get('price')
+            if f.prefix + 'disabled' in self.request.POST.getlist('_bulk'):
+                u['disabled'] = f.cleaned_data.get('disabled')
+
+            if not u:
+                continue
+
+            if isinstance(f, SubEventItemForm):
+                if u.get('price') is None and not u.get('disabled'):
+                    SubEventItem.objects.filter(
+                        subevent__in=self.get_queryset(),
+                        item=f.instance.item,
+                    ).delete()
+                else:
+                    for obj in self.get_queryset():
+                        SubEventItem.objects.update_or_create(
+                            subevent=obj,
+                            item=f.instance.item,
+                            defaults=u
+                        )
+            elif isinstance(f, SubEventItemVariationForm):
+                if u.get('price') is None and not u.get('disabled'):
+                    SubEventItemVariation.objects.filter(
+                        subevent__in=self.get_queryset(),
+                        variation=f.instance.variation,
+                    ).delete()
+                else:
+                    for obj in self.get_queryset():
+                        SubEventItemVariation.objects.update_or_create(
+                            subevent=obj,
+                            variation=f.instance.variation,
+                            defaults=u
+                        )
 
     @transaction.atomic()
     def form_valid(self, form):
@@ -1279,11 +1367,13 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         # Main form
         form.save()
         if form.has_changed():
+            data = {
+                k: v for k, v in form.cleaned_data.items() if k in form.changed_data
+            }
+            data['_raw_bulk_data'] = self.request.POST.dict()
             for obj in self.get_initial():
                 log_entries.append(
-                    obj.log_action('pretix.subevent.changed', data={
-                        k: v for k, v in form.cleaned_data.items() if k in form.changed_data
-                    }, user=self.request.user, save=False)
+                    obj.log_action('pretix.subevent.changed', data=data, user=self.request.user, save=False)
                 )
 
         # Formsets
@@ -1291,6 +1381,8 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             self.save_quota_formset(log_entries)
         if '__checkinlists' in self.request.POST.getlist('_bulk'):
             self.save_list_formset(log_entries)
+
+        self.save_itemvars()
 
         if connections['default'].features.can_return_rows_from_bulk_insert:
             LogEntry.objects.bulk_create(log_entries, batch_size=200)
