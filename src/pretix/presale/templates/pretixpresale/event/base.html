@@ -57,6 +57,18 @@
 {% endblock %}
 {% block page %}
     <div class="page-header {% if event_logo and event.settings.logo_image_large %}logo-large{% endif %}">
+        {% if event.settings.locales|length > 1 %}
+            {% if event.settings.theme_color_background|upper == "#FFFFFF" and not event.settings.logo_image_large %}
+                <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox hidden-print">
+                    <nav class="locales" aria-label="{% trans "select language" %}">
+                        {% for l in languages %}
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}">
+                                {{ l.name_local }}</a>
+                        {% endfor %}
+                    </nav>
+                </div>
+            {% endif %}
+        {% endif %}
         <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-left flip{% endif %}">
             {% if event_logo and event.settings.logo_image_large %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
@@ -77,18 +89,6 @@
                 </h1>
             {% endif %}
         </div>
-        {% if event.settings.locales|length > 1 %}
-            {% if event.settings.theme_color_background|upper == "#FFFFFF" and not event.settings.logo_image_large %}
-                <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox hidden-print">
-                    <div class="locales">
-                        {% for l in languages %}
-                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                                {{ l.name_local }}</a>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-        {% endif %}
         <div class="clearfix"></div>
     </div>
     {% if request.event.testmode %}
