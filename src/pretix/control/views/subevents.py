@@ -973,6 +973,33 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         return formlist
 
     @cached_property
+    def meta_forms(self):
+        matches = defaultdict(list)
+        for smv in SubEventMetaValue.objects.filter(
+            subevent__in=self.get_queryset()
+        ).order_by().values('property', 'value').annotate(c=Count('*')):
+            matches[smv['property']].append(smv)
+        total = len(self.get_queryset())
+
+        formlist = []
+
+        if not hasattr(self, '_default_meta'):
+            self._default_meta = self.request.event.meta_data
+
+        for p in self.request.organizer.meta_properties.all():
+            inst = SubEventMetaValue(property=p)
+            if len(matches[p.id]) == 1 and matches[p.id][0]['c'] == total:
+                inst.value = matches[p.id][0]['value']
+            formlist.append(SubEventMetaValueForm(
+                prefix='prop-{}'.format(p.pk),
+                property=p,
+                default=self._default_meta.get(p.name, ''),
+                instance=inst,
+                data=(self.request.POST if self.is_submitted else None)
+            ))
+        return formlist
+
+    @cached_property
     def quota_formset(self):
         extra = 0
         kwargs = {}
@@ -1169,6 +1196,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         ctx['cl_formset'] = self.list_formset
         ctx['itemvar_forms'] = self.itemvar_forms
         ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
+        ctx['meta_forms'] = self.meta_forms
         return ctx
 
     @cached_property
@@ -1313,7 +1341,8 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             form.is_valid() and
             self.quota_formset.is_valid() and
             (not self.list_formset or self.list_formset.is_valid()) and
-            all(f.is_valid() for f in self.itemvar_forms)
+            all(f.is_valid() for f in self.itemvar_forms)and
+            all(f.is_valid() for f in self.meta_forms)
         )
         if is_valid:
             return self.form_valid(form)
@@ -1321,6 +1350,26 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             if self.is_submitted:
                 messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.form_invalid(form)
+
+    def save_meta(self):
+        for f in self.meta_forms:
+            if f.prefix + 'value' not in self.request.POST.getlist('_bulk'):
+                continue
+
+            if f.cleaned_data.get('value'):
+                for obj in self.get_queryset():
+                    SubEventMetaValue.objects.update_or_create(
+                        property=f.instance.property,
+                        subevent=obj,
+                        defaults={
+                            'value': f.cleaned_data['value']
+                        }
+                    )
+            else:
+                SubEventMetaValue.objects.filter(
+                    property=f.instance.property,
+                    subevent__in=self.get_queryset()
+                ).delete()
 
     def save_itemvars(self):
         for f in self.itemvar_forms:
@@ -1366,15 +1415,14 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         # Main form
         form.save()
-        if form.has_changed():
-            data = {
-                k: v for k, v in form.cleaned_data.items() if k in form.changed_data
-            }
-            data['_raw_bulk_data'] = self.request.POST.dict()
-            for obj in self.get_initial():
-                log_entries.append(
-                    obj.log_action('pretix.subevent.changed', data=data, user=self.request.user, save=False)
-                )
+        data = {
+            k: v for k, v in form.cleaned_data.items() if k in form.changed_data
+        }
+        data['_raw_bulk_data'] = self.request.POST.dict()
+        for obj in self.get_initial():
+            log_entries.append(
+                obj.log_action('pretix.subevent.changed', data=data, user=self.request.user, save=False)
+            )
 
         # Formsets
         if '__quotas' in self.request.POST.getlist('_bulk'):
@@ -1383,6 +1431,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             self.save_list_formset(log_entries)
 
         self.save_itemvars()
+        self.save_meta()
 
         if connections['default'].features.can_return_rows_from_bulk_insert:
             LogEntry.objects.bulk_create(log_entries, batch_size=200)
@@ -1395,5 +1444,3 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         self.request.event.cache.clear()
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
-
-    # todo: times, quota, prices, checkin lists, plugins
