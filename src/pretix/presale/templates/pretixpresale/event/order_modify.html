@@ -33,7 +33,7 @@
                                     {% trans "Contact information" %}
                                 {% endif %}
                             </strong>
-                            <i class="fa fa-angle-down collapse-indicator"></i>
+                            <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                         </h4>
                     </summary>
                     <div id="invoice" class="panel-collapse">
@@ -55,7 +55,7 @@
                             <strong>{{ pos.item.name }}{% if pos.variation %}
                                 – {{ pos.variation }}
                             {% endif %}</strong>
-                            <i class="fa fa-angle-down collapse-indicator"></i>
+                            <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                         </h4>
                     </summary>
                     <div id="cp{{ pos.id }}">

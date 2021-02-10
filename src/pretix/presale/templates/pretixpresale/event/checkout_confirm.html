@@ -23,13 +23,13 @@
                     </strong>
                     <span class="helper-display-block cart-modify">
                         <a href="{% eventurl request.event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">
-                            <span class="fa fa-edit"></span>
+                            <span class="fa fa-edit" aria-hidden="true"></span>
                             {% trans "Add or remove tickets" %}
                         </a>
                     </span>
                 </div>
                 <h3 class="panel-title">
-                    <i class="fa fa-shopping-cart"></i>
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     {% trans "Your cart" %}
                 </h3>
             </div>
@@ -57,7 +57,7 @@
                     {% if payment_provider.identifier != "free" %}
                         <div class="pull-right flip">
                             <a href="{% eventurl request.event "presale:event.checkout" step="payment" cart_namespace=cart_namespace|default_if_none:"" %}">
-                                <span class="fa fa-edit"></span>
+                                <span class="fa fa-edit" aria-hidden="true"></span>
                                 {% trans "Modify" %}
                             </a>
                         </div>
@@ -79,7 +79,7 @@
                         <div class="panel-heading">
                             <div class="pull-right flip">
                                 <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}?invoice=1">
-                                    <span class="fa fa-edit"></span>
+                                    <span class="fa fa-edit" aria-hidden="true"></span>
                                     {% trans "Modify" %}
                                 </a>
                             </div>
@@ -129,7 +129,7 @@
                     <div class="panel-heading">
                         <div class="pull-right flip">
                             <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}">
-                                <span class="fa fa-edit"></span>
+                                <span class="fa fa-edit" aria-hidden="true"></span>
                                 {% trans "Modify" %}
                             </a>
                         </div>

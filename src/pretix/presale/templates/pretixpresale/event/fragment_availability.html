@@ -10,7 +10,7 @@
         {% if event.settings.waiting_list_enabled and item.allow_waitinglist %}
             <br/>
             <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
-                <span class="fa fa-plus-circle"></span>
+                <span class="fa fa-plus-circle" aria-hidden="true"></span>
                 {% trans "Waiting list" %}
             </a>
         {% endif %}
@@ -23,7 +23,7 @@
         {% if event.settings.waiting_list_enabled and item.allow_waitinglist %}
             <br/>
             <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
-                <span class="fa fa-plus-circle"></span>
+                <span class="fa fa-plus-circle" aria-hidden="true"></span>
                 {% trans "Waiting list" %}
             </a>
         {% endif %}

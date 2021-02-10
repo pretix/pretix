@@ -7,7 +7,7 @@
         <summary class="panel-heading">
             <h3 class="panel-title">
                 <span>
-                    <i class="fa fa-shopping-cart"></i>
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     <strong>{% trans "Your cart" %}</strong>
                 </span>
                 <span>
@@ -18,7 +18,7 @@
                             {% trans "Cart expired" %}
                         {% endif %}
                     </strong>
-                    <i class="fa fa-angle-down collapse-indicator"></i>
+                    <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                 </span>
             </h3>
         </summary>
@@ -39,7 +39,7 @@
     </details>
     {% if not has_prev and request.event.has_subevents and request.session.iframe_session %}
         <a class="btn btn-primary btn-block btn-lg" href="{{ prev_url }}">
-            <span class="fa fa-reply"></span>
+            <span class="fa fa-reply" aria-hidden="true"></span>
             {% trans "Add tickets for a different date" %}
         </a>
     {% endif %}

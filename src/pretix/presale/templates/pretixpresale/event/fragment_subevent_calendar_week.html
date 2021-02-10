@@ -11,7 +11,7 @@
         <div class="col-sm-4 hidden-xs text-left flip">
             <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
                     class="btn btn-default">
-                <span class="fa fa-arrow-left"></span>
+                <span class="fa fa-arrow-left" aria-hidden="true"></span>
                 {{ before|date:week_format }}
             </a>
         </div>
@@ -34,7 +34,7 @@
             <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
                     class="btn btn-default">
                 {{ after|date:week_format }}
-                <span class="fa fa-arrow-right"></span>
+                <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
         </div>
     </div>
@@ -43,12 +43,12 @@
 <div class="col-sm-4 visible-xs text-center">
     <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
             class="btn btn-default">
-        <span class="fa fa-arrow-left"></span>
+        <span class="fa fa-arrow-left" aria-hidden="true"></span>
         {{ before|date:week_format }}
     </a>
     <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
             class="btn btn-default">
         {{ after|date:week_format }}
-        <span class="fa fa-arrow-right"></span>
+        <span class="fa fa-arrow-right" aria-hidden="true"></span>
     </a>
 </div>

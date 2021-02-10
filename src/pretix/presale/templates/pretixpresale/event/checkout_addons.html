@@ -20,17 +20,17 @@
                             <strong>{{ form.item.name }}{% if form.variation %}
                                 – {{ form.variation }}
                             {% endif %}</strong>
-                            <i class="fa fa-angle-down collapse-indicator"></i>
+                            <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                         </h4>
                     </summary>
                     <div id="cp{{ form.cartpos.pk }}">
                         <div class="panel-body">
                             {% if form.cartpos.subevent %}
                                 <p>
-                                    <span class="fa fa-calendar"></span>
+                                    <span class="fa fa-calendar" aria-hidden="true"></span>
                                     {{ form.cartpos.subevent.name }} &middot; {{ form.cartpos.subevent.get_date_range_display }}
                                     {% if form.cartpos.event.settings.show_times %}
-                                        <span class="fa fa-clock-o"></span>
+                                        <span class="fa fa-clock-o" aria-hidden="true"></span>
                                         {{ form.cartpos.subevent.date_from|date:"TIME_FORMAT" }}
                                     {% endif %}
                                 </p>

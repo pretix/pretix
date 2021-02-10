@@ -23,13 +23,13 @@
                 {{ line.seat }}
             {% endif %}
             {% if line.voucher %}
-                <br /><span class="fa fa-tags fa-fw"></span> {% trans "Voucher code used:" %} {{ line.voucher.code }}
+                <br /><span class="fa fa-tags fa-fw" aria-hidden="true"></span> {% trans "Voucher code used:" %} {{ line.voucher.code }}
             {% endif %}
             {% if line.subevent %}
-                <br /><span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+                <br /><span class="fa fa-calendar fa-fw" aria-hidden="true"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
                 {% if event.settings.show_times %}
                     <span data-time="{{ line.subevent.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}" data-time-short>
-                        <span class="fa fa-clock-o"></span>
+                        <span class="fa fa-clock-o" aria-hidden="true"></span>
                         {{ line.subevent.date_from|date:"TIME_FORMAT" }}
                     </span>
                 {% endif %}
@@ -100,7 +100,7 @@
                         <dd>
                             {% if q.answer %}
                                 {% if q.answer.file %}
-                                    <span class="fa fa-file"></span>
+                                    <span class="fa fa-file" aria-hidden="true"></span>
                                     <a href="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}">
                                         {{ q.answer.file_name }}
                                     </a>
@@ -131,7 +131,7 @@
                         {% csrf_token %}
                         <button type="submit"
                                 class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                            <span class="fa {{ b.icon }}" aria-hidden="true"></span> {{ b.text }}
                         </button>
                     </form>
                 {% endfor %}
@@ -154,11 +154,11 @@
                         method="post" data-asynctask>
                     {% csrf_token %}
                     <input type="hidden" name="id" value="{{ line.id }}" />
-                    <button class="btn btn-mini btn-link" title="{% trans "Remove one" %}">
+                    <button class="btn btn-mini btn-link" title="{% trans "Remove one" %}" aria-label="{% trans "Remove one" %}">
                         {% if line.seat %}
-                            <i class="fa fa-trash"></i>
+                            <i class="fa fa-trash" aria-hidden="true"></i>
                         {% else %}
-                            <i class="fa fa-minus"></i>
+                            <i class="fa fa-minus" aria-hidden="true"></i>
                         {% endif %}
                     </button>
                 </form>
@@ -182,8 +182,8 @@
                         <input type="hidden" name="price_{{ line.item.id }}"
                                 value="{% if event.settings.display_net_prices %}{{ line.bundle_sum_net }}{% else %}{{ line.bundle_sum }}{% endif %}" />
                     {% endif %}
-                    <button class="btn btn-mini btn-link {% if line.seat %}btn-invisible{% endif %}" title="{% trans "Add one more" %}" {% if line.seat %}disabled{% endif %}>
-                        <i class="fa fa-plus"></i>
+                    <button class="btn btn-mini btn-link {% if line.seat %}btn-invisible{% endif %}" title="{% trans "Add one more" %}" aria-label="{% trans "Add one more" %}" {% if line.seat %}disabled{% endif %}>
+                        <i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
                 </form>
                 {% endif %}
@@ -300,17 +300,17 @@
         {% if editable and vouchers_exist and not cart.all_with_voucher %}
             <br>
             <a class="js-only apply-voucher-toggle" href="#">
-                <span class="fa fa-tag"></span> {% trans "Redeem a voucher" %}
+                <span class="fa fa-tag" aria-hidden="true"></span> {% trans "Redeem a voucher" %}
             </a>
             <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
                   data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
                   method="post" data-asynctask class="apply-voucher">
                 {% csrf_token %}
                 <div class="input-group">
-                    <input type="text" class="form-control" name="voucher" placeholder="{% trans "Voucher code" %}">
+                    <input type="text" class="form-control" name="voucher" placeholder="{% trans "Voucher code" %}" aria-label="{% trans "Voucher code" %}">
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit">
-                            <span class="fa fa-check"></span>
+                        <button class="btn btn-primary" type="submit" aria-label="{% trans "Redeem voucher" %}">
+                            <span class="fa fa-check" aria-hidden="true"></span>
                         </button>
                     </span>
                 </div>

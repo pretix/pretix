@@ -5,7 +5,7 @@
             <div class="checkout-step-bar-left"></div>
             <div class="checkout-step-bar-right"></div>
             <div class="checkout-step-icon">
-                <span class="fa {% if step.c_is_before %}fa-check{% elif step.icon %}fa-{{ step.icon }}{% else %}fa-pencil{% endif %}"></span>
+                <span class="fa {% if step.c_is_before %}fa-check{% elif step.icon %}fa-{{ step.icon }}{% else %}fa-pencil{% endif %}" aria-hidden="true"></span>
             </div>
             <div class="checkout-step-label">
                 {{ step.label }}
@@ -16,7 +16,7 @@
         <div class="checkout-step-bar-left"></div>
         <div class="checkout-step-bar-right"></div>
         <div class="checkout-step-icon">
-            <span class="fa fa-ticket"></span>
+            <span class="fa fa-ticket" aria-hidden="true"></span>
         </div>
         <div class="checkout-step-label">
             {% trans "Order confirmed" context "checkoutflow" %}
