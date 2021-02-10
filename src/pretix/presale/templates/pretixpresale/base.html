@@ -46,8 +46,10 @@
 </head>
 <body class="nojs" data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}" data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-currency="{{ request.event.currency }}">
 {{ html_page_header|safe }}
+<header>
 {% block above %}
 {% endblock %}
+</header>
 <div class="container main-box">
     {% block page %}
     {% endblock %}

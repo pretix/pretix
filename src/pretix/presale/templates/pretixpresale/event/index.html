@@ -24,7 +24,7 @@
             {{ ev.event_microdata }}
         </script>
     {% endautoescape %}
-
+    <main aria-label="{% trans General information, tickets and products %}">
     {% if show_cart %}
         <details class="panel panel-primary cart" open>
             <summary class="panel-heading">
@@ -286,9 +286,10 @@
             </form>
         {% endif %}
     {% endif %}
+    </main>
     {% if show_vouchers %}
-        <section class="front-page">
-            <h3>{% trans "Redeem a voucher" %}</h3>
+        <aside class="front-page" aria-labelledby="redeem-a-voucher">
+            <h3 id="redeem-a-voucher">{% trans "Redeem a voucher" %}</h3>
             {% if event.settings.voucher_explanation_text %}
                 <div>
                     {{ event.settings.voucher_explanation_text|rich_text }}
@@ -312,12 +313,12 @@
                     <div class="clearfix"></div>
                 </div>
             </form>
-        </section>
+        </aside>
     {% endif %}
     {% if not cart_namespace %}
         {% eventsignal event "pretix.presale.signals.front_page_bottom" subevent=subevent request=request %}
-        <section class="front-page">
-            <h3>{% trans "If you already ordered a ticket" %}</h3>
+        <aside class="front-page" aria-labelledby="if-you-already-ordered-a-ticket">
+            <h3 id="if-you-already-ordered-a-ticket">{% trans "If you already ordered a ticket" %}</h3>
             <div>
                 <div class="col-md-8 col-xs-12">
                     <p>
@@ -335,7 +336,7 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-        </section>
+        </aside>
     {% else %}
         {% eventsignal event "pretix.presale.signals.front_page_bottom_widget" subevent=subevent request=request %}
     {% endif %}
