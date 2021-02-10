@@ -690,7 +690,7 @@ $(function () {
         var update = function () {
             var all_true = true;
             var all_false = true;
-            $toggle.closest("table").find("td:first-child input[type=checkbox]").each(function () {
+            $toggle.closest("table").find("tbody td:first-child input[type=checkbox]").each(function () {
                 if ($(this).prop("checked")) {
                     all_false = false;
                 } else {
@@ -704,11 +704,29 @@ $(function () {
             } else {
                 $toggle.prop("checked", false).prop("indeterminate", true);
             }
+            var is_incomplete = $toggle.prop("indeterminate") || !$toggle.prop("checked")
+            $toggle.closest("table").find(".table-select-all").toggleClass(
+                "hidden", is_incomplete
+            )
+            if (is_incomplete) {
+                $toggle.closest("table").find(".table-select-all input").prop(
+                     "checked", false
+                )
+            }
         };
 
         $(this).closest("table").find("td:first-child input[type=checkbox]").change(update);
         $(this).change(function (ev) {
-            $(this).closest("table").find("td:first-child input[type=checkbox]").prop("checked", $(this).prop("checked"));
+            $(this).closest("table").find("tbody td:first-child input[type=checkbox]").prop("checked", $(this).prop("checked"));
+            var is_incomplete = $(this).prop("indeterminate") || !$(this).prop("checked")
+            $(this).closest("table").find(".table-select-all").toggleClass(
+                "hidden", is_incomplete
+            )
+            if (is_incomplete) {
+                $(this).closest("table").find(".table-select-all input").prop(
+                     "checked", false
+                )
+            }
         });
     });
 

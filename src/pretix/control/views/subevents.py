@@ -56,7 +56,7 @@ class SubEventQueryMixin:
             return self.request.POST
         return self.request.GET
 
-    def get_queryset(self):
+    def get_queryset(self, list=False):
         sum_tickets_paid = Quota.objects.filter(
             subevent=OuterRef('pk')
         ).order_by().values('subevent').annotate(
@@ -64,17 +64,19 @@ class SubEventQueryMixin:
         ).values(
             's'
         )
-        qs = self.request.event.subevents.annotate(
-            sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
-        ).prefetch_related(
-            Prefetch('quotas',
-                     queryset=Quota.objects.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
-                     to_attr='first_quotas')
-        )
+        qs = self.request.event.subevents
+        if list:
+            qs = qs.annotate(
+                sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
+            ).prefetch_related(
+                Prefetch('quotas',
+                         queryset=Quota.objects.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
+                         to_attr='first_quotas')
+            )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
-        if 'subevent' in self.request_data:
+        if 'subevent' in self.request_data and '__ALL' not in self.request_data:
             qs = qs.filter(
                 id__in=self.request_data.getlist('subevent')
             )
@@ -91,6 +93,9 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
     context_object_name = 'subevents'
     template_name = 'pretixcontrol/subevents/index.html'
     permission = 'can_change_settings'
+
+    def get_queryset(self):
+        return super().get_queryset(True)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -921,6 +926,9 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
     template_name = 'pretixcontrol/subevents/bulk_edit.html'
     context_object_name = 'subevent'
 
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(None).order_by()
+
     def get_success_url(self) -> str:
         return reverse('control:event.subevents', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -929,6 +937,10 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
     def get(self, request, *args, **kwargs):
         return HttpResponse(status=405)
+
+    @cached_property
+    def cached_num(self):
+        return self.get_queryset().count()
 
     @cached_property
     def itemvar_forms(self):
@@ -941,7 +953,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             subevent__in=self.get_queryset()
         ).order_by().values('variation', 'price', 'disabled').annotate(c=Count('*')):
             matches['variation', sei['variation']].append(sei)
-        total = len(self.get_queryset())
+        total = self.cached_num
 
         formlist = []
         for i in self.request.event.items.filter(active=True).prefetch_related('variations'):
@@ -979,7 +991,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             subevent__in=self.get_queryset()
         ).order_by().values('property', 'value').annotate(c=Count('*')):
             matches[smv['property']].append(smv)
-        total = len(self.get_queryset())
+        total = self.cached_num
 
         formlist = []
 
@@ -1271,10 +1283,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         # Usually, django considers a form "bound" / "submitted" on every POST request. However, this view is always
         # called with POST method, even if just to pass the selection of objects to work on, so we want to modify
         # that behaviour
-        ignored_fields = {'csrfmiddlewaretoken', 'action', 'subevent'}
-        return len([
-            k for k, v in self.request.POST.items() if v and k not in ignored_fields and not k.startswith('filter-')
-        ]) > 0
+        return '_bulk' in self.request.POST
 
     def get_form_kwargs(self):
         initial = {}
@@ -1419,7 +1428,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             k: v for k, v in form.cleaned_data.items() if k in form.changed_data
         }
         data['_raw_bulk_data'] = self.request.POST.dict()
-        for obj in self.get_initial():
+        for obj in self.get_queryset():
             log_entries.append(
                 obj.log_action('pretix.subevent.changed', data=data, user=self.request.user, save=False)
             )

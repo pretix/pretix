@@ -85,6 +85,16 @@
                         </th>
                         <th></th>
                     </tr>
+                    <tr class="table-select-all warning hidden">
+                        <td>
+                            <input type="checkbox" name="__ALL" id="__all">
+                        </td>
+                        <td colspan="5">
+                            <label for="__all">
+                                {% trans "Select all results on other pages as well" %}
+                            </label>
+                        </td>
+                    </tr>
                     </thead>
                     <tbody>
                     {% for s in subevents %}
