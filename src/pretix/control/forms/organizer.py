@@ -13,7 +13,9 @@ from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
-from pretix.base.models import Device, Gate, GiftCard, Organizer, Team
+from pretix.base.models import (
+    Device, EventMetaProperty, Gate, GiftCard, Organizer, Team,
+)
 from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import SafeEventMultipleChoiceField
 from pretix.multidomain.models import KnownDomain
@@ -125,7 +127,8 @@ class OrganizerUpdateForm(OrganizerForm):
 
 class EventMetaPropertyForm(forms.ModelForm):
     class Meta:
-        fields = ['name', 'default']
+        model = EventMetaProperty
+        fields = ['name', 'default', 'required', 'protected', 'allowed_values']
         widgets = {
             'default': forms.TextInput()
         }

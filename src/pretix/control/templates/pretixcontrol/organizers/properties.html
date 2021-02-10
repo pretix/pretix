@@ -1,0 +1,42 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    <h1>{% trans "Event metadata" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can here define a set of metadata properties (i.e. variables) that you can later set for your
+            events and re-use in places like ticket layouts. This is an useful timesaver if you create lots and
+            lots of events.
+        {% endblocktrans %}
+    </p>
+    <a href="{% url "control:organizer.property.add" organizer=request.organizer.slug %}" class="btn btn-default">
+        <span class="fa fa-plus"></span>
+        {% trans "Create a new property" %}
+    </a>
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>{% trans "Property" %}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in properties %}
+            <tr>
+                <td><strong>
+                    <a href="{% url "control:organizer.property.edit" organizer=request.organizer.slug property=p.id %}">
+                        {{ p.name }}
+                    </a>
+                </strong></td>
+                <td class="text-right flip">
+                    <a href="{% url "control:organizer.property.edit" organizer=request.organizer.slug property=p.id %}"
+                            class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                    <a href="{% url "control:organizer.property.delete" organizer=request.organizer.slug property=p.id %}"
+                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

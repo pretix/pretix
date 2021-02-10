@@ -143,7 +143,14 @@ def test_subevent_list_filter(token_client, organizer, event, subevent):
 
 
 @pytest.mark.django_db
-def test_subevent_create(token_client, organizer, event, subevent, meta_prop, item):
+def test_subevent_create(team, token_client, organizer, event, subevent, meta_prop, item):
+    meta_prop.allowed_values = "Conference\nWorkshop"
+    meta_prop.save()
+    team.can_change_organizer_settings = False
+    team.save()
+    organizer.meta_properties.create(
+        name="protected", protected=True
+    )
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/subevents/'.format(organizer.slug, event.slug),
         {
@@ -161,7 +168,8 @@ def test_subevent_create(token_client, organizer, event, subevent, meta_prop, it
             "item_price_overrides": [],
             "variation_price_overrides": [],
             "meta_data": {
-                "type": "Workshop"
+                "type": "Workshop",
+                "protected": "ignored",
             },
         },
         format='json'
@@ -171,6 +179,9 @@ def test_subevent_create(token_client, organizer, event, subevent, meta_prop, it
     with scopes_disabled():
         assert subevent.meta_values.filter(
             property__name=meta_prop.name, value="Workshop"
+        ).exists()
+        assert not subevent.meta_values.filter(
+            property__name="ignored",
         ).exists()
 
     resp = token_client.post(
@@ -197,6 +208,31 @@ def test_subevent_create(token_client, organizer, event, subevent, meta_prop, it
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"meta_data":["Meta data property \'foo\' does not exist."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/subevents/'.format(organizer.slug, event.slug),
+        {
+            "name": {
+                "de": "Demo Subevent 2020 Test",
+                "en": "Demo Subevent 2020 Test"
+            },
+            "active": False,
+            "date_from": "2017-12-27T10:00:00Z",
+            "date_to": "2017-12-28T10:00:00Z",
+            "date_admission": None,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "item_price_overrides": [],
+            "variation_price_overrides": [],
+            "meta_data": {
+                meta_prop.name: "bar"
+            },
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"meta_data":["Meta data property \'type\' does not allow value \'bar\'."]}'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/subevents/'.format(organizer.slug, event.slug),

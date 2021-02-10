@@ -13,7 +13,7 @@ from rest_framework.relations import SlugRelatedField
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
-from pretix.base.models import Event, TaxRule
+from pretix.base.models import Device, Event, TaxRule, TeamAPIToken
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.seating import (
@@ -174,9 +174,12 @@ class EventSerializer(I18nAwareModelSerializer):
         }
 
     def validate_meta_data(self, value):
-        for key in value['meta_data'].keys():
+        for key, v in value['meta_data'].items():
             if key not in self.meta_properties:
                 raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
+            if self.meta_properties[key].allowed_values:
+                if v not in [_v.strip() for _v in self.meta_properties[key].allowed_values.splitlines()]:
+                    raise ValidationError(_('Meta data property \'{name}\' does not allow value \'{value}\'.').format(name=key, value=v))
         return value
 
     @cached_property
@@ -223,6 +226,14 @@ class EventSerializer(I18nAwareModelSerializer):
 
         return value
 
+    @cached_property
+    def ignored_meta_properties(self):
+        perm_holder = (self.context['request'].auth if isinstance(self.context['request'].auth, (Device, TeamAPIToken))
+                       else self.context['request'].user)
+        if perm_holder.has_organizer_permission('can_change_organizer_settings', request=self.context['request']):
+            return []
+        return [k for k, p in self.meta_properties.items() if p.protected]
+
     @transaction.atomic
     def create(self, validated_data):
         meta_data = validated_data.pop('meta_data', None)
@@ -238,10 +249,11 @@ class EventSerializer(I18nAwareModelSerializer):
         # Meta data
         if meta_data is not None:
             for key, value in meta_data.items():
-                event.meta_values.create(
-                    property=self.meta_properties.get(key),
-                    value=value
-                )
+                if key not in self.ignored_meta_properties:
+                    event.meta_values.create(
+                        property=self.meta_properties.get(key),
+                        value=value
+                    )
 
         # Item Meta properties
         if item_meta_properties is not None:
@@ -279,19 +291,21 @@ class EventSerializer(I18nAwareModelSerializer):
         if meta_data is not None:
             current = {mv.property: mv for mv in event.meta_values.select_related('property')}
             for key, value in meta_data.items():
-                prop = self.meta_properties.get(key)
-                if prop in current:
-                    current[prop].value = value
-                    current[prop].save()
-                else:
-                    event.meta_values.create(
-                        property=self.meta_properties.get(key),
-                        value=value
-                    )
+                if key not in self.ignored_meta_properties:
+                    prop = self.meta_properties.get(key)
+                    if prop in current:
+                        current[prop].value = value
+                        current[prop].save()
+                    else:
+                        event.meta_values.create(
+                            property=self.meta_properties.get(key),
+                            value=value
+                        )
 
             for prop, current_object in current.items():
-                if prop.name not in meta_data:
-                    current_object.delete()
+                if prop.name not in self.ignored_meta_properties:
+                    if prop.name not in meta_data:
+                        current_object.delete()
 
         # Item Meta properties
         if item_meta_properties is not None:
@@ -444,10 +458,21 @@ class SubEventSerializer(I18nAwareModelSerializer):
         }
 
     def validate_meta_data(self, value):
-        for key in value['meta_data'].keys():
+        for key, v in value['meta_data'].items():
             if key not in self.meta_properties:
                 raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
+            if self.meta_properties[key].allowed_values:
+                if v not in [_v.strip() for _v in self.meta_properties[key].allowed_values.splitlines()]:
+                    raise ValidationError(_('Meta data property \'{name}\' does not allow value \'{value}\'.').format(name=key, value=v))
         return value
+
+    @cached_property
+    def ignored_meta_properties(self):
+        perm_holder = (self.context['request'].auth if isinstance(self.context['request'].auth, (Device, TeamAPIToken))
+                       else self.context['request'].user)
+        if perm_holder.has_organizer_permission('can_change_organizer_settings', request=self.context['request']):
+            return []
+        return [k for k, p in self.meta_properties.items() if p.protected]
 
     @transaction.atomic
     def create(self, validated_data):
@@ -465,10 +490,11 @@ class SubEventSerializer(I18nAwareModelSerializer):
         # Meta data
         if meta_data is not None:
             for key, value in meta_data.items():
-                subevent.meta_values.create(
-                    property=self.meta_properties.get(key),
-                    value=value
-                )
+                if key not in self.ignored_meta_properties:
+                    subevent.meta_values.create(
+                        property=self.meta_properties.get(key),
+                        value=value
+                    )
 
         # Seats
         if subevent.seating_plan:
@@ -514,19 +540,21 @@ class SubEventSerializer(I18nAwareModelSerializer):
         if meta_data is not None:
             current = {mv.property: mv for mv in subevent.meta_values.select_related('property')}
             for key, value in meta_data.items():
-                prop = self.meta_properties.get(key)
-                if prop in current:
-                    current[prop].value = value
-                    current[prop].save()
-                else:
-                    subevent.meta_values.create(
-                        property=self.meta_properties.get(key),
-                        value=value
-                    )
+                if key not in self.ignored_meta_properties:
+                    prop = self.meta_properties.get(key)
+                    if prop in current:
+                        current[prop].value = value
+                        current[prop].save()
+                    else:
+                        subevent.meta_values.create(
+                            property=self.meta_properties.get(key),
+                            value=value
+                        )
 
             for prop, current_object in current.items():
-                if prop.name not in meta_data:
-                    current_object.delete()
+                if prop.name not in self.ignored_meta_properties:
+                    if prop.name not in meta_data:
+                        current_object.delete()
 
         # Seats
         if seat_category_mapping is not None or ('seating_plan' in validated_data and validated_data['seating_plan'] is None):

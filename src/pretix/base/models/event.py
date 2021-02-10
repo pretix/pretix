@@ -16,11 +16,12 @@ from django.core.validators import (
 from django.db import models
 from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery, Value
 from django.template.defaultfilters import date as _date
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField, I18nTextField
 
@@ -953,6 +954,18 @@ class Event(EventMixin, LoggedModel):
         if not self.quotas.exists():
             issues.append(_('You need to configure at least one quota to sell anything.'))
 
+        for mp in self.organizer.meta_properties.all():
+            if mp.required and not self.meta_data.get(mp.name):
+                issues.append(
+                    ('<a {a_attr}>' + gettext('You need to fill the meta parameter "{property}".') + '</a>').format(
+                        property=mp.name,
+                        a_attr='href="%s#id_prop-%d-value"' % (
+                            reverse('control:event.settings', kwargs={'organizer': self.organizer.slug, 'event': self.slug}),
+                            mp.pk
+                        )
+                    )
+                )
+
         responses = event_live_issues.send(self)
         for receiver, response in sorted(responses, key=lambda r: str(r[0])):
             if response:
@@ -1363,7 +1376,26 @@ class EventMetaProperty(LoggedModel):
         ],
         verbose_name=_("Name"),
     )
-    default = models.TextField(blank=True)
+    default = models.TextField(blank=True, verbose_name=_("Default value"))
+    protected = models.BooleanField(default=False,
+                                    verbose_name=_("Can only be changed by organizer-level administrators"))
+    required = models.BooleanField(
+        default=False, verbose_name=_("Required for events"),
+        help_text=_("If checked, an event can only be taken live if the property is set. In event series, its always "
+                    "optional to set a value for individual dates")
+    )
+    allowed_values = models.TextField(
+        null=True, blank=True,
+        verbose_name=_("Valid values"),
+        help_text=_("If you keep this empty, any value is allowed. Otherwise, enter one possible value per line.")
+    )
+
+    def full_clean(self, exclude=None, validate_unique=True):
+        super().full_clean(exclude, validate_unique)
+        if self.default and self.required:
+            raise ValidationError(_("A property can either be required or have a default value, not both."))
+        if self.default and self.allowed_values and self.default not in self.allowed_values.splitlines():
+            raise ValidationError(_("You cannot set a default value that is not a valid value."))
 
 
 class EventMetaValue(LoggedModel):

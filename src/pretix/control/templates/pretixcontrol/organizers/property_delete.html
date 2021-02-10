@@ -2,13 +2,13 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    <h1>{% trans "Delete gate:" %} {{ gate.name }}</h1>
+    <h1>{% trans "Delete property:" %} {{ gate.name }}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
-        <p>{% blocktrans %}Are you sure you want to delete the gate?{% endblocktrans %}
+        <p>{% blocktrans %}Are you sure you want to delete the property?{% endblocktrans %}
         </p>
         <div class="form-group submit-group">
-            <a href="{% url "control:organizer.gates" organizer=request.organizer.slug %}" class="btn btn-default btn-cancel">
+            <a href="{% url "control:organizer.properties" organizer=request.organizer.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save">

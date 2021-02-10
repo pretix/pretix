@@ -1,0 +1,20 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    {% if gate %}
+        <h1>{% trans "Property:" %} {{ property.name }}</h1>
+    {% else %}
+        <h1>{% trans "Create a new property" %}</h1>
+    {% endif %}
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form layout="control" %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+
+    </form>
+{% endblock %}

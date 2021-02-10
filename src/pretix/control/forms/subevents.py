@@ -162,15 +162,32 @@ class SubEventMetaValueForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.property = kwargs.pop('property')
         self.default = kwargs.pop('default', None)
+        self.disabled = kwargs.pop('disabled')
         super().__init__(*args, **kwargs)
+        if self.property.allowed_values:
+            self.fields['value'] = forms.ChoiceField(
+                label=self.property.name,
+                choices=[
+                    ('', _('Default ({value})').format(value=self.default or self.property.default) if self.default or self.property.default else ''),
+                ] + [(a.strip(), a.strip()) for a in self.property.allowed_values.splitlines()],
+            )
+        else:
+            self.fields['value'].label = self.property.name
+            self.fields['value'].widget.attrs['placeholder'] = self.default or self.property.default
+            self.fields['value'].widget.attrs['data-typeahead-url'] = (
+                reverse('control:events.meta.typeahead') + '?' + urlencode({
+                    'property': self.property.name,
+                    'organizer': self.property.organizer.slug,
+                })
+            )
         self.fields['value'].required = False
-        self.fields['value'].widget.attrs['placeholder'] = self.default or self.property.default
-        self.fields['value'].widget.attrs['data-typeahead-url'] = (
-            reverse('control:events.meta.typeahead') + '?' + urlencode({
-                'property': self.property.name,
-                'organizer': self.property.organizer.slug,
-            })
-        )
+        if self.disabled:
+            self.fields['value'].widget.attrs['readonly'] = 'readonly'
+
+    def clean_slug(self):
+        if self.disabled:
+            return self.instance.value if self.instance else None
+        return self.cleaned_data['slug']
 
     class Meta:
         model = SubEventMetaValue
