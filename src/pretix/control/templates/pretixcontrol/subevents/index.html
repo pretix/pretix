@@ -70,18 +70,18 @@
                         </th>
                         <th>
                             {% trans "Begin" %}
-                            <a href="?{% url_replace request 'ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                         <th>
                             {% trans "Paid tickets per quota" %}
-                            <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                         <th>
                             {% trans "Status" %}
-                            <a href="?{% url_replace request 'ordering' '-active' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'active' %}"><i class="fa fa-caret-up"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' '-active' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' 'active' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                         <th></th>
                     </tr>
