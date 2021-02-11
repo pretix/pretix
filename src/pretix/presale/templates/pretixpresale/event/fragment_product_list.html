@@ -223,7 +223,7 @@
                         {% endif %}
                         {% if item.free_price %}
                             <div class="input-group input-group-price">
-                                <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}</label>
+                                <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}</label>
                                 <span class="input-group-addon">{{ event.currency }}</span>
                                 <input type="number" class="form-control input-item-price" placeholder="0"
                                        id="price-item-{{ item.pk }}"
