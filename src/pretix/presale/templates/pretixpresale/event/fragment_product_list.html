@@ -32,7 +32,7 @@
                             {% endif %}
                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
                                 <h4>
-                                    <a href="#" data-toggle="variations">
+                                    <a data-toggle="variations">
                                         {{ item.name }}
                                     </a>
                                 </h4>
@@ -67,7 +67,7 @@
                         </div>
                         <div class="col-md-2 col-xs-6 availability-box">
                             {% if not event.settings.show_variations_expanded %}
-                                <a href="#" data-toggle="variations" class="js-only">
+                                <a data-toggle="variations" class="js-only">
                                     {% trans "Show variants" %}
                                 </a>
                             {% endif %}
