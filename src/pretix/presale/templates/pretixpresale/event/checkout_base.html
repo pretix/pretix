@@ -1,7 +1,16 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Checkout" %}{% endblock %}
+{% block title %}
+    {% for step in checkout_flow %}
+        {% if request.resolver_match.kwargs.step == step.identifier %}
+            {% blocktrans trimmed with label=step.label current=forloop.counter total=checkout_flow|length %}
+            Step {{ current }} of {{ total }}: {{ label }}
+            {% endblocktrans %} –
+        {% endif %}
+    {% endfor %}
+    {% trans "Checkout" %}
+{% endblock %}
 {% block content %}
     <details class="panel panel-default cart" {% if "open_cart" in request.GET %}open{% endif %}>
         <summary class="panel-heading">
