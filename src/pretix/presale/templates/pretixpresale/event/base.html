@@ -39,7 +39,7 @@
                 <div class="pull-right header-part flip hidden-print">
                     <nav class="locales" aria-label="{% trans "select language" %}">
                         {% for l in languages %}
-                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}">
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}">
                                 {{ l.name_local }}</a>
                         {% endfor %}
                     </nav>
@@ -65,7 +65,7 @@
                 <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox hidden-print">
                     <nav class="locales" aria-label="{% trans "select language" %}">
                         {% for l in languages %}
-                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}">
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}">
                                 {{ l.name_local }}</a>
                         {% endfor %}
                     </nav>
