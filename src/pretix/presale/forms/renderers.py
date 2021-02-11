@@ -30,7 +30,7 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
         builder,
         tag='label',
         attrs=mark_safe(flatatt(attrs)) if attrs else '',
-        opt=mark_safe(' <i class="sr-only">{}</i>'.format(pgettext('form', 'required'))) if not optional else '',
+        opt=mark_safe('<i class="sr-only"> {}</i>'.format(pgettext('form', 'required'))) if not optional else '',
         content=text_value(content),
     )
 
