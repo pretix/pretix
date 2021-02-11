@@ -145,7 +145,7 @@
                                 {% if item.require_voucher %}
                                     <div class="col-md-2 col-xs-6 availability-box unavailable">
                                         <small>
-                                            {% trans "Enter a voucher code below to buy this ticket." %}
+                                            <a href="#voucher">{% trans "Enter a voucher code below to buy this ticket." %}</a>
                                         </small>
                                     </div>
                                     {% elif var.cached_availability.0 == 100 %}
