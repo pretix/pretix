@@ -6,6 +6,9 @@
 {% load safelink %}
 {% load rich_text %}
 {% block thetitle %}
+    {% if messages %}
+        {{ messages|join:" " }} :: 
+    {% endif %}
     {% block title %}{% endblock %}{% if request.resolver_match.url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
 {% block custom_header %}
