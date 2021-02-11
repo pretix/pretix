@@ -8,6 +8,13 @@
                 <span class="fa {% if step.c_is_before %}fa-check{% elif step.icon %}fa-{{ step.icon }}{% else %}fa-pencil{% endif %}" aria-hidden="true"></span>
             </div>
             <div class="checkout-step-label">
+                <span class="sr-only">
+                {% if step.c_is_before %}
+                    {% trans "Completed:" %}
+                {% elif request.resolver_match.kwargs.step == step.identifier %}
+                    {% trans "Current:" %}
+                {% endif %}
+                </span>
                 {{ step.label }}
             </div>
         </a>
