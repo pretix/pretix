@@ -24,7 +24,8 @@
                                 <a href="{{ item.picture.url }}" class="productpicture"
                                    data-title="{{ item.name|force_escape|force_escape }}"
                                         {# Yes, double-escape to prevent XSS in lightbox #}
-                                   data-lightbox="{{ item.id }}">
+                                   data-lightbox="{{ item.id }}"
+                                   aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
                                     <img src="{{ item.picture|thumb:'60x60^' }}"
                                          alt="{{ item.name }}"/>
                                 </a>
@@ -101,9 +102,11 @@
                                         <ins>
                                     {% endif %}
                                     {% if item.free_price %}
+                                        <label class="sr-only" for="price-variation-{{ item.pk }}-{{ var.pk }}">{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}</label>
                                         <div class="input-group input-group-price">
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price"
+                                                   id="price-variation-{{ item.pk }}-{{ var.pk }}"
                                                    {% if not ev.presale_is_running %}disabled{% endif %}
                                                    placeholder="0"
                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
@@ -180,7 +183,8 @@
                             <a href="{{ item.picture.url }}" class="productpicture"
                                data-title="{{ item.name|force_escape|force_escape }}"
                                     {# Yes, double-escape to prevent XSS in lightbox #}
-                               data-lightbox="{{ item.id }}">
+                               data-lightbox="{{ item.id }}"
+                               aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
                                 <img src="{{ item.picture|thumb:'60x60^' }}"
                                      alt="{{ item.name }}"/>
                             </a>
@@ -219,8 +223,10 @@
                         {% endif %}
                         {% if item.free_price %}
                             <div class="input-group input-group-price">
+                                <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}</label>
                                 <span class="input-group-addon">{{ event.currency }}</span>
                                 <input type="number" class="form-control input-item-price" placeholder="0"
+                                       id="price-item-{{ item.pk }}"
                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                        name="price_{{ item.id }}"
