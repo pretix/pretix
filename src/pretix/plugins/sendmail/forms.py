@@ -68,7 +68,7 @@ class MailForm(forms.Form):
 
     def clean(self):
         d = super().clean()
-        if d.get('subevent') and d.get('subevents_from'):
+        if d.get('subevent') and (d.get('subevents_from') or d.get('subevents_to')):
             raise ValidationError(pgettext_lazy('subevent', 'Please either select a specific date or a date range, not both.'))
         if bool(d.get('subevents_from')) != bool(d.get('subevents_to')):
             raise ValidationError(pgettext_lazy('subevent', 'If you set a date range, please set both a start and an end.'))

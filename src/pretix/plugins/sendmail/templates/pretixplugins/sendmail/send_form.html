@@ -7,6 +7,7 @@
     {% block inner %}
         <form class="form-horizontal" method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
+            {% bootstrap_form_errors form %}
             {% bootstrap_field form.recipients layout='horizontal' %}
             {% bootstrap_field form.sendto layout='horizontal' %}
             {% if form.subevent %}
