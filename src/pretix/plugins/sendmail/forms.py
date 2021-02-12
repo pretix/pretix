@@ -65,6 +65,16 @@ class MailForm(forms.Form):
         label=pgettext_lazy('subevent', 'Only send to customers of dates starting before'),
         required=False,
     )
+    created_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(),
+        label=pgettext_lazy('subevent', 'Only send to customers with orders created after'),
+        required=False,
+    )
+    created_to = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(),
+        label=pgettext_lazy('subevent', 'Only send to customers with orders created before'),
+        required=False,
+    )
 
     def clean(self):
         d = super().clean()

@@ -64,6 +64,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     kwargs['initial']['subevents_from'] = dateutil.parser.parse(logentry.parsed_data['subevents_from'])
                 if logentry.parsed_data.get('subevents_to'):
                     kwargs['initial']['subevents_to'] = dateutil.parser.parse(logentry.parsed_data['subevents_to'])
+                if logentry.parsed_data.get('created_from'):
+                    kwargs['initial']['created_from'] = dateutil.parser.parse(logentry.parsed_data['created_from'])
+                if logentry.parsed_data.get('created_to'):
+                    kwargs['initial']['created_to'] = dateutil.parser.parse(logentry.parsed_data['created_to'])
                 if logentry.parsed_data.get('subevent'):
                     try:
                         kwargs['initial']['subevent'] = self.request.event.subevents.get(
@@ -117,6 +121,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             opq = opq.filter(subevent__date_from__gte=form.cleaned_data.get('subevents_from'))
         if form.cleaned_data.get('subevents_to'):
             opq = opq.filter(subevent__date_from__lt=form.cleaned_data.get('subevents_to'))
+        if form.cleaned_data.get('created_from'):
+            opq = opq.filter(order__datetime__gte=form.cleaned_data.get('created_from'))
+        if form.cleaned_data.get('created_to'):
+            opq = opq.filter(order__datetime__lt=form.cleaned_data.get('created_to'))
 
         orders = orders.annotate(match_pos=Exists(opq)).filter(match_pos=True).distinct()
 
