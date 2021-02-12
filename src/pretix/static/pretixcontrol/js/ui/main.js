@@ -548,12 +548,15 @@ var form_handlers = function (el) {
 
     el.find(".bulk-edit-field-group").each(function () {
         var $checkbox = $(this).find("input[type=checkbox][name=_bulk]");
-        var $content = $(this).find(".field-content")
-        console.log($checkbox, $content)
+        var $content = $(this).find(".field-content");
+        var $fields = $content.find("input, select, textarea, button");
+
         var update = function () {
-            $content.toggleClass("enabled", $checkbox.prop("checked"));
+            var isChecked = $checkbox.prop("checked");
+            $content.toggleClass("enabled", isChecked);
+            $fields.attr("tabIndex", isChecked ? 0 : -1);
         }
-        $content.find("input, select, textarea, button").on("focus click change", function () {
+        $content.on("focusin", function () {
             $checkbox.prop("checked", true);
             update();
         });
