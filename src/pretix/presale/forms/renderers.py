@@ -3,7 +3,7 @@ from bootstrap3.text import text_value
 from bootstrap3.utils import add_css_class
 from django.forms import CheckboxInput
 from django.forms.utils import flatatt
-from django.utils.html import format_html
+from django.utils.html import escape, format_html, strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
 
@@ -24,13 +24,19 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
         # Empty label, e.g. checkbox
         attrs.setdefault('class', '')
         attrs['class'] += ' label-empty'
+        # usually checkboxes have overall empty labels and special labels per checkbox 
+        # => remove for-attribute as well as "required"-text appended to label
+        del(attrs['for'])
+        opt = ""
+    else:
+        opt = mark_safe('<i class="sr-only"> {}</i>'.format(pgettext('form', 'required'))) if not optional else ''
 
     builder = '<{tag}{attrs}>{content}{opt}</{tag}>'
     return format_html(
         builder,
         tag='label',
         attrs=mark_safe(flatatt(attrs)) if attrs else '',
-        opt=mark_safe('<i class="sr-only"> {}</i>'.format(pgettext('form', 'required'))) if not optional else '',
+        opt=opt,
         content=text_value(content),
     )
 
@@ -71,6 +77,14 @@ class CheckoutFieldRenderer(FieldRenderer):
             label,
             label_for=self.field.id_for_label,
             label_class=self.get_label_class(),
-            optional=not required and not isinstance(self.widget, CheckboxInput)
+            optional=not required #and not isinstance(self.widget, CheckboxInput)
         ) + html
         return html
+
+    def put_inside_label(self, html):
+        content = "{field} {label}".format(field=html, label=self.label)
+        return render_label(
+            content=mark_safe(content),
+            label_for=self.field.id_for_label,
+            label_title=escape(strip_tags(self.field_help)),
+        )
