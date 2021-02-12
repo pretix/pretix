@@ -24,7 +24,7 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
         # Empty label, e.g. checkbox
         attrs.setdefault('class', '')
         attrs['class'] += ' label-empty'
-        # usually checkboxes have overall empty labels and special labels per checkbox 
+        # usually checkboxes have overall empty labels and special labels per checkbox
         # => remove for-attribute as well as "required"-text appended to label
         del(attrs['for'])
         opt = ""
@@ -77,7 +77,7 @@ class CheckoutFieldRenderer(FieldRenderer):
             label,
             label_for=self.field.id_for_label,
             label_class=self.get_label_class(),
-            optional=not required #and not isinstance(self.widget, CheckboxInput)
+            optional=not required and not isinstance(self.widget, CheckboxInput)
         ) + html
         return html
 
