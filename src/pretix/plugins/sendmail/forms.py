@@ -65,10 +65,20 @@ class MailForm(forms.Form):
         label=pgettext_lazy('subevent', 'Only send to customers of dates starting before'),
         required=False,
     )
+    created_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(),
+        label=pgettext_lazy('subevent', 'Only send to customers with orders created after'),
+        required=False,
+    )
+    created_to = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(),
+        label=pgettext_lazy('subevent', 'Only send to customers with orders created before'),
+        required=False,
+    )
 
     def clean(self):
         d = super().clean()
-        if d.get('subevent') and d.get('subevents_from'):
+        if d.get('subevent') and (d.get('subevents_from') or d.get('subevents_to')):
             raise ValidationError(pgettext_lazy('subevent', 'Please either select a specific date or a date range, not both.'))
         if bool(d.get('subevents_from')) != bool(d.get('subevents_to')):
             raise ValidationError(pgettext_lazy('subevent', 'If you set a date range, please set both a start and an end.'))
