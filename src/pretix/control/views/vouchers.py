@@ -67,7 +67,8 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
 
         headers = [
             _('Voucher code'), _('Valid until'), _('Product'), _('Reserve quota'), _('Bypass quota'),
-            _('Price effect'), _('Value'), _('Tag'), _('Redeemed'), _('Maximum usages'), _('Seat')
+            _('Price effect'), _('Value'), _('Tag'), _('Redeemed'), _('Maximum usages'), _('Seat'),
+            _('Comment')
         ]
         writer.writerow(headers)
 
@@ -92,7 +93,8 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
                 v.tag,
                 str(v.redeemed),
                 str(v.max_usages),
-                str(v.seat) if v.seat else ""
+                str(v.seat) if v.seat else "",
+                str(v.comment) if v.comment else ""
             ]
             writer.writerow(row)
 
