@@ -46,14 +46,6 @@ show_hidden_items                     boolean                    Only if set to 
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 1.9
-
-   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
-
-.. versionchanged:: 3.0
-
-   The attribute ``show_hidden_items`` has been added.
-
 .. versionchanged:: 3.4
 
    The attribute ``seat`` has been added.

@@ -30,14 +30,6 @@ release_after_exit                    boolean                    Whether the quo
                                                                  have been scanned at an exit.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.10
-
-   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
-
-.. versionchanged:: 3.0
-
-   The attributes ``close_when_sold_out`` and ``closed`` have been added.
-
 .. versionchanged:: 3.10
 
    The attribute ``release_after_exit`` has been added.

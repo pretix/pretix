@@ -28,10 +28,6 @@ multi_allowed                         boolean                    Adding the same
 price_included                        boolean                    Adding this add-on to the item is free
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.12
-
-   This resource has been added.
-
 Endpoints
 ---------
 

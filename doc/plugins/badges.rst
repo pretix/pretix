@@ -22,10 +22,6 @@ item_assignments                      list of objects            Products this l
 └ item                                integer                    Item ID
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.16
-
-   This resource has been added.
-
 
 Endpoints
 ---------

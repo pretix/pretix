@@ -24,14 +24,6 @@ home_country                          string                     Merchant countr
                                                                  ``null`` or empty string
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.7
-
-   This resource has been added.
-
-.. versionchanged:: 1.9
-
-   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
-
 
 Endpoints
 ---------
