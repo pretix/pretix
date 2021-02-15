@@ -1101,12 +1101,11 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                             q.log_action(action='pretix.event.checkinlist.changed', user=self.request.user,
                                          data=change_data, save=False)
                         )
-            if to_save_products:
-                CheckinList.limit_products.through.objects.bulk_create(to_save_products)
-            if to_save_gates:
-                CheckinList.gates.through.objects.bulk_create(to_save_gates)
-
             qidx += 1
+        if to_save_products:
+            CheckinList.limit_products.through.objects.bulk_create(to_save_products)
+        if to_save_gates:
+            CheckinList.gates.through.objects.bulk_create(to_save_gates)
 
     def save_quota_formset(self, log_entries):
         if not self.quota_formset.has_changed():
@@ -1192,11 +1191,11 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                             q.log_action(action='pretix.event.quota.added', user=self.request.user,
                                          data=change_data, save=False)
                         )
-            if to_save_items:
-                Quota.items.through.objects.bulk_create(to_save_items)
-            if to_save_variations:
-                Quota.variations.through.objects.bulk_create(to_save_variations)
             qidx += 1
+        if to_save_items:
+            Quota.items.through.objects.bulk_create(to_save_items)
+        if to_save_variations:
+            Quota.variations.through.objects.bulk_create(to_save_variations)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
