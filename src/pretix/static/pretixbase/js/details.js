@@ -41,7 +41,12 @@ setup_collapsible_details = function (el) {
             $detailsNotSummary = $details.children(':not(summary)');
         $details.prop('open', typeof $details.attr('open') == 'string');
         if (!$details.prop('open')) {
-            $detailsNotSummary.hide();
+            if ($details.find(".has-error, .alert-danger").length) {
+                $details.addClass("details-open");
+                $details.prop('open', true);
+            } else {
+                $detailsNotSummary.hide();
+            }
         } else {
             $details.addClass("details-open");
         }
