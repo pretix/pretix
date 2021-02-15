@@ -556,7 +556,8 @@ var form_handlers = function (el) {
             $content.toggleClass("enabled", isChecked);
             $fields.attr("tabIndex", isChecked ? 0 : -1);
         }
-        $content.on("focusin", function () {
+        $content.on("focusin change click", function () {
+            if ($checkbox.prop("checked")) return;
             $checkbox.prop("checked", true);
             update();
         });
