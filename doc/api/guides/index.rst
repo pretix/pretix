@@ -8,4 +8,5 @@ This part of the documentation contains how-to guides on some special use cases 
 .. toctree::
    :maxdepth: 2
 
+   order_lifecycle
    custom_checkout

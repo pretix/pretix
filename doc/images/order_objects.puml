@@ -1,0 +1,34 @@
+@startuml
+
+participant User
+collections "OrderPayment\nOrderRefund" as P
+collections "Order\nOrderPosition" as O
+collections "Invoice\nInvoiceLine" as I
+
+User -> O: Order placed (€100)
+rnote over O #6DD96D: Order A1B2C\nstatus = **n**\ntotal = €100
+O -> P: Payment created
+O -> I: Invoice created\n(can also happen later)
+rnote over I #6DD96D: Invoice 00001\n€100
+rnote over P #6DD96D: OrderPayment A1B2C-P-1\nstate = **created**
+P -> User: Payment details (web, email)
+User -> P: Payment performed
+rnote over P #EFF46B: OrderPayment A1B2C-P-1\nstate = **confirmed**
+P -> O: Order marked as paid
+rnote over O #EFF46B: Order A1B2C\nstatus = **p**\ntotal = €100
+User -> O: Data change (e.g. invoice address)
+O -> I: Invoice reissued
+rnote over I #6DD96D: Invoice 00002\n€-100
+rnote over I #6DD96D: Invoice 00003\n€100
+rnote over O #EFF46B: Order A1B2C\nstatus = **p**\ntotal = €100
+User -> O: Order canceled
+rnote over O #EFF46B: Order A1B2C\nstatus = **c**
+O -> I: Invoice canceled
+rnote over I #6DD96D: Invoice 00004\n€-100
+O -> P: Refund started
+rnote over P #6DD96D: OrderRefund\nA1B2C-R-1\nstate = **created**
+P -> User: Money sent
+rnote over P #EFF46B: OrderRefund\nA1B2C-R-1\nstate = **done**
+
+@enduml
+
