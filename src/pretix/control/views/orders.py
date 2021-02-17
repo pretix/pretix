@@ -1105,6 +1105,7 @@ class OrderTransition(OrderView):
 
             try:
                 p.confirm(user=self.request.user, count_waitinglist=False, payment_date=payment_date,
+                          send_mail=self.mark_paid_form.cleaned_data['send_email'],
                           force=self.mark_paid_form.cleaned_data.get('force', False))
             except Quota.QuotaExceededException as e:
                 p.state = OrderPayment.PAYMENT_STATE_FAILED
