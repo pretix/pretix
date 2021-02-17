@@ -300,7 +300,7 @@ class SubEventMetaValueForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.property = kwargs.pop('property')
         self.default = kwargs.pop('default', None)
-        self.disabled = kwargs.pop('disabled')
+        self.disabled = kwargs.pop('disabled', False)
         super().__init__(*args, **kwargs)
         if self.property.allowed_values:
             self.fields['value'] = forms.ChoiceField(
