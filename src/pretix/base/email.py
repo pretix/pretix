@@ -468,7 +468,8 @@ def base_placeholders(sender, **kwargs):
             '68CYU2H6ZTP3WLK5'
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'voucher_list', ['voucher_list'], lambda voucher_list: '\n'.join(voucher_list),
+            # join vouchers with two spaces at end of line so markdown-parser inserts a <br>
+            'voucher_list', ['voucher_list'], lambda voucher_list: '  \n'.join(voucher_list),
             '    68CYU2H6ZTP3WLK5\n    7MB94KKPVEPSMVF2'
         ),
         SimpleFunctionalMailTextPlaceholder(
