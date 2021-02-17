@@ -1,4 +1,5 @@
 import io
+import re
 import tempfile
 from collections import OrderedDict, namedtuple
 from decimal import Decimal
@@ -10,9 +11,19 @@ from django.db.models import QuerySet
 from django.utils.formats import localize
 from django.utils.translation import gettext, gettext_lazy as _
 from openpyxl import Workbook
-from openpyxl.cell.cell import KNOWN_TYPES
+from openpyxl.cell.cell import KNOWN_TYPES, ILLEGAL_CHARACTERS_RE
 
 from pretix.base.models import Event
+
+
+def excel_safe(val):
+    if not isinstance(val, KNOWN_TYPES):
+        val = str(val)
+
+    if isinstance(val, str):
+        val = re.sub(ILLEGAL_CHARACTERS_RE, '', val)
+
+    return val
 
 
 class BaseExporter:
@@ -181,7 +192,7 @@ class ListExporter(BaseExporter):
                 total = line.total
                 continue
             ws.append([
-                str(val) if not isinstance(val, KNOWN_TYPES) else val
+                excel_safe(val) if not isinstance(val, KNOWN_TYPES) else val
                 for val in line
             ])
             if total:
@@ -301,7 +312,7 @@ class MultiSheetListExporter(ListExporter):
                     total = line.total
                     continue
                 ws.append([
-                    str(val) if not isinstance(val, KNOWN_TYPES) else val
+                    excel_safe(val)
                     for val in line
                 ])
                 if total:
