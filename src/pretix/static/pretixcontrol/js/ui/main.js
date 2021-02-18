@@ -673,6 +673,78 @@ $(function () {
     $("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
 
+        var $table = $toggle.closest("table");
+        var $rows = $table.find("tbody tr");
+        var $checkboxes = $rows.find("td:first-child input[type=checkbox]");
+        var firstIndex, lastIndex, currentIndex, selectionChecked, onChangeSelectionHappened = false;
+        var updateSelection = function(a, b, checked) {
+            if (a > b) {
+                //[a, b] = [b, a];// ES6 not ready yet for pretix
+                var tmp = a;
+                a = b;
+                b = tmp;
+            }
+            for (var i = a; i <= b; i++) {
+                var checkbox = $checkboxes.get(i);
+                if (!checkbox.hasAttribute("data-inital")) checkbox.setAttribute("data-inital", checkbox.checked);
+                if (checked === undefined || checked === null) checkbox.checked = checkbox.getAttribute("data-inital") === "true";
+                else checkbox.checked = checked;
+            }
+        };
+        var onChangeSelection = function(ev) {
+            onChangeSelectionHappened = true;
+
+            var row = ev.target.closest("tr");
+            currentIndex = 0;
+            while(row = row.previousSibling) {
+                if (row.tagName) currentIndex++;
+            }
+
+            if (currentIndex > firstIndex && currentIndex > lastIndex) {
+                // special case: selection direction changed
+                if (lastIndex < firstIndex) {
+                    // reset all selected checkboxes before setting new lastIndex
+                    updateSelection(lastIndex, firstIndex);
+                }
+                lastIndex = currentIndex;
+
+            } else if (currentIndex < firstIndex && currentIndex < lastIndex) {
+                // special case: selection direction changed
+                if (lastIndex > firstIndex) {
+                    // reset all selected checkboxes before setting new lastIndex
+                    updateSelection(firstIndex, lastIndex);
+                }
+                lastIndex = currentIndex;
+            }
+
+            if (currentIndex != lastIndex) updateSelection(currentIndex, lastIndex);
+            updateSelection(firstIndex, currentIndex, selectionChecked);
+
+            ev.preventDefault();
+        };
+        $table.on("pointerdown", function(ev) {
+            if (!ev.target.closest("td:first-child")) return;
+            var row = ev.target.closest("tr");
+            selectionChecked = !row.querySelector("td:first-child input").checked;
+
+            firstIndex = 0;
+            while(row = row.previousSibling) {
+                if (row.tagName) firstIndex++;
+            }
+            lastIndex = currentIndex = firstIndex;
+
+            ev.preventDefault();
+            $rows.on("pointerenter", onChangeSelection);
+        }).on("pointerup", function(ev) {
+            if (onChangeSelectionHappened) {
+                ev.preventDefault();
+                onChangeSelectionHappened = false;
+                $checkboxes.removeAttr("data-inital");
+                update();
+            }
+            $rows.off("pointerenter", onChangeSelection);
+        });
+
         var update = function () {
             var all_true = true;
             var all_false = true;
