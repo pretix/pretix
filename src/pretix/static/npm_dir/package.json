@@ -1,0 +1,16 @@
+{
+  "name": "pretix",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "vue": "^2.6.10",
+    "rollup": "^1.17.0",
+    "rollup-plugin-vue": "^5.0.1",
+    "vue-template-compiler": "^2.6.10"
+  }
+}

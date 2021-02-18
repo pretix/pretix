@@ -8,3 +8,5 @@ dist/
 *.egg-info/
 *.bak
 pretix/static/jsi18n/
+node_modules/
+
