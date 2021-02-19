@@ -613,3 +613,10 @@ table td > .checkbox input[type="checkbox"] {
   border-bottom: 1px solid $input-border;
   padding-bottom: 5px;
 }
+
+.batch-select-label {
+  display: block;
+  width: 100%;
+  height: 1.5em;
+  cursor: pointer;
+}
