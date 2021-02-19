@@ -64,7 +64,7 @@
     {% block content %}
     {% endblock %}
 {% endblock %}
-{% block footer %}
+{% block footernav %}
     {% if not request.event and request.organizer.settings.contact_mail %}
         <a href="mailto:{{ request.organizer.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
     {% endif %}
