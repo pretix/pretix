@@ -738,22 +738,20 @@ $(function () {
         });
 
         var update = function () {
-            var all_true = true;
-            var all_false = true;
-            $toggle.closest("table").find("td:first-child input[type=checkbox]").each(function () {
-                if ($(this).prop("checked")) {
-                    all_false = false;
-                } else {
-                    all_true = false;
+            var all_same;
+            var checkboxes = $checkboxes.toArray();
+            var i = checkboxes.length;
+            while (i--) {
+                if (all_same === undefined) {
+                    all_same = checkboxes[i].checked;
+                    continue;
                 }
-            });
-            if (all_true) {
-                $toggle.prop("checked", true).prop("indeterminate", false);
-            } else if (all_false) {
-                $toggle.prop("checked", false).prop("indeterminate", false);
-            } else {
-                $toggle.prop("checked", false).prop("indeterminate", true);
+                if (all_same != checkboxes[i].checked) {
+                    $toggle.prop("checked", false).prop("indeterminate", true);
+                    return;
+                }
             }
+            $toggle.prop("checked", all_same).prop("indeterminate", false);
         };
 
         $(this).closest("table").find("td:first-child input[type=checkbox]").change(update);
