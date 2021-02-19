@@ -56,6 +56,9 @@
     <footer>
         {% block footer %}
         {% endblock %}
+        <nav aria-label="{% trans "Footer Navigation" %}">
+        {% block footernav %}
+        {% endblock %}
         {% if footer_text %}
             {{ footer_text }}
             &middot;
@@ -65,6 +68,7 @@
             &middot;
         {% endfor %}
         {% include "pretixpresale/base_footer.html" %}
+        </nav>
     </footer>
 </div>
 {% include "pretixpresale/fragment_modals.html" %}

@@ -123,6 +123,8 @@
     {% endif %}
     {% block content %}
     {% endblock %}
+{% endblock %}
+{% block footer %}
     {% if request.event.settings.banner_text_bottom %}
         <div class="site-notice-bottom">
             {{ request.event.settings.banner_text_bottom|rich_text }}
@@ -144,7 +146,7 @@
         {% endif %}
     {% endif %}
 {% endblock %}
-{% block footer %}
+{% block footernav %}
     {% if request.event.settings.contact_mail %}
         <a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
     {% endif %}
