@@ -32,6 +32,7 @@ from pretix.helpers.database import FixedOrderBy
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
         subevent_match = django_filters.NumberFilter(method='subevent_match_qs')
+        ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
 
         class Meta:
             model = CheckinList
@@ -41,6 +42,16 @@ with scopes_disabled():
             return qs.filter(
                 Q(subevent_id=value) | Q(subevent_id__isnull=True)
             )
+
+        def ends_after_qs(self, queryset, name, value):
+            expr = (
+                Q(subevent__isnull=True) |
+                Q(
+                    Q(Q(subevent__date_to__isnull=True) & Q(subevent__date_from__gte=value))
+                    | Q(Q(subevent__date_to__isnull=False) & Q(subevent__date_to__gte=value))
+                )
+            )
+            return queryset.filter(expr)
 
 
 class CheckinListViewSet(viewsets.ModelViewSet):
@@ -55,6 +66,12 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         qs = self.request.event.checkin_lists.prefetch_related(
             'limit_products',
         )
+
+        if 'subevent' in self.request.query_params.getlist('expand'):
+            qs = qs.prefetch_related(
+                'subevent', 'subevent__event', 'subevent__subeventitem_set', 'subevent__subeventitemvariation_set',
+                'subevent__seat_category_mappings', 'subevent__meta_values'
+            )
         return qs
 
     def perform_create(self, serializer):

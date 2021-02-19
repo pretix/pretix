@@ -6,3 +6,14 @@
 body {
   background: #FBF7FC;
 }
+
+.container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.loading-icon {
+  color: $brand-primary;
+  -webkit-animation: fa-spin 8s infinite linear;
+  animation: fa-spin 8s infinite linear;
+}

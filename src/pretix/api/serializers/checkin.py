@@ -2,6 +2,7 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import CheckinList
@@ -19,6 +20,9 @@ class CheckinListSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        if 'subevent' in self.context['request'].query_params.getlist('expand'):
+            self.fields['subevent'] = SubEventSerializer(read_only=True)
 
         for exclude_field in self.context['request'].query_params.getlist('exclude'):
             p = exclude_field.split('.')

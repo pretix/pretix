@@ -1,21 +1,35 @@
 <template>
   <div id="app">
-    <p>Hello World</p>
-    <p>{{ random }}</p>
+    <div class="container">
+      <h1>
+        {{ $root.event_name }}
+        <small v-if="checkinlist">
+          {{ listname }}
+        </small>
+      </h1>
+
+      <checkinlist-select v-if="!checkinlist" @selected="checkinlist = $event"></checkinlist-select>
+
+    </div>
   </div>
 </template>
 <script>
 export default {
-  components: { },
+  components: {
+    CheckinlistSelect: CheckinlistSelect.default,
+  },
   data () {
     return {
+      checkinlist: null,
     }
   },
   computed: {
-    random: () => {
-      const isBabel = !(class {}.toString().indexOf('class ') === 0);
-      console.log(isBabel);
-      return Math.random()
+    listname () {
+      if (!this.checkinlist) return ''
+      if(!this.checkinlist.subevent) return this.checkinlist.name
+      const name = i18nstring_localize(this.checkinlist.subevent.name)
+      const date = moment.utc(this.checkinlist.subevent.date_from).tz(this.$root.timezone).format(this.$root.datetime_format)
+      return `${this.checkinlist.name} · ${name} · ${date}`
     }
   },
 }
