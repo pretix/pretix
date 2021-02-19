@@ -34,23 +34,48 @@ export default {
   },
   // TODO: pagination
   mounted() {
-    this.loading = true
-    const cutoff = moment().subtract(8, 'hours').toISOString()
-    fetch(this.$root.api.lists + '?exclude=checkin_count&exclude=position_count&expand=subevent&ends_after=' + cutoff)
-        .then(response => response.json())
-        .then(data => {
-          this.loading = false
-          if (data.results) {
-            this.lists = data.results
-            this.next_url = data.next
-          } else if (data.results === 0) {
-            this.error = this.$root.strings['checkinlist.none']
-          } else {
-            this.error = data
-          }
-        });
+    this.load()
   },
   methods: {
+    load() {
+      this.loading = true
+      const cutoff = moment().subtract(8, 'hours').toISOString()
+      if (location.hash) {
+        fetch(this.$root.api.lists + location.hash.substr(1) + '/' + '?expand=subevent')
+            .then(response => response.json())
+            .then(data => {
+              this.loading = false
+              if (data.id) {
+                this.$emit('selected', data)
+              } else {
+                location.hash = ''
+                this.load()
+              }
+            })
+            .catch(reason => {
+              location.hash = ''
+              this.load()
+            })
+        return
+      }
+      fetch(this.$root.api.lists + '?exclude=checkin_count&exclude=position_count&expand=subevent&ends_after=' + cutoff)
+          .then(response => response.json())
+          .then(data => {
+            this.loading = false
+            if (data.results) {
+              this.lists = data.results
+              this.next_url = data.next
+            } else if (data.results === 0) {
+              this.error = this.$root.strings['checkinlist.none']
+            } else {
+              this.error = data
+            }
+          })
+          .catch(reason => {
+            this.loading = false
+            this.error = reason
+          })
+    },
     loadNext() {
       this.loading = true
       fetch(this.next_url)
@@ -65,7 +90,11 @@ export default {
             } else {
               this.error = data
             }
-          });
+          })
+          .catch(reason => {
+            this.loading = false
+            this.error = reason
+          })
     },
   },
 }

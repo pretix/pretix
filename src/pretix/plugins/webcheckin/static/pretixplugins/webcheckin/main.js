@@ -15,6 +15,11 @@ window.vapp = new Vue({
         strings: {
             'checkinlist.select': gettext('Select a check-in list'),
             'checkinlist.none': gettext('No active check-in lists found.'),
+            'checkinlist.switch': gettext('Switch check-in list'),
+            'scantype.switch': gettext('Switch direction'),
+            'scantype.entry': gettext('Entry'),
+            'scantype.exit': gettext('Exit'),
+            'input.placeholder': gettext('Scan or search…'),
             'pagination.next': gettext('Load more'),
         },
         event_name: document.querySelector('#app').attributes['data-event-name'].value,
