@@ -6,7 +6,19 @@
 {% load expiresformat %}
 {% load eventurl %}
 {% load phone_format %}
-{% block title %}{% trans "Order details" %}{% endblock %}
+{% block title %}
+    {% if "thanks" in request.GET or "paid" in request.GET %}
+        {% trans "Thank you!" %}
+        {% if order.status != 'p' %}
+            {% trans "Your order has been placed successfully. See below for details." %}
+        {% elif order.total == 0 %}
+            {% trans "Your order has been processed successfully! See below for details." %}
+        {% else %}
+            {% trans "We successfully received your payment. See below for details." %}
+        {% endif %}
+    {% endif %}
+    {% trans "Order details" %}
+{% endblock %}
 {% block content %}
 <main>
     {% if "thanks" in request.GET or "paid" in request.GET %}
