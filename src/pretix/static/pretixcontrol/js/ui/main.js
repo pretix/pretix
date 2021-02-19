@@ -689,6 +689,8 @@ $(function () {
                 if (!checkbox.hasAttribute("data-inital")) checkbox.setAttribute("data-inital", checkbox.checked);
                 if (checked === undefined || checked === null) checkbox.checked = checkbox.getAttribute("data-inital") === "true";
                 else checkbox.checked = checked;
+
+                $(checkbox).trigger("change");
             }
         };
         var onChangeSelection = function(ev) {
@@ -732,7 +734,6 @@ $(function () {
                 ev.preventDefault();
                 onChangeSelectionHappened = false;
                 $checkboxes.removeAttr("data-inital");
-                update();
             }
             $rows.off("pointerenter", onChangeSelection);
         });
@@ -754,9 +755,12 @@ $(function () {
             $toggle.prop("checked", all_same).prop("indeterminate", false);
         };
 
-        $(this).closest("table").find("td:first-child input[type=checkbox]").change(update);
+        $checkboxes.change(function() {
+            $(this).closest("tr").toggleClass("warning", this.checked);
+            update();
+        });
         $(this).change(function (ev) {
-            $(this).closest("table").find("td:first-child input[type=checkbox]").prop("checked", $(this).prop("checked"));
+            $checkboxes.prop("checked", this.checked).trigger("change");
         });
     });
 
