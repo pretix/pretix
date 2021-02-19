@@ -8,6 +8,7 @@
 {% load phone_format %}
 {% block title %}{% trans "Order details" %}{% endblock %}
 {% block content %}
+<main>
     {% if "thanks" in request.GET or "paid" in request.GET %}
         <div class="thank-you">
             <span class="fa fa-check-circle" aria-hidden="true"></span>
@@ -426,4 +427,5 @@
             </ul>
         </div>
     {% endif %}
+</main>
 {% endblock %}

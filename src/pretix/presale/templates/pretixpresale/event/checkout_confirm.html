@@ -5,6 +5,7 @@
 {% load eventsignal %}
 {% block title %}{% trans "Review order" %}{% endblock %}
 {% block content %}
+<main aria-label="{% trans "Review order" %}">
     <h2>{% trans "Review order" %}</h2>
     {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     <p>{% trans "Please review the details below and confirm your order." %}</p>
@@ -203,4 +204,5 @@
             <div class="clearfix"></div>
         </div>
     </form>
+</main>
 {% endblock %}

@@ -12,6 +12,7 @@
     {% trans "Checkout" %}
 {% endblock %}
 {% block content %}
+<aside aria-label="{% trans "Your cart" %}">
     <details class="panel panel-default cart" {% if "open_cart" in request.GET %}open{% endif %}>
         <summary class="panel-heading">
             <h3 class="panel-title">
@@ -52,8 +53,11 @@
             {% trans "Add tickets for a different date" %}
         </a>
     {% endif %}
+</aside>
+<main aria-label="{% trans "Checkout" %}">
     <h2>{% trans "Checkout" %}</h2>
     {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     {% block inner %}
     {% endblock %}
+</main>
 {% endblock %}
