@@ -9,4 +9,5 @@ Table of contents
    api/index
    development/index
    plugins/index
+   license/faq
 
