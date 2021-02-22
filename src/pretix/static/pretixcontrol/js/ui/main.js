@@ -757,7 +757,6 @@ $(function () {
         });
 
         var update = function () {
-            console.log("update!");
             var all_same;
             var checkboxes = $checkboxes.toArray();
             var i = checkboxes.length;
