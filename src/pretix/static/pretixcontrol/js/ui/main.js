@@ -776,14 +776,14 @@ $(function () {
 
         var debounceUpdate;
         $checkboxes.change(function() {
-            $(this).closest("tr").toggleClass("warning", this.checked);
+            //$(this).closest("tr").toggleClass("warning", this.checked);
             // when changing the $toggle’s checked-property, lots of change events 
             // get triggered => debounce
             if (debounceUpdate) window.clearTimeout(debounceUpdate);
             debounceUpdate = window.setTimeout(update, 10);
         });
         $toggle.change(function (ev) {
-            if (!$toggle.prop("indeterminate")) $checkboxes.prop("checked", this.checked).trigger("change");
+            if (!this.indeterminate) $checkboxes.prop("checked", this.checked);//.trigger("change");
             $selectAll.toggleClass("hidden", !this.checked).prop("hidden", !this.checked);
             if (!this.checked) $selectAll.find("input").prop("checked", false);
         });
