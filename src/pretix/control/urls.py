@@ -122,6 +122,7 @@ urlpatterns = [
     url(r'^organizer/(?P<organizer>[^/]+)/team/(?P<team>[^/]+)/delete$', organizer.TeamDeleteView.as_view(),
         name='organizer.team.delete'),
     url(r'^organizer/(?P<organizer>[^/]+)/slugrng', main.SlugRNG.as_view(), name='events.add.slugrng'),
+    url(r'^organizer/(?P<organizer>[^/]+)/logs', organizer.LogView.as_view(), name='organizer.log'),
     url(r'^organizer/(?P<organizer>[^/]+)/export/$', organizer.ExportView.as_view(), name='organizer.export'),
     url(r'^organizer/(?P<organizer>[^/]+)/export/do$', organizer.ExportDoView.as_view(), name='organizer.export.do'),
     url(r'^nav/typeahead/$', typeahead.nav_context_list, name='nav.typeahead'),

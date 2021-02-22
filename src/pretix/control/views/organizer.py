@@ -51,6 +51,7 @@ from pretix.control.forms.organizer import (
     GiftCardUpdateForm, OrganizerDeleteForm, OrganizerForm,
     OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm,
 )
+from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
 )
@@ -1434,3 +1435,24 @@ class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionR
         self.object.delete()
         messages.success(request, _('The selected property has been deleted.'))
         return redirect(success_url)
+
+
+class LogView(OrganizerPermissionRequiredMixin, ListView):
+    template_name = 'pretixcontrol/organizers/logs.html'
+    permission = 'can_change_organizer_settings'
+    model = LogEntry
+    context_object_name = 'logs'
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = self.request.organizer.all_logentries().select_related(
+            'user', 'content_type', 'api_token', 'oauth_application', 'device'
+        ).order_by('-datetime')
+        qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
+        if self.request.GET.get('user'):
+            qs = qs.filter(user_id=self.request.GET.get('user'))
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        return ctx

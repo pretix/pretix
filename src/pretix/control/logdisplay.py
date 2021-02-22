@@ -273,8 +273,15 @@ def _display_checkin(event, logentry):
 def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     plains = {
         'pretix.object.cloned': _('This object has been created by cloning.'),
+        'pretix.organizer.changed': _('The organizer has been changed.'),
+        'pretix.organizer.settings': _('The organizer settings have been changed.'),
+        'pretix.giftcards.acceptance.added': _('Gift card acceptance for another organizer has been added.'),
+        'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
+        'pretix.webhook.created': _('The webhook has been created.'),
+        'pretix.webhook.changed': _('The webhook has been changed.'),
         'pretix.event.comment': _('The event\'s internal comment has been updated.'),
         'pretix.event.canceled': _('The event has been canceled.'),
+        'pretix.event.deleted': _('An event has been deleted.'),
         'pretix.event.order.modified': _('The order details have been changed.'),
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
         'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),

@@ -4,6 +4,7 @@ from datetime import date, datetime, time
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.db.models import Exists, OuterRef, Q
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
@@ -87,6 +88,15 @@ class Organizer(LoggedModel):
         from pretix.base.cache import ObjectRelatedCache
 
         return ObjectRelatedCache(self)
+
+    @cached_property
+    def all_logentries_link(self):
+        return reverse(
+            'control:organizer.log',
+            kwargs={
+                'organizer': self.slug,
+            }
+        )
 
     @property
     def has_gift_cards(self):
