@@ -34,16 +34,32 @@ def extract_form_fields(soup):
 
         if field['type'] in ('checkbox', 'radio'):
             if field.has_attr('checked') and field.has_attr('name'):
-                data[field['name']] = field.get('value', 'on')
+                if field['name'] in data:
+                    if not isinstance(data[field['name']], list):
+                        data[field['name']] = [data[field['name']]]
+                    data[field['name']].append(field.get('value', 'on'))
+                else:
+                    data[field['name']] = field.get('value', 'on')
             continue
         elif field.has_attr('name'):
             # single element name/value fields
-            data[field['name']] = field.get('value', '')
+            value = field.get('value', '')
+            if field['name'] in data:
+                if not isinstance(data[field['name']], list):
+                    data[field['name']] = [data[field['name']]]
+                data[field['name']].append(value)
+            else:
+                data[field['name']] = value
             continue
 
     # textareas
     for textarea in soup.findAll('textarea'):
-        data[textarea['name']] = textarea.text or ''
+        if textarea['name'] in data:
+            if not isinstance(data[textarea['name']], list):
+                data[textarea['name']] = [data[textarea['name']]]
+            data[textarea['name']].append(textarea.text or '')
+        else:
+            data[textarea['name']] = textarea.text or ''
 
     # select fields
     for select in soup.find_all('select'):
@@ -66,6 +82,11 @@ def extract_form_fields(soup):
         else:
             value = [option['value'] for option in selected_options]
 
-        data[select['name']] = value
+        if select['name'] in data:
+            if not isinstance(data[select['name']], list):
+                data[select['name']] = [data[select['name']]]
+            data[select['name']].append(value)
+        else:
+            data[select['name']] = value
 
     return data
