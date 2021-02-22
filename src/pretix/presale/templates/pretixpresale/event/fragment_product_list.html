@@ -6,7 +6,7 @@
 {% load eventsignal %}
 {% load rich_text %}
 {% for tup in items_by_category %}
-    <section{% if tup.0 %} aria-labelledby="category-{{ tup.0.id }}"{% else %} aria-label="{% trans "Uncategorized tickets and/or products" %}"{% endif %}{% if tup.0.description %} aria-describedby="category-info-{{ tup.0.id }}"{% endif %}>
+    <section{% if tup.0 %} aria-labelledby="category-{{ tup.0.id }}"{% else %} aria-label="{% trans "Uncategorized products" %}"{% endif %}{% if tup.0.description %} aria-describedby="category-info-{{ tup.0.id }}"{% endif %}>
         {% if tup.0 %}
             <h3 id="category-{{ tup.0.id }}">{{ tup.0.name }}</h3>
             {% if tup.0.description %}

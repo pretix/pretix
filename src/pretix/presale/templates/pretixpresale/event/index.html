@@ -24,7 +24,7 @@
             {{ ev.event_microdata }}
         </script>
     {% endautoescape %}
-    <main aria-label="{% trans "General information, add tickets and/or products to your cart" %}">
+    <main aria-label="{% if show_cart %}{% trans "Your cart, general information, add products to your cart" %}{% else %}{% trans "General information, add products to your cart" %}{% endif %}">
     {% if show_cart %}
         <details class="panel panel-primary cart" open>
             <summary class="panel-heading">
