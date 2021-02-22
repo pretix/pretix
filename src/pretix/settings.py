@@ -720,6 +720,8 @@ BOOTSTRAP3 = {
         'default': 'bootstrap3.renderers.FieldRenderer',
         'inline': 'bootstrap3.renderers.InlineFieldRenderer',
         'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
+        'bulkedit': 'pretix.control.forms.renderers.BulkEditFieldRenderer',
+        'bulkedit_inline': 'pretix.control.forms.renderers.InlineBulkEditFieldRenderer',
         'checkout': 'pretix.presale.forms.renderers.CheckoutFieldRenderer',
     },
 }
@@ -758,3 +760,6 @@ OAUTH2_PROVIDER = {
 COUNTRIES_OVERRIDE = {
     'XK': _('Kosovo'),
 }
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 25000
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB

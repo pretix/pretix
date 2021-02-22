@@ -11,7 +11,7 @@ from django.db.models import QuerySet
 from django.utils.formats import localize
 from django.utils.translation import gettext, gettext_lazy as _
 from openpyxl import Workbook
-from openpyxl.cell.cell import KNOWN_TYPES, ILLEGAL_CHARACTERS_RE
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE, KNOWN_TYPES
 
 from pretix.base.models import Event
 

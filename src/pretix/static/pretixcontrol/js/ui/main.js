@@ -546,6 +546,25 @@ var form_handlers = function (el) {
         );
     });
 
+    el.find(".bulk-edit-field-group").each(function () {
+        var $checkbox = $(this).find("input[type=checkbox][name=_bulk]");
+        var $content = $(this).find(".field-content");
+        var $fields = $content.find("input, select, textarea, button");
+
+        var update = function () {
+            var isChecked = $checkbox.prop("checked");
+            $content.toggleClass("enabled", isChecked);
+            $fields.attr("tabIndex", isChecked ? 0 : -1);
+        }
+        $content.on("focusin change click", function () {
+            if ($checkbox.prop("checked")) return;
+            $checkbox.prop("checked", true);
+            update();
+        });
+        $checkbox.on('change', update)
+        update();
+    });
+
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
 };
@@ -563,7 +582,6 @@ $(function () {
         }
     );
     $("[data-formset]").on("formAdded", "div", function (event) {
-        console.log("formAdded")
         form_handlers($(event.target));
     });
     $(document).on("click", ".variations .variations-select-all", function (e) {
@@ -672,8 +690,8 @@ $(function () {
     // Tables with bulk selection, e.g. subevent list
     $("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
-
         var $table = $toggle.closest("table");
+        var $selectAll = $table.find(".table-select-all");
         var $rows = $table.find("tbody tr");
         var $checkboxes = $rows.find("td:first-child input[type=checkbox]");
         var firstIndex, lastIndex, selectionChecked, onChangeSelectionHappened = false;
@@ -739,6 +757,7 @@ $(function () {
         });
 
         var update = function () {
+            console.log("update!");
             var all_same;
             var checkboxes = $checkboxes.toArray();
             var i = checkboxes.length;
@@ -748,19 +767,25 @@ $(function () {
                     continue;
                 }
                 if (all_same != checkboxes[i].checked) {
-                    $toggle.prop("checked", false).prop("indeterminate", true);
+                    $toggle.prop("checked", false).prop("indeterminate", true).trigger("change");
                     return;
                 }
             }
-            $toggle.prop("checked", all_same).prop("indeterminate", false);
+            $toggle.prop("checked", all_same).prop("indeterminate", false).trigger("change");
         };
 
+        var debounceUpdate;
         $checkboxes.change(function() {
             $(this).closest("tr").toggleClass("warning", this.checked);
-            update();
+            // when changing the $toggle’s checked-property, lots of change events 
+            // get triggered => debounce
+            if (debounceUpdate) window.clearTimeout(debounceUpdate);
+            debounceUpdate = window.setTimeout(update, 10);
         });
-        $(this).change(function (ev) {
-            $checkboxes.prop("checked", this.checked).trigger("change");
+        $toggle.change(function (ev) {
+            if (!$toggle.prop("indeterminate")) $checkboxes.prop("checked", this.checked).trigger("change");
+            $selectAll.toggleClass("hidden", !this.checked).prop("hidden", !this.checked);
+            if (!this.checked) $selectAll.find("input").prop("checked", false);
         });
     });
 

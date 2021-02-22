@@ -1,0 +1,85 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Organizer logs" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Organizer logs" %}</h1>
+    <form class="form-inline helper-display-inline" action="" method="get">
+        <input type="hidden" name="content_type" value="{{ request.GET.content_type }}">
+        <input type="hidden" name="object" value="{{ request.GET.object }}">
+        <p>
+            <select name="user" class="form-control">
+                <option value="">{% trans "All actions" %}</option>
+                {% for up in userlist %}
+                    {% if up.user__id %}
+                        <option value="{{ up.user__id }}"
+                                {% if request.GET.user == up.user__id %}selected="selected"{% endif %}>
+                            {{ up.user__email }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        </p>
+    </form>
+    <ul class="list-group">
+        {% for log in logs %}
+            <li class="list-group-item logentry">
+                <div class="row">
+                    <div class="col-lg-2 col-sm-6 col-xs-12">
+                        <span class="fa fa-clock-o"></span>
+                        {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        {% if log.shredded %}
+                            <span class="fa fa-eraser fa-danger fa-fw"
+                                  data-toggle="tooltip"
+                                  title="{% trans "Personal data was cleared from this log entry." %}">
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-sm-6 col-xs-12">
+                        {% if log.user %}
+                            {% if log.user.is_staff %}
+                                <span class="fa fa-id-card fa-danger fa-fw"
+                                      data-toggle="tooltip"
+                                      title="{% trans "This change was performed by a pretix administrator." %}">
+                                </span>
+                            {% else %}
+                                <span class="fa fa-user fa-fw"></span>
+                            {% endif %}
+                            {{ log.user.get_full_name }}
+                            {% if log.oauth_application %}
+                                <br><span class="fa fa-plug fa-fw"></span>
+                                {{ log.oauth_application.name }}
+                            {% endif %}
+                        {% elif log.device %}
+                            <span class="fa fa-mobile fa-fw"></span>
+                            {{ log.device.name }}
+                        {% elif log.api_token %}
+                            <span class="fa fa-key fa-fw"></span>
+                            {{ log.api_token.name }}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-sm-12 col-xs-12">
+                        {% if log.display_object %}
+                            <span class="fa fa-flag"></span> {{ log.display_object|safe }}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                        {{ log.display }}
+                        {% if staff_session %}
+                            <a href="" class="btn btn-default btn-xs" data-expandlogs data-id="{{ log.pk }}">
+                                <span class="fa-eye fa fa-fw"></span>
+                                {% trans "Inspect" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <div class="list-group-item">
+                <em>{% trans "No results" %}</em>
+            </div>
+        {% endfor %}
+    </ul>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}
