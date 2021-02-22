@@ -46,14 +46,16 @@
                 </button>
             </div>
         </form>
-        <p>
-            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i>
-                {% trans "Create a new date" context "subevent" %}</a>
-            <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i>
-                {% trans "Create many new dates" context "subevent" %}</a>
-        </p>
+        {% if "can_change_event_settings" in request.eventpermset %}
+            <p>
+                <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-default"><i class="fa fa-plus"></i>
+                    {% trans "Create a new date" context "subevent" %}</a>
+                <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-default"><i class="fa fa-plus"></i>
+                    {% trans "Create many new dates" context "subevent" %}</a>
+            </p>
+        {% endif %}
         <form action="{% url "control:event.subevents.bulkaction"  organizer=request.event.organizer.slug event=request.event.slug %}" method="post">
             {% csrf_token %}
             <div class="hidden">
@@ -88,16 +90,18 @@
                         </th>
                         <th></th>
                     </tr>
-                    <tr class="table-select-all warning hidden">
-                        <td>
-                            <input type="checkbox" name="__ALL" id="__all">
-                        </td>
-                        <td colspan="5">
-                            <label for="__all">
-                                {% trans "Select all results on other pages as well" %}
-                            </label>
-                        </td>
-                    </tr>
+                    {% if "can_change_event_settings" in request.eventpermset %}
+                        <tr class="table-select-all warning hidden">
+                            <td>
+                                <input type="checkbox" name="__ALL" id="__all">
+                            </td>
+                            <td colspan="5">
+                                <label for="__all">
+                                    {% trans "Select all results on other pages as well" %}
+                                </label>
+                            </td>
+                        </tr>
+                    {% endif %}
                     </thead>
                     <tbody>
                     {% for s in subevents %}
