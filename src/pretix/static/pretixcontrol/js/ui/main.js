@@ -707,8 +707,6 @@ $(function () {
                 if (!checkbox.hasAttribute("data-inital")) checkbox.setAttribute("data-inital", checkbox.checked);
                 if (checked === undefined || checked === null) checkbox.checked = checkbox.getAttribute("data-inital") === "true";
                 else checkbox.checked = checked;
-
-                $(checkbox).trigger("change");
             }
         };
         var onChangeSelection = function(ev) {
@@ -753,6 +751,8 @@ $(function () {
                     ev.preventDefault();
                     onChangeSelectionHappened = false;
                     $checkboxes.removeAttr("data-inital");
+
+                    update();
                 }
                 $rows.off("pointerenter", onChangeSelection);
             });
