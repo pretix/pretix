@@ -747,14 +747,17 @@ $(function () {
 
             ev.preventDefault();
             $rows.on("pointerenter", onChangeSelection);
-        }).on("pointerup", function(ev) {
-            if (onChangeSelectionHappened) {
-                ev.preventDefault();
-                onChangeSelectionHappened = false;
-                $checkboxes.removeAttr("data-inital");
-            }
-            $rows.off("pointerenter", onChangeSelection);
+
+            $(document).one("pointerup", function(ev) {
+                if (onChangeSelectionHappened) {
+                    ev.preventDefault();
+                    onChangeSelectionHappened = false;
+                    $checkboxes.removeAttr("data-inital");
+                }
+                $rows.off("pointerenter", onChangeSelection);
+            });
         });
+
 
         var update = function () {
             var all_same;
