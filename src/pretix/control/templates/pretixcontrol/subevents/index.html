@@ -67,7 +67,7 @@
                     <tr>
                         <th>
                             {% if "can_change_event_settings" in request.eventpermset %}
-                                <input type="checkbox" data-toggle-table/>
+                                <label aria-label="{% trans "select all rows for batch-operation" %}" class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
                             {% endif %}
                         </th>
                         <th>
@@ -108,7 +108,7 @@
                         <tr>
                             <td>
                                 {% if "can_change_event_settings" in request.eventpermset %}
-                                    <input type="checkbox" name="subevent" class="" value="{{ s.pk }}"/>
+                                    <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label"><input type="checkbox" name="subevent" class="" value="{{ s.pk }}"/></label>
                                 {% endif %}
                             </td>
                             <td>

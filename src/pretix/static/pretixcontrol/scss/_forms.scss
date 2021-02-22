@@ -614,6 +614,14 @@ table td > .checkbox input[type="checkbox"] {
   padding-bottom: 5px;
 }
 
+
+.batch-select-label {
+  display: block;
+  width: 100%;
+  height: 1.5em;
+  cursor: pointer;
+}
+
 .bulk-edit-field-group {
   .field-toggle {
     font-weight: normal;
