@@ -167,18 +167,18 @@
                 </table>
             </div>
             {% if "can_change_event_settings" in request.eventpermset %}
-                <button type="submit" class="btn btn-default btn-save" name="action" value="delete">
-                    {% trans "Delete selected" %}
+                <button type="submit" class="btn btn-danger btn-save" name="action" value="delete">
+                    <i class="fa fa-trash"></i>{% trans "Delete selected" %}
                 </button>
-                <button type="submit" class="btn btn-default btn-save" name="action" value="disable"
+                <button type="submit" class="btn btn-primary btn-save" name="action" value="disable"
                         formaction="{% url "control:event.subevents.bulkedit"  organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Change selected" %}
+                    <i class="fa fa-edit"></i>{% trans "Edit selected" %}
                 </button>
                 <button type="submit" class="btn btn-default btn-save" name="action" value="enable">
-                    {% trans "Enable selected" %}
+                    <i class="fa fa-check"></i>{% trans "Activate selected" %}
                 </button>
                 <button type="submit" class="btn btn-default btn-save" name="action" value="disable">
-                    {% trans "Disable selected" %}
+                    <i class="fa fa-ban"></i>{% trans "Deactivate selected" %}
                 </button>
             {% endif %}
         </form>
