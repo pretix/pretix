@@ -30,7 +30,7 @@ class Command(BaseCommand):
                     continue
 
             if verbosity > 1:
-                self.stdout.write(f'Running {name}…')
+                self.stdout.write(f'INFO Running {name}…')
             t0 = time.time()
             try:
                 r = receiver(signal=periodic_task, sender=self)
@@ -40,13 +40,13 @@ class Command(BaseCommand):
                 if settings.SENTRY_ENABLED:
                     from sentry_sdk import capture_exception
                     capture_exception(err)
-                    self.stdout.write(self.style.ERROR(f'FAIL: {str(err)}\n'))
+                    self.stdout.write(self.style.ERROR(f'ERROR runperiodic {str(err)}\n'))
                 else:
-                    self.stdout.write(self.style.ERROR(f'FAIL: {str(err)}\n'))
+                    self.stdout.write(self.style.ERROR(f'ERROR runperiodic {str(err)}\n'))
                     traceback.print_exc()
             else:
                 if options.get('verbosity') > 1:
                     if r is SKIPPED:
-                        self.stdout.write(self.style.SUCCESS(f'Skipped {name}'))
+                        self.stdout.write(self.style.SUCCESS(f'INFO Skipped {name}'))
                     else:
-                        self.stdout.write(self.style.SUCCESS(f'Completed {name} in {round(time.time() - t0, 3)}s'))
+                        self.stdout.write(self.style.SUCCESS(f'INFO Completed {name} in {round(time.time() - t0, 3)}s'))
