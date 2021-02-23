@@ -691,6 +691,7 @@ $(function () {
     $("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
         var $actionButtons = $(".batch-select-actions button", this.form);
+        var countLabels = $("<span></span>").appendTo($actionButtons);
         var $table = $toggle.closest("table");
         var $selectAll = $table.find(".table-select-all");
         var $rows = $table.find("tbody tr");
@@ -761,26 +762,17 @@ $(function () {
 
         var update = function() {
             var nrOfChecked = $checkboxes.filter(":checked").length;
+            var allChecked = nrOfChecked == $checkboxes.length;
 
-            if (!nrOfChecked) {
-                $actionButtons.attr("disabled", true);
+            if (!nrOfChecked) countLabels.empty();
+            else countLabels.text(" ("+nrOfChecked+")");
 
-                $selectAll.toggleClass("hidden", true).prop("hidden", true);
-                $selectAll.find("input").prop("checked", false);
+            if (!allChecked) $selectAll.find("input").prop("checked", false); 
 
-                $toggle.prop("checked", false).prop("indeterminate", false);
-            }
-            else {
-                $actionButtons.attr("disabled", false);
+            $actionButtons.attr("disabled", !nrOfChecked);
+            $toggle.prop("checked", allChecked).prop("indeterminate", nrOfChecked > 0 && !allChecked);
+            $selectAll.toggleClass("hidden", nrOfChecked !== $checkboxes.length).prop("hidden", nrOfChecked !== $checkboxes.length);
 
-                if (nrOfChecked == $checkboxes.length) {
-                    $selectAll.toggleClass("hidden", false).prop("hidden", false);
-                    $toggle.prop("checked", true).prop("indeterminate", false);
-                }
-                else {
-                    $toggle.prop("checked",false).prop("indeterminate", true);
-                }
-            }
         }
 
         $checkboxes.change(update);
@@ -789,6 +781,10 @@ $(function () {
             $checkboxes.prop("checked", this.checked);
             update();
         });
+        $selectAll.find("input").change(function(ev) {
+            if (this.checked) countLabels.text(" ("+this.getAttribute("data-results-total")+")");
+            else countLabels.text(" ("+$checkboxes.filter(":checked").length+")");
+        })
 
         update();
     });

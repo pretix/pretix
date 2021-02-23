@@ -93,7 +93,7 @@
                     {% if "can_change_event_settings" in request.eventpermset %}
                         <tr class="table-select-all warning hidden">
                             <td>
-                                <input type="checkbox" name="__ALL" id="__all">
+                                <input type="checkbox" name="__ALL" id="__all" data-results-total="{{ page_obj.paginator.count }}">
                             </td>
                             <td colspan="5">
                                 <label for="__all">
