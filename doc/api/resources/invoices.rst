@@ -46,24 +46,6 @@ internal_reference                    string                     Customer's refe
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 1.6
-
-   The attribute ``invoice_no`` has been dropped in favor of ``number`` which includes the number including the prefix,
-   since the prefix can now vary. Also, invoices now need to be identified by their ``number`` instead of the raw
-   number.
-
-
-.. versionchanged:: 1.7
-
-   The attributes ``lines.tax_name``, ``foreign_currency_display``, ``foreign_currency_rate``, and
-   ``foreign_currency_rate_date`` have been added.
-
-
-.. versionchanged:: 1.9
-
-   The attribute ``internal_reference`` has been added.
-
-
 .. versionchanged:: 3.4
 
    The attribute ``lines.number`` has been added.

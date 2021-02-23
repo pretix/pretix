@@ -1,14 +1,17 @@
 import copy
+from collections import defaultdict
 from datetime import datetime, time, timedelta
 
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
 from django.core.files import File
 from django.db import connections, transaction
-from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum
-from django.db.models.functions import Coalesce
+from django.db.models import (
+    Count, F, IntegerField, OuterRef, Prefetch, Subquery, Sum,
+)
+from django.db.models.functions import Coalesce, TruncDate, TruncTime
 from django.forms import inlineformset_factory
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.formats import get_format
@@ -16,7 +19,9 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import (
+    CreateView, DeleteView, FormView, ListView, UpdateView,
+)
 
 from pretix.base.models import CartPosition, LogEntry
 from pretix.base.models.checkin import CheckinList
@@ -31,24 +36,27 @@ from pretix.control.forms.checkin import SimpleCheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
-    CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkForm,
-    SubEventForm, SubEventItemForm, SubEventItemVariationForm,
-    SubEventMetaValueForm, TimeFormSet,
+    CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkEditForm,
+    SubEventBulkForm, SubEventForm, SubEventItemForm,
+    SubEventItemVariationForm, SubEventMetaValueForm, TimeFormSet,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
+from pretix.helpers import GroupConcat
 from pretix.helpers.models import modelcopy
 
 
-class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
-    model = SubEvent
-    context_object_name = 'subevents'
-    template_name = 'pretixcontrol/subevents/index.html'
-    permission = 'can_change_settings'
+class SubEventQueryMixin:
 
-    def get_queryset(self):
+    @cached_property
+    def request_data(self):
+        if self.request.method == "POST":
+            return self.request.POST
+        return self.request.GET
+
+    def get_queryset(self, list=False):
         sum_tickets_paid = Quota.objects.filter(
             subevent=OuterRef('pk')
         ).order_by().values('subevent').annotate(
@@ -56,17 +64,38 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
         ).values(
             's'
         )
-
-        qs = self.request.event.subevents.annotate(
-            sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
-        ).prefetch_related(
-            Prefetch('quotas',
-                     queryset=Quota.objects.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
-                     to_attr='first_quotas')
-        )
+        qs = self.request.event.subevents
+        if list:
+            qs = qs.annotate(
+                sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
+            ).prefetch_related(
+                Prefetch('quotas',
+                         queryset=Quota.objects.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
+                         to_attr='first_quotas')
+            )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
+
+        if 'subevent' in self.request_data and '__ALL' not in self.request_data:
+            qs = qs.filter(
+                id__in=self.request_data.getlist('subevent')
+            )
+
         return qs
+
+    @cached_property
+    def filter_form(self):
+        return SubEventFilterForm(data=self.request_data, prefix='filter')
+
+
+class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryMixin, ListView):
+    model = SubEvent
+    context_object_name = 'subevents'
+    template_name = 'pretixcontrol/subevents/index.html'
+    permission = 'can_change_settings'
+
+    def get_queryset(self):
+        return super().get_queryset(True)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -94,10 +123,6 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
                     round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
                 )
         return ctx
-
-    @cached_property
-    def filter_form(self):
-        return SubEventFilterForm(data=self.request.GET)
 
 
 class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
@@ -535,19 +560,13 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         return formlist
 
 
-class SubEventBulkAction(EventPermissionRequiredMixin, View):
+class SubEventBulkAction(SubEventQueryMixin, EventPermissionRequiredMixin, View):
     permission = 'can_change_settings'
-
-    @cached_property
-    def objects(self):
-        return self.request.event.subevents.filter(
-            id__in=self.request.POST.getlist('subevent')
-        )
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         if request.POST.get('action') == 'disable':
-            for obj in self.objects:
+            for obj in self.get_queryset():
                 obj.log_action(
                     'pretix.subevent.changed', user=self.request.user, data={
                         'active': False
@@ -557,7 +576,7 @@ class SubEventBulkAction(EventPermissionRequiredMixin, View):
                 obj.save(update_fields=['active'])
             messages.success(request, pgettext_lazy('subevent', 'The selected dates have been disabled.'))
         elif request.POST.get('action') == 'enable':
-            for obj in self.objects:
+            for obj in self.get_queryset():
                 obj.log_action(
                     'pretix.subevent.changed', user=self.request.user, data={
                         'active': True
@@ -568,11 +587,11 @@ class SubEventBulkAction(EventPermissionRequiredMixin, View):
             messages.success(request, pgettext_lazy('subevent', 'The selected dates have been enabled.'))
         elif request.POST.get('action') == 'delete':
             return render(request, 'pretixcontrol/subevents/delete_bulk.html', {
-                'allowed': self.objects.filter(orderposition__isnull=True),
-                'forbidden': self.objects.filter(orderposition__isnull=False),
+                'allowed': self.get_queryset().filter(orderposition__isnull=True),
+                'forbidden': self.get_queryset().filter(orderposition__isnull=False).distinct(),
             })
         elif request.POST.get('action') == 'delete_confirm':
-            for obj in self.objects:
+            for obj in self.get_queryset():
                 if obj.allow_delete():
                     CartPosition.objects.filter(addon_to__subevent=obj).delete()
                     obj.cartposition_set.all().delete()
@@ -899,3 +918,537 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return self.form_invalid(form)
+
+
+class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormView):
+    permission = 'can_change_settings'
+    form_class = SubEventBulkEditForm
+    template_name = 'pretixcontrol/subevents/bulk_edit.html'
+    context_object_name = 'subevent'
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(None).order_by()
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.subevents', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=405)
+
+    @cached_property
+    def cached_num(self):
+        return self.get_queryset().count()
+
+    @cached_property
+    def itemvar_forms(self):
+        matches = defaultdict(list)
+        for sei in SubEventItem.objects.filter(
+            subevent__in=self.get_queryset()
+        ).order_by().values('item', 'price', 'disabled').annotate(c=Count('*')):
+            matches['item', sei['item']].append(sei)
+        for sei in SubEventItemVariation.objects.filter(
+            subevent__in=self.get_queryset()
+        ).order_by().values('variation', 'price', 'disabled').annotate(c=Count('*')):
+            matches['variation', sei['variation']].append(sei)
+        total = self.cached_num
+
+        formlist = []
+        for i in self.request.event.items.filter(active=True).prefetch_related('variations'):
+            if i.has_variations:
+                for v in i.variations.all():
+                    m = matches['variation', v.pk]
+                    if m and len(m) == 1 and m[0]['c'] == total:
+                        inst = SubEventItemVariation(variation=v, disabled=m[0]['disabled'], price=m[0]['price'])
+                    else:
+                        inst = SubEventItemVariation(variation=v)
+                    formlist.append(SubEventItemVariationForm(
+                        prefix='itemvar-{}'.format(v.pk),
+                        item=i, variation=v,
+                        instance=inst,
+                        data=(self.request.POST if self.is_submitted else None)
+                    ))
+            else:
+                m = matches['item', i.pk]
+                if m and len(m) == 1 and m[0]['c'] == total:
+                    inst = SubEventItem(item=i, disabled=m[0]['disabled'], price=m[0]['price'])
+                else:
+                    inst = SubEventItem(item=i)
+                formlist.append(SubEventItemForm(
+                    prefix='item-{}'.format(i.pk),
+                    item=i,
+                    instance=inst,
+                    data=(self.request.POST if self.is_submitted else None)
+                ))
+        return formlist
+
+    @cached_property
+    def meta_forms(self):
+        matches = defaultdict(list)
+        for smv in SubEventMetaValue.objects.filter(
+            subevent__in=self.get_queryset()
+        ).order_by().values('property', 'value').annotate(c=Count('*')):
+            matches[smv['property']].append(smv)
+        total = self.cached_num
+
+        formlist = []
+
+        if not hasattr(self, '_default_meta'):
+            self._default_meta = self.request.event.meta_data
+
+        for p in self.request.organizer.meta_properties.all():
+            inst = SubEventMetaValue(property=p)
+            if len(matches[p.id]) == 1 and matches[p.id][0]['c'] == total:
+                inst.value = matches[p.id][0]['value']
+            formlist.append(SubEventMetaValueForm(
+                prefix='prop-{}'.format(p.pk),
+                property=p,
+                default=self._default_meta.get(p.name, ''),
+                instance=inst,
+                data=(self.request.POST if self.is_submitted else None)
+            ))
+        return formlist
+
+    @cached_property
+    def quota_formset(self):
+        extra = 0
+        kwargs = {}
+
+        if self.sampled_quotas is not None:
+            kwargs['instance'] = self.get_queryset()[0]
+
+        formsetclass = inlineformset_factory(
+            SubEvent, Quota,
+            form=QuotaForm, formset=QuotaFormSet, min_num=0, validate_min=False,
+            can_order=False, can_delete=True, extra=extra,
+        )
+        return formsetclass(
+            self.request.POST if self.is_submitted else None,
+            event=self.request.event, **kwargs
+        )
+
+    @cached_property
+    def list_formset(self):
+        extra = 0
+        kwargs = {}
+
+        if self.sampled_lists is not None:
+            kwargs['instance'] = self.get_queryset()[0]
+        else:
+            return None
+
+        formsetclass = inlineformset_factory(
+            SubEvent, CheckinList,
+            form=SimpleCheckinListForm, formset=CheckinListFormSet, min_num=0, validate_min=False,
+            can_order=False, can_delete=True, extra=extra,
+        )
+        return formsetclass(
+            self.request.POST if self.is_submitted else None,
+            event=self.request.event, **kwargs
+        )
+
+    def save_list_formset(self, log_entries):
+        if not self.list_formset.has_changed() or self.sampled_lists is None:
+            return
+        qidx = 0
+        subevents = list(self.get_queryset().prefetch_related('checkinlist_set'))
+        to_save_products = []
+        to_save_gates = []
+
+        for f in self.list_formset.forms:
+            if self.list_formset._should_delete_form(f) and f in self.list_formset.extra_forms:
+                continue
+
+            if self.list_formset._should_delete_form(f):
+                for se in subevents:
+                    q = list(se.checkinlist_set.all())[qidx]
+                    log_entries += [
+                        q.log_action(action='pretix.event.checkinlist.deleted', user=self.request.user, save=False),
+                    ]
+                    q.delete()
+            elif f in self.list_formset.extra_forms:
+                change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                for se in subevents:
+                    q = copy.copy(f.instance)
+                    q.pk = None
+                    q.subevent = se
+                    q.event = self.request.event
+                    q.save()
+                    for _i in f.cleaned_data.get('limit_products', []):
+                        to_save_products.append(CheckinList.limit_products.through(checkinlist_id=q.pk, item_id=_i.pk))
+                    for _i in f.cleaned_data.get('gates', []):
+                        to_save_gates.append(CheckinList.gates.through(checkinlist_id=q.pk, gate_id=_i.pk))
+                    change_data['id'] = q.pk
+                    log_entries.append(
+                        q.log_action(action='pretix.event.checkinlist.added', user=self.request.user,
+                                     data=change_data, save=False)
+                    )
+            else:
+                if f.changed_data:
+                    change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                    for se in subevents:
+                        q = list(se.checkinlist_set.all())[qidx]
+                        for fname in ('name', 'all_products', 'include_pending', 'allow_entry_after_exit'):
+                            setattr(q, fname, f.cleaned_data.get(fname))
+                        q.save()
+                        if 'limit_products' in f.changed_data:
+                            q.limit_products.set(f.cleaned_data.get('limit_products', []))
+                        if 'gates' in f.changed_data:
+                            q.gates.set(f.cleaned_data.get('limit_products', []))
+                        log_entries.append(
+                            q.log_action(action='pretix.event.checkinlist.changed', user=self.request.user,
+                                         data=change_data, save=False)
+                        )
+            qidx += 1
+        if to_save_products:
+            CheckinList.limit_products.through.objects.bulk_create(to_save_products)
+        if to_save_gates:
+            CheckinList.gates.through.objects.bulk_create(to_save_gates)
+
+    def save_quota_formset(self, log_entries):
+        if not self.quota_formset.has_changed():
+            return
+        qidx = 0
+        subevents = list(self.get_queryset().prefetch_related('quotas'))
+        to_save_items = []
+        to_save_variations = []
+        to_delete_quota_ids = []
+
+        if self.sampled_quotas is None:
+            if len(self.quota_formset.forms) == 0:
+                return
+            else:
+                for se in subevents:
+                    for q in se.quotas.all():
+                        to_delete_quota_ids.append(q.pk)
+                        log_entries += [
+                            q.log_action(action='pretix.event.quota.deleted', user=self.request.user, save=False),
+                            se.log_action('pretix.subevent.quota.deleted', user=self.request.user, data={
+                                'id': q.pk
+                            }, save=False)
+                        ]
+
+                if to_delete_quota_ids:
+                    Quota.objects.filter(id__in=to_delete_quota_ids).delete()
+
+        for f in self.quota_formset.forms:
+            if self.quota_formset._should_delete_form(f) and f in self.quota_formset.extra_forms:
+                continue
+
+            selected_items = set(list(self.request.event.items.filter(id__in=[
+                i.split('-')[0] for i in f.cleaned_data.get('itemvars', [])
+            ])))
+            selected_variations = list(ItemVariation.objects.filter(item__event=self.request.event, id__in=[
+                i.split('-')[1] for i in f.cleaned_data.get('itemvars', []) if '-' in i
+            ]))
+
+            if self.quota_formset._should_delete_form(f):
+                for se in subevents:
+                    q = list(se.quotas.all())[qidx]
+                    log_entries += [
+                        q.log_action(action='pretix.event.quota.deleted', user=self.request.user, save=False),
+                        se.log_action('pretix.subevent.quota.deleted', user=self.request.user, data={
+                            'id': q.pk
+                        }, save=False)
+                    ]
+                    q.delete()
+            elif f in self.quota_formset.extra_forms:
+                change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                for se in subevents:
+                    q = copy.copy(f.instance)
+                    q.pk = None
+                    q.subevent = se
+                    q.event = self.request.event
+                    q.save(clear_cache=False)
+                    for _i in selected_items:
+                        to_save_items.append(Quota.items.through(quota_id=q.pk, item_id=_i.pk))
+                    for _i in selected_variations:
+                        to_save_variations.append(Quota.variations.through(quota_id=q.pk, itemvariation_id=_i.pk))
+
+                    change_data['id'] = q.pk
+                    log_entries.append(
+                        q.log_action(action='pretix.event.quota.added', user=self.request.user,
+                                     data=change_data, save=False)
+                    )
+                    log_entries.append(
+                        se.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data,
+                                      save=False)
+                    )
+            else:
+                if f.changed_data:
+                    change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
+                    for se in subevents:
+                        q = list(se.quotas.all())[qidx]
+                        for fname in ('size', 'name', 'release_after_exit'):
+                            setattr(q, fname, f.cleaned_data.get(fname))
+                        q.save(clear_cache=False)
+                        if 'itemvar' in f.changed_data:
+                            q.items.set(selected_items)
+                            q.variations.set(selected_variations)
+                        log_entries.append(
+                            q.log_action(action='pretix.event.quota.added', user=self.request.user,
+                                         data=change_data, save=False)
+                        )
+            qidx += 1
+        if to_save_items:
+            Quota.items.through.objects.bulk_create(to_save_items)
+        if to_save_variations:
+            Quota.variations.through.objects.bulk_create(to_save_variations)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['subevents'] = self.get_queryset()
+        ctx['filter_form'] = self.filter_form
+        ctx['sampled_quotas'] = self.sampled_quotas
+        ctx['sampled_lists'] = self.sampled_lists
+        ctx['formset'] = self.quota_formset
+        ctx['cl_formset'] = self.list_formset
+        ctx['itemvar_forms'] = self.itemvar_forms
+        ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
+        ctx['meta_forms'] = self.meta_forms
+        return ctx
+
+    @cached_property
+    def sampled_quotas(self):
+        all_quotas = Quota.objects.filter(
+            subevent__in=self.get_queryset()
+        ).annotate(
+            item_list=GroupConcat('items__id'),
+            var_list=GroupConcat('variations__id'),
+        ).values(
+            'item_list', 'var_list',
+            *(f.name for f in Quota._meta.fields if f.name not in (
+                'id', 'event', 'items', 'variations', 'cached_availability_state', 'cached_availability_number',
+                'cached_availability_paid_orders', 'cached_availability_time', 'closed',
+            ))
+        ).order_by('subevent_id')
+
+        if not all_quotas:
+            return Quota.objects.none()
+
+        quotas_by_subevent = defaultdict(list)
+        for q in all_quotas:
+            quotas_by_subevent[q.pop('subevent')].append(q)
+
+        prev = None
+        for se in self.get_queryset():
+            if se.pk not in quotas_by_subevent:
+                return None
+
+            if prev is None:
+                prev = quotas_by_subevent[se.pk]
+
+            if quotas_by_subevent[se.pk] != prev:
+                return None
+        return se.quotas.all()
+
+    @cached_property
+    def sampled_lists(self):
+        all_lists = CheckinList.objects.filter(
+            subevent__in=self.get_queryset()
+        ).annotate(
+            item_list=GroupConcat('limit_products__id'),
+            gates_list=GroupConcat('gates__id'),
+        ).values(
+            'item_list', 'gates_list',
+            *(f.name for f in CheckinList._meta.fields if f.name not in (
+                'id', 'event', 'limit_products', 'gates',
+            ))
+        ).order_by('subevent_id')
+
+        if not all_lists:
+            return SubEvent.objects.none()
+
+        lists_by_subevent = defaultdict(list)
+        for cl in all_lists:
+            lists_by_subevent[cl.pop('subevent')].append(cl)
+
+        prev = None
+        for se in self.get_queryset():
+            if se.pk not in lists_by_subevent:
+                return None
+
+            if prev is None:
+                prev = lists_by_subevent[se.pk]
+
+            if lists_by_subevent[se.pk] != prev:
+                return None
+        return se.checkinlist_set.all()
+
+    @cached_property
+    def is_submitted(self):
+        # Usually, django considers a form "bound" / "submitted" on every POST request. However, this view is always
+        # called with POST method, even if just to pass the selection of objects to work on, so we want to modify
+        # that behaviour
+        return '_bulk' in self.request.POST
+
+    def get_form_kwargs(self):
+        initial = {}
+        mixed_values = set()
+        qs = self.get_queryset()
+
+        qs = qs.annotate(
+            **{
+                # TODO: Once we're on Django 3.2, pass a tzinfo parameter
+                # Before Django 3.2, it uses the current timezone, which is hopefully fine
+                # as well in all cases we are concerned about
+                # See also: https://code.djangoproject.com/ticket/31948
+                k + '_day': TruncDate(k)
+                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
+            },
+            **{
+                k + '_time': TruncTime(k)
+                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
+            },
+        )
+
+        fields = {
+            'name',
+            'location',
+            'frontpage_text',
+            'geo_lat',
+            'geo_lon',
+            'is_public',
+            'active',
+            'date_from_day',
+            'date_from_time',
+            'date_to_day',
+            'date_to_time',
+            'date_admission_day',
+            'date_admission_time',
+            'presale_start_day',
+            'presale_start_time',
+            'presale_end_day',
+            'presale_end_time',
+        }
+        for k in fields:
+            existing_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
+            if len(existing_values) == 1:
+                initial[k] = existing_values[0][k]
+            elif len(existing_values) > 1:
+                mixed_values.add(k)
+                initial[k] = None
+
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        kwargs['prefix'] = 'bulkedit'
+        kwargs['initial'] = initial
+        kwargs['queryset'] = self.get_queryset()
+        kwargs['mixed_values'] = mixed_values
+        if not self.is_submitted:
+            kwargs['data'] = None
+            kwargs['files'] = None
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        is_valid = (
+            self.is_submitted and
+            form.is_valid() and
+            self.quota_formset.is_valid() and
+            (not self.list_formset or self.list_formset.is_valid()) and
+            all(f.is_valid() for f in self.itemvar_forms)and
+            all(f.is_valid() for f in self.meta_forms)
+        )
+        if is_valid:
+            return self.form_valid(form)
+        else:
+            if self.is_submitted:
+                messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.form_invalid(form)
+
+    def save_meta(self):
+        for f in self.meta_forms:
+            if f.prefix + 'value' not in self.request.POST.getlist('_bulk'):
+                continue
+
+            if f.cleaned_data.get('value'):
+                for obj in self.get_queryset():
+                    SubEventMetaValue.objects.update_or_create(
+                        property=f.instance.property,
+                        subevent=obj,
+                        defaults={
+                            'value': f.cleaned_data['value']
+                        }
+                    )
+            else:
+                SubEventMetaValue.objects.filter(
+                    property=f.instance.property,
+                    subevent__in=self.get_queryset()
+                ).delete()
+
+    def save_itemvars(self):
+        for f in self.itemvar_forms:
+            u = {}
+            if f.prefix + 'price' in self.request.POST.getlist('_bulk'):
+                u['price'] = f.cleaned_data.get('price')
+            if f.prefix + 'disabled' in self.request.POST.getlist('_bulk'):
+                u['disabled'] = f.cleaned_data.get('disabled')
+
+            if not u:
+                continue
+
+            if isinstance(f, SubEventItemForm):
+                if u.get('price') is None and not u.get('disabled'):
+                    SubEventItem.objects.filter(
+                        subevent__in=self.get_queryset(),
+                        item=f.instance.item,
+                    ).delete()
+                else:
+                    for obj in self.get_queryset():
+                        SubEventItem.objects.update_or_create(
+                            subevent=obj,
+                            item=f.instance.item,
+                            defaults=u
+                        )
+            elif isinstance(f, SubEventItemVariationForm):
+                if u.get('price') is None and not u.get('disabled'):
+                    SubEventItemVariation.objects.filter(
+                        subevent__in=self.get_queryset(),
+                        variation=f.instance.variation,
+                    ).delete()
+                else:
+                    for obj in self.get_queryset():
+                        SubEventItemVariation.objects.update_or_create(
+                            subevent=obj,
+                            variation=f.instance.variation,
+                            defaults=u
+                        )
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        log_entries = []
+
+        # Main form
+        form.save()
+        data = {
+            k: v for k, v in form.cleaned_data.items() if k in form.changed_data
+        }
+        data['_raw_bulk_data'] = self.request.POST.dict()
+        for obj in self.get_queryset():
+            log_entries.append(
+                obj.log_action('pretix.subevent.changed', data=data, user=self.request.user, save=False)
+            )
+
+        # Formsets
+        if '__quotas' in self.request.POST.getlist('_bulk'):
+            self.save_quota_formset(log_entries)
+        if '__checkinlists' in self.request.POST.getlist('_bulk'):
+            self.save_list_formset(log_entries)
+
+        self.save_itemvars()
+        self.save_meta()
+
+        if connections['default'].features.can_return_rows_from_bulk_insert:
+            LogEntry.objects.bulk_create(log_entries, batch_size=200)
+            LogEntry.bulk_postprocess(log_entries)
+        else:
+            for le in log_entries:
+                le.save()
+            LogEntry.bulk_postprocess(log_entries)
+
+        self.request.event.cache.clear()
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)

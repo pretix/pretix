@@ -94,60 +94,6 @@ last_modified                         datetime                   Last modificati
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 1.6
-
-   The ``invoice_address.country`` attribute contains a two-letter country code for all new orders. For old orders,
-   a custom text might still be returned.
-
-.. versionchanged:: 1.7
-
-   The attributes ``invoice_address.vat_id_validated`` and ``invoice_address.is_business`` have been added.
-   The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate`` and ``order.payment_fee_tax_value`` have been
-   deprecated in favor of the new ``fees`` attribute but will still be served and removed in 1.9.
-
-.. versionchanged:: 1.9
-
-   First write operations (``…/mark_paid/``, ``…/mark_pending/``, ``…/mark_canceled/``, ``…/mark_expired/``) have been added.
-   The attribute ``invoice_address.internal_reference`` has been added.
-
-.. versionchanged:: 1.13
-
-   The field ``checkin_attention`` has been added.
-
-.. versionchanged:: 1.15
-
-   The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate``, ``order.payment_fee_tax_value`` and
-   ``order.payment_fee_tax_rule`` have finally been removed.
-
-.. versionchanged:: 1.16
-
-   The attributes ``order.last_modified`` as well as the corresponding filters to the resource have been added.
-   An endpoint for order creation as well as ``…/mark_refunded/`` has been added.
-
-.. versionchanged:: 2.0
-
-   The ``order.payment_date`` and ``order.payment_provider`` attributes have been deprecated in favor of the new
-   nested ``payments`` and ``refunds`` resources, but will still be served and removed in 2.2. The ``require_approval``
-   attribute has been added, as have been the ``…/approve/`` and ``…/deny/`` endpoints.
-
-.. versionchanged:: 2.3
-
-   The ``sales_channel`` attribute has been added.
-
-.. versionchanged:: 2.4
-
-   ``order.status`` can no longer be ``r``, ``…/mark_canceled/`` now accepts a ``cancellation_fee`` parameter and
-   ``…/mark_refunded/`` has been deprecated.
-
-.. versionchanged:: 2.5
-
-   The ``testmode`` attribute has been added and ``DELETE`` has been implemented for orders.
-
-.. versionchanged:: 3.1
-
-   The ``invoice_address.state`` and ``url`` attributes have been added. When creating orders through the API,
-   vouchers are now supported and many fields are now optional.
-
 .. versionchanged:: 3.5
 
    The ``order.fees.canceled`` attribute has been added.
@@ -233,30 +179,6 @@ pdf_data                              object                     Data object req
                                                                  ``pdf_data=true`` query parameter to your request.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.7
-
-   The attribute ``tax_rule`` has been added.
-
-.. versionchanged:: 1.11
-
-   The attribute ``checkins.list`` has been added.
-
-.. versionchanged:: 1.14
-
-  The attributes ``answers.question_identifier`` and ``answers.option_identifiers`` have been added.
-
-.. versionchanged:: 1.16
-
-  The attributes ``pseudonymization_id`` and ``pdf_data`` have been added.
-
-.. versionchanged:: 3.0
-
-  The attribute ``seat`` has been added.
-
-.. versionchanged:: 3.2
-
-  The value ``auto_checked_in`` has been added to the ``checkins``-attribute.
-
 .. versionchanged:: 3.3
 
   The ``url`` of a ticket ``download`` can now also return a ``text/uri-list`` instead of a file. See
@@ -306,14 +228,6 @@ details                               object                     Payment-specifi
                                                                  the object is empty.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 2.0
-
-  This resource has been added.
-
-.. versionchanged:: 3.1
-
-  The attributes ``payment_url`` and ``details`` have been added.
-
 .. _order-refund-resource:
 
 Order refund resource
@@ -334,16 +248,8 @@ execution_date                        datetime                   Date and time o
 provider                              string                     Identification string of the payment provider
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 2.0
-
-  This resource has been added.
-
 List of all orders
 ------------------
-
-.. versionchanged:: 1.15
-
-   Filtering for emails or order codes is now case-insensitive.
 
 .. versionchanged:: 3.5
 
@@ -1450,21 +1356,6 @@ Sending e-mails
 List of all order positions
 ---------------------------
 
-.. versionchanged:: 1.15
-
-   The order positions endpoint has been extended by the filter queries ``item__in``, ``variation__in``,
-   ``order__status__in``, ``subevent__in``, ``addon_to__in`` and ``search``. The search for attendee names and order
-   codes is now case-insensitive.
-
-.. versionchanged:: 2.0
-
-   The order positions endpoint has been extended by the filter queries ``voucher``, ``voucher__code`` and
-   ``pseudonymization_id``.
-
-.. versionchanged:: 3.2
-
-  The value ``auto_checked_in`` has been added to the ``checkins``-attribute.
-
 .. versionchanged:: 3.5
 
    The ``include_canceled_positions`` and ``include_canceled_fees`` query parameters have been added.
@@ -1804,10 +1695,6 @@ Manipulating individual positions
 Order payment endpoints
 -----------------------
 
-.. versionchanged:: 2.0
-
-  These endpoints have been added.
-
 .. versionchanged:: 3.6
 
    Payments can now be created through the API.
@@ -2086,10 +1973,6 @@ Order payment endpoints
 
 Order refund endpoints
 ----------------------
-
-.. versionchanged:: 2.0
-
-  These endpoints have been added.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/refunds/
 

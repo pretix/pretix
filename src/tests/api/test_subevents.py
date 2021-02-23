@@ -72,6 +72,7 @@ TEST_SUBEVENT_RES = {
     'date_to': None,
     'date_admission': None,
     'name': {'en': 'Foobar'},
+    'frontpage_text': None,
     'date_from': '2017-12-27T10:00:00Z',
     'presale_end': None,
     'seating_plan': None,

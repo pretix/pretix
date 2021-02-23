@@ -1,19 +1,39 @@
 @startuml
 
-Pending: Order is expecting payment\nOrder reduces quotas
-Expired: Payment period is over\nOrder does not affect quotas
-Paid: Order was successful\nOrder reduces quotas
-Canceled: Order has been canceled\nOrder does not affect quotas
+state "Approval Pending" as AP
+state "Canceled (with paid fee)" as CP
+AP: status = "n"
+AP: require_approval = true
+Pending: status = "n"
+Pending: require_approval = false
+Pending: Tickets reserved: yes
+Expired: status = "e"
+Expired: Tickets reserved: no
+Paid: status = "p"
+Paid: count(positions | !canceled) > 0
+Paid: Tickets reserved: yes
+CP: status = "p"
+CP: count(positions | !canceled) = 0
+Canceled: status = "c"
+Canceled: Tickets reserved: no
 
-[*] --> Pending: customer\nplaces order
-Pending --> Paid: successful payment
-Pending --> Expired: automatically\nor manually\non admin action
-Expired --> Paid: if payment is received\nonly if quota left
-Expired --> Canceled
-Expired --> Pending: manually\non admin action
-Paid --> Canceled: manually on\nadmin action\nor if an external\npayment provider\nnotifies about a\npayment refund
-Pending --> Canceled: on admin or\ncustomer action
-Paid -> Pending: manually on admin action
-[*] --> Paid: customer\nplaces free order
+
+[*] -> Pending: order placed\ntotal > 0
+[*] -> Paid: order placed\ntotal = 0
+[*] -> AP: order placed\napproval required
+Pending --> Paid: order paid
+Pending --> Expired: after payment\ndeadline
+Expired --> Paid: order paid\n(only if quota left)
+Expired -[dashed]-> Canceled
+Expired -[dashed]-> Pending: order extended
+Paid --> Canceled: order canceled
+Pending --> Canceled: order canceled
+Paid -[dashed]-> Pending: refund
+AP --> Pending: order approved
+AP --> Canceled: order denied
+Paid --> CP: order canceled\n(with cancellation fee)
+Canceled -[dashed]-> Pending: order reactivated
+Canceled -[dashed]-> Paid: order reactivated
+CP -[dashed]-> Canceled: fee canceled
 
 @enduml

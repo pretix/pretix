@@ -26,14 +26,6 @@ description                           multi-lingual string       A public descri
 position                              integer                    An integer, used for sorting
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 2.7
-
-   The attribute ``original_price`` has been added.
-
-.. versionchanged:: 1.12
-
-   This resource has been added.
-
 Endpoints
 ---------
 

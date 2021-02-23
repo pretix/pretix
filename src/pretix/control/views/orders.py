@@ -1105,6 +1105,7 @@ class OrderTransition(OrderView):
 
             try:
                 p.confirm(user=self.request.user, count_waitinglist=False, payment_date=payment_date,
+                          send_mail=self.mark_paid_form.cleaned_data['send_email'],
                           force=self.mark_paid_form.cleaned_data.get('force', False))
             except Quota.QuotaExceededException as e:
                 p.state = OrderPayment.PAYMENT_STATE_FAILED
@@ -2079,11 +2080,17 @@ class ExportMixin:
             exporters.append(ex)
         return exporters
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['exporters'] = self.exporters
+        return ctx
 
-class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View):
+
+class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, TemplateView):
     permission = 'can_view_orders'
     known_errortypes = ['ExportError']
     task = export
+    template_name = 'pretixcontrol/orders/export.html'
 
     def get_success_message(self, value):
         return None
@@ -2103,6 +2110,11 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
             if ex.identifier == self.request.POST.get("exporter"):
                 return ex
 
+    def get(self, request, *args, **kwargs):
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
+        return TemplateView.get(self, request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         if not self.exporter:
             messages.error(self.request, _('The selected exporter was not found.'))
@@ -2112,16 +2124,8 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
             }))
 
         if not self.exporter.form.is_valid():
-            messages.error(
-                self.request,
-                str(_('There was a problem processing your input:')) + ' ' + ', '.join(
-                    ', '.join(line) for line in self.exporter.form.errors.values()
-                )
-            )
-            return redirect(reverse('control:event.orders.export', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug
-            }) + '?identifier=' + self.exporter.identifier)
+            messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
+            return self.get(request, *args, **kwargs)
 
         cf = CachedFile(web_download=True, session_key=request.session.session_key)
         cf.date = now()
@@ -2133,11 +2137,6 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View)
 class ExportView(EventPermissionRequiredMixin, ExportMixin, TemplateView):
     permission = 'can_view_orders'
     template_name = 'pretixcontrol/orders/export.html'
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['exporters'] = self.exporters
-        return ctx
 
 
 class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):

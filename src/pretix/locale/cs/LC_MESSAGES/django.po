@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-27 17:45+0000\n"
-"PO-Revision-Date: 2020-12-14 10:00+0000\n"
+"PO-Revision-Date: 2021-02-16 06:00+0000\n"
 "Last-Translator: Ondřej Sokol <osokol@treesoft.cz>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -218,17 +218,17 @@ msgstr ""
 #: pretix/api/serializers/organizer.py:142
 #: pretix/control/views/organizer.py:539
 msgid "pretix account invitation"
-msgstr ""
+msgstr "pozvánka k pretix účtu"
 
 #: pretix/api/serializers/organizer.py:164
 #: pretix/control/views/organizer.py:638
 msgid "This user already has been invited for this team."
-msgstr "Tento uživatel byl již pozván do této skupiny."
+msgstr "Tento uživatel byl již pozván do tohoto týmu."
 
 #: pretix/api/serializers/organizer.py:180
 #: pretix/control/views/organizer.py:655
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Tento uživatel již má nastavena práva pro tento tým."
 
 #: pretix/api/views/oauth.py:85 pretix/control/logdisplay.py:356
 #, python-brace-format
@@ -240,7 +240,7 @@ msgstr ""
 #: pretix/api/views/order.py:460 pretix/control/views/orders.py:1186
 #: pretix/presale/views/order.py:663 pretix/presale/views/order.py:728
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Nemůžete vygenerovat fakturu pro tuto objednávku."
 
 #: pretix/api/views/order.py:465 pretix/control/views/orders.py:1188
 #: pretix/presale/views/order.py:665 pretix/presale/views/order.py:730
@@ -1868,7 +1868,7 @@ msgstr "Časové pásmo"
 
 #: pretix/base/models/auth.py:108
 msgid "Two-factor authentication is required to log in"
-msgstr ""
+msgstr "Pro přihlášení je vyžadována dvoufaktorová autentizace"
 
 #: pretix/base/models/auth.py:112
 msgid "Receive notifications according to my settings below"
@@ -1991,7 +1991,7 @@ msgstr ""
 #: pretix/base/models/devices.py:91
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 msgid "Gate"
-msgstr ""
+msgstr "Brána"
 
 #: pretix/base/models/devices.py:109
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:38
@@ -2008,7 +2008,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:46
 msgid "The end of the event has to be later than its start."
-msgstr ""
+msgstr "Konec události musí být pozdější než začátek."
 
 #: pretix/base/models/event.py:353
 msgid ""
@@ -2030,7 +2030,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:369
 msgid "Shop is live"
-msgstr ""
+msgstr "Obchod je spuštěný"
 
 #: pretix/base/models/event.py:371
 msgid "Event currency"
@@ -2057,7 +2057,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:380 pretix/base/models/event.py:1106
 msgid "Show in lists"
-msgstr ""
+msgstr "Zobrazit v seznamu"
 
 #: pretix/base/models/event.py:381
 msgid ""
@@ -2068,7 +2068,7 @@ msgstr ""
 #: pretix/base/models/event.py:384 pretix/base/models/event.py:1120
 #: pretix/control/forms/subevents.py:75
 msgid "End of presale"
-msgstr ""
+msgstr "Konec předprodeje"
 
 #: pretix/base/models/event.py:385 pretix/base/models/event.py:1121
 #: pretix/control/forms/subevents.py:76
@@ -2080,7 +2080,7 @@ msgstr ""
 #: pretix/base/models/event.py:390 pretix/base/models/event.py:1126
 #: pretix/control/forms/subevents.py:69
 msgid "Start of presale"
-msgstr ""
+msgstr "Začátek předprodeje"
 
 #: pretix/base/models/event.py:391 pretix/base/models/event.py:1127
 #: pretix/control/forms/subevents.py:70
@@ -2101,13 +2101,13 @@ msgstr ""
 
 #: pretix/base/models/event.py:416 pretix/control/navigation.py:44
 msgid "Plugins"
-msgstr ""
+msgstr "Zásuvné moduly"
 
 #: pretix/base/models/event.py:419
 #: pretix/control/templates/pretixcontrol/event/index.html:143
 #: pretix/control/templates/pretixcontrol/order/index.html:865
 msgid "Internal comment"
-msgstr ""
+msgstr "Interní poznámka"
 
 #: pretix/base/models/event.py:423 pretix/control/forms/event.py:211
 #: pretix/control/forms/filter.py:988
@@ -2133,7 +2133,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/search/orders.html:44
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:18
 msgid "Event"
-msgstr ""
+msgstr "Událost"
 
 #: pretix/base/models/event.py:437 pretix/control/navigation.py:305
 #: pretix/control/navigation.py:407
@@ -2144,7 +2144,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:37
 #: pretix/control/views/organizer.py:1205
 msgid "Events"
-msgstr ""
+msgstr "Události"
 
 #: pretix/base/models/event.py:951
 msgid ""
@@ -2182,7 +2182,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:1250
 #: pretix/control/templates/pretixcontrol/users/index.html:46
 msgid "Active"
-msgstr ""
+msgstr "Aktivní"
 
 #: pretix/base/models/event.py:1103
 msgid ""
@@ -6399,7 +6399,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1694
 msgid "Primary color"
-msgstr ""
+msgstr "Hlavní barva"
 
 #: pretix/base/settings.py:1714
 msgid "Accent color for success"
@@ -9737,7 +9737,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr ""
+msgstr "Nástěnka"
 
 #: pretix/control/navigation.py:28 pretix/control/navigation.py:329
 #: pretix/control/navigation.py:424
@@ -10328,7 +10328,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:123
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
 msgid "Filter"
-msgstr ""
+msgstr "Filtrovat"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:52
 msgid "No attendee record was found."
@@ -10558,11 +10558,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
-msgstr ""
+msgstr "Jít na událost"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "Vaše nadcházející události"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:20
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -10571,11 +10571,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:57
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:12
 msgid "Create a new event"
-msgstr ""
+msgstr "Vytvořit novou událost"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:39
 msgid "View all upcoming events"
-msgstr ""
+msgstr "Zobrazit všechny nadcházející události"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
@@ -13546,7 +13546,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:98
 msgid "Remove filter"
-msgstr ""
+msgstr "Odstranit filtr"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:116
 msgid "Order  paid / total"
@@ -13618,7 +13618,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/overview.html:69
 #: pretix/plugins/reports/exporters.py:259
 msgid "Purchased"
-msgstr ""
+msgstr "Zakoupeno"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:178
 msgid ""
@@ -13679,7 +13679,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
 msgid "Download pretixSCAN"
-msgstr ""
+msgstr "Stáhnout pretixSCAN"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:18
 msgid ""
@@ -17735,12 +17735,12 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:120
 #, python-format
 msgid "Page %d"
-msgstr ""
+msgstr "Strana %d"
 
 #: pretix/plugins/reports/exporters.py:122
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "Vytvořeno: %s"
 
 #: pretix/plugins/reports/exporters.py:162
 msgid "Order overview (PDF)"
@@ -17810,10 +17810,8 @@ msgstr ""
 
 #: pretix/plugins/reports/exporters.py:668
 #: pretix/plugins/reports/exporters.py:713
-#, fuzzy
-#| msgid "Country"
 msgid "Country code"
-msgstr "Stát"
+msgstr "Kód země"
 
 #: pretix/plugins/returnurl/__init__.py:9
 #: pretix/plugins/returnurl/__init__.py:12

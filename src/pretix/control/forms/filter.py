@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from decimal import Decimal
 from urllib.parse import urlencode
 
@@ -766,10 +766,15 @@ class SubEventFilterForm(FilterForm):
         ),
         required=False
     )
-    date = forms.DateField(
-        label=_('Date'),
+    date_from = forms.DateField(
+        label=_('Date from'),
         required=False,
-        widget=DatePickerWidget
+        widget=DatePickerWidget,
+    )
+    date_until = forms.DateField(
+        label=_('Date until'),
+        required=False,
+        widget=DatePickerWidget,
     )
     weekday = forms.ChoiceField(
         label=_('Weekday'),
@@ -796,7 +801,8 @@ class SubEventFilterForm(FilterForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['date'].widget = DatePickerWidget()
+        self.fields['date_from'].widget = DatePickerWidget()
+        self.fields['date_until'].widget = DatePickerWidget()
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
@@ -838,19 +844,21 @@ class SubEventFilterForm(FilterForm):
                 Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
             )
 
-        if fdata.get('date'):
-            date_start = make_aware(datetime.combine(
-                fdata.get('date'),
+        if fdata.get('date_until'):
+            date_end = make_aware(datetime.combine(
+                fdata.get('date_until') + timedelta(days=1),
                 time(hour=0, minute=0, second=0, microsecond=0)
             ), get_current_timezone())
-            date_end = make_aware(datetime.combine(
-                fdata.get('date'),
-                time(hour=23, minute=59, second=59, microsecond=999999)
-            ), get_current_timezone())
             qs = qs.filter(
-                Q(date_to__isnull=True, date_from__gte=date_start, date_from__lte=date_end) |
-                Q(date_to__isnull=False, date_from__lte=date_end, date_to__gte=date_start)
+                Q(date_to__isnull=True, date_from__lt=date_end) |
+                Q(date_to__isnull=False, date_to__lt=date_end)
             )
+        if fdata.get('date_from'):
+            date_start = make_aware(datetime.combine(
+                fdata.get('date_from'),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(date_from__gte=date_start)
 
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())

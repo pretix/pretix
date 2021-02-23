@@ -36,22 +36,6 @@ rules                                 object                     Custom check-in
 exit_all_at                           datetime                   Automatically check out (i.e. perform an exit scan) at this point in time. After this happened, this property will automatically be set exactly one day into the future. Note that this field is considered "internal configuration" and if you pull the list with ``If-Modified-Since``, the daily change in this field will not trigger a response.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.10
-
-   This resource has been added.
-
-.. versionchanged:: 1.11
-
-   The ``positions`` endpoints have been added.
-
-.. versionchanged:: 1.13
-
-   The ``include_pending`` field has been added.
-
-.. versionchanged:: 3.2
-
-    The ``auto_checkin_sales_channels`` field has been added.
-
 .. versionchanged:: 3.9
 
     The ``subevent`` attribute may now be ``null`` inside event series. The ``allow_multiple_entries``,
@@ -67,10 +51,6 @@ exit_all_at                           datetime                   Automatically c
 
 Endpoints
 ---------
-
-.. versionchanged:: 1.15
-
-   The ``../status/`` detail endpoint has been added.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/
 
@@ -379,29 +359,6 @@ Endpoints
 
 Order position endpoints
 ------------------------
-
-.. versionchanged:: 1.15
-
-   The order positions endpoint has been extended by the filter queries ``item__in``, ``variation__in``,
-   ``order__status__in``, ``subevent__in``, ``addon_to__in``, and ``search``. The search for attendee names and order
-   codes is now case-insensitive.
-
-   The ``.../redeem/`` endpoint has been added.
-
-.. versionchanged:: 2.0
-
-   The order positions endpoint has been extended by the filter queries ``voucher`` and ``voucher__code``.
-
-.. versionchanged:: 2.7
-
-   The resource now contains the new attributes ``require_attention`` and ``order__status`` and accepts the new
-   ``ignore_status`` filter. The ``attendee_name`` field is now "smart" (see below) and the redemption endpoint
-   returns ``400`` instead of ``404`` on tickets which are known but not paid.
-
-.. versionchanged:: 3.2
-
-    The ``checkins`` dict now also contains a ``auto_checked_in`` value to indicate if the check-in has been performed
-    automatically by the system.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/
 

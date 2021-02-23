@@ -33,6 +33,7 @@ date_to                               datetime                   The sub-event's
 date_admission                        datetime                   The sub-event's admission date (or ``null``)
 presale_start                         datetime                   The sub-date at which the ticket shop opens (or ``null``)
 presale_end                           datetime                   The sub-date at which the ticket shop closes (or ``null``)
+frontpage_text                        multi-lingual string       The description of the event (or ``null``)
 location                              multi-lingual string       The sub-event location (or ``null``)
 geo_lat                               float                      Latitude of the location (or ``null``)
 geo_lon                               float                      Longitude of the location (or ``null``)
@@ -53,25 +54,6 @@ seat_category_mapping                 object                     An object mappi
                                                                  (strings) to items in the event (integers or ``null``).
 last_modified                         datetime                   Last modification of this object
 ===================================== ========================== =======================================================
-
-.. versionchanged:: 1.7
-
-   The ``meta_data`` field has been added.
-
-.. versionchanged:: 2.1
-
-   The ``event`` field has been added, together with filters on the list of dates and an organizer-level list.
-
-.. versionchanged:: 2.6
-   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
-
-.. versionchanged:: 2.7
-
-   The attribute ``is_public`` has been added.
-
-.. versionchanged:: 3.0
-
-   The attributes ``seating_plan`` and ``seat_category_mapping`` have been added.
 
 .. versionchanged:: 3.3
 

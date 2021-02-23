@@ -362,6 +362,9 @@ $(document).ready(function () {
                 } else {
                     this.$set(this.rule[this.operator], 1, time);
                 }
+                if (event.target.value === "custom") {
+                    this.$set(this.rule[this.operator], 2, 0);
+                }
             },
             setTimeValue: function (val) {
                 console.log(val);

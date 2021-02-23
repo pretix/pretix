@@ -104,7 +104,7 @@ class ConfirmPaymentForm(forms.Form):
 class CancelForm(ConfirmPaymentForm):
     send_email = forms.BooleanField(
         required=False,
-        label=_('Notify user by e-mail'),
+        label=_('Notify customer by email'),
         initial=True
     )
     cancellation_fee = forms.DecimalField(
@@ -139,6 +139,11 @@ class CancelForm(ConfirmPaymentForm):
 
 
 class MarkPaidForm(ConfirmPaymentForm):
+    send_email = forms.BooleanField(
+        required=False,
+        label=_('Notify customer by email'),
+        initial=True
+    )
     amount = forms.DecimalField(
         required=True,
         max_digits=10, decimal_places=2,

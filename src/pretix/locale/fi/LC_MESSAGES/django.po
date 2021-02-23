@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-22 11:05+0000\n"
-"PO-Revision-Date: 2021-01-26 03:00+0000\n"
+"PO-Revision-Date: 2021-02-15 05:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -3136,10 +3136,8 @@ msgstr "Ulkoinen"
 
 #: pretix/base/models/orders.py:1720
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:191
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund reason"
-msgstr "Hyvitä tilaus"
+msgstr "Hyvityksen syy"
 
 #: pretix/base/models/orders.py:1721
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:192
@@ -4537,10 +4535,8 @@ msgstr ""
 
 #: pretix/base/services/cancelevent.py:200
 #: pretix/base/services/cancelevent.py:258
-#, fuzzy
-#| msgid "Event created"
 msgid "Event canceled"
-msgstr "Tapahtuma luotu"
+msgstr "Tapahtuma peruttu"
 
 #: pretix/base/services/cart.py:52 pretix/base/services/orders.py:73
 msgid ""
@@ -7817,16 +7813,12 @@ msgid "Order placed before"
 msgstr "Tilattu jälkeen"
 
 #: pretix/control/forms/filter.py:468
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Minimal sum of payments and refunds"
-msgstr "Tilauksen maksut ja palautukset"
+msgstr "Maksujen ja palautusten vähimmäissumma"
 
 #: pretix/control/forms/filter.py:473
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Maximal sum of payments and refunds"
-msgstr "Tilauksen maksut ja palautukset"
+msgstr "Tilausten ja maksujen enimmäissumma"
 
 #: pretix/control/forms/filter.py:515 pretix/control/forms/filter.py:520
 #: pretix/control/forms/filter.py:546 pretix/control/forms/filter.py:551
@@ -8487,11 +8479,9 @@ msgid "Automatically refund money if possible"
 msgstr ""
 
 #: pretix/control/forms/orders.py:619
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid ""
 "Create manual refund if the payment method does not support automatic refunds"
-msgstr "Tätä maksutapa ei tue automaattisia hyvityksiä."
+msgstr "Luo manuaalinen hyvitys, jos maksutapa ei tue automaattista hyvitystä"
 
 #: pretix/control/forms/orders.py:623
 msgid ""
@@ -12876,10 +12866,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:104
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund for overpayment"
-msgstr "Hyvitä tilaus"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:106
 #, python-format
@@ -13262,16 +13250,12 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:30
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund to original payment method"
-msgstr "Hyvitä tilaus"
+msgstr "Hyvitä alkuperäiseen maksutapaan"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:36
-#, fuzzy
-#| msgid "Payment method"
 msgid "Payment details"
-msgstr "Maksutapa"
+msgstr "Maksun tiedot"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:37
 msgid "Amount not refunded"
@@ -13279,10 +13263,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund amount"
-msgstr "Hyvitä tilaus"
+msgstr "Hyvitettävä summa"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:66
 msgid "Full amount"
@@ -13293,16 +13275,12 @@ msgid "This payment method does not support automatic refunds."
 msgstr "Tätä maksutapa ei tue automaattisia hyvityksiä."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:78
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund to a different payment method"
-msgstr "Hyvitä tilaus"
+msgstr "Hyvitä eri maksutavalle"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:84
-#, fuzzy
-#| msgid "Question options"
 msgid "Recipient / options"
-msgstr "Kysymysvaihtoehdot"
+msgstr "Vastaanottaja / vaihtoehdot"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:112
 msgid "Transfer to other order"
@@ -14500,16 +14478,12 @@ msgid "Times"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:339
-#, fuzzy
-#| msgid "Start of presale"
 msgid "Start of first slot"
-msgstr "Ennakkomyynnin alku"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:345
-#, fuzzy
-#| msgid "End of presale"
 msgid "End of time slots"
-msgstr "Ennakkomyynnin loppu"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:351
 msgid "Length of slots"
@@ -14525,11 +14499,8 @@ msgid "Break between slots"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:370
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "created"
 msgid "Create"
-msgstr "luotu"
+msgstr "Luo"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:377
 msgid "Add a single time slot"
@@ -16187,10 +16158,8 @@ msgid "The selected exporter was not found."
 msgstr ""
 
 #: pretix/control/views/orders.py:2117
-#, fuzzy
-#| msgid "We are processing your request …"
 msgid "There was a problem processing your input:"
-msgstr "Pyyntöäsi käsitellään …"
+msgstr "Ongelma syötteen käsittelyssä:"
 
 #: pretix/control/views/orders.py:2213
 msgid "All orders have been canceled."
@@ -16949,17 +16918,12 @@ msgid "Can only create a bank transfer refund from an existing payment."
 msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:349
-#, fuzzy
-#| msgid "Price (optional)"
 msgid "BIC (optional)"
-msgstr "Hinta (valinnainen)"
+msgstr "BIC (valinnainen)"
 
 #: pretix/plugins/banktransfer/payment.py:388
-#, fuzzy
-#| msgid "Your order has been placed successfully. See below for details."
 msgid "Your input was invalid, please see below for details."
-msgstr ""
-"Tilauksesi on vastaanotettu onnistuneesti. Katso tilauksen tiedot alta."
+msgstr "Epäkelpo syöte, katso tiedot alta."
 
 #: pretix/plugins/banktransfer/refund_export.py:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
@@ -20213,10 +20177,8 @@ msgid "You chose an invalid cancellation fee."
 msgstr ""
 
 #: pretix/presale/views/order.py:869
-#, fuzzy
-#| msgid "Any customer"
 msgid "Canceled by customer"
-msgstr "Kaikki asiakkaat"
+msgstr "Asiakkaan peruuttama"
 
 #: pretix/presale/views/order.py:880
 msgid "The cancellation has been requested."

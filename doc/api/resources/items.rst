@@ -118,44 +118,6 @@ bundles                               list of objects            Definition of b
 meta_data                             object                     Values set for event-specific meta data parameters.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 2.7
-
-   The attribute ``original_price`` has been added for ``variations``.
-
-.. versionchanged:: 1.7
-
-   The attribute ``tax_rule`` has been added. ``tax_rate`` is kept for compatibility. The attribute
-   ``checkin_attention`` has been added.
-
-.. versionchanged:: 1.12
-
-   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
-   The attribute ``price_included`` has been added to ``addons``.
-
-.. versionchanged:: 1.16
-
-   The ``internal_name`` and ``original_price`` fields have been added.
-
-.. versionchanged:: 2.0
-
-   The field ``require_approval`` has been added.
-
-.. versionchanged:: 2.3
-
-   The ``sales_channels`` attribute has been added.
-
-.. versionchanged:: 2.4
-
-   The ``generate_tickets`` attribute has been added.
-
-.. versionchanged:: 2.6
-
-   The ``bundles`` and ``require_bundling`` attributes have been added.
-
-.. versionchanged:: 3.0
-
-   The ``show_quota_left``, ``allow_waitinglist``, and ``hidden_if_available`` attributes have been added.
-
 .. versionchanged:: 3.7
 
    The attribute ``meta_data`` has been added.

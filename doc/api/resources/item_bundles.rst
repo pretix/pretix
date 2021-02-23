@@ -30,10 +30,6 @@ designated_price                      money (string)             Designated pric
                                                                  taxation. This is not added to the price.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 2.6
-
-   This resource has been added.
-
 Endpoints
 ---------
 

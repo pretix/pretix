@@ -1,8 +1,9 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from urllib.parse import urlencode
 
 from django import forms
 from django.forms import formset_factory
+from django.forms.utils import ErrorDict
 from django.urls import reverse
 from django.utils.dates import MONTHS, WEEKDAYS
 from django.utils.functional import cached_property
@@ -11,6 +12,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
+from pretix.base.forms.widgets import DatePickerWidget, TimePickerWidget
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
 from pretix.base.reldate import RelativeDateTimeField
@@ -88,6 +90,142 @@ class SubEventBulkForm(SubEventForm):
         del self.fields['date_admission']
 
 
+class NullBooleanSelect(forms.NullBooleanSelect):
+    def __init__(self, attrs=None):
+        choices = (
+            ('unknown', _('Keep the current values')),
+            ('true', _('Yes')),
+            ('false', _('No')),
+        )
+        super(forms.NullBooleanSelect, self).__init__(attrs, choices)
+
+
+class SubEventBulkEditForm(I18nModelForm):
+    def __init__(self, *args, **kwargs):
+        self.mixed_values = kwargs.pop('mixed_values')
+        self.queryset = kwargs.pop('queryset')
+        super().__init__(*args, **kwargs)
+        self.fields['location'].widget.attrs['rows'] = '3'
+
+        for k in ('name', 'location', 'frontpage_text'):
+            # i18n fields
+            if k in self.mixed_values:
+                self.fields[k].widget.attrs['placeholder'] = '[{}]'.format(_('Selection contains various values'))
+            else:
+                self.fields[k].widget.attrs['placeholder'] = ''
+            self.fields[k].one_required = False
+
+        for k in ('geo_lat', 'geo_lon'):
+            # scalar fields
+            if k in self.mixed_values:
+                self.fields[k].widget.attrs['placeholder'] = '[{}]'.format(_('Selection contains various values'))
+            else:
+                self.fields[k].widget.attrs['placeholder'] = ''
+            self.fields[k].widget.is_required = False
+            self.fields[k].required = False
+
+        for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end'):
+            self.fields[k + '_day'] = forms.DateField(
+                label=self._meta.model._meta.get_field(k).verbose_name,
+                help_text=self._meta.model._meta.get_field(k).help_text,
+                widget=DatePickerWidget(),
+                required=False,
+            )
+            self.fields[k + '_time'] = forms.TimeField(
+                label=self._meta.model._meta.get_field(k).verbose_name,
+                help_text=self._meta.model._meta.get_field(k).help_text,
+                widget=TimePickerWidget(),
+                required=False,
+            )
+
+    class Meta:
+        model = SubEvent
+        localized_fields = '__all__'
+        fields = [
+            'name',
+            'location',
+            'frontpage_text',
+            'geo_lat',
+            'geo_lon',
+            'is_public',
+            'active',
+        ]
+        field_classes = {
+        }
+        widgets = {
+        }
+
+    def save(self, commit=True):
+        objs = list(self.queryset)
+        fields = set()
+
+        check_map = {
+            'geo_lat': '__geo',
+            'geo_lon': '__geo',
+        }
+        for k in self.fields:
+            cb_val = self.prefix + check_map.get(k, k)
+            if cb_val not in self.data.getlist('_bulk'):
+                continue
+
+            if k.endswith('_day'):
+                for obj in objs:
+                    oldval = getattr(obj, k.replace('_day', ''))
+                    cval = self.cleaned_data[k]
+                    if cval is None:
+                        newval = None
+                        if not self._meta.model._meta.get_field(k.replace('_day', '')).null:
+                            continue
+                    elif oldval:
+                        oldval = oldval.astimezone(self.event.timezone)
+                        newval = oldval.replace(
+                            year=cval.year,
+                            month=cval.month,
+                            day=cval.day,
+                        )
+                    else:
+                        # If there is no previous date/time set, we'll just set to midnight
+                        # If the user also selected a time, this will be overridden anyways
+                        newval = datetime(
+                            year=cval.year,
+                            month=cval.month,
+                            day=cval.day,
+                            tzinfo=self.event.timezone
+                        )
+                    setattr(obj, k.replace('_day', ''), newval)
+                fields.add(k.replace('_day', ''))
+            elif k.endswith('_time'):
+                for obj in objs:
+                    # If there is no previous date/time set and only a time is changed not the
+                    # date, we instead use the date of the event
+                    oldval = getattr(obj, k.replace('_time', '')) or obj.date_from
+                    cval = self.cleaned_data[k]
+                    if cval is None:
+                        continue
+                    oldval = oldval.astimezone(self.event.timezone)
+                    newval = oldval.replace(
+                        hour=cval.hour,
+                        minute=cval.minute,
+                        second=cval.second,
+                    )
+                    setattr(obj, k.replace('_time', ''), newval)
+                fields.add(k.replace('_time', ''))
+            else:
+                fields.add(k)
+                for obj in objs:
+                    setattr(obj, k, self.cleaned_data[k])
+
+        if fields:
+            SubEvent.objects.bulk_update(objs, fields, 200)
+
+    def full_clean(self):
+        if len(self.data) == 0:
+            # form wasn't submitted
+            self._errors = ErrorDict()
+            return
+        super().full_clean()
+
+
 class SubEventItemOrVariationFormMixin:
     def __init__(self, *args, **kwargs):
         self.item = kwargs.pop('item')
@@ -162,7 +300,7 @@ class SubEventMetaValueForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.property = kwargs.pop('property')
         self.default = kwargs.pop('default', None)
-        self.disabled = kwargs.pop('disabled')
+        self.disabled = kwargs.pop('disabled', False)
         super().__init__(*args, **kwargs)
         if self.property.allowed_values:
             self.fields['value'] = forms.ChoiceField(

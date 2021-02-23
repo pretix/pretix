@@ -25,14 +25,6 @@ is_addon                              boolean                    If ``true``, it
                                                                  defining add-ons for other products.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.14
-
-   The operations POST, PATCH, PUT and DELETE have been added.
-
-.. versionchanged:: 1.16
-
-   The field ``internal_name`` has been added.
-
 
 Endpoints
 ---------

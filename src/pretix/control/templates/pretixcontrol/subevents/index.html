@@ -22,14 +22,17 @@
         </div>
     {% else %}
         <form class="row filter-form" action="" method="get">
-            <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="col-md-2 col-sm-6 col-xs-12">
                 {% bootstrap_field filter_form.query layout='inline' %}
             </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="col-md-2 col-sm-6 col-xs-12">
                 {% bootstrap_field filter_form.status layout='inline' %}
             </div>
             <div class="col-md-2 col-sm-6 col-xs-12">
-                {% bootstrap_field filter_form.date layout='inline' %}
+                {% bootstrap_field filter_form.date_from layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.date_until layout='inline' %}
             </div>
             <div class="col-md-2 col-sm-6 col-xs-12">
                 {% bootstrap_field filter_form.weekday layout='inline' %}
@@ -43,23 +46,28 @@
                 </button>
             </div>
         </form>
-        <p>
-            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i>
-                {% trans "Create a new date" context "subevent" %}</a>
-            <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i>
-                {% trans "Create many new dates" context "subevent" %}</a>
-        </p>
+        {% if "can_change_event_settings" in request.eventpermset %}
+            <p>
+                <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-default"><i class="fa fa-plus"></i>
+                    {% trans "Create a new date" context "subevent" %}</a>
+                <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-default"><i class="fa fa-plus"></i>
+                    {% trans "Create many new dates" context "subevent" %}</a>
+            </p>
+        {% endif %}
         <form action="{% url "control:event.subevents.bulkaction"  organizer=request.event.organizer.slug event=request.event.slug %}" method="post">
             {% csrf_token %}
+            <div class="hidden">
+                {{ filter_form.as_p }}
+            </div>
             <div class="table-responsive">
                 <table class="table table-hover table-quotas">
                     <thead>
                     <tr>
                         <th>
                             {% if "can_change_event_settings" in request.eventpermset %}
-                                <input type="checkbox" data-toggle-table/>
+                                <label aria-label="{% trans "select all rows for batch-operation" %}" class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
                             {% endif %}
                         </th>
                         <th>
@@ -67,28 +75,40 @@
                         </th>
                         <th>
                             {% trans "Begin" %}
-                            <a href="?{% url_replace request 'ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                         <th>
                             {% trans "Paid tickets per quota" %}
-                            <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                         <th>
                             {% trans "Status" %}
-                            <a href="?{% url_replace request 'ordering' '-active' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'active' %}"><i class="fa fa-caret-up"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' '-active' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'filter-ordering' 'active' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                         <th></th>
                     </tr>
+                    {% if "can_change_event_settings" in request.eventpermset %}
+                        <tr class="table-select-all warning hidden">
+                            <td>
+                                <input type="checkbox" name="__ALL" id="__all">
+                            </td>
+                            <td colspan="5">
+                                <label for="__all">
+                                    {% trans "Select all results on other pages as well" %}
+                                </label>
+                            </td>
+                        </tr>
+                    {% endif %}
                     </thead>
                     <tbody>
                     {% for s in subevents %}
                         <tr>
                             <td>
                                 {% if "can_change_event_settings" in request.eventpermset %}
-                                    <input type="checkbox" name="subevent" class="" value="{{ s.pk }}"/>
+                                    <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label"><input type="checkbox" name="subevent" class="" value="{{ s.pk }}"/></label>
                                 {% endif %}
                             </td>
                             <td>
@@ -149,6 +169,10 @@
             {% if "can_change_event_settings" in request.eventpermset %}
                 <button type="submit" class="btn btn-default btn-save" name="action" value="delete">
                     {% trans "Delete selected" %}
+                </button>
+                <button type="submit" class="btn btn-default btn-save" name="action" value="disable"
+                        formaction="{% url "control:event.subevents.bulkedit"  organizer=request.event.organizer.slug event=request.event.slug %}">
+                    {% trans "Change selected" %}
                 </button>
                 <button type="submit" class="btn btn-default btn-save" name="action" value="enable">
                     {% trans "Enable selected" %}

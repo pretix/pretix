@@ -437,11 +437,6 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
     </script>
 
 
-.. versionchanged:: 2.3
-
-   Data passing options have been added in pretix 2.3. If you use a self-hosted version of pretix, they only work
-   fully if you configured a redis server.
-
 .. versionchanged:: 3.6
 
    Dynamically opening the widget has been added in pretix 3.6.

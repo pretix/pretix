@@ -75,28 +75,6 @@ dependency_value                      string                     An old version 
                                                                  for one value. **Deprecated.**
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.12
-
-  The values ``D``, ``H``, and ``W`` for the field ``type`` are now allowed and the ``ask_during_checkin`` field has
-  been added.
-
-.. versionchanged:: 1.14
-
-  Write methods have been added. The attribute ``identifier`` has been added to both the resource itself and the
-  options resource. The ``position`` attribute has been added to the options resource.
-
-.. versionchanged:: 2.7
-
-  The attribute ``hidden`` and the question type ``CC`` have been added.
-
-.. versionchanged:: 3.0
-
-  The attribute ``dependency_values`` has been added.
-
-.. versionchanged:: 3.1
-
-  The attribute ``print_on_invoice`` has been added.
-
 .. versionchanged:: 3.5
 
   The attribute ``help_text`` has been added.

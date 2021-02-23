@@ -42,10 +42,6 @@ seat                                  objects                    The assigned se
 └ seat_guid                           string                     Identifier of the seat within the seating plan
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.17
-
-   This resource has been added.
-
 .. versionchanged:: 3.0
 
    This ``seat`` attribute has been added.

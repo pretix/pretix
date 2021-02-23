@@ -51,6 +51,7 @@ from pretix.control.forms.organizer import (
     GiftCardUpdateForm, OrganizerDeleteForm, OrganizerForm,
     OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm,
 )
+from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
 )
@@ -1147,8 +1148,9 @@ class ExportMixin:
             organizer=self.request.organizer
         )
         responses = register_multievent_data_exporters.send(self.request.organizer)
+        id = self.request.GET.get("identifier") or self.request.POST.get("exporter")
         for ex in sorted([response(events) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
-            if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
+            if id and ex.identifier != id:
                 continue
 
             # Use form parse cycle to generate useful defaults
@@ -1180,10 +1182,16 @@ class ExportMixin:
             exporters.append(ex)
         return exporters
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['exporters'] = self.exporters
+        return ctx
 
-class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, View):
+
+class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, TemplateView):
     known_errortypes = ['ExportError']
     task = multiexport
+    template_name = 'pretixcontrol/organizers/export.html'
 
     def get_success_message(self, value):
         return None
@@ -1201,6 +1209,11 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, V
         for ex in self.exporters:
             if ex.identifier == self.request.POST.get("exporter"):
                 return ex
+
+    def get(self, request, *args, **kwargs):
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
+        return TemplateView.get(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if not self.exporter:
@@ -1230,11 +1243,6 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, V
 
 class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, TemplateView):
     template_name = 'pretixcontrol/organizers/export.html'
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['exporters'] = self.exporters
-        return ctx
 
 
 class GateListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
@@ -1427,3 +1435,24 @@ class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionR
         self.object.delete()
         messages.success(request, _('The selected property has been deleted.'))
         return redirect(success_url)
+
+
+class LogView(OrganizerPermissionRequiredMixin, ListView):
+    template_name = 'pretixcontrol/organizers/logs.html'
+    permission = 'can_change_organizer_settings'
+    model = LogEntry
+    context_object_name = 'logs'
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = self.request.organizer.all_logentries().select_related(
+            'user', 'content_type', 'api_token', 'oauth_application', 'device'
+        ).order_by('-datetime')
+        qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
+        if self.request.GET.get('user'):
+            qs = qs.filter(user_id=self.request.GET.get('user'))
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        return ctx

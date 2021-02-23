@@ -20,10 +20,6 @@ layout                                object                     JSON representa
                                                                  still evolves. The version in use can be found `here`_.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 3.0
-
-   This endpoint has been added.
-
 Endpoints
 ---------
 

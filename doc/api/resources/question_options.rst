@@ -19,10 +19,6 @@ identifier                            string                     An arbitrary st
 answer                                multi-lingual string       The displayed value of this option
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 1.12
-
-   This resource has been added.
-
 Endpoints
 ---------
 

@@ -1,11 +1,8 @@
 /*global $ */
 
-$(function () {
-    "use strict";
-
+setup_collapsible_details = function (el) {
     var isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
-
-    $("details summary, details summary a[data-toggle=variations]").click(function (e) {
+    el.find("details summary, details summary a[data-toggle=variations]").click(function (e) {
         if (this.tagName !== "A" && $(e.target).closest("a").length > 0) {
             return true;
         }
@@ -44,7 +41,12 @@ $(function () {
             $detailsNotSummary = $details.children(':not(summary)');
         $details.prop('open', typeof $details.attr('open') == 'string');
         if (!$details.prop('open')) {
-            $detailsNotSummary.hide();
+            if ($details.find(".has-error, .alert-danger").length) {
+                $details.addClass("details-open");
+                $details.prop('open', true);
+            } else {
+                $detailsNotSummary.hide();
+            }
         } else {
             $details.addClass("details-open");
         }
@@ -55,4 +57,10 @@ $(function () {
             return false;
         });
     });
+};
+
+$(function () {
+    "use strict";
+
+    setup_collapsible_details($("body"));
 });

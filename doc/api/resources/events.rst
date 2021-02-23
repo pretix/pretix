@@ -52,31 +52,6 @@ sales_channels                        list                       A list of sales
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 1.7
-
-   The ``meta_data`` field has been added.
-
-.. versionchanged:: 1.15
-
-   The ``plugins`` field has been added.
-   The operations POST, PATCH, PUT and DELETE have been added.
-
-.. versionchanged:: 2.1
-
-   Filters have been added to the list of events.
-
-.. versionchanged:: 2.5
-
-   The ``testmode`` attribute has been added.
-
-.. versionchanged:: 2.8
-
-    When cloning events, the ``testmode`` attribute will now be cloned, too.
-
-.. versionchanged:: 3.0
-
-   The attributes ``seating_plan`` and ``seat_category_mapping`` have been added.
-
 .. versionchanged:: 3.3
 
    The attributes ``geo_lat`` and ``geo_lon`` have been added.

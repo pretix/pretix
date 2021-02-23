@@ -546,6 +546,25 @@ var form_handlers = function (el) {
         );
     });
 
+    el.find(".bulk-edit-field-group").each(function () {
+        var $checkbox = $(this).find("input[type=checkbox][name=_bulk]");
+        var $content = $(this).find(".field-content");
+        var $fields = $content.find("input, select, textarea, button");
+
+        var update = function () {
+            var isChecked = $checkbox.prop("checked");
+            $content.toggleClass("enabled", isChecked);
+            $fields.attr("tabIndex", isChecked ? 0 : -1);
+        }
+        $content.on("focusin change click", function () {
+            if ($checkbox.prop("checked")) return;
+            $checkbox.prop("checked", true);
+            update();
+        });
+        $checkbox.on('change', update)
+        update();
+    });
+
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
 };
@@ -563,7 +582,6 @@ $(function () {
         }
     );
     $("[data-formset]").on("formAdded", "div", function (event) {
-        console.log("formAdded")
         form_handlers($(event.target));
     });
     $(document).on("click", ".variations .variations-select-all", function (e) {
@@ -672,29 +690,104 @@ $(function () {
     // Tables with bulk selection, e.g. subevent list
     $("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
-
-        var update = function () {
-            var all_true = true;
-            var all_false = true;
-            $toggle.closest("table").find("td:first-child input[type=checkbox]").each(function () {
-                if ($(this).prop("checked")) {
-                    all_false = false;
-                } else {
-                    all_true = false;
-                }
-            });
-            if (all_true) {
-                $toggle.prop("checked", true).prop("indeterminate", false);
-            } else if (all_false) {
-                $toggle.prop("checked", false).prop("indeterminate", false);
-            } else {
-                $toggle.prop("checked", false).prop("indeterminate", true);
+        var $table = $toggle.closest("table");
+        var $selectAll = $table.find(".table-select-all");
+        var $rows = $table.find("tbody tr");
+        var $checkboxes = $rows.find("td:first-child input[type=checkbox]");
+        var firstIndex, lastIndex, selectionChecked, onChangeSelectionHappened = false;
+        var updateSelection = function(a, b, checked) {
+            if (a > b) {
+                //[a, b] = [b, a];// ES6 not ready yet for pretix
+                var tmp = a;
+                a = b;
+                b = tmp;
+            }
+            for (var i = a; i <= b; i++) {
+                var checkbox = $checkboxes.get(i);
+                if (!checkbox.hasAttribute("data-inital")) checkbox.setAttribute("data-inital", checkbox.checked);
+                if (checked === undefined || checked === null) checkbox.checked = checkbox.getAttribute("data-inital") === "true";
+                else checkbox.checked = checked;
             }
         };
+        var onChangeSelection = function(ev) {
+            onChangeSelectionHappened = true;
 
-        $(this).closest("table").find("td:first-child input[type=checkbox]").change(update);
-        $(this).change(function (ev) {
-            $(this).closest("table").find("td:first-child input[type=checkbox]").prop("checked", $(this).prop("checked"));
+            var row = ev.target.closest("tr");
+            var currentIndex = 0;
+            while(row = row.previousSibling) {
+                if (row.tagName) currentIndex++;
+            }
+            var dCurrent = currentIndex - firstIndex;
+            var dLast = lastIndex - firstIndex;
+            if (dCurrent*dLast < 0) {
+                // direction of selection changed => reset all previously selected
+                updateSelection(lastIndex, firstIndex);
+            }
+            else if (Math.abs(dCurrent) < Math.abs(dLast)) {
+                // selection distance decreased => reset unselected
+                updateSelection(currentIndex, lastIndex);
+            }
+            lastIndex = currentIndex;
+            updateSelection(firstIndex, currentIndex, selectionChecked);
+
+            ev.preventDefault();
+        };
+        $table.on("pointerdown", function(ev) {
+            if (!ev.target.closest("td:first-child")) return;
+            var row = ev.target.closest("tr");
+            selectionChecked = !row.querySelector("td:first-child input").checked;
+
+            firstIndex = 0;
+            while(row = row.previousSibling) {
+                if (row.tagName) firstIndex++;
+            }
+            lastIndex = firstIndex;
+
+            ev.preventDefault();
+            $rows.on("pointerenter", onChangeSelection);
+
+            $(document).one("pointerup", function(ev) {
+                if (onChangeSelectionHappened) {
+                    ev.preventDefault();
+                    onChangeSelectionHappened = false;
+                    $checkboxes.removeAttr("data-inital");
+
+                    update();
+                }
+                $rows.off("pointerenter", onChangeSelection);
+            });
+        });
+
+
+        var update = function () {
+            var all_same;
+            var checkboxes = $checkboxes.toArray();
+            var i = checkboxes.length;
+            while (i--) {
+                if (all_same === undefined) {
+                    all_same = checkboxes[i].checked;
+                    continue;
+                }
+                if (all_same != checkboxes[i].checked) {
+                    $toggle.prop("checked", false).prop("indeterminate", true).trigger("change");
+                    return;
+                }
+            }
+            $toggle.prop("checked", all_same).prop("indeterminate", false).trigger("change");
+        };
+
+        var debounceUpdate;
+        $checkboxes.change(function() {
+            //$(this).closest("tr").toggleClass("warning", this.checked);
+            // when changing the $toggle’s checked-property, lots of change events 
+            // get triggered => debounce
+            if (debounceUpdate) window.clearTimeout(debounceUpdate);
+            debounceUpdate = window.setTimeout(update, 10);
+        });
+        $toggle.change(function (ev) {
+            if (!this.indeterminate) $checkboxes.prop("checked", this.checked);//.trigger("change");
+            $selectAll.toggleClass("hidden", !this.checked).prop("hidden", !this.checked);
+            if (!this.checked) $selectAll.find("input").prop("checked", false);
         });
     });
 

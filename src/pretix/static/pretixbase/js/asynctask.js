@@ -71,6 +71,7 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
             jqXHR.responseText.indexOf("</body")
         ));
         form_handlers($("body"));
+        setup_collapsible_details($("body"));
     } else if (c.length > 0) {
         // This is some kind of 500/404/403 page, show it in an overlay
         $("body").data('ajaxing', false);
@@ -146,11 +147,20 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
         if (respdom.filter('form') && (respdom.filter('.has-error') || respdom.filter('.alert-danger'))) {
             // This is a failed form validation, let's just use it
             waitingDialog.hide();
-            $("body").html(jqXHR.responseText.substring(
-                jqXHR.responseText.indexOf("<body"),
-                jqXHR.responseText.indexOf("</body")
-            ));
-            form_handlers($("body"));
+
+            if (respdom.filter('#page-wrapper') && $('#page-wrapper').length) {
+                $("#page-wrapper").html(respdom.find("#page-wrapper").html());
+                form_handlers($("#page-wrapper"));
+                setup_collapsible_details($("#page-wrapper"));
+            } else {
+                $("body").html(jqXHR.responseText.substring(
+                    jqXHR.responseText.indexOf("<body"),
+                    jqXHR.responseText.indexOf("</body")
+                ));
+                form_handlers($("body"));
+                setup_collapsible_details($("body"));
+            }
+
         } else if (c.length > 0) {
             waitingDialog.hide();
             ajaxErrDialog.show(c.first().html());
