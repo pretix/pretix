@@ -108,7 +108,7 @@
                         <tr>
                             <td>
                                 {% if "can_change_event_settings" in request.eventpermset %}
-                                    <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label"><input type="checkbox" name="subevent" class="" value="{{ s.pk }}"/></label>
+                                    <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label"><input type="checkbox" name="subevent" class="batch-select-checkbox" value="{{ s.pk }}"/></label>
                                 {% endif %}
                             </td>
                             <td>
@@ -167,6 +167,7 @@
                 </table>
             </div>
             {% if "can_change_event_settings" in request.eventpermset %}
+            <div class="batch-select-actions">
                 <button type="submit" class="btn btn-danger btn-save" name="action" value="delete">
                     <i class="fa fa-trash"></i>{% trans "Delete selected" %}
                 </button>
@@ -180,6 +181,7 @@
                 <button type="submit" class="btn btn-default btn-save" name="action" value="disable">
                     <i class="fa fa-ban"></i>{% trans "Deactivate selected" %}
                 </button>
+            </div>
             {% endif %}
         </form>
         {% include "pretixcontrol/pagination.html" %}

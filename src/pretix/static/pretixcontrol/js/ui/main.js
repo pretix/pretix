@@ -690,6 +690,7 @@ $(function () {
     // Tables with bulk selection, e.g. subevent list
     $("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
+        var $actionButtons = $(".batch-select-actions button", this.form);
         var $table = $toggle.closest("table");
         var $selectAll = $table.find(".table-select-all");
         var $rows = $table.find("tbody tr");
@@ -758,37 +759,38 @@ $(function () {
             });
         });
 
+        var update = function() {
+            var nrOfChecked = $checkboxes.filter(":checked").length;
 
-        var update = function () {
-            var all_same;
-            var checkboxes = $checkboxes.toArray();
-            var i = checkboxes.length;
-            while (i--) {
-                if (all_same === undefined) {
-                    all_same = checkboxes[i].checked;
-                    continue;
+            if (!nrOfChecked) {
+                $actionButtons.attr("disabled", true);
+
+                $selectAll.toggleClass("hidden", true).prop("hidden", true);
+                $selectAll.find("input").prop("checked", false);
+
+                $toggle.prop("checked", false).prop("indeterminate", false);
+            }
+            else {
+                $actionButtons.attr("disabled", false);
+
+                if (nrOfChecked == $checkboxes.length) {
+                    $selectAll.toggleClass("hidden", false).prop("hidden", false);
+                    $toggle.prop("checked", true).prop("indeterminate", false);
                 }
-                if (all_same != checkboxes[i].checked) {
-                    $toggle.prop("checked", false).prop("indeterminate", true).trigger("change");
-                    return;
+                else {
+                    $toggle.prop("checked",false).prop("indeterminate", true);
                 }
             }
-            $toggle.prop("checked", all_same).prop("indeterminate", false).trigger("change");
-        };
+        }
 
-        var debounceUpdate;
-        $checkboxes.change(function() {
-            //$(this).closest("tr").toggleClass("warning", this.checked);
-            // when changing the $toggle’s checked-property, lots of change events 
-            // get triggered => debounce
-            if (debounceUpdate) window.clearTimeout(debounceUpdate);
-            debounceUpdate = window.setTimeout(update, 10);
-        });
+        $checkboxes.change(update);
         $toggle.change(function (ev) {
-            if (!this.indeterminate) $checkboxes.prop("checked", this.checked);//.trigger("change");
-            $selectAll.toggleClass("hidden", !this.checked).prop("hidden", !this.checked);
-            if (!this.checked) $selectAll.find("input").prop("checked", false);
+            this.indeterminate = false;
+            $checkboxes.prop("checked", this.checked);
+            update();
         });
+
+        update();
     });
 
     // Items and categories
