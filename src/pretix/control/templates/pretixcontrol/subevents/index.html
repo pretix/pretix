@@ -90,7 +90,7 @@
                         </th>
                         <th></th>
                     </tr>
-                    {% if "can_change_event_settings" in request.eventpermset %}
+                    {% if "can_change_event_settings" in request.eventpermset and page_obj.paginator.num_pages > 1 %}
                         <tr class="table-select-all warning hidden">
                             <td>
                                 <input type="checkbox" name="__ALL" id="__all" data-results-total="{{ page_obj.paginator.count }}">
