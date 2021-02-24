@@ -19,7 +19,7 @@ $(function () {
         return;
       }
       $sec.find(".col-md-1").html("<span class='fa fa-cog fa-spin'></span>");
-      $.getJSON('/control/geocode/?q=' + escape(q), function (res) {
+      $.getJSON('/control/geocode/?q=' + encodeURIComponent(q), function (res) {
         var q2 = $.trim($inp.val().replace(/\n/g, ", "));
         if (q2 !== q) {
           return;  // lost race
