@@ -23,24 +23,24 @@
                 <div class="btn-group" role="group">
                     <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" %}" type="button"
                        class="btn btn-default">
-                        <span class="fa fa-list"></span>
+                        <span class="fa fa-list" aria-hidden="true"></span>
                         {% trans "List" %}
                     </a>
                     <a href="?{% url_replace request "style" "week" "month" "" "old" "" %}" type="button"
                        class="btn btn-default active">
-                        <span class="fa fa-calendar"></span>
+                        <span class="fa fa-calendar" aria-hidden="true"></span>
                         {% trans "Week" %}
                     </a>
                     <a href="?{% url_replace request "style" "calendar" "week" "" "old" "" "year" "" %}"
                        type="button"
                        class="btn btn-default">
-                        <span class="fa fa-calendar"></span>
+                        <span class="fa fa-calendar" aria-hidden="true"></span>
                         {% trans "Month" %}
                     </a>
                 </div>
                 <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" %}"
                    class="btn btn-default">
-                    <span class="fa fa-calendar-plus-o"></span>
+                    <span class="fa fa-calendar-plus-o" aria-hidden="true"></span>
                     {% trans "iCal" %}
                 </a>
             </div>
@@ -66,7 +66,7 @@
                 {% if has_before %}
                     <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
                        class="btn btn-default">
-                        <span class="fa fa-arrow-left"></span>
+                        <span class="fa fa-arrow-left" aria-hidden="true"></span>
                         {{ before|date:week_format }}
                     </a>
                 {% endif %}
@@ -74,7 +74,7 @@
                     <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
                        class="btn btn-default">
                         {{ after|date:week_format }}
-                        <span class="fa fa-arrow-right"></span>
+                        <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>
                 {% endif %}
             </div>
@@ -90,7 +90,7 @@
         {% if has_before %}
             <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
                class="btn btn-default">
-                <span class="fa fa-arrow-left"></span>
+                <span class="fa fa-arrow-left" aria-hidden="true"></span>
                 {{ before|date:week_format }}
             </a>
         {% endif %}
@@ -98,7 +98,7 @@
             <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
                class="btn btn-default">
                 {{ after|date:week_format }}
-                <span class="fa fa-arrow-right"></span>
+                <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
         {% endif %}
     </div>

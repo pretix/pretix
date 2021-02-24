@@ -8,11 +8,11 @@
                 <strong>{{ subev.name }}</strong>
             </div>
             <div class="col-md-4">
-                <span class="fa fa-calendar"></span>
+                <span class="fa fa-calendar" aria-hidden="true"></span>
                 {{ subev.get_date_range_display }}
                 {% if event.settings.show_times %}
                     <span data-time="{{ subev.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
-                        <span class="fa fa-clock-o"></span>
+                        <span class="fa fa-clock-o" aria-hidden="true"></span>
                         {{ subev.date_from|date:"TIME_FORMAT" }}
                     </span>
                 {% endif %}

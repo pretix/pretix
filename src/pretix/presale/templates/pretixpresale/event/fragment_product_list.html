@@ -6,15 +6,16 @@
 {% load eventsignal %}
 {% load rich_text %}
 {% for tup in items_by_category %}
-    <section>
+    <section{% if tup.0 %} aria-labelledby="category-{{ tup.0.id }}"{% else %} aria-label="{% trans "Uncategorized products" %}"{% endif %}{% if tup.0.description %} aria-describedby="category-info-{{ tup.0.id }}"{% endif %}>
         {% if tup.0 %}
             <h3 id="category-{{ tup.0.id }}">{{ tup.0.name }}</h3>
             {% if tup.0.description %}
-                <p>{{ tup.0.description|localize|rich_text }}</p>
+                <div id="category-info-{{ tup.0.id }}">{{ tup.0.description|localize|rich_text }}</div>
             {% endif %}
         {% endif %}
         {% for item in tup.1 %}
             {% if item.has_variations %}
+                <article>
                 <details class="item-with-variations" {% if event.settings.show_variations_expanded %}open{% endif %}
                         id="item-{{ item.id }}">
                     <summary class="row-fluid product-row headline">
@@ -23,14 +24,15 @@
                                 <a href="{{ item.picture.url }}" class="productpicture"
                                    data-title="{{ item.name|force_escape|force_escape }}"
                                         {# Yes, double-escape to prevent XSS in lightbox #}
-                                   data-lightbox="{{ item.id }}">
+                                   data-lightbox="{{ item.id }}"
+                                   aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
                                     <img src="{{ item.picture|thumb:'60x60^' }}"
                                          alt="{{ item.name }}"/>
                                 </a>
                             {% endif %}
                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
                                 <h4>
-                                    <a href="#" data-toggle="variations">
+                                    <a data-toggle="variations">
                                         {{ item.name }}
                                     </a>
                                 </h4>
@@ -65,7 +67,7 @@
                         </div>
                         <div class="col-md-2 col-xs-6 availability-box">
                             {% if not event.settings.show_variations_expanded %}
-                                <a href="#" data-toggle="variations" class="js-only">
+                                <a data-toggle="variations" class="js-only">
                                     {% trans "Show variants" %}
                                 </a>
                             {% endif %}
@@ -74,7 +76,7 @@
                     </summary>
                     <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
                         {% for var in item.available_variations %}
-                            <div class="row-fluid product-row variation">
+                            <article class="row-fluid product-row variation">
                                 <div class="col-md-8 col-xs-12">
                                     <h5>
                                         <label for="variation_{{ item.pk }}_{{ var.pk }}">
@@ -100,9 +102,11 @@
                                         <ins>
                                     {% endif %}
                                     {% if item.free_price %}
+                                        <label class="sr-only" for="price-variation-{{ item.pk }}-{{ var.pk }}">{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}</label>
                                         <div class="input-group input-group-price">
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price"
+                                                   id="price-variation-{{ item.pk }}-{{ var.pk }}"
                                                    {% if not ev.presale_is_running %}disabled{% endif %}
                                                    placeholder="0"
                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
@@ -141,7 +145,7 @@
                                 {% if item.require_voucher %}
                                     <div class="col-md-2 col-xs-6 availability-box unavailable">
                                         <small>
-                                            {% trans "Enter a voucher code below to buy this ticket." %}
+                                            <a href="#voucher">{% trans "Enter a voucher code below to buy this ticket." %}</a>
                                         </small>
                                     </div>
                                     {% elif var.cached_availability.0 == 100 %}
@@ -167,18 +171,20 @@
                                     {% include "pretixpresale/event/fragment_availability.html" with price=var.display_price.gross avail=var.cached_availability.0 event=event item=item var=var %}
                                 {% endif %}
                                 <div class="clearfix"></div>
-                            </div>
+                            </article>
                         {% endfor %}
                     </div>
                 </details>
+                </article>
             {% else %}
-                <div class="row-fluid product-row simple" id="item-{{ item.id }}">
+                <article class="row-fluid product-row simple" id="item-{{ item.id }}">
                     <div class="col-md-8 col-xs-12">
                         {% if item.picture %}
                             <a href="{{ item.picture.url }}" class="productpicture"
                                data-title="{{ item.name|force_escape|force_escape }}"
                                     {# Yes, double-escape to prevent XSS in lightbox #}
-                               data-lightbox="{{ item.id }}">
+                               data-lightbox="{{ item.id }}"
+                               aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
                                 <img src="{{ item.picture|thumb:'60x60^' }}"
                                      alt="{{ item.name }}"/>
                             </a>
@@ -217,8 +223,10 @@
                         {% endif %}
                         {% if item.free_price %}
                             <div class="input-group input-group-price">
+                                <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}</label>
                                 <span class="input-group-addon">{{ event.currency }}</span>
                                 <input type="number" class="form-control input-item-price" placeholder="0"
+                                       id="price-item-{{ item.pk }}"
                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                        name="price_{{ item.id }}"
@@ -280,7 +288,7 @@
                         {% include "pretixpresale/event/fragment_availability.html" with price=item.display_price.gross avail=item.cached_availability.0 event=event item=item var=0 %}
                     {% endif %}
                     <div class="clearfix"></div>
-                </div>
+                </article>
             {% endif %}
         {% endfor %}
     </section>

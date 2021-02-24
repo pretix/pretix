@@ -6,11 +6,24 @@
 {% load expiresformat %}
 {% load eventurl %}
 {% load phone_format %}
-{% block title %}{% trans "Order details" %}{% endblock %}
+{% block title %}
+    {% if "thanks" in request.GET or "paid" in request.GET %}
+        {% trans "Thank you!" %}
+        {% if order.status != 'p' %}
+            {% trans "Your order has been placed successfully. See below for details." %}
+        {% elif order.total == 0 %}
+            {% trans "Your order has been processed successfully! See below for details." %}
+        {% else %}
+            {% trans "We successfully received your payment. See below for details." %}
+        {% endif %}
+    {% endif %}
+    {% trans "Order details" %}
+{% endblock %}
 {% block content %}
+<main>
     {% if "thanks" in request.GET or "paid" in request.GET %}
         <div class="thank-you">
-            <span class="fa fa-check-circle"></span>
+            <span class="fa fa-check-circle" aria-hidden="true"></span>
 
             <h2>{% trans "Thank you!" %}</h2>
             {% if order.status != 'p' %}
@@ -121,7 +134,7 @@
                             {% elif r.state == "done" %}
                                 {% if r.provider == "giftcard" %}
                                     <a href="#" class="print-this-page btn btn-default btn-sm pull-right hidden-print">
-                                        <span class="fa fa-print"></span>
+                                        <span class="fa fa-print" aria-hidden="true"></span>
                                         {% trans "Print" %}
                                     </a>
                                     {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
@@ -129,7 +142,7 @@
                                         us, you can use the following gift card code during payment:
                                     {% endblocktrans %}
                                     <div class="text-center refund-gift-card-code">
-                                        <span class="fa fa-credit-card"></span>
+                                        <span class="fa fa-credit-card" aria-hidden="true"></span>
                                         {{ r.giftcard.secret }}
                                     </div>
                                     {% if r.giftcard.value != r.amount %}
@@ -170,7 +183,7 @@
             {% if order.can_modify_answers %}
                 <div class="pull-right flip">
                     <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
-                        <span class="fa fa-edit"></span>
+                        <span class="fa fa-edit" aria-hidden="true"></span>
                         {% trans "Change details" %}
                     </a>
                 </div>
@@ -264,7 +277,7 @@
                         {% if order.can_modify_answers %}
                             <div class="pull-right flip">
                                 <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
-                                    <span class="fa fa-edit"></span>
+                                    <span class="fa fa-edit" aria-hidden="true"></span>
                                     {% trans "Change details" %}
                                 </a>
                             </div>
@@ -337,7 +350,7 @@
                         </p>
                         <a href="{% eventurl event 'presale:event.order.change' secret=order.secret order=order.code %}"
                                 class="btn btn-default">
-                            <span class="fa fa-edit"></span>
+                            <span class="fa fa-edit" aria-hidden="true"></span>
                             {% trans "Change order" %}
                         </a>
                     </li>
@@ -405,7 +418,7 @@
                             {% endif %}
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                                     class="btn btn-danger">
-                                <span class="fa fa-remove"></span>
+                                <span class="fa fa-remove" aria-hidden="true"></span>
                                 {% trans "Cancel order" %}
                             </a>
                         {% else %}
@@ -417,7 +430,7 @@
                             </p>
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                                     class="btn btn-danger">
-                                <span class="fa fa-remove"></span>
+                                <span class="fa fa-remove" aria-hidden="true"></span>
                                 {% trans "Cancel order" %}
                             </a>
                         {% endif %}
@@ -426,4 +439,5 @@
             </ul>
         </div>
     {% endif %}
+</main>
 {% endblock %}

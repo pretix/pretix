@@ -11,7 +11,7 @@
         <div class="col-sm-4 hidden-xs text-left flip">
             <a href="?{% url_replace request "year" before.year "month" before.month %}"
                     class="btn btn-default">
-                <span class="fa fa-arrow-left"></span>
+                <span class="fa fa-arrow-left" aria-hidden="true"></span>
                 {{ before|date:"F Y" }}
             </a>
         </div>
@@ -33,7 +33,7 @@
         <div class="col-sm-4 hidden-xs text-right flip">
             <a href="?{% url_replace request "year" after.year "month" after.month %}" class="btn btn-default">
                 {{ after|date:"F Y" }}
-                <span class="fa fa-arrow-right"></span>
+                <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
         </div>
     </div>

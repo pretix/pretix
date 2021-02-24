@@ -9,7 +9,7 @@
         </div>
         <div class="panel-body text-center">
             <h4>
-                <span class="fa fa-envelope text-muted fa-2x"></span><br><br>
+                <span class="fa fa-envelope text-muted fa-2x" aria-hidden="true"></span><br><br>
                 {% trans "Please check your email account, we've sent you your tickets." %}
             </h4>
             <p class="text-muted">
@@ -45,7 +45,7 @@
                             {% csrf_token %}
                             <button type="submit"
                                     class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                                <span class="fa {{ b.icon }}"></span> {{ b.multi_text }}
+                                <span class="fa {{ b.icon }}" aria-hidden="true"></span> {{ b.multi_text }}
                             </button>
                         </form>
                     {% endif %}
@@ -66,7 +66,7 @@
                         {% csrf_token %}
                         <button type="submit"
                                 class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                            <span class="fa {{ b.icon }}"></span> {{ b.long_text }}
+                            <span class="fa {{ b.icon }}" aria-hidden="true"></span> {{ b.long_text }}
                         </button>
                     </form>
                 {% endfor %}

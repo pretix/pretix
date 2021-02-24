@@ -14,7 +14,7 @@
         <h3>{{ subevent.name }}</h3>
         {% with ev=subevent %}
             <div class="info-row">
-                <span class="fa fa-clock-o fa-fw"></span>
+                <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
                 <p>
                     {{ ev.get_date_range_display }}
                     {% if event.settings.show_times %}
@@ -340,12 +340,12 @@
                         <button class="btn btn-block btn-primary btn-lg" id="btn-add-to-cart" type="submit">
                             {% if request.event.settings.redirect_to_checkout_directly %}
                                 {% if allfree %}
-                                    <i class="fa fa-check"></i> {% trans "Register" context "free_tickets" %}
+                                    <i class="fa fa-check" aria-hidden="true"></i> {% trans "Register" context "free_tickets" %}
                                 {% else %}
-                                    <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Proceed with checkout" %}
                                 {% endif %}
                             {% else %}
-                                <i class="fa fa-shopping-cart"></i> {% trans "Add to cart" %}
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Add to cart" %}
                             {% endif %}
                         </button>
                     </div>

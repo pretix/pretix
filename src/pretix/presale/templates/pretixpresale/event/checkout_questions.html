@@ -16,7 +16,7 @@
                 <summary class="panel-heading">
                     <h4 class="panel-title">
                         <strong>{% trans "Contact information" %}</strong>
-                        <i class="fa fa-angle-down collapse-indicator"></i>
+                        <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                     </h4>
                 </summary>
                 <div id="contact">
@@ -36,7 +36,7 @@
                                 {% trans "(optional)" %}
                             {% endif %}</strong>
 
-                            <i class="fa fa-angle-down collapse-indicator"></i>
+                            <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                         </h4>
                     </summary>
                     <div id="invoice">
@@ -66,10 +66,10 @@
                                         <button type="button" data-id="{{ forloop.counter0 }}" name="copy"
                                                 class="js-copy-answers btn btn-default btn-xs">{% trans "Copy answers from above" %}</button>
                                     {% endif %}
-                                    <i class="fa fa-angle-down collapse-indicator"></i>
+                                    <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                                 </span>
                             {% else %}
-                                <i class="fa fa-angle-down collapse-indicator"></i>
+                                <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                             {% endif %}
                         </h4>
                     </summary>
@@ -116,7 +116,7 @@
                                             {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display }}
                                             {% if pos.event.settings.show_times %}
                                                 <span data-time="{{ pos.subevent.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                                    <span class="fa fa-clock-o"></span>
+                                                    <span class="fa fa-clock-o" aria-hidden="true"></span>
                                                     {{ pos.subevent.date_from|date:"TIME_FORMAT" }}
                                                 </span>
                                             {% endif %}

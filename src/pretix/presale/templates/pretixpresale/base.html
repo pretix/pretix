@@ -46,13 +46,18 @@
 </head>
 <body class="nojs" data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}" data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-currency="{{ request.event.currency }}">
 {{ html_page_header|safe }}
+<header>
 {% block above %}
 {% endblock %}
+</header>
 <div class="container main-box">
     {% block page %}
     {% endblock %}
     <footer>
         {% block footer %}
+        {% endblock %}
+        <nav aria-label="{% trans "Footer Navigation" %}">
+        {% block footernav %}
         {% endblock %}
         {% if footer_text %}
             {{ footer_text }}
@@ -63,6 +68,7 @@
             &middot;
         {% endfor %}
         {% include "pretixpresale/base_footer.html" %}
+        </nav>
     </footer>
 </div>
 {% include "pretixpresale/fragment_modals.html" %}

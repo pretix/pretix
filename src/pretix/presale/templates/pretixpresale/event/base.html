@@ -6,6 +6,9 @@
 {% load safelink %}
 {% load rich_text %}
 {% block thetitle %}
+    {% if messages %}
+        {{ messages|join:" " }} :: 
+    {% endif %}
     {% block title %}{% endblock %}{% if request.resolver_match.url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
 {% block custom_header %}
@@ -22,7 +25,7 @@
     {% if not event.live %}
         <div class="offline-banner">
             <div class="container">
-                <span class="fa fa-user-secret"></span>
+                <span class="fa fa-user-secret" aria-hidden="true"></span>
                 {% trans "This shop is currently only visible to you and your team." %}
                 <a href="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}">
                     {% trans "Take it live now" %}
@@ -34,12 +37,12 @@
         {% if event.settings.locales|length > 1 %}
             {% if event.settings.theme_color_background|upper != "#FFFFFF" or event.settings.logo_image_large %}
                 <div class="pull-right header-part flip hidden-print">
-                    <div class="locales">
+                    <nav class="locales" aria-label="{% trans "select language" %}">
                         {% for l in languages %}
-                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}">
                                 {{ l.name_local }}</a>
                         {% endfor %}
-                    </div>
+                    </nav>
                 </div>
             {% endif %}
         {% endif %}
@@ -80,12 +83,12 @@
         {% if event.settings.locales|length > 1 %}
             {% if event.settings.theme_color_background|upper == "#FFFFFF" and not event.settings.logo_image_large %}
                 <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox hidden-print">
-                    <div class="locales">
+                    <nav class="locales" aria-label="{% trans "select language" %}">
                         {% for l in languages %}
-                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
                                 {{ l.name_local }}</a>
                         {% endfor %}
-                    </div>
+                    </nav>
                 </div>
             {% endif %}
         {% endif %}
@@ -120,6 +123,8 @@
     {% endif %}
     {% block content %}
     {% endblock %}
+{% endblock %}
+{% block footer %}
     {% if request.event.settings.banner_text_bottom %}
         <div class="site-notice-bottom">
             {{ request.event.settings.banner_text_bottom|rich_text }}
@@ -141,7 +146,7 @@
         {% endif %}
     {% endif %}
 {% endblock %}
-{% block footer %}
+{% block footernav %}
     {% if request.event.settings.contact_mail %}
         <a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
     {% endif %}

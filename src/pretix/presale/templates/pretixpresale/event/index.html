@@ -24,24 +24,24 @@
             {{ ev.event_microdata }}
         </script>
     {% endautoescape %}
-
+    <main aria-label="{% if show_cart %}{% trans "Your cart, general information, add products to your cart" %}{% else %}{% trans "General information, add products to your cart" %}{% endif %}">
     {% if show_cart %}
         <details class="panel panel-primary cart" open>
             <summary class="panel-heading">
                 <h3 class="panel-title">
                     <span>
-                        <i class="fa fa-shopping-cart"></i>
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                         <strong>{% trans "Your cart" %}</strong>
                     </span>
                     <span>
-                        <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                        <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" aria-hidden="true">
                             {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
                                 {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
                             {% else %}
                                 {% trans "Cart expired" %}
                             {% endif %}
                         </strong>
-                        <i class="fa fa-angle-down collapse-indicator"></i>
+                        <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                     </span>
                 </h3>
             </summary>
@@ -62,16 +62,16 @@
                             <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
                                 {% csrf_token %}
                                 <button class="btn btn-block btn-default btn-lg" type="submit">
-                                    <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
+                                    <i class="fa fa-close" aria-hidden="true"></i> {% trans "Empty cart" %}</button>
                             </form>
                         </div>
                         <div class="col-md-4 col-sm-6 col-md-offset-4 col-xs-12">
                             <a class="btn btn-block btn-primary btn-lg"
                                     href="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
                                 {% if has_addon_choices or cart.total == 0 %}
-                                    <i class="fa fa-shopping-cart"></i> {% trans "Continue" %}
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Continue" %}
                                 {% else %}
-                                    <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Proceed with checkout" %}
                                 {% endif %}
                             </a>
                         </div>
@@ -79,7 +79,7 @@
                             <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
                                 {% csrf_token %}
                                 <button class="btn btn-block btn-default btn-lg" type="submit">
-                                    <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
+                                    <i class="fa fa-close" aria-hidden="true"></i> {% trans "Empty cart" %}</button>
                             </form>
                         </div>
                         <div class="clearfix"></div>
@@ -106,7 +106,7 @@
         {% if subevent and "year" not in request.GET %}
             {% if show_cart %}
                 <a class="subevent-toggle btn btn-primary btn-block btn-lg">
-                    <span class="fa fa-reply"></span>
+                    <span class="fa fa-reply" aria-hidden="true"></span>
                     {% trans "Add tickets for a different date" %}
                 </a>
             {% else %}
@@ -187,15 +187,15 @@
             <div>
                 {% if ev.location %}
                     <div class="info-row">
-                        <span class="fa fa-map-marker fa-fw"></span>
-                        <p>
+                        <span class="fa fa-map-marker fa-fw" aria-hidden="true"></span>
+                        <p><span class="sr-only">{% trans "Location" %}:</span>
                             {{ ev.location|linebreaksbr }}
                         </p>
                     </div>
                 {% endif %}
                 {% if ev.settings.show_dates_on_frontpage %}
                     <div class="info-row">
-                        <span class="fa fa-clock-o fa-fw"></span>
+                        <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
                         <p>
                             {{ ev.get_date_range_display }}
                             {% if event.settings.show_times %}
@@ -270,12 +270,12 @@
                                 <button class="btn btn-block btn-primary btn-lg" type="submit" id="btn-add-to-cart">
                                     {% if request.event.settings.redirect_to_checkout_directly %}
                                         {% if allfree %}
-                                            <i class="fa fa-check"></i> {% trans "Register" context "free_tickets" %}
+                                            <i class="fa fa-check" aria-hidden="true"></i> {% trans "Register" context "free_tickets" %}
                                         {% else %}
-                                           <i class="fa fa-shopping-cart"></i> {% trans "Proceed with checkout" %}
+                                           <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Proceed with checkout" %}
                                         {% endif %}
                                     {% else %}
-                                        <i class="fa fa-shopping-cart"></i> {% trans "Add to cart" %}
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Add to cart" %}
                                     {% endif %}
                                 </button>
                             </div>
@@ -286,9 +286,10 @@
             </form>
         {% endif %}
     {% endif %}
+    </main>
     {% if show_vouchers %}
-        <section class="front-page">
-            <h3>{% trans "Redeem a voucher" %}</h3>
+        <aside class="front-page" aria-labelledby="redeem-a-voucher">
+            <h3 id="redeem-a-voucher">{% trans "Redeem a voucher" %}</h3>
             {% if event.settings.voucher_explanation_text %}
                 <div>
                     {{ event.settings.voucher_explanation_text|rich_text }}
@@ -298,9 +299,9 @@
                 <div class="row-voucher">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-ticket fa-fw"></i></span>
+                            <span class="input-group-addon"><i class="fa fa-ticket fa-fw" aria-hidden="true"></i></span>
                             <input type="text" class="form-control" name="voucher" id="voucher"
-                                    placeholder="{% trans "Voucher code" %}">
+                                    placeholder="{% trans "Voucher code" %}" aria-label="{% trans "Voucher code" %}">
                         </div>
                     </div>
                     <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
@@ -312,12 +313,12 @@
                     <div class="clearfix"></div>
                 </div>
             </form>
-        </section>
+        </aside>
     {% endif %}
     {% if not cart_namespace %}
         {% eventsignal event "pretix.presale.signals.front_page_bottom" subevent=subevent request=request %}
-        <section class="front-page">
-            <h3>{% trans "If you already ordered a ticket" %}</h3>
+        <aside class="front-page" aria-labelledby="if-you-already-ordered-a-ticket">
+            <h3 id="if-you-already-ordered-a-ticket">{% trans "If you already ordered a ticket" %}</h3>
             <div>
                 <div class="col-md-8 col-xs-12">
                     <p>
@@ -335,7 +336,7 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-        </section>
+        </aside>
     {% else %}
         {% eventsignal event "pretix.presale.signals.front_page_bottom_widget" subevent=subevent request=request %}
     {% endif %}

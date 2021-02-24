@@ -30,23 +30,23 @@
         <div class="btn-group" role="group">
             <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" %}" type="button"
                     class="btn btn-default active">
-                <span class="fa fa-list"></span>
+                <span class="fa fa-list" aria-hidden="true"></span>
                 {% trans "List" %}
             </a>
             <a href="?{% url_replace request "style" "week" "month" "" "old" "" "page" "" %}" type="button"
                     class="btn btn-default">
-                <span class="fa fa-calendar"></span>
+                <span class="fa fa-calendar" aria-hidden="true"></span>
                 {% trans "Week" %}
             </a>
             <a href="?{% url_replace request "style" "calendar" "week" "" "old" "" "page" "" %}" type="button"
                     class="btn btn-default">
-                <span class="fa fa-calendar"></span>
+                <span class="fa fa-calendar" aria-hidden="true"></span>
                 {% trans "Month" %}
             </a>
         </div>
         <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" %}"
                 class="btn btn-default">
-            <span class="fa fa-calendar-plus-o"></span>
+            <span class="fa fa-calendar-plus-o" aria-hidden="true"></span>
             {% trans "iCal" %}
         </a>
         {% if "old" in request.GET %}
@@ -109,9 +109,9 @@
                             <span class="label label-warning">{% trans "Reserved" %}</span>
                         {% elif e.best_availability_state < 20 %}
                             {% if e.has_paid_item %}
-                                <span class="fa fa-ticket"></span> {% trans "Sold out" %}
+                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sold out" %}
                             {% else %}
-                                <span class="fa fa-ticket"></span> {% trans "Fully booked" %}
+                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Fully booked" %}
                             {% endif %}
                         {% endif %}
                     {% elif e.presale_is_running %}
@@ -130,11 +130,11 @@
                 </div>
                 <div class="col-md-2 col-xs-6 text-right flip">
                     <a class="btn btn-primary btn-block" href="{{ url }}">
-                        {% if e.has_subevents %}<span class="fa fa-ticket"></span> {% trans "Tickets" %}
+                        {% if e.has_subevents %}<span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Tickets" %}
                         {% elif e.presale_is_running and e.best_availability_state == 100 %}
-                            <span class="fa fa-ticket"></span> {% trans "Tickets" %}
+                            <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Tickets" %}
                         {% else %}
-                            <span class="fa fa-info"></span> {% trans "More info" %}
+                            <span class="fa fa-info" aria-hidden="true"></span> {% trans "More info" %}
                         {% endif %}
                     </a>
                 </div>

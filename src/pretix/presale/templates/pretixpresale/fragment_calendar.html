@@ -52,7 +52,7 @@
                                         {% if not event.continued %}
                                             {% if event.time %}
                                                 <span class="event-time" data-time="{{ event.event.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
-                                                    <span class="fa fa-clock-o"></span>
+                                                    <span class="fa fa-clock-o" aria-hidden="true"></span>
                                                     {% if not show_names|default_if_none:True %}
                                                         <strong>
                                                     {% endif %}
@@ -71,29 +71,29 @@
                                             <span class="event-status">
                                                 {% if event.event.presale_is_running and show_avail %}
                                                     {% if event.event.best_availability_state == 100 %}
-                                                        <span class="fa fa-ticket"></span> {% trans "Book now" %}
+                                                        <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
                                                     {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
-                                                        <span class="fa fa-ticket"></span> {% trans "Waiting list" %}
+                                                        <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Waiting list" %}
                                                     {% elif event.event.best_availability_state == 20 %}
-                                                        <span class="fa fa-ticket"></span> {% trans "Reserved" %}
+                                                        <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Reserved" %}
                                                     {% elif event.event.best_availability_state < 20 %}
                                                         {% if event.event.has_paid_item %}
-                                                            <span class="fa fa-ticket"></span> {% trans "Sold out" %}
+                                                            <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sold out" %}
                                                         {% else %}
-                                                            <span class="fa fa-ticket"></span> {% trans "Fully booked" %}
+                                                            <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Fully booked" %}
                                                         {% endif %}
                                                     {% endif %}
                                                 {% elif event.event.presale_is_running %}
-                                                    <span class="fa fa-ticket"></span> {% trans "Book now" %}
+                                                    <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
                                                 {% elif event.event.presale_has_ended %}
-                                                    <span class="fa fa-ticket"></span> {% trans "Sale over" %}
+                                                    <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sale over" %}
                                                 {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
-                                                    <span class="fa fa-ticket"></span>
+                                                    <span class="fa fa-ticket" aria-hidden="true"></span>
                                                     {% blocktrans with start_date=event.event.presale_start|date:"SHORT_DATE_FORMAT" %}
                                                         from {{ start_date }}
                                                     {% endblocktrans %}
                                                 {% else %}
-                                                    <span class="fa fa-ticket"></span> {% trans "Soon" %}
+                                                    <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Soon" %}
                                                 {% endif %}
                                             </span>
                                         {% endif %}

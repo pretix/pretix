@@ -1,13 +1,23 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Checkout" %}{% endblock %}
+{% block title %}
+    {% for step in checkout_flow %}
+        {% if request.resolver_match.kwargs.step == step.identifier %}
+            {% blocktrans trimmed with label=step.label current=forloop.counter total=checkout_flow|length %}
+            Step {{ current }} of {{ total }}: {{ label }}
+            {% endblocktrans %} –
+        {% endif %}
+    {% endfor %}
+    {% trans "Checkout" %}
+{% endblock %}
 {% block content %}
+<aside aria-label="{% trans "Your cart" %}">
     <details class="panel panel-default cart" {% if "open_cart" in request.GET %}open{% endif %}>
         <summary class="panel-heading">
             <h3 class="panel-title">
                 <span>
-                    <i class="fa fa-shopping-cart"></i>
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     <strong>{% trans "Your cart" %}</strong>
                 </span>
                 <span>
@@ -18,7 +28,7 @@
                             {% trans "Cart expired" %}
                         {% endif %}
                     </strong>
-                    <i class="fa fa-angle-down collapse-indicator"></i>
+                    <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                 </span>
             </h3>
         </summary>
@@ -39,12 +49,15 @@
     </details>
     {% if not has_prev and request.event.has_subevents and request.session.iframe_session %}
         <a class="btn btn-primary btn-block btn-lg" href="{{ prev_url }}">
-            <span class="fa fa-reply"></span>
+            <span class="fa fa-reply" aria-hidden="true"></span>
             {% trans "Add tickets for a different date" %}
         </a>
     {% endif %}
+</aside>
+<main aria-label="{% trans "Checkout" %}">
     <h2>{% trans "Checkout" %}</h2>
     {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     {% block inner %}
     {% endblock %}
+</main>
 {% endblock %}
