@@ -399,10 +399,10 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         q.items.add(item)
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
-        self.assertIn("Red", doc.select("section:nth-of-type(1) div.variation")[0].text)
-        self.assertIn("14.00", doc.select("section:nth-of-type(1) div.variation")[0].text)
-        self.assertIn("Black", doc.select("section:nth-of-type(1) div.variation")[1].text)
-        self.assertIn("12.00", doc.select("section:nth-of-type(1) div.variation")[1].text)
+        self.assertIn("Red", doc.select("section:nth-of-type(1) .variation")[0].text)
+        self.assertIn("14.00", doc.select("section:nth-of-type(1) .variation")[0].text)
+        self.assertIn("Black", doc.select("section:nth-of-type(1) .variation")[1].text)
+        self.assertIn("12.00", doc.select("section:nth-of-type(1) .variation")[1].text)
 
     def test_require_bundling(self):
         with scopes_disabled():
@@ -430,8 +430,12 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.event.settings.hide_sold_out = True
 
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
-        self.assertNotIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
-        self.assertNotIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
+        html_element = doc.select("article:nth-of-type(1) div:nth-of-type(1)")
+        if (html_element):
+            self.assertNotIn("Early-bird", html_element[0].text)
+        html_element = doc.select("article:nth-of-type(1)")
+        if (html_element):
+            self.assertNotIn("SOLD OUT", html_element[0].text)
 
     def test_hidden_if_available(self):
         with scopes_disabled():
