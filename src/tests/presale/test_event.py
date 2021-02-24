@@ -430,12 +430,8 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.event.settings.hide_sold_out = True
 
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
-        html_element = doc.select("article:nth-of-type(1) div:nth-of-type(1)")
-        if (html_element):
-            self.assertNotIn("Early-bird", html_element[0].text)
-        html_element = doc.select("article:nth-of-type(1)")
-        if (html_element):
-            self.assertNotIn("SOLD OUT", html_element[0].text)
+        self.assertNotIn("Early-bird", doc.select("body")[0].text)
+        self.assertNotIn("SOLD OUT", doc.select("body")[0].text)
 
     def test_hidden_if_available(self):
         with scopes_disabled():
