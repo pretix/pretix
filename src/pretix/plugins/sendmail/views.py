@@ -178,7 +178,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                                       user=self.request.user,
                                       data=dict(form.cleaned_data))
         messages.success(self.request, _('Your message has been queued and will be sent to the contact addresses of %d '
-                                         'orders in the next minutes.') % len(orders))
+                                         'orders in the next few minutes.') % len(orders))
 
         return redirect(
             'plugins:sendmail:send',
