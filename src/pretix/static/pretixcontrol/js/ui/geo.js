@@ -22,7 +22,7 @@ $(function () {
         var debounceLocationChange, debounceLatLonChange, delayLoadingIndicator, delayUpdateDismissal;
         var touched = $lat.val() !== "";
         var xhr;
-        var lastLocation;
+        var lastLocation = $.trim($location.val().replace(/\n/g, ", "));
 
         function load() {
             window.clearTimeout(debounceLocationChange);
