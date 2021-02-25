@@ -32,16 +32,21 @@ $(function () {
             lastLocation = q;
 
             window.clearTimeout(delayLoadingIndicator);
-            delayLoadingIndicator = window.setTimeout(function() {
-                $sec.removeClass("notify-updated").addClass("notify-loading");
-            }, 1000);
+            if ($sec.hasClass("notify-error") || $sec.hasClass("notify-updated") || $sec.hasClass("notify-triggered")) {
+                $sec.removeClass("notify-error notify-updated notify-triggered").addClass("notify-loading");
+            }
+            else {
+                delayLoadingIndicator = window.setTimeout(function() {
+                    $sec.removeClass("notify-error notify-updated notify-triggered").addClass("notify-loading");
+                }, 1000);
+            }
 
             if (xhr) xhr.abort();
 
             xhr = $.getJSON('/control/geocode/?q=' + encodeURIComponent(q), function (res) {
                 var q2 = $.trim($location.val().replace(/\n/g, ", "));
                 window.clearTimeout(delayLoadingIndicator);
-                $sec.removeClass("notify-updated").removeClass("notify-loading");
+                $sec.removeClass("notify-error notify-updated notify-triggered notify-loading");
                 if (q2 !== q) {
                     return;  // lost race
                 }
