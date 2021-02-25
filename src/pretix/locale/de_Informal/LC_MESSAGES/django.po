@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 19:14+0000\n"
-"PO-Revision-Date: 2021-01-30 19:49+0000\n"
+"PO-Revision-Date: 2021-02-25 20:50+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -154,10 +154,9 @@ msgid "Meta data property '{name}' does not exist."
 msgstr "Die Meta-Eigenschaft '{name}' existiert nicht."
 
 #: pretix/api/serializers/event.py:182 pretix/api/serializers/event.py:466
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "Die Meta-Eigenschaft '{name}' existiert nicht."
+msgstr "Die Meta-Eigenschaft '{name}' erlaubt den Wert '{value}' nicht."
 
 #: pretix/api/serializers/event.py:225
 #, python-brace-format
@@ -2237,7 +2236,7 @@ msgstr "Du musst mindestens ein Kontingent anlegen, um etwas zu verkaufen."
 #: pretix/base/models/event.py:960
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
-msgstr ""
+msgstr "Du musst die Meta-Eigenschaft \"{property}\" ausfüllen."
 
 #: pretix/base/models/event.py:1065
 msgid ""
@@ -2311,52 +2310,47 @@ msgstr ""
 "enthalten."
 
 #: pretix/base/models/event.py:1379
-#, fuzzy
-#| msgid "Default language"
 msgid "Default value"
-msgstr "Standardsprache"
+msgstr "Standardwert"
 
 #: pretix/base/models/event.py:1381
-#, fuzzy
-#| msgid "Can change organizer settings"
 msgid "Can only be changed by organizer-level administrators"
-msgstr "Kann Veranstaltereinstellungen ändern"
+msgstr "Kann nur von Veranstalter-Administratoren geändert werden"
 
 #: pretix/base/models/event.py:1383
-#, fuzzy
-#| msgid "Search for events"
 msgid "Required for events"
-msgstr "Nach Veranstaltungen suchen"
+msgstr "Pflichtfeld für Veranstaltungen"
 
 #: pretix/base/models/event.py:1384
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
+"Wenn diese Option aktiv ist, kann eine Veranstaltung nur veröffentlicht "
+"werden, wenn ein Wert eingetragen ist. In einer Veranstaltungsreihe ist das "
+"Eintragen eines Wertes immer optional."
 
 #: pretix/base/models/event.py:1389
-#, fuzzy
-#| msgid "Total value"
 msgid "Valid values"
-msgstr "Gesamtbetrag"
+msgstr "Erlaubte Werte"
 
 #: pretix/base/models/event.py:1390
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Wenn dieses Feld leer ist, ist jede Eingabe erlaubt. Sonst trage bitte einen "
+"erlaubten Wert pro Zeile ein."
 
 #: pretix/base/models/event.py:1396
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
+"Ein Parameter kann entweder ein Pflichtfeld sein oder einen Standardwert "
+"haben, nicht beides."
 
 #: pretix/base/models/event.py:1398
-#, fuzzy
-#| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot set a default value that is not a valid value."
-msgstr ""
-"Du kannst kein Kontingent auswählen, das zu einer anderen Veranstaltung "
-"gehört."
+msgstr "Der Standardwert muss gleichzeitig ein erlaubter Wert sein."
 
 #: pretix/base/models/fields.py:12
 msgid "No value can contain the delimiter character."
@@ -6567,6 +6561,8 @@ msgstr ""
 #: pretix/base/settings.py:1091
 msgid "Allow customers to modify their information after they checked in."
 msgstr ""
+"Erlaube Kunden, ihre Informationen auch zu ändern, nachdem sie eingecheckt "
+"wurden."
 
 #: pretix/base/settings.py:1100
 msgid "Last date of modifications"
@@ -8255,10 +8251,9 @@ msgid "Do not copy"
 msgstr "Nicht übernehmen"
 
 #: pretix/control/forms/event.py:274 pretix/control/forms/subevents.py:309
-#, fuzzy, python-brace-format
-#| msgid "Default language"
+#, python-brace-format
 msgid "Default ({value})"
-msgstr "Standardsprache"
+msgstr "Standard ({value})"
 
 #: pretix/control/forms/event.py:326 pretix/control/forms/organizer.py:84
 msgid "Custom domain"
@@ -9399,10 +9394,8 @@ msgstr ""
 "mögliche Zahlungsdatum ignoriert."
 
 #: pretix/control/forms/orders.py:107 pretix/control/forms/orders.py:144
-#, fuzzy
-#| msgid "Notify user by e-mail"
 msgid "Notify customer by email"
-msgstr "Benutzer per E-Mail benachrichtigen"
+msgstr "Kunden per E-Mail benachrichtigen"
 
 #: pretix/control/forms/orders.py:114
 msgid "Keep a cancellation fee of"
@@ -9798,21 +9791,17 @@ msgstr "Optional"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:47
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:180
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:265
-#, fuzzy
-#| msgid "Change"
 msgctxt "form_bulk"
 msgid "change"
-msgstr "Ändern"
+msgstr "ändern"
 
 #: pretix/control/forms/subevents.py:96
-#, fuzzy
-#| msgid "Current value"
 msgid "Keep the current values"
-msgstr "Aktueller Wert"
+msgstr "Aktuelle Werte beibehalten"
 
 #: pretix/control/forms/subevents.py:113 pretix/control/forms/subevents.py:121
 msgid "Selection contains various values"
-msgstr ""
+msgstr "Auswahl enthält verschiedene Werte"
 
 #: pretix/control/forms/subevents.py:369
 msgid "Exclude these dates instead of adding them."
@@ -10229,40 +10218,30 @@ msgid "This object has been created by cloning."
 msgstr "Das Objekt wurde durch Klonen erstellt."
 
 #: pretix/control/logdisplay.py:276
-#, fuzzy
-#| msgid "The order has been changed."
 msgid "The organizer has been changed."
-msgstr "Die Bestellung wurde geändert."
+msgstr "Der Veranstalter wurde geändert."
 
 #: pretix/control/logdisplay.py:277
-#, fuzzy
-#| msgid "The team settings have been changed."
 msgid "The organizer settings have been changed."
-msgstr "Die Team-Einstellungen wurden geändert."
+msgstr "Die Veranstalter-Einstellungen wurden geändert."
 
 #: pretix/control/logdisplay.py:278
-#, fuzzy
-#| msgid "The new organizer has been created."
 msgid "Gift card acceptance for another organizer has been added."
-msgstr "Das neue Veranstalterkonto wurde erstellt."
+msgstr ""
+"Geschenkgutschein-Akzeptanz für einen anderen Veranstalter wurde hinzugefügt."
 
 #: pretix/control/logdisplay.py:279
-#, fuzzy
-#| msgid "The new organizer has been created."
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr "Das neue Veranstalterkonto wurde erstellt."
+msgstr ""
+"Geschenkgutschein-Akzeptanz für einen anderen Veranstalter wurde entfernt."
 
 #: pretix/control/logdisplay.py:280
-#, fuzzy
-#| msgid "The user has been created."
 msgid "The webhook has been created."
-msgstr "Der Benutzer wurde erstellt."
+msgstr "Der Webhook wurde erstellt."
 
 #: pretix/control/logdisplay.py:281
-#, fuzzy
-#| msgid "The gate has been changed."
 msgid "The webhook has been changed."
-msgstr "Die Station wurde verändert."
+msgstr "Der Webhook wurde geändert."
 
 #: pretix/control/logdisplay.py:282
 msgid "The event's internal comment has been updated."
@@ -10273,10 +10252,8 @@ msgid "The event has been canceled."
 msgstr "Die Veranstaltung wurde abgesagt."
 
 #: pretix/control/logdisplay.py:284
-#, fuzzy
-#| msgid "The event has been deleted."
 msgid "An event has been deleted."
-msgstr "Die Veranstaltung wurde gelöscht."
+msgstr "Eine Veranstaltung wurde gelöscht."
 
 #: pretix/control/logdisplay.py:285
 msgid "The order details have been changed."
@@ -15798,10 +15775,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:6
-#, fuzzy
-#| msgid "Organizers"
 msgid "Organizer logs"
-msgstr "Veranstalter"
+msgstr "Veranstalter-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -15816,34 +15791,24 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:8
-#, fuzzy
-#| msgid "Create a new product"
 msgid "Create a new property"
-msgstr "Neues Produkt erstellen"
+msgstr "Neue Eigenschaft erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:20
-#, fuzzy
-#| msgid "Properties"
 msgid "Property"
-msgstr "Eigenschaften"
+msgstr "Eigenschaft"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:5
-#, fuzzy
-#| msgid "Delete product"
 msgid "Delete property:"
-msgstr "Produkt löschen"
+msgstr "Eigenschaft löschen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:8
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete the property?"
-msgstr "Möchten Sie die Station wirklich löschen?"
+msgstr "Möchtest du die Eigenschaft wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:6
-#, fuzzy
-#| msgid "Properties"
 msgid "Property:"
-msgstr "Eigenschaften"
+msgstr "Eigenschaft:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
@@ -16224,10 +16189,8 @@ msgid "Light"
 msgstr "Hell"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:349
-#, fuzzy
-#| msgid "E-mail content"
 msgid "Image content"
-msgstr "E-Mail-Inhalt"
+msgstr "Bild-Inhalt"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:360
 msgid "Text content"
@@ -16263,7 +16226,7 @@ msgstr "pretix-Logo"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:410
 msgid "Dynamic image"
-msgstr ""
+msgstr "Dynamisches Bild"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:104
 msgid ""
@@ -16516,18 +16479,14 @@ msgstr "Neue Check-in-Liste erstellen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:11
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create multiple dates"
 msgctxt "subevent"
 msgid "Change multiple dates"
-msgstr "Mehrere Termine erstellen"
+msgstr "Mehrere Termine bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:13
-#, fuzzy, python-format
-#| msgid "Enable selected"
+#, python-format
 msgid "%(number)s selected"
-msgstr "Ausgewählte aktivieren"
+msgstr "%(number)s ausgewählt"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:170
 msgid ""
@@ -16536,12 +16495,18 @@ msgid ""
 "new set of quotas to <strong>replace</strong> the quota setup of all "
 "selected dates."
 msgstr ""
+"Die ausgewählten Termine enthalten unterschiedliche Kontingent-"
+"Konfigurationen und können daher nicht gemeinsam bearbeitet werden. "
+"Stattdessen kannst du neue Kontingente angeben, die die existierenden für "
+"alle Termine <strong>ersetzen</strong> werden."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:256
 msgid ""
 "You selected a set of dates that currently have different check-in list "
 "setups. You can therefore not change their check-in lists in bulk."
 msgstr ""
+"Die ausgewählten Termine enthalten unterschiedliche Check-in-Listen und "
+"können daher nicht gemeinsam bearbeitet werden."
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:6
@@ -16600,7 +16565,7 @@ msgstr "Mehrere neue Termine erstellen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:70
 msgid "select all rows for batch-operation"
-msgstr ""
+msgstr "Alle Zeilen für Batch-Operation auswählen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:77
 msgid "Begin"
@@ -16608,11 +16573,11 @@ msgstr "Beginn"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:100
 msgid "Select all results on other pages as well"
-msgstr ""
+msgstr "Ergebnisse auf anderen Seiten mit auswählen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:111
 msgid "select row for batch-operation"
-msgstr ""
+msgstr "Zeile für Batch-Operation auswählen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:152
 msgctxt "subevent"
@@ -16630,23 +16595,16 @@ msgid "Delete selected"
 msgstr "Ausgewählte löschen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:176
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Edit selected"
-msgstr "Kein Termin ausgewählt."
+msgstr "Ausgewählte bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:179
-#, fuzzy
-#| msgid "Disable selected"
 msgid "Activate selected"
-msgstr "Ausgewählte deaktivieren"
+msgstr "Ausgewählte aktivieren"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:182
-#, fuzzy
-#| msgid "Delete selected"
 msgid "Deactivate selected"
-msgstr "Ausgewählte löschen"
+msgstr "Ausgewählte deaktivieren"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -18545,10 +18503,8 @@ msgid "The selected gate has been deleted."
 msgstr "Die ausgewählte Station wurde gelöscht."
 
 #: pretix/control/views/organizer.py:1374
-#, fuzzy
-#| msgid "The new property has been created."
 msgid "The property has been created."
-msgstr "Eine neue Eigenschaft wurde erstellt."
+msgstr "Eine Eigenschaft wurde erstellt."
 
 #: pretix/control/views/organizer.py:1436
 msgid "The selected property has been deleted."
@@ -20301,19 +20257,14 @@ msgid "Only send to customers of dates starting before"
 msgstr "Nur an Kunden von Terminen beginnend bevor"
 
 #: pretix/plugins/sendmail/forms.py:70
-#, fuzzy
-#| msgid "Send to customers with order status"
 msgctxt "subevent"
 msgid "Only send to customers with orders created after"
-msgstr "An Kunden mit Bestellstatus"
+msgstr "Nur an Kunden mit Bestelldatum nach"
 
 #: pretix/plugins/sendmail/forms.py:75
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Only send to customers of dates starting before"
 msgctxt "subevent"
 msgid "Only send to customers with orders created before"
-msgstr "Nur an Kunden von Terminen beginnend bevor"
+msgstr "Nur an Kunden mit Bestelldatum bevor"
 
 #: pretix/plugins/sendmail/forms.py:108
 msgid "Everyone who created a ticket order"
@@ -20398,10 +20349,7 @@ msgstr ""
 "Es existiert keine Bestellung, die zu den eingegebenen Kriterien passt."
 
 #: pretix/plugins/sendmail/views.py:180
-#, fuzzy, python-format
-#| msgid ""
-#| "Your message has been queued and will be sent to the contact addresses of "
-#| "%d orders in the next minutes."
+#, python-format
 msgid ""
 "Your message has been queued and will be sent to the contact addresses of %d "
 "orders in the next few minutes."
@@ -21400,12 +21348,9 @@ msgid "No other variations of this product exist."
 msgstr "Keine anderen Varianten dieses Produktes existieren."
 
 #: pretix/presale/forms/renderers.py:32
-#, fuzzy
-#| msgctxt "attendee_data"
-#| msgid "Required"
 msgctxt "form"
 msgid "required"
-msgstr "Erfordern"
+msgstr "erforderlich"
 
 #: pretix/presale/ical.py:54
 #, python-brace-format
@@ -21423,10 +21368,8 @@ msgid "Organizer: {organizer}"
 msgstr "Veranstalter: {organizer}"
 
 #: pretix/presale/templates/pretixpresale/base.html:59
-#, fuzzy
-#| msgid "Toggle navigation"
 msgid "Footer Navigation"
-msgstr "Navigation umschalten"
+msgstr "Fußzeile"
 
 #: pretix/presale/templates/pretixpresale/base_footer.html:36
 #, python-format
@@ -21443,10 +21386,8 @@ msgstr "Jetzt veröffentlichen"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:40
 #: pretix/presale/templates/pretixpresale/event/base.html:86
-#, fuzzy
-#| msgid "Use languages"
 msgid "select language"
-msgstr "Verfügbare Sprachen"
+msgstr "Sprache auswählen"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:52
 #, python-format
@@ -21606,7 +21547,7 @@ msgstr "Zurück"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:7
 #, python-format
 msgid "Step %(current)s of %(total)s: %(label)s"
-msgstr ""
+msgstr "Schritt %(current)s von %(total)s: %(label)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:12
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:57
@@ -21881,16 +21822,12 @@ msgid "Redeem voucher"
 msgstr "Gutschein einlösen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:13
-#, fuzzy
-#| msgid "Completion date"
 msgid "Completed:"
-msgstr "Abschlussdatum"
+msgstr "Fertiggestellt:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:15
-#, fuzzy
-#| msgid "Currency"
 msgid "Current:"
-msgstr "Währung"
+msgstr "Aktuell:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:29
 msgctxt "checkoutflow"
@@ -21961,17 +21898,14 @@ msgid "Confirmed"
 msgstr "bestätigt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
-#, fuzzy
-#| msgid "Uncategorized"
 msgid "Uncategorized products"
-msgstr "Unkategorisiert"
+msgstr "Produkte ohne Kategorie"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:187
-#, fuzzy, python-format
-#| msgid "Show all events of %(name)s"
+#, python-format
 msgid "Show full-size image of %(item)s"
-msgstr "Alle Veranstaltungen von %(name)s"
+msgstr "Zeige Bild von %(item)s in voller Größe"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:63
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:120
@@ -22039,10 +21973,12 @@ msgstr "Noch nicht im Verkauf"
 #: pretix/presale/templates/pretixpresale/event/index.html:27
 msgid "Your cart, general information, add products to your cart"
 msgstr ""
+"Dein Warenkorb, allgemeine Informationen, neue Produkte zum Warenkorb "
+"hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:27
 msgid "General information, add products to your cart"
-msgstr ""
+msgstr "Allgemeine Informationen, neue Produkte zum Warenkorb hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 #: pretix/presale/templates/pretixpresale/event/index.html:82
