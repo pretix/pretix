@@ -28,6 +28,13 @@ class NextTimeField(forms.TimeField):
         return result
 
 
+class NextTimeInput(forms.TimeInput):
+    def format_value(self, value):
+        if isinstance(value, datetime):
+            value = value.astimezone(get_current_timezone()).time()
+        return super().format_value(value)
+
+
 class CheckinListForm(forms.ModelForm):
     def __init__(self, **kwargs):
         self.event = kwargs.pop('event')
@@ -89,7 +96,7 @@ class CheckinListForm(forms.ModelForm):
                 'class': 'scrolling-multiple-choice'
             }),
             'auto_checkin_sales_channels': forms.CheckboxSelectMultiple(),
-            'exit_all_at': forms.TimeInput(attrs={'class': 'timepickerfield'}),
+            'exit_all_at': NextTimeInput(attrs={'class': 'timepickerfield'}),
         }
         field_classes = {
             'limit_products': SafeModelMultipleChoiceField,
