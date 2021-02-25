@@ -1,54 +1,91 @@
 /*globals $*/
 
 $(function () {
-    var j = 0;
     $(".geodata-section").each(function () {
         // Geocoding
         var $sec = $(this);
-        var $inp = $(this).find("textarea[lang=en], input[lang=en]").first();
-        if ($inp.length === 0) {
-            $inp = $(this).find("textarea, input").first();
+        //var $notifications = $(".geodata-autoupdate", this);
+        var $lat = $("input[name$=geo_lat]", this).first();
+        var $lon = $("input[name$=geo_lon]", this).first();
+        var lat;
+        var lon;
+        var $location = $("textarea[lang=en], input[lang=en]", this).first();
+        var $updateButton = $("[data-action=update]", this);
+
+        if (!$location.length) {
+            $location = $("textarea, input[type=text]", this).first();
         }
-        var timer, timer2;
-        var touched = $sec.find("input[name$=geo_lat]").val() !== "";
+        if (!$lat.length || !$lon.length || !$location.length) {
+            return;
+        }
+
+        var debounceLocationChange, debounceLatLonChange, delayLoadingIndicator, delayUpdateDismissal;
+        var touched = $lat.val() !== "";
+        var xhr;
+        var lastLocation;
 
         function load() {
-            window.clearTimeout(timer);
-            var q = $.trim($inp.val().replace(/\n/g, ", "));
-            if ((touched && $sec.find("input[name$=geo_lat]").val() !== "") || $.trim(q) === "") {
-                return;
-            }
-            $sec.find(".col-md-1").html("<span class='fa fa-cog fa-spin'></span>");
-            $.getJSON('/control/geocode/?q=' + encodeURIComponent(q), function (res) {
-                var q2 = $.trim($inp.val().replace(/\n/g, ", "));
+            window.clearTimeout(debounceLocationChange);
+
+            var q = $.trim($location.val().replace(/\n/g, ", "));
+            if (q === "" || q === lastLocation) return;
+            lastLocation = q;
+
+            window.clearTimeout(delayLoadingIndicator);
+            delayLoadingIndicator = window.setTimeout(function() {
+                $sec.removeClass("notify-updated").addClass("notify-loading");
+            }, 1000);
+
+            if (xhr) xhr.abort();
+
+            xhr = $.getJSON('/control/geocode/?q=' + encodeURIComponent(q), function (res) {
+                var q2 = $.trim($location.val().replace(/\n/g, ", "));
+                window.clearTimeout(delayLoadingIndicator);
+                $sec.removeClass("notify-updated").removeClass("notify-loading");
                 if (q2 !== q) {
                     return;  // lost race
                 }
-                if (res.results) {
-                    $sec.find("input[name$=geo_lat]").val(res.results[0].lat);
-                    $sec.find("input[name$=geo_lon]").val(res.results[0].lon);
-                    center(13);
+                if (res.results && res.results.length) {
+                    if (touched) {
+                        $sec.addClass("notify-triggered");
+                        lat = res.results[0].lat;
+                        lon = res.results[0].lon;
+                    }
+                    else {
+                        $lat.val(res.results[0].lat);
+                        $lon.val(res.results[0].lon);
+                        center(13);
+                    }
                 }
-                $sec.find(".col-md-1").html("");
+                else {
+                    $sec.addClass("notify-error");
+                }
             })
         }
 
-        $sec.find("input[name$=geo_lat], input[name$=geo_lon]").change(function () {
-            touched = $sec.find("input[name$=geo_lat]").val() !== "";
+        $lat.add($lon).change(function () {
+            if (this.value !== "") touched = true;
             center(13);
         }).keyup(function () {
-            if (timer2) {
-                window.clearTimeout(timer2);
-            }
-            timer2 = window.setTimeout(center, 300);
+            window.clearTimeout(debounceLatLonChange);
+            debounceLatLonChange = window.setTimeout(center, 300);
         });
 
-        $inp.change(load);
-        $inp.keyup(function () {
-            if (timer) {
-                window.clearTimeout(timer);
-            }
-            timer = window.setTimeout(load, 1000);
+        $location.change(load);
+        $location.keyup(function () {
+            window.clearTimeout(debounceLocationChange);
+            debounceLocationChange = window.setTimeout(load, 1000);
+        });
+
+        $updateButton.click(function() {
+            $lat.val(lat);
+            $lon.val(lon).trigger("change");
+            touched = false;
+            center(13);
+            $sec.addClass("notify-updated").removeClass("notify-triggered");
+            delayUpdateDismissal = window.setTimeout(function() {
+                $sec.removeClass("notify-updated");
+            }, 2500);
         });
 
         // Map
@@ -63,8 +100,6 @@ $(function () {
                 attribution: attrib,
                 maxZoom: 18,
             }).addTo(map);
-            var $lat = $sec.find("input[name$=geo_lat]");
-            var $lon = $sec.find("input[name$=geo_lon]");
 
             function getpoint() {
                 if ($lat.val() !== "" && $lon.val() !== "") {
@@ -100,6 +135,7 @@ $(function () {
                 }).bindPopup(position).update();
                 $lat.val(position.lat.toFixed(7));
                 $lon.val(position.lng.toFixed(7));
+                touched = true;
                 center(null);
             });
 

@@ -241,6 +241,16 @@ div.mail-preview {
 input[type=number].short {
   width: 80px !important;
 }
+
+.geodata-autoupdate .help-block {
+  display: none;
+}
+.notify-loading .loading-notification,
+.notify-triggered .triggered-notification,
+.notify-updated .updated-notification,
+.notify-failed .failed-notification {
+  display: block;
+}
 .geodata-group {
   .form-group {
     margin: 0 0 10px 0;

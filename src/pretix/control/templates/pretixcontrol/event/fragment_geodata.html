@@ -4,6 +4,7 @@
 
 <div class="geodata-section">
     {% bootstrap_field form.location layout="control" %}
+    {% include "pretixcontrol/event/fragment_geodata_autoupdate.html" %}
     <div class="form-group geodata-group"
          data-tiles="{{ global_settings.leaflet_tiles|default_if_none:"" }}"
          data-attrib="{{ global_settings.leaflet_tiles_attribution }}"
