@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-27 17:45+0000\n"
+"POT-Creation-Date: 2021-02-25 19:14+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -62,7 +62,7 @@ msgid "Contacting your bank …"
 msgstr "Povezovanje z banko …"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
-#: pretix/static/pretixbase/js/asynctask.js:116
+#: pretix/static/pretixbase/js/asynctask.js:117
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -75,7 +75,7 @@ msgstr ""
 "lahko traja do nekaj minut, kar je odvisno od velikosti vašega dogodka."
 
 #: pretix/static/pretixbase/js/asynctask.js:48
-#: pretix/static/pretixbase/js/asynctask.js:121
+#: pretix/static/pretixbase/js/asynctask.js:122
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -86,7 +86,7 @@ msgstr ""
 "lahko traja do nekaj minut, kar je odvisno od velikosti vašega dogodka."
 
 #: pretix/static/pretixbase/js/asynctask.js:54
-#: pretix/static/pretixbase/js/asynctask.js:127
+#: pretix/static/pretixbase/js/asynctask.js:128
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -96,14 +96,14 @@ msgstr ""
 "traja že več kot nekaj minut, nas prosimo kontaktirajte ali pojdite z "
 "brskalnikom nazaj in poskusite ponovno."
 
-#: pretix/static/pretixbase/js/asynctask.js:86
-#: pretix/static/pretixbase/js/asynctask.js:159
-#: pretix/static/pretixbase/js/asynctask.js:164
+#: pretix/static/pretixbase/js/asynctask.js:87
+#: pretix/static/pretixbase/js/asynctask.js:169
+#: pretix/static/pretixbase/js/asynctask.js:174
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Prišlo je do napake tipa {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:89
+#: pretix/static/pretixbase/js/asynctask.js:90
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -111,24 +111,24 @@ msgstr ""
 "Strežnik trenutno ni dosegljiv, bomo pa še poskušali. Zadnja koda napake: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:141
+#: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 #, fuzzy
 #| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "Zahteva traja predolgo. Poskusite ponovno."
 
-#: pretix/static/pretixbase/js/asynctask.js:167
+#: pretix/static/pretixbase/js/asynctask.js:177
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "Strežnik trenutno ni dosegljiv. Poskusite ponovno. Koda napake: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:189
+#: pretix/static/pretixbase/js/asynctask.js:199
 msgid "We are processing your request …"
 msgstr "Obdelujemo vašo zahtevo …"
 
-#: pretix/static/pretixbase/js/asynctask.js:197
+#: pretix/static/pretixbase/js/asynctask.js:207
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -138,7 +138,7 @@ msgstr ""
 "preverite vašo internetno povezavo in nato ponovno naložite spletno stran in "
 "poskusite znova."
 
-#: pretix/static/pretixbase/js/asynctask.js:235
+#: pretix/static/pretixbase/js/asynctask.js:245
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Zapri obvestilo"
@@ -220,56 +220,62 @@ msgid "Tolerance (minutes)"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:237
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:441
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:444
 msgid "Add condition"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:43
+#: pretix/static/pretixcontrol/js/ui/editor.js:69
 msgid "Lead Scan QR"
 msgstr "Lead Scan QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:45
+#: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "QR koda za check-in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:269
+#: pretix/static/pretixcontrol/js/ui/editor.js:311
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Ozadja PDF ni bilo mogoče naložiti zaradi naslednjega razloga:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:461
+#: pretix/static/pretixcontrol/js/ui/editor.js:517
 msgid "Group of objects"
 msgstr "Skupina objektov"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:467
+#: pretix/static/pretixcontrol/js/ui/editor.js:523
 msgid "Text object"
 msgstr "Tekstovni objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:469
+#: pretix/static/pretixcontrol/js/ui/editor.js:525
 msgid "Barcode area"
 msgstr "Področje za črtno kodo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:471
+#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#, fuzzy
+#| msgid "Barcode area"
+msgid "Image area"
+msgstr "Področje za črtno kodo"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:529
 msgid "Powered by pretix"
 msgstr "Powered by pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:473
+#: pretix/static/pretixcontrol/js/ui/editor.js:531
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:477
+#: pretix/static/pretixcontrol/js/ui/editor.js:535
 msgid "Ticket design"
 msgstr "Oblikovanje vstopnice"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:734
+#: pretix/static/pretixcontrol/js/ui/editor.js:808
 msgid "Saving failed."
 msgstr "Shranjevanje ni bilo uspešno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:783
-#: pretix/static/pretixcontrol/js/ui/editor.js:821
+#: pretix/static/pretixcontrol/js/ui/editor.js:857
+#: pretix/static/pretixcontrol/js/ui/editor.js:896
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Napaka pri nalaganju datoteke PDF. Poskusite ponovno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:806
+#: pretix/static/pretixcontrol/js/ui/editor.js:881
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Ali zares želite zapustiti urejevalnik ne da bi shranili spremembe?"
 
@@ -309,15 +315,15 @@ msgstr "Vse"
 msgid "None"
 msgstr "Nič"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:710
+#: pretix/static/pretixcontrol/js/ui/main.js:801
 msgid "Use a different name internally"
 msgstr "Uporabite drugo interno ime"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:767
+#: pretix/static/pretixcontrol/js/ui/main.js:858
 msgid "Click to close"
 msgstr "Kliknite za zapiranje"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:782
+#: pretix/static/pretixcontrol/js/ui/main.js:873
 msgid "You have unsaved changes!"
 msgstr ""
 
