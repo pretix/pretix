@@ -1,11 +1,8 @@
 {% load i18n %}
 
-<div class="form-group geodata-autoupdate">
-    <div class="col-md-3"></div>
-    <div class="col-md-9">
-        <p class="help-block error-notification"><i class="fa fa-warning"></i> {% trans "Failed to retrieve geo coordinates." %}</p>
-        <p class="help-block loading-notification"><i class="fa fa-cog fa-spin"></i> {% trans "Retrieving geo coordinates for location …" %}</p>
-        <p class="help-block updated-notification"><i class="fa fa-check"></i> {% trans "Your geo coordinates have been updated." %}</p>
-        <p class="help-block triggered-notification"><i class="fa fa-question-circle"></i> {% trans "You changed the location. Do you want to update your geo coordinates?" %} <button type="button" data-action="update" class="btn btn-secondary">{% trans "Update geo coordinates" %}</button></p>
-    </div>
-</div>
+<span class="geodata-autoupdate">
+    <span class="optional" data-notification="error" title="{% trans "Failed to retrieve geo coordinates" %}"><i class="fa fa-warning"></i></span>
+    <span class="optional" data-notification="loading" title="{% trans "Retrieving geo coordinates …" %}"><i class="fa fa-cog fa-spin"></i></span>
+    <span class="optional" data-notification="updated"><i class="fa fa-check"></i> {% trans "Geo coordinates updated" %}</span>
+    <span class="optional" data-notification="confirm">New geo coordinates. <button type="button" data-action="update" class="btn btn-link text-nowrap">{% trans "Update map?" %}</button></span>
+</span>

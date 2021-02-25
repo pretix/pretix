@@ -1,69 +1,59 @@
 /*globals $*/
 
 $(function () {
+    function cleanup(l) {
+        return $.trim(l.replace(/\n/g, ", "));
+    }
     $(".geodata-section").each(function () {
         // Geocoding
-        var $sec = $(this);
-        //var $notifications = $(".geodata-autoupdate", this);
+        // detach notifications and append them to first label (should be from location)
+        var $notifications = $(".geodata-autoupdate", this).detach().appendTo($("label", this).first());
         var $lat = $("input[name$=geo_lat]", this).first();
         var $lon = $("input[name$=geo_lon]", this).first();
         var lat;
         var lon;
-        var $location = $("textarea[lang=en], input[lang=en]", this).first();
         var $updateButton = $("[data-action=update]", this);
+        var $location = $("textarea[lang=en], input[lang=en]", this).first();
+        if (!$location.length) $location = $("textarea, input[type=text]", this).first();
 
-        if (!$location.length) {
-            $location = $("textarea, input[type=text]", this).first();
-        }
         if (!$lat.length || !$lon.length || !$location.length) {
             return;
         }
 
-        var debounceLocationChange, debounceLatLonChange, delayLoadingIndicator, delayUpdateDismissal;
+        var debounceLoad, debounceLatLonChange, delayUpdateDismissal;
         var touched = $lat.val() !== "";
         var xhr;
-        var lastLocation = $.trim($location.val().replace(/\n/g, ", "));
+        var lastLocation = cleanup($location.val());
 
         function load() {
-            window.clearTimeout(debounceLocationChange);
+            window.clearTimeout(debounceLoad);
+            if (xhr) {
+                xhr.abort();
+                xhr = null;
+            }
 
-            var q = $.trim($location.val().replace(/\n/g, ", "));
+            var q = cleanup($location.val());
             if (q === "" || q === lastLocation) return;
+
             lastLocation = q;
-
-            window.clearTimeout(delayLoadingIndicator);
-            if ($sec.hasClass("notify-error") || $sec.hasClass("notify-updated") || $sec.hasClass("notify-triggered")) {
-                $sec.removeClass("notify-error notify-updated notify-triggered").addClass("notify-loading");
-            }
-            else {
-                delayLoadingIndicator = window.setTimeout(function() {
-                    $sec.removeClass("notify-error notify-updated notify-triggered").addClass("notify-loading");
-                }, 1000);
-            }
-
-            if (xhr) xhr.abort();
+            $notifications.attr("data-notify", "loading");
 
             xhr = $.getJSON('/control/geocode/?q=' + encodeURIComponent(q), function (res) {
-                var q2 = $.trim($location.val().replace(/\n/g, ", "));
-                window.clearTimeout(delayLoadingIndicator);
-                $sec.removeClass("notify-error notify-updated notify-triggered notify-loading");
-                if (q2 !== q) {
-                    return;  // lost race
+                if (!res.results || !res.results.length) {
+                    $notifications.attr("data-notify", "error");
+                    return;
                 }
-                if (res.results && res.results.length) {
-                    if (touched) {
-                        $sec.addClass("notify-triggered");
-                        lat = res.results[0].lat;
-                        lon = res.results[0].lon;
-                    }
-                    else {
-                        $lat.val(res.results[0].lat);
-                        $lon.val(res.results[0].lon);
-                        center(13);
-                    }
+
+                lat = res.results[0].lat;
+                lon = res.results[0].lon;
+                if (touched) {
+                    $notifications.attr("data-notify", "confirm");
                 }
                 else {
-                    $sec.addClass("notify-error");
+                    $notifications.attr("data-notify", "");
+                    $lat.val(lat);
+                    $lon.val(lon);
+                    center(13);
                 }
             })
         }
@@ -78,23 +68,24 @@ $(function () {
 
         $location.change(load);
         $location.keyup(function () {
-            window.clearTimeout(debounceLocationChange);
-            debounceLocationChange = window.setTimeout(load, 1000);
+            window.clearTimeout(debounceLoad);
+            debounceLoad = window.setTimeout(load, 1000);
+            if ($notifications.attr("data-notify") == "confirm" && lastLocation !== cleanup(this.value)) $notifications.attr("data-notify", "");
         });
 
         $updateButton.click(function() {
             $lat.val(lat);
-            $lon.val(lon).trigger("change");
+            $lon.val(lon).trigger("change");// change-event is needed by bulk-edit
             touched = false;
             center(13);
-            $sec.addClass("notify-updated").removeClass("notify-triggered");
+            $notifications.attr("data-notify", "updated");
             delayUpdateDismissal = window.setTimeout(function() {
-                $sec.removeClass("notify-updated");
+                if ($notifications.attr("data-notify") == "updated") $notifications.attr("data-notify", "");
             }, 2500);
         });
 
         // Map
-        var $grp = $sec.find(".geodata-group");
+        var $grp = $(".geodata-group", this);
         var tiles = $grp.attr("data-tiles");
         var attrib = $grp.attr("data-attrib");
         if (tiles) {
