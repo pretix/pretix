@@ -248,7 +248,7 @@ input[type=number].short {
 .notify-loading .loading-notification,
 .notify-triggered .triggered-notification,
 .notify-updated .updated-notification,
-.notify-failed .failed-notification {
+.notify-error .error-notification {
   display: block;
 }
 .geodata-group {
