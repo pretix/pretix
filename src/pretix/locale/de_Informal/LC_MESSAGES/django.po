@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 19:14+0000\n"
-"PO-Revision-Date: 2021-02-25 20:50+0000\n"
+"PO-Revision-Date: 2021-02-25 20:53+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -16565,7 +16565,7 @@ msgstr "Mehrere neue Termine erstellen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:70
 msgid "select all rows for batch-operation"
-msgstr "Alle Zeilen für Batch-Operation auswählen"
+msgstr "Alle Zeilen für Sammel-Operation auswählen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:77
 msgid "Begin"
@@ -16577,7 +16577,7 @@ msgstr "Ergebnisse auf anderen Seiten mit auswählen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:111
 msgid "select row for batch-operation"
-msgstr "Zeile für Batch-Operation auswählen"
+msgstr "Zeile für Sammel-Operation auswählen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:152
 msgctxt "subevent"
