@@ -1,0 +1,8 @@
+{% load i18n %}
+
+<span class="geodata-autoupdate">
+    <span class="optional" data-notification="error" title="{% trans "Failed to retrieve geo coordinates" %}"><i class="fa fa-warning"></i></span>
+    <span class="optional" data-notification="loading" title="{% trans "Retrieving geo coordinates …" %}"><i class="fa fa-cog fa-spin"></i></span>
+    <span class="optional" data-notification="updated"><i class="fa fa-check"></i> {% trans "Geo coordinates updated" %}</span>
+    <span class="optional" data-notification="confirm">New geo coordinates. <button type="button" data-action="update" class="btn btn-link text-nowrap">{% trans "Update map?" %}</button></span>
+</span>
