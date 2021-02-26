@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-26 09:06+0000\n"
-"PO-Revision-Date: 2021-02-25 20:53+0000\n"
+"PO-Revision-Date: 2021-02-26 16:38+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -12278,25 +12278,19 @@ msgstr "Geocoding-Daten © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:4
 msgid "Failed to retrieve geo coordinates"
-msgstr ""
+msgstr "Konnte Geo-Koordinaten nicht abrufen"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
-#, fuzzy
-#| msgid "Geo coordinates"
 msgid "Retrieving geo coordinates …"
-msgstr "Geo-Koordinaten"
+msgstr "Rufe Geo-Koordinaten ab…"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:6
-#, fuzzy
-#| msgid "Geo coordinates"
 msgid "Geo coordinates updated"
-msgstr "Geo-Koordinaten"
+msgstr "Geo-Koordinaten geändert"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
-#, fuzzy
-#| msgid "Update comment"
 msgid "Update map?"
-msgstr "Kommentar speichern"
+msgstr "Übernehmen?"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
