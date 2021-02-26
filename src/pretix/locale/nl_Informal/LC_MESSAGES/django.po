@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-25 19:14+0000\n"
+"POT-Creation-Date: 2021-02-26 09:06+0000\n"
 "PO-Revision-Date: 2021-01-29 11:23+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -369,7 +369,7 @@ msgstr "{system}-gebruiker"
 #: pretix/base/auth.py:113 pretix/base/forms/auth.py:207
 #: pretix/base/models/auth.py:90 pretix/base/models/notifications.py:25
 #: pretix/base/models/orders.py:147 pretix/control/navigation.py:60
-#: pretix/control/templates/pretixcontrol/event/settings.html:93
+#: pretix/control/templates/pretixcontrol/event/settings.html:66
 #: pretix/plugins/checkinlists/exporters.py:416
 #: pretix/presale/checkoutflow.py:823 pretix/presale/forms/checkout.py:23
 #: pretix/presale/forms/user.py:6
@@ -1370,7 +1370,7 @@ msgstr "Momenteel in winkelwagens"
 #: pretix/base/exporters/orderlist.py:696
 #: pretix/base/exporters/waitinglist.py:20 pretix/base/shredder.py:204
 #: pretix/control/forms/event.py:1280 pretix/control/navigation.py:206
-#: pretix/control/templates/pretixcontrol/event/settings.html:273
+#: pretix/control/templates/pretixcontrol/event/settings.html:246
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:6
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:8
@@ -3103,9 +3103,9 @@ msgstr "Quotum"
 #: pretix/base/models/items.py:1405 pretix/control/navigation.py:145
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
 #: pretix/control/templates/pretixcontrol/items/quotas.html:6
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:439
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:167
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:81
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:416
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:168
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:58
 msgid "Quotas"
 msgstr "Quota"
 
@@ -3550,7 +3550,7 @@ msgid "%(name)s on %(object)s"
 msgstr "%(name)s op %(object)s"
 
 #: pretix/base/models/organizer.py:265
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:84
+#: pretix/control/templates/pretixcontrol/events/create_basics.html:61
 msgid "Team"
 msgstr "Team"
 
@@ -8304,7 +8304,7 @@ msgid "Ask, but do not require input"
 msgstr "Vraag, maar maak invoer niet verplicht"
 
 #: pretix/control/forms/event.py:565
-#: pretix/control/templates/pretixcontrol/event/settings.html:97
+#: pretix/control/templates/pretixcontrol/event/settings.html:70
 msgid "Ask and require input"
 msgstr "Vraag en maak invullen verplicht"
 
@@ -9779,9 +9779,9 @@ msgid "Optional"
 msgstr "Optioneel"
 
 #: pretix/control/forms/renderers.py:85
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:47
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:180
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:265
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:48
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:181
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:266
 #, fuzzy
 #| msgid "Change"
 msgctxt "form_bulk"
@@ -11161,9 +11161,9 @@ msgstr "Check-in"
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:3
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:5
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:72
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:524
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:253
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:166
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:501
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:254
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:143
 #: pretix/plugins/checkinlists/__init__.py:10
 msgid "Check-in lists"
 msgstr "Inchecklijsten"
@@ -11384,7 +11384,7 @@ msgstr "Stel nieuw wachtwoord in"
 #: pretix/control/templates/pretixcontrol/event/payment.html:80
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:36
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:201
-#: pretix/control/templates/pretixcontrol/event/settings.html:341
+#: pretix/control/templates/pretixcontrol/event/settings.html:314
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:136
 #: pretix/control/templates/pretixcontrol/event/tickets.html:72
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
@@ -11409,9 +11409,9 @@ msgstr "Stel nieuw wachtwoord in"
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:43
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:20
 #: pretix/control/templates/pretixcontrol/pdf/index.html:425
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:607
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:347
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:263
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:584
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:348
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:240
 #: pretix/control/templates/pretixcontrol/user/notifications.html:85
 #: pretix/control/templates/pretixcontrol/user/settings.html:81
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:13
@@ -12141,7 +12141,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
-#: pretix/control/templates/pretixcontrol/event/settings.html:347
+#: pretix/control/templates/pretixcontrol/event/settings.html:320
 msgid "Cancel or delete event"
 msgstr "Annuleer of verwijder evenement"
 
@@ -12262,6 +12262,47 @@ msgid ""
 msgstr ""
 "Je evenement is al alleen zichtbaar voor het organiserende team, omdat je "
 "winkel al offline is."
+
+#: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:14
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:42
+msgid "Geo coordinates"
+msgstr "Geo-coördinaten"
+
+#: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:15
+#: pretix/control/templates/pretixcontrol/event/settings.html:124
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:271
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:489
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:131
+msgid "Optional"
+msgstr "Optioneel"
+
+#: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:22
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:57
+msgid "Geocoding data © OpenStreetMap"
+msgstr "Geocoding-data © OpenStreetMap"
+
+#: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:4
+msgid "Failed to retrieve geo coordinates"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
+#, fuzzy
+#| msgid "Geo coordinates"
+msgid "Retrieving geo coordinates …"
+msgstr "Geo-coördinaten"
+
+#: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:6
+#, fuzzy
+#| msgid "Geo coordinates"
+msgid "Geo coordinates updated"
+msgstr "Geo-coördinaten"
+
+#: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
+#, fuzzy
+#| msgid "Update comment"
+msgid "Update map?"
+msgstr "Commentaar bijwerken"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
@@ -12869,88 +12910,60 @@ msgstr "Algemene instellingen"
 msgid "Basics"
 msgstr "Basisinstellingen"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:35
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:46
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:391
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:41
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:32
-msgid "Geo coordinates"
-msgstr "Geo-coördinaten"
-
 #: pretix/control/templates/pretixcontrol/event/settings.html:36
-#: pretix/control/templates/pretixcontrol/event/settings.html:151
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:47
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:271
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:392
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:512
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:33
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:154
-msgid "Optional"
-msgstr "Optioneel"
-
-#: pretix/control/templates/pretixcontrol/event/settings.html:43
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:54
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:399
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:56
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:40
-msgid "Geocoding data © OpenStreetMap"
-msgstr "Geocoding-data © OpenStreetMap"
-
-#: pretix/control/templates/pretixcontrol/event/settings.html:63
 #: pretix/control/templates/pretixcontrol/item/index.html:69
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:415
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:74
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:57
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:392
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:75
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:34
 msgid "Meta data"
 msgstr "Metadata"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:82
+#: pretix/control/templates/pretixcontrol/event/settings.html:55
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:50
 msgid "Localization"
 msgstr "Lokalisatie"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:89
+#: pretix/control/templates/pretixcontrol/event/settings.html:62
 msgid "Customer and attendee data"
 msgstr "Gegevens van gasten en klanten"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:90
+#: pretix/control/templates/pretixcontrol/event/settings.html:63
 msgid "Customer data (once per order)"
 msgstr "Klantgegevens (eenmaal per bestelling)"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:105
+#: pretix/control/templates/pretixcontrol/event/settings.html:78
 msgid "Name and address"
 msgstr "Naam en adres"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:110
+#: pretix/control/templates/pretixcontrol/event/settings.html:83
 msgid "See invoice settings"
 msgstr "Zie factuurinstellingen"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:116
+#: pretix/control/templates/pretixcontrol/event/settings.html:89
 msgid "Attendee data (once per admission ticket)"
 msgstr "Gastgegevens (eenmaal per toegangsbewijs)"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:125
+#: pretix/control/templates/pretixcontrol/event/settings.html:98
 msgid "Custom fields"
 msgstr "Aangepaste velden"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:130
+#: pretix/control/templates/pretixcontrol/event/settings.html:103
 msgid "Manage questions"
 msgstr "Vragen beheren"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:137
+#: pretix/control/templates/pretixcontrol/event/settings.html:110
 msgid "Other settings"
 msgstr "Andere instellingen"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:143
+#: pretix/control/templates/pretixcontrol/event/settings.html:116
 msgid "Texts"
 msgstr "Teksten"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:150
+#: pretix/control/templates/pretixcontrol/event/settings.html:123
 msgid "Confirmation text"
 msgstr "Bevestigingstekst"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:155
+#: pretix/control/templates/pretixcontrol/event/settings.html:128
 msgid ""
 "These texts need to be confirmed by the user before a purchase is possible. "
 "You could for example link your terms of service here. If you use the Pages "
@@ -12962,36 +12975,36 @@ msgstr ""
 "Als je de Pages-functie gebruikt om je voorwaarden te publiceren heb je deze "
 "instelling niet nodig, omdat je dit daar kunt instellen."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:212
+#: pretix/control/templates/pretixcontrol/event/settings.html:185
 msgid "Add confirmation text"
 msgstr "Bevestigingstekst toevoegen"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:224
+#: pretix/control/templates/pretixcontrol/event/settings.html:197
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:55
 msgid "Shop design"
 msgstr "Winkelontwerp"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:240
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:76
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:434
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:93
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:76
+#: pretix/control/templates/pretixcontrol/event/settings.html:213
+#: pretix/control/templates/pretixcontrol/events/create_basics.html:53
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:411
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:94
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:53
 msgid "Timeline"
 msgstr "Tijdlijn"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:249
+#: pretix/control/templates/pretixcontrol/event/settings.html:222
 msgid "Display"
 msgstr "Weergave"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:267
+#: pretix/control/templates/pretixcontrol/event/settings.html:240
 msgid "Cart"
 msgstr "Winkelwagen"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:279
+#: pretix/control/templates/pretixcontrol/event/settings.html:252
 msgid "Item metadata"
 msgstr "Productmetadata"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:281
+#: pretix/control/templates/pretixcontrol/event/settings.html:254
 msgid ""
 "You can here define a set of metadata properties (i.e. variables) that you "
 "can later set for your items and re-use in places like ticket layouts. This "
@@ -13001,11 +13014,11 @@ msgstr ""
 "je later kunt instellen voor je producten en hergebruiken in plaatsen als "
 "layouts van kaartjes. Dit kan je tijd schelen als je veel producten aanmaakt."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:334
+#: pretix/control/templates/pretixcontrol/event/settings.html:307
 msgid "Add property"
 msgstr "Eigenschap toevoegen"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:352
+#: pretix/control/templates/pretixcontrol/event/settings.html:325
 #: pretix/control/templates/pretixcontrol/events/index.html:160
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:115
 msgid "Clone event"
@@ -13267,7 +13280,7 @@ msgid ""
 "We strongly recommend against using short forms of more then 16 characters."
 msgstr "We raden sterk af om korte vormen te gebruiken van meer dan 16 tekens."
 
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:70
+#: pretix/control/templates/pretixcontrol/events/create_basics.html:47
 msgid "Display settings"
 msgstr "Weergaveinstellingen"
 
@@ -13753,8 +13766,8 @@ msgid "Tickets & check-in"
 msgstr "Tickets & inchecken"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:120
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:600
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:242
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:577
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:219
 msgid "Additional settings"
 msgstr "Extra instellingen"
 
@@ -16478,21 +16491,21 @@ msgstr "Nieuw tijdsslot toevoegen"
 msgid "Add many time slots"
 msgstr "Meerdere nieuwe tijdsslots toevoegen"
 
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:502
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:245
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:144
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:479
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:246
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:121
 msgid "Add a new quota"
 msgstr "Nieuw quotum toevoegen"
 
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:506
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:151
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:148
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:483
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:152
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:125
 msgid "Item prices"
 msgstr "Productprijzen"
 
-#: pretix/control/templates/pretixcontrol/subevents/bulk.html:595
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:338
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:237
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:572
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:339
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:214
 msgid "Add a new check-in list"
 msgstr "Voeg een nieuwe inchecklijst toe"
 
@@ -16511,7 +16524,7 @@ msgstr "Maak meerdere datums aan"
 msgid "%(number)s selected"
 msgstr "Schakel geselecteerde in"
 
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:170
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:171
 msgid ""
 "You selected a set of dates that currently have different quota setups. You "
 "can therefore not change their quotas in bulk. If you want, you can set up a "
@@ -16519,7 +16532,7 @@ msgid ""
 "selected dates."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:256
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:257
 msgid ""
 "You selected a set of dates that currently have different check-in list "
 "setups. You can therefore not change their check-in lists in bulk."
@@ -16560,7 +16573,7 @@ msgctxt "subevent"
 msgid "Create date"
 msgstr "Datum aanmaken"
 
-#: pretix/control/templates/pretixcontrol/subevents/detail.html:253
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:230
 msgctxt "subevent"
 msgid "Date history"
 msgstr "Datumgeschiedenis"
