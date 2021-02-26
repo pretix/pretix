@@ -46,7 +46,10 @@ $(function () {
 
                 lat = res.results[0].lat;
                 lon = res.results[0].lon;
-                if (touched) {
+                if ($lat.val() == lat && $lon.val() == lon) {
+                    $notifications.attr("data-notify", "");
+                }
+                else if (touched) {
                     $notifications.attr("data-notify", "confirm");
                 }
                 else {
