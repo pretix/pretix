@@ -33,6 +33,7 @@ frontend
 frontpage
 GENEXAMPLE
 Geo
+geo
 geocoding
 gift
 giropay
