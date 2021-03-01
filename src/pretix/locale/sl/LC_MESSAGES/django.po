@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:24+0000\n"
-"Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
+"Last-Translator: lapor-kris <kristijan.tkalec@posteo.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
 "Language: sl\n"
@@ -283,8 +283,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:476 pretix/control/forms/item.py:118
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
-"Vprašanje ne more biti odvisno od vprašanja, zastavljenega med prijavo."
+msgstr "Vprašanje ne more biti odvisno od vprašanja, zastavljenega med prijavo."
 
 #: pretix/api/serializers/item.py:481 pretix/control/forms/item.py:123
 msgid "Circular dependency between questions detected."
@@ -5860,8 +5859,7 @@ msgstr "Navedeni ID sedeža \"{id}\" za ta dogodek ne obstaja."
 msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
-msgstr ""
-"Sedež \"{id}\" trenutno ni na voljo (blokiran, že prodan ali drug bon)."
+msgstr "Sedež \"{id}\" trenutno ni na voljo (blokiran, že prodan ali drug bon)."
 
 #: pretix/base/models/vouchers.py:491
 msgid "You need to choose a specific product if you select a seat."
@@ -6305,8 +6303,7 @@ msgstr ""
 #: pretix/base/payment.py:409
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
-msgstr ""
-"Uporabo tega ponudnika plačil dovoli samo v izbranih prodajnih kanalih."
+msgstr "Uporabo tega ponudnika plačil dovoli samo v izbranih prodajnih kanalih."
 
 #: pretix/base/payment.py:413
 msgid "Hide payment method"
@@ -6326,8 +6323,7 @@ msgstr "Povezava za omogočanje načina plačila"
 
 #: pretix/base/payment.py:431
 msgid "Share this link with customers who should use this payment method."
-msgstr ""
-"Povezavo delite s strankami, ki bi morale uporabljati ta način plačila."
+msgstr "Povezavo delite s strankami, ki bi morale uporabljati ta način plačila."
 
 #: pretix/base/payment.py:464
 msgctxt "invoice"
@@ -7719,8 +7715,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
-"Izbrali ste članstvo vrste \"{type}\", ki ni dovoljeno za izdelek "
-"\"{product}\"."
+"Izbrali ste članstvo vrste \"{type}\", ki ni dovoljeno za izdelek \"{product}"
+"\"."
 
 #: pretix/base/services/memberships.py:183
 #, python-brace-format
@@ -7748,8 +7744,8 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
-"Napaka pri uvozu vrednosti \"{value}\" za stolpec \"{column}\" v vrstici "
-"\"{line}\": {message}"
+"Napaka pri uvozu vrednosti \"{value}\" za stolpec \"{column}\" v vrstici \""
+"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:147
 #, python-brace-format
@@ -8072,8 +8068,7 @@ msgstr ""
 msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
-msgstr ""
-"Datoteke za prenos ni več mogoče najti na strežniku, poskusite ponovno."
+msgstr "Datoteke za prenos ni več mogoče najti na strežniku, poskusite ponovno."
 
 #: pretix/base/services/shredder.py:114 pretix/control/views/shredder.py:91
 msgid "This file is from a different event."
@@ -8921,8 +8916,7 @@ msgstr "Noga"
 msgid ""
 "Will be printed centered and in a smaller font at the end of every invoice "
 "page."
-msgstr ""
-"Na koncu vsake strani računa bo izpisano na sredini in z manjšo pisavo."
+msgstr "Na koncu vsake strani računa bo izpisano na sredini in z manjšo pisavo."
 
 #: pretix/base/settings.py:1146
 msgid "Attach invoices to emails"
