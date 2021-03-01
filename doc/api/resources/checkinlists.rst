@@ -49,7 +49,7 @@ exit_all_at                           datetime                   Automatically c
 
     The ``exit_all_at`` attribute has been added.
 
-.. versionchanged:: 3.16
+.. versionchanged:: 3.17
 
     The ``ends_after`` and ``expand`` query parameters have been added.
 
@@ -453,6 +453,7 @@ Order position endpoints
                            ``attendee_name,positionid``
    :query string order: Only return positions of the order with the given order code
    :query string search: Fuzzy search matching the attendee name, order code, invoice address name as well as to the beginning of the secret.
+   :query string expand: Expand a field into a full object. Currently only ``subevent``, ``item``, and ``variation`` are supported. Can be passed multiple times.
    :query integer item: Only return positions with the purchased item matching the given ID.
    :query integer item__in: Only return positions with the purchased item matching one of the given comma-separated IDs.
    :query integer variation: Only return positions with the purchased item variation matching the given ID.

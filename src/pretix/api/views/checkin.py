@@ -226,7 +226,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             order__event=self.request.event,
         ).annotate(
             last_checked_in=Subquery(cqs)
-        )
+        ).prefetch_related('order__event', 'order__event__organizer')
         if self.checkinlist.subevent:
             qs = qs.filter(
                 subevent=self.checkinlist.subevent
@@ -271,6 +271,18 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         if not self.checkinlist.all_products and not ignore_products:
             qs = qs.filter(item__in=self.checkinlist.limit_products.values_list('id', flat=True))
+
+        if 'subevent' in self.request.query_params.getlist('expand'):
+            qs = qs.prefetch_related(
+                'subevent', 'subevent__event', 'subevent__subeventitem_set', 'subevent__subeventitemvariation_set',
+                'subevent__seat_category_mappings', 'subevent__meta_values'
+            )
+
+        if 'item' in self.request.query_params.getlist('expand'):
+            qs = qs.prefetch_related('item', 'item__addons', 'item__bundles', 'item__meta_values', 'item__variations').select_related('item__tax_rule')
+
+        if 'variation' in self.request.query_params.getlist('expand'):
+            qs = qs.prefetch_related('variation')
 
         return qs
 

@@ -13,7 +13,9 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
+from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.api.serializers.item import ItemSerializer, InlineItemVariationSerializer
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
@@ -483,6 +485,18 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'require_attention',
                   'order__status')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if 'subevent' in self.context['request'].query_params.getlist('expand'):
+            self.fields['subevent'] = SubEventSerializer(read_only=True)
+
+        if 'item' in self.context['request'].query_params.getlist('expand'):
+            self.fields['item'] = ItemSerializer(read_only=True)
+
+        if 'variation' in self.context['request'].query_params.getlist('expand'):
+            self.fields['variation'] = InlineItemVariationSerializer(read_only=True)
 
 
 class OrderPaymentTypeField(serializers.Field):
