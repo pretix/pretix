@@ -13,6 +13,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext, gettext_lazy as _, pgettext
 
 from pretix.base.models import Invoice, InvoiceLine, OrderPayment
+from ..services.export import ExportError
 
 from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
@@ -111,6 +112,8 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
                         if not i.file:
                             invoice_pdf_task.apply(args=(i.pk,))
                             i.refresh_from_db()
+                        if not i.file:
+                            raise ExportError('Could not generate PDF for invoice {nr}'.format(nr=i.full_invoice_no))
                         i.file.open('rb')
                         zipf.writestr('{}-{}.pdf'.format(i.number, i.order.code), i.file.read())
                         i.file.close()
