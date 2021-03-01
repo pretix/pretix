@@ -656,6 +656,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'mail_from',
         'mail_from_name',
         'mail_attach_ical',
+        'mail_attach_tickets',
         'invoice_address_asked',
         'invoice_address_required',
         'invoice_address_vatid',

@@ -13,6 +13,7 @@ from django.core.validators import (
     MaxValueValidator, MinValueValidator, RegexValidator,
 )
 from django.db.models import Model
+from django.utils.text import format_lazy
 from django.utils.translation import (
     gettext_lazy as _, gettext_noop, pgettext, pgettext_lazy,
 )
@@ -1321,6 +1322,19 @@ DEFAULTS = {
     'mail_html_renderer': {
         'default': 'classic',
         'type': str
+    },
+    'mail_attach_tickets': {
+        'default': 'True',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Attach ticket files"),
+            help_text=format_lazy(
+                _("Tickets will never be attached if they're larger than {size} to avoid email delivery problems."),
+                size='4 MB'
+            ),
+        )
     },
     'mail_attach_ical': {
         'default': 'False',

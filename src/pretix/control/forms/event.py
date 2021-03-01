@@ -786,6 +786,7 @@ class MailSettingsForm(SettingsForm):
         'mail_from',
         'mail_from_name',
         'mail_attach_ical',
+        'mail_attach_tickets',
     ]
 
     mail_sales_channel_placed_paid = forms.MultipleChoiceField(

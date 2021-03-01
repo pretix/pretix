@@ -291,6 +291,8 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     order = None
                 else:
                     with language(order.locale, event.settings.region):
+                        if not event.settings.mail_attach_tickets:
+                            attach_tickets = False
                         if position:
                             try:
                                 position = order.positions.get(pk=position)
