@@ -596,6 +596,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'checkout_email_helptext',
         'presale_has_ended_text',
         'voucher_explanation_text',
+        'checkout_success_text',
         'banner_text',
         'banner_text_bottom',
         'show_dates_on_frontpage',

@@ -1997,6 +1997,19 @@ Your {event} team"""))
                         "why you need information from them.")
         )
     },
+    'checkout_success_text': {
+        'default': '',
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Additional success message"),
+            help_text=_("This message will be shown after an order has been created successfully. It will be shown in additional "
+                        "to the default text."),
+            widget_kwargs={'attrs': {'rows': '2'}},
+            widget=I18nTextarea
+        )
+    },
     'checkout_phone_helptext': {
         'default': '',
         'type': LazyI18nString,

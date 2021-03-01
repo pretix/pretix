@@ -435,6 +435,7 @@ class EventSettingsForm(SettingsForm):
         'checkout_email_helptext',
         'presale_has_ended_text',
         'voucher_explanation_text',
+        'checkout_success_text',
         'show_dates_on_frontpage',
         'show_date_to',
         'show_times',

@@ -6,6 +6,7 @@
 {% load expiresformat %}
 {% load eventurl %}
 {% load phone_format %}
+{% load rich_text %}
 {% block title %}
     {% if "thanks" in request.GET or "paid" in request.GET %}
         {% trans "Thank you!" %}
@@ -43,6 +44,9 @@
                 <p>{% trans "Your order has been processed successfully! See below for details." %}</p>
             {% else %}
                 <p>{% trans "We successfully received your payment. See below for details." %}</p>
+            {% endif %}
+            {% if request.event.settings.checkout_success_text %}
+                {{ request.event.settings.checkout_success_text|rich_text }}
             {% endif %}
             <p class="iframe-hidden">{% blocktrans trimmed %}
                 Please bookmark or save the link to this exact page if you want to access your order later. We also sent you an email containing the link to the address you specified.
