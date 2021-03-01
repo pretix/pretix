@@ -33,7 +33,13 @@ export default {
       checkinlist: null,
     }
   },
-  mounted() {
+  mounted () {
+    window.addEventListener('focus', this.refocus)
+    document.addEventListener('keydown', this.globalKeydown)
+  },
+  destroyed () {
+    window.removeEventListener('focus', this.refocus)
+    document.removeEventListener('keydown', this.globalKeydown)
   },
   computed: {
     subevent() {
@@ -45,6 +51,13 @@ export default {
     }
   },
   methods: {
+    globalKeydown(e) {
+      if (document.activeElement.nodeName.toLowerCase() !== 'input' && document.activeElement.nodeName.toLowerCase() !== 'textarea') {
+        if (e.key.match(/^[a-z0-9A-Z+/=<>#]$/)) {
+          this.refocus()
+        }
+      }
+    },
     refocus() {
       this.$nextTick(() => {
         this.$refs.input.focus()
