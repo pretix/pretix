@@ -13,6 +13,8 @@ from pretix.base.models import WaitingListEntry
 
 
 class WaitingListForm(forms.ModelForm):
+    required_css_class = 'required'
+    
     class Meta:
         model = WaitingListEntry
         fields = ('email',)
