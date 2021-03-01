@@ -8,7 +8,7 @@ class WaitingListSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = WaitingListEntry
-        fields = ('id', 'created', 'email', 'voucher', 'item', 'variation', 'locale', 'subevent', 'priority')
+        fields = ('id', 'created', 'name', 'name_parts', 'email', 'phone', 'voucher', 'item', 'variation', 'locale', 'subevent', 'priority')
         read_only_fields = ('id', 'created', 'voucher')
 
     def validate(self, data):
