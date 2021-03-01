@@ -5,11 +5,14 @@ from django.db import models, transaction
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
+from jsonfallback.fields import FallbackJSONField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import Voucher
 from pretix.base.services.mail import mail
+from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from .base import LoggedModel
 from .event import Event, SubEvent
@@ -37,8 +40,20 @@ class WaitingListEntry(LoggedModel):
         verbose_name=_("On waiting list since"),
         auto_now_add=True
     )
+    name_cached = models.CharField(
+        max_length=255,
+        verbose_name=_("Name"),
+        blank=True, null=True,
+    )
+    name_parts = FallbackJSONField(
+        blank=True, default=dict
+    )
     email = models.EmailField(
         verbose_name=_("E-mail address")
+    )
+    phone = PhoneNumberField(
+        null=True, blank=True,
+        verbose_name=_("Phone number")
     )
     voucher = models.ForeignKey(
         'Voucher',
@@ -82,6 +97,27 @@ class WaitingListEntry(LoggedModel):
         WaitingListEntry.clean_duplicate(self.email, self.item, self.variation, self.subevent, self.pk)
         WaitingListEntry.clean_itemvar(self.event, self.item, self.variation)
         WaitingListEntry.clean_subevent(self.event, self.subevent)
+
+    def save(self, *args, **kwargs):
+        update_fields = kwargs.get('update_fields', [])
+        if 'name_parts' in update_fields:
+            update_fields.append('name_cached')
+        self.name_cached = self.name
+        if self.name_parts is None:
+            self.name_parts = {}
+        super().save(*args, **kwargs)
+
+    @property
+    def name(self):
+        if not self.name_parts:
+            return None
+        if '_legacy' in self.name_parts:
+            return self.name_parts['_legacy']
+        if '_scheme' in self.name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
+        else:
+            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        return scheme['concatenation'](self.name_parts).strip()
 
     def send_voucher(self, quota_cache=None, user=None, auth=None):
         availability = (
