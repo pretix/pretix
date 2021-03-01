@@ -255,8 +255,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     invoice_from_top = 17 * mm
 
     def _draw_invoice_from(self, canvas):
-        p = Paragraph(self.invoice.full_invoice_from.strip().replace('\n', '<br />\n'), style=self.stylesheet[
-            'InvoiceFrom'])
+        p = Paragraph(
+            bleach.clean(self.invoice.full_invoice_from, tags=[]).strip().replace('\n', '<br />\n'),
+            style=self.stylesheet['InvoiceFrom']
+        )
         p.wrapOn(canvas, self.invoice_from_width, self.invoice_from_height)
         p_size = p.wrap(self.invoice_from_width, self.invoice_from_height)
         p.drawOn(canvas, self.invoice_from_left, self.pagesize[1] - p_size[1] - self.invoice_from_top)
@@ -361,6 +363,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     def _draw_event(self, canvas):
         def shorten(txt):
             txt = str(txt)
+            txt = bleach.clean(txt, tags=[]).strip()
             p = Paragraph(txt.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
             p_size = p.wrap(self.event_width, self.event_height)
 
@@ -441,13 +444,18 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         story = []
         if self.invoice.custom_field:
             story.append(Paragraph(
-                '{}: {}'.format(self.invoice.event.settings.invoice_address_custom_field, self.invoice.custom_field),
+                '{}: {}'.format(
+                    bleach.clean(self.invoice.event.settings.invoice_address_custom_field, tags=[]).strip().replace('\n', '<br />\n'),
+                    bleach.clean(self.invoice.custom_field, tags=[]).strip().replace('\n', '<br />\n'),
+                ),
                 self.stylesheet['Normal']
             ))
 
         if self.invoice.internal_reference:
             story.append(Paragraph(
-                pgettext('invoice', 'Customer reference: {reference}').format(reference=self.invoice.internal_reference),
+                pgettext('invoice', 'Customer reference: {reference}').format(
+                    reference=bleach.clean(self.invoice.internal_reference, tags=[]).strip().replace('\n', '<br />\n'),
+                ),
                 self.stylesheet['Normal']
             ))
 
@@ -466,7 +474,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ))
 
         if self.invoice.introductory_text:
-            story.append(Paragraph(self.invoice.introductory_text, self.stylesheet['Normal']))
+            story.append(Paragraph(
+                bleach.clean(self.invoice.introductory_text, tags=[]).strip().replace('\n', '<br />\n'),
+                self.stylesheet['Normal']
+            ))
             story.append(Spacer(1, 10 * mm))
 
         return story
@@ -518,7 +529,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         for line in self.invoice.lines.all():
             if has_taxes:
                 tdata.append((
-                    Paragraph(line.description, self.stylesheet['Normal']),
+                    Paragraph(
+                        bleach.clean(line.description, tags=[]).strip().replace('\n', '<br />\n'),
+                        self.stylesheet['Normal']
+                    ),
                     "1",
                     localize(line.tax_rate) + " %",
                     money_filter(line.net_value, self.invoice.event.currency),
@@ -526,7 +540,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ))
             else:
                 tdata.append((
-                    Paragraph(line.description, self.stylesheet['Normal']),
+                    Paragraph(
+                        bleach.clean(line.description, tags=[]).strip().replace('\n', '<br />\n'),
+                        self.stylesheet['Normal']
+                    ),
                     "1",
                     money_filter(line.gross_value, self.invoice.event.currency),
                 ))
@@ -566,10 +583,16 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         story.append(Spacer(1, 15 * mm))
 
         if self.invoice.payment_provider_text:
-            story.append(Paragraph(self.invoice.payment_provider_text, self.stylesheet['Normal']))
+            story.append(Paragraph(
+                bleach.clean(self.invoice.payment_provider_text, tags=[]).strip().replace('\n', '<br />\n'),
+                self.stylesheet['Normal']
+            ))
 
         if self.invoice.additional_text:
-            story.append(Paragraph(self.invoice.additional_text, self.stylesheet['Normal']))
+            story.append(Paragraph(
+                bleach.clean(self.invoice.additional_text, tags=[]).strip().replace('\n', '<br />\n'),
+                self.stylesheet['Normal']
+            ))
             story.append(Spacer(1, 15 * mm))
 
         tstyledata = [
@@ -701,7 +724,10 @@ class Modern1Renderer(ClassicInvoiceRenderer):
     def _draw_invoice_from(self, canvas):
         if not self.invoice.invoice_from:
             return
-        c = self.invoice.address_invoice_from.strip().split('\n')
+        c = [
+            bleach.clean(l, tags=[]).strip().replace('\n', '<br />\n')
+            for l in self.invoice.address_invoice_from.strip().split('\n')
+        ]
         p = Paragraph(' · '.join(c), style=self.stylesheet['Sender'])
         p.wrapOn(canvas, self.invoice_to_width, 15.7 * mm)
         p.drawOn(canvas, self.invoice_to_left, self.pagesize[1] - self.invoice_to_top + 2 * mm)
