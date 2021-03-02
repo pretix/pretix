@@ -10,13 +10,21 @@
         <div class="panel-body text-center">
             <h4>
                 <span class="fa fa-envelope text-muted fa-2x" aria-hidden="true"></span><br><br>
-                {% trans "Please check your email account, we've sent you your tickets." %}
+                {% if event.settings.mail_attach_tickets %}
+                    {% trans "Please check your email account, we've sent you your tickets." %}
+                {% else %}
+                    {% trans "Please check your email account, we've sent you an email." %}
+                {% endif %}
             </h4>
             <p class="text-muted">
                 {% if position_page %}
                     {% blocktrans trimmed %}
-                        You can also download them right here as soon as the person who placed the order clicked the
+                        You can download your tickets right here as soon as the person who placed the order clicked the
                         link in the email they received to confirm the email address is valid.
+                    {% endblocktrans %}
+                {% elif not event.settings.mail_attach_tickets %}
+                    {% blocktrans trimmed %}
+                        If you click the link in our email, you will be able to download your tickets here.
                     {% endblocktrans %}
                 {% else %}
                     {% blocktrans trimmed %}
