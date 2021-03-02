@@ -132,7 +132,13 @@
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>{% trans "User" %}</th>
+                    {% if request.event.settings.waiting_list_names_asked %}
+                    <th>{% trans "Name" %}</th>
+                    {% endif %}
+                    <th>{% trans "Email" %}</th>
+                    {% if request.event.settings.waiting_list_phones_asked %}
+                    <th>{% trans "Phone number" %}</th>
+                    {% endif %}
                     <th>{% trans "Product" %}</th>
                     {% if request.event.has_subevents %}
                         <th>{% trans "Date" context "subevent" %}</th>
@@ -146,7 +152,13 @@
                 <tbody>
                 {% for e in entries %}
                     <tr>
+                        {% if request.event.settings.waiting_list_names_asked %}
+                        <td>{{ e.name|default:"" }}</td>
+                        {% endif %}
                         <td>{{ e.email }}</td>
+                        {% if request.event.settings.waiting_list_phones_asked %}
+                        <td>{{ e.phone|default:"" }}</td>
+                        {% endif %}
                         <td>
                             {{ e.item }}
                             {% if e.variation %}
