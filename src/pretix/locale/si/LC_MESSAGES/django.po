@@ -8,21 +8,23 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-02 17:38+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-03-03 06:00+0000\n"
+"Last-Translator: helabasa <R45XvezA@pm.me>\n"
+"Language-Team: Sinhala <https://translate.pretix.eu/projects/pretix/pretix/"
+"si/>\n"
 "Language: si\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:98
 #: pretix/control/views/dashboards.py:479
 msgid "Shop disabled"
-msgstr ""
+msgstr "සාප්පුව අබල කර ඇත"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:765 pretix/control/forms/filter.py:993
@@ -68,7 +70,7 @@ msgstr ""
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr ""
+msgstr "යෙදුමේ නම"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
@@ -563,7 +565,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:761
 #: pretix/plugins/ticketoutputpdf/exporters.py:40
 msgid "Order code"
-msgstr ""
+msgstr "ඇණවුම් කේතය"
 
 #: pretix/base/exporters/invoices.py:168 pretix/base/exporters/invoices.py:296
 #: pretix/base/models/waitinglist.py:41 pretix/base/orderimport.py:126
@@ -627,7 +629,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:309
 #: pretix/presale/templates/pretixpresale/organizers/index.html:61
 msgid "Name"
-msgstr ""
+msgstr "නම"
 
 #: pretix/base/exporters/invoices.py:173 pretix/base/exporters/invoices.py:300
 #: pretix/base/exporters/orderlist.py:156
@@ -643,7 +645,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:313
 msgid "Address"
-msgstr ""
+msgstr "ලිපිනය"
 
 #: pretix/base/exporters/invoices.py:174 pretix/base/exporters/invoices.py:182
 #: pretix/base/exporters/invoices.py:301 pretix/base/exporters/invoices.py:309
@@ -974,7 +976,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:61
 #: pretix/presale/templates/pretixpresale/organizers/index.html:67
 msgid "Status"
-msgstr ""
+msgstr "තත්ත්වය"
 
 #: pretix/base/exporters/orderlist.py:148
 #: pretix/base/exporters/orderlist.py:312
@@ -1148,7 +1150,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_change.html:29
 msgctxt "subevent"
 msgid "Date"
-msgstr ""
+msgstr "දිනය"
 
 #: pretix/base/exporters/orderlist.py:423 pretix/base/models/items.py:428
 #: pretix/base/models/vouchers.py:156 pretix/base/models/waitinglist.py:52
@@ -1321,7 +1323,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:798
 msgid "Paid orders"
-msgstr ""
+msgstr "ගෙවූ ඇණවුම්"
 
 #: pretix/base/exporters/orderlist.py:695 pretix/control/views/item.py:803
 msgid "Pending orders"
@@ -7204,7 +7206,7 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:56
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "සියලුම දිනයන්"
 
 #: pretix/control/forms/event.py:43
 msgid "Use languages"
@@ -7897,7 +7899,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:783
 msgid "Monday"
-msgstr ""
+msgstr "සඳුදා"
 
 #: pretix/control/forms/filter.py:784
 msgid "Tuesday"
@@ -7921,7 +7923,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:789
 msgid "Sunday"
-msgstr ""
+msgstr "ඉරිදා"
 
 #: pretix/control/forms/filter.py:917
 msgid "Live"
@@ -10178,7 +10180,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:20
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:35
 msgid "Save"
-msgstr ""
+msgstr "සුරකින්න"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
@@ -10532,7 +10534,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:54
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 msgid "Cancel"
-msgstr ""
+msgstr "අවලංගු"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:21
 #: pretix/control/templates/pretixcontrol/event/delete.html:30
@@ -13142,7 +13144,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:561
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:268
 msgid "Taxes"
-msgstr ""
+msgstr "බදු"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:570
 #: pretix/control/templates/pretixcontrol/orders/overview.html:78
@@ -20510,7 +20512,7 @@ msgstr ""
 
 #: pretix/settings.py:435
 msgid "Arabic"
-msgstr ""
+msgstr "අරාබි"
 
 #: pretix/settings.py:436
 msgid "Chinese (simplified)"
@@ -20530,7 +20532,7 @@ msgstr ""
 
 #: pretix/settings.py:440
 msgid "French"
-msgstr ""
+msgstr "ප්‍රංශ"
 
 #: pretix/settings.py:441
 msgid "Finnish"
@@ -20538,11 +20540,11 @@ msgstr ""
 
 #: pretix/settings.py:442
 msgid "Greek"
-msgstr ""
+msgstr "ග්‍රීක"
 
 #: pretix/settings.py:443
 msgid "Italian"
-msgstr ""
+msgstr "ඉතාලි"
 
 #: pretix/settings.py:444
 msgid "Latvian"
