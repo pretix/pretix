@@ -33,7 +33,10 @@ def wle(event, item):
 TEST_WLE_RES = {
     "id": 1,
     "created": "2017-12-01T10:00:00Z",
+    "name": None,
+    "name_parts": {},
     "email": "waiting@example.org",
+    "phone": None,
     "voucher": None,
     "item": 2,
     "variation": None,
