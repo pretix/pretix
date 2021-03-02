@@ -203,7 +203,7 @@ class EmailAddressShredder(BaseDataShredder):
 class WaitingListShredder(BaseDataShredder):
     verbose_name = _('Waiting list')
     identifier = 'waiting_list'
-    description = _('This will remove all email addresses from the waiting list.')
+    description = _('This will remove all names, email addresses and phone numbers from the waiting list.')
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
         yield 'waiting-list.json', 'application/json', json.dumps([
@@ -213,7 +213,7 @@ class WaitingListShredder(BaseDataShredder):
 
     @transaction.atomic
     def shred_data(self):
-        self.event.waitinglistentries.update(email='█')
+        self.event.waitinglistentries.update(name_cached=None, name_parts={'_shredded': True}, email='█', phone='█')
 
         for wle in self.event.waitinglistentries.select_related('voucher').filter(voucher__isnull=False):
             if '@' in wle.voucher.comment:
@@ -222,7 +222,14 @@ class WaitingListShredder(BaseDataShredder):
 
         for le in self.event.logentry_set.filter(action_type="pretix.voucher.added.waitinglist").exclude(data=""):
             d = le.parsed_data
+            if 'name' in d:
+                d['name'] = '█'
+            if 'name_parts' in d:
+                d['name_parts'] = {
+                    '_legacy': '█'
+                }
             d['email'] = '█'
+            d['phone'] = '█'
             le.data = json.dumps(d)
             le.shredded = True
             le.save(update_fields=['data', 'shredded'])
