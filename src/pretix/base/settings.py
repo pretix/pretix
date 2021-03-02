@@ -975,7 +975,7 @@ DEFAULTS = {
         )
     },
     'waiting_list_names_asked': {
-        'default': 'True',
+        'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
@@ -996,7 +996,7 @@ DEFAULTS = {
         )
     },
     'waiting_list_phones_asked': {
-        'default': 'True',
+        'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
