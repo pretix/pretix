@@ -14,16 +14,14 @@ from pretix.base.models import WaitingListEntry
 
 class WaitingListForm(forms.ModelForm):
     required_css_class = 'required'
-    
+
     class Meta:
         model = WaitingListEntry
-        fields = ('email',)
+        fields = ('name_parts', 'email', 'phone')
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
-
-        field_order = []
 
         event = self.event
 
@@ -35,9 +33,8 @@ class WaitingListForm(forms.ModelForm):
                 titles=event.settings.name_scheme_titles,
                 label=_('Name'),
             )
-            field_order.append('name_parts')
-
-        field_order.append('email')
+        else:
+            del self.fields['name_parts']
 
         if event.settings.waiting_list_phones_asked:
             with language(get_babel_locale()):
@@ -46,7 +43,6 @@ class WaitingListForm(forms.ModelForm):
                 for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
                     if str(default_country) in values:
                         default_prefix = prefix
-
                 self.fields['phone'] = PhoneNumberField(
                     label=_("Phone number"),
                     required=event.settings.waiting_list_phones_required,
@@ -57,7 +53,5 @@ class WaitingListForm(forms.ModelForm):
                     initial="+{}.".format(default_prefix) if default_prefix else None,
                     widget=WrappedPhoneNumberPrefixWidget()
                 )
-            field_order.append('phone')
-
-        if len(field_order) > 1:
-            self.order_fields(field_order)
+        else:
+            del self.fields['phone']
