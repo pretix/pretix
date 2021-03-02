@@ -475,7 +475,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.introductory_text:
             story.append(Paragraph(
-                bleach.clean(self.invoice.introductory_text, tags=[]).strip().replace('\n', '<br />\n'),
+                self.invoice.introductory_text,
                 self.stylesheet['Normal']
             ))
             story.append(Spacer(1, 10 * mm))
@@ -578,13 +578,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.payment_provider_text:
             story.append(Paragraph(
-                bleach.clean(self.invoice.payment_provider_text, tags=[]).strip().replace('\n', '<br />\n'),
+                self.invoice.payment_provider_text,
                 self.stylesheet['Normal']
             ))
 
         if self.invoice.additional_text:
             story.append(Paragraph(
-                bleach.clean(self.invoice.additional_text, tags=[]).strip().replace('\n', '<br />\n'),
+                self.invoice.additional_text,
                 self.stylesheet['Normal']
             ))
             story.append(Spacer(1, 15 * mm))
