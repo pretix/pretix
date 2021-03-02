@@ -918,12 +918,10 @@ class SubEventsTest(SoupTest):
         assert doc.select(".alert-success")
         with scopes_disabled():
             for se in [self.subevent1, self.subevent2]:
-                q = se.quotas.first()
-                assert q.name == 'Q1'
+                q = se.quotas.get(name='Q1')
                 assert q.size == 50
                 assert list(q.items.all()) == [self.ticket]
-                q = se.quotas.last()
-                assert q.name == 'Q2'
+                q = se.quotas.get(name='Q2')
                 assert q.size == 25
                 assert list(q.items.all()) == [self.ticket]
 
@@ -931,6 +929,8 @@ class SubEventsTest(SoupTest):
             '__ALL': 'on',
         }, follow=True)
         fields = extract_form_fields(doc)
+        assert fields['quotas-0-name'] == 'Q1'
+        assert fields['quotas-1-name'] == 'Q2'
         fields.update({
             '_bulk': ['__quotas'],
             'quotas-0-size': '25',
