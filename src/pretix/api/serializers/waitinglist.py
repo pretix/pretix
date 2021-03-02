@@ -32,4 +32,11 @@ class WaitingListSerializer(I18nAwareModelSerializer):
             if availability[0] == 100:
                 raise ValidationError("This product is currently available.")
 
+        if data.get('name') and data.get('name_parts'):
+            raise ValidationError(
+                {'name': ['Do not specify name if you specified name_parts.']}
+            )
+        if data.get('name_parts') and '_scheme' not in data.get('name_parts'):
+            data['name_parts']['_scheme'] = event.settings.name_scheme
+
         return data
