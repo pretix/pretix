@@ -529,10 +529,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         for line in self.invoice.lines.all():
             if has_taxes:
                 tdata.append((
-                    Paragraph(
-                        bleach.clean(line.description, tags=[]).strip().replace('\n', '<br />\n'),
-                        self.stylesheet['Normal']
-                    ),
+                    Paragraph(line.description, self.stylesheet['Normal']),
                     "1",
                     localize(line.tax_rate) + " %",
                     money_filter(line.net_value, self.invoice.event.currency),
@@ -540,10 +537,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ))
             else:
                 tdata.append((
-                    Paragraph(
-                        bleach.clean(line.description, tags=[]).strip().replace('\n', '<br />\n'),
-                        self.stylesheet['Normal']
-                    ),
+                    Paragraph(line.description, self.stylesheet['Normal']),
                     "1",
                     money_filter(line.gross_value, self.invoice.event.currency),
                 ))
