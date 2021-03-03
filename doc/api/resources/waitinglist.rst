@@ -13,9 +13,10 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the waiting list entry
 created                               datetime                   Creation date of the waiting list entry
-name                                  string                     Name of the user on the waiting list
+name                                  string                     Name of the user on the waiting list (or ``null``)
+name_parts                            object of strings          Decomposition of name of the user (or ``null``)
 email                                 string                     Email address of the user on the waiting list
-phone                                 string                     Phone number of the user on the waiting list
+phone                                 string                     Phone number of the user on the waiting list (or ``null``)
 voucher                               integer                    Internal ID of the voucher sent to this user. If
                                                                  this field is set, the user has been sent a voucher
                                                                  and is no longer waiting. If it is ``null``, the
