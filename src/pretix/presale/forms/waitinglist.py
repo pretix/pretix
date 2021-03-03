@@ -37,18 +37,17 @@ class WaitingListForm(forms.ModelForm):
         if event.settings.waiting_list_phones_asked:
             with language(get_babel_locale()):
                 default_country = guess_country(self.event)
-                default_prefix = None
                 for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
-                    if str(default_country) in values:
-                        default_prefix = prefix
+                    if str(default_country) in values and not self.initial.get('phone'):
+                        # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
+                        # a country code but no number as an initial value. It's a bit hacky, but should be stable for
+                        # the future.
+                        self.initial['phone'] = "+{}.".format(prefix)
+
                 self.fields['phone'] = PhoneNumberField(
                     label=_("Phone number"),
                     required=event.settings.waiting_list_phones_required,
                     help_text=event.settings.waiting_list_phones_explanation_text,
-                    # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
-                    # a country code but no number as an initial value. It's a bit hacky, but should be stable for
-                    # the future.
-                    initial="+{}.".format(default_prefix) if default_prefix else None,
                     widget=WrappedPhoneNumberPrefixWidget()
                 )
         else:
