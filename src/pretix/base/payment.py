@@ -970,17 +970,17 @@ class ManualPayment(BasePaymentProvider):
                     label=_('Payment process description in order confirmation emails'),
                     help_text=_('This text will be included for the {payment_info} placeholder in order confirmation '
                                 'mails. It should instruct the user on how to proceed with the payment. You can use '
-                                'the placeholders {order}, {total}, {currency} and {total_with_currency}.'),
+                                'the placeholders {order}, {amount}, {currency} and {amount_with_currency}.'),
                     widget=I18nTextarea,
-                    validators=[PlaceholderValidator(['{order}', '{total}', '{currency}', '{total_with_currency}'])],
+                    validators=[PlaceholderValidator(['{order}', '{amount}', '{currency}', '{amount_with_currency}'])],
                 )),
                 ('pending_description', I18nFormField(
                     label=_('Payment process description for pending orders'),
                     help_text=_('This text will be shown on the order confirmation page for pending orders. '
                                 'It should instruct the user on how to proceed with the payment. You can use '
-                                'the placeholders {order}, {total}, {currency} and {total_with_currency}.'),
+                                'the placeholders {order}, {amount}, {currency} and {amount_with_currency}.'),
                     widget=I18nTextarea,
-                    validators=[PlaceholderValidator(['{order}', '{total}', '{currency}', '{total_with_currency}'])],
+                    validators=[PlaceholderValidator(['{order}', '{amount}', '{currency}', '{amount_with_currency}'])],
                 )),
             ] + list(super().settings_form_fields.items())
         )
@@ -1001,21 +1001,24 @@ class ManualPayment(BasePaymentProvider):
     def checkout_confirm_render(self, request):
         return self.payment_form_render(request)
 
-    def format_map(self, order):
+    def format_map(self, order, payment):
         return {
             'order': order.code,
-            'total': order.total,
+            'amount': payment.amount,
             'currency': self.event.currency,
-            'total_with_currency': money_filter(order.total, self.event.currency)
+            'amount_with_currency': money_filter(payment.amount, self.event.currency),
+            # {total} and {total_with_currency} are deprecated
+            'total': order.total,
+            'total_with_currency': money_filter(order.total, self.event.currency),
         }
 
-    def order_pending_mail_render(self, order) -> str:
-        msg = str(self.settings.get('email_instructions', as_type=LazyI18nString)).format_map(self.format_map(order))
+    def order_pending_mail_render(self, order, payment) -> str:
+        msg = str(self.settings.get('email_instructions', as_type=LazyI18nString)).format_map(self.format_map(order, payment))
         return msg
 
     def payment_pending_render(self, request, payment) -> str:
         return rich_text(
-            str(self.settings.get('pending_description', as_type=LazyI18nString)).format_map(self.format_map(payment.order))
+            str(self.settings.get('pending_description', as_type=LazyI18nString)).format_map(self.format_map(payment.order, payment))
         )
 
 
