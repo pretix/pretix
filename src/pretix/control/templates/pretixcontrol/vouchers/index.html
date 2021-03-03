@@ -179,6 +179,14 @@
                                 </td>
                             {% endif %}
                             <td class="text-right flip">
+                                {% if v.recipient is not None %}
+                                    <a href="{% url "control:event.voucher.resend" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}"
+                                       class="btn btn-sm btn-default"
+                                       title="{% blocktrans with recipient=v.recipient %}Resend to {{recipient}}{% endblocktrans %}"
+                                       data-toggle="tooltip">
+                                        <span class="fa fa-repeat"></span>
+                                    </a>
+                                {% endif %}
                                 <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ v.id }}"
                                    class="btn btn-sm btn-default" title="{% trans "Use as a template for new vouchers" %}" data-toggle="tooltip">
                                     <span class="fa fa-copy"></span>
@@ -191,6 +199,9 @@
                 </table>
             </div>
             {% if "can_change_vouchers" in request.eventpermset %}
+                <button type="submit" class="btn btn-default btn-save" name="action" value="resend">
+                    {% trans "Resend selected" %}
+                </button>
                 <button type="submit" class="btn btn-default btn-save" name="action" value="delete">
                     {% trans "Delete selected" %}
                 </button>

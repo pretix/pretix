@@ -595,6 +595,41 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
             'send_recipients': 'email,number,flop\nfoooo@example.org,2,baz'
         }, expected_failure=True)
 
+    def test_resend(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH',
+            'itemvar': '%d' % self.shirt.pk,
+            'send': 'on',
+            'send_subject': 'Your voucher',
+            'send_message': 'Voucher list: {voucher_list}',
+            'send_recipients': 'foo@example.com\nfoo@example.net'
+        })
+        assert len(djmail.outbox) == 2
+        assert len([m for m in djmail.outbox if m.to == ['foo@example.com']]) == 1
+        assert len([m for m in djmail.outbox if m.to == ['foo@example.net']]) == 1
+        assert len([m for m in djmail.outbox if 'ABCDE' in m.body]) == 1
+        assert len([m for m in djmail.outbox if 'DEFGH' in m.body]) == 1
+        with scopes_disabled():
+            v = self.event.vouchers.get(recipient='foo@example.com')
+        doc = self.get_doc('/control/event/%s/%s/vouchers/%s/resend' % (self.orga.slug, self.event.slug, v.pk),
+                           follow=True)
+        assert doc.select(".alert-success")
+        assert len(djmail.outbox) == 3
+        assert len([m for m in djmail.outbox if m.to == ['foo@example.com']]) == 2
+        assert len([m for m in djmail.outbox if m.to == ['foo@example.net']]) == 1
+        assert len([m for m in djmail.outbox if 'ABCDE' in m.body]) == 1
+        # codes get assigned in reverse order, so foo@example.com got 'DEFGH'
+        assert len([m for m in djmail.outbox if 'DEFGH' in m.body]) == 2
+
+    def test_resend_missing_recipient(self):
+        with scopes_disabled():
+            v = self.event.vouchers.create(quota=self.quota_tickets)
+        doc = self.get_doc('/control/event/%s/%s/vouchers/%s/resend' % (self.orga.slug, self.event.slug, v.pk),
+                           follow=True)
+        assert doc.select(".alert-danger")
+
+    # TODO test bulk resend
+
     def test_delete_voucher(self):
         with scopes_disabled():
             v = self.event.vouchers.create(quota=self.quota_tickets)
