@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-02 17:38+0000\n"
-"PO-Revision-Date: 2021-03-01 23:24+0000\n"
+"PO-Revision-Date: 2021-03-04 03:00+0000\n"
 "Last-Translator: lapor-kris <kristijan.tkalec@posteo.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -5151,18 +5151,18 @@ msgstr "012345"
 
 #: pretix/base/services/invoices.py:373
 msgid "Sample product {}"
-msgstr ""
+msgstr "Vzorčni izdelek {}"
 
 #: pretix/base/services/invoices.py:379
 msgid "Sample product A"
-msgstr ""
+msgstr "Vzorčni izdelek A"
 
 #: pretix/base/services/mail.py:174
 #, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr ""
+msgstr "To e-pošto ste prejeli, ker je nekdo za vas naročil {event}."
 
 #: pretix/base/services/mail.py:178 pretix/base/services/mail.py:194
 #, python-brace-format
@@ -5170,11 +5170,13 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"Podrobnosti o naročilu si lahko ogledate na povezavi:\n"
+"{orderurl}."
 
 #: pretix/base/services/mail.py:190
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr ""
+msgstr "To e-pošto ste prejeli, ker ste oddali naročilo za {event}."
 
 #: pretix/base/services/orderimport.py:85
 #, python-brace-format
@@ -5182,6 +5184,8 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
+"Napaka pri uvozu vrednosti \"{value}\" za stolpec \"{column}\" v vrstici \""
+"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:117
 #, python-brace-format
@@ -5193,26 +5197,32 @@ msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
 msgstr ""
+"Nekateri izdelki, ki ste jih izbrali, niso več na voljo. Za podrobnosti "
+"glejte spodaj."
 
 #: pretix/base/services/orders.py:65
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Nekateri izdelki, ki ste jih izbrali, niso več na voljo v izbrani količini. "
+"Za podrobnosti glejte spodaj."
 
 #: pretix/base/services/orders.py:67
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
+"Cena nekaterih izdelkov v košarici se je medtem spremenila. Za podrobnosti "
+"glejte spodaj."
 
 #: pretix/base/services/orders.py:69
 msgid "An internal error occurred, please try again."
-msgstr ""
+msgstr "Prišlo je do notranje napake, poskusite znova."
 
 #: pretix/base/services/orders.py:70
 msgid "Your cart is empty."
-msgstr ""
+msgstr "Vaša košarica je prazna."
 
 #: pretix/base/services/orders.py:71
 #, python-format
@@ -5220,16 +5230,20 @@ msgid ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr ""
+"Ne morete izbrati več kot %(max)s izdelkov %(product)s. Odvečne predmete smo "
+"odstranili iz košarice."
 
 #: pretix/base/services/orders.py:76
 msgid "The presale period has ended."
-msgstr ""
+msgstr "Obdobje predprodaje se je končalo."
 
 #: pretix/base/services/orders.py:77
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
+"Koda bona, uporabljena za enega od izdelkov v košarici, ni znana v naši bazi "
+"podatkov."
 
 #: pretix/base/services/orders.py:78
 msgid ""
@@ -5237,82 +5251,91 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
+"Koda bona, uporabljena za enega od izdelkov v košarici, je bila že "
+"uporabljena prevečkrat. Izdelek smo odstranili iz košarice."
 
 #: pretix/base/services/orders.py:80
-#, fuzzy
-#| msgid ""
-#| "The presale period for one of the events in your cart has ended. The "
-#| "affected positions have been removed from your cart."
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"Predprodaja enega od dogodkov v vozičku se je končalo. Prizadeti položaji so "
-"bili odstranjeni iz vaše košarice."
+"Koda bona, uporabljena za enega od izdelkov v košarici, je bila že "
+"prepogosto. Prilagodili smo ceno izdelka v košarici."
 
 #: pretix/base/services/orders.py:82
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
+"Koda bona, uporabljena za enega od izdelkov v košarici, je potekla. Izdelek "
+"smo odstranili iz košarice."
 
 #: pretix/base/services/orders.py:84
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
+"Koda bona, uporabljena za enega od izdelkov v košarici, za ta izdelek ni "
+"veljavna. Izdelek smo odstranili iz košarice."
 
 #: pretix/base/services/orders.py:86
 msgid ""
 "You need a valid voucher code to order one of the products in your cart. We "
 "removed this item from your cart."
 msgstr ""
+"Za naročilo enega od izdelkov v košarici potrebujete veljavno kodo bona. "
+"Izdelek smo odstranili iz košarice."
 
 #: pretix/base/services/orders.py:88
 msgid ""
 "The presale period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
+"Obdobje predprodaje za enega od dogodkov v košarici se še ni začelo. Izdelek "
+"smo odstranili iz košarice."
 
 #: pretix/base/services/orders.py:92
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
+"Eden od sedežev v naročilu je neveljaven. Izdelek smo odstranili iz košarice."
 
 #: pretix/base/services/orders.py:93
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
+"Medtem je bil zaseden eden od sedežev v naročilu. Izdelek smo odstranili iz "
+"vozička."
 
 #: pretix/base/services/orders.py:159 pretix/control/forms/orders.py:70
 msgid "The new expiry date needs to be in the future."
-msgstr ""
+msgstr "Novi datum poteka veljavnosti mora biti v prihodnosti."
 
 #: pretix/base/services/orders.py:234 pretix/base/services/orders.py:294
 msgid "This order is not pending approval."
-msgstr ""
+msgstr "To naročilo ne čaka na odobritev."
 
 #: pretix/base/services/orders.py:268
 #, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr ""
+msgstr "Naročilo odobreno in potrjeno: %(code)s"
 
 #: pretix/base/services/orders.py:271
 #, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr ""
+msgstr "Naročilo odobreno in čaka na plačilo: %(code)s"
 
 #: pretix/base/services/orders.py:317
 #, python-format
 msgid "Order denied: %(code)s"
-msgstr ""
+msgstr "Naročilo zavrnjeno: %(code)s"
 
 #: pretix/base/services/orders.py:352 pretix/presale/views/order.py:780
 #: pretix/presale/views/order.py:829
 msgid "You cannot cancel this order."
-msgstr ""
+msgstr "Tega naročila ne morete preklicati."
 
 #: pretix/base/services/orders.py:363
 #, python-brace-format
@@ -5320,16 +5343,19 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Tega naročila ni mogoče preklicati, saj je darilna kartica {card}, kupljena "
+"v tem naročilu, že unovčena."
 
 #: pretix/base/services/orders.py:400 pretix/control/forms/orders.py:137
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
 msgstr ""
+"Provizija za odpoved ne sme biti višja od dobropisa za plačilo tega naročila."
 
 #: pretix/base/services/orders.py:429
 #, python-format
 msgid "Order canceled: %(code)s"
-msgstr ""
+msgstr "Naročilo preklicano: %(code)s"
 
 #: pretix/base/services/orders.py:833
 msgid ""
@@ -5337,16 +5363,20 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
+"Med poskušanjem oddaje naročila smo opazili, da se je skupno število naročil "
+"spremenilo. Ali se je ena od cen spremenila ravno zdaj, ali pa je bila "
+"medtem uporabljena darilna kartica, ki ste jo uporabili. Preverite spodnje "
+"cene in poskusite znova."
 
 #: pretix/base/services/orders.py:1045
 #, python-format
 msgid "Your order is about to expire: %(code)s"
-msgstr ""
+msgstr "Vaše naročilo bo kmalu poteklo: %(code)s"
 
 #: pretix/base/services/orders.py:1047
 #, python-format
 msgid "Your order is pending payment: %(code)s"
-msgstr ""
+msgstr "Naročilo čaka na plačilo: %(code)s"
 
 #: pretix/base/services/orders.py:1121
 #, python-format
