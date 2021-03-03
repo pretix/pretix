@@ -970,21 +970,17 @@ class ManualPayment(BasePaymentProvider):
                     label=_('Payment process description in order confirmation emails'),
                     help_text=_('This text will be included for the {payment_info} placeholder in order confirmation '
                                 'mails. It should instruct the user on how to proceed with the payment. You can use '
-                                'the placeholders {order}, {total}, {amount}, {currency}, {total_with_currency} '
-                                'and {amount_with_currency}.'),
+                                'the placeholders {order}, {amount}, {currency} and {amount_with_currency}.'),
                     widget=I18nTextarea,
-                    validators=[PlaceholderValidator(['{order}', '{total}', '{amount}', '{currency}',
-                                                      '{total_with_currency}', '{amount_with_currency}'])],
+                    validators=[PlaceholderValidator(['{order}', '{amount}', '{currency}', '{amount_with_currency}'])],
                 )),
                 ('pending_description', I18nFormField(
                     label=_('Payment process description for pending orders'),
                     help_text=_('This text will be shown on the order confirmation page for pending orders. '
                                 'It should instruct the user on how to proceed with the payment. You can use '
-                                'the placeholders {order}, {total}, {amount}, {currency}, {total_with_currency} '
-                                'and {amount_with_currency}.'),
+                                'the placeholders {order}, {amount}, {currency} and {amount_with_currency}.'),
                     widget=I18nTextarea,
-                    validators=[PlaceholderValidator(['{order}', '{total}', '{amount}', '{currency}',
-                                                      '{total_with_currency}', '{amount_with_currency}'])],
+                    validators=[PlaceholderValidator(['{order}', '{amount}', '{currency}', '{amount_with_currency}'])],
                 )),
             ] + list(super().settings_form_fields.items())
         )
@@ -1008,11 +1004,12 @@ class ManualPayment(BasePaymentProvider):
     def format_map(self, order, payment):
         return {
             'order': order.code,
-            'total': order.total,
             'amount': payment.amount,
             'currency': self.event.currency,
+            'amount_with_currency': money_filter(payment.amount, self.event.currency),
+            # {total} and {total_with_currency} are deprecated
+            'total': order.total,
             'total_with_currency': money_filter(order.total, self.event.currency),
-            'amount_with_currency': money_filter(payment.amount, self.event.currency)
         }
 
     def order_pending_mail_render(self, order, payment) -> str:
