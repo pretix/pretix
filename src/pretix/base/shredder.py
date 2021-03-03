@@ -203,7 +203,7 @@ class EmailAddressShredder(BaseDataShredder):
 class WaitingListShredder(BaseDataShredder):
     verbose_name = _('Waiting list')
     identifier = 'waiting_list'
-    description = _('This will remove all names, email addresses and phone numbers from the waiting list.')
+    description = _('This will remove all names, email addresses, and phone numbers from the waiting list.')
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
         yield 'waiting-list.json', 'application/json', json.dumps([
