@@ -13,7 +13,7 @@
 {% else %}
     <script type="text/plain" id="stripe_pubkey">{{ settings.publishable_key }}</script>
 {% endif %}
-{% if settings.connect_user_id %}
+{% if settings.connect_user_id and not settings.secret_key %}
     <script type="text/plain" id="stripe_connectedAccountId">{{ settings.connect_user_id }}</script>
 {% endif %}
     <script type="text/plain" id="stripe_merchantcountry">{{ settings.merchant_country|default:"" }}</script>
