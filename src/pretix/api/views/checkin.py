@@ -173,6 +173,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
 with scopes_disabled():
     class CheckinOrderPositionFilter(OrderPositionFilter):
         check_rules = django_filters.rest_framework.BooleanFilter(method='check_rules_qs')
+        # check_rules is currently undocumented on purpose, let's get a feel for the performance impact first
 
         def __init__(self, *args, **kwargs):
             self.checkinlist = kwargs.pop('checkinlist')

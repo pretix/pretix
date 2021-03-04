@@ -107,7 +107,7 @@ export default {
       this.searchLoading = true
       this.searchError = null
       this.searchResults = []
-      fetch(this.$root.api.lists + this.checkinlist.id + '/positions/?ignore_status=true&expand=subevent&expand=item&expand=variation&search=' + encodeURIComponent(this.query))
+      fetch(this.$root.api.lists + this.checkinlist.id + '/positions/?ignore_status=true&expand=subevent&expand=item&expand=variation&check_rules=true&search=' + encodeURIComponent(this.query))
           .then(response => response.json())
           .then(data => {
             this.searchLoading = false
