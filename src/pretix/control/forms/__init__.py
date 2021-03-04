@@ -201,6 +201,8 @@ class CachedFileField(ExtFileField):
         from ...base.models import CachedFile
 
         if isinstance(data, File):
+            if hasattr(data, '_uploaded_to'):
+                return data._uploaded_to
             cf = CachedFile.objects.create(
                 expires=now() + datetime.timedelta(days=1),
                 date=now(),
@@ -210,6 +212,7 @@ class CachedFileField(ExtFileField):
             )
             cf.file.save(data.name, data.file)
             cf.save()
+            data._uploaded_to = cf
             return cf
         return super().bound_data(data, initial)
 
@@ -218,6 +221,8 @@ class CachedFileField(ExtFileField):
 
         data = super().clean(*args, **kwargs)
         if isinstance(data, File):
+            if hasattr(data, '_uploaded_to'):
+                return data._uploaded_to
             cf = CachedFile.objects.create(
                 expires=now() + datetime.timedelta(days=1),
                 web_download=True,
@@ -227,6 +232,7 @@ class CachedFileField(ExtFileField):
             )
             cf.file.save(data.name, data.file)
             cf.save()
+            data._uploaded_to = cf
             return cf
         return data
 
