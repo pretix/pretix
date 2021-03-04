@@ -67,6 +67,7 @@ RUN chmod +x /usr/local/bin/pretix && \
     rm -f pretix.cfg && \
 	mkdir -p data && \
     chown -R pretixuser:pretixuser /pretix /data data && \
+	sudo -u pretixuser make npminstall && \
 	sudo -u pretixuser make production
 
 USER pretixuser
