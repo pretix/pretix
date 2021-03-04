@@ -1,9 +1,15 @@
 from datetime import timedelta
+from functools import partial, reduce
 
 import dateutil
+import dateutil.parser
 from django.core.files import File
 from django.db import transaction
-from django.db.models.functions import TruncDate
+from django.db.models import (
+    BooleanField, Count, ExpressionWrapper, F, IntegerField, OuterRef, Q,
+    Subquery, Value,
+)
+from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import now, override
@@ -15,9 +21,18 @@ from pretix.base.models import (
 )
 from pretix.base.signals import checkin_created, order_placed, periodic_task
 from pretix.helpers.jsonlogic import Logic
+from pretix.helpers.jsonlogic_query import (
+    Equal, GreaterEqualThan, GreaterThan, InList, LowerEqualThan, LowerThan,
+    tolerance,
+)
 
 
 def get_logic_environment(ev):
+    # Every change to our supported JSON logic must be done
+    # * in pretix.base.services.checkin
+    # * in pretix.base.models.checkin
+    # * in checkinrules.js
+    # * in libpretixsync
     def build_time(t=None, value=None):
         if t == "custom":
             return dateutil.parser.parse(value)
@@ -82,8 +97,179 @@ class LazyRuleVars:
         tz = self._clist.event.timezone
         with override(tz):
             return self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).annotate(
-                day=TruncDate('datetime')
+                day=TruncDate('datetime', tzinfo=tz)
             ).values('day').distinct().count()
+
+
+class SQLLogic:
+    """
+    This is a simplified implementation of JSON logic that creates a Q-object to be used in a QuerySet.
+    It does not implement all operations supported by JSON logic and makes a few simplifying assumptions,
+    but all that can be created through our graphical editor. There's also CheckinList.validate_rules()
+    which tries to validate the same preconditions for rules set throught he API (probably not perfect).
+
+    Assumptions:
+
+    * Only a limited set of operators is used
+    * The top level operator is always a boolean operation (and, or) or a comparison operation (==, !=, …)
+    * Expression operators (var, lookup, buildTime) do not require further recursion
+    * Comparison operators (==, !=, …) never contain boolean operators (and, or) further down in the stack
+    """
+
+    def __init__(self, list):
+        self.list = list
+        self.bool_ops = {
+            "and": lambda *args: reduce(lambda total, arg: total & arg, args),
+            "or": lambda *args: reduce(lambda total, arg: total | arg, args),
+        }
+        self.comparison_ops = {
+            "==": partial(self.comparison_to_q, operator=Equal),
+            "!=": partial(self.comparison_to_q, operator=Equal, negate=True),
+            ">": partial(self.comparison_to_q, operator=GreaterThan),
+            ">=": partial(self.comparison_to_q, operator=GreaterEqualThan),
+            "<": partial(self.comparison_to_q, operator=LowerThan),
+            "<=": partial(self.comparison_to_q, operator=LowerEqualThan),
+            "inList": partial(self.comparison_to_q, operator=InList),
+            "isBefore": partial(self.comparison_to_q, operator=LowerThan, modifier=partial(tolerance, sign=1)),
+            "isAfter": partial(self.comparison_to_q, operator=GreaterThan, modifier=partial(tolerance, sign=-1)),
+        }
+        self.expression_ops = {'buildTime', 'objectList', 'lookup', 'var'}
+
+    def operation_to_expression(self, rule):
+        if not isinstance(rule, dict):
+            return rule
+
+        operator = list(rule.keys())[0]
+        values = rule[operator]
+
+        if not isinstance(values, list) and not isinstance(values, tuple):
+            values = [values]
+
+        if operator == 'buildTime':
+            if values[0] == "custom":
+                return Value(dateutil.parser.parse(values[1]))
+            elif values[0] == 'date_from':
+                return Coalesce(
+                    F(f'subevent__date_from'),
+                    F(f'order__event__date_from'),
+                )
+            elif values[0] == 'date_to':
+                return Coalesce(
+                    F(f'subevent__date_to'),
+                    F(f'subevent__date_from'),
+                    F(f'order__event__date_to'),
+                    F(f'order__event__date_from'),
+                )
+            elif values[0] == 'date_admission':
+                return Coalesce(
+                    F(f'subevent__date_admission'),
+                    F(f'subevent__date_from'),
+                    F(f'order__event__date_admission'),
+                    F(f'order__event__date_from'),
+                )
+            else:
+                raise ValueError(f'Unknown time type {values[0]}')
+        elif operator == 'objectList':
+            return [self.operation_to_expression(v) for v in values]
+        elif operator == 'lookup':
+            return int(values[1])
+        elif operator == 'var':
+            if values[0] == 'now':
+                return Value(now())
+            elif values[0] == 'product':
+                return F('item_id')
+            elif values[0] == 'variation':
+                return F('variation_id')
+            elif values[0] == 'entries_number':
+                return Coalesce(
+                    Subquery(
+                        Checkin.objects.filter(
+                            position_id=OuterRef('pk'),
+                            type=Checkin.TYPE_ENTRY,
+                            list_id=self.list.pk
+                        ).values('position_id').order_by().annotate(
+                            c=Count('*')
+                        ).values('c')
+                    ),
+                    Value(0),
+                    output_field=IntegerField()
+                )
+            elif values[0] == 'entries_today':
+                midnight = now().astimezone(self.list.event.timezone).replace(hour=0, minute=0, second=0, microsecond=0)
+                return Coalesce(
+                    Subquery(
+                        Checkin.objects.filter(
+                            position_id=OuterRef('pk'),
+                            type=Checkin.TYPE_ENTRY,
+                            list_id=self.list.pk,
+                            datetime__gte=midnight,
+                        ).values('position_id').order_by().annotate(
+                            c=Count('*')
+                        ).values('c')
+                    ),
+                    Value(0),
+                    output_field=IntegerField()
+                )
+            elif values[0] == 'entries_days':
+                tz = self.list.event.timezone
+                return Coalesce(
+                    Subquery(
+                        Checkin.objects.filter(
+                            position_id=OuterRef('pk'),
+                            type=Checkin.TYPE_ENTRY,
+                            list_id=self.list.pk,
+                        ).annotate(
+                            day=TruncDate('datetime', tzinfo=tz)
+                        ).values('position_id').order_by().annotate(
+                            c=Count('day', distinct=True)
+                        ).values('c')
+                    ),
+                    Value(0),
+                    output_field=IntegerField()
+                )
+        else:
+            raise ValueError(f'Unknown operator {operator}')
+
+    def comparison_to_q(self, a, b, *args, operator, negate=False, modifier=None):
+        a = self.operation_to_expression(a)
+        b = self.operation_to_expression(b)
+        if modifier:
+            b = modifier(b, *args)
+        q = Q(
+            ExpressionWrapper(
+                operator(
+                    a,
+                    b,
+                ),
+                output_field=BooleanField()
+            )
+        )
+        return ~q if negate else q
+
+    def apply(self, tests):
+        """
+        Convert JSON logic to queryset info, returns an Q object and fills self.annotations
+        """
+        if not tests:
+            return Q()
+        if isinstance(tests, bool):
+            # not really a legal configuration but used in the test suite
+            return Value(tests, output_field=BooleanField())
+
+        operator = list(tests.keys())[0]
+        values = tests[operator]
+
+        # Easy syntax for unary operators, like {"var": "x"} instead of strict
+        # {"var": ["x"]}
+        if not isinstance(values, list) and not isinstance(values, tuple):
+            values = [values]
+
+        if operator in self.bool_ops:
+            return self.bool_ops[operator](*[self.apply(v) for v in values])
+        elif operator in self.comparison_ops:
+            return self.comparison_ops[operator](*values)
+        else:
+            raise ValueError(f'Invalid operator {operator} on first level')
 
 
 class CheckInError(Exception):
@@ -207,7 +393,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'product'
             )
         elif op.order.status != Order.STATUS_PAID and not force and not (
-            ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
+                ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
         ):
             raise CheckInError(
                 _('This order is not marked as paid.'),

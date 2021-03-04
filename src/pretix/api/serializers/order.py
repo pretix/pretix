@@ -15,7 +15,9 @@ from rest_framework.reverse import reverse
 
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
-from pretix.api.serializers.item import ItemSerializer, InlineItemVariationSerializer
+from pretix.api.serializers.item import (
+    InlineItemVariationSerializer, ItemSerializer,
+)
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language

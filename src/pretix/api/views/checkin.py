@@ -25,7 +25,7 @@ from pretix.base.models import (
     CachedFile, Checkin, CheckinList, Event, Order, OrderPosition, Question,
 )
 from pretix.base.services.checkin import (
-    CheckInError, RequiredQuestionsError, perform_checkin,
+    CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
 )
 from pretix.helpers.database import FixedOrderBy
 
@@ -172,15 +172,36 @@ class CheckinListViewSet(viewsets.ModelViewSet):
 
 with scopes_disabled():
     class CheckinOrderPositionFilter(OrderPositionFilter):
+        check_rules = django_filters.rest_framework.BooleanFilter(method='check_rules_qs')
+
+        def __init__(self, *args, **kwargs):
+            self.checkinlist = kwargs.pop('checkinlist')
+            super().__init__(*args, **kwargs)
 
         def has_checkin_qs(self, queryset, name, value):
             return queryset.filter(last_checked_in__isnull=not value)
+
+        def check_rules_qs(self, queryset, name, value):
+            if not self.checkinlist.rules:
+                return queryset
+            return queryset.filter(SQLLogic(self.checkinlist).apply(self.checkinlist.rules))
+
+
+class ExtendedBackend(DjangoFilterBackend):
+    def get_filterset_kwargs(self, request, queryset, view):
+        kwargs = super().get_filterset_kwargs(request, queryset, view)
+
+        # merge filterset kwargs provided by view class
+        if hasattr(view, 'get_filterset_kwargs'):
+            kwargs.update(view.get_filterset_kwargs())
+
+        return kwargs
 
 
 class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CheckinListOrderPositionSerializer
     queryset = OrderPosition.all.none()
-    filter_backends = (DjangoFilterBackend, RichOrderingFilter)
+    filter_backends = (ExtendedBackend, RichOrderingFilter)
     ordering = ('attendee_name_cached', 'positionid')
     ordering_fields = (
         'order__code', 'order__datetime', 'positionid', 'attendee_name',
@@ -206,6 +227,11 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_class = CheckinOrderPositionFilter
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
+
+    def get_filterset_kwargs(self):
+        return {
+            'checkinlist': self.checkinlist,
+        }
 
     @cached_property
     def checkinlist(self):

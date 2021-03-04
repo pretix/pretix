@@ -54,4 +54,6 @@ class CheckinListSerializer(I18nAwareModelSerializer):
             if channel not in get_all_sales_channels():
                 raise ValidationError(_('Unknown sales channel.'))
 
+        CheckinList.validate_rules(data.get('rules'))
+
         return data

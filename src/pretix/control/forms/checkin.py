@@ -105,6 +105,11 @@ class CheckinListForm(forms.ModelForm):
             'exit_all_at': NextTimeField,
         }
 
+    def clean(self):
+        d = super().clean()
+        CheckinList.validate_rules(d.get('rules'))
+        return d
+
 
 class SimpleCheckinListForm(forms.ModelForm):
     def __init__(self, **kwargs):
