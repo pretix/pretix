@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.uploadedfile import UploadedFile
 from django.forms.utils import from_current_timezone
+from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
@@ -122,7 +123,7 @@ class CachedFileInput(forms.ClearableFileInput):
 
         @property
         def url(self):
-            return self.file.file.url
+            return reverse('cachedfile.download', kwargs={'id': self.file.id})
 
     def value_from_datadict(self, data, files, name):
         from ...base.models import CachedFile
