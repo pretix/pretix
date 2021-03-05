@@ -298,6 +298,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Event organizer info text"),
         "evaluate": lambda op, order, ev: str(order.event.settings.organizer_info_text)
     }),
+    ("event_info_text", {
+        "label": _("Event info text"),
+        "editor_sample": _("Event info text"),
+        "evaluate": lambda op, order, ev: str(order.event.settings.event_info_text)
+    }),
     ("now_date", {
         "label": _("Printing date"),
         "editor_sample": _("2017-05-31"),

@@ -629,6 +629,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'frontpage_subevent_ordering',
         'event_list_type',
         'frontpage_text',
+        'event_info_text',
         'attendee_names_asked',
         'attendee_names_required',
         'attendee_emails_asked',

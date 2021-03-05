@@ -2000,6 +2000,18 @@ Your {event} team"""))
             widget=I18nTextarea
         )
     },
+    'event_info_text': {
+        'default': '',
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_('Info text'),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_('Not displayed anywhere by default, but if you want to, you can use this e.g. in ticket templates.')
+        )
+    },
     'banner_text': {
         'default': '',
         'type': LazyI18nString,
