@@ -255,7 +255,7 @@ def subevent_select2(request, **kwargs):
 
     qs = request.event.subevents.filter(
         qf
-    ).order_by('-date_from')
+    ).order_by('-date_from', 'name', 'pk')
 
     total = qs.count()
     pagesize = 20
