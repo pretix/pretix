@@ -1184,7 +1184,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                         for fname in ('size', 'name', 'release_after_exit'):
                             setattr(q, fname, f.cleaned_data.get(fname))
                         q.save(clear_cache=False)
-                        if 'itemvar' in f.changed_data:
+                        if 'itemvars' in f.changed_data:
                             q.items.set(selected_items)
                             q.variations.set(selected_variations)
                         log_entries.append(
