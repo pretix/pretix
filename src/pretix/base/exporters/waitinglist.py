@@ -82,7 +82,9 @@ class WaitingListExporter(ListExporter):
 
         headers = [
             _('Date'),
+            _('Name'),
             _('Email'),
+            _('Phone number'),
             _('Product name'),
             _('Variation'),
             _('Event slug'),
@@ -117,7 +119,9 @@ class WaitingListExporter(ListExporter):
 
             row = [
                 entry.created.astimezone(tz).strftime(datetime_format),  # alternative: .isoformat(),
+                entry.name,
                 entry.email,
+                entry.phone,
                 str(entry.item) if entry.item else "",
                 str(entry.variation) if entry.variation else "",
                 entry.event.slug,

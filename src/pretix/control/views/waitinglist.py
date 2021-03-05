@@ -211,7 +211,7 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 
         headers = [
-            _('E-mail address'), _('Product'), _('On list since'), _('Status'), _('Voucher code'),
+            _('Name'), _('E-mail address'), _('Phone number'), _('Product'), _('On list since'), _('Status'), _('Voucher code'),
             _('Language'), _('Priority')
         ]
         if self.request.event.has_subevents:
@@ -235,7 +235,9 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 status = _('Waiting')
 
             row = [
+                w.name,
                 w.email,
+                w.phone,
                 prod,
                 w.created.isoformat(),
                 status,

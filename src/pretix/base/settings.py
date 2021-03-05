@@ -975,6 +975,61 @@ DEFAULTS = {
             widget=forms.NumberInput(),
         )
     },
+    'waiting_list_names_asked': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Ask for a name"),
+            help_text=_("Ask for a name when signing up to the waiting list."),
+        )
+    },
+    'waiting_list_names_required': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Require name"),
+            help_text=_("Require a name when signing up to the waiting list.."),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-waiting_list_names_asked'}),
+        )
+    },
+    'waiting_list_phones_asked': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Ask for a phone number"),
+            help_text=_("Ask for a phone number when signing up to the waiting list."),
+        )
+    },
+    'waiting_list_phones_required': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Require phone number"),
+            help_text=_("Require a phone number when signing up to the waiting list.."),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-waiting_list_phones_asked'}),
+        )
+    },
+    'waiting_list_phones_explanation_text': {
+        'default': '',
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            label=_("Phone number explanation"),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_("If you ask for a phone number, explain why you do so and what you will use the phone number for.")
+        )
+    },
+
     'ticket_download': {
         'default': 'False',
         'type': bool,

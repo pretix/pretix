@@ -113,7 +113,7 @@ def test_waitinglist_shredder(event, item):
     q = event.quotas.create(size=5)
     q.items.add(item)
     wle = event.waitinglistentries.create(
-        item=item, email='foo@example.org'
+        item=item, email='foo@example.org', name_parts={'_legacy': 'Peter'}, phone='+49891234567'
     )
     wle.send_voucher()
     assert '@' in wle.voucher.comment
@@ -130,13 +130,18 @@ def test_waitinglist_shredder(event, item):
             'created': wle.created.isoformat().replace('+00:00', 'Z'),
             'locale': 'en',
             'priority': 0,
-            'email': 'foo@example.org'
+            'name': 'Peter',
+            'name_parts': {'_legacy': 'Peter'},
+            'email': 'foo@example.org',
+            'phone': '+49891234567'
         }
     ]
     s.shred_data()
     wle.refresh_from_db()
     wle.voucher.refresh_from_db()
+    assert 'Richard' not in wle.name
     assert '@' not in wle.email
+    assert '+49' not in str(wle.phone)
     assert '@' not in wle.voucher.comment
     assert '@' not in wle.voucher.all_logentries().last().data
 
