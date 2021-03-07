@@ -53,3 +53,20 @@ jobs:
       - name: Run flake8
         run: flake8 .
         working-directory: ./src
+  licenseheader:
+    name: flake8
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install Dependencies
+        run: pip3 install licenseheaders
+      - name: Run licenseheaders
+        run: licenseheaders -t ../.licenseheader -E .py -x "*/migrations/*.py
+        working-directory: ./src
+      - name: Check for changes
+        run: git diff --exit-code
+        working-directory: ./src
