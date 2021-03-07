@@ -41,6 +41,8 @@ a) All third-party components located at src/pretix/static/ are licensed by thei
 b) All translation files located at src/pretix/locale/ as well as all documentation files located at doc/ are licensed
    under the terms of the Apache License 2.0.
 
+c) All auxiliary scripts located at deployment/ are licensed under the terms of the Apache License 2.0.
+
 Full text of the GNU Affero General Public License version 3
 ============================================================
 
