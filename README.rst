@@ -52,11 +52,9 @@ including issues, pull requests, etc.
 
 License
 -------
-The code in this repository is published under the terms of the Apache License. 
-See the LICENSE file for the complete license text.
 
-This project is maintained by Raphael Michel. See the AUTHORS file for a list of all
-the awesome folks who contributed to this project.
+The code in this repository is covered by different licenses. Most of it is available to everyone under the terms of
+the GNU AGPL license v3 with additional terms. See the LICENSE file for the complete license details.
 
 .. _installation guide: https://docs.pretix.eu/en/latest/admin/installation/index.html
 .. _developer documentation: https://docs.pretix.eu/en/latest/development/index.html
