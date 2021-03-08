@@ -691,13 +691,18 @@ class QuotaListExporter(ListExporter):
     verbose_name = gettext_lazy('Quota availabilities')
 
     def iterate_list(self, form_data):
+        has_subevents = self.event.has_subevents
         headers = [
             _('Quota name'), _('Total quota'), _('Paid orders'), _('Pending orders'), _('Blocking vouchers'),
             _('Current user\'s carts'), _('Waiting list'), _('Exited orders'), _('Current availability')
         ]
+        if has_subevents:
+            headers.append(pgettext('subevent', 'Date'))
+            headers.append(_('Start date'))
+            headers.append(_('End date'))
         yield headers
 
-        quotas = list(self.event.quotas.all())
+        quotas = list(self.event.quotas.select_related('subevent'))
         qa = QuotaAvailability(full_results=True)
         qa.queue(*quotas)
         qa.compute()
@@ -715,6 +720,18 @@ class QuotaListExporter(ListExporter):
                 qa.count_exited_orders[quota],
                 _('Infinite') if avail[1] is None else avail[1]
             ]
+            if has_subevents:
+                if quota.subevent:
+                    row.append(quota.subevent.name)
+                    row.append(quota.subevent.date_from.astimezone(self.event.timezone).strftime('%Y-%m-%d %H:%M:%S'))
+                    if quota.subevent.date_to:
+                        row.append(quota.subevent.date_to.astimezone(self.event.timezone).strftime('%Y-%m-%d %H:%M:%S'))
+                    else:
+                        row.append('')
+                else:
+                    row.append('')
+                    row.append('')
+                    row.append('')
             yield row
 
     def get_filename(self):
