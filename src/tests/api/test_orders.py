@@ -960,8 +960,24 @@ TEST_INVOICE_RES = {
     "order": "FOO",
     "number": "DUMMY-00001",
     "is_cancellation": False,
+    "invoice_from_name": "",
     "invoice_from": "",
+    "invoice_from_zipcode": "",
+    "invoice_from_city": "",
+    "invoice_from_country": None,
+    "invoice_from_tax_id": "",
+    "invoice_from_vat_id": "",
     "invoice_to": "Sample company\nNew Zealand\nVAT-ID: DE123",
+    "invoice_to_company": "Sample company",
+    "invoice_to_name": "",
+    "invoice_to_street": "",
+    "invoice_to_zipcode": "",
+    "invoice_to_city": "",
+    "invoice_to_state": "",
+    "invoice_to_country": "NZ",
+    "invoice_to_vat_id": "DE123",
+    "invoice_to_beneficiary": "",
+    "custom_field": None,
     "date": "2017-12-10",
     "refers": None,
     "locale": "en",
@@ -977,6 +993,11 @@ TEST_INVOICE_RES = {
         {
             "position": 1,
             "description": "Budget Ticket<br />Attendee: Peter",
+            'event_date_from': '2017-12-27T10:00:00Z',
+            'event_date_to': None,
+            'attendee_name': 'Peter',
+            'item': None,
+            'variation': None,
             "gross_value": "23.00",
             "tax_value": "0.00",
             "tax_name": "",
@@ -985,6 +1006,11 @@ TEST_INVOICE_RES = {
         {
             "position": 2,
             "description": "Payment fee",
+            'event_date_from': '2017-12-27T10:00:00Z',
+            'event_date_to': None,
+            'attendee_name': None,
+            'item': None,
+            'variation': None,
             "gross_value": "0.25",
             "tax_value": "0.05",
             "tax_name": "",
@@ -995,8 +1021,9 @@ TEST_INVOICE_RES = {
 
 
 @pytest.mark.django_db
-def test_invoice_list(token_client, organizer, event, order, invoice):
+def test_invoice_list(token_client, organizer, event, order, item, invoice):
     res = dict(TEST_INVOICE_RES)
+    res['lines'][0]['item'] = item.pk
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -1043,8 +1070,9 @@ def test_invoice_list(token_client, organizer, event, order, invoice):
 
 
 @pytest.mark.django_db
-def test_invoice_detail(token_client, organizer, event, invoice):
+def test_invoice_detail(token_client, organizer, event, item, invoice):
     res = dict(TEST_INVOICE_RES)
+    res['lines'][0]['item'] = item.pk
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/{}/'.format(organizer.slug, event.slug,
                                                                                   invoice.number))
@@ -4300,12 +4328,30 @@ def test_order_create_invoice(token_client, organizer, event, order):
         ), format='json', data={}
     )
     assert resp.status_code == 201
-    assert resp.data == {
+    with scopes_disabled():
+        pos = order.positions.first()
+    assert json.loads(json.dumps(resp.data)) == {
         'order': 'FOO',
         'number': 'DUMMY-00001',
         'is_cancellation': False,
-        'invoice_from': '',
-        'invoice_to': 'Sample company\nNew Zealand\nVAT-ID: DE123',
+        "invoice_from_name": "",
+        "invoice_from": "",
+        "invoice_from_zipcode": "",
+        "invoice_from_city": "",
+        "invoice_from_country": None,
+        "invoice_from_tax_id": "",
+        "invoice_from_vat_id": "",
+        "invoice_to": "Sample company\nNew Zealand\nVAT-ID: DE123",
+        "invoice_to_company": "Sample company",
+        "invoice_to_name": "",
+        "invoice_to_street": "",
+        "invoice_to_zipcode": "",
+        "invoice_to_city": "",
+        "invoice_to_state": "",
+        "invoice_to_country": "NZ",
+        "invoice_to_vat_id": "DE123",
+        "invoice_to_beneficiary": "",
+        "custom_field": None,
         'date': now().date().isoformat(),
         'refers': None,
         'locale': 'en',
@@ -4317,6 +4363,11 @@ def test_order_create_invoice(token_client, organizer, event, order):
             {
                 'position': 1,
                 'description': 'Budget Ticket<br />Attendee: Peter',
+                'event_date_from': '2017-12-27T10:00:00Z',
+                'event_date_to': None,
+                'attendee_name': 'Peter',
+                'item': pos.item_id,
+                'variation': None,
                 'gross_value': '23.00',
                 'tax_value': '0.00',
                 'tax_rate': '0.00',
@@ -4325,6 +4376,11 @@ def test_order_create_invoice(token_client, organizer, event, order):
             {
                 'position': 2,
                 'description': 'Payment fee',
+                'event_date_from': '2017-12-27T10:00:00Z',
+                'event_date_to': None,
+                'attendee_name': None,
+                'item': None,
+                'variation': None,
                 'gross_value': '0.25',
                 'tax_value': '0.05',
                 'tax_rate': '19.00',

@@ -15,8 +15,24 @@ number                                string                     Invoice number 
 order                                 string                     Order code of the order this invoice belongs to
 is_cancellation                       boolean                    ``true``, if this invoice is the cancellation of a
                                                                  different invoice.
-invoice_from                          string                     Sender address
-invoice_to                            string                     Receiver address
+invoice_from_name                     string                     Sender address: Name
+invoice_from                          string                     Sender address: Address lines
+invoice_from_zipcode                  string                     Sender address: ZIP code
+invoice_from_city                     string                     Sender address: City
+invoice_from_country                  string                     Sender address: Country code
+invoice_from_tax_id                   string                     Sender address: Local Tax ID
+invoice_from_vat_id                   string                     Sender address: EU VAT ID
+invoice_to                            string                     Full recipient address
+invoice_to_company                    string                     Recipient address: Company name
+invoice_to_name                       string                     Recipient address: Person name
+invoice_to_street                     string                     Recipient address: Address lines
+invoice_to_zipcode                    string                     Recipient address: ZIP code
+invoice_to_city                       string                     Recipient address: City
+invoice_to_state                      string                     Recipient address: State (only used in some countries)
+invoice_to_country                    string                     Recipient address: Country code
+invoice_to_vat_id                     string                     Recipient address: EU VAT ID
+invoice_to_beneficiary                string                     Invoice beneficiary
+custom_field                          string                     Custom invoice address field
 date                                  date                       Invoice date
 refers                                string                     Invoice number of an invoice this invoice refers to
                                                                  (for example a cancellation refers to the invoice it
@@ -30,6 +46,31 @@ footer_text                           string                     Text to be prin
 lines                                 list of objects            The actual invoice contents
 ├ position                            integer                    Number of the line within an invoice.
 ├ description                         string                     Text representing the invoice line (e.g. product name)
+├ item                                integer                    Product used to create this line. Note that everything
+                                                                 about the product might have changed since the creation
+                                                                 of the invoice. Can be ``null`` for all invoice lines
+                                                                 created before this field was introduced as well as for
+                                                                 all lines not created by a product (e.g. a shipping or
+                                                                 cancellation fee).
+├ variation                           integer                    Product variation used to create this line. Note that everything
+                                                                 about the product might have changed since the creation
+                                                                 of the invoice. Can be ``null`` for all invoice lines
+                                                                 created before this field was introduced as well as for
+                                                                 all lines not created by a product (e.g. a shipping or
+                                                                 cancellation fee).
+├ event_date_from                     datetime                   Start date of the (sub)event this line was created for as it
+                                                                 was set during invoice creation. Can be ``null`` for all invoice
+                                                                 lines created before this was introduced as well as for lines in
+                                                                 an event series not created by a product (e.g. shipping or
+                                                                 cancellation fees).
+├ event_date_to                       datetime                   End date of the (sub)event this line was created for as it
+                                                                 was set during invoice creation. Can be ``null`` for all invoice
+                                                                 lines created before this was introduced as well as for lines in
+                                                                 an event series not created by a product (e.g. shipping or
+                                                                 cancellation fees) as well as whenever the respective (sub)event
+                                                                 has no end date set.
+├ attendee_name                       string                     Attendee name at time of invoice creation. Can be ``null`` if no
+                                                                 name was set or if names are configured to not be added to invoices.
 ├ gross_value                         money (string)             Price including taxes
 ├ tax_value                           money (string)             Tax amount included
 ├ tax_name                            string                     Name of used tax rate (e.g. "VAT")
@@ -49,6 +90,12 @@ internal_reference                    string                     Customer's refe
 .. versionchanged:: 3.4
 
    The attribute ``lines.number`` has been added.
+
+.. versionchanged:: 3.17
+
+   The attribute ``invoice_to_*``, ``invoice_from_*``, ``custom_field``, ``lines.item``, ``lines.variation``, ``lines.event_date_from``,
+   ``lines.event_date_to``, and ``lines.attendee_name`` have been added.
+   ``refers`` now returns an invoice number including the prefix.
 
 
 Endpoints
@@ -83,8 +130,24 @@ Endpoints
             "number": "SAMPLECONF-00001",
             "order": "ABC12",
             "is_cancellation": false,
-            "invoice_from": "Big Events LLC\nDemo street 12\nDemo town",
-            "invoice_to": "Sample company\nJohn Doe\nTest street 12\n12345 Testington\nTestikistan\nVAT ID: EU123456789",
+            "invoice_from_name": "Big Events LLC",
+            "invoice_from": "Demo street 12",
+            "invoice_from_zipcode":"",
+            "invoice_from_city":"Demo town",
+            "invoice_from_country":"US",
+            "invoice_from_tax_id":"",
+            "invoice_from_vat_id":"",
+            "invoice_to": "Sample company\nJohn Doe\nTest street 12\n12345 Testington\nTestikistan\nVAT-ID: EU123456789",
+            "invoice_to_company": "Sample company",
+            "invoice_to_name": "John Doe",
+            "invoice_to_street": "Test street 12",
+            "invoice_to_zipcode": "12345",
+            "invoice_to_city": "Testington",
+            "invoice_to_state": null,
+            "invoice_to_country": "TE",
+            "invoice_to_vat_id": "EU123456789",
+            "invoice_to_beneficiary": "",
+            "custom_field": null,
             "date": "2017-12-01",
             "refers": null,
             "locale": "en",
@@ -97,6 +160,11 @@ Endpoints
               {
                 "position": 1,
                 "description": "Budget Ticket",
+                "item": 1234,
+                "variation": 245,
+                "event_date_from": "2017-12-27T10:00:00Z",
+                "event_date_to": null,
+                "attendee_name": null,
                 "gross_value": "23.00",
                 "tax_value": "0.00",
                 "tax_name": "VAT",
@@ -148,8 +216,24 @@ Endpoints
         "number": "SAMPLECONF-00001",
         "order": "ABC12",
         "is_cancellation": false,
-        "invoice_from": "Big Events LLC\nDemo street 12\nDemo town",
-        "invoice_to": "Sample company\nJohn Doe\nTest street 12\n12345 Testington\nTestikistan\nVAT ID: EU123456789",
+        "invoice_from_name": "Big Events LLC",
+        "invoice_from": "Demo street 12",
+        "invoice_from_zipcode":"",
+        "invoice_from_city":"Demo town",
+        "invoice_from_country":"US",
+        "invoice_from_tax_id":"",
+        "invoice_from_vat_id":"",
+        "invoice_to": "Sample company\nJohn Doe\nTest street 12\n12345 Testington\nTestikistan\nVAT-ID: EU123456789",
+        "invoice_to_company": "Sample company",
+        "invoice_to_name": "John Doe",
+        "invoice_to_street": "Test street 12",
+        "invoice_to_zipcode": "12345",
+        "invoice_to_city": "Testington",
+        "invoice_to_state": null,
+        "invoice_to_country": "TE",
+        "invoice_to_vat_id": "EU123456789",
+        "invoice_to_beneficiary": "",
+        "custom_field": null,
         "date": "2017-12-01",
         "refers": null,
         "locale": "en",
@@ -162,6 +246,11 @@ Endpoints
           {
             "position": 1,
             "description": "Budget Ticket",
+            "item": 1234,
+            "variation": 245,
+            "event_date_from": "2017-12-27T10:00:00Z",
+            "event_date_to": null,
+            "attendee_name": null,
             "gross_value": "23.00",
             "tax_value": "0.00",
             "tax_name": "VAT",

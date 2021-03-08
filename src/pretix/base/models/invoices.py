@@ -273,6 +273,14 @@ class InvoiceLine(models.Model):
     :type subevent: SubEvent
     :param event_date_from: Event date of the (sub)event at the time the invoice was created
     :type event_date_from: datetime
+    :param event_date_to: Event end date of the (sub)event at the time the invoice was created
+    :type event_date_to: datetime
+    :param item: The item this line refers to
+    :type item: Item
+    :param variation: The variation this line refers to
+    :type variation: ItemVariation
+    :param attendee_name: The attendee name at the time the invoice was created
+    :type attendee_name: str
     """
     invoice = models.ForeignKey('Invoice', related_name='lines', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(default=0)
@@ -283,6 +291,10 @@ class InvoiceLine(models.Model):
     tax_name = models.CharField(max_length=190)
     subevent = models.ForeignKey('SubEvent', null=True, blank=True, on_delete=models.PROTECT)
     event_date_from = models.DateTimeField(null=True)
+    event_date_to = models.DateTimeField(null=True)
+    item = models.ForeignKey('Item', null=True, blank=True, on_delete=models.PROTECT)
+    variation = models.ForeignKey('ItemVariation', null=True, blank=True, on_delete=models.PROTECT)
+    attendee_name = models.TextField(null=True, blank=True)
 
     @property
     def net_value(self):

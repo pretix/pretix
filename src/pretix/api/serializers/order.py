@@ -45,6 +45,14 @@ class CompatibleCountryField(serializers.Field):
             return instance.country_old
 
 
+class CountryField(serializers.Field):
+    def to_internal_value(self, data):
+        return {self.field_name: Country(data)}
+
+    def to_representation(self, src):
+        return str(src) if src else None
+
+
 class InvoiceAddressSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
     name = serializers.CharField(required=False)
@@ -1322,17 +1330,24 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = InvoiceLine
-        fields = ('position', 'description', 'gross_value', 'tax_value', 'tax_rate', 'tax_name')
+        fields = ('position', 'description', 'item', 'variation', 'attendee_name', 'event_date_from',
+                  'event_date_to', 'gross_value', 'tax_value', 'tax_rate', 'tax_name')
 
 
 class InvoiceSerializer(I18nAwareModelSerializer):
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
-    refers = serializers.SlugRelatedField(slug_field='invoice_no', read_only=True)
+    refers = serializers.SlugRelatedField(slug_field='full_invoice_no', read_only=True)
     lines = InlineInvoiceLineSerializer(many=True)
+    invoice_to_country = CountryField()
+    invoice_from_country = CountryField()
 
     class Meta:
         model = Invoice
-        fields = ('order', 'number', 'is_cancellation', 'invoice_from', 'invoice_to', 'date', 'refers', 'locale',
+        fields = ('order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
+                  'invoice_from_city', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
+                  'invoice_to', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street', 'invoice_to_zipcode',
+                  'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id', 'invoice_to_beneficiary',
+                  'custom_field', 'date', 'refers', 'locale',
                   'introductory_text', 'additional_text', 'payment_provider_text', 'footer_text', 'lines',
                   'foreign_currency_display', 'foreign_currency_rate', 'foreign_currency_rate_date',
                   'internal_reference')

@@ -171,9 +171,17 @@ def build_invoice(invoice: Invoice) -> Invoice:
             if invoice.event.has_subevents:
                 desc += "<br />" + pgettext("subevent", "Date: {}").format(p.subevent)
             InvoiceLine.objects.create(
-                position=i, invoice=invoice, description=desc,
-                gross_value=p.price, tax_value=p.tax_value,
-                subevent=p.subevent, event_date_from=(p.subevent.date_from if p.subevent else invoice.event.date_from),
+                position=i,
+                invoice=invoice,
+                description=desc,
+                gross_value=p.price,
+                tax_value=p.tax_value,
+                subevent=p.subevent,
+                item=p.item,
+                variation=p.variation,
+                attendee_name=p.attendee_name if invoice.event.settings.invoice_attendee_name else None,
+                event_date_from=p.subevent.date_from if invoice.event.has_subevents else invoice.event.date_from,
+                event_date_to=p.subevent.date_to if invoice.event.has_subevents else invoice.event.date_to,
                 tax_rate=p.tax_rate, tax_name=p.tax_rule.name if p.tax_rule else ''
             )
 
@@ -198,6 +206,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 invoice=invoice,
                 description=fee_title,
                 gross_value=fee.value,
+                event_date_from=None if invoice.event.has_subevents else invoice.event.date_from,
+                event_date_to=None if invoice.event.has_subevents else invoice.event.date_to,
                 tax_value=fee.tax_value,
                 tax_rate=fee.tax_rate,
                 tax_name=fee.tax_rule.name if fee.tax_rule else ''
