@@ -691,14 +691,14 @@ class MailSettingsRendererPreview(MailSettingsPreview):
                                                     expires=now(), code="PREVIEW", total=119)
                 item = request.event.items.create(name=gettext("Sample product"), default_price=42.23,
                                                   description=gettext("Sample product description"))
-                p = order.positions.create(item=item, attendee_name_parts={'_legacy': gettext("John Doe")},
-                                           price=item.default_price)
+                order.positions.create(item=item, attendee_name_parts={'_legacy': gettext("John Doe")},
+                                       price=item.default_price, subevent=request.event.subevents.last())
                 v = renderers[request.GET.get('renderer')].render(
                     v,
                     str(request.event.settings.mail_text_signature),
                     gettext('Your order: %(code)s') % {'code': order.code},
                     order,
-                    position=p
+                    position=None
                 )
                 r = HttpResponse(v, content_type='text/html')
                 r._csp_ignore = True

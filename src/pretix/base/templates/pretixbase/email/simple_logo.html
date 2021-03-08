@@ -147,6 +147,31 @@
             text-decoration: none;
             color: {{ color }};
         }
+
+        .order-button {
+            padding-top: 5px
+        }
+        .order-button a.button {
+            font-size: 12px;
+        }
+        .order-info {
+            padding-bottom: 5px
+        }
+
+        .order {
+            font-size: 12px;
+        }
+
+        .cart-table > tr > td:first-child {
+            width: 40px;
+        }
+        .order-details > tr > td:first-child {
+            width: 20%;
+        }
+        .order-details td {
+            font-size: 12px;
+        }
+
         {% if rtl %}
             body {
                 direction: rtl;
@@ -226,23 +251,7 @@
                         <table cellpadding="20"><tr><td>
                     <![endif]-->
                     <div class="content">
-                        {% if position %}
-                            {% trans "You are receiving this email because someone signed you up for the following event:" %}<br>
-                            <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
-                            <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
-                            <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
-                            <a href="{% abseventurl event "presale:event.order.position" order=order.code secret=position.web_secret position=position.positionid %}">
-                                {% trans "View registration details" %}
-                            </a>
-                        {% else %}
-                            {% trans "You are receiving this email because you placed an order for the following event:" %}<br>
-                            <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
-                            <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
-                            <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
-                            <a href="{% abseventurl event "presale:event.order.open" hash=order.email_confirm_hash order=order.code secret=order.secret %}">
-                                {% trans "View order details" %}
-                            </a>
-                        {% endif %}
+                        {% include "pretixbase/email/order_details.html" %}
                     </div>
                     <!--[if gte mso 9]>
                         </td></tr></table>

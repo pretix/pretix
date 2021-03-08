@@ -2,10 +2,12 @@ import inspect
 import logging
 from datetime import timedelta
 from decimal import Decimal
+from itertools import groupby
 from smtplib import SMTPResponseException
 
 from django.conf import settings
 from django.core.mail.backends.smtp import EmailBackend
+from django.db.models import Count
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.timezone import now
@@ -128,9 +130,21 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
 
         if order:
             htmlctx['order'] = order
+            positions = list(order.positions.select_related(
+                'item', 'variation', 'subevent', 'addon_to'
+            ).annotate(
+                has_addons=Count('addons')
+            ))
+            htmlctx['cart'] = [(k, list(v)) for k, v in groupby(
+                positions, key=lambda op: (
+                    op.item, op.variation, op.subevent, op.attendee_name,
+                    (op.pk if op.addon_to_id else None), (op.pk if op.has_addons else None)
+                )
+            )]
 
         if position:
             htmlctx['position'] = position
+            htmlctx['ev'] = position.subevent or self.event
 
         tpl = get_template(self.template_name)
         body_html = inline_css(tpl.render(htmlctx))
