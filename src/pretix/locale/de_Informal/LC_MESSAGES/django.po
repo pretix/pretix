@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-08 16:39+0000\n"
-"PO-Revision-Date: 2021-03-02 18:42+0100\n"
+"PO-Revision-Date: 2021-03-08 17:01+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
-"Language: de\n"
+"Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -4423,12 +4423,7 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschreibung des Zahlungsvorgangs in Bestellbestätigungs-E-Mails"
 
 #: pretix/base/payment.py:971
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}."
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
@@ -4438,19 +4433,14 @@ msgstr ""
 "Dieser Text wird statt des {payment_info}-Platzhalters in "
 "Bestellbestätigungen verwendet. Er sollte den Kunden darüber informieren, "
 "wie die Zahlung vervollständigt werden kann. Die Platzhalter {order}, "
-"{total}, {currency} und {total_with_currency} können verwendet werden."
+"{amount}, {currency} und {amount_with_currency} können verwendet werden."
 
 #: pretix/base/payment.py:978
 msgid "Payment process description for pending orders"
 msgstr "Beschreibung des Zahlungsvorgangs für ausstehende Bestellungen"
 
 #: pretix/base/payment.py:979
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}."
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
@@ -4458,7 +4448,7 @@ msgid ""
 msgstr ""
 "Dieser Text wird auf der Bestellbestätigungsseite angezeigt. Er sollte dem "
 "Kunden erklären, wie mit der Zahlung fortzufahren ist. Die Platzhalter "
-"{order}, {total}, {currency} und {total_with_currency} können verwendet "
+"{order}, {amount}, {currency} und {amount_with_currency} können verwendet "
 "werden."
 
 #: pretix/base/payment.py:1028
@@ -4812,10 +4802,8 @@ msgid "Event organizer info text"
 msgstr "Information zum Veranstalter"
 
 #: pretix/base/pdf.py:302 pretix/base/pdf.py:303
-#, fuzzy
-#| msgid "Event organizer info text"
 msgid "Event info text"
-msgstr "Information zum Veranstalter"
+msgstr "Information zur Veranstaltung"
 
 #: pretix/base/pdf.py:307
 msgid "Printing date"
@@ -6462,64 +6450,52 @@ msgstr ""
 "werden."
 
 #: pretix/base/settings.py:984
-#, fuzzy
-#| msgid "Ask for attendee names"
 msgid "Ask for a name"
-msgstr "Namen der Teilnehmer*innen erfragen"
+msgstr "Namen erfragen"
 
 #: pretix/base/settings.py:985
-#, fuzzy
-#| msgid "An entry has been changed on the waiting list."
 msgid "Ask for a name when signing up to the waiting list."
-msgstr "Ein Eintrag auf der Warteliste wurde geändert."
+msgstr "Ein Name wird bei der Eintragung auf die Warteliste abgefragt."
 
 #: pretix/base/settings.py:994
-#, fuzzy
-#| msgid "Require customer name"
 msgid "Require name"
-msgstr "Namen des Bestellers erfordern"
+msgstr "Namen erfordern"
 
 #: pretix/base/settings.py:995
-#, fuzzy
-#| msgid "An entry has been changed on the waiting list."
 msgid "Require a name when signing up to the waiting list.."
-msgstr "Ein Eintrag auf der Warteliste wurde geändert."
+msgstr ""
+"Die Eingabe eines Namens ist erforderlich, um sich in die Warteliste "
+"einzutragen."
 
 #: pretix/base/settings.py:1005
-#, fuzzy
-#| msgid "Ask for a phone number per order"
 msgid "Ask for a phone number"
-msgstr "Telefonnummer pro Bestellung abfragen"
+msgstr "Telefonnummer abfragen"
 
 #: pretix/base/settings.py:1006
-#, fuzzy
-#| msgid "An entry has been changed on the waiting list."
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr "Ein Eintrag auf der Warteliste wurde geändert."
+msgstr "Beim Eintragen in die Warteliste wird eine Telefonnummer abgefragt."
 
 #: pretix/base/settings.py:1015
-#, fuzzy
-#| msgid "Require a phone number per order"
 msgid "Require phone number"
-msgstr "Telefonnummer pro Bestellung erfordern"
+msgstr "Telefonnummer erfordern"
 
 #: pretix/base/settings.py:1016
-#, fuzzy
-#| msgid "An entry has been changed on the waiting list."
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr "Ein Eintrag auf der Warteliste wurde geändert."
+msgstr ""
+"Die Eingabe einer Telefonnummer ist erforderlich, um sich in die Warteliste "
+"einzutragen."
 
 #: pretix/base/settings.py:1026
-#, fuzzy
-#| msgid "Voucher explanation"
 msgid "Phone number explanation"
-msgstr "Gutschein-Erklärung"
+msgstr "Erklärung zur Telefonnummer"
 
 #: pretix/base/settings.py:1029
 msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
+"Wenn du nach einer Telefonnummer fragst, kannst du hier erklären wieso und "
+"wofür die Nummer benutzt wird."
 
 #: pretix/base/settings.py:1039
 msgid "Allow users to download tickets"
@@ -6848,6 +6824,8 @@ msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
 msgstr ""
+"Tickets werden nie angehängt, wenn sie größer als {size} sind, um "
+"Zustellungsprobleme zu vermeiden."
 
 #: pretix/base/settings.py:1400
 msgid "Attach calendar files"
@@ -7880,12 +7858,12 @@ msgstr ""
 "Bestellungen und Teilnehmer*innen."
 
 #: pretix/base/shredder.py:206
-#, fuzzy
-#| msgid "This will remove all email addresses from the waiting list."
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
-msgstr "Dies entfernt alle E-Mail-Adressen von der Warteliste."
+msgstr ""
+"Dies entfernt alle Namen, E-Mail-Adressen und Telefonnummern von der "
+"Warteliste."
 
 #: pretix/base/shredder.py:239
 msgid "Attendee info"
@@ -8090,25 +8068,18 @@ msgid "Order code:"
 msgstr "Bestellnummer:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:30
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "created"
 msgid "created by"
-msgstr "erstellt"
+msgstr "erstellt von"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:36
 #: pretix/base/templates/pretixbase/email/order_details.html:92
-#, fuzzy
-#| msgid "Order status"
 msgid "Order status:"
-msgstr "Bestellstatus"
+msgstr "Bestellstatus:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:44
 #: pretix/base/templates/pretixbase/email/order_details.html:140
-#, fuzzy
-#| msgid "Organizer"
 msgid "Organizer:"
-msgstr "Veranstalter"
+msgstr "Veranstalter:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:59
 msgid "View registration details"
@@ -8123,10 +8094,8 @@ msgstr ""
 "Veranstaltung getätigt hast:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:101
-#, fuzzy
-#| msgid "Details"
 msgid "Details:"
-msgstr "Details"
+msgstr "Details:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
@@ -8893,7 +8862,7 @@ msgstr "Stornierung angefragt"
 
 #: pretix/control/forms/filter.py:158
 msgid "Fully canceled but invoice not canceled"
-msgstr ""
+msgstr "Vollständig storniert aber Rechnung nicht storniert"
 
 #: pretix/control/forms/filter.py:160
 msgid "Payment process"
@@ -9547,10 +9516,8 @@ msgstr ""
 "Steuern werden automatisch berechnet."
 
 #: pretix/control/forms/orders.py:121
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Generate cancellation for invoice"
-msgstr "Stornobeleg erstellen"
+msgstr "Stornobeleg für Rechnung erstellen"
 
 #: pretix/control/forms/orders.py:158
 msgid "Payment amount"
@@ -15537,7 +15504,7 @@ msgstr "VOLL BEZAHLT"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:175
 msgid "INVOICE NOT CANCELED"
-msgstr ""
+msgstr "RECHNUNG NICHT STORNIERT"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:186
 msgid "Sum over all pages"
