@@ -16,6 +16,8 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--tasks', action='store', type=str, help='Only execute the tasks with this name '
                                                                       '(dotted path, comma separation)')
+        parser.add_argument('--exclude', action='store', type=str, help='Exclude the tasks with this name '
+                                                                        '(dotted path, comma separation)')
 
     def handle(self, *args, **options):
         verbosity = int(options['verbosity'])
@@ -27,6 +29,9 @@ class Command(BaseCommand):
             name = f'{receiver.__module__}.{receiver.__name__}'
             if options.get('tasks'):
                 if name not in options.get('tasks').split(','):
+                    continue
+            if options.get('exclude'):
+                if name in options.get('exclude').split(','):
                     continue
 
             if verbosity > 1:
