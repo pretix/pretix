@@ -19,6 +19,7 @@ from django.core.mail import (
     EmailMultiAlternatives, SafeMIMEMultipart, get_connection,
 )
 from django.core.mail.message import SafeMIMEText
+from django.db import transaction
 from django.template.loader import get_template
 from django.utils.translation import gettext as _, pgettext
 from django_scopes import scope, scopes_disabled
@@ -240,7 +241,10 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             task_chain = []
 
         task_chain.append(send_task)
-        chain(*task_chain).apply_async()
+
+        transaction.on_commit(
+            lambda: chain(*task_chain).apply_async()
+        )
 
 
 class CustomEmail(EmailMultiAlternatives):
