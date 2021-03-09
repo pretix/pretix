@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-08 16:39+0000\n"
-"PO-Revision-Date: 2021-01-29 11:23+0000\n"
+"PO-Revision-Date: 2021-03-09 15:36+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:144
@@ -154,10 +154,10 @@ msgid "Meta data property '{name}' does not exist."
 msgstr "Metadataeigenschap '{name}' bestaat niet."
 
 #: pretix/api/serializers/event.py:182 pretix/api/serializers/event.py:466
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "Metadataeigenschap '{name}' bestaat niet."
+msgstr ""
+"De waarde '{value}' is niet toegestaan voor de metadataeigenschap '{name}'."
 
 #: pretix/api/serializers/event.py:225
 #, python-brace-format
@@ -2246,7 +2246,7 @@ msgstr "U moet ten minste één quotum instellen om iets te verkopen."
 #: pretix/base/models/event.py:960
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
-msgstr ""
+msgstr "U moet de meta-eigenschap \"{property}\" invullen."
 
 #: pretix/base/models/event.py:1065
 msgid ""
@@ -2324,50 +2324,49 @@ msgstr ""
 "onderstrepingstekens bevatten."
 
 #: pretix/base/models/event.py:1379
-#, fuzzy
-#| msgid "Default language"
 msgid "Default value"
-msgstr "Standaardtaal"
+msgstr "Standaardwaarde"
 
 #: pretix/base/models/event.py:1381
-#, fuzzy
-#| msgid "Can change organizer settings"
 msgid "Can only be changed by organizer-level administrators"
-msgstr "Kan organisatorinstellingen wijzigen"
+msgstr "Kan alleen worden gewijzigd door beheerders van deze organisator"
 
 #: pretix/base/models/event.py:1383
-#, fuzzy
-#| msgid "Search for events"
 msgid "Required for events"
-msgstr "Zoek naar evenementen"
+msgstr "Verplicht voor evenementen"
 
 #: pretix/base/models/event.py:1384
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
+"Als deze optie is ingeschakeld kan een evenement alleen live worden gezet "
+"als deze eigenschap een waarde heeft. In evenementenreeksen is het altijd "
+"optioneel om een waarde voor individuele datums in te stellen."
 
 #: pretix/base/models/event.py:1389
-#, fuzzy
-#| msgid "Total value"
 msgid "Valid values"
-msgstr "Totaalwaarde"
+msgstr "Toegestane waarden"
 
 #: pretix/base/models/event.py:1390
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Voer hier een toegestane waarde per regel in. Als u dit veld leeg laat wordt "
+"iedere waarde toegestaan."
 
 #: pretix/base/models/event.py:1396
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
+"Een eigenschap kan niet verplicht zijn en tegelijkertijd een standaardwaarde "
+"hebben."
 
 #: pretix/base/models/event.py:1398
-#, fuzzy
-#| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot set a default value that is not a valid value."
-msgstr "U kunt geen quotum selecteren dat bij een ander evenement hoort."
+msgstr ""
+"U kunt geen standaardwaarde instellen die niet in de lijst met toegestane "
+"waarden staat."
 
 #: pretix/base/models/fields.py:12
 msgid "No value can contain the delimiter character."
@@ -4421,12 +4420,7 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschrijving van betalingsproces in bevestigingsmails"
 
 #: pretix/base/payment.py:971
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}."
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
@@ -4436,7 +4430,7 @@ msgstr ""
 "Deze tekst zal worden ingevoegd op de plaats van de {payment_info}-"
 "plaatsaanduiding in bevestigingsmails voor een bestelling. De tekst moet de "
 "gebruiker informeren hoe verder te gaan met de betaling. U kunt hier de "
-"plaatsaanduidingen {order}, {total}, {currency} en {total_with_currency} "
+"plaatsaanduidingen {order}, {amount}, {currency} en {amount_with_currency} "
 "gebruiken."
 
 #: pretix/base/payment.py:978
@@ -4444,12 +4438,7 @@ msgid "Payment process description for pending orders"
 msgstr "Beschrijving van betalingsproces voor openstaande bestellingen"
 
 #: pretix/base/payment.py:979
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}."
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
@@ -4457,8 +4446,8 @@ msgid ""
 msgstr ""
 "Deze tekst zal worden getoond op de bevestigingspagina van openstaande "
 "bestellingen. De tekst moet de gebruiker informeren hoe verder te gaan met "
-"de betaling. U kunt hier de plaatsaanduidingen {order}, {total}, {currency} "
-"en {total_with_currency} gebruiken."
+"de betaling. U kunt hier de plaatsaanduidingen {order}, {amount}, {currency} "
+"en {amount_with_currency} gebruiken."
 
 #: pretix/base/payment.py:1028
 msgid "Offsetting"
@@ -4804,13 +4793,11 @@ msgstr "Informatietekst organisator"
 
 #: pretix/base/pdf.py:298
 msgid "Event organizer info text"
-msgstr "Informatietekst van de organisator van het evenement"
+msgstr "Informatie over de organisator van het evenement"
 
 #: pretix/base/pdf.py:302 pretix/base/pdf.py:303
-#, fuzzy
-#| msgid "Event organizer info text"
 msgid "Event info text"
-msgstr "Informatietekst van de organisator van het evenement"
+msgstr "Informatie over het evenement"
 
 #: pretix/base/pdf.py:307
 msgid "Printing date"
@@ -6454,64 +6441,52 @@ msgstr ""
 "aan de volgende persoon op de lijst."
 
 #: pretix/base/settings.py:984
-#, fuzzy
-#| msgid "Ask for attendee names"
 msgid "Ask for a name"
-msgstr "Vraag om namen van gasten"
+msgstr "Vraag om namen"
 
 #: pretix/base/settings.py:985
-#, fuzzy
-#| msgid "An entry has been changed on the waiting list."
 msgid "Ask for a name when signing up to the waiting list."
-msgstr "Een inschrijving op de wachtlijst is aangepast."
+msgstr "Vraag om een naam bij het aanmelden voor de wachtlijst."
 
 #: pretix/base/settings.py:994
-#, fuzzy
-#| msgid "Require customer name"
 msgid "Require name"
-msgstr "Verplicht klantnaam"
+msgstr "Verplicht namen"
 
 #: pretix/base/settings.py:995
-#, fuzzy
-#| msgid "An entry has been changed on the waiting list."
 msgid "Require a name when signing up to the waiting list.."
-msgstr "Een inschrijving op de wachtlijst is aangepast."
+msgstr ""
+"Maakt het opgeven van een naam verplicht om in te schrijven voor de "
+"wachtlijst."
 
 #: pretix/base/settings.py:1005
-#, fuzzy
-#| msgid "Ask for a phone number per order"
 msgid "Ask for a phone number"
-msgstr "Vraag om een telefoonnummer bij bestelling"
+msgstr "Vraag om een telefoonnummer"
 
 #: pretix/base/settings.py:1006
-#, fuzzy
-#| msgid "An entry has been changed on the waiting list."
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr "Een inschrijving op de wachtlijst is aangepast."
+msgstr "Vraag om een telefoonnummer bij het inschrijven voor de wachtlijst."
 
 #: pretix/base/settings.py:1015
-#, fuzzy
-#| msgid "Require a phone number per order"
 msgid "Require phone number"
-msgstr "Verplicht het opgeven van een telefoonnummer"
+msgstr "Verplicht telefoonnummer"
 
 #: pretix/base/settings.py:1016
-#, fuzzy
-#| msgid "An entry has been changed on the waiting list."
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr "Een inschrijving op de wachtlijst is aangepast."
+msgstr ""
+"Maakt het opgeven van een telefoonnummer verplicht bij het inschrijven voor "
+"de wachtlijst."
 
 #: pretix/base/settings.py:1026
-#, fuzzy
-#| msgid "Voucher explanation"
 msgid "Phone number explanation"
-msgstr "Voucher-uitleg"
+msgstr "Uitleg voor telefoonnummer"
 
 #: pretix/base/settings.py:1029
 msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
+"Als u om een telefoonnummer vraagt kunt u in dit veld uitleggen waarom en "
+"hoe u de verzamelde telefoonnummers zult gebruiken."
 
 #: pretix/base/settings.py:1039
 msgid "Allow users to download tickets"
@@ -6641,6 +6616,7 @@ msgstr ""
 #: pretix/base/settings.py:1147
 msgid "Allow customers to modify their information after they checked in."
 msgstr ""
+"Sta klanten toe om hun informatie aan te passen nadat ze ingecheckt zijn."
 
 #: pretix/base/settings.py:1156
 msgid "Last date of modifications"
@@ -6836,10 +6812,8 @@ msgstr ""
 "contactinformatie en eventuele wettelijk verplichte informatie bevat."
 
 #: pretix/base/settings.py:1387
-#, fuzzy
-#| msgid "Cached ticket files"
 msgid "Attach ticket files"
-msgstr "Gecachete ticketbestanden"
+msgstr "Ticketbestanden bijvoegen bij e-mails"
 
 #: pretix/base/settings.py:1389
 #, python-brace-format
@@ -6847,6 +6821,8 @@ msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
 msgstr ""
+"Tickets worden nooit bijgevoegd bij een e-mail als ze groter zijn dan {size}"
+", om problemen met het versturen van de e-mail te voorkomen."
 
 #: pretix/base/settings.py:1400
 msgid "Attach calendar files"
@@ -7583,22 +7559,16 @@ msgstr ""
 "informatie vraagt."
 
 #: pretix/base/settings.py:2073
-#, fuzzy
-#| msgid "Additional fee"
 msgid "Additional success message"
-msgstr "Extra kosten"
+msgstr "Extra succesbericht na het plaatsen van een bestelling"
 
 #: pretix/base/settings.py:2074
-#, fuzzy
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending orders "
-#| "in addition to the standard text."
 msgid ""
 "This message will be shown after an order has been created successfully. It "
 "will be shown in additional to the default text."
 msgstr ""
-"Deze tekst zal naast de standaardtekst worden getoond op de "
-"bevestigingspagina voor openstaande bestellingen."
+"Deze tekst zal worden getoond nadat een klant een bestelling heeft "
+"geplaatst. Deze tekst wordt samen met de standaardtekst getoond."
 
 #: pretix/base/settings.py:2086
 msgid "Help text of the phone number field"
@@ -7883,12 +7853,12 @@ msgstr ""
 "met opgeslagen emailinhoud."
 
 #: pretix/base/shredder.py:206
-#, fuzzy
-#| msgid "This will remove all email addresses from the waiting list."
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
-msgstr "Dit zal alle e-mailadressen van de wachtlijst verwijderen."
+msgstr ""
+"Dit zal alle namen, e-mailadressen en telefoonnummers van de wachtlijst "
+"verwijderen."
 
 #: pretix/base/shredder.py:239
 msgid "Attendee info"
@@ -8093,25 +8063,18 @@ msgid "Order code:"
 msgstr "Bestelcode:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:30
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "created"
 msgid "created by"
-msgstr "aangemaakt"
+msgstr "aangemaakt door"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:36
 #: pretix/base/templates/pretixbase/email/order_details.html:92
-#, fuzzy
-#| msgid "Order status"
 msgid "Order status:"
-msgstr "Bestelstatus"
+msgstr "Bestelstatus:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:44
 #: pretix/base/templates/pretixbase/email/order_details.html:140
-#, fuzzy
-#| msgid "Organizer"
 msgid "Organizer:"
-msgstr "Organisator"
+msgstr "Organisator:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:59
 msgid "View registration details"
@@ -8126,10 +8089,8 @@ msgstr ""
 "geplaatst:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:101
-#, fuzzy
-#| msgid "Details"
 msgid "Details:"
-msgstr "Details"
+msgstr "Details:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
@@ -8379,10 +8340,9 @@ msgid "Do not copy"
 msgstr "Niet kopiëren"
 
 #: pretix/control/forms/event.py:274 pretix/control/forms/subevents.py:309
-#, fuzzy, python-brace-format
-#| msgid "Default language"
+#, python-brace-format
 msgid "Default ({value})"
-msgstr "Standaardtaal"
+msgstr "Standaard ({value})"
 
 #: pretix/control/forms/event.py:326 pretix/control/forms/organizer.py:84
 msgid "Custom domain"
@@ -8902,7 +8862,7 @@ msgstr "Annulering aangevraagd"
 
 #: pretix/control/forms/filter.py:158
 msgid "Fully canceled but invoice not canceled"
-msgstr ""
+msgstr "Compleet geannuleerd, maar factuur niet geannuleerd"
 
 #: pretix/control/forms/filter.py:160
 msgid "Payment process"
@@ -9532,10 +9492,8 @@ msgstr ""
 "betalingen worden uitgevoerd."
 
 #: pretix/control/forms/orders.py:107 pretix/control/forms/orders.py:151
-#, fuzzy
-#| msgid "Notify user by e-mail"
 msgid "Notify customer by email"
-msgstr "Stel de gebruiker per e-mail op de hoogte"
+msgstr "Stel de klant per e-mail op de hoogte"
 
 #: pretix/control/forms/orders.py:114
 msgid "Keep a cancellation fee of"
@@ -9556,10 +9514,8 @@ msgstr ""
 "betalen. Voer een bruto bedrag in, belasting zal automatisch worden berekend."
 
 #: pretix/control/forms/orders.py:121
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Generate cancellation for invoice"
-msgstr "Genereer annulering"
+msgstr "Genereer annulering voor factuur"
 
 #: pretix/control/forms/orders.py:158
 msgid "Payment amount"
@@ -9934,21 +9890,17 @@ msgstr "Optioneel"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:48
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:181
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:266
-#, fuzzy
-#| msgid "Change"
 msgctxt "form_bulk"
 msgid "change"
-msgstr "Veranderen"
+msgstr "veranderen"
 
 #: pretix/control/forms/subevents.py:96
-#, fuzzy
-#| msgid "Current value"
 msgid "Keep the current values"
-msgstr "Huidige waarde"
+msgstr "Houd huidige waarden"
 
 #: pretix/control/forms/subevents.py:113 pretix/control/forms/subevents.py:121
 msgid "Selection contains various values"
-msgstr ""
+msgstr "Selectie bevat verschillende waarden"
 
 #: pretix/control/forms/subevents.py:369
 msgid "Exclude these dates instead of adding them."
@@ -10359,40 +10311,28 @@ msgid "This object has been created by cloning."
 msgstr "Dit object is aangemaakt via kopiëren."
 
 #: pretix/control/logdisplay.py:276
-#, fuzzy
-#| msgid "The order has been changed."
 msgid "The organizer has been changed."
-msgstr "De bestelling is aangepast."
+msgstr "De organisator is veranderd."
 
 #: pretix/control/logdisplay.py:277
-#, fuzzy
-#| msgid "The team settings have been changed."
 msgid "The organizer settings have been changed."
-msgstr "De teaminstellingen zijn aangepast."
+msgstr "De instellingen van de organisator zijn aangepast."
 
 #: pretix/control/logdisplay.py:278
-#, fuzzy
-#| msgid "The new organizer has been created."
 msgid "Gift card acceptance for another organizer has been added."
-msgstr "De nieuwe organisator is aangemaakt."
+msgstr "Cadeaubonacceptatie voor een andere organisator is toegevoegd."
 
 #: pretix/control/logdisplay.py:279
-#, fuzzy
-#| msgid "The new organizer has been created."
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr "De nieuwe organisator is aangemaakt."
+msgstr "Cadeaubonacceptatie voor een andere organisator is verwijderd."
 
 #: pretix/control/logdisplay.py:280
-#, fuzzy
-#| msgid "The user has been created."
 msgid "The webhook has been created."
-msgstr "De gebruiker is aangemaakt."
+msgstr "De webhook is aangemaakt."
 
 #: pretix/control/logdisplay.py:281
-#, fuzzy
-#| msgid "The gate has been changed."
 msgid "The webhook has been changed."
-msgstr "De toegangslocatie is aangepast."
+msgstr "De webhook is aangepast."
 
 #: pretix/control/logdisplay.py:282
 msgid "The event's internal comment has been updated."
@@ -10403,10 +10343,8 @@ msgid "The event has been canceled."
 msgstr "Het evenement is geannuleerd."
 
 #: pretix/control/logdisplay.py:284
-#, fuzzy
-#| msgid "The event has been deleted."
 msgid "An event has been deleted."
-msgstr "Dit evenement is verwijderd."
+msgstr "Een webhook is verwijderd."
 
 #: pretix/control/logdisplay.py:285
 msgid "The order details have been changed."
@@ -12437,25 +12375,19 @@ msgstr "Geocoding-data © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:4
 msgid "Failed to retrieve geo coordinates"
-msgstr ""
+msgstr "Geo-coördinaten ophalen mislukt"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
-#, fuzzy
-#| msgid "Geo coordinates"
 msgid "Retrieving geo coordinates …"
-msgstr "Geo-coördinaten"
+msgstr "Geo-coördinaten ophalen…"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:6
-#, fuzzy
-#| msgid "Geo coordinates"
 msgid "Geo coordinates updated"
-msgstr "Geo-coördinaten"
+msgstr "Geo-coördinaten bijgewerkt"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
-#, fuzzy
-#| msgid "Update comment"
 msgid "Update map?"
-msgstr "Commentaar bijwerken"
+msgstr "Kaart bijwerken?"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
@@ -15564,7 +15496,7 @@ msgstr "VOLLEDIG BETAALD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:175
 msgid "INVOICE NOT CANCELED"
-msgstr ""
+msgstr "FACTUUR NIET GEANNULEERD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:186
 msgid "Sum over all pages"
@@ -15950,10 +15882,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:6
-#, fuzzy
-#| msgid "Organizers"
 msgid "Organizer logs"
-msgstr "Organisatoren"
+msgstr "Organisatorlogs"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -15967,34 +15897,24 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:8
-#, fuzzy
-#| msgid "Create a new product"
 msgid "Create a new property"
-msgstr "Nieuw product aanmaken"
+msgstr "Nieuwe eigenschap aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:20
-#, fuzzy
-#| msgid "Add property"
 msgid "Property"
-msgstr "Eigenschap toevoegen"
+msgstr "Eigenschap"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:5
-#, fuzzy
-#| msgid "Delete product"
 msgid "Delete property:"
-msgstr "Product verwijderen"
+msgstr "Verwijder eigenschap:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:8
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete the property?"
-msgstr "Weet u zeker dat u de toegangslocatie wilt verwijderen?"
+msgstr "Weet u zeker dat u de eigenschap wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:6
-#, fuzzy
-#| msgid "Add property"
 msgid "Property:"
-msgstr "Eigenschap toevoegen"
+msgstr "Eigenschap:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
@@ -16374,10 +16294,8 @@ msgid "Light"
 msgstr "Licht"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:349
-#, fuzzy
-#| msgid "E-mail content"
 msgid "Image content"
-msgstr "E-mailinhoud"
+msgstr "Afbeeldingsinhoud"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:360
 msgid "Text content"
@@ -16413,7 +16331,7 @@ msgstr "pretix-logo"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:410
 msgid "Dynamic image"
-msgstr ""
+msgstr "Dynamische afbeelding"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:104
 msgid ""
@@ -16666,18 +16584,14 @@ msgstr "Voeg een nieuwe inchecklijst toe"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:11
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create multiple dates"
 msgctxt "subevent"
 msgid "Change multiple dates"
-msgstr "Maak meerdere datums aan"
+msgstr "Meerdere datums veranderen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:13
-#, fuzzy, python-format
-#| msgid "Enable selected"
+#, python-format
 msgid "%(number)s selected"
-msgstr "Schakel geselecteerde in"
+msgstr "%(number)s geselecteerd"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:171
 msgid ""
