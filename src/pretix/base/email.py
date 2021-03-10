@@ -251,6 +251,8 @@ def get_email_context(**kwargs):
     from pretix.base.models import InvoiceAddress
 
     event = kwargs['event']
+    if 'position' in kwargs:
+        kwargs.setdefault("position_or_address", kwargs['position'])
     if 'order' in kwargs:
         try:
             kwargs['invoice_address'] = kwargs['order'].invoice_address
