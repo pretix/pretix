@@ -2,6 +2,22 @@
 
 from django.db import migrations
 
+def clean_duplicates(apps, schema_editor):
+    while True:
+        statement = """
+            DELETE
+            FROM pretixbase_questionanswer
+            WHERE pretixbase_questionanswer.id IN (
+                SELECT MIN(qa.id)
+                FROM pretixbase_questionanswer qa
+                GROUP BY qa.orderposition_id, qa.question_id
+                HAVING COUNT(*) > 1
+            );
+        """
+        with schema_editor.connection.cursor() as cursor:
+            cursor.execute(statement)
+            if cursor.rowcount == 0:
+                return
 
 class Migration(migrations.Migration):
 
@@ -10,6 +26,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(
+            clean_duplicates,
+            migrations.RunPython.noop,
+        ),
         migrations.AlterUniqueTogether(
             name='questionanswer',
             unique_together={('orderposition', 'question'), ('cartposition', 'question')},
