@@ -16,7 +16,7 @@ SITE_URL = "http://example.com"
 
 atexit.register(tmpdir.cleanup)
 
-EMAIL_BACKEND = 'django.core.mail.outbox'
+EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = False
 COMPRESS_CACHE_BACKEND = 'testcache'
