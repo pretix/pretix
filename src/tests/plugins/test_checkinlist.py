@@ -81,8 +81,6 @@ def test_csv_simple(event):
 @pytest.mark.django_db
 def test_csv_order_by_name_parts(event):  # noqa
     from django.conf import settings
-    if not settings.JSON_FIELD_AVAILABLE:
-        raise pytest.skip("Not supported on this database")
     c = CSVCheckinList(event)
     _, _, content = c.render({
         'list': event.checkin_lists.first().pk,
@@ -122,8 +120,6 @@ def test_csv_order_by_name_parts(event):  # noqa
 @pytest.mark.django_db
 def test_csv_order_by_inherited_name_parts(event):  # noqa
     from django.conf import settings
-    if not settings.JSON_FIELD_AVAILABLE:
-        raise pytest.skip("Not supported on this database")
 
     with scope(organizer=event.organizer):
         OrderPosition.objects.filter(attendee_name_cached__icontains="Andrea").delete()

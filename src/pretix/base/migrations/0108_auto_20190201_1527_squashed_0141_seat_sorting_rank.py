@@ -3,7 +3,6 @@
 from decimal import Decimal
 
 import django.db.models.deletion
-import jsonfallback.fields
 from django.conf import settings
 from django.core.cache import cache
 from django.db import migrations, models
@@ -190,7 +189,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cartposition',
             name='attendee_name_parts',
-            field=jsonfallback.fields.FallbackJSONField(default=dict),
+            field=models.JSONField(default=dict),
         ),
         migrations.AlterField(
             model_name='cartposition',
@@ -210,7 +209,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='invoiceaddress',
             name='name_parts',
-            field=jsonfallback.fields.FallbackJSONField(default=dict),
+            field=models.JSONField(default=dict),
         ),
         migrations.AlterField(
             model_name='item',
@@ -225,7 +224,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='orderposition',
             name='attendee_name_parts',
-            field=jsonfallback.fields.FallbackJSONField(default=dict),
+            field=models.JSONField(default=dict),
         ),
         migrations.AlterField(
             model_name='orderposition',

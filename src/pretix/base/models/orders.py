@@ -29,7 +29,6 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString
-from jsonfallback.fields import FallbackJSONField
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumbers import NumberParseException
@@ -1132,7 +1131,7 @@ class AbstractPosition(models.Model):
         blank=True, null=True,
         help_text=_("Empty, if this product is not an admission ticket")
     )
-    attendee_name_parts = FallbackJSONField(
+    attendee_name_parts = models.JSONField(
         blank=True, default=dict
     )
     attendee_email = models.EmailField(
@@ -2252,7 +2251,7 @@ class InvoiceAddress(models.Model):
     is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
-    name_parts = FallbackJSONField(default=dict)
+    name_parts = models.JSONField(default=dict)
     street = models.TextField(verbose_name=_('Address'), blank=False)
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)

@@ -2,11 +2,9 @@ from collections import OrderedDict
 from io import BytesIO
 
 from django import forms
-from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db.models.functions import Coalesce
 from django.utils.translation import gettext as _, gettext_lazy
-from jsonfallback.functions import JSONExtract
 from PyPDF2.merger import PdfFileMerger
 
 from pretix.base.exporter import BaseExporter
@@ -38,10 +36,10 @@ class AllTicketsPDF(BaseExporter):
                      choices=[
                          ('name', _('Attendee name')),
                          ('code', _('Order code')),
-                     ] + ([
+                     ] + [
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if settings.JSON_FIELD_AVAILABLE and name_scheme and len(name_scheme['fields']) > 1 else []),
+                     ],
                  )),
             ]
         )
@@ -68,10 +66,8 @@ class AllTicketsPDF(BaseExporter):
             part = form_data['order_by'][5:]
             qs = qs.annotate(
                 resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts', 'order__invoice_address__name_parts')
-            ).annotate(
-                resolved_name_part=JSONExtract('resolved_name', part)
             ).order_by(
-                'resolved_name_part'
+                f'resolved_name_part__{part}'
             )
 
         o = PdfTicketOutput(Event.objects.none())

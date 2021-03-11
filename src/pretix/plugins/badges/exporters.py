@@ -5,14 +5,12 @@ from io import BytesIO
 from typing import Tuple
 
 from django import forms
-from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db.models import Exists, OuterRef
 from django.db.models.functions import Coalesce
 from django.utils.translation import gettext as _, gettext_lazy
-from jsonfallback.functions import JSONExtract
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
@@ -242,10 +240,10 @@ class BadgeExporter(BaseExporter):
                      choices=[
                          ('name', _('Attendee name')),
                          ('code', _('Order code')),
-                     ] + ([
+                     ] + [
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
+                     ],
                  )),
             ]
         )
@@ -275,10 +273,8 @@ class BadgeExporter(BaseExporter):
             qs = qs.annotate(
                 resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts',
                                        'order__invoice_address__name_parts')
-            ).annotate(
-                resolved_name_part=JSONExtract('resolved_name', part)
             ).order_by(
-                'resolved_name_part'
+                f'resolved_name_part__{part}'
             )
 
         outbuffer = render_pdf(self.event, qs, OPTIONS[form_data.get('rendering', 'one')])

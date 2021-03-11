@@ -2,7 +2,6 @@
 
 import django.db.models.deletion
 import django_countries.fields
-import jsonfallback.fields
 from django.db import migrations, models
 
 import pretix.helpers.countries
@@ -43,7 +42,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='checkinlist',
             name='rules',
-            field=jsonfallback.fields.FallbackJSONField(default=dict),
+            field=models.JSONField(default=dict),
         ),
         migrations.AlterUniqueTogether(
             name='checkin',

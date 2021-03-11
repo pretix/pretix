@@ -153,9 +153,9 @@ def markdown_compile_email(source):
 
 class SnippetExtension(markdown.extensions.Extension):
     def extendMarkdown(self, md, *args, **kwargs):
-        del md.parser.blockprocessors['olist']
-        del md.parser.blockprocessors['ulist']
-        del md.parser.blockprocessors['quote']
+        md.parser.blockprocessors.deregister('olist')
+        md.parser.blockprocessors.deregister('ulist')
+        md.parser.blockprocessors.deregister('quote')
 
 
 def markdown_compile(source, snippet=False):

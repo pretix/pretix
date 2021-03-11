@@ -3,7 +3,6 @@ from datetime import datetime, time, timedelta
 
 import dateutil.parser
 from django import forms
-from django.conf import settings
 from django.db.models import (
     Case, Exists, Max, OuterRef, Q, Subquery, Value, When,
 )
@@ -12,7 +11,6 @@ from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
-from jsonfallback.functions import JSONExtract
 from pytz import UTC
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
@@ -73,10 +71,10 @@ class CheckInListMixin(BaseExporter):
                      choices=[
                          ('name', _('Attendee name')),
                          ('code', _('Order code')),
-                     ] + ([
+                     ] + [
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
+                     ],
                      widget=forms.RadioSelect,
                      required=False
                  )),
@@ -184,11 +182,9 @@ class CheckInListMixin(BaseExporter):
                     When(addon_to__attendee_name_cached__isnull=False, addon_to__attendee_name_cached__ne='', then='addon_to__attendee_name_parts'),
                     default='order__invoice_address__name_parts',
                 )
-            ).annotate(
-                resolved_name_part=JSONExtract('resolved_name', part)
             ).order_by(
                 *o,
-                'resolved_name_part'
+                f'resolved_name_part__{part}'
             )
 
         if form_data.get('attention_only'):
