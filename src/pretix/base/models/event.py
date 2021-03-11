@@ -697,9 +697,9 @@ class Event(EventMixin, LoggedModel):
                 for k, v in rules.items():
                     if k == 'lookup':
                         if v[0] == 'product':
-                            v[1] = str(item_map.get(int(v[1]), 0).pk)
+                            v[1] = str(item_map.get(int(v[1]), 0).pk) if int(v[1]) in item_map else "0"
                         elif v[0] == 'variation':
-                            v[1] = str(variation_map.get(int(v[1]), 0).pk)
+                            v[1] = str(variation_map.get(int(v[1]), 0).pk) if int(v[1]) in variation_map else "0"
                     else:
                         _walk_rules(v)
             elif isinstance(rules, list):
