@@ -983,6 +983,9 @@ class QuestionAnswer(models.Model):
 
     objects = ScopedManager(organizer='question__event__organizer')
 
+    class Meta:
+        unique_together = [['orderposition', 'question'], ['cartposition', 'question']]
+
     @property
     def backend_file_url(self):
         if self.file:
