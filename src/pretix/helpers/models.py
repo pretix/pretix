@@ -1,5 +1,6 @@
 import copy
 
+from django.core.files import File
 from django.db import models
 
 
@@ -16,7 +17,8 @@ def modelcopy(obj: models.Model):
     n = obj.__class__()
     for f in obj._meta.fields:
         val = getattr(obj, f.name)
-        if isinstance(val, models.Model):
+        print(f, f.name, val)
+        if isinstance(val, (models.Model, File)):
             setattr(n, f.name, copy.copy(val))
         else:
             setattr(n, f.name, copy.deepcopy(val))

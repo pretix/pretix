@@ -4,7 +4,7 @@ from datetime import datetime, time, timedelta
 import dateutil.parser
 from django import forms
 from django.db.models import (
-    Case, Exists, Max, OuterRef, Q, Subquery, Value, When,
+    Case, Exists, Max, OuterRef, Q, Subquery, Value, When, F,
 )
 from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
@@ -178,13 +178,17 @@ class CheckInListMixin(BaseExporter):
             part = sort[5:]
             qs = qs.annotate(
                 resolved_name=Case(
-                    When(attendee_name_cached__ne='', then='attendee_name_parts'),
-                    When(addon_to__attendee_name_cached__isnull=False, addon_to__attendee_name_cached__ne='', then='addon_to__attendee_name_parts'),
-                    default='order__invoice_address__name_parts',
-                )
+                     When(attendee_name_cached__isnull=False, attendee_name_cached__ne='',
+                          then='attendee_name_parts'),
+                     When(addon_to__attendee_name_cached__isnull=False, addon_to__attendee_name_cached__ne='',
+                          then='addon_to__attendee_name_parts'),
+                     default='order__invoice_address__name_parts',
+                ),
+            ).annotate(
+                resolved_name_part=F(f'resolved_name__{part}')
             ).order_by(
                 *o,
-                f'resolved_name_part__{part}'
+                f'resolved_name__{part}'
             )
 
         if form_data.get('attention_only'):

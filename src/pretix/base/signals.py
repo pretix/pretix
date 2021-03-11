@@ -266,8 +266,7 @@ multiple events. Receivers should return a subclass of pretix.base.exporter.Base
 The ``sender`` keyword argument will contain an organizer.
 """
 
-validate_order = EventPluginSignal(
-)
+validate_order = EventPluginSignal()
 """
 Arguments: ``payment_provider``, ``positions``, ``email``, ``locale``, ``invoice_address``, ``meta_info``
 
@@ -413,10 +412,10 @@ the deletion of the order.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-checkin_created = EventPluginSignal(
-    providing_args=["checkin"],
-)
+checkin_created = EventPluginSignal()
 """
+Arguments: ``checkin``
+
 This signal is sent out every time a check-in is created (i.e. an order position is marked as
 checked in). It is not send if the position was already checked in and is force-checked-in a second time.
 The check-in object is given as the first argument

@@ -119,8 +119,6 @@ def test_csv_order_by_name_parts(event):  # noqa
 
 @pytest.mark.django_db
 def test_csv_order_by_inherited_name_parts(event):  # noqa
-    from django.conf import settings
-
     with scope(organizer=event.organizer):
         OrderPosition.objects.filter(attendee_name_cached__icontains="Andrea").delete()
         op = OrderPosition.objects.get()

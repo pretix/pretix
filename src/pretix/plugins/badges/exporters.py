@@ -274,7 +274,7 @@ class BadgeExporter(BaseExporter):
                 resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts',
                                        'order__invoice_address__name_parts')
             ).order_by(
-                f'resolved_name_part__{part}'
+                f'resolved_name__{part}'
             )
 
         outbuffer = render_pdf(self.event, qs, OPTIONS[form_data.get('rendering', 'one')])

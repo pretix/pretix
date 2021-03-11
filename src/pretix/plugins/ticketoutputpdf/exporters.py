@@ -36,10 +36,10 @@ class AllTicketsPDF(BaseExporter):
                      choices=[
                          ('name', _('Attendee name')),
                          ('code', _('Order code')),
-                     ] + [
+                     ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ],
+                     ] if name_scheme else [])
                  )),
             ]
         )
@@ -67,7 +67,7 @@ class AllTicketsPDF(BaseExporter):
             qs = qs.annotate(
                 resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts', 'order__invoice_address__name_parts')
             ).order_by(
-                f'resolved_name_part__{part}'
+                f'resolved_name__{part}'
             )
 
         o = PdfTicketOutput(Event.objects.none())

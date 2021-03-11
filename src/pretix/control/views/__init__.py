@@ -1,4 +1,4 @@
-import collections
+import collections.abc
 import warnings
 
 from django.core.paginator import (
@@ -65,7 +65,7 @@ class PaginationMixin:
         return ctx
 
 
-class LargeResultSetPage(collections.Sequence):
+class LargeResultSetPage(collections.abc.Sequence):
 
     def __init__(self, object_list, number, paginator):
         self.object_list = object_list
