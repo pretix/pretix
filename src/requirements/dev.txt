@@ -1,9 +1,9 @@
-django-debug-toolbar==2.1
+django-debug-toolbar==3.2
 # Testing requirements
-pycodestyle==2.5.*
-pyflakes==2.1.*
+pycodestyle==2.6.*
+pyflakes==2.2.*
 pep8-naming
-flake8==3.7.*
+flake8==3.8.*
 codecov
 coverage
 pytest-cov
@@ -11,12 +11,12 @@ pytest==6.*
 pytest-django==4.*
 isort
 pytest-rerunfailures==9.*
-pytest-mock==2.0.*
+pytest-mock==3.5.*
 responses
 potypo
 freezegun
 
 # Not really required, just nice to have
-pytest-xdist==1.31.*
+pytest-xdist==2.2.*
 pytest-cache
 pytest-sugar
