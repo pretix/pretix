@@ -33,14 +33,6 @@
         </tr>
         <tr>
             <td>
-                <strong>{% trans "Order status:" %}</strong>
-            </td>
-            <td>
-                {% include "pretixpresale/event/fragment_order_status.html" with order=order %}
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <strong>{% trans "Organizer:" %}</strong>
             </td>
             <td>
@@ -85,14 +77,6 @@
             </td>
             <td>
                 {{ order.code }} ({{ order.datetime|date:"SHORT_DATE_FORMAT" }})
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <strong>{% trans "Order status:" %}</strong>
-            </td>
-            <td>
-                {% include "pretixpresale/event/fragment_order_status.html" with order=order %}
             </td>
         </tr>
         {% if cart %}
