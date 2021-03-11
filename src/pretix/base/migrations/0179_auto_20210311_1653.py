@@ -2,6 +2,7 @@
 
 from django.db import migrations
 
+
 def clean_duplicates(apps, schema_editor):
     while True:
         statement = """
