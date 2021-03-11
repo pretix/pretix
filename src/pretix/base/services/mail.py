@@ -242,9 +242,14 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         task_chain.append(send_task)
 
-        transaction.on_commit(
-            lambda: chain(*task_chain).apply_async()
-        )
+        if 'locmem' in settings.EMAIL_BACKEND:
+            # This clause is triggered during unit tests, because transaction.on_commit never fires due to the nature
+            # Django's unit tests work
+            chain(*task_chain).apply_async()
+        else:
+            transaction.on_commit(
+                lambda: chain(*task_chain).apply_async()
+            )
 
 
 class CustomEmail(EmailMultiAlternatives):
