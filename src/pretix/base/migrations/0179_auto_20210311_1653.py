@@ -18,7 +18,7 @@ def clean_duplicates(apps, schema_editor):
         with schema_editor.connection.cursor() as cursor:
             cursor.execute(statement)
             if cursor.rowcount == 0:
-                return
+                break
 
     while True:
         statement = """
@@ -34,7 +34,7 @@ def clean_duplicates(apps, schema_editor):
         with schema_editor.connection.cursor() as cursor:
             cursor.execute(statement)
             if cursor.rowcount == 0:
-                return
+                break
 
 class Migration(migrations.Migration):
 
