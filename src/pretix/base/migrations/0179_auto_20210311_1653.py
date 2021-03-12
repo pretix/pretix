@@ -11,7 +11,7 @@ def clean_duplicates(apps, schema_editor):
             WHERE questionanswer_id IN (
                 SELECT MIN(qa.id)
                 FROM pretixbase_questionanswer qa
-                GROUP BY qa.orderposition_id, qa.question_id
+                GROUP BY qa.cartposition_id, qa.orderposition_id, qa.question_id
                 HAVING COUNT(*) > 1
             );
         """
@@ -21,7 +21,7 @@ def clean_duplicates(apps, schema_editor):
             WHERE pretixbase_questionanswer.id IN (
                 SELECT MIN(qa.id)
                 FROM pretixbase_questionanswer qa
-                GROUP BY qa.orderposition_id, qa.question_id
+                GROUP BY qa.cartposition_id, qa.orderposition_id, qa.question_id
                 HAVING COUNT(*) > 1
             );
         """
