@@ -7,6 +7,22 @@ def clean_duplicates(apps, schema_editor):
     while True:
         statement = """
             DELETE
+            FROM pretixbase_questionanswer_options
+            WHERE questionanswer_id IN (
+                SELECT MIN(qa.id)
+                FROM pretixbase_questionanswer qa
+                GROUP BY qa.orderposition_id, qa.question_id
+                HAVING COUNT(*) > 1
+            );
+        """
+         with schema_editor.connection.cursor() as cursor:
+            cursor.execute(statement)
+            if cursor.rowcount == 0:
+                return
+
+    while True:
+        statement = """
+            DELETE
             FROM pretixbase_questionanswer
             WHERE pretixbase_questionanswer.id IN (
                 SELECT MIN(qa.id)
