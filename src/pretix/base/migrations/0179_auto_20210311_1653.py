@@ -5,7 +5,7 @@ from django.db import migrations
 
 def clean_duplicates(apps, schema_editor):
     while True:
-        statement = """
+        delete_options = """
             DELETE
             FROM pretixbase_questionanswer_options
             WHERE questionanswer_id IN (
@@ -15,13 +15,7 @@ def clean_duplicates(apps, schema_editor):
                 HAVING COUNT(*) > 1
             );
         """
-        with schema_editor.connection.cursor() as cursor:
-            cursor.execute(statement)
-            if cursor.rowcount == 0:
-                break
-
-    while True:
-        statement = """
+        delete_answers = """
             DELETE
             FROM pretixbase_questionanswer
             WHERE pretixbase_questionanswer.id IN (
@@ -32,9 +26,10 @@ def clean_duplicates(apps, schema_editor):
             );
         """
         with schema_editor.connection.cursor() as cursor:
-            cursor.execute(statement)
+            cursor.execute(delete_options)
+            cursor.execute(delete_answers)
             if cursor.rowcount == 0:
-                break
+                return
 
 class Migration(migrations.Migration):
 
