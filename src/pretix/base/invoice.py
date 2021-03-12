@@ -445,7 +445,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         if self.invoice.custom_field:
             story.append(Paragraph(
                 '{}: {}'.format(
-                    bleach.clean(self.invoice.event.settings.invoice_address_custom_field, tags=[]).strip().replace('\n', '<br />\n'),
+                    bleach.clean(str(self.invoice.event.settings.invoice_address_custom_field), tags=[]).strip().replace('\n', '<br />\n'),
                     bleach.clean(self.invoice.custom_field, tags=[]).strip().replace('\n', '<br />\n'),
                 ),
                 self.stylesheet['Normal']
