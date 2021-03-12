@@ -1,19 +1,19 @@
 # Functional requirements
-Django==3.1.*
-djangorestframework==3.12.*
+Django==3.0.*,>=3.0.9
+djangorestframework==3.11.*
 python-dateutil==2.8.*
 isoweek
-requests==2.25.0
+requests==2.24.0
 pytz
-django-bootstrap3==14.0.*
+django-bootstrap3==12.0.*
 django-formset-js-improved==0.5.0.2
 django-compressor==2.4.*
 django-hierarkey==1.0.*,>=1.0.4
-django-filter==2.4.*
+django-filter==2.2.*
 django-scopes==1.2.*
-reportlab>=3.5.65
+reportlab>=3.5.18
 PyPDF2==1.26.*
-Pillow==8.*
+Pillow==7.*
 django-libsass==0.8
 libsass==0.20.*
 django-otp==0.7.*,>=0.7.5
@@ -22,9 +22,9 @@ webauthn==0.4.*
 django-formtools==2.2
 celery==4.4.*
 kombu==4.6.*
-django-statici18n==2.0.*
+django-statici18n==1.9.*
 inlinestyler==0.2.*
-BeautifulSoup4==4.9.*
+BeautifulSoup4==4.8.*
 slimit
 lxml
 static3==0.7.*
@@ -35,38 +35,39 @@ markdown==3.3.*
 bleach==3.3.*
 sentry-sdk==0.14.*
 babel
-django-i18nfield==1.9.*
-django-hijack==2.3.*
+django-i18nfield>=1.7.0
+django-hijack>=2.1.10,<2.2.0
 jsonschema
 openpyxl==3.0.*
-django-oauth-toolkit==1.4.*
+django-oauth-toolkit==1.2.*
 oauthlib==3.1.*
 django-jsonfallback>=2.1.2
 psycopg2-binary
 tqdm==4.*
 # Stripe
-stripe==2.56.*
+stripe==2.42.*
 # PayPal
 paypalrestsdk==1.13.*
+pycparser==2.13  # https://github.com/eliben/pycparser/issues/147
 # Banktransfer
-chardet==4.0.*
+chardet<3.1.0,>=3.0.2
 mt-940==3.2
 vobject==0.9.*
 pycountry
-django-countries==7.*
+django-countries>=6.0
 pyuca  # for better sorting of country names in django-countries
 defusedcsv>=1.1.0
 vat_moss_forked==2020.3.20.0.11.0
-django-localflavor==3.0.*
-django-redis==4.12.*
-redis==3.5.*
-django-phonenumber-field==5.0.*
-phonenumberslite==8.12.*
+django-localflavor>=2.2
+django-redis==4.11.*
+redis==3.4.*
+django-phonenumber-field==4.0.*
+phonenumberslite==8.11.*
 python-bidi==0.4.*  # Support for arabic in reportlab
 arabic-reshaper==2.0.15  # Support for Aabic in reportlab
 packaging
-tlds>=2021031000
+tlds>=2020041600
 text-unidecode==1.*
-protobuf==3.15.*
+protobuf==3.13.*
 cryptography>=3.4.2
 sepaxml==2.4.*,>=2.4.1
