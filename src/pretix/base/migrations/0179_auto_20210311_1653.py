@@ -15,7 +15,7 @@ def clean_duplicates(apps, schema_editor):
                 HAVING COUNT(*) > 1
             );
         """
-         with schema_editor.connection.cursor() as cursor:
+        with schema_editor.connection.cursor() as cursor:
             cursor.execute(statement)
             if cursor.rowcount == 0:
                 return
