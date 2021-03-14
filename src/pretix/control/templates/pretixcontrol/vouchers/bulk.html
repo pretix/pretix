@@ -5,7 +5,7 @@
 {% block title %}{% trans "Voucher" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Create multiple vouchers" %}</h1>
-    <form action="" method="post" class="form-horizontal">
+    <form action="" method="post" class="form-horizontal" data-asynctask>
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         <fieldset>

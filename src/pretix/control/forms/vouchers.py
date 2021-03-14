@@ -5,7 +5,7 @@ from io import StringIO
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import EmailValidator
-from django.db.models.functions import Lower
+from django.db.models.functions import Upper
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
@@ -346,8 +346,8 @@ class VoucherBulkForm(VoucherForm):
         data = super().clean()
 
         vouchers = self.instance.event.vouchers.annotate(
-            code_lower=Lower('code')
-        ).filter(code_lower__in=[c.lower() for c in data['codes']])
+            code_upper=Upper('code')
+        ).filter(code_upper__in=[c.upper() for c in data['codes']])
         if vouchers.exists():
             raise ValidationError(_('A voucher with one of these codes already exists.'))
 
@@ -377,26 +377,5 @@ class VoucherBulkForm(VoucherForm):
 
         return data
 
-    def save(self, event, *args, **kwargs):
-        objs = []
-        for code in self.cleaned_data['codes']:
-            obj = modelcopy(self.instance)
-            obj.event = event
-            obj.code = code
-            try:
-                obj.seat = self.cleaned_data['seats'].pop()
-                obj.item = obj.seat.product
-            except IndexError:
-                pass
-            data = dict(self.cleaned_data)
-            data['code'] = code
-            data['bulk'] = True
-            del data['codes']
-            objs.append(obj)
-        Voucher.objects.bulk_create(objs, batch_size=200)
-        objs = []
-        for v in event.vouchers.filter(code__in=self.cleaned_data['codes']):
-            # We need to query them again as bulk_create does not fill in .pk values on databases
-            # other than PostgreSQL
-            objs.append(v)
-        return objs
+    def post_bulk_save(self, objs):
+        pass

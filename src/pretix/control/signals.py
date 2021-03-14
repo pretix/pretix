@@ -154,6 +154,11 @@ This signal allows you to replace the form class that is used for modifying vouc
 You will receive the default form class (or the class set by a previous plugin) in the
 ``cls`` argument so that you can inherit from it.
 
+Note that this is also called for the voucher bulk creation form, which is executed in
+an asynchronous context. For the bulk creation form, ``save()`` is not called. Instead,
+you can implement ``post_bulk_save(saved_vouchers)`` which may be called multiple times
+for every batch persisted to the database.
+
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 

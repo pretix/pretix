@@ -3,7 +3,8 @@ import io
 from defusedcsv import csv
 from django.conf import settings
 from django.contrib import messages
-from django.db import transaction
+from django.core.exceptions import ValidationError
+from django.db import connection, transaction
 from django.db.models import Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
@@ -21,7 +22,9 @@ from django.views.generic import (
 
 from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher
 from pretix.base.models.vouchers import _generate_random_code
+from pretix.base.services.locking import NoLockManager
 from pretix.base.services.vouchers import vouchers_send
+from pretix.base.views.tasks import AsyncFormView
 from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -287,13 +290,19 @@ class VoucherGo(EventPermissionRequiredMixin, View):
             return redirect('control:event.vouchers', event=request.event.slug, organizer=request.event.organizer.slug)
 
 
-class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
+class VoucherBulkCreate(EventPermissionRequiredMixin, AsyncFormView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/bulk.html'
     permission = 'can_change_vouchers'
     context_object_name = 'voucher'
 
-    def get_success_url(self) -> str:
+    def get_success_url(self, value) -> str:
+        return reverse('control:event.vouchers', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_error_url(self):
         return reverse('control:event.vouchers', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -316,34 +325,84 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
             i.redeemed = 0
             kwargs['instance'] = i
         else:
-            kwargs['instance'] = Voucher(event=self.request.event)
+            kwargs['instance'] = Voucher(event=self.request.event, code=None)
         return kwargs
 
-    @transaction.atomic
-    def form_valid(self, form):
-        log_entries = []
-        objs = form.save(self.request.event)
+    def get_async_form_kwargs(self, form_kwargs, organizer=None, event=None):
+        if not form_kwargs.get('instance'):
+            form_kwargs['instance'] = Voucher(event=self.request.event, code=None)
+        return form_kwargs
+
+    def async_form_valid(self, task, form):
+        lockfn = NoLockManager
+        if form.data.get('block_quota'):
+            lockfn = self.request.event.lock
+        batch_size = 500
+        total_num = 1  # will be set later
+
+        def set_progress(percent):
+            if not task.request.called_directly:
+                task.update_state(
+                    state='PROGRESS',
+                    meta={'value': percent}
+                )
+
+        def process_batch(batch_vouchers, voucherids):
+            Voucher.objects.bulk_create(batch_vouchers)
+            if not connection.features.can_return_rows_from_bulk_insert:
+                batch_vouchers = list(self.request.event.vouchers.filter(code__in=[v.code for v in batch_vouchers]))
+
+            log_entries = []
+            for v in batch_vouchers:
+                voucherids.append(v.pk)
+                data = dict(form.cleaned_data)
+                data['code'] = code
+                data['bulk'] = True
+                del data['codes']
+                log_entries.append(
+                    v.log_action('pretix.voucher.added', data=data, user=self.request.user, save=False)
+                )
+            LogEntry.objects.bulk_create(log_entries)
+            form.post_bulk_save(batch_vouchers)
+            batch_vouchers.clear()
+            set_progress(len(voucherids) / total_num * (50. if form.cleaned_data['send'] else 100.))
+
         voucherids = []
-        for v in objs:
-            log_entries.append(
-                v.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user, save=False)
-            )
-            voucherids.append(v.pk)
-        LogEntry.objects.bulk_create(log_entries, batch_size=200)
+        with lockfn(), transaction.atomic():
+            if not form.is_valid():
+                raise ValidationError(form.errors)
+            total_num = len(form.cleaned_data['codes'])
+
+            batch_vouchers = []
+            for code in form.cleaned_data['codes']:
+                if len(batch_vouchers) > batch_size:
+                    process_batch(batch_vouchers, voucherids)
+
+                obj = modelcopy(form.instance, code=None)
+                obj.event = self.request.event
+                obj.code = code
+                try:
+                    obj.seat = form.cleaned_data['seats'].pop()
+                    obj.item = obj.seat.product
+                except IndexError:
+                    pass
+                batch_vouchers.append(obj)
+
+            process_batch(batch_vouchers, voucherids)
 
         if form.cleaned_data['send']:
-            vouchers_send.apply_async(kwargs={
-                'event': self.request.event.pk,
-                'vouchers': voucherids,
-                'subject': form.cleaned_data['send_subject'],
-                'message': form.cleaned_data['send_message'],
-                'recipients': [r._asdict() for r in form.cleaned_data['send_recipients']],
-                'user': self.request.user.pk,
-            })
-            messages.success(self.request, _('The new vouchers have been created and will be sent out shortly.'))
-        else:
-            messages.success(self.request, _('The new vouchers have been created.'))
-        return HttpResponseRedirect(self.get_success_url())
+            vouchers_send(
+                event=self.request.event,
+                vouchers=voucherids,
+                subject=form.cleaned_data['send_subject'],
+                message=form.cleaned_data['send_message'],
+                recipients=[r._asdict() for r in form.cleaned_data['send_recipients']],
+                user=self.request.user.pk,
+                progress=lambda p: set_progress(50. + p * 50.)
+            )
+
+    def get_success_message(self, value):
+        return _('The new vouchers have been created.')
 
     def get_form_class(self):
         form_class = VoucherBulkForm
@@ -356,11 +415,6 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
         ctx = super().get_context_data(**kwargs)
         ctx['code_length'] = settings.ENTROPY['voucher_code']
         return ctx
-
-    def post(self, request, *args, **kwargs):
-        # TODO: Transform this into an asynchronous call?
-        with request.event.lock():
-            return super().post(request, *args, **kwargs)
 
 
 class VoucherRNG(EventPermissionRequiredMixin, View):

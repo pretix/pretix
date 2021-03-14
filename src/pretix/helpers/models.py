@@ -12,8 +12,8 @@ class Thumbnail(models.Model):
         unique_together = (('source', 'size'),)
 
 
-def modelcopy(obj: models.Model):
-    n = obj.__class__()
+def modelcopy(obj: models.Model, **kwargs):
+    n = obj.__class__(**kwargs)
     for f in obj._meta.fields:
         val = getattr(obj, f.name)
         if isinstance(val, models.Model):

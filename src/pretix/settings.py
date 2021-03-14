@@ -653,7 +653,7 @@ LOGGING = {
         'django.db.backends': {
             'handlers': ['file', 'console'],
             'level': 'INFO',  # Do not output all the queries
-            'propagate': True,
+            'propagate': False,
         },
         'asyncio': {
             'handlers': ['file', 'console'],
