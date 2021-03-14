@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-08 16:39+0000\n"
-"PO-Revision-Date: 2021-03-09 15:36+0000\n"
+"PO-Revision-Date: 2021-03-14 17:20+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -16600,12 +16600,18 @@ msgid ""
 "new set of quotas to <strong>replace</strong> the quota setup of all "
 "selected dates."
 msgstr ""
+"De quotuminstellingen van de gekozen datums verschillen en kunnen hierom "
+"niet in één keer aangepast worden. Als u dit wilt kunt u wel nieuwe quota "
+"definiëren om de quotuminstellingen van de geselecteerde datums "
+"<strong>vervangen</strong>."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:257
 msgid ""
 "You selected a set of dates that currently have different check-in list "
 "setups. You can therefore not change their check-in lists in bulk."
 msgstr ""
+"De inchecklijstinstellingen van de gekozen datums verschillen en kunnen "
+"hierom niet in één keer aangepast worden."
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:6
@@ -16665,7 +16671,7 @@ msgstr "Maak meerdere nieuwe datums"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:70
 msgid "select all rows for batch-operation"
-msgstr ""
+msgstr "Selecteer alle rijen voor batch-handeling"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:77
 msgid "Begin"
@@ -16673,11 +16679,11 @@ msgstr "Begin"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:100
 msgid "Select all results on other pages as well"
-msgstr ""
+msgstr "Selecteer ook alle resultaten op andere pagina's"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:111
 msgid "select row for batch-operation"
-msgstr ""
+msgstr "Selecteer rij voor batch-handeling"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:152
 msgctxt "subevent"
@@ -16695,23 +16701,16 @@ msgid "Delete selected"
 msgstr "Verwijder geselecteerde"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:176
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Edit selected"
-msgstr "Geen datum geselecteerd."
+msgstr "Bewerk geselecteerde"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:179
-#, fuzzy
-#| msgid "Disable selected"
 msgid "Activate selected"
-msgstr "Schakel geselecteerde uit"
+msgstr "Activeer geselecteerde"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:182
-#, fuzzy
-#| msgid "Delete selected"
 msgid "Deactivate selected"
-msgstr "Verwijder geselecteerde"
+msgstr "Deactiveer geselecteerde"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -18609,16 +18608,12 @@ msgid "The selected gate has been deleted."
 msgstr "De geselecteerde toegangslocatie is verwijderd."
 
 #: pretix/control/views/organizer.py:1375
-#, fuzzy
-#| msgid "The product has been created."
 msgid "The property has been created."
-msgstr "Het product is aangemaakt."
+msgstr "De eigenschap is aangemaakt."
 
 #: pretix/control/views/organizer.py:1437
-#, fuzzy
-#| msgid "The selected product has been deleted."
 msgid "The selected property has been deleted."
-msgstr "Het gekozen product is verwijderd."
+msgstr "De eigenschap is verwijderd."
 
 #: pretix/control/views/pdf.py:53
 msgid "The uploaded PDF file is too large."
@@ -20371,19 +20366,14 @@ msgid "Only send to customers of dates starting before"
 msgstr "Stuur alleen naar klanten van subevenementen die beginnen voor"
 
 #: pretix/plugins/sendmail/forms.py:70
-#, fuzzy
-#| msgid "Send to customers with order status"
 msgctxt "subevent"
 msgid "Only send to customers with orders created after"
-msgstr "Stuur naar klanten met bestelstatus"
+msgstr "Stuur alleen naar klanten met bestellingen geplaatst na"
 
 #: pretix/plugins/sendmail/forms.py:75
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Only send to customers of dates starting before"
 msgctxt "subevent"
 msgid "Only send to customers with orders created before"
-msgstr "Stuur alleen naar klanten van subevenementen die beginnen voor"
+msgstr "Stuur alleen naar klanten met bestellingen geplaatst voor"
 
 #: pretix/plugins/sendmail/forms.py:108
 msgid "Everyone who created a ticket order"
@@ -20467,16 +20457,13 @@ msgid "There are no orders matching this selection."
 msgstr "Er zijn geen bestellingen die overeenkomen met deze selectie."
 
 #: pretix/plugins/sendmail/views.py:180
-#, fuzzy, python-format
-#| msgid ""
-#| "Your message has been queued and will be sent to the contact addresses of "
-#| "%d orders in the next minutes."
+#, python-format
 msgid ""
 "Your message has been queued and will be sent to the contact addresses of %d "
 "orders in the next few minutes."
 msgstr ""
-"Uw bericht is in de wachtrij gezet, en zal in de komende minuten naar de e-"
-"mailadressen van %d bestellingen worden verstuurd."
+"Uw bericht is in de wachtrij gezet en zal binnenkort naar de e-mailadressen "
+"van %d bestellingen worden verstuurd."
 
 #: pretix/plugins/statistics/__init__.py:9
 #: pretix/plugins/statistics/__init__.py:12
@@ -21467,12 +21454,9 @@ msgid "No other variations of this product exist."
 msgstr "Er bestaan geen andere varianten van dit product."
 
 #: pretix/presale/forms/renderers.py:32
-#, fuzzy
-#| msgctxt "attendee_data"
-#| msgid "Required"
 msgctxt "form"
 msgid "required"
-msgstr "Verplicht"
+msgstr "verplicht"
 
 #: pretix/presale/ical.py:54
 #, python-brace-format
@@ -21490,10 +21474,8 @@ msgid "Organizer: {organizer}"
 msgstr "Organisator: {organizer}"
 
 #: pretix/presale/templates/pretixpresale/base.html:59
-#, fuzzy
-#| msgid "Toggle navigation"
 msgid "Footer Navigation"
-msgstr "Navigatie schakelen"
+msgstr "Footer-navigatie"
 
 #: pretix/presale/templates/pretixpresale/base_footer.html:36
 #, python-format
@@ -21510,10 +21492,8 @@ msgstr "Zet uw winkel nu live"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:40
 #: pretix/presale/templates/pretixpresale/event/base.html:86
-#, fuzzy
-#| msgid "Use languages"
 msgid "select language"
-msgstr "Gebruik talen"
+msgstr "taal kiezen"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:52
 #, python-format
@@ -21672,7 +21652,7 @@ msgstr "Ga terug"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:7
 #, python-format
 msgid "Step %(current)s of %(total)s: %(label)s"
-msgstr ""
+msgstr "Stap %(current)s van %(total)s: %(label)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:12
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:57
@@ -21944,16 +21924,12 @@ msgid "Redeem voucher"
 msgstr "Voucher inwisselen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:13
-#, fuzzy
-#| msgid "Completion date"
 msgid "Completed:"
-msgstr "Voltooiingsdatum"
+msgstr "Voltooid:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:15
-#, fuzzy
-#| msgid "Currency"
 msgid "Current:"
-msgstr "Munteenheid"
+msgstr "Huidig:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:29
 msgctxt "checkoutflow"
@@ -21967,39 +21943,27 @@ msgstr ""
 "tickets te ontvangen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:16
-#, fuzzy
-#| msgid "Please check your email account, we've sent you your tickets."
 msgid "Please check your email account, we've sent you an email."
-msgstr ""
-"We hebben uw tickets per e-mail naar u verzonden. Kijk in uw inbox om uw "
-"tickets te ontvangen."
+msgstr "We hebben een e-mail naar u verzonden."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:21
-#, fuzzy
-#| msgid ""
-#| "You can also download them right here as soon as the person who placed "
-#| "the order clicked the link in the email they received to confirm the "
-#| "email address is valid."
 msgid ""
 "You can download your tickets right here as soon as the person who placed "
 "the order clicked the link in the email they received to confirm the email "
 "address is valid."
 msgstr ""
-"U kunt uw tickets ook op deze pagina downloaden zodra het opgegeven e-"
-"mailadres is bevestigd. Dit kan de persoon die de bestelling heeft geplaatst "
-"doen door te klikken op de link in de toegezonden email."
+"De persoon die de bestelling heeft geplaatst heeft een e-mail ontvangen met "
+"een link om het opgegeven e-mailadres te controleren. U kunt uw tickets op "
+"deze pagina downloaden zodra de persoon die de bestelling heeft geplaatst op "
+"deze link heeft geklikt."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:26
-#, fuzzy
-#| msgid ""
-#| "If the email has no attachment, click the link in our email and you will "
-#| "be able to download them from here."
 msgid ""
 "If you click the link in our email, you will be able to download your "
 "tickets here."
 msgstr ""
-"Als de email geen bijlage heeft kunt u op de link in de mail klikken om de "
-"tickets te downloaden."
+"U kunt uw tickets op deze pagina downloaden zodra u op de link in onze e-"
+"mail klikt."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:30
 msgid ""
@@ -22053,17 +22017,14 @@ msgid "Confirmed"
 msgstr "Bevestigd"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
-#, fuzzy
-#| msgid "Uncategorized"
 msgid "Uncategorized products"
-msgstr "Ongecategoriseerd"
+msgstr "Ongecategoriseerde producten"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:187
-#, fuzzy, python-format
-#| msgid "Show all events of %(name)s"
+#, python-format
 msgid "Show full-size image of %(item)s"
-msgstr "Toon alle evenementen van %(name)s"
+msgstr "Toon volledige afbeelding van %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:63
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:120
@@ -22131,10 +22092,12 @@ msgstr "Nog niet in de verkoop"
 #: pretix/presale/templates/pretixpresale/event/index.html:27
 msgid "Your cart, general information, add products to your cart"
 msgstr ""
+"Uw winkelwagen, algemene informatie, nieuwe producten aan winkelwagen "
+"toevoegen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:27
 msgid "General information, add products to your cart"
-msgstr ""
+msgstr "Algemene informatie, nieuwe producten aan winkelwagen toevoegen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 #: pretix/presale/templates/pretixpresale/event/index.html:82
