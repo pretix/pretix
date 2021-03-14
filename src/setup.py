@@ -101,7 +101,7 @@ setup(
         'django-filter==2.4.*',
         'django-scopes==1.2.*',
         'reportlab>=3.5.65',
-        'Pillow==7.*',
+        'Pillow==8.*',
         'PyPDF2==1.26.*',
         'django-libsass==0.8',
         'libsass==0.20.*',
