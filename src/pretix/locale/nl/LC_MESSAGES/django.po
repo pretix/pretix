@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-08 16:39+0000\n"
-"PO-Revision-Date: 2021-03-14 17:20+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"PO-Revision-Date: 2021-03-14 17:33+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -22024,7 +22024,7 @@ msgstr "Ongecategoriseerde producten"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:187
 #, python-format
 msgid "Show full-size image of %(item)s"
-msgstr "Toon volledige afbeelding van %(name)s"
+msgstr "Toon volledige afbeelding van %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:63
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:120
