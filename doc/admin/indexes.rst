@@ -60,7 +60,10 @@ Here is the currently recommended set of commands::
     CREATE INDEX CONCURRENTLY pretix_addidx_ia_company
         ON pretixbase_invoiceaddress
         USING gin (upper("company") gin_trgm_ops);
-    CREATE INDEX CONCURRENTLY pretix_addidx_orderpos_email_upper ON public.pretixbase_orderposition (upper((attendee_email)::text));
+    CREATE INDEX CONCURRENTLY pretix_addidx_orderpos_email_upper
+        ON public.pretixbase_orderposition (upper((attendee_email)::text));
+    CREATE INDEX CONCURRENTLY pretix_addidx_voucher_code_upper
+        ON public.pretixbase_voucher (upper((code)::text));
 
 
 Also, if you use our ``pretix-shipping`` plugin::
