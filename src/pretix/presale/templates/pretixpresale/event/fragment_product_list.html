@@ -6,12 +6,14 @@
 {% load eventsignal %}
 {% load rich_text %}
 {% for tup in items_by_category %}
-    <section{% if tup.0 %} aria-labelledby="category-{{ tup.0.id }}"{% else %} aria-label="{% trans "Uncategorized products" %}"{% endif %}{% if tup.0.description %} aria-describedby="category-info-{{ tup.0.id }}"{% endif %}>
+    <section aria-labelledby="category-{% if tup.0 %}{{ tup.0.id }}{% else %}none{% endif %}"{% if tup.0.description %} aria-describedby="category-info-{{ tup.0.id }}"{% endif %}>
         {% if tup.0 %}
             <h3 id="category-{{ tup.0.id }}">{{ tup.0.name }}</h3>
             {% if tup.0.description %}
                 <div id="category-info-{{ tup.0.id }}">{{ tup.0.description|localize|rich_text }}</div>
             {% endif %}
+        {% else %}
+            <h3 id="category-none" class="sr-only">{% trans "Uncategorized products" %}</h3>
         {% endif %}
         {% for item in tup.1 %}
             {% if item.has_variations %}
