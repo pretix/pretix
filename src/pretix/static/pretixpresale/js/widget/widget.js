@@ -1342,7 +1342,7 @@ var shared_root_methods = {
             url += '&voucher=' + encodeURIComponent(this.$root.voucher_code);
         }
         if (cart_id) {
-            url += "&cart_id=" + cart_id;
+            url += "&cart_id=" + encodeURIComponent(cart_id);
         }
         if (this.$root.date !== null) {
             url += "&year=" + this.$root.date.substr(0, 4) + "&month=" + this.$root.date.substr(5, 2);
@@ -1350,18 +1350,21 @@ var shared_root_methods = {
             url += "&year=" + this.$root.week[0] + "&week=" + this.$root.week[1];
         }
         if (this.$root.style !== null) {
-            url = url + '&style=' + this.$root.style;
+            url = url + '&style=' + encodeURIComponent(this.$root.style);
         }
         var root = this.$root;
         api._getJSON(url, function (data, xhr) {
-            if (typeof xhr.responseURL !== "undefined" && xhr.responseURL !== url) {
+            if (typeof xhr.responseURL !== "undefined") {
                 var new_url = xhr.responseURL.substr(0, xhr.responseURL.indexOf("/widget/product_list?") + 1);
-                if (root.subevent) {
-                    new_url = new_url.substr(0, new_url.lastIndexOf("/", new_url.length - 1) + 1);
+                var old_url = url.substr(0, url.indexOf("/widget/product_list?") + 1);
+                if (new_url !== old_url) {
+                    if (root.subevent) {
+                        new_url = new_url.substr(0, new_url.lastIndexOf("/", new_url.length - 1) + 1);
+                    }
+                    root.target_url = new_url;
+                    root.reload();
+                    return;
                 }
-                root.target_url = new_url;
-                root.reload();
-                return;
             }
             if (data.weeks !== undefined) {
                 root.weeks = data.weeks;
