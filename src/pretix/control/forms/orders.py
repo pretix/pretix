@@ -75,7 +75,7 @@ class ExtendForm(I18nModelForm):
         return super().save(commit)
 
 
-class ConfirmPaymentForm(forms.Form):
+class ForceQuotaConfirmationForm(forms.Form):
     force = forms.BooleanField(
         label=_('Overbook quota and ignore late payment'),
         help_text=_('If you check this box, this operation will be performed even if it leads to an overbooked quota '
@@ -101,7 +101,15 @@ class ConfirmPaymentForm(forms.Form):
             del self.fields['force']
 
 
-class CancelForm(ConfirmPaymentForm):
+class ConfirmPaymentForm(ForceQuotaConfirmationForm):
+    pass
+
+
+class ReactivateOrderForm(ForceQuotaConfirmationForm):
+    pass
+
+
+class CancelForm(ForceQuotaConfirmationForm):
     send_email = forms.BooleanField(
         required=False,
         label=_('Notify customer by email'),
