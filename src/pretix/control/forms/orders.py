@@ -105,6 +105,10 @@ class ConfirmPaymentForm(ForceQuotaConfirmationForm):
     pass
 
 
+class ReactivateOrderForm(ForceQuotaConfirmationForm):
+    pass
+
+
 class CancelForm(ForceQuotaConfirmationForm):
     send_email = forms.BooleanField(
         required=False,
