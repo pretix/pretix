@@ -1424,11 +1424,24 @@ class OrderExtend(OrderView):
 class OrderReactivate(OrderView):
     permission = 'can_change_orders'
 
+    @cached_property
+    def reactivate_form(self):
+        return ConfirmPaymentForm(
+            instance=self.order,
+            data=self.request.POST if self.request.method == "POST" else None,
+        )
+
     def post(self, *args, **kwargs):
+        if not self.reactivate_form.is_valid():
+            return render(self.request, 'pretixcontrol/order/reactivate.html', {
+                'form': self.reactivate_form,
+                'order': self.order,
+            })
         try:
             reactivate_order(
                 self.order,
-                user=self.request.user
+                user=self.request.user,
+                force=self.reactivate_form.cleaned_data.get('force', False)
             )
             messages.success(self.request, _('The order has been reactivated.'))
         except OrderError as e:
@@ -1453,6 +1466,7 @@ class OrderReactivate(OrderView):
 
     def get(self, *args, **kwargs):
         return render(self.request, 'pretixcontrol/order/reactivate.html', {
+            'form': self.reactivate_form,
             'order': self.order,
         })
 
