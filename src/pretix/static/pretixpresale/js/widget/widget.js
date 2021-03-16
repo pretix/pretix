@@ -229,7 +229,9 @@ Vue.component('availbox', {
         },
         amount_selected: {
             get: function () {
-                return this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
+                var selected = this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
+                if (selected === 0) return undefined;
+                return selected
             },
             set: function (value) {
                 // Unary operator to force boolean to integer conversion, as the HTML form submission
