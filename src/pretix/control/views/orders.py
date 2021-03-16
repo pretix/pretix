@@ -83,7 +83,7 @@ from pretix.control.forms.orders import (
     ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeChangeForm,
     OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
     OrderPositionAddFormset, OrderPositionChangeForm, OrderPositionMailForm,
-    OrderRefundForm, OtherOperationsForm,
+    OrderRefundForm, OtherOperationsForm, ForceQuotaConfirmationForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import order_search_forms
@@ -1426,7 +1426,7 @@ class OrderReactivate(OrderView):
 
     @cached_property
     def reactivate_form(self):
-        return ConfirmPaymentForm(
+        return ForceQuotaConfirmationForm(
             instance=self.order,
             data=self.request.POST if self.request.method == "POST" else None,
         )
