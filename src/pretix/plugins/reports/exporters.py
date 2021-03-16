@@ -616,7 +616,7 @@ class OrderTaxListReport(MultiSheetListExporter):
         elif sheet == 'companies':
             yield from self.iterate_companies(form_data)
 
-    def _combine(self, *qs, keys=tuple()):
+    def _combine(self, *qs, keys=()):
         cache = {}
 
         def kf(r):

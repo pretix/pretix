@@ -18,18 +18,18 @@ class FormFieldWrapperField(serializers.Field):
 
 
 simple_mappings = (
-    (forms.DateField, serializers.DateField, tuple()),
-    (forms.TimeField, serializers.TimeField, tuple()),
-    (forms.SplitDateTimeField, serializers.DateTimeField, tuple()),
-    (forms.DateTimeField, serializers.DateTimeField, tuple()),
+    (forms.DateField, serializers.DateField, ()),
+    (forms.TimeField, serializers.TimeField, ()),
+    (forms.SplitDateTimeField, serializers.DateTimeField, ()),
+    (forms.DateTimeField, serializers.DateTimeField, ()),
     (forms.DecimalField, serializers.DecimalField, ('max_digits', 'decimal_places', 'min_value', 'max_value')),
-    (forms.FloatField, serializers.FloatField, tuple()),
-    (forms.IntegerField, serializers.IntegerField, tuple()),
-    (forms.EmailField, serializers.EmailField, tuple()),
-    (forms.UUIDField, serializers.UUIDField, tuple()),
-    (forms.URLField, serializers.URLField, tuple()),
-    (forms.NullBooleanField, serializers.NullBooleanField, tuple()),
-    (forms.BooleanField, serializers.BooleanField, tuple()),
+    (forms.FloatField, serializers.FloatField, ()),
+    (forms.IntegerField, serializers.IntegerField, ()),
+    (forms.EmailField, serializers.EmailField, ()),
+    (forms.UUIDField, serializers.UUIDField, ()),
+    (forms.URLField, serializers.URLField, ()),
+    (forms.NullBooleanField, serializers.NullBooleanField, ()),
+    (forms.BooleanField, serializers.BooleanField, ()),
 )
 
 

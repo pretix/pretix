@@ -53,8 +53,8 @@ class DeviceSerializer(serializers.ModelSerializer):
 
 
 class InitializeView(APIView):
-    authentication_classes = tuple()
-    permission_classes = tuple()
+    authentication_classes = ()
+    permission_classes = ()
 
     def post(self, request, format=None):
         serializer = InitializationRequestSerializer(data=request.data)

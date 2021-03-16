@@ -309,7 +309,7 @@ class EventSerializer(I18nAwareModelSerializer):
 
         # Item Meta properties
         if item_meta_properties is not None:
-            current = [imp for imp in event.item_meta_properties.all()]
+            current = list(event.item_meta_properties.all())
             for key, value in item_meta_properties.items():
                 prop = self.item_meta_props.get(key)
                 if prop in current:

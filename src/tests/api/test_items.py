@@ -1055,7 +1055,7 @@ def test_items_with_cart_position_delete(token_client, organizer, event, item, c
 
 @pytest.fixture
 def variations(item):
-    v = list()
+    v = []
     v.append(item.variations.create(value="ChildA1"))
     v.append(item.variations.create(value="ChildA2"))
     return v
@@ -1063,7 +1063,7 @@ def variations(item):
 
 @pytest.fixture
 def variations2(item2):
-    v = list()
+    v = []
     v.append(item2.variations.create(value="ChildB1"))
     v.append(item2.variations.create(value="ChildB2"))
     return v

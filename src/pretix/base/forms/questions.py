@@ -100,7 +100,7 @@ class NamePartsWidget(forms.MultiWidget):
         if not isinstance(value, list):
             value = self.decompress(value)
         output = []
-        final_attrs = self.build_attrs(attrs or dict())
+        final_attrs = self.build_attrs(attrs or {})
         if 'required' in final_attrs:
             del final_attrs['required']
         id_ = final_attrs.get('id', None)

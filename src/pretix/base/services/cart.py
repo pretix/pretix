@@ -241,7 +241,7 @@ class CartManager:
                 raise CartError(_(error_messages['max_items']) % (self.event.settings.max_items_per_order,))
 
     def _check_item_constraints(self, op, current_ops=[]):
-        if isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
+        if isinstance(op, (self.AddOperation, self.ExtendOperation)):
             if not (
                 (isinstance(op, self.AddOperation) and op.addon_to == 'FAKE') or
                 (isinstance(op, self.ExtendOperation) and op.position.is_bundled)
@@ -863,7 +863,7 @@ class CartManager:
                 op.position.addons.all().delete()
                 op.position.delete()
 
-            elif isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
+            elif isinstance(op, (self.AddOperation, self.ExtendOperation)):
                 # Create a CartPosition for as much items as we can
                 requested_count = quota_available_count = voucher_available_count = op.count
 

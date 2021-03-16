@@ -15,7 +15,7 @@ from pretix.base.models.orders import OrderFee
 
 @pytest.fixture
 def variations(item):
-    v = list()
+    v = []
     v.append(item.variations.create(value="ChildA1", default_price='12.00'))
     v.append(item.variations.create(value="ChildA2", default_price='13.00'))
     return v
@@ -23,7 +23,7 @@ def variations(item):
 
 @pytest.fixture
 def variations2(item2):
-    v = list()
+    v = []
     v.append(item2.variations.create(value="ChildB1", default_price='12.00'))
     v.append(item2.variations.create(value="ChildB2", default_price='13.00'))
     return v

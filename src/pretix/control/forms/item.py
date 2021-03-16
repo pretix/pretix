@@ -337,7 +337,7 @@ class ItemCreateForm(I18nModelForm):
                 setattr(self.instance, f, getattr(self.cleaned_data['copy_from'], f))
         else:
             # Add to all sales channels by default
-            self.instance.sales_channels = [k for k in get_all_sales_channels().keys()]
+            self.instance.sales_channels = list(get_all_sales_channels().keys())
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
         instance = super().save(*args, **kwargs)
