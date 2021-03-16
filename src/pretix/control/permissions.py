@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 
 
 def current_url(request):
-    if len(request.GET):
+    if request.GET:
         return request.path + '?' + request.GET.urlencode()
     else:
         return request.path

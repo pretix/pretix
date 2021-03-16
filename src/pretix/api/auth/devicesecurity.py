@@ -10,7 +10,7 @@ class FullAccessSecurityProfile:
 
 
 class AllowListSecurityProfile:
-    allowlist = tuple()
+    allowlist = ()
 
     def is_allowed(self, request):
         key = (request.method, f"{request.resolver_match.namespace}:{request.resolver_match.url_name}")

@@ -63,7 +63,7 @@ def eventurl(parser, token, absolute=False):
         asvar = bits[-1]
         bits = bits[:-2]
 
-    if len(bits):
+    if bits:
         for bit in bits:
             match = kwarg_re.match(bit)
             if not match:

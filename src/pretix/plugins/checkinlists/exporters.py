@@ -159,7 +159,7 @@ class CheckInListMixin(BaseExporter):
             ), self.event.timezone)
             qs = qs.filter(subevent__date_from__lt=dt)
 
-        o = tuple()
+        o = ()
         if self.event.has_subevents and not cl.subevent:
             o = ('subevent__date_from', 'subevent__name')
 

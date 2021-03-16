@@ -48,7 +48,7 @@ def page_not_found(request, exception):
     except (AttributeError, IndexError):
         pass
     else:
-        if isinstance(message, str) or isinstance(message, Promise):
+        if isinstance(message, (str, Promise)):
             exception_repr = str(message)
     context = {
         'request_path': request.path,

@@ -19,7 +19,7 @@ from pretix.testutils.mock import mocker_context
 
 @pytest.fixture
 def variations(item):
-    v = list()
+    v = []
     v.append(item.variations.create(value="ChildA1"))
     v.append(item.variations.create(value="ChildA2"))
     return v
