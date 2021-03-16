@@ -95,6 +95,8 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:taxrule-list'),
         ('GET', 'api-v1:ticketlayout-list'),
         ('GET', 'api-v1:ticketlayoutitem-list'),
+        ('GET', 'api-v1:badgelayout-list'),
+        ('GET', 'api-v1:badgeitem-list'),
         ('GET', 'api-v1:order-list'),
         ('POST', 'api-v1:order-list'),
         ('GET', 'api-v1:order-detail'),
