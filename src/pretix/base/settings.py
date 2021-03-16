@@ -1799,7 +1799,7 @@ Your {event} team"""))
         ),
     },
     'theme_color_danger': {
-        'default': '#D36060',
+        'default': '#C44F4F',
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,

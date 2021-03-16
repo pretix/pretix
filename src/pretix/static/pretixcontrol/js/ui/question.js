@@ -45,9 +45,9 @@ $(function () {
     if (data_type === 'B') {
         var colors;
         if (data[0].answer_bool) {
-            colors = ['#50A167', '#D36060'];
+            colors = ['#50A167', '#C44F4F'];
         } else {
-            colors = ['#D36060', '#50A167'];
+            colors = ['#C44F4F', '#50A167'];
         }
         new Morris.Donut({
             element: 'question_chart',
@@ -65,7 +65,7 @@ $(function () {
                 '#50A167',
                 '#FFB419',
                 '#5F9CD4',
-                '#D36060',
+                '#C44F4F',
                 '#83FFFA',
                 '#FF6C38',
                 '#1f5b8e',
