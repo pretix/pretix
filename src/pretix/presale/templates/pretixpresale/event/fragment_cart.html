@@ -306,11 +306,12 @@
                   data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
                   method="post" data-asynctask class="apply-voucher">
                 {% csrf_token %}
+                <label for="voucher_code" class="sr-only">{% trans "Voucher code" %}</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="voucher" placeholder="{% trans "Voucher code" %}" aria-label="{% trans "Voucher code" %}">
+                    <input type="text" class="form-control" name="voucher" id="voucher_code" placeholder="{% trans "Voucher code" %}" aria-label="{% trans "Voucher code" %}">
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit" aria-label="{% trans "Redeem voucher" %}">
-                            <span class="fa fa-check" aria-hidden="true"></span>
+                        <button class="btn btn-primary" type="submit">
+                            <span class="fa fa-check" aria-hidden="true"></span><span class="sr-only"> {% trans "Redeem voucher" %}</span>
                         </button>
                     </span>
                 </div>
