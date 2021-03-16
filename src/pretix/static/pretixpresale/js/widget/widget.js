@@ -614,7 +614,12 @@ var shared_methods = {
     },
     resume: function () {
         var redirect_url;
-        redirect_url = this.$root.target_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang;
+        redirect_url = this.$root.target_url + 'w/' + widget_id + '/';
+        if (this.$root.subevent && !this.$root.cart_id) {
+            // button with subevent but no items
+            redirect_url += this.$root.subevent + '/';
+        }
+        redirect_url += '?iframe=1&locale=' + lang;
         if (this.$root.cart_id) {
             redirect_url += '&take_cart_id=' + this.$root.cart_id;
         }
