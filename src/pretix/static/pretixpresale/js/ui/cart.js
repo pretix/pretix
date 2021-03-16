@@ -75,7 +75,7 @@ $(function () {
     $(".apply-voucher-toggle").click(function (e) {
         $(".apply-voucher-toggle").hide();
         $(".apply-voucher").show();
-        $(".apply-voucher input[ŧype=text]").first().focus();
+        $(".apply-voucher input[type=text]").first().focus();
         e.preventDefault();
         return true;
     });
