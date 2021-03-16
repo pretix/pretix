@@ -1505,7 +1505,7 @@ var shared_root_computed = {
         return form_target
     },
     useIframe: function () {
-        return !this.disable_iframe && Math.min(screen.width, window.innerWidth) >= 800 && (this.skip_ssl || site_is_secure());
+        return !this.disable_iframe && (this.skip_ssl || site_is_secure());
     },
     showPrices: function () {
         var has_priced = false;

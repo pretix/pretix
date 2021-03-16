@@ -788,5 +788,30 @@
   }
 }
 
+@media (max-width: 800px) {
+  .pretix-widget-frame-holder .pretix-widget-frame-inner {
+    left: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: $brand-primary;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    padding: 40px 0 0 0;
+  }
+  .pretix-widget-frame-holder .pretix-widget-frame-close {
+    right: 20px;
+    top: 20px;
+    background: white;
+    svg path {
+      fill: $brand-primary;
+    }
+  }
+}
+
 // https://github.com/Akryum/vue-resize/blob/master/dist/vue-resize.css
 .resize-observer[data-v-b329ee4c]{position:absolute;top:0;left:0;z-index:-1;width:100%;height:100%;border:none;background-color:transparent;pointer-events:none;display:block;overflow:hidden;opacity:0}.resize-observer[data-v-b329ee4c] object{display:block;position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;pointer-events:none;z-index:-1}
