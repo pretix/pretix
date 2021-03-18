@@ -9,14 +9,38 @@
 
       <input v-if="checkinlist" v-model="query" ref="input" :placeholder="$root.strings['input.placeholder']" @keyup="inputKeyup" class="form-control scan-input">
 
-      <div v-if="searchResults !== null" class="panel panel-primary search-results">
+      <div v-if="checkResult !== null" class="panel panel-primary check-result">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            {{ $root.strings['check.headline'] }}
+          </h3>
+        </div>
+        <div v-if="checkLoading" class="panel-body text-center">
+          <span class="fa fa-4x fa-cog fa-spin loading-icon"></span>
+        </div>
+        <div v-else-if="checkError" class="panel-body text-center">
+          {{ checkError }}
+        </div>
+        <div :class="'check-result-status check-result-' + checkResultColor">
+          {{ checkResultText }}
+        </div>
+        <div class="panel-body">
+          <div class="details">
+            <h4>{{ checkResult.position.order }}-{{ checkResult.position.positionid }} {{ checkResult.position.attendee_name }}</h4>
+            <span>{{ checkResultItemvar }}</span>
+            <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="searchResults !== null" class="panel panel-primary search-results">
         <div class="panel-heading">
           <h3 class="panel-title">
             {{ $root.strings['results.headline'] }}
           </h3>
         </div>
         <ul class="list-group">
-          <searchresult-item v-if="searchResults" v-for="p in searchResults" :position="p" :key="p.id"></searchresult-item>
+          <searchresult-item v-if="searchResults" v-for="p in searchResults" :position="p" :key="p.id" @selected="selectResult($event)"></searchresult-item>
           <li v-if="searchLoading" class="list-group-item text-center">
             <span class="fa fa-4x fa-cog fa-spin loading-icon"></span>
           </li>
@@ -29,16 +53,17 @@
         </ul>
       </div>
 
-
-      <div v-if="checkinlist && searchResults === null" class="scantype text-center">
-        <span :class="'fa fa-sign-' + (type === 'exit' ? 'out' : 'in')"></span>
-        {{ $root.strings['scantype.' + type] }}<br>
-        <button @click="switchType" class="btn btn-default"><span class="fa fa-refresh"></span> {{ $root.strings['scantype.switch'] }}</button>
-      </div>
-      <div v-if="checkinlist && searchResults === null" class="meta text-center">
-        {{ checkinlist.name }}<br>
-        {{ subevent }}<br>
-        <button @click="switchList" type="button" class="btn btn-default">{{ $root.strings['checkinlist.switch'] }}</button>
+      <div v-else>
+        <div v-if="checkinlist" class="scantype text-center">
+          <span :class="'fa fa-sign-' + (type === 'exit' ? 'out' : 'in')"></span>
+          {{ $root.strings['scantype.' + type] }}<br>
+          <button @click="switchType" class="btn btn-default"><span class="fa fa-refresh"></span> {{ $root.strings['scantype.switch'] }}</button>
+        </div>
+        <div v-if="checkinlist" class="meta text-center">
+          {{ checkinlist.name }}<br>
+          {{ subevent }}<br>
+          <button @click="switchList" type="button" class="btn btn-default">{{ $root.strings['checkinlist.switch'] }}</button>
+        </div>
       </div>
     </div>
   </div>
@@ -57,14 +82,17 @@ export default {
       searchResults: null,
       searchNextUrl: null,
       searchError: null,
+      checkLoading: false,
+      checkError: null,
+      checkResult: null,
       checkinlist: null,
     }
   },
-  mounted () {
+  mounted() {
     window.addEventListener('focus', this.globalKeydown)
     document.addEventListener('keydown', this.globalKeydown)
   },
-  destroyed () {
+  destroyed() {
     window.removeEventListener('focus', this.globalKeydown)
     document.removeEventListener('keydown', this.globalKeydown)
   },
@@ -75,9 +103,67 @@ export default {
       const name = i18nstring_localize(this.checkinlist.subevent.name)
       const date = moment.utc(this.checkinlist.subevent.date_from).tz(this.$root.timezone).format(this.$root.datetime_format)
       return `${name} · ${date}`
-    }
+    },
+    checkResultItemvar() {
+      if (!this.checkResult) return ''
+      if (this.checkResult.position.variation) {
+        return `${i18nstring_localize(this.checkResult.position.item.name)} – ${i18nstring_localize(this.checkResult.position.variation.value)}`
+      }
+      return i18nstring_localize(this.checkResult.position.item.name)
+    },
+    checkResultText () {
+      if (!this.checkResult) return ''
+      if (this.checkResult.status === 'ok') {
+        return this.$root.strings['result.ok']
+      } else if (this.checkResult.status === 'incomplete') {
+        return this.$root.strings['result.questions']
+      } else {
+        return this.$root.strings['result.' + this.checkResult.reason]
+      }
+    },
+    checkResultColor () {
+      if (!this.checkResult) return ''
+      if (this.checkResult.status === 'ok') {
+        return "green";
+      } else if (this.checkResult.status === 'incomplete') {
+        return "purple";
+      } else {
+        if (this.checkResult.reason === 'already_redeemed') return "orange";
+        return "red";
+      }
+    },
   },
   methods: {
+    selectResult(res) {
+      this.check(res.id)
+    },
+    check(id) {
+      this.checkLoading = true
+      this.checkError = null
+      this.checkResult = {}
+      fetch(this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=variation', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector("input[name=csrfmiddlewaretoken]").value,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          questions_supported: false,
+          canceled_supported: true,
+          type: this.type,
+        })
+      })
+          .then(response => response.json())
+          .then(data => {
+            this.checkLoading = false
+            this.checkResult = data
+          })
+          .catch(reason => {
+            this.checkLoading = false
+            this.checkResult = {}
+            this.checkError = null
+          })
+    },
     globalKeydown(e) {
       if (document.activeElement.nodeName.toLowerCase() !== 'input' && document.activeElement.nodeName.toLowerCase() !== 'textarea') {
         if (e.key && e.key.match(/^[a-z0-9A-Z+/=<>#]$/)) {
@@ -99,11 +185,12 @@ export default {
         this.cleanup()
       }
     },
-    cleanup () {
+    cleanup() {
       this.searchLoading = false
       this.searchResults = null
     },
     startSearch() {
+      this.checkResult = null
       this.searchLoading = true
       this.searchError = null
       this.searchResults = []
@@ -120,7 +207,7 @@ export default {
           })
           .catch(reason => {
             this.searchLoading = false
-            this.searchResults = null
+            this.searchResults = []
             this.searchError = reason
           })
     },
@@ -140,7 +227,6 @@ export default {
           })
           .catch(reason => {
             this.searchLoading = false
-            this.searchResults = null
             this.searchError = reason
           })
     },

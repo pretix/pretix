@@ -85,3 +85,29 @@ a.searchresult {
     color: $text-muted;
   }
 }
+
+.check-result-status {
+  height: 30vh;
+  max-height: 200px;
+  font-size: 35px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  &.check-result-red {
+    background: $brand-danger;
+  }
+  &.check-result-green {
+    background: $brand-success;
+  }
+  &.check-result-orange {
+    background: $brand-warning;
+  }
+  &.check-result-purple {
+    background: $brand-primary;
+  }
+}
