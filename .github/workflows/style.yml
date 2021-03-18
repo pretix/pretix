@@ -65,7 +65,7 @@ jobs:
       - name: Install Dependencies
         run: pip3 install licenseheaders
       - name: Run licenseheaders
-        run: licenseheaders -t ../.licenseheader -E .py -x "*/migrations/*.py
+        run: licenseheaders -t ../.licenseheader -E .py -x "*/migrations/*.py"
         working-directory: ./src
       - name: Check for changes
         run: git diff --exit-code
