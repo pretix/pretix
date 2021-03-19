@@ -105,19 +105,19 @@
 
         {% if subevent and "year" not in request.GET %}
             {% if show_cart %}
-                <a class="subevent-toggle btn btn-primary btn-block btn-lg">
+                <a class="subevent-toggle btn btn-primary btn-block btn-lg" href="#subevent-list">
                     <span class="fa fa-reply" aria-hidden="true"></span>
                     {% trans "Add tickets for a different date" %}
                 </a>
             {% else %}
-                <a class="subevent-toggle btn btn-default btn-block">
+                <a class="subevent-toggle btn btn-default btn-block" href="#subevent-list">
                     {% trans "View other date" %}
                 </a>
             {% endif %}
         {% else %}
             <h3>{% trans "Choose date to book a ticket" %}</h3>
         {% endif %}
-        <div class="panel panel-default subevent-list">
+        <div class="panel panel-default subevent-list" id="subevent-list">
             <div class="panel-heading">
                 {% if subevent %}
                     {% trans "Other dates" context "subevent" %}
