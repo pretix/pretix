@@ -292,6 +292,7 @@ $(function () {
 
     $("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
         var dependent = $(this),
+            dependentLabel = $("label[for="+this.id+"]"),
             dependency = $($(this).attr("data-required-if")),
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
@@ -299,6 +300,12 @@ $(function () {
                     dependent.prop('required', enabled);
                 }
                 dependent.closest('.form-group').toggleClass('required', enabled);
+                if (enabled) {
+                    dependentLabel.append('<i class="sr-only label-required">, ' + gettext('required') + '</i>');
+                }
+                else {
+                    dependentLabel.find(".label-required").remove();
+                }
             };
         update();
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
