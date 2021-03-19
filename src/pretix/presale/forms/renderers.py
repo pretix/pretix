@@ -22,7 +22,7 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
 
     opt = ""
 
-    if not (is_valid == None):
+    if is_valid is not None:
         if is_valid:
             validation_text = pgettext('form', 'is valid')
         else:
@@ -71,7 +71,7 @@ class CheckoutFieldRenderer(FieldRenderer):
                 self.get_size_class(prefix='form-group')
             )
         return form_group_class
-    
+
     def append_to_field(self, html):
         help_text_and_errors = []
         help_text_and_errors += self.field_errors
