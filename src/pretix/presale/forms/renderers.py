@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
 
 
-def render_label(content, label_for=None, label_class=None, label_title='', optional=False):
+def render_label(content, label_for=None, label_class=None, label_title='', optional=False, is_valid=None):
     """
     Render a label with content
     """
@@ -20,6 +20,15 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
     if label_title:
         attrs['title'] = label_title
 
+    opt = ""
+
+    if not (is_valid == None):
+        if is_valid:
+            validation_text = pgettext('form', 'is valid')
+        else:
+            validation_text = pgettext('form', 'has errors')
+        opt += '<strong class="sr-only"> {}</strong>'.format(validation_text)
+
     if text_value(content) == '&#160;':
         # Empty label, e.g. checkbox
         attrs.setdefault('class', '')
@@ -27,16 +36,15 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
         # usually checkboxes have overall empty labels and special labels per checkbox
         # => remove for-attribute as well as "required"-text appended to label
         del(attrs['for'])
-        opt = ""
     else:
-        opt = mark_safe('<i class="sr-only"> {}</i>'.format(pgettext('form', 'required'))) if not optional else ''
+        opt += '<i class="sr-only label-required">, {}</i>'.format(pgettext('form', 'required')) if not optional else ''
 
     builder = '<{tag}{attrs}>{content}{opt}</{tag}>'
     return format_html(
         builder,
         tag='label',
         attrs=mark_safe(flatatt(attrs)) if attrs else '',
-        opt=opt,
+        opt=mark_safe(opt),
         content=text_value(content),
     )
 
@@ -93,11 +101,16 @@ class CheckoutFieldRenderer(FieldRenderer):
         else:
             required = self.field.field.required
 
+        if self.field.form.is_bound:
+            is_valid = len(self.field.errors) == 0
+        else:
+            is_valid = None
         html = render_label(
             label,
             label_for=self.field.id_for_label,
             label_class=self.get_label_class(),
-            optional=not required and not isinstance(self.widget, CheckboxInput)
+            optional=not required and not isinstance(self.widget, CheckboxInput),
+            is_valid=is_valid
         ) + html
         return html
 
