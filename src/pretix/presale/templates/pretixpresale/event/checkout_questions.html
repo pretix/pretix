@@ -21,9 +21,9 @@
                 </summary>
                 <div id="contact">
                     <div class="panel-body">
-                        {% bootstrap_form contact_form layout="horizontal" %}
+                        {% bootstrap_form contact_form layout="checkout" %}
                         {% if not invoice_address_asked and event.settings.invoice_name_required %}
-                            {% bootstrap_form invoice_form layout="horizontal" %}
+                            {% bootstrap_form invoice_form layout="checkout" %}
                         {% endif %}
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                                     {{ event.settings.invoice_address_explanation_text|rich_text }}
                                 </div>
                             {% endif %}
-                            {% bootstrap_form invoice_form layout="horizontal" %}
+                            {% bootstrap_form invoice_form layout="checkout" %}
                         </div>
                     </div>
                 </details>

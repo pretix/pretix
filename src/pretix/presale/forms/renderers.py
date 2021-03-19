@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
 
 
-def render_label(content, label_for=None, label_class=None, label_title='', optional=False):
+def render_label(content, label_for=None, label_class=None, label_title='', optional=False, is_valid=None):
     """
     Render a label with content
     """
@@ -20,6 +20,15 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
     if label_title:
         attrs['title'] = label_title
 
+    opt = ""
+
+    if is_valid is not None:
+        if is_valid:
+            validation_text = pgettext('form', 'is valid')
+        else:
+            validation_text = pgettext('form', 'has errors')
+        opt += '<strong class="sr-only"> {}</strong>'.format(validation_text)
+
     if text_value(content) == '&#160;':
         # Empty label, e.g. checkbox
         attrs.setdefault('class', '')
@@ -27,16 +36,15 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
         # usually checkboxes have overall empty labels and special labels per checkbox
         # => remove for-attribute as well as "required"-text appended to label
         del(attrs['for'])
-        opt = ""
     else:
-        opt = mark_safe('<i class="sr-only"> {}</i>'.format(pgettext('form', 'required'))) if not optional else ''
+        opt += '<i class="sr-only label-required">, {}</i>'.format(pgettext('form', 'required')) if not optional else ''
 
     builder = '<{tag}{attrs}>{content}{opt}</{tag}>'
     return format_html(
         builder,
         tag='label',
         attrs=mark_safe(flatatt(attrs)) if attrs else '',
-        opt=opt,
+        opt=mark_safe(opt),
         content=text_value(content),
     )
 
@@ -64,6 +72,26 @@ class CheckoutFieldRenderer(FieldRenderer):
             )
         return form_group_class
 
+    def append_to_field(self, html):
+        help_text_and_errors = []
+        help_text_and_errors += self.field_errors
+        if self.field_help:
+            help_text_and_errors.append(self.field_help)
+        for idx, text in enumerate(help_text_and_errors):
+            html += '<div class="help-block" id="help-for-{id}-{idx}">{text}</div>'.format(id=self.field.id_for_label, text=text, idx=idx)
+        return html
+
+    def add_help_attrs(self, widget=None):
+        super().add_help_attrs(widget)
+        if widget is None:
+            widget = self.widget
+        help_cnt = len(self.field_errors)
+        if self.field_help:
+            help_cnt += 1
+        if help_cnt > 0:
+            help_ids = ["help-for-{id}-{idx}".format(id=self.field.id_for_label, idx=idx) for idx in range(help_cnt)]
+            widget.attrs["aria-describedby"] = " ".join(help_ids)
+
     def add_label(self, html):
         label = self.get_label()
 
@@ -73,11 +101,16 @@ class CheckoutFieldRenderer(FieldRenderer):
         else:
             required = self.field.field.required
 
+        if self.field.form.is_bound:
+            is_valid = len(self.field.errors) == 0
+        else:
+            is_valid = None
         html = render_label(
             label,
             label_for=self.field.id_for_label,
             label_class=self.get_label_class(),
-            optional=not required and not isinstance(self.widget, CheckboxInput)
+            optional=not required and not isinstance(self.widget, CheckboxInput),
+            is_valid=is_valid
         ) + html
         return html
 

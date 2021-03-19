@@ -140,6 +140,7 @@
         {% elif line.addon_to %}
             <div class="count">&nbsp;</div>
             <div class="singleprice price">
+                <span class="sr-only">{% trans "price per item" %}</span>
                 {% if event.settings.display_net_prices %}
                     {{ line.net_price|money:event.currency }}
                 {% else %}
@@ -163,6 +164,7 @@
                     </button>
                 </form>
                 {% endif %}
+                <span class="sr-only">{% trans "quantity" %}</span>
                 {{ line.count }}
                 {% if editable %}
                 <form action="{% eventurl event "presale:event.cart.add" cart_namespace=cart_namespace|default_if_none:"" %}"
@@ -189,6 +191,7 @@
                 {% endif %}
             </div>
             <div class="singleprice price">
+                <span class="sr-only">{% trans "price per item" %}</span>
                 {% if event.settings.display_net_prices %}
                     {{ line.net_price|money:event.currency }}
                 {% else %}
@@ -197,6 +200,7 @@
             </div>
         {% endif %}
         <div class="totalprice price">
+            <span class="sr-only">{% trans "price" %}</span>
             {% if event.settings.display_net_prices %}
                 <strong>{{ line.net_total|money:event.currency }}</strong>
                 {% if line.tax_rate and line.total %}
