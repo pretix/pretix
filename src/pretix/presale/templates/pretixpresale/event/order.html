@@ -186,7 +186,7 @@
         <div class="panel-heading">
             {% if order.can_modify_answers %}
                 <div class="pull-right flip">
-                    <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
+                    <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change ordered items" %}">
                         <span class="fa fa-edit" aria-hidden="true"></span>
                         {% trans "Change details" %}
                     </a>
@@ -280,7 +280,7 @@
                     {% if invoice_address_asked or request.event.settings.invoice_name_required %}
                         {% if order.can_modify_answers %}
                             <div class="pull-right flip">
-                                <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}">
+                                <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change your information" %}">
                                     <span class="fa fa-edit" aria-hidden="true"></span>
                                     {% trans "Change details" %}
                                 </a>

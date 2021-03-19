@@ -57,7 +57,7 @@
                 <div class="panel-heading">
                     {% if payment_provider.identifier != "free" %}
                         <div class="pull-right flip">
-                            <a href="{% eventurl request.event "presale:event.checkout" step="payment" cart_namespace=cart_namespace|default_if_none:"" %}">
+                            <a href="{% eventurl request.event "presale:event.checkout" step="payment" cart_namespace=cart_namespace|default_if_none:"" %}" aria-label="{% trans "Modify payment" %}">
                                 <span class="fa fa-edit" aria-hidden="true"></span>
                                 {% trans "Modify" %}
                             </a>
@@ -79,7 +79,7 @@
                     <div class="panel panel-primary panel-contact">
                         <div class="panel-heading">
                             <div class="pull-right flip">
-                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}?invoice=1">
+                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}?invoice=1" aria-label="{% trans "Modify invoice information" %}">
                                     <span class="fa fa-edit" aria-hidden="true"></span>
                                     {% trans "Modify" %}
                                 </a>
@@ -129,7 +129,7 @@
                 <div class="panel panel-primary panel-contact">
                     <div class="panel-heading">
                         <div class="pull-right flip">
-                            <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}">
+                            <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}" aria-label="{% trans "Modify contact information" %}">
                                 <span class="fa fa-edit" aria-hidden="true"></span>
                                 {% trans "Modify" %}
                             </a>
