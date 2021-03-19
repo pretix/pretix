@@ -63,6 +63,26 @@ class CheckoutFieldRenderer(FieldRenderer):
                 self.get_size_class(prefix='form-group')
             )
         return form_group_class
+    
+    def append_to_field(self, html):
+        help_text_and_errors = []
+        help_text_and_errors += self.field_errors
+        if self.field_help:
+            help_text_and_errors.append(self.field_help)
+        for idx, text in enumerate(help_text_and_errors):
+            html += '<div class="help-block" id="help-for-{id}-{idx}">{text}</div>'.format(id=self.field.id_for_label, text=text, idx=idx)
+        return html
+
+    def add_help_attrs(self, widget=None):
+        super().add_help_attrs(widget)
+        if widget is None:
+            widget = self.widget
+        help_cnt = len(self.field_errors)
+        if self.field_help:
+            help_cnt += 1
+        if help_cnt > 0:
+            help_ids = ["help-for-{id}-{idx}".format(id=self.field.id_for_label, idx=idx) for idx in range(help_cnt)]
+            widget.attrs["aria-describedby"] = " ".join(help_ids)
 
     def add_label(self, html):
         label = self.get_label()
