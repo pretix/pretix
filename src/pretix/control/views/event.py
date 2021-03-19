@@ -955,11 +955,10 @@ class EventDelete(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixi
         return reverse('control:index')
 
 
-class EventLog(EventPermissionRequiredMixin, ListView):
+class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/event/logs.html'
     model = LogEntry
     context_object_name = 'logs'
-    paginate_by = 20
 
     def get_queryset(self):
         qs = self.request.event.logentry_set.all().select_related(

@@ -1438,12 +1438,11 @@ class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionR
         return redirect(success_url)
 
 
-class LogView(OrganizerPermissionRequiredMixin, ListView):
+class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/organizers/logs.html'
     permission = 'can_change_organizer_settings'
     model = LogEntry
     context_object_name = 'logs'
-    paginate_by = 20
 
     def get_queryset(self):
         qs = self.request.organizer.all_logentries().select_related(
