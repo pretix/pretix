@@ -43,6 +43,10 @@ b) All translation files located at src/pretix/locale/ as well as all documentat
 
 c) All auxiliary scripts located at deployment/ are licensed under the terms of the Apache License 2.0.
 
+Older versions of pretix have been released under the Apache License 2.0. This version still contains contributions
+licensed by their respective copyright owners under the terms of Apache License 2.0 (full text given below). A full
+history of the code and all contributions can be obtained at https://github.com/pretix/pretix
+
 Full text of the GNU Affero General Public License version 3
 ============================================================
 
