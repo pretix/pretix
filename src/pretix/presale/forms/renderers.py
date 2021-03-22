@@ -110,10 +110,10 @@ class CheckoutFieldRenderer(FieldRenderer):
             is_valid = None
 
         if self.is_group_widget:
-            label_for= ""
+            label_for = ""
             label_id = "legend-{}".format(self.field.html_name)
         else:
-            label_for=self.field.id_for_label
+            label_for = self.field.id_for_label
             label_id = ""
 
         html = render_label(
