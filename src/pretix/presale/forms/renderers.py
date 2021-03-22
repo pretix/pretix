@@ -110,13 +110,15 @@ class CheckoutFieldRenderer(FieldRenderer):
             is_valid = None
 
         if self.is_group_widget:
+            label_for= ""
             label_id = "legend-{}".format(self.field.html_name)
         else:
+            label_for=self.field.id_for_label
             label_id = ""
 
         html = render_label(
             label,
-            label_for=self.field.id_for_label,
+            label_for=label_for,
             label_class=self.get_label_class(),
             label_id=label_id,
             optional=not required and not isinstance(self.widget, CheckboxInput),
