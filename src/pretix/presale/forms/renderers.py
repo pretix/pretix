@@ -1,14 +1,14 @@
 from bootstrap3.renderers import FieldRenderer
 from bootstrap3.text import text_value
 from bootstrap3.utils import add_css_class
-from django.forms import CheckboxInput
+from django.forms import CheckboxInput, CheckboxSelectMultiple, RadioSelect
 from django.forms.utils import flatatt
 from django.utils.html import escape, format_html, strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
 
 
-def render_label(content, label_for=None, label_class=None, label_title='', optional=False, is_valid=None):
+def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False, is_valid=None):
     """
     Render a label with content
     """
@@ -19,6 +19,8 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
         attrs['class'] = label_class
     if label_title:
         attrs['title'] = label_title
+    if label_id:
+        attrs['id'] = label_id
 
     opt = ""
 
@@ -53,6 +55,7 @@ class CheckoutFieldRenderer(FieldRenderer):
     def __init__(self, *args, **kwargs):
         kwargs['layout'] = 'horizontal'
         super().__init__(*args, **kwargs)
+        self.is_group_widget = isinstance(self.widget, (CheckboxSelectMultiple, RadioSelect, )) or (self.is_multi_widget and len(self.widget.widgets) > 1)
 
     def get_form_group_class(self):
         form_group_class = self.form_group_class
@@ -105,10 +108,17 @@ class CheckoutFieldRenderer(FieldRenderer):
             is_valid = len(self.field.errors) == 0
         else:
             is_valid = None
+
+        if self.is_group_widget:
+            label_id = "legend-{}".format(self.field.html_name)
+        else:
+            label_id = ""
+
         html = render_label(
             label,
             label_for=self.field.id_for_label,
             label_class=self.get_label_class(),
+            label_id=label_id,
             optional=not required and not isinstance(self.widget, CheckboxInput),
             is_valid=is_valid
         ) + html
@@ -121,3 +131,10 @@ class CheckoutFieldRenderer(FieldRenderer):
             label_for=self.field.id_for_label,
             label_title=escape(strip_tags(self.field_help)),
         )
+
+    def wrap_label_and_field(self, html):
+        if self.is_group_widget:
+            attrs = ' role="group" aria-labelledby="legend-{}"'.format(self.field.html_name)
+        else:
+            attrs = ''
+        return '<div class="{klass}"{attrs}>{html}</div>'.format(klass=self.get_form_group_class(), html=html, attrs=attrs)
