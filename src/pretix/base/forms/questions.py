@@ -245,7 +245,10 @@ class WrappedPhonePrefixSelect(Select):
 class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 
     def __init__(self, attrs=None, initial=None):
-        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput(attrs={'aria-label': pgettext_lazy('phonenumber', 'Phone number (without international area code)')}))
+        attrs = {
+            'aria-label': pgettext_lazy('phonenumber', 'Phone number (without international area code)')
+        }
+        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput(attrs=attrs))
         super(PhoneNumberPrefixWidget, self).__init__(widgets, attrs)
 
     def render(self, name, value, attrs=None, renderer=None):
