@@ -122,6 +122,8 @@ class NamePartsWidget(forms.MultiWidget):
                     these_attrs.pop('data-no-required-attr', None)
                 these_attrs['autocomplete'] = (self.attrs.get('autocomplete', '') + ' ' + self.autofill_map.get(self.scheme['fields'][i][0], 'off')).strip()
                 these_attrs['data-size'] = self.scheme['fields'][i][2]
+                if len(self.widgets) > 1:
+                    these_attrs['aria-label'] = self.scheme['fields'][i][1]
             else:
                 these_attrs = final_attrs
             output.append(widget.render(name + '_%s' % i, widget_value, these_attrs, renderer=renderer))
