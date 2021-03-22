@@ -122,6 +122,8 @@ class NamePartsWidget(forms.MultiWidget):
                     these_attrs.pop('data-no-required-attr', None)
                 these_attrs['autocomplete'] = (self.attrs.get('autocomplete', '') + ' ' + self.autofill_map.get(self.scheme['fields'][i][0], 'off')).strip()
                 these_attrs['data-size'] = self.scheme['fields'][i][2]
+                if len(self.widgets) > 1:
+                    these_attrs['aria-label'] = self.scheme['fields'][i][1]
             else:
                 these_attrs = final_attrs
             output.append(widget.render(name + '_%s' % i, widget_value, these_attrs, renderer=renderer))
@@ -220,7 +222,7 @@ class WrappedPhonePrefixSelect(Select):
                 country_name = locale.territories.get(country_code)
                 if country_name:
                     choices.append((prefix, "{} {}".format(country_name, prefix)))
-        super().__init__(choices=sorted(choices, key=lambda item: item[1]))
+        super().__init__(choices=sorted(choices, key=lambda item: item[1]), attrs={'aria-label': pgettext_lazy('phonenumber', 'International area code')})
 
     def render(self, name, value, *args, **kwargs):
         return super().render(name, value or self.initial, *args, **kwargs)
@@ -243,7 +245,10 @@ class WrappedPhonePrefixSelect(Select):
 class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 
     def __init__(self, attrs=None, initial=None):
-        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput())
+        attrs = {
+            'aria-label': pgettext_lazy('phonenumber', 'Phone number (without international area code)')
+        }
+        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput(attrs=attrs))
         super(PhoneNumberPrefixWidget, self).__init__(widgets, attrs)
 
     def render(self, name, value, attrs=None, renderer=None):
