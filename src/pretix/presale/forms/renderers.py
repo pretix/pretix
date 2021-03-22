@@ -37,7 +37,8 @@ def render_label(content, label_for=None, label_class=None, label_title='', labe
         attrs['class'] += ' label-empty'
         # usually checkboxes have overall empty labels and special labels per checkbox
         # => remove for-attribute as well as "required"-text appended to label
-        del(attrs['for'])
+        if 'for' in attrs:
+            del(attrs['for'])
     else:
         opt += '<i class="sr-only label-required">, {}</i>'.format(pgettext('form', 'required')) if not optional else ''
 
