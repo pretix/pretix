@@ -220,7 +220,7 @@ class WrappedPhonePrefixSelect(Select):
                 country_name = locale.territories.get(country_code)
                 if country_name:
                     choices.append((prefix, "{} {}".format(country_name, prefix)))
-        super().__init__(choices=sorted(choices, key=lambda item: item[1]))
+        super().__init__(choices=sorted(choices, key=lambda item: item[1]), attrs={'aria-label': pgettext_lazy('phonenumber', 'International area code')})
 
     def render(self, name, value, *args, **kwargs):
         return super().render(name, value or self.initial, *args, **kwargs)
@@ -243,7 +243,7 @@ class WrappedPhonePrefixSelect(Select):
 class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 
     def __init__(self, attrs=None, initial=None):
-        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput())
+        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput(attrs={'aria-label': pgettext_lazy('phonenumber', 'Phone number (without international area code)')}))
         super(PhoneNumberPrefixWidget, self).__init__(widgets, attrs)
 
     def render(self, name, value, attrs=None, renderer=None):
