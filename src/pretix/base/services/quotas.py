@@ -10,6 +10,7 @@ from django.db.models import (
 )
 from django.dispatch import receiver
 from django.utils.timezone import now
+from django_redis import get_redis_connection
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
@@ -89,7 +90,7 @@ class QuotaAvailability:
     def queue(self, *quota):
         self._queue += quota
 
-    def compute(self, now_dt=None):
+    def compute(self, now_dt=None, dbcache=True):
         now_dt = now_dt or now()
         quotas = list(set(self._queue))
         quotas_original = list(self._queue)
@@ -106,18 +107,18 @@ class QuotaAvailability:
 
         self._close(quotas)
         try:
-            self._write_cache(quotas, now_dt)
+            self._write_cache(quotas, now_dt, dbcache)
         except OperationalError as e:
             # Ignore deadlocks when multiple threads try to write to the cache
             if 'deadlock' not in str(e).lower():
                 raise e
 
-    def _write_cache(self, quotas, now_dt):
+    def _write_cache(self, quotas, now_dt, dbcache):
         # We used to also delete item_quota_cache:* from the event cache here, but as the cache
         # gets more complex, this does not seem worth it. The cache is only present for up to
         # 5 seconds to prevent high peaks, and a 5-second delay in availability is usually
         # tolerable
-        update = []
+        update = defaultdict(list)
         for q in quotas:
             rewrite_cache = self._count_waitinglist and (
                 not q.cache_is_hot(now_dt) or self.results[q][0] > q.cached_availability_state
@@ -129,12 +130,21 @@ class QuotaAvailability:
                 q.cached_availability_time = now_dt
                 if q in self.count_paid_orders:
                     q.cached_availability_paid_orders = self.count_paid_orders[q]
-                update.append(q)
+                update[q.event_id].append(q)
+
         if update:
-            Quota.objects.using('default').bulk_update(update, [
-                'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
-                'cached_availability_paid_orders'
-            ], batch_size=50)
+            if dbcache:
+                Quota.objects.using('default').bulk_update(sum((quotas for event, quotas in update.items()), []), [
+                    'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
+                    'cached_availability_paid_orders'
+                ], batch_size=50)
+
+            if settings.HAS_REDIS:
+                rc = get_redis_connection("redis")
+                for eventid, quotas in update.items():
+                    rc.hmset(f'quotas:{eventid}:availability', {
+                        str(q.id): ",".join([str(i) for i in self.results[q]]) for q in quotas
+                    })
 
     def _close(self, quotas):
         for q in quotas:
