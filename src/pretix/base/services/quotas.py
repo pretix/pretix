@@ -133,11 +133,11 @@ class QuotaAvailability:
                 update[q.event_id].append(q)
 
         if update:
-            if dbcache:
-                Quota.objects.using('default').bulk_update(sum((quotas for event, quotas in update.items()), []), [
-                    'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
-                    'cached_availability_paid_orders'
-                ], batch_size=50)
+            # if dbcache:
+            #     Quota.objects.using('default').bulk_update(sum((quotas for event, quotas in update.items()), []), [
+            #         'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
+            #         'cached_availability_paid_orders'
+            #     ], batch_size=50)
 
             if settings.HAS_REDIS:
                 rc = get_redis_connection("redis")
