@@ -40,7 +40,7 @@ import pretix.control.urls
 import pretix.presale.urls
 from pretix.base.views import js_helpers
 
-from .base.views import cachedfiles, csp, health, js_catalog, metrics, redirect
+from .base.views import cachedfiles, csp, health, js_catalog, metrics, redirect, source
 
 base_patterns = [
     url(r'^download/(?P<id>[^/]+)/$', cachedfiles.DownloadView.as_view(),
@@ -52,6 +52,7 @@ base_patterns = [
     url(r'^metrics$', metrics.serve_metrics,
         name='metrics'),
     url(r'^csp_report/$', csp.csp_report, name='csp.report'),
+    url(r'^agpl_source$', source.get_source, name='source'),
     url(r'^js_helpers/states/$', js_helpers.states, name='js_helpers.states'),
     url(r'^api/v1/', include(('pretix.api.urls', 'pretixapi'), namespace='api-v1')),
     url(r'^api/$', RedirectView.as_view(url='/api/v1/'), name='redirect-api-version')

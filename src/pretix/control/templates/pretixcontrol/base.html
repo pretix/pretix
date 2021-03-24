@@ -394,6 +394,16 @@
                             </a>
                         </div>
                     {% endif %}
+                    {% if warning_license_compliance_check_required %}
+                        <div class="alert alert-legal">
+                            <a href="{% url "control:global.license" %}">
+                                {% blocktrans trimmed %}
+                                    Click here to do a license compliance check to make sure your usage of pretix is in
+                                    line with pretix' license.
+                                {% endblocktrans %}
+                            </a>
+                        </div>
+                    {% endif %}
 
                     {% if debug_warning %}
                         <div class="alert alert-danger">
@@ -410,11 +420,7 @@
                                 Times displayed in {{ tz }}
                             {% endblocktrans %} &middot;
                         {% endif %}
-                        {% with "href='http://pretix.eu'" as a_attr %}
-                            {% blocktrans trimmed %}
-                                powered by <a {{ a_attr }}>pretix</a>
-                            {% endblocktrans %}
-                        {% endwith %}
+                        {{ poweredby }} {# removing or hiding this might be in violation of pretix' license #}
                         {% if development_warning %}
                             <span class="text-warning">&middot; {% trans "running in development mode" %}</span>
                         {% endif %}

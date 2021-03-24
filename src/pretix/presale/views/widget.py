@@ -40,7 +40,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import get_language, gettext, pgettext
+from django.utils.translation import get_language, gettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -51,6 +51,7 @@ from django.views.i18n import (
 )
 from lxml import html
 
+from pretix.base.context import get_powered_by
 from pretix.base.i18n import language
 from pretix.base.models import CartPosition, Event, Quota, SubEvent, Voucher
 from pretix.base.services.cart import error_messages
@@ -283,9 +284,7 @@ class WidgetAPIProductList(EventListMixin, View):
         return grps, display_add_to_cart, len(items)
 
     def post_process(self, data):
-        data['poweredby'] = '<a href="https://pretix.eu" target="_blank" rel="noopener">{}</a>'.format(
-            pgettext('widget', 'event ticketing powered by pretix')
-        )
+        data['poweredby'] = get_powered_by(safelink=False)
 
     def response(self, data):
         self.post_process(data)

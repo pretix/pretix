@@ -409,6 +409,11 @@ def get_global_navigation(request):
                     'url': reverse('control:global.update'),
                     'active': (url.url_name == 'global.update'),
                 },
+                {
+                    'label': _('License check'),
+                    'url': reverse('control:global.license'),
+                    'active': (url.url_name == 'global.license'),
+                },
             ]
         })
 

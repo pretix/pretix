@@ -144,9 +144,12 @@ def _default_context(request):
 
     ctx['warning_update_available'] = False
     ctx['warning_update_check_active'] = False
+    ctx['warning_license_compliance_check_required'] = False
     gs = GlobalSettingsObject()
     ctx['global_settings'] = gs.settings
     if request.user.is_staff:
+        if not gs.settings.license_check_completed:
+            ctx['warning_license_compliance_check_required'] = True
         if gs.settings.update_check_result_warning:
             ctx['warning_update_available'] = True
         if not gs.settings.update_check_ack and 'runserver' not in sys.argv:

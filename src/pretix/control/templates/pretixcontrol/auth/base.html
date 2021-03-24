@@ -41,11 +41,7 @@
     {% block content %}
     {% endblock %}
     <footer>
-        {% with "href='http://pretix.eu'" as a_attr %}
-            {% blocktrans trimmed %}
-                powered by <a {{ a_attr }}>pretix</a>
-            {% endblocktrans %}
-        {% endwith %}
+        {{ poweredby }} {# removing or hiding this might be in violation of pretix' license #}
     </footer>
 </div>
 </body>

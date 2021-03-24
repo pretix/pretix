@@ -22,12 +22,56 @@
 import sys
 
 from django.conf import settings
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+from django.utils.translation import gettext
+
+from pretix.base.settings import GlobalSettingsObject
+from pretix.base.templatetags.safelink import safelink as sl
+
+
+def get_powered_by(safelink=True):
+    gs = GlobalSettingsObject()
+    d = gs.settings.license_check_input
+    if d.get('poweredby_name'):
+        if d.get('poweredby_url'):
+            n = '<a href="{}" target="_blank" rel="noopener">{}</a>'.format(
+                sl(d['poweredby_url']) if safelink else d['poweredby_url'],
+                d['poweredby_name']
+            )
+        else:
+            n = d['poweredby_name']
+
+        msg = gettext('powered by {name} based on <a {a_attr}>pretix</a>').format(
+            name=n,
+            a_attr='href="{}" target="_blank" rel="noopener"'.format(
+                sl('https://pretix.eu') if safelink else 'https://pretix.eu',
+            )
+        )
+    else:
+        msg = gettext('powered by <a %(a_attr)s>pretix</a>') % {
+            'a_attr': 'href="{}" target="_blank" rel="noopener"'.format(
+                sl('https://pretix.eu') if safelink else 'https://pretix.eu',
+            )
+        }
+
+    if d.get('base_license') == 'agpl':
+        msg += ' (<a href="{}" target="_blank" rel="noopener">{}</a>)'.format(
+            reverse('source'),
+            gettext('source code')
+        )
+
+    return mark_safe(msg)
 
 
 def contextprocessor(request):
     ctx = {
         'rtl': getattr(request, 'LANGUAGE_CODE', 'en') in settings.LANGUAGES_RTL,
     }
+    try:
+        ctx['poweredby'] = get_powered_by(safelink=True)
+    except Exception:
+        ctx['poweredby'] = 'powered by <a href="https://pretix.eu/" target="_blank" rel="noopener">pretix</a>'
     if settings.DEBUG and 'runserver' not in sys.argv:
         ctx['debug_warning'] = True
     elif 'runserver' in sys.argv:

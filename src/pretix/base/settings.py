@@ -2173,6 +2173,14 @@ Your {event} team"""))
                         ' on-the-fly, even when they do not have \"Can change teams and permissions\" permission.'),
         )
     },
+    'license_check_completed': {
+        'default': None,
+        'type': datetime
+    },
+    'license_check_input': {
+        'default': '{}',
+        'type': dict
+    },
     'update_check_ack': {
         'default': 'False',
         'type': bool

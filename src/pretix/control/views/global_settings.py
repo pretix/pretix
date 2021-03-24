@@ -35,15 +35,17 @@
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, reverse
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import FormView, TemplateView
+import pkg_resources
 
 from pretix.base.models import LogEntry, OrderPayment, OrderRefund
 from pretix.base.services.update_check import check_result_table, update_check
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.forms.global_settings import (
-    GlobalSettingsForm, UpdateSettingsForm,
+    GlobalSettingsForm, UpdateSettingsForm, LicenseCheckForm,
 )
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, StaffMemberRequiredMixin,
@@ -117,3 +119,142 @@ class RefundDetailView(AdministratorPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         p = get_object_or_404(OrderRefund, pk=request.GET.get('pk'))
         return JsonResponse({'data': p.info_data})
+
+
+class LicenseCheckView(StaffMemberRequiredMixin, FormView):
+    template_name = 'pretixcontrol/global_license.html'
+    form_class = LicenseCheckForm
+
+    def get_initial(self):
+        d = {}
+        gs = GlobalSettingsObject()
+        d.update(gs.settings.license_check_input)
+        if not d:
+            d['source_notice'] = 'pretix (AGPLv3 with additional terms): https://github.com/pretix/pretix'
+            seen = set()
+            for entry_point in pkg_resources.iter_entry_points(group='pretix.plugin', name=None):
+                if entry_point.dist.key not in seen:
+                    license, url = self._get_license_for_pkg(entry_point.dist.key)
+                    d['source_notice'] += f'\n{entry_point.dist.key} ({license}): {url}'
+                    seen.add(entry_point.dist.key)
+
+        return d
+
+    def form_valid(self, form):
+        gs = GlobalSettingsObject()
+        gs.settings.license_check_input = form.cleaned_data
+        gs.settings.license_check_completed = now()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes have not been saved, see below for errors.'))
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('control:global.license')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        input = self.get_initial()
+        if 'base_license' in input:
+            ctx['results'] = self._check_results(input)
+        else:
+            ctx['results'] = False
+        return ctx
+
+    def _get_license_for_pkg(self, pkg):
+        license, url = None, None
+        try:
+            pkgs = pkg_resources.require(pkg)
+            pkg = pkgs[0]
+        except:
+            return None, None
+        for line in pkg.get_metadata_lines('PKG-INFO'):
+            if ': ' in line:
+                (k, v) = line.split(': ', 1)
+                if k == "License":
+                    license = v
+                if k == "Home-page":
+                    url = v
+        return license, url
+
+    def _check_results(self, input):
+        res = []
+
+        if input.get('base_license') == 'agpl_addperm' and input.get('usage') != 'internally':
+            res.append((
+                'danger', 'exclamation-circle',
+                _('You are in violation of the license. If you\'re not sure whether you qualify for the additional '
+                  'permission or if you offer the functionality of pretix to others, you must either use pretix under '
+                  'AGPLv3 terms or obtain a pretix Enterprise license.')
+            ))
+
+        if (input.get('base_license') != 'agpl' or input.get('plugins_enterprise')) and input.get('plugins_copyleft'):
+            res.append((
+                'danger', 'exclamation-circle',
+                _('You may not make use of the additional permission or of a pretix Enterprise license if you install '
+                  'any plugins licensed with strong copyleft, otherwise you are likely in violation of the license '
+                  'of these plugins.')
+            ))
+
+        if input.get('base_license') == 'agpl' and not input.get('source_notice'):
+            res.append((
+                'danger', 'exclamation-circle',
+                _('If you\'re using pretix under AGPL license, you need to provide instructions on how to access the '
+                  'source code.')
+            ))
+
+        if input.get('base_license') == 'agpl' and input.get('plugins_enterprise'):
+            res.append((
+                'danger', 'exclamation-circle',
+                _('You must not use pretix under AGPL terms if you use pretix Enterprise plugins.')
+            ))
+
+        if input.get('base_license') not in ('enterprise', 'agpl_addperm'):
+            if input.get('base_changes') == 'yes':
+                res.append((
+                    'warning', 'warning',
+                    _('You need to make all changes you made to pretix\' source code freely available to every visitor '
+                      'of your site in source code form under the same license terms as pretix (AGPLv3 + additional '
+                      'restrictions). Make sure to keep it up to date!')
+                ))
+            if input.get('plugins_own'):
+                res.append((
+                    'warning', 'warning',
+                    _('You need to make all your installed plugins freely available to every visitor '
+                      'of your site in source code form under the same license terms as pretix (AGPLv3 + additional'
+                      'restrictions). Make sure to keep it up to date!')
+                ))
+
+        for entry_point in pkg_resources.iter_entry_points(group='pretix.plugin', name=None):
+            license, url = self._get_license_for_pkg(entry_point.dist.key)
+
+            if not input.get('plugins_enterprise') and 'pretix Enterprise' in license:
+                res.append((
+                    'danger', 'exclamation-circle',
+                    _('You selected that you have no active pretix Enterprise licenses, but we found the following '
+                      'Enterprise plugin: {plugin}').format(plugin=entry_point.dist.key)
+                ))
+
+            if not input.get('plugins_copyleft') and any(l in license for l in ('GPL',)):
+                res.append((
+                    'danger', 'exclamation-circle',
+                    _('You selected that you have no copyleft-licensed plugins installed, but we found the '
+                      'plugin "{plugin}" with license "{license}".').format(plugin=entry_point.dist.key, license=license)
+                ))
+
+            if not input.get('plugins_free') and any(l in license for l in ('Apache', 'MIT', 'BSD')):
+                res.append((
+                    'danger', 'exclamation-circle',
+                    _('You selected that you have no free plugins installed, but we found the '
+                      'plugin "{plugin}" with license "{license}".').format(plugin=entry_point.dist.key, license=license)
+                ))
+
+            if not any(l in license for l in ('Apache', 'MIT', 'BSD', 'pretix Enterprise', 'GPL')):
+                res.append((
+                    'muted', 'warning',
+                    _('We found the plugin "{plugin}" with license "{license}" which this tool does not know about and '
+                      'therefore cannot give any recommendations.').format(plugin=entry_point.dist.key, license=license)
+                ))
+
+        return res

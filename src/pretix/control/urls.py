@@ -54,6 +54,7 @@ urlpatterns = [
     url(r'^widgets.json$', dashboards.user_index_widgets_lazy, name='index.widgets'),
     url(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     url(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
+    url(r'^global/license/$', global_settings.LicenseCheckView.as_view(), name='global.license'),
     url(r'^global/message/$', global_settings.MessageView.as_view(), name='global.message'),
     url(r'^logdetail/$', global_settings.LogDetailView.as_view(), name='global.logdetail'),
     url(r'^logdetail/payment/$', global_settings.PaymentDetailView.as_view(), name='global.paymentdetail'),
