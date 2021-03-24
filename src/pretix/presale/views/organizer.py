@@ -387,9 +387,17 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
             for ev, quotas in quotas_by_event.items():
                 d = rc.hmget(f'quotas:{ev}:availability', [str(q.pk) for q in quotas])
                 for redisval, q in zip(d, quotas):
-                    if redisval is not None:
-                        quotas_to_compute.remove(q)
-                        qcache[q] = tuple(int(rv) for rv in redisval.decode().split(','))
+                    if redisval is not None and b',' in redisval:
+                        parts = redisval.decode().strip().split(',')
+                        if parts[0].isdigit() and parts[1] == "None":
+                            qcache[q] = (int(parts[0]), None)
+                            quotas_to_compute.remove(q)
+                        else:
+                            try:
+                                qcache[q] = tuple(int(rv) for rv in parts)
+                                quotas_to_compute.remove(q)
+                            except ValueError:
+                                pass
 
         if quotas_to_compute:
             qa = QuotaAvailability()
