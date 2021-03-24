@@ -5,26 +5,27 @@ import pytz
 from django import forms
 from django.db.models import (
     CharField, Count, DateTimeField, IntegerField, Max, OuterRef, Subquery,
-    Sum,
+    Sum, Q,
 )
+from django.db.models.functions import Coalesce
 from django.dispatch import receiver
 from django.utils.functional import cached_property
+from django.utils.timezone import now, get_current_timezone
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
 
 from pretix.base.models import (
-    GiftCard, Invoice, InvoiceAddress, Order, OrderPosition, Question,
+    GiftCard, Invoice, InvoiceAddress, Order, OrderPosition, Question, GiftCardTransaction,
 )
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import PERSON_NAME_SCHEMES
-
-from ...control.forms.filter import get_all_payment_providers
-from ...helpers import GroupConcat
-from ...helpers.iter import chunked_iterable
 from ..exporter import ListExporter, MultiSheetListExporter
 from ..signals import (
     register_data_exporters, register_multievent_data_exporters,
 )
+from ...control.forms.filter import get_all_payment_providers
+from ...helpers import GroupConcat
+from ...helpers.iter import chunked_iterable
 
 
 class OrderListExporter(MultiSheetListExporter):
@@ -782,6 +783,116 @@ class GiftcardRedemptionListExporter(ListExporter):
             return '{}_giftcardredemptions'.format(self.event.slug)
 
 
+def generate_GiftCardListExporter(organizer):  # hackhack
+    class GiftcardListExporter(ListExporter):
+        identifier = 'giftcardlist'
+        verbose_name = gettext_lazy('Gift cards')
+
+        @property
+        def additional_form_fields(self):
+            return OrderedDict(
+                [
+                    ('date', forms.DateTimeField(
+                        label=_('Show value at'),
+                        initial=now(),
+                    )),
+                    ('testmode', forms.ChoiceField(
+                        label=_('Test mode'),
+                        choices=(
+                            ('', _('All')),
+                            ('yes', _('Test mode')),
+                            ('no', _('Live')),
+                        ),
+                        initial='no',
+                        required=False
+                    )),
+                    ('state', forms.ChoiceField(
+                        label=_('Status'),
+                        choices=(
+                            ('', _('All')),
+                            ('empty', _('Empty')),
+                            ('valid_value', _('Valid and with value')),
+                            ('expired_value', _('Expired and with value')),
+                            ('expired', _('Expired')),
+                        ),
+                        initial='valid_value',
+                        required=False
+                    ))
+                ]
+            )
+
+        def iterate_list(self, form_data):
+            s = GiftCardTransaction.objects.filter(
+                card=OuterRef('pk'),
+                datetime__lte=form_data['date']
+            ).order_by().values('card').annotate(s=Sum('value')).values('s')
+            qs = organizer.issued_gift_cards.filter(
+                issuance__lte=form_data['date']
+            ).annotate(
+                cached_value=Coalesce(Subquery(s), Decimal('0.00')),
+            ).order_by('issuance').prefetch_related(
+                'transactions', 'transactions__order', 'transactions__order__event', 'transactions__order__invoices'
+            )
+
+            if form_data.get('testmode') == 'yes':
+                qs = qs.filter(testmode=True)
+            elif form_data.get('testmode') == 'no':
+                qs = qs.filter(testmode=False)
+
+            if form_data.get('state') == 'empty':
+                qs = qs.filter(cached_value=0)
+            elif form_data.get('state') == 'valid_value':
+                qs = qs.exclude(cached_value=0).filter(Q(expires__isnull=True) | Q(expires__gte=form_data['date']))
+            elif form_data.get('state') == 'expired_value':
+                qs = qs.exclude(cached_value=0).filter(expires__lt=form_data['date'])
+            elif form_data.get('state') == 'expired':
+                qs = qs.filter(expires__lt=form_data['date'])
+
+            headers = [
+                _('Gift card code'),
+                _('Test mode card'),
+                _('Creation date'),
+                _('Expiry date'),
+                _('Special terms and conditions'),
+                _('Currency'),
+                _('Current value'),
+                _('Created in order'),
+                _('Last invoice number of order'),
+                _('Last invoice date of order'),
+            ]
+            yield headers
+
+            tz = get_current_timezone()
+            for obj in qs:
+                o = None
+                i = None
+                trans = list(obj.transactions.all())
+                if trans:
+                    o = trans[0].order
+                if o:
+                    invs = list(o.invoices.all())
+                    if invs:
+                        i = invs[-1]
+                row = [
+                    obj.secret,
+                    _('Yes') if obj.testmode else _('No'),
+                    obj.issuance.astimezone(tz).date().strftime('%Y-%m-%d'),
+                    obj.expires.astimezone(tz).date().strftime('%Y-%m-%d') if obj.expires else '',
+                    obj.conditions or '',
+                    obj.currency,
+                    obj.cached_value,
+                    o.full_code if o else '',
+                    i.number if i else '',
+                    i.date.strftime('%Y-%m-%d') if i else '',
+                ]
+                yield row
+
+        def get_filename(self):
+            return '{}_giftcards'.format(organizer.slug)
+
+    return GiftcardListExporter
+
+
 @receiver(register_data_exporters, dispatch_uid="exporter_orderlist")
 def register_orderlist_exporter(sender, **kwargs):
     return OrderListExporter
@@ -815,3 +926,8 @@ def register_giftcardredemptionlist_exporter(sender, **kwargs):
 @receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_giftcardredemptionlist")
 def register_multievent_i_giftcardredemptionlist_exporter(sender, **kwargs):
     return GiftcardRedemptionListExporter
+
+
+@receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_giftcardlist")
+def register_multievent_i_giftcardlist_exporter(sender, **kwargs):
+    return generate_GiftCardListExporter(sender)
