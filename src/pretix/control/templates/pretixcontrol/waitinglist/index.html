@@ -74,44 +74,50 @@
         </div>
     </div>
 
-    <p>
-    <form class="form-inline helper-display-inline" action="" method="get">
-        <select name="status" class="form-control">
-            <option value="a"
-                    {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "All entries" %}</option>
-            <option value="w"
-                    {% if request.GET.status == "w" or not request.GET.status %}selected="selected"{% endif %}>
-                {% trans "Waiting for a voucher" %}</option>
-            <option value="s"
-                    {% if request.GET.status == "s" %}selected="selected"{% endif %}>{% trans "Voucher assigned" %}</option>
-            <option value="v"
-                    {% if request.GET.status == "v" %}selected="selected"{% endif %}>
-                {% trans "Waiting for redemption" %}</option>
-            <option value="r"
-                    {% if request.GET.status == "r" %}selected="selected"{% endif %}>
-                {% trans "Successfully redeemed" %}</option>
-            <option value="e"
-                    {% if request.GET.status == "e" %}selected="selected"{% endif %}>
-                {% trans "Voucher expired" %}</option>
-        </select>
-        <select name="item" class="form-control">
-            <option value="">{% trans "All products" %}</option>
-            {% for item in items %}
-                <option value="{{ item.id }}"
-                        {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
-                    {{ item }}
-                </option>
-            {% endfor %}
-        </select>
+    <form class="row filter-form" action="" method="get">
+        <div class="col-lg-2 col-md-3 col-xs-6">
+            <select name="status" class="form-control">
+                <option value="a"
+                        {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "All entries" %}</option>
+                <option value="w"
+                        {% if request.GET.status == "w" or not request.GET.status %}selected="selected"{% endif %}>
+                    {% trans "Waiting for a voucher" %}</option>
+                <option value="s"
+                        {% if request.GET.status == "s" %}selected="selected"{% endif %}>{% trans "Voucher assigned" %}</option>
+                <option value="v"
+                        {% if request.GET.status == "v" %}selected="selected"{% endif %}>
+                    {% trans "Waiting for redemption" %}</option>
+                <option value="r"
+                        {% if request.GET.status == "r" %}selected="selected"{% endif %}>
+                    {% trans "Successfully redeemed" %}</option>
+                <option value="e"
+                        {% if request.GET.status == "e" %}selected="selected"{% endif %}>
+                    {% trans "Voucher expired" %}</option>
+            </select>
+        </div>
+        <div class="col-lg-2 col-md-3 col-xs-6">
+            <select name="item" class="form-control">
+                <option value="">{% trans "All products" %}</option>
+                {% for item in items %}
+                    <option value="{{ item.id }}"
+                            {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
+                        {{ item }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
         {% if request.event.has_subevents %}
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
             {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+        </div>
         {% endif %}
-        <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-        <a href="?{% url_replace request "download" "yes" %}"
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <button class="btn btn-primary" type="submit"><span class="fa fa-filter"></span> {% trans "Filter" %}</button>
+            <a href="?{% url_replace request "download" "yes" %}"
                 class="btn btn-default"><i class="fa fa-download"></i>
-            {% trans "Download list" %}</a>
+                {% trans "Download list" %}</a>
+        </div>
     </form>
-    </p>
     <form method="post" action="?next={{ request.get_full_path|urlencode }}">
         {% csrf_token %}
         <div class="table-responsive">
