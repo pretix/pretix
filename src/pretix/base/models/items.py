@@ -17,6 +17,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
+from django_redis import get_redis_connection
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
@@ -25,6 +26,7 @@ from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
 
+from ... import settings
 from .event import Event, SubEvent
 
 
@@ -1374,10 +1376,6 @@ class Quota(LoggedModel):
         blank=True,
         verbose_name=_("Variations")
     )
-    cached_availability_state = models.PositiveIntegerField(null=True, blank=True)
-    cached_availability_number = models.PositiveIntegerField(null=True, blank=True)
-    cached_availability_paid_orders = models.PositiveIntegerField(null=True, blank=True)
-    cached_availability_time = models.DateTimeField(null=True, blank=True)
 
     close_when_sold_out = models.BooleanField(
         verbose_name=_('Close this quota permanently once it is sold out'),
@@ -1422,14 +1420,10 @@ class Quota(LoggedModel):
             self.event.cache.clear()
 
     def rebuild_cache(self, now_dt=None):
-        self.cached_availability_time = None
-        self.cached_availability_number = None
-        self.cached_availability_state = None
-        self.availability(now_dt=now_dt)
-
-    def cache_is_hot(self, now_dt=None):
-        now_dt = now_dt or now()
-        return self.cached_availability_time and (now_dt - self.cached_availability_time).total_seconds() < 120
+        if settings.HAS_REDIS:
+            rc = get_redis_connection("redis")
+            rc.hdel(f'quotas:{self.event_id}:availabilitycache', str(self.pk))
+            self.availability(now_dt=now_dt)
 
     def availability(
             self, now_dt: datetime=None, count_waitinglist=True, _cache=None, allow_cache=False
@@ -1452,9 +1446,6 @@ class Quota(LoggedModel):
         """
         from ..services.quotas import QuotaAvailability
 
-        if allow_cache and self.cache_is_hot() and count_waitinglist:
-            return self.cached_availability_state, self.cached_availability_number
-
         if _cache and count_waitinglist is not _cache.get('_count_waitinglist', True):
             _cache.clear()
 
@@ -1462,7 +1453,7 @@ class Quota(LoggedModel):
             return _cache[self.pk]
         qa = QuotaAvailability(count_waitinglist=count_waitinglist, early_out=False)
         qa.queue(self)
-        qa.compute(now_dt=now_dt)
+        qa.compute(now_dt=now_dt, allow_cache=allow_cache)
         res = qa.results[self]
 
         if _cache is not None:

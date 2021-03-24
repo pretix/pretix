@@ -1,8 +1,11 @@
+from datetime import datetime
+
+import pytz
 from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import (
-    F, IntegerField, Max, Min, OuterRef, Prefetch, Subquery, Sum,
+    Count, F, IntegerField, Max, Min, OuterRef, Prefetch, Subquery,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
@@ -10,6 +13,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
@@ -17,7 +21,9 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.forms import SafeSessionWizardView
 from pretix.base.i18n import language
-from pretix.base.models import Event, EventMetaValue, Organizer, Quota, Team
+from pretix.base.models import (
+    Event, EventMetaValue, Order, OrderPosition, Organizer, Quota, Team,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
@@ -52,10 +58,11 @@ class EventList(PaginationMixin, ListView):
             order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
         )
 
-        sum_tickets_paid = Quota.objects.filter(
-            event=OuterRef('pk'), subevent__isnull=True
-        ).order_by().values('event').annotate(
-            s=Sum('cached_availability_paid_orders')
+        sum_tickets_paid = OrderPosition.objects.filter(
+            order__event=OuterRef('pk'),
+            order__status=Order.STATUS_PAID,
+        ).order_by().values('order__event').annotate(
+            s=Count('*')
         ).values(
             's'
         )
@@ -88,22 +95,17 @@ class EventList(PaginationMixin, ListView):
             s.first_quotas = s.first_quotas[:4]
             quotas += list(s.first_quotas)
 
-        qa = QuotaAvailability(early_out=False)
+        qa = QuotaAvailability()
         for q in quotas:
-            if q.cached_availability_time is None or q.cached_availability_paid_orders is None:
-                qa.queue(q)
-        qa.compute()
+            qa.queue(q)
+        qa.compute(allow_cache=True, allow_cache_stale=True)
 
         for q in quotas:
-            q.cached_avail = (
-                qa.results[q] if q in qa.results
-                else (q.cached_availability_state, q.cached_availability_number)
-            )
+            q.cached_avail = qa.results[q]
+            q.cached_availability_time = datetime.fromtimestamp(q.cached_avail[2], tz=pytz.UTC) if len(q.cached_avail) > 2 else now()
             if q.size is not None:
-                q.percent_paid = min(
-                    100,
-                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
-                )
+                q.percent = round(q.cached_avail[1] / q.size * 100) if q.size > 0 else 0
+                q.inv_percent = 100 - q.percent
         return ctx
 
     @cached_property

@@ -657,10 +657,6 @@ class Event(EventMixin, LoggedModel):
             oldid = q.pk
             q.pk = None
             q.event = self
-            q.cached_availability_state = None
-            q.cached_availability_number = None
-            q.cached_availability_paid_orders = None
-            q.cached_availability_time = None
             q.closed = False
             q.save()
             q.log_action('pretix.object.cloned')

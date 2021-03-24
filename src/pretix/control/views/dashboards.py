@@ -202,14 +202,10 @@ def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
     quotas = sender.quotas.filter(subevent=subevent)
 
-    quotas_to_compute = [
-        q for q in quotas
-        if not q.cache_is_hot(now() + timedelta(seconds=5))
-    ]
     qa = QuotaAvailability()
-    if quotas_to_compute:
-        qa.queue(*quotas_to_compute)
-        qa.compute()
+    if quotas:
+        qa.queue(*quotas)
+        qa.compute(allow_cache=True)
 
     for q in quotas:
         if not lazy:

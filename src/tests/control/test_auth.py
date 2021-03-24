@@ -398,7 +398,6 @@ class FakeRedis(object):
         return self
 
     def exists(self, rkey):
-        print(rkey in self.storage)
         return rkey in self.storage
 
     def setex(self, rkey, value, expiration):
