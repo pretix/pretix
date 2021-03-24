@@ -1,5 +1,6 @@
 import logging
 from collections import OrderedDict, namedtuple
+from itertools import groupby
 
 from django.dispatch import receiver
 from django.utils.formats import date_format
@@ -182,15 +183,30 @@ class ParametrizedOrderNotificationType(NotificationType):
             n.add_attribute(pgettext_lazy('subevent', 'Dates'), '\n'.join(ses))
         else:
             n.add_attribute(_('Event date'), order.event.get_date_range_display())
+
+        positions = list(order.positions.select_related('item', 'variation', 'subevent'))
+        fees = list(order.fees.all())
+
         n.add_attribute(_('Order code'), order.code)
+        n.add_attribute(_('Net total'), money_filter(sum([p.net_price for p in positions] + [f.net_value for f in fees]), logentry.event.currency))
         n.add_attribute(_('Order total'), money_filter(order.total, logentry.event.currency))
         n.add_attribute(_('Pending amount'), money_filter(order.pending_sum, logentry.event.currency))
         n.add_attribute(_('Order date'), date_format(order.datetime, 'SHORT_DATETIME_FORMAT'))
         n.add_attribute(_('Order status'), order.get_status_display())
         n.add_attribute(_('Order positions'), str(order.positions.count()))
+
+        def key(op):
+            return op.item, op.variation, op.subevent
+
+        cart = [(k, list(v)) for k, v in groupby(sorted(positions, key=key), key=key)]
         items = []
-        for it in self.event.items.filter(id__in=order.positions.values_list('item', flat=True)):
-            items.append(str(it.name))
+        for (item, variation, subevent), pos in cart:
+            ele = [str(len(pos)) + 'x ' + str(item)]
+            if variation:
+                ele.append(str(variation.value))
+            if subevent:
+                ele.append(str(subevent))
+            items.append(' – '.join(ele))
         n.add_attribute(_('Purchased products'), '\n'.join(items))
         n.add_action(_('View order details'), order_url)
         return n
