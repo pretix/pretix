@@ -48,15 +48,9 @@
                             </p>
                         {% endif %}
                         {% if request.event.has_subevents %}
-                            <select name="subevent" class="form-control">
-                                <option value="">{% trans "All dates" context "subevent" %}</option>
-                                {% for se in request.event.subevents.all %}
-                                    <option value="{{ se.id }}"
-                                            {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
-                                        {{ se.name }} – {{ se.get_date_range_display }}
-                                    </option>
-                                {% endfor %}
-                            </select>
+                            <div class="col-md-6">
+                                {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+                            </div>
                         {% endif %}
                         <button class="btn btn-large btn-primary" type="submit">
                             {% trans "Send as many vouchers as possible" %}
@@ -110,15 +104,7 @@
             {% endfor %}
         </select>
         {% if request.event.has_subevents %}
-            <select name="subevent" class="form-control">
-                <option value="">{% trans "All dates" context "subevent" %}</option>
-                {% for se in request.event.subevents.all %}
-                    <option value="{{ se.id }}"
-                            {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
-                        {{ se.name }} – {{ se.get_date_range_display }}
-                    </option>
-                {% endfor %}
-            </select>
+            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
         {% endif %}
         <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
         <a href="?{% url_replace request "download" "yes" %}"
@@ -166,7 +152,7 @@
                             {% endif %}
                         </td>
                         {% if request.event.has_subevents %}
-                            <td>{{ e.subevent.name }} – {{ e.subevent.get_date_range_display }}</td>
+                            <td>{{ e.subevent.name }} – {{ e.subevent.get_date_range_display }} {{ e.subevent.date_from|date:"TIME_FORMAT" }}</td>
                         {% endif %}
                         <td>
                             {{ e.created|date:"SHORT_DATETIME_FORMAT" }}
