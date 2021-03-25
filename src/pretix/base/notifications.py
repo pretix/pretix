@@ -195,10 +195,13 @@ class ParametrizedOrderNotificationType(NotificationType):
         n.add_attribute(_('Order status'), order.get_status_display())
         n.add_attribute(_('Order positions'), str(order.positions.count()))
 
-        def key(op):
+        def sortkey(op):
             return op.item_id, op.variation_id, op.subevent_id
 
-        cart = [(k, list(v)) for k, v in groupby(sorted(positions, key=key), key=key)]
+        def groupkey(op):
+            return op.item, op.variation, op.subevent
+
+        cart = [(k, list(v)) for k, v in groupby(sorted(positions, key=sortkey()), key=groupkey())]
         items = []
         for (item, variation, subevent), pos in cart:
             ele = [str(len(pos)) + 'x ' + str(item)]
