@@ -196,7 +196,7 @@ class ParametrizedOrderNotificationType(NotificationType):
         n.add_attribute(_('Order positions'), str(order.positions.count()))
 
         def key(op):
-            return op.item, op.variation, op.subevent
+            return op.item_id, op.variation_id, op.subevent_id
 
         cart = [(k, list(v)) for k, v in groupby(sorted(positions, key=key), key=key)]
         items = []
