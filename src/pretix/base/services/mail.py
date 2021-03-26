@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Sequence, Union
 from urllib.parse import urljoin, urlparse
 
 import cssutils
+import pytz
 import requests
 from bs4 import BeautifulSoup
 from celery import chain
@@ -21,6 +22,7 @@ from django.core.mail import (
 from django.core.mail.message import SafeMIMEText
 from django.db import transaction
 from django.template.loader import get_template
+from django.utils.timezone import override
 from django.utils.translation import gettext as _, pgettext
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
@@ -145,6 +147,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         bcc = []
         if event:
+            timezone = event.timezone
             renderer = event.get_html_mail_renderer()
             if event.settings.mail_bcc:
                 for bcc_mail in event.settings.mail_bcc.split(','):
@@ -203,19 +206,24 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                     )
                 )
             body_plain += "\r\n"
+        elif user:
+            timezone = pytz.timezone(user.timezone)
+        else:
+            timezone = pytz.timezone(settings.TIME_ZONE)
 
-        try:
-            if 'position' in inspect.signature(renderer.render).parameters:
-                body_html = renderer.render(content_plain, signature, raw_subject, order, position)
-            else:
-                # Backwards compatibility
-                warnings.warn('E-mail renderer called without position argument because position argument is not '
-                              'supported.',
-                              DeprecationWarning)
-                body_html = renderer.render(content_plain, signature, raw_subject, order)
-        except:
-            logger.exception('Could not render HTML body')
-            body_html = None
+        with override(timezone):
+            try:
+                if 'position' in inspect.signature(renderer.render).parameters:
+                    body_html = renderer.render(content_plain, signature, raw_subject, order, position)
+                else:
+                    # Backwards compatibility
+                    warnings.warn('E-mail renderer called without position argument because position argument is not '
+                                  'supported.',
+                                  DeprecationWarning)
+                    body_html = renderer.render(content_plain, signature, raw_subject, order)
+            except:
+                logger.exception('Could not render HTML body')
+                body_html = None
 
         send_task = mail_send_task.si(
             to=[email] if isinstance(email, str) else list(email),
