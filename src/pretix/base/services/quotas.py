@@ -166,7 +166,10 @@ class QuotaAvailability:
 
         for eventid, quotas in update.items():
             rc.hmset(f'quotas:{eventid}:availabilitycache', {
-                str(q.id): ",".join([str(i) for i in self.results[q]] + [str(int(time.time()))]) for q in quotas
+                str(q.id): ",".join(
+                    [str(i) for i in self.results[q]] +
+                    [str(int(time.time()))]
+                ) for q in quotas
             })
             rc.expire(f'quotas:{eventid}:availabilitycache', 3600 * 24 * 7)
 

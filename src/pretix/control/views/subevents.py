@@ -2,14 +2,11 @@ import copy
 from collections import defaultdict
 from datetime import datetime, time, timedelta
 
-import pytz
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
 from django.core.files import File
 from django.db import connections, transaction
-from django.db.models import (
-    Count, F, IntegerField, OuterRef, Prefetch, Subquery,
-)
+from django.db.models import Count, F, Prefetch
 from django.db.models.functions import Coalesce, TruncDate, TruncTime
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -17,14 +14,14 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.formats import get_format
 from django.utils.functional import cached_property
-from django.utils.timezone import make_aware, now
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
 from django.views.generic import (
     CreateView, DeleteView, FormView, ListView, UpdateView,
 )
 
-from pretix.base.models import CartPosition, LogEntry, Order, OrderPosition
+from pretix.base.models import CartPosition, LogEntry
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import (
@@ -58,21 +55,11 @@ class SubEventQueryMixin:
         return self.request.GET
 
     def get_queryset(self, list=False):
-        sum_tickets_paid = OrderPosition.objects.filter(
-            subevent=OuterRef('pk'),
-            order__status=Order.STATUS_PAID,
-        ).order_by().values('subevent').annotate(
-            s=Count('*')
-        ).values(
-            's'
-        )
         qs = self.request.event.subevents
         if list:
-            qs = qs.annotate(
-                sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
-            ).prefetch_related(
+            qs = qs.prefetch_related(
                 Prefetch('quotas',
-                         queryset=Quota.objects.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
+                         queryset=self.request.event.quotas.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
                          to_attr='first_quotas')
             )
         if self.filter_form.is_valid():
@@ -108,17 +95,19 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
             s.first_quotas = s.first_quotas[:4]
             quotas += list(s.first_quotas)
 
-        qa = QuotaAvailability()
+        qa = QuotaAvailability(early_out=False)
         for q in quotas:
             qa.queue(q)
-        qa.compute(allow_cache=True, allow_cache_stale=True)
+        qa.compute()
 
         for q in quotas:
             q.cached_avail = qa.results[q]
-            q.cached_availability_time = datetime.fromtimestamp(q.cached_avail[2], tz=pytz.UTC) if len(q.cached_avail) > 2 else now()
+            q.cached_availability_paid_orders = qa.count_paid_orders.get(qa, 0)
             if q.size is not None:
-                q.percent = round(q.cached_avail[1] / q.size * 100) if q.size > 0 else 0
-                q.inv_percent = 100 - q.percent
+                q.percent_paid = min(
+                    100,
+                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
+                )
         return ctx
 
 

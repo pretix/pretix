@@ -2,7 +2,6 @@
 {% load i18n %}
 {% load urlreplace %}
 {% load bootstrap3 %}
-{% load humanize %}
 {% block title %}{% trans "Events" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Events" %}</h1>
@@ -81,12 +80,7 @@
                     <a href="?{% url_replace request 'ordering' 'date_to' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
-                    {% trans "Quota availability" %}
-                </th>
-                <th>
-                    {% trans "Paid tickets" %}
-                    <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
+                    {% trans "Paid tickets per quota" %}
                 </th>
                 <th>
                     {% trans "Status" %}
@@ -133,7 +127,7 @@
                     </td>
                     <td>
                         {% for q in e.first_quotas|slice:":3" %}
-                            {% include "pretixcontrol/fragment_quota_box.html" with quota=q %}
+                            {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
                         {% endfor %}
                         {% if e.first_quotas|length > 3 %}
                             <a href="{% url "control:event.items.quotas" organizer=e.organizer.slug event=e.slug %}"
@@ -142,9 +136,6 @@
                                 &middot;&middot;&middot;
                             </a>
                         {% endif %}
-                    </td>
-                    <td>
-                        {{ e.sum_tickets_paid|default_if_none:"0"|intcomma }}
                     </td>
                     <td>
                         {% if not e.live %}

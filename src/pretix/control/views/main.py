@@ -1,19 +1,13 @@
-from datetime import datetime
-
-import pytz
 from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import (
-    Count, F, IntegerField, Max, Min, OuterRef, Prefetch, Subquery,
-)
+from django.db.models import F, Max, Min, Prefetch
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
-from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
@@ -21,9 +15,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.forms import SafeSessionWizardView
 from pretix.base.i18n import language
-from pretix.base.models import (
-    Event, EventMetaValue, Order, OrderPosition, Organizer, Quota, Team,
-)
+from pretix.base.models import Event, EventMetaValue, Organizer, Quota, Team
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
@@ -58,18 +50,7 @@ class EventList(PaginationMixin, ListView):
             order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
         )
 
-        sum_tickets_paid = OrderPosition.objects.filter(
-            order__event=OuterRef('pk'),
-            order__status=Order.STATUS_PAID,
-        ).order_by().values('order__event').annotate(
-            s=Count('*')
-        ).values(
-            's'
-        )
-
-        qs = qs.annotate(
-            sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
-        ).prefetch_related(
+        qs = qs.prefetch_related(
             Prefetch('quotas',
                      queryset=Quota.objects.filter(subevent__isnull=True).annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
                      to_attr='first_quotas')
@@ -95,17 +76,19 @@ class EventList(PaginationMixin, ListView):
             s.first_quotas = s.first_quotas[:4]
             quotas += list(s.first_quotas)
 
-        qa = QuotaAvailability()
+        qa = QuotaAvailability(early_out=False)
         for q in quotas:
             qa.queue(q)
-        qa.compute(allow_cache=True, allow_cache_stale=True)
+        qa.compute()
 
         for q in quotas:
             q.cached_avail = qa.results[q]
-            q.cached_availability_time = datetime.fromtimestamp(q.cached_avail[2], tz=pytz.UTC) if len(q.cached_avail) > 2 else now()
+            q.cached_availability_paid_orders = qa.count_paid_orders.get(qa, 0)
             if q.size is not None:
-                q.percent = round(q.cached_avail[1] / q.size * 100) if q.size > 0 else 0
-                q.inv_percent = 100 - q.percent
+                q.percent_paid = min(
+                    100,
+                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
+                )
         return ctx
 
     @cached_property

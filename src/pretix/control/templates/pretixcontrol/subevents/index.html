@@ -1,7 +1,6 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% load humanize %}
 {% load urlreplace %}
 {% block title %}{% trans "Dates" context "subevent" %}{% endblock %}
 {% block content %}
@@ -80,12 +79,7 @@
                             <a href="?{% url_replace request 'filter-ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                         <th>
-                            {% trans "Quota availability" %}
-                        </th>
-                        <th>
-                            {% trans "Paid tickets" %}
-                            <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
+                            {% trans "Paid tickets per quota" %}
                         </th>
                         <th>
                             {% trans "Status" %}
@@ -122,7 +116,7 @@
                             <td>{{ s.get_date_from_display }}</td>
                             <td>
                                 {% for q in s.first_quotas|slice:":3" %}
-                                    {% include "pretixcontrol/fragment_quota_box.html" with quota=q %}
+                                    {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
                                 {% endfor %}
                                 {% if s.first_quotas|length > 3 %}
                                     <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}?subevent={{ s.id }}"
@@ -131,9 +125,6 @@
                                         &middot;&middot;&middot;
                                     </a>
                                 {% endif %}
-                            </td>
-                            <td>
-                                {{ s.sum_tickets_paid|default_if_none:"0"|intcomma }}
                             </td>
                             <td>
                                 {% if not s.active %}
