@@ -201,7 +201,7 @@ class ParametrizedOrderNotificationType(NotificationType):
         def groupkey(op):
             return op.item, op.variation, op.subevent
 
-        cart = [(k, list(v)) for k, v in groupby(sorted(positions, key=sortkey()), key=groupkey())]
+        cart = [(k, list(v)) for k, v in groupby(sorted(positions, key=sortkey), key=groupkey)]
         items = []
         for (item, variation, subevent), pos in cart:
             ele = [str(len(pos)) + 'x ' + str(item)]
