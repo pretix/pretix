@@ -346,8 +346,8 @@ export default {
               }
             } else {
               this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
+              this.fetchStatus()
             }
-            this.fetchStatus()
           })
           .catch(reason => {
             this.checkLoading = false
@@ -389,11 +389,18 @@ export default {
       }
     },
     startSearch() {
+      if (this.query.length >= 32) {
+        // likely a secret, not a search result
+        this.check(this.query, false, false)
+        return
+      }
+
       this.checkResult = null
       this.searchLoading = true
       this.searchError = null
       this.searchResults = []
       this.answers = {}
+
       window.clearInterval(this.clearTimeout)
       fetch(this.$root.api.lists + this.checkinlist.id + '/positions/?ignore_status=true&expand=subevent&expand=item&expand=variation&check_rules=true&search=' + encodeURIComponent(this.query))
           .then(response => response.json())
