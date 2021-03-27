@@ -1,4 +1,4 @@
-.. spelling:: fullname
+.. spelling:: fullname checkin
 
 .. _`rest-teams`:
 
