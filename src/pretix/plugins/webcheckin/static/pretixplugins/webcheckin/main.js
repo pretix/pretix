@@ -32,6 +32,7 @@ window.vapp = new Vue({
             'results.headline': gettext('Search results'),
             'results.none': gettext('No tickets found'),
             'check.headline': gettext('Check-in result'),
+            'check.attention': gettext('This ticket requires special attention'),
             'scantype.switch': gettext('Switch direction'),
             'scantype.entry': gettext('Entry'),
             'scantype.exit': gettext('Exit'),

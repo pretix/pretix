@@ -31,6 +31,10 @@
             <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
           </div>
         </div>
+        <div class="attention" v-if="checkResult.require_attention">
+          <span class="fa fa-warning"></span>
+          {{ $root.strings['check.attention'] }}
+        </div>
       </div>
 
       <div v-else-if="searchResults !== null" class="panel panel-primary search-results">
