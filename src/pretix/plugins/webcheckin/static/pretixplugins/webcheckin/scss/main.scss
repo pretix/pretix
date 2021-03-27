@@ -2,6 +2,7 @@
 @import "bootstrap/scss/_bootstrap.scss";
 @import "pretixbase/scss/_theme.scss";
 @import "fontawesome/scss/font-awesome.scss";
+@import "datetimepicker/_bootstrap-datetimepicker.scss";
 
 body {
   background: #FBF7FC;
@@ -125,6 +126,7 @@ a.searchresult {
 }
 .modal.fade.in {
   display: block;
+  overflow: auto;
 }
 
 @-webkit-keyframes blinking {

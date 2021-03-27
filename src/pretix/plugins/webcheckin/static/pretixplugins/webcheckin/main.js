@@ -13,6 +13,7 @@ function ngettext(singular, plural, count) {
     return plural;
 }
 
+
 moment.locale(document.body.attributes['data-datetimelocale'].value)
 window.vapp = new Vue({
     components: {
@@ -47,6 +48,7 @@ window.vapp = new Vue({
             'modal.continue': gettext('Continue'),
             'modal.unpaid.head': gettext('Ticket not paid'),
             'modal.unpaid.text': gettext('This ticket is not yet paid. Do you want to continue anyways?'),
+            'modal.questions': gettext('Additional information required'),
             'result.ok': gettext('Valid ticket'),
             'result.exit': gettext('Exit recorded'),
             'result.already_redeemed': gettext('Ticket already used'),

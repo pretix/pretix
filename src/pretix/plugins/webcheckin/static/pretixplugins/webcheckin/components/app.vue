@@ -101,12 +101,13 @@
 
       </div>
     </div>
+
     <div :class="'modal modal-unpaid fade' + (showUnpaidModal ? ' in' : '')" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
-        <div class="modal-content" v-if="checkResult">
+        <div class="modal-content" v-if="checkResult && checkResult.position">
           <div class="modal-header">
             <button type="button" class="close" @click="showUnpaidModal = false">
-                <span class="fa fa-close"></span>
+              <span class="fa fa-close"></span>
             </button>
             <h4 class="modal-title">
               {{ $root.strings['modal.unpaid.head'] }}
@@ -121,13 +122,73 @@
             <button type="button" class="btn btn-default" @click="showUnpaidModal = false">
               {{ $root.strings['modal.cancel'] }}
             </button>
-            <button type="button" class="btn btn-primary" @click="check(checkResult.position.secret, true)">
+            <button type="button" class="btn btn-primary" @click="check(checkResult.position.secret, true, false)">
               {{ $root.strings['modal.continue'] }}
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    <form :class="'modal modal-questions fade' + (showQuestionsModal ? ' in' : '')" tabindex="-1" role="dialog" ref="questionsModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" v-if="checkResult && checkResult.questions">
+          <div class="modal-header">
+            <button type="button" class="close" @click="showQuestionsModal = false">
+                <span class="fa fa-close"></span>
+            </button>
+            <h4 class="modal-title">
+              {{ $root.strings['modal.questions'] }}
+            </h4>
+          </div>
+          <div class="modal-body">
+            <div :class="q.type === 'M' ? '' : (q.type === 'B' ? 'checkbox' : 'form-group')" v-for="q in checkResult.questions">
+              <label :for="'q_' + q.id" v-if="q.type !== 'B'">
+                {{ q.question }}
+                {{ q.required ? ' *' : '' }}
+              </label>
+
+              <textarea v-if="q.type === 'T'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required"></textarea>
+              <input v-else-if="q.type === 'N'" type="number" v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required">
+              <datefield v-else-if="q.type === 'D'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" :required="q.required"></datefield>
+              <timefield v-else-if="q.type === 'H'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" :required="q.required"></timefield>
+              <datetimefield v-else-if="q.type === 'W'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" :required="q.required"></datetimefield>
+              <select v-else-if="q.type === 'C'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required">
+                <option v-if="!q.required"></option>
+                <option v-for="op in q.options" :value="op.id.toString()">{{ op.answer }}</option>
+              </select>
+              <div v-else-if="q.type === 'M'">
+                <div class="checkbox" v-for="op in q.options">
+                  <label>
+                    <input type="checkbox" :checked="answers[q.id.toString()] && answers[q.id.toString()].split(',').includes(op.id.toString)" @input="answerSetM(q.id.toString(), op.id.toString(), $event.target.checked)">
+                    {{ op.answer }}
+                  </label>
+                </div>
+              </div>
+              <label v-else-if="q.type === 'B'">
+                <input type="checkbox" :checked="answers[q.id.toString()] === 'true'" @input="answers[q.id.toString()] = $event.target.checked.toString()" :required="q.required">
+                {{ q.question }}
+                {{ q.required ? ' *' : '' }}
+              </label>
+              <select v-else-if="q.type === 'CC'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required">
+                <option v-if="!q.required"></option>
+                <option v-for="op in countries" :value="op.key">{{ op.value }}</option>
+              </select>
+              <input v-else v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" @click="showQuestionsModal = false">
+              {{ $root.strings['modal.cancel'] }}
+            </button>
+            <button type="button" class="btn btn-primary" @click="check(checkResult.position.secret, true, true)">
+              {{ $root.strings['modal.continue'] }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
   </div>
 </template>
 <script>
@@ -135,6 +196,9 @@ export default {
   components: {
     CheckinlistSelect: CheckinlistSelect.default,
     SearchresultItem: SearchresultItem.default,
+    Datetimefield: Datetimefield.default,
+    Timefield: Timefield.default,
+    Datefield: Datefield.default,
   },
   data() {
     return {
@@ -153,6 +217,8 @@ export default {
       checkinlist: null,
       clearTimeout: null,
       showUnpaidModal: false,
+      showQuestionsModal: false,
+      answers: {},
     }
   },
   mounted() {
@@ -167,6 +233,9 @@ export default {
     window.clearInterval(this.clearTimeout)
   },
   computed: {
+    countries() {
+      return JSON.parse(document.querySelector("#countries").innerHTML);
+    },
     subevent() {
       if (!this.checkinlist) return ''
       if (!this.checkinlist.subevent) return ''
@@ -207,6 +276,15 @@ export default {
     selectResult(res) {
       this.check(res.id, false)
     },
+    answerSetM(qid, opid, checked) {
+      let arr = this.answers[qid] ? this.answers[qid].split(',') : [];
+      if (checked && !arr.includes(opid)) {
+        arr.push(opid)
+      } else if (!checked) {
+        arr = arr.filter(o => opid !== o)
+      }
+      this.answers[qid] = arr.join(',')
+    },
     clear() {
       this.query = ''
       this.searchLoading = false
@@ -217,9 +295,19 @@ export default {
       this.checkError = null
       this.checkResult = null
       this.showUnpaidModal = false
+      this.showQuestionsModal = false
+      this.answers = {}
     },
-    check(id, ignoreUnpaid) {
+    check(id, ignoreUnpaid, keepAnswers) {
+      if (!keepAnswers) {
+        this.answers = {}
+      } else if (this.showQuestionsModal) {
+        if (!this.$refs.questionsModal.reportValidity()) {
+          return
+        }
+      }
       this.showUnpaidModal = false
+      this.showQuestionsModal = false
       this.checkLoading = true
       this.checkError = null
       this.checkResult = {}
@@ -232,10 +320,11 @@ export default {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          questions_supported: false,
+          questions_supported: true,
           canceled_supported: true,
           ignore_unpaid: ignoreUnpaid || false,
           type: this.type,
+          answers: this.answers,
         })
       })
           .then(response => response.json())
@@ -244,6 +333,17 @@ export default {
             this.checkResult = data
             if (this.checkinlist.include_pending && data.status === 'error' && data.reason === 'unpaid') {
               this.showUnpaidModal = true
+            } else if (data.status === 'incomplete') {
+              this.showQuestionsModal = true
+              for (const q of this.checkResult.questions) {
+                if (!this.answers[q.id.toString()]) {
+                  this.answers[q.id.toString()] = ""
+                }
+                q.question = i18nstring_localize(q.question)
+                for (const o of q.options) {
+                  o.answer = i18nstring_localize(o.answer)
+                }
+              }
             } else {
               this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
             }
@@ -273,18 +373,15 @@ export default {
       if (e.key === "Enter") {
         this.startSearch()
       } else if (this.query === '') {
-        this.cleanup()
+        this.clear()
       }
-    },
-    cleanup() {
-      this.searchLoading = false
-      this.searchResults = null
     },
     startSearch() {
       this.checkResult = null
       this.searchLoading = true
       this.searchError = null
       this.searchResults = []
+      this.answers = {}
       window.clearInterval(this.clearTimeout)
       fetch(this.$root.api.lists + this.checkinlist.id + '/positions/?ignore_status=true&expand=subevent&expand=item&expand=variation&check_rules=true&search=' + encodeURIComponent(this.query))
           .then(response => response.json())
