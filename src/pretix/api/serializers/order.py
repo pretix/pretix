@@ -355,7 +355,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         super().__init__(*args, **kwargs)
         request = self.context.get('request')
         if not request or not self.context['request'].query_params.get('pdf_data', 'false') == 'true' or 'can_view_orders' not in request.eventpermset:
-            self.fields.pop('pdf_data')
+            self.fields.pop('pdf_data', None)
 
     def validate(self, data):
         if data.get('attendee_name') and data.get('attendee_name_parts'):
@@ -601,7 +601,7 @@ class OrderSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
-            self.fields['positions'].child.fields.pop('pdf_data')
+            self.fields['positions'].child.fields.pop('pdf_data', None)
 
         for exclude_field in self.context['request'].query_params.getlist('exclude'):
             p = exclude_field.split('.')
