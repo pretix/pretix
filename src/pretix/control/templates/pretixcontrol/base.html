@@ -283,6 +283,7 @@
                                 {% for nav in nav_items %}
                                     <li>
                                         <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}
+                                                {% if nav.external %}target="_blank"{% endif %}
                                                 {% if nav.children %}class="has-children"{% endif %}>
                                             {% if nav.icon %}
                                                 {% if "<svg" in nav.icon %}
@@ -301,6 +302,7 @@
                                                 {% for item in nav.children %}
                                                     <li>
                                                         <a href="{{ item.url }}"
+                                                                {% if item.external %}target="_blank"{% endif %}
                                                                 {% if item.active %}class="active"{% endif %}>
                                                             {{ item.label }}
                                                         </a>

@@ -55,7 +55,9 @@ from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
 from ...base.i18n import language
-from ...base.models.items import ItemMetaProperty
+from ...base.models.items import (
+    Item, ItemCategory, ItemMetaProperty, Question, Quota,
+)
 from ...base.settings import SETTINGS_AFFECTING_CSS, LazyI18nStringList
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
@@ -971,6 +973,21 @@ class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
         if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_vouchers',
                                                       request=self.request):
             qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event,
+                                                      'can_change_event_settings', request=self.request):
+            allowed_types = [
+                ContentType.objects.get_for_model(Voucher),
+                ContentType.objects.get_for_model(Order)
+            ]
+            if self.request.user.has_event_permission(self.request.organizer, self.request.event,
+                                                      'can_change_items', request=self.request):
+                allowed_types += [
+                    ContentType.objects.get_for_model(Item),
+                    ContentType.objects.get_for_model(ItemCategory),
+                    ContentType.objects.get_for_model(Quota),
+                    ContentType.objects.get_for_model(Question),
+                ]
+            qs = qs.filter(content_type__in=allowed_types)
 
         if self.request.GET.get('user') == 'yes':
             qs = qs.filter(user__isnull=False)

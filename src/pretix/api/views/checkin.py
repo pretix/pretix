@@ -59,7 +59,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
     queryset = CheckinList.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CheckinListFilter
-    permission = 'can_view_orders'
+    permission = ('can_view_orders', 'can_checkin_orders',)
     write_permission = 'can_change_event_settings'
 
     def get_queryset(self):
@@ -226,8 +226,8 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     }
 
     filterset_class = CheckinOrderPositionFilter
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
+    permission = ('can_view_orders', 'can_checkin_orders')
+    write_permission = ('can_change_orders', 'can_checkin_orders')
 
     def get_filterset_kwargs(self):
         return {
@@ -310,6 +310,9 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         if 'variation' in self.request.query_params.getlist('expand'):
             qs = qs.prefetch_related('variation')
+
+        if 'can_view_orders' not in self.request.eventpermset and len(self.request.query_params.get('search', '')) < 3:
+            qs = qs.none()
 
         return qs
 

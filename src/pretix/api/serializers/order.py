@@ -353,7 +353,8 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'request' in self.context and not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
+        request = self.context.get('request')
+        if not request or not self.context['request'].query_params.get('pdf_data', 'false') == 'true' or 'can_view_orders' not in request.eventpermset:
             self.fields.pop('pdf_data')
 
     def validate(self, data):

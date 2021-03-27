@@ -66,7 +66,9 @@ def _default_context(request):
                 if complain_testmode_orders is None:
                     complain_testmode_orders = request.event.orders.filter(testmode=True).exists()
                     request.event.cache.set('complain_testmode_orders', complain_testmode_orders, 30)
-            ctx['complain_testmode_orders'] = complain_testmode_orders
+            ctx['complain_testmode_orders'] = complain_testmode_orders and request.user.has_event_permission(
+                request.organizer, request.event, 'can_view_orders', request=request
+            )
         else:
             ctx['complain_testmode_orders'] = False
 

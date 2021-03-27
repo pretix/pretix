@@ -174,6 +174,8 @@ class Team(LoggedModel):
     :type can_view_orders: bool
     :param can_change_orders: If ``True``, the members can change details of orders of the associated events.
     :type can_change_orders: bool
+    :param can_checkin_orders: If ``True``, the members can perform check-in related actions.
+    :type can_checkin_orders: bool
     :param can_view_vouchers: If ``True``, the members can inspect details of all vouchers of the associated events.
     :type can_view_vouchers: bool
     :param can_change_vouchers: If ``True``, the members can change and create vouchers for the associated events.
@@ -219,6 +221,12 @@ class Team(LoggedModel):
     can_change_orders = models.BooleanField(
         default=False,
         verbose_name=_("Can change orders")
+    )
+    can_checkin_orders = models.BooleanField(
+        default=False,
+        verbose_name=_("Can perform check-ins"),
+        help_text=_('This includes searching for attendees, which can be used to obtain personal information about '
+                    'attendees. Users with "can change orders" can also perform check-ins.')
     )
     can_view_vouchers = models.BooleanField(
         default=False,
