@@ -51,6 +51,10 @@ a.searchresult {
   padding: 0;
   color: $text-color;
 
+  &:focus {
+    background: $gray-lightest;
+  }
+
   h4 {
     margin: 0 0 5px;
   }

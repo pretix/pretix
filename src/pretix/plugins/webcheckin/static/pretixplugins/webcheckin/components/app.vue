@@ -44,7 +44,7 @@
           </h3>
         </div>
         <ul class="list-group">
-          <searchresult-item v-if="searchResults" v-for="p in searchResults" :position="p" :key="p.id" @selected="selectResult($event)"></searchresult-item>
+          <searchresult-item ref="result" v-if="searchResults" v-for="p in searchResults" :position="p" :key="p.id" @selected="selectResult($event)"></searchresult-item>
           <li v-if="!searchResults.length && !searchLoading" class="list-group-item text-center">
             {{ $root.strings['results.none'] }}
           </li>
@@ -357,6 +357,18 @@ export default {
           })
     },
     globalKeydown(e) {
+      if (document.activeElement.classList.contains('searchresult') && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        if (e.key === 'ArrowDown') {
+          document.activeElement.nextElementSibling.focus()
+          e.preventDefault()
+          return true
+        }
+        if (e.key === 'ArrowUp') {
+          document.activeElement.previousElementSibling.focus()
+          e.preventDefault()
+          return true
+        }
+      }
       if (document.activeElement.nodeName.toLowerCase() !== 'input' && document.activeElement.nodeName.toLowerCase() !== 'textarea') {
         if (e.key && e.key.match(/^[a-z0-9A-Z+/=<>#]$/)) {
           this.query = ''
@@ -390,6 +402,11 @@ export default {
             if (data.results) {
               this.searchResults = data.results
               this.searchNextUrl = data.next
+              if (data.results.length) {
+              	this.$nextTick(() => {
+                  this.$refs.result[0].$refs.a.focus()
+                })
+              }
             } else {
               this.searchError = data
             }

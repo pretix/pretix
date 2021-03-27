@@ -1,5 +1,5 @@
 <template>
-  <a class="list-group-item searchresult" href="#" @click.prevent="$emit('selected', position)">
+  <a class="list-group-item searchresult" href="#" @click.prevent="$emit('selected', position)" ref="a">
     <div class="details">
       <h4>{{ position.order }}-{{ position.positionid }} {{ position.attendee_name }}</h4>
       <span>{{ itemvar }}<br></span>
