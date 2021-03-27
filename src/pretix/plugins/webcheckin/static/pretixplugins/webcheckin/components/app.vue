@@ -403,9 +403,15 @@ export default {
               this.searchResults = data.results
               this.searchNextUrl = data.next
               if (data.results.length) {
-              	this.$nextTick(() => {
-                  this.$refs.result[0].$refs.a.focus()
-                })
+                if (data.results[0].secret === this.query) {
+                  this.$nextTick(() => {
+                    this.$refs.result[0].$refs.a.click()
+                  })
+                } else {
+                  this.$nextTick(() => {
+                    this.$refs.result[0].$refs.a.focus()
+                  })
+                }
               }
             } else {
               this.searchError = data
