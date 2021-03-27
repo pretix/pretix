@@ -120,6 +120,13 @@ a.searchresult {
   font-size: 16px;
 }
 
+.modal {
+  background: rgba(0, 0, 0, 0.7);
+}
+.modal.fade.in {
+  display: block;
+}
+
 @-webkit-keyframes blinking {
   0%, 49% {
     background-color: $brand-primary;

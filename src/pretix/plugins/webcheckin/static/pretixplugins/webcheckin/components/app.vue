@@ -24,14 +24,14 @@
         <div :class="'check-result-status check-result-' + checkResultColor">
           {{ checkResultText }}
         </div>
-        <div class="panel-body">
+        <div class="panel-body" v-if="checkResult.position">
           <div class="details">
             <h4>{{ checkResult.position.order }}-{{ checkResult.position.positionid }} {{ checkResult.position.attendee_name }}</h4>
             <span>{{ checkResultItemvar }}</span>
             <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
           </div>
         </div>
-        <div class="attention" v-if="checkResult.require_attention">
+        <div class="attention" v-if="checkResult && checkResult.require_attention">
           <span class="fa fa-warning"></span>
           {{ $root.strings['check.attention'] }}
         </div>
@@ -101,6 +101,33 @@
 
       </div>
     </div>
+    <div :class="'modal modal-unpaid fade' + (showUnpaidModal ? ' in' : '')" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" v-if="checkResult">
+          <div class="modal-header">
+            <button type="button" class="close" @click="showUnpaidModal = false">
+                <span class="fa fa-close"></span>
+            </button>
+            <h4 class="modal-title">
+              {{ $root.strings['modal.unpaid.head'] }}
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p>
+              {{ $root.strings['modal.unpaid.text'] }}
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" @click="showUnpaidModal = false">
+              {{ $root.strings['modal.cancel'] }}
+            </button>
+            <button type="button" class="btn btn-primary" @click="check(checkResult.position.secret, true)">
+              {{ $root.strings['modal.continue'] }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -125,6 +152,7 @@ export default {
       checkResult: null,
       checkinlist: null,
       clearTimeout: null,
+      showUnpaidModal: false,
     }
   },
   mounted() {
@@ -177,7 +205,7 @@ export default {
   },
   methods: {
     selectResult(res) {
-      this.check(res.id)
+      this.check(res.id, false)
     },
     clear() {
       this.query = ''
@@ -188,8 +216,10 @@ export default {
       this.checkLoading = false
       this.checkError = null
       this.checkResult = null
+      this.showUnpaidModal = false
     },
-    check(id) {
+    check(id, ignoreUnpaid) {
+      this.showUnpaidModal = false
       this.checkLoading = true
       this.checkError = null
       this.checkResult = {}
@@ -204,6 +234,7 @@ export default {
         body: JSON.stringify({
           questions_supported: false,
           canceled_supported: true,
+          ignore_unpaid: ignoreUnpaid || false,
           type: this.type,
         })
       })
@@ -211,9 +242,12 @@ export default {
           .then(data => {
             this.checkLoading = false
             this.checkResult = data
-            console.log(data)
+            if (this.checkinlist.include_pending && data.status === 'error' && data.reason === 'unpaid') {
+              this.showUnpaidModal = true
+            } else {
+              this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
+            }
             this.fetchStatus()
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
           })
           .catch(reason => {
             this.checkLoading = false
