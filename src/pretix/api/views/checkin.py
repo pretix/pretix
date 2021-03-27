@@ -311,7 +311,8 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         if 'variation' in self.request.query_params.getlist('expand'):
             qs = qs.prefetch_related('variation')
 
-        if 'can_view_orders' not in self.request.eventpermset and len(self.request.query_params.get('search', '')) < 3:
+        if 'pk' not in self.request.resolver_match.kwargs and 'can_view_orders' not in self.request.eventpermset \
+                and len(self.request.query_params.get('search', '')) < 3:
             qs = qs.none()
 
         return qs

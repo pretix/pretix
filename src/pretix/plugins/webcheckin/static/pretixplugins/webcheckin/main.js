@@ -1,4 +1,17 @@
 /*global gettext, Vue, App*/
+function gettext(msgid) {
+    if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
+        return django.gettext(msgid);
+    }
+    return msgid;
+}
+
+function ngettext(singular, plural, count) {
+    if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
+        return django.ngettext(singular, plural, count);
+    }
+    return plural;
+}
 
 moment.locale(document.body.attributes['data-datetimelocale'].value)
 window.vapp = new Vue({
@@ -17,6 +30,7 @@ window.vapp = new Vue({
             'checkinlist.none': gettext('No active check-in lists found.'),
             'checkinlist.switch': gettext('Switch check-in list'),
             'results.headline': gettext('Search results'),
+            'results.none': gettext('No tickets found'),
             'check.headline': gettext('Check-in result'),
             'scantype.switch': gettext('Switch direction'),
             'scantype.entry': gettext('Entry'),
@@ -38,6 +52,9 @@ window.vapp = new Vue({
             'result.rules': gettext('Entry not allowed'),
             'result.revoked': gettext('Ticket code revoked/changed'),
             'result.canceled': gettext('Order canceled'),
+            'status.checkin': gettext('Checked-in Tickets'),
+            'status.position': gettext('Valid Tickets'),
+            'status.inside': gettext('Currently inside'),
         },
         event_name: document.querySelector('#app').attributes['data-event-name'].value,
         timezone: document.body.attributes['data-timezone'].value,

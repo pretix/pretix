@@ -19,23 +19,23 @@ body {
 }
 
 .meta {
-  margin-top: 20px;
-  font-size: 32px;
-  color: $text-muted;
-}
-
-.scantype {
-  margin-top: 20px;
-  text-transform: uppercase;
-  font-size: 48px;
-
-  &>.fa {
-    font-size: 96px;
-    display: block;
-    padding-bottom: 10px;
+  padding: 20px;
+  text-align: center;
+  .settings {
+    font-size: 32px;
   }
+  color: $text-muted;
   .fa-sign-out {
     color: $brand-warning;
+  }
+
+  .status {
+    padding-top: 20px;
+    color: $text-muted;
+    .statistic {
+      display: block;
+      font-size: 30px;
+    }
   }
 }
 

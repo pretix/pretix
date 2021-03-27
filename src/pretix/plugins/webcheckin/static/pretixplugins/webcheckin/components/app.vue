@@ -41,6 +41,9 @@
         </div>
         <ul class="list-group">
           <searchresult-item v-if="searchResults" v-for="p in searchResults" :position="p" :key="p.id" @selected="selectResult($event)"></searchresult-item>
+          <li v-if="!searchResults.length && !searchLoading" class="list-group-item text-center">
+            {{ $root.strings['results.none'] }}
+          </li>
           <li v-if="searchLoading" class="list-group-item text-center">
             <span class="fa fa-4x fa-cog fa-spin loading-icon"></span>
           </li>
@@ -53,17 +56,45 @@
         </ul>
       </div>
 
-      <div v-else>
-        <div v-if="checkinlist" class="scantype text-center">
-          <span :class="'fa fa-sign-' + (type === 'exit' ? 'out' : 'in')"></span>
-          {{ $root.strings['scantype.' + type] }}<br>
-          <button @click="switchType" class="btn btn-default"><span class="fa fa-refresh"></span> {{ $root.strings['scantype.switch'] }}</button>
+      <div v-else-if="checkinlist">
+        <div class="panel panel-default">
+          <div class="panel-body meta">
+            <div class="row settings">
+              <div class="col-sm-6">
+                <div>
+                  <span :class="'fa fa-sign-' + (type === 'exit' ? 'out' : 'in')"></span>
+                  {{ $root.strings['scantype.' + type] }}<br>
+                  <button @click="switchType" class="btn btn-default"><span class="fa fa-refresh"></span> {{ $root.strings['scantype.switch'] }}</button>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div v-if="checkinlist">
+                  {{ checkinlist.name }}<br>
+                  {{ subevent }}<br v-if="subevent">
+                  <button @click="switchList" type="button" class="btn btn-default">{{ $root.strings['checkinlist.switch'] }}</button>
+                </div>
+              </div>
+            </div>
+            <div v-if="status" class="row status">
+              <div class="col-sm-4">
+                <span class="statistic">{{ status.checkin_count }}</span>
+                {{ $root.strings['status.checkin'] }}
+              </div>
+              <div class="col-sm-4">
+                <span class="statistic">{{ status.position_count }}</span>
+                {{ $root.strings['status.position'] }}
+              </div>
+              <div class="col-sm-4">
+                <div class="pull-right">
+                  <button @click="fetchStatus" class="btn btn-default"><span :class="'fa fa-refresh' + (statusLoading ? ' fa-spin': '')"></span></button>
+                </div>
+                <span class="statistic">{{ status.inside_count }}</span>
+                {{ $root.strings['status.inside'] }}
+              </div>
+            </div>
+          </div>
         </div>
-        <div v-if="checkinlist" class="meta text-center">
-          {{ checkinlist.name }}<br>
-          {{ subevent }}<br>
-          <button @click="switchList" type="button" class="btn btn-default">{{ $root.strings['checkinlist.switch'] }}</button>
-        </div>
+
       </div>
     </div>
   </div>
@@ -82,19 +113,26 @@ export default {
       searchResults: null,
       searchNextUrl: null,
       searchError: null,
+      status: null,
+      statusLoading: 0,
+      statusInterval: null,
       checkLoading: false,
       checkError: null,
       checkResult: null,
       checkinlist: null,
+      clearTimeout: null,
     }
   },
   mounted() {
     window.addEventListener('focus', this.globalKeydown)
     document.addEventListener('keydown', this.globalKeydown)
+    this.statusInterval = window.setInterval(this.fetchStatus, 120 * 1000)
   },
   destroyed() {
     window.removeEventListener('focus', this.globalKeydown)
     document.removeEventListener('keydown', this.globalKeydown)
+    window.clearInterval(this.statusInterval)
+    window.clearInterval(this.clearTimeout)
   },
   computed: {
     subevent() {
@@ -137,10 +175,22 @@ export default {
     selectResult(res) {
       this.check(res.id)
     },
+    clear() {
+      this.query = ''
+      this.searchLoading = false
+      this.searchResults = null
+      this.searchNextUrl = null
+      this.searchError = null
+      this.checkLoading = false
+      this.checkError = null
+      this.checkResult = null
+    },
     check(id) {
       this.checkLoading = true
       this.checkError = null
       this.checkResult = {}
+      window.clearInterval(this.clearTimeout)
+
       fetch(this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=variation', {
         method: 'POST',
         headers: {
@@ -157,11 +207,15 @@ export default {
           .then(data => {
             this.checkLoading = false
             this.checkResult = data
+            console.log(data)
+            this.fetchStatus()
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
           })
           .catch(reason => {
             this.checkLoading = false
             this.checkResult = {}
-            this.checkError = null
+            this.checkError = reason
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
           })
     },
     globalKeydown(e) {
@@ -179,7 +233,6 @@ export default {
     },
     inputKeyup(e) {
       if (e.key === "Enter") {
-        console.log("startsearch")
         this.startSearch()
       } else if (this.query === '') {
         this.cleanup()
@@ -194,6 +247,7 @@ export default {
       this.searchLoading = true
       this.searchError = null
       this.searchResults = []
+      window.clearInterval(this.clearTimeout)
       fetch(this.$root.api.lists + this.checkinlist.id + '/positions/?ignore_status=true&expand=subevent&expand=item&expand=variation&check_rules=true&search=' + encodeURIComponent(this.query))
           .then(response => response.json())
           .then(data => {
@@ -204,16 +258,19 @@ export default {
             } else {
               this.searchError = data
             }
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
           })
           .catch(reason => {
             this.searchLoading = false
             this.searchResults = []
             this.searchError = reason
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
           })
     },
     searchNext() {
       this.searchLoading = true
       this.searchError = null
+      window.clearInterval(this.clearTimeout)
       fetch(this.searchNextUrl)
           .then(response => response.json())
           .then(data => {
@@ -224,10 +281,12 @@ export default {
             } else {
               this.searchError = data
             }
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
           })
           .catch(reason => {
             this.searchLoading = false
             this.searchError = reason
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
           })
     },
     switchType() {
@@ -238,10 +297,23 @@ export default {
       location.hash = ''
       this.checkinlist = null
     },
+    fetchStatus() {
+      this.statusLoading++
+      fetch(this.$root.api.lists + this.checkinlist.id + '/status/')
+              .then(response => response.json())
+              .then(data => {
+                this.statusLoading--
+                this.status = data
+              })
+              .catch(reason => {
+                this.statusLoading--
+              })
+    },
     selectList(list) {
       this.checkinlist = list
       location.hash = '#' + list.id
       this.refocus()
+      this.fetchStatus()
     }
   }
 }
