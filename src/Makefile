@@ -25,6 +25,7 @@ coverage:
 	coverage run -m py.test
 
 npminstall:
-	mkdir -p pretix/static.dist/node_prefix
-	npm install --prefix=pretix/static.dist/node_prefix pretix/static/npm_dir/
+	mkdir -p pretix/static.dist/node_prefix/
+	cp -r pretix/static/npm_dir/* pretix/static.dist/node_prefix/
+	npm install --prefix=pretix/static.dist/node_prefix
 
