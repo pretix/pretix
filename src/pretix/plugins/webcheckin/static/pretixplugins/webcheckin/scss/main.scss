@@ -143,3 +143,11 @@ a.searchresult {
     color: $brand-primary;
   }
 }
+
+.panel-primary .panel-heading a {
+  color: white;
+}
+
+.modal-footer .btn-primary.pull-right {
+  margin-left: 10px;
+}

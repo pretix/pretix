@@ -11,6 +11,9 @@
 
       <div v-if="checkResult !== null" class="panel panel-primary check-result">
         <div class="panel-heading">
+          <a class="pull-right" @click.prevent="clear" href="#" tabindex="-1">
+            <span class="fa fa-close"></span>
+          </a>
           <h3 class="panel-title">
             {{ $root.strings['check.headline'] }}
           </h3>
@@ -39,6 +42,9 @@
 
       <div v-else-if="searchResults !== null" class="panel panel-primary search-results">
         <div class="panel-heading">
+          <a class="pull-right" @click.prevent="clear" href="#" tabindex="-1">
+            <span class="fa fa-close"></span>
+          </a>
           <h3 class="panel-title">
             {{ $root.strings['results.headline'] }}
           </h3>
@@ -119,11 +125,11 @@
             </p>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, false)">
+              {{ $root.strings['modal.continue'] }}
+            </button>
             <button type="button" class="btn btn-default" @click="showUnpaidModal = false">
               {{ $root.strings['modal.cancel'] }}
-            </button>
-            <button type="button" class="btn btn-primary" @click="check(checkResult.position.secret, true, false)">
-              {{ $root.strings['modal.continue'] }}
             </button>
           </div>
         </div>
@@ -157,6 +163,7 @@
                 <option v-if="!q.required"></option>
                 <option v-for="op in q.options" :value="op.id.toString()">{{ op.answer }}</option>
               </select>
+              <div v-else-if="q.type === 'F'"><em>file input not supported</em></div>
               <div v-else-if="q.type === 'M'">
                 <div class="checkbox" v-for="op in q.options">
                   <label>
@@ -178,11 +185,11 @@
             </div>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, true)">
+              {{ $root.strings['modal.continue'] }}
+            </button>
             <button type="button" class="btn btn-default" @click="showQuestionsModal = false">
               {{ $root.strings['modal.cancel'] }}
-            </button>
-            <button type="button" class="btn btn-primary" @click="check(checkResult.position.secret, true, true)">
-              {{ $root.strings['modal.continue'] }}
             </button>
           </div>
         </div>
@@ -223,11 +230,13 @@ export default {
   },
   mounted() {
     window.addEventListener('focus', this.globalKeydown)
+    document.addEventListener("visibilitychange", this.globalKeydown)
     document.addEventListener('keydown', this.globalKeydown)
     this.statusInterval = window.setInterval(this.fetchStatus, 120 * 1000)
   },
   destroyed() {
     window.removeEventListener('focus', this.globalKeydown)
+    document.removeEventListener("visibilitychange", this.globalKeydown)
     document.removeEventListener('keydown', this.globalKeydown)
     window.clearInterval(this.statusInterval)
     window.clearInterval(this.clearTimeout)
@@ -333,6 +342,9 @@ export default {
             this.checkResult = data
             if (this.checkinlist.include_pending && data.status === 'error' && data.reason === 'unpaid') {
               this.showUnpaidModal = true
+              this.$nextTick(() => {
+                document.querySelector(".modal-unpaid .btn-primary").focus()
+              })
             } else if (data.status === 'incomplete') {
               this.showQuestionsModal = true
               for (const q of this.checkResult.questions) {
@@ -344,6 +356,9 @@ export default {
                   o.answer = i18nstring_localize(o.answer)
                 }
               }
+              this.$nextTick(() => {
+                document.querySelector(".modal-questions input, .modal-questions select, .modal-questions textarea").focus()
+              })
             } else {
               this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
               this.fetchStatus()
@@ -419,6 +434,10 @@ export default {
                     this.$refs.result[0].$refs.a.focus()
                   })
                 }
+              } else {
+                this.$nextTick(() => {
+                  this.$refs.input.blur()
+                })
               }
             } else {
               this.searchError = data
