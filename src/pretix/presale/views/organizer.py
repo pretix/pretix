@@ -19,7 +19,7 @@ from pytz import UTC
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, EventMetaValue, SubEvent, SubEventMetaValue, Quota,
+    Event, EventMetaValue, Quota, SubEvent, SubEventMetaValue,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar

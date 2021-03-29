@@ -1,13 +1,14 @@
 from collections import OrderedDict
 from decimal import Decimal
 
+import dateutil
 import pytz
 from django import forms
 from django.db.models import (
-    CharField, Count, DateTimeField, IntegerField, Max, OuterRef, Q, Subquery,
-    Sum,
+    Case, CharField, Count, DateTimeField, F, IntegerField, Max, Min, OuterRef,
+    Q, Subquery, Sum, When,
 )
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, now
@@ -48,28 +49,61 @@ class OrderListExporter(MultiSheetListExporter):
 
     @property
     def additional_form_fields(self):
-        return OrderedDict(
-            [
-                ('paid_only',
-                 forms.BooleanField(
-                     label=_('Only paid orders'),
-                     initial=True,
-                     required=False
-                 )),
-                ('include_payment_amounts',
-                 forms.BooleanField(
-                     label=_('Include payment amounts'),
-                     initial=False,
-                     required=False
-                 )),
-                ('group_multiple_choice',
-                 forms.BooleanField(
-                     label=_('Show multiple choice answers grouped in one column'),
-                     initial=False,
-                     required=False
-                 )),
-            ]
-        )
+        d = [
+            ('paid_only',
+             forms.BooleanField(
+                 label=_('Only paid orders'),
+                 initial=True,
+                 required=False
+             )),
+            ('include_payment_amounts',
+             forms.BooleanField(
+                 label=_('Include payment amounts'),
+                 initial=False,
+                 required=False
+             )),
+            ('group_multiple_choice',
+             forms.BooleanField(
+                 label=_('Show multiple choice answers grouped in one column'),
+                 initial=False,
+                 required=False
+             )),
+            ('date_from',
+             forms.DateField(
+                 label=_('Start date'),
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                 required=False,
+                 help_text=_('Only include orders created on or after this date.')
+             )),
+            ('date_to',
+             forms.DateField(
+                 label=_('End date'),
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                 required=False,
+                 help_text=_('Only include orders issued on or before this date.')
+             )),
+            ('event_date_from',
+             forms.DateField(
+                 label=_('Start event date'),
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                 required=False,
+                 help_text=_('Only include orders including at least one ticket for a date on or after this date. '
+                             'Will also include other dates in case of mixed orders!')
+             )),
+            ('event_date_to',
+             forms.DateField(
+                 label=_('End event date'),
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                 required=False,
+                 help_text=_('Only include orders including at least one ticket for a date on or after this date. '
+                             'Will also include other dates in case of mixed orders!')
+             )),
+        ]
+        d = OrderedDict(d)
+        if not self.is_multievent and not self.event.has_subevents:
+            del d['event_date_from']
+            del d['event_date_to']
+        return d
 
     def _get_all_payment_methods(self, qs):
         pps = dict(get_all_payment_providers())
@@ -107,6 +141,51 @@ class OrderListExporter(MultiSheetListExporter):
     def event_object_cache(self):
         return {e.pk: e for e in self.events}
 
+    def _date_filter(self, qs, form_data, rel):
+        annotations = {}
+        filters = {}
+
+        if form_data.get('date_from'):
+            date_value = form_data.get('date_from')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+
+            annotations['date'] = TruncDate(f'{rel}datetime')
+            filters['date__gte'] = date_value
+
+        if form_data.get('date_to'):
+            date_value = form_data.get('date_to')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+
+            annotations['date'] = TruncDate(f'{rel}datetime')
+            filters['date__lte'] = date_value
+
+        if form_data.get('event_date_from'):
+            date_value = form_data.get('event_date_from')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+
+            annotations['event_date_max'] = Case(
+                When(**{f'{rel}event__has_subevents': True}, then=Max(f'{rel}all_positions__subevent__date_from')),
+                default=F(f'{rel}event__date_from'),
+            )
+            filters['event_date_max__gte'] = date_value
+
+        if form_data.get('event_date_to'):
+            date_value = form_data.get('event_date_to')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+
+            annotations['event_date_min'] = Case(
+                When(**{f'{rel}event__has_subevents': True}, then=Min(f'{rel}all_positions__subevent__date_from')),
+                default=F(f'{rel}event__date_from'),
+            )
+            filters['event_date_min__lte'] = date_value
+
+        if filters:
+            return qs.annotate(**annotations).filter(**filters)
+
     def iterate_orders(self, form_data: dict):
         p_date = OrderPayment.objects.filter(
             order=OuterRef('pk'),
@@ -143,6 +222,9 @@ class OrderListExporter(MultiSheetListExporter):
             invoice_numbers=Subquery(i_numbers, output_field=CharField()),
             pcnt=Subquery(s, output_field=IntegerField())
         ).select_related('invoice_address')
+
+        qs = self._date_filter(qs, form_data, rel='')
+
         if form_data['paid_only']:
             qs = qs.filter(status=Order.STATUS_PAID)
         tax_rates = self._get_all_tax_rates(qs)
@@ -308,6 +390,8 @@ class OrderListExporter(MultiSheetListExporter):
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID)
 
+        qs = self._date_filter(qs, form_data, rel='order__')
+
         headers = [
             _('Event slug'),
             _('Order code'),
@@ -405,6 +489,8 @@ class OrderListExporter(MultiSheetListExporter):
         )
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID)
+
+        qs = self._date_filter(qs, form_data, rel='order__')
 
         has_subevents = self.events.filter(has_subevents=True).exists()
 

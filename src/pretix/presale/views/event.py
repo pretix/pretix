@@ -23,7 +23,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.models import ItemVariation, Quota, SeatCategoryMapping, Voucher
+from pretix.base.models import (
+    ItemVariation, Quota, SeatCategoryMapping, Voucher,
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
     ItemBundle, SubEventItem, SubEventItemVariation,
