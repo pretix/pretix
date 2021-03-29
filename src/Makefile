@@ -12,7 +12,7 @@ localegen:
 staticfiles: jsi18n
 	./manage.py collectstatic --noinput
 
-compress:
+compress: npminstall
 	./manage.py compress
 
 jsi18n: localecompile

@@ -67,6 +67,10 @@ Then, create the local database::
 A first user with username ``admin@localhost`` and password ``admin`` will be automatically
 created.
 
+You will also need to install a few JavaScript dependencies::
+
+    make npminstall
+
 If you want to see pretix in a different language than English, you have to compile our language
 files::
 
