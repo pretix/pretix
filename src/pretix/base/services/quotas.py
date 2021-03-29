@@ -120,9 +120,9 @@ class QuotaAvailability:
                                 quotas_original.remove(q)
                                 quotas.remove(q)
                                 if data[1] == "None":
-                                    self.results[q] = int(data[0]), None, int(data[2])
+                                    self.results[q] = int(data[0]), None
                                 else:
-                                    self.results[q] = int(data[0]), int(data[1]), int(data[2])
+                                    self.results[q] = int(data[0]), int(data[1])
 
         if not quotas:
             return
