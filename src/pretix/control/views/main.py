@@ -83,7 +83,7 @@ class EventList(PaginationMixin, ListView):
 
         for q in quotas:
             q.cached_avail = qa.results[q]
-            q.cached_availability_paid_orders = qa.count_paid_orders.get(qa, 0)
+            q.cached_availability_paid_orders = qa.count_paid_orders.get(q, 0)
             if q.size is not None:
                 q.percent_paid = min(
                     100,
