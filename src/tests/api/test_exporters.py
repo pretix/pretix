@@ -37,12 +37,30 @@ SAMPLE_EXPORTER_CONFIG = {
             "name": "group_multiple_choice",
             "required": False
         },
+        {
+            "name": "date_from",
+            "required": False
+        },
+        {
+            "name": "date_to",
+            "required": False
+        },
+        {
+            "name": "event_date_from",
+            "required": False
+        },
+        {
+            "name": "event_date_to",
+            "required": False
+        },
     ]
 }
 
 
 @pytest.mark.django_db
 def test_event_list(token_client, organizer, event):
+    event.has_subevents = True
+    event.save()
     c = copy.deepcopy(SAMPLE_EXPORTER_CONFIG)
     resp = token_client.get('/api/v1/organizers/{}/events/{}/exporters/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -62,7 +80,6 @@ def test_org_list(token_client, organizer, event):
     })
     resp = token_client.get('/api/v1/organizers/{}/exporters/'.format(organizer.slug))
     assert resp.status_code == 200
-    print(resp.data['results'])
     assert c in resp.data['results']
     resp = token_client.get('/api/v1/organizers/{}/exporters/orderlist/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
