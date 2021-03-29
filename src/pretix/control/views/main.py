@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import (
-    F, IntegerField, Max, Min, OuterRef, Prefetch, Subquery, Sum,
-)
+from django.db.models import F, Max, Min, Prefetch
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -52,17 +50,7 @@ class EventList(PaginationMixin, ListView):
             order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
         )
 
-        sum_tickets_paid = Quota.objects.filter(
-            event=OuterRef('pk'), subevent__isnull=True
-        ).order_by().values('event').annotate(
-            s=Sum('cached_availability_paid_orders')
-        ).values(
-            's'
-        )
-
-        qs = qs.annotate(
-            sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
-        ).prefetch_related(
+        qs = qs.prefetch_related(
             Prefetch('quotas',
                      queryset=Quota.objects.filter(subevent__isnull=True).annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
                      to_attr='first_quotas')
@@ -90,15 +78,12 @@ class EventList(PaginationMixin, ListView):
 
         qa = QuotaAvailability(early_out=False)
         for q in quotas:
-            if q.cached_availability_time is None or q.cached_availability_paid_orders is None:
-                qa.queue(q)
+            qa.queue(q)
         qa.compute()
 
         for q in quotas:
-            q.cached_avail = (
-                qa.results[q] if q in qa.results
-                else (q.cached_availability_state, q.cached_availability_number)
-            )
+            q.cached_avail = qa.results[q]
+            q.cached_availability_paid_orders = qa.count_paid_orders.get(qa, 0)
             if q.size is not None:
                 q.percent_paid = min(
                     100,

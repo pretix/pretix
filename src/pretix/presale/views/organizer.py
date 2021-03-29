@@ -368,33 +368,33 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
     quotas_to_compute = []
     for se in qs:
         if se.presale_is_running:
-            quotas_to_compute += [
-                q for q in se.active_quotas
-                if not q.cache_is_hot(now() + timedelta(seconds=5))
-            ]
+            quotas_to_compute += se.active_quotas
 
     name = None
+    qcache = {}
     if quotas_to_compute:
         qa = QuotaAvailability()
         qa.queue(*quotas_to_compute)
-        qa.compute()
+        qa.compute(allow_cache=True)
+        qcache.update(qa.results)
+
     for se in qs:
-        if quotas_to_compute:
-            se._quota_cache = qa.results
+        if qcache:
+            se._quota_cache = qcache
         kwargs = {'subevent': se.pk}
         if cart_namespace:
             kwargs['cart_namespace'] = cart_namespace
 
-        settings = event.settings if event else se.event.settings
-        timezones.add(settings.timezones)
-        tz = pytz.timezone(settings.timezone)
+        s = event.settings if event else se.event.settings
+        timezones.add(s.timezones)
+        tz = pytz.timezone(s.timezone)
         datetime_from = se.date_from.astimezone(tz)
         date_from = datetime_from.date()
         if name is None:
             name = str(se.name)
         elif str(se.name) != name:
             ebd['_subevents_different_names'] = True
-        if se.event.settings.show_date_to and se.date_to:
+        if s.show_date_to and se.date_to:
             datetime_to = se.date_to.astimezone(tz)
             date_to = se.date_to.astimezone(tz).date()
             d = max(date_from, before.date())
@@ -402,13 +402,13 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                 first = d == date_from
                 ebd[d].append({
                     'continued': not first,
-                    'timezone': settings.timezone,
-                    'time': datetime_from.time().replace(tzinfo=None) if first and settings.show_times else None,
+                    'timezone': s.timezone,
+                    'time': datetime_from.time().replace(tzinfo=None) if first and s.show_times else None,
                     'time_end': (
                         datetime_to.time().replace(tzinfo=None)
                         if (date_to == date_from or (
                             date_to == date_from + timedelta(days=1) and datetime_to.time() < datetime_from.time()
-                        )) and settings.show_times
+                        )) and s.show_times
                         else None
                     ),
                     'event': se,
@@ -420,9 +420,9 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
             ebd[date_from].append({
                 'event': se,
                 'continued': False,
-                'time': datetime_from.time().replace(tzinfo=None) if se.event.settings.show_times else None,
+                'time': datetime_from.time().replace(tzinfo=None) if s.show_times else None,
                 'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs),
-                'timezone': se.event.settings.timezone,
+                'timezone': s.timezone,
             })
 
 

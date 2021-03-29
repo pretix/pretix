@@ -1,6 +1,7 @@
 {% load i18n %}
-<div class="quotabox" data-toggle="tooltip_html" data-placement="top"
-        title="{% trans "Quota:" %} {{ q.name }}<br>{% blocktrans with date=q.cached_availability_time|date:"SHORT_DATETIME_FORMAT" %}Numbers as of {{ date }}{% endblocktrans %}{% if q.cached_avail.1 is not None %}<br>{% blocktrans with num=q.cached_avail.1 %}Currently available: {{ num }}{% endblocktrans %}{% endif %}">
+<a class="quotabox" data-toggle="tooltip_html" data-placement="top"
+        title="{% trans "Quota:" %} {{ q.name }}{% if q.cached_avail.1 is not None %}<br>{% blocktrans with num=q.cached_avail.1 %}Currently available: {{ num }}{% endblocktrans %}{% endif %}"
+    href="{% url "control:event.items.quotas.show" event=q.event.slug organizer=q.event.organizer.slug quota=q.pk %}">
     {% if q.size|default_if_none:"NONE" == "NONE" %}
         <div class="progress">
         </div>
@@ -13,4 +14,4 @@
     <div class="numbers">
         {{ q.cached_availability_paid_orders|default_if_none:"?" }} / {{ q.size|default_if_none:"∞" }}
     </div>
-</div>
+</a>

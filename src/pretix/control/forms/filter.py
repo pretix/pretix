@@ -995,7 +995,6 @@ class EventFilterForm(FilterForm):
         'date_from': 'order_from',
         'date_to': 'order_to',
         'live': 'live',
-        'sum_tickets_paid': 'sum_tickets_paid'
     }
     status = forms.ChoiceField(
         label=_('Status'),

@@ -6,9 +6,7 @@ from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
 from django.core.files import File
 from django.db import connections, transaction
-from django.db.models import (
-    Count, F, IntegerField, OuterRef, Prefetch, Subquery, Sum,
-)
+from django.db.models import Count, F, Prefetch
 from django.db.models.functions import Coalesce, TruncDate, TruncTime
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -57,20 +55,11 @@ class SubEventQueryMixin:
         return self.request.GET
 
     def get_queryset(self, list=False):
-        sum_tickets_paid = Quota.objects.filter(
-            subevent=OuterRef('pk')
-        ).order_by().values('subevent').annotate(
-            s=Sum('cached_availability_paid_orders')
-        ).values(
-            's'
-        )
         qs = self.request.event.subevents
         if list:
-            qs = qs.annotate(
-                sum_tickets_paid=Subquery(sum_tickets_paid, output_field=IntegerField())
-            ).prefetch_related(
+            qs = qs.prefetch_related(
                 Prefetch('quotas',
-                         queryset=Quota.objects.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
+                         queryset=self.request.event.quotas.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
                          to_attr='first_quotas')
             )
         if self.filter_form.is_valid():
@@ -108,15 +97,12 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
 
         qa = QuotaAvailability(early_out=False)
         for q in quotas:
-            if q.cached_availability_time is None or q.cached_availability_paid_orders is None:
-                qa.queue(q)
+            qa.queue(q)
         qa.compute()
 
         for q in quotas:
-            q.cached_avail = (
-                qa.results[q] if q in qa.results
-                else (q.cached_availability_state, q.cached_availability_number)
-            )
+            q.cached_avail = qa.results[q]
+            q.cached_availability_paid_orders = qa.count_paid_orders.get(qa, 0)
             if q.size is not None:
                 q.percent_paid = min(
                     100,
@@ -1220,8 +1206,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         ).values(
             'item_list', 'var_list',
             *(f.name for f in Quota._meta.fields if f.name not in (
-                'id', 'event', 'items', 'variations', 'cached_availability_state', 'cached_availability_number',
-                'cached_availability_paid_orders', 'cached_availability_time', 'closed',
+                'id', 'event', 'items', 'variations', 'closed',
             ))
         ).order_by('subevent_id')
 
