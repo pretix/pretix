@@ -125,7 +125,7 @@
             </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, false)">
+            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, false, false)">
               {{ $root.strings['modal.continue'] }}
             </button>
             <button type="button" class="btn btn-default" @click="showUnpaidModal = false">
@@ -283,7 +283,7 @@ export default {
   },
   methods: {
     selectResult(res) {
-      this.check(res.id, false)
+      this.check(res.id, false, false, false)
     },
     answerSetM(qid, opid, checked) {
       let arr = this.answers[qid] ? this.answers[qid].split(',') : [];
@@ -307,7 +307,7 @@ export default {
       this.showQuestionsModal = false
       this.answers = {}
     },
-    check(id, ignoreUnpaid, keepAnswers) {
+    check(id, ignoreUnpaid, keepAnswers, fallbackToSearch) {
       if (!keepAnswers) {
         this.answers = {}
       } else if (this.showQuestionsModal) {
@@ -336,7 +336,18 @@ export default {
           answers: this.answers,
         })
       })
-          .then(response => response.json())
+          .then(response => {
+            if (response.status === 404) {
+              return {
+                status: 'error',
+                reason: 'invalid',
+              }
+            }
+            if (!response.ok) {
+              throw new Error("HTTP status " + response.status);
+            }
+            return response.json()
+          })
           .then(data => {
             this.checkLoading = false
             this.checkResult = data
@@ -359,6 +370,8 @@ export default {
               this.$nextTick(() => {
                 document.querySelector(".modal-questions input, .modal-questions select, .modal-questions textarea").focus()
               })
+            } else if (data.status === 'error' && data.reason === 'invalid' && fallbackToSearch) {
+              this.startSearch(false)
             } else {
               this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
               this.fetchStatus()
@@ -367,7 +380,7 @@ export default {
           .catch(reason => {
             this.checkLoading = false
             this.checkResult = {}
-            this.checkError = reason
+            this.checkError = reason.toString()
             this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
           })
     },
@@ -398,15 +411,15 @@ export default {
     },
     inputKeyup(e) {
       if (e.key === "Enter") {
-        this.startSearch()
+        this.startSearch(true)
       } else if (this.query === '') {
         this.clear()
       }
     },
-    startSearch() {
-      if (this.query.length >= 32) {
+    startSearch(fallbackToScan) {
+      if (this.query.length >= 32 && fallbackToScan) {
         // likely a secret, not a search result
-        this.check(this.query, false, false)
+        this.check(this.query, false, false, true)
         return
       }
 
