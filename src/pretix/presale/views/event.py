@@ -490,7 +490,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
-                self.request.GET.get('voucher'),
                 voucher,
             )
 

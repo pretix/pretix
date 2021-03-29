@@ -185,6 +185,7 @@ class OrderListExporter(MultiSheetListExporter):
 
         if filters:
             return qs.annotate(**annotations).filter(**filters)
+        return qs
 
     def iterate_orders(self, form_data: dict):
         p_date = OrderPayment.objects.filter(
