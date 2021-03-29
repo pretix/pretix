@@ -71,7 +71,7 @@ class OrganizerUpdateForm(OrganizerForm):
         kwargs.setdefault('initial', {})
         self.instance = kwargs['instance']
         if self.domain and self.instance:
-            initial_domain = self.instance.domains.first()
+            initial_domain = self.instance.domains.filter(event__isnull=True).first()
             if initial_domain:
                 kwargs['initial'].setdefault('domain', initial_domain.domainname)
 
