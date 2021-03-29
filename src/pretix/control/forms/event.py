@@ -463,6 +463,7 @@ class EventSettingsForm(SettingsForm):
         'redirect_to_checkout_directly',
         'frontpage_subevent_ordering',
         'event_list_type',
+        'event_list_available_only',
         'frontpage_text',
         'event_info_text',
         'attendee_names_asked',
@@ -547,6 +548,7 @@ class EventSettingsForm(SettingsForm):
         if not self.event.has_subevents:
             del self.fields['frontpage_subevent_ordering']
             del self.fields['event_list_type']
+            del self.fields['event_list_available_only']
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields
         self.virtual_keys = []

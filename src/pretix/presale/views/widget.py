@@ -513,6 +513,12 @@ class WidgetAPIProductList(EventListMixin, View):
                     filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier), self.request)
                 )
                 tz = pytz.timezone(request.event.settings.timezone)
+                if self.request.event.settings.event_list_available_only:
+                    evs = [
+                        se for se in evs
+                        if not se.presale_has_ended and se.best_availability_state >= Quota.AVAILABILITY_RESERVED
+                    ]
+
                 data['events'] = [
                     {
                         'name': str(ev.name),

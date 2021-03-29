@@ -503,6 +503,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
             )
+            if self.request.event.settings.event_list_available_only:
+                context['subevent_list'] = [
+                    se for se in context['subevent_list']
+                    if not se.presale_has_ended and se.best_availability_state >= Quota.AVAILABILITY_RESERVED
+                ]
         return context
 
 

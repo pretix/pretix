@@ -1138,6 +1138,15 @@ DEFAULTS = {
             help_text=_('If your event series has more than 50 dates in the future, only the month or week calendar can be used.')
         ),
     },
+    'event_list_available_only': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Hide all unavailable dates from calendar or list views"),
+        )
+    },
     'allow_modifications_after_checkin': {
         'default': 'False',
         'type': bool,

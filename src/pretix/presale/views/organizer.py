@@ -18,7 +18,7 @@ from pytz import UTC
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, EventMetaValue, SubEvent, SubEventMetaValue,
+    Event, EventMetaValue, SubEvent, SubEventMetaValue, Quota,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
@@ -386,6 +386,11 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
             kwargs['cart_namespace'] = cart_namespace
 
         s = event.settings if event else se.event.settings
+
+        if s.event_list_available_only:
+            if se.presale_has_ended or se.best_availability_state < Quota.AVAILABILITY_RESERVED:
+                continue
+
         timezones.add(s.timezones)
         tz = pytz.timezone(s.timezone)
         datetime_from = se.date_from.astimezone(tz)
