@@ -343,7 +343,7 @@ export default {
                 reason: 'invalid',
               }
             }
-            if (!response.ok) {
+            if (!response.ok && response.status != 400) {
               throw new Error("HTTP status " + response.status);
             }
             return response.json()
