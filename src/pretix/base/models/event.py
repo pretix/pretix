@@ -212,7 +212,8 @@ class EventMixin:
             & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=now()))
             & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
             & Q(item__sales_channels__contains=channel)
-            & Q(item__hide_without_voucher=False)  # TODO: does this make sense?
+            & Q(item__hide_without_voucher=False)
+            & Q(item__require_bundling=False)
             & Q(quotas__pk=OuterRef('pk'))
         ).order_by().values_list('quotas__pk').annotate(
             items=GroupConcat('pk', delimiter=',')
