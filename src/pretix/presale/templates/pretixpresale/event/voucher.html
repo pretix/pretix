@@ -10,7 +10,13 @@
 
 {% block content %}
     <h2>{% trans "Voucher redemption" %}</h2>
+
     {% if subevent %}
+        {% if request.GET.subevent and subevent.pk|stringformat:"i" != request.GET.subevent %}
+            <div class="alert alert-warning">
+                {% trans "This voucher is valid only for the following specific date and time." %}
+            </div>
+        {% endif %}
         <h3>{{ subevent.name }}</h3>
         {% with ev=subevent %}
             <div class="info-row">

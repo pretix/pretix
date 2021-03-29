@@ -1,6 +1,7 @@
 import calendar
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
+from urllib.parse import quote
 
 import isoweek
 import pytz
@@ -357,7 +358,7 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
             })
 
 
-def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None):
+def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None, voucher=None):
     qs = qs.filter(active=True, is_public=True).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
@@ -365,6 +366,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
     ).order_by(
         'date_from'
     )
+
     quotas_to_compute = []
     for se in qs:
         if se.presale_is_running:
@@ -388,7 +390,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
         s = event.settings if event else se.event.settings
 
         if s.event_list_available_only:
-            if se.presale_has_ended or se.best_availability_state < Quota.AVAILABILITY_RESERVED:
+            if se.presale_has_ended or ((not voucher or not voucher.allow_ignore_quota) and se.best_availability_state < Quota.AVAILABILITY_RESERVED):
                 continue
 
         timezones.add(s.timezones)
@@ -417,7 +419,12 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                         else None
                     ),
                     'event': se,
-                    'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs)
+                    'url': (
+                        eventreverse(se.event, 'presale:event.redeem',
+                                     kwargs={k: v for k, v in kwargs.items() if k != 'subevent'}) + f'?subevent={se.pk}&voucher={quote(voucher.code)}'
+                        if voucher
+                        else eventreverse(se.event, 'presale:event.index', kwargs=kwargs)
+                    )
                 })
                 d += timedelta(days=1)
 
@@ -426,7 +433,12 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                 'event': se,
                 'continued': False,
                 'time': datetime_from.time().replace(tzinfo=None) if s.show_times else None,
-                'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs),
+                'url': (
+                    eventreverse(se.event, 'presale:event.redeem',
+                                 kwargs={k: v for k, v in kwargs.items() if k != 'subevent'}) + f'?subevent={se.pk}&voucher={quote(voucher.code)}'
+                    if voucher
+                    else eventreverse(se.event, 'presale:event.index', kwargs=kwargs)
+                ),
                 'timezone': s.timezone,
             })
 

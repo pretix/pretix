@@ -518,7 +518,6 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
                                                     kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
         if context['cart_redirect'].startswith('https:'):
             context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
-
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -566,6 +565,10 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
 
             if hasattr(self, 'voucher') and self.voucher.subevent:
                 self.subevent = self.voucher.subevent
+
+            if not err and not self.subevent:
+                return redirect(eventreverse(self.request.event, 'presale:event.index',
+                                kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''}) + '?voucher=' + quote(self.voucher.code))
         else:
             pass
 

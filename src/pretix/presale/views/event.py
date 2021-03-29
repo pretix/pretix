@@ -23,7 +23,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.models import ItemVariation, Quota, SeatCategoryMapping
+from pretix.base.models import ItemVariation, Quota, SeatCategoryMapping, Voucher
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
     ItemBundle, SubEventItem, SubEventItemVariation,
@@ -375,6 +375,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         if vouchers_exist is None:
             vouchers_exist = self.request.event.vouchers.exists()
             self.request.event.cache.set('vouchers_exist', vouchers_exist)
+        context['show_vouchers'] = context['vouchers_exist'] = vouchers_exist
 
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
@@ -398,12 +399,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             # Regroup those by category
             context['items_by_category'] = item_group_by_category(items)
             context['display_add_to_cart'] = display_add_to_cart
-
-            context['show_vouchers'] = vouchers_exist
-            context['vouchers_exist'] = vouchers_exist
-        else:
-            context['show_vouchers'] = False
-            context['vouchers_exist'] = vouchers_exist
 
         context['ev'] = self.subevent or self.request.event
         context['subevent'] = self.subevent
@@ -434,6 +429,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         return context
 
     def _subevent_list_context(self):
+        voucher = None
+        if self.request.GET.get('voucher'):
+            try:
+                voucher = Voucher.objects.get(code__iexact=self.request.GET.get('voucher'), event=self.request.event)
+            except Voucher.DoesNotExist:
+                pass
+
         context = {}
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
         if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
@@ -456,7 +458,8 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             add_subevents_for_days(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
-                self.kwargs.get('cart_namespace')
+                self.kwargs.get('cart_namespace'),
+                voucher,
             )
 
             context['show_names'] = ebd.get('_subevents_different_names', False) or sum(
@@ -484,7 +487,9 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             add_subevents_for_days(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
-                self.kwargs.get('cart_namespace')
+                self.kwargs.get('cart_namespace'),
+                self.request.GET.get('voucher'),
+                voucher,
             )
 
             context['show_names'] = ebd.get('_subevents_different_names', False) or sum(
@@ -503,7 +508,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
             )
-            if self.request.event.settings.event_list_available_only:
+            if self.request.event.settings.event_list_available_only and not voucher:
                 context['subevent_list'] = [
                     se for se in context['subevent_list']
                     if not se.presale_has_ended and se.best_availability_state >= Quota.AVAILABILITY_RESERVED
