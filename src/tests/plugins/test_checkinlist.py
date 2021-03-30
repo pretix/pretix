@@ -168,9 +168,9 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
 "Checked in","Checked out","Automatically checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special
  attention","Comment","Seat ID","Seat name","Seat zone","Seat row","Seat number","Address","ZIP code","City","Country","State"
 "BAR","Mr Albert J Zulu","Mr","Albert","J","Zulu","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytyy",
-"dummy@dummy.test","","BARCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
+"dummy@dummy.test","'+498912345678","BARCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 "FOO","Mr Paul A Jones","Mr","Paul","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test","","FOOCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
+"dummy@dummy.test","'+498912345678","FOOCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 """)
     c = CSVCheckinList(event)
     _, _, content = c.render({
@@ -185,9 +185,9 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
 "Checked in","Checked out","Automatically checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special
  attention","Comment","Seat ID","Seat name","Seat zone","Seat row","Seat number","Address","ZIP code","City","Country","State"
 "BAR","Mr Albert J Zulu","Mr","Albert","J","Zulu","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytyy",
-"dummy@dummy.test","","BARCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
+"dummy@dummy.test","'+498912345678","BARCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 "FOO","Mr Paul A Jones","Mr","Paul","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test","","FOOCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
+"dummy@dummy.test","'+498912345678","FOOCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 """)
     c = CSVCheckinList(event)
     _, _, content = c.render({
@@ -202,7 +202,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
 "Checked in","Checked out","Automatically checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special
  attention","Comment","Seat ID","Seat name","Seat zone","Seat row","Seat number","Address","ZIP code","City","Country","State"
 "FOO","Mr Paul A Jones","Mr","Paul","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test","","FOOCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
+"dummy@dummy.test","'+498912345678","FOOCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 "BAR","Mr Albert J Zulu","Mr","Albert","J","Zulu","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytyy",
-"dummy@dummy.test","","BARCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
+"dummy@dummy.test","'+498912345678","BARCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 """)
