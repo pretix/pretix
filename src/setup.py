@@ -2,7 +2,9 @@ import os
 import sys
 from codecs import open
 from distutils.command.build import build
+from distutils.dir_util import copy_tree
 from os import path
+import subprocess
 
 from setuptools import find_packages, setup
 
@@ -51,10 +53,17 @@ class CustomBuild(build):
         settings.COMPRESS_ENABLED = True
         settings.COMPRESS_OFFLINE = True
 
+        # keep this in sync with Makefile!
+        node_prefix = os.path.join(settings.STATIC_ROOT, 'node_prefix')
+        os.makedirs(node_prefix, exist_ok=True)
+        copy_tree(os.path.join(here, 'pretix', 'static', 'npm_dir'), node_prefix)
+        subprocess.check_call(['npm', 'install', '--prefix=' + node_prefix])
+
         management.call_command('compilemessages', verbosity=1)
         management.call_command('compilejsi18n', verbosity=1)
         management.call_command('collectstatic', verbosity=1, interactive=False)
         management.call_command('compress', verbosity=1)
+
         build.run(self)
 
 
