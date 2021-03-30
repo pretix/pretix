@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
 "PO-Revision-Date: 2021-03-30 19:30+0000\n"
-"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -952,22 +952,21 @@ msgid "Only include orders issued on or before this date."
 msgstr "Nur Bestellungen an oder bevor diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:87
-#, fuzzy
-#| msgid "Start date"
 msgid "Start event date"
-msgstr "Beginn"
+msgstr "Frühester Termin"
 
 #: pretix/base/exporters/orderlist.py:90 pretix/base/exporters/orderlist.py:98
 msgid ""
 "Only include orders including at least one ticket for a date on or after "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"Nur Bestellungen, die mindestens ein Ticket für einen Termin an oder nach "
+"diesem Datum enthalten. Enthält auch andere Termine, wenn es gemischte "
+"Bestellungen gibt!"
 
 #: pretix/base/exporters/orderlist.py:95
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "Veranstaltungsdatum"
+msgstr "Letzter Termin"
 
 #: pretix/base/exporters/orderlist.py:234
 #: pretix/base/exporters/orderlist.py:397
@@ -1441,10 +1440,8 @@ msgid "Gift cards"
 msgstr "Geschenkgutscheine"
 
 #: pretix/base/exporters/orderlist.py:885
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show value at"
-msgstr "Varianten zeigen"
+msgstr "Wert zum Stichtag anzeigen"
 
 #: pretix/base/exporters/orderlist.py:889
 #: pretix/base/exporters/orderlist.py:892 pretix/control/forms/filter.py:173
@@ -1528,16 +1525,12 @@ msgid "Current value"
 msgstr "Aktueller Wert"
 
 #: pretix/base/exporters/orderlist.py:948
-#, fuzzy
-#| msgid "Free order"
 msgid "Created in order"
-msgstr "Kostenlose Bestellung"
+msgstr "Erzeugt durch Bestellung"
 
 #: pretix/base/exporters/orderlist.py:949
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Last invoice number of order"
-msgstr "Rechnungsnummern-Präfix"
+msgstr "Letzte Rechnungsnummer der Bestellung"
 
 #: pretix/base/exporters/orderlist.py:950
 msgid "Last invoice date of order"
@@ -3666,10 +3659,8 @@ msgid "Can change orders"
 msgstr "Kann Bestellungen verändern"
 
 #: pretix/base/models/organizer.py:227
-#, fuzzy
-#| msgid "Perform update checks"
 msgid "Can perform check-ins"
-msgstr "Update-Checks durchführen"
+msgstr "Kann Tickets einchecken"
 
 #: pretix/base/models/organizer.py:228
 msgid ""
@@ -3677,6 +3668,9 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"Dies schließt die Suche in Teilnehmerdaten mit ein, wodurch auf "
+"personenbezogene Informationen zugegriffen werden kann. Benutzer, die "
+"Bestellungen verändern können, können ebenfalls Tickets einchecken."
 
 #: pretix/base/models/organizer.py:233
 msgid "Can view vouchers"
@@ -6769,6 +6763,7 @@ msgstr ""
 #: pretix/base/settings.py:1147
 msgid "Hide all unavailable dates from calendar or list views"
 msgstr ""
+"Verstecke alle nicht verfügbaren Termine in Kalender- oder Listenansichten"
 
 #: pretix/base/settings.py:1156
 msgid "Allow customers to modify their information after they checked in."
@@ -11545,7 +11540,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:72
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
-#, fuzzy
 msgid "Continue"
 msgstr "Fortfahren"
 
@@ -21481,12 +21475,8 @@ msgid "Web-based check-in"
 msgstr "Web-basierter Check-In"
 
 #: pretix/plugins/webcheckin/__init__.py:16
-#, fuzzy
-#| msgid ""
-#| "This plugin allows you to generate check-in lists for your conference."
 msgid "This plugin allows you to perform check-in actions in your browser."
-msgstr ""
-"Dieses Plugin erlaubt, Listen für den Check-in am Eventeingang zu erstellen."
+msgstr "Dieses Plugin erlaubt, Check-in-Aktionen im Browser durchzuführen."
 
 #: pretix/plugins/webcheckin/signals.py:15
 msgid "Web Check-in"
