@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
-"PO-Revision-Date: 2021-03-08 17:01+0000\n"
+"PO-Revision-Date: 2021-03-30 19:44+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -945,34 +945,29 @@ msgid "Show multiple choice answers grouped in one column"
 msgstr "Multiple-Choice-Fragen in einer Spalte gruppieren"
 
 #: pretix/base/exporters/orderlist.py:76
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include orders created on or after this date."
-msgstr "Nur Tickets für Termine an oder nach diesem Datum."
+msgstr "Nur Bestellungen für Termine an oder nach diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:83
-#, fuzzy
-#| msgid "Only include tickets for dates on or before this date."
 msgid "Only include orders issued on or before this date."
-msgstr "Nur Tickets an oder bevor diesem Datum."
+msgstr "Nur Bestellungen an oder bevor diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:87
-#, fuzzy
-#| msgid "Start date"
 msgid "Start event date"
-msgstr "Beginn"
+msgstr "Frühester Termin"
 
 #: pretix/base/exporters/orderlist.py:90 pretix/base/exporters/orderlist.py:98
 msgid ""
 "Only include orders including at least one ticket for a date on or after "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"Nur Bestellungen, die mindestens ein Ticket für einen Termin an oder nach "
+"diesem Datum enthalten. Enthält auch andere Termine, wenn es gemischte "
+"Bestellungen gibt!"
 
 #: pretix/base/exporters/orderlist.py:95
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "Veranstaltungsdatum"
+msgstr "Letzter Termin"
 
 #: pretix/base/exporters/orderlist.py:234
 #: pretix/base/exporters/orderlist.py:397
@@ -1446,10 +1441,8 @@ msgid "Gift cards"
 msgstr "Geschenkgutscheine"
 
 #: pretix/base/exporters/orderlist.py:885
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show value at"
-msgstr "Varianten zeigen"
+msgstr "Wert zum Stichtag anzeigen"
 
 #: pretix/base/exporters/orderlist.py:889
 #: pretix/base/exporters/orderlist.py:892 pretix/control/forms/filter.py:173
@@ -1533,22 +1526,16 @@ msgid "Current value"
 msgstr "Aktueller Wert"
 
 #: pretix/base/exporters/orderlist.py:948
-#, fuzzy
-#| msgid "Free order"
 msgid "Created in order"
-msgstr "Kostenlose Bestellung"
+msgstr "Erzeugt durch Bestellung"
 
 #: pretix/base/exporters/orderlist.py:949
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Last invoice number of order"
-msgstr "Rechnungsnummern-Präfix"
+msgstr "Letzte Rechnungsnummer der Bestellung"
 
 #: pretix/base/exporters/orderlist.py:950
-#, fuzzy
-#| msgid "Show expiration date of order"
 msgid "Last invoice date of order"
-msgstr "Zeige das Zahlungsziel der Bestellung an"
+msgstr "Datum der letzten Rechnung dieser Bestellung"
 
 #: pretix/base/exporters/waitinglist.py:26
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
@@ -1665,16 +1652,14 @@ msgid "Please enter a shorter name."
 msgstr "Bitte gib einen kürzeren Namen ein."
 
 #: pretix/base/forms/questions.py:225
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Interne Referenz"
+msgstr "Ländervorwahl"
 
 #: pretix/base/forms/questions.py:249
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Telefonnummer (ohne Ländervorwahl)"
 
 #: pretix/base/forms/questions.py:415 pretix/base/forms/questions.py:719
 msgid "Street and Number"
@@ -3101,10 +3086,8 @@ msgstr "Minimaler Wert"
 #: pretix/base/models/items.py:1092 pretix/base/models/items.py:1095
 #: pretix/base/models/items.py:1098 pretix/base/models/items.py:1101
 #: pretix/base/models/items.py:1104 pretix/base/models/items.py:1107
-#, fuzzy
-#| msgid "Currently not supported in our apps"
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Derzeit nicht von unseren Apps unterstützt"
+msgstr "Derzeit nicht von unseren Apps und während dem Check-In unterstützt"
 
 #: pretix/base/models/items.py:1094 pretix/base/models/items.py:1100
 #: pretix/base/models/items.py:1106
@@ -3673,10 +3656,8 @@ msgid "Can change orders"
 msgstr "Kann Bestellungen verändern"
 
 #: pretix/base/models/organizer.py:227
-#, fuzzy
-#| msgid "Perform update checks"
 msgid "Can perform check-ins"
-msgstr "Update-Checks durchführen"
+msgstr "Kann Tickets einchecken"
 
 #: pretix/base/models/organizer.py:228
 msgid ""
@@ -3684,6 +3665,9 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"Dies schließt die Suche in Teilnehmerdaten mit ein, wodurch auf "
+"personenbezogene Informationen zugegriffen werden kann. Benutzer, die "
+"Bestellungen verändern können, können ebenfalls Tickets einchecken."
 
 #: pretix/base/models/organizer.py:233
 msgid "Can view vouchers"
@@ -6770,6 +6754,7 @@ msgstr ""
 #: pretix/base/settings.py:1147
 msgid "Hide all unavailable dates from calendar or list views"
 msgstr ""
+"Verstecke alle nicht verfügbaren Termine in Kalender- oder Listenansichten"
 
 #: pretix/base/settings.py:1156
 msgid "Allow customers to modify their information after they checked in."
@@ -9251,7 +9236,7 @@ msgstr "Kein Administrator"
 
 #: pretix/control/forms/filter.py:1353
 msgid "Valid"
-msgstr "Gültig"
+msgstr "gültig"
 
 #: pretix/control/forms/filter.py:1354
 msgid "Unredeemed"
@@ -21441,24 +21426,16 @@ msgstr "Ticket-Layout: {}"
 
 #: pretix/plugins/webcheckin/__init__.py:9
 #: pretix/plugins/webcheckin/__init__.py:12
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Web-based check-in"
-msgstr "Automatischer Check-In"
+msgstr "Web-basierter Check-In"
 
 #: pretix/plugins/webcheckin/__init__.py:16
-#, fuzzy
-#| msgid ""
-#| "This plugin allows you to generate check-in lists for your conference."
 msgid "This plugin allows you to perform check-in actions in your browser."
-msgstr ""
-"Dieses Plugin erlaubt, Listen für den Check-in am Eventeingang zu erstellen."
+msgstr "Dieses Plugin erlaubt, Check-in-Aktionen im Browser durchzuführen."
 
 #: pretix/plugins/webcheckin/signals.py:15
-#, fuzzy
-#| msgid "Check-in"
 msgid "Web Check-in"
-msgstr "Check-ins"
+msgstr "Web Check-In"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:11
 msgid "Check-in"
@@ -21580,16 +21557,14 @@ msgid "No other variations of this product exist."
 msgstr "Keine anderen Varianten dieses Produktes existieren."
 
 #: pretix/presale/forms/renderers.py:29
-#, fuzzy
-#| msgid "Valid"
 msgctxt "form"
 msgid "is valid"
-msgstr "Gültig"
+msgstr "ist gültig"
 
 #: pretix/presale/forms/renderers.py:31
 msgctxt "form"
 msgid "has errors"
-msgstr ""
+msgstr "ist fehlerhaft"
 
 #: pretix/presale/forms/renderers.py:43
 msgctxt "form"
@@ -21852,10 +21827,8 @@ msgid "Add or remove tickets"
 msgstr "Tickets hinzufügen oder entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
-#, fuzzy
-#| msgid "Confirm payment"
 msgid "Modify payment"
-msgstr "Zahlung bestätigen"
+msgstr "Zahlungsdetails bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:62
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:84
@@ -21864,16 +21837,12 @@ msgid "Modify"
 msgstr "Bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:82
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Modify invoice information"
-msgstr "Rechnungsinformationen"
+msgstr "Rechnungsinformationen bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:132
-#, fuzzy
-#| msgid "Contact information"
 msgid "Modify contact information"
-msgstr "Kontaktinformationen"
+msgstr "Kontaktinformationen bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:18
@@ -22030,17 +21999,13 @@ msgstr ""
 "verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:54
-#, fuzzy
-#| msgid "Show attendee names on invoices"
 msgid "No attendee name provided"
-msgstr "Teilnehmername auf Rechnungen anzeigen"
+msgstr "Teilnehmername nicht angegeben"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:141
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:192
-#, fuzzy
-#| msgid "Modify price for %(item)s"
 msgid "price per item"
-msgstr "Preis von %(item)s verändern"
+msgstr "Preis pro Stück"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:152
 msgid "Okay, we're removing that…"
@@ -22051,9 +22016,6 @@ msgid "Remove one"
 msgstr "Eins entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:165
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Quantity"
 msgid "quantity"
 msgstr "Menge"
 
@@ -22078,8 +22040,6 @@ msgid "Add one more"
 msgstr "Eins mehr hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:201
-#, fuzzy
-#| msgid "Price"
 msgid "price"
 msgstr "Preis"
 
@@ -22292,12 +22252,8 @@ msgid "Proceed with checkout"
 msgstr "Zur Kasse"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:107
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Please either select all dates or a date range, not both."
 msgid "Please select a date to redeem your voucher."
-msgstr ""
-"Bitte wähle entweder alle Termine oder einen Datumsbereich, nicht beides."
+msgstr "Bitte wähle einen Termin, um deinen Gutschein einzulösen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:120
 msgid "View other date"
@@ -22527,10 +22483,8 @@ msgstr ""
 "Zahlungsart kann dies bis zu 14 Tage dauern."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:189
-#, fuzzy
-#| msgid "Change order"
 msgid "Change ordered items"
-msgstr "Bestellung umbuchen"
+msgstr "Bestellte Produkte bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:191
 #: pretix/presale/templates/pretixpresale/event/order.html:285
@@ -22551,10 +22505,8 @@ msgid "Request invoice"
 msgstr "Rechnung anfragen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:283
-#, fuzzy
-#| msgid "Change order information"
 msgid "Change your information"
-msgstr "Informationen ändern"
+msgstr "Kundendaten ändern"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:291
 msgid "Your information"
@@ -22868,11 +22820,8 @@ msgid "Voucher redemption"
 msgstr "Gutschein-Einlösung"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:17
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This voucher is valid only for the following specific date and time."
-msgstr "Dieser Gutschein ist für diesen Termin nicht gültig."
+msgstr "Dieser Gutschein ist nur für den hier angegebenen Termin gültig."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:64
 msgid ""
