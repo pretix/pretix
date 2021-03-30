@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
-"PO-Revision-Date: 2021-03-30 19:41+0000\n"
-"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
+"PO-Revision-Date: 2021-03-30 19:44+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -172,29 +172,27 @@ msgstr "Ungültiges Produkt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
-msgstr ""
+msgstr "Eingang nicht erlaubt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Ticket gesperrt/geändert"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
-msgstr ""
+msgstr "Bestellung storniert"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-#, fuzzy
-#| msgid "Check-in QR"
 msgid "Checked-in Tickets"
-msgstr "Check-in-QR-Code"
+msgstr "Eingecheckte Tickets"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Valid Tickets"
-msgstr ""
+msgstr "Gültige Tickets"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Currently inside"
-msgstr ""
+msgstr "Derzeit anwesend"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:117
@@ -373,10 +371,8 @@ msgid "Barcode area"
 msgstr "QR-Code-Bereich"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:527
-#, fuzzy
-#| msgid "Barcode area"
 msgid "Image area"
-msgstr "QR-Code-Bereich"
+msgstr "Bildbereich"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:529
 msgid "Powered by pretix"
@@ -501,10 +497,8 @@ msgid "Please enter a quantity for one of the ticket types."
 msgstr "Bitte trage eine Menge für eines der Produkte ein."
 
 #: pretix/static/pretixpresale/js/ui/main.js:304
-#, fuzzy
-#| msgid "Cart expired"
 msgid "required"
-msgstr "Warenkorb abgelaufen"
+msgstr "verpflichtend"
 
 #: pretix/static/pretixpresale/js/ui/main.js:401
 msgid "The organizer keeps %(currency)s %(amount)s"
