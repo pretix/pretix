@@ -2,6 +2,7 @@ import os
 import sys
 from codecs import open
 from distutils.command.build import build
+from distutils.command.build_ext import build_ext
 from distutils.dir_util import copy_tree
 from os import path
 import subprocess
@@ -32,6 +33,7 @@ an older version of pretix:
     sys.exit(1)
 
 here = path.abspath(path.dirname(__file__))
+npm_installed = False
 
 # Get the long description from the relevant file
 try:
@@ -39,6 +41,18 @@ try:
         long_description = f.read()
 except:
     long_description = ''
+
+
+def npm_install():
+    global npm_installed
+
+    if not npm_installed:
+        # keep this in sync with Makefile!
+        node_prefix = os.path.join(here, 'pretix', 'static.dist', 'node_prefix')
+        os.makedirs(node_prefix, exist_ok=True)
+        copy_tree(os.path.join(here, 'pretix', 'static', 'npm_dir'), node_prefix)
+        subprocess.check_call(['npm', 'install', '--prefix=' + node_prefix])
+        npm_installed = True
 
 
 class CustomBuild(build):
@@ -53,12 +67,7 @@ class CustomBuild(build):
         settings.COMPRESS_ENABLED = True
         settings.COMPRESS_OFFLINE = True
 
-        # keep this in sync with Makefile!
-        node_prefix = os.path.join(settings.STATIC_ROOT, 'node_prefix')
-        os.makedirs(node_prefix, exist_ok=True)
-        copy_tree(os.path.join(here, 'pretix', 'static', 'npm_dir'), node_prefix)
-        subprocess.check_call(['npm', 'install', '--prefix=' + node_prefix])
-
+        npm_install()
         management.call_command('compilemessages', verbosity=1)
         management.call_command('compilejsi18n', verbosity=1)
         management.call_command('collectstatic', verbosity=1, interactive=False)
@@ -67,8 +76,15 @@ class CustomBuild(build):
         build.run(self)
 
 
+class CustomBuildExt(build_ext):
+    def run(self):
+        npm_install()
+        build_ext.run(self)
+
+
 cmdclass = {
-    'build': CustomBuild
+    'build': CustomBuild,
+    'build_ext': CustomBuildExt,
 }
 
 
