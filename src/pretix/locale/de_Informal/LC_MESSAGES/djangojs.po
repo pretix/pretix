@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
 "PO-Revision-Date: 2021-03-30 19:40+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -140,7 +140,7 @@ msgstr "Ticket nicht bezahlt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
+msgstr "Diese Ticket ist noch nicht bezahlt. Möchtest du dennoch fortfahren?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 msgid "Additional information required"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "Valid ticket"
-msgstr ""
+msgstr "Gültiges Ticket"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Exit recorded"
