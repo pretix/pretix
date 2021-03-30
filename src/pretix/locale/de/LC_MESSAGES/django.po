@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
 "PO-Revision-Date: 2021-03-30 19:44+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -22531,10 +22531,8 @@ msgstr ""
 "Zahlungsart kann dies bis zu 14 Tage dauern."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:189
-#, fuzzy
-#| msgid "Change order"
 msgid "Change ordered items"
-msgstr "Bestellung umbuchen"
+msgstr "Bestellte Produkte bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:191
 #: pretix/presale/templates/pretixpresale/event/order.html:285
