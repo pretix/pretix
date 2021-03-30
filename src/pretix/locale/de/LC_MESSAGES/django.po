@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
-"PO-Revision-Date: 2021-03-30 17:06+0000\n"
+"PO-Revision-Date: 2021-03-30 19:25+0000\n"
 "Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -9254,7 +9254,7 @@ msgstr "Kein Administrator"
 
 #: pretix/control/forms/filter.py:1353
 msgid "Valid"
-msgstr "Gültig"
+msgstr "gültig"
 
 #: pretix/control/forms/filter.py:1354
 msgid "Unredeemed"
@@ -11545,6 +11545,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:72
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
+#, fuzzy
 msgid "Continue"
 msgstr "Fortfahren"
 
@@ -22063,10 +22064,8 @@ msgstr "Teilnehmername nicht angegeben"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:141
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:192
-#, fuzzy
-#| msgid "Modify price for %(item)s"
 msgid "price per item"
-msgstr "Preis von %(item)s verändern"
+msgstr "Preis pro Stück"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:152
 msgid "Okay, we're removing that…"
