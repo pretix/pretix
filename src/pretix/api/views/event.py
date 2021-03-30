@@ -259,7 +259,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
         qs = filter_qs_by_attr(qs, self.request)
 
         return qs.prefetch_related(
-            'subeventitem_set', 'subeventitemvariation_set', 'seat_category_mappings'
+            'subeventitem_set', 'subeventitemvariation_set', 'seat_category_mappings', 'meta_values'
         )
 
     def list(self, request, **kwargs):

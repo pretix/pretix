@@ -95,7 +95,7 @@ class TeamSerializer(serializers.ModelSerializer):
             'id', 'name', 'all_events', 'limit_events', 'can_create_events', 'can_change_teams',
             'can_change_organizer_settings', 'can_manage_gift_cards', 'can_change_event_settings',
             'can_change_items', 'can_view_orders', 'can_change_orders', 'can_view_vouchers',
-            'can_change_vouchers'
+            'can_change_vouchers', 'can_checkin_orders'
         )
 
     def validate(self, data):

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Exists, F, Max, OuterRef, Q, Subquery
 from django.utils.timezone import now
@@ -141,6 +142,54 @@ class CheckinList(LoggedModel):
 
     def __str__(self):
         return self.name
+
+    @classmethod
+    def validate_rules(cls, rules, seen_nonbool=False, depth=0):
+        # While we implement a full jsonlogic machine on Python-level, we also use the logic rules to generate
+        # SQL queries, which is not a full implementation of JSON logic right now, but makes some assumptions,
+        # e.g. it does not support something like (a AND b) == (c OR D)
+        # Every change to our supported JSON logic must be done
+        # * in pretix.base.services.checkin
+        # * in pretix.base.models.checkin
+        # * in checkinrules.js
+        # * in libpretixsync
+        top_level_operators = {
+            '<', '<=', '>', '>=', '==', '!=', 'inList', 'isBefore', 'isAfter', 'or', 'and'
+        }
+        allowed_operators = top_level_operators | {
+            'buildTime', 'objectList', 'lookup', 'var',
+        }
+        allowed_vars = {
+            'product', 'variation', 'now', 'entries_number', 'entries_today', 'entries_days'
+        }
+        if not rules or not isinstance(rules, dict):
+            return
+
+        if len(rules) > 1:
+            raise ValidationError(f'Rules should not include dictionaries with more than one key, found: "{rules}".')
+
+        operator = list(rules.keys())[0]
+
+        if operator not in allowed_operators:
+            raise ValidationError(f'Logic operator "{operator}" is currently not allowed.')
+
+        if depth == 0 and operator not in top_level_operators:
+            raise ValidationError(f'Logic operator "{operator}" is currently not allowed on the first level.')
+
+        values = rules[operator]
+        if not isinstance(values, list) and not isinstance(values, tuple):
+            values = [values]
+
+        if operator == 'var':
+            if values[0] not in allowed_vars:
+                raise ValidationError(f'Logic variable "{values[0]}" is currently not allowed.')
+            return
+
+        if operator in ('or', 'and') and seen_nonbool:
+            raise ValidationError(f'You cannot use OR/AND logic on a level below a comparison operator.')
+
+        for v in values:
+            cls.validate_rules(v, seen_nonbool=seen_nonbool or operator not in ('or', 'and'), depth=depth + 1)
 
 
 class Checkin(models.Model):

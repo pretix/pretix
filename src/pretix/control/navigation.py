@@ -514,5 +514,5 @@ def merge_in(nav, newnav):
                 if 'children' not in parents[0]:
                     parents[0]['children'] = []
                 parents[0]['children'].append(item)
-        else:
-            nav.append(item)
+                continue
+        nav.append(item)

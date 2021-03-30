@@ -49,7 +49,9 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'can_change_items'
 
     def get_queryset(self):
-        return self.request.event.items.select_related('tax_rule').prefetch_related('variations', 'addons', 'bundles').all()
+        return self.request.event.items.select_related('tax_rule').prefetch_related(
+            'variations', 'addons', 'bundles', 'meta_values'
+        ).all()
 
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)

@@ -49,6 +49,10 @@ exit_all_at                           datetime                   Automatically c
 
     The ``exit_all_at`` attribute has been added.
 
+.. versionchanged:: 3.17
+
+    The ``ends_after`` and ``expand`` query parameters have been added.
+
 Endpoints
 ---------
 
@@ -100,6 +104,8 @@ Endpoints
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query integer subevent: Only return check-in lists of the sub-event with the given ID
    :query integer subevent_match: Only return check-in lists that are valid for the sub-event with the given ID (i.e. also lists valid for all subevents)
+   :query string ends_after: Exclude all check-in lists attached to a sub-event that is already in the past at the given time.
+   :query string expand: Expand a field into a full object. Currently only ``subevent`` is supported. Can be passed multiple times.
    :query string exclude: Exclude a field from the output, e.g. ``checkin_count``. Can be used as a performance optimization. Can be passed multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
@@ -447,6 +453,7 @@ Order position endpoints
                            ``attendee_name,positionid``
    :query string order: Only return positions of the order with the given order code
    :query string search: Fuzzy search matching the attendee name, order code, invoice address name as well as to the beginning of the secret.
+   :query string expand: Expand a field into a full object. Currently only ``subevent``, ``item``, and ``variation`` are supported. Can be passed multiple times.
    :query integer item: Only return positions with the purchased item matching the given ID.
    :query integer item__in: Only return positions with the purchased item matching one of the given comma-separated IDs.
    :query integer variation: Only return positions with the purchased item variation matching the given ID.

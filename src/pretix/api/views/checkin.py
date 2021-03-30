@@ -25,13 +25,14 @@ from pretix.base.models import (
     CachedFile, Checkin, CheckinList, Event, Order, OrderPosition, Question,
 )
 from pretix.base.services.checkin import (
-    CheckInError, RequiredQuestionsError, perform_checkin,
+    CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
 )
 from pretix.helpers.database import FixedOrderBy
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
         subevent_match = django_filters.NumberFilter(method='subevent_match_qs')
+        ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
 
         class Meta:
             model = CheckinList
@@ -42,19 +43,35 @@ with scopes_disabled():
                 Q(subevent_id=value) | Q(subevent_id__isnull=True)
             )
 
+        def ends_after_qs(self, queryset, name, value):
+            expr = (
+                Q(subevent__isnull=True) |
+                Q(
+                    Q(Q(subevent__date_to__isnull=True) & Q(subevent__date_from__gte=value))
+                    | Q(Q(subevent__date_to__isnull=False) & Q(subevent__date_to__gte=value))
+                )
+            )
+            return queryset.filter(expr)
+
 
 class CheckinListViewSet(viewsets.ModelViewSet):
     serializer_class = CheckinListSerializer
     queryset = CheckinList.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CheckinListFilter
-    permission = 'can_view_orders'
+    permission = ('can_view_orders', 'can_checkin_orders',)
     write_permission = 'can_change_event_settings'
 
     def get_queryset(self):
         qs = self.request.event.checkin_lists.prefetch_related(
             'limit_products',
         )
+
+        if 'subevent' in self.request.query_params.getlist('expand'):
+            qs = qs.prefetch_related(
+                'subevent', 'subevent__event', 'subevent__subeventitem_set', 'subevent__subeventitemvariation_set',
+                'subevent__seat_category_mappings', 'subevent__meta_values'
+            )
         return qs
 
     def perform_create(self, serializer):
@@ -155,15 +172,37 @@ class CheckinListViewSet(viewsets.ModelViewSet):
 
 with scopes_disabled():
     class CheckinOrderPositionFilter(OrderPositionFilter):
+        check_rules = django_filters.rest_framework.BooleanFilter(method='check_rules_qs')
+        # check_rules is currently undocumented on purpose, let's get a feel for the performance impact first
+
+        def __init__(self, *args, **kwargs):
+            self.checkinlist = kwargs.pop('checkinlist')
+            super().__init__(*args, **kwargs)
 
         def has_checkin_qs(self, queryset, name, value):
             return queryset.filter(last_checked_in__isnull=not value)
+
+        def check_rules_qs(self, queryset, name, value):
+            if not self.checkinlist.rules:
+                return queryset
+            return queryset.filter(SQLLogic(self.checkinlist).apply(self.checkinlist.rules))
+
+
+class ExtendedBackend(DjangoFilterBackend):
+    def get_filterset_kwargs(self, request, queryset, view):
+        kwargs = super().get_filterset_kwargs(request, queryset, view)
+
+        # merge filterset kwargs provided by view class
+        if hasattr(view, 'get_filterset_kwargs'):
+            kwargs.update(view.get_filterset_kwargs())
+
+        return kwargs
 
 
 class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CheckinListOrderPositionSerializer
     queryset = OrderPosition.all.none()
-    filter_backends = (DjangoFilterBackend, RichOrderingFilter)
+    filter_backends = (ExtendedBackend, RichOrderingFilter)
     ordering = ('attendee_name_cached', 'positionid')
     ordering_fields = (
         'order__code', 'order__datetime', 'positionid', 'attendee_name',
@@ -187,8 +226,13 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     }
 
     filterset_class = CheckinOrderPositionFilter
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
+    permission = ('can_view_orders', 'can_checkin_orders')
+    write_permission = ('can_change_orders', 'can_checkin_orders')
+
+    def get_filterset_kwargs(self):
+        return {
+            'checkinlist': self.checkinlist,
+        }
 
     @cached_property
     def checkinlist(self):
@@ -209,7 +253,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             order__event=self.request.event,
         ).annotate(
             last_checked_in=Subquery(cqs)
-        )
+        ).prefetch_related('order__event', 'order__event__organizer')
         if self.checkinlist.subevent:
             qs = qs.filter(
                 subevent=self.checkinlist.subevent
@@ -254,6 +298,22 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         if not self.checkinlist.all_products and not ignore_products:
             qs = qs.filter(item__in=self.checkinlist.limit_products.values_list('id', flat=True))
+
+        if 'subevent' in self.request.query_params.getlist('expand'):
+            qs = qs.prefetch_related(
+                'subevent', 'subevent__event', 'subevent__subeventitem_set', 'subevent__subeventitemvariation_set',
+                'subevent__seat_category_mappings', 'subevent__meta_values'
+            )
+
+        if 'item' in self.request.query_params.getlist('expand'):
+            qs = qs.prefetch_related('item', 'item__addons', 'item__bundles', 'item__meta_values', 'item__variations').select_related('item__tax_rule')
+
+        if 'variation' in self.request.query_params.getlist('expand'):
+            qs = qs.prefetch_related('variation')
+
+        if 'pk' not in self.request.resolver_match.kwargs and 'can_view_orders' not in self.request.eventpermset \
+                and len(self.request.query_params.get('search', '')) < 3:
+            qs = qs.none()
 
         return qs
 

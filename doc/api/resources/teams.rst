@@ -1,4 +1,4 @@
-.. spelling:: fullname
+.. spelling:: fullname checkin
 
 .. _`rest-teams`:
 
@@ -32,6 +32,7 @@ can_view_orders                       boolean
 can_change_orders                     boolean
 can_view_vouchers                     boolean
 can_change_vouchers                   boolean
+can_checkin_orders                    boolean
 ===================================== ========================== =======================================================
 
 Team member resource

@@ -22,8 +22,8 @@ from django.utils.translation import gettext_lazy as _, pgettext, ungettext
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    Item, ItemVariation, Order, OrderPosition, OrderRefund, RequiredAction,
-    SubEvent, Voucher, WaitingListEntry,
+    Item, ItemCategory, ItemVariation, Order, OrderPosition, OrderRefund,
+    Question, Quota, RequiredAction, SubEvent, Voucher, WaitingListEntry,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timeline import timeline_for_event
@@ -313,19 +313,40 @@ def event_index(request, organizer, event):
         except SubEvent.DoesNotExist:
             pass
 
-    widgets = []
-    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=True):
-        widgets.extend(result)
-
+    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'can_view_orders',
+                                                        request=request)
     can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
                                                           request=request)
+    can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
+                                                                  'can_change_event_settings', request=request)
+    can_view_vouchers = request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers',
+                                                          request=request)
+
+    widgets = []
+    if can_view_orders:
+        for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=True):
+            widgets.extend(result)
+
     qs = request.event.logentry_set.all().select_related('user', 'content_type', 'api_token', 'oauth_application',
                                                          'device').order_by('-datetime')
     qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
-    if not request.user.has_event_permission(request.organizer, request.event, 'can_view_orders', request=request):
+    if not can_view_orders:
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
-    if not request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers', request=request):
+    if not can_view_vouchers:
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
+    if not can_change_event_settings:
+        allowed_types = [
+            ContentType.objects.get_for_model(Voucher),
+            ContentType.objects.get_for_model(Order)
+        ]
+        if request.user.has_event_permission(request.organizer, request.event, 'can_change_items', request=request):
+            allowed_types += [
+                ContentType.objects.get_for_model(Item),
+                ContentType.objects.get_for_model(ItemCategory),
+                ContentType.objects.get_for_model(Quota),
+                ContentType.objects.get_for_model(Question),
+            ]
+        qs = qs.filter(content_type__in=allowed_types)
 
     a_qs = request.event.requiredaction_set.filter(done=False)
 
@@ -334,25 +355,25 @@ def event_index(request, organizer, event):
         'logs': qs[:5],
         'subevent': subevent,
         'actions': a_qs[:5] if can_change_orders else [],
-        'comment_form': CommentForm(initial={'comment': request.event.comment})
+        'comment_form': CommentForm(initial={'comment': request.event.comment}, readonly=not can_change_event_settings),
     }
 
-    ctx['has_overpaid_orders'] = Order.annotate_overpayments(request.event.orders).filter(
+    ctx['has_overpaid_orders'] = can_view_orders and Order.annotate_overpayments(request.event.orders).filter(
         Q(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0))
         | Q(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0))
     ).exists()
-    ctx['has_pending_orders_with_full_payment'] = Order.annotate_overpayments(request.event.orders).filter(
+    ctx['has_pending_orders_with_full_payment'] = can_view_orders and Order.annotate_overpayments(request.event.orders).filter(
         Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0) & Q(require_approval=False)
     ).exists()
-    ctx['has_pending_refunds'] = OrderRefund.objects.filter(
+    ctx['has_pending_refunds'] = can_view_orders and OrderRefund.objects.filter(
         order__event=request.event,
         state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_EXTERNAL)
     ).exists()
-    ctx['has_pending_approvals'] = request.event.orders.filter(
+    ctx['has_pending_approvals'] = can_view_orders and request.event.orders.filter(
         status=Order.STATUS_PENDING,
         require_approval=True
     ).exists()
-    ctx['has_cancellation_requests'] = CancellationRequest.objects.filter(
+    ctx['has_cancellation_requests'] = can_view_orders and CancellationRequest.objects.filter(
         order__event=request.event
     ).exists()
 

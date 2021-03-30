@@ -1,0 +1,153 @@
+@import "pretixbase/scss/_variables.scss";
+@import "bootstrap/scss/_bootstrap.scss";
+@import "pretixbase/scss/_theme.scss";
+@import "fontawesome/scss/font-awesome.scss";
+@import "datetimepicker/_bootstrap-datetimepicker.scss";
+
+body {
+  background: #FBF7FC;
+}
+
+.container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.loading-icon {
+  color: $brand-primary;
+  -webkit-animation: fa-spin 8s infinite linear;
+  animation: fa-spin 8s infinite linear;
+}
+
+.meta {
+  padding: 20px;
+  text-align: center;
+  .settings {
+    font-size: 32px;
+  }
+  color: $text-muted;
+  .fa-sign-out {
+    color: $brand-warning;
+  }
+
+  .status {
+    padding-top: 20px;
+    color: $text-muted;
+    .statistic {
+      display: block;
+      font-size: 30px;
+    }
+  }
+}
+
+.scan-input {
+  margin-bottom: 20px;
+}
+
+a.searchresult {
+  display: flex;
+  flex-direction: row;
+  min-height: 96px;
+  padding: 0;
+  color: $text-color;
+
+  &:focus {
+    background: $gray-lightest;
+  }
+
+  h4 {
+    margin: 0 0 5px;
+  }
+
+  .details {
+    flex: auto 1 1;
+    padding: 10px;
+  }
+
+  .status {
+    flex: 128px 0 0;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 140%;
+
+    &.status-p {
+      background: $brand-success;
+    }
+    &.status-c, &.status-e, &.status-n {
+      background: $brand-danger;
+    }
+    &.status-redeemed {
+      background: $brand-warning;
+    }
+  }
+
+  .secret {
+    word-break: break-word;
+    color: $text-muted;
+  }
+}
+
+.check-result-status {
+  height: 30vh;
+  max-height: 200px;
+  font-size: 35px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  &.check-result-red {
+    background: $brand-danger;
+  }
+  &.check-result-green {
+    background: $brand-success;
+  }
+  &.check-result-orange {
+    background: $brand-warning;
+  }
+  &.check-result-purple {
+    background: $brand-primary;
+  }
+}
+
+.attention {
+  padding: 10px;
+  text-align: center;
+  animation: blinking 1s infinite;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.7);
+}
+.modal.fade.in {
+  display: block;
+  overflow: auto;
+}
+
+@-webkit-keyframes blinking {
+  0%, 49% {
+    background-color: $brand-primary;
+    color: white;
+  }
+  50%, 100% {
+    background-color: $brand-warning;
+    color: $brand-primary;
+  }
+}
+
+.panel-primary .panel-heading a {
+  color: white;
+}
+
+.modal-footer .btn-primary.pull-right {
+  margin-left: 10px;
+}

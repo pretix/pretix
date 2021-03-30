@@ -297,6 +297,7 @@ INSTALLED_APPS = [
     'pretix.plugins.badges',
     'pretix.plugins.manualpayment',
     'pretix.plugins.returnurl',
+    'pretix.plugins.webcheckin',
     'django_markup',
     'django_otp',
     'django_otp.plugins.otp_totp',
@@ -563,6 +564,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
+    ('text/vue', 'pretix.helpers.compressor.VueCompiler'),
 )
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback

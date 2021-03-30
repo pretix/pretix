@@ -61,6 +61,9 @@ jobs:
       - name: Run checks
         run: python manage.py check
         working-directory: ./src
+      - name: Install JS dependencies
+        working-directory: ./src
+        run: make npminstall
       - name: Compile
         working-directory: ./src
         run: make all compress

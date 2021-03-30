@@ -59,6 +59,8 @@ Permissions separate into two areas:
    * Can view vouchers – This permission allows viewing the list of vouchers including the voucher codes themselves and
      their redemption status.
 
+   * Can perform check-ins – This permission allows using web-based features to perform ticket search and check-in.
+
    * Can change vouchers – This permission allows to create and modify vouchers in all their details. It only works
      properly if the same users also have the "Can view vouchers" permission.
 

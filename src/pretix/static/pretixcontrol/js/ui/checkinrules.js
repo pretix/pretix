@@ -1,5 +1,10 @@
 $(document).ready(function () {
     var TYPEOPS = {
+        // Every change to our supported JSON logic must be done
+        // * in pretix.base.services.checkin
+        // * in pretix.base.models.checkin
+        // * in checkinrules.js
+        // * in libpretixsync
         'product': {
             'inList': {
                 'label': gettext('is one of'),

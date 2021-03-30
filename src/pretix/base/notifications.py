@@ -191,7 +191,7 @@ class ParametrizedOrderNotificationType(NotificationType):
         n.add_attribute(_('Net total'), money_filter(sum([p.net_price for p in positions] + [f.net_value for f in fees]), logentry.event.currency))
         n.add_attribute(_('Order total'), money_filter(order.total, logentry.event.currency))
         n.add_attribute(_('Pending amount'), money_filter(order.pending_sum, logentry.event.currency))
-        n.add_attribute(_('Order date'), date_format(order.datetime, 'SHORT_DATETIME_FORMAT'))
+        n.add_attribute(_('Order date'), date_format(order.datetime.astimezone(logentry.event.timezone), 'SHORT_DATETIME_FORMAT'))
         n.add_attribute(_('Order status'), order.get_status_display())
         n.add_attribute(_('Order positions'), str(order.positions.count()))
 

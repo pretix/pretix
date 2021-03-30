@@ -13,7 +13,11 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
+from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.api.serializers.item import (
+    InlineItemVariationSerializer, ItemSerializer,
+)
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
@@ -349,8 +353,9 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'request' in self.context and not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
-            self.fields.pop('pdf_data')
+        request = self.context.get('request')
+        if not request or not self.context['request'].query_params.get('pdf_data', 'false') == 'true' or 'can_view_orders' not in request.eventpermset:
+            self.fields.pop('pdf_data', None)
 
     def validate(self, data):
         if data.get('attendee_name') and data.get('attendee_name_parts'):
@@ -484,6 +489,18 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
                   'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'require_attention',
                   'order__status')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if 'subevent' in self.context['request'].query_params.getlist('expand'):
+            self.fields['subevent'] = SubEventSerializer(read_only=True)
+
+        if 'item' in self.context['request'].query_params.getlist('expand'):
+            self.fields['item'] = ItemSerializer(read_only=True)
+
+        if 'variation' in self.context['request'].query_params.getlist('expand'):
+            self.fields['variation'] = InlineItemVariationSerializer(read_only=True)
+
 
 class OrderPaymentTypeField(serializers.Field):
     # TODO: Remove after pretix 2.2
@@ -584,7 +601,7 @@ class OrderSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
-            self.fields['positions'].child.fields.pop('pdf_data')
+            self.fields['positions'].child.fields.pop('pdf_data', None)
 
         for exclude_field in self.context['request'].query_params.getlist('exclude'):
             p = exclude_field.split('.')

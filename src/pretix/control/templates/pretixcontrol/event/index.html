@@ -150,12 +150,14 @@
                 <div class="row">
                     {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
                 </div>
-                <p class="text-right flip">
-                    <br>
-                    <button class="btn btn-default">
-                        {% trans "Update comment" %}
-                    </button>
-                </p>
+                {% if not comment_form.readonly %}
+                    <p class="text-right flip">
+                        <br>
+                        <button class="btn btn-default">
+                            {% trans "Update comment" %}
+                        </button>
+                    </p>
+                {% endif %}
             </form>
         </div>
     </div>
