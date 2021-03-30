@@ -390,7 +390,12 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
         s = event.settings if event else se.event.settings
 
         if s.event_list_available_only:
-            if se.presale_has_ended or ((not voucher or not voucher.allow_ignore_quota) and se.best_availability_state < Quota.AVAILABILITY_RESERVED):
+            hide = se.presale_has_ended or (
+                (not voucher or not voucher.allow_ignore_quota) and
+                se.best_availability_state is not None and
+                se.best_availability_state < Quota.AVAILABILITY_RESERVED
+            )
+            if hide:
                 continue
 
         timezones.add(s.timezones)
