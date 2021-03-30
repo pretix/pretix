@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-08 16:40+0000\n"
+"POT-Creation-Date: 2021-03-30 16:15+0000\n"
 "PO-Revision-Date: 2020-09-23 17:00+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -60,6 +60,153 @@ msgstr "Подтверждается ваш платёж…"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
 msgstr "Идёт обращение к вашему банку…"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
+msgid "Select a check-in list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
+msgid "No active check-in lists found."
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
+msgid "Switch check-in list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
+msgid "Search results"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Close ticket shop"
+msgid "No tickets found"
+msgstr "Закрыть билетную кассу"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
+#, fuzzy
+#| msgid "Check-in QR"
+msgid "Check-in result"
+msgstr "QR-код для регистрации"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
+msgid "This ticket requires special attention"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
+msgid "Switch direction"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
+msgid "Entry"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
+msgid "Exit"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
+msgid "Scan a ticket or search and press return…"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
+msgid "Load more"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
+msgid "Valid"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
+msgid "Unpaid"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
+msgid "Canceled"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Redeem"
+msgid "Redeemed"
+msgstr "Использовать"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
+msgid "Cancel"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Continue"
+msgid "Continue"
+msgstr "Продолжить"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
+msgid "Ticket not paid"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
+msgid "This ticket is not yet paid. Do you want to continue anyways?"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
+msgid "Additional information required"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
+msgid "Valid ticket"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
+msgid "Exit recorded"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
+msgid "Ticket already used"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
+msgid "Information required"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
+msgid "Invalid ticket"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
+msgid "Invalid product"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
+msgid "Entry not allowed"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
+msgid "Ticket code revoked/changed"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
+msgid "Order canceled"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#, fuzzy
+#| msgid "Check-in QR"
+msgid "Checked-in Tickets"
+msgstr "QR-код для регистрации"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+msgid "Valid Tickets"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+msgid "Currently inside"
+msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:117
@@ -152,76 +299,76 @@ msgstr "Скопировано!"
 msgid "Press Ctrl-C to copy!"
 msgstr "Чтобы скопировать, нажмите Ctrl-C."
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:5
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:11
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:10
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:16
 msgid "is one of"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:17
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:22
 msgid "is before"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:21
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:26
 msgid "is after"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:54
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:59
 msgid "Product"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:58
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:63
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "See variations"
 msgid "Product variation"
 msgstr "Посмотреть варианты"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:62
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:67
 msgid "Current date and time"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:66
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
 msgid "Number of previous entries"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:70
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
 msgid "Number of previous entries since midnight"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:74
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:79
 msgid "Number of days with a previous entry"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:214
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:219
 msgid "All of the conditions below (AND)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:215
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:220
 msgid "At least one of the conditions below (OR)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:223
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:228
 msgid "Event start"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:224
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
 msgid "Event end"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:225
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:230
 msgid "Event admission"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:226
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:231
 msgid "custom time"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:234
 msgid "Tolerance (minutes)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:237
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:444
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:242
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:449
 msgid "Add condition"
 msgstr ""
 
@@ -376,30 +523,36 @@ msgstr[2] ""
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Пожалуйста, введите количество для одного из типов билетов."
 
-#: pretix/static/pretixpresale/js/ui/main.js:394
+#: pretix/static/pretixpresale/js/ui/main.js:304
+#, fuzzy
+#| msgid "Cart expired"
+msgid "required"
+msgstr "Срок действия корзины истёк"
+
+#: pretix/static/pretixpresale/js/ui/main.js:401
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "от %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:402
+#: pretix/static/pretixpresale/js/ui/main.js:409
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "от %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:418
+#: pretix/static/pretixpresale/js/ui/main.js:425
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:432
-#: pretix/static/pretixpresale/js/ui/main.js:450
+#: pretix/static/pretixpresale/js/ui/main.js:439
+#: pretix/static/pretixpresale/js/ui/main.js:457
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:441
+#: pretix/static/pretixpresale/js/ui/main.js:448
 msgid "Your local time:"
 msgstr ""
 
