@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
 "PO-Revision-Date: 2021-03-30 19:39+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -1652,16 +1652,14 @@ msgid "Please enter a shorter name."
 msgstr "Bitte gib einen kürzeren Namen ein."
 
 #: pretix/base/forms/questions.py:225
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Interne Referenz"
+msgstr "Ländervorwahl"
 
 #: pretix/base/forms/questions.py:249
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Telefonnummer (ohne Ländervorwahl)"
 
 #: pretix/base/forms/questions.py:415 pretix/base/forms/questions.py:719
 msgid "Street and Number"
@@ -3088,10 +3086,8 @@ msgstr "Minimaler Wert"
 #: pretix/base/models/items.py:1092 pretix/base/models/items.py:1095
 #: pretix/base/models/items.py:1098 pretix/base/models/items.py:1101
 #: pretix/base/models/items.py:1104 pretix/base/models/items.py:1107
-#, fuzzy
-#| msgid "Currently not supported in our apps"
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Derzeit nicht von unseren Apps unterstützt"
+msgstr "Derzeit nicht von unseren Apps und während dem Check-In unterstützt"
 
 #: pretix/base/models/items.py:1094 pretix/base/models/items.py:1100
 #: pretix/base/models/items.py:1106
@@ -9240,7 +9236,7 @@ msgstr "Kein Administrator"
 
 #: pretix/control/forms/filter.py:1353
 msgid "Valid"
-msgstr "Gültig"
+msgstr "gültig"
 
 #: pretix/control/forms/filter.py:1354
 msgid "Unredeemed"
@@ -11526,6 +11522,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:72
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
+#, fuzzy
 msgid "Continue"
 msgstr "Fortfahren"
 
@@ -21430,20 +21427,16 @@ msgstr "Ticket-Layout: {}"
 
 #: pretix/plugins/webcheckin/__init__.py:9
 #: pretix/plugins/webcheckin/__init__.py:12
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Web-based check-in"
-msgstr "Automatischer Check-In"
+msgstr "Web-basierter Check-In"
 
 #: pretix/plugins/webcheckin/__init__.py:16
 msgid "This plugin allows you to perform check-in actions in your browser."
 msgstr "Dieses Plugin erlaubt, Check-in-Aktionen im Browser durchzuführen."
 
 #: pretix/plugins/webcheckin/signals.py:15
-#, fuzzy
-#| msgid "Check-in"
 msgid "Web Check-in"
-msgstr "Check-ins"
+msgstr "Web Check-In"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:11
 msgid "Check-in"
@@ -21565,16 +21558,14 @@ msgid "No other variations of this product exist."
 msgstr "Keine anderen Varianten dieses Produktes existieren."
 
 #: pretix/presale/forms/renderers.py:29
-#, fuzzy
-#| msgid "Valid"
 msgctxt "form"
 msgid "is valid"
-msgstr "Gültig"
+msgstr "ist gültig"
 
 #: pretix/presale/forms/renderers.py:31
 msgctxt "form"
 msgid "has errors"
-msgstr ""
+msgstr "ist fehlerhaft"
 
 #: pretix/presale/forms/renderers.py:43
 msgctxt "form"
@@ -21837,10 +21828,8 @@ msgid "Add or remove tickets"
 msgstr "Tickets hinzufügen oder entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
-#, fuzzy
-#| msgid "Confirm payment"
 msgid "Modify payment"
-msgstr "Zahlung bestätigen"
+msgstr "Zahlungsdetails bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:62
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:84
@@ -21849,16 +21838,12 @@ msgid "Modify"
 msgstr "Bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:82
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Modify invoice information"
-msgstr "Rechnungsinformationen"
+msgstr "Rechnungsinformationen bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:132
-#, fuzzy
-#| msgid "Contact information"
 msgid "Modify contact information"
-msgstr "Kontaktinformationen"
+msgstr "Kontaktinformationen bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:18
@@ -22015,17 +22000,13 @@ msgstr ""
 "verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:54
-#, fuzzy
-#| msgid "Show attendee names on invoices"
 msgid "No attendee name provided"
-msgstr "Teilnehmername auf Rechnungen anzeigen"
+msgstr "Teilnehmername nicht angegeben"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:141
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:192
-#, fuzzy
-#| msgid "Modify price for %(item)s"
 msgid "price per item"
-msgstr "Preis von %(item)s verändern"
+msgstr "Preis pro Stück"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:152
 msgid "Okay, we're removing that…"
