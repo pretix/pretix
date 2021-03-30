@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
-"PO-Revision-Date: 2021-03-30 19:30+0000\n"
+"PO-Revision-Date: 2021-03-30 19:44+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -22062,9 +22062,6 @@ msgid "Remove one"
 msgstr "Eins entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:165
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Quantity"
 msgid "quantity"
 msgstr "Menge"
 
@@ -22089,8 +22086,6 @@ msgid "Add one more"
 msgstr "Eins mehr hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:201
-#, fuzzy
-#| msgid "Price"
 msgid "price"
 msgstr "Preis"
 
@@ -22307,7 +22302,7 @@ msgstr "Zur Kasse"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:107
 msgid "Please select a date to redeem your voucher."
-msgstr "Bitte wähle Sie einen Termin, um Ihren Gutschein einzulösen."
+msgstr "Bitte wählen Sie einen Termin, um Ihren Gutschein einzulösen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:120
 msgid "View other date"
@@ -22560,10 +22555,8 @@ msgid "Request invoice"
 msgstr "Rechnung anfragen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:283
-#, fuzzy
-#| msgid "Change order information"
 msgid "Change your information"
-msgstr "Informationen ändern"
+msgstr "Kundendaten ändern"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:291
 msgid "Your information"
@@ -22877,11 +22870,8 @@ msgid "Voucher redemption"
 msgstr "Gutschein-Einlösung"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:17
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This voucher is valid only for the following specific date and time."
-msgstr "Dieser Gutschein ist für diesen Termin nicht gültig."
+msgstr "Dieser Gutschein ist nur für den hier angegebenen Termin gültig."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:64
 msgid ""
