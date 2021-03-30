@@ -5,24 +5,29 @@ from django.db import migrations
 
 def clean_duplicates(apps, schema_editor):
     while True:
+        # Double subquery to avoid MySQL error 1093
         delete_options = """
             DELETE
             FROM pretixbase_questionanswer_options
             WHERE questionanswer_id IN (
-                SELECT MIN(qa.id)
-                FROM pretixbase_questionanswer qa
-                GROUP BY qa.cartposition_id, qa.orderposition_id, qa.question_id
-                HAVING COUNT(*) > 1
+                SELECT minid FROM (
+                    SELECT MIN(qa.id) minid
+                    FROM pretixbase_questionanswer qa
+                    GROUP BY qa.cartposition_id, qa.orderposition_id, qa.question_id
+                    HAVING COUNT(*) > 1
+                ) AS tmptable
             );
         """
         delete_answers = """
             DELETE
             FROM pretixbase_questionanswer
             WHERE pretixbase_questionanswer.id IN (
-                SELECT MIN(qa.id)
-                FROM pretixbase_questionanswer qa
-                GROUP BY qa.cartposition_id, qa.orderposition_id, qa.question_id
-                HAVING COUNT(*) > 1
+                SELECT minid FROM (
+                    SELECT MIN(qa.id) minid
+                    FROM pretixbase_questionanswer qa
+                    GROUP BY qa.cartposition_id, qa.orderposition_id, qa.question_id
+                    HAVING COUNT(*) > 1
+                ) AS tmptable
             );
         """
         with schema_editor.connection.cursor() as cursor:
