@@ -98,7 +98,7 @@
 
     {% if request.event.has_subevents %}
         <form class="form-inline helper-display-inline" action="" method="get">
-            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" with auto_submit=True %}
         </form>
     {% endif %}
     {% if not request.event.has_subevents or subevent %}

@@ -1,6 +1,6 @@
 {% load i18n %}
 <p>
-    <select name="subevent" class="form-control simple-subevent-choice" data-model-select2="event"
+    <select name="subevent" class="form-control{% if auto_submit %} simple-subevent-choice{% endif %}" data-model-select2="event"
             data-select2-url="{% url "control:event.subevents.select2" organizer=request.event.organizer.slug event=request.event.slug %}"
             data-placeholder="{% trans "All dates" context "subevent" %}">
         {% for se in selected_subevents %}
