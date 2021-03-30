@@ -114,6 +114,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'plugins:pretix_posbackend:posreceipt-list'),
         ('POST', 'plugins:pretix_posbackend:posclosing-list'),
         ('POST', 'plugins:pretix_posbackend:posdebugdump-list'),
+        ('GET', 'plugins:pretix_posbackend:poscashier-list'),
         ('POST', 'plugins:pretix_posbackend:stripeterminal.token'),
         ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:event.settings'),
