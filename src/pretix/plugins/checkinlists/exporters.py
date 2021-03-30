@@ -414,6 +414,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             headers.append(_('Secret'))
 
         headers.append(_('E-mail'))
+        headers.append(_('Phone number'))
 
         if self.event.has_subevents:
             headers.append(pgettext('subevent', 'Date'))
@@ -494,6 +495,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             if form_data['secrets']:
                 row.append(op.secret)
             row.append(op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '') or op.order.email or '')
+            row.append(str(op.order.phone) if op.order.phone else '')
             if self.event.has_subevents:
                 row.append(str(op.subevent.name))
                 row.append(date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT'))
