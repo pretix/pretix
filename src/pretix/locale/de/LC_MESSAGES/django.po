@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
-"PO-Revision-Date: 2021-03-08 17:01+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2021-03-30 17:06+0000\n"
+"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -944,16 +944,12 @@ msgid "Show multiple choice answers grouped in one column"
 msgstr "Multiple-Choice-Fragen in einer Spalte gruppieren"
 
 #: pretix/base/exporters/orderlist.py:76
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include orders created on or after this date."
-msgstr "Nur Tickets für Termine an oder nach diesem Datum."
+msgstr "Nur Bestellungen für Termine an oder nach diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:83
-#, fuzzy
-#| msgid "Only include tickets for dates on or before this date."
 msgid "Only include orders issued on or before this date."
-msgstr "Nur Tickets an oder bevor diesem Datum."
+msgstr "Nur Bestellungen an oder bevor diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:87
 #, fuzzy
@@ -1544,10 +1540,8 @@ msgid "Last invoice number of order"
 msgstr "Rechnungsnummern-Präfix"
 
 #: pretix/base/exporters/orderlist.py:950
-#, fuzzy
-#| msgid "Show expiration date of order"
 msgid "Last invoice date of order"
-msgstr "Zeige das Zahlungsziel der Bestellung an"
+msgstr "Datum der letzten Rechnung dieser Bestellung"
 
 #: pretix/base/exporters/waitinglist.py:26
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
@@ -1665,16 +1659,14 @@ msgid "Please enter a shorter name."
 msgstr "Bitte geben Sie einen kürzeren Namen ein."
 
 #: pretix/base/forms/questions.py:225
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Interne Referenz"
+msgstr "Ländervorwahl"
 
 #: pretix/base/forms/questions.py:249
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Telefonnummer (ohne Ländervorwahl)"
 
 #: pretix/base/forms/questions.py:415 pretix/base/forms/questions.py:719
 msgid "Street and Number"
@@ -3104,10 +3096,8 @@ msgstr "Minimaler Wert"
 #: pretix/base/models/items.py:1092 pretix/base/models/items.py:1095
 #: pretix/base/models/items.py:1098 pretix/base/models/items.py:1101
 #: pretix/base/models/items.py:1104 pretix/base/models/items.py:1107
-#, fuzzy
-#| msgid "Currently not supported in our apps"
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Derzeit nicht von unseren Apps unterstützt"
+msgstr "Derzeit nicht von unseren Apps und beim Check-In unterstützt"
 
 #: pretix/base/models/items.py:1094 pretix/base/models/items.py:1100
 #: pretix/base/models/items.py:1106
@@ -21486,10 +21476,8 @@ msgstr "Ticket-Layout: {}"
 
 #: pretix/plugins/webcheckin/__init__.py:9
 #: pretix/plugins/webcheckin/__init__.py:12
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Web-based check-in"
-msgstr "Automatischer Check-In"
+msgstr "Web-basierter Check-In"
 
 #: pretix/plugins/webcheckin/__init__.py:16
 #, fuzzy
@@ -21500,10 +21488,8 @@ msgstr ""
 "Dieses Plugin erlaubt, Listen für den Check-in am Eventeingang zu erstellen."
 
 #: pretix/plugins/webcheckin/signals.py:15
-#, fuzzy
-#| msgid "Check-in"
 msgid "Web Check-in"
-msgstr "Check-ins"
+msgstr "Web Check-In"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:11
 msgid "Check-in"
@@ -21910,16 +21896,12 @@ msgid "Modify"
 msgstr "Bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:82
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Modify invoice information"
-msgstr "Rechnungsinformationen"
+msgstr "Rechnungsinformationen bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:132
-#, fuzzy
-#| msgid "Contact information"
 msgid "Modify contact information"
-msgstr "Kontaktinformationen"
+msgstr "Kontaktinformationen bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:18
@@ -22076,10 +22058,8 @@ msgstr ""
 "verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:54
-#, fuzzy
-#| msgid "Show attendee names on invoices"
 msgid "No attendee name provided"
-msgstr "Teilnehmername auf Rechnungen anzeigen"
+msgstr "Teilnehmername nicht angegeben"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:141
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:192
