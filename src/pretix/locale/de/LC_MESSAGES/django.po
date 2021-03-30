@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
-"PO-Revision-Date: 2021-03-30 19:25+0000\n"
+"PO-Revision-Date: 2021-03-30 19:30+0000\n"
 "Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -21612,16 +21612,14 @@ msgid "No other variations of this product exist."
 msgstr "Keine anderen Varianten dieses Produktes existieren."
 
 #: pretix/presale/forms/renderers.py:29
-#, fuzzy
-#| msgid "Valid"
 msgctxt "form"
 msgid "is valid"
-msgstr "Gültig"
+msgstr "ist gültig"
 
 #: pretix/presale/forms/renderers.py:31
 msgctxt "form"
 msgid "has errors"
-msgstr ""
+msgstr "ist fehlerhaft"
 
 #: pretix/presale/forms/renderers.py:43
 msgctxt "form"
@@ -21885,10 +21883,8 @@ msgid "Add or remove tickets"
 msgstr "Tickets hinzufügen oder entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
-#, fuzzy
-#| msgid "Confirm payment"
 msgid "Modify payment"
-msgstr "Zahlung bestätigen"
+msgstr "Zahlungsdetails bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:62
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:84
@@ -22320,12 +22316,8 @@ msgid "Proceed with checkout"
 msgstr "Zur Kasse"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:107
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Please either select all dates or a date range, not both."
 msgid "Please select a date to redeem your voucher."
-msgstr ""
-"Bitte wähle entweder alle Termine oder einen Datumsbereich, nicht beides."
+msgstr "Bitte wähle Sie einen Termin, um Ihren Gutschein einzulösen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:120
 msgid "View other date"
