@@ -131,7 +131,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
         op.attendee_name_parts = {}
         op.save()
         order2 = Order.objects.create(
-            code='BAR', event=event, email='dummy@dummy.test',
+            code='BAR', event=event, email='dummy@dummy.test', phone='+498912345678',
             status=Order.STATUS_PAID,
             datetime=datetime.datetime(2019, 2, 22, 14, 0, 0, tzinfo=pytz.UTC), expires=now() + datetime.timedelta(days=10),
             total=33, locale='en'
