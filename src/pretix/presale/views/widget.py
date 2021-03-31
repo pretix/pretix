@@ -70,15 +70,17 @@ def widget_js_etag(request, lang, **kwargs):
 def widget_css(request, **kwargs):
     o = getattr(request, 'event', request.organizer)
     if o.settings.presale_widget_css_file:
-        resp = FileResponse(default_storage.open(o.settings.presale_widget_css_file),
-                            content_type='text/css')
-        return resp
-    else:
-        tpl = get_template('pretixpresale/widget_dummy.html')
-        et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
-        f = finders.find(et)
-        resp = FileResponse(open(f, 'rb'), content_type='text/css')
-        return resp
+        try:
+            resp = FileResponse(default_storage.open(o.settings.presale_widget_css_file),
+                                content_type='text/css')
+            return resp
+        except FileNotFoundError:
+            pass
+    tpl = get_template('pretixpresale/widget_dummy.html')
+    et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
+    f = finders.find(et)
+    resp = FileResponse(open(f, 'rb'), content_type='text/css')
+    return resp
 
 
 def generate_widget_js(lang):
