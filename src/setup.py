@@ -1,11 +1,11 @@
 import os
+import subprocess
 import sys
 from codecs import open
 from distutils.command.build import build
 from distutils.command.build_ext import build_ext
 from distutils.dir_util import copy_tree
 from os import path
-import subprocess
 
 from setuptools import find_packages, setup
 
