@@ -15,6 +15,7 @@ import pytz
 import requests
 from bs4 import BeautifulSoup
 from celery import chain
+from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.mail import (
     EmailMultiAlternatives, SafeMIMEMultipart, get_connection,
@@ -389,11 +390,25 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
 
         try:
             backend.send_messages([email])
-        except smtplib.SMTPResponseException as e:
+        except (smtplib.SMTPResponseException, smtplib.SMTPSenderRefused) as e:
             if e.smtp_code in (101, 111, 421, 422, 431, 442, 447, 452):
-                self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
-            logger.exception('Error sending email')
+                # Most likely temporary, retry again (but pretty soon)
+                try:
+                    self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
+                except MaxRetriesExceededError:
+                    if order:
+                        order.log_action(
+                            'pretix.event.order.email.error',
+                            data={
+                                'subject': 'SMTP code {}, max retries exceeded'.format(e.smtp_code),
+                                'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
+                                'recipient': '',
+                                'invoices': [],
+                            }
+                        )
+                    raise e
 
+            logger.exception('Error sending email')
             if order:
                 order.log_action(
                     'pretix.event.order.email.error',
@@ -406,9 +421,50 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 )
 
             raise SendMailException('Failed to send an email to {}.'.format(to))
+        except smtplib.SMTPRecipientsRefused as e:
+            smtp_codes = [a[0] for a in e.recipients.values()]
+
+            if not any(c >= 500 for c in smtp_codes):
+                # Not a permanent failure (mailbox full, service unavailable), retry later, but with large intervals
+                try:
+                    self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3) * 4)  # max is 2 ** (4*3) * 4 = 16384 seconds = approx 4.5 hours
+                except MaxRetriesExceededError:
+                    # ignore and go on with logging the error
+                    pass
+
+            logger.exception('Error sending email')
+            if order:
+                message = []
+                for e, val in e.recipients.items():
+                    message.append(f'{e}: {val[0]} {val[1].decode()}')
+
+                order.log_action(
+                    'pretix.event.order.email.error',
+                    data={
+                        'subject': 'SMTP error',
+                        'message': '\n'.join(message),
+                        'recipient': '',
+                        'invoices': [],
+                    }
+                )
+
+            raise SendMailException('Failed to send an email to {}.'.format(to))
         except Exception as e:
             if isinstance(e, (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, ssl.SSLError, OSError)):
-                self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
+                try:
+                    self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
+                except MaxRetriesExceededError:
+                    if order:
+                        order.log_action(
+                            'pretix.event.order.email.error',
+                            data={
+                                'subject': 'Internal error',
+                                'message': 'Max retries exceeded',
+                                'recipient': '',
+                                'invoices': [],
+                            }
+                        )
+                    raise e
             if order:
                 order.log_action(
                     'pretix.event.order.email.error',
