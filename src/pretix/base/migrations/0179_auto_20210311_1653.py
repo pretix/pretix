@@ -4,7 +4,7 @@ from django.db import migrations
 
 
 def clean_duplicates(apps, schema_editor):
-    while True:
+    for i in range(100):  # no infinite loops
         # Double subquery to avoid MySQL error 1093
         delete_options = """
             DELETE
