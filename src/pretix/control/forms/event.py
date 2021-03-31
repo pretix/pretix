@@ -1136,7 +1136,7 @@ class TicketSettingsForm(SettingsForm):
 class CommentForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
-        self.readonly = kwargs.pop('readonly')
+        self.readonly = kwargs.pop('readonly', None)
         super().__init__(*args, **kwargs)
         if self.readonly:
             self.fields['comment'].widget.attrs['readonly'] = 'readonly'
