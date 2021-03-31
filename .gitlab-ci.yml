@@ -24,11 +24,11 @@ pypi:
         - XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt
         - cd src
         - python setup.py sdist
-        - make npminstall
         - pip install dist/pretix-*.tar.gz
         - python -m pretix migrate
         - python -m pretix check
         - check-manifest
+        - make npminstall
         - python setup.py sdist bdist_wheel
         - twine check dist/*
         - twine upload dist/*
