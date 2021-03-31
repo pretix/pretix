@@ -116,6 +116,7 @@ class QuotaAvailability:
                     for redisval, q in zip(d, evquotas):
                         if redisval is not None:
                             data = [rv for rv in redisval.decode().split(',')]
+                            # Except for some rare situations, we don't want to use cache entries older than 2 minutes
                             if time.time() - int(data[2]) < 120 or allow_cache_stale:
                                 quotas_original.remove(q)
                                 quotas.remove(q)
@@ -153,7 +154,7 @@ class QuotaAvailability:
         # high load *to a specific calendar or event*, lots of parallel web requests will receive an "expired" result
         # around the same time, recompute quotas and write back to the cache. To avoid overloading redis with lots of
         # simultaneous write queries for the same page, we place a very naive and simple "lock" on the write process for
-        # these quotas.
+        # these quotas. We choose 10 seconds since that should be well above the duration of a write.
 
         lock_name = '_'.join([str(p) for p in sorted([q.pk for q in quotas])])
         if rc.exists(f'quotas:availabilitycachewrite:{lock_name}'):
@@ -171,6 +172,9 @@ class QuotaAvailability:
                     [str(int(time.time()))]
                 ) for q in quotas
             })
+            # To make sure old events do not fill up our redis instance, we set an expiry on the cache. However, we set it
+            # on 7 days even though we mostly ignore values older than 2 monites. The reasoning is that we have some places
+            # where we set allow_cache_stale and use the old entries anyways to save on performance.
             rc.expire(f'quotas:{eventid}:availabilitycache', 3600 * 24 * 7)
 
         # We used to also delete item_quota_cache:* from the event cache here, but as the cache
