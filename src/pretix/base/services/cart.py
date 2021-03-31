@@ -207,7 +207,7 @@ class CartManager:
     def _update_subevents_cache(self, se_ids: List[int]):
         self._subevents_cache.update({
             i.pk: i
-            for i in self.event.subevents.filter(id__in=[i for i in se_ids if i and i not in self._items_cache])
+            for i in self.event.subevents.filter(id__in=[i for i in se_ids if i and i not in self._subevents_cache])
         })
 
     def _update_items_cache(self, item_ids: List[int], variation_ids: List[int]):
