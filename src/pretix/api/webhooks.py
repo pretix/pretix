@@ -257,7 +257,7 @@ def register_default_webhook_events(sender, **kwargs):
     )
 
 
-@app.task(base=TransactionAwareTask, acks_late=True)
+@app.task(base=TransactionAwareTask, max_retries=9, default_retry_delay=900, acks_late=True)
 def notify_webhooks(logentry_ids: list):
     if not isinstance(logentry_ids, list):
         logentry_ids = [logentry_ids]

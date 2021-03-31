@@ -13,7 +13,7 @@ from pretix.celery_app import app
 from pretix.helpers.urls import build_absolute_uri
 
 
-@app.task(base=TransactionAwareTask, acks_late=True)
+@app.task(base=TransactionAwareTask, acks_late=True, max_retries=9, default_retry_delay=900)
 @scopes_disabled()
 def notify(logentry_ids: list):
     if not isinstance(logentry_ids, list):
@@ -70,7 +70,7 @@ def notify(logentry_ids: list):
                 send_notification.apply_async(args=(logentry.id, notification_type.action_type, user.pk, method))
 
 
-@app.task(base=ProfiledTask, acks_late=True)
+@app.task(base=ProfiledTask, acks_late=True, max_retries=9, default_retry_delay=900)
 def send_notification(logentry_id: int, action_type: str, user_id: int, method: str):
     logentry = LogEntry.all.get(id=logentry_id)
     if logentry.event:
