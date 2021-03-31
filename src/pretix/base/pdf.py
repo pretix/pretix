@@ -87,6 +87,13 @@ DEFAULT_VARIABLES = OrderedDict((
             if orderposition.variation else str(orderposition.item.name)
         )
     }),
+    ("itemvar_description", {
+        "label": _("Product variation description"),
+        "editor_sample": _("Sample product variation description"),
+        "evaluate": lambda orderposition, order, event: (
+            str(orderposition.variation.description) if orderposition.variation else str(orderposition.item.description)
+        )
+    }),
     ("item_category", {
         "label": _("Product category"),
         "editor_sample": _("Ticket category"),
@@ -149,6 +156,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: str(getattr(op.country, 'name', '')) or (
             str(getattr(op.addon_to.country, 'name', '')) if op.addon_to else ''
         )
+    }),
+    ("attendee_email", {
+        "label": _("Attendee email"),
+        "editor_sample": 'foo@bar.com',
+        "evaluate": lambda op, order, ev: op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '')
     }),
     ("event_name", {
         "label": _("Event name"),
@@ -240,6 +252,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Phone number"),
         "editor_sample": "+01 1234 567890",
         "evaluate": lambda op, order, ev: phone_format(order.phone)
+    }),
+    ("email", {
+        "label": _("Email"),
+        "editor_sample": "foo@bar.com",
+        "evaluate": lambda op, order, ev: order.email
     }),
     ("invoice_name", {
         "label": _("Invoice address name"),
