@@ -111,6 +111,12 @@ class CartActionMixin:
 
         parts = key.split("_")
         price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
+        subevent = None
+        if 'subevent' in self.request.POST:
+            try:
+                subevent = int(self.request.POST.get('subevent'))
+            except ValueError:
+                pass
 
         if key.startswith('seat_'):
             try:
@@ -121,7 +127,7 @@ class CartActionMixin:
                     'seat': value,
                     'price': price,
                     'voucher': voucher,
-                    'subevent': self.request.POST.get("subevent")
+                    'subevent': subevent
                 }
             except ValueError:
                 raise CartError(_('Please enter numbers only.'))
@@ -143,7 +149,7 @@ class CartActionMixin:
                     'count': amount,
                     'price': price,
                     'voucher': voucher,
-                    'subevent': self.request.POST.get("subevent")
+                    'subevent': subevent
                 }
             except ValueError:
                 raise CartError(_('Please enter numbers only.'))
@@ -155,7 +161,7 @@ class CartActionMixin:
                     'count': amount,
                     'price': price,
                     'voucher': voucher,
-                    'subevent': self.request.POST.get("subevent")
+                    'subevent': subevent
                 }
             except ValueError:
                 raise CartError(_('Please enter numbers only.'))
@@ -380,8 +386,11 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
 
     def post(self, request, *args, **kwargs):
         if 'id' in request.POST:
-            return self.do(self.request.event.id, request.POST.get('id'), get_or_create_cart_id(self.request),
-                           translation.get_language(), request.sales_channel.identifier)
+            try:
+                return self.do(self.request.event.id, int(request.POST.get('id')), get_or_create_cart_id(self.request),
+                               translation.get_language(), request.sales_channel.identifier)
+            except ValueError:
+                return redirect(self.get_error_url())
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
