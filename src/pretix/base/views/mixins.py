@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
+from django.db import IntegrityError
 from django.db.models import Prefetch, QuerySet
 from django.utils.functional import cached_property
 
@@ -148,8 +149,24 @@ class BaseQuestionsViewMixin:
                                 orderposition=(form.pos if isinstance(form.pos, OrderPosition) else None),
                                 question=field.question,
                             )
-                            self._save_to_answer(field, answer, v)
-                            answer.save()
+                            try:
+                                self._save_to_answer(field, answer, v)
+                                answer.save()
+                            except IntegrityError:
+                                # Since we prefill ``field.answer`` at form creation time, there's a possible race condition
+                                # here if the users submits their save request a second time while the first one is still running,
+                                # thus leading to duplicate QuestionAnswer objects. Since Django doesn't support UPSERT, the "proper"
+                                # fix would be a transaction with select_for_update(), or at least fetching using get_or_create here
+                                # again. However, both of these approaches have a significant performance overhead for *all* requests,
+                                # while the issue happens very very rarely. So we opt for just catching the error and retrying properly.
+                                answer = QuestionAnswer.objects.get(
+                                    cartposition=(form.pos if isinstance(form.pos, CartPosition) else None),
+                                    orderposition=(form.pos if isinstance(form.pos, OrderPosition) else None),
+                                    question=field.question,
+                                )
+                                self._save_to_answer(field, answer, v)
+                                answer.save()
+
                     else:
                         meta_info.setdefault('question_form_data', {})
                         if v is None:
