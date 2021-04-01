@@ -47,8 +47,4 @@ class Migration(migrations.Migration):
             clean_duplicates,
             migrations.RunPython.noop,
         ),
-        migrations.AlterUniqueTogether(
-            name='questionanswer',
-            unique_together={('orderposition', 'question'), ('cartposition', 'question')},
-        ),
     ]
