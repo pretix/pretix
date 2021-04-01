@@ -10,6 +10,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AlterUniqueTogether(
+            name='questionanswer',
+            unique_together={('orderposition', 'question'), ('cartposition', 'question')},
+        ),
         migrations.RemoveField(
             model_name='quota',
             name='cached_availability_number',
