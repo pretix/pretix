@@ -25,6 +25,7 @@ installation guides):
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
 * A `PostgreSQL`_ 9.5+, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
 * A `redis`_ server
+* A `nodejs_` installation
 
 We also recommend that you use a firewall, although this is not a pretix-specific recommendation. If you're new to
 Linux and firewalls, we recommend that you start with `ufw`_.
@@ -312,3 +313,4 @@ example::
 .. _redis: https://blog.programster.org/debian-8-install-redis-server/
 .. _ufw: https://en.wikipedia.org/wiki/Uncomplicated_Firewall
 .. _strong encryption settings: https://mozilla.github.io/server-side-tls/ssl-config-generator/
+.. _nodejs: https://github.com/nodesource/distributions/blob/master/README.md#deb
