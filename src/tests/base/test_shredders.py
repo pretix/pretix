@@ -226,6 +226,7 @@ def test_invoice_address_shredder(event, order):
 @pytest.mark.django_db
 def test_question_answer_shredder(event, order, question):
     opt = question.options.first()
+    q2 = event.questions.create(question="Photo", type="F", identifier="DEF")
     l1 = order.log_action(
         'pretix.event.order.modified',
         data={
@@ -242,21 +243,33 @@ def test_question_answer_shredder(event, order, question):
         question=question,
         answer='S'
     )
+    qa2 = QuestionAnswer.objects.create(
+        orderposition=order.positions.first(),
+        question=q2,
+        answer='file:///foo.pdf'
+    )
     qa.file.save('foo.pdf', ContentFile('foo'))
     fname = qa.file.path
     assert os.path.exists(fname)
     qa.options.add(opt)
     s = QuestionAnswerShredder(event)
     f = list(s.generate_files())
-    assert json.loads(f[0][2]) == {
+    assert json.loads(f[-1][2]) == {
         '{}-1'.format(order.code): [{
             'question': question.pk,
             'answer': 'S',
             'question_identifier': question.identifier,
             'options': [opt.pk],
             'option_identifiers': [opt.identifier],
+        }, {
+            'question': q2.pk,
+            'answer': f'/api/v1/organizers/dummy/events/dummy/orderpositions/{qa2.orderposition_id}/answer/{qa2.question_id}/',
+            'question_identifier': q2.identifier,
+            'options': [],
+            'option_identifiers': [],
         }]
     }
+    assert f[0][0].endswith('.pdf')
     s.shred_data()
     order.refresh_from_db()
     assert not os.path.exists(fname)

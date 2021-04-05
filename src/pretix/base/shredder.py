@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import timedelta
 from typing import List, Tuple
 
@@ -324,10 +325,16 @@ class QuestionAnswerShredder(BaseDataShredder):
     description = _('This will remove all answers to questions, as well as logged changes to them.')
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
-        yield 'question-answers.json', 'application/json', json.dumps({
-            '{}-{}'.format(op.order.code, op.positionid): AnswerSerializer(op.answers.all(), many=True).data
-            for op in OrderPosition.all.filter(order__event=self.event).prefetch_related('answers')
-        }, indent=4)
+        d = {}
+        for op in OrderPosition.all.filter(order__event=self.event).prefetch_related('answers', 'answers__question'):
+            for a in op.answers.all():
+                if a.file:
+                    fname = f'{op.order.code}-{op.positionid}-{a.question.identifier}-{os.path.basename(a.file.name)}'
+                    yield fname, 'application/unknown', a.file.read()
+            d[f'{op.order.code}-{op.positionid}'] = AnswerSerializer(
+                sorted(op.answers.all(), key=lambda a: a.question_id), context={'request': None}, many=True
+            ).data
+        yield 'question-answers.json', 'application/json', json.dumps(d, indent=4)
 
     @transaction.atomic
     def shred_data(self):
