@@ -1,13 +1,12 @@
 from urllib.parse import quote
 
 from django.contrib import messages
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.db.models import Count, IntegerField, OuterRef, Subquery
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.http import url_has_allowed_host_and_scheme
-from django.utils.translation import get_language, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
@@ -18,6 +17,7 @@ from pretix.base.services.mail import mail
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.customer import (
     AuthenticationForm, RegistrationForm, ResetPasswordForm, SetPasswordForm,
+    TokenGenerator,
 )
 from pretix.presale.utils import customer_login, customer_logout
 
@@ -106,10 +106,6 @@ class LogoutView(View):
         return next_page
 
 
-class TokenGenerator(PasswordResetTokenGenerator):
-    key_salt = "pretix.presale.views.customer.TokenGenerator"
-
-
 class RegistrationView(RedirectBackMixin, FormView):
     form_class = RegistrationForm
     template_name = 'pretixpresale/organizers/customer_registration.html'
@@ -139,26 +135,7 @@ class RegistrationView(RedirectBackMixin, FormView):
         return url or eventreverse(self.request.organizer, 'presale:organizer.customer.login', kwargs={})
 
     def form_valid(self, form):
-        customer = self.request.organizer.customers.create(
-            email=form.cleaned_data['email'],
-            name_parts=form.cleaned_data['name_parts'],
-            is_active=True,
-            is_verified=False,
-            locale=get_language(),
-        )
-        customer.log_action('pretix.customer.created', {})
-        ctx = customer.get_email_context()
-        token = TokenGenerator().make_token(customer)
-        ctx['url'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.activate') + '?id=' + customer.identifier + '&token=' + token
-        mail(
-            customer.email,
-            _('Activate your account at {organizer}').format(organizer=self.request.organizer.name),
-            self.request.organizer.settings.mail_text_customer_registration,
-            ctx,
-            locale=customer.locale,
-            customer=customer,
-            organizer=self.request.organizer,
-        )
+        form.create()
         messages.success(
             self.request,
             _('Your account has been created. Please follow the link in the email we sent you to activate your '
@@ -223,7 +200,8 @@ class ResetPasswordView(FormView):
         customer.log_action('pretix.customer.password.resetrequested', {})
         ctx = customer.get_email_context()
         token = TokenGenerator().make_token(customer)
-        ctx['url'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.recoverpw') + '?id=' + customer.identifier + '&token=' + token
+        ctx['url'] = build_absolute_uri(self.request.organizer,
+                                        'presale:organizer.customer.recoverpw') + '?id=' + customer.identifier + '&token=' + token
         mail(
             customer.email,
             _('Set a new password for your account at {organizer}').format(organizer=self.request.organizer.name),

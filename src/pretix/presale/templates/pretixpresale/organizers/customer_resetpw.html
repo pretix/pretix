@@ -14,7 +14,7 @@
             </h2>
             <form action="" method="post">
                 {% csrf_token %}
-                {% bootstrap_form form layout="presale" %}
+                {% bootstrap_form form %}
                 <div class="form-group buttons">
                     <button type="submit" class="btn btn-primary btn-lg btn-block">
                         {% trans "Request a new password" %}

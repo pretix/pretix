@@ -9,6 +9,23 @@
     <h2>
         {% trans "Your account" %}
     </h2>
+    <div class="panel panel-primary items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Account information" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>{% trans "Customer ID" %}</dt>
+                <dd>{{ customer.identifier }}</dd>
+                <dt>{% trans "Email" %}</dt>
+                <dd>{{ customer.email }}</dd>
+                <dt>{% trans "Name" %}</dt>
+                <dd>{{ customer.name }}</dd>
+            </dl>
+        </div>
+    </div>
     <div class="panel panel-default items">
         <div class="panel-heading">
             <h3 class="panel-title">

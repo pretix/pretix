@@ -2,10 +2,18 @@ from django import forms
 from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms.questions import NamePartsFormField
+from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
+from pretix.base.services.mail import mail
+from pretix.multidomain.urlreverse import build_absolute_uri
+
+
+class TokenGenerator(PasswordResetTokenGenerator):
+    key_salt = "pretix.presale.forms.customer.TokenGenerator"
 
 
 class AuthenticationForm(forms.Form):
@@ -20,6 +28,7 @@ class AuthenticationForm(forms.Form):
     )
 
     error_messages = {
+        'incomplete': _('You need to fill out all fields.'),
         'invalid_login': _(
             "We have not found an account with this email address and password."
         ),
@@ -56,6 +65,12 @@ class AuthenticationForm(forms.Form):
             else:
                 self.confirm_login_allowed(self.customer_cache)
 
+        if not email or not password:
+            raise forms.ValidationError(
+                self.error_messages['incomplete'],
+                code='incomplete'
+            )
+
         return self.cleaned_data
 
     def confirm_login_allowed(self, user):
@@ -81,6 +96,7 @@ class RegistrationForm(forms.Form):
     )
 
     error_messages = {
+        'incomplete': _('You need to fill out all fields.'),
         'duplicate': _(
             "An account with this email address is already registered. Please try to log in or reset your password "
             "instead."
@@ -113,7 +129,37 @@ class RegistrationForm(forms.Form):
                     code='duplicate',
                 )
 
+        if not self.cleaned_data.get('email') or not self.cleaned_data.get('name_parts'):
+            raise forms.ValidationError(
+                self.error_messages['incomplete'],
+                code='incomplete'
+            )
+
         return self.cleaned_data
+
+    def create(self):
+        customer = self.request.organizer.customers.create(
+            email=self.cleaned_data['email'],
+            name_parts=self.cleaned_data['name_parts'],
+            is_active=True,
+            is_verified=False,
+            locale=get_language_without_region(),
+        )
+        customer.log_action('pretix.customer.created', {})
+        ctx = customer.get_email_context()
+        token = TokenGenerator().make_token(customer)
+        ctx['url'] = build_absolute_uri(self.request.organizer,
+                                        'presale:organizer.customer.activate') + '?id=' + customer.identifier + '&token=' + token
+        mail(
+            customer.email,
+            _('Activate your account at {organizer}').format(organizer=self.request.organizer.name),
+            self.request.organizer.settings.mail_text_customer_registration,
+            ctx,
+            locale=customer.locale,
+            customer=customer,
+            organizer=self.request.organizer,
+        )
+        return customer
 
 
 class SetPasswordForm(forms.Form):

@@ -50,7 +50,7 @@ from django.utils.translation import (
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Order
+from pretix.base.models import Customer, Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
 from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
@@ -64,12 +64,14 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
     ContactForm, InvoiceAddressForm, InvoiceNameForm,
 )
+from pretix.presale.forms.customer import AuthenticationForm, RegistrationForm
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
     contact_form_fields, contact_form_fields_overrides,
     order_meta_from_request, question_form_fields,
     question_form_fields_overrides,
 )
+from pretix.presale.utils import customer_login
 from pretix.presale.views import (
     CartMixin, get_cart, get_cart_is_free, get_cart_total,
 )
@@ -220,6 +222,102 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
     @property
     def identifier(self):
         raise NotImplementedError()
+
+
+class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+    priority = 30
+    identifier = "customer"
+    template_name = "pretixpresale/event/checkout_customer.html"
+    label = pgettext_lazy('checkoutflow', 'Customer account')
+    icon = 'id-badge'
+
+    def is_applicable(self, request):
+        return request.organizer.settings.customer_accounts
+
+    @cached_property
+    def login_form(self):
+        f = AuthenticationForm(
+            data=(
+                self.request.POST
+                if self.request.method == "POST" and self.request.POST.get('customer_mode') == 'login'
+                else None
+            ),
+            prefix='login',
+            request=self.request.event,
+        )
+        for field in f.fields.values():
+            field.required = False
+            field.widget.is_required = False
+        return f
+
+    @cached_property
+    def register_form(self):
+        f = RegistrationForm(
+            data=(
+                self.request.POST
+                if self.request.method == "POST" and self.request.POST.get('customer_mode') == 'register'
+                else None
+            ),
+            prefix='register',
+            request=self.request.event,
+        )
+        for field in f.fields.values():
+            field.required = False
+            field.widget.is_required = False
+        return f
+
+    def post(self, request):
+        self.request = request
+
+        if request.POST.get("customer_mode") == 'login':
+            if 'customer' in self.cart_session:
+                return redirect(self.get_next_url(request))
+            elif request.customer:
+                self.cart_session['customer_mode'] = 'login'
+                self.cart_session['customer'] = request.customer.pk
+                return redirect(self.get_next_url(request))
+            elif self.login_form.is_valid():
+                customer_login(self.request, self.login_form.get_customer())
+                self.cart_session['customer_mode'] = 'login'
+                self.cart_session['customer'] = self.login_form.get_customer().pk
+                return redirect(self.get_next_url(request))
+            else:
+                return self.render()
+        elif request.POST.get("customer_mode") == 'register':
+            if self.register_form.is_valid():
+                customer = self.register_form.create()
+                self.cart_session['customer_mode'] = 'login'
+                self.cart_session['customer'] = customer.pk
+                return redirect(self.get_next_url(request))
+            else:
+                return self.render()
+        elif request.POST.get("customer_mode") == 'guest':
+            self.cart_session['customer'] = None
+            self.cart_session['customer_mode'] = 'guest'
+            return redirect(self.get_next_url(request))
+        else:
+            return self.render()
+
+    def is_completed(self, request, warn=False):
+        self.request = request
+        return 'customer_mode' in self.cart_session
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['cart'] = self.get_cart()
+        ctx['cart_session'] = self.cart_session
+        ctx['login_form'] = self.login_form
+        ctx['register_form'] = self.register_form
+        ctx['selected'] = self.request.POST.get('customer_mode', self.cart_session.get('customer_mode', ''))
+
+        if 'customer' in self.cart_session:
+            try:
+                ctx['customer'] = self.request.organizer.customers.get(pk=self.cart_session.get('customer', -1))
+            except Customer.DoesNotExist:
+                self.cart_session['customer'] = None
+                self.cart_session['customer_mode'] = None
+
+        return ctx
 
 
 class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
@@ -486,12 +584,14 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             initial.update({
                 k: v['initial'] for k, v in overrides.items() if 'initial' in v
             })
+        if self.cart_customer:
+            initial['email'] = self.cart_customer.email
 
         f = ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                         event=self.request.event,
                         request=self.request,
                         initial=initial, all_optional=self.all_optional)
-        if wd.get('email', '') and wd.get('fix', '') == "true":
+        if wd.get('email', '') and wd.get('fix', '') == "true" or self.cart_customer:
             f.fields['email'].disabled = True
 
         for overrides in override_sets:
@@ -537,6 +637,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         else:
             wd_initial = {}
         initial = dict(wd_initial)
+
+        if self.cart_customer:
+            initial.update({
+                'name_parts': self.cart_customer.name_parts
+            })
 
         override_sets = self._contact_override_sets
         for overrides in override_sets:
@@ -939,7 +1044,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             sales_channel=request.sales_channel.identifier,
             gift_cards=self.cart_session.get('gift_cards'),
             shown_total=self.cart_session.get('shown_total'),
-            customer=self.request.customer.pk if self.request.customer else None,
+            customer=self.cart_session.get('customer'),
         )
 
     def get_success_message(self, value):
@@ -973,6 +1078,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
 
 DEFAULT_FLOW = (
+    CustomerStep,
     AddOnsStep,
     QuestionsStep,
     PaymentStep,
