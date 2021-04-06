@@ -45,6 +45,7 @@ from django.template.response import TemplateResponse
 from django.urls import resolve
 from django.utils.crypto import constant_time_compare
 from django.utils.functional import SimpleLazyObject
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.defaults import permission_denied
 from django_scopes import scope
@@ -106,6 +107,10 @@ def customer_login(request, customer):
     request.session[session_key] = customer.pk
     request.session[hash_session_key] = session_auth_hash
     request.customer = customer
+
+    customer.last_login = now()
+    customer.save(update_fields=['last_login'])
+
     rotate_token(request)
 
 

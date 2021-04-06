@@ -182,7 +182,15 @@
                             <dt>{% trans "Expiry date" %}</dt>
                             <dd>{{ order.expires|date:"SHORT_DATETIME_FORMAT" }}</dd>
                         {% endif %}
-                        <dt>{% trans "User" %}</dt>
+                        {% if order.customer %}
+                            <dt>{% trans "Customer account" %}</dt>
+                            <dd>
+                                <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=order.customer.identifier %}">
+                                    {{ order.customer.identifier }} – {{ order.customer.email }}
+                                </a>
+                            </dd>
+                        {% endif %}
+                        <dt>{% trans "Buyer email" %}</dt>
                         <dd>
                             {{ order.email|default_if_none:"" }}
                             {% if order.email and order.email_known_to_work %}
@@ -197,7 +205,7 @@
                                 </a>
                                 {% if order.status != "c" %}
                                     <form class="form-inline helper-display-inline" method="post"
-                                            action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                          action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                         {% csrf_token %}
                                         <button class="btn btn-default btn-xs">
                                             {% trans "Resend link" %}

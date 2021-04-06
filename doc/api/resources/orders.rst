@@ -31,6 +31,7 @@ testmode                              boolean                    If ``true``, th
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
 phone                                 string                     The customer phone number
+customer                              string                     The customer account ID (or ``null``)
 locale                                string                     The locale used for communication with this customer
 sales_channel                         string                     Channel this sale was created through, such as
                                                                  ``"web"``.
@@ -117,6 +118,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 3.14
 
    The ``phone`` attribute has been added.
+
+.. versionchanged:: 4.0
+
+   The ``customer`` attribute has been added.
 
 
 .. _order-position-resource:
@@ -289,6 +294,7 @@ List of all orders
             "url": "https://test.pretix.eu/dummy/dummy/order/ABC12/k24fiuwvu8kxz3y1/",
             "email": "tester@example.org",
             "phone": "+491234567",
+            "customer": null,
             "locale": "en",
             "sales_channel": "web",
             "datetime": "2017-12-01T10:00:00Z",
@@ -457,6 +463,7 @@ Fetching individual orders
         "url": "https://test.pretix.eu/dummy/dummy/order/ABC12/k24fiuwvu8kxz3y1/",
         "email": "tester@example.org",
         "phone": "+491234567",
+        "customer": null,
         "locale": "en",
         "sales_channel": "web",
         "datetime": "2017-12-01T10:00:00Z",

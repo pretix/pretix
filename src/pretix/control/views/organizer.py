@@ -43,7 +43,8 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
-    Count, Max, Min, OuterRef, Prefetch, ProtectedError, Subquery, Sum,
+    Count, Exists, IntegerField, Max, Min, OuterRef, Prefetch, ProtectedError,
+    Subquery, Sum,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
@@ -61,14 +62,16 @@ from django.views.generic import (
 
 from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
-    CachedFile, Device, Gate, GiftCard, LogEntry, OrderPayment, Organizer,
-    Team, TeamInvite, User,
+    CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry, Order,
+    OrderPayment, OrderPosition, Organizer, Team, TeamInvite, User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import (
     GiftCardTransaction, gen_giftcard_secret,
 )
+from pretix.base.models.orders import CancellationRequest
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import multiexport
@@ -78,6 +81,8 @@ from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import (
     EventFilterForm, GiftCardFilterForm, OrganizerFilterForm, TeamFilterForm,
+    CustomerFilterForm, EventFilterForm, GiftCardFilterForm,
+    OrganizerFilterForm,
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
@@ -1501,4 +1506,88 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
+        return ctx
+
+
+class CustomerListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
+    model = Customer
+    template_name = 'pretixcontrol/organizers/customers.html'
+    permission = 'can_manage_customers'
+    context_object_name = 'customers'
+
+    def get_queryset(self):
+        qs = self.request.organizer.customers.all()
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return CustomerFilterForm(data=self.request.GET, request=self.request)
+
+
+class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
+    template_name = 'pretixcontrol/organizers/customer.html'
+    permission = 'can_manage_customers'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        return self.customer.orders.select_related('event').order_by('-datetime')
+
+    @cached_property
+    def customer(self):
+        return get_object_or_404(
+            self.request.organizer.customers,
+            identifier=self.kwargs.get('customer')
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['customer'] = self.customer
+        ctx['display_locale'] = dict(settings.LANGUAGES)[self.customer.locale or self.request.organizer.settings.locale]
+
+        # Only compute this annotations for this page (query optimization)
+        s = OrderPosition.objects.filter(
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
+        i = Invoice.objects.filter(
+            order=OuterRef('pk'),
+            is_cancellation=False,
+            refered__isnull=True,
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
+        annotated = {
+            o['pk']: o
+            for o in
+            Order.annotate_overpayments(Order.objects, sums=True).filter(
+                pk__in=[o.pk for o in ctx['orders']]
+            ).annotate(
+                pcnt=Subquery(s, output_field=IntegerField()),
+                icnt=Subquery(i, output_field=IntegerField()),
+                has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk')))
+            ).values(
+                'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
+                'has_pending_refund', 'has_cancellation_request', 'computed_payment_refund_sum', 'icnt'
+            )
+        }
+
+        scs = get_all_sales_channels()
+        for o in ctx['orders']:
+            if o.pk not in annotated:
+                continue
+            o.pcnt = annotated.get(o.pk)['pcnt']
+            o.is_overpaid = annotated.get(o.pk)['is_overpaid']
+            o.is_underpaid = annotated.get(o.pk)['is_underpaid']
+            o.is_pending_with_full_payment = annotated.get(o.pk)['is_pending_with_full_payment']
+            o.has_external_refund = annotated.get(o.pk)['has_external_refund']
+            o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
+            o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
+            o.computed_payment_refund_sum = annotated.get(o.pk)['computed_payment_refund_sum']
+            o.icnt = annotated.get(o.pk)['icnt']
+            o.sales_channel_obj = scs[o.sales_channel]
+
         return ctx

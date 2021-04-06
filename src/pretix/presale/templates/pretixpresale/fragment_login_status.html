@@ -4,7 +4,7 @@
 {% if request.organizer.settings.customer_accounts %}
     <nav class="loginstatus" aria-label="{% trans "customer account" %}">
         {% if request.customer %}
-            <a href="{% eventurl request.organizer "presale:organizer.customer.login" %}"
+            <a href="{% eventurl request.organizer "presale:organizer.customer.profile" %}"
                aria-label="{% trans "View customer account" %}" data-placement="bottom"
                title="{% trans "View user profile" %}" data-toggle="tooltip">
                 <span class="fa fa-user" aria-hidden="true"></span>

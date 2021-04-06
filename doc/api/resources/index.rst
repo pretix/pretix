@@ -21,6 +21,7 @@ Resources and endpoints
    vouchers
    checkinlists
    waitinglist
+   customers
    giftcards
    carts
    teams

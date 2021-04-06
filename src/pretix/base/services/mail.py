@@ -93,10 +93,10 @@ class SendMailException(Exception):
 
 
 def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, LazyI18nString],
-         context: Dict[str, Any] = None, event: Event = None, locale: str = None, *,
-         order: Order = None, position: OrderPosition = None, headers: dict = None, sender: str = None,
-         organizer: Organizer = None, customer: Customer = None, invoices: Sequence = None, attach_tickets=False,
-         auto_email=True, user=None, attach_ical=False, attach_cached_files: Sequence = None):
+         context: Dict[str, Any] = None, event: Event = None, locale: str = None, order: Order = None,
+         position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
+         customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
+         attach_ical=False, attach_cached_files: Sequence = None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 

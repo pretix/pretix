@@ -115,6 +115,7 @@ def team(organizer):
         can_change_vouchers=True,
         can_view_vouchers=True,
         can_change_orders=True,
+        can_manage_customers=True,
         can_change_organizer_settings=True
     )
 

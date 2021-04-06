@@ -217,6 +217,8 @@ class Team(LoggedModel):
     :type can_create_events: bool
     :param can_change_teams: If ``True``, the members can change the teams of this organizer account.
     :type can_change_teams: bool
+    :param can_manage_customers: If ``True``, the members can view and change organizer-level customer accounts.
+    :type can_manage_customers: bool
     :param can_change_organizer_settings: If ``True``, the members can change the settings of this organizer account.
     :type can_change_organizer_settings: bool
     :param can_change_event_settings: If ``True``, the members can change the settings of the associated events.
@@ -254,11 +256,14 @@ class Team(LoggedModel):
         help_text=_('Someone with this setting can get access to most data of all of your events, i.e. via privacy '
                     'reports, so be careful who you add to this team!')
     )
+    can_manage_customers = models.BooleanField(
+        default=False,
+        verbose_name=_("Can manage customer accounts")
+    )
     can_manage_gift_cards = models.BooleanField(
         default=False,
         verbose_name=_("Can manage gift cards")
     )
-
     can_change_event_settings = models.BooleanField(
         default=False,
         verbose_name=_("Can change event settings")

@@ -18,6 +18,7 @@ class Customer(LoggedModel):
     """
     Represents a registered customer of an organizer.
     """
+    id = models.BigAutoField(primary_key=True)
     organizer = models.ForeignKey(Organizer, related_name='customers', on_delete=models.CASCADE)
     identifier = models.CharField(max_length=190, db_index=True, unique=True)
     email = models.EmailField(unique=True, db_index=True, null=True, blank=True,
@@ -28,7 +29,7 @@ class Customer(LoggedModel):
     is_active = models.BooleanField(default=True, verbose_name=_('Is active'))
     is_verified = models.BooleanField(default=True, verbose_name=_('Email verified'))
     last_login = models.DateTimeField(verbose_name=_('Last login'), blank=True, null=True)
-    date_joined = models.DateTimeField(auto_now_add=True, verbose_name=_('Date joined'))
+    date_joined = models.DateTimeField(auto_now_add=True, verbose_name=_('Registration date'))
     locale = models.CharField(max_length=50,
                               choices=settings.LANGUAGES,
                               default=settings.LANGUAGE_CODE,

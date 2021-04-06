@@ -1,0 +1,67 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load money %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Your account" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% trans "Your account" %}
+    </h2>
+    <div class="panel panel-default items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Orders" %}
+            </h3>
+        </div>
+        <table class="panel-body table table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Order code" %}</th>
+                <th>{% trans "Event" %}</th>
+                <th>{% trans "Order date" %}</th>
+                <th class="text-right">{% trans "Order total" %}</th>
+                <th class="text-right">{% trans "Positions" %}</th>
+                <th class="text-right">{% trans "Status" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for o in orders %}
+                <tr>
+                    <td>
+                        <strong>
+                            <a href="{% eventurl o.event "presale:event.order" order=o.code secret=o.secret %}">
+                                {{ o.code }}
+                            </a>
+                        </strong>
+                        {% if o.testmode %}
+                            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ o.event }}
+                    </td>
+                    <td>
+                        {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    </td>
+                    <td class="text-right flip">
+                        {{ o.total|money:o.event.currency }}
+                    </td>
+                    <td class="text-right flip">{{ o.count_positions|default_if_none:"0" }}</td>
+                    <td class="text-right flip">{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</td>
+                    <td class="text-right flip">
+                        <a href="{% eventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
+                           class="btn btn-default">
+                            {% trans "Details" %}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% include "pretixcontrol/pagination.html" %}
+    </div>
+    </div>
+{% endblock %}

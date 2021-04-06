@@ -34,8 +34,8 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan, Team,
-    TeamAPIToken, TeamInvite, User,
+    Customer, Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan,
+    Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
@@ -59,6 +59,14 @@ class SeatingPlanSerializer(I18nAwareModelSerializer):
     class Meta:
         model = SeatingPlan
         fields = ('id', 'name', 'layout')
+
+
+class CustomerSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = Customer
+        fields = ('identifier', 'email', 'name', 'name_parts', 'is_active', 'is_verified', 'last_login', 'date_joined',
+                  'locale', 'last_modified')
 
 
 class GiftCardSerializer(I18nAwareModelSerializer):
@@ -116,7 +124,7 @@ class TeamSerializer(serializers.ModelSerializer):
             'id', 'name', 'all_events', 'limit_events', 'can_create_events', 'can_change_teams',
             'can_change_organizer_settings', 'can_manage_gift_cards', 'can_change_event_settings',
             'can_change_items', 'can_view_orders', 'can_change_orders', 'can_view_vouchers',
-            'can_change_vouchers', 'can_checkin_orders'
+            'can_change_vouchers', 'can_checkin_orders', 'can_manage_customers'
         )
 
     def validate(self, data):

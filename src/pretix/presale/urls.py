@@ -172,7 +172,7 @@ organizer_patterns = [
     url(r'^account/pwreset$', pretix.presale.views.customer.ResetPasswordView.as_view(), name='organizer.customer.resetpw'),
     url(r'^account/pwrecover$', pretix.presale.views.customer.SetPasswordView.as_view(), name='organizer.customer.recoverpw'),
     url(r'^account/activate$', pretix.presale.views.customer.SetPasswordView.as_view(), name='organizer.customer.activate'),
-    url(r'^account/$', pretix.presale.views.widget.widget_css, name='organizer.customer.profile'),
+    url(r'^account/$', pretix.presale.views.customer.ProfileView.as_view(), name='organizer.customer.profile'),
 ]
 
 locale_patterns = [

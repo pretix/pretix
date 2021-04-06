@@ -181,7 +181,7 @@ class TeamForm(forms.ModelForm):
         model = Team
         fields = ['name', 'all_events', 'limit_events', 'can_create_events',
                   'can_change_teams', 'can_change_organizer_settings',
-                  'can_manage_gift_cards',
+                  'can_manage_gift_cards', 'can_manage_customers',
                   'can_change_event_settings', 'can_change_items',
                   'can_view_orders', 'can_change_orders', 'can_checkin_orders',
                   'can_view_vouchers', 'can_change_vouchers']

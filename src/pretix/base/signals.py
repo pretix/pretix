@@ -324,7 +324,7 @@ The ``sender`` keyword argument will contain an organizer.
 
 validate_order = EventPluginSignal(
     providing_args=["payment_provider", "positions", "email", "locale", "invoice_address",
-                    "meta_info"]
+                    "meta_info", "customer"]
 )
 """
 This signal is sent out when the user tries to confirm the order, before we actually create

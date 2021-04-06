@@ -1,0 +1,80 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}{% trans "Customers" %}{% endblock %}
+{% block inner %}
+    <h1>
+        {% trans "Customers" %}
+    </h1>
+    {% if customers|length == 0 and not filter_form.filtered %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    No customer accounts have been created yet.
+                {% endblocktrans %}
+            </p>
+        </div>
+    {% else %}
+        <form class="row filter-form" action="" method="get">
+            <div class="col-md-10 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.query layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
+                    {% trans "Filter" %}
+                </span>
+                </button>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Customer ID" %}
+                        <a href="?{% url_replace request 'ordering' '-identifier' %}"><i
+                                class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'identifier' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                    <th>{% trans "Email" %}
+                        <a href="?{% url_replace request 'ordering' '-email' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Name" %}
+                        <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for c in customers %}
+                    <tr>
+                        <td>
+                            <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=c.identifier %}">
+                                {% if not c.is_active %}<strike>{% endif %}
+                                <strong>{{ c.identifier }}</strong>
+                                {% if not c.is_active %}</strike>{% endif %}
+                            </a>
+                        </td>
+                        <td>
+                            {% if not c.is_verified %}<strike>{% endif %}
+                            {{ c.email }}
+                            {% if not c.is_verified %}</strike>{% endif %}
+                        </td>
+                        <td>{{ c.name }}</td>
+                        <td class="text-right">
+                            <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=c.identifier %}"
+                               class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Details" %}">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

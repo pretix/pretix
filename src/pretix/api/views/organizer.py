@@ -38,14 +38,14 @@ from rest_framework.viewsets import GenericViewSet
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
-    DeviceSerializer, GiftCardSerializer, GiftCardTransactionSerializer,
-    OrganizerSerializer, OrganizerSettingsSerializer, SeatingPlanSerializer,
-    TeamAPITokenSerializer, TeamInviteSerializer, TeamMemberSerializer,
-    TeamSerializer,
+    CustomerSerializer, DeviceSerializer, GiftCardSerializer,
+    GiftCardTransactionSerializer, OrganizerSerializer,
+    OrganizerSettingsSerializer, SeatingPlanSerializer, TeamAPITokenSerializer,
+    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
 )
 from pretix.base.models import (
-    Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan, Team,
-    TeamAPIToken, TeamInvite, User,
+    Customer, Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan,
+    Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers.dicts import merge_dicts
@@ -480,3 +480,19 @@ class OrganizerSettingsView(views.APIView):
             'request': request
         })
         return Response(s.data)
+
+
+class CustomerViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CustomerSerializer
+    queryset = Customer.objects.none()
+    permission = 'can_manage_customers'
+    lookup_field = 'identifier'
+
+    def get_queryset(self):
+        qs = self.request.organizer.customers.all()
+        return qs
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx

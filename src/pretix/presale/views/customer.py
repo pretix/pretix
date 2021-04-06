@@ -1,15 +1,19 @@
+from urllib.parse import quote
+
 from django.contrib import messages
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.db.models import Count, IntegerField, OuterRef, Subquery
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import get_language, gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import FormView, View
+from django.views.generic import FormView, ListView, View
 
-from pretix.base.models import Customer
+from pretix.base.models import Customer, Order, OrderPosition
 from pretix.base.services.mail import mail
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.customer import (
@@ -239,3 +243,47 @@ class ResetPasswordView(FormView):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
+
+
+class CustomerRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not getattr(request, 'customer', None):
+            return redirect(
+                eventreverse(self.request.organizer, 'presale:organizer.customer.login', kwargs={}) +
+                '?next=' + quote(self.request.path_info + '?' + self.request.GET.urlencode())
+            )
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ProfileView(CustomerRequiredMixin, ListView):
+    template_name = 'pretixpresale/organizers/customer_profile.html'
+    context_object_name = 'orders'
+    paginate_by = 50
+
+    def get_queryset(self):
+        return self.request.customer.orders.select_related('event').order_by('-datetime')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['customer'] = self.request.customer
+
+        s = OrderPosition.objects.filter(
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
+        annotated = {
+            o['pk']: o
+            for o in
+            Order.annotate_overpayments(Order.objects, sums=True).filter(
+                pk__in=[o.pk for o in ctx['orders']]
+            ).annotate(
+                pcnt=Subquery(s, output_field=IntegerField()),
+            ).values(
+                'pk', 'pcnt',
+            )
+        }
+
+        for o in ctx['orders']:
+            if o.pk not in annotated:
+                continue
+            o.count_positions = annotated.get(o.pk)['pcnt']
+        return ctx

@@ -120,6 +120,8 @@ urlpatterns = [
         name='organizer.property.edit'),
     url(r'^organizer/(?P<organizer>[^/]+)/property/(?P<property>[^/]+)/delete$', organizer.EventMetaPropertyDeleteView.as_view(),
         name='organizer.property.delete'),
+    url(r'^organizer/(?P<organizer>[^/]+)/customers$', organizer.CustomerListView.as_view(), name='organizer.customers'),
+    url(r'^organizer/(?P<organizer>[^/]+)/customer/(?P<customer>[^/]+)/$', organizer.CustomerDetailView.as_view(), name='organizer.customer'),
     url(r'^organizer/(?P<organizer>[^/]+)/giftcards$', organizer.GiftCardListView.as_view(), name='organizer.giftcards'),
     url(r'^organizer/(?P<organizer>[^/]+)/giftcard/add$', organizer.GiftCardCreateView.as_view(), name='organizer.giftcard.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/giftcard/(?P<giftcard>[^/]+)/$', organizer.GiftCardDetailView.as_view(), name='organizer.giftcard'),

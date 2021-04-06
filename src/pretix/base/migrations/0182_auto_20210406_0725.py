@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Customer',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False)),
+                ('id', models.BigAutoField(primary_key=True, serialize=False)),
                 ('identifier', models.CharField(db_index=True, max_length=190, unique=True)),
                 ('email', models.EmailField(db_index=True, max_length=190, null=True, unique=True)),
                 ('password', models.CharField(max_length=128)),
@@ -39,6 +39,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='order',
             name='customer',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='customers', to='pretixbase.Customer'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='orders', to='pretixbase.Customer'),
+        ),
+        migrations.AddField(
+            model_name='team',
+            name='can_manage_customers',
+            field=models.BooleanField(default=False),
         ),
     ]

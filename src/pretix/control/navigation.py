@@ -490,6 +490,16 @@ def get_organizer_navigation(request):
             'icon': 'credit-card',
         })
 
+    if 'can_manage_customers' in request.orgapermset and request.organizer.settings.customer_accounts:
+        nav.append({
+            'label': _('Customers'),
+            'url': reverse('control:organizer.customers', kwargs={
+                'organizer': request.organizer.slug
+            }),
+            'active': 'organizer.customer' in url.url_name,
+            'icon': 'user',
+        })
+
     if 'can_change_organizer_settings' in request.orgapermset:
         nav.append({
             'label': _('Devices'),

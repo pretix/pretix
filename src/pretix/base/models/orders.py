@@ -182,7 +182,7 @@ class Order(LockModel, LoggedModel):
     customer = models.ForeignKey(
         Customer,
         verbose_name=_("Customer"),
-        related_name="customers",
+        related_name="orders",
         null=True, blank=True,
         on_delete=models.SET_NULL
     )

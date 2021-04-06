@@ -624,6 +624,7 @@ class OrderSerializer(I18nAwareModelSerializer):
     payment_date = OrderPaymentDateField(source='*', read_only=True)
     payment_provider = OrderPaymentTypeField(source='*', read_only=True)
     url = OrderURLField(source='*', read_only=True)
+    customer = serializers.SlugRelatedField(slug_field='identifier', read_only=True)
 
     class Meta:
         model = Order
@@ -631,11 +632,11 @@ class OrderSerializer(I18nAwareModelSerializer):
             'code', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
-            'url'
+            'url', 'customer'
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
-            'payment_provider', 'fees', 'total', 'positions', 'downloads',
+            'payment_provider', 'fees', 'total', 'positions', 'downloads', 'customer',
             'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel'
         )
 
