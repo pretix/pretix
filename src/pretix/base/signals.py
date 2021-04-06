@@ -633,7 +633,7 @@ well, otherwise it will be ``None``.
 """
 
 global_email_filter = GlobalSignal(
-    providing_args=['message', 'order', 'user']
+    providing_args=['message', 'order', 'user', 'customer', 'organizer']
 )
 """
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to

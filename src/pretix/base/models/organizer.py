@@ -35,6 +35,7 @@
 import string
 from datetime import date, datetime, time
 
+from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.db.models import Exists, OuterRef, Q
@@ -172,6 +173,24 @@ class Organizer(LoggedModel):
             e.delete_sub_objects()
             e.delete()
         self.teams.all().delete()
+
+    def get_mail_backend(self, timeout=None, force_custom=False):
+        """
+        Returns an email server connection, either by using the system-wide connection
+        or by returning a custom one based on the organizer's settings.
+        """
+        from pretix.base.email import CustomSMTPBackend
+
+        if self.settings.smtp_use_custom or force_custom:
+            return CustomSMTPBackend(host=self.settings.smtp_host,
+                                     port=self.settings.smtp_port,
+                                     username=self.settings.smtp_username,
+                                     password=self.settings.smtp_password,
+                                     use_tls=self.settings.smtp_use_tls,
+                                     use_ssl=self.settings.smtp_use_ssl,
+                                     fail_silently=False, timeout=timeout)
+        else:
+            return get_connection(fail_silently=False)
 
 
 def generate_invite_token():

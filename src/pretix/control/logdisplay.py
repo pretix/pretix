@@ -314,6 +314,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
         'pretix.webhook.created': _('The webhook has been created.'),
         'pretix.webhook.changed': _('The webhook has been changed.'),
+        'pretix.email.error': _('Sending of an email has failed.'),
         'pretix.event.comment': _('The event\'s internal comment has been updated.'),
         'pretix.event.canceled': _('The event has been canceled.'),
         'pretix.event.deleted': _('An event has been deleted.'),

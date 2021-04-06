@@ -277,7 +277,7 @@ class Forgot(TemplateView):
                         rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
 
             except User.DoesNotExist:
-                logger.warning('Password reset for unregistered e-mail \"' + email + '\"requested.')
+                logger.warning('Password reset for unregistered e-mail \"' + email + '\" requested.')
 
             except SendMailException:
                 logger.exception('Sending password reset e-mail to \"' + email + '\" failed.')

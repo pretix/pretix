@@ -8,16 +8,18 @@
     {% block title %}{% endblock %}{% if url_name != "organizer.index" %} :: {% endif %}{{ organizer.name }}
 {% endblock %}
 {% block above %}
-    {% if organizer.settings.locales|length > 1 %}
+    {% if organizer.settings.locales|length > 1 or request.organizer.settings.customer_accounts %}
         {% if organizer.settings.theme_color_background|upper != "#FFFFFF" or organizer.settings.organizer_logo_image_large %}
             <div class="container page-header-links">
                 <div class="pull-right header-part flip">
-                    <nav class="locales" aria-label="{% trans "select language" %}">
-                        {% for l in languages %}
-                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                                {{ l.name_local }}</a>
-                        {% endfor %}
-                    </nav>
+                    {% if organizer.settings.locales|length > 1 %}
+                        <nav class="locales" aria-label="{% trans "select language" %}">
+                            {% for l in languages %}
+                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                                    {{ l.name_local }}</a>
+                            {% endfor %}
+                        </nav>
+                    {% endif %}
                     {% include "pretixpresale/fragment_login_status.html" %}
                 </div>
             </div>
@@ -41,15 +43,17 @@
                 <h1><a href="{% eventurl organizer "presale:organizer.index" %}">{{ organizer.name }}</a></h1>
             {% endif %}
         </div>
-        {% if organizer.settings.locales|length > 1 %}
+        {% if organizer.settings.locales|length > 1 or request.organizer.settings.customer_accounts %}
             {% if organizer.settings.theme_color_background|upper == "#FFFFFF" and not organizer.settings.organizer_logo_image_large %}
                 <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-right flip{% endif %} loginbox">
-                    <nav class="locales" aria-label="{% trans "select language" %}">
-                        {% for l in languages %}
-                            <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                                {{ l.name_local }}</a>
-                        {% endfor %}
-                    </nav>
+                    {% if organizer.settings.locales|length > 1 %}
+                        <nav class="locales" aria-label="{% trans "select language" %}">
+                            {% for l in languages %}
+                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
+                                    {{ l.name_local }}</a>
+                            {% endfor %}
+                        </nav>
+                    {% endif %}
                     {% include "pretixpresale/fragment_login_status.html" %}
                 </div>
             {% endif %}

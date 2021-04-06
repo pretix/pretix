@@ -1762,25 +1762,61 @@ Your {event} team"""))
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
-you are registered for {event}.
+    you are registered for {event}.
 
-If you did not do so already, you can download your ticket here:
-{url}
+    If you did not do so already, you can download your ticket here:
+    {url}
 
-Best regards,
-Your {event} team"""))
+    Best regards,
+    Your {event} team"""))
     },
     'mail_text_download_reminder': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
-you bought a ticket for {event}.
+    you bought a ticket for {event}.
 
-If you did not do so already, you can download your ticket here:
+    If you did not do so already, you can download your ticket here:
+    {url}
+
+    Best regards,
+    Your {event} team"""))
+    },
+    'mail_text_customer_registration': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+    thank you for signing up for an account at {organizer}!
+
+    To activate your account and set a password, please click here:
+
+    {url}
+
+    This link is valid for one day.
+
+    If you did not sign up yourself, please ignore this email.
+
+    Best regards,
+
+    Your {organizer} team"""))
+    },
+    'mail_text_customer_reset': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+you requested a new password for your account at {organizer}!
+ 
+To set a new password, please click here:
+
 {url}
 
+This link is valid for one day.
+
+If you did not request a new password, please ignore this email.
+
 Best regards,
-Your {event} team"""))
+
+Your {organizer} team"""))
     },
     'smtp_use_custom': {
         'default': 'False',

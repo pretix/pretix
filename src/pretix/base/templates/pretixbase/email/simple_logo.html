@@ -220,6 +220,9 @@
                 {% if event %}
                     <h2><a href="{% abseventurl event "presale:event.index" %}" target="_blank">{{ event.name }}</a>
                     </h2>
+                {% elif organizer %}
+                    <h2><a href="{% abseventurl organizer "presale:organizer.index" %}" target="_blank">{{ organizer.name }}</a>
+                    </h2>
                 {% else %}
                     <h2><a href="{{ site_url }}" target="_blank">{{ site }}</a></h2>
                 {% endif %}

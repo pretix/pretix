@@ -121,3 +121,15 @@ class Customer(LoggedModel):
         payload = self.password
         payload += self.email
         return salted_hmac(key_salt, payload).hexdigest()
+
+    def get_email_context(self):
+        ctx = {
+            'name': self.name,
+            'organizer': self.organizer.name,
+        }
+        name_scheme = PERSON_NAME_SCHEMES[self.organizer.settings.name_scheme]
+        for f, l, w in name_scheme['fields']:
+            if f == 'full_name':
+                continue
+            ctx['name_%s' % f] = self.name_parts.get(f, '')
+        return ctx

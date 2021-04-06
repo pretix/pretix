@@ -168,6 +168,10 @@ organizer_patterns = [
     url(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
     url(r'^account/login$', pretix.presale.views.customer.LoginView.as_view(), name='organizer.customer.login'),
     url(r'^account/logout$', pretix.presale.views.customer.LogoutView.as_view(), name='organizer.customer.logout'),
+    url(r'^account/register$', pretix.presale.views.customer.RegistrationView.as_view(), name='organizer.customer.register'),
+    url(r'^account/pwreset$', pretix.presale.views.customer.ResetPasswordView.as_view(), name='organizer.customer.resetpw'),
+    url(r'^account/pwrecover$', pretix.presale.views.customer.SetPasswordView.as_view(), name='organizer.customer.recoverpw'),
+    url(r'^account/activate$', pretix.presale.views.customer.SetPasswordView.as_view(), name='organizer.customer.activate'),
     url(r'^account/$', pretix.presale.views.widget.widget_css, name='organizer.customer.profile'),
 ]
 
