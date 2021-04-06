@@ -39,15 +39,18 @@ from urllib.parse import urljoin
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
+from django.middleware.csrf import rotate_token
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import resolve
+from django.utils.crypto import constant_time_compare
+from django.utils.functional import SimpleLazyObject
 from django.utils.translation import gettext_lazy as _
 from django.views.defaults import permission_denied
 from django_scopes import scope
 
 from pretix.base.middleware import LocaleMiddleware
-from pretix.base.models import Event, Organizer
+from pretix.base.models import Customer, Event, Organizer
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
 )
@@ -56,8 +59,74 @@ from pretix.presale.signals import process_request, process_response
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
+def get_customer(request):
+    if not hasattr(request, '_cached_customer'):
+        session_key = f'customer_auth_id:{request.organizer.pk}'
+        hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+
+        with scope(organizer=request.organizer):
+            try:
+                customer = request.organizer.customers.get(pk=request.session[session_key])
+            except (Customer.DoesNotExist, KeyError):
+                request._cached_customer = None
+            else:
+                session_hash = request.session.get(hash_session_key)
+                session_hash_verified = session_hash and constant_time_compare(
+                    session_hash,
+                    customer.get_session_auth_hash()
+                )
+                if session_hash_verified:
+                    request._cached_customer = customer
+                else:
+                    request.session.flush()
+                    request._cached_customer = None
+
+    return request._cached_customer
+
+
+def add_customer_to_request(request):
+    request.customer = SimpleLazyObject(lambda: get_customer(request))
+
+
+def customer_login(request, customer):
+    session_key = f'customer_auth_id:{request.organizer.pk}'
+    hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+    session_auth_hash = customer.get_session_auth_hash()
+
+    if session_key in request.session:
+        if request.session[session_key] != customer.pk or (
+                not constant_time_compare(request.session.get(hash_session_key, ''), session_auth_hash)):
+            # To avoid reusing another user's session, create a new, empty
+            # session if the existing session corresponds to a different
+            # authenticated user.
+            request.session.flush()
+    else:
+        request.session.cycle_key()
+
+    request.session[session_key] = customer.pk
+    request.session[hash_session_key] = session_auth_hash
+    request.customer = customer
+    rotate_token(request)
+
+
+def customer_logout(request):
+    # session_key = f'customer_auth_id:{request.organizer.pk}'
+    # hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+    # request.session.pop(session_key, None)
+    # request.session.pop(hash_session_key, None)
+    # request.session.cycle_key()
+
+    # Instead of only logging out for this organizer, log the user out domain-wide including all carts. This might
+    # be expected or unepxected behaviour for the users – we'll need to figure that out in practice.
+    request.session.flush()
+    rotate_token(request)
+    request.customer = None
+    request._cached_customer = None
+
+
 @scope(organizer=None)
 def _detect_event(request, require_live=True, require_plugin=None):
+
     if hasattr(request, '_event_detected'):
         return
 
@@ -131,6 +200,9 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 r = redirect(urljoin('%s://%s' % (request.scheme, domain), path))
                 r['Access-Control-Allow-Origin'] = '*'
                 return r
+
+        if not hasattr(request, 'customer'):
+            add_customer_to_request(request)
 
         if hasattr(request, 'event'):
             # Restrict locales to the ones available for this event

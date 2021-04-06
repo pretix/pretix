@@ -104,6 +104,13 @@ class LocaleMiddleware(MiddlewareMixin):
         return response
 
 
+def get_language_from_customer_settings(request: HttpRequest) -> str:
+    if getattr(request, 'customer', None):
+        lang_code = request.customer.locale
+        if lang_code in _supported and lang_code is not None and check_for_language(lang_code):
+            return lang_code
+
+
 def get_language_from_user_settings(request: HttpRequest) -> str:
     if request.user.is_authenticated:
         lang_code = request.user.locale
@@ -169,6 +176,7 @@ def get_language_from_request(request: HttpRequest) -> str:
     if request.path.startswith(get_script_prefix() + 'control'):
         return (
             get_language_from_user_settings(request)
+            or get_language_from_customer_settings(request)
             or get_language_from_session_or_cookie(request)
             or get_language_from_browser(request)
             or get_language_from_event(request)
@@ -177,6 +185,7 @@ def get_language_from_request(request: HttpRequest) -> str:
     else:
         return (
             get_language_from_session_or_cookie(request)
+            or get_language_from_customer_settings(request)
             or get_language_from_user_settings(request)
             or get_language_from_browser(request)
             or get_language_from_event(request)

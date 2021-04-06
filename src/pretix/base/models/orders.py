@@ -73,7 +73,7 @@ from pretix.base.banlist import banned
 from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import User
+from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.locking import NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -119,6 +119,8 @@ class Order(LockModel, LoggedModel):
 
     :param event: The event this order belongs to
     :type event: Event
+    :param customer: The customer this order belongs to
+    :type customer: Customer
     :param email: The email of the person who ordered this
     :type email: str
     :param phone: The phone number of the person who ordered this
@@ -176,6 +178,13 @@ class Order(LockModel, LoggedModel):
         verbose_name=_("Event"),
         related_name="orders",
         on_delete=models.CASCADE
+    )
+    customer = models.ForeignKey(
+        Customer,
+        verbose_name=_("Customer"),
+        related_name="customers",
+        null=True, blank=True,
+        on_delete=models.SET_NULL
     )
     email = models.EmailField(
         null=True, blank=True,

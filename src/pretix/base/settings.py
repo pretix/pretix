@@ -107,6 +107,15 @@ class LazyI18nStringList(UserList):
 
 
 DEFAULTS = {
+    'customer_accounts': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow customers to create accounts"),
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,

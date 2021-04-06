@@ -37,6 +37,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import pretix.presale.views.cart
 import pretix.presale.views.checkout
+import pretix.presale.views.customer
 import pretix.presale.views.event
 import pretix.presale.views.locale
 import pretix.presale.views.order
@@ -165,6 +166,9 @@ organizer_patterns = [
     url(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
         name='organizer.widget.productlist'),
     url(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
+    url(r'^account/login$', pretix.presale.views.customer.LoginView.as_view(), name='organizer.customer.login'),
+    url(r'^account/logout$', pretix.presale.views.customer.LogoutView.as_view(), name='organizer.customer.logout'),
+    url(r'^account/$', pretix.presale.views.widget.widget_css, name='organizer.customer.profile'),
 ]
 
 locale_patterns = [

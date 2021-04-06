@@ -1,0 +1,27 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Log in" %}{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h2>
+                {% blocktrans trimmed with org=request.organizer.name %}
+                    Sign in to your {{ org }} account
+                {% endblocktrans %}
+            </h2>
+            <form action="" method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <div class="form-group buttons">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        {% trans "Log in" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

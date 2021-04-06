@@ -30,7 +30,7 @@ footer nav {
 .js-only {
     display: none;
 }
-.locales {
+.locales, .loginstatus {
     display: inline;
     a {
         text-decoration: none;
@@ -44,6 +44,9 @@ footer nav {
     img {
         vertical-align: baseline;
     }
+}
+.loginstatus a {
+    margin-left: 10px;
 }
 .huge {
     font-size: 40px;
