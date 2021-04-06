@@ -113,7 +113,7 @@ setup(
 
     keywords='tickets web shop ecommerce',
     install_requires=[
-        'Django==3.0.*,>=3.0.9',
+        'Django==3.0.*,>=3.0.14',
         'djangorestframework==3.11.*',
         'python-dateutil==2.8.*',
         'isoweek',
