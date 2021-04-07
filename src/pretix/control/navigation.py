@@ -461,15 +461,23 @@ def get_organizer_navigation(request):
                     'active': url.url_name.startswith('organizer.propert'),
                 },
                 {
+                    'label': _('E-mail'),
+                    'url': reverse('control:organizer.settings.mail', kwargs={
+                        'organizer': request.organizer.slug,
+                    }),
+                    'active': url.url_name == 'organizer.settings.mail',
+                },
+                {
                     'label': _('Webhooks'),
                     'url': reverse('control:organizer.webhooks', kwargs={
                         'organizer': request.organizer.slug
                     }),
                     'active': 'organizer.webhook' in url.url_name,
                     'icon': 'bolt',
-                }
+                },
             ]
         })
+
     if 'can_change_teams' in request.orgapermset:
         nav.append({
             'label': _('Teams'),

@@ -1,10 +1,16 @@
 input[lang] {
   background: no-repeat 10px center;
   padding-left: 34px;
+  &[disabled] {
+    background-color: $input-bg-disabled;
+  }
 }
 textarea[lang] {
   background: no-repeat 10px 10px;
   padding-left: 34px;
+  &[disabled] {
+    background-color: $input-bg-disabled;
+  }
 }
 pre[lang] {
   background: no-repeat 10px 10px;
@@ -23,6 +29,10 @@ div[lang] {
   input[lang], textarea[lang], div[lang], pre[lang] {
     background: none;
     padding-left: 12px;
+
+    &[disabled] {
+      background-color: $input-bg-disabled;
+    }
   }
 }
 

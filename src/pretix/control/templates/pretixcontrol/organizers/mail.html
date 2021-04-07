@@ -1,0 +1,58 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+{% block custom_header %}
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" %}">
+{% endblock %}
+{% block title %}{% trans "Organizer" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "E-mail settings" %}</h1>
+
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data"
+            mail-preview-url="{% url "control:organizer.settings.mail.preview" organizer=request.organizer.slug %}">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="tabbed-form">
+            <fieldset>
+                <legend>{% trans "General" %}</legend>
+                {% bootstrap_field form.mail_from layout="control" %}
+                {% bootstrap_field form.mail_from_name layout="control" %}
+                {% bootstrap_field form.mail_text_signature layout="control" %}
+                {% bootstrap_field form.mail_bcc layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "E-mail content" %}</legend>
+                <div class="panel-group" id="questions_group">
+                    {% blocktrans asvar title_customer_registration %}Customer account registration{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="customer_registration" title=title_customer_registration items="mail_text_customer_registration" %}
+
+                    {% blocktrans asvar title_email_change %}Customer account email change{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="email_change" title=title_email_change items="mail_text_customer_email_change" %}
+
+                    {% blocktrans asvar title_reset %}Customer account password reset{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="reset" title=title_reset items="mail_text_customer_reset" %}
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "SMTP settings" %}</legend>
+                {% bootstrap_field form.smtp_use_custom layout="control" %}
+                {% bootstrap_field form.smtp_host layout="control" %}
+                {% bootstrap_field form.smtp_port layout="control" %}
+                {% bootstrap_field form.smtp_username layout="control" %}
+                {% bootstrap_field form.smtp_password layout="control" %}
+                {% bootstrap_field form.smtp_use_tls layout="control" %}
+                {% bootstrap_field form.smtp_use_ssl layout="control" %}
+            </fieldset>
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+            <button type="submit" class="btn btn-default btn-save pull-left" name="test" value="1">
+                {% trans "Save and test custom SMTP connection" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

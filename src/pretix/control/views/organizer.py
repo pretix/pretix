@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
+import re
 from datetime import timedelta
 from decimal import Decimal
 
@@ -48,7 +49,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
-from django.http import JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -63,6 +64,7 @@ from django.views.generic import (
 from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry, Order,
     OrderPayment, OrderPosition, Organizer, Team, TeamInvite, User,
@@ -78,6 +80,7 @@ from pretix.base.services.export import multiexport
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.base.signals import register_multievent_data_exporters
+from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import (
     EventFilterForm, GiftCardFilterForm, OrganizerFilterForm, TeamFilterForm,
@@ -86,9 +89,10 @@ from pretix.control.forms.filter import (
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
-    DeviceForm, EventMetaPropertyForm, GateForm, GiftCardCreateForm,
-    GiftCardUpdateForm, OrganizerDeleteForm, OrganizerForm,
-    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm, CustomerUpdateForm,
+    CustomerUpdateForm, DeviceForm, EventMetaPropertyForm, GateForm,
+    GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
+    OrganizerDeleteForm, OrganizerForm, OrganizerSettingsForm,
+    OrganizerUpdateForm, TeamForm, WebHookForm,
 )
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
@@ -231,6 +235,104 @@ class OrganizerSettingsFormView(OrganizerDetailViewMixin, OrganizerPermissionReq
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
+
+
+class OrganizerMailSettings(OrganizerSettingsFormView):
+    form_class = MailSettingsForm
+    template_name = 'pretixcontrol/organizers/mail.html'
+    permission = 'can_change_organizer_settings'
+
+    def get_success_url(self):
+        return reverse('control:organizer.settings.mail', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            if form.has_changed():
+                self.request.organizer.log_action(
+                    'pretix.organizer.settings', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                )
+
+            if request.POST.get('test', '0').strip() == '1':
+                backend = self.request.organizer.get_mail_backend(force_custom=True, timeout=10)
+                try:
+                    backend.test(self.request.organizer.settings.mail_from)
+                except Exception as e:
+                    messages.warning(self.request, _('An error occurred while contacting the SMTP server: %s') % str(e))
+                else:
+                    if form.cleaned_data.get('smtp_use_custom'):
+                        messages.success(self.request, _('Your changes have been saved and the connection attempt to '
+                                                         'your SMTP server was successful.'))
+                    else:
+                        messages.success(self.request, _('We\'ve been able to contact the SMTP server you configured. '
+                                                         'Remember to check the "use custom SMTP server" checkbox, '
+                                                         'otherwise your SMTP server will not be used.'))
+            else:
+                messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.get(request)
+
+
+class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
+    permission = 'can_change_organizer_settings'
+
+    # return the origin text if key is missing in dict
+    class SafeDict(dict):
+        def __missing__(self, key):
+            return '{' + key + '}'
+
+    # create index-language mapping
+    @cached_property
+    def supported_locale(self):
+        locales = {}
+        for idx, val in enumerate(settings.LANGUAGES):
+            if val[0] in self.request.organizer.settings.locales:
+                locales[str(idx)] = val[0]
+        return locales
+
+    # get all supported placeholders with dummy values
+    def placeholders(self, item):
+        ctx = {}
+        for p, s in MailSettingsForm(obj=self.request.organizer)._get_sample_context(MailSettingsForm.base_context[item]).items():
+            if s.strip().startswith('*'):
+                ctx[p] = s
+            else:
+                ctx[p] = '<span class="placeholder" title="{}">{}</span>'.format(
+                    _('This value will be replaced based on dynamic parameters.'),
+                    s
+                )
+        return self.SafeDict(ctx)
+
+    def post(self, request, *args, **kwargs):
+        preview_item = request.POST.get('item', '')
+        if preview_item not in MailSettingsForm.base_context:
+            return HttpResponseBadRequest(_('invalid item'))
+
+        regex = r"^" + re.escape(preview_item) + r"_(?P<idx>[\d+])$"
+        msgs = {}
+        for k, v in request.POST.items():
+            # only accept allowed fields
+            matched = re.search(regex, k)
+            if matched is not None:
+                idx = matched.group('idx')
+                if idx in self.supported_locale:
+                    with language(self.supported_locale[idx], self.request.organizer.settings.region):
+                        msgs[self.supported_locale[idx]] = markdown_compile_email(
+                            v.format_map(self.placeholders(preview_item))
+                        )
+
+        return JsonResponse({
+            'item': preview_item,
+            'msgs': msgs
+        })
 
 
 class OrganizerDisplaySettings(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, View):

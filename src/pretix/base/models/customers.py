@@ -21,7 +21,7 @@ class Customer(LoggedModel):
     id = models.BigAutoField(primary_key=True)
     organizer = models.ForeignKey(Organizer, related_name='customers', on_delete=models.CASCADE)
     identifier = models.CharField(max_length=190, db_index=True, unique=True)
-    email = models.EmailField(unique=True, db_index=True, null=True, blank=False, verbose_name=_('Email'), max_length=190)
+    email = models.EmailField(unique=True, db_index=True, null=True, blank=False, verbose_name=_('E-mail'), max_length=190)
     password = models.CharField(verbose_name=_('Password'), max_length=128)
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
     name_parts = FallbackJSONField(default=dict)

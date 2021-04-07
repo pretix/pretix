@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/settings_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load hierarkey_form %}
 {% load static %}
 {% block inside %}
     <h1>{% trans "E-mail settings" %}</h1>
@@ -11,11 +12,14 @@
         <div class="tabbed-form">
             <fieldset>
                 <legend>{% trans "General" %}</legend>
+                {% url "control:organizer.settings.mail" organizer=request.organizer.slug as org_url %}
+                {% propagated request.event org_url "mail_from" "mail_from_name" "mail_text_signature" "mail_bcc" %}
+                    {% bootstrap_field form.mail_from layout="control" %}
+                    {% bootstrap_field form.mail_from_name layout="control" %}
+                    {% bootstrap_field form.mail_text_signature layout="control" %}
+                    {% bootstrap_field form.mail_bcc layout="control" %}
+                {% endpropagated %}
                 {% bootstrap_field form.mail_prefix layout="control" %}
-                {% bootstrap_field form.mail_from layout="control" %}
-                {% bootstrap_field form.mail_from_name layout="control" %}
-                {% bootstrap_field form.mail_text_signature layout="control" %}
-                {% bootstrap_field form.mail_bcc layout="control" %}
                 {% bootstrap_field form.mail_attach_tickets layout="control" %}
                 {% bootstrap_field form.mail_attach_ical layout="control" %}
                 {% bootstrap_field form.mail_sales_channel_placed_paid layout="control" %}
@@ -80,13 +84,15 @@
             </fieldset>
             <fieldset>
                 <legend>{% trans "SMTP settings" %}</legend>
-                {% bootstrap_field form.smtp_use_custom layout="control" %}
-                {% bootstrap_field form.smtp_host layout="control" %}
-                {% bootstrap_field form.smtp_port layout="control" %}
-                {% bootstrap_field form.smtp_username layout="control" %}
-                {% bootstrap_field form.smtp_password layout="control" %}
-                {% bootstrap_field form.smtp_use_tls layout="control" %}
-                {% bootstrap_field form.smtp_use_ssl layout="control" %}
+                {% propagated request.event org_url "smtp_use_custom" "smtp_host" "smtp_port" "smtp_username" "smtp_password" "smtp_use_tls" "smtp_use_ssl" %}
+                    {% bootstrap_field form.smtp_use_custom layout="control" %}
+                    {% bootstrap_field form.smtp_host layout="control" %}
+                    {% bootstrap_field form.smtp_port layout="control" %}
+                    {% bootstrap_field form.smtp_username layout="control" %}
+                    {% bootstrap_field form.smtp_password layout="control" %}
+                    {% bootstrap_field form.smtp_use_tls layout="control" %}
+                    {% bootstrap_field form.smtp_use_ssl layout="control" %}
+                {% endpropagated %}
             </fieldset>
         </div>
         <div class="form-group submit-group">

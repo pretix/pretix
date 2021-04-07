@@ -1,10 +1,10 @@
 from urllib.parse import quote
 
 from django.contrib import messages
-from django.core.signing import dumps, loads, BadSignature
+from django.core.signing import BadSignature, dumps, loads
 from django.db import transaction
 from django.db.models import Count, IntegerField, OuterRef, Subquery
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -18,10 +18,12 @@ from pretix.base.models import Customer, Order, OrderPosition
 from pretix.base.services.mail import mail
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.customer import (
-    AuthenticationForm, RegistrationForm, ResetPasswordForm, SetPasswordForm,
-    TokenGenerator, ChangePasswordForm, ChangeInfoForm,
+    AuthenticationForm, ChangeInfoForm, ChangePasswordForm, RegistrationForm,
+    ResetPasswordForm, SetPasswordForm, TokenGenerator,
 )
-from pretix.presale.utils import customer_login, customer_logout, update_customer_session_auth_hash
+from pretix.presale.utils import (
+    customer_login, customer_logout, update_customer_session_auth_hash,
+)
 
 
 class RedirectBackMixin:
@@ -343,7 +345,7 @@ class ChangeInformationView(CustomerRequiredMixin, FormView):
             mail(
                 new_email,
                 _('Confirm email address for your account at {organizer}').format(organizer=self.request.organizer.name),
-                self.request.organizer.settings.mail_text_customer_reset,
+                self.request.organizer.settings.mail_text_customer_email_change,
                 ctx,
                 locale=form.instance.locale,
                 customer=form.instance,

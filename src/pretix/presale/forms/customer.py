@@ -20,7 +20,7 @@ class TokenGenerator(PasswordResetTokenGenerator):
 
 class AuthenticationForm(forms.Form):
     email = forms.EmailField(
-        label=_("Email"),
+        label=_("E-mail"),
         widget=forms.EmailInput(attrs={'autofocus': True})
     )
     password = forms.CharField(
@@ -94,7 +94,7 @@ class AuthenticationForm(forms.Form):
 class RegistrationForm(forms.Form):
     name_parts = forms.CharField()
     email = forms.EmailField(
-        label=_("Email"),
+        label=_("E-mail"),
     )
 
     error_messages = {
@@ -207,7 +207,7 @@ class ResetPasswordForm(forms.Form):
         'unknown': _("A user with this email address is now known in our system."),
     }
     email = forms.EmailField(
-        label=_('Email'),
+        label=_('E-mail'),
     )
 
     def __init__(self, request=None, *args, **kwargs):
