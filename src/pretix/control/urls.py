@@ -125,6 +125,7 @@ urlpatterns = [
     url(r'^organizer/(?P<organizer>[^/]+)/property/(?P<property>[^/]+)/delete$', organizer.EventMetaPropertyDeleteView.as_view(),
         name='organizer.property.delete'),
     url(r'^organizer/(?P<organizer>[^/]+)/customers$', organizer.CustomerListView.as_view(), name='organizer.customers'),
+    url(r'^organizer/(?P<organizer>[^/]+)/customers/select2$', typeahead.customer_select2, name='organizer.customers.select2'),
     url(r'^organizer/(?P<organizer>[^/]+)/customer/(?P<customer>[^/]+)/$',
         organizer.CustomerDetailView.as_view(), name='organizer.customer'),
     url(r'^organizer/(?P<organizer>[^/]+)/customer/(?P<customer>[^/]+)/edit$',

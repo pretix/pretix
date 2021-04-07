@@ -99,7 +99,12 @@ class Customer(LoggedModel):
         return scheme['concatenation'](self.name_parts).strip()
 
     def __str__(self):
-        return self.name or self.email
+        s = f'#{self.identifier}'
+        if self.name or self.email:
+            s += f' – {self.name or self.email}'
+        if not self.is_active:
+            s += f' ({_("disabled")})'
+        return s
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)

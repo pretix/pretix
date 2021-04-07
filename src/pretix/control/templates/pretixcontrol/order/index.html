@@ -182,11 +182,16 @@
                             <dt>{% trans "Expiry date" %}</dt>
                             <dd>{{ order.expires|date:"SHORT_DATETIME_FORMAT" }}</dd>
                         {% endif %}
-                        {% if order.customer %}
+                        {% if request.organizer.settings.customer_accounts %}
                             <dt>{% trans "Customer account" %}</dt>
                             <dd>
-                                <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=order.customer.identifier %}">
-                                    {{ order.customer.identifier }} – {{ order.customer.email }}
+                                {% if order.customer %}
+                                    <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=order.customer.identifier %}">
+                                        {{ order.customer.identifier }} – {{ order.customer.email }}
+                                    </a>
+                                {% endif %}
+                                <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                    <span class="fa fa-edit"></span>
                                 </a>
                             </dd>
                         {% endif %}

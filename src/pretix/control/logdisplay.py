@@ -344,6 +344,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
                                                   'in the email for the first time).'),
         'pretix.event.order.phone.changed': _('The phone number has been changed from "{old_phone}" '
                                               'to "{new_phone}".'),
+        'pretix.event.order.customer.changed': _('The customer account has been changed.'),
         'pretix.event.order.locale.changed': _('The order locale has been changed.'),
         'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),

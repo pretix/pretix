@@ -46,6 +46,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import (
     gettext_lazy as _, gettext_noop, pgettext_lazy,
 )
+from django_scopes.forms import SafeModelChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
@@ -516,15 +517,35 @@ class OrderContactForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['email', 'email_known_to_work', 'phone']
+        fields = ['customer', 'email', 'email_known_to_work', 'phone']
         widgets = {
-            'phone': WrappedPhoneNumberPrefixWidget()
+            'phone': WrappedPhoneNumberPrefixWidget(),
+        }
+        field_classes = {
+            'customer': SafeModelChoiceField,
         }
 
     def __init__(self, *args, **kwargs):
+        customers = kwargs.pop('customers')
         super().__init__(*args, **kwargs)
         if not self.instance.event.settings.order_phone_asked and not self.instance.phone:
             del self.fields['phone']
+
+        if customers:
+            self.fields['customer'].queryset = self.instance.event.organizer.customers.all()
+            self.fields['customer'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'generic',
+                    'data-select2-url': reverse('control:organizer.customers.select2', kwargs={
+                        'organizer': self.instance.event.organizer.slug,
+                    }),
+                    'data-placeholder': _('Customer')
+                }
+            )
+            self.fields['customer'].widget.choices = self.fields['customer'].choices
+            self.fields['customer'].required = False
+        else:
+            del self.fields['customer']
 
 
 class OrderLocaleForm(forms.ModelForm):
