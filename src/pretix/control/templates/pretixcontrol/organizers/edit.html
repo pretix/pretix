@@ -35,7 +35,6 @@
                         {% bootstrap_field sform.imprint_url layout="control" %}
                         {% bootstrap_field sform.contact_mail layout="control" %}
                         {% bootstrap_field sform.organizer_info_text layout="control" %}
-                        {% bootstrap_field sform.customer_accounts layout="control" %}
                         {% bootstrap_field sform.event_team_provisioning layout="control" %}
                     </fieldset>
                     <fieldset>
@@ -51,6 +50,13 @@
                         <legend>{% trans "Localization" %}</legend>
                         {% bootstrap_field sform.locales layout="control" %}
                         {% bootstrap_field sform.region layout="control" %}
+                        {% bootstrap_field sform.timezone layout="control" %}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{% trans "Customer accounts" %}</legend>
+                        {% bootstrap_field sform.customer_accounts layout="control" %}
+                        {% bootstrap_field sform.name_scheme layout="control" %}
+                        {% bootstrap_field sform.name_scheme_titles layout="control" %}
                     </fieldset>
                     <fieldset>
                         <legend>{% trans "Shop design" %}</legend>

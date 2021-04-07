@@ -42,6 +42,7 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
+from pytz import common_timezones
 
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
@@ -51,6 +52,7 @@ from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
     Device, EventMetaProperty, Gate, GiftCard, Organizer, Team, Customer,
 )
+from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
 from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import SafeEventMultipleChoiceField
 from pretix.multidomain.models import KnownDomain
@@ -251,6 +253,22 @@ class DeviceForm(forms.ModelForm):
 
 
 class OrganizerSettingsForm(SettingsForm):
+    timezone = forms.ChoiceField(
+        choices=((a, a) for a in common_timezones),
+        label=_("Default timezone"),
+    )
+    name_scheme = forms.ChoiceField(
+        label=_("Name format"),
+        help_text=_("This defines how pretix will ask for human names. Changing this after you already received "
+                    "orders might lead to unexpected behavior when sorting or changing names."),
+        required=True,
+    )
+    name_scheme_titles = forms.ChoiceField(
+        label=_("Allowed titles"),
+        help_text=_("If the naming scheme you defined above allows users to input a title, you can use this to "
+                    "restrict the set of selectable titles."),
+        required=False,
+    )
     auto_fields = [
         'customer_accounts',
         'contact_mail',
@@ -293,6 +311,23 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
                     'We recommend a size of at least 200x200px to accommodate most devices.')
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name_scheme'].choices = (
+            (k, _('Ask for {fields}, display like {example}').format(
+                fields=' + '.join(str(vv[1]) for vv in v['fields']),
+                example=v['concatenation'](v['sample'])
+            ))
+            for k, v in PERSON_NAME_SCHEMES.items()
+        )
+        self.fields['name_scheme_titles'].choices = [('', _('Free text input'))] + [
+            (k, '{scheme}: {samples}'.format(
+                scheme=v[0],
+                samples=', '.join(v[1])
+            ))
+            for k, v in PERSON_NAME_TITLE_GROUPS.items()
+        ]
 
 
 class WebHookForm(forms.ModelForm):

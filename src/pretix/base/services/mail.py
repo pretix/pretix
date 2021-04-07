@@ -204,9 +204,10 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             timezone = event.timezone
         elif user:
             timezone = pytz.timezone(user.timezone)
+        elif organizer:
+            timezone = organizer.timezone
         else:
             timezone = pytz.timezone(settings.TIME_ZONE)
-            # TODO: timezone for organizer / customer!
 
         if settings_holder:
             if settings_holder.settings.mail_bcc:

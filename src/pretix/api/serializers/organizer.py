@@ -262,7 +262,8 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'theme_color_background',
         'theme_round_borders',
         'primary_font',
-        'organizer_logo_image'
+        'organizer_logo_image',
+        'timezone',
     ]
 
     def __init__(self, *args, **kwargs):

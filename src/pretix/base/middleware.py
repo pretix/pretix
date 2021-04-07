@@ -85,6 +85,8 @@ class LocaleMiddleware(MiddlewareMixin):
         tzname = None
         if hasattr(request, 'event'):
             tzname = request.event.settings.timezone
+        elif hasattr(request, 'organizer') and 'timezone' in request.organizer.settings._cache():
+            tzname = request.organizer.settings.timezone
         elif request.user.is_authenticated:
             tzname = request.user.timezone
         if tzname:

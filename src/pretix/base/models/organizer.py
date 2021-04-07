@@ -35,6 +35,7 @@
 import string
 from datetime import date, datetime, time
 
+import pytz
 from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
@@ -123,6 +124,10 @@ class Organizer(LoggedModel):
         from pretix.base.cache import ObjectRelatedCache
 
         return ObjectRelatedCache(self)
+
+    @property
+    def timezone(self):
+        return pytz.timezone(self.settings.timezone)
 
     @cached_property
     def all_logentries_link(self):
