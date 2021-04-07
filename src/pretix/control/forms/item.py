@@ -368,6 +368,7 @@ class ItemCreateForm(I18nModelForm):
                 'hidden_if_available',
                 'require_bundling',
                 'checkin_attention',
+                ''
             )
             for f in fields:
                 setattr(self.instance, f, getattr(self.cleaned_data['copy_from'], f))

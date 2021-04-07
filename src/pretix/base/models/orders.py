@@ -1190,6 +1190,9 @@ class AbstractPosition(models.Model):
     voucher = models.ForeignKey(
         'Voucher', null=True, blank=True, on_delete=models.PROTECT
     )
+    used_membership = models.ForeignKey(
+        'Membership', null=True, blank=True, on_delete=models.PROTECT
+    )
     addon_to = models.ForeignKey(
         'self', null=True, blank=True, on_delete=models.PROTECT, related_name='addons'
     )

@@ -514,6 +514,27 @@ class Item(LoggedModel):
                     'product price.'),
         default=False
     )
+    require_membership = models.BooleanField(
+        verbose_name=_('Require a valid membership'),
+        default=False,
+    )
+    require_membership_types = models.ManyToManyField(
+        'Membership',
+        verbose_name=_('Membership types'),
+    )
+    grant_membership_type = models.ForeignKey(
+        'MembershipType', null=True, blank=True, related_name='granted_by', on_delete=models.PROTECT,
+        verbose_name=_('This product creates a membership of type'),
+    )
+    grant_membership_duration_like_event = models.BooleanField(
+        verbose_name=_('The duration of the membership is the same as the duration of the event or event series date'),
+    )
+    grant_membership_duration_days = models.IntegerField(
+        verbose_name=_('Membership duration in days'), default=0,
+    )
+    grant_membership_duration_months = models.IntegerField(
+        verbose_name=_('Membership duration in months'), default=0,
+    )
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.
 
@@ -759,6 +780,14 @@ class ItemVariation(models.Model):
         max_digits=7, decimal_places=2,
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
+    )
+    require_membership = models.BooleanField(
+        verbose_name=_('Require a valid membership'),
+        default=False,
+    )
+    require_membership_types = models.ManyToManyField(
+        'Membership',
+        verbose_name=_('Membership types'),
     )
 
     objects = ScopedManager(organizer='item__event__organizer')
