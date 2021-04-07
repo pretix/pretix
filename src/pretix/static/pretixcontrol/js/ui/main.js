@@ -702,11 +702,13 @@ $(function () {
         );
     });
 
+    $(".propagated-settings-box").find("input, textarea, select").not("[disabled]")
+        .attr("data-propagated-locked", "true").prop("disabled", true);
+
     $(".propagated-settings-box button[data-action=unlink]").click(function (ev) {
         var $box = $(this).closest(".propagated-settings-box");
-        $box.find(".propagated-settings-overlay").fadeOut();
-        $box.find("input[name=_settings_ignore]").attr("name", "decouple");
-        $box.find(".propagated-settings-form").removeClass("blurred");
+        $box.find("[data-propagated-locked]").prop("disabled", false);
+        $box.removeClass("locked").addClass("unlocked");
         ev.preventDefault();
         return true;
     });

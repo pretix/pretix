@@ -4,6 +4,7 @@
 {% load static %}
 {% load hierarkey_form %}
 {% load formset_tags %}
+{% block title %}{% trans "General settings" %}{% endblock %}
 {% block custom_header %}
     {{ block.super }}
     <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" %}">
@@ -203,7 +204,7 @@
                 {% bootstrap_field sform.logo_show_title layout="control" %}
                 {% bootstrap_field sform.og_image layout="control" %}
                 {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
-                {% propagated request.event org_url "primary_color" "primary_font" "theme_color_success" "theme_color_danger" %}
+                {% propagated request.event org_url "primary_color" "primary_font" "theme_color_success" "theme_color_danger" "theme_round_borders" %}
                     {% bootstrap_field sform.primary_color layout="control" %}
                     {% bootstrap_field sform.theme_color_success layout="control" %}
                     {% bootstrap_field sform.theme_color_danger layout="control" %}
