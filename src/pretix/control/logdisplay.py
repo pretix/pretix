@@ -315,6 +315,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.webhook.created': _('The webhook has been created.'),
         'pretix.webhook.changed': _('The webhook has been changed.'),
         'pretix.customer.created': _('The account has been created.'),
+        'pretix.customer.changed': _('The account has been changed.'),
         'pretix.customer.password.resetrequested': _('A new password has been requested.'),
         'pretix.customer.password.set': _('A new password has been set.'),
         'pretix.email.error': _('Sending of an email has failed.'),

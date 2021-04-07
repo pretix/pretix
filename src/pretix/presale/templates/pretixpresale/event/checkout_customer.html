@@ -25,14 +25,12 @@
                 <div id="customer_login"
                      class="panel-collapse collapsed {% if selected == "login" %}in{% endif %}">
                     <div class="panel-body form-horizontal">
-                        <p>
-                            {% blocktrans trimmed with org=request.organizer.name %}
-                                If you created a customer account at {{ org }} before, you can log in now and connect
-                                your order to your account. This will allow you to see all your orders in one place
-                                and access them at any time.
-                            {% endblocktrans %}
-                        </p>
                         {% if customer %}
+                            <p>
+                                {% blocktrans trimmed with org=request.organizer.name %}
+                                You are currently logged in with the following credentials.
+                                {% endblocktrans %}
+                            </p>
                             <dl class="dl-horizontal">
                                 <dt>{% trans "Email" %}</dt>
                                 <dd>
@@ -40,8 +38,19 @@
                                 </dd>
                                 <dt>{% trans "Name" %}</dt>
                                 <dd>{{ customer.name }}</dd>
+                                <dt>{% trans "Customer ID" %}</dt>
+                                <dd>
+                                    #{{ customer.identifier }}
+                                </dd>
                             </dl>
                         {% else %}
+                            <p>
+                                {% blocktrans trimmed with org=request.organizer.name %}
+                                If you created a customer account at {{ org }} before, you can log in now and connect
+                                your order to your account. This will allow you to see all your orders in one place
+                                and access them at any time.
+                                {% endblocktrans %}
+                            </p>
                             {% bootstrap_form login_form layout="checkout" %}
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">

@@ -54,13 +54,13 @@
                         <td>
                             <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=c.identifier %}">
                                 {% if not c.is_active %}<strike>{% endif %}
-                                <strong>{{ c.identifier }}</strong>
+                                <strong>#{{ c.identifier }}</strong>
                                 {% if not c.is_active %}</strike>{% endif %}
                             </a>
                         </td>
                         <td>
                             {% if not c.is_verified %}<strike>{% endif %}
-                            {{ c.email }}
+                            {{ c.email|default_if_none:"" }}
                             {% if not c.is_verified %}</strike>{% endif %}
                         </td>
                         <td>{{ c.name }}</td>

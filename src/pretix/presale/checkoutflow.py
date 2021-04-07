@@ -308,7 +308,10 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['cart_session'] = self.cart_session
         ctx['login_form'] = self.login_form
         ctx['register_form'] = self.register_form
-        ctx['selected'] = self.request.POST.get('customer_mode', self.cart_session.get('customer_mode', ''))
+        ctx['selected'] = self.request.POST.get(
+            'customer_mode',
+            self.cart_session.get('customer_mode', 'login' if self.request.customer else '')
+        )
 
         if 'customer' in self.cart_session:
             try:
@@ -316,6 +319,8 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             except Customer.DoesNotExist:
                 self.cart_session['customer'] = None
                 self.cart_session['customer_mode'] = None
+        elif self.request.customer:
+            ctx['customer'] = self.request.customer
 
         return ctx
 
@@ -957,6 +962,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
         ctx['invoice_address_asked'] = self.address_asked
+        ctx['customer'] = self.cart_customer
 
         self.cart_session['shown_total'] = str(ctx['cart']['total'])
 

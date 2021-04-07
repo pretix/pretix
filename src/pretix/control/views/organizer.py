@@ -88,7 +88,7 @@ from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
     DeviceForm, EventMetaPropertyForm, GateForm, GiftCardCreateForm,
     GiftCardUpdateForm, OrganizerDeleteForm, OrganizerForm,
-    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm, CustomerUpdateForm,
 )
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
@@ -1591,3 +1591,57 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             o.sales_channel_obj = scs[o.sales_channel]
 
         return ctx
+
+
+class CustomerUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    template_name = 'pretixcontrol/organizers/customer_edit.html'
+    permission = 'can_manage_customers'
+    context_object_name = 'customer'
+    form_class = CustomerUpdateForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            self.request.organizer.customers,
+            identifier=self.kwargs.get('customer')
+        )
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action('pretix.customer.changed', user=self.request.user, data={
+                k: getattr(self.object, k)
+                for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('control:organizer.customer', kwargs={
+            'organizer': self.request.organizer.slug,
+            'customer': self.object.identifier,
+        })
+
+
+class CustomerAnonymizeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
+    template_name = 'pretixcontrol/organizers/customer_anonymize.html'
+    permission = 'can_manage_customers'
+    context_object_name = 'customer'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            self.request.organizer.customers,
+            identifier=self.kwargs.get('customer')
+        )
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        with transaction.atomic():
+            self.object.anonymize()
+            self.object.log_action('pretix.customer.anonymized', user=self.request.user)
+        messages.success(self.request, _('The customer account has been anonymized.'))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('control:organizer.customer', kwargs={
+            'organizer': self.request.organizer.slug,
+            'customer': self.object.identifier,
+        })

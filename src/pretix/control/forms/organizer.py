@@ -46,9 +46,10 @@ from django_scopes.forms import SafeModelMultipleChoiceField
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
+from pretix.base.forms.questions import NamePartsFormField
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    Device, EventMetaProperty, Gate, GiftCard, Organizer, Team,
+    Device, EventMetaProperty, Gate, GiftCard, Organizer, Team, Customer,
 )
 from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import SafeEventMultipleChoiceField
@@ -374,3 +375,40 @@ class GiftCardUpdateForm(forms.ModelForm):
             'expires': SplitDateTimePickerWidget,
             'conditions': forms.Textarea(attrs={"rows": 2})
         }
+
+
+class CustomerUpdateForm(forms.ModelForm):
+    error_messages = {
+        'duplicate': _("An account with this email address is already registered."),
+    }
+
+    class Meta:
+        model = Customer
+        fields = ['is_active', 'name_parts', 'email', 'is_verified', 'locale']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['name_parts'] = NamePartsFormField(
+            max_length=255,
+            required=True,
+            scheme=self.instance.organizer.settings.name_scheme,
+            titles=self.instance.organizer.settings.name_scheme_titles,
+            label=_('Name'),
+        )
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+
+        if email is not None:
+            try:
+                self.instance.organizer.customers.exclude(pk=self.instance.pk).get(email=email)
+            except Customer.DoesNotExist:
+                pass
+            else:
+                raise forms.ValidationError(
+                    self.error_messages['duplicate'],
+                    code='duplicate',
+                )
+
+        return self.cleaned_data

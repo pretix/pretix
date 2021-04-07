@@ -139,6 +139,12 @@
                         </h3>
                     </div>
                     <div class="panel-body">
+                        {% if customer %}
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "Customer account" %}</dt>
+                            <dd>{{ customer.email }}<br>{{ customer.name }}<br>#{{ customer.identifier }}</dd>
+                        </dl>
+                        {% endif %}
                         {% if not asked and event.settings.invoice_name_required %}
                             <dl class="dl-horizontal">
                                 <dt>{% trans "Name" %}</dt>

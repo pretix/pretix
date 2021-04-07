@@ -4,13 +4,13 @@
 {% load money %}
 {% block title %}
     {% blocktrans trimmed with id=customer.identifier %}
-        Customer: {{ id }}
+        Customer #{{ id }}
     {% endblocktrans %}
 {% endblock %}
 {% block inner %}
     <h1>
         {% blocktrans trimmed with id=customer.identifier %}
-            Customer: {{ id }}
+            Customer #{{ id }}
         {% endblocktrans %}
     </h1>
     <div class="row">
@@ -24,7 +24,7 @@
                 <div class="panel-body">
                     <dl class="dl-horizontal">
                         <dt>{% trans "Customer ID" %}</dt>
-                        <dd>{{ customer.identifier }}</dd>
+                        <dd>#{{ customer.identifier }}</dd>
                         <dt>{% trans "Status" %}</dt>
                         <dd>
                             {% if not customer.is_active %}
@@ -36,7 +36,7 @@
                             {% endif %}
                         </dd>
                         <dt>{% trans "Email" %}</dt>
-                        <dd>{{ customer.email }}</dd>
+                        <dd>{{ customer.email|default_if_none:"" }}</dd>
                         <dt>{% trans "Name" %}</dt>
                         <dd>{{ customer.name }}</dd>
                         <dt>{% trans "Locale" %}</dt>
@@ -47,6 +47,16 @@
                         <dd>{% if customer.last_login %}{{ customer.last_login|date:"SHORT_DATETIME_FORMAT" }}{% else %}
                             –{% endif %}</dd>
                     </dl>
+                    <div class="text-right">
+                        <a href="{% url "control:organizer.customer.edit" organizer=request.organizer.slug customer=customer.identifier %}"
+                                class="btn btn-default">
+                            <i class="fa fa-edit"></i> {% trans "Edit" %}
+                        </a>
+                        <a href="{% url "control:organizer.customer.anonymize" organizer=request.organizer.slug customer=customer.identifier %}"
+                                class="btn btn-danger">
+                            <i class="fa fa-trash"></i> {% trans "Anonymize" %}
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default items">

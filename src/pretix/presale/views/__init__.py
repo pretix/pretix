@@ -93,7 +93,7 @@ class CartMixin:
 
     @cached_property
     def cart_customer(self):
-        if self.cart_session['customer_mode'] == 'login':
+        if self.cart_session.get('customer_mode', 'guest') == 'login':
             try:
                 return self.request.organizer.customers.get(pk=self.cart_session.get('customer', -1))
             except Customer.DoesNotExist:

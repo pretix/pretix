@@ -1,8 +1,10 @@
 from urllib.parse import quote
 
 from django.contrib import messages
+from django.core.signing import dumps, loads, BadSignature
+from django.db import transaction
 from django.db.models import Count, IntegerField, OuterRef, Subquery
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -17,9 +19,9 @@ from pretix.base.services.mail import mail
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.customer import (
     AuthenticationForm, RegistrationForm, ResetPasswordForm, SetPasswordForm,
-    TokenGenerator,
+    TokenGenerator, ChangePasswordForm, ChangeInfoForm,
 )
-from pretix.presale.utils import customer_login, customer_logout
+from pretix.presale.utils import customer_login, customer_logout, update_customer_session_auth_hash
 
 
 class RedirectBackMixin:
@@ -51,6 +53,8 @@ class LoginView(RedirectBackMixin, FormView):
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
+        if not request.organizer.settings.customer_accounts:
+            raise Http404('Feature not enabled')
         if self.redirect_authenticated_user and self.request.customer:
             redirect_to = self.get_success_url()
             if redirect_to == self.request.path:
@@ -115,6 +119,8 @@ class RegistrationView(RedirectBackMixin, FormView):
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
+        if not request.organizer.settings.customer_accounts:
+            raise Http404('Feature not enabled')
         if self.redirect_authenticated_user and self.request.customer:
             redirect_to = self.get_success_url()
             if redirect_to == self.request.path:
@@ -135,7 +141,8 @@ class RegistrationView(RedirectBackMixin, FormView):
         return url or eventreverse(self.request.organizer, 'presale:organizer.customer.login', kwargs={})
 
     def form_valid(self, form):
-        form.create()
+        with transaction.atomic():
+            form.create()
         messages.success(
             self.request,
             _('Your account has been created. Please follow the link in the email we sent you to activate your '
@@ -152,6 +159,8 @@ class SetPasswordView(FormView):
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
+        if not request.organizer.settings.customer_accounts:
+            raise Http404('Feature not enabled')
         try:
             self.customer = request.organizer.customers.get(identifier=self.request.GET.get('id'))
         except Customer.DoesNotExist:
@@ -171,10 +180,11 @@ class SetPasswordView(FormView):
         return eventreverse(self.request.organizer, 'presale:organizer.customer.login', kwargs={})
 
     def form_valid(self, form):
-        self.customer.set_password(form.cleaned_data['password'])
-        self.customer.is_verified = True
-        self.customer.save()
-        self.customer.log_action('pretix.customer.password.set', {})
+        with transaction.atomic():
+            self.customer.set_password(form.cleaned_data['password'])
+            self.customer.is_verified = True
+            self.customer.save()
+            self.customer.log_action('pretix.customer.password.set', {})
         messages.success(
             self.request,
             _('Your new password has been set! You can now use it to log in.'),
@@ -190,6 +200,8 @@ class ResetPasswordView(FormView):
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
+        if not request.organizer.settings.customer_accounts:
+            raise Http404('Feature not enabled')
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
@@ -225,6 +237,8 @@ class ResetPasswordView(FormView):
 
 class CustomerRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
+        if not request.organizer.settings.customer_accounts:
+            raise Http404('Feature not enabled')
         if not getattr(request, 'customer', None):
             return redirect(
                 eventreverse(self.request.organizer, 'presale:organizer.customer.login', kwargs={}) +
@@ -265,3 +279,131 @@ class ProfileView(CustomerRequiredMixin, ListView):
                 continue
             o.count_positions = annotated.get(o.pk)['pcnt']
         return ctx
+
+
+class ChangePasswordView(CustomerRequiredMixin, FormView):
+    template_name = 'pretixpresale/organizers/customer_password.html'
+    form_class = ChangePasswordForm
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.organizer.settings.customer_accounts:
+            raise Http404('Feature not enabled')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        customer = form.customer
+        customer.log_action('pretix.customer.password.set', {})
+        customer.set_password(form.cleaned_data['password'])
+        customer.save()
+        messages.success(self.request, _('Your changes have been saved.'))
+        update_customer_session_auth_hash(self.request, customer)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['customer'] = self.request.customer
+        return kwargs
+
+
+class ChangeInformationView(CustomerRequiredMixin, FormView):
+    template_name = 'pretixpresale/organizers/customer_info.html'
+    form_class = ChangeInfoForm
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.organizer.settings.customer_accounts:
+            raise Http404('Feature not enabled')
+        self.initial_email = self.request.customer.email
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
+
+    def form_valid(self, form):
+        if form.cleaned_data['email'] != self.initial_email:
+            new_email = form.cleaned_data['email']
+            form.cleaned_data['email'] = form.instance.email = self.initial_email
+            ctx = form.instance.get_email_context()
+            ctx['url'] = build_absolute_uri(
+                self.request.organizer,
+                'presale:organizer.customer.change.confirm'
+            ) + '?token=' + dumps({
+                'customer': form.instance.pk,
+                'email': new_email
+            }, salt='pretix.presale.views.customer.ChangeInformationView')
+            mail(
+                new_email,
+                _('Confirm email address for your account at {organizer}').format(organizer=self.request.organizer.name),
+                self.request.organizer.settings.mail_text_customer_reset,
+                ctx,
+                locale=form.instance.locale,
+                customer=form.instance,
+                organizer=self.request.organizer,
+            )
+            messages.success(self.request, _('Your changes have been saved. We\'ve sent you an email with a link to update your '
+                                             'email address. The email address of your account will be changed as soon as you '
+                                             'click that link.'))
+        else:
+            messages.success(self.request, _('Your changes have been saved.'))
+
+        with transaction.atomic():
+            form.save()
+            d = dict(form.cleaned_data)
+            del d['email']
+            self.request.customer.log_action('pretix.customer.changed', d)
+
+        update_customer_session_auth_hash(self.request, form.instance)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        kwargs['instance'] = self.request.customer
+        return kwargs
+
+
+class ConfirmChangeView(CustomerRequiredMixin, View):
+    template_name = 'pretixpresale/organizers/customer_info.html'
+    form_class = ChangeInfoForm
+
+    def get(self, request, *args, **kwargs):
+        if not request.organizer.settings.customer_accounts:
+            raise Http404('Feature not enabled')
+
+        try:
+            data = loads(request.GET.get('token'), salt='pretix.presale.views.customer.ChangeInformationView', max_age=3600 * 24)
+        except BadSignature:
+            messages.error(request, _('You clicked an invalid link.'))
+            return HttpResponseRedirect(self.get_success_url())
+
+        try:
+            customer = request.organizer.customers.get(pk=data.get('customer'))
+        except Customer.DoesNotExist:
+            messages.error(request, _('You clicked an invalid link.'))
+            return HttpResponseRedirect(self.get_success_url())
+
+        with transaction.atomic():
+            customer.email = data['email']
+            customer.save()
+            customer.log_action('pretix.customer.changed', {
+                'email': data['email']
+            })
+
+        messages.success(request, _('Your email address has been updated.'))
+
+        if customer == request.customer:
+            update_customer_session_auth_hash(self.request, customer)
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})

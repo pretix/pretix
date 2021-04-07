@@ -21,13 +21,12 @@ class Customer(LoggedModel):
     id = models.BigAutoField(primary_key=True)
     organizer = models.ForeignKey(Organizer, related_name='customers', on_delete=models.CASCADE)
     identifier = models.CharField(max_length=190, db_index=True, unique=True)
-    email = models.EmailField(unique=True, db_index=True, null=True, blank=True,
-                              verbose_name=_('E-mail'), max_length=190)
+    email = models.EmailField(unique=True, db_index=True, null=True, blank=False, verbose_name=_('Email'), max_length=190)
     password = models.CharField(verbose_name=_('Password'), max_length=128)
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
     name_parts = FallbackJSONField(default=dict)
-    is_active = models.BooleanField(default=True, verbose_name=_('Is active'))
-    is_verified = models.BooleanField(default=True, verbose_name=_('Email verified'))
+    is_active = models.BooleanField(default=True, verbose_name=_('Account active'))
+    is_verified = models.BooleanField(default=True, verbose_name=_('Verified email address'))
     last_login = models.DateTimeField(verbose_name=_('Last login'), blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name=_('Registration date'))
     locale = models.CharField(max_length=50,
@@ -42,7 +41,8 @@ class Customer(LoggedModel):
         unique_together = [['organizer', 'email']]
 
     def save(self, **kwargs):
-        self.email = self.email.lower()
+        if self.email:
+            self.email = self.email.lower()
         if 'update_fields' in kwargs and 'last_modified' not in kwargs['update_fields']:
             kwargs['update_fields'] = list(kwargs['update_fields']) + ['last_modified']
         if not self.identifier:
@@ -53,6 +53,16 @@ class Customer(LoggedModel):
             self.name_cached = ""
             self.name_parts = {}
         super().save(**kwargs)
+
+    def anonymize(self):
+        self.is_active = False
+        self.is_verified = False
+        self.name_parts = {}
+        self.name_cached = ''
+        self.email = None
+        self.save()
+        self.all_logentries().update(data={}, shredded=True)
+        self.orders.all().update(customer=None)
 
     @scopes_disabled()
     def assign_identifier(self):

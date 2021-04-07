@@ -1,4 +1,6 @@
 from django import forms
+from django.conf import settings
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
@@ -145,6 +147,8 @@ class RegistrationForm(forms.Form):
             is_verified=False,
             locale=get_language_without_region(),
         )
+        customer.set_unusable_password()
+        customer.save()
         customer.log_action('pretix.customer.created', {})
         ctx = customer.get_email_context()
         token = TokenGenerator().make_token(customer)
@@ -221,3 +225,144 @@ class ResetPasswordForm(forms.Form):
             # have it, there'd be an info leak in the registration flow (trying to sign up for an account, which fails
             # if the email address already exists).
             raise forms.ValidationError(self.error_messages['unknown'], code='unknown')
+
+
+class ChangePasswordForm(forms.Form):
+    error_messages = {
+        'pw_current_wrong': _("The current password you entered was not correct."),
+        'pw_mismatch': _("Please enter the same password twice"),
+        'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
+    }
+    password_current = forms.CharField(
+        label=_('Your current password'),
+        widget=forms.PasswordInput,
+        required=True
+    )
+    password = forms.CharField(
+        label=_('New password'),
+        widget=forms.PasswordInput,
+        required=True
+    )
+    password_repeat = forms.CharField(
+        label=_('Repeat password'),
+        widget=forms.PasswordInput
+    )
+
+    def __init__(self, customer, *args, **kwargs):
+        self.customer = customer
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        password1 = self.cleaned_data.get('password', '')
+        password2 = self.cleaned_data.get('password_repeat')
+
+        if password1 and password1 != password2:
+            raise forms.ValidationError({
+                'password_repeat': self.error_messages['pw_mismatch'],
+            }, code='pw_mismatch')
+
+        return self.cleaned_data
+
+    def clean_password(self):
+        password1 = self.cleaned_data.get('password', '')
+        if validate_password(password1, user=self.customer) is not None:
+            raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
+        return password1
+
+    def clean_password_current(self):
+        old_pw = self.cleaned_data.get('password_current')
+
+        if old_pw and settings.HAS_REDIS:
+            from django_redis import get_redis_connection
+
+            rc = get_redis_connection("redis")
+            cnt = rc.incr('pretix_pwchange_customer_%s' % self.customer.pk)
+            rc.expire('pretix_pwchange_customer_%s' % self.customer.pk, 300)
+            if cnt > 10:
+                raise forms.ValidationError(
+                    self.error_messages['rate_limit'],
+                    code='rate_limit',
+                )
+
+        if old_pw and not check_password(old_pw, self.customer.password):
+            raise forms.ValidationError(
+                self.error_messages['pw_current_wrong'],
+                code='pw_current_wrong',
+            )
+
+
+class ChangeInfoForm(forms.ModelForm):
+    error_messages = {
+        'pw_current_wrong': _("The current password you entered was not correct."),
+        'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
+        'duplicate': _("An account with this email address is already registered."),
+    }
+    password_current = forms.CharField(
+        label=_('Your current password'),
+        widget=forms.PasswordInput,
+        help_text=_('Only required if you change your email address'),
+        required=False
+    )
+
+    class Meta:
+        model = Customer
+        fields = ('name_parts', 'email')
+
+    def __init__(self, request=None, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
+
+        self.fields['name_parts'] = NamePartsFormField(
+            max_length=255,
+            required=True,
+            scheme=request.organizer.settings.name_scheme,
+            titles=request.organizer.settings.name_scheme_titles,
+            label=_('Name'),
+        )
+
+    def clean_password_current(self):
+        old_pw = self.cleaned_data.get('password_current')
+
+        if old_pw:
+            if settings.HAS_REDIS:
+                from django_redis import get_redis_connection
+
+                rc = get_redis_connection("redis")
+                cnt = rc.incr('pretix_pwchange_customer_%s' % self.instance.pk)
+                rc.expire('pretix_pwchange_customer_%s' % self.instance.pk, 300)
+                if cnt > 10:
+                    raise forms.ValidationError(
+                        self.error_messages['rate_limit'],
+                        code='rate_limit',
+                    )
+
+            if not check_password(old_pw, self.instance.password):
+                raise forms.ValidationError(
+                    self.error_messages['pw_current_wrong'],
+                    code='pw_current_wrong',
+                )
+
+            return "***valid***"
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        password_current = self.cleaned_data.get('password_current')
+
+        if email != self.instance.email and not password_current:
+            raise forms.ValidationError(
+                self.error_messages['pw_current_wrong'],
+                code='pw_current_wrong',
+            )
+
+        if email is not None:
+            try:
+                self.request.organizer.customers.exclude(pk=self.instance.pk).get(email=email)
+            except Customer.DoesNotExist:
+                pass
+            else:
+                raise forms.ValidationError(
+                    self.error_messages['duplicate'],
+                    code='duplicate',
+                )
+
+        return self.cleaned_data

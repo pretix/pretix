@@ -67,7 +67,10 @@ def get_customer(request):
 
         with scope(organizer=request.organizer):
             try:
-                customer = request.organizer.customers.get(pk=request.session[session_key])
+                customer = request.organizer.customers.get(
+                    is_active=True, is_verified=True,
+                    pk=request.session[session_key]
+                )
             except (Customer.DoesNotExist, KeyError):
                 request._cached_customer = None
             else:
@@ -83,6 +86,13 @@ def get_customer(request):
                     request._cached_customer = None
 
     return request._cached_customer
+
+
+def update_customer_session_auth_hash(request, customer):
+    hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+    session_auth_hash = customer.get_session_auth_hash()
+    request.session.cycle_key()
+    request.session[hash_session_key] = session_auth_hash
 
 
 def add_customer_to_request(request):

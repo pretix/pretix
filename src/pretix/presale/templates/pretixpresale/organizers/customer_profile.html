@@ -18,12 +18,22 @@
         <div class="panel-body">
             <dl class="dl-horizontal">
                 <dt>{% trans "Customer ID" %}</dt>
-                <dd>{{ customer.identifier }}</dd>
+                <dd>#{{ customer.identifier }}</dd>
                 <dt>{% trans "Email" %}</dt>
                 <dd>{{ customer.email }}</dd>
                 <dt>{% trans "Name" %}</dt>
                 <dd>{{ customer.name }}</dd>
             </dl>
+            <div class="text-right">
+                <a href="{% eventurl request.organizer "presale:organizer.customer.change" %}"
+                        class="btn btn-default">
+                    {% trans "Change account information" %}
+                </a>
+                <a href="{% eventurl request.organizer "presale:organizer.customer.password" %}"
+                        class="btn btn-default">
+                    {% trans "Change password" %}
+                </a>
+            </div>
         </div>
     </div>
     <div class="panel panel-default items">
@@ -49,7 +59,7 @@
                 <tr>
                     <td>
                         <strong>
-                            <a href="{% eventurl o.event "presale:event.order" order=o.code secret=o.secret %}">
+                            <a href="{% eventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
                                 {{ o.code }}
                             </a>
                         </strong>
@@ -70,7 +80,8 @@
                     <td class="text-right flip">{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</td>
                     <td class="text-right flip">
                         <a href="{% eventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
-                           class="btn btn-default">
+                                target="_blank"
+                                class="btn btn-default">
                             {% trans "Details" %}
                         </a>
                     </td>
@@ -79,6 +90,5 @@
             </tbody>
         </table>
         {% include "pretixcontrol/pagination.html" %}
-    </div>
     </div>
 {% endblock %}

@@ -12,7 +12,7 @@ def set_can_manage_customers(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0182_auto_20210406_0725'),
+        ('pretixbase', '0182_customer'),
     ]
 
     operations = [
