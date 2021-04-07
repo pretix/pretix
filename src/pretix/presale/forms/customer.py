@@ -1,3 +1,6 @@
+import hashlib
+import ipaddress
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
@@ -5,12 +8,14 @@ from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms.questions import NamePartsFormField
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
 from pretix.base.services.mail import mail
+from pretix.helpers.http import get_client_ip
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 
@@ -99,6 +104,7 @@ class RegistrationForm(forms.Form):
 
     error_messages = {
         'incomplete': _('You need to fill out all fields.'),
+        'rate_limit': _("We've received a lot of registration requests from you, please wait 10 minutes before you try again."),
         'duplicate': _(
             "An account with this email address is already registered. Please try to log in or reset your password "
             "instead."
@@ -116,6 +122,23 @@ class RegistrationForm(forms.Form):
             titles=request.organizer.settings.name_scheme_titles,
             label=_('Name'),
         )
+
+    @cached_property
+    def ratelimit_key(self):
+        if not settings.HAS_REDIS:
+            return None
+        client_ip = get_client_ip(self.request)
+        if not client_ip:
+            return None
+        try:
+            client_ip = ipaddress.ip_address(client_ip)
+        except ValueError:
+            # Web server not set up correctly
+            return None
+        if client_ip.is_private:
+            # This is the private IP of the server, web server not set up correctly
+            return None
+        return 'pretix_customer_registration_{}'.format(hashlib.sha1(str(client_ip).encode()).hexdigest())
 
     def clean(self):
         email = self.cleaned_data.get('email')
@@ -136,7 +159,18 @@ class RegistrationForm(forms.Form):
                 self.error_messages['incomplete'],
                 code='incomplete'
             )
+        else:
+            if self.ratelimit_key:
+                from django_redis import get_redis_connection
 
+                rc = get_redis_connection("redis")
+                cnt = rc.incr(self.ratelimit_key)
+                rc.expire(self.ratelimit_key, 600)
+                if cnt > 10:
+                    raise forms.ValidationError(
+                        self.error_messages['rate_limit'],
+                        code='rate_limit',
+                    )
         return self.cleaned_data
 
     def create(self):
@@ -204,7 +238,8 @@ class SetPasswordForm(forms.Form):
 
 class ResetPasswordForm(forms.Form):
     error_messages = {
-        'unknown': _("A user with this email address is now known in our system."),
+        'rate_limit': _("For security reasons, please wait 10 minutes before you try again."),
+        'unknown': _("A user with this email address is not known in our system."),
     }
     email = forms.EmailField(
         label=_('E-mail'),
@@ -225,6 +260,21 @@ class ResetPasswordForm(forms.Form):
             # have it, there'd be an info leak in the registration flow (trying to sign up for an account, which fails
             # if the email address already exists).
             raise forms.ValidationError(self.error_messages['unknown'], code='unknown')
+
+    def clean(self):
+        d = super().clean()
+        if d.get('email') and settings.HAS_REDIS:
+            from django_redis import get_redis_connection
+
+            rc = get_redis_connection("redis")
+            cnt = rc.incr('pretix_pwreset_customer_%s' % self.customer.pk)
+            rc.expire('pretix_pwreset_customer_%s' % self.customer.pk, 600)
+            if cnt > 2:
+                raise forms.ValidationError(
+                    self.error_messages['rate_limit'],
+                    code='rate_limit',
+                )
+        return d
 
 
 class ChangePasswordForm(forms.Form):
