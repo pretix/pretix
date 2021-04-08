@@ -434,6 +434,14 @@ def get_organizer_navigation(request):
                     }),
                     'active': url.url_name.startswith('organizer.propert'),
                 },
+                {
+                    'label': _('Webhooks'),
+                    'url': reverse('control:organizer.webhooks', kwargs={
+                        'organizer': request.organizer.slug
+                    }),
+                    'active': 'organizer.webhook' in url.url_name,
+                    'icon': 'bolt',
+                }
             ]
         })
     if 'can_change_teams' in request.orgapermset:
@@ -442,18 +450,19 @@ def get_organizer_navigation(request):
             'url': reverse('control:organizer.teams', kwargs={
                 'organizer': request.organizer.slug
             }),
-            'active': 'organizer.team' in url.url_name,
+            'active': 'organizer.team' in url.url_name and url.namespace == 'control',
             'icon': 'group',
         })
 
-    nav.append({
-        'label': _('Export'),
-        'url': reverse('control:organizer.export', kwargs={
-            'organizer': request.organizer.slug,
-        }),
-        'active': 'organizer.export' in url.url_name,
-        'icon': 'download',
-    })
+    if 'can_manage_gift_cards' in request.orgapermset:
+        nav.append({
+            'label': _('Gift cards'),
+            'url': reverse('control:organizer.giftcards', kwargs={
+                'organizer': request.organizer.slug
+            }),
+            'active': 'organizer.giftcard' in url.url_name,
+            'icon': 'credit-card',
+        })
 
     if 'can_change_organizer_settings' in request.orgapermset:
         nav.append({
@@ -479,24 +488,15 @@ def get_organizer_navigation(request):
                 }
             ]
         })
-    if 'can_manage_gift_cards' in request.orgapermset:
-        nav.append({
-            'label': _('Gift cards'),
-            'url': reverse('control:organizer.giftcards', kwargs={
-                'organizer': request.organizer.slug
-            }),
-            'active': 'organizer.giftcard' in url.url_name,
-            'icon': 'credit-card',
-        })
-    if 'can_change_organizer_settings' in request.orgapermset:
-        nav.append({
-            'label': _('Webhooks'),
-            'url': reverse('control:organizer.webhooks', kwargs={
-                'organizer': request.organizer.slug
-            }),
-            'active': 'organizer.webhook' in url.url_name,
-            'icon': 'bolt',
-        })
+
+    nav.append({
+        'label': _('Export'),
+        'url': reverse('control:organizer.export', kwargs={
+            'organizer': request.organizer.slug,
+        }),
+        'active': 'organizer.export' in url.url_name,
+        'icon': 'download',
+    })
 
     merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_organizer.send(request.organizer, request=request, organizer=request.organizer)),
@@ -512,7 +512,10 @@ def merge_in(nav, newnav):
             parents = [n for n in nav if n['url'] == item['parent']]
             if parents:
                 if 'children' not in parents[0]:
-                    parents[0]['children'] = []
+                    parents[0]['children'] = [
+                        dict(parents[0])
+                    ]
+                    parents[0]['active'] = False
                 parents[0]['children'].append(item)
                 continue
         nav.append(item)
