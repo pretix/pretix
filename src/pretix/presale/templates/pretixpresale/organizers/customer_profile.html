@@ -20,7 +20,8 @@
                 <dt>{% trans "Customer ID" %}</dt>
                 <dd>#{{ customer.identifier }}</dd>
                 <dt>{% trans "E-mail" %}</dt>
-                <dd>{{ customer.email }}</dd>
+                <dd>{{ customer.email }}
+                </dd>
                 <dt>{% trans "Name" %}</dt>
                 <dd>{{ customer.name }}</dd>
             </dl>
@@ -72,6 +73,12 @@
                     </td>
                     <td>
                         {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        {% if o.customer_id != customer.pk %}
+                            <span class="fa fa-link text-muted"
+                                    data-toggle="tooltip"
+                                    title="{% trans "Matched to your account based on the email address." %}"
+                            ></span>
+                        {% endif %}
                     </td>
                     <td class="text-right flip">
                         {{ o.total|money:o.event.currency }}

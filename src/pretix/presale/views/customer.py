@@ -3,7 +3,7 @@ from urllib.parse import quote
 from django.contrib import messages
 from django.core.signing import BadSignature, dumps, loads
 from django.db import transaction
-from django.db.models import Count, IntegerField, OuterRef, Subquery
+from django.db.models import Count, IntegerField, OuterRef, Subquery, Q
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
@@ -255,7 +255,12 @@ class ProfileView(CustomerRequiredMixin, ListView):
     paginate_by = 50
 
     def get_queryset(self):
-        return self.request.customer.orders.select_related('event').order_by('-datetime')
+        qs = Order.objects.filter(
+            Q(customer=self.request.customer)
+            | Q(email__iexact=self.request.customer.email)
+            # This is safe because we only let customers with verified emails log in
+        ).select_related('event').order_by('-datetime')
+        return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
