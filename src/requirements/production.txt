@@ -35,7 +35,7 @@ markdown==3.3.*
 bleach==3.3.*
 sentry-sdk==0.14.*
 babel
-django-i18nfield>=1.7.0
+django-i18nfield==1.9.*,>=1.9.1
 django-hijack>=2.1.10,<2.2.0
 jsonschema
 openpyxl==3.0.*
