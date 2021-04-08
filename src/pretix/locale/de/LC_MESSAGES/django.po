@@ -945,11 +945,11 @@ msgstr "Multiple-Choice-Fragen in einer Spalte gruppieren"
 
 #: pretix/base/exporters/orderlist.py:76
 msgid "Only include orders created on or after this date."
-msgstr "Nur Bestellungen für Termine an oder nach diesem Datum."
+msgstr "Nur Bestellungen erstellt an oder nach diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:83
-msgid "Only include orders issued on or before this date."
-msgstr "Nur Bestellungen an oder bevor diesem Datum."
+msgid "Only include orders created on or before this date."
+msgstr "Nur Bestellungen erstellt an oder bevor diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:87
 msgid "Start event date"

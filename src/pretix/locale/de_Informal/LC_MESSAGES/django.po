@@ -8,16 +8,15 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-30 16:15+0000\n"
-"PO-Revision-Date: 2021-03-30 19:44+0000\n"
+"PO-Revision-Date: 2021-04-08 22:04+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
-"Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: pretix/api/auth/devicesecurity.py:6
 msgid ""
@@ -946,11 +945,11 @@ msgstr "Multiple-Choice-Fragen in einer Spalte gruppieren"
 
 #: pretix/base/exporters/orderlist.py:76
 msgid "Only include orders created on or after this date."
-msgstr "Nur Bestellungen für Termine an oder nach diesem Datum."
+msgstr "Nur Bestellungen erstellt an oder nach diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:83
-msgid "Only include orders issued on or before this date."
-msgstr "Nur Bestellungen an oder bevor diesem Datum."
+msgid "Only include orders created on or before this date."
+msgstr "Nur Bestellungen erstellt an oder bevor diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:87
 msgid "Start event date"

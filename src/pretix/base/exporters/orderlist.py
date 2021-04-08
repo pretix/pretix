@@ -80,7 +80,7 @@ class OrderListExporter(MultiSheetListExporter):
                  label=_('End date'),
                  widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                  required=False,
-                 help_text=_('Only include orders issued on or before this date.')
+                 help_text=_('Only include orders created on or before this date.')
              )),
             ('event_date_from',
              forms.DateField(
