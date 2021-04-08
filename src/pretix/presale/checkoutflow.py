@@ -225,7 +225,7 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
 
 
 class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
-    priority = 30
+    priority = 45
     identifier = "customer"
     template_name = "pretixpresale/event/checkout_customer.html"
     label = pgettext_lazy('checkoutflow', 'Customer account')

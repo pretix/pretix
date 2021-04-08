@@ -99,8 +99,8 @@ def test_plugin_in_order(event, mocker):
         priority = 100
 
     flow = with_mocked_step(mocker, MockingStep, event)
-    assert isinstance(flow[0], checkoutflow.CustomerStep)
-    assert isinstance(flow[1], checkoutflow.AddOnsStep)
+    assert isinstance(flow[0], checkoutflow.AddOnsStep)
+    assert isinstance(flow[1], checkoutflow.CustomerStep)
     assert isinstance(flow[2], checkoutflow.QuestionsStep)
     assert isinstance(flow[3], MockingStep)
     assert isinstance(flow[4], checkoutflow.PaymentStep)
