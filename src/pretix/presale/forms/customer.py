@@ -9,7 +9,7 @@ from django.contrib.auth.password_validation import (
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.forms.questions import NamePartsFormField
 from pretix.base.i18n import get_language_without_region

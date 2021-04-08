@@ -32,7 +32,7 @@ from cryptography.hazmat.primitives.serialization import (
 from django.conf import settings
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import Item, ItemVariation, SubEvent
 from pretix.base.secretgenerators import pretix_sig1_pb2
