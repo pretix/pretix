@@ -2,10 +2,10 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    {% if property %}
-        <h1>{% trans "Property:" %} {{ property.name }}</h1>
+    {% if type %}
+        <h1>{% trans "Membership type:" %} {{ type.name }}</h1>
     {% else %}
-        <h1>{% trans "Create a new property" %}</h1>
+        <h1>{% trans "Create a new membership type" %}</h1>
     {% endif %}
     <form class="form-horizontal" action="" method="post">
         {% csrf_token %}

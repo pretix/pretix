@@ -519,21 +519,28 @@ class Item(LoggedModel):
         default=False,
     )
     require_membership_types = models.ManyToManyField(
-        'Membership',
-        verbose_name=_('Membership types'),
+        'MembershipType',
+        verbose_name=_('Allowed membership types'),
+        blank=True,
     )
     grant_membership_type = models.ForeignKey(
-        'MembershipType', null=True, blank=True, related_name='granted_by', on_delete=models.PROTECT,
+        'MembershipType',
+        null=True, blank=True,
+        related_name='granted_by',
+        on_delete=models.PROTECT,
         verbose_name=_('This product creates a membership of type'),
     )
     grant_membership_duration_like_event = models.BooleanField(
         verbose_name=_('The duration of the membership is the same as the duration of the event or event series date'),
+        default=True,
     )
     grant_membership_duration_days = models.IntegerField(
-        verbose_name=_('Membership duration in days'), default=0,
+        verbose_name=_('Membership duration in days'),
+        default=0,
     )
     grant_membership_duration_months = models.IntegerField(
-        verbose_name=_('Membership duration in months'), default=0,
+        verbose_name=_('Membership duration in months'),
+        default=0,
     )
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.
@@ -786,8 +793,9 @@ class ItemVariation(models.Model):
         default=False,
     )
     require_membership_types = models.ManyToManyField(
-        'Membership',
+        'MembershipType',
         verbose_name=_('Membership types'),
+        blank=True,
     )
 
     objects = ScopedManager(organizer='item__event__organizer')

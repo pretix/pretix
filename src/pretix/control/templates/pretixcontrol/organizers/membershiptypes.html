@@ -1,0 +1,48 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Membership types" %}{% endblock %}
+{% block inner %}
+    <h1>{% trans "Membership types" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can define membership types. These allow you to link products from different events
+            together. You can sell a membership as part of a a product in one event, and require valid
+            memberships to allow purchases in another event.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            This can be used to enable products like year passes, tickets of ten, etc.
+        {% endblocktrans %}
+    </p>
+    <a href="{% url "control:organizer.membershiptype.add" organizer=request.organizer.slug %}" class="btn btn-default">
+        <span class="fa fa-plus"></span>
+        {% trans "Create a new membership type" %}
+    </a>
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for t in types %}
+            <tr>
+                <td><strong>
+                    <a href="{% url "control:organizer.membershiptype.edit" organizer=request.organizer.slug type=t.id %}">
+                        {{ t.name }}
+                    </a>
+                </strong></td>
+                <td class="text-right flip">
+                    <a href="{% url "control:organizer.membershiptype.edit" organizer=request.organizer.slug type=t.id %}"
+                            class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                    <a href="{% url "control:organizer.membershiptype.delete" organizer=request.organizer.slug type=t.id %}"
+                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -46,6 +46,12 @@
                     {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.description layout="control" %}
+                    {% if form.require_membership %}
+                        {% bootstrap_field form.require_membership layout="control" %}
+                        <div data-display-dependency="#{{ form.require_membership.id_for_label }}">
+                            {% bootstrap_field form.require_membership_types layout="control" %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
@@ -80,6 +86,12 @@
                     {% bootstrap_field formset.empty_form.default_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field formset.empty_form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field formset.empty_form.description layout="control" %}
+                    {% if formset.empty_form.require_membership %}
+                        {% bootstrap_field formset.empty_form.require_membership layout="control" %}
+                        <div data-display-dependency="#{{ formset.empty_form.require_membership.id_for_label }}">
+                            {% bootstrap_field formset.empty_form.require_membership_types layout="control" %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endescapescript %}

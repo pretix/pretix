@@ -3,7 +3,7 @@ from urllib.parse import quote
 from django.contrib import messages
 from django.core.signing import BadSignature, dumps, loads
 from django.db import transaction
-from django.db.models import Count, IntegerField, OuterRef, Subquery, Q
+from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator

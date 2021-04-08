@@ -66,8 +66,9 @@ from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry, Order,
-    OrderPayment, OrderPosition, Organizer, Team, TeamInvite, User,
+    CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry,
+    MembershipType, Order, OrderPayment, OrderPosition, Organizer, Team,
+    TeamInvite, User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import (
@@ -91,8 +92,8 @@ from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
     CustomerUpdateForm, DeviceForm, EventMetaPropertyForm, GateForm,
     GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
-    OrganizerDeleteForm, OrganizerForm, OrganizerSettingsForm,
-    OrganizerUpdateForm, TeamForm, WebHookForm,
+    MembershipTypeForm, OrganizerDeleteForm, OrganizerForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm,
 )
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
@@ -1609,6 +1610,103 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         return ctx
+
+
+class MembershipTypeListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = MembershipType
+    template_name = 'pretixcontrol/organizers/membershiptypes.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'types'
+
+    def get_queryset(self):
+        return self.request.organizer.membership_types.all()
+
+
+class MembershipTypeCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    model = MembershipType
+    template_name = 'pretixcontrol/organizers/membershiptype_edit.html'
+    permission = 'can_change_organizer_settings'
+    form_class = MembershipTypeForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(MembershipType, organizer=self.request.organizer, pk=self.kwargs.get('type'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.membershiptypes', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        messages.success(self.request, _('The membership type has been created.'))
+        form.instance.organizer = self.request.organizer
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.membershiptype.created', user=self.request.user, data={
+            k: getattr(self.object, k) for k in form.changed_data
+        })
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class MembershipTypeUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    model = MembershipType
+    template_name = 'pretixcontrol/organizers/membershiptype_edit.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'type'
+    form_class = MembershipTypeForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(MembershipType, organizer=self.request.organizer, pk=self.kwargs.get('type'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.membershiptypes', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action('pretix.membershiptype.changed', user=self.request.user, data={
+                k: getattr(self.object, k)
+                for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class MembershipTypeDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+    model = MembershipType
+    template_name = 'pretixcontrol/organizers/membershiptype_delete.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'type'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(MembershipType, organizer=self.request.organizer, pk=self.kwargs.get('type'))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['is_allowed'] = self.object.allow_delete()
+        return ctx
+
+    def get_success_url(self):
+        return reverse('control:organizer.membershiptypes', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        success_url = self.get_success_url()
+        self.object = self.get_object()
+        if self.object.allow_delete():
+            self.object.log_action('pretix.membershiptype.deleted', user=self.request.user)
+            self.object.delete()
+            messages.success(request, _('The selected object has been deleted.'))
+        return redirect(success_url)
 
 
 class CustomerListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):

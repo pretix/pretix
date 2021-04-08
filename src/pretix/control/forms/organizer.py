@@ -48,13 +48,12 @@ from pytz import common_timezones
 
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
-from pretix.base.forms import (
-    I18nModelForm, PlaceholderValidator, SettingsForm,
-)
+from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.forms.questions import NamePartsFormField
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    Customer, Device, EventMetaProperty, Gate, GiftCard, Organizer, Team,
+    Customer, Device, EventMetaProperty, Gate, GiftCard, MembershipType,
+    Organizer, Team,
 )
 from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
 from pretix.control.forms import (
@@ -178,6 +177,12 @@ class EventMetaPropertyForm(forms.ModelForm):
         widgets = {
             'default': forms.TextInput()
         }
+
+
+class MembershipTypeForm(forms.ModelForm):
+    class Meta:
+        model = MembershipType
+        fields = ['name', 'transferable']
 
 
 class TeamForm(forms.ModelForm):

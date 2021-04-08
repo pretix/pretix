@@ -289,6 +289,9 @@ var form_handlers = function (el) {
             dependency = $($(this).attr("data-display-dependency")),
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                if (dependent.is("[data-inverse]")) {
+                    enabled = !enabled;
+                }
                 var $toggling = dependent;
                 if (dependent.get(0).tagName.toLowerCase() !== "div") {
                     $toggling = dependent.closest('.form-group');
@@ -304,8 +307,8 @@ var form_handlers = function (el) {
                 }
             };
         update();
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependency.closest('.form-group').find('[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
     el.find("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {

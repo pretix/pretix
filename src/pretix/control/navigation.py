@@ -498,15 +498,37 @@ def get_organizer_navigation(request):
             'icon': 'credit-card',
         })
 
-    if 'can_manage_customers' in request.orgapermset and request.organizer.settings.customer_accounts:
-        nav.append({
-            'label': _('Customers'),
-            'url': reverse('control:organizer.customers', kwargs={
-                'organizer': request.organizer.slug
-            }),
-            'active': 'organizer.customer' in url.url_name,
-            'icon': 'user',
-        })
+    if request.organizer.settings.customer_accounts:
+        children = []
+        if 'can_manage_customers' in request.orgapermset:
+            children.append(
+                {
+                    'label': _('Customers'),
+                    'url': reverse('control:organizer.customers', kwargs={
+                        'organizer': request.organizer.slug
+                    }),
+                    'active': 'organizer.customer' in url.url_name,
+                }
+            )
+        if 'can_change_organizer_settings' in request.orgapermset:
+            children.append(
+                {
+                    'label': _('Membership types'),
+                    'url': reverse('control:organizer.membershiptypes', kwargs={
+                        'organizer': request.organizer.slug
+                    }),
+                    'active': 'organizer.membershiptype' in url.url_name,
+                }
+            )
+        if children:
+            nav.append({
+                'label': _('Customer accounts'),
+                'url': reverse('control:organizer.customers', kwargs={
+                    'organizer': request.organizer.slug
+                }),
+                'icon': 'user',
+                'children': children,
+            })
 
     if 'can_change_organizer_settings' in request.orgapermset:
         nav.append({
