@@ -179,10 +179,10 @@ class EventMetaPropertyForm(forms.ModelForm):
         }
 
 
-class MembershipTypeForm(forms.ModelForm):
+class MembershipTypeForm(I18nModelForm):
     class Meta:
         model = MembershipType
-        fields = ['name', 'transferable']
+        fields = ['name', 'transferable', 'allow_parallel_usage', 'max_usages']
 
 
 class TeamForm(forms.ModelForm):

@@ -251,6 +251,15 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return f
 
     @cached_property
+    def guest_allowed(self):
+        return not any(
+            p.item.require_membership or
+            (p.variation and p.variation.require_membership) or
+            p.item.grant_membership_type_id
+            for p in self.positions
+        )
+
+    @cached_property
     def register_form(self):
         f = RegistrationForm(
             data=(
@@ -291,7 +300,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 return redirect(self.get_next_url(request))
             else:
                 return self.render()
-        elif request.POST.get("customer_mode") == 'guest':
+        elif request.POST.get("customer_mode") == 'guest' and self.guest_allowed:
             self.cart_session['customer'] = None
             self.cart_session['customer_mode'] = 'guest'
             return redirect(self.get_next_url(request))
@@ -300,7 +309,10 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def is_completed(self, request, warn=False):
         self.request = request
-        return 'customer_mode' in self.cart_session
+        if self.guest_allowed:
+            return 'customer_mode' in self.cart_session
+        else:
+            return self.cart_session.get('customer_mode') == 'login'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -312,6 +324,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             'customer_mode',
             self.cart_session.get('customer_mode', 'login' if self.request.customer else '')
         )
+        ctx['guest_allowed'] = self.guest_allowed
 
         if 'customer' in self.cart_session:
             try:

@@ -82,6 +82,7 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
+from pretix.base.services.memberships import create_membership
 from pretix.base.services.pricing import get_price
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
@@ -2325,3 +2326,14 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
 
     if any_giftcards:
         tickets.invalidate_cache.apply_async(kwargs={'event': sender.pk, 'order': order.pk})
+
+
+@receiver(order_paid, dispatch_uid="pretixbase_order_paid_memberships")
+@receiver(order_changed, dispatch_uid="pretixbase_order_changed_memberships")
+@transaction.atomic()
+def signal_listener_issue_memberships(sender: Event, order: Order, **kwargs):
+    if order.status != Order.STATUS_PAID or not order.customer:
+        return
+    for p in order.positions.all():
+        if p.item.grant_membership_type_id:
+            create_membership(order.customer, p)

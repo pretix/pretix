@@ -252,7 +252,7 @@ class CustomerRequiredMixin:
 class ProfileView(CustomerRequiredMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_profile.html'
     context_object_name = 'orders'
-    paginate_by = 50
+    paginate_by = 20
 
     def get_queryset(self):
         qs = Order.objects.filter(
@@ -265,6 +265,9 @@ class ProfileView(CustomerRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['customer'] = self.request.customer
+        ctx['memberships'] = self.request.customer.memberships.select_related(
+            'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
+        )
 
         s = OrderPosition.objects.filter(
             order=OuterRef('pk')

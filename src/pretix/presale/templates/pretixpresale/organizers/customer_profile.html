@@ -40,6 +40,59 @@
     <div class="panel panel-default items">
         <div class="panel-heading">
             <h3 class="panel-title">
+                {% trans "Memberships" %}
+            </h3>
+        </div>
+        <table class="panel-body table table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Membership type" %}</th>
+                <th>{% trans "Valid from" %}</th>
+                <th>{% trans "Valid until" %}</th>
+                <th>{% trans "Attendee name" %}</th>
+                <th>{% trans "Usages" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for m in memberships %}
+                <tr>
+                    <td>
+                        {{ m.type.name }}
+                    </td>
+                    <td>
+                        {{ o.event }}
+                    </td>
+                    <td>
+                        {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        {% if o.customer_id != customer.pk %}
+                            <span class="fa fa-link text-muted"
+                                    data-toggle="tooltip"
+                                    title="{% trans "Matched to your account based on the email address." %}"
+                            ></span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right flip">
+                        {{ o.total|money:o.event.currency }}
+                    </td>
+                    <td class="text-right flip">{{ o.count_positions|default_if_none:"0" }}</td>
+                    <td class="text-right flip">{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</td>
+                    <td class="text-right flip">
+                        <a href="{% eventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
+                                target="_blank"
+                                class="btn btn-default">
+                            {% trans "Details" %}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% include "pretixcontrol/pagination.html" %}
+    </div>
+    <div class="panel panel-default items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
                 {% trans "Orders" %}
             </h3>
         </div>
