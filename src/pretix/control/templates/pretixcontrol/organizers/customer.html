@@ -83,10 +83,10 @@
                             <td>
                                 {{ m.membership_type.name }}
                             </td>
-                            <td class="{% if not m.is_valid %}text-muted{% endif %}">
+                            <td>
                                 {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}
                             </td>
-                            <td class="{% if not m.is_valid %}text-muted{% endif %}">
+                            <td>
                                 {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
                             </td>
                             <td>
