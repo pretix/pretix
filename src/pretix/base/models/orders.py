@@ -47,6 +47,7 @@ import dateutil
 import pycountry
 import pytz
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import (
     Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
@@ -831,7 +832,11 @@ class Order(LockModel, LoggedModel):
         return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
 
     def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False,
-                            check_voucher_usage=False) -> Union[bool, str]:
+                            check_voucher_usage=False, check_memberships=False) -> Union[bool, str]:
+        from pretix.base.services.memberships import (
+            validate_memberships_in_cart,
+        )
+
         error_messages = {
             'unavailable': _('The ordered product "{item}" is no longer available.'),
             'seat_unavailable': _('The seat "{seat}" is no longer available.'),
@@ -839,11 +844,17 @@ class Order(LockModel, LoggedModel):
             'voucher_usages': _('The voucher "{voucher}" has been used in the meantime.'),
         }
         now_dt = now_dt or now()
-        positions = self.positions.all().select_related('item', 'variation', 'seat', 'voucher')
+        positions = list(self.positions.all().select_related('item', 'variation', 'seat', 'voucher'))
         quota_cache = {}
         v_budget = {}
         v_usage = Counter()
         try:
+            if check_memberships:
+                try:
+                    validate_memberships_in_cart(self.customer, positions, self.event, lock=False)
+                except ValidationError as e:
+                    raise Quota.QuotaExceededException(e)
+
             for i, op in enumerate(positions):
                 if op.seat:
                     if not op.seat.is_available(ignore_orderpos=op):

@@ -149,7 +149,8 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
         raise OrderError('The order was not canceled.')
 
     with order.event.lock() as now_dt:
-        is_available = force or order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True)
+        is_available = force or order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True,
+                                                          check_memberships=True)
         if is_available is True:
             if order.payment_refund_sum >= order.total:
                 order.status = Order.STATUS_PAID
