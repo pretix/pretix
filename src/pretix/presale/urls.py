@@ -175,6 +175,7 @@ organizer_patterns = [
     url(r'^account/password$', pretix.presale.views.customer.ChangePasswordView.as_view(), name='organizer.customer.password'),
     url(r'^account/change$', pretix.presale.views.customer.ChangeInformationView.as_view(), name='organizer.customer.change'),
     url(r'^account/confirmchange$', pretix.presale.views.customer.ConfirmChangeView.as_view(), name='organizer.customer.change.confirm'),
+    url(r'^account/membership/(?P<id>\d+)/$', pretix.presale.views.customer.MembershipUsageView.as_view(), name='organizer.customer.membership'),
     url(r'^account/$', pretix.presale.views.customer.ProfileView.as_view(), name='organizer.customer.profile'),
 ]
 

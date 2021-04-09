@@ -66,6 +66,7 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
     :param lock: Whether to place a SELECT FOR UPDATE lock on the selected memberships
     :param ignored_order: An order that should be ignored for usage counting
     """
+    tz = event.timezone
     applicable_positions = [
         p for p in positions
         if p.item.require_membership or (p.variation and p.variation.require_membership)
@@ -88,7 +89,7 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
                 )
             )
 
-    base_qs = Membership.objects.with_usages()
+    base_qs = Membership.objects.with_usages(ignored_order=ignored_order)
 
     if lock:
         base_qs = base_qs.select_for_update()
@@ -119,9 +120,9 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
             raise ValidationError(
                 _('You selected a membership that is valid from {start} to {end}, but selected an event '
                   'taking place at {date}.').format(
-                    start=date_format(m.date_start, 'SHORT_DATETIME_FORMAT'),
-                    end=date_format(m.date_end, 'SHORT_DATETIME_FORMAT'),
-                    date=date_format(ev.date_from, 'SHORT_DATETIME_FORMAT'),
+                    start=date_format(m.date_start.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                    end=date_format(m.date_end.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                    date=date_format(ev.date_from.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
                 )
             )
 
@@ -155,7 +156,7 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
                     _('You are trying to use a membership of type "{type}" for an event taking place at {date}, '
                       'however you already used the same membership for a different ticket at the same time.').format(
                         type=m.membership_type.name,
-                        date=date_format(ev.date_from, 'SHORT_DATETIME_FORMAT'),
+                        date=date_format(ev.date_from.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
                     )
                 )
             m._used_at_dates.append(ev.date_from)

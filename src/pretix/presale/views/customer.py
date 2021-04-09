@@ -7,6 +7,7 @@ from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
@@ -268,6 +269,7 @@ class ProfileView(CustomerRequiredMixin, ListView):
         ctx['memberships'] = self.request.customer.memberships.with_usages().select_related(
             'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
         )
+        ctx['is_paginated'] = True
 
         for m in ctx['memberships']:
             if m.membership_type.max_usages:
@@ -294,6 +296,27 @@ class ProfileView(CustomerRequiredMixin, ListView):
             if o.pk not in annotated:
                 continue
             o.count_positions = annotated.get(o.pk)['pcnt']
+        return ctx
+
+
+class MembershipUsageView(CustomerRequiredMixin, ListView):
+    template_name = 'pretixpresale/organizers/customer_membership.html'
+    context_object_name = 'usages'
+    paginate_by = 20
+
+    @cached_property
+    def membership(self):
+        return self.request.customer.memberships.get(pk=self.kwargs.get('id'))
+
+    def get_queryset(self):
+        return self.membership.orderposition_set.select_related(
+            'order', 'order__event', 'subevent', 'item', 'variation',
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['membership'] = self.membership
+        ctx['is_paginated'] = True
         return ctx
 
 
